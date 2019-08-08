@@ -1,0 +1,17 @@
+nav {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: 0 !important;
+    height: 75px;
+
+    .logo-link {
+        padding: unset;
+        height: 100%;
+
+        .logo {
+            padding: 0 10px;
+            width: unset;
+            height: 100%;
+        }
+    }
+}

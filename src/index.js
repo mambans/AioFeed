@@ -1,19 +1,30 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
+// import "bootstrap/dist/css/bootstrap.css";
+import "./variables.scss";
+import "normalize.css";
+import "./index.scss";
+
+// import App from "./components/app/App";
 import * as serviceWorker from "./serviceWorker";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+import Navigation from "./components/navigation/navigation";
+
+// ReactDOM.render(<App />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-ReactDOM.render(<h1>Hello, world!</h1>, document.getElementById("root"));
+ReactDOM.render(<div id="main-body" />, document.getElementById("root"));
 
-const appName = "Updates-Deck";
-const element = <h1>Hello, {appName}</h1>;
+function mainBody() {
+    return (
+        <div id="main-body">
+            <Navigation />
+        </div>
+    );
+}
 
-ReactDOM.render(element, document.getElementById("root"));
+ReactDOM.render(mainBody(), document.getElementById("root"));

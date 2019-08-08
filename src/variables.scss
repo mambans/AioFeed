@@ -1,0 +1,15 @@
+$primaryPurple: #040113;
+$textColor: rgb(240, 240, 240);
+$greyInfo: rgb(100, 100, 100);
+$videoTitle: rgb(240, 240, 240);
+
+@import "~bootstrap/scss/bootstrap.scss";
+
+body {
+    background: $primaryPurple;
+    color: $textColor;
+}
+
+a:hover {
+    text-decoration: none;
+}
