@@ -5,8 +5,9 @@ import Moment from "react-moment";
 import "./Subscriptions.scss";
 import placeholderImg from "./../../assets/images/placeholder.png";
 import Utilities from "./../../utilities/utilities";
-
 import getSubscriptionVideos from "./Subscriptions";
+
+require("dotenv").config();
 
 const axios = require("axios");
 
@@ -14,16 +15,18 @@ class Subscriptions extends React.Component {
     constructor(props) {
         super(props);
         this.state = { Videos: null };
-        this.props = { title: "Subscriptions" };
+        this.title = "Subscriptions";
     }
 
     async getSubscriptionVideos() {
         console.log(1);
+        console.log(process.env.API_KEY);
+
         try {
             console.log("REQEUST SENT");
 
             const response = await axios.get(
-                "https://www.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=UCHiof82PvgZrXFF-BRMvGDg&maxResults=10&key=AIzaSyCQy9tlwoRF0WrLf3oCFsvVwgVygpcpADE"
+                `https://www.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=UCHiof82PvgZrXFF-BRMvGDg&maxResults=10&key=${API_KEY}`
             );
             console.log(response);
             return response;
@@ -54,7 +57,7 @@ class Subscriptions extends React.Component {
         this.setState({
             Videos: Object.values(requestRes.data.items).map(video => (
                 // console.log("sd", video.snippet.thumbnails.maxres.url),
-                <div className="video">
+                <div className="video" key={video.contentDetails.upload.videoId}>
                     <a
                         className="video-img"
                         href={
@@ -99,8 +102,7 @@ class Subscriptions extends React.Component {
     render() {
         return (
             <>
-                <h2>{this.props.title}</h2>
-                <h2>Subscriptions</h2>
+                <h2>{this.title}</h2>
                 <div className="video-container">{this.state.Videos}</div>
             </>
         );
