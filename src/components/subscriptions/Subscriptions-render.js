@@ -1,6 +1,7 @@
 import React from "react";
 
 import Moment from "react-moment";
+import _ from "lodash";
 
 import styles from "./Subscriptions.module.scss";
 import Utilities from "./../../utilities/utilities";
@@ -10,7 +11,7 @@ const axios = require("axios");
 class Subscriptions extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { videos: null, loading: true, error: null };
+        this.state = { videos: null, isLoaded: false, error: null };
         this.title = "Subscriptions";
     }
 
@@ -57,10 +58,12 @@ class Subscriptions extends React.Component {
                     console.log("channel: ", channel);
 
                     const response = await axios.get(
-                        `https://www.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=${channel}&maxResults=5&key=${
+                        `https://www.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=${channel}&maxResults=8&key=${
                             process.env.REACT_APP_API_KEY
                         }`
                     );
+
+                    console.log("response: ", response);
 
                     let videosunfiltered = response.data.items.filter(video => {
                         return video.snippet.type === "upload";
@@ -69,18 +72,29 @@ class Subscriptions extends React.Component {
                     videosunfiltered.forEach(element => {
                         videos.push(element);
                     });
+
+                    // this.state.videos.sort()
+
+                    console.log("sort-start");
+                    // FIX SORT
+                    _.sortBy(videos, [
+                        function(o) {
+                            return o.snippet.publishedAt;
+                        },
+                    ]);
+                    console.log("sort-end");
                 })
             );
 
             console.log("videos :", videos);
             this.setState({
-                loading: false,
+                isLoaded: true,
                 videos,
             });
         } catch (error) {
             console.error(error);
             this.setState({
-                loading: false,
+                isLoaded: true,
                 error,
             });
         }
@@ -91,14 +105,16 @@ class Subscriptions extends React.Component {
     }
 
     render() {
-        const { error, loading, videos } = this.state;
+        console.log("RENDERING");
+
+        const { error, isLoaded, videos } = this.state;
         if (error) {
             return (
                 <div>
                     <p>Error: {error.message}</p>
                 </div>
             );
-        } else if (loading) {
+        } else if (!isLoaded) {
             return (
                 <div>
                     <p>Loading..</p>
