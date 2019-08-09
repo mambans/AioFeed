@@ -1,11 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-// import "bootstrap/dist/css/bootstrap.css";
 import "./variables.scss";
 import "normalize.css";
 import "./index.scss";
 
-// import App from "./components/app/App";
 import * as serviceWorker from "./serviceWorker";
 
 import Navigation from "./components/navigation/navigation";
@@ -17,14 +15,11 @@ import Navigation from "./components/navigation/navigation";
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-ReactDOM.render(<div id="main-body" />, document.getElementById("root"));
+// ReactDOM.render(<div id="main-body" />, document.getElementById("root"));
 
-function mainBody() {
-    return (
-        <div id="main-body">
-            <Navigation />
-        </div>
-    );
-}
-
-ReactDOM.render(mainBody(), document.getElementById("root"));
+ReactDOM.render(
+    <div id="main-body">
+        <Navigation />
+    </div>,
+    document.getElementById("root")
+);
