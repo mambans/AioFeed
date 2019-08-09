@@ -10,9 +10,14 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+@import "~bootstrap/scss/bootstrap.scss";
 @import "./variables.scss";
 
-// body {
-//     background: $primaryPurple;
-//     color: $textColor;
-// }
+body {
+    background: $primaryPurple;
+    color: $textColor;
+}
+
+a:hover {
+    text-decoration: none;
+}
