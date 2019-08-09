@@ -1,23 +1,23 @@
 @import "./../../variables.scss";
 
-.video-container {
+.container {
     display: flex;
     flex-wrap: wrap;
     width: 86%;
     margin: auto;
 }
+
 .video {
     display: grid;
     grid-template-areas:
         "video video"
         "title title"
         "date channel";
-    // "info info";
 
     width: 250px;
     margin: 10px;
 
-    .video-title {
+    .title {
         margin-top: 10px;
         grid-area: title;
         font-size: 1.2rem;
@@ -30,7 +30,7 @@
             }
         }
     }
-    .video-img {
+    .img {
         grid-area: video;
         transition: all 0.2s ease-in-out;
         &:hover {
@@ -42,14 +42,16 @@
         }
         img {
             width: 250px;
+            max-height: 140px;
+            object-fit: cover;
         }
     }
-    .video-date {
+    .date {
         grid-area: date;
 
         color: $greyInfo;
     }
-    .video-channel {
+    .channel {
         grid-area: channel-start;
         justify-self: end;
 
