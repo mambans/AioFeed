@@ -1,6 +1,16 @@
 import placeholderImg from "./../assets/images/placeholder.png";
 
 const Utilities = {
+    loadingSpinner: {
+        position: "absolute",
+        left: "calc(50% - 5rem)",
+        top: "20%",
+        height: "10rem",
+        width: "10rem",
+    },
+    alertWarning: {
+        "text-align": "center",
+    },
     truncate: function(input, max) {
         if (input.length > max) return input.substring(0, max) + "..";
         else return input;
@@ -22,13 +32,11 @@ const Utilities = {
 
     // Format PT25M1S to 25:10
     formatDuration(duration) {
-        console.log(duration);
         let hours;
         let minutes;
         let seconds;
 
         if (duration.includes("H")) {
-            console.log(duration);
             let asd = duration.split("PT")[1].split("H");
 
             hours = asd[0];

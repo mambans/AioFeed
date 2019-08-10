@@ -1,13 +1,19 @@
 import React from "react";
-
 import Moment from "react-moment";
+import Spinner from "react-bootstrap/Spinner";
+import Alert from "react-bootstrap/Alert";
 import _ from "lodash";
 
+// Own modules
 import styles from "./Subscriptions.module.scss";
 import Utilities from "./../../utilities/utilities";
 
 const axios = require("axios");
 
+/**
+ * TODO: -Cache reuqeusts and find a way to check if you wanna do a new reuqest or not.
+ *
+ */
 class Subscriptions extends React.Component {
     constructor(props) {
         super(props);
@@ -22,8 +28,8 @@ class Subscriptions extends React.Component {
             FastASMR: "UCHiof82PvgZrXFF-BRMvGDg",
             // ASMRGlow: "UCFmL725KKPx2URVPvH3Gp8w",
             // SiriusEyesASMR: "UCKzOQLe_60mhb0LPuKDSbCA",
-            // LinusTechTips: "UCXuqSBlHAE6Xw-yeJA0Tunw",
-            // GibiASMR: "UCE6acMV3m35znLcf0JGNn7Q",
+            LinusTechTips: "UCXuqSBlHAE6Xw-yeJA0Tunw",
+            GibiASMR: "UCE6acMV3m35znLcf0JGNn7Q",
             // Techquickie: "UC0vBXGSyV14uvJ4hECDOl0Q",
             // MovieClipsTrailers: "UCi8e0iOVk1fEOogdfu4YgfA",
             // JayzTwoCents: "UCkWQ0gDrqOCarmUKmppD7GQ",
@@ -32,7 +38,7 @@ class Subscriptions extends React.Component {
             // Sodapoppin: "UCtu2BCnJoFGRBOuIh570QWw",
             // Moona: "UCKpnB4SQuE6YqfHMleVNn_w",
             // LoganPaulVlogs: "UCG8rbF3g2AMX70yOd8vqIZg",
-            // Impaulsive: "UCGeBogGDZ9W3dsGx-mWQGJA",
+            Impaulsive: "UCGeBogGDZ9W3dsGx-mWQGJA",
             // MrBeast: "UCX6OQ3DkcsbYNE6H8uQQuVA",
             // PrimitiveTechnology: "UCAL3JXZSzSm8AlZyD3nQdBA",
         };
@@ -44,7 +50,7 @@ class Subscriptions extends React.Component {
                     console.log("channel: ", channel);
 
                     const response = await axios.get(
-                        `https://www.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=${channel}&maxResults=8&key=${
+                        `https://www.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=${channel}&maxResults=3&key=${
                             process.env.REACT_APP_API_KEY
                         }`
                     );
@@ -59,7 +65,7 @@ class Subscriptions extends React.Component {
                         videos.push(element);
                     });
 
-                    // FIX SORT
+                    // FIXME: Sort videos by newest first.
                     _.sortBy(videos, [
                         function(o) {
                             return o.snippet.publishedAt;
@@ -109,20 +115,22 @@ class Subscriptions extends React.Component {
     }
 
     render() {
-        console.log("RENDERING");
+        console.log("-Rendering-");
 
         const { error, isLoaded, videos } = this.state;
         if (error) {
             return (
-                <div>
-                    <p>Error: {error.message}</p>
-                </div>
+                <Alert key={error} variant="warning" style={Utilities.alertWarning}>
+                    <Alert.Heading>Couldn't fetch the data required.</Alert.Heading>
+                    <hr />
+                    {error.message}
+                </Alert>
             );
         } else if (!isLoaded) {
             return (
-                <div>
-                    <p>Loading..</p>
-                </div>
+                <Spinner animation="border" role="status" style={Utilities.loadingSpinner}>
+                    <span className="sr-only">Loading...</span>
+                </Spinner>
             );
         } else {
             return (
