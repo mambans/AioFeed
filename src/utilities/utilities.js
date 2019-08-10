@@ -22,12 +22,34 @@ const Utilities = {
 
     // Format PT25M1S to 25:10
     formatDuration(duration) {
-        let minutes = duration.split("PT")[1].split("M")[0];
-        // let minutes = durations.split("M")[0];
-        let seconds = minutes[1].split("S")[0];
+        console.log(duration);
+        let hours;
+        let minutes;
+        let seconds;
 
-        if (seconds.length < 2) {
-            return minutes + ":" + seconds + 0;
+        if (duration.includes("H")) {
+            console.log(duration);
+            let asd = duration.split("PT")[1].split("H");
+
+            hours = asd[0];
+            minutes = asd[1].split("M")[0];
+            seconds = asd[1].split("M")[1].split("S")[0];
+        } else {
+            minutes = duration.split("PT")[1].split("M")[0];
+            seconds = duration
+                .split("PT")[1]
+                .split("M")[1]
+                .split("S")[0];
+        }
+
+        // if (seconds.length < 2) {
+        //     seconds += 0;
+        // }
+
+        seconds = seconds.length < 2 ? seconds + 0 : seconds;
+
+        if (hours) {
+            return hours + ":" + minutes + ":" + seconds;
         } else {
             return minutes + ":" + seconds;
         }
