@@ -19,6 +19,19 @@ const Utilities = {
             return placeholderImg;
         }
     },
+
+    // Format PT25M1S to 25:10
+    formatDuration(duration) {
+        let minutes = duration.split("PT")[1].split("M")[0];
+        // let minutes = durations.split("M")[0];
+        let seconds = minutes[1].split("S")[0];
+
+        if (seconds.length < 2) {
+            return minutes + ":" + seconds + 0;
+        } else {
+            return minutes + ":" + seconds;
+        }
+    },
 };
 
 export default Utilities;
