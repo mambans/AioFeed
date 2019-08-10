@@ -20,40 +20,26 @@ class Subscriptions extends React.Component {
         // eslint-disable-next-line
         let channels = {
             FastASMR: "UCHiof82PvgZrXFF-BRMvGDg",
-            ASMRGlow: "UCFmL725KKPx2URVPvH3Gp8w",
-            SiriusEyesASMR: "UCKzOQLe_60mhb0LPuKDSbCA",
-            LinusTechTips: "UCXuqSBlHAE6Xw-yeJA0Tunw",
-            GibiASMR: "UCE6acMV3m35znLcf0JGNn7Q",
+            // ASMRGlow: "UCFmL725KKPx2URVPvH3Gp8w",
+            // SiriusEyesASMR: "UCKzOQLe_60mhb0LPuKDSbCA",
+            // LinusTechTips: "UCXuqSBlHAE6Xw-yeJA0Tunw",
+            // GibiASMR: "UCE6acMV3m35znLcf0JGNn7Q",
             // Techquickie: "UC0vBXGSyV14uvJ4hECDOl0Q",
             // MovieClipsTrailers: "UCi8e0iOVk1fEOogdfu4YgfA",
+            // JayzTwoCents: "UCkWQ0gDrqOCarmUKmppD7GQ",
+            // ASMRCham: "UCRz3cGfqeMPSHMBN6CxKQ9w",
+            // ASMRSurge: "UCIKOy_q2VWDv1vzeoi7KgNw",
+            // Sodapoppin: "UCtu2BCnJoFGRBOuIh570QWw",
+            // Moona: "UCKpnB4SQuE6YqfHMleVNn_w",
+            // LoganPaulVlogs: "UCG8rbF3g2AMX70yOd8vqIZg",
+            // Impaulsive: "UCGeBogGDZ9W3dsGx-mWQGJA",
+            // MrBeast: "UCX6OQ3DkcsbYNE6H8uQQuVA",
+            // PrimitiveTechnology: "UCAL3JXZSzSm8AlZyD3nQdBA",
         };
-
-        let channelsArray = [
-            "UCHiof82PvgZrXFF-BRMvGDg",
-            "UCFmL725KKPx2URVPvH3Gp8w",
-            "UCKzOQLe_60mhb0LPuKDSbCA",
-            "UCXuqSBlHAE6Xw-yeJA0Tunw",
-            "UCE6acMV3m35znLcf0JGNn7Q",
-        ];
-
-        // try {
-        //     console.log("REQEUST SENT");
-
-        //     const response = await axios.get(
-        //         `https://www.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=${
-        //             channels.FastASMR
-        //         }&maxResults=10&key=${process.env.REACT_APP_API_KEY}`
-        //     );
-
-        //     console.log(response);
-        //     return response.data.items;
-        // } catch (error) {
-        //     console.error(error);
-        // }
 
         try {
             await Promise.all(
-                channelsArray.map(async channel => {
+                Object.values(channels).map(async channel => {
                     console.log("REQEUST SENT");
                     console.log("channel: ", channel);
 
@@ -73,18 +59,16 @@ class Subscriptions extends React.Component {
                         videos.push(element);
                     });
 
-                    // this.state.videos.sort()
-
-                    console.log("sort-start");
                     // FIX SORT
                     _.sortBy(videos, [
                         function(o) {
                             return o.snippet.publishedAt;
                         },
                     ]);
-                    console.log("sort-end");
                 })
             );
+
+            await this.getVideoInfo(videos);
 
             console.log("videos :", videos);
             this.setState({
@@ -98,6 +82,26 @@ class Subscriptions extends React.Component {
                 error,
             });
         }
+    }
+
+    async getVideoInfo(videoList) {
+        await Promise.all(
+            Object.values(videoList).map(async video => {
+                const response = await axios.get(
+                    `https://www.googleapis.com/youtube/v3/videos?part=contentDetails%2Cstatus&id=${
+                        video.contentDetails.upload.videoId
+                    }&key=${process.env.REACT_APP_API_KEY}`
+                );
+
+                // console.log("Video details response: ", response);
+
+                videoList.find(videoo => {
+                    return videoo.contentDetails.upload.videoId === response.data.items[0].id;
+                }).duration = Utilities.formatDuration(
+                    response.data.items[0].contentDetails.duration
+                );
+            })
+        );
     }
 
     componentDidMount() {
@@ -124,20 +128,22 @@ class Subscriptions extends React.Component {
             return (
                 <div className={styles.container}>
                     {Object.values(videos).map(video => (
-                        // console.log("Thumnbails", video.snippet),
                         <div className={styles.video} key={video.contentDetails.upload.videoId}>
-                            <a
-                                className={styles.img}
-                                href={
-                                    `https://www.youtube.com/watch?v=` +
-                                    video.contentDetails.upload.videoId
-                                }>
-                                <img
-                                    src={Utilities.videoImageUrls(video.snippet.thumbnails)}
-                                    // src={placeholderImg}
-                                    alt={styles.thumbnail}
-                                />
-                            </a>
+                            <div className={styles.imgDurationContainer}>
+                                <a
+                                    className={styles.img}
+                                    href={
+                                        `https://www.youtube.com/watch?v=` +
+                                        video.contentDetails.upload.videoId
+                                    }>
+                                    <img
+                                        src={Utilities.videoImageUrls(video.snippet.thumbnails)}
+                                        // src={placeholderImg}
+                                        alt={styles.thumbnail}
+                                    />
+                                </a>
+                                <p className={styles.duration}>{video.duration}</p>
+                            </div>
                             <h4 className={styles.title}>
                                 <a
                                     href={
