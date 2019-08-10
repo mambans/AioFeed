@@ -1,12 +1,13 @@
 import React from "react";
-
 import { Navbar, NavDropdown, Nav } from "react-bootstrap";
 import { BrowserRouter as Router, NavLink, Route } from "react-router-dom";
+// import ReactDOM from "react-dom";
+// import GoogleLogin from "react-google-login";
 
+// Own modules
 import "./navigation.scss";
-
 import logo from "../../assets/images/logo-white.png";
-import Subscriptions from "./../subscriptions/Subscriptions-render";
+import Subscriptions from "./../subscriptions/Subscriptions";
 import Posts from "./../posts/Posts";
 
 function Navigation() {
@@ -52,7 +53,9 @@ const NavigationBar = () => {
                     </NavDropdown>
                 </Nav>
                 <Nav>
-                    <Nav.Link href="#deets">More deets</Nav.Link>
+                    <Nav.Link href="#login" id="login">
+                        Login{" "}
+                    </Nav.Link>
                     <Nav.Link eventKey={2} href="#memes">
                         Dank memes
                     </Nav.Link>
@@ -61,5 +64,24 @@ const NavigationBar = () => {
         </Navbar>
     );
 };
+
+// const responseGoogle = response => {
+//     console.log(response);
+// };
+
+// ReactDOM.render(
+//     <GoogleLogin
+//         clientId="
+
+// 359792337122-v0dqlfulrmj1qtuibdcmj9k3ld8c9rcf.apps.googleusercontent.com
+
+// "
+//         buttonText="Login"
+//         onSuccess={responseGoogle}
+//         onFailure={responseGoogle}
+//         cookiePolicy={"single_host_origin"}
+//     />,
+//     document.getElementById("login")
+// );
 
 export default Navigation;

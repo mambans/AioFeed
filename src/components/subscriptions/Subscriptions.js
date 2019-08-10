@@ -94,7 +94,7 @@ class Subscriptions extends React.Component {
         await Promise.all(
             Object.values(videoList).map(async video => {
                 const response = await axios.get(
-                    `https://www.googleapis.com/youtube/v3/videos?part=contentDetails%2Cstatus&id=${
+                    `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${
                         video.contentDetails.upload.videoId
                     }&key=${process.env.REACT_APP_API_KEY}`
                 );
