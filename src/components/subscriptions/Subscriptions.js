@@ -22,15 +22,16 @@ class Subscriptions extends React.Component {
     }
 
     async getSubscriptionVideos() {
-        const videos = [];
+        const videosUnordered = [];
+        let videos = [];
         // eslint-disable-next-line
         let channels = {
-            FastASMR: "UCHiof82PvgZrXFF-BRMvGDg",
+            // FastASMR: "UCHiof82PvgZrXFF-BRMvGDg",
             // ASMRGlow: "UCFmL725KKPx2URVPvH3Gp8w",
             // SiriusEyesASMR: "UCKzOQLe_60mhb0LPuKDSbCA",
             LinusTechTips: "UCXuqSBlHAE6Xw-yeJA0Tunw",
             GibiASMR: "UCE6acMV3m35znLcf0JGNn7Q",
-            // Techquickie: "UC0vBXGSyV14uvJ4hECDOl0Q",
+            Techquickie: "UC0vBXGSyV14uvJ4hECDOl0Q",
             // MovieClipsTrailers: "UCi8e0iOVk1fEOogdfu4YgfA",
             // JayzTwoCents: "UCkWQ0gDrqOCarmUKmppD7GQ",
             // ASMRCham: "UCRz3cGfqeMPSHMBN6CxKQ9w",
@@ -38,7 +39,7 @@ class Subscriptions extends React.Component {
             // Sodapoppin: "UCtu2BCnJoFGRBOuIh570QWw",
             // Moona: "UCKpnB4SQuE6YqfHMleVNn_w",
             // LoganPaulVlogs: "UCG8rbF3g2AMX70yOd8vqIZg",
-            Impaulsive: "UCGeBogGDZ9W3dsGx-mWQGJA",
+            // Impaulsive: "UCGeBogGDZ9W3dsGx-mWQGJA",
             // MrBeast: "UCX6OQ3DkcsbYNE6H8uQQuVA",
             // PrimitiveTechnology: "UCAL3JXZSzSm8AlZyD3nQdBA",
         };
@@ -50,7 +51,7 @@ class Subscriptions extends React.Component {
                     console.log("channel: ", channel);
 
                     const response = await axios.get(
-                        `https://www.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=${channel}&maxResults=3&key=${
+                        `https://www.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=${channel}&maxResults=4&key=${
                             process.env.REACT_APP_API_KEY
                         }`
                     );
@@ -62,15 +63,10 @@ class Subscriptions extends React.Component {
                     });
 
                     videosunfiltered.forEach(element => {
-                        videos.push(element);
+                        videosUnordered.push(element);
                     });
 
-                    // FIXME: Sort videos by newest first.
-                    _.sortBy(videos, [
-                        function(o) {
-                            return o.snippet.publishedAt;
-                        },
-                    ]);
+                    videos = _.reverse(_.sortBy(videosUnordered, d => d.snippet.publishedAt));
                 })
             );
 
