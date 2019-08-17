@@ -17,6 +17,7 @@
 
     width: 250px;
     margin: 15px;
+    max-height: 250px;
 }
 
 .title {
@@ -94,4 +95,8 @@
 
 .imgDurationContainer {
     max-height: 140px;
+}
+
+.domainTitle {
+    text-align: center;
 }

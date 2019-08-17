@@ -1,4 +1,6 @@
 import placeholderImg from "./../assets/images/placeholder.png";
+import React from "react";
+import styles from "components/Twitch/Twitch.module.scss";
 
 const Utilities = {
     loadingSpinner: {
@@ -9,7 +11,7 @@ const Utilities = {
         width: "10rem",
     },
     alertWarning: {
-        "text-align": "center",
+        textAlign: "center",
     },
     truncate: function(input, max) {
         if (input.length > max) return input.substring(0, max) + "..";
@@ -61,6 +63,25 @@ const Utilities = {
         } else {
             return minutes + ":" + seconds;
         }
+    },
+
+    OnlyReruns(type) {
+        if (!type === "live") {
+            return <p className={styles.type}>{type}</p>;
+        }
+    },
+
+    msToTime(duration) {
+        var milliseconds = parseInt((duration % 1000) / 100),
+            seconds = Math.floor((duration / 1000) % 60),
+            minutes = Math.floor((duration / (1000 * 60)) % 60),
+            hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+        hours = hours < 10 ? "0" + hours : hours;
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
     },
 };
 

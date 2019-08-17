@@ -15,8 +15,6 @@ import Navigation from "./components/navigation/navigation";
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-// ReactDOM.render(<div id="main-body" />, document.getElementById("root"));
-
 ReactDOM.render(
     <div id="main-body">
         <Navigation />

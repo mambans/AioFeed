@@ -1,9 +1,9 @@
 import React from "react";
 
+// Own modules
 import logo from "../../assets/images/logo-white.png";
 import logoWhite from "../../assets/images/logo-round-white.png";
-
-import "./home.css";
+import "./home.scss";
 
 function Title() {
     return <h2>Home</h2>;
