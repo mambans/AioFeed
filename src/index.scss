@@ -18,8 +18,12 @@ code {
 }
 
 body {
-    background: $primaryPurple;
+    background: $backgroundBlue;
     color: $textColor;
+
+    background-image: url("https://i.imgur.com/Pt25ia5.jpg");
+    object-fit: cover !important;
+    background-attachment: fixed !important;
 }
 
 a:hover {

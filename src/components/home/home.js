@@ -3,32 +3,32 @@ import React from "react";
 // Own modules
 import logo from "../../assets/images/logo-white.png";
 import logoWhite from "../../assets/images/logo-round-white.png";
-import "./home.scss";
+import styles from "./Home.module.scss";
 
-function Title() {
-    return <h2>Home</h2>;
-}
+class Home extends React.Component {
+    constructor(props) {
+        super(props);
+        this.title = "Home";
+    }
 
-function Logos() {
-    return (
-        <div className="home">
-            <img src={logo} alt="logo" className="logo" />
-            <img src={logoWhite} alt="logo" className="logo" />
-            <p>
-                A site/app for viewing all updates on Youtube such as subscriptions, posts,
-                notifications and more.
-            </p>
-        </div>
-    );
-}
+    Logos() {
+        return (
+            <div className={styles.container}>
+                <img src={logo} alt="logo" className={styles.logo} />
+                <img src={logoWhite} alt="logo" className={styles.logo} />
+                <p>A site/app for viewing feeds and updates from Youtube and Twitch.</p>
+            </div>
+        );
+    }
 
-function Home() {
-    return (
-        <>
-            <Title />
-            <Logos />
-        </>
-    );
+    render() {
+        return (
+            <>
+                {" "}
+                <this.Logos />
+            </>
+        );
+    }
 }
 
 export default Home;

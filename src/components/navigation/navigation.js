@@ -7,8 +7,10 @@ import { BrowserRouter as Router, NavLink, Route, Redirect } from "react-router-
 // Own modules
 import "./navigation.scss";
 import logo from "../../assets/images/logo-white.png";
+import Home from "./../Home/Home";
 import Feed from "./../Feed/Feed";
 import Auth from "./../Login/Login";
+import youtubeAuth from "./../Login/YoutubeLogin";
 import Posts from "./../posts/Posts";
 
 import AuthContextProvider, { AuthContext } from "components/Login/AuthContextProvider";
@@ -28,6 +30,15 @@ function Navigation() {
                         />
                         <Route path="/posts" component={Posts} />
                         <Route
+                            path="/youtube/login"
+                            component={() => {
+                                window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
+                                    process.env.REACT_APP_CLIENT_ID
+                                }&redirect_uri=http://localhost:3000/youtube/auth&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly&include_granted_scopes=true`;
+                                return null;
+                            }}
+                        />
+                        <Route
                             path="/login"
                             component={() => {
                                 window.location.href = `https://id.twitch.tv/oauth2/authorize?client_id=${
@@ -37,15 +48,12 @@ function Navigation() {
                             }}
                         />
                         <Route path="/twitch/auth" component={Auth} />
+                        <Route path="/youtube/auth" component={youtubeAuth} />
                     </Router>
                 )}
             </AuthContext.Consumer>
         </AuthContextProvider>
     );
-}
-
-function Home() {
-    return <h2>Home</h2>;
 }
 
 const NavigationBar = () => {
@@ -75,16 +83,11 @@ const NavigationBar = () => {
                     </NavDropdown>
                 </Nav>
                 <Nav>
-                    {/* <Nav.Link href="#login" id="login"> */}
-                    <Nav.Link
-                        as={NavLink}
-                        // href=`https://id.twitch.tv/oauth2/authorize?client_id=${process.env.TWITCH_CLIENT_ID}&redirect_uri=http://localhost:3000/twitch/auth&scope=channel:read:subscriptions&response_type=code`
-                        to="/login"
-                        id="login">
-                        Login{" "}
+                    <Nav.Link as={NavLink} to="/login" id="login">
+                        Login Twitch{" "}
                     </Nav.Link>
-                    <Nav.Link eventKey={2} href="#memes">
-                        Dank memes
+                    <Nav.Link as={NavLink} to="/youtube/login" id="login">
+                        Login Youtube
                     </Nav.Link>
                 </Nav>
             </Navbar.Collapse>

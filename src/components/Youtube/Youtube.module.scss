@@ -3,7 +3,7 @@
 .container {
     display: flex;
     flex-wrap: wrap;
-    width: 86%;
+    width: 90%;
     margin: auto;
     margin-top: 25px;
 }
@@ -25,6 +25,7 @@
     grid-area: title;
     font-size: 1.2rem;
     max-width: 250px;
+    overflow: hidden;
 
     a {
         color: $videoTitle;
@@ -35,7 +36,7 @@
     }
 }
 
-.imgDurationContainer {
+.imgContainer {
     grid-area: video;
     transition: all 0.2s ease-in-out;
     img {
@@ -77,26 +78,30 @@
 
 .duration {
     bottom: 21px;
-
     position: relative;
-
     width: max-content;
-
     background: #2222228c;
-
     padding-right: 5px;
-
     font-size: 0.9rem;
-
     padding-left: 2px;
-
     border-top-right-radius: 10px;
 }
 
-.imgDurationContainer {
+.imgContainer {
     max-height: 140px;
+    min-height: 140px;
 }
 
 .domainTitle {
     text-align: center;
+}
+
+.liveDot {
+    width: 14px;
+    height: 14px;
+    background-color: red;
+    border-radius: 7px;
+    bottom: 41px;
+    position: relative;
+    right: -234px;
 }

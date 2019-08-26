@@ -3,7 +3,7 @@
 .container {
     display: flex;
     flex-wrap: wrap;
-    width: 86%;
+    width: 90%;
     margin: auto;
     margin-top: 25px;
 }
@@ -25,6 +25,8 @@
     grid-area: title;
     font-size: 1.05rem;
     max-width: 250px;
+    height: 40px;
+    overflow: hidden;
 
     a {
         color: $videoTitle;
@@ -35,7 +37,7 @@
     }
 }
 
-.imgDurationContainer {
+.imgContainer {
     grid-area: video;
     transition: all 0.2s ease-in-out;
     img {
@@ -61,7 +63,7 @@
     color: $greyInfo;
 }
 
-.channel {
+.viewers {
     // grid-area: info;
     // justify-self: end;
     position: relative;
@@ -69,15 +71,7 @@
     display: flex;
     justify-content: flex-end;
     left: 75px;
-    min-width: 175px;
-
-    a {
-        color: $greyInfo;
-
-        &:hover {
-            color: lighten($greyInfo, 30%);
-        }
-    }
+    width: 175px;
 }
 
 .duration {
@@ -102,7 +96,7 @@
     right: -213px;
 }
 
-.game a {
+.channel a {
     bottom: 5px;
     // bottom: 40px;
     position: relative;
@@ -117,18 +111,27 @@
     }
 }
 
-.viewers {
+.game {
     bottom: 20px;
     position: relative;
     width: max-content;
     background: none;
     padding-right: 5px;
     font-size: 0.9rem;
-    color: $greyInfo;
+    width: 210px;
+
+    a {
+        color: lighten($greyInfo, 20%);
+
+        &:hover {
+            color: lighten($greyInfo, 30%);
+        }
+    }
 }
 
-.imgDurationContainer {
+.imgContainer {
     max-height: 140px;
+    min-height: 140px;
 }
 
 .domainTitle {
@@ -143,4 +146,20 @@
     bottom: 40px;
     position: relative;
     right: -234px;
+}
+
+.refreshButton {
+    position: relative;
+    left: 5.5%;
+    bottom: -20px;
+}
+
+@media screen and (max-width: 1920px) {
+    .container {
+        width: 80%;
+    }
+
+    .refreshButton {
+        left: 10.5%;
+    }
 }

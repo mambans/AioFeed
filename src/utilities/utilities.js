@@ -1,5 +1,6 @@
-import placeholderImg from "./../assets/images/placeholder.png";
 import React from "react";
+
+import placeholderImg from "./../assets/images/placeholder.png";
 import styles from "components/Twitch/Twitch.module.scss";
 
 const Utilities = {
@@ -9,6 +10,13 @@ const Utilities = {
         top: "20%",
         height: "10rem",
         width: "10rem",
+    },
+    loadingSpinnerSmall: {
+        position: "relative",
+        height: "26px",
+        width: "26px",
+        left: "11%",
+        bottom: "-27px",
     },
     alertWarning: {
         textAlign: "center",

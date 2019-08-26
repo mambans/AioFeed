@@ -18,15 +18,15 @@ class Auth extends React.Component {
         console.log("getAccessToken");
 
         const url = new URL(window.location.href);
+        console.log("TCL: Auth -> getAccessToken -> url", url);
         const authCode = url.searchParams.get("code");
+        console.log("TCL: Auth -> getAccessToken -> authCode", authCode);
         const response = await axios.post(`https://id.twitch.tv/oauth2/token
 ?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}
 &client_secret=${process.env.REACT_APP_TWITCH_SECRET}
 &code=${authCode}
 &grant_type=authorization_code
 &redirect_uri=http://localhost:3000/twitch/auth`);
-
-        console.log("res: ", response);
 
         localStorage.setItem("access_token", response.data.access_token);
 

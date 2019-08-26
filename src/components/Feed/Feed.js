@@ -1,32 +1,23 @@
+import Alert from "react-bootstrap/Alert";
 import React from "react";
 import Spinner from "react-bootstrap/Spinner";
-import Alert from "react-bootstrap/Alert";
 
-// Own modules
 import styles from "./Feed.module.scss";
 import Utilities from "utilities/utilities";
-// import Twitch from "components/Twitch/Twitch";
 
-import Youtube from "./../Youtube/Youtube";
-import Twitch from "./../Twitch/Twitch";
+//eslint-disable-next-line
+import Youtube from "../Youtube/Youtube";
+import Twitch from "../Twitch/Twitch";
+import TwitchVods from "../Twitch/Twitch-Vods";
 
-/**
- * TODO: -Cache reuqeusts and find a way to check if you wanna do a new reuqest or not.
- *  TODO: -Fråga dennis, Hur kan jag använda process.env.TWITCH_CLIENT_ID i en extern url?
- */
 class Feed extends React.Component {
     constructor(props) {
         super(props);
         this.state = { isLoaded: true, error: null };
         this.title = "Feed";
-        this.thresholdDate = 3;
     }
 
-    componentDidMount() {
-        // this.getTopStreams();
-        // this.getFollowedOnlineStreams();
-        // this.getSubscriptionVideos();
-    }
+    componentDidMount() {}
 
     render() {
         console.log("-Rendering-");
@@ -52,6 +43,7 @@ class Feed extends React.Component {
                     <Twitch />
                     <div className={styles.lineBreak} />
                     {/* <Youtube /> */}
+                    <TwitchVods />
                 </>
             );
         }
