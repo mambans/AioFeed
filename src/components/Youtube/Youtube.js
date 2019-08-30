@@ -1,7 +1,10 @@
+import Alert from "react-bootstrap/Alert";
 import axios from "axios";
+import { Button } from "react-bootstrap";
 import React from "react";
 import Spinner from "react-bootstrap/Spinner";
 import _ from "lodash";
+import Moment from "react-moment";
 
 import RenderYoutube from "./Render-Youtube";
 import styles from "./Youtube.module.scss";
@@ -14,72 +17,142 @@ import Utilities from "utilities/utilities";
 class Youtube extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { videos: null, isLoaded: false, error: null, followedChannels: [] };
+        this.state = {
+            videos: null,
+            isLoaded: false,
+            error: null,
+            followedChannels: [],
+            refreshing: false,
+            lastRefresh: null,
+            lastRender: null,
+        };
         this.title = "Youtube";
         this.thresholdDate = 3;
     }
 
     async getFollowChannels() {
-        const firstPage = await axios.get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {
-            params: {
-                maxResults: 50,
-                mine: true,
-                part: "snippet",
-                order: "relevance",
-                key: process.env.REACT_APP_API_KEY,
-            },
-            headers: {
-                Authorization: "Bearer " + localStorage.getItem("Youtube-access_token"),
-                Accept: "application/json",
-            },
-        });
+        try {
+            if (
+                !localStorage.getItem(`followedChannels`) ||
+                JSON.parse(localStorage.getItem(`followedChannels`)).casheExpire <= new Date()
+            ) {
+                console.log("------REQUEST SENT------");
 
-        const CheckNextPage =
-            firstPage.data.pageInfo.totalResults / firstPage.data.pageInfo.resultsPerPage;
+                const firstPage = await axios.get(
+                    `https://www.googleapis.com/youtube/v3/subscriptions?`,
+                    {
+                        params: {
+                            maxResults: 50,
+                            mine: true,
+                            part: "snippet",
+                            order: "relevance",
+                            key: process.env.REACT_APP_API_KEY,
+                        },
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("Youtube-access_token"),
+                            Accept: "application/json",
+                        },
+                    }
+                );
 
-        if (CheckNextPage >= 1) {
-            const secondPage = await axios.get(
-                `https://www.googleapis.com/youtube/v3/subscriptions?`,
-                {
-                    params: {
-                        maxResults: 50,
-                        mine: true,
-                        part: "snippet",
-                        order: "relevance",
-                        key: process.env.REACT_APP_API_KEY,
-                        pageToken: firstPage.data.nextPageToken,
-                    },
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem("Youtube-access_token"),
-                        Accept: "application/json",
-                    },
+                const CheckNextPage =
+                    firstPage.data.pageInfo.totalResults / firstPage.data.pageInfo.resultsPerPage;
+
+                if (CheckNextPage >= 1) {
+                    const secondPage = await axios.get(
+                        `https://www.googleapis.com/youtube/v3/subscriptions?`,
+                        {
+                            params: {
+                                maxResults: 50,
+                                mine: true,
+                                part: "snippet",
+                                order: "relevance",
+                                key: process.env.REACT_APP_API_KEY,
+                                pageToken: firstPage.data.nextPageToken,
+                            },
+                            headers: {
+                                Authorization:
+                                    "Bearer " + localStorage.getItem("Youtube-access_token"),
+                                Accept: "application/json",
+                            },
+                        }
+                    );
+
+                    console.log("TCL: getFollowChannels -> secondPage", secondPage);
+
+                    let currentTime = new Date();
+
+                    localStorage.setItem(
+                        `followedChannels`,
+                        JSON.stringify({
+                            data: firstPage.data.items.concat(secondPage.data.items),
+                            casheExpire: currentTime.setHours(currentTime.getHours() + 12),
+                        })
+                    );
+
+                    console.log(
+                        "followedChannels cache: ",
+                        JSON.parse(localStorage.getItem(`followedChannels`))
+                    );
+
+                    this.setState({
+                        followedChannels: JSON.parse(localStorage.getItem("followedChannels")).data,
+                    });
+                } else {
+                    this.setState({
+                        followedChannels: firstPage,
+                    });
                 }
-            );
+            } else {
+                console.log("------CACHE------");
 
-            console.log("TCL: getFollowChannels -> secondPage", secondPage);
+                this.setState({
+                    followedChannels: JSON.parse(localStorage.getItem("followedChannels")).data,
+                });
+            }
 
+            console.log("All followed channels: ", this.state.followedChannels);
+        } catch (e) {
             this.setState({
-                followedChannels: firstPage.data.items.concat(secondPage.data.items),
+                error: e.message,
             });
-        } else {
-            this.setState({
-                followedChannels: firstPage,
-            });
+            console.error("-Error: ", e);
         }
-
-        console.log("TCL: getFollowChannels -> firstPage", firstPage);
-        console.log("All followed channels: ", this.state.followedChannels);
     }
 
     async GetLiveYoutubeStreams(channel) {
-        console.log("--Param: Channel", channel);
+        try {
+            console.log("--Param: Channel", channel);
 
-        let liveStreams = [];
-        let liveResponse = null;
+            let liveStreams = [];
+            let liveResponse = null;
 
-        localStorage.getItem(`live-${channel}`)
-            ? (liveResponse = await axios
-                  .get(`https://www.googleapis.com/youtube/v3/search?`, {
+            localStorage.getItem(`live-${channel}`)
+                ? (liveResponse = await axios
+                      .get(`https://www.googleapis.com/youtube/v3/search?`, {
+                          params: {
+                              part: "snippet",
+                              channelId: channel,
+                              eventType: "live",
+                              maxResults: 1,
+                              type: "video",
+                              key: process.env.REACT_APP_API_KEY,
+                          },
+                          headers: {
+                              "If-None-Match": JSON.parse(localStorage.getItem(`live-${channel}`))
+                                  .data.etag,
+                          },
+                      })
+                      .catch(function(error) {
+                          console.log("Catch error");
+                          console.error(error);
+                          console.log(
+                              "catch: ",
+                              JSON.parse(localStorage.getItem(`live-${channel}`))
+                          );
+                          return JSON.parse(localStorage.getItem(`live-${channel}`));
+                      }))
+                : (liveResponse = await axios.get(`https://www.googleapis.com/youtube/v3/search?`, {
                       params: {
                           part: "snippet",
                           channelId: channel,
@@ -88,90 +161,77 @@ class Youtube extends React.Component {
                           type: "video",
                           key: process.env.REACT_APP_API_KEY,
                       },
-                      headers: {
-                          "If-None-Match": JSON.parse(localStorage.getItem(`live-${channel}`)).data
-                              .etag,
-                      },
-                  })
-                  .catch(function(error) {
-                      console.log("Catch error");
-                      console.error(error);
-                      console.log("catch: ", JSON.parse(localStorage.getItem(`live-${channel}`)));
-                      return JSON.parse(localStorage.getItem(`live-${channel}`));
-                  }))
-            : (liveResponse = await axios.get(`https://www.googleapis.com/youtube/v3/search?`, {
-                  params: {
-                      part: "snippet",
-                      channelId: channel,
-                      eventType: "live",
-                      maxResults: 1,
-                      type: "video",
-                      key: process.env.REACT_APP_API_KEY,
-                  },
-              }));
+                  }));
 
-        localStorage.setItem(`live-${channel}`, JSON.stringify(liveResponse));
+            localStorage.setItem(`live-${channel}`, JSON.stringify(liveResponse));
 
-        console.log("LiveResonse: ", liveResponse);
-        console.log(
-            "LiveResonse- localstorage: ",
-            JSON.parse(localStorage.getItem(`live-${channel}`))
-        );
-
-        // ----------------------------------------
-        // const liveResponse = await axios.get(`https://www.googleapis.com/youtube/v3/search?`, {
-        //     params: {
-        //         part: "snippet",
-        //         channelId: channel,
-        //         eventType: "live",
-        //         maxResults: 2,
-        //         type: "video",
-        //         key: process.env.REACT_APP_API_KEY,
-        //     },
-        // });
-
-        // console.log("LiveResonse: ", liveResponse);
-
-        // Adding live stremaing details.
-        if (liveResponse.data.items.length >= 1) {
-            console.log("GET: Livestrema details.");
-
-            liveStreams = await Promise.all(
-                liveResponse.data.items.map(async stream => {
-                    const liveDetailsResponse = await axios.get(
-                        `https://www.googleapis.com/youtube/v3/videos?`,
-                        {
-                            params: {
-                                part: "liveStreamingDetails",
-                                id: stream.id.videoId,
-                                key: process.env.REACT_APP_API_KEY,
-                            },
-                        }
-                    );
-
-                    stream.snippet.publishedAt =
-                        liveDetailsResponse.data.items[0].liveStreamingDetails.actualStartTime;
-
-                    stream.df = "liveYoutube";
-
-                    stream.duration =
-                        liveDetailsResponse.data.items[0].liveStreamingDetails.actualStartTime;
-
-                    stream.contentDetails = {
-                        upload: {
-                            videoId: stream.id.videoId,
-                        },
-                    };
-                    return stream;
-
-                    // await liveStreams.push(stream);
-                })
+            console.log("LiveResonse: ", liveResponse);
+            console.log(
+                "LiveResonse- localstorage: ",
+                JSON.parse(localStorage.getItem(`live-${channel}`))
             );
+
+            // ----------------------------------------
+            // const liveResponse = await axios.get(`https://www.googleapis.com/youtube/v3/search?`, {
+            //     params: {
+            //         part: "snippet",
+            //         channelId: channel,
+            //         eventType: "live",
+            //         maxResults: 2,
+            //         type: "video",
+            //         key: process.env.REACT_APP_API_KEY,
+            //     },
+            // });
+
+            // console.log("LiveResonse: ", liveResponse);
+
+            // Adding live stremaing details.
+            if (liveResponse.data.items.length >= 1) {
+                console.log("GET: Livestrema details.");
+
+                liveStreams = await Promise.all(
+                    liveResponse.data.items.map(async stream => {
+                        const liveDetailsResponse = await axios.get(
+                            `https://www.googleapis.com/youtube/v3/videos?`,
+                            {
+                                params: {
+                                    part: "liveStreamingDetails",
+                                    id: stream.id.videoId,
+                                    key: process.env.REACT_APP_API_KEY,
+                                },
+                            }
+                        );
+
+                        stream.snippet.publishedAt =
+                            liveDetailsResponse.data.items[0].liveStreamingDetails.actualStartTime;
+
+                        stream.df = "liveYoutube";
+
+                        stream.duration =
+                            liveDetailsResponse.data.items[0].liveStreamingDetails.actualStartTime;
+
+                        stream.contentDetails = {
+                            upload: {
+                                videoId: stream.id.videoId,
+                            },
+                        };
+                        return stream;
+                    })
+                );
+            }
+            return liveStreams;
+        } catch (e) {
+            console.error("-Error: ", e);
+            this.setState({
+                error: e.message,
+            });
         }
-        return liveStreams;
     }
 
     async getSubscriptionVideos() {
+        this.setState({
+            refreshing: true,
+        });
         const videosUnordered = [];
         const today = new Date();
         const OnlyVideosAfterDate = new Date();
@@ -207,14 +267,11 @@ class Youtube extends React.Component {
         await this.getFollowChannels();
 
         console.log("---this.state.followedChannels:: ", this.state.followedChannels);
-        let i = 0;
 
         try {
             await Promise.all(
                 this.state.followedChannels.map(async channel => {
                     let response = null;
-                    console.log(i);
-                    i++;
 
                     localStorage.getItem(`activity-${channel.snippet.resourceId.channelId}`)
                         ? (response = await axios
@@ -235,17 +292,6 @@ class Youtube extends React.Component {
                                   },
                               })
                               .catch(function(error) {
-                                  console.log("catch");
-                                  console.error(error);
-                                  console.log(
-                                      "catch: ",
-                                      JSON.parse(
-                                          localStorage.getItem(
-                                              `activity-${channel.snippet.resourceId.channelId}`
-                                          )
-                                      )
-                                  );
-
                                   return JSON.parse(
                                       localStorage.getItem(
                                           `activity-${channel.snippet.resourceId.channelId}`
@@ -270,8 +316,6 @@ class Youtube extends React.Component {
                         JSON.stringify(response)
                     );
 
-                    console.log(`YOUTUBE RES: ${channel.snippet.resourceId.channelId}`, response);
-
                     let videosfiltered = response.data.items.filter(video => {
                         return video.snippet.type === "upload";
                     });
@@ -280,10 +324,10 @@ class Youtube extends React.Component {
                         videosUnordered.push(element);
                     });
 
-                    let bnm = await this.GetLiveYoutubeStreams(channel.snippet.channelId);
-                    bnm.forEach(stream => {
-                        liveStreams.push(stream);
-                    });
+                    // let liveChannels = await this.GetLiveYoutubeStreams(channel.snippet.channelId);
+                    // liveChannels.forEach(stream => {
+                    //     liveStreams.push(stream);
+                    // });
 
                     videos = videosUnordered;
                 })
@@ -299,9 +343,12 @@ class Youtube extends React.Component {
             this.setState({
                 isLoaded: true,
                 videos,
+                refreshing: false,
+                lastRefresh: new Date(),
+                lastRender: new Date(),
             });
         } catch (error) {
-            console.error(error);
+            // console.error(error);
             this.setState({
                 isLoaded: true,
                 error,
@@ -317,9 +364,7 @@ class Youtube extends React.Component {
                 !localStorage.getItem(`videoDetails-${video.contentDetails.upload.videoId}`)
                     ? (response = await axios
                           .get(
-                              `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${
-                                  video.contentDetails.upload.videoId
-                              }&key=${process.env.REACT_APP_API_KEY}`
+                              `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${video.contentDetails.upload.videoId}&key=${process.env.REACT_APP_API_KEY}`
                           )
                           .then(console.log("DETAILS SENT")))
                     : (response = JSON.parse(
@@ -335,22 +380,57 @@ class Youtube extends React.Component {
 
                 videoList.find(videoo => {
                     return videoo.contentDetails.upload.videoId === response.data.items[0].id;
-                }).duration = Utilities.formatDuration(
+                }).duration = await Utilities.formatDuration(
                     response.data.items[0].contentDetails.duration
                 );
+
+                // videoList.find(videoo => {
+                //     return videoo.contentDetails.upload.videoId === response.data.items[0].id;
+                // }).duration = response.data.items[0].contentDetails.duration;
             })
         );
     }
 
     componentDidMount() {
+        window.addEventListener("focus", this.windowFocusHandler);
+        window.addEventListener("blur", this.windowBlurHandler);
         // this.getFollowChannels();
 
         this.getSubscriptionVideos();
     }
 
+    componentWillUnmount() {
+        window.removeEventListener("blur", this.windowBlurHandler);
+        window.removeEventListener("focus", this.windowFocusHandler);
+    }
+
+    windowBlurHandler = () => {};
+
+    windowFocusHandler = () => {
+        // this.getSubscriptionVideos();
+        this.setState({
+            lastRender: new Date(),
+        });
+    };
+
+    ButtonRun = () => {
+        this.getSubscriptionVideos();
+        this.setState({
+            lastRender: new Date(),
+        });
+    };
+
     render() {
-        const { videos } = this.state;
-        if (!this.state.isLoaded) {
+        const { videos, refreshing, lastRefresh, lastRender, error } = this.state;
+        if (error) {
+            return (
+                <Alert variant="warning" style={Utilities.alertWarning}>
+                    <Alert.Heading>Oh-oh! Something not so good happended.</Alert.Heading>
+                    <hr />
+                    <p>{error}</p>
+                </Alert>
+            );
+        } else if (!this.state.isLoaded) {
             return (
                 <Spinner animation="border" role="status" style={Utilities.loadingSpinner}>
                     <span className="sr-only">Loading...</span>
@@ -358,10 +438,24 @@ class Youtube extends React.Component {
             );
         } else {
             console.log("FINAL: ", videos);
-
             return (
                 <>
-                    {/* <h3 className={styles.domainTitle}>{this.title}</h3> */}
+                    <Button
+                        variant="outline-secondary"
+                        className={styles.refreshButton}
+                        onClick={this.ButtonRun}>
+                        Reload
+                    </Button>
+                    {refreshing ? (
+                        <Spinner
+                            animation="border"
+                            role="status"
+                            style={Utilities.loadingSpinnerSmall}></Spinner>
+                    ) : (
+                        <Moment key={lastRender.getTime()} className={styles.lastRender} fromNow>
+                            {lastRefresh}
+                        </Moment>
+                    )}
                     <div className={styles.container}>
                         {videos.map(video => {
                             return (

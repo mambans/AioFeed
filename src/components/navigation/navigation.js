@@ -32,18 +32,14 @@ function Navigation() {
                         <Route
                             path="/youtube/login"
                             component={() => {
-                                window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
-                                    process.env.REACT_APP_CLIENT_ID
-                                }&redirect_uri=http://localhost:3000/youtube/auth&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly&include_granted_scopes=true`;
+                                window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=http://localhost:3000/youtube/auth&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly&include_granted_scopes=true`;
                                 return null;
                             }}
                         />
                         <Route
                             path="/login"
                             component={() => {
-                                window.location.href = `https://id.twitch.tv/oauth2/authorize?client_id=${
-                                    process.env.REACT_APP_TWITCH_CLIENT_ID
-                                }&redirect_uri=http://localhost:3000/twitch/auth&scope=channel:read:subscriptions&response_type=code`;
+                                window.location.href = `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=http://localhost:3000/twitch/auth&scope=channel:read:subscriptions user:read:broadcast&response_type=code`;
                                 return null;
                             }}
                         />
@@ -62,9 +58,9 @@ const NavigationBar = () => {
             <Nav.Link as={NavLink} to="/" className="logo-link">
                 <img src={logo} alt="logo" className="logo" />
             </Nav.Link>
-            <Navbar.Brand as={NavLink} to="/" activeClassName="active">
+            {/* <Navbar.Brand as={NavLink} to="/" activeClassName="active">
                 Home
-            </Navbar.Brand>
+            </Navbar.Brand> */}
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">

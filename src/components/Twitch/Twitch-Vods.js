@@ -77,7 +77,6 @@ class TwitchVods extends React.Component {
             "yourpelagea",
             "jakenbakelive",
             "malena_tudi",
-            "윰찌니",
         ];
         const followedStreamVods = [];
         const today = new Date();
@@ -99,32 +98,50 @@ class TwitchVods extends React.Component {
             let response = null;
             await Promise.all(
                 vodChannels.map(async channel => {
-                    if (!localStorage.getItem(`${channel}-vod`)) {
+                    if (
+                        !localStorage.getItem(`${channel}-vod`) ||
+                        JSON.parse(localStorage.getItem(`${channel}-vod`)).casheExpire <= new Date()
+                    ) {
                         console.log("REQ SENT");
 
                         response = await axios.get(`https://api.twitch.tv/helix/videos?`, {
                             params: {
                                 user_id: channel,
-                                first: 1,
-                                period: "day",
+                                first: 2,
+                                period: "week",
+                                type: "archive",
                             },
                             headers: {
                                 "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
                             },
                         });
+
+                        let currentTime = new Date();
+                        response.casheExpire = currentTime.setHours(currentTime.getHours() + 12);
                         localStorage.setItem(`${channel}-vod`, JSON.stringify(response));
                     } else {
                         console.log("Cashe used");
-
+                        console.log(
+                            "cashe expire in : ",
+                            (JSON.parse(localStorage.getItem(`${channel}-vod`)).casheExpire -
+                                new Date()) /
+                                1000 /
+                                60 /
+                                60
+                        );
                         response = JSON.parse(localStorage.getItem(`${channel}-vod`));
                     }
 
-                    followedStreamVods.push(response);
+                    response.data.data.forEach(vod => {
+                        followedStreamVods.push(vod);
+                    });
+
+                    // followedStreamVods.push(response.data.data);
                 })
             );
 
             let followedOrderedStreamVods = _.reverse(
-                _.sortBy(followedStreamVods, d => d.data.data[0].published_at)
+                _.sortBy(followedStreamVods, d => d.published_at)
             );
 
             this.setState({
@@ -144,10 +161,25 @@ class TwitchVods extends React.Component {
         this.getFollowedVods();
     };
 
+    getVodMarkers() {
+        const response = axios.get(`https://api.twitch.tv/helix/streams/markers`, {
+            params: {
+                video_id: "472417730",
+            },
+            headers: {
+                "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+                Authorization: "Bearer " + localStorage.getItem("bearer_token"),
+            },
+        });
+
+        console.log(response);
+    }
+
     async componentDidMount() {
         await this.getFollowedChannels();
         // await this.TwitterHomeFeed();
         await this.getFollowedVods();
+        // await this.getVodMarkers();
     }
 
     render() {
@@ -156,7 +188,7 @@ class TwitchVods extends React.Component {
         if (error) {
             return (
                 <Alert variant="warning" style={Utilities.alertWarning}>
-                    <Alert.Heading>Couldn't fetch the data required.</Alert.Heading>
+                    <Alert.Heading>Oh-oh! Something not so good happended.</Alert.Heading>
                     <hr />
                     {error.message}
                 </Alert>
@@ -180,12 +212,7 @@ class TwitchVods extends React.Component {
                     </Button>
                     <div className={styles.container}>
                         {vods.map(vod => {
-                            return (
-                                <RenderTwitchVods
-                                    data={vod.data.data[0]}
-                                    key={vod.data.data[0].id}
-                                />
-                            );
+                            return <RenderTwitchVods data={vod} key={vod.id} />;
                         })}
                     </div>
                 </>

@@ -17,7 +17,6 @@ class Twitch extends React.Component {
             isLoaded: false,
             error: null,
             lastRan: null,
-            runOnce: true,
             refreshing: false,
             refreshRate: 120,
         };
@@ -32,18 +31,16 @@ class Twitch extends React.Component {
             // console.log("currentTime: ", currentTime);
             // console.log("lastRan: ", this.state.lastRan);
             // console.log("currentTime - lastRan: ", (currentTime - this.state.lastRan) / 1000);
-            // console.log("runOnce: ", this.state.runOnce);
 
             // Only make requests each 2min.
             if (
                 ((currentTime - this.state.lastRan) / 1000 >= this.state.refreshRate &&
                     this.state.lastRan != null) ||
-                this.state.runOnce
+                this.state.lastRan === null
             ) {
                 console.log("Refreshing data");
                 this.setState({
                     refreshing: true,
-                    runOnce: false,
                 });
 
                 // GET all followed channels.
@@ -140,13 +137,10 @@ class Twitch extends React.Component {
                 const FilteredLiveFollowedStreams = LiveFollowedStreams.data.data;
 
                 this.setState({
-                    refreshing: false,
-                });
-
-                this.setState({
                     isLoaded: true,
                     data: FilteredLiveFollowedStreams,
                     lastRan: new Date(),
+                    refreshing: false,
                 });
             } else {
                 console.log(
@@ -159,11 +153,11 @@ class Twitch extends React.Component {
                 );
             }
 
-            if (!this.state.lastRan) {
-                this.setState({
-                    lastRan: new Date(),
-                });
-            }
+            // if (!this.state.lastRan) {
+            //     this.setState({
+            //         lastRan: new Date(),
+            //     });
+            // }
         } catch (error) {
             console.error("-Error: ", error.message);
             this.setState({
@@ -179,32 +173,53 @@ class Twitch extends React.Component {
     }
 
     async subscriptionsWebhoks() {
-        //FIXME: Fix webhooks.
-        console.log("access_token: ", localStorage.getItem("access_token"));
+        try {
+            //FIXME: Fix webhooks.
+            console.log("access_token: ", localStorage.getItem("access_token"));
 
-        const response = await axios.post(
-            `https://id.twitch.tv/oauth2/token?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&client_secret=${process.env.REACT_APP_TWITCH_SECRET}&grant_type=client_credentials`
-        );
+            const response = await axios.post(
+                `https://id.twitch.tv/oauth2/token?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&client_secret=${process.env.REACT_APP_TWITCH_SECRET}&grant_type=client_credentials`
+            );
 
-        // const response = axios.get(`https://api.twitch.tv/helix/webhooks/subscriptions`, {
-        //     headers: {
-        //         "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-        //         Authorization: "Bearer" + localStorage.getItem("access_token"),
-        //     },
-        // });
+            // const response = axios.get(`https://api.twitch.tv/helix/webhooks/subscriptions`, {
+            //     headers: {
+            //         "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+            //         Authorization: "Bearer" + localStorage.getItem("access_token"),
+            //     },
+            // });
 
-        console.log("HOOK: ", response);
-        localStorage.setItem(`bearer_token`, response.data.access_token);
-        console.log("bearer_token: ", localStorage.getItem("bearer_token"));
+            console.log("HOOK: ", response);
+            localStorage.setItem(`bearer_token`, response.data.access_token);
+            console.log("bearer_token: ", localStorage.getItem("bearer_token"));
 
-        const webhooks = await axios.get(`https://api.twitch.tv/helix/webhooks/subscriptions`, {
-            headers: {
-                "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-                Authorization: "Bearer" + localStorage.getItem("bearer_token"),
-            },
-        });
+            // const websub = await axios.post(`https://api.twitch.tv/helix/webhooks/hub`, {
+            //     body: {
+            //         "hub.callback": "http://localhost:3000/feed",
+            //         "hub.mode": "subscribe",
+            //         "hub.topic": "https://api.twitch.tv/helix/streams?user_id=26301881",
+            //         "hub.lease_seconds": 10,
+            //         "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+            //     },
+            //     headers: {
+            //         "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+            //         Authorization: "Bearer " + localStorage.getItem("bearer_token"),
+            //         // access_token: localStorage.getItem("access_token"),
+            //     },
+            // });
 
-        console.log("webhooks: ", webhooks);
+            // console.log(websub);
+
+            // const webhooks = await axios.get(`https://api.twitch.tv/helix/webhooks/subscriptions`, {
+            //     headers: {
+            //         // "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+            //         Authorization: "Bearer " + localStorage.getItem("bearer_token"),
+            //     },
+            // });
+
+            // console.log("webhooks: ", webhooks);
+        } catch (e) {
+            console.error("- ", e);
+        }
     }
 
     windowFocusHandler = () => {
@@ -235,7 +250,7 @@ class Twitch extends React.Component {
         if (error) {
             return (
                 <Alert variant="warning" style={Utilities.alertWarning}>
-                    <Alert.Heading>Couldn't fetch the data required.</Alert.Heading>
+                    <Alert.Heading>Oh-oh! Something not so good happended.</Alert.Heading>
                     <hr />
                     {error.message}
                 </Alert>

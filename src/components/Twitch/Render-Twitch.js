@@ -25,9 +25,13 @@ class RenderTwitch extends React.Component {
                             this.props.data.user_name.toLowerCase()
                         }>
                         <img
-                            src={this.props.data.thumbnail_url
-                                .replace("{width}", 640)
-                                .replace("{height}", 360)}
+                            src={
+                                this.props.data.thumbnail_url
+                                    .replace("{width}", 640)
+                                    .replace("{height}", 360) +
+                                `#` +
+                                new Date().getTime()
+                            }
                             alt={styles.thumbnail}
                         />
                     </a>

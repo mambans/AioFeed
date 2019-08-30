@@ -41,36 +41,80 @@ const Utilities = {
     },
 
     // Format PT25M1S to 25:10
-    formatDuration(duration) {
+    async formatDuration(duration) {
         let hours;
         let minutes;
         let seconds;
+        let formatDuration;
+        let time;
+        let timeformat;
 
-        if (duration.includes("H")) {
-            let asd = duration.split("PT")[1].split("H");
-
-            hours = asd[0];
-            minutes = asd[1].split("M")[0];
-            seconds = asd[1].split("M")[1].split("S")[0];
-        } else {
-            minutes = duration.split("PT")[1].split("M")[0];
-            seconds = duration
-                .split("PT")[1]
-                .split("M")[1]
-                .split("S")[0];
+        try {
+            if (duration.includes("H")) {
+                time = duration
+                    .replace("PT", "")
+                    .replace("H", ":")
+                    .replace("M", ":")
+                    .replace("S", "");
+                timeformat = "hours";
+            } else if (duration.includes("M")) {
+                time = duration
+                    .replace("PT", "")
+                    .replace("M", ":")
+                    .replace("S", "");
+                timeformat = "minutes";
+            } else {
+                time = duration.replace("PT", "").replace("S", "");
+                timeformat = "seconds";
+            }
+        } catch (error) {
+            console.trace(error);
         }
 
-        // if (seconds.length < 2) {
-        //     seconds += 0;
-        // }
+        let timeSegments = time.split(":");
 
-        seconds = seconds.length < 2 ? seconds + 0 : seconds;
+        if (timeformat === "hours") {
+            hours = timeSegments[0];
+            minutes = timeSegments[1];
+            seconds = timeSegments[2];
 
-        if (hours) {
-            return hours + ":" + minutes + ":" + seconds;
-        } else {
-            return minutes + ":" + seconds;
+            if (hours.length <= 1) {
+                hours = "0" + hours;
+            }
+
+            if (minutes.length <= 1) {
+                minutes = "0" + minutes;
+            }
+
+            if (seconds.length <= 1) {
+                seconds = "0" + seconds;
+            }
+
+            formatDuration = hours + ":" + minutes + ":" + seconds;
+        } else if (timeformat === "minutes") {
+            minutes = timeSegments[0];
+            seconds = timeSegments[1];
+
+            if (minutes.length <= 1) {
+                minutes = "0" + minutes;
+            }
+
+            if (seconds.length <= 1) {
+                seconds = "0" + seconds;
+            }
+
+            formatDuration = minutes + ":" + seconds;
+        } else if (timeformat === "seconds") {
+            seconds = timeSegments[0];
+
+            if (seconds.length <= 1) {
+                seconds = "0" + seconds;
+            }
+
+            formatDuration = seconds;
         }
+
+        return formatDuration;
     },
 
     OnlyReruns(type) {

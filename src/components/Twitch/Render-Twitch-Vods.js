@@ -19,9 +19,13 @@ class RenderTwitchVods extends React.Component {
                 <div className={styles.imgContainer}>
                     <a className={styles.img} href={this.props.data.url}>
                         <img
-                            src={this.props.data.thumbnail_url
-                                .replace("%{width}", 640)
-                                .replace("%{height}", 360)}
+                            src={
+                                this.props.data.thumbnail_url
+                                    ? this.props.data.thumbnail_url
+                                          .replace("%{width}", 640)
+                                          .replace("%{height}", 360)
+                                    : "https://vod-secure.twitch.tv/_404/404_processing_320x180.png"
+                            }
                             alt={styles.thumbnail}
                         />
                     </a>

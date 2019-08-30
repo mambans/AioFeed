@@ -26,7 +26,7 @@ class Feed extends React.Component {
         if (error) {
             return (
                 <Alert variant="warning" style={Utilities.alertWarning}>
-                    <Alert.Heading>Couldn't fetch the data required.</Alert.Heading>
+                    <Alert.Heading>Oh-oh! Something not so good happended.</Alert.Heading>
                     <hr />
                     {error.message}
                 </Alert>
@@ -42,8 +42,9 @@ class Feed extends React.Component {
                 <>
                     <Twitch />
                     <div className={styles.lineBreak} />
-                    {/* <Youtube /> */}
                     <TwitchVods />
+                    <div className={styles.lineBreak} />
+                    <Youtube />
                 </>
             );
         }
