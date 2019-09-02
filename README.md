@@ -1,10 +1,14 @@
 # Notifies
 
-<img src="./src/assets/images/logo-white.png" alt="Logo" title="Logo" width="450" />
+My personal project.'
+
+---
+
+<img src="./src/assets/images/logo-white-v2.png" alt="Logo" width="300" />
+
+<img src="./src/assets/images/logo-v2.png" alt="Logo" width="300" />
 
 <!-- ![Logo](./src/assets/images/logo-white.png#logo -->
-
-My personal project.
 
 **Notifies** is a site that combines feeds from different sites such as Twitch.tv and Youtube.com into one feed/page.
 

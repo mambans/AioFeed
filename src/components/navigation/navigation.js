@@ -6,7 +6,7 @@ import { BrowserRouter as Router, NavLink, Route, Redirect } from "react-router-
 
 // Own modules
 import "./navigation.scss";
-import logo from "../../assets/images/logo-white.png";
+import logo from "../../assets/images/logo-v2.png";
 import Home from "./../Home/Home";
 import Feed from "./../Feed/Feed";
 import twitchAuth from "../Login/TwitchLogin";
