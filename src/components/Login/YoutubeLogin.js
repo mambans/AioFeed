@@ -54,7 +54,6 @@ class youtubeAuth extends React.Component {
         if (loggedIn) {
             return (
                 <>
-                    <p>123123123</p>
                     <Alert variant="success" style={Utilities.alertWarning}>
                         <Alert.Heading>Successfully logged in</Alert.Heading>
                         <hr />
@@ -64,7 +63,6 @@ class youtubeAuth extends React.Component {
         }
         return (
             <>
-                <p>ASD123</p>
                 <Spinner animation="border" role="status" style={Utilities.loadingSpinner}>
                     <span className="sr-only">Loading...</span>
                 </Spinner>

@@ -46,7 +46,7 @@ class Youtube extends React.Component {
                             mine: true,
                             part: "snippet",
                             order: "relevance",
-                            key: process.env.REACT_APP_API_KEY,
+                            key: process.env.REACT_APP_YOUTUBE_API_KEY,
                         },
                         headers: {
                             Authorization: "Bearer " + localStorage.getItem("Youtube-access_token"),
@@ -67,7 +67,7 @@ class Youtube extends React.Component {
                                 mine: true,
                                 part: "snippet",
                                 order: "relevance",
-                                key: process.env.REACT_APP_API_KEY,
+                                key: process.env.REACT_APP_YOUTUBE_API_KEY,
                                 pageToken: firstPage.data.nextPageToken,
                             },
                             headers: {
@@ -136,7 +136,7 @@ class Youtube extends React.Component {
                               eventType: "live",
                               maxResults: 1,
                               type: "video",
-                              key: process.env.REACT_APP_API_KEY,
+                              key: process.env.REACT_APP_YOUTUBE_API_KEY,
                           },
                           headers: {
                               "If-None-Match": JSON.parse(localStorage.getItem(`live-${channel}`))
@@ -159,7 +159,7 @@ class Youtube extends React.Component {
                           eventType: "live",
                           maxResults: 1,
                           type: "video",
-                          key: process.env.REACT_APP_API_KEY,
+                          key: process.env.REACT_APP_YOUTUBE_API_KEY,
                       },
                   }));
 
@@ -179,7 +179,7 @@ class Youtube extends React.Component {
             //         eventType: "live",
             //         maxResults: 2,
             //         type: "video",
-            //         key: process.env.REACT_APP_API_KEY,
+            //         key: process.env.REACT_APP_YOUTUBE_API_KEY,
             //     },
             // });
 
@@ -197,7 +197,7 @@ class Youtube extends React.Component {
                                 params: {
                                     part: "liveStreamingDetails",
                                     id: stream.id.videoId,
-                                    key: process.env.REACT_APP_API_KEY,
+                                    key: process.env.REACT_APP_YOUTUBE_API_KEY,
                                 },
                             }
                         );
@@ -281,7 +281,7 @@ class Youtube extends React.Component {
                                       channelId: channel.snippet.resourceId.channelId,
                                       maxResults: 1,
                                       publishedAfter: OnlyVideosAfterDate.toISOString(),
-                                      key: process.env.REACT_APP_API_KEY,
+                                      key: process.env.REACT_APP_YOUTUBE_API_KEY,
                                   },
                                   headers: {
                                       "If-None-Match": JSON.parse(
@@ -306,7 +306,7 @@ class Youtube extends React.Component {
                                       channelId: channel.snippet.resourceId.channelId,
                                       maxResults: 1,
                                       publishedAfter: OnlyVideosAfterDate.toISOString(),
-                                      key: process.env.REACT_APP_API_KEY,
+                                      key: process.env.REACT_APP_YOUTUBE_API_KEY,
                                   },
                               }
                           ));
@@ -364,7 +364,7 @@ class Youtube extends React.Component {
                 !localStorage.getItem(`videoDetails-${video.contentDetails.upload.videoId}`)
                     ? (response = await axios
                           .get(
-                              `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${video.contentDetails.upload.videoId}&key=${process.env.REACT_APP_API_KEY}`
+                              `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${video.contentDetails.upload.videoId}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`
                           )
                           .then(console.log("DETAILS SENT")))
                     : (response = JSON.parse(

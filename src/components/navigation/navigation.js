@@ -9,7 +9,7 @@ import "./navigation.scss";
 import logo from "../../assets/images/logo-white.png";
 import Home from "./../Home/Home";
 import Feed from "./../Feed/Feed";
-import Auth from "./../Login/Login";
+import twitchAuth from "../Login/TwitchLogin";
 import youtubeAuth from "./../Login/YoutubeLogin";
 import Posts from "./../posts/Posts";
 
@@ -32,7 +32,7 @@ function Navigation() {
                         <Route
                             path="/youtube/login"
                             component={() => {
-                                window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=http://localhost:3000/youtube/auth&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly&include_granted_scopes=true`;
+                                window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://localhost:3000/youtube/auth&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly&include_granted_scopes=true`;
                                 return null;
                             }}
                         />
@@ -43,7 +43,7 @@ function Navigation() {
                                 return null;
                             }}
                         />
-                        <Route path="/twitch/auth" component={Auth} />
+                        <Route path="/twitch/auth" component={twitchAuth} />
                         <Route path="/youtube/auth" component={youtubeAuth} />
                     </Router>
                 )}
