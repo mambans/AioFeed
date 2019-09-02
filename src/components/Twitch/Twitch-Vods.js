@@ -70,14 +70,21 @@ class TwitchVods extends React.Component {
     }
 
     async getFollowedVods() {
-        const FollowChannelVods = [
-            "sodapoppin",
-            "dizzykitten",
-            "nmplol",
-            "yourpelagea",
-            "jakenbakelive",
-            "malena_tudi",
-        ];
+        // const FollowChannelVods = [
+        //     "sodapoppin",
+        //     "dizzykitten",
+        //     "nmplol",
+        //     "yourpelagea",
+        //     "jakenbakelive",
+        //     "malena",
+        //     "gggibi",
+        // ];
+
+        const response = await axios.get(`http://localhost:3100/vod-channels`);
+        const FollowedChannelVods = response.data.channels[0].map(channel => {
+            return channel.name;
+        });
+
         const followedStreamVods = [];
         const today = new Date();
         const OnlyVodsAfterDate = new Date();
@@ -86,7 +93,7 @@ class TwitchVods extends React.Component {
         try {
             const vodChannels = this.state.FollowedChannels.data.data
                 .map(channel => {
-                    if (FollowChannelVods.includes(channel.to_name.toLowerCase())) {
+                    if (FollowedChannelVods.includes(channel.to_name.toLowerCase())) {
                         return channel.to_id;
                     }
                     return null;
@@ -176,6 +183,7 @@ class TwitchVods extends React.Component {
     }
 
     async componentDidMount() {
+        await this.followedVods();
         await this.getFollowedChannels();
         // await this.TwitterHomeFeed();
         await this.getFollowedVods();
@@ -200,7 +208,7 @@ class TwitchVods extends React.Component {
                 </Spinner>
             );
         } else {
-            console.log("Final vods: ", vods);
+            console.log("Render vods: ", vods);
 
             return (
                 <>
