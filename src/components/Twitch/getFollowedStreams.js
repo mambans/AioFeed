@@ -147,13 +147,17 @@ async function getFollowedOnlineStreams(lastRan) {
 
       // const FilteredLiveFollowedStreams = LiveFollowedStreams.data.data;
 
-      return LiveFollowedStreams.data.data;
+      return {
+        data: LiveFollowedStreams.data.data,
+        status: 200,
+        refreshTimer: refreshRate - (currentTime - lastRan) / 1000,
+      };
     } else {
       console.log(
         "Can auto refresh in " + (refreshRate - (currentTime - lastRan) / 1000) + " sec."
       );
       console.log("Since last refresh: " + (currentTime - lastRan) / 1000 + " sec");
-      return 401;
+      return { refreshTimer: refreshRate - (currentTime - lastRan) / 1000, status: 401 };
     }
   } catch (error) {
     console.error("-Error: ", error.message);

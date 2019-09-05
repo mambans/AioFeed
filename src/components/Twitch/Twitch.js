@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { Button } from "react-bootstrap";
-import Spinner from "react-bootstrap/Spinner";
+import { Button, Spinner } from "react-bootstrap";
+
+import getFollowedOnlineStreams from "./getFollowedStreams";
+import RenderTwitch from "./Render-Twitch";
+import styles from "./Twitch.module.scss";
 
 import Utilities from "utilities/utilities";
 import ErrorHandeling from "./../Error/Error";
@@ -15,6 +18,7 @@ function Twitch() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(null);
+  const [refreshTimer, setRefreshTimer] = useState(200);
 
   const lastRan = useRef(null);
 
@@ -24,12 +28,14 @@ function Twitch() {
         setRefreshing(true);
         const streams = await getFollowedOnlineStreams(lastRan.current);
 
-        if (streams !== 401) {
+        if (streams.status === 200) {
           console.log(streams);
 
-          setLiveStreams(streams);
+          setLiveStreams(streams.data);
           lastRan.current = new Date();
         }
+
+        setRefreshTimer(streams.refreshTimer);
         setRefreshing(false);
       } catch (error) {
         setError(error);
@@ -51,7 +57,7 @@ function Twitch() {
       try {
         const streams = await getFollowedOnlineStreams(lastRan.current);
 
-        setLiveStreams(streams);
+        setLiveStreams(streams.data);
         setIsLoaded(true);
         setRefreshing(false);
       } catch (error) {
@@ -88,7 +94,11 @@ function Twitch() {
         </Button>
         {refreshing ? (
           <Spinner animation="border" role="status" style={Utilities.loadingSpinnerSmall}></Spinner>
-        ) : null}
+        ) : (
+          <p key={refreshTimer} className={styles.refreshTimer}>
+            {`in ${Math.trunc(refreshTimer)} seconds`}
+          </p>
+        )}
         <div className={styles.container}>
           {liveStreams.map(stream => {
             return <RenderTwitch data={stream} key={stream.id} />;
