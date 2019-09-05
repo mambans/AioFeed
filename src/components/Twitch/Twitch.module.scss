@@ -198,6 +198,13 @@
   }
 }
 
+.refreshTimer {
+  position: relative;
+  left: 260px;
+  // bottom: 11px;
+  color: $greyInfo;
+}
+
 /* ------- */
 
 @media screen and (max-width: 1920px) {
@@ -207,5 +214,9 @@
 
   .refreshButton {
     left: 10.5%;
+  }
+
+  .refreshTimer {
+    left: 265px;
   }
 }
