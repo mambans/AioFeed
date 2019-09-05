@@ -10,7 +10,6 @@ async function getFollowedOnlineStreams(lastRan) {
 
     // Only make requests each 2min.
     if (((currentTime - lastRan) / 1000 >= refreshRate && lastRan != null) || lastRan === null) {
-      // if (true) {
       console.log("Refreshing data");
 
       // GET all followed channels.
@@ -112,8 +111,6 @@ async function getFollowedOnlineStreams(lastRan) {
         },
       });
 
-      console.log("gameNames: ", gameNames);
-
       // Add the game name to each stream object.
       LiveFollowedStreams.data.data.map(stream => {
         gameNames.data.data.find(game => {
@@ -160,7 +157,7 @@ async function getFollowedOnlineStreams(lastRan) {
       return { refreshTimer: refreshRate - (currentTime - lastRan) / 1000, status: 401 };
     }
   } catch (error) {
-    console.error("-Error: ", error.message);
+    console.error(error.message);
     return error;
   }
 }

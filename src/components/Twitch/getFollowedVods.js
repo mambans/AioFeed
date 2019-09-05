@@ -34,8 +34,6 @@ async function getFollowedVods(FollowedChannels) {
           !localStorage.getItem(`${channel}-vod`) ||
           JSON.parse(localStorage.getItem(`${channel}-vod`)).casheExpire <= new Date()
         ) {
-          console.log("REQ SENT");
-
           response = await axios.get(`https://api.twitch.tv/helix/videos?`, {
             params: {
               user_id: channel,
@@ -72,7 +70,7 @@ async function getFollowedVods(FollowedChannels) {
 
     return followedOrderedStreamVods;
   } catch (error) {
-    console.error("-Error: ", error.message);
+    console.error(error.message);
     return error;
   }
 }

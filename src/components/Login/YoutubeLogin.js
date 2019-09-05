@@ -1,11 +1,7 @@
 import React from "react";
-// import { OauthSender } from "react-oauth-flow";
+import { Alert, Spinner } from "react-bootstrap";
 
-import Alert from "react-bootstrap/Alert";
-import Spinner from "react-bootstrap/Spinner";
 import Utilities from "utilities/utilities";
-//eslint-disable-next-line
-import { AuthContext } from "components/Login/AuthContextProvider";
 
 class youtubeAuth extends React.Component {
   constructor(props) {

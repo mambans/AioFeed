@@ -8,11 +8,6 @@ import styles from "./Twitch.module.scss";
 import Utilities from "utilities/utilities";
 import ErrorHandeling from "./../Error/Error";
 
-import styles from "./Twitch.module.scss";
-import RenderTwitch from "./Render-Twitch";
-
-import getFollowedOnlineStreams from "./getFollowedStreams";
-
 function Twitch() {
   const [liveStreams, setLiveStreams] = useState();
   const [isLoaded, setIsLoaded] = useState(false);

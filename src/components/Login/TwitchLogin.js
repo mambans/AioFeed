@@ -1,10 +1,8 @@
-import React from "react";
-// import { OauthSender } from "react-oauth-flow";
-
-import Alert from "react-bootstrap/Alert";
-import Spinner from "react-bootstrap/Spinner";
-import Utilities from "utilities/utilities";
 import axios from "axios";
+import React from "react";
+import { Alert, Spinner } from "react-bootstrap";
+
+import Utilities from "utilities/utilities";
 import { AuthContext } from "components/Login/AuthContextProvider";
 
 class Auth extends React.Component {
