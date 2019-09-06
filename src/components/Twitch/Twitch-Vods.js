@@ -1,7 +1,8 @@
 import { Button, Spinner } from "react-bootstrap";
 import React, { useState, useEffect, useRef } from "react";
-import ErrorHandeling from "../Error/Error";
+import Moment from "react-moment";
 
+import ErrorHandeling from "../Error/Error";
 import Utilities from "utilities/utilities";
 import styles from "./Twitch.module.scss";
 import RenderTwitchVods from "./Render-Twitch-Vods";
@@ -18,7 +19,18 @@ function TwitchVods() {
 
   function refresh() {
     console.log("Refreshing vods");
-    getFollowedVods(followedChannels.current);
+    async function fetchData() {
+      try {
+        const followedVods = await getFollowedVods(followedChannels.current);
+
+        setVods(followedVods);
+        setIsLoaded(true);
+      } catch (error) {
+        setError(error);
+      }
+    }
+
+    fetchData();
   }
 
   useEffect(() => {
@@ -54,8 +66,9 @@ function TwitchVods() {
         <Button variant="outline-secondary" className={styles.refreshButton} onClick={refresh}>
           Reload
         </Button>
+        <Moment from={vods.expire} ago className={styles.vodRefreshTimer}></Moment>
         <div className={styles.container}>
-          {vods.map(vod => {
+          {vods.data.map(vod => {
             return <RenderTwitchVods data={vod} key={vod.id} />;
           })}
         </div>

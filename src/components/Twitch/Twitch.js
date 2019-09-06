@@ -91,7 +91,9 @@ function Twitch() {
           <Spinner animation="border" role="status" style={Utilities.loadingSpinnerSmall}></Spinner>
         ) : (
           <p key={refreshTimer} className={styles.refreshTimer}>
-            {`in ${Math.trunc(refreshTimer)} seconds`}
+            {Math.trunc(refreshTimer) >= 0
+              ? `in ${Math.trunc(refreshTimer)} seconds`
+              : "recently refreshed"}
           </p>
         )}
         <div className={styles.container}>

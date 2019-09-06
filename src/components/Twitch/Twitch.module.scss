@@ -199,9 +199,16 @@
 }
 
 .refreshTimer {
-  position: relative;
+  position: absolute;
   left: 260px;
+  width: max-content;
   // bottom: 11px;
+  color: $greyInfo;
+}
+.vodRefreshTimer {
+  position: relative;
+  left: 190px;
+  top: 31px;
   color: $greyInfo;
 }
 
