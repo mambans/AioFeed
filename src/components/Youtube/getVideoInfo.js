@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import Utilities from "./../../utilities/utilities";
+import Utilities from "../../utilities/Utilities";
 
 async function getVideoInfo(videoList) {
   await Promise.all(

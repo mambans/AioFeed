@@ -4,16 +4,16 @@ import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 
 //eslint-disable-next-line
-import Youtube from "../Youtube/Youtube";
-import Twitch from "../Twitch/Twitch";
-import TwitchVods from "../Twitch/Twitch-vods";
-import ErrorHandeling from "./../Error/Error";
+import Youtube from "../youtube/Youtube";
+import Twitch from "../twitch/Twitch";
+import TwitchVods from "../twitch/Twitch-vods";
+import ErrorHandeling from "./../error/Error";
 import styles from "./Feed.module.scss";
-import Utilities from "utilities/utilities";
+import Utilities from "utilities/Utilities";
 
 function Feed() {
-  const [isLoaded, setIsloaded] = useState(true);
-  const [error, setError] = useState(null);
+  const [isLoaded] = useState(true);
+  const [error] = useState(null);
 
   if (error) {
     return <ErrorHandeling data={error}></ErrorHandeling>;

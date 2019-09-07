@@ -1,7 +1,7 @@
 import React from "react";
 import { Alert, Spinner } from "react-bootstrap";
 
-import Utilities from "utilities/utilities";
+import Utilities from "utilities/Utilities";
 
 class youtubeAuth extends React.Component {
   constructor(props) {

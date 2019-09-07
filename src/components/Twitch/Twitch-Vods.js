@@ -2,15 +2,15 @@ import { Button, Spinner } from "react-bootstrap";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Moment from "react-moment";
 
-import ErrorHandeling from "../Error/Error";
-import Utilities from "utilities/utilities";
+import ErrorHandeling from "../error/Error";
+import Utilities from "utilities/Utilities";
 import styles from "./Twitch.module.scss";
 import RenderTwitchVods from "./Render-Twitch-Vods";
 
-import getFollowedChannels from "./getFollowedChannels";
-import getFollowedVods from "./getFollowedVods";
+import getFollowedChannels from "./GetFollowedChannels";
+import getFollowedVods from "./GetFollowedVods";
 
-import AddChannelForm from "./vodSettings";
+import AddChannelForm from "./VodSettings";
 
 import Popup from "reactjs-popup";
 

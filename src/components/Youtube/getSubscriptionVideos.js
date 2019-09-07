@@ -1,7 +1,7 @@
 import axios from "axios";
 import _ from "lodash";
 
-import getVideoInfo from "./getVideoInfo";
+import getVideoInfo from "./GetVideoInfo";
 
 async function getSubscriptionVideos(followedChannels) {
   const thresholdDate = 3;

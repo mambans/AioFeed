@@ -1,6 +1,6 @@
 import axios from "axios";
 
-async function getFollowChannels() {
+async function getFollowedChannels() {
   try {
     if (
       !localStorage.getItem(`followedChannels`) ||
@@ -64,4 +64,4 @@ async function getFollowChannels() {
   }
 }
 
-export default getFollowChannels;
+export default getFollowedChannels;

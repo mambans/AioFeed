@@ -2,8 +2,8 @@ import axios from "axios";
 import React from "react";
 import { Alert, Spinner } from "react-bootstrap";
 
-import Utilities from "utilities/utilities";
-import { AuthContext } from "components/Login/AuthContextProvider";
+import Utilities from "utilities/Utilities";
+import { AuthContext } from "components/login/AuthContextProvider";
 
 class Auth extends React.Component {
   constructor(props) {

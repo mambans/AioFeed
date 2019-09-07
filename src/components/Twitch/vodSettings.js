@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import { Button, Spinner } from "react-bootstrap";
 
-import Utilities from "./../../utilities/utilities";
+import Utilities from "./../../utilities/Utilities";
 import "./Twitch.scss";
 
 class AddChannelForm extends React.Component {

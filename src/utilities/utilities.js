@@ -1,7 +1,7 @@
 import React from "react";
 
 import placeholderImg from "./../assets/images/placeholder.png";
-import styles from "components/Twitch/Twitch.module.scss";
+import styles from "components/twitch/Twitch.module.scss";
 
 const Utilities = {
   loadingSpinner: {

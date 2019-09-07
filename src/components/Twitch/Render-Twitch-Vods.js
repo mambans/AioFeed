@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
 import Moment from "react-moment";
+import React, { useEffect } from "react";
 import { store } from "react-notifications-component";
 
 import styles from "./Twitch.module.scss";
-import Utilities from "utilities/utilities";
+import Utilities from "utilities/Utilities";
 
 function RenderTwitchVods(data) {
   useEffect(() => {

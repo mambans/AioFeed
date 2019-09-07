@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Button, Spinner } from "react-bootstrap";
 
-import getFollowedOnlineStreams from "./getFollowedStreams";
+import getFollowedOnlineStreams from "./GetFollowedStreams";
 import RenderTwitch from "./Render-Twitch";
 import styles from "./Twitch.module.scss";
 
-import Utilities from "utilities/utilities";
-import ErrorHandeling from "./../Error/Error";
+import Utilities from "utilities/Utilities";
+import ErrorHandeling from "./../error/Error";
 
 function Twitch() {
   const [liveStreams, setLiveStreams] = useState();

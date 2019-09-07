@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import Moment from "react-moment";
 
-import getFollowChannels from "./getFollowedChannels";
-import getSubscriptionVideos from "./getSubscriptionVideos";
+import getFollowedChannels from "./GetFollowedChannels";
+import getSubscriptionVideos from "./GetSubscriptionVideos";
 import RenderYoutube from "./Render-Youtube";
 import styles from "./Youtube.module.scss";
 
-import Utilities from "utilities/utilities";
-import ErrorHandeling from "./../Error/Error";
+import Utilities from "utilities/Utilities";
+import ErrorHandeling from "./../error/Error";
 
 function Youtube() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -23,7 +23,7 @@ function Youtube() {
     async function fetchData() {
       try {
         setRefreshing(true);
-        followedChannels.current = await getFollowChannels();
+        followedChannels.current = await getFollowedChannels();
 
         const SubscriptionVideos = await getSubscriptionVideos(followedChannels.current);
 
@@ -44,7 +44,7 @@ function Youtube() {
     async function fetchData() {
       try {
         setRefreshing(true);
-        followedChannels.current = await getFollowChannels();
+        followedChannels.current = await getFollowedChannels();
 
         const SubscriptionVideos = await getSubscriptionVideos(followedChannels.current);
 

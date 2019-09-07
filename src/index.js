@@ -6,7 +6,7 @@ import "./index.scss";
 
 import * as serviceWorker from "./serviceWorker";
 
-import Navigation from "./components/navigation/navigation";
+import Navigation from "./components/navigation/Navigation";
 
 // ReactDOM.render(<App />, document.getElementById("root"));
 
@@ -16,8 +16,8 @@ import Navigation from "./components/navigation/navigation";
 serviceWorker.unregister();
 
 ReactDOM.render(
-    <div id="main-body">
-        <Navigation />
-    </div>,
-    document.getElementById("root")
+  <div id="main-body">
+    <Navigation />
+  </div>,
+  document.getElementById("root")
 );

@@ -2,9 +2,8 @@ import Moment from "react-moment";
 import React, { useEffect } from "react";
 import { store } from "react-notifications-component";
 
-import Utilities from "utilities/utilities";
+import Utilities from "utilities/Utilities";
 import styles from "./Youtube.module.scss";
-
 
 function RenderYoutube(data) {
   function streamType(type) {

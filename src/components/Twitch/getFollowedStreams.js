@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import placeholder from "./../../assets/images/placeholder.png";
 
 async function getFollowedOnlineStreams(lastRan) {
