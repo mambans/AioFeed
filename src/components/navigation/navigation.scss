@@ -1,21 +1,25 @@
 nav {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    padding-left: 0 !important;
-    height: 75px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: 0 !important;
+  height: 75px;
 
-    .logo-link {
-        padding: unset;
-        height: 100%;
+  .logo-link {
+    padding: unset;
+    height: 100%;
 
-        .logo {
-            padding: 0 10px;
-            width: unset;
-            height: 100%;
-        }
+    .logo {
+      padding: 0 10px;
+      width: unset;
+      height: 100%;
     }
+  }
 }
 
 .bg-dark {
-    background-color: #0f141aa1 !important;
+  background-color: #0f141aa1 !important;
+}
+
+.navbar-nav a.nav-link {
+  font-size: 1.15rem;
 }

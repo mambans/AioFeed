@@ -3,7 +3,7 @@
 .container {
   display: flex;
   flex-wrap: wrap;
-  width: 90%;
+  width: 87%;
   margin: auto;
   margin-top: 25px;
 }
@@ -15,16 +15,16 @@
     "title title"
     "info info";
 
-  width: 250px;
+  width: 300px;
   margin: 15px;
-  max-height: 250px;
+  max-height: 300px;
 }
 
 .title {
   margin-top: 10px;
   grid-area: title;
   font-size: 1.05rem;
-  max-width: 250px;
+  max-width: 300px;
   height: 40px;
   overflow: hidden;
 
@@ -52,8 +52,8 @@
     -o-transform: scale(1.1);
   }
   img {
-    width: 250px;
-    max-height: 140px;
+    width: 300px;
+    max-height: 170px;
     object-fit: cover;
   }
 }
@@ -71,7 +71,7 @@
   display: flex;
   justify-content: flex-end;
   left: 75px;
-  width: 175px;
+  width: 220px;
 }
 
 .duration {
@@ -114,11 +114,10 @@
 .game {
   bottom: 20px;
   position: relative;
-  width: max-content;
   background: none;
   padding-right: 5px;
   font-size: 0.9rem;
-  width: 210px;
+  width: 270px;
 
   a {
     color: lighten($greyInfo, 20%);
@@ -130,8 +129,11 @@
 }
 
 .imgContainer {
-  max-height: 140px;
-  min-height: 140px;
+  max-height: 170px;
+  min-height: 170px;
+  a {
+    display: block;
+  }
 }
 
 .domainTitle {
@@ -145,12 +147,12 @@
   border-radius: 7px;
   bottom: 40px;
   position: relative;
-  right: -234px;
+  right: -284px;
 }
 
 .refreshButton {
   position: relative;
-  left: 5.5%;
+  left: 7%;
   bottom: -20px;
 }
 
@@ -163,7 +165,7 @@
   margin-bottom: 5px;
 
   .profile_img {
-    width: 25px;
+    width: 30px;
     border-radius: 3px;
   }
 
@@ -179,7 +181,7 @@
   display: flex;
 
   .game_img {
-    width: 25px;
+    width: 30px;
     border-radius: 3px;
   }
 
@@ -198,32 +200,97 @@
   }
 }
 
+.gameContainer p a,
+.channelContainer p a {
+  font-size: 1rem;
+}
+
 .refreshTimer {
   position: absolute;
-  left: 260px;
+  left: 330px;
   width: max-content;
   // bottom: 11px;
   color: $greyInfo;
+  font-size: 1.1rem;
 }
 .vodRefreshTimer {
   position: relative;
-  left: 190px;
+  left: 255px;
   top: 31px;
   color: $greyInfo;
 }
 
 /* ------- */
 
+.settings {
+  position: relative;
+  left: 86.7%;
+  top: 20px;
+  color: $greyInfo;
+}
+
+form {
+  padding: 5px;
+}
+
+input[type="text"] {
+  color: white;
+  border: none;
+  border-bottom: 1px solid white;
+  background-color: transparent;
+  background: transparent;
+}
+
+input[type="submit"] {
+  border-radius: 5px;
+  border: thin solid #484848;
+  background-color: #054328;
+  color: rgb(224, 224, 224);
+  width: 100%;
+  margin-top: 5px;
+  &:hover {
+    color: white;
+    background-color: #015c34;
+  }
+}
+
+ul {
+  list-style: none;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: rgb(8, 3, 20);
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    height: 35px;
+    align-items: center;
+  }
+
+  li p {
+    margin: 0;
+  }
+}
+
 @media screen and (max-width: 1920px) {
   .container {
-    width: 80%;
+    width: 87%;
   }
 
   .refreshButton {
-    left: 10.5%;
+    left: 7.5%;
   }
 
   .refreshTimer {
-    left: 265px;
+    left: 245px;
+  }
+
+  .vodRefreshTimer {
+    left: 170px;
+  }
+
+  .settings {
+    left: 81.5%;
   }
 }

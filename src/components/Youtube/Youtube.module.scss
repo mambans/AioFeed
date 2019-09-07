@@ -1,134 +1,134 @@
 @import "./../../variables.scss";
 
 .container {
-    display: flex;
-    flex-wrap: wrap;
-    width: 90%;
-    margin: auto;
-    margin-top: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 87%;
+  margin: auto;
+  margin-top: 25px;
 }
 
 .video {
-    display: grid;
-    grid-template-areas:
-        "video video"
-        "title title"
-        "info info";
+  display: grid;
+  grid-template-areas:
+    "video video"
+    "title title"
+    "info info";
 
-    width: 250px;
-    margin: 15px;
-    max-height: 250px;
+  width: 300px;
+  margin: 15px;
+  max-height: 300px;
 }
 
 .title {
-    margin-top: 10px;
-    grid-area: title;
-    font-size: 1.2rem;
-    max-width: 250px;
-    overflow: hidden;
+  margin-top: 10px;
+  grid-area: title;
+  font-size: 1.2rem;
+  max-width: 300px;
+  overflow: hidden;
 
-    a {
-        color: $videoTitle;
+  a {
+    color: $videoTitle;
 
-        &:hover {
-            color: lighten($videoTitle, 30%);
-        }
+    &:hover {
+      color: lighten($videoTitle, 30%);
     }
+  }
 }
 
 .imgContainer {
-    grid-area: video;
+  grid-area: video;
+  transition: all 0.2s ease-in-out;
+  img {
     transition: all 0.2s ease-in-out;
-    img {
-        transition: all 0.2s ease-in-out;
-        border-radius: 10px;
-    }
-    &:hover {
-        transform: scale(1.1);
-        -webkit-transform: scale(1.1);
-        -moz-transform: scale(1.1);
-        -ms-transform: scale(1.1);
-        -o-transform: scale(1.1);
-    }
-    img {
-        width: 250px;
-        max-height: 140px;
-        object-fit: cover;
-    }
+    border-radius: 10px;
+  }
+  &:hover {
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -o-transform: scale(1.1);
+  }
+  img {
+    width: 300px;
+    max-height: 170px;
+    object-fit: cover;
+  }
 }
 
 .date {
-    grid-area: info;
+  grid-area: info;
 
-    color: $greyInfo;
+  color: $greyInfo;
 }
 
 .channel {
-    grid-area: info;
-    justify-self: end;
+  grid-area: info;
+  justify-self: end;
 
-    a {
-        color: $greyInfo;
+  a {
+    color: $greyInfo;
 
-        &:hover {
-            color: lighten($greyInfo, 30%);
-        }
+    &:hover {
+      color: lighten($greyInfo, 30%);
     }
+  }
 }
 
 .duration {
-    bottom: 21px;
-    position: relative;
-    width: max-content;
-    background: #2222228c;
-    padding-right: 5px;
-    font-size: 0.9rem;
-    padding-left: 2px;
-    border-top-right-radius: 10px;
+  bottom: 21px;
+  position: relative;
+  width: max-content;
+  background: #2222228c;
+  padding-right: 5px;
+  font-size: 0.9rem;
+  padding-left: 2px;
+  border-top-right-radius: 10px;
 }
 
 .imgContainer {
-    max-height: 140px;
-    min-height: 140px;
+  max-height: 170px;
+  min-height: 170px;
 }
 
 .domainTitle {
-    text-align: center;
+  text-align: center;
 }
 
 .liveDot {
-    width: 14px;
-    height: 14px;
-    background-color: red;
-    border-radius: 7px;
-    bottom: 41px;
-    position: relative;
-    right: -234px;
+  width: 14px;
+  height: 14px;
+  background-color: red;
+  border-radius: 7px;
+  bottom: 41px;
+  position: relative;
+  right: -234px;
 }
 
 .refreshButton {
-    position: relative;
-    left: 5.5%;
-    bottom: -20px;
+  position: relative;
+  left: 7%;
+  bottom: -20px;
 }
 
-.lastRender {
-    position: relative;
-    left: 185px;
-    top: 30px;
-    color: $greyInfo;
+.lastRefresh {
+  position: relative;
+  left: 255px;
+  top: 32px;
+  color: $greyInfo;
 }
 
 @media screen and (max-width: 1920px) {
-    .container {
-        width: 80%;
-    }
+  .container {
+    width: 86.5%;
+  }
 
-    .refreshButton {
-        left: 10.5%;
-    }
+  .refreshButton {
+    left: 7.5%;
+  }
 
-    .lastRender {
-        left: 195px;
-    }
+  .lastRefresh {
+    left: 165px;
+  }
 }

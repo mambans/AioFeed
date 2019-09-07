@@ -1,13 +1,13 @@
 import axios from "axios";
 import _ from "lodash";
 
-async function getFollowedVods(FollowedChannels) {
+async function getFollowedVods(FollowedChannels, forceRun) {
   const thresholdDate = 1;
   const vodExpire = 3;
 
   try {
-    const reqVodChannels = await axios.get(`http://localhost:3100/vod-channels`);
-    const FollowedChannelVods = reqVodChannels.data.channels[0].map(channel => {
+    const reqVodChannels = await axios.get(`http://localhost:3100/notifies/vod-channels`);
+    const FollowedChannelVods = reqVodChannels.data.channels.map(channel => {
       return channel.name;
     });
 
@@ -30,53 +30,13 @@ async function getFollowedVods(FollowedChannels) {
     let response = null;
     if (
       !localStorage.getItem(`Twitch-vods`) ||
-      JSON.parse(localStorage.getItem("Twitch-vods")).expire <= new Date()
+      JSON.parse(localStorage.getItem("Twitch-vods")).expire <= new Date() ||
+      forceRun
     ) {
+      console.log("--:Vod requests sent.");
+
       await Promise.all(
         vodChannels.map(async channel => {
-          // if (
-          //   !localStorage.getItem(`${channel}-vod`) ||
-          //   JSON.parse(localStorage.getItem(`${channel}-vod`)).casheExpire <= new Date()
-          // ) {
-          //   response = await axios.get(`https://api.twitch.tv/helix/videos?`, {
-          //     params: {
-          //       user_id: channel,
-          //       first: 2,
-          //       period: "week",
-          //       type: "archive",
-          //     },
-          //     headers: {
-          //       "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-          //     },
-          //   });
-
-          //   let currentTime = new Date();
-          //   response.casheExpire = currentTime.setHours(currentTime.getHours() + vodExpire);
-          //   localStorage.setItem(`${channel}-vod`, JSON.stringify(response));
-          // } else {
-          //   console.log(
-          //     "Vod cashe expire in: ",
-          //     (JSON.parse(localStorage.getItem(`${channel}-vod`)).casheExpire - new Date()) /
-          //       1000 /
-          //       60 /
-          //       60
-          //   );
-          //   response = JSON.parse(localStorage.getItem(`${channel}-vod`));
-          // }
-
-          // response.data.data.forEach(vod => {
-          //   followedStreamVods.push(vod);
-          // });
-
-          // console.log("response.data.data: ", response.data.data);
-          // console.log("followedStreamVods: ", followedStreamVods);
-
-          // ------------
-
-          // if (
-          //   !localStorage.getItem(`Twitch-vods`) ||
-          //   JSON.parse(localStorage.getItem("Twitch-vods").expire <= new Date())
-          // ) {
           response = await axios.get(`https://api.twitch.tv/helix/videos?`, {
             params: {
               user_id: channel,
@@ -89,15 +49,9 @@ async function getFollowedVods(FollowedChannels) {
             },
           });
 
-          // let currentTime = new Date();
-          // response.casheExpire = currentTime.setHours(currentTime.getHours() + vodExpire);
-          // localStorage.setItem(`${channel}-vod`, JSON.stringify(response));
-
           response.data.data.forEach(vod => {
             followedStreamVods.push(vod);
           });
-          // }
-          // --------------
         })
       );
 
@@ -113,9 +67,6 @@ async function getFollowedVods(FollowedChannels) {
         })
       );
     }
-
-    console.log("followedStreamVods: ", followedStreamVods);
-    console.log("cache Twitch-vods: ", JSON.parse(localStorage.getItem("Twitch-vods")));
 
     return JSON.parse(localStorage.getItem("Twitch-vods"));
   } catch (error) {

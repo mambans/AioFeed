@@ -1,5 +1,5 @@
 import { Button, Spinner } from "react-bootstrap";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Moment from "react-moment";
 
 import ErrorHandeling from "../Error/Error";
@@ -10,6 +10,10 @@ import RenderTwitchVods from "./Render-Twitch-Vods";
 import getFollowedChannels from "./getFollowedChannels";
 import getFollowedVods from "./getFollowedVods";
 
+import AddChannelForm from "./vodSettings";
+
+import Popup from "reactjs-popup";
+
 function TwitchVods() {
   const [vods, setVods] = useState();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -17,11 +21,11 @@ function TwitchVods() {
 
   const followedChannels = useRef();
 
-  function refresh() {
+  const refresh = useCallback(() => {
     console.log("Refreshing vods");
     async function fetchData() {
       try {
-        const followedVods = await getFollowedVods(followedChannels.current);
+        const followedVods = await getFollowedVods(followedChannels.current, true);
 
         setVods(followedVods);
         setIsLoaded(true);
@@ -31,9 +35,32 @@ function TwitchVods() {
     }
 
     fetchData();
-  }
+  }, []);
+
+  const windowFocusHandler = useCallback(() => {
+    async function fetchData() {
+      console.log("Vods windowFocusHandler");
+
+      try {
+        followedChannels.current = await getFollowedChannels();
+        const followedVods = await getFollowedVods(followedChannels.current);
+
+        setVods(followedVods);
+        setIsLoaded(true);
+      } catch (error) {
+        setError(error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  const windowBlurHandler = useCallback(() => {
+    console.log("Focus lost");
+  }, []);
 
   useEffect(() => {
+    window.addEventListener("focus", windowFocusHandler);
+    window.addEventListener("blur", windowBlurHandler);
     async function fetchData() {
       try {
         followedChannels.current = await getFollowedChannels();
@@ -48,7 +75,12 @@ function TwitchVods() {
     }
 
     fetchData();
-  }, []);
+
+    return () => {
+      window.removeEventListener("blur", windowBlurHandler);
+      window.removeEventListener("focus", windowFocusHandler);
+    };
+  }, [windowBlurHandler, windowFocusHandler]);
 
   if (error) {
     return <ErrorHandeling data={error}></ErrorHandeling>;
@@ -67,6 +99,21 @@ function TwitchVods() {
           Reload
         </Button>
         <Moment from={vods.expire} ago className={styles.vodRefreshTimer}></Moment>
+        <Popup
+          placeholder="Channel name.."
+          trigger={
+            <Button
+              variant="outline-secondary"
+              className={styles.settings}
+              // onClick={addChannelForm}
+            >
+              Settings
+            </Button>
+          }
+          position="left center"
+          className="settingsPopup">
+          <AddChannelForm></AddChannelForm>
+        </Popup>
         <div className={styles.container}>
           {vods.data.map(vod => {
             return <RenderTwitchVods data={vod} key={vod.id} />;
