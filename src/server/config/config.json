@@ -1,0 +1,7 @@
+{
+  "host": "localhost",
+  "user": "root",
+  "password": "merpler23995",
+  "database": "notifies",
+  "multipleStatements": true
+}
