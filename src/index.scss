@@ -3,29 +3,29 @@
 @import "./variables.scss";
 
 body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
-        "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
-    // font-family: "Fira Code", monospace;
+  // font-family: "Fira Code", monospace;
 }
 
 code {
-    font-family: "Fira Code", monospace, source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-        monospace;
+  font-family: "Fira Code", monospace, source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
 
 body {
-    background: $backgroundBlue;
-    color: $textColor;
+  background: $backgroundBlue;
+  color: $textColor;
 
-    background-image: url("https://i.imgur.com/Pt25ia5.jpg");
-    object-fit: cover !important;
-    background-attachment: fixed !important;
+  background-image: url("https://i.imgur.com/Z2Mr5eg.jpg");
+  object-fit: cover !important;
+  background-attachment: fixed !important;
 }
 
 a:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
