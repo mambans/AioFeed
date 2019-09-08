@@ -23,3 +23,24 @@ nav {
 .navbar-nav a.nav-link {
   font-size: 1.15rem;
 }
+
+.container {
+  .mr-auto.navbar-nav {
+    justify-content: center;
+  }
+
+  .navbar-nav .nav-link {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+}
+
+.logo-link.nav-link {
+  color: white;
+  font-size: 1.3rem;
+  width: 250px;
+}
+
+.navbar-nav {
+  min-width: 250px;
+}
