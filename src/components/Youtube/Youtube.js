@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import Moment from "react-moment";
+import Alert from "react-bootstrap/Alert";
 
 import getFollowedChannels from "./GetFollowedChannels";
 import getSubscriptionVideos from "./GetSubscriptionVideos";
@@ -16,6 +17,7 @@ function Youtube() {
   const [videos, setVideos] = useState(null);
   const [refreshing, setRefreshing] = useState(null);
   const [lastRefresh, setLastRefresh] = useState(null);
+  const [requestError, setRequestError] = useState();
 
   const followedChannels = useRef();
 
@@ -25,8 +27,11 @@ function Youtube() {
         setRefreshing(true);
         followedChannels.current = await getFollowedChannels();
 
-        const SubscriptionVideos = await getSubscriptionVideos(followedChannels.current);
+        const SubscriptionData = await getSubscriptionVideos(followedChannels.current);
 
+        const SubscriptionVideos = SubscriptionData.data;
+
+        setRequestError(SubscriptionData.error.response.data.error);
         setVideos(SubscriptionVideos);
         setLastRefresh(new Date());
         setIsLoaded(true);
@@ -46,8 +51,12 @@ function Youtube() {
         setRefreshing(true);
         followedChannels.current = await getFollowedChannels();
 
-        const SubscriptionVideos = await getSubscriptionVideos(followedChannels.current);
+        const SubscriptionData = await getSubscriptionVideos(followedChannels.current);
 
+        const SubscriptionVideos = SubscriptionData.data;
+
+        // const SubscriptionVideos = await getSubscriptionVideos(followedChannels.current);
+        setRequestError(SubscriptionData.error.response.data.error);
         setVideos(SubscriptionVideos);
         setLastRefresh(new Date());
         setIsLoaded(true);
@@ -83,6 +92,15 @@ function Youtube() {
             {lastRefresh}
           </Moment>
         )}
+        {requestError && requestError.code === 403 ? (
+          // <p className={styles.requestError}>{requestError.response.data.error.errors[0].reason}</p>
+          <Alert
+            key={requestError.errors[0].reason}
+            className={styles.requestError}
+            variant={"warning"}>
+            {requestError.errors[0].reason}
+          </Alert>
+        ) : null}
         <div className={styles.container}>
           {videos.map(video => {
             return <RenderYoutube data={video} key={video.contentDetails.upload.videoId} />;

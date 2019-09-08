@@ -119,6 +119,15 @@
   color: $greyInfo;
 }
 
+.requestError {
+  left: 310px;
+  padding: 5px;
+  opacity: 0.8;
+  display: inline;
+  top: 23px;
+  margin: 0;
+}
+
 @media screen and (max-width: 1920px) {
   .container {
     width: 86.5%;

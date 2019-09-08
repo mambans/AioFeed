@@ -60,7 +60,11 @@ async function getFollowedChannels() {
     }
   } catch (error) {
     console.error(error.message);
-    return error.message;
+    if (localStorage.getItem("followedChannels")) {
+      return JSON.parse(localStorage.getItem("followedChannels")).data;
+    } else {
+      return error;
+    }
   }
 }
 

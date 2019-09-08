@@ -13,6 +13,7 @@ async function getSubscriptionVideos(followedChannels) {
   //eslint-disable-next-line
   let liveStreams = [];
   let videos = [];
+  let error = null;
 
   try {
     await Promise.all(
@@ -35,20 +36,26 @@ async function getSubscriptionVideos(followedChannels) {
                   ).data.etag,
                 },
               })
-              .catch(function(error) {
+              .catch(function(e) {
+                error = e;
+
                 return JSON.parse(
                   localStorage.getItem(`activity-${channel.snippet.resourceId.channelId}`)
                 );
               }))
-          : (response = await axios.get(`https://www.googleapis.com/youtube/v3/activities?`, {
-              params: {
-                part: "snippet,contentDetails",
-                channelId: channel.snippet.resourceId.channelId,
-                maxResults: 5,
-                publishedAfter: OnlyVideosAfterDate.toISOString(),
-                key: process.env.REACT_APP_YOUTUBE_API_KEY,
-              },
-            }));
+          : (response = await axios
+              .get(`https://www.googleapis.com/youtube/v3/activities?`, {
+                params: {
+                  part: "snippet,contentDetails",
+                  channelId: channel.snippet.resourceId.channelId,
+                  maxResults: 5,
+                  publishedAfter: OnlyVideosAfterDate.toISOString(),
+                  key: process.env.REACT_APP_YOUTUBE_API_KEY,
+                },
+              })
+              .catch(function(e) {
+                error = e;
+              }));
 
         localStorage.setItem(
           `activity-${channel.snippet.resourceId.channelId}`,
@@ -79,7 +86,7 @@ async function getSubscriptionVideos(followedChannels) {
 
     videos = _.reverse(_.sortBy(videosUnordered, d => d.snippet.publishedAt));
 
-    return videos;
+    return { data: videos, error: error };
   } catch (error) {
     console.error(error);
     return error;
