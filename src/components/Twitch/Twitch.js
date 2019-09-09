@@ -4,7 +4,6 @@ import { Button, Spinner } from "react-bootstrap";
 import getFollowedOnlineStreams from "./GetFollowedStreams";
 import RenderTwitch from "./Render-Twitch";
 import styles from "./Twitch.module.scss";
-
 import Utilities from "utilities/Utilities";
 import ErrorHandeling from "./../error/Error";
 
@@ -14,6 +13,7 @@ function Twitch() {
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(null);
   const [refreshTimer, setRefreshTimer] = useState(200);
+  // const [firstLoad, setFirstLoad] = useState(true);
 
   const lastRan = useRef(null);
 
@@ -24,8 +24,6 @@ function Twitch() {
         const streams = await getFollowedOnlineStreams(lastRan.current);
 
         if (streams.status === 200) {
-          console.log(streams);
-
           setLiveStreams(streams.data);
           lastRan.current = new Date();
         }
@@ -39,9 +37,7 @@ function Twitch() {
     fetchData();
   }, []);
 
-  const windowBlurHandler = useCallback(() => {
-    console.log("Focus lost");
-  }, []);
+  const windowBlurHandler = useCallback(() => {}, []);
 
   useEffect(() => {
     window.addEventListener("focus", windowFocusHandler);

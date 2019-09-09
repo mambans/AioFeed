@@ -39,8 +39,6 @@ function TwitchVods() {
 
   const windowFocusHandler = useCallback(() => {
     async function fetchData() {
-      console.log("Vods windowFocusHandler");
-
       try {
         followedChannels.current = await getFollowedChannels();
         const followedVods = await getFollowedVods(followedChannels.current);
@@ -54,9 +52,7 @@ function TwitchVods() {
     fetchData();
   }, []);
 
-  const windowBlurHandler = useCallback(() => {
-    console.log("Focus lost");
-  }, []);
+  const windowBlurHandler = useCallback(() => {}, []);
 
   useEffect(() => {
     window.addEventListener("focus", windowFocusHandler);

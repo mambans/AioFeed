@@ -18,13 +18,13 @@ function RenderTwitch(data) {
   function gameName(input) {
     if (input.length > 50) return input.substring(0, 50) + "..";
     else if (input.length < 50) {
-      return input + "\xa0".repeat(62 - input.length);
+      return input + "\xa0".repeat(64 - input.length) + "\n";
     } else return input;
   }
 
   useEffect(() => {
     function addNotification(title, message, type) {
-      store.addNotification({
+      return store.addNotification({
         title: title,
         message: message,
         width: 350,
@@ -46,14 +46,15 @@ function RenderTwitch(data) {
       `${gameName(data.data.game_name)} \n ${Utilities.truncate(data.data.title, 50)}`,
       "info"
     );
+
     return () => {
       addNotification(data.data.user_name, "Offline", "danger");
     };
-  }, [data.data.game_name, data.data.title, data.data.user_name]);
+  }, [data.data.game_name, data.data.title, data.data.user_name, data.firstLoad]);
 
   return (
     <>
-      <ReactTooltip delayShow="250" place="bottom" type="dark" effect="solid" />
+      <ReactTooltip delayShow={250} place="bottom" type="dark" effect="solid" />
       <div className={styles.video} key={data.data.id}>
         <div className={styles.imgContainer}>
           <a

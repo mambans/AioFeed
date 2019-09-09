@@ -41,7 +41,7 @@ function RenderTwitchVods(data) {
 
   return (
     <>
-      <ReactTooltip delayShow="250" place="bottom" type="dark" effect="solid" />
+      <ReactTooltip delayShow={250} place="bottom" type="dark" effect="solid" />
       <div className={styles.video}>
         <div className={styles.imgContainer}>
           <a className={styles.img} href={data.data.url}>
