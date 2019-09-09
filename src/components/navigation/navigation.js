@@ -1,51 +1,68 @@
+// import AuthContextProvider, { AuthContext } from "components/auth/AuthContextProvider";
 import React from "react";
-import { Navbar, NavDropdown, Nav } from "react-bootstrap";
+import { Navbar, NavDropdown, Nav, Container } from "react-bootstrap";
 import { BrowserRouter as Router, NavLink, Route, Redirect } from "react-router-dom";
-// import ReactDOM from "react-dom";
-// import GoogleLogin from "react-google-login";
 
-// Own modules
 import "./navigation.scss";
 import logo from "../../assets/images/logo-v2.png";
 import Home from "./../home/Home";
 import Feed from "./../feed/Feed";
-import twitchAuth from "../login/TwitchLogin";
-import youtubeAuth from "./../login/YoutubeLogin";
-import Posts from "./../posts/Posts";
+import youtubeAuth from "./../auth/YoutubeAuth";
+import TwitchAuth from "./../auth/TwitchAuth";
+import ErrorHandeling from "./../error/Error";
 
-import AuthContextProvider, { AuthContext } from "components/login/AuthContextProvider";
+// import Posts from "./../posts/Posts";
+import streamOnlineWebhook from "./../twitch/Twitchwebhooks";
+import asd from "./../twitch/asd";
 
 function Navigation() {
   return (
-    <AuthContextProvider>
-      <AuthContext.Consumer>
-        {({ loggedIn }) => (
-          <Router>
-            <NavigationBar />
+    // <AuthContextProvider>
+    //   <AuthContext.Consumer>
+    //     {({ loggedIn }) => (
+    <Router>
+      <NavigationBar />
 
-            <Route exact path="/" component={Home} />
-            <Route path="/feed" render={() => (loggedIn ? <Feed /> : <Redirect to="/login" />)} />
-            <Route path="/posts" component={Posts} />
-            <Route
-              path="/youtube/login"
-              component={() => {
-                window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://localhost:3000/youtube/auth&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly&include_granted_scopes=true`;
-                return null;
-              }}
-            />
-            <Route
-              path="/login"
-              component={() => {
-                window.location.href = `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=http://localhost:3000/twitch/auth&scope=channel:read:subscriptions user:read:broadcast&response_type=code`;
-                return null;
-              }}
-            />
-            <Route path="/twitch/auth" component={twitchAuth} />
-            <Route path="/youtube/auth" component={youtubeAuth} />
-          </Router>
-        )}
-      </AuthContext.Consumer>
-    </AuthContextProvider>
+      <Route exact path="/" component={Home} />
+      <Route
+        path="/feed"
+        render={() =>
+          sessionStorage.getItem("YoutubeLoggedIn") === "true" &&
+          sessionStorage.getItem("TwitchLoggedIn") === "true" ? (
+            <Feed />
+          ) : (
+            <ErrorHandeling
+              data={{
+                title: "Please login",
+                message: "You are not logged with Twitch or Youtube.",
+              }}></ErrorHandeling>
+
+            // <Redirect to="/login" />
+          )
+        }
+      />
+      <Route path="/twitch/notifications" component={streamOnlineWebhook} />
+      <Route path="/twitch/notifications/callback" component={asd} />
+      <Route
+        path="/youtube/login"
+        component={() => {
+          youtubeAuth();
+          return null;
+        }}
+      />
+      <Route
+        path="/login"
+        component={() => {
+          TwitchAuth();
+          return null;
+        }}
+      />
+      <Route path="/twitch/auth" component={TwitchAuth} />
+      <Route path="/youtube/auth" component={youtubeAuth} />
+    </Router>
+    //     )}
+    //   </AuthContext.Consumer>
+    // </AuthContextProvider>
   );
 }
 
@@ -54,34 +71,41 @@ const NavigationBar = () => {
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Nav.Link as={NavLink} to="/" className="logo-link">
         <img src={logo} alt="logo" className="logo" />
+        Notifies
       </Nav.Link>
-      {/* <Navbar.Brand as={NavLink} to="/" activeClassName="active">
-                Home
-            </Navbar.Brand> */}
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
-        <Nav className="mr-auto">
-          <Nav.Link as={NavLink} to="/feed" activeClassName="active">
-            Feed
-          </Nav.Link>
-          <Nav.Link as={NavLink} to="/posts" activeClassName="active">
-            Posts
-          </Nav.Link>
-          <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
-            <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-          </NavDropdown>
-        </Nav>
+        <Container>
+          <Nav className="mr-auto">
+            <Nav.Link as={NavLink} to="/feed" activeClassName="active">
+              Feed
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/twitch/notifications" activeClassName="active">
+              Webhooks
+            </Nav.Link>
+          </Nav>
+        </Container>
         <Nav>
-          <Nav.Link as={NavLink} to="/login" id="login">
-            Login Twitch{" "}
-          </Nav.Link>
-          <Nav.Link as={NavLink} to="/youtube/login" id="login">
-            Login Youtube
-          </Nav.Link>
+          <NavDropdown title="Login" id="collasible-nav-dropdown">
+            <NavDropdown.Item as={NavLink} to="/login" id="login">
+              Login Twitch
+            </NavDropdown.Item>
+            <NavDropdown.Item as={NavLink} to="/youtube/login" id="login">
+              Login Youtube
+            </NavDropdown.Item>
+          </NavDropdown>
+          <NavDropdown title="Other" id="collasible-nav-dropdown">
+            <NavDropdown.Item disabled as={NavLink} to="/asd" id="login">
+              Asd
+            </NavDropdown.Item>
+            <NavDropdown.Item disabled as={NavLink} to="/asd" id="login">
+              Asd
+            </NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href="https://github.com/mambans/Notifies">
+              Notifies -Github
+            </NavDropdown.Item>
+          </NavDropdown>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
