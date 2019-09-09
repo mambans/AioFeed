@@ -6,7 +6,12 @@ import Utilities from "./../../utilities/Utilities";
 class ErrorHandeling extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, error: this.props.data, info: null };
+    this.state = {
+      hasError: false,
+      error: this.props.data,
+      info: null,
+      errorTitle: "Oh-oh! Something bad happened.",
+    };
   }
 
   ErrorHandelingText() {
@@ -22,18 +27,21 @@ class ErrorHandeling extends React.Component {
 
     this.setState({
       error,
+      errorTitle: this.props.data.title ? this.props.data.title : "Oh-oh! Something bad happened.",
     });
   }
 
   componentDidMount() {
+    console.log("fgh: ", this.props.data);
+
     this.ErrorHandelingText();
   }
 
   render() {
-    const { error } = this.state;
+    const { error, errorTitle } = this.state;
     return (
       <Alert variant="warning" style={Utilities.alertWarning}>
-        <Alert.Heading>Oh-oh! Something bad happened.</Alert.Heading>
+        <Alert.Heading>{errorTitle}</Alert.Heading>
         <hr />
         {error.toString()}
       </Alert>
