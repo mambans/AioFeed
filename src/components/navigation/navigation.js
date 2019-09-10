@@ -1,9 +1,10 @@
 // import AuthContextProvider, { AuthContext } from "components/auth/AuthContextProvider";
 import React from "react";
 import { Navbar, NavDropdown, Nav, Container } from "react-bootstrap";
+// eslint-disable-next-line
 import { BrowserRouter as Router, NavLink, Route, Redirect } from "react-router-dom";
 
-import "./navigation.scss";
+import "./Navigation.scss";
 import logo from "../../assets/images/logo-v2.png";
 import Home from "./../home/Home";
 import Feed from "./../feed/Feed";
@@ -13,7 +14,6 @@ import ErrorHandeling from "./../error/Error";
 
 // import Posts from "./../posts/Posts";
 import streamOnlineWebhook from "./../twitch/Twitchwebhooks";
-import asd from "./../twitch/asd";
 
 function Navigation() {
   return (
@@ -42,7 +42,7 @@ function Navigation() {
         }
       />
       <Route path="/twitch/notifications" component={streamOnlineWebhook} />
-      <Route path="/twitch/notifications/callback" component={asd} />
+      {/* <Route path="/twitch/notifications/callback" component={} /> */}
       <Route
         path="/youtube/login"
         component={() => {

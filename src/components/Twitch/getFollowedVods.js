@@ -34,40 +34,45 @@ async function getFollowedVods(FollowedChannels, forceRun) {
       forceRun
     ) {
       console.log("--:Vod requests sent.");
+      try {
+        await Promise.all(
+          vodChannels.map(async channel => {
+            response = await axios.get(`https://api.twitch.tv/helix/videos?`, {
+              params: {
+                user_id: channel,
+                first: 2,
+                period: "week",
+                type: "archive",
+              },
+              headers: {
+                "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+              },
+            });
 
-      await Promise.all(
-        vodChannels.map(async channel => {
-          response = await axios.get(`https://api.twitch.tv/helix/videos?`, {
-            params: {
-              user_id: channel,
-              first: 2,
-              period: "week",
-              type: "archive",
-            },
-            headers: {
-              "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-            },
-          });
+            response.data.data.forEach(vod => {
+              followedStreamVods.push(vod);
+            });
+          })
+        );
 
-          response.data.data.forEach(vod => {
-            followedStreamVods.push(vod);
-          });
-        })
-      );
+        let followedOrderedStreamVods = {};
+        followedOrderedStreamVods.data = _.reverse(
+          _.sortBy(followedStreamVods, d => d.published_at)
+        );
+        followedOrderedStreamVods.expire = new Date().setHours(new Date().getHours() + vodExpire);
 
-      let followedOrderedStreamVods = {};
-      followedOrderedStreamVods.data = _.reverse(_.sortBy(followedStreamVods, d => d.published_at));
-      followedOrderedStreamVods.expire = new Date().setHours(new Date().getHours() + vodExpire);
-
-      localStorage.setItem(
-        `Twitch-vods`,
-        JSON.stringify({
-          data: followedOrderedStreamVods.data,
-          expire: followedOrderedStreamVods.expire,
-        })
-      );
+        localStorage.setItem(
+          `Twitch-vods`,
+          JSON.stringify({
+            data: followedOrderedStreamVods.data,
+            expire: followedOrderedStreamVods.expire,
+          })
+        );
+      } catch (error) {
+        console.error(error.message);
+        // return error;
+      }
     }
-
     return JSON.parse(localStorage.getItem("Twitch-vods"));
   } catch (error) {
     console.error(error.message);
