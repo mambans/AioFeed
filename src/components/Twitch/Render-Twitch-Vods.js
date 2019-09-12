@@ -9,36 +9,33 @@ import Utilities from "utilities/Utilities";
 
 function RenderTwitchVods(data) {
   useEffect(() => {
-    function addNotification(title, message, type) {
+    function addNotification(title, type) {
       store.addNotification({
-        title: title,
-        message: message,
+        content: (
+          <div className={`notification-custom-${type}`}>
+            <div className="notification-custom-icon"></div>
+            <div className="notification-custom-content">
+              <p className="notification-title">{title}</p>
+              <p className="notification-message">{Utilities.truncate(data.data.title, 50)}</p>
+              <p className="notification-game">{data.data.game_name}</p>
+            </div>
+          </div>
+        ),
         width: 350,
-        type: type,
         insert: "top",
         container: "bottom-right",
         animationIn: ["animated", "slideInRight"],
         animationOut: ["animated", "fadeOut"],
         dismiss: {
-          duration: 7000,
-          onScreen: true,
-          pauseOnHover: true,
+          duration: 5000,
         },
       });
     }
-    addNotification(
-      `Added vod: ${data.data.user_name}`,
-      Utilities.truncate(data.data.title, 50),
-      "info"
-    );
+    addNotification(`Added vod: ${data.data.user_name}`, "twitch-vod-add");
     return () => {
-      addNotification(
-        `Removed vod: ${data.data.user_name}`,
-        Utilities.truncate(data.data.title, 50),
-        "danger"
-      );
+      addNotification(`Removed vod: ${data.data.user_name}`, "twitch-vod-remove");
     };
-  }, [data.data.title, data.data.user_name]);
+  }, [data.data.game_name, data.data.profile_img_url, data.data.title, data.data.user_name]);
 
   return (
     <>

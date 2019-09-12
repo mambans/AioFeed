@@ -1,105 +1,98 @@
 @import "./../../variables.scss";
 
 .container {
-    display: flex;
-    flex-wrap: wrap;
-    width: 86%;
-    margin: auto;
-    margin-top: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 86%;
+  margin: auto;
+  margin-top: 25px;
 }
 
 .video {
-    display: grid;
-    grid-template-areas:
-        "video video"
-        "title title"
-        "info info";
+  display: grid;
+  grid-template-areas:
+    "video video"
+    "title title"
+    "info info";
 
-    width: 250px;
-    margin: 15px;
+  width: 250px;
+  margin: 15px;
 }
 
 .title {
-    margin-top: 10px;
-    grid-area: title;
-    font-size: 1.2rem;
-    max-width: 250px;
+  margin-top: 10px;
+  grid-area: title;
+  font-size: 1.2rem;
+  max-width: 250px;
 
-    a {
-        color: $videoTitle;
+  a {
+    color: $videoTitle;
 
-        &:hover {
-            color: lighten($videoTitle, 30%);
-        }
+    &:hover {
+      color: lighten($videoTitle, 30%);
     }
+  }
 }
 
 .imgDurationContainer {
-    grid-area: video;
+  grid-area: video;
+  transition: all 0.2s ease-in-out;
+  img {
     transition: all 0.2s ease-in-out;
-    img {
-        transition: all 0.2s ease-in-out;
-        border-radius: 10px;
-    }
-    &:hover {
-        transform: scale(1.1);
-        -webkit-transform: scale(1.1);
-        -moz-transform: scale(1.1);
-        -ms-transform: scale(1.1);
-        -o-transform: scale(1.1);
-    }
-    img {
-        width: 250px;
-        max-height: 140px;
-        object-fit: cover;
-    }
+    border-radius: 10px;
+  }
+  &:hover {
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -o-transform: scale(1.1);
+  }
+  img {
+    width: 250px;
+    max-height: 140px;
+    object-fit: cover;
+  }
 }
 
 .date {
-    grid-area: info;
+  grid-area: info;
 
-    color: $greyInfo;
+  color: $greyInfo;
 }
 
 .channel {
-    grid-area: info;
-    justify-self: end;
+  grid-area: info;
+  justify-self: end;
 
-    a {
-        color: $greyInfo;
+  a {
+    color: $greyInfo;
 
-        &:hover {
-            color: lighten($greyInfo, 30%);
-        }
+    &:hover {
+      color: lighten($greyInfo, 30%);
     }
+  }
 }
 
 .duration {
-    bottom: 21px;
-
-    position: relative;
-
-    width: max-content;
-
-    background: #2222228c;
-
-    padding-right: 5px;
-
-    font-size: 0.9rem;
-
-    padding-left: 2px;
-
-    border-top-right-radius: 10px;
+  bottom: 21px;
+  position: relative;
+  width: max-content;
+  background: #2222228c;
+  padding-right: 5px;
+  font-size: 0.9rem;
+  padding-left: 2px;
+  border-top-right-radius: 10px;
 }
 
 .imgDurationContainer {
-    max-height: 140px;
+  max-height: 140px;
 }
 
 .lineBreak {
-    border-bottom: 2px solid #80808029;
-    width: 86%;
-    margin: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
+  border-bottom: 2px solid #80808029;
+  width: 86%;
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }

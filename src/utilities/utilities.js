@@ -15,7 +15,7 @@ const Utilities = {
     position: "relative",
     height: "26px",
     width: "26px",
-    left: "7.5%",
+    left: "1.5%",
     bottom: "-25px",
   },
   alertWarning: {

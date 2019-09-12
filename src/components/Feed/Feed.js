@@ -8,8 +8,11 @@ import Youtube from "../youtube/Youtube";
 import Twitch from "../twitch/Twitch";
 import TwitchVods from "../twitch/Twitch-vods";
 import ErrorHandeling from "./../error/Error";
+//eslint-disable-next-line
 import styles from "./Feed.module.scss";
 import Utilities from "utilities/Utilities";
+
+import "./Notifications.scss";
 
 function Feed() {
   const [isLoaded] = useState(true);
@@ -29,9 +32,9 @@ function Feed() {
         <ReactNotification />
 
         <Twitch />
-        <div className={styles.lineBreak} />
+        {/* <div className={styles.lineBreak} /> */}
         <Youtube />
-        <div className={styles.lineBreak} />
+        {/* <div className={styles.lineBreak} /> */}
         <TwitchVods />
       </>
     );

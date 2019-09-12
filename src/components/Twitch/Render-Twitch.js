@@ -1,8 +1,8 @@
 import { Animated } from "react-animated-css";
 import Moment from "react-moment";
 import React, { useEffect, useCallback, useRef } from "react";
-import { store } from "react-notifications-component";
 import ReactTooltip from "react-tooltip";
+import { store } from "react-notifications-component";
 
 import styles from "./Twitch.module.scss";
 import Utilities from "utilities/Utilities";
@@ -18,112 +18,71 @@ function RenderTwitch(data) {
     }
   }
 
-  function gameName(input) {
-    if (input.length > 50) return input.substring(0, 50) + "..";
-    else if (input.length < 50) {
-      return input + "\xa0".repeat(64 - input.length) + "\n";
-    } else return input;
-  }
-
-  const addOnlineNotification = useCallback(() => {
-    // const styles = {
-    //   "animation-name": "timer",
-    //   "animation-duration": "7000ms",
-    //   "animation-timing-function": "linear",
-    //   "animation-fill-mode": "forwards",
-    //   "animation-play-state": "running",
-    // };
-
-    // const textContent = React.createElement(
-    //   "div",
-    //   {
-    //     className: "notification-content",
-    //   },
-    //   <p className="notification-title">{data.data.user_name + " Live"}</p>,
-    //   <p className="notification-message">{data.data.game_name}</p>,
-    //   <p>{Utilities.truncate(data.data.title, 50)}</p>,
-    //   <div className="timer">
-    //     <div className="timer-filler" style={styles}></div>
-    //   </div>
-    // );
-
-    return store.addNotification({
-      title: data.data.user_name + " Live",
-      message: `${gameName(data.data.game_name)} \n ${Utilities.truncate(data.data.title, 50)}`,
-      // content: textContent,
-      width: 350,
-      type: "info",
-      insert: "top",
-      container: "bottom-right",
-      animationIn: ["animated", "slideInRight"],
-      animationOut: ["animated", "fadeOut"],
-      dismiss: {
-        duration: 7000,
-        onScreen: true,
-        pauseOnHover: true,
-      },
-    });
-    // }
-  }, [data.data.game_name, data.data.title, data.data.user_name]);
-
-  const addUpdateNotification = useCallback(() => {
-    return store.addNotification({
-      title: data.data.user_name + " UPDATE",
-      message: `${gameName(data.data.game_name)} \n ${Utilities.truncate(data.data.title, 50)}`,
-      // content: textContent,
-      width: 350,
-      type: "success",
-      insert: "top",
-      container: "bottom-right",
-      animationIn: ["animated", "slideInRight"],
-      animationOut: ["animated", "fadeOut"],
-      dismiss: {
-        duration: 7000,
-        onScreen: true,
-        pauseOnHover: true,
-      },
-    });
-  }, [data.data.game_name, data.data.title, data.data.user_name]);
-
-  useEffect(() => {
-    // console.log("streamData.current1: ", streamData.current);
-    if (streamData.current === undefined || streamData.current.id !== data.data.id) {
-      // console.log(data.data.user_name + " is live!");
-
-      addOnlineNotification();
-      streamData.current = data.data;
-    } else if (streamData.current.game_id !== data.data.game_id) {
-      streamData.current = data.data;
-      addUpdateNotification();
-    } else if (streamData.current.title !== data.data.title) {
-      streamData.current = data.data;
-      addUpdateNotification();
-    }
-    // console.log("streamData.current2: ", streamData.current);
-  }, [addOnlineNotification, addUpdateNotification, data.data, data.data.id]);
-
-  useEffect(() => {
-    function addOfflineNotification(title, message, type) {
+  const addNotification = useCallback(
+    (type, status) => {
       return store.addNotification({
-        title: title,
-        message: message,
-        width: 350,
-        type: type,
+        content: (
+          <div className={`notification-custom-${type}`}>
+            <div className="notification-custom-icon">
+              <img src={data.data.profile_img_url} alt="" className="notificationProfileIcon"></img>
+            </div>
+            <div className="notification-custom-content">
+              <p className="notification-title">{data.data.user_name + " " + status}</p>
+              <p className="notification-message">{Utilities.truncate(data.data.title, 50)}</p>
+              <p className="notification-game">{data.data.game_name}</p>
+            </div>
+          </div>
+        ),
+        width: 450,
         insert: "top",
         container: "bottom-right",
         animationIn: ["animated", "slideInRight"],
         animationOut: ["animated", "fadeOut"],
         dismiss: {
-          duration: 7000,
-          onScreen: true,
-          pauseOnHover: true,
+          duration: 7500,
         },
       });
+    },
+    [data.data.game_name, data.data.profile_img_url, data.data.title, data.data.user_name]
+  );
+
+  useEffect(() => {
+    if (streamData.current === undefined || streamData.current.id !== data.data.id) {
+      addNotification("twitch-online", "Live");
+      streamData.current = data.data;
+    } else if (
+      streamData.current.game_id !== data.data.game_id ||
+      streamData.current.title !== data.data.title
+    ) {
+      addNotification("twitch-update", "UPDATE");
+      streamData.current = data.data;
     }
+  }, [addNotification, data.data, data.data.id]);
+
+  useEffect(() => {
     return () => {
-      addOfflineNotification(data.data.user_name, "Offline", "danger");
+      store.addNotification({
+        content: (
+          <div className={`notification-custom-twitch-offline`}>
+            <div className="notification-custom-icon">
+              <img src={data.data.profile_img_url} alt="" className="notificationProfileIcon"></img>
+            </div>
+            <div className="notification-custom-content">
+              <p className="notification-title">{data.data.user_name + " Offline"}</p>
+            </div>
+          </div>
+        ),
+        width: 350,
+        insert: "top",
+        container: "bottom-right",
+        animationIn: ["animated", "slideInRight"],
+        animationOut: ["animated", "fadeOut"],
+        dismiss: {
+          duration: 1000000,
+        },
+      });
     };
-  }, [data.data.id, data.data.user_name]);
+  }, [data.data.id, data.data.profile_img_url, data.data.user_name]);
 
   return (
     <>

@@ -73,10 +73,10 @@ async function getFollowedVods(FollowedChannels, forceRun) {
         // return error;
       }
     }
-    return JSON.parse(localStorage.getItem("Twitch-vods"));
+    return { data: JSON.parse(localStorage.getItem("Twitch-vods")) };
   } catch (error) {
-    console.error(error.message);
-    return error;
+    console.error("message: ", error.message);
+    return { data: JSON.parse(localStorage.getItem("Twitch-vods")), error: error };
   }
 }
 

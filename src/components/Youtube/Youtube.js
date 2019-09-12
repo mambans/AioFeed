@@ -82,25 +82,31 @@ function Youtube() {
     console.log("Render Youtube videos: ", videos);
     return (
       <>
-        <Button variant="outline-secondary" className={styles.refreshButton} onClick={refresh}>
-          Reload
-        </Button>
-        {refreshing ? (
-          <Spinner animation="border" role="status" style={Utilities.loadingSpinnerSmall}></Spinner>
-        ) : (
-          <Moment key={lastRefresh.getTime()} className={styles.lastRefresh} fromNow>
-            {lastRefresh}
-          </Moment>
-        )}
-        {requestError && requestError.code === 403 ? (
-          // <p className={styles.requestError}>{requestError.response.data.error.errors[0].reason}</p>
-          <Alert
-            key={requestError.errors[0].reason}
-            className={styles.requestError}
-            variant={"warning"}>
-            {requestError.errors[0].reason}
-          </Alert>
-        ) : null}
+        <div className={styles.header_div}>
+          <Button variant="outline-secondary" className={styles.refreshButton} onClick={refresh}>
+            Reload
+          </Button>
+          {refreshing ? (
+            <Spinner
+              animation="border"
+              role="status"
+              style={Utilities.loadingSpinnerSmall}></Spinner>
+          ) : (
+            <Moment key={lastRefresh.getTime()} className={styles.lastRefresh} fromNow>
+              {lastRefresh}
+            </Moment>
+          )}
+          {requestError && requestError.code === 403 ? (
+            // <p className={styles.requestError}>{requestError.response.data.error.errors[0].reason}</p>
+            <Alert
+              key={requestError.errors[0].reason}
+              className={styles.requestError}
+              variant={"warning"}>
+              {requestError.errors[0].reason}
+            </Alert>
+          ) : null}
+          <h4 className={styles.container_header}>Youtube</h4>
+        </div>
         <div className={styles.container}>
           {videos.map(video => {
             return <RenderYoutube data={video} key={video.contentDetails.upload.videoId} />;

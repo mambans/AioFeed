@@ -64,9 +64,7 @@ async function getFollowedOnlineStreams(lastRan) {
         },
       });
 
-      //-------------
       // Fetch profile imgs
-
       LiveFollowedStreams.data.data.map(async user => {
         let profileImgUrl;
 
@@ -90,8 +88,6 @@ async function getFollowedOnlineStreams(lastRan) {
           user.profile_img_url = localStorage.getItem(`${user.user_id}-profile_img`);
         }
       });
-
-      //-------------
 
       // Removes game id duplicates before sending game request.
       const games = [

@@ -17,26 +17,46 @@ function RenderYoutube(data) {
   }
 
   useEffect(() => {
-    function addNotification() {
+    function addNotification(type) {
       store.addNotification({
         title: data.data.snippet.channelTitle,
         message: `${Utilities.truncate(data.data.snippet.title, 50)}`,
-        width: 350,
-        type: "default",
+        content: (
+          <div className={`notification-custom-${type}`}>
+            <div className="notification-custom-icon">
+              <img
+                src={data.data.snippet.thumbnails.medium.url}
+                alt=""
+                className={"youtube-notificationProfileIcon"}></img>
+            </div>
+            <div className="notification-custom-content">
+              <p className="notification-title">{data.data.snippet.channelTitle}</p>
+              <p className="notification-message">
+                {Utilities.truncate(data.data.snippet.title, 50)}
+              </p>
+              <p className="notification-duration">{data.data.duration}</p>
+            </div>
+          </div>
+        ),
+        width: 450,
         insert: "top",
         container: "bottom-right",
         animationIn: ["animated", "slideInRight"],
         animationOut: ["animated", "fadeOut"],
         dismiss: {
-          duration: 7000,
-          onScreen: true,
-          pauseOnHover: true,
+          duration: 7500,
         },
       });
     }
 
-    addNotification();
-  }, [data.data.snippet.channelTitle, data.data.snippet.title]);
+    addNotification("youtube-new-video");
+  }, [
+    data.data.duration,
+    data.data.profile_img_url,
+    data.data.snippet.channelTitle,
+    data.data.snippet.thumbnails.medium.url,
+    data.data.snippet.title,
+  ]);
 
   return (
     <>

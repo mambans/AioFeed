@@ -22,10 +22,13 @@ function TwitchVods() {
   const followedChannels = useRef();
 
   const refresh = useCallback(() => {
-    console.log("Refreshing vods");
     async function fetchData() {
       try {
-        const followedVods = await getFollowedVods(followedChannels.current, true);
+        const followedVodsResponse = await getFollowedVods(followedChannels.current);
+
+        const followedVods = followedVodsResponse.data;
+
+        setError(followedVodsResponse.error);
 
         setVods(followedVods);
         setIsLoaded(true);
@@ -41,7 +44,11 @@ function TwitchVods() {
     async function fetchData() {
       try {
         followedChannels.current = await getFollowedChannels();
-        const followedVods = await getFollowedVods(followedChannels.current);
+        const followedVodsResponse = await getFollowedVods(followedChannels.current);
+
+        const followedVods = followedVodsResponse.data;
+
+        setError(followedVodsResponse.error);
 
         setVods(followedVods);
         setIsLoaded(true);
@@ -55,13 +62,15 @@ function TwitchVods() {
   const windowBlurHandler = useCallback(() => {}, []);
 
   useEffect(() => {
-    window.addEventListener("focus", windowFocusHandler);
-    window.addEventListener("blur", windowBlurHandler);
     async function fetchData() {
       try {
         followedChannels.current = await getFollowedChannels();
 
-        const followedVods = await getFollowedVods(followedChannels.current);
+        const followedVodsResponse = await getFollowedVods(followedChannels.current);
+
+        const followedVods = followedVodsResponse.data;
+
+        setError(followedVodsResponse.error);
 
         setVods(followedVods);
         setIsLoaded(true);
@@ -71,6 +80,8 @@ function TwitchVods() {
     }
 
     fetchData();
+    window.addEventListener("focus", windowFocusHandler);
+    window.addEventListener("blur", windowBlurHandler);
 
     return () => {
       window.removeEventListener("blur", windowBlurHandler);
@@ -91,25 +102,28 @@ function TwitchVods() {
     console.log("Render vods: ", vods);
     return (
       <>
-        <Button variant="outline-secondary" className={styles.refreshButton} onClick={refresh}>
-          Reload
-        </Button>
-        <Moment from={vods.expire} ago className={styles.vodRefreshTimer}></Moment>
-        <Popup
-          placeholder="Channel name.."
-          trigger={
-            <Button
-              variant="outline-secondary"
-              className={styles.settings}
-              // onClick={addChannelForm}
-            >
-              Settings
-            </Button>
-          }
-          position="left center"
-          className="settingsPopup">
-          <AddChannelForm></AddChannelForm>
-        </Popup>
+        <div className={styles.header_div}>
+          <Button variant="outline-secondary" className={styles.refreshButton} onClick={refresh}>
+            Reload
+          </Button>
+          <Moment from={vods.expire} ago className={styles.vodRefreshTimer}></Moment>
+          <Popup
+            placeholder="Channel name.."
+            trigger={
+              <Button
+                variant="outline-secondary"
+                className={styles.settings}
+                // onClick={addChannelForm}
+              >
+                Settings
+              </Button>
+            }
+            position="left center"
+            className="settingsPopup">
+            <AddChannelForm></AddChannelForm>
+          </Popup>
+          <h4 className={styles.container_header}>Twitch vods</h4>
+        </div>
         <div className={styles.container}>
           {vods.data.map(vod => {
             return <RenderTwitchVods data={vod} key={vod.id} />;
