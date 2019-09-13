@@ -78,7 +78,7 @@ function RenderTwitch(data) {
         animationIn: ["animated", "slideInRight"],
         animationOut: ["animated", "fadeOut"],
         dismiss: {
-          duration: 1000000,
+          duration: 7500,
         },
       });
     };
