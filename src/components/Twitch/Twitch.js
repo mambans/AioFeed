@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Button, Spinner } from "react-bootstrap";
 
 import ErrorHandeling from "./../error/Error";
-import getFollowedOnlineStreams from "./GetFollowedStreams";
+// import getFollowedOnlineStreams from "./GetFollowedStreams";
+import getFollowedOnlineStreams from "./GetFollowedStreamsNEW";
 import RenderTwitch from "./Render-Twitch";
 import styles from "./Twitch.module.scss";
 import Utilities from "utilities/Utilities";
@@ -13,7 +14,6 @@ function Twitch() {
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(null);
   const [refreshTimer, setRefreshTimer] = useState(200);
-  // const [firstLoad, setFirstLoad] = useState(true);
 
   const lastRan = useRef(null);
 
@@ -40,11 +40,6 @@ function Twitch() {
   const windowBlurHandler = useCallback(() => {}, []);
 
   useEffect(() => {
-    // let dd = {
-    //   title: "test title",
-    //   message: "test message",
-    // };
-    // setError(dd);
     window.addEventListener("focus", windowFocusHandler);
     window.addEventListener("blur", windowBlurHandler);
     setRefreshing(true);
@@ -53,6 +48,7 @@ function Twitch() {
       try {
         const streams = await getFollowedOnlineStreams(lastRan.current);
 
+        setError(streams.error);
         setLiveStreams(streams.data);
         setIsLoaded(true);
         setRefreshing(false);
@@ -71,7 +67,7 @@ function Twitch() {
   }, [lastRan, windowBlurHandler, windowFocusHandler]);
 
   if (error) {
-    console.log(error);
+    console.error(error);
 
     return <ErrorHandeling data={error}></ErrorHandeling>;
   } else if (!isLoaded) {

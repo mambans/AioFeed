@@ -11,6 +11,7 @@ import Feed from "./../feed/Feed";
 import youtubeAuth from "./../auth/YoutubeAuth";
 import TwitchAuth from "./../auth/TwitchAuth";
 import ErrorHandeling from "./../error/Error";
+import Utilities from "./../../utilities/Utilities";
 
 // import Posts from "./../posts/Posts";
 import streamOnlineWebhook from "./../twitch/Twitchwebhooks";
@@ -27,8 +28,8 @@ function Navigation() {
       <Route
         path="/feed"
         render={() =>
-          sessionStorage.getItem("YoutubeLoggedIn") === "true" &&
-          sessionStorage.getItem("TwitchLoggedIn") === "true" ? (
+          Utilities.getCookie("Twitch-access_token") &&
+          Utilities.getCookie("Youtube-access_token") ? (
             <Feed />
           ) : (
             <ErrorHandeling

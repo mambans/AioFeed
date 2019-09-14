@@ -1,4 +1,5 @@
 import axios from "axios";
+import Utilities from "utilities/Utilities";
 
 async function getFollowedChannels() {
   try {
@@ -17,7 +18,8 @@ async function getFollowedChannels() {
           key: process.env.REACT_APP_YOUTUBE_API_KEY,
         },
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("Youtube-access_token"),
+          Authorization: "Bearer " + Utilities.getCookie("Youtube-access_token"),
+          // Authorization: "Bearer " + localStorage.getItem("Youtube-access_token"),
           Accept: "application/json",
         },
       });
@@ -36,7 +38,8 @@ async function getFollowedChannels() {
             pageToken: firstPage.data.nextPageToken,
           },
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("Youtube-access_token"),
+            Authorization: "Bearer " + Utilities.getCookie("Youtube-access_token"),
+            // Authorization: "Bearer " + localStorage.getItem("Youtube-access_token"),
             Accept: "application/json",
           },
         });

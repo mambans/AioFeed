@@ -22,12 +22,19 @@ function YoutubeAuth() {
 
   const getAccessToken = useCallback(() => {
     const url = new URL(window.location.href).hash;
+
     const authCode = url
       .split("#")[1]
       .split("&")[1]
       .slice(13);
 
-    localStorage.setItem("Youtube-access_token", authCode);
+    // const authCodeExpire = url
+    //   .split("#")[1]
+    //   .split("&")[3]
+    //   .replace("expires_in=", "");
+
+    document.cookie = `Youtube-access_token=${authCode}; path=/`;
+    // localStorage.setItem("Youtube-access_token", authCode);
   }, []);
 
   useEffect(() => {
