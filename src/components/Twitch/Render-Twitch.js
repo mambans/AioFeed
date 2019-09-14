@@ -54,7 +54,9 @@ function RenderTwitch(data) {
       streamData.current.game_id !== data.data.game_id ||
       streamData.current.title !== data.data.title
     ) {
-      addNotification("twitch-update", "UPDATE");
+      // addNotification("twitch-update", "UPDATE");
+      console.log("twitch-update");
+
       streamData.current = data.data;
     }
   }, [addNotification, data.data, data.data.id]);
@@ -69,6 +71,8 @@ function RenderTwitch(data) {
             </div>
             <div className="notification-custom-content">
               <p className="notification-title">{data.data.user_name + " Offline"}</p>
+              <p className="notification-message">{""}</p>
+              <p className="notification-game">{""}</p>
             </div>
           </div>
         ),
@@ -82,7 +86,7 @@ function RenderTwitch(data) {
         },
       });
     };
-  }, [data.data.id, data.data.profile_img_url, data.data.user_name]);
+  }, [data.data.profile_img_url, data.data.user_name]);
 
   return (
     <>
