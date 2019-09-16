@@ -1,131 +1,44 @@
 import axios from "axios";
+// eslint-disable-next-line
 import React, { useEffect, useState, useCallback } from "react";
 import { Button, Spinner } from "react-bootstrap";
 
 import Utilities from "./../../utilities/Utilities";
 import "./Twitch.scss";
 
-// function AddChannelForm() {
-//   const [channels, setChannels] = useState();
-//   const [value, setValue] = useState("");
+function AddChannelForm() {
+  const useInput = initialValue => {
+    const [value, setValue] = useState(initialValue);
 
-//   async function removeChannel(channel) {
-//     try {
-//       await axios.delete(`http://localhost:3100/notifies/vod-channels`, {
-//         data: {
-//           channelName: channel,
-//         },
-//       });
+    return {
+      value,
+      setValue,
+      reset: () => setValue(""),
+      bind: {
+        value,
+        onChange: event => {
+          setValue(event.target.value);
+        },
+      },
+    };
+  };
 
-//       setChannels(await axios.get(`http://localhost:3100/notifies/vod-channels`));
-//     } catch (e) {
-//       console.log(e.message);
-//     }
-//   }
+  const [channels, setChannels] = useState();
+  const { value: channel, bind: bindchannel, reset: resetchannel } = useInput("");
 
-//   const handleChange = useCallback(event => {
-//     console.log(event);
-//     console.log(event.target.value);
-
-//     setValue({ value: event.target.value });
-//   }, []);
-
-//   // function handleChange(event) {
-//   //   console.log(event);
-//   //   console.log(event.target.value);
-
-//   //   setValue(event.target.value);
-//   // }
-
-//   const handleSubmit = useCallback(() => {
-//     async function addChannel() {
-//       try {
-//         await axios.post(`http://localhost:3100/notifies/vod-channels`, {
-//           channelName: value,
-//         });
-
-//         const channels = await axios.get(`http://localhost:3100/notifies/vod-channels`);
-
-//         setChannels(channels);
-//       } catch (e) {
-//         console.log(e.message);
-//       }
-//     }
-
-//     addChannel();
-//   }, [value]);
-
-//   const getChannels = useCallback(async () => {
-//     const vodChannels = await axios.get(`http://localhost:3100/notifies/vod-channels`);
-//     setChannels(vodChannels);
-//   }, []);
-
-//   useEffect(() => {
-//     getChannels();
-//   }, [getChannels]);
-
-//   return (
-//     <>
-//       {channels ? (
-//         <ul>
-//           {channels.data.channels.map(channel => {
-//             return (
-//               <li key={channel.name}>
-//                 <p>{channel.name}</p>
-//                 <Button
-//                   variant="danger"
-//                   size="sm"
-//                   onClick={() => {
-//                     removeChannel(channel.name);
-//                   }}>
-//                   X
-//                 </Button>
-//               </li>
-//             );
-//           })}
-//         </ul>
-//       ) : (
-//         <Spinner animation="border" role="status" style={Utilities.loadingSpinner}>
-//           <span className="sr-only">Loading...</span>
-//         </Spinner>
-//       )}
-//       <form onSubmit={handleSubmit}>
-//         <label>
-//           Add channel:
-//           <input type="text" placeholder="Channel name.." value={value} onChange={handleChange} />
-//         </label>
-//         <input type="submit" value="Submit" />
-//       </form>
-//     </>
-//   );
-// }
-
-class AddChannelForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: "", channels: null };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  async addChannel() {
+  async function addChannel() {
     try {
       await axios.post(`http://localhost:3100/notifies/vod-channels`, {
-        channelName: this.state.value,
+        channelName: channel,
       });
 
-      const channels = await axios.get(`http://localhost:3100/notifies/vod-channels`);
-
-      this.setState({
-        channels,
-      });
+      getChannels();
     } catch (e) {
       console.log(e.message);
     }
   }
 
-  async removeChannel(channel) {
+  async function removeChannel(channel) {
     try {
       await axios.delete(`http://localhost:3100/notifies/vod-channels`, {
         data: {
@@ -133,75 +46,62 @@ class AddChannelForm extends React.Component {
         },
       });
 
-      this.setState({
-        channels: await axios.get(`http://localhost:3100/notifies/vod-channels`),
-      });
+      getChannels();
     } catch (e) {
       console.log(e.message);
     }
   }
 
-  handleChange(event) {
-    console.log(event.target.value);
-    this.setState({ value: event.target.value });
+  async function getChannels() {
+    setChannels(await axios.get(`http://localhost:3100/notifies/vod-channels`));
   }
 
-  handleSubmit(event) {
-    console.log(this.state.value);
+  const handleSubmit = evt => {
+    evt.preventDefault();
+    console.log(`Submitting Name ${channel}`);
+    addChannel();
+    resetchannel();
+  };
 
-    this.addChannel(this.state.value);
+  useEffect(() => {
+    getChannels();
+  }, []);
 
-    event.preventDefault();
-  }
+  return (
+    <>
+      {channels ? (
+        <ul>
+          {channels.data.channels.map(channel => {
+            return (
+              <li key={channel.name}>
+                <p>{channel.name}</p>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => {
+                    removeChannel(channel.name);
+                  }}>
+                  X
+                </Button>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <Spinner animation="border" role="status" style={Utilities.loadingSpinner}>
+          <span className="sr-only">Loading...</span>
+        </Spinner>
+      )}
 
-  async componentDidMount() {
-    this.setState({
-      channels: await axios.get(`http://localhost:3100/notifies/vod-channels`),
-    });
-  }
-
-  render() {
-    return (
-      <>
-        {this.state.channels ? (
-          <ul>
-            {this.state.channels.data.channels.map(channel => {
-              return (
-                <li key={channel.name}>
-                  <p>{channel.name}</p>
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    onClick={() => {
-                      this.removeChannel(channel.name);
-                    }}>
-                    X
-                  </Button>
-                </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <Spinner animation="border" role="status" style={Utilities.loadingSpinner}>
-            <span className="sr-only">Loading...</span>
-          </Spinner>
-        )}
-
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Add channel:
-            <input
-              type="text"
-              placeholder="Channel name.."
-              value={this.state.value}
-              onChange={this.handleChange}
-            />
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
-      </>
-    );
-  }
+      <form onSubmit={handleSubmit}>
+        <label>
+          Add channel:
+          <input type="text" placeholder="Channel name.." {...bindchannel} />
+        </label>
+        <input type="submit" value="Add" />
+      </form>
+    </>
+  );
 }
 
 export default AddChannelForm;
