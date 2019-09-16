@@ -8,5 +8,48 @@
   -o-border-radius: 5px !important;
   width: min-content !important;
 
-  top: 1785px !important;
+  // top: 1785px !important;
+  form {
+    padding: 5px;
+  }
+
+  input[type="text"] {
+    color: white;
+    border: none;
+    border-bottom: 1px solid white;
+    background-color: transparent;
+    background: transparent;
+  }
+
+  input[type="submit"] {
+    border-radius: 5px;
+    border: thin solid #484848;
+    background-color: #054328;
+    color: rgb(224, 224, 224);
+    width: 100%;
+    margin-top: 5px;
+    &:hover {
+      color: white;
+      background-color: #015c34;
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: rgb(8, 3, 20);
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      height: 35px;
+      align-items: center;
+    }
+
+    li p {
+      margin: 0;
+    }
+  }
 }

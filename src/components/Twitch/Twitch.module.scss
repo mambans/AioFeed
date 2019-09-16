@@ -12,6 +12,7 @@
   text-align: center;
   color: #65696d;
   margin: auto;
+  letter-spacing: 1px;
 }
 
 .header_div {
@@ -238,50 +239,6 @@
   left: 92%;
   top: 20px;
   color: $greyInfo;
-}
-
-form {
-  padding: 5px;
-}
-
-input[type="text"] {
-  color: white;
-  border: none;
-  border-bottom: 1px solid white;
-  background-color: transparent;
-  background: transparent;
-}
-
-input[type="submit"] {
-  border-radius: 5px;
-  border: thin solid #484848;
-  background-color: #054328;
-  color: rgb(224, 224, 224);
-  width: 100%;
-  margin-top: 5px;
-  &:hover {
-    color: white;
-    background-color: #015c34;
-  }
-}
-
-ul {
-  list-style: none;
-  padding-left: 10px;
-  padding-right: 10px;
-  background-color: rgb(8, 3, 20);
-
-  li {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    height: 35px;
-    align-items: center;
-  }
-
-  li p {
-    margin: 0;
-  }
 }
 
 /* ----- */
