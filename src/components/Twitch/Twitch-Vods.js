@@ -1,18 +1,15 @@
 import { Button, Spinner } from "react-bootstrap";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Moment from "react-moment";
+import Popup from "reactjs-popup";
 
 import ErrorHandeling from "../error/Error";
 import Utilities from "utilities/Utilities";
 import styles from "./Twitch.module.scss";
 import RenderTwitchVods from "./Render-Twitch-Vods";
-
 import getFollowedChannels from "./GetFollowedChannels";
 import getFollowedVods from "./GetFollowedVods";
-
 import AddChannelForm from "./VodSettings";
-
-import Popup from "reactjs-popup";
 
 function TwitchVods() {
   const [vods, setVods] = useState();
@@ -24,7 +21,7 @@ function TwitchVods() {
   const refresh = useCallback(() => {
     async function fetchData() {
       try {
-        const followedVodsResponse = await getFollowedVods(followedChannels.current);
+        const followedVodsResponse = await getFollowedVods(followedChannels.current, true);
 
         const followedVods = followedVodsResponse.data;
 
@@ -110,11 +107,7 @@ function TwitchVods() {
           <Popup
             placeholder="Channel name.."
             trigger={
-              <Button
-                variant="outline-secondary"
-                className={styles.settings}
-                // onClick={addChannelForm}
-              >
+              <Button variant="outline-secondary" className={styles.settings}>
                 Settings
               </Button>
             }
