@@ -16,33 +16,34 @@ function TwitchAuth() {
       length: 32,
     });
 
-    sessionStorage.setItem("myState", myState.current);
+    document.cookie = `Twitch-myState=${myState.current}`;
 
     window.location.href = `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=http://localhost:3000/twitch/auth&scope=channel:read:subscriptions&response_type=code&state=${myState.current}`;
   }, []);
 
   const getAccessToken = useCallback(async url => {
     const authCode = url.searchParams.get("code");
-    //     const response = await axios.post(`https://id.twitch.tv/oauth2/token
-    // ?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}
-    // &client_secret=${process.env.REACT_APP_TWITCH_SECRET}
-    // &code=${authCode}
-    // &grant_type=authorization_code
-    // &redirect_uri=http://localhost:3000/twitch/auth`);
 
-    return await axios.post(`https://id.twitch.tv/oauth2/token
+    const requestAccessToken = await axios.post(`https://id.twitch.tv/oauth2/token
 ?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}
 &client_secret=${process.env.REACT_APP_TWITCH_SECRET}
 &code=${authCode}
 &grant_type=authorization_code
 &redirect_uri=http://localhost:3000/twitch/auth`);
 
-    // console.log("TCL: TwitchAuth -> response", response);
+    const accessToken = requestAccessToken.data.access_token;
 
-    // console.log("GETACCESSTOKEN");
+    document.cookie = `Twitch-access_token=${accessToken}; path=/`;
 
-    // localStorage.setItem("access_token", response.data.access_token);
-    // document.cookie = "access_token=response.data.access_token;";
+    sessionStorage.setItem("TwitchLoggedIn", true);
+    // window.location.href = "http://localhost:3000?TwitchloggedIn=true";
+
+    // const validateToken = await axios.post(`https://id.twitch.tv/oauth2/validate`, {
+    //   headers: {
+    //     Authorization: "OAuth " + authCode,
+    //   },
+    // });
+    // console.log("TCL: TwitchAuth -> validateToken", validateToken);
   }, []);
 
   useEffect(() => {
@@ -53,15 +54,9 @@ function TwitchAuth() {
         if (url.href === "http://localhost:3000/login") {
           initiateAuth();
         } else {
-          if (url.searchParams.get("state") === sessionStorage.getItem("myState")) {
+          if (url.searchParams.get("state") === Utilities.getCookie("Twitch-myState")) {
             try {
-              const response = await getAccessToken(url);
-              const accessToken = response.data.access_token;
-
-              // localStorage.setItem("access_token", accessToken);
-              document.cookie = `Twitch-access_token=${accessToken}; path=/`;
-
-              sessionStorage.setItem("TwitchLoggedIn", true);
+              await getAccessToken(url);
               window.location.href = "http://localhost:3000?TwitchloggedIn=true";
             } catch (error) {
               setError(error);
