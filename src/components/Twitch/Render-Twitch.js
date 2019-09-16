@@ -86,7 +86,7 @@ function RenderTwitch(data) {
         },
       });
     };
-  }, [data.data.profile_img_url, data.data.user_name]);
+  }, [data.data.profile_img_url, data.data.id, data.data.user_name]);
 
   return (
     <>
@@ -96,11 +96,11 @@ function RenderTwitch(data) {
           <div className={styles.imgContainer}>
             <a
               className={styles.img}
-              // href={"https://www.twitch.tv/" + this.props.data.data.user_name.toLowerCase()}>
-              href={
+              href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+              {/* href={
                 "https://player.twitch.tv/?volume=0.1&!muted&channel=" +
                 data.data.user_name.toLowerCase()
-              }>
+              }> */}
               <img
                 src={
                   data.data.thumbnail_url.replace("{width}", 640).replace("{height}", 360) +
