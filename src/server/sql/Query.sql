@@ -1,5 +1,13 @@
-CALL show_vod_channels;
+CALL Create_Account("asd", "123@", "pass123");
 
-CALL add_channel("asd");
+INSERT into accounts(username, email, password) values("asd", "email", "password");
 
-CALL remove_channel("test1");
+SELECT Account_Login("mambans", "merpler23995");
+
+SELECT * FROM accounts where username = "mambans" AND password = "merpler23995";
+
+CALL Account_Login("mambans", "merpler23995");
+
+SELECT @returnUser;
+
+
