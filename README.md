@@ -13,9 +13,13 @@ Notifies v.2 refactored to use react hooks.
 
 ## Feeds
 
+- Twitch follows
+- Twitch Vods follows
+- Youtube subscriptions
+
 ### Twitch
 
-Notifies auto refreshes the live Twitch feed every 2min when tab is focused. Notifies also shows the two most recent vods from specific Twitch channels that you have followed in Notifies (vod follows doesn't sync with Twitch, stored on Notifies database server). Auto refreches vods every 3hours, can be manually refreshed from a button.
+Notifies auto refreshes the live Twitch feed every 2min. Notifies also shows the three most recent vods from specific Twitch channels that you have followed in Notifies (vod follows doesn't sync with Twitch, stored on Notifies database server). Auto refreches vods every 3hours, can be manually refreshed from a button.
 
 ### Youtube
 
