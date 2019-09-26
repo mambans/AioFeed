@@ -21,6 +21,12 @@ const Utilities = {
   alertWarning: {
     textAlign: "center",
   },
+  feedAlertWarning: {
+    textAlign: "center",
+    width: "86%",
+    margin: "auto",
+    marginTop: "50px",
+  },
   truncate: function(input, max) {
     if (input.length > max) return input.substring(0, max) + "..";
     else return input;

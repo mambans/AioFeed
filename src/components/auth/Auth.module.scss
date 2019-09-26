@@ -1,0 +1,151 @@
+@import "./../../variables.scss";
+
+.formTitle {
+  border-bottom: 2px solid $greyInfo;
+  text-align: center;
+  width: 25%;
+  margin: auto;
+  margin-top: 40px;
+}
+
+.createForm {
+  width: 20%;
+  margin: auto;
+  margin-top: 50px;
+}
+
+.accountContainer {
+  width: 40%;
+  margin: auto;
+  display: grid;
+  border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  -ms-border-radius: 25px;
+  -o-border-radius: 25px;
+  background-color: #081016d1;
+  margin-top: 50px;
+  padding: 25px;
+
+  .connectButtons {
+    width: max-content;
+    margin-bottom: 1rem;
+    margin-left: 0;
+    height: 42px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+
+    &.connectTwitch {
+      background-color: #42107d;
+      border: thin solid lighten(#42107d, 0%);
+
+      &:hover {
+        background-color: lighten(#42107d, 10%);
+      }
+
+      &:focus {
+        box-shadow: 0 0 0 0.2rem lighten(#42107d, 20%);
+      }
+
+      &:active {
+        background-color: lighten(#42107d, 25%);
+        border-color: lighten(#42107d, 35%);
+      }
+    }
+
+    &.connectYoutube {
+      background-color: #4b1010;
+      border: thin solid lighten(#4b1010, 0%);
+
+      &:hover {
+        background-color: lighten(#4b1010, 10%);
+      }
+
+      &:focus {
+        box-shadow: 0 0 0 0.2rem lighten(#4b1010, 20%);
+      }
+
+      &:active {
+        background-color: lighten(#4b1010, 25%);
+        border-color: lighten(#4b1010, 35%);
+      }
+    }
+  }
+
+  .twitchConnected {
+    color: #fff;
+    font-size: 1.1rem;
+    border: thin solid lighten(#42107d, 10%);
+    width: max-content;
+    padding: 7px;
+    background-color: #42107d;
+    min-width: 300px;
+    text-align: center;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    margin-right: 50px;
+  }
+
+  .youtubeConnected {
+    color: #fff;
+    font-size: 1.1rem;
+    border: thin solid lighten(#4b1010, 10%);
+    width: max-content;
+    padding: 7px;
+    background-color: #4b1010;
+    min-width: 300px;
+    text-align: center;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    margin-right: 50px;
+  }
+}
+
+.profileContainer {
+  display: grid;
+  grid-template-columns: 320px 125px auto;
+  margin-bottom: 50px;
+  margin-top: 50px;
+  //   justify-content: center;
+
+  .prefixs {
+    align-self: center;
+
+    p {
+      font-weight: bold;
+      font-size: 1.3rem;
+    }
+  }
+
+  .names {
+    align-self: center;
+    p {
+      font-size: 1.3rem;
+    }
+  }
+
+  img {
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+  }
+}
+
+.connectContainer {
+  display: flex;
+}
+
+.ToggleSwitch {
+  width: max-content;
+}

@@ -5,6 +5,7 @@ import Alert from "react-bootstrap/Alert";
 
 import getFollowedChannels from "./GetFollowedChannels";
 import getSubscriptionVideos from "./GetSubscriptionVideos";
+// import getSubscriptionVideos from "./GetSubscriptionVideosNEW";
 import RenderYoutube from "./Render-Youtube";
 import styles from "./Youtube.module.scss";
 
@@ -20,6 +21,12 @@ function Youtube() {
   const [requestError, setRequestError] = useState();
 
   const followedChannels = useRef();
+
+  const initialOpen = useRef(true);
+
+  function onChange(newRun) {
+    initialOpen.current = newRun;
+  }
 
   const refresh = useCallback(() => {
     async function fetchData() {
@@ -74,22 +81,30 @@ function Youtube() {
     return <ErrorHandeling data={error}></ErrorHandeling>;
   } else if (!isLoaded) {
     return (
-      <Spinner animation="border" role="status" style={Utilities.loadingSpinner}>
-        <span className="sr-only">Loading...</span>
+      <Spinner animation='border' role='status' style={Utilities.loadingSpinner}>
+        <span className='sr-only'>Loading...</span>
       </Spinner>
     );
+  } else if (!Utilities.getCookie("Youtube-access_token")) {
+    return (
+      <ErrorHandeling
+        data={{
+          title: "Couldn't load Youtube feed",
+          message: "You are not connected with your Youtube account to Notifies",
+        }}></ErrorHandeling>
+    );
   } else {
-    console.log("Render Youtube videos: ", videos);
+    // console.log("Render Youtube videos: ", videos);
     return (
       <>
         <div className={styles.header_div}>
-          <Button variant="outline-secondary" className={styles.refreshButton} onClick={refresh}>
+          <Button variant='outline-secondary' className={styles.refreshButton} onClick={refresh}>
             Reload
           </Button>
           {refreshing ? (
             <Spinner
-              animation="border"
-              role="status"
+              animation='border'
+              role='status'
               style={Utilities.loadingSpinnerSmall}></Spinner>
           ) : (
             <Moment key={lastRefresh.getTime()} className={styles.lastRefresh} fromNow>
@@ -102,14 +117,21 @@ function Youtube() {
               key={requestError.errors[0].reason}
               className={styles.requestError}
               variant={"warning"}>
-              {requestError.errors[0].reason}
+              {requestError.errors[0].reason + " - Cache used instead."}
             </Alert>
           ) : null}
           <h4 className={styles.container_header}>Youtube</h4>
         </div>
         <div className={styles.container}>
           {videos.map(video => {
-            return <RenderYoutube data={video} key={video.contentDetails.upload.videoId} />;
+            return (
+              <RenderYoutube
+                data={video}
+                run={{ initial: initialOpen.current }}
+                runChange={onChange}
+                key={video.contentDetails.upload.videoId}
+              />
+            );
           })}
         </div>
       </>

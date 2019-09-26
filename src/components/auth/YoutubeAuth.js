@@ -1,5 +1,5 @@
 import { Spinner } from "react-bootstrap";
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import randomstring from "randomstring";
 import axios from "axios";
 
@@ -8,19 +8,24 @@ import ErrorHandeling from "./../error/Error";
 
 function YoutubeAuth() {
   const [error, setError] = useState();
-  const myState = useRef();
+  // const myState = useRef();
 
   const initiateAuth = useCallback(() => {
-    myState.current = randomstring.generate({
+    // myState.current = randomstring.generate({
+    //   capitalization: "lowercase",
+    //   length: 32,
+    // });
+
+    const orginState = randomstring.generate({
       capitalization: "lowercase",
       length: 32,
     });
 
-    document.cookie = `Youtube-myState=${myState.current}`;
+    document.cookie = `Youtube-myState=${orginState}`;
 
     // window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://localhost:3000/youtube/auth&response_type=code&scope=https://www.googleapis.com/auth/youtube.readonly&include_granted_scopes=true&state=${myState.current}`;
 
-    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://localhost:3000/youtube/auth&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly&include_granted_scopes=true&state=${myState.current}`;
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://localhost:3000/youtube/auth&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly&include_granted_scopes=true&state=${orginState}`;
   }, []);
 
   const getAccessToken = useCallback(async () => {
@@ -36,7 +41,6 @@ function YoutubeAuth() {
     );
 
     if (validateToken.data.aud === process.env.REACT_APP_YOUTUBE_CLIENT_ID) {
-      console.log("Youtube-token validated: TRUE");
       document.cookie = `Youtube-access_token=${authCode}; path=/`;
     }
 
@@ -45,7 +49,14 @@ function YoutubeAuth() {
     //   .split("&")[3]
     //   .replace("expires_in=", "");
 
-    document.cookie = `Youtube-access_token=${authCode}; path=/`;
+    // document.cookie = `Youtube-access_token=${authCode}; path=/`;
+
+    await axios.put(`http://localhost:3100/notifies/account/youtube/connect`, {
+      accountName: Utilities.getCookie("Notifies_AccountName"),
+      accountEmail: Utilities.getCookie("Notifies_AccountEmail"),
+      youtubeToken: Utilities.getCookie("Youtube-access_token"),
+    });
+
     sessionStorage.setItem("YoutubeLoggedIn", true);
     // window.location.href = "http://localhost:3000?YoutubeloggedIn=true";
   }, []);
@@ -55,7 +66,10 @@ function YoutubeAuth() {
       const url = new URL(window.location.href);
 
       try {
-        if (url.href === "http://localhost:3000/youtube/login") {
+        if (
+          url.href === "http://localhost:3000/youtube/login" ||
+          url.href === "http://localhost:3000/account"
+        ) {
           initiateAuth();
         } else {
           if (
@@ -82,8 +96,8 @@ function YoutubeAuth() {
     return <ErrorHandeling data={error}></ErrorHandeling>;
   } else {
     return (
-      <Spinner animation="border" role="status" style={Utilities.loadingSpinner}>
-        <span className="sr-only">Loading...</span>
+      <Spinner animation='border' role='status' style={Utilities.loadingSpinner}>
+        <span className='sr-only'>Loading...</span>
       </Spinner>
     );
   }

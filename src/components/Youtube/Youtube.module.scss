@@ -3,7 +3,8 @@
 .container {
   display: flex;
   flex-wrap: wrap;
-  width: 87%;
+  // width: 87%;
+  width: 82%;
   margin: auto;
   margin-top: 25px;
 }
@@ -15,16 +16,16 @@
     "title title"
     "info info";
 
-  width: 300px;
+  width: 320px;
   margin: 15px;
-  max-height: 300px;
+  max-height: 320px;
 }
 
 .title {
-  margin-top: 10px;
+  margin-top: 15px;
   grid-area: title;
   font-size: 1.2rem;
-  max-width: 300px;
+  max-width: 320px;
   overflow: hidden;
 
   a {
@@ -44,15 +45,15 @@
     border-radius: 10px;
   }
   &:hover {
-    transform: scale(1.1);
-    -webkit-transform: scale(1.1);
-    -moz-transform: scale(1.1);
-    -ms-transform: scale(1.1);
-    -o-transform: scale(1.1);
+    transform: scale(1.15);
+    -webkit-transform: scale(1.15);
+    -moz-transform: scale(1.15);
+    -ms-transform: scale(1.15);
+    -o-transform: scale(1.15);
   }
   img {
-    width: 300px;
-    max-height: 170px;
+    width: 320px;
+    max-height: 180px;
     object-fit: cover;
   }
 }
@@ -88,8 +89,8 @@
 }
 
 .imgContainer {
-  max-height: 170px;
-  min-height: 170px;
+  max-height: 180px;
+  min-height: 180px;
 }
 
 .domainTitle {
@@ -132,10 +133,12 @@
   text-align: center;
   color: #65696d;
   margin: auto;
+  letter-spacing: 1px;
 }
 
 .header_div {
-  width: 87%;
+  // width: 87%;
+  width: 82%;
   margin: auto;
   border-bottom: 2px solid #80808029;
   margin-top: 25px;
@@ -144,11 +147,13 @@
 
 @media screen and (max-width: 2560px) {
   .container {
-    width: 91%;
+    // width: 91%;
+    width: 82.5%;
   }
 
   .header_div {
-    width: 91%;
+    // width: 91%;
+    width: 82.5%;
   }
 
   .refreshTimer {
@@ -158,11 +163,13 @@
 
 @media screen and (max-width: 1920px) {
   .container {
-    width: 86.5%;
+    // width: 86.5%;
+    width: 73.5%;
   }
 
   .header_div {
-    width: 86.5%;
+    // width: 86.5%;
+    width: 73.5%;
   }
 
   .refreshButton {

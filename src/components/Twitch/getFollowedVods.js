@@ -1,31 +1,35 @@
 import axios from "axios";
 import _ from "lodash";
+import getFollowedChannels from "./GetFollowedChannels";
 
-async function getFollowedVods(FollowedChannels, forceRun) {
+import Utilities from "./../../utilities/Utilities";
+
+// async function getFollowedVods(FollowedChannels, forceRun) {
+async function getFollowedVods(forceRun) {
   const thresholdDate = 1;
   const vodExpire = 3;
 
   try {
-    const reqVodChannels = await axios.get(`http://localhost:3100/notifies/vod-channels`);
-    const FollowedChannelVods = reqVodChannels.data.channels.map(channel => {
-      return channel.name;
-    });
+    // const reqVodChannels = await axios.get(`http://localhost:3100/notifies/vod-channels`);
+    // const FollowedChannelVods = reqVodChannels.data.channels.map(channel => {
+    //   return channel.name;
+    // });
 
     const followedStreamVods = [];
     const today = new Date();
     const OnlyVodsAfterDate = new Date();
     OnlyVodsAfterDate.setDate(today.getDate() - thresholdDate);
 
-    const vodChannels = FollowedChannels.data.data
-      .map(channel => {
-        if (FollowedChannelVods.includes(channel.to_name.toLowerCase())) {
-          return channel.to_id;
-        }
-        return null;
-      })
-      .filter(channel => {
-        return channel !== null;
-      });
+    // const vodChannels = FollowedChannels.data.data
+    //   .map(channel => {
+    //     if (FollowedChannelVods.includes(channel.to_name.toLowerCase())) {
+    //       return channel.to_id;
+    //     }
+    //     return null;
+    //   })
+    //   .filter(channel => {
+    //     return channel !== null;
+    //   });
 
     let response = null;
     if (
@@ -33,18 +37,35 @@ async function getFollowedVods(FollowedChannels, forceRun) {
       JSON.parse(localStorage.getItem("Twitch-vods")).expire <= new Date() ||
       forceRun
     ) {
-      console.log("--:Vod requests sent.");
       try {
+        const followedChannels = await getFollowedChannels();
+        const reqVodChannels = await axios.get(`http://localhost:3100/notifies/vod-channels`);
+        const FollowedChannelVods = reqVodChannels.data.channels.map(channel => {
+          return channel.name;
+        });
+
+        const vodChannels = followedChannels.data.data
+          .map(channel => {
+            if (FollowedChannelVods.includes(channel.to_name.toLowerCase())) {
+              return channel.to_id;
+            }
+            return null;
+          })
+          .filter(channel => {
+            return channel !== null;
+          });
+
         await Promise.all(
           vodChannels.map(async channel => {
             response = await axios.get(`https://api.twitch.tv/helix/videos?`, {
               params: {
                 user_id: channel,
-                first: 2,
+                first: 3,
                 period: "week",
                 type: "archive",
               },
               headers: {
+                Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
                 "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
               },
             });

@@ -2,10 +2,11 @@ import axios from "axios";
 // import React, { useState } from "react";
 
 import placeholder from "./../../assets/images/placeholder.png";
+import Utilities from "./../../utilities/Utilities";
 
 async function getFollowedOnlineStreams(lastRan) {
   let error;
-  const refreshRate = 120;
+  const refreshRate = 115;
 
   function getProfile(user, tx, db, store, index) {
     return new Promise((resolve, reject) => {
@@ -31,8 +32,6 @@ async function getFollowedOnlineStreams(lastRan) {
 
     // Only make requests each 2min.
     if (((currentTime - lastRan) / 1000 >= refreshRate && lastRan != null) || lastRan === null) {
-      console.log("Refreshing data");
-
       // GET all followed channels.
       const followedchannels = await axios
         .get(`https://api.twitch.tv/helix/users/follows?`, {
@@ -41,6 +40,7 @@ async function getFollowedOnlineStreams(lastRan) {
             first: 50,
           },
           headers: {
+            Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         })
@@ -60,6 +60,7 @@ async function getFollowedOnlineStreams(lastRan) {
             after: followedchannels.data.pagination.cursor,
           },
           headers: {
+            Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         });
@@ -80,6 +81,7 @@ async function getFollowedOnlineStreams(lastRan) {
           user_id: followedChannelsIds,
         },
         headers: {
+          Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       });
@@ -130,6 +132,7 @@ async function getFollowedOnlineStreams(lastRan) {
                   id: user.user_id,
                 },
                 headers: {
+                  Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
                   "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
                 },
               });
@@ -177,6 +180,7 @@ async function getFollowedOnlineStreams(lastRan) {
             id: games,
           },
           headers: {
+            Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         });
@@ -225,10 +229,6 @@ async function getFollowedOnlineStreams(lastRan) {
         error: error,
       };
     } else {
-      console.log(
-        "Can auto refresh in " + (refreshRate - (currentTime - lastRan) / 1000) + " sec."
-      );
-      console.log("Since last refresh: " + (currentTime - lastRan) / 1000 + " sec");
       return { refreshTimer: refreshRate - (currentTime - lastRan) / 1000, status: 401 };
     }
   } catch (error) {

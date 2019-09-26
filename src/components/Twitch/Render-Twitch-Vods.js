@@ -1,23 +1,114 @@
+import axios from "axios";
 import { Animated } from "react-animated-css";
 import Moment from "react-moment";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import { store } from "react-notifications-component";
 import ReactTooltip from "react-tooltip";
 
 import styles from "./Twitch.module.scss";
 import Utilities from "utilities/Utilities";
 
+function TwitchVodElement(data) {
+  return (
+    <div className={styles.video}>
+      <div className={styles.imgContainer}>
+        <a className={styles.img} href={data.data.url}>
+          <img
+            src={
+              data.data.thumbnail_url
+                ? data.data.thumbnail_url.replace("%{width}", 1280).replace("%{height}", 720)
+                : "https://vod-secure.twitch.tv/_404/404_processing_320x180.png"
+            }
+            alt={styles.thumbnail}
+          />
+        </a>
+        <p className={styles.duration}>
+          {data.data.duration
+            .replace("h", ":")
+            .replace("m", ":")
+            .replace("s", "")}
+        </p>
+      </div>
+      <h4 className={styles.title}>
+        <a
+          data-tip={data.data.title}
+          href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+          {Utilities.truncate(data.data.title, 50)}
+        </a>
+      </h4>
+      <div style={{ width: "inherit" }}>
+        <p className={styles.channel}>
+          <a href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase() + "/videos"}>
+            {data.data.user_name}
+          </a>
+        </p>
+        {/* <DropdownButton
+                onClick={fetchVodMarkers}
+                id='dropdown-basic-button'
+                title='Dropdown button'>
+                <Dropdown.Item href='#/action-1'>Action</Dropdown.Item>
+                <Dropdown.Item href='#/action-2'>Another action</Dropdown.Item>
+                <Dropdown.Item href='#/action-3'>Something else</Dropdown.Item>
+              </DropdownButton> */}
+        {
+          <Moment
+            className={styles.viewers}
+            style={{
+              left: "235px",
+              bottom: "45px",
+              width: "unset",
+              justifyContent: "unset",
+              dispaly: "block",
+            }}
+            fromNow>
+            {data.data.published_at}
+          </Moment>
+        }
+      </div>
+    </div>
+  );
+}
+
 function RenderTwitchVods(data) {
-  useEffect(() => {
-    function addNotification(title, type) {
+  const vodData = useRef();
+  const [animate, setAnimate] = useState(false);
+  const [vodMarkers, setVodMarkers] = useState(false);
+  const [open, setOpen] = useState(true);
+
+  async function fetchVodMarkers(vodeoId) {
+    console.log("TCL: fetchVodMarkers -> open", open);
+    console.log("Makers_: ", vodeoId);
+
+    if (open) {
+      setVodMarkers(
+        await axios
+          .get(`https://api.twitch.tv/helix/streams/markers`, {
+            params: {
+              video_id: vodeoId,
+            },
+            headers: {
+              // "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+              Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+            },
+          })
+          .catch(error => {
+            console.error(error);
+          })
+      );
+    }
+    setOpen(false);
+  }
+
+  const addNotification = useCallback(
+    (title, type) => {
       store.addNotification({
         content: (
           <div className={`notification-custom-${type}`}>
-            <div className="notification-custom-icon"></div>
-            <div className="notification-custom-content">
-              <p className="notification-title">{title}</p>
-              <p className="notification-message">{Utilities.truncate(data.data.title, 50)}</p>
-              <p className="notification-game">{data.data.game_name}</p>
+            <div className='notification-custom-icon'></div>
+            <div className='notification-custom-content'>
+              <p className='notification-title'>{title}</p>
+              <p className='notification-message'>{Utilities.truncate(data.data.title, 50)}</p>
+              <p className='notification-game'>{data.data.game_name}</p>
             </div>
           </div>
         ),
@@ -30,58 +121,45 @@ function RenderTwitchVods(data) {
           duration: 5000,
         },
       });
+    },
+    [data.data.game_name, data.data.title]
+  );
+
+  useEffect(() => {
+    if (
+      (vodData.current === undefined || vodData.current.id !== data.data.id) &&
+      !data.run.initial
+    ) {
+      setAnimate(true);
+      addNotification(`Added vod: ${data.data.user_name}`, "twitch-vod-add");
     }
-    addNotification(`Added vod: ${data.data.user_name}`, "twitch-vod-add");
+    vodData.current = data.data;
+    data.runChange(false);
+  }, [
+    addNotification,
+    data,
+    data.data.game_name,
+    data.data.profile_img_url,
+    data.data.title,
+    data.data.user_name,
+  ]);
+
+  useEffect(() => {
     return () => {
       addNotification(`Removed vod: ${data.data.user_name}`, "twitch-vod-remove");
     };
-  }, [data.data.game_name, data.data.profile_img_url, data.data.title, data.data.user_name]);
+  }, [addNotification, data.data.user_name]);
 
   return (
     <>
-      <ReactTooltip delayShow={250} place="bottom" type="dark" effect="solid" />
-      <Animated animationIn="zoomIn" animationOut="fadeOut" isVisible={true}>
-        <div className={styles.video}>
-          <div className={styles.imgContainer}>
-            <a className={styles.img} href={data.data.url}>
-              <img
-                src={
-                  data.data.thumbnail_url
-                    ? data.data.thumbnail_url.replace("%{width}", 640).replace("%{height}", 360)
-                    : "https://vod-secure.twitch.tv/_404/404_processing_320x180.png"
-                }
-                alt={styles.thumbnail}
-              />
-            </a>
-            <p className={styles.duration}>
-              {data.data.duration
-                .replace("h", ":")
-                .replace("m", ":")
-                .replace("s", "")}
-            </p>
-          </div>
-          <h4 className={styles.title}>
-            <a
-              data-tip={data.data.title}
-              href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
-              {Utilities.truncate(data.data.title, 50)}
-            </a>
-          </h4>
-          <div>
-            <p className={styles.channel}>
-              <a href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase() + "/videos"}>
-                {data.data.user_name}
-              </a>
-            </p>
-            <p className={styles.game}>{data.data.type}</p>
-            {
-              <Moment className={styles.viewers} fromNow>
-                {data.data.published_at}
-              </Moment>
-            }
-          </div>
-        </div>
-      </Animated>
+      <ReactTooltip delayShow={250} place='bottom' type='dark' effect='solid' />
+      {animate ? (
+        <Animated animationIn='zoomIn' animationOut='fadeOut' isVisible={true}>
+          <TwitchVodElement data={data.data}></TwitchVodElement>
+        </Animated>
+      ) : (
+        <TwitchVodElement data={data.data}></TwitchVodElement>
+      )}
     </>
   );
 }

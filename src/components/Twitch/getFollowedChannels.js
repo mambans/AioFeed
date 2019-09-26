@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import Utilities from "./../../utilities/Utilities";
+
 async function getFollowedChannels() {
   try {
     const followedchannels = await axios
@@ -9,6 +11,7 @@ async function getFollowedChannels() {
           first: 50,
         },
         headers: {
+          Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })
@@ -25,6 +28,7 @@ async function getFollowedChannels() {
           after: followedchannels.data.pagination.cursor,
         },
         headers: {
+          Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       });
@@ -33,6 +37,7 @@ async function getFollowedChannels() {
         followedchannels.data.data.push(channel);
       });
     }
+
     return followedchannels;
   } catch (error) {
     console.error(error.message);
