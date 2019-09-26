@@ -10,9 +10,11 @@
     "express-react-views": "^0.11.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.26",
+    "multer": "^1.4.2",
     "node-sass": "^4.12.0",
     "normalize.css": "^5.0.0",
     "promise-mysql": "^4.1.0",
+    "pubsubhubbub": "^1.0.1",
     "randomstring": "^1.1.5",
     "react": "^16.8.6",
     "react-animated-css": "^1.2.1",
@@ -22,7 +24,9 @@
     "react-notifications-component": "^2.0.7",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
+    "react-switch": "^5.0.1",
     "react-tooltip": "^3.11.1",
+    "react-web-notification": "^0.7.0",
     "reactjs-popup": "^1.5.0"
   },
   "scripts": {
