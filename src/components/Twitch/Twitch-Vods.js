@@ -7,7 +7,6 @@ import ErrorHandeling from "../error/Error";
 import Utilities from "utilities/Utilities";
 import styles from "./Twitch.module.scss";
 import RenderTwitchVods from "./Render-Twitch-Vods";
-import getFollowedChannels from "./GetFollowedChannels";
 import getFollowedVods from "./GetFollowedVods";
 import AddChannelForm from "./VodSettings";
 
@@ -22,12 +21,9 @@ function TwitchVods() {
     initialOpen.current = newRun;
   }
 
-  const followedChannels = useRef();
-
   const refresh = useCallback(() => {
     async function fetchData() {
       try {
-        // const followedVodsResponse = await getFollowedVods(followedChannels.current, true);
         const followedVodsResponse = await getFollowedVods(true);
 
         const followedVods = followedVodsResponse.data;
@@ -47,7 +43,6 @@ function TwitchVods() {
   const windowFocusHandler = useCallback(() => {
     async function fetchData() {
       try {
-        // followedChannels.current = await getFollowedChannels();
         const followedVodsResponse = await getFollowedVods();
 
         const followedVods = followedVodsResponse.data;
@@ -68,8 +63,6 @@ function TwitchVods() {
   useEffect(() => {
     async function fetchData() {
       try {
-        // followedChannels.current = await getFollowedChannels();
-
         const followedVodsResponse = await getFollowedVods();
 
         const followedVods = followedVodsResponse.data;
@@ -111,7 +104,6 @@ function TwitchVods() {
         }}></ErrorHandeling>
     );
   } else {
-    // console.log("Render vods: ", vods);
     return (
       <>
         <div className={styles.header_div}>

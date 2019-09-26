@@ -62,7 +62,6 @@ function Youtube() {
 
         const SubscriptionVideos = SubscriptionData.data;
 
-        // const SubscriptionVideos = await getSubscriptionVideos(followedChannels.current);
         setRequestError(SubscriptionData.error.response.data.error);
         setVideos(SubscriptionVideos);
         setLastRefresh(new Date());
@@ -94,7 +93,6 @@ function Youtube() {
         }}></ErrorHandeling>
     );
   } else {
-    // console.log("Render Youtube videos: ", videos);
     return (
       <>
         <div className={styles.header_div}>
@@ -112,7 +110,6 @@ function Youtube() {
             </Moment>
           )}
           {requestError && requestError.code === 403 ? (
-            // <p className={styles.requestError}>{requestError.response.data.error.errors[0].reason}</p>
             <Alert
               key={requestError.errors[0].reason}
               className={styles.requestError}

@@ -8,14 +8,8 @@ import ErrorHandeling from "./../error/Error";
 
 function YoutubeAuth() {
   const [error, setError] = useState();
-  // const myState = useRef();
 
   const initiateAuth = useCallback(() => {
-    // myState.current = randomstring.generate({
-    //   capitalization: "lowercase",
-    //   length: 32,
-    // });
-
     const orginState = randomstring.generate({
       capitalization: "lowercase",
       length: 32,
@@ -49,8 +43,6 @@ function YoutubeAuth() {
     //   .split("&")[3]
     //   .replace("expires_in=", "");
 
-    // document.cookie = `Youtube-access_token=${authCode}; path=/`;
-
     await axios.put(`http://localhost:3100/notifies/account/youtube/connect`, {
       accountName: Utilities.getCookie("Notifies_AccountName"),
       accountEmail: Utilities.getCookie("Notifies_AccountEmail"),
@@ -58,7 +50,6 @@ function YoutubeAuth() {
     });
 
     sessionStorage.setItem("YoutubeLoggedIn", true);
-    // window.location.href = "http://localhost:3000?YoutubeloggedIn=true";
   }, []);
 
   useEffect(() => {

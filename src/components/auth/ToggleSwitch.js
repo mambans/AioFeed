@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Switch from "react-switch";
+
 import styles from "./Auth.module.scss";
 
 // function ToggleSwitch(data) {
@@ -29,19 +30,13 @@ class ToggleSwitch extends Component {
   handleChange(checked) {
     this.setState({ checked });
     localStorage.setItem(this.props.data.label + "FeedEnabled", checked);
-    // console.log("rrtt: ", localStorage.getItem(this.props.data.label + "FeedEnabled"));
-    // localStorage.setItem(this.props.data.label + "FeedEnabled", checked);
   }
 
   render() {
     return (
       <label className={styles.ToggleSwitch}>
         <span>{this.props.data.label}</span>
-        <Switch
-          onChange={this.handleChange}
-          // checked={localStorage.getItem(this.props.data.label + "FeedEnabled") === "true"}
-          checked={this.state.checked}
-        />
+        <Switch onChange={this.handleChange} checked={this.state.checked} />
       </label>
     );
   }

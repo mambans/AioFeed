@@ -25,10 +25,6 @@ async function getVideoInfo(videoList) {
       videoList.find(videoo => {
         return videoo.contentDetails.upload.videoId === response.data.items[0].id;
       }).duration = await Utilities.formatDuration(response.data.items[0].contentDetails.duration);
-
-      // videoList.find(videoo => {
-      //     return videoo.contentDetails.upload.videoId === response.data.items[0].id;
-      // }).duration = response.data.items[0].contentDetails.duration;
     })
   );
 

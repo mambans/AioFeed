@@ -1,4 +1,3 @@
-import axios from "axios";
 import { Animated } from "react-animated-css";
 import Moment from "react-moment";
 import React, { useEffect, useRef, useCallback, useState } from "react";
@@ -42,14 +41,6 @@ function TwitchVodElement(data) {
             {data.data.user_name}
           </a>
         </p>
-        {/* <DropdownButton
-                onClick={fetchVodMarkers}
-                id='dropdown-basic-button'
-                title='Dropdown button'>
-                <Dropdown.Item href='#/action-1'>Action</Dropdown.Item>
-                <Dropdown.Item href='#/action-2'>Another action</Dropdown.Item>
-                <Dropdown.Item href='#/action-3'>Something else</Dropdown.Item>
-              </DropdownButton> */}
         {
           <Moment
             className={styles.viewers}
@@ -72,32 +63,6 @@ function TwitchVodElement(data) {
 function RenderTwitchVods(data) {
   const vodData = useRef();
   const [animate, setAnimate] = useState(false);
-  const [vodMarkers, setVodMarkers] = useState(false);
-  const [open, setOpen] = useState(true);
-
-  async function fetchVodMarkers(vodeoId) {
-    console.log("TCL: fetchVodMarkers -> open", open);
-    console.log("Makers_: ", vodeoId);
-
-    if (open) {
-      setVodMarkers(
-        await axios
-          .get(`https://api.twitch.tv/helix/streams/markers`, {
-            params: {
-              video_id: vodeoId,
-            },
-            headers: {
-              // "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-              Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
-            },
-          })
-          .catch(error => {
-            console.error(error);
-          })
-      );
-    }
-    setOpen(false);
-  }
 
   const addNotification = useCallback(
     (title, type) => {

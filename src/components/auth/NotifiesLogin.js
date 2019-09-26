@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
-// import { Redirect } from "react-router-dom";
 
 import styles from "./Auth.module.scss";
 import ErrorHandeling from "components/error/Error";
@@ -29,14 +28,12 @@ function NotifiesLogin() {
   };
 
   const { value: userName, bind: bindUserName, reset: resetUserName } = useInput("");
-  // const { value: email, bind: bindEmail, reset: resetEmail } = useInput("");
   const { value: password, bind: bindPassword, reset: resetPassword } = useInput("");
 
   const handleSubmit = evt => {
     evt.preventDefault();
     loginAccount();
     resetUserName();
-    // resetEmail();
     resetPassword();
   };
 
@@ -87,7 +84,6 @@ function NotifiesLogin() {
           Login
         </Button>
       </Form>
-      {/* {isLoggedIn & !error ? <Redirect to='/account'></Redirect> : null} */}
       {isLoggedIn & !error ? (window.location.href = "/account") : null}
     </>
   );

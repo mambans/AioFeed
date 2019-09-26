@@ -4,7 +4,6 @@ import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import { Animated } from "react-animated-css";
 
-//eslint-disable-next-line
 import Youtube from "../youtube/Youtube";
 import Twitch from "../twitch/Twitch";
 import TwitchVods from "../twitch/Twitch-vods";

@@ -2,7 +2,6 @@ import { Animated } from "react-animated-css";
 import Moment from "react-moment";
 import React, { useEffect, useCallback, useRef, useState } from "react";
 import ReactTooltip from "react-tooltip";
-import { store } from "react-notifications-component";
 
 import styles from "./Twitch.module.scss";
 import Utilities from "utilities/Utilities";
@@ -84,34 +83,6 @@ function RenderTwitch(data) {
   const streamData = useRef();
   const [animate, setAnimate] = useState(false);
 
-  const addNotification = useCallback(
-    (type, status) => {
-      return store.addNotification({
-        content: (
-          <div className={`notification-custom-${type}`}>
-            <div className='notification-custom-icon'>
-              <img src={data.data.profile_img_url} alt='' className='notificationProfileIcon'></img>
-            </div>
-            <div className='notification-custom-content'>
-              <p className='notification-title'>{data.data.user_name + " " + status}</p>
-              <p className='notification-message'>{Utilities.truncate(data.data.title, 50)}</p>
-              <p className='notification-game'>{data.data.game_name}</p>
-            </div>
-          </div>
-        ),
-        width: 450,
-        insert: "top",
-        container: "bottom-right",
-        animationIn: ["animated", "slideInRight"],
-        animationOut: ["animated", "fadeOut"],
-        dismiss: {
-          duration: 7500,
-        },
-      });
-    },
-    [data.data.game_name, data.data.profile_img_url, data.data.title, data.data.user_name]
-  );
-
   const addSystemNotification = useCallback(
     status => {
       if (Notification.permission === "granted") {
@@ -145,7 +116,6 @@ function RenderTwitch(data) {
     ) {
       setAnimate(true);
       addSystemNotification("online");
-      // addNotification("twitch-online", "Live");
       streamData.current = data.data;
     } else if (
       streamData.current === undefined ||
@@ -155,35 +125,12 @@ function RenderTwitch(data) {
       streamData.current = data.data;
     }
     streamData.current = data.data;
-    // initialOpen.current = false;
     data.runChange(false);
-  }, [addNotification, addSystemNotification, data, data.data, data.data.id]);
+  }, [addSystemNotification, data, data.data, data.data.id]);
 
   useEffect(
     () => {
       return () => {
-        // store.addNotification({
-        //   content: (
-        //     <div className={`notification-custom-twitch-offline`}>
-        //       <div className='notification-custom-icon'>
-        //         <img src={data.data.profile_img_url} alt='' className='notificationProfileIcon'></img>
-        //       </div>
-        //       <div className='notification-custom-content'>
-        //         <p className='notification-title'>{data.data.user_name + " Offline"}</p>
-        //         <p className='notification-message'>{""}</p>
-        //         <p className='notification-game'>{""}</p>
-        //       </div>
-        //     </div>
-        //   ),
-        //   width: 350,
-        //   insert: "top",
-        //   container: "bottom-right",
-        //   animationIn: ["animated", "slideInRight"],
-        //   animationOut: ["animated", "fadeOut"],
-        //   dismiss: {
-        //     duration: 7500,
-        //   },
-        // });
         addSystemNotification("offline");
       };
     },
@@ -195,9 +142,6 @@ function RenderTwitch(data) {
   return (
     <>
       <ReactTooltip delayShow={250} place='bottom' type='dark' effect='solid' />
-
-      {/* {console.log(!data.run.initial)} */}
-      {/* {!data.run.initial ? ( */}
       {animate ? (
         <Animated animationIn='zoomIn' animationOut='fadeOut' isVisible={true}>
           <StreamEle key={data.data.id} data={data.data}></StreamEle>
@@ -205,7 +149,6 @@ function RenderTwitch(data) {
       ) : (
         <StreamEle key={data.data.id} data={data.data}></StreamEle>
       )}
-      {/* {data.runChange(false)} */}
     </>
   );
 }

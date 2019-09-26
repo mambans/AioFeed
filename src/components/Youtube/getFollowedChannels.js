@@ -17,7 +17,6 @@ async function getFollowedChannels() {
         },
         headers: {
           Authorization: "Bearer " + Utilities.getCookie("Youtube-access_token"),
-          // Authorization: "Bearer " + localStorage.getItem("Youtube-access_token"),
           Accept: "application/json",
         },
       });
@@ -37,7 +36,6 @@ async function getFollowedChannels() {
           },
           headers: {
             Authorization: "Bearer " + Utilities.getCookie("Youtube-access_token"),
-            // Authorization: "Bearer " + localStorage.getItem("Youtube-access_token"),
             Accept: "application/json",
           },
         });

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Button, Spinner } from "react-bootstrap";
 
 import ErrorHandeling from "./../error/Error";
-import getFollowedOnlineStreams from "./GetFollowedStreamsNEW";
+import getFollowedOnlineStreams from "./GetFollowedStreams";
 import RenderTwitch from "./Render-Twitch";
 import styles from "./Twitch.module.scss";
 import Utilities from "utilities/Utilities";
@@ -62,7 +62,6 @@ function Twitch() {
           setError(streams.error);
         }
 
-        // setLiveStreams(streams.data);
         setIsLoaded(true);
         setRefreshing(false);
       } catch (error) {
@@ -70,7 +69,6 @@ function Twitch() {
       }
     }
     fetchData();
-    // lastRan.current = new Date();
 
     setInterval(fetchData, refreshRate * 100);
 
@@ -97,8 +95,6 @@ function Twitch() {
         }}></ErrorHandeling>
     );
   } else {
-    // console.log("Render liveStreams: ", liveStreams);
-
     return (
       <>
         <div

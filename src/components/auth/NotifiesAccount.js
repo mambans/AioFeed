@@ -3,8 +3,6 @@ import { Button } from "react-bootstrap";
 import { Redirect, NavLink } from "react-router-dom";
 import Popup from "reactjs-popup";
 
-// import { Redirect } from "react-router-dom";
-
 import SuccessfullyConnected from "./SuccessfullyConnected";
 import styles from "./Auth.module.scss";
 import Utilities from "./../../utilities/Utilities";
@@ -39,7 +37,6 @@ function NotifiesAccount() {
           <ToggleSwitch data={{ label: "Youtube" }}></ToggleSwitch>
           <ToggleSwitch data={{ label: "TwitchVods" }}></ToggleSwitch>
 
-          {/* {!TwitchloggedIn ? <Button onClick={() => { */}
           {!Utilities.getCookie("Twitch-access_token") ? (
             <Button
               className={[styles.connectButtons, styles.connectTwitch].join(" ")}
@@ -60,7 +57,6 @@ function NotifiesAccount() {
               </Button>
             </div>
           )}
-          {/* {!YoutubeloggedIn ? <Button onClick={() => { */}
           {!Utilities.getCookie("Youtube-access_token") ? (
             <Button
               className={[styles.connectButtons, styles.connectYoutube].join(" ")}
@@ -88,14 +84,7 @@ function NotifiesAccount() {
       {false ? (
         <Popup
           placeholder='Image..'
-          trigger={
-            <Button
-              variant='outline-secondary'
-              // className={styles.settings}
-            >
-              Upload image
-            </Button>
-          }
+          trigger={<Button variant='outline-secondary'>Upload image</Button>}
           position='right center'
           className='settingsPopup'>
           {/* <UploadProfileImageForm></UploadProfileImageForm> */}
@@ -110,10 +99,7 @@ function NotifiesAccount() {
           document.cookie = `Youtube-access_token=; path=/`;
 
           window.location.href = "/account/login";
-        }}
-        // as={NavLink}
-        // to='/account/login'
-      >
+        }}>
         Logout from Notifies
       </Button>
     </>
