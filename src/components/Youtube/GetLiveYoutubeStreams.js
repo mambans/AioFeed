@@ -21,9 +21,7 @@ async function GetLiveYoutubeStreams(channel) {
             },
           })
           .catch(function(error) {
-            console.log("Catch error");
             console.error(error);
-            console.log("catch: ", JSON.parse(localStorage.getItem(`live-${channel}`)));
             return JSON.parse(localStorage.getItem(`live-${channel}`));
           }))
       : (liveResponse = await axios.get(`https://www.googleapis.com/youtube/v3/search?`, {
@@ -38,9 +36,6 @@ async function GetLiveYoutubeStreams(channel) {
         }));
 
     localStorage.setItem(`live-${channel}`, JSON.stringify(liveResponse));
-
-    console.log("LiveResonse: ", liveResponse);
-    console.log("LiveResonse- localstorage: ", JSON.parse(localStorage.getItem(`live-${channel}`)));
 
     // ----------------------------------------
     // const liveResponse = await axios.get(`https://www.googleapis.com/youtube/v3/search?`, {
@@ -58,8 +53,6 @@ async function GetLiveYoutubeStreams(channel) {
 
     // Adding live stremaing details.
     if (liveResponse.data.items.length >= 1) {
-      console.log("GET: Livestrema details.");
-
       liveStreams = await Promise.all(
         liveResponse.data.items.map(async stream => {
           const liveDetailsResponse = await axios.get(

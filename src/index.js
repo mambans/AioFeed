@@ -16,7 +16,7 @@ import Navigation from "./components/navigation/Navigation";
 serviceWorker.unregister();
 
 ReactDOM.render(
-  <div id="main-body">
+  <div id='main-body'>
     <Navigation />
   </div>,
   document.getElementById("root")

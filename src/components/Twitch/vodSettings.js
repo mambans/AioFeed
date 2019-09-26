@@ -58,7 +58,6 @@ function AddChannelForm() {
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    console.log(`Submitting Name ${channel}`);
     addChannel();
     resetchannel();
   };
@@ -76,8 +75,8 @@ function AddChannelForm() {
               <li key={channel.name}>
                 <p>{channel.name}</p>
                 <Button
-                  variant="danger"
-                  size="sm"
+                  variant='danger'
+                  size='sm'
                   onClick={() => {
                     removeChannel(channel.name);
                   }}>
@@ -88,17 +87,17 @@ function AddChannelForm() {
           })}
         </ul>
       ) : (
-        <Spinner animation="border" role="status" style={Utilities.loadingSpinner}>
-          <span className="sr-only">Loading...</span>
+        <Spinner animation='border' role='status' style={Utilities.loadingSpinner}>
+          <span className='sr-only'>Loading...</span>
         </Spinner>
       )}
 
       <form onSubmit={handleSubmit}>
         <label>
           Add channel:
-          <input type="text" placeholder="Channel name.." {...bindchannel} />
+          <input type='text' placeholder='Channel name..' {...bindchannel} />
         </label>
-        <input type="submit" value="Add" />
+        <input type='submit' value='Add' />
       </form>
     </>
   );

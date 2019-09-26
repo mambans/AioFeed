@@ -8,8 +8,6 @@ async function getVideoInfo(videoList) {
       let response = null;
 
       if (!localStorage.getItem(`videoDetails-${video.contentDetails.upload.videoId}`)) {
-        console.log("--Video details request sent!--");
-
         response = await axios.get(
           `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${video.contentDetails.upload.videoId}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`
         );
@@ -19,8 +17,6 @@ async function getVideoInfo(videoList) {
           JSON.stringify(response)
         );
       } else {
-        console.log("--Video details cache used!--");
-
         response = JSON.parse(
           localStorage.getItem(`videoDetails-${video.contentDetails.upload.videoId}`)
         );

@@ -7,8 +7,6 @@ async function getFollowedChannels() {
       !localStorage.getItem(`followedChannels`) ||
       JSON.parse(localStorage.getItem(`followedChannels`)).casheExpire <= new Date()
     ) {
-      console.log("Youtube: Followed-channels REQUEST sent.");
-
       const firstPage = await axios.get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {
         params: {
           maxResults: 50,

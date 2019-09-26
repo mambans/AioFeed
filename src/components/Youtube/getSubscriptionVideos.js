@@ -75,11 +75,11 @@ async function getSubscriptionVideos(followedChannels) {
         //     liveStreams.push(stream);
         // });
 
-        videos = videosUnordered;
+        // videos = videosUnordered;
       })
     );
 
-    await getVideoInfo(videos);
+    await getVideoInfo(videosUnordered);
     // await liveStreams.forEach(ele => {
     //     videosUnordered.push(ele);
     // });
