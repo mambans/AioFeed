@@ -96,11 +96,10 @@ const Utilities = {
     }
 
     let timeSegments = time.split(":");
-
     if (timeformat === "hours") {
-      hours = timeSegments[0];
-      minutes = timeSegments[1];
-      seconds = timeSegments[2];
+      hours = timeSegments[0] || "00";
+      minutes = timeSegments[1] || "00";
+      seconds = timeSegments[2] || "00";
 
       if (hours.length <= 1) {
         hours = "0" + hours;
@@ -111,7 +110,11 @@ const Utilities = {
       }
 
       if (seconds.length <= 1) {
-        seconds = "0" + seconds;
+        if (seconds.length <= 0) {
+          seconds = "00";
+        } else {
+          seconds = "0" + seconds;
+        }
       }
 
       formatDuration = hours + ":" + minutes + ":" + seconds;
