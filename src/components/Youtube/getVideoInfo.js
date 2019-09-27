@@ -1,6 +1,8 @@
 import axios from "axios";
 
-import Utilities from "../../utilities/Utilities";
+// import Utilities from "../../utilities/Utilities";
+import moment from "moment";
+// var moment = require("moment");
 
 async function getVideoInfo(videoList) {
   await Promise.all(
@@ -24,7 +26,11 @@ async function getVideoInfo(videoList) {
 
       videoList.find(videoo => {
         return videoo.contentDetails.upload.videoId === response.data.items[0].id;
-      }).duration = await Utilities.formatDuration(response.data.items[0].contentDetails.duration);
+        // }).duration = response.data.items[0].contentDetails.duration;
+      }).duration = await moment
+        .duration(response.data.items[0].contentDetails.duration)
+        .format("hh:mm:ss");
+      // }).duration = await Utilities.formatDuration(response.data.items[0].contentDetails.duration);
     })
   );
 
@@ -32,3 +38,5 @@ async function getVideoInfo(videoList) {
 }
 
 export default getVideoInfo;
+
+moment.duration("PT5M33S").format("hh:mm:ss");
