@@ -100,7 +100,12 @@ function RenderTwitch(data) {
 
         notification.onclick = function(event) {
           event.preventDefault(); // prevent the browser from focusing the Notification's tab
-          window.open("https://www.twitch.tv/" + data.data.user_name.toLowerCase(), "_blank");
+          status === "offline"
+            ? window.open(
+                "https://www.twitch.tv/" + data.data.user_name.toLowerCase() + "/videos",
+                "_blank"
+              )
+            : window.open("https://www.twitch.tv/" + data.data.user_name.toLowerCase(), "_blank");
         };
 
         return notification;
@@ -128,16 +133,11 @@ function RenderTwitch(data) {
     data.runChange(false);
   }, [addSystemNotification, data, data.data, data.data.id]);
 
-  useEffect(
-    () => {
-      return () => {
-        addSystemNotification("offline");
-      };
-    },
-    [addSystemNotification],
-    data.data.user_name,
-    [addSystemNotification]
-  );
+  useEffect(() => {
+    return () => {
+      addSystemNotification("offline");
+    };
+  }, [addSystemNotification, data.data.id, data.data.user_name]);
 
   return (
     <>
