@@ -27,4 +27,4 @@ Youtube feed shows the 5 latest uploaded video from each followed/subscribed cha
 
 #### Problems
 
-- Youtube feed doesn't live-streams (cost to much quota/requests)
+- Youtube feed doesn't include live-streams (cost to much quota/requests)
