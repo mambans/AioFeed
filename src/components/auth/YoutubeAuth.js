@@ -68,7 +68,7 @@ function YoutubeAuth() {
               .slice(6) === Utilities.getCookie("Youtube-myState")
           ) {
             await getAccessToken();
-            window.location.href = "http://localhost:3000?YoutubeloggedIn=true";
+            window.location.href = "http://localhost:3000?YoutubeConnected=true";
           } else {
             setError({ message: "Request didn't come from this website." });
           }

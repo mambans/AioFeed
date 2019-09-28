@@ -71,7 +71,7 @@ function TwitchAuth() {
           if (url.searchParams.get("state") === Utilities.getCookie("Twitch-myState")) {
             try {
               await getAccessToken(url);
-              window.location.href = `http://localhost:3000/account?TwitchloggedIn=true`;
+              window.location.href = `http://localhost:3000/account?TwitchConnected=true`;
             } catch (error) {
               setError(error);
             }
