@@ -46,10 +46,8 @@ function YoutubeAuth() {
     await axios.put(`http://localhost:3100/notifies/account/youtube/connect`, {
       accountName: Utilities.getCookie("Notifies_AccountName"),
       accountEmail: Utilities.getCookie("Notifies_AccountEmail"),
-      youtubeToken: Utilities.getCookie("Youtube-access_token"),
+      youtubeToken: authCode,
     });
-
-    sessionStorage.setItem("YoutubeLoggedIn", true);
   }, []);
 
   useEffect(() => {

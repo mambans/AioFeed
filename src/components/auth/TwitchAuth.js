@@ -44,10 +44,9 @@ function TwitchAuth() {
     await axios.put(`http://localhost:3100/notifies/account/twitch/connect`, {
       accountName: Utilities.getCookie("Notifies_AccountName"),
       accountEmail: Utilities.getCookie("Notifies_AccountEmail"),
-      twitchToken: Utilities.getCookie("Twitch-access_token"),
+      twitchToken: accessToken,
     });
 
-    sessionStorage.setItem("TwitchLoggedIn", true);
     // window.location.href = "http://localhost:3000?TwitchloggedIn=true";
 
     // const validateToken = await axios.post(`https://id.twitch.tv/oauth2/validate`, {
