@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Navbar, NavDropdown, Nav, Container, Button } from "react-bootstrap";
 import { BrowserRouter as Router, NavLink, Route, Switch } from "react-router-dom";
 
+import Icon from "react-icons-kit";
+import { github } from "react-icons-kit/icomoon/github";
+
 import "./Navigation.scss";
 import logo from "../../assets/images/logo-v2.png";
 import Home from "./../home/Home";
@@ -10,9 +13,9 @@ import youtubeAuth from "./../auth/YoutubeAuth";
 import TwitchAuth from "./../auth/TwitchAuth";
 import ErrorHandeling from "./../error/Error";
 import Utilities from "./../../utilities/Utilities";
-import NotifiesCreateAccount from "./../auth/NotifiesCreateAccount";
-import NotifiesLogin from "./../auth/NotifiesLogin";
-import NotifiesAccount from "./../auth/NotifiesAccount";
+import NotifiesCreateAccount from "./../account/NotifiesCreateAccount";
+import NotifiesLogin from "./../account/NotifiesLogin";
+import NotifiesAccount from "./../account/NotifiesAccount";
 import placeholder from "./../../assets/images/placeholder.png";
 import styles from "./Navigation.module.scss";
 import NoMatch from "./NoMatch.js";
@@ -100,6 +103,7 @@ function NavigationBar() {
             </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href='https://github.com/mambans/Notifies'>
+              <Icon icon={github} size={24} style={{ paddingRight: "0.75rem" }}></Icon>
               Notifies -Github
             </NavDropdown.Item>
           </NavDropdown>

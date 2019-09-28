@@ -27,6 +27,24 @@
   margin-top: 50px;
   padding: 25px;
 
+  .disconnectButton {
+    background-color: #333;
+    border: thin solid #313131;
+
+    &:hover {
+      background-color: lighten(#8a1f1f, 10%);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem lighten(#5c1313, 20%);
+    }
+
+    &:active {
+      background-color: lighten(#791313, 25%);
+      border-color: lighten(#581010, 35%);
+    }
+  }
+
   .connectButtons {
     width: max-content;
     margin-bottom: 1rem;
@@ -75,14 +93,12 @@
     }
   }
 
-  .twitchConnected {
+  .connected {
     color: #fff;
     font-size: 1.1rem;
-    border: thin solid lighten(#42107d, 10%);
     width: max-content;
     padding: 7px;
-    background-color: #42107d;
-    min-width: 300px;
+    min-width: 250px;
     text-align: center;
     border-radius: 10px;
     -webkit-border-radius: 10px;
@@ -92,21 +108,14 @@
     margin-right: 50px;
   }
 
+  .twitchConnected {
+    border: thin solid lighten(#42107d, 10%);
+    background-color: #42107d;
+  }
+
   .youtubeConnected {
-    color: #fff;
-    font-size: 1.1rem;
     border: thin solid lighten(#4b1010, 10%);
-    width: max-content;
-    padding: 7px;
     background-color: #4b1010;
-    min-width: 300px;
-    text-align: center;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
-    margin-right: 50px;
   }
 }
 
@@ -148,4 +157,13 @@
 
 .ToggleSwitch {
   width: max-content;
+  display: flex;
+  height: 40px;
+  align-items: center;
+
+  span {
+    padding-right: 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
 }

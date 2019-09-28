@@ -6,11 +6,7 @@ import Utilities from "utilities/Utilities";
 function SuccessfullyConnected() {
   const url = new URL(window.location.href);
 
-  if (
-    url.searchParams.get("TwitchloggedIn") &&
-    sessionStorage.getItem("TwitchLoggedIn") &&
-    Utilities.getCookie("Twitch-access_token")
-  ) {
+  if (url.searchParams.get("TwitchloggedIn") && Utilities.getCookie("Twitch-access_token")) {
     return (
       <>
         <Alert variant='success' style={Utilities.alertWarning}>
@@ -21,7 +17,6 @@ function SuccessfullyConnected() {
     );
   } else if (
     url.searchParams.get("YoutubeloggedIn") &&
-    sessionStorage.getItem("YoutubeLoggedIn") &&
     Utilities.getCookie("Youtube-access_token")
   ) {
     return (

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 
-import styles from "./Auth.module.scss";
+import styles from "./Account.module.scss";
 import ErrorHandeling from "components/error/Error";
 import Utilities from "utilities/Utilities";
 
@@ -44,17 +44,14 @@ function NotifiesLogin() {
         accountName: userName,
         accountPassword: password,
       });
+      console.log("TCL: loginAccount -> res", res);
 
       if (res.data.account[0].username) {
         document.cookie = `Notifies_AccountName=${res.data.account[0].username}; path=/`;
         document.cookie = `Notifies_AccountEmail=${res.data.account[0].email}; path=/`;
 
-        document.cookie = `Twitch-access_token=${Utilities.getCookie(
-          "Twitch-access_token"
-        )}; path=/`;
-        document.cookie = `Youtube-access_token=${Utilities.getCookie(
-          "Youtube-access_token"
-        )}; path=/`;
+        document.cookie = `Twitch-access_token=${res.data.account[0].twitch_token}; path=/`;
+        document.cookie = `Youtube-access_token=${res.data.account[0].youtube_token}; path=/`;
 
         setIsLoggedIn(true);
       } else {
