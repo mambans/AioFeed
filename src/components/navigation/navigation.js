@@ -86,6 +86,7 @@ function NavigationBar() {
         <Container>
           <Nav className='mr-auto'>
             <Nav.Link as={NavLink} to='/feed' activeClassName='active'>
+              {/* <Icon icon={feed} size={24} style={{ paddingRight: "0.75rem" }}></Icon> */}
               Feed
             </Nav.Link>
             <Nav.Link as={NavLink} to='/twitch/notifications' activeClassName='active'>

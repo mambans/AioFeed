@@ -1,12 +1,11 @@
 import axios from "axios";
-// import React, { useState } from "react";
 
 import placeholder from "./../../assets/images/placeholder.png";
 import Utilities from "./../../utilities/Utilities";
 
-async function getFollowedOnlineStreams(lastRan) {
+async function getFollowedOnlineStreams(lastRan, refresh) {
   let error;
-  const refreshRate = 115;
+  const refreshRate = refresh - 5;
 
   function getProfile(user, tx, db, store, index) {
     return new Promise((resolve, reject) => {
@@ -32,6 +31,8 @@ async function getFollowedOnlineStreams(lastRan) {
 
     // Only make requests each 2min.
     if (((currentTime - lastRan) / 1000 >= refreshRate && lastRan != null) || lastRan === null) {
+      console.log("Twitch Request sent!");
+
       // GET all followed channels.
       const followedchannels = await axios
         .get(`https://api.twitch.tv/helix/users/follows?`, {

@@ -25,12 +25,30 @@
   padding-bottom: 7px;
 }
 
-.video {
+.videoVod {
   display: grid;
   grid-template-areas:
     "video video"
     "title title"
     "info info";
+
+  width: 320px;
+  margin: 15px;
+  max-height: 320px;
+}
+
+.video {
+  display: grid;
+  grid-template-areas:
+    "highlight highlight"
+    "video video"
+    "title title"
+    "info info";
+
+  // grid-template-areas:
+  //   "video video"
+  //   "title title"
+  //   "info info";
 
   width: 320px;
   margin: 15px;
@@ -57,6 +75,7 @@
 .imgContainer {
   grid-area: video;
   transition: all 0.2s ease-in-out;
+  margin-top: 5px;
   img {
     transition: all 0.2s ease-in-out;
     border-radius: 10px;

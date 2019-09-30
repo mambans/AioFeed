@@ -4,7 +4,6 @@ import { Form, Button } from "react-bootstrap";
 
 import styles from "./Account.module.scss";
 import ErrorHandeling from "components/error/Error";
-import Utilities from "utilities/Utilities";
 
 function NotifiesLogin() {
   document.title = "Notifies | Login";
@@ -44,7 +43,6 @@ function NotifiesLogin() {
         accountName: userName,
         accountPassword: password,
       });
-      console.log("TCL: loginAccount -> res", res);
 
       if (res.data.account[0].username) {
         document.cookie = `Notifies_AccountName=${res.data.account[0].username}; path=/`;

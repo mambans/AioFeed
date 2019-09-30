@@ -9,7 +9,7 @@ import Utilities from "utilities/Utilities";
 
 function TwitchVodElement(data) {
   return (
-    <div className={styles.video}>
+    <div className={styles.videoVod}>
       <div className={styles.imgContainer}>
         <a className={styles.img} href={data.data.url}>
           <img

@@ -18,6 +18,36 @@ function StreamEle(data) {
 
   return (
     <div className={`${styles.video}`} key={data.data.id}>
+      {data.newlyAdded ? (
+        <Animated
+          animationIn='fadeIn'
+          animationOut='zoomOut'
+          isVisible={false}
+          animationOutDelay={1500}
+          animationOutDuration={15000}
+          style={{ gridArea: "highlight" }}>
+          <div
+            style={{
+              height: 5,
+              backgroundColor: "rgb(14, 203, 247)",
+              borderRadius: 5,
+              gridArea: "highlight",
+              width: "100%",
+            }}
+          />
+        </Animated>
+      ) : (
+        <div
+          style={{
+            height: 5,
+            backgroundColor: "transparent",
+            borderRadius: 5,
+            gridArea: "highlight",
+            width: "100%",
+          }}
+        />
+      )}
+
       <div className={styles.imgContainer}>
         <a
           className={styles.img}
@@ -81,7 +111,6 @@ function StreamEle(data) {
 
 function RenderTwitch(data) {
   const streamData = useRef();
-  const [animate, setAnimate] = useState(false);
 
   const addSystemNotification = useCallback(
     status => {
@@ -119,8 +148,8 @@ function RenderTwitch(data) {
       (streamData.current === undefined || streamData.current.id !== data.data.id) &&
       !data.run.initial
     ) {
-      setAnimate(true);
-      addSystemNotification("online");
+      // addSystemNotification("online");
+
       streamData.current = data.data;
     } else if (
       streamData.current === undefined ||
@@ -130,24 +159,17 @@ function RenderTwitch(data) {
       streamData.current = data.data;
     }
     streamData.current = data.data;
-    data.runChange(false);
   }, [addSystemNotification, data, data.data, data.data.id]);
-
-  useEffect(() => {
-    return () => {
-      addSystemNotification("offline");
-    };
-  }, [addSystemNotification, data.data.id, data.data.user_name]);
 
   return (
     <>
       <ReactTooltip delayShow={250} place='bottom' type='dark' effect='solid' />
-      {animate ? (
+      {data.newlyAdded ? (
         <Animated animationIn='zoomIn' animationOut='fadeOut' isVisible={true}>
-          <StreamEle key={data.data.id} data={data.data}></StreamEle>
+          <StreamEle key={data.data.id} data={data.data} newlyAdded={data.newlyAdded}></StreamEle>
         </Animated>
       ) : (
-        <StreamEle key={data.data.id} data={data.data}></StreamEle>
+        <StreamEle key={data.data.id} data={data.data} newlyAdded={data.newlyAdded}></StreamEle>
       )}
     </>
   );

@@ -1,142 +1,82 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Button, Spinner } from "react-bootstrap";
 
-import ErrorHandeling from "./../error/Error";
-import getFollowedOnlineStreams from "./GetFollowedStreams";
 import RenderTwitch from "./Render-Twitch";
 import styles from "./Twitch.module.scss";
 import Utilities from "utilities/Utilities";
 
-function Twitch() {
-  const [liveStreams, setLiveStreams] = useState();
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [error, setError] = useState(null);
+function Twitch({ data }) {
   const [refreshing, setRefreshing] = useState(null);
-  const [refreshTimer, setRefreshTimer] = useState(200);
-  const initialOpen = useRef(true);
-
-  const refreshRate = 120; // seconds
-
-  function onChange(newRun) {
-    initialOpen.current = newRun;
-  }
-
-  const lastRan = useRef(null);
 
   const windowFocusHandler = useCallback(() => {
-    async function fetchData() {
-      try {
-        setRefreshing(true);
-        const streams = await getFollowedOnlineStreams(lastRan.current);
+    document.title = "Notifies | Feed";
 
-        if (streams.status === 200) {
-          setLiveStreams(streams.data);
-          lastRan.current = new Date();
-        }
+    // document.getElementById(
+    //   "favicon16"
+    // ).href = `${process.env.PUBLIC_URL}/icons/favicon2-16x16.png`;
 
-        setRefreshTimer(streams.refreshTimer);
-        setRefreshing(false);
-      } catch (error) {
-        setError(error);
-      }
-    }
-    fetchData();
-  }, []);
+    // document.getElementById(
+    //   "favicon32"
+    // ).href = `${process.env.PUBLIC_URL}/icons/favicon2-32x32.png`;
+
+    data.refresh();
+  }, [data]);
 
   const windowBlurHandler = useCallback(() => {}, []);
+
+  const refresh = useCallback(async () => {
+    setRefreshing(true);
+
+    await data.refresh();
+    setRefreshing(false);
+  }, [data]);
 
   useEffect(() => {
     window.addEventListener("focus", windowFocusHandler);
     window.addEventListener("blur", windowBlurHandler);
-    setRefreshing(true);
-
-    async function fetchData() {
-      try {
-        setRefreshing(true);
-        const streams = await getFollowedOnlineStreams(lastRan.current);
-
-        if (streams.status === 200) {
-          setLiveStreams(streams.data);
-          lastRan.current = new Date();
-        } else {
-          setError(streams.error);
-        }
-
-        setIsLoaded(true);
-        setRefreshing(false);
-      } catch (error) {
-        setError(error);
-      }
-    }
-    fetchData();
-
-    setInterval(fetchData, refreshRate * 100);
 
     return () => {
       window.removeEventListener("blur", windowBlurHandler);
       window.removeEventListener("focus", windowFocusHandler);
     };
-  }, [lastRan, windowBlurHandler, windowFocusHandler]);
+  }, [windowBlurHandler, windowFocusHandler]);
 
-  if (error) {
-    return <ErrorHandeling data={error}></ErrorHandeling>;
-  } else if (!isLoaded) {
-    return (
-      <Spinner animation='border' role='status' style={Utilities.loadingSpinner}>
-        <span className='sr-only'>Loading...</span>
-      </Spinner>
-    );
-  } else if (!Utilities.getCookie("Twitch-access_token")) {
-    return (
-      <ErrorHandeling
-        data={{
-          title: "Couldn't load Twitch feed",
-          message: "You are not connected with your Twitch account to Notifies",
-        }}></ErrorHandeling>
-    );
-  } else {
-    return (
-      <>
-        <div
-          className={styles.header_div}
-          style={{
-            marginTop: "0",
-          }}>
-          <Button
-            variant='outline-secondary'
-            className={styles.refreshButton}
-            onClick={windowFocusHandler}>
-            Reload
-          </Button>
-          {refreshing ? (
-            <Spinner
-              animation='border'
-              role='status'
-              style={Utilities.loadingSpinnerSmall}></Spinner>
-          ) : (
-            <p key={refreshTimer} className={styles.refreshTimer}>
-              {Math.trunc(refreshTimer) >= 0
-                ? `in ${Math.trunc(refreshTimer)} seconds`
-                : "recently refreshed"}
-            </p>
-          )}
-          <h4 className={styles.container_header}>Twitch</h4>
-        </div>
-        <div className={styles.container}>
-          {liveStreams.map(stream => {
-            return (
-              <RenderTwitch
-                data={stream}
-                run={{ initial: initialOpen.current }}
-                runChange={onChange}
-                key={stream.id}
-              />
-            );
-          })}
-        </div>
-      </>
-    );
-  }
+  return (
+    <>
+      <div
+        className={styles.header_div}
+        style={{
+          marginTop: "0",
+        }}>
+        <Button variant='outline-secondary' className={styles.refreshButton} onClick={refresh}>
+          Reload
+        </Button>
+        {refreshing ? (
+          <Spinner animation='border' role='status' style={Utilities.loadingSpinnerSmall}></Spinner>
+        ) : (
+          <p key={data.refreshTimer} className={styles.refreshTimer}>
+            {Math.trunc(data.refreshTimer) >= 0
+              ? `in ${Math.trunc(data.refreshTimer)} seconds`
+              : "recently refreshed"}
+          </p>
+        )}
+        <h4 className={styles.container_header}>Twitch</h4>
+      </div>
+      <div className={styles.container}>
+        {data.liveStreams.map(stream => {
+          return (
+            <RenderTwitch
+              data={stream}
+              run={{ initial: data.initialOpen }}
+              runChange={data.onChange}
+              newlyAdded={stream.newlyAdded}
+              key={stream.id}
+            />
+          );
+        })}
+      </div>
+    </>
+  );
 }
 
 export default Twitch;

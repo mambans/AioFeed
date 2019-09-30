@@ -35,10 +35,7 @@ function NotifiesAccount() {
   }
 
   async function disconnectTwitch() {
-    console.log("Disconnecting Twitch");
-
     document.cookie = "Twitch-access_token=";
-    setDisableTwitch(true);
     await axios.put(`http://localhost:3100/notifies/account/twitch/connect`, {
       accountName: Utilities.getCookie("Notifies_AccountName"),
       accountEmail: Utilities.getCookie("Notifies_AccountEmail"),
@@ -47,6 +44,7 @@ function NotifiesAccount() {
 
     refresh ? setRefresh(false) : setRefresh(true);
     setDisableTwitch(true);
+    setDisableTwitchVods(true);
   }
 
   async function disconnectYoutube() {
@@ -58,6 +56,7 @@ function NotifiesAccount() {
     });
 
     refresh ? setRefresh(false) : setRefresh(true);
+    setDisableYoutube(true);
   }
 
   return (
@@ -110,11 +109,6 @@ function NotifiesAccount() {
               <Button
                 className={[styles.connectButtons, styles.disconnectButton].join(" ")}
                 onClick={disconnectTwitch}>
-                {/* onClick={() => {
-                  document.cookie = "Twitch-access_token=";
-                  refresh ? setRefresh(false) : setRefresh(true);
-                  setDisableTwitch(true);
-                }}> */}
                 Disconnect Twitch
               </Button>
             </div>
@@ -136,10 +130,6 @@ function NotifiesAccount() {
               <Button
                 className={[styles.connectButtons, styles.disconnectButton].join(" ")}
                 onClick={disconnectYoutube}>
-                {/* onClick={() => {
-                  document.cookie = "Youtube-access_token=";
-                  refresh ? setRefresh(false) : setRefresh(true);
-                }}> */}
                 Disconnect Youtube
               </Button>
               {false ? (
