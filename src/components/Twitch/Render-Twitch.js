@@ -1,11 +1,35 @@
 import { Animated } from "react-animated-css";
 import Moment from "react-moment";
-import React, { useEffect, useCallback, useRef, useState } from "react";
+import React, { useEffect, useCallback, useRef } from "react";
 import ReactTooltip from "react-tooltip";
 
 import styles from "./Twitch.module.scss";
 import Utilities from "utilities/Utilities";
 import logo from "./../../assets/images/logo-v2.png";
+
+function Animation(data) {
+  return (
+    <Animated
+      className='highlight'
+      animationIn='fadeIn'
+      animationOut='zoomOut'
+      isVisible={!data.animateOut}
+      animationOutDelay={data.delay}
+      animationOutDuration={20000}
+      style={{ gridArea: "highlight" }}>
+      <div
+        style={{
+          height: 5,
+          backgroundColor: "rgb(14, 203, 247)",
+          borderRadius: 5,
+          gridArea: "highlight",
+          width: "100%",
+          transition: "all 3.0s ease-in-out",
+        }}
+      />
+    </Animated>
+  );
+}
 
 function StreamEle(data) {
   function streamType(type) {
@@ -16,26 +40,19 @@ function StreamEle(data) {
     }
   }
 
+  function checkNewlyAdded(stream) {
+    return data.newlyAddedStreams.includes(stream.user_name);
+  }
+
   return (
     <div className={`${styles.video}`} key={data.data.id}>
-      {data.newlyAdded ? (
-        <Animated
-          animationIn='fadeIn'
-          animationOut='zoomOut'
-          isVisible={false}
-          animationOutDelay={1500}
-          animationOutDuration={15000}
-          style={{ gridArea: "highlight" }}>
-          <div
-            style={{
-              height: 5,
-              backgroundColor: "rgb(14, 203, 247)",
-              borderRadius: 5,
-              gridArea: "highlight",
-              width: "100%",
-            }}
-          />
-        </Animated>
+      {data.newlyAdded || checkNewlyAdded(data.data) ? (
+        // {data.newlyAdded ? (
+        document.hasFocus() ? (
+          <Animation delay={2000} animateOut={true} />
+        ) : (
+          <Animation delay={500} animateOut={false} />
+        )
       ) : (
         <div
           style={{
@@ -166,10 +183,18 @@ function RenderTwitch(data) {
       <ReactTooltip delayShow={250} place='bottom' type='dark' effect='solid' />
       {data.newlyAdded ? (
         <Animated animationIn='zoomIn' animationOut='fadeOut' isVisible={true}>
-          <StreamEle key={data.data.id} data={data.data} newlyAdded={data.newlyAdded}></StreamEle>
+          <StreamEle
+            key={data.data.id}
+            data={data.data}
+            newlyAddedStreams={data.newlyAddedStreams}
+            newlyAdded={data.newlyAdded}></StreamEle>
         </Animated>
       ) : (
-        <StreamEle key={data.data.id} data={data.data} newlyAdded={data.newlyAdded}></StreamEle>
+        <StreamEle
+          key={data.data.id}
+          data={data.data}
+          newlyAddedStreams={data.newlyAddedStreams}
+          newlyAdded={data.newlyAdded}></StreamEle>
       )}
     </>
   );

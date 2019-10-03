@@ -6,6 +6,7 @@ import Utilities from "./../../utilities/Utilities";
 function ErrorHandeling(data) {
   const [errorMessage, setErrorMessage] = useState(data.data.message);
   const [errorTitle, setErrorTitle] = useState();
+  const [show, setShow] = useState(true);
 
   useEffect(() => {
     async function handleErrorContent() {
@@ -27,13 +28,21 @@ function ErrorHandeling(data) {
     handleErrorContent();
   }, [data.data.manualError, data.data.message, data.data.title, errorMessage]);
 
-  return (
-    <Alert variant='warning' style={Utilities.feedAlertWarning}>
-      <Alert.Heading>{errorTitle}</Alert.Heading>
-      <hr />
-      {errorMessage.toString()}
-    </Alert>
-  );
+  if (show) {
+    return (
+      <Alert
+        variant='warning'
+        style={Utilities.feedAlertWarning}
+        dismissible
+        onClose={() => setShow(false)}>
+        <Alert.Heading>{errorTitle}</Alert.Heading>
+        <hr />
+        {errorMessage.toString()}
+      </Alert>
+    );
+  } else {
+    return "";
+  }
 }
 
 export default ErrorHandeling;

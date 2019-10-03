@@ -22,7 +22,16 @@ function Twitch({ data }) {
     data.refresh();
   }, [data]);
 
-  const windowBlurHandler = useCallback(() => {}, []);
+  const windowBlurHandler = useCallback(() => {
+    const highlight = document.querySelectorAll(".highlight");
+    if (highlight) {
+      highlight.forEach(ele => {
+        // ele.style.backgroundColor = "transparent";
+        ele.setAttribute("isVisible", false);
+      });
+    }
+    data.resetNewlyAddedStreams();
+  }, [data]);
 
   const refresh = useCallback(async () => {
     setRefreshing(true);
@@ -70,6 +79,7 @@ function Twitch({ data }) {
               run={{ initial: data.initialOpen }}
               runChange={data.onChange}
               newlyAdded={stream.newlyAdded}
+              newlyAddedStreams={data.newlyAddedStreams}
               key={stream.id}
             />
           );

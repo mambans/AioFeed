@@ -16,6 +16,7 @@
 
 .accountContainer {
   width: 40%;
+  min-width: 1000px;
   margin: auto;
   display: grid;
   border-radius: 25px;
@@ -26,6 +27,17 @@
   background-color: #081016d1;
   margin-top: 50px;
   padding: 25px;
+
+  .profileImage {
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    -ms-border-radius: 30px;
+    -o-border-radius: 30px;
+    object-fit: cover;
+    width: 300px;
+    height: 169px;
+  }
 
   .disconnectButton {
     background-color: #333;
@@ -123,7 +135,7 @@
   display: grid;
   grid-template-columns: 320px 125px auto;
   margin-bottom: 50px;
-  margin-top: 50px;
+  // margin-top: 50px;
   //   justify-content: center;
 
   .prefixs {
@@ -166,4 +178,13 @@
     font-size: 1.1rem;
     font-weight: bold;
   }
+}
+
+.UpdateProfileImgButton {
+  font-size: 0.9rem;
+  grid-row: 2;
+  width: max-content;
+  border-radius: 18px;
+  margin-top: 5px;
+  justify-self: center;
 }

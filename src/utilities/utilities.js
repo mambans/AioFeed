@@ -47,7 +47,7 @@ const Utilities = {
         return c.substring(name.length, c.length);
       }
     }
-    return "";
+    return null;
   },
 
   videoImageUrls(urls) {

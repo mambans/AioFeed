@@ -1,11 +1,14 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 
 import styles from "./Account.module.scss";
 
 function NotifiesCreateAccount() {
   document.title = "Notifies | Create Account";
+  const [loggedIn, setLoggedIn] = useState();
+
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);
 
@@ -35,14 +38,25 @@ function NotifiesCreateAccount() {
   };
 
   async function createAccount() {
-    axios.post(`http://localhost:3100/notifies/account/create`, {
-      accountName: userName,
-      accountEmail: email,
-      accountPassword: password,
-    });
+    await axios
+      .post(`http://localhost:3100/notifies/account/create`, {
+        accountName: userName,
+        accountEmail: email,
+        accountPassword: password,
+      })
+      .then(data => {
+        if (data.status === 200 && data.data === "Account successfully created") {
+          console.log("TCL: createAccount -> resCREATE", data);
+          setLoggedIn(true);
+          // return <Redirect to='/login' />;
+          // window.location.href = "http://localhost:3000/account/login";
+        }
+      });
   }
 
-  return (
+  return loggedIn ? (
+    <Redirect to='/account/login' />
+  ) : (
     <>
       <h3 className={styles.formTitle}>Create a Notifies account.</h3>
       <Form onSubmit={handleSubmit} validated className={styles.createForm}>

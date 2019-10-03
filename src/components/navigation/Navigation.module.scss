@@ -1,11 +1,13 @@
 .navProfile {
-  width: 65px;
+  width: 60px;
   margin-left: 20px;
-  border-radius: 5px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
+  border-radius: 30px;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  -ms-border-radius: 30px;
+  -o-border-radius: 30px;
+  object-fit: cover;
+  height: 60px;
 }
 
 .notifiesLogin {

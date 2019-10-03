@@ -1,11 +1,12 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
+import { Redirect } from "react-router-dom";
 
 import styles from "./Account.module.scss";
 import ErrorHandeling from "components/error/Error";
 
-function NotifiesLogin() {
+function NotifiesLogin(data) {
   document.title = "Notifies | Login";
   const [error, setError] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(null);
@@ -31,34 +32,51 @@ function NotifiesLogin() {
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    loginAccount();
-    resetUserName();
-    resetPassword();
+
+    if (userName.length === 0 || password.length === 0) {
+      setError({
+        title: "Please enter your Username and Password.",
+        message: "Must enter a username and password.",
+      });
+    } else {
+      loginAccount();
+    }
   };
 
   async function loginAccount() {
+    let error;
     try {
       setError(null);
       const res = await axios.post(`http://localhost:3100/notifies/account/login`, {
         accountName: userName,
         accountPassword: password,
       });
+      if (res.data.account && res.data.account.username) {
+        document.cookie = `Notifies_AccountName=${res.data.account.username}; path=/`;
+        document.cookie = `Notifies_AccountEmail=${res.data.account.email}; path=/`;
+        document.cookie = `Twitch-access_token=${res.data.account.twitch_token}; path=/`;
+        document.cookie = `Youtube-access_token=${res.data.account.youtube_token}; path=/`;
+        document.cookie = `Notifies_AccountProfileImg=${res.data.account.profile_img}; path=/`;
 
-      if (res.data.account[0].username) {
-        document.cookie = `Notifies_AccountName=${res.data.account[0].username}; path=/`;
-        document.cookie = `Notifies_AccountEmail=${res.data.account[0].email}; path=/`;
+        data.data.setRefresh(!data.data.refresh);
 
-        document.cookie = `Twitch-access_token=${res.data.account[0].twitch_token}; path=/`;
-        document.cookie = `Youtube-access_token=${res.data.account[0].youtube_token}; path=/`;
-
+        resetUserName();
+        resetPassword();
         setIsLoggedIn(true);
       } else {
-        setError({ title: "Invalid username or password." });
+        setError({
+          title: `${error.data.message} - ${error.data.code}`,
+          message: "No account with those details.",
+        });
       }
     } catch (error) {
       console.error(error);
-      error.title = "Invalid username or password.";
-      setError(error);
+      setError({
+        title: error.response.data,
+        message: error.response.status,
+        // title: `${error.data.message} - ${error.data.code}`,
+        // message: "No account with those details.",
+      });
     }
   }
 
@@ -79,7 +97,8 @@ function NotifiesLogin() {
           Login
         </Button>
       </Form>
-      {isLoggedIn & !error ? (window.location.href = "/account") : null}
+      {isLoggedIn & !error ? <Redirect to='/account'></Redirect> : null}
+      {/* {isLoggedIn & !error ? (window.location.href = "/account") : null} */}
     </>
   );
 }

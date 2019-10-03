@@ -9,7 +9,7 @@ nav {
     height: 100%;
 
     .logo {
-      padding: 0 10px;
+      padding: 7px 10px;
       width: unset;
       height: 100%;
     }
@@ -38,14 +38,20 @@ nav {
 .logo-link.nav-link {
   color: white;
   font-size: 1.3rem;
-  width: 180px;
+  width: 280px;
 }
 
 .navbar-nav {
-  min-width: 180px;
+  min-width: 280px;
 }
 
 .dropdown-menu {
   left: -60px !important;
   text-align: center;
+}
+
+.dropdown.nav-item,
+.show.dropdown.nav-item {
+  align-items: center;
+  display: flex;
 }

@@ -5,7 +5,7 @@ import ErrorHandeling from "./../error/Error";
 import getFollowedOnlineStreams from "./GetFollowedStreams";
 import Utilities from "utilities/Utilities";
 
-import logo from "./../../assets/images/logo-v2.png";
+// import logo from "./../../assets/images/logo-v2.png";
 
 function HandleData({ children }) {
   const liveStreams = useRef();
@@ -14,6 +14,11 @@ function HandleData({ children }) {
   const [error, setError] = useState(null);
   const [refreshTimer, setRefreshTimer] = useState(80);
   const lastRan = useRef(null);
+  const newlyAddedStreams = useRef([]);
+
+  function resetNewlyAddedStreams() {
+    newlyAddedStreams.current = [];
+  }
 
   const refreshRate = 80; // seconds
 
@@ -26,8 +31,10 @@ function HandleData({ children }) {
             status === "offline"
               ? ""
               : `${Utilities.truncate(stream.title, 60)}\n${stream.game_name}`,
-          icon: stream.profile_img_url || logo,
-          badge: stream.profile_img_url || logo,
+          icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/icons/v2/Logo2-2k.png`,
+          badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/icons/v2/Logo2-2k.png`,
+          // icon: stream.profile_img_url || logo,
+          // badge: stream.profile_img_url || logo,
         }
       );
 
@@ -73,6 +80,7 @@ function HandleData({ children }) {
             if (!isStreamLive) {
               addSystemNotification("online", stream);
               // setNewlyAdded(true)
+              newlyAddedStreams.current.push(stream.user_name);
 
               stream.newlyAdded = true;
 
@@ -161,6 +169,8 @@ function HandleData({ children }) {
       liveStreams: liveStreams.current,
       refresh: refresh,
       refreshTimer: refreshTimer,
+      newlyAddedStreams: newlyAddedStreams.current,
+      resetNewlyAddedStreams: resetNewlyAddedStreams,
     });
   }
 }

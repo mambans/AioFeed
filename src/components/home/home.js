@@ -10,6 +10,11 @@ function Home() {
   function Logos() {
     return (
       <div className={styles.container}>
+        <img
+          src={`${process.env.PUBLIC_URL}/icons/v2/Logo-4k.png`}
+          alt='logo'
+          className={styles.logo}
+        />
         <img src={logo} alt='logo' className={styles.logo} />
         <img src={logoWhite} alt='logo' className={styles.logo} />
         <p>A site/app for viewing feeds and updates from Youtube and Twitch.</p>

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Navbar, NavDropdown, Nav, Container, Button } from "react-bootstrap";
+//eslint-disable-next-line
 import { BrowserRouter as Router, NavLink, Route, Switch } from "react-router-dom";
 
 import Icon from "react-icons-kit";
 import { github } from "react-icons-kit/icomoon/github";
 
 import "./Navigation.scss";
-import logo from "../../assets/images/logo-v2.png";
+// import logo from "../../assets/images/logo-v2.png";
 import Home from "./../home/Home";
 import Feed from "./../feed/Feed";
 import youtubeAuth from "./../auth/YoutubeAuth";
@@ -23,62 +24,75 @@ import YoutubeNewVideo from "./../youtube/YoutubeNewVideo";
 
 import streamOnlineWebhook from "./../twitch/Twitchwebhooks";
 
+import HandleRefresh from "./HandleRefresh";
+
 function Navigation() {
   return (
     <Router>
-      <NavigationBar />
-      <Switch>
-        <Route exact path='/' component={Home} />
-        <Route exact path='/index' component={Home} />
-        <Route exact path='/home' component={Home} />
-        <Route
-          path='/feed'
-          render={() =>
-            Utilities.getCookie("Notifies_AccountName") ? (
-              <Feed />
-            ) : (
-              <>
-                <ErrorHandeling
-                  data={{
-                    title: "Please login",
-                    message: "You are not logged with your Notifies account.",
-                  }}></ErrorHandeling>
-                <Button className={styles.notifiesLogin} as={NavLink} to='/account/login'>
-                  Login
-                </Button>
-              </>
-            )
-          }
-        />
-        <Route path='/twitch/notifications' component={streamOnlineWebhook} />
-        <Route path='/youtube/notifications' component={YoutubeNewVideo} />
-        {/* <Route path="/twitch/notifications/callback" component={} /> */}
-        <Route path='/youtube/login' component={youtubeAuth} />
-        <Route path='/login' component={TwitchAuth} />
-        <Route path='/twitch/auth' component={TwitchAuth} />
-        <Route path='/youtube/auth' component={youtubeAuth} />
+      <HandleRefresh>
+        {data => (
+          <>
+            <NavigationBar data={data} />
+            <Route exact path='/' component={Home} />
+            <Route exact path='/index' component={Home} />
+            <Route exact path='/home' component={Home} />
+            <Route
+              exact
+              path='/feed'
+              render={() =>
+                Utilities.getCookie("Notifies_AccountName") ? (
+                  <Feed />
+                ) : (
+                  <>
+                    <ErrorHandeling
+                      data={{
+                        title: "Please login",
+                        message: "You are not logged with your Notifies account.",
+                      }}></ErrorHandeling>
+                    <Button className={styles.notifiesLogin} as={NavLink} to='/account/login'>
+                      Login
+                    </Button>
+                  </>
+                )
+              }
+            />
+            <Route exact path='/twitch/notifications' component={streamOnlineWebhook} />
+            <Route exact path='/youtube/notifications' component={YoutubeNewVideo} />
+            {/* <Route path="/twitch/notifications/callback" component={} /> */}
+            <Route exact path='/youtube/login' component={youtubeAuth} />
+            <Route exact path='/login' component={TwitchAuth} />
+            <Route exact path='/twitch/auth' component={TwitchAuth} />
+            <Route exact path='/youtube/auth' component={youtubeAuth} />
+            <Route exact path='/account' render={() => <NotifiesAccount data={data} />} />
+            <Route exact path='/account/create' component={NotifiesCreateAccount} />
+            <Route exact path='/account/login' render={() => <NotifiesLogin data={data} />} />
+            {/* <Route exact path='/account/login' component={NotifiesLogin} /> */}
+            {/* <Route exact path='/account' render={NotifiesAccount()} component={NotifiesAccount} /> */}
 
-        <Route path='/account/create' component={NotifiesCreateAccount} />
-        <Route path='/account/login' component={NotifiesLogin} />
-        <Route path='/account' component={NotifiesAccount} />
-
-        <Route component={NoMatch} />
-      </Switch>
+            <Route component={NoMatch} />
+          </>
+        )}
+      </HandleRefresh>
     </Router>
   );
 }
 
-function NavigationBar() {
+function NavigationBar(data) {
+  //eslint-disable-next-line
+  const [refresh, setRefresh] = useState(false);
   const [loggedIn, setLoggedIn] = useState(Utilities.getCookie("Notifies_AccountName"));
 
   useEffect(() => {
     setLoggedIn(Utilities.getCookie("Notifies_AccountName"));
-  }, [loggedIn]);
+    if (data) {
+      setRefresh(true);
+    }
+  }, [data, loggedIn]);
 
   return (
     <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
       <Nav.Link as={NavLink} to='/' className='logo-link'>
-        <img src={logo} alt='logo' className='logo' />
+        <img src={`${process.env.PUBLIC_URL}/icons/v2/Logo2-4k.png`} alt='logo' className='logo' />
         Notifies
       </Nav.Link>
       <Navbar.Toggle aria-controls='responsive-navbar-nav' />
@@ -94,13 +108,10 @@ function NavigationBar() {
             </Nav.Link>
           </Nav>
         </Container>
-        <Nav>
+        <Nav style={{ justifyContent: "right" }}>
           <NavDropdown title='Other' id='collasible-nav-dropdown'>
             <NavDropdown.Item as={NavLink} to='/account/create' id='login'>
               Create Account
-            </NavDropdown.Item>
-            <NavDropdown.Item as={NavLink} to='/account/login' id='login'>
-              Login with Notifies
             </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href='https://github.com/mambans/Notifies'>
@@ -110,12 +121,24 @@ function NavigationBar() {
           </NavDropdown>
           {loggedIn ? (
             <Nav.Link as={NavLink} to={`/account`}>
-              <img className={styles.navProfile} src={placeholder} alt=''></img>
+              <img
+                className={styles.navProfile}
+                src={
+                  Utilities.getCookie("Notifies_AccountProfileImg") !== "null"
+                    ? Utilities.getCookie("Notifies_AccountProfileImg")
+                    : placeholder
+                }
+                alt=''></img>
             </Nav.Link>
           ) : (
-            <Nav.Link as={NavLink} to={`/account/login`}>
-              Login
-            </Nav.Link>
+            <>
+              <Nav.Link as={NavLink} to={`/account/create`}>
+                Create account
+              </Nav.Link>
+              <Nav.Link as={NavLink} to={`/account/login`}>
+                Login
+              </Nav.Link>
+            </>
           )}
         </Nav>
       </Navbar.Collapse>
