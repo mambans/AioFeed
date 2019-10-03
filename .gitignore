@@ -28,4 +28,6 @@ yarn-error.log*
 
 .gitignore
 .env
-ToDo
+todo.txt
+.VSCodeCounter
+src/server/sql/Query.sql
