@@ -5,6 +5,8 @@ Notifies v.2 refactored to use react hooks.
 
 ---
 
+![Logo](https://github.com/mambans/Notifies/blob/master/public/icons/v2/Logo-4k.png)
+[Logo](https://github.com/mambans/Notifies/blob/master/public/icons/v2/Logo-4k.png)
 <img src="/public/icons/v2/logo-4k.png" alt="Logo" width="300" />
 
 **Notifies** is a site that combines feeds from different sites such as Twitch.tv and Youtube.com into one feed/page.
