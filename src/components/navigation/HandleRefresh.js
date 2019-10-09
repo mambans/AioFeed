@@ -13,7 +13,7 @@ function HandleRefresh({ children }) {
 
   if (!loaded) {
     return (
-      <Spinner animation='border' role='status' style={Utilities.loadingSpinner}>
+      <Spinner animation='grow' role='status' style={Utilities.loadingSpinner}>
         <span className='sr-only'>Loading...</span>
       </Spinner>
     );

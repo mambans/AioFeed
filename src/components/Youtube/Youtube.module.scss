@@ -145,6 +145,22 @@
   padding-bottom: 7px;
 }
 
+.VideoHoverIframe {
+  border: none;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  z-index: 100;
+  cursor: pointer;
+  position: absolute;
+  display: block;
+  background-color: transparent;
+  background: none;
+  // margin: 15px;
+}
+
 @media screen and (max-width: 2560px) {
   .container {
     // width: 91%;

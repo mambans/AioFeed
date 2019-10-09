@@ -115,8 +115,11 @@
   background: #2222228c;
   padding-right: 5px;
   font-size: 0.9rem;
-  padding-left: 2px;
+  padding-left: 4px;
   border-top-right-radius: 10px;
+  z-index: 101;
+  border-bottom-left-radius: 10px;
+  display: block;
 }
 
 .type {
@@ -161,7 +164,7 @@
   height: 14px;
   background-color: red;
   border-radius: 7px;
-  bottom: 40px;
+  bottom: 37px;
   position: relative;
   right: -303px;
 }
@@ -264,6 +267,17 @@
 }
 
 /* ----- */
+
+.StreamHoverIframe {
+  border: none;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  z-index: 100;
+  cursor: pointer;
+}
 
 @media screen and (max-width: 2560px) {
   .container {

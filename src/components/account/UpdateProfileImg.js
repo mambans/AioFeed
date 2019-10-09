@@ -6,8 +6,6 @@ import Utilities from "./../../utilities/Utilities";
 import "./updateProfilePopup.scss";
 
 function UpdateProfileImg({ data }) {
-  console.log("TCL: UpdateProfileImg -> data", data);
-
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);
 
@@ -27,19 +25,20 @@ function UpdateProfileImg({ data }) {
   const { value: image, bind: bindimage, reset: resetimage } = useInput("");
 
   async function addProfileImage() {
-    try {
-      await axios.put(`http://localhost:3100/notifies/account/profile/image`, {
+    await axios
+      .put(`http://localhost:3100/notifies/account/profile/image`, {
         accountName: Utilities.getCookie("Notifies_AccountName"),
         accountEmail: Utilities.getCookie("Notifies_AccountEmail"),
         profileImage: image,
+      })
+      .then(() => {
+        document.cookie = `Notifies_AccountProfileImg=${image}; path=/`;
+
+        data.data.setRefresh(!data.data.refresh);
+      })
+      .catch(error => {
+        console.error(error);
       });
-
-      document.cookie = `Notifies_AccountProfileImg=${image}; path=/`;
-
-      data.data.setRefresh(!data.data.refresh);
-    } catch (e) {
-      console.log(e.message);
-    }
   }
 
   const handleSubmit = evt => {

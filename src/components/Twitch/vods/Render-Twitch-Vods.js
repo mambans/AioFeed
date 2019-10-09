@@ -4,8 +4,9 @@ import React, { useEffect, useRef, useCallback, useState } from "react";
 import { store } from "react-notifications-component";
 import ReactTooltip from "react-tooltip";
 
-import styles from "./Twitch.module.scss";
-import Utilities from "utilities/Utilities";
+import styles from "./../Twitch.module.scss";
+// import Utilities from "utilities/Utilities";
+import Utilities from "./../../../utilities/Utilities";
 
 function TwitchVodElement(data) {
   return (

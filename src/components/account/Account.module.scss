@@ -25,7 +25,8 @@
   -ms-border-radius: 25px;
   -o-border-radius: 25px;
   background-color: #081016d1;
-  margin-top: 50px;
+  // margin-top: 50px;
+  margin-top: 10px;
   padding: 25px;
 
   .profileImage {
@@ -168,10 +169,12 @@
 }
 
 .ToggleSwitch {
-  width: max-content;
+  // width: max-content;
   display: flex;
   height: 40px;
   align-items: center;
+  width: 200px;
+  justify-content: space-between;
 
   span {
     padding-right: 15px;

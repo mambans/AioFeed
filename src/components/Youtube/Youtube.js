@@ -2,13 +2,12 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import Moment from "react-moment";
 import Alert from "react-bootstrap/Alert";
+import LazyLoad from "react-lazyload";
 
 import getFollowedChannels from "./GetFollowedChannels";
 import getSubscriptionVideos from "./GetSubscriptionVideos";
-// import getSubscriptionVideos from "./GetSubscriptionVideosNEW";
 import RenderYoutube from "./Render-Youtube";
 import styles from "./Youtube.module.scss";
-
 import Utilities from "utilities/Utilities";
 import ErrorHandeling from "./../error/Error";
 
@@ -19,9 +18,7 @@ function Youtube() {
   const [refreshing, setRefreshing] = useState(null);
   const [lastRefresh, setLastRefresh] = useState(null);
   const [requestError, setRequestError] = useState();
-
   const followedChannels = useRef();
-
   const initialOpen = useRef(true);
 
   function onChange(newRun) {
@@ -35,7 +32,6 @@ function Youtube() {
         followedChannels.current = await getFollowedChannels();
 
         const SubscriptionData = await getSubscriptionVideos(followedChannels.current);
-
         const SubscriptionVideos = SubscriptionData.data;
 
         setRequestError(SubscriptionData.error.response.data.error);
@@ -59,7 +55,6 @@ function Youtube() {
         followedChannels.current = await getFollowedChannels();
 
         const SubscriptionData = await getSubscriptionVideos(followedChannels.current);
-
         const SubscriptionVideos = SubscriptionData.data;
 
         setRequestError(SubscriptionData.error.response.data.error);
@@ -80,11 +75,19 @@ function Youtube() {
     return <ErrorHandeling data={error}></ErrorHandeling>;
   } else if (!isLoaded) {
     return (
-      <Spinner animation='border' role='status' style={Utilities.loadingSpinner}>
-        <span className='sr-only'>Loading...</span>
-      </Spinner>
+      <>
+        <div className={styles.header_div}>
+          <h4 className={styles.container_header}>Youtube</h4>
+        </div>
+        <Spinner animation='grow' role='status' style={Utilities.loadingSpinner} variant='light'>
+          <span className='sr-only'>Loading...</span>
+        </Spinner>
+      </>
     );
-  } else if (!Utilities.getCookie("Youtube-access_token")) {
+  } else if (
+    Utilities.getCookie("Youtube-access_token") === null ||
+    Utilities.getCookie("Youtube-access_token") === "null"
+  ) {
     return (
       <ErrorHandeling
         data={{
@@ -122,12 +125,15 @@ function Youtube() {
         <div className={styles.container}>
           {videos.map(video => {
             return (
-              <RenderYoutube
-                data={video}
-                run={{ initial: initialOpen.current }}
-                runChange={onChange}
-                key={video.contentDetails.upload.videoId}
-              />
+              <LazyLoad key={video.contentDetails.upload.videoId} height={312} offset={100} once>
+                <RenderYoutube
+                  id={video.contentDetails.upload.videoId}
+                  data={video}
+                  run={{ initial: initialOpen.current }}
+                  runChange={onChange}
+                  // key={video.contentDetails.upload.videoId}
+                />
+              </LazyLoad>
             );
           })}
         </div>

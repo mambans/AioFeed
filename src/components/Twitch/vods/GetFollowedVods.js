@@ -1,8 +1,8 @@
 import axios from "axios";
 import _ from "lodash";
-import getFollowedChannels from "./GetFollowedChannels";
+import getFollowedChannels from "./../GetFollowedChannels";
 
-import Utilities from "./../../utilities/Utilities";
+import Utilities from "./../../../utilities/Utilities";
 
 // async function getFollowedVods(FollowedChannels, forceRun) {
 async function getFollowedVods(forceRun) {

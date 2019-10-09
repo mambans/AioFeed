@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import { Redirect, NavLink } from "react-router-dom";
 import Popup from "reactjs-popup";
@@ -17,7 +17,6 @@ import styles from "./Account.module.scss";
 import ToggleSwitch from "./ToggleSwitch";
 import UpdateProfileImg from "./UpdateProfileImg";
 import Utilities from "./../../utilities/Utilities";
-// import UploadProfileImageForm from "./UploadProfileImage";
 
 function NotifiesAccount(data) {
   document.title = "Notifies | Account";
@@ -25,6 +24,7 @@ function NotifiesAccount(data) {
   const [disableTwitch, setDisableTwitch] = useState(false);
   const [disableYoutube, setDisableYoutube] = useState(false);
   const [disableTwitchVods, setDisableTwitchVods] = useState(false);
+  const [refreshStartValue] = useState(data.data.refresh);
 
   function logout() {
     document.cookie = `Notifies_AccountName=; path=/`;
@@ -32,35 +32,50 @@ function NotifiesAccount(data) {
     document.cookie = `Twitch-access_token=null; path=/`;
     document.cookie = `Youtube-access_token=null; path=/`;
 
-    // window.location.href = "/account/login";
-
     data.data.setRefresh(!data.data.refresh);
   }
 
   async function disconnectTwitch() {
-    document.cookie = "Twitch-access_token=";
-    await axios.put(`http://localhost:3100/notifies/account/twitch/connect`, {
-      accountName: Utilities.getCookie("Notifies_AccountName"),
-      accountEmail: Utilities.getCookie("Notifies_AccountEmail"),
-      twitchToken: null,
-    });
-
-    refresh ? setRefresh(false) : setRefresh(true);
-    setDisableTwitch(true);
-    setDisableTwitchVods(true);
+    document.cookie = "Twitch-access_token=null";
+    await axios
+      .put(`http://localhost:3100/notifies/account/twitch/connect`, {
+        accountName: Utilities.getCookie("Notifies_AccountName"),
+        accountEmail: Utilities.getCookie("Notifies_AccountEmail"),
+        twitchToken: null,
+      })
+      .then(() => {
+        // refresh ? setRefresh(false) : setRefresh(true);
+        setRefresh(!refresh);
+        setDisableTwitch(true);
+        setDisableTwitchVods(true);
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
   async function disconnectYoutube() {
-    document.cookie = "Youtube-access_token=";
-    await axios.put(`http://localhost:3100/notifies/account/youtube/connect`, {
-      accountName: Utilities.getCookie("Notifies_AccountName"),
-      accountEmail: Utilities.getCookie("Notifies_AccountEmail"),
-      youtubeToken: null,
-    });
+    document.cookie = "Youtube-access_token=null";
+    await axios
+      .put(`http://localhost:3100/notifies/account/youtube/connect`, {
+        accountName: Utilities.getCookie("Notifies_AccountName"),
+        accountEmail: Utilities.getCookie("Notifies_AccountEmail"),
+        youtubeToken: null,
+      })
+      .then(() => {
+        setRefresh(!refresh);
+        // localStorage.setItem("YoutubeFeedEnabled", false);
 
-    refresh ? setRefresh(false) : setRefresh(true);
-    setDisableYoutube(true);
+        setDisableYoutube(true);
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
+
+  useEffect(() => {
+    data.data.setRefresh(!refreshStartValue);
+  }, [data.data, refreshStartValue]);
 
   return (
     <>
@@ -71,11 +86,11 @@ function NotifiesAccount(data) {
           <div className={styles.profileContainer}>
             <img
               className={styles.profileImage}
-              // src={placeholder}
               src={
-                Utilities.getCookie("Notifies_AccountProfileImg") !== "null"
-                  ? Utilities.getCookie("Notifies_AccountProfileImg")
-                  : placeholder
+                Utilities.getCookie("Notifies_AccountProfileImg") === null ||
+                Utilities.getCookie("Notifies_AccountProfileImg") === "null"
+                  ? placeholder
+                  : Utilities.getCookie("Notifies_AccountProfileImg")
               }
               alt=''></img>
             <Popup
@@ -100,25 +115,33 @@ function NotifiesAccount(data) {
           </div>
 
           <ToggleSwitch
-            data={{ label: "Twitch", token: "Twitch", disable: disableTwitch }}></ToggleSwitch>
+            data={{
+              label: "Twitch",
+              token: "Twitch",
+              disable: disableTwitch,
+              refresh,
+            }}></ToggleSwitch>
           <ToggleSwitch
             data={{
               label: "Youtube",
               token: "Youtube",
               disable: disableYoutube,
+              refresh,
             }}></ToggleSwitch>
           <ToggleSwitch
             data={{
               label: "TwitchVods",
               token: "Twitch",
               disable: disableTwitchVods,
+              refresh,
             }}></ToggleSwitch>
 
-          {Utilities.getCookie("Twitch-access_token") === "null" ? (
+          {Utilities.getCookie("Twitch-access_token") === null ||
+          Utilities.getCookie("Twitch-access_token") === "null" ? (
             <Button
               className={[styles.connectButtons, styles.connectTwitch].join(" ")}
               as={NavLink}
-              to='/login'>
+              to='/auth/twitch'>
               Connect Twitch
               <Icon icon={twitch} size={24} style={{ paddingLeft: "0.75rem" }} />
             </Button>
@@ -135,11 +158,12 @@ function NotifiesAccount(data) {
               </Button>
             </div>
           )}
-          {Utilities.getCookie("Youtube-access_token") === "null" ? (
+          {Utilities.getCookie("Youtube-access_token") === null ||
+          Utilities.getCookie("Youtube-access_token") === "null" ? (
             <Button
               className={[styles.connectButtons, styles.connectYoutube].join(" ")}
               as={NavLink}
-              to='/youtube/login'>
+              to='/auth/youtube'>
               Connect Youtube
               <Icon icon={youtube} size={24} style={{ paddingLeft: "0.75rem" }} />
             </Button>

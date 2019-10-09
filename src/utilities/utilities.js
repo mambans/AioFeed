@@ -5,11 +5,13 @@ import styles from "components/twitch/Twitch.module.scss";
 
 const Utilities = {
   loadingSpinner: {
-    position: "absolute",
-    left: "calc(50% - 5rem)",
-    top: "20%",
+    // position: "absolute",
+    // left: "calc(50% - 5rem)",
+    // top: "20%",
+    marginLeft: "calc(50% - 5rem)",
     height: "10rem",
     width: "10rem",
+    marginTop: "20px",
   },
   loadingSpinnerSmall: {
     position: "relative",

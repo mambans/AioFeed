@@ -1,11 +1,13 @@
 import { Animated } from "react-animated-css";
 import Moment from "react-moment";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { store } from "react-notifications-component";
 import ReactTooltip from "react-tooltip";
 
 import Utilities from "utilities/Utilities";
 import styles from "./Youtube.module.scss";
+
+import VideoHoverIframe from "./VideoHoverIframe";
 
 function YoutubeVideoElement(data) {
   function streamType(type) {
@@ -17,13 +19,18 @@ function YoutubeVideoElement(data) {
   }
   return (
     <div className={styles.video} key={data.data.contentDetails.upload.videoId}>
-      <div className={styles.imgContainer}>
+      <div id={data.data.contentDetails.upload.videoId} className={styles.imgContainer}>
+        {data.isHovered ? (
+          <VideoHoverIframe
+            id={data.data.contentDetails.upload.videoId}
+            data={data.data}
+            setIsHovered={data.setIsHovered}></VideoHoverIframe>
+        ) : null}
         <a
           className={styles.img}
           href={`https://www.youtube.com/watch?v=` + data.data.contentDetails.upload.videoId}>
           <img
             src={Utilities.videoImageUrls(data.data.snippet.thumbnails)}
-            // src={placeholderImg}
             alt={styles.thumbnail}
           />
         </a>
@@ -58,6 +65,34 @@ function YoutubeVideoElement(data) {
 function RenderYoutube(data) {
   const videoData = useRef();
   const [animate, setAnimate] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const streamHoverTimer = useRef();
+
+  const handleMouseOver = () => {
+    streamHoverTimer.current = setTimeout(function() {
+      setIsHovered(true);
+    }, 500);
+  };
+
+  const handleMouseOut = useCallback(() => {
+    clearTimeout(streamHoverTimer.current);
+    document.getElementById(data.data.contentDetails.upload.videoId).src = "about:blank";
+    setIsHovered(false);
+  }, [data.data.contentDetails.upload.videoId]);
+
+  useEffect(() => {
+    const node = document.getElementById(`${data.data.contentDetails.upload.videoId}`);
+
+    if (node) {
+      node.addEventListener("mouseover", handleMouseOver);
+      node.addEventListener("mouseout", handleMouseOut);
+
+      return () => {
+        node.removeEventListener("mouseover", handleMouseOver);
+        node.removeEventListener("mouseout", handleMouseOut);
+      };
+    }
+  }, [data.data.contentDetails.upload.videoId, handleMouseOut]);
 
   useEffect(() => {
     function addNotification(type) {
@@ -110,10 +145,16 @@ function RenderYoutube(data) {
       <ReactTooltip delayShow={250} place='bottom' type='dark' effect='solid' />
       {animate ? (
         <Animated animationIn='zoomIn' animationOut='fadeOut' isVisible={true}>
-          <YoutubeVideoElement data={data.data}></YoutubeVideoElement>
+          <YoutubeVideoElement
+            data={data.data}
+            isHovered={isHovered}
+            setIsHovered={setIsHovered}></YoutubeVideoElement>
         </Animated>
       ) : (
-        <YoutubeVideoElement data={data.data}></YoutubeVideoElement>
+        <YoutubeVideoElement
+          data={data.data}
+          isHovered={isHovered}
+          setIsHovered={setIsHovered}></YoutubeVideoElement>
       )}
     </>
   );

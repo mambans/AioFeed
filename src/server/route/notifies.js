@@ -2,6 +2,8 @@
  * Route for biblioteket.
  */
 
+const axios = require("axios");
+
 const express = require("express");
 const router = express.Router();
 const notifies = require("../src/notifies.js");
@@ -55,13 +57,27 @@ router.delete("/vod-channels", async (req, res) => {
 });
 
 router.post("/account/create", async (req, res) => {
+  if (!req.body.accountName || !req.body.accountEmail || !req.body.accountPassword) {
+    res.status(400).send("Please enter a username, email and password.");
+  }
   bcrypt.hash(req.body.accountPassword, 10, async function(err, hash) {
-    notifies.createAccount(req.body.accountName, req.body.accountEmail, hash).then(par => {
-      if (par && par[0].username) {
-        console.log("TCL: par[0].username", par[0].username);
-        res.status(200).send("Account successfully created");
-      }
-    });
+    notifies
+      .createAccount(req.body.accountName, req.body.accountEmail, hash)
+      .then(par => {
+        if (par && par[0].username) {
+          res.status(200).send("Account successfully created");
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        if (error.sqlMessage.includes("PRIMARY")) {
+          res.status(400).send("Username is already taken");
+        } else if (error.sqlMessage.includes("email")) {
+          res.status(400).send("Email is already taken");
+        } else {
+          res.status(400).send("Something went wrong with creating the account");
+        }
+      });
   });
 });
 
@@ -123,6 +139,27 @@ router.put("/account/profile/image", async (req, res) => {
   );
 
   res.json({ account: data.user });
+});
+
+router.post("/twitch/streams", async (req, res) => {
+  let data = await axios.get(`https://api.twitch.tv/helix/streams`, {
+    params: {
+      user_id: req.body.followedChannelsIds,
+    },
+    headers: {
+      Authorization: `Bearer 3sz4wql6sytxd4c6lpc5w87cog932e`,
+      "Client-ID": "o33xbyt10houyjmhjqr6gvvks38lo3",
+    },
+  });
+
+  console.log("TCL: data.user", data);
+
+  res.setHeader("Ratelimit-Limit", data.headers["ratelimit-limit"]);
+  res.setHeader("Ratelimit-Remaining", data.headers["ratelimit-remaining"]);
+  res.setHeader("Ratelimit-Reset", data.headers["ratelimit-reset"]);
+  res.setHeader("Content-Type", "text/plain");
+
+  res.send();
 });
 
 module.exports = router;

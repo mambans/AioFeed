@@ -27,6 +27,14 @@ app.use(function(req, res, next) {
 
   res.setHeader("Access-Control-Allow-Credentials", true);
 
+  res.setHeader("Access-Control-Expose-Headers", [
+    "Ratelimit-Limit",
+    "ratelimit-Remaining",
+    "Ratelimit-Reset",
+  ]);
+  // res.setHeader("Access-Control-Expose-Headers", "ratelimit-Remaining");
+  // res.setHeader("Access-Control-Expose-Headers", "Ratelimit-Reset");
+
   next();
 });
 

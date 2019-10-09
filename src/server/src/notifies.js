@@ -55,12 +55,12 @@ async function removeVodChannels(channel) {
 }
 
 async function createAccount(name, email, password) {
-  let res;
-  try {
-    let sql = `Call Create_Account('${name}', '${email}', '${password}');`;
-    res = await db.query(sql);
+  let sql = `Call Create_Account('${name}', '${email}', '${password}');`;
+  const result = await db.query(sql).then(res => {
     return res[0];
-  } catch (error) {}
+  });
+
+  return result;
 }
 
 async function loginAccount(p_name, p_password) {

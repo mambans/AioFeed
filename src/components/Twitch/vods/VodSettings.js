@@ -3,8 +3,8 @@ import axios from "axios";
 import React, { useEffect, useState, useCallback } from "react";
 import { Button, Spinner } from "react-bootstrap";
 
-import Utilities from "./../../utilities/Utilities";
-import "./Twitch.scss";
+import Utilities from "./../../../utilities/Utilities";
+// import "./Twitch.scss";
 
 function AddChannelForm() {
   const useInput = initialValue => {
