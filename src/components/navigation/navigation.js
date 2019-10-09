@@ -98,7 +98,7 @@ function NavigationBar(data) {
   return (
     <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
       <Nav.Link as={NavLink} to='/' className='logo-link'>
-        <img src={`${process.env.PUBLIC_URL}/icons/v2/Logo2-4k.png`} alt='logo' className='logo' />
+        <img src={`${process.env.PUBLIC_URL}/icons/v2/Logo-4k.png`} alt='logo' className='logo' />
         Notifies
       </Nav.Link>
       <Navbar.Toggle aria-controls='responsive-navbar-nav' />
