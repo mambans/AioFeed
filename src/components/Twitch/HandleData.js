@@ -32,16 +32,14 @@ function HandleData({ children }) {
             status === "offline"
               ? ""
               : `${Utilities.truncate(stream.title, 60)}\n${stream.game_name}`,
-          icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/icons/v2/Logo-2k.png`,
-          badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/icons/v2/Logo-2k.png`,
+          icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/icons/v3/Logo-2k.png`,
+          badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/icons/v3/Logo-2k.png`,
           silent: status === "offline" ? true : false,
-          // icon: stream.profile_img_url || logo,
-          // badge: stream.profile_img_url || logo,
         }
       );
 
       notification.onclick = function(event) {
-        event.preventDefault(); // prevent the browser from focusing the Notification's tab
+        // event.preventDefault(); // prevent the browser from focusing the Notification's tab
         status === "offline"
           ? window.open(
               "https://www.twitch.tv/" + stream.user_name.toLowerCase() + "/videos",
