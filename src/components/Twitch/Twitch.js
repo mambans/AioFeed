@@ -89,6 +89,7 @@ function Twitch({ data }) {
                 newlyAdded={stream.newlyAdded}
                 newlyAddedStreams={data.newlyAddedStreams}
                 key={stream.id}
+                refresh={refresh}
               />
             );
           })}

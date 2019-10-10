@@ -66,6 +66,7 @@ function RenderTwitch(data) {
             data={data.data}
             newlyAddedStreams={data.newlyAddedStreams}
             newlyAdded={data.newlyAdded}
+            refresh={data.refresh}
           />
         </Animated>
       ) : (
@@ -75,6 +76,7 @@ function RenderTwitch(data) {
             data={data.data}
             newlyAddedStreams={data.newlyAddedStreams}
             newlyAdded={data.newlyAdded}
+            refresh={data.refresh}
           />
         </>
       )}

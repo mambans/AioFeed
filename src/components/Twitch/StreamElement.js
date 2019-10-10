@@ -1,10 +1,17 @@
 import { Animated } from "react-animated-css";
 import React, { useRef, useCallback, useState, useEffect } from "react";
 import Moment from "react-moment";
+import { Button } from "react-bootstrap";
 
 import styles from "./Twitch.module.scss";
 import StreamHoverIframe from "./StreamHoverIframe.js";
 import Utilities from "utilities/Utilities";
+
+import UnfollowStream from "./UnfollowStream";
+import { Icon } from "react-icons-kit";
+import { cross } from "react-icons-kit/icomoon/cross";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
 const HOVER_DELAY = 1000;
 
@@ -58,9 +65,10 @@ function HighlightAnimation({ data }) {
 
 function StreamEle(data) {
   const [isHovered, setIsHovered] = useState(false);
+  const [channelIsHovered, setChannelIsHovered] = useState(false);
   const streamHoverTimer = useRef();
-  // const streamHoverOutTimer = useRef();
   const ref = useRef();
+  const refChannel = useRef();
 
   function streamType(type) {
     if (type === "live") {
@@ -71,17 +79,12 @@ function StreamEle(data) {
   }
 
   const handleMouseOver = () => {
-    // clearTimeout(streamHoverOutTimer.current);
     streamHoverTimer.current = setTimeout(function() {
       setIsHovered(true);
     }, HOVER_DELAY);
   };
 
   const handleMouseOut = useCallback(event => {
-    // streamHoverOutTimer.current = setTimeout(function() {
-    //   event.target.src = "about:blank";
-    // }, 200);
-
     clearTimeout(streamHoverTimer.current);
     setIsHovered(false);
   }, []);
@@ -99,11 +102,32 @@ function StreamEle(data) {
     }
   }, [handleMouseOut]);
 
+  const handleMouseOverChannel = () => {
+    setChannelIsHovered(true);
+  };
+
+  const handleMouseOutChannel = () => {
+    setChannelIsHovered(false);
+  };
+
+  useEffect(() => {
+    if (refChannel.current) {
+      const refEle = refChannel.current;
+      refChannel.current.addEventListener("mouseenter", handleMouseOverChannel);
+      refChannel.current.addEventListener("mouseleave", handleMouseOutChannel);
+
+      return () => {
+        refEle.removeEventListener("mouseenter", handleMouseOverChannel);
+        refEle.removeEventListener("mouseleave", handleMouseOutChannel);
+      };
+    }
+  }, []);
+
   return (
-    <div className={`${styles.video}`} key={data.data.id} ref={ref}>
+    <div className={`${styles.video}`} key={data.data.id}>
       <HighlightAnimation data={data}></HighlightAnimation>
 
-      <div className={styles.imgContainer} id={data.data.id}>
+      <div className={styles.imgContainer} id={data.data.id} ref={ref}>
         {isHovered ? (
           <StreamHoverIframe
             id={data.data.id}
@@ -139,8 +163,10 @@ function StreamEle(data) {
         </a>
       </h4>
       <div>
-        <div className={styles.channelContainer}>
-          <a href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase() + "/videos"}>
+        <div className={styles.channelContainer} ref={refChannel}>
+          <a
+            href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase() + "/videos"}
+            style={{ gridRow: 1 }}>
             <img src={data.data.profile_img_url} alt='' className={styles.profile_img}></img>
           </a>
           <p className={styles.channel}>
@@ -148,6 +174,27 @@ function StreamEle(data) {
               {data.data.user_name}
             </a>
           </p>
+          {channelIsHovered ? (
+            <OverlayTrigger
+              key={"bottom"}
+              placement={"bottom"}
+              delay={250}
+              overlay={
+                <Tooltip id={`tooltip-${"bottom"}`}>
+                  Unfollow <strong>{data.data.user_name}</strong>.
+                </Tooltip>
+              }>
+              <Button
+                data-tip={"Unfollow " + data.data.user}
+                variant='link'
+                onClick={() => {
+                  UnfollowStream({ user_id: data.data.user_id, refresh: data.refresh });
+                }}
+                className={styles.unfollowButton}>
+                <Icon icon={cross} size={18} className={styles.unfollowIcon} />
+              </Button>
+            </OverlayTrigger>
+          ) : null}
         </div>
         <div className={styles.gameContainer}>
           <a
