@@ -30,3 +30,15 @@ body {
 a:hover {
   text-decoration: none;
 }
+
+body {
+  background: no-repeat center center fixed;
+  background-attachment: fixed;
+  color: $textColor;
+  background-image: url("/images/background5.png");
+  object-fit: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
