@@ -1,41 +1,13 @@
 import { Animated } from "react-animated-css";
-import React, { useEffect, useCallback, useRef, useState } from "react";
+import React, { useEffect, useCallback, useRef } from "react";
 import ReactTooltip from "react-tooltip";
 
-import logo from "./../../assets/images/logo-v2.png";
+import logo from "../../assets/images/logo-v2.png";
 import StreamEle from "./StreamElement.js";
 import Utilities from "utilities/Utilities";
 
 function RenderTwitch(data) {
   const streamData = useRef();
-  const [isHovered, setIsHovered] = useState(false);
-  const streamHoverTimer = useRef();
-
-  const handleMouseOver = () => {
-    streamHoverTimer.current = setTimeout(function() {
-      setIsHovered(true);
-    }, 500);
-  };
-
-  const handleMouseOut = useCallback(() => {
-    clearTimeout(streamHoverTimer.current);
-    document.getElementById(data.data.id).src = "about:blank";
-    setIsHovered(false);
-  }, [data.data.id]);
-
-  useEffect(() => {
-    const node = document.getElementById(`${data.data.id}`);
-
-    if (node) {
-      node.addEventListener("mouseover", handleMouseOver);
-      node.addEventListener("mouseout", handleMouseOut);
-
-      return () => {
-        node.removeEventListener("mouseover", handleMouseOver);
-        node.removeEventListener("mouseout", handleMouseOut);
-      };
-    }
-  }, [data.data.id, handleMouseOut]);
 
   const addSystemNotification = useCallback(
     status => {
@@ -94,8 +66,6 @@ function RenderTwitch(data) {
             data={data.data}
             newlyAddedStreams={data.newlyAddedStreams}
             newlyAdded={data.newlyAdded}
-            isHovered={isHovered}
-            setIsHovered={setIsHovered}
           />
         </Animated>
       ) : (
@@ -105,8 +75,6 @@ function RenderTwitch(data) {
             data={data.data}
             newlyAddedStreams={data.newlyAddedStreams}
             newlyAdded={data.newlyAdded}
-            isHovered={isHovered}
-            setIsHovered={setIsHovered}
           />
         </>
       )}

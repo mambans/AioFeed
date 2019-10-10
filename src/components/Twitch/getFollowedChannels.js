@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import Utilities from "./../../utilities/Utilities";
+import Utilities from "../../utilities/Utilities";
 
 async function getFollowedChannels() {
   try {

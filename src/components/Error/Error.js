@@ -1,7 +1,7 @@
 import Alert from "react-bootstrap/Alert";
 import React, { useEffect, useState } from "react";
 
-import Utilities from "./../../utilities/Utilities";
+import Utilities from "../../utilities/Utilities";
 
 function ErrorHandeling(data) {
   const [errorMessage, setErrorMessage] = useState(data.data.message);

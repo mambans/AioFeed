@@ -2,7 +2,7 @@ import axios from "axios";
 // eslint-disable-next-line
 import React, { useEffect, useState, useCallback } from "react";
 
-import Utilities from "./../../utilities/Utilities";
+import Utilities from "../../utilities/Utilities";
 import "./updateProfilePopup.scss";
 
 function UpdateProfileImg({ data }) {

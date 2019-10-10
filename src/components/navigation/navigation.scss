@@ -16,9 +16,9 @@ nav {
   }
 }
 
-.bg-dark {
-  background-color: #081016d1 !important;
-}
+// .bg-dark {
+//   background-color: #081016d1 ;
+// }
 
 .navbar-nav a.nav-link {
   font-size: 1.15rem;
@@ -54,4 +54,9 @@ nav {
 .show.dropdown.nav-item {
   align-items: center;
   display: flex;
+}
+
+.bg-dark {
+  background-color: #0000003d !important;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
 }

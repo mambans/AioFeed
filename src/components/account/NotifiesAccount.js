@@ -11,12 +11,12 @@ import { checkmark } from "react-icons-kit/icomoon/checkmark";
 import { twitch } from "react-icons-kit/icomoon/twitch";
 import { youtube } from "react-icons-kit/icomoon/youtube";
 
-import placeholder from "./../../assets/images/placeholder.png";
+import placeholder from "../../assets/images/placeholder.png";
 import SuccessfullyConnected from "./SuccessfullyConnected";
 import styles from "./Account.module.scss";
 import ToggleSwitch from "./ToggleSwitch";
 import UpdateProfileImg from "./UpdateProfileImg";
-import Utilities from "./../../utilities/Utilities";
+import Utilities from "../../utilities/Utilities";
 
 function NotifiesAccount(data) {
   document.title = "Notifies | Account";

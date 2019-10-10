@@ -6,23 +6,23 @@ import { github } from "react-icons-kit/icomoon/github";
 
 import "./Navigation.scss";
 import HandleRefresh from "./HandleRefresh";
-import Home from "./../home/Home";
-import Feed from "./../feed/Feed";
-import YoutubeAuth from "./../auth/YoutubeAuth";
-import YoutubeAuthCallback from "./../auth/YoutubeAuthCallback";
-import TwitchAuth from "./../auth/TwitchAuth";
-import TwitchAuthCallback from "./../auth/TwitchAuthCallback";
-import Utilities from "./../../utilities/Utilities";
-import NotifiesCreateAccount from "./../account/NotifiesCreateAccount";
-import NotifiesLogin from "./../account/NotifiesLogin";
-import NotifiesAccount from "./../account/NotifiesAccount";
-import placeholder from "./../../assets/images/placeholder.png";
+import Home from "../home/Home";
+import Feed from "../feed/Feed";
+import YoutubeAuth from "../auth/YoutubeAuth";
+import YoutubeAuthCallback from "../auth/YoutubeAuthCallback";
+import TwitchAuth from "../auth/TwitchAuth";
+import TwitchAuthCallback from "../auth/TwitchAuthCallback";
+import Utilities from "../../utilities/Utilities";
+import NotifiesCreateAccount from "../account/NotifiesCreateAccount";
+import NotifiesLogin from "../account/NotifiesLogin";
+import NotifiesAccount from "../account/NotifiesAccount";
+import placeholder from "../../assets/images/placeholder.png";
 import styles from "./Navigation.module.scss";
 import NoMatch from "./NoMatch.js";
-import YoutubeNewVideo from "./../youtube/YoutubeNewVideo";
+import YoutubeNewVideo from "../youtube/YoutubeNewVideo";
 
-import TwitterAuth from "./../twitter/TwitterAuth";
-import streamOnlineWebhook from "./../twitch/Twitchwebhooks";
+import TwitterAuth from "../twitter/TwitterAuth";
+import streamOnlineWebhook from "../twitch/Twitchwebhooks";
 
 function Navigation() {
   return (
@@ -38,25 +38,10 @@ function Navigation() {
               <Route
                 exact
                 path='/feed'
-                render={() => {
-                  return <Feed />;
-                }}
-                // render={() =>
-                //   Utilities.getCookie("Notifies_AccountName") ? (
-                //     <Feed />
-                //   ) : (
-                //     <>
-                //       <ErrorHandeling
-                //         data={{
-                //           title: "Please login",
-                //           message: "You are not logged with your Notifies account.",
-                //         }}></ErrorHandeling>
-                //       <Button className={styles.notifiesLogin} as={NavLink} to='/account/login'>
-                //         Login
-                //       </Button>
-                //     </>
-                //   )
-                // }
+                component={Feed}
+                // render={() => {
+                //   return <Feed />;
+                // }}
               />
               <Route exact path='/twitch/notifications' component={streamOnlineWebhook} />
               <Route exact path='/youtube/notifications' component={YoutubeNewVideo} />

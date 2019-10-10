@@ -24,10 +24,12 @@
   -moz-border-radius: 25px;
   -ms-border-radius: 25px;
   -o-border-radius: 25px;
-  background-color: #081016d1;
+  // background-color: #081016d1;
   // margin-top: 50px;
   margin-top: 10px;
   padding: 25px;
+  background-color: #0000003d !important;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.25);
 
   .profileImage {
     border-radius: 30px;

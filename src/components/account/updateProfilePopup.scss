@@ -1,6 +1,6 @@
 .updateProfilePopup-content {
-  background-color: #080314 !important;
-  border: thin solid rgb(59, 56, 56) !important;
+  // background-color: #080314 !important;
+  // border: thin solid rgb(59, 56, 56) !important;
   border-radius: 5px !important;
   -webkit-border-radius: 5px !important;
   -moz-border-radius: 5px !important;
@@ -8,8 +8,10 @@
   -o-border-radius: 5px !important;
   width: 280px !important;
 
-  // top: 1785px !important;
-  form {
+  background-color: #0a0a0aed !important;
+  border: none !important;
+  box-shadow: 0 5px 10px 3px rgba(0, 0, 0, 0.25) !important // top: 1785px !important;
+    form {
     padding: 5px;
   }
 

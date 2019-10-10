@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Spinner } from "react-bootstrap";
 
-import ErrorHandeling from "./../error/Error";
+import ErrorHandeling from "../error/Error";
 import getFollowedOnlineStreams from "./GetFollowedStreams";
 import Utilities from "utilities/Utilities";
 import styles from "./Twitch.module.scss";
+
+const REFRESH_RATE = 20; // seconds
 
 function HandleData({ children }) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -20,8 +22,6 @@ function HandleData({ children }) {
   function resetNewlyAddedStreams() {
     newlyAddedStreams.current = [];
   }
-
-  const refreshRate = 20; // seconds
 
   const addSystemNotification = useCallback((status, stream) => {
     if (Notification.permission === "granted") {
@@ -120,14 +120,14 @@ function HandleData({ children }) {
     async function fetchData() {
       try {
         const timeNow = new Date();
-        setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + refreshRate));
+        setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
 
         timer.current = setInterval(() => {
           const timeNow = new Date();
           // console.log("Interval time - ", timeNow.toLocaleTimeString("sv-SE"));
-          setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + refreshRate));
+          setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
           refresh();
-        }, refreshRate * 1000);
+        }, REFRESH_RATE * 1000);
         const streams = await getFollowedOnlineStreams();
         if (streams.status === 200) {
           liveStreams.current = streams.data;

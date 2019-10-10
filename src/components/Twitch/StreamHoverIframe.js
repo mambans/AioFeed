@@ -1,28 +1,41 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useRef } from "react";
 import Iframe from "react-iframe";
 
 import styles from "./Twitch.module.scss";
 
 function StreamHoverIframe(data) {
+  const ref = useRef();
+  const streamHoverOutTimer = useRef();
+
   const handleMouseOver = useCallback(() => {
+    clearTimeout(streamHoverOutTimer.current);
     data.setIsHovered(true);
   }, [data]);
 
-  const handleMouseOut = useCallback(() => {
-    data.setIsHovered(false);
-  }, [data]);
+  const handleMouseOut = useCallback(
+    event => {
+      streamHoverOutTimer.current = setTimeout(function() {
+        event.target.src = "about:blank";
+        document.getElementById(`${data.data.id}-iframe`).src = "about:blank";
+      }, 200);
+      data.setIsHovered(false);
+    },
+    [data]
+  );
 
   useEffect(() => {
     data.setIsHovered(true);
-    const node = document.getElementById(`${data.data.id}-iframe`);
 
-    node.addEventListener("mouseover", handleMouseOver);
-    node.addEventListener("mouseout", handleMouseOut);
+    if (ref.current) {
+      const refEle = ref.current;
+      ref.current.addEventListener("mouseover", handleMouseOver);
+      ref.current.addEventListener("mouseout", handleMouseOut);
 
-    return () => {
-      node.removeEventListener("mouseover", handleMouseOver);
-      node.removeEventListener("mouseout", handleMouseOut);
-    };
+      return () => {
+        refEle.removeEventListener("mouseover", handleMouseOver);
+        refEle.removeEventListener("mouseout", handleMouseOut);
+      };
+    }
   }, [data, handleMouseOut, handleMouseOver]);
 
   return (
@@ -31,16 +44,13 @@ function StreamHoverIframe(data) {
       url={`https://player.twitch.tv/?twitch5=0&allowfullscreen&video=&channel=${data.data.user_name}&!playsinline&autoplay&!muted&!controls`}
       title={data.data.user_name + "-iframe"}
       className={styles.StreamHoverIframe}
-      id={data.data.id + "-iframe"}
       theme='dark'
+      id={data.data.id + "-iframe"}
       width='100%'
       height='100%'
       display='inline'
       position='absolute'
-      // frameBorder='0'
-      // scrolling='no'
-      loading='Loading..'
-      // allowFullScreen={true}
+      loading={"Loading.."}
     />
   );
 }

@@ -9,7 +9,7 @@ import getSubscriptionVideos from "./GetSubscriptionVideos";
 import RenderYoutube from "./Render-Youtube";
 import styles from "./Youtube.module.scss";
 import Utilities from "utilities/Utilities";
-import ErrorHandeling from "./../error/Error";
+import ErrorHandeling from "../error/Error";
 
 function Youtube() {
   const [isLoaded, setIsLoaded] = useState(false);

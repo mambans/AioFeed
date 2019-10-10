@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Spinner } from "react-bootstrap";
 
-import Utilities from "./../../utilities/Utilities";
+import Utilities from "../../utilities/Utilities";
 
 function HandleRefresh({ children }) {
   const [refresh, setRefresh] = useState(false);

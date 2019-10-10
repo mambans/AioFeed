@@ -1,10 +1,12 @@
 import { Animated } from "react-animated-css";
-import React from "react";
+import React, { useRef, useCallback, useState, useEffect } from "react";
 import Moment from "react-moment";
 
 import styles from "./Twitch.module.scss";
 import StreamHoverIframe from "./StreamHoverIframe.js";
 import Utilities from "utilities/Utilities";
+
+const HOVER_DELAY = 1000;
 
 function HighlightAnimation({ data }) {
   function checkNewlyAdded(stream) {
@@ -55,6 +57,11 @@ function HighlightAnimation({ data }) {
 }
 
 function StreamEle(data) {
+  const [isHovered, setIsHovered] = useState(false);
+  const streamHoverTimer = useRef();
+  // const streamHoverOutTimer = useRef();
+  const ref = useRef();
+
   function streamType(type) {
     if (type === "live") {
       return <div className={styles.liveDot} />;
@@ -63,16 +70,45 @@ function StreamEle(data) {
     }
   }
 
+  const handleMouseOver = () => {
+    // clearTimeout(streamHoverOutTimer.current);
+    streamHoverTimer.current = setTimeout(function() {
+      setIsHovered(true);
+    }, HOVER_DELAY);
+  };
+
+  const handleMouseOut = useCallback(event => {
+    // streamHoverOutTimer.current = setTimeout(function() {
+    //   event.target.src = "about:blank";
+    // }, 200);
+
+    clearTimeout(streamHoverTimer.current);
+    setIsHovered(false);
+  }, []);
+
+  useEffect(() => {
+    if (ref.current) {
+      const refEle = ref.current;
+      ref.current.addEventListener("mouseover", handleMouseOver);
+      ref.current.addEventListener("mouseout", handleMouseOut);
+
+      return () => {
+        refEle.removeEventListener("mouseover", handleMouseOver);
+        refEle.removeEventListener("mouseout", handleMouseOut);
+      };
+    }
+  }, [handleMouseOut]);
+
   return (
-    <div className={`${styles.video}`} key={data.data.id}>
+    <div className={`${styles.video}`} key={data.data.id} ref={ref}>
       <HighlightAnimation data={data}></HighlightAnimation>
 
       <div className={styles.imgContainer} id={data.data.id}>
-        {data.isHovered ? (
+        {isHovered ? (
           <StreamHoverIframe
             id={data.data.id}
             data={data.data}
-            setIsHovered={data.setIsHovered}></StreamHoverIframe>
+            setIsHovered={setIsHovered}></StreamHoverIframe>
         ) : null}
         <a
           className={styles.img}
