@@ -14,11 +14,11 @@ function StreamHoverIframe(data) {
 
   const handleMouseOut = useCallback(
     event => {
-      streamHoverOutTimer.current = setTimeout(function() {
+      data.setIsHovered(false);
+      streamHoverOutTimer.current = setTimeout(() => {
         event.target.src = "about:blank";
         document.getElementById(`${data.data.id}-iframe`).src = "about:blank";
       }, 200);
-      data.setIsHovered(false);
     },
     [data]
   );

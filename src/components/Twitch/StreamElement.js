@@ -92,12 +92,12 @@ function StreamEle(data) {
   useEffect(() => {
     if (ref.current) {
       const refEle = ref.current;
-      ref.current.addEventListener("mouseover", handleMouseOver);
-      ref.current.addEventListener("mouseout", handleMouseOut);
+      ref.current.addEventListener("mouseenter", handleMouseOver);
+      ref.current.addEventListener("mouseleave", handleMouseOut);
 
       return () => {
-        refEle.removeEventListener("mouseover", handleMouseOver);
-        refEle.removeEventListener("mouseout", handleMouseOut);
+        refEle.removeEventListener("mouseenter", handleMouseOver);
+        refEle.removeEventListener("mouseleave", handleMouseOut);
       };
     }
   }, [handleMouseOut]);
