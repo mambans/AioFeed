@@ -113,75 +113,77 @@ function NotifiesAccount(data) {
               <p>{Utilities.getCookie("Notifies_AccountEmail")}</p>
             </div>
           </div>
-
-          <ToggleSwitch
-            data={{
-              label: "Twitch",
-              token: "Twitch",
-              disable: disableTwitch,
-              refresh,
-            }}></ToggleSwitch>
-          <ToggleSwitch
-            data={{
-              label: "Youtube",
-              token: "Youtube",
-              disable: disableYoutube,
-              refresh,
-            }}></ToggleSwitch>
-          <ToggleSwitch
-            data={{
-              label: "TwitchVods",
-              token: "Twitch",
-              disable: disableTwitchVods,
-              refresh,
-            }}></ToggleSwitch>
-
-          {Utilities.getCookie("Twitch-access_token") === null ||
-          Utilities.getCookie("Twitch-access_token") === "null" ? (
-            <Button
-              className={[styles.connectButtons, styles.connectTwitch].join(" ")}
-              as={NavLink}
-              to='/auth/twitch'>
-              Connect Twitch
-              <Icon icon={twitch} size={24} style={{ paddingLeft: "0.75rem" }} />
-            </Button>
-          ) : (
-            <div className={styles.connectContainer}>
-              <p className={[styles.twitchConnected, styles.connected].join(" ")}>
-                Connected to Twitch{" "}
-                <Icon icon={checkmark} size={24} style={{ paddingLeft: "0.75rem" }} />
-              </p>
+          <div className={styles.toggleContainer}>
+            <ToggleSwitch
+              data={{
+                label: "Twitch",
+                token: "Twitch",
+                disable: disableTwitch,
+                refresh,
+              }}></ToggleSwitch>
+            {Utilities.getCookie("Twitch-access_token") === null ||
+            Utilities.getCookie("Twitch-access_token") === "null" ? (
               <Button
-                className={[styles.connectButtons, styles.disconnectButton].join(" ")}
-                onClick={disconnectTwitch}>
-                Disconnect Twitch
+                className={styles.connectTwitch}
+                as={NavLink}
+                to='/auth/twitch'>
+                Connect Twitch
+                <Icon icon={twitch} size={24} style={{ paddingLeft: "0.75rem" }} />
               </Button>
-            </div>
-          )}
-          {Utilities.getCookie("Youtube-access_token") === null ||
-          Utilities.getCookie("Youtube-access_token") === "null" ? (
-            <Button
-              className={[styles.connectButtons, styles.connectYoutube].join(" ")}
-              as={NavLink}
-              to='/auth/youtube'>
-              Connect Youtube
-              <Icon icon={youtube} size={24} style={{ paddingLeft: "0.75rem" }} />
-            </Button>
-          ) : (
-            <div className={styles.connectContainer}>
-              <p className={[styles.youtubeConnected, styles.connected].join(" ")}>
-                Connected to Youtube{" "}
-                <Icon icon={checkmark} size={24} style={{ paddingLeft: "0.75rem" }} />
-              </p>
+            ) : (
+              <div className={styles.connectContainer}>
+                <p className={[styles.twitchConnected, styles.connected].join(" ")}>
+                  Connected to Twitch{" "}
+                  <Icon icon={checkmark} size={24} style={{ paddingLeft: "0.75rem" }} />
+                </p>
+                <Button className={styles.disconnectButton} onClick={disconnectTwitch}>
+                  Disconnect Twitch
+                </Button>
+              </div>
+            )}
+          </div>
+          <div className={styles.toggleContainer}>
+            <ToggleSwitch
+              data={{
+                label: "TwitchVods",
+                token: "Twitch",
+                disable: disableTwitchVods,
+                refresh,
+              }}></ToggleSwitch>
+          </div>
+
+          <div className={styles.toggleContainer}>
+            <ToggleSwitch
+              data={{
+                label: "Youtube",
+                token: "Youtube",
+                disable: disableYoutube,
+                refresh,
+              }}></ToggleSwitch>
+            {Utilities.getCookie("Youtube-access_token") === null ||
+            Utilities.getCookie("Youtube-access_token") === "null" ? (
               <Button
-                className={[styles.connectButtons, styles.disconnectButton].join(" ")}
-                onClick={disconnectYoutube}>
-                Disconnect Youtube
+                className={styles.connectYoutube}
+                as={NavLink}
+                to='/auth/youtube'>
+                Connect Youtube
+                <Icon icon={youtube} size={24} style={{ paddingLeft: "0.75rem" }} />
               </Button>
-            </div>
-          )}
+            ) : (
+              <div className={styles.connectContainer}>
+                <p className={[styles.youtubeConnected, styles.connected].join(" ")}>
+                  Connected to Youtube{" "}
+                  <Icon icon={checkmark} size={24} style={{ paddingLeft: "0.75rem" }} />
+                </p>
+                <Button className={styles.disconnectButton} onClick={disconnectYoutube}>
+                  Disconnect Youtube
+                </Button>
+              </div>
+            )}
+          </div>
+
           <Button
-            className={[styles.connectButtons, styles.disconnectButton].join(" ")}
+            className={[styles.notifiesLogoutButton, styles.disconnectButton].join(" ")}
             onClick={logout}>
             Logout from Notifies
             <Icon icon={out} size={24} style={{ paddingLeft: "0.75rem" }} />
