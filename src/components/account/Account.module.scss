@@ -44,7 +44,15 @@
 
   .disconnectButton {
     background-color: #333;
+    width: max-content;
+    min-width: 170px;
+    height: 42.5px;
     border: thin solid #313131;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
 
     &:hover {
       background-color: lighten(#8a1f1f, 10%);
@@ -62,7 +70,6 @@
 
   .connectButtons {
     width: max-content;
-    margin-bottom: 1rem;
     margin-left: 0;
     height: 42px;
     border-radius: 10px;
@@ -70,50 +77,66 @@
     -moz-border-radius: 10px;
     -ms-border-radius: 10px;
     -o-border-radius: 10px;
+  }
 
-    &.connectTwitch {
-      background-color: #42107d;
-      border: thin solid lighten(#42107d, 0%);
+  .connectTwitch {
+    background-color: #42107d;
+    width: max-content;
+    margin-left: 0;
+    height: 42px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border: thin solid lighten(#42107d, 0%);
 
-      &:hover {
-        background-color: lighten(#42107d, 10%);
-      }
-
-      &:focus {
-        box-shadow: 0 0 0 0.2rem lighten(#42107d, 20%);
-      }
-
-      &:active {
-        background-color: lighten(#42107d, 25%);
-        border-color: lighten(#42107d, 35%);
-      }
+    &:hover {
+      background-color: lighten(#42107d, 10%);
     }
 
-    &.connectYoutube {
-      background-color: #4b1010;
-      border: thin solid lighten(#4b1010, 0%);
+    &:focus {
+      box-shadow: 0 0 0 0.2rem lighten(#42107d, 20%);
+    }
 
-      &:hover {
-        background-color: lighten(#4b1010, 10%);
-      }
+    &:active {
+      background-color: lighten(#42107d, 25%);
+      border-color: lighten(#42107d, 35%);
+    }
+  }
 
-      &:focus {
-        box-shadow: 0 0 0 0.2rem lighten(#4b1010, 20%);
-      }
+  .connectYoutube {
+    background-color: #4b1010;
+    width: max-content;
+    margin-left: 0;
+    height: 42px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border: thin solid lighten(#4b1010, 0%);
 
-      &:active {
-        background-color: lighten(#4b1010, 25%);
-        border-color: lighten(#4b1010, 35%);
-      }
+    &:hover {
+      background-color: lighten(#4b1010, 10%);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem lighten(#4b1010, 20%);
+    }
+
+    &:active {
+      background-color: lighten(#4b1010, 25%);
+      border-color: lighten(#4b1010, 35%);
     }
   }
 
   .connected {
     color: #fff;
-    font-size: 1.1rem;
+    font-size: 1rem;
     width: max-content;
     padding: 7px;
-    min-width: 250px;
+    min-width: 220px;
     text-align: center;
     border-radius: 10px;
     -webkit-border-radius: 10px;
@@ -121,6 +144,8 @@
     -ms-border-radius: 10px;
     -o-border-radius: 10px;
     margin-right: 50px;
+    height: min-content;
+    margin-bottom: 0;
   }
 
   .twitchConnected {
@@ -132,6 +157,20 @@
     border: thin solid lighten(#4b1010, 10%);
     background-color: #4b1010;
   }
+}
+
+.notifiesLogoutButton {
+  margin-top: 75px;
+  width: max-content;
+  padding: 7px;
+  min-width: 220px;
+  text-align: center;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  height: min-content;
 }
 
 .profileContainer {
@@ -170,6 +209,10 @@
   display: flex;
 }
 
+.toggleContainer {
+  display: flex;
+}
+
 .ToggleSwitch {
   // width: max-content;
   display: flex;
@@ -177,6 +220,7 @@
   align-items: center;
   width: 200px;
   justify-content: space-between;
+  margin-right: 100px;
 
   span {
     padding-right: 15px;
