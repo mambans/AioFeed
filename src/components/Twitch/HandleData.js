@@ -39,7 +39,7 @@ function HandleData({ children }) {
       );
 
       notification.onclick = function(event) {
-        // event.preventDefault(); // prevent the browser from focusing the Notification's tab
+        event.preventDefault(); // prevent the browser from focusing the Notification's tab
         status === "offline"
           ? window.open(
               "https://www.twitch.tv/" + stream.user_name.toLowerCase() + "/videos",
@@ -124,7 +124,6 @@ function HandleData({ children }) {
 
         timer.current = setInterval(() => {
           const timeNow = new Date();
-          // console.log("Interval time - ", timeNow.toLocaleTimeString("sv-SE"));
           setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
           refresh();
         }, REFRESH_RATE * 1000);
