@@ -1,28 +1,41 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useRef } from "react";
 import YouTube from "react-youtube";
 
 import styles from "./Youtube.module.scss";
 
 function VideoHoverIframe(data) {
+  const ref = useRef();
+  const videoHoverOutTimer = useRef();
+
   const handleMouseOver = useCallback(() => {
+    clearTimeout(videoHoverOutTimer.current);
     data.setIsHovered(true);
   }, [data]);
 
-  const handleMouseOut = useCallback(() => {
-    data.setIsHovered(false);
-  }, [data]);
+  const handleMouseOut = useCallback(
+    event => {
+      data.setIsHovered(false);
+      videoHoverOutTimer.current = setTimeout(() => {
+        event.target.src = "about:blank";
+        document.getElementById(`${data.data.contentDetails.upload.videoId}-iframe`).src =
+          "about:blank";
+      }, 200);
+    },
+    [data]
+  );
 
   useEffect(() => {
     data.setIsHovered(true);
-    const node = document.getElementById(`${data.data.contentDetails.upload.videoId}-iframe`);
+    if (ref.current) {
+      const refEle = ref.current;
+      ref.current.addEventListener("mousenter", handleMouseOver);
+      ref.current.addEventListener("mouseleave", handleMouseOut);
 
-    node.addEventListener("mouseover", handleMouseOver);
-    node.addEventListener("mouseout", handleMouseOut);
-
-    return () => {
-      node.removeEventListener("mouseover", handleMouseOver);
-      node.removeEventListener("mouseout", handleMouseOut);
-    };
+      return () => {
+        refEle.removeEventListener("mousenter", handleMouseOver);
+        refEle.removeEventListener("mouseleave", handleMouseOut);
+      };
+    }
   }, [data, handleMouseOut, handleMouseOver]);
 
   const opts = {
