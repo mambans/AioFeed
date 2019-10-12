@@ -23,10 +23,11 @@ function TwitchVodElement(data) {
           />
         </a>
         <p className={styles.duration}>
-          {data.data.duration
+          {Utilities.formatTwitchVodsDuration(data.data.duration)}
+          {/* {data.data.duration
             .replace("h", ":")
             .replace("m", ":")
-            .replace("s", "")}
+            .replace("s", "")} */}
         </p>
       </div>
       <h4 className={styles.title}>

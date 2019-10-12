@@ -164,6 +164,33 @@ const Utilities = {
 
     return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
   },
+
+  formatTwitchVodsDuration(duration) {
+    let hour;
+
+    const duration1 = duration
+      .replace("h", ":")
+      .replace("m", ":")
+      .replace("s", "");
+
+    const durationParts = duration1.split(":");
+    if (duration.includes("h")) hour = durationParts.shift();
+
+    let i = 0;
+    durationParts.map(number => {
+      if (number.length < 2) durationParts[i] = 0 + number;
+
+      i++;
+
+      return "";
+    });
+
+    if (hour) {
+      return hour + ":" + durationParts.join(":");
+    } else {
+      return durationParts.join(":");
+    }
+  },
 };
 
 export default Utilities;
