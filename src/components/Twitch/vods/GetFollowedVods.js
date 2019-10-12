@@ -61,8 +61,9 @@ async function getFollowedVods(forceRun) {
               params: {
                 user_id: channel,
                 first: 3,
-                period: "week",
-                type: "archive",
+                period: "month",
+                // type: "archive",
+                type: "all",
               },
               headers: {
                 Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
