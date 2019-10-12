@@ -166,7 +166,7 @@ const Utilities = {
   },
 
   formatTwitchVodsDuration(duration) {
-    let hour;
+    let hour = "0";
 
     const duration1 = duration
       .replace("h", ":")
