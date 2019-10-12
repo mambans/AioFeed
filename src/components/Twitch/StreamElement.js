@@ -33,7 +33,8 @@ function HighlightAnimation({ data }) {
         <div
           style={{
             height: 5,
-            backgroundColor: "rgb(14, 203, 247)",
+            // backgroundColor: "rgb(14, 203, 247)",
+            backgroundColor: "#d18a07",
             borderRadius: 5,
             gridArea: "highlight",
             width: "100%",
