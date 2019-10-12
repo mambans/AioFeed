@@ -33,7 +33,7 @@ function YoutubeVideoElement(data) {
   }, [data.data.contentDetails.upload.videoId]);
 
   useEffect(() => {
-    if (ref.current) {
+    if (ref.current && localStorage.getItem(`YoutubeVideoHoverEnabled`) === "true") {
       const refEle = ref.current;
       ref.current.addEventListener("mouseenter", handleMouseOver);
       ref.current.addEventListener("mouseleave", handleMouseOut);

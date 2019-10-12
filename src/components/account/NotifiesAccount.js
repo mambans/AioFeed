@@ -15,6 +15,7 @@ import placeholder from "../../assets/images/placeholder.png";
 import SuccessfullyConnected from "./SuccessfullyConnected";
 import styles from "./Account.module.scss";
 import ToggleSwitch from "./ToggleSwitch";
+import ToggleSwitchVideoHover from "./ToggleSwitchVideoHover";
 import UpdateProfileImg from "./UpdateProfileImg";
 import Utilities from "../../utilities/Utilities";
 
@@ -123,10 +124,7 @@ function NotifiesAccount(data) {
               }}></ToggleSwitch>
             {Utilities.getCookie("Twitch-access_token") === null ||
             Utilities.getCookie("Twitch-access_token") === "null" ? (
-              <Button
-                className={styles.connectTwitch}
-                as={NavLink}
-                to='/auth/twitch'>
+              <Button className={styles.connectTwitch} as={NavLink} to='/auth/twitch'>
                 Connect Twitch
                 <Icon icon={twitch} size={24} style={{ paddingLeft: "0.75rem" }} />
               </Button>
@@ -162,10 +160,7 @@ function NotifiesAccount(data) {
               }}></ToggleSwitch>
             {Utilities.getCookie("Youtube-access_token") === null ||
             Utilities.getCookie("Youtube-access_token") === "null" ? (
-              <Button
-                className={styles.connectYoutube}
-                as={NavLink}
-                to='/auth/youtube'>
+              <Button className={styles.connectYoutube} as={NavLink} to='/auth/youtube'>
                 Connect Youtube
                 <Icon icon={youtube} size={24} style={{ paddingLeft: "0.75rem" }} />
               </Button>
@@ -180,6 +175,22 @@ function NotifiesAccount(data) {
                 </Button>
               </div>
             )}
+          </div>
+
+          <div className={styles.toggleContainer}>
+            <ToggleSwitchVideoHover
+              data={{
+                feed: "Twitch",
+                refresh,
+              }}></ToggleSwitchVideoHover>
+          </div>
+
+          <div className={styles.toggleContainer}>
+            <ToggleSwitchVideoHover
+              data={{
+                feed: "Youtube",
+                refresh,
+              }}></ToggleSwitchVideoHover>
           </div>
 
           <Button
