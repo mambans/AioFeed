@@ -3,10 +3,9 @@ import ReactDOM from "react-dom";
 import "./variables.scss";
 import "normalize.css";
 import "./index.scss";
+import Routes from "../src/components/routes/Routes";
 
 import * as serviceWorker from "./serviceWorker";
-
-import Navigation from "./components/navigation/Navigation";
 
 // ReactDOM.render(<App />, document.getElementById("root"));
 
@@ -17,7 +16,7 @@ serviceWorker.unregister();
 
 ReactDOM.render(
   <div id='main-body'>
-    <Navigation />
+    <Routes />
   </div>,
   document.getElementById("root")
 );

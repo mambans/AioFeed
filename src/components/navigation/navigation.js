@@ -1,72 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Navbar, NavDropdown, Nav, Container } from "react-bootstrap";
-import { BrowserRouter as Router, NavLink, Route, Switch } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Icon from "react-icons-kit";
 import { github } from "react-icons-kit/icomoon/github";
 
 import "./Navigation.scss";
-import HandleRefresh from "./HandleRefresh";
-import Home from "../home/Home";
-import Feed from "../feed/Feed";
-import YoutubeAuth from "../auth/YoutubeAuth";
-import YoutubeAuthCallback from "../auth/YoutubeAuthCallback";
-import TwitchAuth from "../auth/TwitchAuth";
-import TwitchAuthCallback from "../auth/TwitchAuthCallback";
 import Utilities from "../../utilities/Utilities";
-import NotifiesCreateAccount from "../account/NotifiesCreateAccount";
-import NotifiesLogin from "../account/NotifiesLogin";
-import NotifiesAccount from "../account/NotifiesAccount";
 import placeholder from "../../assets/images/placeholder.png";
 import styles from "./Navigation.module.scss";
-import NoMatch from "./NoMatch.js";
-import YoutubeNewVideo from "../youtube/YoutubeNewVideo";
-
-import TwitterAuth from "../twitter/TwitterAuth";
-import streamOnlineWebhook from "../twitch/Twitchwebhooks";
-
-function Navigation() {
-  return (
-    <Router>
-      <HandleRefresh>
-        {data => (
-          <>
-            <NavigationBar data={data} />
-            <Switch>
-              <Route exact path='/' component={Home} />
-              <Route exact path='/index' component={Home} />
-              <Route exact path='/home' component={Home} />
-              <Route
-                exact
-                path='/feed'
-                component={Feed}
-                // render={() => {
-                //   return <Feed />;
-                // }}
-              />
-              <Route exact path='/twitch/notifications' component={streamOnlineWebhook} />
-              <Route exact path='/youtube/notifications' component={YoutubeNewVideo} />
-              <Route exact path='/auth/youtube' component={YoutubeAuth} />
-              <Route exact path='/auth/twitch' component={TwitchAuth} />
-              <Route exact path='/auth/twitch/callback' component={TwitchAuthCallback} />
-              <Route exact path='/auth/youtube/callback' component={YoutubeAuthCallback} />
-              <Route exact path='/auth/twitter' component={TwitterAuth} />
-              <Route exact path='/auth/twitter/callback' component={TwitterAuth} />
-              <Route exact path='/account' render={() => <NotifiesAccount data={data} />} />
-              <Route
-                exact
-                path='/account/create'
-                render={() => <NotifiesCreateAccount data={data} />}
-              />
-              <Route exact path='/account/login' render={() => <NotifiesLogin data={data} />} />
-
-              <Route component={NoMatch} />
-            </Switch>
-          </>
-        )}
-      </HandleRefresh>
-    </Router>
-  );
-}
 
 function NavigationBar(data) {
   //eslint-disable-next-line
@@ -136,4 +77,5 @@ function NavigationBar(data) {
     </Navbar>
   );
 }
-export default Navigation;
+
+export default NavigationBar;
