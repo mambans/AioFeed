@@ -3,17 +3,38 @@ import axios from "axios";
 import placeholder from "../../assets/images/placeholder.png";
 import Utilities from "../../utilities/Utilities";
 
-// async function getFollowedOnlineStreams(currentTime, lastRan, refresh) {
+// const initStore = () => {
+//   new Promise(async (resolve, reject) => {
+//     try {
+//       const Store = new indexedDB({
+//         dbVersion: 1,
+//         storeName: "TwitchProfiles",
+//         keyPath: "user_id",
+//         indexes: [
+//           {
+//             name: "user_id",
+//           },
+//         ],
+//         onStoreReady: function() {
+//           resolve(Store);
+//         },
+//       });
+//     } catch (error) {
+//       reject(error);
+//     }
+//   });
+// };
+
 async function getFollowedOnlineStreams() {
   let error;
 
   async function getProfile(user, tx, db, store, index) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       tx = db.transaction("TwitchProfiles", "readonly");
       store = tx.objectStore("TwitchProfiles");
       index = store.index("user_id");
 
-      let profile = store.get(user);
+      let profile = await store.get(user);
       profile.onsuccess = () => {
         resolve(profile.result);
       };
@@ -26,7 +47,6 @@ async function getFollowedOnlineStreams() {
   }
 
   try {
-    // console.log("Request sent -  ", new Date().toLocaleTimeString("sv-SE"));
     let LiveFollowedStreams;
 
     // GET all followed channels.
@@ -120,7 +140,7 @@ async function getFollowedOnlineStreams() {
             };
 
             if (LiveFollowedStreams.data.data.length > 0) {
-              LiveFollowedStreams.data.data.map(async user => {
+              await LiveFollowedStreams.data.data.map(async user => {
                 let profileImgUrl;
 
                 const profile = await getProfile(user.user_id, tx, db, store, index);
@@ -142,7 +162,7 @@ async function getFollowedOnlineStreams() {
                   store = tx.objectStore("TwitchProfiles");
                   index = store.index("user_id");
 
-                  store.put({
+                  await store.put({
                     user_id: user.user_id,
                     url: profileImgUrl.data.data[0].profile_image_url,
                   });
