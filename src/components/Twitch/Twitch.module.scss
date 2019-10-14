@@ -7,6 +7,7 @@
   width: 82%;
   margin: auto;
   margin-top: 25px;
+  margin-bottom: 100px;
 }
 
 .container_header {
@@ -109,17 +110,25 @@
 }
 
 .duration {
-  bottom: 21px;
+  // bottom: 21px;
   position: relative;
   width: max-content;
   background: #2222228c;
   padding-right: 5px;
   font-size: 0.9rem;
-  padding-left: 4px;
+  padding-left: 5px;
   border-top-right-radius: 10px;
-  z-index: 101;
+  z-index: 2;
   border-bottom-left-radius: 10px;
-  display: block;
+  // display: block;
+
+  height: 24px;
+  bottom: 28px;
+  left: 4px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  background: #161616b0;
 }
 
 .type {
@@ -164,9 +173,11 @@
   height: 14px;
   background-color: red;
   border-radius: 7px;
-  bottom: 37px;
+  // bottom: 37px;
+  bottom: 41px;
   position: relative;
-  right: -303px;
+  // right: -303px;
+  left: 303px;
 }
 
 .refreshButton {
@@ -277,7 +288,7 @@
   -moz-border-radius: 10px;
   -ms-border-radius: 10px;
   -o-border-radius: 10px;
-  z-index: 100;
+  z-index: 1;
   cursor: pointer;
 }
 

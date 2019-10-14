@@ -1,3 +1,24 @@
+.accountPopup-content {
+  // width: 30% !important;
+  width: 100px !important;
+  min-width: 1000px;
+  border-radius: 25px !important;
+  -webkit-border-radius: 25px !important;
+  -moz-border-radius: 25px !important;
+  -ms-border-radius: 25px !important;
+  -o-border-radius: 25px !important;
+  margin-top: 10px;
+  background-color: #000000d9 !important;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.25) !important;
+  left: calc(50% - 500px) !important;
+  border: none !important;
+  z-index: 10 !important;
+
+  .popup-arrow.accountPopup-arrow {
+    display: none !important;
+  }
+}
+
 .settingsPopup-content {
   background-color: #080314 !important;
   border: thin solid rgb(59, 56, 56) !important;

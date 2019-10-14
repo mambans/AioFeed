@@ -22,13 +22,7 @@ function TwitchVodElement(data) {
             alt={styles.thumbnail}
           />
         </a>
-        <p className={styles.duration}>
-          {Utilities.formatTwitchVodsDuration(data.data.duration)}
-          {/* {data.data.duration
-            .replace("h", ":")
-            .replace("m", ":")
-            .replace("s", "")} */}
-        </p>
+        <p className={styles.duration}>{Utilities.formatTwitchVodsDuration(data.data.duration)}</p>
       </div>
       <h4 className={styles.title}>
         <a
@@ -37,26 +31,35 @@ function TwitchVodElement(data) {
           {Utilities.truncate(data.data.title, 50)}
         </a>
       </h4>
-      <div style={{ width: "inherit" }}>
-        <p className={styles.channel}>
-          <a href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase() + "/videos"}>
-            {data.data.user_name}
-          </a>
-        </p>
-        {
+
+      <div>
+        <div className={styles.channelContainer} style={{ marginBottom: "0px", height: "25px" }}>
+          <p className={styles.channel} style={{ paddingLeft: "5px" }}>
+            <a
+              href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase() + "/videos"}
+              style={{ color: "#f0f0f0" }}>
+              {data.data.user_name}
+            </a>
+          </p>
+        </div>
+        <div
+          className={styles.gameContainer}
+          style={{ gridTemplateColumns: "50% 50%", color: "#979797" }}>
+          <p className={styles.game} style={{ gridColumn: 1, paddingLeft: "5px" }}>
+            {data.data.type}
+          </p>
           <Moment
             className={styles.viewers}
             style={{
-              left: "235px",
-              bottom: "45px",
               width: "unset",
-              justifyContent: "unset",
               dispaly: "block",
+              gridColumn: 2,
+              justifySelf: "right",
             }}
             fromNow>
             {data.data.published_at}
           </Moment>
-        }
+        </div>
       </div>
     </div>
   );
@@ -111,11 +114,11 @@ function RenderTwitchVods(data) {
     data.data.user_name,
   ]);
 
-  useEffect(() => {
-    return () => {
-      addNotification(`Removed vod: ${data.data.user_name}`, "twitch-vod-remove");
-    };
-  }, [addNotification, data.data.user_name]);
+  // useEffect(() => {
+  //   return () => {
+  //     addNotification(`Removed vod: ${data.data.user_name}`, "twitch-vod-remove");
+  //   };
+  // }, [addNotification, data.data.user_name]);
 
   return (
     <>
