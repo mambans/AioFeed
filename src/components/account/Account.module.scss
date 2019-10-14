@@ -15,7 +15,8 @@
 }
 
 .accountContainer {
-  width: 40%;
+  width: min-content;
+  // width: 40%;
   min-width: 1000px;
   margin: auto;
   display: grid;

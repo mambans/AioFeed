@@ -1,18 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { Navbar, NavDropdown, Nav, Container } from "react-bootstrap";
+import { Navbar, NavDropdown, Nav, Container, Spinner } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import Icon from "react-icons-kit";
 import { github } from "react-icons-kit/icomoon/github";
 
 import "./Navigation.scss";
 import Utilities from "../../utilities/Utilities";
 import placeholder from "../../assets/images/placeholder.png";
+import Icon from "react-icons-kit";
+import { closeCircled } from "react-icons-kit/ionicons/closeCircled";
+import Popup from "reactjs-popup";
+
 import styles from "./Navigation.module.scss";
+import NotifiesAccount from "../account/NotifiesAccount";
+import HandleRefresh from "./HandleRefresh";
 
 function NavigationBar(data) {
   //eslint-disable-next-line
   const [refresh, setRefresh] = useState(false);
   const [loggedIn, setLoggedIn] = useState(Utilities.getCookie("Notifies_AccountName"));
+  const [openAccountPopup, setOpenAccountPopup] = useState(false);
+
+  // console.log("TCL: NavigationBar -> urls", urlParams.current.has("AccountModalOpen"));
+
+  const openModal = () => {
+    setOpenAccountPopup(true);
+  };
+
+  const closeModal = () => {
+    setOpenAccountPopup(false);
+    data.data.setRefresh(!data.data.refresh);
+  };
 
   useEffect(() => {
     setLoggedIn(Utilities.getCookie("Notifies_AccountName"));
@@ -51,6 +68,49 @@ function NavigationBar(data) {
               Notifies -Github
             </NavDropdown.Item>
           </NavDropdown>
+          <Popup
+            open={openAccountPopup}
+            onClose={closeModal}
+            trigger={
+              <div onClick={openModal} style={{ alignSelf: "center" }}>
+                <img
+                  onClick={openModal}
+                  className={styles.navProfile}
+                  src={
+                    Utilities.getCookie("Notifies_AccountProfileImg") !== "null"
+                      ? Utilities.getCookie("Notifies_AccountProfileImg")
+                      : placeholder
+                  }
+                  alt=''></img>
+              </div>
+            }
+            // position='center'
+            className='accountPopup'>
+            {openAccountPopup ? (
+              <HandleRefresh>
+                {data => (
+                  <>
+                    <Icon
+                      icon={closeCircled}
+                      size={56}
+                      onClick={closeModal}
+                      style={{
+                        color: "rgba(255, 255, 255, 0.81)",
+                        position: "absolute",
+                        right: "-12px",
+                        top: "-12px",
+                      }}
+                    />
+                    <NotifiesAccount data={data}></NotifiesAccount>
+                  </>
+                )}
+              </HandleRefresh>
+            ) : (
+              <Spinner animation='grow' role='status' style={Utilities.loadingSpinner}>
+                <span className='sr-only'>Loading...</span>
+              </Spinner>
+            )}
+          </Popup>
           {loggedIn ? (
             <Nav.Link as={NavLink} to={`/account`}>
               <img
