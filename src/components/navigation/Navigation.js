@@ -19,7 +19,6 @@ function NavigationBar(data) {
   const [refresh, setRefresh] = useState(false);
   const [loggedIn, setLoggedIn] = useState(Utilities.getCookie("Notifies_AccountName"));
   const [openAccountPopup, setOpenAccountPopup] = useState(false);
-
   // console.log("TCL: NavigationBar -> urls", urlParams.current.has("AccountModalOpen"));
 
   const openModal = () => {
@@ -49,7 +48,6 @@ function NavigationBar(data) {
         <Container>
           <Nav className='mr-auto'>
             <Nav.Link as={NavLink} to='/feed' activeClassName='active'>
-              {/* <Icon icon={feed} size={24} style={{ paddingRight: "0.75rem" }}></Icon> */}
               Feed
             </Nav.Link>
             <Nav.Link as={NavLink} to='/twitch/notifications' activeClassName='active'>
@@ -98,8 +96,7 @@ function NavigationBar(data) {
                       style={{
                         color: "rgba(255, 255, 255, 0.81)",
                         position: "absolute",
-                        right: "-12px",
-                        top: "-12px",
+                        right: "-28px",
                       }}
                     />
                     <NotifiesAccount data={data}></NotifiesAccount>

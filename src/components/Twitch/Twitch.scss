@@ -7,12 +7,12 @@
   -moz-border-radius: 25px !important;
   -ms-border-radius: 25px !important;
   -o-border-radius: 25px !important;
-  margin-top: 10px;
-  background-color: #000000d9 !important;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.25) !important;
+  background-color: transparent !important;
+  // box-shadow: 10px 10px 10px 0 rgba(0, 0, 0, 0.25) !important;
   left: calc(50% - 500px) !important;
   border: none !important;
   z-index: 10 !important;
+  padding: 0 !important;
 
   .popup-arrow.accountPopup-arrow {
     display: none !important;
