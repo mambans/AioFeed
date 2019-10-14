@@ -66,7 +66,6 @@ function NotifiesAccount(data) {
       .then(() => {
         setRefresh(!refresh);
         // localStorage.setItem("YoutubeFeedEnabled", false);
-
         setDisableYoutube(true);
       })
       .catch(error => {
@@ -80,7 +79,7 @@ function NotifiesAccount(data) {
 
   return (
     <>
-      <SuccessfullyConnected />
+      <SuccessfullyConnected data={data.data} />
 
       {Utilities.getCookie("Notifies_AccountName") ? (
         <div className={styles.accountContainer}>

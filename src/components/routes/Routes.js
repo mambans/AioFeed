@@ -32,17 +32,31 @@ function Routes() {
               <Route
                 exact
                 path='/feed'
-                component={Feed}
-                // render={() => {
-                //   return <Feed />;
-                // }}
+                // component={Feed}
+                render={() => {
+                  return <Feed data={data} />;
+                }}
               />
               <Route exact path='/twitch/notifications' component={streamOnlineWebhook} />
               <Route exact path='/youtube/notifications' component={YoutubeNewVideo} />
               <Route exact path='/auth/youtube' component={YoutubeAuth} />
               <Route exact path='/auth/twitch' component={TwitchAuth} />
-              <Route exact path='/auth/twitch/callback' component={TwitchAuthCallback} />
-              <Route exact path='/auth/youtube/callback' component={YoutubeAuthCallback} />
+              <Route
+                exact
+                path='/auth/twitch/callback'
+                // component={TwitchAuthCallback}
+                render={() => {
+                  return <TwitchAuthCallback data={data} />;
+                }}
+              />
+              <Route
+                exact
+                path='/auth/youtube/callback'
+                // component={YoutubeAuthCallback}
+                render={() => {
+                  return <YoutubeAuthCallback data={data} />;
+                }}
+              />
               <Route exact path='/auth/twitter' component={TwitterAuth} />
               <Route exact path='/auth/twitter/callback' component={TwitterAuth} />
               <Route exact path='/account' render={() => <NotifiesAccount data={data} />} />

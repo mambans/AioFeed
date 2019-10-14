@@ -6,6 +6,8 @@ import Utilities from "../../utilities/Utilities";
 function HandleRefresh({ children }) {
   const [refresh, setRefresh] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [connectedDomain, setConnectedDomain] = useState(null);
+  const [accountModalOpen, setAccountModalOpen] = useState(false);
 
   useEffect(() => {
     setLoaded(true);
@@ -21,6 +23,10 @@ function HandleRefresh({ children }) {
     return children({
       refresh: refresh,
       setRefresh: setRefresh,
+      connectedDomain: connectedDomain,
+      setConnectedDomain: setConnectedDomain,
+      accountModalOpen: accountModalOpen,
+      setAccountModalOpen: setAccountModalOpen,
     });
   }
 }

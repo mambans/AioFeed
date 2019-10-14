@@ -6,7 +6,7 @@ import { Redirect } from "react-router-dom";
 import Utilities from "utilities/Utilities";
 import ErrorHandeling from "./../error/Error";
 
-function TwitchAuthCallback() {
+function TwitchAuthCallback({ data }) {
   const [error, setError] = useState();
   const [authenticated, setAuthenticated] = useState(false);
 
@@ -70,7 +70,9 @@ function TwitchAuthCallback() {
   if (error) {
     return <ErrorHandeling data={error}></ErrorHandeling>;
   } else if (authenticated) {
-    return <Redirect to='/account?TwitchConnected=true'></Redirect>;
+    data.setAccountModalOpen(true);
+    data.setConnectedDomain("Twitch");
+    return <Redirect to='/account'></Redirect>;
   } else {
     return (
       <Spinner animation='border' role='status' style={Utilities.loadingSpinner}>

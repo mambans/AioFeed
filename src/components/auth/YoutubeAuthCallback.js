@@ -6,7 +6,7 @@ import axios from "axios";
 import Utilities from "utilities/Utilities";
 import ErrorHandeling from "./../error/Error";
 
-function YoutubeAuthCallback() {
+function YoutubeAuthCallback({ data }) {
   const [error, setError] = useState();
   const [authenticated, setAuthenticated] = useState(false);
 
@@ -70,7 +70,9 @@ function YoutubeAuthCallback() {
   if (error) {
     return <ErrorHandeling data={error}></ErrorHandeling>;
   } else if (authenticated) {
-    return <Redirect to='/account?YoutubeConnected=true'></Redirect>;
+    data.setAccountModalOpen(true);
+    data.setConnectedDomain("Youtube");
+    return <Redirect to='/account'></Redirect>;
   } else {
     return (
       <Spinner animation='border' role='status' style={Utilities.loadingSpinner}>
