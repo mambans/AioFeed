@@ -41,7 +41,7 @@ function StreamHoverIframe(data) {
   return (
     <Iframe
       // url={`https://player.twitch.tv/?channel=${data.data.user_name}&muted=true`}
-      url={`https://player.twitch.tv/?twitch5=0&allowfullscreen&video=&channel=${data.data.user_name}&!playsinline&autoplay&!muted&!controls`}
+      url={`https://player.twitch.tv/?twitch5=1&allowfullscreen&video=&channel=${data.data.user_name}&!playsinline&autoplay&!muted&!controls`}
       title={data.data.user_name + "-iframe"}
       className={styles.StreamHoverIframe}
       theme='dark'

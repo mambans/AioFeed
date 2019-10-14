@@ -114,12 +114,6 @@ function RenderTwitchVods(data) {
     data.data.user_name,
   ]);
 
-  // useEffect(() => {
-  //   return () => {
-  //     addNotification(`Removed vod: ${data.data.user_name}`, "twitch-vod-remove");
-  //   };
-  // }, [addNotification, data.data.user_name]);
-
   return (
     <>
       <ReactTooltip delayShow={250} place='bottom' type='dark' effect='solid' />

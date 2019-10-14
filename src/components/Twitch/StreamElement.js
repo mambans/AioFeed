@@ -91,8 +91,6 @@ function StreamEle(data) {
   }, []);
 
   useEffect(() => {
-    console.log(Utilities.getCookie("TwitchVideoHoverEnabled"));
-
     if (ref.current && localStorage.getItem(`TwitchVideoHoverEnabled`) === "true") {
       const refEle = ref.current;
       ref.current.addEventListener("mouseenter", handleMouseOver);

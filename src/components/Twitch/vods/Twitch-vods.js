@@ -36,22 +36,6 @@ function TwitchVods() {
       .catch(() => {
         setError(error);
       });
-
-    // try {
-    //   const followedVodsResponse = await getFollowedVods(true);
-
-    //   const followedVods = followedVodsResponse.data;
-
-    //   setError(followedVodsResponse.error);
-
-    //   setVods(followedVods);
-    //   setIsLoaded(true);
-    // } catch (error) {
-    //   setError(error);
-    // }
-    // }
-
-    // fetchData();
   }, [error]);
 
   const windowFocusHandler = useCallback(async () => {
@@ -66,21 +50,6 @@ function TwitchVods() {
       .catch(() => {
         setError(error);
       });
-
-    // try {
-    //   const followedVodsResponse = await getFollowedVods();
-
-    //   const followedVods = followedVodsResponse.data;
-
-    //   setError(followedVodsResponse.error);
-
-    //   setVods(followedVods);
-    //   setIsLoaded(true);
-    // } catch (error) {
-    //   setError(error);
-    // }
-    // }
-    // fetchData();
   }, [error]);
 
   const windowBlurHandler = useCallback(() => {}, []);
@@ -96,19 +65,6 @@ function TwitchVods() {
         .catch(() => {
           setError(error);
         });
-      // try {
-
-      //   const followedVodsResponse = await getFollowedVods();
-
-      //   const followedVods = followedVodsResponse.data;
-
-      //   setError(followedVodsResponse.error);
-
-      //   setVods(followedVods);
-      //   setIsLoaded(true);
-      // } catch (error) {
-      //   setError(error);
-      // }
     }
 
     fetchData();
@@ -125,7 +81,6 @@ function TwitchVods() {
     return <ErrorHandeling data={error}></ErrorHandeling>;
   }
   if (!isLoaded) {
-    // if (true) {
     return (
       <>
         <div className={styles.header_div}>
@@ -168,7 +123,7 @@ function TwitchVods() {
         <div className={styles.container}>
           {vods.data.map(vod => {
             return (
-              <LazyLoad key={vod.id} height={312} offset={100} once>
+              <LazyLoad key={vod.id} height={312} offset={50} once>
                 <RenderTwitchVods
                   data={vod}
                   run={{ initial: initialOpen.current }}
