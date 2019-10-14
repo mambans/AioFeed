@@ -1,141 +1,88 @@
-import React, { useEffect, useState } from "react";
-import { Navbar, NavDropdown, Nav, Container, Spinner } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
-import { github } from "react-icons-kit/icomoon/github";
+import AuthContextProvider, { AuthContext } from "components/login/AuthContextProvider";
+import React from "react";
+import { Navbar, NavDropdown, Nav, Container } from "react-bootstrap";
+import { BrowserRouter as Router, NavLink, Route, Redirect } from "react-router-dom";
 
-import "./Navigation.scss";
-import Utilities from "../../utilities/Utilities";
-import placeholder from "../../assets/images/placeholder.png";
-import Icon from "react-icons-kit";
-import { closeCircled } from "react-icons-kit/ionicons/closeCircled";
-import Popup from "reactjs-popup";
+import "./navigation.scss";
+import logo from "../../assets/images/logo-v2.png";
+import Home from "./../home/Home";
+import Feed from "./../feed/Feed";
+import twitchAuth from "../login/TwitchLogin";
+import youtubeAuth from "./../login/YoutubeLogin";
+import Posts from "./../posts/Posts";
 
-import styles from "./Navigation.module.scss";
-import NotifiesAccount from "../account/NotifiesAccount";
-import HandleRefresh from "./HandleRefresh";
+import AuthContextProvider, { AuthContext } from "components/login/AuthContextProvider";
 
-function NavigationBar(data) {
-  //eslint-disable-next-line
-  const [refresh, setRefresh] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(Utilities.getCookie("Notifies_AccountName"));
-  const [openAccountPopup, setOpenAccountPopup] = useState(false);
-
-  // console.log("TCL: NavigationBar -> urls", urlParams.current.has("AccountModalOpen"));
-
-  const openModal = () => {
-    setOpenAccountPopup(true);
-  };
-
-  const closeModal = () => {
-    setOpenAccountPopup(false);
-    data.data.setRefresh(!data.data.refresh);
-  };
-
-  useEffect(() => {
-    setLoggedIn(Utilities.getCookie("Notifies_AccountName"));
-    if (data) {
-      setRefresh(true);
-    }
-  }, [data, loggedIn]);
-
+function Navigation() {
   return (
-    <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
-      <Nav.Link as={NavLink} to='/' className='logo-link'>
-        <img src={`${process.env.PUBLIC_URL}/icons/v3/Logo-4k.png`} alt='logo' className='logo' />
+    <AuthContextProvider>
+      <AuthContext.Consumer>
+        {({ loggedIn }) => (
+          <Router>
+            <NavigationBar />
+
+            <Route exact path="/" component={Home} />
+            <Route path="/feed" render={() => (loggedIn ? <Feed /> : <Redirect to="/login" />)} />
+            <Route path="/posts" component={Posts} />
+            <Route
+              path="/youtube/login"
+              component={() => {
+                window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://localhost:3000/youtube/auth&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly&include_granted_scopes=true`;
+                return null;
+              }}
+            />
+            <Route
+              path="/login"
+              component={() => {
+                window.location.href = `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=http://localhost:3000/twitch/auth&scope=channel:read:subscriptions user:read:broadcast&response_type=code`;
+                return null;
+              }}
+            />
+            <Route path="/twitch/auth" component={twitchAuth} />
+            <Route path="/youtube/auth" component={youtubeAuth} />
+          </Router>
+        )}
+      </AuthContext.Consumer>
+    </AuthContextProvider>
+  );
+}
+
+const NavigationBar = () => {
+  return (
+    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+      <Nav.Link as={NavLink} to="/" className="logo-link">
+        <img src={logo} alt="logo" className="logo" />
         Notifies
       </Nav.Link>
-      <Navbar.Toggle aria-controls='responsive-navbar-nav' />
-      <Navbar.Collapse id='responsive-navbar-nav'>
+      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+      <Navbar.Collapse id="responsive-navbar-nav">
         <Container>
-          <Nav className='mr-auto'>
-            <Nav.Link as={NavLink} to='/feed' activeClassName='active'>
-              {/* <Icon icon={feed} size={24} style={{ paddingRight: "0.75rem" }}></Icon> */}
+          <Nav className="mr-auto">
+            <Nav.Link as={NavLink} to="/feed" activeClassName="active">
               Feed
             </Nav.Link>
-            <Nav.Link as={NavLink} to='/twitch/notifications' activeClassName='active'>
+            <Nav.Link as={NavLink} to="/twitch/notifications" activeClassName="active">
               Webhooks
             </Nav.Link>
+            <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
+              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+            </NavDropdown>
           </Nav>
         </Container>
-        <Nav style={{ justifyContent: "right" }}>
-          <NavDropdown title='Other' id='collasible-nav-dropdown'>
-            <NavDropdown.Item as={NavLink} to='/account/create' id='login'>
-              Create Account
-            </NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href='https://github.com/mambans/Notifies'>
-              <Icon icon={github} size={24} style={{ paddingRight: "0.75rem" }}></Icon>
-              Notifies -Github
-            </NavDropdown.Item>
-          </NavDropdown>
-          <Popup
-            open={openAccountPopup}
-            onClose={closeModal}
-            trigger={
-              <div onClick={openModal} style={{ alignSelf: "center" }}>
-                <img
-                  onClick={openModal}
-                  className={styles.navProfile}
-                  src={
-                    Utilities.getCookie("Notifies_AccountProfileImg") !== "null"
-                      ? Utilities.getCookie("Notifies_AccountProfileImg")
-                      : placeholder
-                  }
-                  alt=''></img>
-              </div>
-            }
-            // position='center'
-            className='accountPopup'>
-            {openAccountPopup ? (
-              <HandleRefresh>
-                {data => (
-                  <>
-                    <Icon
-                      icon={closeCircled}
-                      size={56}
-                      onClick={closeModal}
-                      style={{
-                        color: "rgba(255, 255, 255, 0.81)",
-                        position: "absolute",
-                        right: "-12px",
-                        top: "-12px",
-                      }}
-                    />
-                    <NotifiesAccount data={data}></NotifiesAccount>
-                  </>
-                )}
-              </HandleRefresh>
-            ) : (
-              <Spinner animation='grow' role='status' style={Utilities.loadingSpinner}>
-                <span className='sr-only'>Loading...</span>
-              </Spinner>
-            )}
-          </Popup>
-          {loggedIn ? (
-            <Nav.Link as={NavLink} to={`/account`}>
-              <img
-                className={styles.navProfile}
-                src={
-                  Utilities.getCookie("Notifies_AccountProfileImg") !== "null"
-                    ? Utilities.getCookie("Notifies_AccountProfileImg")
-                    : placeholder
-                }
-                alt=''></img>
-            </Nav.Link>
-          ) : (
-            <>
-              <Nav.Link as={NavLink} to={`/account/create`}>
-                Create account
-              </Nav.Link>
-              <Nav.Link as={NavLink} to={`/account/login`}>
-                Login
-              </Nav.Link>
-            </>
-          )}
+        <Nav>
+          <Nav.Link as={NavLink} to="/login" id="login">
+            Login Twitch{" "}
+          </Nav.Link>
+          <Nav.Link as={NavLink} to="/youtube/login" id="login">
+            Login Youtube
+          </Nav.Link>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
   );
-}
-
-export default NavigationBar;
+};
+export default Navigation;
