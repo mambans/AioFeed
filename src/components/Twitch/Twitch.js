@@ -9,6 +9,11 @@ import RenderTwitch from "./Render-Twitch";
 import styles from "./Twitch.module.scss";
 import Utilities from "utilities/Utilities";
 
+import Icon from "react-icons-kit";
+import { reload } from "react-icons-kit/iconic/reload";
+// import { repeat } from "react-icons-kit/fa/repeat";
+// import { refresh } from "react-icons-kit/fa/refresh";
+
 import "./Twitch.scss";
 
 function Twitch({ data }) {
@@ -16,12 +21,6 @@ function Twitch({ data }) {
 
   const windowFocusHandler = useCallback(() => {
     document.title = "Notifies | Feed";
-    // document.getElementById(
-    //   "favicon16"
-    // ).href = `${process.env.PUBLIC_URL}/icons/favicon2-16x16.png`;
-    // document.getElementById(
-    //   "favicon32"
-    // ).href = `${process.env.PUBLIC_URL}/icons/favicon2-32x32.png`;
     data.refresh();
   }, [data]);
 
@@ -36,6 +35,15 @@ function Twitch({ data }) {
   }, [data]);
 
   const refresh = useCallback(async () => {
+    // clearInterval(data.timer);
+    // const timeNow = new Date();
+    // data.setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + data.REFRESH_RATE));
+    // data.timer = setInterval(() => {
+    //   const timeNow = new Date();
+    //   data.setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + data.REFRESH_RATE));
+    //   data.refresh();
+    // }, data.REFRESH_RATE * 1000);
+
     await data.refresh();
   }, [data]);
 
@@ -57,15 +65,22 @@ function Twitch({ data }) {
           marginTop: "0",
         }}>
         <Button variant='outline-secondary' className={styles.refreshButton} onClick={refresh}>
-          Reload
+          {data.refreshing ? (
+            <div style={{ height: "25.5px" }}>
+              <Spinner
+                animation='border'
+                role='status'
+                style={Utilities.loadingSpinnerSmall}></Spinner>
+            </div>
+          ) : (
+            <>
+              <Icon icon={reload} size={22}></Icon>
+            </>
+          )}
         </Button>
-        {data.refreshing ? (
-          <Spinner animation='border' role='status' style={Utilities.loadingSpinnerSmall}></Spinner>
-        ) : (
-          <p key={data.refreshTimer} className={styles.refreshTimer}>
-            <Countdown date={data.refreshTimer} zeroPadDays={0} zeroPadTime={0} />
-          </p>
-        )}
+        <p key={data.refreshTimer} className={styles.refreshTimer}>
+          <Countdown date={data.refreshTimer} zeroPadDays={0} zeroPadTime={2} />
+        </p>
         <h4 className={styles.container_header}>Twitch</h4>
       </div>
       {data.error ? (

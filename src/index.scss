@@ -10,6 +10,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
   // font-family: "Fira Code", monospace;
+
+  background: no-repeat center center fixed;
+  background-attachment: fixed;
+  color: $textColor;
+  background-image: url("/images/background5.png");
+  // background-image: url("/images/wood3.jpg");
+  // background-image: url("/images/wood5.jpg");
+  object-fit: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 code {
@@ -17,28 +29,29 @@ code {
     monospace;
 }
 
-body {
-  background: $backgroundBlue;
-  color: $textColor;
-
-  // background-image: url("https://i.imgur.com/Z2Mr5eg.jpg");
-  background-image: url("https://i.imgur.com/wBNRIOx.jpg");
-  object-fit: cover !important;
-  background-attachment: fixed !important;
-}
-
 a:hover {
   text-decoration: none;
 }
 
-body {
-  background: no-repeat center center fixed;
-  background-attachment: fixed;
-  color: $textColor;
-  background-image: url("/images/background5.png");
-  object-fit: cover;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+.tooltip-inner {
+  padding: 0.25rem 0.5rem;
+  color: #fff;
+  text-align: center;
+  background-color: #2c2c2cf1;
+  max-width: unset;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  font-size: 16px;
+}
+
+.btn {
+  padding: 0.5rem 0.75rem;
+}
+
+.btn-outline-secondary:focus,
+.btn-outline-secondary.focus {
+  box-shadow: 3px 3px 3px 0px #201f1f;
 }

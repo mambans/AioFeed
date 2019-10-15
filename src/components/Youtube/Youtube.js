@@ -3,6 +3,8 @@ import { Button, Spinner } from "react-bootstrap";
 import Moment from "react-moment";
 import Alert from "react-bootstrap/Alert";
 import LazyLoad from "react-lazyload";
+import Icon from "react-icons-kit";
+import { reload } from "react-icons-kit/iconic/reload";
 
 import getFollowedChannels from "./GetFollowedChannels";
 import getSubscriptionVideos from "./GetSubscriptionVideos";
@@ -100,9 +102,21 @@ function Youtube() {
       <>
         <div className={styles.header_div}>
           <Button variant='outline-secondary' className={styles.refreshButton} onClick={refresh}>
-            Reload
+            {refreshing ? (
+              <div style={{ height: "25.5px" }}>
+                <Spinner
+                  animation='border'
+                  role='status'
+                  style={Utilities.loadingSpinnerSmall}></Spinner>
+              </div>
+            ) : (
+              <Icon icon={reload} size={22}></Icon>
+            )}
           </Button>
-          {refreshing ? (
+          <Moment key={lastRefresh.getTime()} className={styles.lastRefresh} fromNow>
+            {lastRefresh}
+          </Moment>
+          {/* {refreshing ? (
             <Spinner
               animation='border'
               role='status'
@@ -111,7 +125,7 @@ function Youtube() {
             <Moment key={lastRefresh.getTime()} className={styles.lastRefresh} fromNow>
               {lastRefresh}
             </Moment>
-          )}
+          )} */}
           {requestError && requestError.code === 403 ? (
             <Alert
               key={requestError.errors[0].reason}

@@ -9,6 +9,9 @@ import styles from "./../Twitch.module.scss";
 import RenderTwitchVods from "./Render-Twitch-Vods";
 import getFollowedVods from "./GetFollowedVods";
 import AddChannelForm from "./VodSettings";
+import Icon from "react-icons-kit";
+import { reload } from "react-icons-kit/iconic/reload";
+import { ic_settings } from "react-icons-kit/md/ic_settings";
 
 import LazyLoad from "react-lazyload";
 
@@ -16,6 +19,7 @@ function TwitchVods() {
   const [vods, setVods] = useState();
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   const initialOpen = useRef(true);
 
@@ -23,44 +27,39 @@ function TwitchVods() {
     initialOpen.current = newRun;
   }
 
-  const refresh = useCallback(async () => {
-    // async function fetchData() {
+  const refresh = useCallback(
+    async forceRefresh => {
+      setRefreshing(true);
+      await getFollowedVods(forceRefresh)
+        .then(data => {
+          setError(data.error);
 
-    await getFollowedVods(true)
-      .then(data => {
-        setError(data.error);
-
-        setVods(data.data);
-        setIsLoaded(true);
-      })
-      .catch(() => {
-        setError(error);
-      });
-  }, [error]);
+          setVods(data.data);
+          setIsLoaded(true);
+          setRefreshing(false);
+        })
+        .catch(() => {
+          setError(error);
+        });
+    },
+    [error]
+  );
 
   const windowFocusHandler = useCallback(async () => {
-    // async function fetchData() {
-    await getFollowedVods()
-      .then(data => {
-        setError(data.error);
-
-        setVods(data.data);
-        setIsLoaded(true);
-      })
-      .catch(() => {
-        setError(error);
-      });
-  }, [error]);
+    refresh({ forceRefresh: false });
+  }, [refresh]);
 
   const windowBlurHandler = useCallback(() => {}, []);
 
   useEffect(() => {
     async function fetchData() {
+      setRefreshing(true);
       await getFollowedVods()
         .then(data => {
           setError(data.error);
           setVods(data.data);
           setIsLoaded(true);
+          setRefreshing(false);
         })
         .catch(() => {
           setError(error);
@@ -103,15 +102,38 @@ function TwitchVods() {
     return (
       <>
         <div className={styles.header_div}>
-          <Button variant='outline-secondary' className={styles.refreshButton} onClick={refresh}>
-            Reload
+          <Button
+            variant='outline-secondary'
+            className={styles.refreshButton}
+            onClick={() => {
+              refresh({ forceRefresh: true });
+            }}>
+            {refreshing ? (
+              <div style={{ height: "25.5px" }}>
+                <Spinner
+                  animation='border'
+                  role='status'
+                  style={Utilities.loadingSpinnerSmall}></Spinner>
+              </div>
+            ) : (
+              <Icon icon={reload} size={22}></Icon>
+            )}
           </Button>
           <Moment from={vods.expire} ago className={styles.vodRefreshTimer}></Moment>
           <Popup
             placeholder='Channel name..'
             trigger={
               <Button variant='outline-secondary' className={styles.settings}>
-                Settings
+                <Icon
+                  icon={ic_settings}
+                  size={22}
+                  style={{
+                    height: "22px",
+
+                    alignItems: "center",
+
+                    display: "flex",
+                  }}></Icon>
               </Button>
             }
             position='left center'
