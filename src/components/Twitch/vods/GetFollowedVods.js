@@ -4,32 +4,16 @@ import getFollowedChannels from "./../GetFollowedChannels";
 
 import Utilities from "./../../../utilities/Utilities";
 
-// async function getFollowedVods(FollowedChannels, forceRun) {
 async function getFollowedVods(forceRun) {
+  // console.log("TCL: getFollowedVods -> forceRun", forceRun);
   const thresholdDate = 1;
   const vodExpire = 3;
 
   try {
-    // const reqVodChannels = await axios.get(`http://localhost:3100/notifies/vod-channels`);
-    // const FollowedChannelVods = reqVodChannels.data.channels.map(channel => {
-    //   return channel.name;
-    // });
-
     const followedStreamVods = [];
     const today = new Date();
     const OnlyVodsAfterDate = new Date();
     OnlyVodsAfterDate.setDate(today.getDate() - thresholdDate);
-
-    // const vodChannels = FollowedChannels.data.data
-    //   .map(channel => {
-    //     if (FollowedChannelVods.includes(channel.to_name.toLowerCase())) {
-    //       return channel.to_id;
-    //     }
-    //     return null;
-    //   })
-    //   .filter(channel => {
-    //     return channel !== null;
-    //   });
 
     let response = null;
     if (
@@ -37,6 +21,8 @@ async function getFollowedVods(forceRun) {
       JSON.parse(localStorage.getItem("Twitch-vods")).expire <= new Date() ||
       forceRun
     ) {
+      // console.log("REFRESING VODS");
+
       try {
         const followedChannels = await getFollowedChannels();
         const reqVodChannels = await axios.get(`http://localhost:3100/notifies/vod-channels`);
