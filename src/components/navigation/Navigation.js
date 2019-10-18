@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Navbar, NavDropdown, Nav, Container, Spinner } from "react-bootstrap";
+import { Navbar, NavDropdown, Nav, Container, Button } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { github } from "react-icons-kit/icomoon/github";
 
@@ -14,19 +14,23 @@ import styles from "./Navigation.module.scss";
 import NotifiesAccount from "../account/NotifiesAccount";
 import HandleRefresh from "./HandleRefresh";
 
+import NotifiesCreateAccount from "../account/NotifiesCreateAccount";
+import NotifiesLogin from "../account/NotifiesLogin";
+
 function NavigationBar(data) {
+  // console.log("TCL: NavigationBar -> data", data);
   //eslint-disable-next-line
   const [refresh, setRefresh] = useState(false);
   const [loggedIn, setLoggedIn] = useState(Utilities.getCookie("Notifies_AccountName"));
-  const [openAccountPopup, setOpenAccountPopup] = useState(false);
+  const [renderModal, setRenderModal] = useState("login");
   // console.log("TCL: NavigationBar -> urls", urlParams.current.has("AccountModalOpen"));
 
   const openModal = () => {
-    setOpenAccountPopup(true);
+    data.data.setAccountModalOpen(true);
   };
 
   const closeModal = () => {
-    setOpenAccountPopup(false);
+    data.data.setAccountModalOpen(false);
     data.data.setRefresh(!data.data.refresh);
   };
 
@@ -67,69 +71,75 @@ function NavigationBar(data) {
             </NavDropdown.Item>
           </NavDropdown>
           <Popup
-            open={openAccountPopup}
+            open={data.data.accountModalOpen}
             onClose={closeModal}
             trigger={
               <div onClick={openModal} className={styles.navProfileContainer}>
-                <img
-                  onClick={openModal}
-                  className={styles.navProfile}
-                  src={
-                    Utilities.getCookie("Notifies_AccountProfileImg") !== "null"
-                      ? Utilities.getCookie("Notifies_AccountProfileImg")
-                      : placeholder
-                  }
-                  style={{ marginLeft: "0" }}
-                  alt=''></img>
+                {loggedIn ? (
+                  <img
+                    onClick={openModal}
+                    className={styles.navProfile}
+                    src={
+                      Utilities.getCookie("Notifies_AccountProfileImg") !== "null"
+                        ? Utilities.getCookie("Notifies_AccountProfileImg")
+                        : placeholder
+                    }
+                    style={{ marginLeft: "0" }}
+                    alt=''></img>
+                ) : (
+                  <p className={styles.LoginAccountButton}>Login</p>
+                )}
               </div>
             }
             // position='center'
             className='accountPopup'>
-            {openAccountPopup ? (
-              <HandleRefresh>
-                {data => (
+            {loggedIn ? (
+              data.data.accountModalOpen ? (
+                <HandleRefresh>
+                  {data => (
+                    <>
+                      <Icon
+                        icon={closeCircled}
+                        size={56}
+                        onClick={closeModal}
+                        className={styles.closeModalButton}
+                      />
+                      <NotifiesAccount
+                        data={data}
+                        navSetRefresh={setRefresh}
+                        navRefresh={refresh}
+                        setRenderModal={setRenderModal}></NotifiesAccount>
+                    </>
+                  )}
+                </HandleRefresh>
+              ) : (
+                // <Spinner animation='border' role='status' style={Utilities.loadingSpinner}>
+                //   <span className='sr-only'>Loading...</span>
+                // </Spinner>
+                ""
+              )
+            ) : (
+              <div className={styles.createAccountContainer}>
+                {renderModal !== "login" ? (
+                  <NotifiesCreateAccount />
+                ) : (
                   <>
-                    <Icon
-                      icon={closeCircled}
-                      size={56}
-                      onClick={closeModal}
-                      style={{
-                        color: "rgba(255, 255, 255, 0.81)",
-                        position: "absolute",
-                        right: "-28px",
-                      }}
-                    />
-                    <NotifiesAccount data={data}></NotifiesAccount>
+                    <NotifiesLogin
+                      data={data.data}
+                      navSetRefresh={setRefresh}
+                      setRenderModal={setRenderModal}></NotifiesLogin>
+                    <Button
+                      className={styles.disconnectButton}
+                      onClick={() => {
+                        setRenderModal("create");
+                      }}>
+                      Create Account
+                    </Button>
                   </>
                 )}
-              </HandleRefresh>
-            ) : (
-              <Spinner animation='border' role='status' style={Utilities.loadingSpinner}>
-                <span className='sr-only'>Loading...</span>
-              </Spinner>
+              </div>
             )}
           </Popup>
-          {loggedIn ? (
-            <Nav.Link as={NavLink} to={`/account`}>
-              <img
-                className={styles.navProfile}
-                src={
-                  Utilities.getCookie("Notifies_AccountProfileImg") !== "null"
-                    ? Utilities.getCookie("Notifies_AccountProfileImg")
-                    : placeholder
-                }
-                alt=''></img>
-            </Nav.Link>
-          ) : (
-            <>
-              <Nav.Link as={NavLink} to={`/account/create`}>
-                Create account
-              </Nav.Link>
-              <Nav.Link as={NavLink} to={`/account/login`}>
-                Login
-              </Nav.Link>
-            </>
-          )}
         </Nav>
       </Navbar.Collapse>
     </Navbar>

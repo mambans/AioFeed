@@ -26,3 +26,35 @@
   -ms-border-radius: 30px;
   -o-border-radius: 30px;
 }
+
+.closeModalButton {
+  color: rgba(240, 240, 240, 0.81);
+  position: absolute;
+  right: -28px;
+  cursor: pointer;
+
+  &:hover {
+    color: white;
+  }
+}
+
+.createAccountContainer {
+  padding: 25px 25px 100px 25px;
+  background: #081016d1;
+  margin-top: 25px;
+  width: min-content;
+  min-width: 1000px;
+  box-shadow: 10px 10px 10px 0 rgba(0, 0, 0, 0.25) !important;
+  border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  -ms-border-radius: 25px;
+  -o-border-radius: 25px;
+}
+
+.LoginAccountButton {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 1.15rem;
+  margin-right: 15px;
+}

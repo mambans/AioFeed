@@ -38,7 +38,8 @@ nav {
 .logo-link.nav-link {
   color: white;
   font-size: 1.3rem;
-  width: 280px;
+  // width: 280px;
+  margin-right: 130px;
 }
 
 .navbar-nav {
@@ -59,4 +60,9 @@ nav {
 .bg-dark {
   background-color: #0000003d !important;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
+}
+
+.popup-overlay {
+  // visibility: hidden;
+  margin-top: 75px;
 }
