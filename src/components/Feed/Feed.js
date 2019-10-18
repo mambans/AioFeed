@@ -82,12 +82,27 @@ function Feed() {
       <>
         <ReactNotification />
         <NofeedsEnabled></NofeedsEnabled>
-        {/* {localStorage.getItem("TwitchFeedEnabled") === "true" ? <Twitch /> : null} */}
+
         {localStorage.getItem("TwitchFeedEnabled") === "true" ? (
-          <HandleData>{liveStreams => <Twitch data={liveStreams} />}</HandleData>
+          <HandleData>
+            {liveStreams => (
+              <Animated animationIn='fadeIn' animationOut='fadeOut' isVisible={true}>
+                <Twitch data={liveStreams} />
+              </Animated>
+            )}
+          </HandleData>
         ) : null}
-        {localStorage.getItem("YoutubeFeedEnabled") === "true" ? <Youtube /> : null}
-        {localStorage.getItem("TwitchVodsFeedEnabled") === "true" ? <TwitchVods /> : null}
+
+        {localStorage.getItem("YoutubeFeedEnabled") === "true" ? (
+          <Animated animationIn='fadeIn' animationOut='fadeOut' isVisible={true}>
+            <Youtube />
+          </Animated>
+        ) : null}
+        {localStorage.getItem("TwitchVodsFeedEnabled") === "true" ? (
+          <Animated animationIn='fadeIn' animationOut='fadeOut' isVisible={true}>
+            <TwitchVods />
+          </Animated>
+        ) : null}
       </>
     );
   }
