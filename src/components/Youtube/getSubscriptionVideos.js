@@ -4,11 +4,11 @@ import _ from "lodash";
 import getVideoInfo from "./GetVideoInfo";
 
 async function getSubscriptionVideos(followedChannels) {
-  const thresholdDate = 3;
+  const THRESHOLD_DATE = 3;
   const videosUnordered = [];
   const today = new Date();
   const OnlyVideosAfterDate = new Date();
-  OnlyVideosAfterDate.setDate(today.getDate() - thresholdDate);
+  OnlyVideosAfterDate.setDate(today.getDate() - THRESHOLD_DATE);
 
   //eslint-disable-next-line
   let liveStreams = [];
@@ -17,7 +17,7 @@ async function getSubscriptionVideos(followedChannels) {
 
   try {
     await Promise.all(
-      followedChannels.map(async channel => {
+      followedChannels.data.items.map(async channel => {
         let response = null;
 
         localStorage.getItem(`activity-${channel.snippet.resourceId.channelId}`)
