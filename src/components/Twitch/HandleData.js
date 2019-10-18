@@ -6,7 +6,7 @@ import getFollowedOnlineStreams from "./GetFollowedStreams";
 import Utilities from "utilities/Utilities";
 import styles from "./Twitch.module.scss";
 
-const REFRESH_RATE = 20; // seconds
+const REFRESH_RATE = 30; // seconds
 
 function HandleData({ children }) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -15,7 +15,6 @@ function HandleData({ children }) {
   const [refreshing, setRefreshing] = useState(false);
   const liveStreams = useRef();
   const oldLiveStreams = useRef();
-  // const lastRan = useRef(null);
   const newlyAddedStreams = useRef([]);
   const timer = useRef();
 
@@ -52,68 +51,55 @@ function HandleData({ children }) {
     }
   }, []);
 
-  const refresh = useCallback(() => {
-    async function refetch() {
-      setRefreshing(true);
-      try {
-        const streams = await getFollowedOnlineStreams();
-        // console.log("TCL: refetch -> streams", streams.status);
+  const refresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      const streams = await getFollowedOnlineStreams();
 
-        if (streams.status === 200) {
-          // console.log("-200-");
-
-          oldLiveStreams.current = liveStreams.current;
-          liveStreams.current = streams.data;
-          setRefreshing(false);
-
-          oldLiveStreams.current.forEach(stream => {
-            let isStreamLive = liveStreams.current.find(
-              ({ user_name }) => user_name === stream.user_name
-            );
-
-            if (!isStreamLive) addSystemNotification("offline", stream);
-          });
-
-          liveStreams.current.forEach(stream => {
-            let isStreamLive = oldLiveStreams.current.find(
-              ({ user_name }) => user_name === stream.user_name
-            );
-
-            if (!isStreamLive) {
-              addSystemNotification("online", stream);
-              newlyAddedStreams.current.push(stream.user_name);
-              stream.newlyAdded = true;
-
-              // document.getElementById(
-              //   "favicon16"
-              // ).href = `${process.env.PUBLIC_URL}/icons/favicon2Noti-16x16.png`;
-              // document.getElementById(
-              //   "favicon32"
-              // ).href = `${process.env.PUBLIC_URL}/icons/favicon2Noti-32x32.png`;
-
-              if (document.title.length > 15) {
-                const title = document.title.substring(4);
-                const count = parseInt(document.title.substring(1, 2)) + 1;
-                document.title = `(${count}) ${title}`;
-              } else {
-                const title = document.title;
-                document.title = `(${1}) ${title}`;
-              }
-            }
-          });
-        } else if (streams.status === 201) {
-          // console.log("-201-");
-          setRefreshing(false);
-        }
-
+      if (streams.status === 200) {
+        oldLiveStreams.current = liveStreams.current;
+        liveStreams.current = streams.data;
         setRefreshing(false);
-        setIsLoaded(true);
-      } catch (error) {
-        console.log("CATCH: ", error);
-        setError(error);
+
+        oldLiveStreams.current.forEach(stream => {
+          let isStreamLive = liveStreams.current.find(
+            ({ user_name }) => user_name === stream.user_name
+          );
+
+          if (!isStreamLive) addSystemNotification("offline", stream);
+        });
+
+        liveStreams.current.forEach(stream => {
+          let isStreamLive = oldLiveStreams.current.find(
+            ({ user_name }) => user_name === stream.user_name
+          );
+
+          if (!isStreamLive) {
+            addSystemNotification("online", stream);
+            newlyAddedStreams.current.push(stream.user_name);
+            stream.newlyAdded = true;
+
+            if (document.title.length > 15) {
+              const title = document.title.substring(4);
+              const count = parseInt(document.title.substring(1, 2)) + 1;
+              document.title = `(${count}) ${title}`;
+            } else {
+              const title = document.title;
+              document.title = `(${1}) ${title}`;
+            }
+          }
+        });
+      } else if (streams.status === 201) {
+        // console.log("-201-");
+        setRefreshing(false);
       }
+
+      setRefreshing(false);
+      setIsLoaded(true);
+    } catch (error) {
+      console.log("CATCH: ", error);
+      setError(error);
     }
-    refetch();
   }, [addSystemNotification]);
 
   useEffect(() => {
@@ -147,7 +133,6 @@ function HandleData({ children }) {
 
   useEffect(() => {
     return () => {
-      // console.log("clearTimeout");
       clearInterval(timer.current);
     };
   }, []);
@@ -155,12 +140,7 @@ function HandleData({ children }) {
   if (!isLoaded) {
     return (
       <>
-        <div
-          className={styles.header_div}
-          // style={{
-          //   marginTop: "0",
-          // }}
-        >
+        <div className={styles.header_div}>
           <h4 className={styles.container_header}>Twitch</h4>
         </div>
         <Spinner animation='grow' role='status' style={Utilities.loadingSpinner} variant='light'>
@@ -184,9 +164,10 @@ function HandleData({ children }) {
       newlyAddedStreams: newlyAddedStreams.current,
       resetNewlyAddedStreams: resetNewlyAddedStreams,
       error: error,
-      // lastRan: lastRan.current,
       timer: timer.current,
       refreshing: refreshing,
+      REFRESH_RATE: REFRESH_RATE,
+      setRefreshTimer: setRefreshTimer,
     });
   }
 }
