@@ -130,18 +130,20 @@ function RenderTwitchVods(data) {
     data.data.user_name,
   ]);
 
-  return (
-    <>
-      {/* <ReactTooltip delayShow={250} place='bottom' type='dark' effect='solid' /> */}
-      {animate ? (
-        <Animated animationIn='zoomIn' animationOut='fadeOut' isVisible={true}>
-          <TwitchVodElement data={data.data}></TwitchVodElement>
-        </Animated>
-      ) : (
-        <TwitchVodElement data={data.data}></TwitchVodElement>
-      )}
-    </>
-  );
+  return <TwitchVodElement data={data.data} />;
+
+  // return (
+  //   <>
+  //     {/* <ReactTooltip delayShow={250} place='bottom' type='dark' effect='solid' /> */}
+  //     {animate ? (
+  //       <Animated animationIn='zoomIn' animationOut='fadeOut' isVisible={true}>
+  //         <TwitchVodElement data={data.data}></TwitchVodElement>
+  //       </Animated>
+  //     ) : (
+  //       <TwitchVodElement data={data.data}></TwitchVodElement>
+  //     )}
+  //   </>
+  // );
 }
 
 export default RenderTwitchVods;

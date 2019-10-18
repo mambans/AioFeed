@@ -1,7 +1,5 @@
-import { Animated } from "react-animated-css";
 import React, { useEffect, useCallback, useRef } from "react";
-import ReactTooltip from "react-tooltip";
-
+// import ReactTooltip from "react-tooltip";
 import logo from "../../assets/images/logo-v2.png";
 import StreamEle from "./StreamElement.js";
 import Utilities from "utilities/Utilities";
@@ -58,27 +56,23 @@ function RenderTwitch(data) {
 
   return (
     <>
-      <ReactTooltip delayShow={250} place='bottom' type='dark' effect='solid' />
+      {/* <ReactTooltip delayShow={150} place='bottom' type='dark' effect='solid' /> */}
       {data.newlyAdded ? (
-        <Animated animationIn='zoomIn' animationOut='fadeOut' isVisible={true}>
-          <StreamEle
-            key={data.data.id}
-            data={data.data}
-            newlyAddedStreams={data.newlyAddedStreams}
-            newlyAdded={data.newlyAdded}
-            refresh={data.refresh}
-          />
-        </Animated>
+        <StreamEle
+          key={data.data.id}
+          data={data.data}
+          newlyAddedStreams={data.newlyAddedStreams}
+          newlyAdded={data.newlyAdded}
+          refresh={data.refresh}
+        />
       ) : (
-        <>
-          <StreamEle
-            key={data.data.id}
-            data={data.data}
-            newlyAddedStreams={data.newlyAddedStreams}
-            newlyAdded={data.newlyAdded}
-            refresh={data.refresh}
-          />
-        </>
+        <StreamEle
+          key={data.data.id}
+          data={data.data}
+          newlyAddedStreams={data.newlyAddedStreams}
+          newlyAdded={data.newlyAdded}
+          refresh={data.refresh}
+        />
       )}
     </>
   );

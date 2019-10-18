@@ -1,3 +1,4 @@
+import { Animated } from "react-animated-css";
 import { Button, Spinner } from "react-bootstrap";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Moment from "react-moment";
@@ -46,7 +47,7 @@ function TwitchVods() {
   );
 
   const windowFocusHandler = useCallback(async () => {
-    refresh({ forceRefresh: false });
+    refresh(false);
   }, [refresh]);
 
   const windowBlurHandler = useCallback(() => {}, []);
@@ -106,7 +107,7 @@ function TwitchVods() {
             variant='outline-secondary'
             className={styles.refreshButton}
             onClick={() => {
-              refresh({ forceRefresh: true });
+              refresh(true);
             }}>
             {refreshing ? (
               <div style={{ height: "25.5px" }}>
@@ -146,12 +147,14 @@ function TwitchVods() {
           {vods.data.map(vod => {
             return (
               <LazyLoad key={vod.id} height={312} offset={50} once>
-                <RenderTwitchVods
-                  data={vod}
-                  run={{ initial: initialOpen.current }}
-                  runChange={onChange}
-                  // key={vod.id}
-                />
+                <Animated animationIn='fadeIn' animationOut='fadeOut' isVisible={true}>
+                  <RenderTwitchVods
+                    data={vod}
+                    run={{ initial: initialOpen.current }}
+                    runChange={onChange}
+                    // key={vod.id}
+                  />
+                </Animated>
               </LazyLoad>
             );
           })}

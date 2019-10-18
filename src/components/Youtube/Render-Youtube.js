@@ -57,25 +57,33 @@ function RenderYoutube(data) {
   }, [data]);
 
   return (
-    <>
-      {/* <ReactTooltip delayShow={250} place='bottom' type='dark' effect='solid' /> */}
-      {animate ? (
-        <Animated animationIn='zoomIn' animationOut='fadeOut' isVisible={true}>
-          <YoutubeVideoElement
-            data={data.data}
-            // isHovered={isHovered}
-            // setIsHovered={setIsHovered}
-          ></YoutubeVideoElement>
-        </Animated>
-      ) : (
-        <YoutubeVideoElement
-          data={data.data}
-          // isHovered={isHovered}
-          // setIsHovered={setIsHovered}
-        ></YoutubeVideoElement>
-      )}
-    </>
+    <YoutubeVideoElement
+      data={data.data}
+      // isHovered={isHovered}
+      // setIsHovered={setIsHovered}
+    ></YoutubeVideoElement>
   );
+
+  // return (
+  //   <>
+  //     {/* <ReactTooltip delayShow={250} place='bottom' type='dark' effect='solid' /> */}
+  //     {animate ? (
+  //       // <Animated animationIn='zoomIn' animationOut='fadeOut' isVisible={true}>
+  //         <YoutubeVideoElement
+  //           data={data.data}
+  //           // isHovered={isHovered}
+  //           // setIsHovered={setIsHovered}
+  //         ></YoutubeVideoElement>
+  //       // {/* </Animated> */}
+  //     ) : (
+  //       <YoutubeVideoElement
+  //         data={data.data}
+  //         // isHovered={isHovered}
+  //         // setIsHovered={setIsHovered}
+  //       ></YoutubeVideoElement>
+  //     )}
+  //   </>
+  // );
 }
 
 export default RenderYoutube;

@@ -1,8 +1,10 @@
+import { Animated } from "react-animated-css";
 import React, { useEffect, useState, useCallback } from "react";
 import Alert from "react-bootstrap/Alert";
 import Countdown from "react-countdown-now";
 
 import { Button, Spinner } from "react-bootstrap";
+// import ReactCSSTransitionGroup from "react-addons-css-transition-group"; // ES6
 // import LazyLoad from "react-lazyload";
 
 import RenderTwitch from "./Render-Twitch";
@@ -11,8 +13,6 @@ import Utilities from "utilities/Utilities";
 
 import Icon from "react-icons-kit";
 import { reload } from "react-icons-kit/iconic/reload";
-// import { repeat } from "react-icons-kit/fa/repeat";
-// import { refresh } from "react-icons-kit/fa/refresh";
 
 import "./Twitch.scss";
 
@@ -97,15 +97,21 @@ function Twitch({ data }) {
         <div className={styles.container}>
           {data.liveStreams.map(stream => {
             return (
-              <RenderTwitch
-                data={stream}
-                run={{ initial: data.initialOpen }}
-                runChange={data.onChange}
-                newlyAdded={stream.newlyAdded}
-                newlyAddedStreams={data.newlyAddedStreams}
-                key={stream.id}
-                refresh={refresh}
-              />
+              <Animated
+                animationIn='fadeIn'
+                animationOut='fadeOut'
+                isVisible={true}
+                key={stream.id}>
+                <RenderTwitch
+                  data={stream}
+                  run={{ initial: data.initialOpen }}
+                  runChange={data.onChange}
+                  newlyAdded={stream.newlyAdded}
+                  newlyAddedStreams={data.newlyAddedStreams}
+                  key={stream.id}
+                  refresh={refresh}
+                />
+              </Animated>
             );
           })}
         </div>

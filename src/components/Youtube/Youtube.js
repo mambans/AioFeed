@@ -1,3 +1,4 @@
+import { Animated } from "react-animated-css";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import Moment from "react-moment";
@@ -116,16 +117,6 @@ function Youtube() {
           <Moment key={lastRefresh.getTime()} className={styles.lastRefresh} fromNow>
             {lastRefresh}
           </Moment>
-          {/* {refreshing ? (
-            <Spinner
-              animation='border'
-              role='status'
-              style={Utilities.loadingSpinnerSmall}></Spinner>
-          ) : (
-            <Moment key={lastRefresh.getTime()} className={styles.lastRefresh} fromNow>
-              {lastRefresh}
-            </Moment>
-          )} */}
           {requestError && requestError.code === 403 ? (
             <Alert
               key={requestError.errors[0].reason}
@@ -140,13 +131,15 @@ function Youtube() {
           {videos.map(video => {
             return (
               <LazyLoad key={video.contentDetails.upload.videoId} height={312} offset={100} once>
-                <RenderYoutube
-                  id={video.contentDetails.upload.videoId}
-                  data={video}
-                  run={{ initial: initialOpen.current }}
-                  runChange={onChange}
-                  // key={video.contentDetails.upload.videoId}
-                />
+                <Animated animationIn='fadeIn' animationOut='fadeOut' isVisible={true}>
+                  <RenderYoutube
+                    id={video.contentDetails.upload.videoId}
+                    data={video}
+                    run={{ initial: initialOpen.current }}
+                    runChange={onChange}
+                    // key={video.contentDetails.upload.videoId}
+                  />
+                </Animated>
               </LazyLoad>
             );
           })}
