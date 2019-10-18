@@ -2,11 +2,13 @@ import { Animated } from "react-animated-css";
 import Moment from "react-moment";
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import { store } from "react-notifications-component";
-import ReactTooltip from "react-tooltip";
+// import ReactTooltip from "react-tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
 import styles from "./../Twitch.module.scss";
-// import Utilities from "utilities/Utilities";
 import Utilities from "./../../../utilities/Utilities";
+// import Utilities from "utilities/Utilities";
 
 function TwitchVodElement(data) {
   return (
@@ -25,11 +27,25 @@ function TwitchVodElement(data) {
         <p className={styles.duration}>{Utilities.formatTwitchVodsDuration(data.data.duration)}</p>
       </div>
       <h4 className={styles.title}>
-        <a
-          data-tip={data.data.title}
-          href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
-          {Utilities.truncate(data.data.title, 50)}
-        </a>
+        <OverlayTrigger
+          key={"bottom"}
+          placement={"bottom"}
+          delay={{ show: 250, hide: 400 }}
+          overlay={
+            <Tooltip
+              id={`tooltip-${"bottom"}`}
+              style={{
+                width: "320px",
+              }}>
+              {data.data.title}
+            </Tooltip>
+          }>
+          <a
+            // data-tip={data.data.title}
+            href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+            {Utilities.truncate(data.data.title, 50)}
+          </a>
+        </OverlayTrigger>
       </h4>
 
       <div>
@@ -116,7 +132,7 @@ function RenderTwitchVods(data) {
 
   return (
     <>
-      <ReactTooltip delayShow={250} place='bottom' type='dark' effect='solid' />
+      {/* <ReactTooltip delayShow={250} place='bottom' type='dark' effect='solid' /> */}
       {animate ? (
         <Animated animationIn='zoomIn' animationOut='fadeOut' isVisible={true}>
           <TwitchVodElement data={data.data}></TwitchVodElement>

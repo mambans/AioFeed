@@ -5,6 +5,9 @@ import VideoHoverIframe from "./VideoHoverIframe";
 import styles from "./Youtube.module.scss";
 import Utilities from "../../utilities/Utilities";
 
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+
 const HOVER_DELAY = 1000;
 
 function YoutubeVideoElement(data) {
@@ -72,11 +75,25 @@ function YoutubeVideoElement(data) {
         {streamType(data.data.df)}
       </div>
       <h4 className={styles.title}>
-        <a
-          data-tip={data.data.snippet.title}
-          href={`https://www.youtube.com/watch?v=` + data.data.contentDetails.upload.videoId}>
-          {Utilities.truncate(data.data.snippet.title, 50)}
-        </a>
+        <OverlayTrigger
+          key={"bottom"}
+          placement={"bottom"}
+          delay={{ show: 250, hide: 400 }}
+          overlay={
+            <Tooltip
+              id={`tooltip-${"bottom"}`}
+              style={{
+                width: "320px",
+              }}>
+              {data.data.snippet.title}
+            </Tooltip>
+          }>
+          <a
+            // data-tip={data.data.snippet.title}
+            href={`https://www.youtube.com/watch?v=` + data.data.contentDetails.upload.videoId}>
+            {Utilities.truncate(data.data.snippet.title, 50)}
+          </a>
+        </OverlayTrigger>
       </h4>
       <Moment className={styles.date} fromNow>
         {data.data.snippet.publishedAt}

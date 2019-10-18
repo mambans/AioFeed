@@ -2,16 +2,15 @@ import { Animated } from "react-animated-css";
 import React, { useRef, useCallback, useState, useEffect } from "react";
 import Moment from "react-moment";
 import { Button } from "react-bootstrap";
-
-import styles from "./Twitch.module.scss";
-import StreamHoverIframe from "./StreamHoverIframe.js";
-import Utilities from "utilities/Utilities";
-
-import UnfollowStream from "./UnfollowStream";
 import { Icon } from "react-icons-kit";
 import { cross } from "react-icons-kit/icomoon/cross";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+
+import styles from "./Twitch.module.scss";
+import StreamHoverIframe from "./StreamHoverIframe.js";
+import Utilities from "utilities/Utilities";
+import UnfollowStream from "./UnfollowStream";
 
 const HOVER_DELAY = 1000;
 
@@ -157,11 +156,25 @@ function StreamEle(data) {
         {streamType(data.data.type)}
       </div>
       <h4 className={styles.title}>
-        <a
-          data-tip={data.data.title}
-          href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
-          {Utilities.truncate(data.data.title, 50)}
-        </a>
+        <OverlayTrigger
+          key={"bottom"}
+          placement={"bottom"}
+          delay={{ show: 250, hide: 400 }}
+          overlay={
+            <Tooltip
+              id={`tooltip-${"bottom"}`}
+              style={{
+                width: "320px",
+              }}>
+              {data.data.title}
+            </Tooltip>
+          }>
+          <a
+            // data-tip={data.data.title}
+            href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+            {Utilities.truncate(data.data.title, 50)}
+          </a>
+        </OverlayTrigger>
       </h4>
       <div>
         <div className={styles.channelContainer} ref={refChannel}>

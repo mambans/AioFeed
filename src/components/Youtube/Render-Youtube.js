@@ -1,7 +1,7 @@
 import { Animated } from "react-animated-css";
 import React, { useEffect, useRef, useState } from "react";
 import { store } from "react-notifications-component";
-import ReactTooltip from "react-tooltip";
+// import ReactTooltip from "react-tooltip";
 
 import YoutubeVideoElement from "./YoutubeVideoElement";
 import Utilities from "utilities/Utilities";
@@ -58,7 +58,7 @@ function RenderYoutube(data) {
 
   return (
     <>
-      <ReactTooltip delayShow={250} place='bottom' type='dark' effect='solid' />
+      {/* <ReactTooltip delayShow={250} place='bottom' type='dark' effect='solid' /> */}
       {animate ? (
         <Animated animationIn='zoomIn' animationOut='fadeOut' isVisible={true}>
           <YoutubeVideoElement
