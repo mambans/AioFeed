@@ -3,13 +3,13 @@
 .formTitle {
   border-bottom: 2px solid $greyInfo;
   text-align: center;
-  width: 25%;
+  width: 100%;
   margin: auto;
   margin-top: 40px;
 }
 
 .createForm {
-  width: 20%;
+  width: 60%;
   margin: auto;
   margin-top: 50px;
 }
@@ -25,7 +25,7 @@
   -moz-border-radius: 25px;
   -ms-border-radius: 25px;
   -o-border-radius: 25px;
-  background-color: #081016d1;
+  background-color: #081016;
   // margin-top: 50px;
   margin-top: 25px;
   padding: 25px;
@@ -238,4 +238,23 @@
   border-radius: 18px;
   margin-top: 5px;
   justify-self: center;
+}
+
+.lastButtonsContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.createAccountContainer {
+  padding: 25px 25px 100px 25px;
+  background: #081016;
+  margin-top: 25px;
+  width: min-content;
+  min-width: 1000px;
+  box-shadow: 10px 10px 10px 0 rgba(0, 0, 0, 0.25) !important;
+  border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  -ms-border-radius: 25px;
+  -o-border-radius: 25px;
 }

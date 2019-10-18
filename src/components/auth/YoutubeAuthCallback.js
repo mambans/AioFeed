@@ -6,17 +6,25 @@ import axios from "axios";
 import Utilities from "utilities/Utilities";
 import ErrorHandeling from "./../error/Error";
 
+function getParameterByName(name, url) {
+  if (!url) url = window.location.href;
+  // name = name.replace(/[\[\]]/g, "\\$&");
+  name = name.replace(/[[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+    results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return "";
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
 function YoutubeAuthCallback({ data }) {
   const [error, setError] = useState();
   const [authenticated, setAuthenticated] = useState(false);
 
   const getAccessToken = useCallback(async () => {
-    const url = new URL(window.location.href).hash;
-
-    const authCode = url
-      .split("#")[1]
-      .split("&")[1]
-      .slice(13);
+    const authCode = getParameterByName("access_token");
+    const authCodeExpireParam = getParameterByName("expires_in");
+    const authCodeExpire = authCodeExpireParam;
 
     const validateToken = await axios.post(
       `https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${authCode}`
@@ -24,12 +32,8 @@ function YoutubeAuthCallback({ data }) {
 
     if (validateToken.data.aud === process.env.REACT_APP_YOUTUBE_CLIENT_ID) {
       document.cookie = `Youtube-access_token=${authCode}; path=/`;
+      document.cookie = `Youtube-access_token_expire=${authCodeExpire}; path=/`;
     }
-
-    // const authCodeExpire = url
-    //   .split("#")[1]
-    //   .split("&")[3]
-    //   .replace("expires_in=", "");
 
     await axios.put(`http://localhost:3100/notifies/account/youtube/connect`, {
       accountName: Utilities.getCookie("Notifies_AccountName"),
@@ -52,6 +56,8 @@ function YoutubeAuthCallback({ data }) {
           await getAccessToken()
             .then(() => {
               setAuthenticated(true);
+              data.setAccountModalOpen(false);
+              data.setConnectedDomain("Youtube");
             })
             .catch(error => {
               setError(error);
@@ -65,13 +71,11 @@ function YoutubeAuthCallback({ data }) {
     }
 
     handleAuth();
-  }, [getAccessToken]);
+  }, [data, getAccessToken]);
 
   if (error) {
     return <ErrorHandeling data={error}></ErrorHandeling>;
   } else if (authenticated) {
-    data.setAccountModalOpen(true);
-    data.setConnectedDomain("Youtube");
     return <Redirect to='/account'></Redirect>;
   } else {
     return (

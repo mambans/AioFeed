@@ -33,14 +33,7 @@ function NotifiesLogin(data) {
   const handleSubmit = evt => {
     evt.preventDefault();
 
-    // if (userName.length === 0 || password.length === 0) {
-    //   setError({
-    //     title: "Please enter your Username and Password.",
-    //     message: "Must enter a username and password.",
-    //   });
-    // } elese {
     loginAccount();
-    // }
   };
 
   async function loginAccount() {
@@ -59,7 +52,8 @@ function NotifiesLogin(data) {
         document.cookie = `Youtube-access_token=${res.data.account.youtube_token}; path=/`;
         document.cookie = `Notifies_AccountProfileImg=${res.data.account.profile_img}; path=/`;
 
-        data.data.setRefresh(!data.data.refresh);
+        // data.data.setRefresh(!data.data.refresh);
+        // data.navSetRefresh(!data.navRefresh);
 
         resetUserName();
         resetPassword();
@@ -72,40 +66,6 @@ function NotifiesLogin(data) {
           message: error.response.status,
         });
       });
-
-    // try {
-    //   setError(null);
-    //   const res = await axios.post(`http://localhost:3100/notifies/account/login`, {
-    //     accountName: userName,
-    //     accountPassword: password,
-    //   });
-    //   if (res.data.account && res.data.account.username) {
-    //     document.cookie = `Notifies_AccountName=${res.data.account.username}; path=/`;
-    //     document.cookie = `Notifies_AccountEmail=${res.data.account.email}; path=/`;
-    //     document.cookie = `Twitch-access_token=${res.data.account.twitch_token}; path=/`;
-    //     document.cookie = `Youtube-access_token=${res.data.account.youtube_token}; path=/`;
-    //     document.cookie = `Notifies_AccountProfileImg=${res.data.account.profile_img}; path=/`;
-
-    //     data.data.setRefresh(!data.data.refresh);
-
-    //     resetUserName();
-    //     resetPassword();
-    //     setIsLoggedIn(true);
-    //   } else {
-    //     setError({
-    //       title: `${error.data.message} - ${error.data.code}`,
-    //       message: "No account with those details.",
-    //     });
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    //   setError({
-    //     title: error.response.data,
-    //     message: error.response.status,
-    //     // title: `${error.data.message} - ${error.data.code}`,
-    //     // message: "No account with those details.",
-    //   });
-    // }
   }
 
   return (
@@ -126,7 +86,6 @@ function NotifiesLogin(data) {
         </Button>
       </Form>
       {isLoggedIn & !error ? <Redirect to='/account'></Redirect> : null}
-      {/* {isLoggedIn & !error ? (window.location.href = "/account") : null} */}
     </>
   );
 }

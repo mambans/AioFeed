@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
-import { Redirect, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Popup from "reactjs-popup";
 
 //icons
@@ -10,6 +10,7 @@ import { out } from "react-icons-kit/entypo/out";
 import { checkmark } from "react-icons-kit/icomoon/checkmark";
 import { twitch } from "react-icons-kit/icomoon/twitch";
 import { youtube } from "react-icons-kit/icomoon/youtube";
+import { ic_account_box } from "react-icons-kit/md/ic_account_box";
 
 import placeholder from "../../assets/images/placeholder.png";
 import SuccessfullyConnected from "./SuccessfullyConnected";
@@ -18,6 +19,7 @@ import ToggleSwitch from "./ToggleSwitch";
 import ToggleSwitchVideoHover from "./ToggleSwitchVideoHover";
 import UpdateProfileImg from "./UpdateProfileImg";
 import Utilities from "../../utilities/Utilities";
+import NotifiesLogin from "../account/NotifiesLogin";
 
 function NotifiesAccount(data) {
   document.title = "Notifies | Account";
@@ -33,11 +35,13 @@ function NotifiesAccount(data) {
     document.cookie = `Twitch-access_token=null; path=/`;
     document.cookie = `Youtube-access_token=null; path=/`;
 
+    data.data.setAccountModalOpen(true);
     data.data.setRefresh(!data.data.refresh);
+    // data.navSetRefresh(!data.navRefresh);
   }
 
   async function disconnectTwitch() {
-    document.cookie = "Twitch-access_token=null";
+    document.cookie = "Twitch-access_token=null; path=/";
     await axios
       .put(`http://localhost:3100/notifies/account/twitch/connect`, {
         accountName: Utilities.getCookie("Notifies_AccountName"),
@@ -56,7 +60,7 @@ function NotifiesAccount(data) {
   }
 
   async function disconnectYoutube() {
-    document.cookie = "Youtube-access_token=null";
+    document.cookie = "Youtube-access_token=null; path=/";
     await axios
       .put(`http://localhost:3100/notifies/account/youtube/connect`, {
         accountName: Utilities.getCookie("Notifies_AccountName"),
@@ -191,16 +195,44 @@ function NotifiesAccount(data) {
                 refresh,
               }}></ToggleSwitchVideoHover>
           </div>
-
-          <Button
-            className={[styles.notifiesLogoutButton, styles.disconnectButton].join(" ")}
-            onClick={logout}>
-            Logout from Notifies
-            <Icon icon={out} size={24} style={{ paddingLeft: "0.75rem" }} />
-          </Button>
+          <div className={styles.lastButtonsContainer}>
+            <Button
+              className={[styles.notifiesLogoutButton, styles.disconnectButton].join(" ")}
+              onClick={logout}>
+              Logout from Notifies
+              <Icon icon={out} size={24} style={{ paddingLeft: "0.75rem" }} />
+            </Button>
+            {window.location.href !== "http://localhost:3000/account" ? (
+              <Button
+                className={[styles.notifiesLogoutButton, styles.disconnectButton].join(" ")}
+                as={NavLink}
+                onClick={() => {
+                  data.data.setAccountModalOpen(false);
+                  data.data.setRefresh(!data.data.refresh);
+                }}
+                to='/account'>
+                Go to Account page
+                <Icon icon={ic_account_box} size={24} style={{ paddingLeft: "0.75rem" }} />
+              </Button>
+            ) : null}
+          </div>
         </div>
       ) : (
-        <Redirect to='/account/login'></Redirect>
+        // <Redirect to='/account/login'></Redirect>
+        // data.data.setAccountModalOpen(true)
+        <div className={styles.createAccountContainer}>
+          <NotifiesLogin
+            data={data.data}
+            navSetRefresh={setRefresh}
+            navRefresh={refresh}></NotifiesLogin>
+          <Button
+            className={styles.disconnectButton}
+            onClick={() => {
+              data.setRenderModal("create");
+            }}>
+            Create Account
+          </Button>
+        </div>
       )}
     </>
   );

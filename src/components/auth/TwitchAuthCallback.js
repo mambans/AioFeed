@@ -70,7 +70,7 @@ function TwitchAuthCallback({ data }) {
   if (error) {
     return <ErrorHandeling data={error}></ErrorHandeling>;
   } else if (authenticated) {
-    data.setAccountModalOpen(true);
+    data.setAccountModalOpen(false);
     data.setConnectedDomain("Twitch");
     return <Redirect to='/account'></Redirect>;
   } else {
