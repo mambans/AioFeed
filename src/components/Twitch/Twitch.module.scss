@@ -12,7 +12,7 @@
 
 .container_header {
   text-align: center;
-  color: #65696d;
+  color: var(--subFeedHeaderColor);
   margin: auto;
   letter-spacing: 1px;
 }
@@ -21,7 +21,7 @@
   // width: 87%;
   width: 82%;
   margin: auto;
-  border-bottom: 2px solid #80808029;
+  border-bottom: var(--subFeedHeaderBorder);
   margin-top: 25px;
   padding-bottom: 7px;
 }
@@ -183,14 +183,18 @@
 }
 
 .refreshButton {
+  // color: var(--refreshButtonColor);
+  // color: white;
+  background: var(--refreshButtonBackground);
   position: relative;
-  // left: 7%;
   left: 0.5%;
-  // bottom: -20px;
   bottom: -23px;
+  box-shadow: var(--refreshButtonShadow);
+  border: var(--refreshButtonBorder);
 
-  border: none;
-  box-shadow: 3px 3px 3px 0px #201f1f;
+  &:hover {
+    color: var(--refreshButtonHoverColor);
+  }
 }
 
 /* For when profile and game img is enabled */
@@ -249,10 +253,10 @@
 
   .viewers {
     left: 0;
-    width: 0;
+    width: unset;
     bottom: 0;
     top: 7px;
-    grid-column: 4;
+    grid-column: 3;
   }
 }
 
@@ -268,6 +272,7 @@
   left: 395px;
   width: max-content;
   color: $greyInfo;
+  // color: $greyInfo;
   font-size: 1.1rem;
 }
 .vodRefreshTimer {

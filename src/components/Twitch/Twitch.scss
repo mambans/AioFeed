@@ -1,3 +1,5 @@
+@import "../../variables.scss";
+
 .accountPopup-content {
   // width: 30% !important;
   width: 100px !important;
@@ -20,7 +22,8 @@
 }
 
 .settingsPopup-content {
-  background-color: #080314 !important;
+  background: none;
+  background-color: var(--vodsettingsmodalbackground) !important;
   border: thin solid rgb(59, 56, 56) !important;
   border-radius: 5px !important;
   -webkit-border-radius: 5px !important;
@@ -59,7 +62,7 @@
     list-style: none;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: rgb(8, 3, 20);
+    // background-color: rgb(8, 3, 20);
 
     li {
       display: flex;

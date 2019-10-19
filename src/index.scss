@@ -14,10 +14,10 @@ body {
 
   background: no-repeat center center fixed;
   background-attachment: fixed;
-  color: $textColor;
-  background-image: url("/images/background5.png");
-  // background-image: url("/images/wood3.jpg");
-  // background-image: url("/images/wood5.jpg");
+  // color: $textColor;
+  color: var(--textColor);
+  // background-image: $backgroundImg;
+  background-image: var(--backgroundImg);
   object-fit: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -35,6 +35,19 @@ a:hover {
 }
 
 :root {
-  scrollbar-color: rgb(18, 36, 58) rgb(5, 8, 10);
+  scrollbar-color: var(--scrollbarColors);
   scrollbar-width: thin;
 }
+
+// html.theme-transition,
+// html.theme-transition *,
+// html.theme-transition *:before,
+// html.theme-transition *:after {
+//   transition: all 750ms !important;
+//   transition-delay: 0 !important;
+//   // transition: all 2s ease-in-out !important;
+//   // -webkit-transition: all 2s ease-in-out !important;
+//   // -moz-transition: all 2s ease-in-out !important;
+//   // -ms-transition: all 2s ease-in-out !important;
+//   // -o-transition: all 2s ease-in-out !important;
+// }

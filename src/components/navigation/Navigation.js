@@ -23,6 +23,7 @@ function NavigationBar(data) {
   const [refresh, setRefresh] = useState(false);
   const [loggedIn, setLoggedIn] = useState(Utilities.getCookie("Notifies_AccountName"));
   const [renderModal, setRenderModal] = useState("login");
+  const [shrinkNavbar, setShrinkNavbar] = useState("false");
   // console.log("TCL: NavigationBar -> urls", urlParams.current.has("AccountModalOpen"));
 
   const openModal = () => {
@@ -41,8 +42,29 @@ function NavigationBar(data) {
     }
   }, [data, loggedIn]);
 
+  window.onscroll = function() {
+    if (document.body.scrollTop > 75 || document.documentElement.scrollTop > 75) {
+      // document.getElementById("navbar").style.padding = "30px 10px";
+      // document.getElementById("logo").style.fontSize = "25px";
+      console.log("Scrolled");
+      setShrinkNavbar("true");
+    } else {
+      console.log("NOT Scrolled");
+      // document.getElementById("navbar").style.padding = "80px 10px";
+      // document.getElementById("logo").style.fontSize = "35px";
+      setShrinkNavbar("false");
+    }
+  };
+
   return (
-    <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
+    <Navbar
+      mode={data.fixed ? "fixed" : "unset"}
+      collapseOnSelect
+      expand='lg'
+      bg='dark'
+      variant='dark'
+      // style={{ paddingRight: "20px", paddingLeft: "20px !important", height: "60px" }}
+      shrink={shrinkNavbar}>
       <Nav.Link as={NavLink} to='/' className='logo-link'>
         <img src={`${process.env.PUBLIC_URL}/icons/v3/Logo-4k.png`} alt='logo' className='logo' />
         Notifies

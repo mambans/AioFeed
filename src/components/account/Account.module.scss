@@ -1,7 +1,7 @@
 @import "./../../variables.scss";
 
 .formTitle {
-  border-bottom: 2px solid $greyInfo;
+  border-bottom: 2px solid var(--greyInfo);
   text-align: center;
   width: 100%;
   margin: auto;
@@ -25,7 +25,7 @@
   -moz-border-radius: 25px;
   -ms-border-radius: 25px;
   -o-border-radius: 25px;
-  background-color: #081016;
+  background-color: var(--AccountContainerBackgroundColor);
   // margin-top: 50px;
   margin-top: 25px;
   padding: 25px;
@@ -247,7 +247,7 @@
 
 .createAccountContainer {
   padding: 25px 25px 100px 25px;
-  background: #081016;
+  background: var(--AccountContainerBackgroundColor);
   margin-top: 25px;
   width: min-content;
   min-width: 1000px;
@@ -257,4 +257,31 @@
   -moz-border-radius: 25px;
   -ms-border-radius: 25px;
   -o-border-radius: 25px;
+}
+
+.themeSelector {
+  label {
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    min-width: 150px;
+  }
+  select {
+    word-wrap: normal;
+    background: #2d5470;
+    border: none;
+    color: white;
+    border-radius: 5px;
+
+    &:after {
+      position: absolute;
+      content: "";
+      top: 14px;
+      right: 10px;
+      width: 0;
+      height: 0;
+      border: 6px solid transparent;
+      border-color: #fff transparent transparent transparent;
+    }
+  }
 }

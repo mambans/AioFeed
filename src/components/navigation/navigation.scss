@@ -1,3 +1,50 @@
+@import "../../variables.scss";
+.navbar.navbar-expand-lg.navbar-dark.bg-dark {
+  height: 75px;
+  position: fixed;
+  width: 100vw;
+  background-color: var(--navigationbarBackground) !important;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
+  transition: ease-in-out 0.5s;
+  -webkit-transition: ease-in-out 0.5s;
+  -moz-transition: ease-in-out 0.5s;
+  -ms-transition: ease-in-out 0.5s;
+  -o-transition: ease-in-out 0.5s;
+
+  a {
+    transition: ease-in-out 0.5s;
+    -webkit-transition: ease-in-out 0.5s;
+    -moz-transition: ease-in-out 0.5s;
+    -ms-transition: ease-in-out 0.5s;
+    -o-transition: ease-in-out 0.5s;
+  }
+}
+
+nav[mode="fixed"].navbar.navbar-expand-lg.navbar-dark.bg-dark {
+  height: 75px;
+  position: fixed;
+  width: 100vw;
+  top: 0;
+  z-index: 1000;
+  background-color: var(--navigationbarBackground) !important;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
+}
+
+nav[shrink="true"].navbar.navbar-expand-lg.navbar-dark.bg-dark {
+  height: 50px;
+  padding: 0 30px 0 25px !important;
+  background-color: hsla(0, 0%, 0%, 0.8) !important;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
+
+  a {
+    font-size: 16px !important;
+  }
+
+  div img {
+    width: 40px;
+  }
+}
+
 nav {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
@@ -36,13 +83,17 @@ nav {
 }
 
 .logo-link.nav-link {
-  color: white;
+  color: var(--headerLogoTextColor);
   font-size: 1.3rem;
-  // width: 280px;
   margin-right: 130px;
 }
 
+#responsive-navbar-nav {
+  height: inherit;
+}
+
 .navbar-nav {
+  height: inherit;
   min-width: 280px;
 }
 
@@ -57,12 +108,21 @@ nav {
   display: flex;
 }
 
-.bg-dark {
-  background-color: #0000003d !important;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
-}
+// .bg-dark {
+//   background-color: var(--navigationbarBackground) !important;
+//   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
+// }
 
 .popup-overlay {
   // visibility: hidden;
   margin-top: 75px;
+}
+
+.navbar-dark .navbar-nav .nav-link.active {
+  color: var(--headerTextColorActive);
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: var(--headerTextColor);
+  // color: darken($textColor, 50%);
 }

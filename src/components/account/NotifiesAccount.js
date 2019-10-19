@@ -21,6 +21,8 @@ import UpdateProfileImg from "./UpdateProfileImg";
 import Utilities from "../../utilities/Utilities";
 import NotifiesLogin from "../account/NotifiesLogin";
 
+import Themeselector from "./Themeselector";
+
 function NotifiesAccount(data) {
   document.title = "Notifies | Account";
   const [refresh, setRefresh] = useState(false);
@@ -195,13 +197,8 @@ function NotifiesAccount(data) {
                 refresh,
               }}></ToggleSwitchVideoHover>
           </div>
+          <Themeselector />
           <div className={styles.lastButtonsContainer}>
-            <Button
-              className={[styles.notifiesLogoutButton, styles.disconnectButton].join(" ")}
-              onClick={logout}>
-              Logout from Notifies
-              <Icon icon={out} size={24} style={{ paddingLeft: "0.75rem" }} />
-            </Button>
             {window.location.href !== "http://localhost:3000/account" ? (
               <Button
                 className={[styles.notifiesLogoutButton, styles.disconnectButton].join(" ")}
@@ -215,6 +212,12 @@ function NotifiesAccount(data) {
                 <Icon icon={ic_account_box} size={24} style={{ paddingLeft: "0.75rem" }} />
               </Button>
             ) : null}
+            <Button
+              className={[styles.notifiesLogoutButton, styles.disconnectButton].join(" ")}
+              onClick={logout}>
+              Logout from Notifies
+              <Icon icon={out} size={24} style={{ paddingLeft: "0.75rem" }} />
+            </Button>
           </div>
         </div>
       ) : (

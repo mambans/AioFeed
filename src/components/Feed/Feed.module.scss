@@ -58,7 +58,7 @@
 .date {
   grid-area: info;
 
-  color: $greyInfo;
+  color: var(--greyInfo);
 }
 
 .channel {
@@ -66,10 +66,11 @@
   justify-self: end;
 
   a {
-    color: $greyInfo;
+    color: var(--greyInfo);
 
     &:hover {
-      color: lighten($greyInfo, 30%);
+      // color: lighten($greyInfo, 30%);
+      color: var(--channelHover);
     }
   }
 }
@@ -90,7 +91,7 @@
 }
 
 .lineBreak {
-  border-bottom: 2px solid #80808029;
+  border-bottom: var(--subFeedHeaderBorder);
   width: 86%;
   margin: auto;
   margin-top: 20px;

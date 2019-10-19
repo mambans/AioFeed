@@ -1,24 +1,36 @@
-import React from "react";
-import "./App.scss";
+import React, { useEffect } from "react";
+import Routes from "./../routes/Routes";
+
+/*
+ *TODO: Add dynamic theming.
+ */
 
 function App() {
-  return (
-    <div className='App'>
-      <header className='App-header'>
-        {" "}
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className='App-link'
-          href='https://reactjs.org'
-          target='_blank'
-          rel='noopener noreferrer'>
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  useEffect(() => {
+    // default or light theme
+
+    // const currentMonth = new Date().getMonth();
+    const currentDate = new Date().getDate();
+
+    // if (currentMonth === 11) {
+    if (currentDate === 20) {
+      document.documentElement.classList.add("theme-transition");
+      document.documentElement.setAttribute("data-theme", "christmas");
+      window.setTimeout(function() {
+        document.documentElement.classList.remove("theme-transition");
+      }, 1000);
+    } else if (localStorage.getItem("activeTheme")) {
+      document.documentElement.classList.add("theme-transition");
+      document.documentElement.setAttribute("data-theme", localStorage.getItem("activeTheme"));
+      window.setTimeout(function() {
+        document.documentElement.classList.remove("theme-transition");
+      }, 1000);
+    }
+
+    console.log("Mounting App");
+  }, []);
+
+  return <Routes />;
 }
 
 export default App;

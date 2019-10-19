@@ -120,13 +120,13 @@
 }
 
 .refreshButton {
+  color: var(--refreshButtonColor);
+  background: var(--refreshButtonBackground);
   position: relative;
   left: 0.5%;
-  // bottom: -20px;
-  bottom: -23px;  
-
-  border: none;
-  box-shadow: 3px 3px 3px 0px #201f1f;
+  bottom: -23px;
+  box-shadow: var(--refreshButtonShadow);
+  border: var(--refreshButtonBorder);
 }
 
 .lastRefresh {
@@ -156,7 +156,7 @@
   // width: 87%;
   width: 82%;
   margin: auto;
-  border-bottom: 2px solid #80808029;
+  border-bottom: var(--subFeedHeaderBorder);
   margin-top: 25px;
   padding-bottom: 7px;
 }

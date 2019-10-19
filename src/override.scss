@@ -2,7 +2,7 @@
   padding: 0.25rem 0.5rem;
   color: #fff;
   text-align: center;
-  background-color: #2c2c2cf1;
+  background-color: #2c2c2cf8;
   max-width: unset;
   border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -18,7 +18,8 @@
 
 .btn-outline-secondary:focus,
 .btn-outline-secondary.focus {
-  box-shadow: 3px 3px 3px 0px #201f1f;
+  // box-shadow: 3px 3px 3px 0px #201f1f;
+  box-shadow: var(--refreshButtonShadow);
 }
 
 .dropdown-menu {

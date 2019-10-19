@@ -11,14 +11,7 @@ function Home() {
           alt='logo'
           className={styles.logo}
         />
-        <div
-          style={{
-            height: "5px",
-            width: "100%",
-            margin: "10px auto 10px",
-            background: "#cecece78",
-            borderRadius: "5px",
-          }}></div>
+        <div className={styles.deviderLine}></div>
         <h1>
           <b>Notifies</b>
         </h1>
