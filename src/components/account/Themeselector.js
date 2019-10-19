@@ -43,8 +43,11 @@ function Themeselector() {
     <>
       <form onSubmit={handleSubmit} className={styles.themeSelector}>
         <label>
-          Choose Theme:
-          <select {...bindtheme} value={localStorage.getItem("activeTheme")}>
+          <b>Choose Theme:</b>
+          <select
+            {...bindtheme}
+            value={localStorage.getItem("activeTheme")}
+            class='custom-select custom-select-sm'>
             {allThemmes.map(theme => {
               return (
                 <option value={theme}>{theme.charAt(0).toUpperCase() + theme.slice(1)}</option>
