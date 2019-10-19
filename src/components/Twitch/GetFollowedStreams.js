@@ -3,28 +3,6 @@ import axios from "axios";
 import placeholder from "../../assets/images/placeholder.png";
 import Utilities from "../../utilities/Utilities";
 
-// const initStore = () => {
-//   new Promise(async (resolve, reject) => {
-//     try {
-//       const Store = new indexedDB({
-//         dbVersion: 1,
-//         storeName: "TwitchProfiles",
-//         keyPath: "user_id",
-//         indexes: [
-//           {
-//             name: "user_id",
-//           },
-//         ],
-//         onStoreReady: function() {
-//           resolve(Store);
-//         },
-//       });
-//     } catch (error) {
-//       reject(error);
-//     }
-//   });
-// };
-
 async function getFollowedOnlineStreams() {
   let error;
 
@@ -102,17 +80,6 @@ async function getFollowedOnlineStreams() {
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       });
-
-      // const serverTwitchResponse = await axios.post(
-      //   `http://localhost:3100/notifies/twitch/streams`,
-      //   {
-      //     followedChannelsIds: followedChannelsIds,
-      //   }
-      // );
-      // console.log("TCL: getFollowedOnlineStreams -> serverTwitchResponse", serverTwitchResponse);
-
-      // Fetch profile imgs
-      //------------------------
 
       try {
         let request = window.indexedDB.open("Notifies", 1),
@@ -223,8 +190,8 @@ async function getFollowedOnlineStreams() {
 
               resolve();
             } else {
-              error = "No followed streams online at the momment";
-              reject("No followed streams online at the momment");
+              // error = "No followed streams online at the momment";
+              reject("No streams online at the momment");
             }
           };
         });
@@ -236,13 +203,6 @@ async function getFollowedOnlineStreams() {
         return { error: error, status: 201 };
       }
     }
-
-    // Filters out rerun streams (not live).
-    // const FilteredLiveFollowedStreams = LiveFollowedStreams.data.data.filter(stream => {
-    //     return stream.type === "live";
-    // });
-
-    // const FilteredLiveFollowedStreams = LiveFollowedStreams.data.data;
     return {
       data: LiveFollowedStreams.data.data,
       status: 200,

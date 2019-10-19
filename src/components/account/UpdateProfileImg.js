@@ -47,10 +47,6 @@ function UpdateProfileImg({ data }) {
     resetimage();
   };
 
-  useEffect(() => {
-    return () => {};
-  }, []);
-
   return (
     <>
       <form onSubmit={handleSubmit}>

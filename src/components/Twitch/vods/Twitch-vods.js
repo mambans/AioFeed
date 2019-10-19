@@ -130,9 +130,7 @@ function TwitchVods() {
                   size={22}
                   style={{
                     height: "22px",
-
                     alignItems: "center",
-
                     display: "flex",
                   }}></Icon>
               </Button>
@@ -152,7 +150,6 @@ function TwitchVods() {
                     data={vod}
                     run={{ initial: initialOpen.current }}
                     runChange={onChange}
-                    // key={vod.id}
                   />
                 </Animated>
               </LazyLoad>

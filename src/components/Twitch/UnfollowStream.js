@@ -3,7 +3,6 @@ import axios from "axios";
 import Utilities from "../../utilities/Utilities";
 
 async function UnfollowStream(data) {
-  console.log("TCL: UnfollowStream -> data", data);
   const myUserId = await axios
     .get(`https://api.twitch.tv/helix/users?`, {
       params: {
@@ -18,8 +17,6 @@ async function UnfollowStream(data) {
       console.error(error);
     });
 
-  console.log("TCL: UnfollowStream -> myUserId", myUserId);
-
   axios
     .delete(
       `https://api.twitch.tv/kraken/users/${myUserId.data.data[0].id}/follows/channels/${data.user_id}`,
@@ -32,8 +29,7 @@ async function UnfollowStream(data) {
       }
     )
     .then(() => {
-      console.log("then");
-
+      console.log(`Unfollowed: ${data.user_id}`);
       data.refresh();
     })
     .catch(error => {
