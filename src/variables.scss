@@ -1,16 +1,5 @@
-// $backgroundImg: url("/images/background5.png");
-// $backgroundBlue: #01010b;
-// $primaryPurple: #040113;
-// $textColor: rgb(240, 240, 240);
 $greyInfo: rgb(100, 100, 100);
 $videoTitle: rgb(240, 240, 240);
-// $subFeedHeaderColor: #65696d;
-// $AccountContainerBackgroundColor: #081016;
-// $ModalCloseButtonColor: rgba(240, 240, 240, 0.8);
-// $ModalCloseButtonColorHover: white;
-// $vodsettingsmodalbackground: #070817f2;
-// $refreshButtonBorder: thin solid #2d2d2d;
-// $refreshButtonShadow: 4px 4px 5px 0px #000c;
 
 html {
   --backgroundImg: url("/images/background5.png");
@@ -24,6 +13,7 @@ html {
   --headerTextColorActive: rgba(255, 255, 255, 1);
   --greyInfo: rgb(100, 100, 100);
   --videoTitle: rgb(240, 240, 240);
+  --videoTitleHover: rgb(240, 240, 240);
   --subFeedHeaderColor: #65696d;
   --AccountContainerBackgroundColor: #081016;
   --ModalCloseButtonColor: rgba(240, 240, 240, 0.8);
@@ -32,15 +22,15 @@ html {
   --refreshButtonBorder: thin solid #2d2d2d;
   --refreshButtonShadow: 4px 4px 5px 0px #000c;
   --subFeedHeaderBorder: 2px solid #80808029;
-  --channelHover: lighten($greyInfo, 30%);
+  --Info: lighten($greyInfo, 20%);
+  --InfoHover: lighten($greyInfo, 50%);
   --refreshButtonBackground: hsla(0, 0%, 0%, 0.1);
   --refreshButtonHoverColor: #ffffff;
   --refreshButtonColor: #6c757d;
 }
 
 html[data-theme="christmas"] {
-  --backgroundImg: url("/images/wood-christmas2.jpeg");
-  // --backgroundImg: url("/images/christmas44.jpg");
+  --backgroundImg: url("/images/wood-christmas4.jpg");
   --scrollbarColors: rgb(207, 5, 16) rgb(43, 31, 31);
   --navigationbarBackground: #00000059;
   --backgroundBlue: #01010b;
@@ -49,7 +39,7 @@ html[data-theme="christmas"] {
   --headerLogoTextColor: rgb(240, 240, 240);
   --headerTextColor: rgba(255, 255, 255, 0.5);
   --headerTextColorActive: rgba(255, 255, 255, 1);
-  --greyInfo: rgb(150, 150, 150);
+  --greyInfo: rgb(175, 175, 175);
   --videoTitle: rgb(240, 240, 240);
   --subFeedHeaderColor: #aeb0b3;
   --AccountContainerBackgroundColor: #000000e3;
@@ -59,7 +49,8 @@ html[data-theme="christmas"] {
   --refreshButtonBorder: thin solid #2d2d2d;
   --refreshButtonShadow: 4px 4px 5px 0px #000c;
   --subFeedHeaderBorder: 2px solid #80808029;
-  --channelHover: lighten($greyInfo, 30%);
+  --Info: lighten($greyInfo, 20%);
+  --InfoHover: lighten($greyInfo, 50%);
   --refreshButtonBackground: #00000026;
   --refreshButtonColor: #a8a8a8;
   --refreshButtonHoverColor: #1cca05;

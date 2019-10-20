@@ -31,3 +31,4 @@ yarn-error.log*
 todo.txt
 .VSCodeCounter
 src/server/sql/Query.sql
+.eslintrc

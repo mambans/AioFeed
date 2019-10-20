@@ -4,7 +4,7 @@ import { Form, Button } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 
 import styles from "./Account.module.scss";
-import ErrorHandeling from "components/error/Error";
+import ErrorHandeling from "../error/Error";
 
 function NotifiesLogin(data) {
   document.title = "Notifies | Login";

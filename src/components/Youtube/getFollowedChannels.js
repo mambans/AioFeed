@@ -1,5 +1,5 @@
 import axios from "axios";
-import Utilities from "utilities/Utilities";
+import Utilities from "../../utilities/Utilities";
 
 async function getFollowedChannels() {
   try {
@@ -7,19 +7,23 @@ async function getFollowedChannels() {
       !localStorage.getItem(`followedChannels`) ||
       JSON.parse(localStorage.getItem(`followedChannels`)).casheExpire <= new Date()
     ) {
-      const firstPage = await axios.get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {
-        params: {
-          maxResults: 50,
-          mine: true,
-          part: "snippet",
-          order: "relevance",
-          key: process.env.REACT_APP_YOUTUBE_API_KEY,
-        },
-        headers: {
-          Authorization: "Bearer " + Utilities.getCookie("Youtube-access_token"),
-          Accept: "application/json",
-        },
-      });
+      const firstPage = await axios
+        .get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {
+          params: {
+            maxResults: 50,
+            mine: true,
+            part: "snippet",
+            order: "relevance",
+            key: process.env.REACT_APP_YOUTUBE_API_KEY,
+          },
+          headers: {
+            Authorization: "Bearer " + Utilities.getCookie("Youtube-access_token"),
+            Accept: "application/json",
+          },
+        })
+        .catch(error => {
+          console.error(error);
+        });
 
       const CheckNextPage =
         firstPage.data.pageInfo.totalResults / firstPage.data.pageInfo.resultsPerPage;

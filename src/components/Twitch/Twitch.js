@@ -9,7 +9,7 @@ import { Button, Spinner } from "react-bootstrap";
 
 import RenderTwitch from "./Render-Twitch";
 import styles from "./Twitch.module.scss";
-import Utilities from "utilities/Utilities";
+import Utilities from "../../utilities/Utilities";
 
 import Icon from "react-icons-kit";
 import { reload } from "react-icons-kit/iconic/reload";

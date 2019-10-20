@@ -1,10 +1,9 @@
-@import "../../variables.scss";
 .navbar.navbar-expand-lg.navbar-dark.bg-dark {
   height: 75px;
   position: fixed;
   width: 100vw;
   background-color: var(--navigationbarBackground) !important;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.15);
   transition: ease-in-out 0.5s;
   -webkit-transition: ease-in-out 0.5s;
   -moz-transition: ease-in-out 0.5s;
@@ -12,6 +11,7 @@
   -o-transition: ease-in-out 0.5s;
 
   a {
+    font-size: 20px;
     transition: ease-in-out 0.5s;
     -webkit-transition: ease-in-out 0.5s;
     -moz-transition: ease-in-out 0.5s;
@@ -27,17 +27,17 @@ nav[mode="fixed"].navbar.navbar-expand-lg.navbar-dark.bg-dark {
   top: 0;
   z-index: 1000;
   background-color: var(--navigationbarBackground) !important;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.15);
 }
 
 nav[shrink="true"].navbar.navbar-expand-lg.navbar-dark.bg-dark {
   height: 50px;
   padding: 0 30px 0 25px !important;
   background-color: hsla(0, 0%, 0%, 0.8) !important;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.15);
 
   a {
-    font-size: 16px !important;
+    font-size: 16px;
   }
 
   div img {

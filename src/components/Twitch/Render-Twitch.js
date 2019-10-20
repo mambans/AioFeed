@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useRef } from "react";
 // import ReactTooltip from "react-tooltip";
 import logo from "../../assets/images/logo-v2.png";
 import StreamEle from "./StreamElement.js";
-import Utilities from "utilities/Utilities";
+import Utilities from "../../utilities/Utilities";
 
 function RenderTwitch(data) {
   const streamData = useRef();

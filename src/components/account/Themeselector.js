@@ -23,14 +23,15 @@ function Themeselector() {
   };
 
   const { value: theme, bind: bindtheme } = useInput("");
-  console.log(document.documentElement.getAttribute("data-theme"));
 
   const activateTheme = theme => {
     document.documentElement.classList.add("theme-transition");
+    document.body.classList.add("theme-transition");
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("activeTheme", theme);
     window.setTimeout(function() {
       document.documentElement.classList.remove("theme-transition");
+      document.body.classList.remove("theme-transition");
     }, 1000);
   };
 
@@ -47,10 +48,12 @@ function Themeselector() {
           <select
             {...bindtheme}
             value={localStorage.getItem("activeTheme")}
-            class='custom-select custom-select-sm'>
+            className='custom-select custom-select-sm'>
             {allThemmes.map(theme => {
               return (
-                <option value={theme}>{theme.charAt(0).toUpperCase() + theme.slice(1)}</option>
+                <option key={theme} value={theme}>
+                  {theme.charAt(0).toUpperCase() + theme.slice(1)}
+                </option>
               );
             })}
           </select>

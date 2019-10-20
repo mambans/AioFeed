@@ -1,5 +1,3 @@
-@import "./../../variables.scss";
-
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -26,10 +24,10 @@
   max-width: 250px;
 
   a {
-    color: $videoTitle;
+    color: var(--videoTitle);
 
     &:hover {
-      color: lighten($videoTitle, 30%);
+      color: var(--videoTitleHover);
     }
   }
 }
@@ -69,7 +67,6 @@
     color: var(--greyInfo);
 
     &:hover {
-      // color: lighten($greyInfo, 30%);
       color: var(--channelHover);
     }
   }

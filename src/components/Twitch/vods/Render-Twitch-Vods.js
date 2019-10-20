@@ -1,13 +1,12 @@
-import { Animated } from "react-animated-css";
 import Moment from "react-moment";
-import React, { useEffect, useRef, useCallback, useState } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import { store } from "react-notifications-component";
 // import ReactTooltip from "react-tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
-import styles from "./../Twitch.module.scss";
-import Utilities from "./../../../utilities/Utilities";
+import styles from "../Twitch.module.scss";
+import Utilities from "../../../utilities/Utilities";
 // import Utilities from "utilities/Utilities";
 
 function TwitchVodElement(data) {
@@ -83,7 +82,6 @@ function TwitchVodElement(data) {
 
 function RenderTwitchVods(data) {
   const vodData = useRef();
-  const [animate, setAnimate] = useState(false);
 
   const addNotification = useCallback(
     (title, type) => {
@@ -116,7 +114,6 @@ function RenderTwitchVods(data) {
       (vodData.current === undefined || vodData.current.id !== data.data.id) &&
       !data.run.initial
     ) {
-      setAnimate(true);
       addNotification(`Added vod: ${data.data.user_name}`, "twitch-vod-add");
     }
     vodData.current = data.data;
@@ -131,19 +128,6 @@ function RenderTwitchVods(data) {
   ]);
 
   return <TwitchVodElement data={data.data} />;
-
-  // return (
-  //   <>
-  //     {/* <ReactTooltip delayShow={250} place='bottom' type='dark' effect='solid' /> */}
-  //     {animate ? (
-  //       <Animated animationIn='zoomIn' animationOut='fadeOut' isVisible={true}>
-  //         <TwitchVodElement data={data.data}></TwitchVodElement>
-  //       </Animated>
-  //     ) : (
-  //       <TwitchVodElement data={data.data}></TwitchVodElement>
-  //     )}
-  //   </>
-  // );
 }
 
 export default RenderTwitchVods;

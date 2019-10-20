@@ -1,5 +1,3 @@
-@import "./../../variables.scss";
-
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -7,7 +5,8 @@
   width: 82%;
   margin: auto;
   margin-top: 25px;
-  margin-bottom: 100px;
+  // margin-bottom: 100px;
+  padding-bottom: 100px;
 }
 
 .container_header {
@@ -65,12 +64,12 @@
   overflow: hidden;
 
   a {
-    color: $videoTitle;
+    color: var(--videoTitle);
     width: 100%;
     display: block;
 
     &:hover {
-      color: lighten($videoTitle, 30%);
+      color: var(--videoTitleHover);
     }
   }
 }
@@ -99,7 +98,7 @@
 
 .date {
   grid-area: info;
-  color: $greyInfo;
+  color: var(--greyInfo);
 }
 
 .viewers {
@@ -151,10 +150,10 @@
   background: none;
   padding-right: 5px;
   font-size: 0.9rem;
-  color: lighten($greyInfo, 20%);
+  color: var(--Info);
 
   &:hover {
-    color: lighten($greyInfo, 50%);
+    color: var(--InfoHover);
   }
 }
 
@@ -243,10 +242,10 @@
     font-size: 0.9rem;
 
     a {
-      color: lighten($greyInfo, 20%);
+      color: var(--Info);
 
       &:hover {
-        color: lighten($greyInfo, 30%);
+        color: var(--InfoHover);
       }
     }
   }
@@ -271,15 +270,14 @@
   // left: 420px;
   left: 395px;
   width: max-content;
-  color: $greyInfo;
-  // color: $greyInfo;
+  color: var(--greyInfo);
   font-size: 1.1rem;
 }
 .vodRefreshTimer {
   position: relative;
   left: 35px;
   top: 31px;
-  color: $greyInfo;
+  color: var(--greyInfo);
 }
 
 /* ------- */
@@ -288,7 +286,7 @@
   position: relative;
   left: 94%;
   top: 20px;
-  color: $greyInfo;
+  color: var(--greyInfo);
 }
 
 /* ----- */

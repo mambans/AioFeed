@@ -3,7 +3,7 @@ import { Spinner } from "react-bootstrap";
 
 import ErrorHandeling from "../error/Error";
 import getFollowedOnlineStreams from "./GetFollowedStreams";
-import Utilities from "utilities/Utilities";
+import Utilities from "../../utilities/Utilities";
 import styles from "./Twitch.module.scss";
 
 const REFRESH_RATE = 30; // seconds
@@ -140,7 +140,7 @@ function HandleData({ children }) {
   if (!isLoaded) {
     return (
       <>
-        <div className={styles.header_div}>
+        <div className={styles.header_div} style={{ marginTop: "120px" }}>
           <h4 className={styles.container_header}>Twitch</h4>
         </div>
         <Spinner animation='grow' role='status' style={Utilities.loadingSpinner} variant='light'>

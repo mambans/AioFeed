@@ -2,7 +2,7 @@ import React from "react";
 import { Alert } from "react-bootstrap";
 import { Animated } from "react-animated-css";
 
-import Utilities from "utilities/Utilities";
+import Utilities from "../../utilities/Utilities";
 
 function SuccessfullyConnected({ data }) {
   if (

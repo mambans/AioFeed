@@ -12,7 +12,7 @@ import TwitchVods from "../twitch/vods/Twitch-vods";
 import ErrorHandeling from "./../error/Error";
 //eslint-disable-next-line
 import styles from "./Feed.module.scss";
-import Utilities from "utilities/Utilities";
+import Utilities from "../../utilities/Utilities";
 
 import "./Notifications.scss";
 

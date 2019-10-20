@@ -1,7 +1,10 @@
-@import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css);
 @import "~bootstrap/scss/bootstrap.scss";
-@import "./variables.scss";
 @import "./override.scss";
+
+html {
+  background: #070711;
+  background-color: #070711;
+}
 
 body {
   margin: 0;
@@ -9,14 +12,9 @@ body {
     "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  // font-family: "Fira Code", monospace;
-
   background: no-repeat center center fixed;
   background-attachment: fixed;
-  // color: $textColor;
   color: var(--textColor);
-  // background-image: $backgroundImg;
   background-image: var(--backgroundImg);
   object-fit: cover;
   -webkit-background-size: cover;
@@ -39,15 +37,14 @@ a:hover {
   scrollbar-width: thin;
 }
 
-// html.theme-transition,
-// html.theme-transition *,
-// html.theme-transition *:before,
-// html.theme-transition *:after {
-//   transition: all 750ms !important;
-//   transition-delay: 0 !important;
-//   // transition: all 2s ease-in-out !important;
-//   // -webkit-transition: all 2s ease-in-out !important;
-//   // -moz-transition: all 2s ease-in-out !important;
-//   // -ms-transition: all 2s ease-in-out !important;
-//   // -o-transition: all 2s ease-in-out !important;
-// }
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *:before,
+html.theme-transition *:after {
+  transition-delay: 0 !important;
+  transition: all 750ms !important;
+  -webkit-transition: all 750ms !important;
+  -moz-transition: all 750ms !important;
+  -ms-transition: all 750ms !important;
+  -o-transition: all 750ms !important;
+}

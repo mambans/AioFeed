@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 
-import Utilities from "utilities/Utilities";
+import Utilities from "../../utilities/Utilities";
 import ErrorHandeling from "./../error/Error";
 
 function getParameterByName(name, url) {

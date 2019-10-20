@@ -9,7 +9,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 
 import styles from "./Twitch.module.scss";
 import StreamHoverIframe from "./StreamHoverIframe.js";
-import Utilities from "utilities/Utilities";
+import Utilities from "../../utilities/Utilities";
 import UnfollowStream from "./UnfollowStream";
 
 const HOVER_DELAY = 1000;

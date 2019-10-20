@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 
 import styles from "./Account.module.scss";
-import ErrorHandeling from "components/error/Error";
+import ErrorHandeling from "../error/Error";
 
 function NotifiesCreateAccount() {
   document.title = "Notifies | Create Account";
@@ -69,7 +69,6 @@ function NotifiesCreateAccount() {
   }
 
   if (created) {
-    // return <Redirect to='/account/login' />;
     return <Redirect to='/account' />;
   } else {
     return (

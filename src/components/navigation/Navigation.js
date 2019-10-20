@@ -43,15 +43,9 @@ function NavigationBar(data) {
   }, [data, loggedIn]);
 
   window.onscroll = function() {
-    if (document.body.scrollTop > 75 || document.documentElement.scrollTop > 75) {
-      // document.getElementById("navbar").style.padding = "30px 10px";
-      // document.getElementById("logo").style.fontSize = "25px";
-      console.log("Scrolled");
+    if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
       setShrinkNavbar("true");
     } else {
-      console.log("NOT Scrolled");
-      // document.getElementById("navbar").style.padding = "80px 10px";
-      // document.getElementById("logo").style.fontSize = "35px";
       setShrinkNavbar("false");
     }
   };
@@ -63,7 +57,6 @@ function NavigationBar(data) {
       expand='lg'
       bg='dark'
       variant='dark'
-      // style={{ paddingRight: "20px", paddingLeft: "20px !important", height: "60px" }}
       shrink={shrinkNavbar}>
       <Nav.Link as={NavLink} to='/' className='logo-link'>
         <img src={`${process.env.PUBLIC_URL}/icons/v3/Logo-4k.png`} alt='logo' className='logo' />
@@ -76,9 +69,9 @@ function NavigationBar(data) {
             <Nav.Link as={NavLink} to='/feed' activeClassName='active'>
               Feed
             </Nav.Link>
-            <Nav.Link as={NavLink} to='/twitch/notifications' activeClassName='active'>
+            {/* <Nav.Link as={NavLink} to='/twitch/notifications' activeClassName='active'>
               Webhooks
-            </Nav.Link>
+            </Nav.Link> */}
           </Nav>
         </Container>
         <Nav style={{ justifyContent: "right" }}>

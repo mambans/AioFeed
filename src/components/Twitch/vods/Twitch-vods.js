@@ -5,7 +5,7 @@ import Moment from "react-moment";
 import Popup from "reactjs-popup";
 
 import ErrorHandeling from "../../error/Error";
-import Utilities from "utilities/Utilities";
+import Utilities from "../../../utilities/Utilities";
 import styles from "./../Twitch.module.scss";
 import RenderTwitchVods from "./Render-Twitch-Vods";
 import getFollowedVods from "./GetFollowedVods";

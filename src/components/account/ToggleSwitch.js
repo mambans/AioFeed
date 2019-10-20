@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Switch from "react-switch";
 
 import styles from "./Account.module.scss";
-import Utilities from "utilities/Utilities";
+import Utilities from "../../utilities/Utilities";
 
 function ToggleSwitch({ data }) {
   //eslint-disable-next-line

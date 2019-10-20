@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Spinner } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 
-import Utilities from "utilities/Utilities";
+import Utilities from "../../utilities/Utilities";
 import ErrorHandeling from "./../error/Error";
 
 function TwitchAuthCallback({ data }) {
