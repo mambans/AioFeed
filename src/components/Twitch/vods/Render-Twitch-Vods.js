@@ -1,13 +1,11 @@
 import Moment from "react-moment";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useEffect, useRef, useCallback } from "react";
 import { store } from "react-notifications-component";
-// import ReactTooltip from "react-tooltip";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
 import styles from "../Twitch.module.scss";
 import Utilities from "../../../utilities/Utilities";
-// import Utilities from "utilities/Utilities";
 
 function TwitchVodElement(data) {
   return (
@@ -39,9 +37,7 @@ function TwitchVodElement(data) {
               {data.data.title}
             </Tooltip>
           }>
-          <a
-            // data-tip={data.data.title}
-            href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+          <a href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
             {Utilities.truncate(data.data.title, 50)}
           </a>
         </OverlayTrigger>
