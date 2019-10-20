@@ -4,7 +4,7 @@ import "./updateProfilePopup.scss";
 import styles from "./Account.module.scss";
 
 function Themeselector() {
-  const allThemmes = ["default", "christmas"];
+  const allThemmes = ["default", "christmas", "new year's eve"];
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);
 
