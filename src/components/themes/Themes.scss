@@ -1,4 +1,4 @@
-$greyInfo: rgb(100, 100, 100);
+$greyInfo: rgb(151, 151, 151);
 $videoTitle: rgb(240, 240, 240);
 
 html {
@@ -13,8 +13,9 @@ html {
   --headerTextColorActive: rgba(255, 255, 255, 1);
   --greyInfo: rgb(100, 100, 100);
   --videoTitle: rgb(240, 240, 240);
-  --videoTitleHover: rgb(240, 240, 240);
-  --subFeedHeaderColor: #65696d;
+  --videoTitleHover: rgb(255, 255, 255);
+  --channelHover: rgb(179, 30, 248);
+  --subFeedHeaderColor: rgb(124, 124, 124);
   --AccountContainerBackgroundColor: #081016;
   --ModalCloseButtonColor: rgba(240, 240, 240, 0.8);
   --ModalCloseButtonColorHover: white;
@@ -22,7 +23,7 @@ html {
   --refreshButtonBorder: thin solid #2d2d2d;
   --refreshButtonShadow: 4px 4px 5px 0px #000c;
   --subFeedHeaderBorder: 2px solid #80808029;
-  --Info: lighten($greyInfo, 20%);
+  --Info: rgb(151, 151, 151);
   --InfoHover: lighten($greyInfo, 50%);
   --refreshButtonBackground: hsla(0, 0%, 0%, 0.1);
   --refreshButtonHoverColor: #ffffff;
@@ -41,6 +42,8 @@ html[data-theme="christmas"] {
   --headerTextColorActive: rgba(255, 255, 255, 1);
   --greyInfo: rgb(175, 175, 175);
   --videoTitle: rgb(240, 240, 240);
+  --videoTitleHover: rgb(240, 240, 240);
+  --channelHover: rgb(255, 255, 255);
   --subFeedHeaderColor: #aeb0b3;
   --AccountContainerBackgroundColor: #000000e3;
   --ModalCloseButtonColor: rgba(240, 240, 240, 0.8);
@@ -49,7 +52,7 @@ html[data-theme="christmas"] {
   --refreshButtonBorder: thin solid #2d2d2d;
   --refreshButtonShadow: 4px 4px 5px 0px #000c;
   --subFeedHeaderBorder: 2px solid #80808029;
-  --Info: lighten($greyInfo, 20%);
+  --Info: rgb(151, 151, 151);
   --InfoHover: lighten($greyInfo, 50%);
   --refreshButtonBackground: #00000026;
   --refreshButtonColor: #a8a8a8;
