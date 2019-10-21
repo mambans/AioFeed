@@ -57,6 +57,7 @@
 
 .title {
   margin-top: 15px;
+  margin-bottom: 15px;
   grid-area: title;
   font-size: 1.05rem;
   max-width: 320px;
@@ -153,7 +154,7 @@
   color: var(--Info);
 
   &:hover {
-    color: var(--InfoHover);
+    color: var(--channelHover);
   }
 }
 
