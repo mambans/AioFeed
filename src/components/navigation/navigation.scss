@@ -1,40 +1,34 @@
 .navbar.navbar-expand-lg.navbar-dark.bg-dark {
   height: 75px;
-  position: fixed;
+  //position: fixed;
   width: 100vw;
   background-color: var(--navigationbarBackground) !important;
   box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.15);
-  transition: ease-in-out 0.5s;
-  -webkit-transition: ease-in-out 0.5s;
-  -moz-transition: ease-in-out 0.5s;
-  -ms-transition: ease-in-out 0.5s;
-  -o-transition: ease-in-out 0.5s;
-
+  transition: ease-in-out 0.2s;
+  -webkit-transition: ease-in-out 0.2s;
+  -moz-transition: ease-in-out 0.2s;
+  -ms-transition: ease-in-out 0.2s;
+  -o-transition: ease-in-out 0.2s;
   a {
     font-size: 20px;
-    transition: ease-in-out 0.5s;
-    -webkit-transition: ease-in-out 0.5s;
-    -moz-transition: ease-in-out 0.5s;
-    -ms-transition: ease-in-out 0.5s;
-    -o-transition: ease-in-out 0.5s;
+    transition: ease-in-out 0.2s;
+    -webkit-transition: ease-in-out 0.2s;
+    -moz-transition: ease-in-out 0.2s;
+    -ms-transition: ease-in-out 0.2s;
+    -o-transition: ease-in-out 0.2s;
   }
 }
 
 nav[mode="fixed"].navbar.navbar-expand-lg.navbar-dark.bg-dark {
-  height: 75px;
   position: fixed;
-  width: 100vw;
   top: 0;
   z-index: 1000;
-  background-color: var(--navigationbarBackground) !important;
-  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.15);
 }
 
 nav[shrink="true"].navbar.navbar-expand-lg.navbar-dark.bg-dark {
   height: 50px;
-  padding: 0 30px 0 25px !important;
-  background-color: hsla(0, 0%, 0%, 0.8) !important;
-  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.15);
+  padding: 0 30px 0 30px !important;
+  background-color: hsla(0, 0%, 0%, 0.5) !important;
 
   a {
     font-size: 16px;
@@ -62,10 +56,6 @@ nav {
     }
   }
 }
-
-// .bg-dark {
-//   background-color: #081016d1 ;
-// }
 
 .navbar-nav a.nav-link {
   font-size: 1.15rem;

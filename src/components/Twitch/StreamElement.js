@@ -70,13 +70,13 @@ function StreamEle(data) {
   const ref = useRef();
   const refChannel = useRef();
 
-  function streamType(type) {
-    if (type === "live") {
-      return <div className={styles.liveDot} />;
-    } else {
-      return <p className={styles.type}>{data.data.stream_type}</p>;
-    }
-  }
+  // function streamType(type) {
+  //   if (type === "live") {
+  //     return <div className={styles.liveDot} />;
+  //   } else {
+  //     return <p className={styles.type}>{data.data.stream_type}</p>;
+  //   }
+  // }
 
   const handleMouseOver = () => {
     streamHoverTimer.current = setTimeout(function() {
@@ -153,7 +153,7 @@ function StreamEle(data) {
         <Moment className={styles.duration} durationFromNow>
           {data.data.started_at}
         </Moment>
-        {streamType(data.data.type)}
+        {/* {streamType(data.data.type)} */}
       </div>
       <h4 className={styles.title}>
         <OverlayTrigger
@@ -169,9 +169,7 @@ function StreamEle(data) {
               {data.data.title}
             </Tooltip>
           }>
-          <a
-            // data-tip={data.data.title}
-            href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+          <a href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
             {Utilities.truncate(data.data.title, 50)}
           </a>
         </OverlayTrigger>
