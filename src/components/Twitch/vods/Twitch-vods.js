@@ -3,6 +3,11 @@ import { Button, Spinner } from "react-bootstrap";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Moment from "react-moment";
 import Popup from "reactjs-popup";
+import Icon from "react-icons-kit";
+import { reload } from "react-icons-kit/iconic/reload";
+import { ic_settings } from "react-icons-kit/md/ic_settings";
+import { video } from "react-icons-kit/iconic/video";
+import LazyLoad from "react-lazyload";
 
 import ErrorHandeling from "../../error/Error";
 import Utilities from "../../../utilities/Utilities";
@@ -10,11 +15,6 @@ import styles from "./../Twitch.module.scss";
 import RenderTwitchVods from "./Render-Twitch-Vods";
 import getFollowedVods from "./GetFollowedVods";
 import AddChannelForm from "./VodSettings";
-import Icon from "react-icons-kit";
-import { reload } from "react-icons-kit/iconic/reload";
-import { ic_settings } from "react-icons-kit/md/ic_settings";
-
-import LazyLoad from "react-lazyload";
 
 function TwitchVods() {
   const [vods, setVods] = useState();
@@ -84,7 +84,9 @@ function TwitchVods() {
     return (
       <>
         <div className={styles.header_div}>
-          <h4 className={styles.container_header}>Twitch vods</h4>
+          <h4 className={styles.container_header}>
+            Twitch vods <Icon icon={video} size={32} style={{ paddingLeft: "10px" }}></Icon>
+          </h4>
         </div>
         <Spinner animation='grow' role='status' style={Utilities.loadingSpinner} variant='light'>
           <span className='sr-only'>Loading...</span>
@@ -114,6 +116,7 @@ function TwitchVods() {
                 <Spinner
                   animation='border'
                   role='status'
+                  variant='light'
                   style={Utilities.loadingSpinnerSmall}></Spinner>
               </div>
             ) : (
@@ -139,7 +142,9 @@ function TwitchVods() {
             className='settingsPopup'>
             <AddChannelForm></AddChannelForm>
           </Popup>
-          <h4 className={styles.container_header}>Twitch vods</h4>
+          <h4 className={styles.container_header}>
+            Twitch vods <Icon icon={video} size={32} style={{ paddingLeft: "10px" }}></Icon>
+          </h4>
         </div>
         <div className={styles.container}>
           {vods.data.map(vod => {

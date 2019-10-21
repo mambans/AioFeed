@@ -31,6 +31,7 @@ const Utilities = {
     width: "86%",
     margin: "auto",
     marginTop: "50px",
+    opacity: "0.7",
   },
   truncate: function(input, max) {
     if (input.length > max) return input.substring(0, max) + "..";

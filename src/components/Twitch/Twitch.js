@@ -14,6 +14,9 @@ import Utilities from "../../utilities/Utilities";
 import Icon from "react-icons-kit";
 import { reload } from "react-icons-kit/iconic/reload";
 
+// import { feed } from "react-icons-kit/icomoon/feed";
+import { twitch } from "react-icons-kit/fa/twitch";
+
 import "./Twitch.scss";
 
 function Twitch({ data }) {
@@ -35,15 +38,6 @@ function Twitch({ data }) {
   }, [data]);
 
   const refresh = useCallback(async () => {
-    // clearInterval(data.timer);
-    // const timeNow = new Date();
-    // data.setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + data.REFRESH_RATE));
-    // data.timer = setInterval(() => {
-    //   const timeNow = new Date();
-    //   data.setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + data.REFRESH_RATE));
-    //   data.refresh();
-    // }, data.REFRESH_RATE * 1000);
-
     await data.refresh();
   }, [data]);
 
@@ -70,6 +64,7 @@ function Twitch({ data }) {
               <Spinner
                 animation='border'
                 role='status'
+                variant='light'
                 style={Utilities.loadingSpinnerSmall}></Spinner>
             </div>
           ) : (
@@ -81,12 +76,14 @@ function Twitch({ data }) {
         <p key={data.refreshTimer} className={styles.refreshTimer}>
           <Countdown date={data.refreshTimer} zeroPadDays={0} zeroPadTime={2} />
         </p>
-        <h4 className={styles.container_header}>Twitch</h4>
+        <h4 className={styles.container_header}>
+          Twitch Live <Icon icon={twitch} size={32} style={{ paddingLeft: "10px" }}></Icon>
+        </h4>
       </div>
       {data.error ? (
         show ? (
           <Alert
-            variant='info'
+            variant='secondary'
             style={Utilities.feedAlertWarning}
             dismissible
             onClose={() => setShow(false)}>

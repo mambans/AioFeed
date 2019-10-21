@@ -12,6 +12,10 @@ import StreamHoverIframe from "./StreamHoverIframe.js";
 import Utilities from "../../utilities/Utilities";
 import UnfollowStream from "./UnfollowStream";
 
+// eslint-disable-next-line
+import { users } from "react-icons-kit/icomoon/users";
+import { eye } from "react-icons-kit/icomoon/eye";
+
 const HOVER_DELAY = 1000;
 
 function HighlightAnimation({ data }) {
@@ -159,7 +163,7 @@ function StreamEle(data) {
         <OverlayTrigger
           key={"bottom"}
           placement={"bottom"}
-          delay={{ show: 250, hide: 400 }}
+          delay={{ show: 250, hide: 0 }}
           overlay={
             <Tooltip
               id={`tooltip-${"bottom"}`}
@@ -222,7 +226,20 @@ function StreamEle(data) {
               {Utilities.truncate(data.data.game_name, 50)}
             </a>
           </p>
-          <p className={styles.viewers}>{data.data.viewer_count}</p>
+          <p className={styles.viewers}>
+            {data.data.viewer_count}
+            <Icon
+              icon={eye}
+              size={14}
+              style={{
+                color: "rgb(200, 200, 200)",
+                paddingLeft: "5px",
+                paddingTop: "3px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            />
+          </p>
         </div>
       </div>
     </div>

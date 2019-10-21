@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Spinner } from "react-bootstrap";
+import Icon from "react-icons-kit";
+import { feed } from "react-icons-kit/icomoon/feed";
+import { twitch } from "react-icons-kit/fa/twitch";
 
 import ErrorHandeling from "../error/Error";
 import getFollowedOnlineStreams from "./GetFollowedStreams";
@@ -13,8 +16,8 @@ function HandleData({ children }) {
   const [error, setError] = useState(null);
   const [refreshTimer, setRefreshTimer] = useState();
   const [refreshing, setRefreshing] = useState(false);
-  const liveStreams = useRef();
-  const oldLiveStreams = useRef();
+  const liveStreams = useRef([]);
+  const oldLiveStreams = useRef([]);
   const newlyAddedStreams = useRef([]);
   const timer = useRef();
 
@@ -54,6 +57,7 @@ function HandleData({ children }) {
   const refresh = useCallback(async () => {
     setRefreshing(true);
     try {
+      setError(null);
       const streams = await getFollowedOnlineStreams();
 
       if (streams.status === 200) {
@@ -97,7 +101,6 @@ function HandleData({ children }) {
       setRefreshing(false);
       setIsLoaded(true);
     } catch (error) {
-      console.log("CATCH: ", error);
       setError(error);
     }
   }, [addSystemNotification]);
@@ -141,7 +144,9 @@ function HandleData({ children }) {
     return (
       <>
         <div className={styles.header_div} style={{ marginTop: "120px" }}>
-          <h4 className={styles.container_header}>Twitch</h4>
+          <h4 className={styles.container_header}>
+            Twitch Live <Icon icon={twitch} size={32} style={{ paddingLeft: "10px" }}></Icon>
+          </h4>
         </div>
         <Spinner animation='grow' role='status' style={Utilities.loadingSpinner} variant='light'>
           <span className='sr-only'>Loading...</span>

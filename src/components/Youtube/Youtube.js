@@ -6,6 +6,7 @@ import Alert from "react-bootstrap/Alert";
 import LazyLoad from "react-lazyload";
 import Icon from "react-icons-kit";
 import { reload } from "react-icons-kit/iconic/reload";
+import { youtube } from "react-icons-kit/icomoon/youtube";
 
 import getFollowedChannels from "./GetFollowedChannels";
 import getSubscriptionVideos from "./GetSubscriptionVideos";
@@ -80,7 +81,9 @@ function Youtube() {
     return (
       <>
         <div className={styles.header_div}>
-          <h4 className={styles.container_header}>Youtube</h4>
+          <h4 className={styles.container_header}>
+            Youtube <Icon icon={youtube} size={32} style={{ paddingLeft: "10px" }}></Icon>
+          </h4>
         </div>
         <Spinner animation='grow' role='status' style={Utilities.loadingSpinner} variant='light'>
           <span className='sr-only'>Loading...</span>
@@ -125,7 +128,9 @@ function Youtube() {
               {requestError.errors[0].reason + " - Cache used instead."}
             </Alert>
           ) : null}
-          <h4 className={styles.container_header}>Youtube</h4>
+          <h4 className={styles.container_header}>
+            Youtube <Icon icon={youtube} size={32} style={{ paddingLeft: "10px" }}></Icon>
+          </h4>
         </div>
         <div className={styles.container}>
           {videos.map(video => {

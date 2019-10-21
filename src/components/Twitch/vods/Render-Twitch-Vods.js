@@ -27,7 +27,7 @@ function TwitchVodElement(data) {
         <OverlayTrigger
           key={"bottom"}
           placement={"bottom"}
-          delay={{ show: 250, hide: 400 }}
+          delay={{ show: 250, hide: 0 }}
           overlay={
             <Tooltip
               id={`tooltip-${"bottom"}`}
@@ -46,9 +46,7 @@ function TwitchVodElement(data) {
       <div>
         <div className={styles.channelContainer} style={{ marginBottom: "0px", height: "25px" }}>
           <p className={styles.channel} style={{ paddingLeft: "5px" }}>
-            <a
-              href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase() + "/videos"}
-              style={{ color: "#f0f0f0" }}>
+            <a href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase() + "/videos"}>
               {data.data.user_name}
             </a>
           </p>

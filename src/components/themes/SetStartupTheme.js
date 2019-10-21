@@ -1,8 +1,6 @@
 const SetStartupTheme = () => {
   const currentMonth = new Date().getMonth();
   const currentDate = new Date().getDate();
-  console.log("TCL: SetStartupTheme -> currentMonth", currentMonth);
-  console.log("TCL: SetStartupTheme -> currentDate", currentDate);
 
   switch (currentMonth) {
     case 11:

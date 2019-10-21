@@ -2,7 +2,7 @@
   padding: 0.25rem 0.5rem;
   color: #fff;
   text-align: center;
-  background-color: #2c2c2cf8;
+  background-color: #131313;
   max-width: unset;
   border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -33,26 +33,4 @@
 
 .example-enter {
   opacity: 0.01;
-}
-
-.example-enter.example-enter-active {
-  opacity: 1;
-  transition: opacity 100ms ease-in;
-  -webkit-transition: opacity 100ms ease-in;
-  -moz-transition: opacity 100ms ease-in;
-  -ms-transition: opacity 100ms ease-in;
-  -o-transition: opacity 100ms ease-in;
-}
-
-.example-leave {
-  opacity: 1;
-}
-
-.example-leave.example-leave-active {
-  opacity: 0.01;
-  transition: opacity 500ms ease-in;
-  -webkit-transition: opacity 500ms ease-in;
-  -moz-transition: opacity 500ms ease-in;
-  -ms-transition: opacity 500ms ease-in;
-  -o-transition: opacity 500ms ease-in;
 }
