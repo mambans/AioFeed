@@ -17,7 +17,7 @@ async function UnfollowStream(data) {
       console.error(error);
     });
 
-  axios
+  const response = axios
     .delete(
       `https://api.twitch.tv/kraken/users/${myUserId.data.data[0].id}/follows/channels/${data.user_id}`,
       {
@@ -30,11 +30,14 @@ async function UnfollowStream(data) {
     )
     .then(() => {
       console.log(`Unfollowed: ${data.user_id}`);
-      data.refresh();
-    })
-    .catch(error => {
-      console.error(error);
+      // data.refresh();
     });
+  // .catch(error => {
+  //   console.error(error);
+  //   // return error;
+  // });
+
+  return response;
 }
 
 export default UnfollowStream;

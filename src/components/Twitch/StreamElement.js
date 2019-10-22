@@ -6,11 +6,14 @@ import { Icon } from "react-icons-kit";
 import { cross } from "react-icons-kit/icomoon/cross";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import Alert from "react-bootstrap/Alert";
 
 import styles from "./Twitch.module.scss";
 import StreamHoverIframe from "./StreamHoverIframe.js";
 import Utilities from "../../utilities/Utilities";
 import UnfollowStream from "./UnfollowStream";
+
+import "./Twitch.scss";
 
 // eslint-disable-next-line
 import { users } from "react-icons-kit/icomoon/users";
@@ -70,10 +73,68 @@ function HighlightAnimation({ data }) {
 function StreamEle(data) {
   const [isHovered, setIsHovered] = useState(false);
   const [channelIsHovered, setChannelIsHovered] = useState(false);
+  const [unfollowError, setUnfollowError] = useState(false);
+
   const streamHoverTimer = useRef();
   const ref = useRef();
   const refChannel = useRef();
+  const refUnfollowAlert = useRef();
 
+  function UnfollowAlert() {
+    if (unfollowError) {
+      let alertType = "warning";
+      if (unfollowError.includes("Failed")) {
+        alertType = "warning";
+      } else if (unfollowError.includes("Successfully")) {
+        alertType = "success";
+      }
+      clearTimeout(refUnfollowAlert.current);
+      refUnfollowAlert.current = setTimeout(() => {
+        setUnfollowError(null);
+      }, 6000);
+      return (
+        <Animated
+          animationIn='fadeInUp'
+          animationOut='fadeOut'
+          animationOutDelay={3500}
+          animationOutDuration={2500}
+          isVisible={false}
+          style={{
+            width: "inherit",
+            position: "absolute",
+            margin: "0",
+            height: "30px",
+            marginTop: "10px",
+          }}>
+          <Alert
+            variant={alertType}
+            style={{
+              width: "inherit",
+              position: "absolute",
+              // zIndex: "2",
+              margin: "0",
+              padding: "5px",
+              borderRadius: "10px 10px 0 0",
+            }}
+            className='unfollowErrorAlert'>
+            <Alert.Heading
+              style={{
+                fontSize: "16px",
+                textAlign: "center",
+                marginBottom: "0",
+              }}>
+              {unfollowError}{" "}
+              <Alert.Link href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+                {data.data.user_name}
+              </Alert.Link>
+            </Alert.Heading>
+          </Alert>
+        </Animated>
+      );
+    } else {
+      return "";
+    }
+  }
   // function streamType(type) {
   //   if (type === "live") {
   //     return <div className={styles.liveDot} />;
@@ -130,6 +191,7 @@ function StreamEle(data) {
   return (
     <div className={`${styles.video}`} key={data.data.id}>
       <HighlightAnimation data={data}></HighlightAnimation>
+      <UnfollowAlert></UnfollowAlert>
 
       <div className={styles.imgContainer} id={data.data.id} ref={ref}>
         {isHovered ? (
@@ -203,8 +265,19 @@ function StreamEle(data) {
               <Button
                 data-tip={"Unfollow " + data.data.user}
                 variant='link'
-                onClick={() => {
-                  UnfollowStream({ user_id: data.data.user_id, refresh: data.refresh });
+                onClick={async () => {
+                  await UnfollowStream({
+                    user_id: data.data.user_id,
+                    refresh: data.refresh,
+                  })
+                    .then(() => {
+                      setUnfollowError("Successfully unfollowed");
+                      data.refresh();
+                    })
+                    .catch(error => {
+                      setUnfollowError(null);
+                      setUnfollowError("Failed to unfollow");
+                    });
                 }}
                 className={styles.unfollowButton}>
                 <Icon icon={cross} size={18} className={styles.unfollowIcon} />
