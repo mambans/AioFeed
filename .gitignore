@@ -19,16 +19,18 @@ src/server/node_modules
 .env.test.local
 .env.production.local
 
+# logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Other stuff
+.env
 
 *-workspace
-
-.gitignore
-.env
-todo.txt
 .VSCodeCounter
 src/server/sql/Query.sql
 .eslintrc
+public/images/originals
+
+.gitignore

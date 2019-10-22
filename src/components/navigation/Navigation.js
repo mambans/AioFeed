@@ -5,7 +5,7 @@ import { github } from "react-icons-kit/icomoon/github";
 
 import "./Navigation.scss";
 import Utilities from "../../utilities/Utilities";
-import placeholder from "../../assets/images/placeholder.png";
+// import placeholder from "../../assets/images/placeholder.png";
 import Icon from "react-icons-kit";
 import { closeCircled } from "react-icons-kit/ionicons/closeCircled";
 import Popup from "reactjs-popup";
@@ -97,7 +97,7 @@ function NavigationBar(data) {
                     src={
                       Utilities.getCookie("Notifies_AccountProfileImg") !== "null"
                         ? Utilities.getCookie("Notifies_AccountProfileImg")
-                        : placeholder
+                        : `${process.env.PUBLIC_URL}/images/placeholder.png`
                     }
                     style={{ marginLeft: "0" }}
                     alt=''></img>

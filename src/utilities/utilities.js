@@ -1,6 +1,6 @@
 import React from "react";
 
-import placeholderImg from "./../assets/images/placeholder.png";
+// import placeholderImg from "./../assets/images/placeholder.png";
 import styles from "../components/twitch/Twitch.module.scss";
 
 const Utilities = {
@@ -66,7 +66,7 @@ const Utilities = {
     } else if (urls.medium) {
       return urls.medium.url;
     } else {
-      return placeholderImg;
+      return `${process.env.PUBLIC_URL}/images/placeholder.png`;
     }
   },
 

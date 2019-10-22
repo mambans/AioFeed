@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { Spinner } from "react-bootstrap";
 import Icon from "react-icons-kit";
-import { feed } from "react-icons-kit/icomoon/feed";
 import { twitch } from "react-icons-kit/fa/twitch";
 
 import ErrorHandeling from "../error/Error";

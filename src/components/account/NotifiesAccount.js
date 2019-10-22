@@ -12,7 +12,7 @@ import { twitch } from "react-icons-kit/icomoon/twitch";
 import { youtube } from "react-icons-kit/icomoon/youtube";
 import { ic_account_box } from "react-icons-kit/md/ic_account_box";
 
-import placeholder from "../../assets/images/placeholder.png";
+// import placeholder from "../../assets/images/placeholder.png";
 import SuccessfullyConnected from "./SuccessfullyConnected";
 import styles from "./Account.module.scss";
 import ToggleSwitch from "./ToggleSwitch";
@@ -95,7 +95,7 @@ function NotifiesAccount(data) {
               src={
                 Utilities.getCookie("Notifies_AccountProfileImg") === null ||
                 Utilities.getCookie("Notifies_AccountProfileImg") === "null"
-                  ? placeholder
+                  ? `${process.env.PUBLIC_URL}/images/placeholder.png`
                   : Utilities.getCookie("Notifies_AccountProfileImg")
               }
               alt=''></img>

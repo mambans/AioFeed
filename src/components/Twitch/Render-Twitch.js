@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useRef } from "react";
 // import ReactTooltip from "react-tooltip";
-import logo from "../../assets/images/logo-v2.png";
+// import logo from "../../assets/images/logo-v2.png";
 import StreamEle from "./StreamElement.js";
 import Utilities from "../../utilities/Utilities";
 
@@ -17,8 +17,8 @@ function RenderTwitch(data) {
               status === "offline"
                 ? ""
                 : `${Utilities.truncate(data.data.title, 60)}\n${data.data.game_name}`,
-            icon: data.data.profile_img_url || logo,
-            badge: data.data.profile_img_url || logo,
+            icon: data.data.profile_img_url || `${process.env.PUBLIC_URL}/icons/v3/Logo-4k.png`,
+            badge: data.data.profile_img_url || `${process.env.PUBLIC_URL}/icons/v3/Logo-4k.png`,
           }
         );
 

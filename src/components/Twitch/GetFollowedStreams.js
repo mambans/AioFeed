@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import placeholder from "../../assets/images/placeholder.png";
+// import placeholder from "../../assets/images/placeholder.png";
 import Utilities from "../../utilities/Utilities";
 
 async function getFollowedOnlineStreams() {
@@ -183,7 +183,7 @@ async function getFollowedOnlineStreams() {
                   ? (stream.game_img = gameNames.data.data.find(game => {
                       return game.id === stream.game_id;
                     }).box_art_url)
-                  : (stream.game_img = placeholder);
+                  : (stream.game_img = `${process.env.PUBLIC_URL}/images/placeholder.png`);
 
                 return undefined;
               });
