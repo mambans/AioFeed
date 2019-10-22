@@ -12,7 +12,6 @@ import { twitch } from "react-icons-kit/icomoon/twitch";
 import { youtube } from "react-icons-kit/icomoon/youtube";
 import { ic_account_box } from "react-icons-kit/md/ic_account_box";
 
-// import placeholder from "../../assets/images/placeholder.png";
 import SuccessfullyConnected from "./SuccessfullyConnected";
 import styles from "./Account.module.scss";
 import ToggleSwitch from "./ToggleSwitch";
@@ -51,7 +50,6 @@ function NotifiesAccount(data) {
         twitchToken: null,
       })
       .then(() => {
-        // refresh ? setRefresh(false) : setRefresh(true);
         setRefresh(!refresh);
         setDisableTwitch(true);
         setDisableTwitchVods(true);
@@ -71,7 +69,6 @@ function NotifiesAccount(data) {
       })
       .then(() => {
         setRefresh(!refresh);
-        // localStorage.setItem("YoutubeFeedEnabled", false);
         setDisableYoutube(true);
       })
       .catch(error => {
@@ -221,8 +218,6 @@ function NotifiesAccount(data) {
           </div>
         </div>
       ) : (
-        // <Redirect to='/account/login'></Redirect>
-        // data.data.setAccountModalOpen(true)
         <div className={styles.createAccountContainer}>
           <NotifiesLogin
             data={data.data}

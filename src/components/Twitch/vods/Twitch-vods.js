@@ -21,7 +21,6 @@ function TwitchVods() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
-
   const initialOpen = useRef(true);
 
   function onChange(newRun) {
@@ -34,7 +33,6 @@ function TwitchVods() {
       await getFollowedVods(forceRefresh)
         .then(data => {
           setError(data.error);
-
           setVods(data.data);
           setIsLoaded(true);
           setRefreshing(false);

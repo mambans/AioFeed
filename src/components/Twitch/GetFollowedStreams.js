@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// import placeholder from "../../assets/images/placeholder.png";
 import Utilities from "../../utilities/Utilities";
 
 async function getFollowedOnlineStreams() {

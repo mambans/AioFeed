@@ -19,7 +19,6 @@ function Home() {
       </div>
     );
   }
-
   return <Logos></Logos>;
 }
 

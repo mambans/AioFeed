@@ -2,29 +2,23 @@ import React, { useEffect, useState } from "react";
 import { Navbar, NavDropdown, Nav, Container, Button } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { github } from "react-icons-kit/icomoon/github";
-
-import "./Navigation.scss";
-import Utilities from "../../utilities/Utilities";
-// import placeholder from "../../assets/images/placeholder.png";
 import Icon from "react-icons-kit";
 import { closeCircled } from "react-icons-kit/ionicons/closeCircled";
 import Popup from "reactjs-popup";
 
-import styles from "./Navigation.module.scss";
-import NotifiesAccount from "../account/NotifiesAccount";
 import HandleRefresh from "./HandleRefresh";
-
+import NotifiesAccount from "../account/NotifiesAccount";
 import NotifiesCreateAccount from "../account/NotifiesCreateAccount";
 import NotifiesLogin from "../account/NotifiesLogin";
+import styles from "./Navigation.module.scss";
+import Utilities from "../../utilities/Utilities";
+import "./Navigation.scss";
 
 function NavigationBar(data) {
-  // console.log("TCL: NavigationBar -> data", data);
-  //eslint-disable-next-line
   const [refresh, setRefresh] = useState(false);
   const [loggedIn, setLoggedIn] = useState(Utilities.getCookie("Notifies_AccountName"));
   const [renderModal, setRenderModal] = useState("login");
   const [shrinkNavbar, setShrinkNavbar] = useState("false");
-  // console.log("TCL: NavigationBar -> urls", urlParams.current.has("AccountModalOpen"));
 
   const openModal = () => {
     data.data.setAccountModalOpen(true);

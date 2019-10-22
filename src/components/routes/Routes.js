@@ -1,21 +1,20 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
+import Feed from "../feed/Feed";
 import HandleRefresh from "../navigation/HandleRefresh";
 import Home from "../home/Home";
-import Feed from "../feed/Feed";
-import YoutubeAuth from "../auth/YoutubeAuth";
-import YoutubeAuthCallback from "../auth/YoutubeAuthCallback";
-import TwitchAuth from "../auth/TwitchAuth";
-import TwitchAuthCallback from "../auth/TwitchAuthCallback";
+import NoMatch from "../navigation/NoMatch";
+import NotifiesAccount from "../account/NotifiesAccount";
 import NotifiesCreateAccount from "../account/NotifiesCreateAccount";
 import NotifiesLogin from "../account/NotifiesLogin";
-import NotifiesAccount from "../account/NotifiesAccount";
-import NoMatch from "../navigation/NoMatch";
 import NavigationBar from "../navigation/Navigation";
+import TwitchAuth from "../auth/TwitchAuth";
+import TwitchAuthCallback from "../auth/TwitchAuthCallback";
+import YoutubeAuth from "../auth/YoutubeAuth";
+import YoutubeAuthCallback from "../auth/YoutubeAuthCallback";
 import style from "./Routes.module.scss";
 
-import YoutubeNewVideo from "../youtube/YoutubeNewVideo";
 import TwitterAuth from "../twitter/TwitterAuth";
 import streamOnlineWebhook from "../twitch/Twitchwebhooks";
 
@@ -40,7 +39,6 @@ function Routes() {
                   }}
                 />
                 <Route exact path='/twitch/notifications' component={streamOnlineWebhook} />
-                <Route exact path='/youtube/notifications' component={YoutubeNewVideo} />
                 <Route exact path='/auth/youtube' component={YoutubeAuth} />
                 <Route exact path='/auth/twitch' component={TwitchAuth} />
                 <Route

@@ -9,7 +9,6 @@ import ErrorHandeling from "../error/Error";
 function NotifiesCreateAccount() {
   document.title = "Notifies | Create Account";
   const [error, setError] = useState(null);
-
   const [created, setCreated] = useState();
 
   const useInput = initialValue => {

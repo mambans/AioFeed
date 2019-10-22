@@ -13,7 +13,6 @@ function ToggleSwitch({ data }) {
       Utilities.getCookie(`${data.token}-access_token`) !== "null"
   );
   const [tokenExists, setTokenExists] = useState(
-    // !Utilities.getCookie(`${data.token}-access_token`) ||
     Utilities.getCookie(`${data.token}-access_token`) === null ||
       Utilities.getCookie(`${data.token}-access_token`) === "null"
       ? false
@@ -23,7 +22,6 @@ function ToggleSwitch({ data }) {
   function handleChange(checked) {
     if (Utilities.getCookie(`${data.token}-access_token`)) {
       setChecked(checked);
-      // document.cookie = `${data.label}FeedEnabled=${checked}; path=/`;
       localStorage.setItem(data.label + "FeedEnabled", checked);
     }
   }

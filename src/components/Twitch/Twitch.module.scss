@@ -1,12 +1,15 @@
 .container {
   display: flex;
   flex-wrap: wrap;
-  // width: 87%;
   width: 82%;
   margin: auto;
-  margin-top: 25px;
-  // margin-bottom: 100px;
+  // margin-top: 25px;
+  margin-top: 2px;
   padding-bottom: 100px;
+
+  // > div {
+  //   height: 400px;
+  // }
 }
 
 .container_header {
@@ -17,7 +20,6 @@
 }
 
 .header_div {
-  // width: 87%;
   width: 82%;
   margin: auto;
   border-bottom: var(--subFeedHeaderBorder);
@@ -44,11 +46,6 @@
     "video video"
     "title title"
     "info info";
-
-  // grid-template-areas:
-  //   "video video"
-  //   "title title"
-  //   "info info";
 
   width: 320px;
   margin: 15px;
@@ -79,11 +76,14 @@
   grid-area: video;
   transition: all 0.2s ease-in-out;
   margin-top: 5px;
+  // margin-top: 28px;
+  // z-index: 1;
   img {
     transition: all 0.2s ease-in-out;
     border-radius: 10px;
   }
   &:hover {
+    z-index: 2;
     transform: scale(1.15);
     -webkit-transform: scale(1.15);
     -moz-transform: scale(1.15);
@@ -112,7 +112,6 @@
 }
 
 .duration {
-  // bottom: 21px;
   position: relative;
   width: max-content;
   background: #2222228c;
@@ -122,8 +121,6 @@
   border-top-right-radius: 10px;
   z-index: 2;
   border-bottom-left-radius: 10px;
-  // display: block;
-
   height: 24px;
   bottom: 28px;
   left: 4px;
@@ -175,16 +172,12 @@
   height: 14px;
   background-color: red;
   border-radius: 7px;
-  // bottom: 37px;
   bottom: 41px;
   position: relative;
-  // right: -303px;
   left: 303px;
 }
 
 .refreshButton {
-  // color: var(--refreshButtonColor);
-  // color: white;
   background: var(--refreshButtonBackground);
   position: relative;
   left: 0.5%;
@@ -196,8 +189,6 @@
     color: var(--refreshButtonHoverColor);
   }
 }
-
-/* For when profile and game img is enabled */
 
 .channelContainer {
   display: grid;
@@ -267,8 +258,6 @@
 
 .refreshTimer {
   position: absolute;
-  // left: 330px;
-  // left: 420px;
   left: 395px;
   width: max-content;
   color: var(--greyInfo);
@@ -281,16 +270,12 @@
   color: var(--greyInfo);
 }
 
-/* ------- */
-
 .settings {
   position: relative;
   left: 94%;
   top: 20px;
   color: var(--greyInfo);
 }
-
-/* ----- */
 
 .StreamHoverIframe {
   border: none;
@@ -326,17 +311,14 @@
 
 @media screen and (max-width: 2560px) {
   .container {
-    // width: 91%;
     width: 82.5%;
   }
 
   .header_div {
-    // width: 91%;
     width: 82.5%;
   }
 
   .refreshTimer {
-    // left: 225px;
     left: 340px;
   }
 
@@ -346,12 +328,10 @@
 }
 @media screen and (max-width: 1920px) {
   .container {
-    // width: 86.5%;
     width: 73.5%;
   }
 
   .header_div {
-    // width: 86.5%;
     width: 73.5%;
   }
 
@@ -360,12 +340,10 @@
   }
 
   .refreshTimer {
-    // left: 235px;
     left: 365px;
   }
 
   .vodRefreshTimer {
-    // left: 170px;
     left: 40px;
   }
 

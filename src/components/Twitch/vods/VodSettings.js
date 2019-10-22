@@ -1,10 +1,8 @@
 import axios from "axios";
-// eslint-disable-next-line
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 
 import Utilities from "../../../utilities/Utilities";
-// import "./Twitch.scss";
 
 function AddChannelForm() {
   const useInput = initialValue => {

@@ -1,22 +1,15 @@
-import { Animated } from "react-animated-css";
 import React, { useEffect, useState, useCallback } from "react";
+import { Animated } from "react-animated-css";
 import Alert from "react-bootstrap/Alert";
 import Countdown from "react-countdown-now";
-
 import { Button, Spinner } from "react-bootstrap";
-// import ReactCSSTransitionGroup from "react-addons-css-transition-group"; // ES6
-// import LazyLoad from "react-lazyload";
+import Icon from "react-icons-kit";
+import { reload } from "react-icons-kit/iconic/reload";
+import { twitch } from "react-icons-kit/fa/twitch";
 
 import RenderTwitch from "./Render-Twitch";
 import styles from "./Twitch.module.scss";
 import Utilities from "../../utilities/Utilities";
-
-import Icon from "react-icons-kit";
-import { reload } from "react-icons-kit/iconic/reload";
-
-// import { feed } from "react-icons-kit/icomoon/feed";
-import { twitch } from "react-icons-kit/fa/twitch";
-
 import "./Twitch.scss";
 
 function Twitch({ data }) {

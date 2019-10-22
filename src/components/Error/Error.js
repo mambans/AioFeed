@@ -1,5 +1,5 @@
-import Alert from "react-bootstrap/Alert";
 import React, { useEffect, useState } from "react";
+import Alert from "react-bootstrap/Alert";
 
 import Utilities from "../../utilities/Utilities";
 
@@ -22,7 +22,6 @@ function ErrorHandeling(data) {
       }
 
       setErrorMessage(error);
-
       setErrorTitle(data.data.title ? data.data.title : "Oh-oh! Something bad happened.");
     }
     handleErrorContent();

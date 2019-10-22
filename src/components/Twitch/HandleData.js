@@ -93,7 +93,6 @@ function HandleData({ children }) {
           }
         });
       } else if (streams.status === 201) {
-        // console.log("-201-");
         setRefreshing(false);
       }
 

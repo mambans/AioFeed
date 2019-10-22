@@ -1,6 +1,5 @@
 .navbar.navbar-expand-lg.navbar-dark.bg-dark {
   height: 75px;
-  //position: fixed;
   width: 100vw;
   background-color: var(--navigationbarBackground) !important;
   box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.15);
@@ -10,7 +9,6 @@
   -ms-transition: ease-in-out 0.2s;
   -o-transition: ease-in-out 0.2s;
   a {
-    // font-size: 20px;
     transition: ease-in-out 0.2s;
     -webkit-transition: ease-in-out 0.2s;
     -moz-transition: ease-in-out 0.2s;
@@ -103,7 +101,6 @@ nav {
 }
 
 .popup-overlay {
-  // visibility: hidden;
   margin-top: 75px;
 }
 
@@ -113,5 +110,4 @@ nav {
 
 .navbar-dark .navbar-nav .nav-link {
   color: var(--headerTextColor);
-  // color: darken($textColor, 50%);
 }

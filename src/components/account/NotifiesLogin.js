@@ -37,8 +37,6 @@ function NotifiesLogin(data) {
   };
 
   async function loginAccount() {
-    // let error;
-
     setError(null);
     await axios
       .post(`http://localhost:3100/notifies/account/login`, {
@@ -51,9 +49,6 @@ function NotifiesLogin(data) {
         document.cookie = `Twitch-access_token=${res.data.account.twitch_token}; path=/`;
         document.cookie = `Youtube-access_token=${res.data.account.youtube_token}; path=/`;
         document.cookie = `Notifies_AccountProfileImg=${res.data.account.profile_img}; path=/`;
-
-        // data.data.setRefresh(!data.data.refresh);
-        // data.navSetRefresh(!data.navRefresh);
 
         resetUserName();
         resetPassword();

@@ -1,5 +1,4 @@
 .accountPopup-content {
-  // width: 30% !important;
   width: 100px !important;
   min-width: 1000px;
   border-radius: 25px !important;
@@ -8,7 +7,6 @@
   -ms-border-radius: 25px !important;
   -o-border-radius: 25px !important;
   background-color: transparent !important;
-  // box-shadow: 10px 10px 10px 0 rgba(0, 0, 0, 0.25) !important;
   left: calc(50% - 500px) !important;
   border: none !important;
   z-index: 10 !important;
@@ -30,7 +28,6 @@
   -o-border-radius: 5px !important;
   width: min-content !important;
 
-  // top: 1785px !important;
   form {
     padding: 5px;
   }
@@ -60,7 +57,6 @@
     list-style: none;
     padding-left: 10px;
     padding-right: 10px;
-    // background-color: rgb(8, 3, 20);
 
     li {
       display: flex;

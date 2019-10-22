@@ -1,11 +1,10 @@
 import axios from "axios";
 import _ from "lodash";
-import getFollowedChannels from "./../GetFollowedChannels";
 
+import getFollowedChannels from "./../GetFollowedChannels";
 import Utilities from "../../../utilities/Utilities";
 
 async function getFollowedVods(forceRun) {
-  // console.log("TCL: getFollowedVods -> forceRun", forceRun);
   const thresholdDate = 1;
   const vodExpire = 3;
 
@@ -21,8 +20,6 @@ async function getFollowedVods(forceRun) {
       JSON.parse(localStorage.getItem("Twitch-vods")).expire <= new Date() ||
       forceRun
     ) {
-      // console.log("REFRESING VODS");
-
       try {
         const followedChannels = await getFollowedChannels();
         const reqVodChannels = await axios.get(`http://localhost:3100/notifies/vod-channels`);
@@ -78,7 +75,6 @@ async function getFollowedVods(forceRun) {
         );
       } catch (error) {
         console.error(error.message);
-        // return error;
       }
     }
     return { data: JSON.parse(localStorage.getItem("Twitch-vods")) };

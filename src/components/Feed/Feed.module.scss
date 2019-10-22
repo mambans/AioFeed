@@ -35,10 +35,12 @@
 .imgDurationContainer {
   grid-area: video;
   transition: all 0.2s ease-in-out;
+
   img {
     transition: all 0.2s ease-in-out;
     border-radius: 10px;
   }
+
   &:hover {
     transform: scale(1.1);
     -webkit-transform: scale(1.1);
@@ -46,6 +48,7 @@
     -ms-transform: scale(1.1);
     -o-transform: scale(1.1);
   }
+
   img {
     width: 250px;
     max-height: 140px;
@@ -55,7 +58,6 @@
 
 .date {
   grid-area: info;
-
   color: var(--greyInfo);
 }
 

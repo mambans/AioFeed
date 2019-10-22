@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Spinner, Alert, Button } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import { Animated } from "react-animated-css";
-import { NavLink } from "react-router-dom";
 
 import Youtube from "../youtube/Youtube";
 import Twitch from "../twitch/Twitch";
 import HandleData from "../twitch/HandleData";
 import TwitchVods from "../twitch/vods/Twitch-vods";
 import ErrorHandeling from "./../error/Error";
-//eslint-disable-next-line
 import styles from "./Feed.module.scss";
 import Utilities from "../../utilities/Utilities";
-
 import "./Notifications.scss";
 
 function Feed() {
@@ -98,6 +96,7 @@ function Feed() {
             <Youtube />
           </Animated>
         ) : null}
+
         {localStorage.getItem("TwitchVodsFeedEnabled") === "true" ? (
           <Animated animationIn='fadeIn' animationOut='fadeOut' isVisible={true}>
             <TwitchVods />

@@ -1,8 +1,8 @@
-import Moment from "react-moment";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useEffect, useRef, useCallback } from "react";
-import { store } from "react-notifications-component";
 import Tooltip from "react-bootstrap/Tooltip";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import { store } from "react-notifications-component";
+import Moment from "react-moment";
 
 import styles from "../Twitch.module.scss";
 import Utilities from "../../../utilities/Utilities";

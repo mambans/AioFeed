@@ -1,3 +1,33 @@
+// .notification-custom-success {
+//   width: 100%;
+//   display: flex;
+//   background-color: #28a745;
+
+//   .notification-custom-icon {
+//     border-left: 8px solid darken(#28a745, 15%);
+//   }
+// }
+
+// .notification-custom-default {
+//   width: 100%;
+//   display: flex;
+//   background-color: #007bff;
+
+//   .notification-custom-icon {
+//     border-left: 8px solid darken(#007bff, 15%);
+//   }
+// }
+
+// .notification-custom-danger {
+//   width: 100%;
+//   display: flex;
+//   background-color: #dc3545;
+
+//   .notification-custom-icon {
+//     border-left: 8px solid darken(#dc3545, 15%);
+//   }
+// }
+
 .notification-custom-icon {
   flex-basis: 20%;
   position: relative;
@@ -18,36 +48,6 @@
   display: inline-block;
 }
 
-.notification-custom-success {
-  width: 100%;
-  display: flex;
-  background-color: #28a745;
-
-  .notification-custom-icon {
-    border-left: 8px solid darken(#28a745, 15%);
-  }
-}
-
-.notification-custom-default {
-  width: 100%;
-  display: flex;
-  background-color: #007bff;
-
-  .notification-custom-icon {
-    border-left: 8px solid darken(#007bff, 15%);
-  }
-}
-
-.notification-custom-danger {
-  width: 100%;
-  display: flex;
-  background-color: #dc3545;
-
-  .notification-custom-icon {
-    border-left: 8px solid darken(#dc3545, 15%);
-  }
-}
-
 .notification-custom-twitch-online {
   border-radius: 0px 15px 15px 0;
   width: 100%;
@@ -56,17 +56,6 @@
 
   .notification-custom-icon {
     border-left: 8px solid darken(#8c3fd4, 25%);
-  }
-}
-
-.notification-custom-twitch-update {
-  border-radius: 0px 15px 15px 0;
-  width: 100%;
-  display: flex;
-  background-color: #4d194d;
-
-  .notification-custom-icon {
-    border-left: 8px solid darken(#902390, 25%);
   }
 }
 
