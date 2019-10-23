@@ -32,5 +32,6 @@ yarn-error.log*
 src/server/sql/Query.sql
 .eslintrc
 public/images/originals
+Notes
 
 .gitignore
