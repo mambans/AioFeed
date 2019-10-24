@@ -28,6 +28,9 @@ html {
   --refreshButtonBackground: hsla(0, 0%, 0%, 0.1);
   --refreshButtonHoverColor: #ffffff;
   --refreshButtonColor: #6c757d;
+  --footerShadow: 0 0 50px 0 #242424;
+  --footerLinkColor: #0eb5bd;
+  --footerLinkHoverColor: #14dbe6;
 }
 
 html[data-theme="christmas"] {
@@ -57,8 +60,14 @@ html[data-theme="christmas"] {
   --refreshButtonBackground: #00000026;
   --refreshButtonColor: #a8a8a8;
   --refreshButtonHoverColor: #1cca05;
+  --footerShadow: 0 0 50px 0 #242424;
+  --footerLinkColor: rgb(224, 224, 224);
+  --footerLinkHoverColor: white;
 }
 
 html[data-theme="new year's eve"] {
   --backgroundImg: url("/images/new years eve33.jpg");
+  --footerShadow: 0 0 50px 0 #242424;
+  // --footerLinkColor: #0eb5bd;
+  // --footerLinkHoverColor: #12ccd6;
 }

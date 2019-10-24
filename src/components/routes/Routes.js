@@ -13,6 +13,8 @@ import TwitchAuth from "../auth/TwitchAuth";
 import TwitchAuthCallback from "../auth/TwitchAuthCallback";
 import YoutubeAuth from "../auth/YoutubeAuth";
 import YoutubeAuthCallback from "../auth/YoutubeAuthCallback";
+import Legality from "../legality/Legality";
+import Footer from "../footer/Footer";
 import style from "./Routes.module.scss";
 
 import TwitterAuth from "../twitter/TwitterAuth";
@@ -25,7 +27,7 @@ function Routes() {
         {data => (
           <>
             <NavigationBar fixed data={data} />
-            <div id={style.contentContainer}>
+            <main id={style.contentContainer}>
               <Switch>
                 <Route exact path='/' component={Home} />
                 <Route exact path='/index' component={Home} />
@@ -33,7 +35,6 @@ function Routes() {
                 <Route
                   exact
                   path='/feed'
-                  // component={Feed}
                   render={() => {
                     return <Feed data={data} />;
                   }}
@@ -44,7 +45,6 @@ function Routes() {
                 <Route
                   exact
                   path='/auth/twitch/callback'
-                  // component={TwitchAuthCallback}
                   render={() => {
                     return <TwitchAuthCallback data={data} />;
                   }}
@@ -52,7 +52,6 @@ function Routes() {
                 <Route
                   exact
                   path='/auth/youtube/callback'
-                  // component={YoutubeAuthCallback}
                   render={() => {
                     return <YoutubeAuthCallback data={data} />;
                   }}
@@ -66,10 +65,12 @@ function Routes() {
                   render={() => <NotifiesCreateAccount data={data} />}
                 />
                 <Route exact path='/account/login' render={() => <NotifiesLogin data={data} />} />
+                <Route exact path='/legality' component={Legality} />
 
                 <Route component={NoMatch} />
               </Switch>
-            </div>
+            </main>
+            <Footer />
           </>
         )}
       </HandleRefresh>
