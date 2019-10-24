@@ -37,7 +37,7 @@ async function vodChannels() {
 }
 
 async function addVodChannels(channel) {
-  let sql = `Call add_channel('${channel}');`;
+  let sql = `Call add_channel('${channel.trim()}');`;
   let res;
 
   res = await db.query(sql);
@@ -46,7 +46,7 @@ async function addVodChannels(channel) {
 }
 
 async function removeVodChannels(channel) {
-  let sql = `Call remove_channel('${channel}');`;
+  let sql = `Call remove_channel('${channel.trim()}');`;
   let res;
 
   res = await db.query(sql);
@@ -55,7 +55,7 @@ async function removeVodChannels(channel) {
 }
 
 async function createAccount(name, email, password) {
-  let sql = `Call Create_Account('${name}', '${email}', '${password}');`;
+  let sql = `Call Create_Account('${name.trim()}', '${email.trim()}', '${password}');`;
   const result = await db.query(sql).then(res => {
     return res[0];
   });
