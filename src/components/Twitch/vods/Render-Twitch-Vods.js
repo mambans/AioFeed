@@ -104,12 +104,12 @@ function RenderTwitchVods(data) {
   );
 
   useEffect(() => {
-    if (
-      (vodData.current === undefined || vodData.current.id !== data.data.id) &&
-      !data.run.initial
-    ) {
-      addNotification(`Added vod: ${data.data.user_name}`, "twitch-vod-add");
-    }
+    // if (
+    //   (vodData.current === undefined || vodData.current.id !== data.data.id) &&
+    //   !data.run.initial
+    // ) {
+    //   addNotification(`Added vod: ${data.data.user_name}`, "twitch-vod-add");
+    // }
     vodData.current = data.data;
     data.runChange(false);
   }, [
