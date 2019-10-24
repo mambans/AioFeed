@@ -1,13 +1,38 @@
 import axios from "axios";
 import Utilities from "../../utilities/Utilities";
 
+const fetchNextPgeOfSubscriptions = async (previousPage, totalResults, prevpPageItems) => {
+  if (prevpPageItems.length < totalResults) {
+    const nextPage = await axios.get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {
+      params: {
+        maxResults: 50,
+        mine: true,
+        part: "snippet",
+        order: "relevance",
+        key: process.env.REACT_APP_YOUTUBE_API_KEY,
+        pageToken: previousPage.data.nextPageToken,
+      },
+      headers: {
+        Authorization: "Bearer " + Utilities.getCookie("Youtube-access_token"),
+        Accept: "application/json",
+      },
+    });
+
+    const pageItems = await prevpPageItems.concat(nextPage.data.items);
+
+    return await fetchNextPgeOfSubscriptions(nextPage, totalResults, pageItems);
+  } else {
+    return prevpPageItems;
+  }
+};
+
 async function getFollowedChannels() {
   try {
     if (
       !localStorage.getItem(`followedChannels`) ||
       JSON.parse(localStorage.getItem(`followedChannels`)).casheExpire <= new Date()
     ) {
-      const firstPage = await axios
+      const previousPage = await axios
         .get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {
           params: {
             maxResults: 50,
@@ -25,38 +50,24 @@ async function getFollowedChannels() {
           console.error(error);
         });
 
-      const CheckNextPage =
-        firstPage.data.pageInfo.totalResults / firstPage.data.pageInfo.resultsPerPage;
+      const totalResults = previousPage.data.pageInfo.totalResults;
+      const allSubscriptions = await fetchNextPgeOfSubscriptions(
+        previousPage,
+        totalResults,
+        previousPage.data.items
+      );
 
-      if (CheckNextPage >= 1) {
-        const secondPage = await axios.get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {
-          params: {
-            maxResults: 50,
-            mine: true,
-            part: "snippet",
-            order: "relevance",
-            key: process.env.REACT_APP_YOUTUBE_API_KEY,
-            pageToken: firstPage.data.nextPageToken,
-          },
-          headers: {
-            Authorization: "Bearer " + Utilities.getCookie("Youtube-access_token"),
-            Accept: "application/json",
-          },
-        });
-        let currentTime = new Date();
+      let currentTime = new Date();
 
-        localStorage.setItem(
-          `followedChannels`,
-          JSON.stringify({
-            data: firstPage.data.items.concat(secondPage.data.items),
-            casheExpire: currentTime.setHours(currentTime.getHours() + 12),
-          })
-        );
+      localStorage.setItem(
+        `followedChannels`,
+        JSON.stringify({
+          data: allSubscriptions,
+          casheExpire: currentTime.setHours(currentTime.getHours() + 12),
+        })
+      );
 
-        return JSON.parse(localStorage.getItem("followedChannels")).data;
-      } else {
-        return firstPage;
-      }
+      return allSubscriptions;
     } else {
       console.log("Youtube: Followed-channels cashe used.");
       return JSON.parse(localStorage.getItem("followedChannels")).data;

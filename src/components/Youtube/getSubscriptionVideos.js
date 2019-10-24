@@ -17,7 +17,7 @@ async function getSubscriptionVideos(followedChannels) {
 
   try {
     await Promise.all(
-      followedChannels.data.items.map(async channel => {
+      followedChannels.map(async channel => {
         let response = null;
 
         localStorage.getItem(`activity-${channel.snippet.resourceId.channelId}`)
