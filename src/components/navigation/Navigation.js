@@ -88,6 +88,7 @@ function NavigationBar(data) {
                   <img
                     onClick={openModal}
                     className={styles.navProfile}
+                    id='NavigationProfileImage'
                     src={
                       Utilities.getCookie("Notifies_AccountProfileImg") !== "null"
                         ? Utilities.getCookie("Notifies_AccountProfileImg")
