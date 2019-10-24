@@ -309,6 +309,14 @@
   padding: 2px;
 }
 
+.vodPreview {
+  animation: animateVodPreviewV2 5s steps(9);
+  -webkit-animation: animateVodPreviewV2 5s steps(9);
+  animation-fill-mode: forwards;
+  //animation: animateVodPreview 5s;
+  //animation-delay: 0.5s;
+}
+
 @media screen and (max-width: 2560px) {
   .container {
     width: 82.5%;
@@ -349,5 +357,57 @@
 
   .settings {
     left: 83.5%;
+  }
+}
+
+@keyframes animateVodPreview {
+  0%,
+  10% {
+    background-position-y: calc(180px * 1);
+  }
+  10.01%,
+  20% {
+    background-position-y: calc(180px * 2);
+  }
+  20.01%,
+  30% {
+    background-position-y: calc(180px * 3);
+  }
+  30.01%,
+  40% {
+    background-position-y: calc(180px * 4);
+  }
+  40.01%,
+  50% {
+    background-position-y: calc(180px * 5);
+  }
+  50.01%,
+  60% {
+    background-position-y: calc(180px * 6);
+  }
+  60.01%,
+  70% {
+    background-position-y: calc(180px * 7);
+  }
+  70.01%,
+  80% {
+    background-position-y: calc(180px * 8);
+  }
+  80.01%,
+  90% {
+    background-position-y: calc(180px * 9);
+  }
+  90.01%,
+  100% {
+    background-position-y: calc(180px * 10);
+  }
+}
+
+@keyframes animateVodPreviewV2 {
+  from {
+    background-position-y: 1800px;
+  }
+  to {
+    background-position-y: 180px;
   }
 }

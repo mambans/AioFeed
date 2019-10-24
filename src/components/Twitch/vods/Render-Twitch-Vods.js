@@ -1,25 +1,79 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { store } from "react-notifications-component";
 import Moment from "react-moment";
 
+// import axios from "axios";
+
 import styles from "../Twitch.module.scss";
 import Utilities from "../../../utilities/Utilities";
 
 function TwitchVodElement(data) {
+  const [isHovered, setIsHovered] = useState(false);
+  const ref = useRef();
+
+  const vodPreview = `https://static-cdn.jtvnw.net/s3_vods/${
+    data.data.thumbnail_url.split("/")[4]
+  }/storyboards/${data.data.id}-strip-0.jpg`;
+
+  // const checkVodPreviewAvailability = async () => {
+  //   const Availability = await axios
+  //     .get(vodPreview)
+  //     .then(() => {
+  //       return true;
+  //     })
+  //     .catch(() => {
+  //       return false;
+  //     });
+  //   console.log(Availability);
+
+  //   return Availability;
+  // };
+
+  const handleMouseOver = useCallback(() => {
+    setIsHovered(true);
+  }, []);
+
+  const handleMouseOut = useCallback(event => {
+    setIsHovered(false);
+  }, []);
+
+  useEffect(() => {
+    const refEle = ref.current;
+    ref.current.addEventListener("mouseenter", handleMouseOver);
+    ref.current.addEventListener("mouseleave", handleMouseOut);
+
+    return () => {
+      refEle.removeEventListener("mouseenter", handleMouseOver);
+      refEle.removeEventListener("mouseleave", handleMouseOut);
+    };
+  }, [handleMouseOut, handleMouseOver]);
+
   return (
     <div className={styles.videoVod}>
-      <div className={styles.imgContainer}>
+      <div className={styles.imgContainer} ref={ref}>
         <a className={styles.img} href={data.data.url}>
-          <img
-            src={
-              data.data.thumbnail_url
-                ? data.data.thumbnail_url.replace("%{width}", 1280).replace("%{height}", 720)
-                : "https://vod-secure.twitch.tv/_404/404_processing_320x180.png"
-            }
-            alt={styles.thumbnail}
-          />
+          {isHovered && data.data.thumbnail_url ? (
+            <div
+              alt=''
+              className={styles.vodPreview}
+              style={{
+                width: "320px",
+                height: "180px",
+                backgroundImage: `url(${vodPreview})`,
+                borderRadius: "10px",
+              }}></div>
+          ) : (
+            <img
+              src={
+                data.data.thumbnail_url
+                  ? data.data.thumbnail_url.replace("%{width}", 1280).replace("%{height}", 720)
+                  : "https://vod-secure.twitch.tv/_404/404_processing_320x180.png"
+              }
+              alt={styles.thumbnail}
+            />
+          )}
         </a>
         <p className={styles.duration}>{Utilities.formatTwitchVodsDuration(data.data.duration)}</p>
       </div>
