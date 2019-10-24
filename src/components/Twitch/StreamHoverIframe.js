@@ -39,19 +39,27 @@ function StreamHoverIframe(data) {
   }, [data, handleMouseOut, handleMouseOver]);
 
   return (
-    <Iframe
-      // url={`https://player.twitch.tv/?channel=${data.data.user_name}&muted=true`}
-      url={`https://player.twitch.tv/?twitch5=1&allowfullscreen&video=&channel=${data.data.user_name}&!playsinline&autoplay&!muted&!controls`}
-      title={data.data.user_name + "-iframe"}
-      className={styles.StreamHoverIframe}
-      theme='dark'
-      id={data.data.id + "-iframe"}
-      width='100%'
-      height='100%'
-      display='inline'
-      position='absolute'
-      loading={"Loading.."}
-    />
+    <>
+      <Iframe
+        // url={`https://player.twitch.tv/?channel=${data.data.user_name}&muted=true`}
+        url={`https://player.twitch.tv/?twitch5=1&allowfullscreen&video=&channel=${data.data.user_name}&!playsinline&autoplay&!muted&!controls`}
+        title={data.data.user_name + "-iframe"}
+        className={styles.StreamHoverIframe}
+        theme='dark'
+        id={data.data.id + "-iframe"}
+        width='100%'
+        height='100%'
+        display='inline'
+        position='absolute'
+        loading={"Loading.."}
+      />
+      <a
+        href={`https://www.twitch.tv/${data.data.user_name}`}
+        alt=''
+        style={{ position: "absolute", height: "180px", width: "320px", zIndex: "10" }}>
+        ""
+      </a>
+    </>
   );
 }
 
