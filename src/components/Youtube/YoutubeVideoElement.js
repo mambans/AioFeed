@@ -78,7 +78,7 @@ function YoutubeVideoElement(data) {
         <OverlayTrigger
           key={"bottom"}
           placement={"bottom"}
-          delay={{ show: 250, hide: 400 }}
+          delay={{ show: 250, hide: 0 }}
           overlay={
             <Tooltip
               id={`tooltip-${"bottom"}`}
