@@ -9,6 +9,17 @@ const bodyParser = require("body-parser");
 
 app.set("view engine", "ejs");
 
+const rateLimit = require("express-rate-limit");
+
+const limiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 15 minutes
+  max: 120, // limit each IP to 100 requests per windowMs
+  message: "Too many requests made from this IP, please try again after 5min.",
+});
+
+//  apply to all requests
+app.use(limiter);
+
 app.use(function(req, res, next) {
   const allowedOrigins = [
     "http://127.0.0.1:3000",
