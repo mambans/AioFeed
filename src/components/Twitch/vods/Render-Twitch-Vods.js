@@ -3,41 +3,55 @@ import Tooltip from "react-bootstrap/Tooltip";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import { store } from "react-notifications-component";
 import Moment from "react-moment";
-
-// import axios from "axios";
+import axios from "axios";
 
 import styles from "../Twitch.module.scss";
 import Utilities from "../../../utilities/Utilities";
 
 function TwitchVodElement(data) {
   const [isHovered, setIsHovered] = useState(false);
+  const [previewAvalible, setPreviewAvalible] = useState(null);
   const ref = useRef();
+  const hoverTimeoutRef = useRef();
 
   const vodPreview = `https://static-cdn.jtvnw.net/s3_vods/${
     data.data.thumbnail_url.split("/")[4]
   }/storyboards/${data.data.id}-strip-0.jpg`;
 
-  // const checkVodPreviewAvailability = async () => {
-  //   const Availability = await axios
-  //     .get(vodPreview)
-  //     .then(() => {
-  //       return true;
-  //     })
-  //     .catch(() => {
-  //       return false;
-  //     });
-  //   console.log(Availability);
+  const checkVodPreviewAvailability = useCallback(async () => {
+    const Availability = await axios
+      .get(vodPreview)
+      .then(() => {
+        setPreviewAvalible(true);
+        return true;
+      })
+      .catch(() => {
+        setPreviewAvalible(false);
+        return false;
+      });
+    console.log(Availability);
 
-  //   return Availability;
-  // };
+    return Availability;
+  }, [vodPreview]);
 
   const handleMouseOver = useCallback(() => {
-    setIsHovered(true);
-  }, []);
+    if (previewAvalible === null) {
+      checkVodPreviewAvailability();
+    }
+    hoverTimeoutRef.current = setTimeout(() => {
+      setIsHovered(true);
+    }, 200);
+    // setIsHovered(true);
+  }, [checkVodPreviewAvailability, previewAvalible]);
 
   const handleMouseOut = useCallback(event => {
+    clearTimeout(hoverTimeoutRef.current);
     setIsHovered(false);
   }, []);
+
+  // useEffect(() => {
+  //   checkVodPreviewAvailability();
+  // }, [checkVodPreviewAvailability]);
 
   useEffect(() => {
     const refEle = ref.current;
@@ -54,7 +68,8 @@ function TwitchVodElement(data) {
     <div className={styles.videoVod}>
       <div className={styles.imgContainer} ref={ref}>
         <a className={styles.img} href={data.data.url}>
-          {isHovered && data.data.thumbnail_url ? (
+          {/* {isHovered && data.data.thumbnail_url ? ( */}
+          {isHovered && data.data.thumbnail_url && previewAvalible ? (
             <div
               alt=''
               className={styles.vodPreview}
@@ -158,12 +173,6 @@ function RenderTwitchVods(data) {
   );
 
   useEffect(() => {
-    // if (
-    //   (vodData.current === undefined || vodData.current.id !== data.data.id) &&
-    //   !data.run.initial
-    // ) {
-    //   addNotification(`Added vod: ${data.data.user_name}`, "twitch-vod-add");
-    // }
     vodData.current = data.data;
     data.runChange(false);
   }, [
