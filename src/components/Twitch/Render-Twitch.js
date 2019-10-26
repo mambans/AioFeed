@@ -54,7 +54,6 @@ function RenderTwitch(data) {
 
   return (
     <>
-      {/* <ReactTooltip delayShow={150} place='bottom' type='dark' effect='solid' /> */}
       {data.newlyAdded ? (
         <StreamEle
           key={data.data.id}

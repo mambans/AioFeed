@@ -5,13 +5,19 @@ import getFollowedChannels from "./../GetFollowedChannels";
 import Utilities from "../../../utilities/Utilities";
 
 const getMonitoredVodChannels = async () => {
-  const vodChannels = await axios.get(`http://localhost:3100/notifies/vod-channels`);
+  const vodChannels = await axios
+    .get(`http://localhost:3100/notifies/vod-channels`)
+    .then(channels => {
+      return channels.data.channels.map(channel => {
+        return channel.name;
+      });
+    })
+    .catch(error => {
+      console.log({ error });
+      return error;
+    });
 
-  const vodChannelsNames = vodChannels.data.channels.map(channel => {
-    return channel.name;
-  });
-
-  return vodChannelsNames;
+  return vodChannels;
 };
 
 const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) => {
@@ -97,7 +103,8 @@ async function getFollowedVods(forceRun) {
           })
         );
       } catch (error) {
-        console.error(error.message);
+        console.error(error);
+        return { data: JSON.parse(localStorage.getItem("Twitch-vods")), error: error };
       }
     }
     return { data: JSON.parse(localStorage.getItem("Twitch-vods")) };

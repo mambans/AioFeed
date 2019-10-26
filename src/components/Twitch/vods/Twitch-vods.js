@@ -27,22 +27,20 @@ function TwitchVods() {
     initialOpen.current = newRun;
   }
 
-  const refresh = useCallback(
-    async forceRefresh => {
-      setRefreshing(true);
-      await getFollowedVods(forceRefresh)
-        .then(data => {
-          setError(data.error);
-          setVods(data.data);
-          setIsLoaded(true);
-          setRefreshing(false);
-        })
-        .catch(() => {
-          setError(error);
-        });
-    },
-    [error]
-  );
+  const refresh = useCallback(async forceRefresh => {
+    setRefreshing(true);
+    await getFollowedVods(forceRefresh)
+      .then(data => {
+        setError(data.error);
+        setVods(data.data);
+        setIsLoaded(true);
+        setRefreshing(false);
+      })
+      .catch(data => {
+        setError(data.error);
+        setVods(data.data);
+      });
+  }, []);
 
   const windowFocusHandler = useCallback(async () => {
     refresh(false);

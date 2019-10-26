@@ -89,6 +89,7 @@
     -moz-transform: scale(1.15);
     -ms-transform: scale(1.15);
     -o-transform: scale(1.15);
+    // transition-duration: 350ms;
   }
   img {
     width: 320px;
@@ -178,15 +179,17 @@
 }
 
 .refreshButton {
+  color: var(--refreshButtonColor);
   background: var(--refreshButtonBackground);
+  box-shadow: var(--refreshButtonShadow);
+  border: var(--refreshButtonBorder);
   position: relative;
   left: 0.5%;
   bottom: -23px;
-  box-shadow: var(--refreshButtonShadow);
-  border: var(--refreshButtonBorder);
 
   &:hover {
     color: var(--refreshButtonHoverColor);
+    background: var(--refreshButtonHoverBackground);
   }
 }
 
@@ -310,11 +313,14 @@
 }
 
 .vodPreview {
-  animation: animateVodPreviewV2 5s steps(9);
-  -webkit-animation: animateVodPreviewV2 5s steps(9);
+  animation: animateVodPreview 5s steps(9);
+  -webkit-animation: animateVodPreview 5s steps(9);
   animation-fill-mode: forwards;
   //animation: animateVodPreview 5s;
   //animation-delay: 0.5s;
+  //image-rendering: optimizequality;
+  //image-rendering: crisp-edges;
+  //image-rendering: optimizespeed;
 }
 
 @media screen and (max-width: 2560px) {
@@ -360,7 +366,7 @@
   }
 }
 
-@keyframes animateVodPreview {
+@keyframes animateVodPreview_OLD {
   0%,
   10% {
     background-position-y: calc(180px * 1);
@@ -403,7 +409,7 @@
   }
 }
 
-@keyframes animateVodPreviewV2 {
+@keyframes animateVodPreview {
   from {
     background-position-y: 1800px;
   }
