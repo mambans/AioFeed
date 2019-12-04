@@ -1,0 +1,178 @@
+.tooltip-inner {
+  padding: 0.25rem 0.5rem;
+  color: #fff;
+  // text-align: center;
+  text-align: start;
+  background-color: #131313;
+  max-width: unset;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  font-size: 16px;
+}
+
+.btn {
+  padding: 0.5rem 0.75rem;
+}
+
+.btn-outline-secondary:focus,
+.btn-outline-secondary.focus {
+  // box-shadow: 3px 3px 3px 0px #201f1f;
+  box-shadow: var(--refreshButtonShadow);
+}
+
+.dropdown-menu {
+  background-color: #16161fd4;
+}
+
+.dropdown-item {
+  color: #fff;
+  transition: all 0.1s ease-in-out;
+}
+
+.example-enter {
+  opacity: 0.01;
+}
+
+.modal-content {
+  background: transparent !important;
+}
+
+.modal .modal-dialog {
+  min-width: 1000px !important;
+  max-width: 1000px !important;
+
+  .modal-header {
+    padding: 0 !important;
+    border: none !important;
+    padding-top: 50px !important;
+  }
+
+  .close {
+    text-shadow: none !important;
+    color: #fff !important;
+    font-size: 50px;
+    outline: none !important;
+  }
+}
+
+.popup-content {
+  background: linear-gradient(rgba(0, 0, 0, 0.4) 0%, var(--popupModalBackground) 15%) !important;
+  border-radius: 0 0 10px 10px !important;
+  -webkit-border-radius: 0 0 10px 10px !important;
+  -moz-border-radius: 0 0 10px 10px !important;
+  -ms-border-radius: 0 0 10px 10px !important;
+  -o-border-radius: 0 0 10px 10px !important;
+  width: 300px !important;
+  min-width: min-content !important;
+  max-height: 485px;
+  height: 485px;
+  overflow: scroll;
+  overflow-x: hidden;
+  border: none !important;
+
+  ul {
+    list-style: none;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: thin solid #1e1616;
+      padding: 5px 0;
+      min-height: 43px;
+    }
+
+    li a {
+      margin: 0;
+      color: white;
+
+      &:hover {
+        color: var(--channelHover);
+      }
+    }
+
+    li p {
+      margin: 0;
+    }
+  }
+}
+
+.settingsPopup-content {
+  max-height: 600px;
+
+  form {
+    padding: 5px;
+  }
+
+  input[type="text"] {
+    color: white;
+    border: none;
+    border-bottom: 1px solid white;
+    background-color: transparent;
+    background: transparent;
+  }
+
+  input[type="submit"] {
+    border-radius: 5px;
+    border: thin solid #484848;
+    background-color: #035879;
+    color: rgb(224, 224, 224);
+    width: 100%;
+    margin-top: 5px;
+    &:hover {
+      color: white;
+      background-color: #097099;
+    }
+  }
+  ul li {
+    button {
+      background-color: none !important;
+      background: none !important;
+      border: none !important;
+
+      i {
+        color: rgb(172, 34, 47);
+      }
+
+      &:hover i {
+        color: red;
+      }
+    }
+  }
+}
+
+#twitchSidebar .animated:last-child > div {
+  border: none;
+}
+
+.accountPopup-content {
+  width: 1000px !important;
+  min-width: 1000px;
+  border-radius: 25px !important;
+  -webkit-border-radius: 25px !important;
+  -moz-border-radius: 25px !important;
+  -ms-border-radius: 25px !important;
+  -o-border-radius: 25px !important;
+  background-color: transparent !important;
+  left: calc(50% - 500px) !important;
+  border: none !important;
+  z-index: 10 !important;
+  padding: 0 !important;
+
+  background: none !important;
+  height: unset;
+  max-height: unset;
+  // min-width: unset !important;
+  // width: unset !important;
+  overflow: unset !important;
+}
+
+.popup-content {
+  scrollbar-color: var(--scrollbarColors) !important;
+  scrollbar-width: thin !important;
+}

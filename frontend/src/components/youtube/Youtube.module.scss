@@ -1,0 +1,112 @@
+.date {
+  grid-area: info;
+  color: var(--greyInfo);
+}
+
+.channel {
+  grid-area: info;
+  justify-self: end;
+  padding-right: 15px;
+
+  a {
+    color: var(--greyInfo);
+
+    &:hover {
+      color: var(--infoHover);
+    }
+  }
+}
+
+.duration {
+  position: relative;
+  width: max-content;
+  background: #2222228c;
+  padding-right: 5px;
+  font-size: 0.9rem;
+  border-top-right-radius: 10px;
+  padding-left: 5px;
+  height: 24px;
+  bottom: 28px;
+  left: 4px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  background: #161616b0;
+}
+
+.domainTitle {
+  text-align: center;
+}
+
+.liveDot {
+  width: 14px;
+  height: 14px;
+  background-color: red;
+  border-radius: 7px;
+  bottom: 41px;
+  position: relative;
+  right: -234px;
+}
+
+.lastRefresh {
+  position: relative;
+  left: 10%;
+  color: var(--greyInfo);
+}
+
+.requestError {
+  padding: 5px;
+  opacity: 0.8;
+  margin: 0;
+  position: absolute;
+  margin-left: 250px;
+
+  color: #ffc51c;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid;
+  border-radius: 0;
+  font-weight: bold;
+}
+
+.container_header {
+  text-align: center;
+  color: var(--subFeedHeaderColor);
+  margin: auto;
+  letter-spacing: 1px;
+
+  width: 100%;
+  margin-right: 300px;
+  margin-bottom: 10px;
+}
+
+.VideoHoverIframe {
+  border: none;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  z-index: 2;
+  cursor: pointer;
+  position: absolute;
+  display: block;
+  background-color: transparent;
+  background: none;
+}
+
+@media screen and (max-width: 2560px) {
+  .refreshTimer {
+    left: 225px;
+  }
+}
+
+@media screen and (max-width: 1920px) {
+  .refreshButton {
+    left: 1%;
+  }
+
+  .lastRefresh {
+    left: 45px;
+  }
+}

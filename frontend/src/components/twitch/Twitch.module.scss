@@ -1,0 +1,398 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  width: var(--feedsWidth);
+  margin: var(--feedsMargin);
+  padding-bottom: 50px;
+  min-height: 400px;
+}
+
+.headerContainerTopStreams {
+  border-bottom: var(--subFeedHeaderBorder);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 7px;
+  width: 92%;
+  margin: auto;
+  margin-top: 25px;
+}
+
+.video {
+  display: grid;
+  grid-template-areas:
+    "highlight highlight"
+    "video video"
+    "title title"
+    "info info";
+
+  width: 336px;
+  margin: 7px;
+  max-height: 336px;
+  margin-bottom: 15px;
+}
+
+.date {
+  grid-area: info;
+  color: var(--greyInfo);
+}
+
+.viewers {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+
+  // top: 7px;
+  grid-column: 3;
+  padding-right: 15px;
+  margin-bottom: 0;
+  align-items: center;
+}
+
+.duration {
+  position: relative;
+  width: max-content;
+  background: #2222228c;
+  padding-right: 5px;
+  font-size: 0.9rem;
+  padding-left: 5px;
+  border-top-right-radius: 10px;
+  z-index: 1;
+  border-bottom-left-radius: 10px;
+  height: 24px;
+  bottom: 28px;
+  left: 4px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  background: #161616b0;
+}
+
+.type {
+  bottom: 46px;
+  position: relative;
+  width: max-content;
+  background: #2222228c;
+  font-size: 0.9rem;
+  padding-left: 2px;
+  border-top-left-radius: 5px;
+  right: -213px;
+}
+
+.channel a {
+  bottom: 5px;
+  position: relative;
+  width: max-content;
+  background: none;
+  padding-right: 5px;
+  font-size: 0.9rem;
+  color: var(--infoColorGrey);
+  font-weight: bold;
+
+  &:hover {
+    color: var(--channelHover);
+  }
+}
+
+.domainTitle {
+  text-align: center;
+}
+
+.channelContainer {
+  display: grid;
+  height: 30px;
+  align-content: center;
+  margin-bottom: 5px;
+  grid-template-columns: min-content;
+
+  .profile_img {
+    width: 30px;
+    border-radius: 3px;
+  }
+
+  .channel {
+    height: 20px;
+    top: 7px;
+    position: relative;
+    padding-left: 5px;
+    grid-row: 1;
+  }
+}
+
+.gameContainer {
+  display: grid;
+  grid-template-columns: 10% 70% 20%;
+  width: 336px;
+
+  .game_img {
+    width: 30px;
+    border-radius: 3px;
+    grid-column: 1;
+  }
+
+  .game {
+    height: 20px;
+    top: 7px;
+    position: relative;
+    padding-left: 5px;
+    grid-column: 2;
+    bottom: 20px;
+    background: none;
+    padding-right: 5px;
+    font-size: 0.9rem;
+
+    a {
+      color: var(--infoColorGrey);
+
+      &:hover {
+        color: var(--infoHover);
+      }
+    }
+  }
+}
+
+.gameContainer p a,
+.channelContainer p a {
+  font-size: 1rem;
+}
+
+.refreshTimer {
+  position: relative;
+  // left: 395px;
+  // margin-left: 85px;
+  // width: max-content;
+  color: var(--greyInfo);
+  font-size: 1.1rem;
+
+  left: 10%;
+}
+.vodRefreshTimer {
+  position: relative;
+  // left: 35px;
+  // top: 31px;
+  left: 10%;
+  color: var(--greyInfo);
+}
+
+.settings {
+  position: relative;
+  // left: 93.6%;
+  // top: 20px;
+  right: 0.5%;
+  color: var(--greyInfo);
+}
+
+.StreamHoverIframe {
+  border: none;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  z-index: 1;
+  cursor: pointer;
+  max-width: 360px;
+}
+
+.vodPreview {
+  animation: animateVodPreview 5s steps(9);
+  -webkit-animation: animateVodPreview 5s steps(9);
+  animation-fill-mode: forwards;
+  object-fit: cover;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+
+  //animation: animateVodPreview 5s;
+  //animation-delay: 0.5s;
+  //image-rendering: optimizequality;
+  //image-rendering: crisp-edges;
+  //image-rendering: optimizespeed;
+}
+
+.sidebar[fixedtop="true"] {
+  top: 60px;
+  position: fixed;
+}
+
+.newHighlight {
+  position: absolute;
+  left: 0;
+  height: 45.6px;
+  width: 4px;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  background: var(--newHighlight);
+}
+
+.sidebar {
+  width: 275px;
+  background: var(--sidebarBackground);
+  top: 104px;
+  // position: absolute;
+  position: fixed;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+
+  .twitchSidebarHeader {
+    font-size: 1.15rem;
+    font-weight: bold;
+    color: var(--subFeedHeaderColor);
+    // text-align: center;
+    padding: 8px 5px 8px 10px;
+    border-bottom: 2px solid #2f2f2f;
+    height: 50.5px;
+    margin-bottom: 0;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+  }
+
+  .sidebarItems {
+    display: grid;
+    grid-template-areas: "profile user  viewers" "profile row2 row2";
+    // grid-template-columns: 22% 54% 24%;
+    grid-template-columns: 22% 52% 26%;
+    grid-template-rows: 50% 50%;
+    padding: 8px 5px 8px 10px;
+    //margin-bottom: 5px;
+    border-bottom: 1px solid #2f2f2f;
+    transition: ease-in-out 1s;
+    -webkit-transition: ease-in-out 1s;
+    -moz-transition: ease-in-out 1s;
+    -ms-transition: ease-in-out 1s;
+    -o-transition: ease-in-out 1s;
+    a {
+      height: max-content;
+    }
+
+    .profileImage {
+      height: 24px !important;
+
+      img {
+        width: 40px;
+        // width: 100%;
+        grid-area: profile;
+        border-radius: 20px;
+      }
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .sidebarGame {
+      overflow: hidden;
+      font-size: 0.9rem;
+      color: rgb(150, 150, 150);
+      font-weight: bold;
+      width: max-content;
+    }
+
+    .sidebarUser {
+      color: white;
+      font-weight: bold;
+      overflow: hidden;
+      margin-right: 8px;
+    }
+
+    .sidebarViewers {
+      color: var(--textColor);
+      display: flex;
+      justify-content: space-between;
+
+      i {
+        // width: 100% !important;
+        justify-content: right !important;
+      }
+    }
+
+    .rowTwo {
+      display: grid;
+      grid-area: row2;
+      // grid-template-columns: auto 31%;
+      grid-template-columns: auto 33%;
+      padding-top: 0px;
+    }
+
+    .sidebarDuration {
+      font-size: 0.9rem;
+      color: rgb(150, 150, 150);
+      font-weight: bold;
+      // margin-right: 28px;
+      // overflow: hidden;
+      display: flex;
+      justify-content: space-between;
+
+      i {
+        // width: 100%;
+        justify-content: right;
+      }
+    }
+  }
+}
+
+.renderFollowedChannelList {
+  position: absolute;
+  top: 105px;
+  right: 6.4%;
+}
+
+.topStreamsTitle {
+  text-align: center;
+  width: 92%;
+  margin: auto;
+  border-bottom: var(--subFeedHeaderBorder);
+  padding-bottom: 7px;
+  margin-top: 50px;
+}
+
+.topStreamsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  width: 92%;
+  margin: auto;
+}
+
+@media screen and (max-width: 2560px) {
+  .container {
+    width: 82.5%;
+  }
+
+  .container {
+    margin: 25px 0 0 360px;
+  }
+
+  .topStreamsContainer,
+  .headerContainerTopStreams {
+    width: 82.3% !important;
+  }
+}
+
+@media screen and (max-width: 1920px) {
+  .container {
+    width: 74%;
+    margin: 25px 7.5% 0 19%;
+  }
+
+  .topStreamsContainer,
+  .headerContainerTopStreams {
+    width: 74% !important;
+  }
+}
+
+@keyframes animateVodPreview {
+  from {
+    background-position-y: 1890px;
+  }
+  to {
+    background-position-y: 189px;
+  }
+}

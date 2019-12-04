@@ -1,0 +1,103 @@
+.notification-custom-icon {
+  flex-basis: 20%;
+  position: relative;
+  padding: 8px 8px 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .fa {
+    color: #fff;
+    font-size: 28px;
+  }
+}
+
+.notification-custom-content {
+  flex-basis: 80%;
+  padding: 12px 12px 12px 8px;
+  display: inline-block;
+}
+
+.notification-custom-twitch-online {
+  border-radius: 0px 15px 15px 0;
+  width: 100%;
+  display: flex;
+  background-color: #391350;
+
+  .notification-custom-icon {
+    border-left: 8px solid darken(#8c3fd4, 25%);
+  }
+}
+
+.notification-custom-twitch-offline {
+  border-radius: 0px 15px 15px 0;
+  width: 100%;
+  display: flex;
+  background-color: #9e4226;
+
+  .notification-custom-icon {
+    border-left: 8px solid darken(#d35b36, 25%);
+  }
+}
+
+.notification-custom-twitch-vod-add {
+  border-radius: 0px 15px 15px 0;
+  width: 100%;
+  display: flex;
+  background-color: #4d194d;
+
+  .notification-custom-icon {
+    border-left: 8px solid darken(#c533c5, 25%);
+    max-width: 0px;
+  }
+}
+
+.notification-custom-twitch-vod-remove {
+  border-radius: 0px 15px 15px 0;
+  width: 100%;
+  display: flex;
+  background-color: #9e4226;
+
+  .notification-custom-icon {
+    border-left: 8px solid darken(#d35b36, 25%);
+  }
+}
+
+.notification-custom-youtube-new-video {
+  border-radius: 0px 15px 15px 0;
+  width: 100%;
+  display: flex;
+  background-color: #310d0d;
+
+  .notification-custom-icon {
+    border-left: 8px solid darken(#771f1f, 25%);
+  }
+}
+
+.notification-custom-warning {
+  width: 100%;
+  display: flex;
+  background-color: #eab000;
+
+  .notification-custom-icon {
+    border-left: 8px solid darken(#eab000, 15%);
+  }
+}
+
+.notification-game {
+  color: rgb(200, 200, 200);
+}
+
+.notificationProfileIcon {
+  width: 65px;
+  border-radius: 10px;
+}
+
+.youtube-notificationProfileIcon {
+  width: 150px;
+  border-radius: 10px;
+}
+
+.notification-duration {
+  color: rgb(200, 200, 200);
+}

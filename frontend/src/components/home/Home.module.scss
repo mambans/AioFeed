@@ -1,0 +1,22 @@
+.container {
+  text-align: center;
+  position: absolute;
+  width: 25%;
+  left: calc(50% - 12.5%);
+  top: calc(50vh - 300px);
+}
+.logo {
+  width: 300px;
+}
+
+.deviderLine {
+  height: 5px;
+  width: 100%;
+  background: #cecece78;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  margin: 15px 0;
+}

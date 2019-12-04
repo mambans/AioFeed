@@ -1,0 +1,132 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Globals:
+  Api:
+    EndpointConfiguration: REGIONAL
+    Cors:
+      AllowMethods: "'*'"
+      # For example, "'GET,POST,DELETE'". If you omit this property, then SAM will automatically allow all the methods configured for each API.
+      # Checkout [HTTP Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods) more details on the value.
+
+      AllowHeaders: "'*'"
+      # For example, "'X-Forwarded-For'". Checkout [HTTP Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers) for more details on the value
+
+      AllowOrigin: "'*'"
+      # For example, "'www.example.com'". Checkout [HTTP Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin) for more details on this value.
+      # MaxAge: Optional. String containing the number of seconds to cache CORS Preflight request.
+      # # For example, "'600'" will cache request for 600 seconds. Checkout [HTTP Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age) for more details on this value
+      # AllowCredentials: true
+      # Header is omitted when false. Checkout [HTTP Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials) for more details on this value.
+Resources:
+  UserLogins:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: Username
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Username
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+  Login:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Login with Notifies account and return account info, tokens and monitored vod channels."
+      Handler: login/handler.handler
+      Runtime: nodejs10.x
+      CodeUri: "."
+      Environment:
+        Variables:
+          USERNAME_TABLE: !Ref UserLogins
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref UserLogins
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /account/login
+            Method: post
+            RequestParameters:
+              - method.request.querystring.username:
+                  Required: true
+              - method.request.querystring.password:
+                  Required: true
+  Create:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Create an Notifies account with tokens and monitored vod channels default to null and empty array."
+      Handler: create/handler.handler
+      Runtime: nodejs10.x
+      CodeUri: "."
+      Environment:
+        Variables:
+          USERNAME_TABLE: !Ref UserLogins
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserLogins
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /account/create
+            Method: post
+            RequestParameters:
+              - method.request.querystring.username:
+                  Required: true
+              - method.request.querystring.email:
+                  Required: true
+              - method.request.querystring.password:
+                  Required: true
+  Update:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Update a specific token mentioned as a param."
+      Handler: update/handler.handler
+      Runtime: nodejs10.x
+      CodeUri: "."
+      Environment:
+        Variables:
+          USERNAME_TABLE: !Ref UserLogins
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserLogins
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /account/update
+            Method: put
+          RequestParameters:
+            - method.request.querystring.username:
+                Required: true
+            - method.request.querystring.token:
+                Required: true
+            - method.request.querystring.tokenName:
+                Required: true
+  UpdateMonitoredChannels:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Update monitored vod channels list."
+      Handler: monitoredChannelsUpdate/handler.handler
+      Runtime: nodejs10.x
+      CodeUri: "."
+      Environment:
+        Variables:
+          USERNAME_TABLE: !Ref UserLogins
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserLogins
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /monitored-channels/update
+            Method: put
+          RequestParameters:
+            - method.request.querystring.username:
+                Required: true
+            - method.request.querystring.channels:
+                Required: true

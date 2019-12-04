@@ -1,0 +1,98 @@
+.navProfile {
+  margin-left: 20px;
+  border-radius: 80%;
+  -webkit-border-radius: 80%;
+  -moz-border-radius: 80%;
+  -ms-border-radius: 80%;
+  -o-border-radius: 80%;
+  object-fit: cover;
+  //height: 60px;
+  width: 60px;
+  height: 80%;
+  align-self: center;
+  transition: ease-in-out 0.2s;
+  -webkit-transition: ease-in-out 0.2s;
+  -moz-transition: ease-in-out 0.2s;
+  -ms-transition: ease-in-out 0.2s;
+  -o-transition: ease-in-out 0.2s;
+
+  border: 2px solid transparent;
+  box-shadow: 0px 0px 10px #000000;
+
+  &:hover {
+    border: 2px solid rgb(200, 200, 200);
+    box-shadow: 0px 0px 15px #000000;
+  }
+}
+
+.notifiesLogin {
+  width: 100px;
+  left: calc(50% - 50px);
+  position: relative;
+}
+
+.navProfileContainer {
+  // align-self: center;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 20px;
+  border-radius: 30px;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  -ms-border-radius: 30px;
+  -o-border-radius: 30px;
+  height: inherit;
+  display: flex;
+}
+
+.closeModalButton {
+  color: var(--modalCloseButtonColor);
+  position: absolute;
+  right: -28px;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--modalCloseButtonColorHover);
+  }
+}
+
+.createAccountContainer {
+  padding: 25px 25px 100px 25px;
+  background: var(--accountContainerBackgroundColor);
+  margin-top: 25px;
+  width: min-content;
+  min-width: 1000px;
+  box-shadow: 10px 10px 10px 0 rgba(0, 0, 0, 0.25) !important;
+  border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  -ms-border-radius: 25px;
+  -o-border-radius: 25px;
+}
+
+.LoginAccountButton {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 1.15rem;
+  margin-right: 15px;
+}
+
+.accountModalPopup {
+  width: 1000px !important;
+  min-width: 1000px;
+  border-radius: 25px !important;
+  -webkit-border-radius: 25px !important;
+  -moz-border-radius: 25px !important;
+  -ms-border-radius: 25px !important;
+  -o-border-radius: 25px !important;
+  background-color: transparent !important;
+  left: calc(50% - 500px) !important;
+  border: none !important;
+  z-index: 10 !important;
+  padding: 0 !important;
+
+  opacity: 1 !important;
+
+  position: absolute !important;
+  top: 100px !important;
+}

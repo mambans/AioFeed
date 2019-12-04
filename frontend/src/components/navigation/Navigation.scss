@@ -1,0 +1,130 @@
+.navbar.navbar-expand-lg.navbar-dark.bg-dark {
+  height: 75px;
+  width: 100vw;
+  background-color: transparent !important;
+  background: var(--navigationbarBackground) !important;
+  box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.15);
+  transition: ease-in-out 0.2s;
+  -webkit-transition: ease-in-out 0.2s;
+  -moz-transition: ease-in-out 0.2s;
+  -ms-transition: ease-in-out 0.2s;
+  -o-transition: ease-in-out 0.2s;
+  a {
+    transition: ease-in-out 0.2s;
+    -webkit-transition: ease-in-out 0.2s;
+    -moz-transition: ease-in-out 0.2s;
+    -ms-transition: ease-in-out 0.2s;
+    -o-transition: ease-in-out 0.2s;
+  }
+}
+
+a.nav-link {
+  font-size: 20px !important;
+}
+
+nav[mode="fixed"].navbar.navbar-expand-lg.navbar-dark.bg-dark {
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+nav[shrink="true"].navbar.navbar-expand-lg.navbar-dark.bg-dark {
+  height: 50px;
+  padding: 0 30px 0 10px !important;
+  // background-color: hsla(0, 0%, 0%, 0.7) !important;
+  background-color: transparent !important;
+  background: linear-gradient(rgba(0, 0, 0, 0.4) 10%, rgba(0, 0, 0, 0.5) 50%) !important;
+
+  a {
+    font-size: 16px;
+  }
+
+  #NavigationProfileImage {
+    width: 40px;
+    box-shadow: 0px 0px 3px #000000;
+
+    &:hover {
+      box-shadow: 0px 0px 8px #000000;
+    }
+  }
+}
+
+nav {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: 0 !important;
+  height: 75px;
+
+  .logo-link {
+    padding: unset;
+    height: 100%;
+
+    .logo {
+      padding: 7px 10px;
+      width: unset;
+      height: 100%;
+    }
+  }
+}
+
+.navbar-nav a.nav-link {
+  font-size: 1.15rem;
+}
+
+.container {
+  .mr-auto.navbar-nav {
+    justify-content: center;
+  }
+
+  .navbar-nav .nav-link {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+}
+
+.logo-link.nav-link {
+  color: var(--headerLogoTextColor);
+  font-size: 1.3rem;
+  margin-right: 95px;
+}
+
+#responsive-navbar-nav {
+  height: inherit;
+}
+
+.navbar-nav {
+  height: inherit;
+  // min-width: 280px;
+  min-width: 218px;
+}
+
+.dropdown-menu {
+  left: -60px !important;
+  text-align: center;
+}
+
+.dropdown.nav-item,
+.show.dropdown.nav-item {
+  align-items: center;
+  display: flex;
+}
+
+.popup-overlay {
+  margin-top: 75px;
+}
+
+.navbar-dark .navbar-nav .nav-link.active {
+  color: var(--headerTextColorActive);
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: var(--headerTextColor);
+}
+
+.green {
+  color: rgb(51, 253, 0) !important;
+}
+
+.red {
+  color: rgb(255, 0, 0) !important;
+}

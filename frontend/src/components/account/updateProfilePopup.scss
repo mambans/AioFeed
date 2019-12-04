@@ -1,0 +1,56 @@
+.updateProfilePopup-content {
+  border-radius: 5px !important;
+  -webkit-border-radius: 5px !important;
+  -moz-border-radius: 5px !important;
+  -ms-border-radius: 5px !important;
+  -o-border-radius: 5px !important;
+  width: 280px !important;
+
+  background-color: #0a0a0aed !important;
+  border: none !important;
+  box-shadow: 0 5px 10px 3px rgba(0, 0, 0, 0.25) !important // top: 1785px !important;
+    form {
+    padding: 5px;
+  }
+
+  input[type="text"] {
+    color: white;
+    border: none;
+    border-bottom: 1px solid white;
+    background-color: transparent;
+    background: transparent;
+    width: 100%;
+  }
+
+  input[type="submit"] {
+    border-radius: 5px;
+    border: thin solid #484848;
+    background-color: #035879;
+    color: rgb(224, 224, 224);
+    width: 100%;
+    margin-top: 5px;
+    &:hover {
+      color: white;
+      background-color: #097099;
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: rgb(8, 3, 20);
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      height: 35px;
+      align-items: center;
+    }
+
+    li p {
+      margin: 0;
+    }
+  }
+}
