@@ -1,13 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import { Navbar, NavDropdown, Nav, Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { github } from "react-icons-kit/icomoon/github";
 import Icon from "react-icons-kit";
 import Popup from "reactjs-popup";
-import Utilities from "../../utilities/Utilities";
 import "./Navigation.scss";
 
-import { ic_notifications } from "react-icons-kit/md/ic_notifications";
+import { ic_notifications_none } from "react-icons-kit/md/ic_notifications_none";
 import { ic_notifications_active } from "react-icons-kit/md/ic_notifications_active";
 import { ButtonList } from "./../sharedStyledComponents";
 import RenderNotifications from "./../notifications/RenderNotifications";
@@ -36,11 +35,7 @@ function NavigationBar(prop) {
       variant='dark'
       shrink={shrinkNavbar}>
       <Nav.Link as={NavLink} to='/' className='logo-link'>
-        <img
-          src={`${process.env.PUBLIC_URL}/icons/v3/Logo-2k.png`}
-          alt='logo'
-          className='logo'
-        />
+        <img src={`${process.env.PUBLIC_URL}/icons/v3/Logo-2k.png`} alt='logo' className='logo' />
         Notifies
       </Nav.Link>
 
@@ -71,10 +66,9 @@ function NavigationBar(prop) {
                       }}></Icon>
                   ) : (
                     <Icon
-                      icon={ic_notifications}
+                      icon={ic_notifications_none}
                       size={40}
                       style={{
-                        height: "22px",
                         alignItems: "center",
                         display: "flex",
                         ransition: "ease-in-out 1s",
