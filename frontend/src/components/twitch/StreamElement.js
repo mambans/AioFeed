@@ -14,38 +14,28 @@ import Utilities from "../../utilities/Utilities";
 import UnfollowStream from "./UnfollowStream";
 import { VideoTitle, ImageContainer, UnfollowButton } from "./../sharedStyledComponents";
 
+import { notification } from "react-icons-kit/icomoon/notification";
+
 const HOVER_DELAY = 500; // 1000
 
-function HighlightAnimation({ data }) {
+function NewHighlightNoti({ data }) {
   if (data.newlyAddedStreams.includes(data.data.user_name)) {
     return (
-      <div
+      <Icon
+        icon={notification}
+        size={22}
         style={{
-          height: 5,
-          // backgroundColor: "rgb(14, 203, 247)",
-          backgroundColor: "var(--newHighlight)",
-          borderRadius: 5,
-          gridArea: "highlight",
-          transition: "all 3.0s ease-in-out",
-          width: "96%",
-          margin: "auto",
-        }}
-      />
-    );
-  } else {
-    return (
-      <div
-        style={{
-          height: 5,
-          backgroundColor: "transparent",
-          borderRadius: 5,
-          gridArea: "highlight",
-          width: "96%",
-          margin: "auto",
+          position: "absolute",
+          display: "flex",
+          color: "var(--newHighlight)",
+          backgroundColor: "#00000042",
+          borderRadius: "8px",
+          margin: "5px",
         }}
       />
     );
   }
+  return "";
 }
 
 function StreamEle(data) {
@@ -173,10 +163,10 @@ function StreamEle(data) {
 
   return (
     <div className={styles.video} key={data.data.id}>
-      <HighlightAnimation data={data} REFRESH_RATE={data.REFRESH_RATE}></HighlightAnimation>
       <UnfollowAlert></UnfollowAlert>
 
       <ImageContainer id={data.data.id} ref={ref} style={{ marginTop: "5px" }}>
+        <NewHighlightNoti data={data}></NewHighlightNoti>
         {isHovered ? (
           <StreamHoverIframe
             id={data.data.id}

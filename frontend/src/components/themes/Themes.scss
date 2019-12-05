@@ -67,7 +67,7 @@ html[data-theme="christmas"] {
   --modalCloseButtonColor: rgba(240, 240, 240, 0.8);
   --modalCloseButtonColorHover: white;
 
-  --navigationbarBackground: #00000059;
+  --navigationbarBackground: linear-gradient(rgba(0, 0, 0, 0.5) 10%, rgba(0, 0, 0, 0.6) 50%);
   --popupModalBackground: #000000e3;
   --primaryPurple: #040113;
   --refreshButtonBackground: #00000026;
@@ -83,8 +83,8 @@ html[data-theme="christmas"] {
   --textColor: rgb(240, 240, 240);
   --videoTitle: rgb(240, 240, 240);
   --videoTitleHover: rgb(240, 240, 240);
-  // --newHighlight: #ffffff;
-  --newHighlight: #ff3000;
+  --newHighlight: #ffffff;
+  // --newHighlight: #ff3000;
   // --refreshButtonBorder: thin solid #2d2d2d;
   // --scrollbarColors: rgb(207, 5, 16) rgb(43, 31, 31);
 }
