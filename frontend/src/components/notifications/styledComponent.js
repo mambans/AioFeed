@@ -6,6 +6,10 @@ const Notification = styled.li`
   min-height: 100px !important;
   grid-template-columns: 20% 80%;
 
+  * {
+    outline-color: transparent;
+  }
+
   .profileImg {
     grid-area: img;
 
