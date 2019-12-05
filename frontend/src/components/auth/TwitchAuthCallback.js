@@ -11,7 +11,7 @@ function TwitchAuthCallback() {
   // const { setConnectedDomain, setAccountModalOpen } = data;
   // const { setConnectedDomain } = data;
   const [error, setError] = useState();
-  const [authenticated, setAuthenticated] = useState(false);
+  // const [authenticated, setAuthenticated] = useState(false);
 
   const getAccessToken = useCallback(async url => {
     const authCode = url.searchParams.get("code");
@@ -62,12 +62,12 @@ function TwitchAuthCallback() {
           if (url.searchParams.get("state") === Utilities.getCookie("Twitch-myState")) {
             await getAccessToken(url)
               .then(() => {
-                setAuthenticated(true);
+                // setAuthenticated(true);
                 localStorage.setItem("TwitchFeedEnabled", "true");
                 window.close();
               })
               .catch(error => {
-                setAuthenticated(false);
+                // setAuthenticated(false);
                 setError(error);
               });
           } else {

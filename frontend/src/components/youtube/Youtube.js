@@ -4,7 +4,6 @@ import { Spinner } from "react-bootstrap";
 import LazyLoad from "react-lazyload";
 // import RenderYoutube from "./Render-Youtube";
 import Utilities from "../../utilities/Utilities";
-import ErrorHandeling from "../error/Error";
 import { SubFeedContainer } from "./../sharedStyledComponents";
 
 import YoutubeVideoElement from "./YoutubeVideoElement";

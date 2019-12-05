@@ -10,7 +10,6 @@ export default () => {
   return (
     <NotificationsContext.Consumer>
       {props => {
-        console.log("TCL: props", props);
         return (
           <div>
             {props.notifications ? (

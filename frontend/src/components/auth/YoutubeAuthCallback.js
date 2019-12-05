@@ -21,7 +21,7 @@ function YoutubeAuthCallback() {
   // const { setConnectedDomain } = data;
 
   const [error, setError] = useState();
-  const [authenticated, setAuthenticated] = useState(false);
+  // const [authenticated, setAuthenticated] = useState(false);
 
   const getAccessToken = useCallback(async () => {
     const authCode = getParameterByName("access_token");
@@ -57,7 +57,8 @@ function YoutubeAuthCallback() {
         ) {
           await getAccessToken()
             .then(() => {
-              setAuthenticated(true);
+              // setAuthenticated(true);
+
               // localStorage.setItem("YoutubeFeedEnabled", "true");
               window.close();
               // setAccountModalOpen(false);
