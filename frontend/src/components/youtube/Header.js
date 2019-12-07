@@ -60,7 +60,8 @@ export default data => {
         </Alert>
       ) : null}
       <HeaderTitle style={{ marginRight: "300px " }}>
-        Youtube <Icon icon={youtube} size={32} style={{ paddingLeft: "10px" }}></Icon>
+        Youtube
+        <Icon icon={youtube} size={32} style={{ paddingLeft: "10px", color: "#a80000" }}></Icon>
       </HeaderTitle>
       <Popup
         placeholder='""'

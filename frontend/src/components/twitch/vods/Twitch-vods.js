@@ -96,7 +96,8 @@ function TwitchVods() {
       <>
         <HeaderContainer>
           <HeaderTitle style={{ margin: "0" }}>
-            Twitch vods <Icon icon={video} size={32} style={{ paddingLeft: "10px" }}></Icon>
+            Twitch vods
+            <Icon icon={video} size={32} style={{ paddingLeft: "10px", color: "#6f166f" }}></Icon>
           </HeaderTitle>
         </HeaderContainer>
         <Spinner animation='grow' role='status' style={Utilities.loadingSpinner} variant='light'>
@@ -142,7 +143,8 @@ function TwitchVods() {
             <Moment from={vods.expire} ago className={styles.vodRefreshTimer}></Moment>
           </div>
           <HeaderTitle>
-            Twitch vods <Icon icon={video} size={32} style={{ paddingLeft: "10px" }}></Icon>
+            Twitch vods
+            <Icon icon={video} size={32} style={{ paddingLeft: "10px", color: "#6f166f" }}></Icon>
           </HeaderTitle>
           <Popup
             placeholder='Channel name..'
