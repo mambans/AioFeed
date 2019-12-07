@@ -107,7 +107,8 @@ function DataHandler({ children }) {
           message: "You are not connected with your Youtube account to Notifies",
         }}></ErrorHandeling>
     );
-  } else if (videos.current && videos.current.length > 1) {
+    // } else if (videos.current && videos.current.length > 1) {
+  } else {
     return children({
       isLoaded,
       refresh,
@@ -117,18 +118,19 @@ function DataHandler({ children }) {
       videos: videos.current,
       initiated,
     });
-  } else {
-    return (
-      <Spinner
-        animation='grow'
-        role='status'
-        id='123'
-        style={Utilities.loadingSpinne}
-        variant='light'>
-        <span className='sr-only'>Loading...</span>
-      </Spinner>
-    );
   }
+  // else {
+  //   return (
+  //     <Spinner
+  //       animation='grow'
+  //       role='status'
+  //       id='123'
+  //       style={Utilities.loadingSpinner}
+  //       variant='light'>
+  //       <span className='sr-only'>Loading...</span>
+  //     </Spinner>
+  //   );
+  // }
 }
 
 export default DataHandler;

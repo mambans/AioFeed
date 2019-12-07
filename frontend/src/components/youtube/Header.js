@@ -48,12 +48,15 @@ export default data => {
           {data.isLoaded || new Date()}
         </Moment>
       </div>
-      {data.requestError && data.requestError.code === 403 ? (
+      {/* {(data.requestError && data.requestError.code === 403) || data.requestError.code === 401 ? ( */}
+      {data.requestError ? (
         <Alert
           key={data.requestError.errors[0].reason}
           className={styles.requestError}
           variant={"warning"}>
-          {data.requestError.errors[0].reason + " - Only cache used instead."}
+          {data.requestError.code === 403
+            ? data.requestError.errors[0].reason + " - Only cache used instead."
+            : data.requestError.errors[0].reason}
         </Alert>
       ) : null}
       <HeaderTitle style={{ marginRight: "300px " }}>

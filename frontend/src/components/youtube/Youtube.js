@@ -9,7 +9,9 @@ import { SubFeedContainer } from "./../sharedStyledComponents";
 import YoutubeVideoElement from "./YoutubeVideoElement";
 
 export default data => {
-  if (!data.initiated) {
+  if (data.requestError && data.requestError.code === 401) {
+    return "";
+  } else if (!data.initiated || !data.videos || data.videos.length < 1) {
     return (
       <Spinner
         animation='grow'
