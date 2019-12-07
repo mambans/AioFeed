@@ -56,8 +56,6 @@ function StreamEle(data) {
 
   return (
     <div className={`${styles.video}`} key={data.data.id}>
-      <div style={{ gridArea: "highlight" }}></div>
-      {/* <div className={styles.imgContainer} id={data.data.id} ref={ref}> */}
       <ImageContainer ref={ref}>
         {isHovered ? (
           <StreamHoverIframe
