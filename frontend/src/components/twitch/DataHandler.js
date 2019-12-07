@@ -124,11 +124,12 @@ export default ({ children, ...props }) => {
       try {
         console.log("Twtich Datahandler UseEffect()");
         const timeNow = new Date();
-        setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
+        // setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
 
         // if (timer.current) clearInterval(timer.current);
         if (!timer.current) {
           console.log("---Twtich Datahandler SetInterval()---");
+          setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
           timer.current = setInterval(() => {
             const timeNow = new Date();
             setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
