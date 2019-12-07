@@ -62,7 +62,7 @@ export default ({ children, ...props }) => {
   }, []);
 
   const refresh = useCallback(async () => {
-    console.log("refreshing");
+    // console.log("refreshing");
     setRefreshing(true);
     try {
       setError(null);
@@ -190,7 +190,8 @@ export default ({ children, ...props }) => {
             </RefreshButton>
           </div>
           <HeaderTitle>
-            Twitch Live <Icon icon={twitch} size={32} style={{ paddingLeft: "10px" }}></Icon>
+            Twitch Live
+            <Icon icon={twitch} size={32} style={{ paddingLeft: "10px", color: "#6f166f" }}></Icon>
           </HeaderTitle>
           <Popup
             placeholder='""'
