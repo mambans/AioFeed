@@ -101,7 +101,7 @@ function StreamEle(data) {
                 textAlign: "center",
                 marginBottom: "0",
               }}>
-              {unfollowError}{" "}
+              {unfollowError}
               <Alert.Link href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
                 {data.data.user_name}
               </Alert.Link>

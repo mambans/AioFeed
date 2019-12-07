@@ -61,7 +61,6 @@ const Footer = () => {
         <ul>
           <li>
             <a href='https://github.com/mambans/Notifies'>
-              {" "}
               <Icon icon={github} size={20} style={{ paddingRight: "0.75rem" }}></Icon>
               Github-Notifies
             </a>

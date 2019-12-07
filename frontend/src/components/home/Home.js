@@ -7,7 +7,7 @@ function Home() {
     return (
       <div className={styles.container}>
         <img
-          src={`${process.env.PUBLIC_URL}/icons/v3/Logo-wide.png`}
+          src={`${process.env.PUBLIC_URL}/icons/v3/Logo-4k.png`}
           alt='logo'
           className={styles.logo}
         />
