@@ -173,6 +173,7 @@
 }
 
 .popup-content {
-  scrollbar-color: var(--scrollbarColors) !important;
+  // scrollbar-color: var(--scrollbarColors) !important;
+  scrollbar-color: rgb(240, 240, 240) rgba(0, 0, 0, 0) !important;
   scrollbar-width: thin !important;
 }
