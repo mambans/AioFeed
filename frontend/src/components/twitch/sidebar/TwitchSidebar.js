@@ -16,7 +16,7 @@ const TwitchSidebar = data => {
           data.onlineStreams.map(stream => {
             return data.newlyAdded.includes(stream.user_name) ? (
               <Animated
-                animationIn='fadeInUp'
+                animationIn='fadeIn'
                 animationOut='fadeOut'
                 isVisible={true}
                 key={stream.id}>

@@ -1,45 +1,11 @@
-import React, { useEffect, useCallback, useRef } from "react";
 import { Animated } from "react-animated-css";
-
-import StreamEle from "./StreamElement.js";
-import Utilities from "../../utilities/Utilities";
+import React, { useEffect, useRef } from "react";
 
 import FeedsContext from "./../feed/FeedsContext";
+import StreamEle from "./StreamElement.js";
 
 function RenderTwitch(data) {
   const streamData = useRef();
-
-  const addSystemNotification = useCallback(
-    status => {
-      if (Notification.permission === "granted") {
-        let notification = new Notification(
-          `${data.data.user_name} ${status === "offline" ? "Offline" : "Live"}`,
-          {
-            body:
-              status === "offline"
-                ? ""
-                : `${Utilities.truncate(data.data.title, 60)}\n${data.data.game_name}`,
-            icon: data.data.profile_img_url || `${process.env.PUBLIC_URL}/icons/v3/Logo-4k.png`,
-            badge:
-              data.data.profile_img_url || `${process.env.PUBLIC_URL}/icons/v3/Logo-4k.png`,
-          }
-        );
-
-        notification.onclick = function(event) {
-          event.preventDefault();
-          status === "offline"
-            ? window.open(
-                "https://www.twitch.tv/" + data.data.user_name.toLowerCase() + "/videos",
-                "_blank"
-              )
-            : window.open("https://www.twitch.tv/" + data.data.user_name.toLowerCase(), "_blank");
-        };
-
-        return notification;
-      }
-    },
-    [data.data.game_name, data.data.profile_img_url, data.data.title, data.data.user_name]
-  );
 
   useEffect(() => {
     if (
@@ -55,7 +21,7 @@ function RenderTwitch(data) {
       streamData.current = data.data;
     }
     streamData.current = data.data;
-  }, [addSystemNotification, data, data.data, data.data.id]);
+  }, [data.data, data.run.initial]);
 
   return (
     <>

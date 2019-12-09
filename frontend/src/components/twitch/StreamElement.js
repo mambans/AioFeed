@@ -1,20 +1,19 @@
 import { Animated } from "react-animated-css";
-import React, { useRef, useCallback, useState, useEffect } from "react";
-import Moment from "react-moment";
-import { Icon } from "react-icons-kit";
 import { cross } from "react-icons-kit/icomoon/cross";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
-import Alert from "react-bootstrap/Alert";
 import { eye } from "react-icons-kit/icomoon/eye";
+import { Icon } from "react-icons-kit";
+import { notification } from "react-icons-kit/icomoon/notification";
+import Alert from "react-bootstrap/Alert";
+import Moment from "react-moment";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import React, { useRef, useCallback, useState, useEffect } from "react";
+import Tooltip from "react-bootstrap/Tooltip";
 
 import styles from "./Twitch.module.scss";
 import StreamHoverIframe from "./StreamHoverIframe.js";
 import Utilities from "../../utilities/Utilities";
 import UnfollowStream from "./UnfollowStream";
 import { VideoTitle, ImageContainer, UnfollowButton } from "./../sharedStyledComponents";
-
-import { notification } from "react-icons-kit/icomoon/notification";
 
 const HOVER_DELAY = 500; // 1000
 
