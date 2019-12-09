@@ -17,7 +17,7 @@ import { RefreshButton, HeaderTitle, ButtonList } from "./../sharedStyledCompone
 const REFRESH_RATE = 20; // seconds
 
 export default ({ children, ...props }) => {
-  const { addNotification } = props.data;
+  const { addNotification } = props;
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [refreshTimer, setRefreshTimer] = useState();
@@ -75,7 +75,7 @@ export default ({ children, ...props }) => {
         liveStreams.current = streams.data;
         setRefreshing(false);
 
-        liveStreams.current.forEach(stream => {
+        liveStreams.current.forEach(async stream => {
           let isStreamLive = oldLiveStreams.current.find(
             ({ user_name }) => user_name === stream.user_name
           );
@@ -83,7 +83,7 @@ export default ({ children, ...props }) => {
           if (!isStreamLive) {
             addSystemNotification("online", stream);
 
-            addNotification(stream, "Live");
+            await addNotification(stream, "Live");
 
             newlyAddedStreams.current.push(stream.user_name);
             stream.newlyAdded = true;

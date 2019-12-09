@@ -41,4 +41,17 @@ const Notification = styled.li`
   }
 `;
 
-export { Notification };
+const UnseenNotifcationCount = styled.div`
+  background-color: var(--unseenNotifcationCountBackground);
+  height: 24px;
+  width: 24px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -14px;
+  left: 27px;
+`;
+
+export { Notification, UnseenNotifcationCount };

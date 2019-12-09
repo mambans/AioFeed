@@ -13,6 +13,7 @@ import RenderNotifications from "./../notifications/RenderNotifications";
 import NotificationsContext from "./../notifications/NotificationsContext";
 import AccountButton from "./AccountButton";
 import NavigationContext from "./NavigationContext";
+import { UnseenNotifcationCount } from "./../notifications/styledComponent";
 
 function NavigationBar(prop) {
   const [refresh, setRefresh] = useState(false);
@@ -48,22 +49,31 @@ function NavigationBar(prop) {
               lockScroll={true}
               className='Notifications'
               onOpen={() => {
-                props.enableNotificationIndicator(false);
+                props.clearUnseenNotifications();
+                // props.enableNotificationIndicator(false);
               }}
               trigger={
                 <ButtonList
                   style={{ border: "none", background: "none", boxShadow: "none", padding: "0" }}>
-                  {props.notificationIndicator ? (
-                    <Icon
-                      icon={ic_notifications_active}
-                      size={40}
-                      style={{
-                        color: "var(--newHighlight)",
-                        height: "22px",
-                        alignItems: "center",
-                        display: "flex",
-                        transition: "ease-in-out 1s",
-                      }}></Icon>
+                  {props.unseenNotifications &&
+                  Array.isArray(props.unseenNotifications) &&
+                  props.unseenNotifications.length > 0 ? (
+                    // {/* {props.notificationIndicator ? ( */}
+                    <>
+                      <Icon
+                        icon={ic_notifications_active}
+                        size={40}
+                        style={{
+                          color: "var(--newHighlight)",
+                          height: "22px",
+                          alignItems: "center",
+                          display: "flex",
+                          transition: "ease-in-out 1s",
+                        }}></Icon>
+                      <UnseenNotifcationCount>
+                        {props.unseenNotifications.length}
+                      </UnseenNotifcationCount>
+                    </>
                   ) : (
                     <Icon
                       icon={ic_notifications_none}

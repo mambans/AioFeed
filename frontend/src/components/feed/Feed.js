@@ -110,7 +110,7 @@ function Feed(props) {
           <NotificationsContext.Consumer>
             {prop => {
               return (
-                <DataHandler data={prop}>
+                <DataHandler addNotification={prop.addNotification}>
                   {liveStreams => (
                     <div className={styles.twitchContainer}>
                       <Animated animationIn='fadeIn' animationOut='fadeOut' isVisible={true}>
