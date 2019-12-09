@@ -4,7 +4,7 @@
   background-color: transparent !important;
   background: var(--navigationbarBackground) !important;
   // box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.15);
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.6);
+  // box-shadow: 0 5px 5px rgba(0, 0, 0, 0.6);
   transition: ease-in-out 0.2s;
   -webkit-transition: ease-in-out 0.2s;
   -moz-transition: ease-in-out 0.2s;
@@ -75,6 +75,7 @@ nav {
 .container {
   .mr-auto.navbar-nav {
     justify-content: center;
+    margin: auto;
   }
 
   .navbar-nav .nav-link {
