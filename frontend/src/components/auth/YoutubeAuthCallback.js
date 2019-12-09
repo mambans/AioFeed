@@ -24,6 +24,8 @@ function YoutubeAuthCallback() {
   // const [authenticated, setAuthenticated] = useState(false);
 
   const getAccessToken = useCallback(async () => {
+    const url = new URL(window.location.href);
+
     const authCode = getParameterByName("access_token");
     const authCodeExpireParam = getParameterByName("expires_in");
     const authCodeExpire = authCodeExpireParam;
@@ -35,6 +37,7 @@ function YoutubeAuthCallback() {
     if (validateToken.data.aud === process.env.REACT_APP_YOUTUBE_CLIENT_ID) {
       document.cookie = `Youtube-access_token=${authCode}; path=/`;
       document.cookie = `Youtube-access_token_expire=${authCodeExpire}; path=/`;
+      document.cookie = `Youtube-readonly=${url.hash.split("&")[4].includes(".readonly")}; path=/`;
     }
 
     await axios.put(`http://localhost:3100/notifies/account/youtube/connect`, {
@@ -57,10 +60,10 @@ function YoutubeAuthCallback() {
         ) {
           await getAccessToken()
             .then(() => {
-              // setAuthenticated(true);
-
-              // localStorage.setItem("YoutubeFeedEnabled", "true");
               window.close();
+
+              // setAuthenticated(true);
+              // localStorage.setItem("YoutubeFeedEnabled", "true");
               // setAccountModalOpen(false);
               // setConnectedDomain("Youtube");
             })

@@ -23,7 +23,7 @@ const UnfollowChannel = async subId => {
       },
     })
     .then(res => {
-      const followedChannels = JSON.parse(localStorage.getItem(`followedChannels`));
+      const followedChannels = JSON.parse(localStorage.getItem(`YT-followedChannels`));
 
       _.remove(followedChannels.data, function(channel) {
         return channel.id === subId;
@@ -32,7 +32,7 @@ const UnfollowChannel = async subId => {
       // setFollowedChannels(followedChannels.data);
 
       localStorage.setItem(
-        `followedChannels`,
+        `YT-followedChannels`,
         JSON.stringify({
           data: followedChannels.data,
           casheExpire: followedChannels.casheExpire,
@@ -140,6 +140,7 @@ const ChannelListElement = data => {
         {channel.snippet.title}
       </a>
       <UnfollowButton
+        disabled={Utilities.getCookie("Youtube-readonly") || false}
         data-tip={"Unfollow " + channel.snippet.title}
         variant='link'
         onClick={async () => {
