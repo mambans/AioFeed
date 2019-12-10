@@ -182,7 +182,7 @@ function StreamEle(data) {
           <img
             src={
               // data.data.thumbnail_url.replace("{width}", 1280).replace("{height}", 720) +
-              data.data.thumbnail_url.replace("{width}", 640).replace("{height}", 360) +
+              data.data.thumbnail_url.replace("{width}", 858).replace("{height}", 480) +
               `#` +
               new Date().getTime()
             }

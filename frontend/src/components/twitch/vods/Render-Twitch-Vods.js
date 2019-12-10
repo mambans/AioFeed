@@ -78,7 +78,7 @@ function TwitchVodElement(data) {
             <img
               src={
                 data.data.thumbnail_url
-                  ? data.data.thumbnail_url.replace("%{width}", 1280).replace("%{height}", 720)
+                  ? data.data.thumbnail_url.replace("%{width}", 858).replace("%{height}", 480)
                   : "https://vod-secure.twitch.tv/_404/404_processing_320x180.png"
               }
               alt={styles.thumbnail}
