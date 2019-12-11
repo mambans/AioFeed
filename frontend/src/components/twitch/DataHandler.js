@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
 import Popup from "reactjs-popup";
 import { Spinner } from "react-bootstrap";
 import Icon from "react-icons-kit";
@@ -14,10 +14,13 @@ import styles from "./Twitch.module.scss";
 import { HeaderContainerTwitchLive } from "./styledComponents";
 import { RefreshButton, HeaderTitle, ButtonList } from "./../sharedStyledComponents";
 
+import NotificationsContext from "./../notifications/NotificationsContext";
+
 const REFRESH_RATE = 20; // seconds
 
-export default ({ children, ...props }) => {
-  const { addNotification } = props;
+export default ({ children }) => {
+  const addNotification = useContext(NotificationsContext).addNotification;
+
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [refreshTimer, setRefreshTimer] = useState();

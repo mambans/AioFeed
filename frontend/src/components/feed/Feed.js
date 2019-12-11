@@ -7,7 +7,7 @@ import { Spinner, Alert } from "react-bootstrap";
 import "./Notifications.scss";
 import DataHandler from "../twitch/DataHandler";
 import ErrorHandeling from "./../error/Error";
-import NotificationsContext from "./../notifications/NotificationsContext";
+// import NotificationsContext from "./../notifications/NotificationsContext";
 import Twitch from "../twitch/Twitch";
 import TwitchVods from "../twitch/vods/Twitch-vods";
 import Utilities from "../../utilities/Utilities";
@@ -107,21 +107,15 @@ function Feed(props) {
         <NoFeedsEnabled />
 
         {props.enableTwitch ? (
-          <NotificationsContext.Consumer>
-            {prop => {
-              return (
-                <DataHandler addNotification={prop.addNotification}>
-                  {liveStreams => (
-                    <div className={styles.twitchContainer}>
-                      <Animated animationIn='fadeIn' animationOut='fadeOut' isVisible={true}>
-                        <Twitch data={liveStreams} />
-                      </Animated>
-                    </div>
-                  )}
-                </DataHandler>
-              );
-            }}
-          </NotificationsContext.Consumer>
+          <DataHandler>
+            {liveStreams => (
+              <div className={styles.twitchContainer}>
+                <Animated animationIn='fadeIn' animationOut='fadeOut' isVisible={true}>
+                  <Twitch data={liveStreams} />
+                </Animated>
+              </div>
+            )}
+          </DataHandler>
         ) : null}
 
         {props.enableYoutube && delayedEnableYoutube ? (
