@@ -89,9 +89,7 @@ function NavigationBar(prop) {
               position='right top'
               // className='popupModal'
             >
-              <RenderNotifications
-                enableNotificationIndicator={props.enableNotificationIndicator}
-              />
+              <RenderNotifications {...props} />
             </Popup>
           );
         }}
