@@ -2,7 +2,6 @@ import { Animated } from "react-animated-css";
 import React from "react";
 import { Spinner } from "react-bootstrap";
 import LazyLoad from "react-lazyload";
-// import RenderYoutube from "./Render-Youtube";
 import Utilities from "../../utilities/Utilities";
 import { SubFeedContainer } from "./../sharedStyledComponents";
 
@@ -31,12 +30,6 @@ export default data => {
             <LazyLoad key={video.contentDetails.upload.videoId} height={312} offset={25} once>
               <Animated animationIn='fadeIn' animationOut='fadeOut' isVisible={true}>
                 <YoutubeVideoElement id={video.contentDetails.upload.videoId} video={video} />
-                {/* <RenderYoutube
-                  id={video.contentDetails.upload.videoId}
-                  video={video}
-                  run={{ initial: data.initialOpen }}
-                  runChange={data.onChange}
-                /> */}
               </Animated>
             </LazyLoad>
           );

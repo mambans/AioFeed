@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { store } from "react-notifications-component";
-import { Spinner } from "react-bootstrap";
 
 import ErrorHandeling from "../error/Error";
 import getFollowedChannels from "./GetFollowedChannels";
@@ -90,7 +89,6 @@ function DataHandler({ children }) {
         setInitiated(new Date());
         setIsLoaded(new Date());
       } catch (error) {
-        console.log("TCL: fetchData -> error", error);
         setInitiated(new Date());
         setIsLoaded(new Date());
         setError(error);
@@ -107,7 +105,6 @@ function DataHandler({ children }) {
           message: "You are not connected with your Youtube account to Notifies",
         }}></ErrorHandeling>
     );
-    // } else if (videos.current && videos.current.length > 1) {
   } else {
     return children({
       isLoaded,
@@ -119,18 +116,6 @@ function DataHandler({ children }) {
       initiated,
     });
   }
-  // else {
-  //   return (
-  //     <Spinner
-  //       animation='grow'
-  //       role='status'
-  //       id='123'
-  //       style={Utilities.loadingSpinner}
-  //       variant='light'>
-  //       <span className='sr-only'>Loading...</span>
-  //     </Spinner>
-  //   );
-  // }
 }
 
 export default DataHandler;

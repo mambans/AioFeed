@@ -2,7 +2,6 @@ import axios from "axios";
 import Utilities from "../../utilities/Utilities";
 
 const fetchNextPgeOfSubscriptions = async (previousPage, totalResults, prevpPageItems) => {
-  // if (prevpPageItems.length < totalResults) {
   const nextPage = await axios.get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {
     params: {
       maxResults: 50,
@@ -25,9 +24,6 @@ const fetchNextPgeOfSubscriptions = async (previousPage, totalResults, prevpPage
   } else {
     return pageItems;
   }
-  // } else {
-  //   return prevpPageItems;
-  // }
 };
 
 async function getFollowedChannels() {

@@ -11,7 +11,6 @@ const filterVideos = async response => {
         return video.snippet.type === "upload";
       })
     );
-    // console.log("TCL: items", items);
     return items;
   } else {
     return [];
@@ -22,10 +21,11 @@ const fetchSubscriptionData = async (videosCACHE, channel) => {
   const currentDate = new Date();
   const DATE_THRESHOLD = new Date(currentDate.setDate(currentDate.getDate() - 5));
 
-  // let error = null;
+  let error = null;
   let res = null;
 
   if (videosCACHE[channel.snippet.resourceId.channelId]) {
+    console.log(":::video cache exists!:::");
     res = await axios
       .get(`https://www.googleapis.com/youtube/v3/activities?`, {
         params: {
@@ -45,10 +45,11 @@ const fetchSubscriptionData = async (videosCACHE, channel) => {
         return result.data;
       })
       .catch(function(e) {
-        // error = e;
+        error = e;
         return videosCACHE[channel.snippet.resourceId.channelId];
       });
   } else {
+    console.log("---Video request sent!---");
     res = await axios
       .get(`https://www.googleapis.com/youtube/v3/activities?`, {
         params: {
@@ -67,14 +68,11 @@ const fetchSubscriptionData = async (videosCACHE, channel) => {
         return result.data;
       })
       .catch(function(e) {
-        // error = e;
+        error = e;
       });
-
-    // console.log("TCL: fetchSubscriptionData -> ressssss", res.data);
-    // return res.data;
   }
 
-  return res;
+  return { res, error };
 };
 
 async function getSubscriptionVideos(followedChannels) {
@@ -86,8 +84,6 @@ async function getSubscriptionVideos(followedChannels) {
   let error = null;
 
   try {
-    console.log(localStorage.getItem("YoutubeVideos"));
-    console.log(typeof localStorage.getItem("YoutubeVideos"));
     const videosCACHE =
       localStorage.getItem("YoutubeVideos") !== "undefined" &&
       localStorage.getItem("YoutubeVideos") !== undefined &&
@@ -95,15 +91,6 @@ async function getSubscriptionVideos(followedChannels) {
       localStorage.getItem("YoutubeVideos") !== null
         ? JSON.parse(localStorage.getItem("YoutubeVideos"))
         : {};
-    // console.log("TCL: getSubscriptionVideos -> videosCACHE", videosCACHE);
-
-    // Object.values(videosCACHE).map(channel => {
-    //   channel.items.map(item => {
-    //     console.log(Object.keys(item));
-    //     return "";
-    //   });
-    //   return "";
-    // });
 
     const videos = {};
 
@@ -111,73 +98,14 @@ async function getSubscriptionVideos(followedChannels) {
       followedChannels.map(async channel => {
         const response = await fetchSubscriptionData(videosCACHE, channel);
 
-        // console.log("TCL: getSubscriptionVideos -> response", response);
-        response.items = await filterVideos(response);
+        response.res.items = await filterVideos(response.res);
+        error = response.error;
 
-        videos[channel.snippet.resourceId.channelId] = response;
+        videos[channel.snippet.resourceId.channelId] = response.res;
       })
     );
 
-    // console.log("TCL: getSubscriptionVideos -> videos", videos);
-
-    // Object.values(videos).map(channel => {
-    //   channel.items.map(item => {
-    //     console.log(Object.keys(item));
-    //     return "";
-    //   });
-    //   return "";
-    // });
-    //-----------------------------------------------------
-    // const videosWithDetails = {};
-
-    // await Promise.all(
-    //   Object.keys(videos).map(async (channel, index) => {
-    //     await videos[channel].items.map(async video => {
-    //       let response = null;
-
-    //       try {
-    //         if (!video.duration) {
-    //           console.log("details req sent");
-    //           // video.duration = "1:02:30";
-
-    //           response = await axios.get(
-    //             `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${video.contentDetails.upload.videoId}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`
-    //           );
-
-    //           video.duration = moment
-    //             .duration(response.data.items[0].contentDetails.duration)
-    //             .format("hh:mm:ss");
-    //         } else {
-    //           console.log("details CAHCE used");
-    //         }
-    //       } catch (e) {
-    //         console.error(e.message);
-    //       }
-    //     });
-
-    //     videosWithDetails[channel] = videos[channel];
-    //   })
-    // ).catch(error => {
-    //   console.log(error);
-    // });
-
-    // console.log("TCL: getSubscriptionVideos -> videosWithDetails", videosWithDetails);
-
-    //-----------------------------------------------------
-
-    // const videosWithDetails = await new Promise(async (resolve, reject) => {
-    //   await getVideoInfo(videos)
-    //     .then(() => {
-    //       resolve();
-    //     })
-    //     .catch(() => {
-    //       reject();
-    //     });
-    // });
-    // const videosWithDetails = await getVideoInfo(videos);
-    const videosWithDetails = videos;
-
-    // console.log("TCL: getSubscriptionVideos -> videosWithDetails", videosWithDetails);
+    const videosWithDetails = await getVideoInfo(videos);
 
     localStorage.setItem("YoutubeVideos", JSON.stringify(videosWithDetails));
 
@@ -185,15 +113,12 @@ async function getSubscriptionVideos(followedChannels) {
 
     await Promise.all(
       Object.values(videos).map(async (channel, index) => {
-        // console.log("TCL: getSubscriptionVideos -> videos[key]", videos[key]);
         await channel.items.map(video => {
           videosUnorderedNew.push(video);
           return video;
         });
       })
     );
-
-    // console.log("TCL: getSubscriptionVideos -> videosUnorderedNew", videosUnorderedNew);
 
     const allVideos = _.reverse(_.sortBy(videosUnorderedNew, video => video.snippet.publishedAt));
 

@@ -21,7 +21,6 @@ const RenderFollowedChannelList = data => {
             fontWeight: "bold",
           }}>{`Total: ${data.followedChannels.length}`}</p>
         {data.followedChannels.map(channel => {
-          // console.log("TCL: channel", channel);
           return (
             <ChannelListElement
               channel={channel}

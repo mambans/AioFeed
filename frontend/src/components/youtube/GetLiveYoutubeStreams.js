@@ -37,21 +37,6 @@ async function GetLiveYoutubeStreams(channel) {
 
     localStorage.setItem(`live-${channel}`, JSON.stringify(liveResponse));
 
-    // ----------------------------------------
-    // const liveResponse = await axios.get(`https://www.googleapis.com/youtube/v3/search?`, {
-    //     params: {
-    //         part: "snippet",
-    //         channelId: channel,
-    //         eventType: "live",
-    //         maxResults: 2,
-    //         type: "video",
-    //         key: process.env.REACT_APP_YOUTUBE_API_KEY,
-    //     },
-    // });
-
-    // console.log("LiveResonse: ", liveResponse);
-
-    // Adding live stremaing details.
     if (liveResponse.data.items.length >= 1) {
       liveStreams = await Promise.all(
         liveResponse.data.items.map(async stream => {

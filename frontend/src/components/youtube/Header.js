@@ -18,6 +18,32 @@ import {
 } from "./../sharedStyledComponents";
 import RenderFollowedChannelList from "./channelList/RenderFollowedChannelList";
 
+const SubFeedError = props => {
+  const { error } = props;
+  let alertError;
+  if (error && error.code) {
+    switch (error.code) {
+      case 401:
+        alertError = error.errors[0].reason + " - Authendication expired.";
+        break;
+      case 403:
+        alertError = error.errors[0].reason + " - Only cache used instead.";
+        break;
+      default:
+        alertError = error.errors[0].reason;
+        break;
+    }
+
+    return (
+      <Alert key={error.errors[0].reason} className={styles.requestError} variant={"warning"}>
+        {alertError}
+      </Alert>
+    );
+  } else {
+    return "";
+  }
+};
+
 export default data => {
   return (
     <HeaderContainer>
@@ -48,17 +74,7 @@ export default data => {
           {data.isLoaded || new Date()}
         </Moment>
       </div>
-      {/* {(data.requestError && data.requestError.code === 403) || data.requestError.code === 401 ? ( */}
-      {data.requestError ? (
-        <Alert
-          key={data.requestError.errors[0].reason}
-          className={styles.requestError}
-          variant={"warning"}>
-          {data.requestError.code === 403
-            ? data.requestError.errors[0].reason + " - Only cache used instead."
-            : data.requestError.errors[0].reason}
-        </Alert>
-      ) : null}
+      <SubFeedError error={data.requestError}></SubFeedError>
       <HeaderTitle style={{ marginRight: "300px " }}>
         Youtube
         <Icon icon={youtube} size={32} style={{ paddingLeft: "10px", color: "#a80000" }}></Icon>
