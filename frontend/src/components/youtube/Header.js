@@ -21,22 +21,30 @@ import RenderFollowedChannelList from "./channelList/RenderFollowedChannelList";
 const SubFeedError = props => {
   const { error } = props;
   let alertError;
+  let alertVariant;
+
   if (error && error.code) {
     switch (error.code) {
       case 401:
         alertError =
           error.errors[0].reason + " - Authendication expired and only cache used instead.";
+        alertVariant = "danger";
         break;
       case 403:
         alertError = error.errors[0].reason + " - Only cache used instead.";
+        alertVariant = "warning";
         break;
       default:
         alertError = error.errors[0].reason;
+        alertVariant = "warning";
         break;
     }
 
     return (
-      <Alert key={error.errors[0].reason} className={styles.requestError} variant={"warning"}>
+      <Alert
+        key={error.errors[0].reason}
+        className={styles.requestError}
+        variant={alertVariant || "warning"}>
         {alertError}
       </Alert>
     );

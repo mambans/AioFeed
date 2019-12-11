@@ -60,13 +60,14 @@
   margin: 0;
   position: absolute;
   margin-left: 250px;
-
-  color: #ffc51c;
+  //color: #ffc51c;
   background-color: transparent;
   border: none;
   border-bottom: 1px solid;
   border-radius: 0;
   font-weight: bold;
+  filter: brightness(250%);
+  -webkit-filter: brightness(250%);
 }
 
 .container_header {
