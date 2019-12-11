@@ -8,7 +8,7 @@ import { SubFeedContainer } from "./../sharedStyledComponents";
 import YoutubeVideoElement from "./YoutubeVideoElement";
 
 export default data => {
-  if (data.requestError && data.requestError.code === 401) {
+  if (data.requestError && data.requestError.code === 401 && !data.videos) {
     return "";
   } else if (!data.initiated || !data.videos || data.videos.length < 1) {
     return (

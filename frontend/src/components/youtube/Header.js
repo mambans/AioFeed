@@ -24,7 +24,8 @@ const SubFeedError = props => {
   if (error && error.code) {
     switch (error.code) {
       case 401:
-        alertError = error.errors[0].reason + " - Authendication expired.";
+        alertError =
+          error.errors[0].reason + " - Authendication expired and only cache used instead.";
         break;
       case 403:
         alertError = error.errors[0].reason + " - Only cache used instead.";
