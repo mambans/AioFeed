@@ -17,15 +17,16 @@ import { UnseenNotifcationCount } from "./../notifications/styledComponent";
 
 function NavigationBar(prop) {
   const [refresh, setRefresh] = useState(false);
+  // eslint-disable-next-line
   const [shrinkNavbar, setShrinkNavbar] = useState("false");
 
-  window.onscroll = function() {
-    if (document.body.scrollTop > 30 || document.documentElement.scrollTop > 30) {
-      setShrinkNavbar("true");
-    } else {
-      setShrinkNavbar("false");
-    }
-  };
+  // window.onscroll = function() {
+  //   if (document.body.scrollTop > 30 || document.documentElement.scrollTop > 30) {
+  //     setShrinkNavbar("true");
+  //   } else {
+  //     setShrinkNavbar("false");
+  //   }
+  // };
 
   return (
     <Navbar

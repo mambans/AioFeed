@@ -22,7 +22,7 @@ html[data-theme="original"] {
   --modalCloseButtonColorHover: white;
   // --navigationbarBackground: #0000003d;
   // --navigationbarBackground: hsla(0, 0%, 0%, 0.45);
-  --navigationbarBackground: linear-gradient(rgba(0, 0, 0, 0.22) 10%, rgba(0, 0, 0, 0.45) 50%);
+  --navigationbarBackground: rgba(0, 0, 0, 0.75);
   --newHighlight: #00b7ff;
   // --newHighlight: #ff3000;
   --popupModalBackground: #000000c7;
@@ -68,7 +68,7 @@ html[data-theme="christmas"] {
   --modalCloseButtonColor: rgba(240, 240, 240, 0.8);
   --modalCloseButtonColorHover: white;
 
-  --navigationbarBackground: linear-gradient(rgba(0, 0, 0, 0.5) 10%, rgba(0, 0, 0, 0.6) 50%);
+  --navigationbarBackground: rgba(0, 0, 0, 0.75);
   --popupModalBackground: #000000e3;
   --primaryPurple: #040113;
   --refreshButtonBackground: #00000026;
