@@ -5,7 +5,7 @@ html,
 html[data-theme="original"] {
   --accountContainerBackgroundColor: #000000c7;
   --backgroundBlue: #01010b;
-  --backgroundImg: url("/images/treeCoffee2.jpg");
+  --backgroundImg: url("/images/treeCoffee.jpg");
   --channelHover: rgb(179, 30, 248);
   --feedsMargin: 25px 0 0 430px;
   --feedsWidth: 81.6%;
@@ -41,6 +41,8 @@ html[data-theme="original"] {
   --videoTitle: rgb(240, 240, 240);
   --videoTitleHover: rgb(255, 255, 255);
   --unseenNotifcationCountBackground: rgb(170, 0, 0);
+  --linkTextShadow: 0px 0px 0px black;
+
   // --accountContainerBackgroundColor: #081016;
   // --backgroundImg: url("/images/background5.png");
   // --feedsMargin: 25px 5.5% 0 430px;
@@ -71,11 +73,11 @@ html[data-theme="christmas"] {
   --navigationbarBackground: rgba(0, 0, 0, 0.75);
   --popupModalBackground: #000000e3;
   --primaryPurple: #040113;
-  --refreshButtonBackground: #00000026;
+  --refreshButtonBackground: #0000007a;
   --refreshButtonBorder: none;
   --refreshButtonColor: #a8a8a8;
-  --refreshButtonHoverBackground: #000000b2;
-  --refreshButtonHoverColor: #1cca05;
+  --refreshButtonHoverBackground: #333435;
+  --refreshButtonHoverColor: #ffffff;
   --refreshButtonShadow: 4px 4px 5px 0px #000c;
   --scrollbarColors: rgb(240, 240, 240) rgb(43, 31, 31);
   --sidebarBackground: rgba(5, 5, 5, 0.8);
@@ -85,6 +87,7 @@ html[data-theme="christmas"] {
   --videoTitle: rgb(240, 240, 240);
   --videoTitleHover: rgb(240, 240, 240);
   --newHighlight: #ffffff;
+  --linkTextShadow: 0px 0px 3px black;
   // --newHighlight: #ff3000;
   // --refreshButtonBorder: thin solid #2d2d2d;
   // --scrollbarColors: rgb(207, 5, 16) rgb(43, 31, 31);

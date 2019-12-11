@@ -9,6 +9,11 @@ const RefreshButton = styled(Button).attrs({ variant: "outline-secondary" })`
   border: var(--refreshButtonBorder);
   position: relative;
   left: 6px;
+
+  &:hover {
+    background: var(--refreshButtonHoverBackground);
+    color: var(--refreshButtonHoverColor);
+  }
 `;
 
 const ButtonList = styled(Button).attrs({ variant: "outline-secondary" })`
@@ -22,6 +27,11 @@ const ButtonList = styled(Button).attrs({ variant: "outline-secondary" })`
   box-shadow: var(--refreshButtonShadow);
   border: var(--refreshButtonBorder);
   font-weight: bold;
+
+  &:hover {
+    background: var(--refreshButtonHoverBackground);
+    color: var(--refreshButtonHoverColor);
+  }
 `;
 
 const HeaderTitle = styled.h4`
@@ -63,6 +73,10 @@ const VideoContainer = styled.div`
   margin: 7px;
   max-height: 336px;
   margin-bottom: 15px;
+
+  a { 
+    text-shadow: var(--linkTextShadow);
+  }
 `;
 
 const VideoTitle = styled.a`
