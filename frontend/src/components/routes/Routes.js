@@ -57,7 +57,7 @@ const Routes = () => {
                       );
                     }}
                   />
-                  <Route exact path='/twitch/top' component={RenderTopStreams} />
+                  <Route path='/twitch/top/' component={RenderTopStreams} />
                   <Route exact path='/twitch/notifications' component={streamOnlineWebhook} />
                   <Route exact path='/auth/youtube' component={YoutubeAuth} />
                   <Route exact path='/auth/twitch' component={TwitchAuth} />

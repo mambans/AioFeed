@@ -91,15 +91,15 @@ const RenderFollowedChannelList = data => {
   } else {
     return (
       <ul>
-        {followedChannels.map(channel => {
-          return <ChannelListElement data={channel} key={channel.to_id}></ChannelListElement>;
-        })}
         <p
           style={{
             textAlign: "center",
             fontSize: "1.1rem",
             fontWeight: "bold",
           }}>{`Total: ${followedChannels.length}`}</p>
+        {followedChannels.map(channel => {
+          return <ChannelListElement data={channel} key={channel.to_id}></ChannelListElement>;
+        })}
       </ul>
     );
   }

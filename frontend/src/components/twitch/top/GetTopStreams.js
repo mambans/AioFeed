@@ -2,21 +2,43 @@ import axios from "axios";
 
 import Utilities from "./../../../utilities/Utilities";
 
-export default async game => {
+export default async game_param_url => {
+  let game;
+  let error;
+
+  if (game_param_url && game_param_url !== "undefined") {
+    game = await axios
+      .get(`https://api.twitch.tv/helix/games`, {
+        params: {
+          name: game_param_url,
+        },
+        headers: {
+          Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+        },
+      })
+      .then(res => {
+        return res.data.data[0];
+      });
+  } else {
+    game = { id: null };
+  }
+
   const topStreams = await axios
     .get(`https://api.twitch.tv/helix/streams`, {
       params: {
         first: 27,
-        game_id: game && game.name !== "All" ? game.id : null,
+        game_id: game.id,
       },
       headers: {
         Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
         "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
       },
     })
-    .catch(error => {
-      console.error(error.message);
-      return error;
+    .catch(e => {
+      console.error(e.message);
+      error = e;
+      return e;
     });
 
   try {
@@ -94,5 +116,5 @@ export default async game => {
     console.error(e);
   }
 
-  return topStreams;
+  return { topStreams, error };
 };

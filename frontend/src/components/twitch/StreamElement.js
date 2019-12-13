@@ -265,11 +265,11 @@ function StreamEle(data) {
               alt=''
               className={styles.game_img}></img>
           </a>
-          <p className={styles.game}>
-            <a href={"https://www.twitch.tv/directory/game/" + data.data.game_name}>
-              {Utilities.truncate(data.data.game_name, 30)}
-            </a>
-          </p>
+          <a
+            className={styles.game}
+            href={"https://www.twitch.tv/directory/game/" + data.data.game_name}>
+            {Utilities.truncate(data.data.game_name, 30)}
+          </a>
           <p className={styles.viewers}>
             {/* {data.data.viewer_count} */}
             {formatViewerNumbers(data.data.viewer_count)}

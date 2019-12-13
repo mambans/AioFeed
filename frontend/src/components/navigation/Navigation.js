@@ -99,10 +99,10 @@ function NavigationBar(prop) {
       <Navbar.Collapse id='responsive-navbar-nav'>
         <Container>
           <Nav className='mr-auto'>
-            <Nav.Link as={NavLink} to='/feed' activeClassName='active'>
+            <Nav.Link as={NavLink} to='/feed/' activeClassName='active'>
               Feed
             </Nav.Link>
-            <Nav.Link as={NavLink} to='/twitch/top' activeClassName='active'>
+            <Nav.Link as={NavLink} to='/twitch/top/' activeClassName='active'>
               Top streams
             </Nav.Link>
             {/* <Nav.Link as={NavLink} to='/twitch/notifications' activeClassName='active'>

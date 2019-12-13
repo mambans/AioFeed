@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+import { Link } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
+import axios from "axios";
+import React, { useState, useEffect, useCallback } from "react";
 
-import GetTopStreams from "./GetTopStreams";
 import Utilities from "./../../../utilities/Utilities";
 
-const RenderTopGamesList = data => {
+const RenderTopGamesList = () => {
   const [topGames, setTopGames] = useState();
 
   const fetchTopGames = useCallback(async () => {
@@ -20,15 +20,6 @@ const RenderTopGamesList = data => {
     });
     return topGames;
   }, []);
-
-  const gameOnClick = async game => {
-    data.setIsLoaded(false);
-    data.setGame(game || "All");
-    GetTopStreams(game).then(res => {
-      data.setTopStreams(res.data.data);
-      data.setIsLoaded(true);
-    });
-  };
 
   useEffect(() => {
     const fetchAndSetTopGames = async () => {
@@ -48,39 +39,24 @@ const RenderTopGamesList = data => {
           fontWeight: "bold",
           fontSize: "1.1rem",
         }}
-        key={"showAll"}
-        onClick={() => {
-          gameOnClick();
-        }}>
-        Show all
+        key={"showAll"}>
+        <Link to={"/twitch/top/"}>Show all</Link>
       </li>
       {topGames.map(game => {
         return (
-          <li
-            style={{ justifyContent: "unset", cursor: "pointer" }}
-            key={game.id}
-            onClick={() => {
-              gameOnClick(game);
-            }}>
-            <img
-              src={game.box_art_url.replace("{width}", 300).replace("{height}", 300)}
-              alt=''
-              style={{
-                width: "30px",
-                height: "30px",
-                marginRight: "10px",
-                borderRadius: "3px",
-              }}></img>
-            <button
-              style={{
-                background: "none",
-                border: "none",
-                color: "white",
-                textAlign: "left",
-                outline: "none",
-              }}>
-              {game.name}
-            </button>
+          <li style={{ justifyContent: "unset", cursor: "pointer" }} key={game.id}>
+            <Link to={"/twitch/top/" + game.name}>
+              <img
+                src={game.box_art_url.replace("{width}", 300).replace("{height}", 300)}
+                alt=''
+                style={{
+                  width: "30px",
+                  height: "30px",
+                  marginRight: "10px",
+                  borderRadius: "3px",
+                }}></img>
+              {Utilities.truncate(game.name, 30)}
+            </Link>
           </li>
         );
       })}

@@ -1,15 +1,15 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
-import Moment from "react-moment";
-import { Icon } from "react-icons-kit";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
 import { eye } from "react-icons-kit/icomoon/eye";
-
-import styles from "./../Twitch.module.scss";
-import StreamHoverIframe from "./../StreamHoverIframe.js";
-import Utilities from "../../../utilities/Utilities";
+import { Icon } from "react-icons-kit";
+import { Link } from "react-router-dom";
+import Moment from "react-moment";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import React, { useRef, useCallback, useState, useEffect } from "react";
+import Tooltip from "react-bootstrap/Tooltip";
 
 import { ImageContainer, VideoTitle } from "./../../sharedStyledComponents";
+import StreamHoverIframe from "./../StreamHoverIframe.js";
+import styles from "./../Twitch.module.scss";
+import Utilities from "../../../utilities/Utilities";
 
 const HOVER_DELAY = 1000;
 
@@ -110,7 +110,17 @@ function StreamEle(data) {
           </p>
         </div>
         <div className={styles.gameContainer}>
-          <a
+          <Link className={styles.game_img} to={"/twitch/top/" + data.data.game_name}>
+            <img
+              src={data.data.game_img.replace("{width}", 130).replace("{height}", 173)}
+              alt=''
+              className={styles.game_img}></img>
+          </Link>
+          <Link className={styles.game} to={"/twitch/top/" + data.data.game_name}>
+            {Utilities.truncate(data.data.game_name, 50)}
+          </Link>
+
+          {/* <a
             className={styles.game_img}
             href={"https://www.twitch.tv/directory/game/" + data.data.game_name}>
             <img
@@ -122,7 +132,8 @@ function StreamEle(data) {
             <a href={"https://www.twitch.tv/directory/game/" + data.data.game_name}>
               {Utilities.truncate(data.data.game_name, 50)}
             </a>
-          </p>
+          </p> */}
+
           <p className={styles.viewers}>
             {/* {data.data.viewer_count} */}
             {formatViewerNumbers(data.data.viewer_count)}
