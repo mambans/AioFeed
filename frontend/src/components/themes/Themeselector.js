@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import styles from "./Themes.module.scss";
 
 function Themeselector() {
-  const allThemmes = ["default", "original", "christmas", "new year's eve"];
+  const allThemmes = ["default", "original", "christmas", "new year's eve", "clean"];
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);
 
@@ -30,8 +30,6 @@ function Themeselector() {
     localStorage.setItem("activeTheme", theme);
 
     if (theme === "default") {
-      console.log(123);
-
       const currentMonth = new Date().getMonth();
       const currentDate = new Date().getDate();
 

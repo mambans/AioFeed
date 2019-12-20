@@ -47,8 +47,8 @@ function StreamHoverIframe(data) {
         className={styles.StreamHoverIframe}
         theme='dark'
         id={data.data.id + "-iframe"}
-        width='100%'
-        height='100%'
+        width='336px'
+        height='189px'
         display='inline'
         position='absolute'
         loading={"Loading.."}

@@ -1,13 +1,12 @@
 import "react-notifications-component/dist/theme.css";
 import React, { useState, useEffect } from "react";
 import ReactNotification from "react-notifications-component";
-import { Animated } from "react-animated-css";
 import { Spinner, Alert } from "react-bootstrap";
+import { CSSTransition } from "react-transition-group";
 
 import "./Notifications.scss";
 import DataHandler from "../twitch/DataHandler";
 import ErrorHandeling from "./../error/Error";
-// import NotificationsContext from "./../notifications/NotificationsContext";
 import Twitch from "../twitch/Twitch";
 import TwitchVods from "../twitch/vods/Twitch-vods";
 import Utilities from "../../utilities/Utilities";
@@ -17,7 +16,6 @@ import YoutubeHeader from "./../youtube/Header";
 import styles from "./Feed.module.scss";
 
 function Feed(props) {
-  // console.log("TCL: Feed -> props", props);
   document.title = "Notifies | Feed";
   const [isLoaded] = useState(true);
   const [error] = useState(null);
@@ -28,10 +26,6 @@ function Feed(props) {
     Notification.requestPermission().then(function(result) {
       console.log("Notifications: ", result);
     });
-  }, []);
-
-  useEffect(() => {
-    console.log("Feed UseEffect()");
   }, []);
 
   useEffect(() => {
@@ -62,11 +56,7 @@ function Feed(props) {
       show
     ) {
       return (
-        <Animated
-          animationIn='fadeIn'
-          animationOut='fadeOut'
-          isVisible={true}
-          animationInDuration={500}>
+        <CSSTransition timeout={0} classNames='fade-1s' unmountOnExit>
           <Alert
             variant='info'
             style={Utilities.feedAlertWarning}
@@ -76,7 +66,7 @@ function Feed(props) {
             <hr />
             Please enable some feeds in account settings
           </Alert>
-        </Animated>
+        </CSSTransition>
       );
     }
     return null;
@@ -109,11 +99,11 @@ function Feed(props) {
         {props.enableTwitch ? (
           <DataHandler>
             {liveStreams => (
-              <div className={styles.twitchContainer}>
-                <Animated animationIn='fadeIn' animationOut='fadeOut' isVisible={true}>
+              <CSSTransition in={props.enableTwitch} timeout={0} classNames='fade-1s' unmountOnExit>
+                <div className={styles.twitchContainer}>
                   <Twitch data={liveStreams} />
-                </Animated>
-              </div>
+                </div>
+              </CSSTransition>
             )}
           </DataHandler>
         ) : null}
@@ -122,13 +112,7 @@ function Feed(props) {
           <div className={styles.container}>
             <YoutubeDataHandler>
               {data => (
-                <Animated
-                  animationIn='fadeIn'
-                  animationOut='fadeOut'
-                  isVisible={true}
-                  style={{
-                    width: "100%",
-                  }}>
+                <>
                   <YoutubeHeader
                     refresh={data.refresh}
                     isLoaded={data.isLoaded}
@@ -145,7 +129,7 @@ function Feed(props) {
                     videos={data.videos}
                     onChange={data.onChange}
                   />
-                </Animated>
+                </>
               )}
             </YoutubeDataHandler>
           </div>
@@ -153,13 +137,7 @@ function Feed(props) {
 
         {props.enableTwitchVods && delayedEnableTwitchVods ? (
           <div className={styles.container}>
-            <Animated
-              animationIn='fadeIn'
-              animationOut='fadeOut'
-              isVisible={true}
-              style={{ width: "100%" }}>
-              <TwitchVods />
-            </Animated>
+            <TwitchVods />
           </div>
         ) : null}
       </>

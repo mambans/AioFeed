@@ -1,20 +1,19 @@
-import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
-import Popup from "reactjs-popup";
-import { Spinner } from "react-bootstrap";
-import Icon from "react-icons-kit";
-import { twitch } from "react-icons-kit/fa/twitch";
-import { reload } from "react-icons-kit/iconic/reload";
 import { list2 } from "react-icons-kit/icomoon/list2";
+import { reload } from "react-icons-kit/iconic/reload";
+import { Spinner } from "react-bootstrap";
+import { twitch } from "react-icons-kit/fa/twitch";
+import Icon from "react-icons-kit";
+import Popup from "reactjs-popup";
+import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
 
+import { HeaderContainerTwitchLive } from "./styledComponents";
+import { RefreshButton, HeaderTitle, ButtonList } from "./../sharedStyledComponents";
 import ErrorHandeling from "../error/Error";
 import getFollowedChannels from "./GetFollowedChannels";
 import getFollowedOnlineStreams from "./GetFollowedStreams";
-import Utilities from "../../utilities/Utilities";
-import styles from "./Twitch.module.scss";
-import { HeaderContainerTwitchLive } from "./styledComponents";
-import { RefreshButton, HeaderTitle, ButtonList } from "./../sharedStyledComponents";
-
 import NotificationsContext from "./../notifications/NotificationsContext";
+import styles from "./Twitch.module.scss";
+import Utilities from "../../utilities/Utilities";
 
 const REFRESH_RATE = 20; // seconds
 

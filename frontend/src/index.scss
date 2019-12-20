@@ -38,7 +38,7 @@ a:hover {
 
 :root {
   scrollbar-color: var(--scrollbarColors) !important;
-  scrollbar-width: thin !important;
+  scrollbar-width: var(--scrollbarWidth);
 }
 
 html.theme-transition,

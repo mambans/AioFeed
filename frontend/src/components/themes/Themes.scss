@@ -23,7 +23,7 @@ html[data-theme="original"] {
   // --navigationbarBackground: #0000003d;
   // --navigationbarBackground: hsla(0, 0%, 0%, 0.45);
   --navigationbarBackground: rgba(0, 0, 0, 0.75);
-  --newHighlight: #00b7ff;
+  --newHighlight: #ffffff;
   // --newHighlight: #ff3000;
   --popupModalBackground: #000000c7;
   --primaryPurple: #040113;
@@ -42,6 +42,8 @@ html[data-theme="original"] {
   --videoTitleHover: rgb(255, 255, 255);
   --unseenNotifcationCountBackground: rgb(170, 0, 0);
   --linkTextShadow: 0px 0px 0px black;
+  --scrollbarWidth: thin !important;
+  --footerMargin: 100px;
 
   // --accountContainerBackgroundColor: #081016;
   // --backgroundImg: url("/images/background5.png");
@@ -80,7 +82,7 @@ html[data-theme="christmas"] {
   --refreshButtonHoverColor: #ffffff;
   --refreshButtonShadow: 4px 4px 5px 0px #000c;
   --scrollbarColors: rgb(240, 240, 240) rgb(43, 31, 31);
-  --sidebarBackground: rgba(5, 5, 5, 0.8);
+  --sidebarBackground: rgba(5, 5, 5, 0.9);
   --subFeedHeaderBorder: 2px solid #80808029;
   --subFeedHeaderColor: #ffffff;
   --textColor: rgb(240, 240, 240);
@@ -88,6 +90,7 @@ html[data-theme="christmas"] {
   --videoTitleHover: rgb(240, 240, 240);
   --newHighlight: #ffffff;
   --linkTextShadow: 0px 0px 3px black;
+
   // --newHighlight: #ff3000;
   // --refreshButtonBorder: thin solid #2d2d2d;
   // --scrollbarColors: rgb(207, 5, 16) rgb(43, 31, 31);
@@ -101,4 +104,8 @@ html[data-theme="new year's eve"] {
   --scrollbarColors: rgb(18, 36, 58) rgb(5, 8, 10);
   // --footerLinkColor: #0eb5bd;
   // --footerLinkHoverColor: #12ccd6;
+}
+
+html[data-theme="clean"] {
+  --backgroundImg: url("/images/pattern.png");
 }

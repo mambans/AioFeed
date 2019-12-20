@@ -5,9 +5,9 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 
-import Utilities from "../../../utilities/Utilities";
-import styles from "../Twitch.module.scss";
 import { VideoContainer, VideoTitle, ImageContainer } from "./../../sharedStyledComponents";
+import styles from "../Twitch.module.scss";
+import Utilities from "../../../utilities/Utilities";
 
 function TwitchVodElement(data) {
   const [isHovered, setIsHovered] = useState(false);

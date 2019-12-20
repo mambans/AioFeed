@@ -1,26 +1,25 @@
-import React, { useEffect, useState, useCallback } from "react";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { list2 } from "react-icons-kit/icomoon/list2";
+import { reload } from "react-icons-kit/iconic/reload";
+import { Spinner } from "react-bootstrap";
+import { twitch } from "react-icons-kit/fa/twitch";
 import Alert from "react-bootstrap/Alert";
 import Countdown from "react-countdown-now";
-import { Spinner } from "react-bootstrap";
 import Icon from "react-icons-kit";
-import { reload } from "react-icons-kit/iconic/reload";
-import { twitch } from "react-icons-kit/fa/twitch";
 import Popup from "reactjs-popup";
-import { list2 } from "react-icons-kit/icomoon/list2";
-
-import RenderTwitch from "./Render-Twitch";
-import styles from "./Twitch.module.scss";
-import Utilities from "../../utilities/Utilities";
-import RenderFollowedChannelList from "./channelList/RenderFollowedChannelList";
-import TwitchSidebar from "./sidebar/TwitchSidebar";
+import React, { useEffect, useState, useCallback } from "react";
 
 import { HeaderContainerTwitchLive } from "./styledComponents";
 import { RefreshButton, HeaderTitle, ButtonList } from "./../sharedStyledComponents";
+import FeedsContext from "./../feed/FeedsContext";
+import RenderFollowedChannelList from "./channelList/RenderFollowedChannelList";
+import StreamEle from "./StreamElement.js";
+import styles from "./Twitch.module.scss";
+import TwitchSidebar from "./sidebar/TwitchSidebar";
+import Utilities from "../../utilities/Utilities";
 
 function Twitch({ data }) {
-  // console.log("TCL: Twitch -> data", data.newlyAddedStreams);
   const [show, setShow] = useState(true);
-  const [onlineLivestream, setOnlineLivestream] = useState([]);
 
   const windowFocusHandler = useCallback(() => {
     document.title = "Notifies | Feed";
@@ -28,7 +27,7 @@ function Twitch({ data }) {
   }, []);
 
   const windowBlurHandler = useCallback(() => {
-    document.title = "Notifies | Feed";
+    // document.title = "Notifies | Feed";
     data.resetNewlyAddedStreams();
   }, [data]);
 
@@ -37,7 +36,6 @@ function Twitch({ data }) {
   }, [data]);
 
   useEffect(() => {
-    setOnlineLivestream(data.liveStreams);
     window.addEventListener("focus", windowFocusHandler);
     window.addEventListener("blur", windowBlurHandler);
 
@@ -119,7 +117,7 @@ function Twitch({ data }) {
       ) : (
         <>
           <TwitchSidebar
-            onlineStreams={onlineLivestream}
+            onlineStreams={data.liveStreams}
             newlyAdded={data.newlyAddedStreams}
             REFRESH_RATE={data.REFRESH_RATE}></TwitchSidebar>
           <div
@@ -127,19 +125,34 @@ function Twitch({ data }) {
             style={{
               marginTop: "0",
             }}>
-            {onlineLivestream.map(stream => {
-              return (
-                <RenderTwitch
-                  data={stream}
-                  run={{ initial: data.initialOpen }}
-                  newlyAdded={stream.newlyAdded}
-                  newlyAddedStreams={data.newlyAddedStreams}
-                  refresh={refresh}
-                  REFRESH_RATE={data.REFRESH_RATE}
-                  key={stream.id}
-                />
-              );
-            })}
+            <TransitionGroup className='twitch-live' component={null}>
+              {data.liveStreams.map(stream => {
+                return (
+                  <CSSTransition
+                    // in={true}
+                    key={stream.id}
+                    timeout={1000}
+                    classNames='videoFade-1s'
+                    unmountOnExit>
+                    <FeedsContext.Consumer>
+                      {feedProps => {
+                        return (
+                          <StreamEle
+                            {...feedProps}
+                            key={stream.id}
+                            data={stream}
+                            newlyAddedStreams={data.newlyAddedStreams}
+                            newlyAdded={stream.newlyAdded}
+                            refresh={refresh}
+                            REFRESH_RATE={data.REFRESH_RATE}
+                          />
+                        );
+                      }}
+                    </FeedsContext.Consumer>
+                  </CSSTransition>
+                );
+              })}
+            </TransitionGroup>
           </div>
         </>
       )}

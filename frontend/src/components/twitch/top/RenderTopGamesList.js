@@ -1,34 +1,21 @@
 import { Link } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
-import axios from "axios";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 
+import GetTopGames from "./GetTopGames";
 import Utilities from "./../../../utilities/Utilities";
 
 const RenderTopGamesList = () => {
   const [topGames, setTopGames] = useState();
 
-  const fetchTopGames = useCallback(async () => {
-    const topGames = await axios.get(`https://api.twitch.tv/helix/games/top`, {
-      params: {
-        first: 50,
-      },
-      headers: {
-        Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
-        "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-      },
-    });
-    return topGames;
-  }, []);
-
   useEffect(() => {
     const fetchAndSetTopGames = async () => {
-      const games = await fetchTopGames();
+      const games = await GetTopGames();
       setTopGames(games.data.data);
     };
 
     fetchAndSetTopGames();
-  }, [fetchTopGames]);
+  }, []);
 
   return topGames ? (
     <ul>

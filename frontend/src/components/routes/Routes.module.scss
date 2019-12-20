@@ -1,4 +1,13 @@
-nav[mode="fixed"] ~ #contentContainer {
-  padding-top: 75px;
-  min-height: calc(100vh - 75px);
+// nav[mode="fixed"] ~ #contentContainer {
+#contentContainer {
+  // padding-top: 75px;
+  min-height: 100vh;
 }
+
+nav[mode="fixed"] ~ #contentContainer {
+  padding-top: 65px;
+}
+
+// html {
+//   overflow: hidden;
+// }

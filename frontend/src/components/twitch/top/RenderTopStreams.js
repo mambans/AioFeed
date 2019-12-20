@@ -1,4 +1,3 @@
-import { Animated } from "react-animated-css";
 import { list2 } from "react-icons-kit/icomoon/list2";
 import { reload } from "react-icons-kit/iconic/reload";
 import { Spinner } from "react-bootstrap";
@@ -7,6 +6,7 @@ import Icon from "react-icons-kit";
 import Popup from "reactjs-popup";
 import React, { useEffect, useState, useCallback } from "react";
 import Alert from "react-bootstrap/Alert";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import { RefreshButton, HeaderTitle, ButtonList } from "./../../sharedStyledComponents";
 import GetTopStreams from "./GetTopStreams";
@@ -120,17 +120,20 @@ const RenderTopStreams = () => {
       ) : (
         <div className={styles.topStreamsContainer}>
           {isLoaded ? (
-            topStreams.map(stream => {
-              return (
-                <Animated
-                  animationIn='fadeIn'
-                  animationOut='fadeOut'
-                  animationInDuration={500}
-                  key={stream.id}>
-                  <StreamEle data={stream} key={stream.id}></StreamEle>
-                </Animated>
-              );
-            })
+            <TransitionGroup className='twitch-top-live' component={null}>
+              {topStreams.map(stream => {
+                return (
+                  <CSSTransition
+                    // in={true}
+                    key={stream.id}
+                    timeout={1000}
+                    classNames='fade-1s'
+                    unmountOnExit>
+                    <StreamEle data={stream} />
+                  </CSSTransition>
+                );
+              })}
+            </TransitionGroup>
           ) : (
             <Spinner
               animation='grow'

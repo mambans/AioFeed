@@ -1,4 +1,3 @@
-import { Animated } from "react-animated-css";
 import { cross } from "react-icons-kit/icomoon/cross";
 import { eye } from "react-icons-kit/icomoon/eye";
 import { Icon } from "react-icons-kit";
@@ -8,6 +7,7 @@ import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useRef, useCallback, useState, useEffect } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
+import { CSSTransition } from "react-transition-group";
 
 import styles from "./Twitch.module.scss";
 import StreamHoverIframe from "./StreamHoverIframe.js";
@@ -46,7 +46,7 @@ function StreamEle(data) {
   const streamHoverTimer = useRef();
   const ref = useRef();
   const refChannel = useRef();
-  const refUnfollowAlert = useRef();
+  // const refUnfollowAlert = useRef();
 
   const formatViewerNumbers = viewers => {
     if (viewers.toString().length === 7) {
@@ -66,24 +66,17 @@ function StreamEle(data) {
       } else if (unfollowError.includes("Successfully")) {
         alertType = "success";
       }
-      clearTimeout(refUnfollowAlert.current);
-      refUnfollowAlert.current = setTimeout(() => {
-        setUnfollowError(null);
-      }, 6000);
+      // clearTimeout(refUnfollowAlert.current);
+      // refUnfollowAlert.current = setTimeout(() => {
+      //   setUnfollowError(null);
+      // }, 6000);
       return (
-        <Animated
-          animationIn='fadeInUp'
-          animationOut='fadeOut'
-          animationOutDelay={3500}
-          animationOutDuration={2500}
-          isVisible={false}
-          style={{
-            width: "inherit",
-            position: "absolute",
-            margin: "0",
-            height: "30px",
-            marginTop: "10px",
-          }}>
+        <CSSTransition
+          in={unfollowError ? true : false}
+          // key={stream.id}
+          timeout={0}
+          classNames='fadeout-2500ms'
+          unmountOnExit>
           <Alert
             variant={alertType}
             style={{
@@ -106,7 +99,7 @@ function StreamEle(data) {
               </Alert.Link>
             </Alert.Heading>
           </Alert>
-        </Animated>
+        </CSSTransition>
       );
     } else {
       return "";
@@ -243,12 +236,12 @@ function StreamEle(data) {
                     refresh: data.refresh,
                   })
                     .then(() => {
-                      setUnfollowError("Successfully unfollowed");
+                      setUnfollowError("Successfully unfollowed ");
                       data.refresh();
                     })
                     .catch(error => {
                       setUnfollowError(null);
-                      setUnfollowError("Failed to unfollow");
+                      setUnfollowError("Failed to unfollow ");
                     });
                 }}>
                 <Icon icon={cross} size={18} className={styles.unfollowIcon} />

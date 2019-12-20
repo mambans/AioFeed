@@ -1,8 +1,8 @@
 .container {
   display: flex;
   flex-wrap: wrap;
-  width: var(--feedsWidth);
-  margin: var(--feedsMargin);
+  width: var(--feedsWidth) !important;
+  margin: var(--feedsMargin) !important;
   padding-bottom: 50px;
   min-height: 400px;
 }
@@ -20,12 +20,7 @@
 
 .video {
   display: grid;
-  grid-template-areas:
-    // "highlight highlight"
-    "video video"
-    "title title"
-    "info info";
-
+  grid-template-areas: "video video" "title title" "info info";
   width: 336px;
   margin: 7px;
   max-height: 336px;
@@ -230,7 +225,7 @@
 }
 
 .sidebar {
-  width: 275px;
+  width: 275px !important;
   background: var(--sidebarBackground);
   top: 104px;
   // position: absolute;
@@ -240,6 +235,7 @@
   -moz-border-radius: 10px;
   -ms-border-radius: 10px;
   -o-border-radius: 10px;
+  margin-top: -12px;
 
   .twitchSidebarHeader {
     font-size: 1.15rem;

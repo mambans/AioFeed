@@ -11,6 +11,7 @@ import { ic_account_box } from "react-icons-kit/md/ic_account_box";
 import { out } from "react-icons-kit/entypo/out";
 import { twitch } from "react-icons-kit/icomoon/twitch";
 import { youtube } from "react-icons-kit/icomoon/youtube";
+import { ic_refresh } from "react-icons-kit/md/ic_refresh";
 
 import NotifiesLogin from "../account/NotifiesLogin";
 import styles from "./Account.module.scss";
@@ -177,6 +178,21 @@ function NotifiesAccount(props) {
               Connected to Twitch
               <Icon icon={checkmark} size={24} style={{ paddingLeft: "0.75rem" }} />
             </p>
+            <Button
+              className={styles.connectTwitch}
+              style={{ margin: "0 25px" }}
+              onClick={() => {
+                authenticatePopup(
+                  `Connect Twitch`,
+                  "Twitch",
+                  `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=http://localhost:3000/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`,
+                  props.setTwitchToken,
+                  props.setEnableTwitch,
+                  props.setEnableTwitchVods
+                );
+              }}>
+              <Icon icon={ic_refresh} size={24} />
+            </Button>
             <Button className={styles.disconnectButton} onClick={disconnectTwitch}>
               Disconnect Twitch
             </Button>
@@ -190,11 +206,13 @@ function NotifiesAccount(props) {
         {!props.youtubeToken ? (
           <Button
             className={styles.connectYoutube}
+            //to unfollow: scope=https://www.googleapis.com/auth/youtube
+            //else  scope=https://www.googleapis.com/auth/youtube.readonly
             onClick={() => {
               authenticatePopup(
                 `Connect Youtube`,
                 "Youtube",
-                `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://localhost:3000/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube`,
+                `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://localhost:3000/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly`,
                 props.setYoutubeToken,
                 props.setEnableYoutube
               );
@@ -208,6 +226,22 @@ function NotifiesAccount(props) {
               Connected to Youtube
               <Icon icon={checkmark} size={24} style={{ paddingLeft: "0.75rem" }} />
             </p>
+            <Button
+              className={styles.connectYoutube}
+              style={{ margin: "0 25px" }}
+              //to unfollow: scope=https://www.googleapis.com/auth/youtube
+              //else  scope=https://www.googleapis.com/auth/youtube.readonly
+              onClick={() => {
+                authenticatePopup(
+                  `Connect Youtube`,
+                  "Youtube",
+                  `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://localhost:3000/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly`,
+                  props.setYoutubeToken,
+                  props.setEnableYoutube
+                );
+              }}>
+              <Icon icon={ic_refresh} size={24} />
+            </Button>
             <Button className={styles.disconnectButton} onClick={disconnectYoutube}>
               Disconnect Youtube
             </Button>

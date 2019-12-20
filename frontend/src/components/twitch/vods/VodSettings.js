@@ -1,8 +1,8 @@
-import axios from "axios";
-import React, { useEffect, useState, useCallback } from "react";
 import { Button, Spinner } from "react-bootstrap";
-import Icon from "react-icons-kit";
 import { deleteIconic } from "react-icons-kit/iconic/deleteIconic";
+import axios from "axios";
+import Icon from "react-icons-kit";
+import React, { useEffect, useState, useCallback } from "react";
 
 import Utilities from "../../../utilities/Utilities";
 
@@ -32,19 +32,6 @@ function AddChannelForm() {
         channelName: channel,
       });
 
-      // const localstorageChannels = JSON.parse(localStorage.getItem("VodChannels"));
-      // localstorageChannels.unshift({ name: channel });
-
-      // console.log("TCL: addChannel -> localstorageChannels", localstorageChannels);
-
-      // await axios.put(
-      //   `https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/update`,
-      //   {
-      //     username: Utilities.getCookie("Notifies_AccountName"),
-      //     channels: localstorageChannels,
-      //   }
-      // );
-
       getChannels();
     } catch (e) {
       console.log(e.message);
@@ -59,23 +46,6 @@ function AddChannelForm() {
         },
       });
 
-      // const localstorageChannels = JSON.parse(localStorage.getItem("VodChannels"));
-
-      // localstorageChannels.splice(
-      //   localstorageChannels.findIndex(value => {
-      //     return value.name === channel;
-      //   }),
-      //   1
-      // );
-
-      // await axios.put(
-      //   `https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/update`,
-      //   {
-      //     username: Utilities.getCookie("Notifies_AccountName"),
-      //     channels: localstorageChannels,
-      //   }
-      // );
-
       getChannels();
     } catch (e) {
       console.log(e.message);
@@ -87,11 +57,6 @@ function AddChannelForm() {
     localStorage.setItem("VodChannels", JSON.stringify(monitoredChannels.data.channels));
     setChannels(monitoredChannels.data.channels);
   }, []);
-
-  // const getChannels = useCallback(async () => {
-  //   setChannels(await axios.get(`http://localhost:3100/notifies/vod-channels`));
-  //   // localStorage.setItem("VodChannels", JSON.stringify(channels));
-  // }, []);
 
   const handleSubmit = evt => {
     evt.preventDefault();

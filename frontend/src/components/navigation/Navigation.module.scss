@@ -97,3 +97,21 @@
   position: absolute !important;
   top: 100px !important;
 }
+
+.modal {
+  min-width: 1000px !important;
+  max-width: 1000px !important;
+
+  .modal-header {
+    padding: 0 !important;
+    border: none !important;
+    padding-top: 50px !important;
+  }
+
+  .close {
+    text-shadow: none !important;
+    color: #fff !important;
+    font-size: 50px;
+    outline: none !important;
+  }
+}

@@ -119,21 +119,6 @@ function StreamEle(data) {
           <Link className={styles.game} to={"/twitch/top/" + data.data.game_name}>
             {Utilities.truncate(data.data.game_name, 50)}
           </Link>
-
-          {/* <a
-            className={styles.game_img}
-            href={"https://www.twitch.tv/directory/game/" + data.data.game_name}>
-            <img
-              src={data.data.game_img.replace("{width}", 130).replace("{height}", 173)}
-              alt=''
-              className={styles.game_img}></img>
-          </a>
-          <p className={styles.game}>
-            <a href={"https://www.twitch.tv/directory/game/" + data.data.game_name}>
-              {Utilities.truncate(data.data.game_name, 50)}
-            </a>
-          </p> */}
-
           <p className={styles.viewers}>
             {/* {data.data.viewer_count} */}
             {formatViewerNumbers(data.data.viewer_count)}

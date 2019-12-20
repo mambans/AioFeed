@@ -6,7 +6,7 @@ const HeaderContainerTwitchLive = styled.div`
   justify-content: space-between;
   align-items: center;
   padding-bottom: 7px;
-  width: var(--feedsWidth);
+  width: var(--feedsWidth) !important;
   margin: var(--feedsMargin);
 
   @media screen and (max-width: 2560px) {

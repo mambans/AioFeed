@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// import getFollowedChannels from "./GetFollowedChannels";
 import Utilities from "../../utilities/Utilities";
 
 const fetchAllOnlineStreams = async followedChannelsIds => {

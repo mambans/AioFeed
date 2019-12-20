@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Icon } from "react-icons-kit";
 import { cross } from "react-icons-kit/icomoon/cross";
-import { Animated } from "react-animated-css";
 import Alert from "react-bootstrap/Alert";
 
 import UnfollowStream from "./../UnfollowStream";
@@ -27,40 +26,26 @@ const ChannelListElement = ({ data }) => {
         setUnfollowResponse(null);
       }, 6000);
       return (
-        <Animated
-          animationIn='fadeInUp'
-          animationOut='fadeOut'
-          animationOutDelay={2000}
-          animationOutDuration={2500}
-          isVisible={false}
+        <Alert
+          variant={alertType}
           style={{
             width: "200px",
             position: "absolute",
+            // zIndex: "2",
             margin: "0",
-            height: "43px",
-            marginTop: "10px",
-          }}>
-          <Alert
-            variant={alertType}
+            padding: "5px",
+            borderRadius: "3px",
+          }}
+          className='unfollowResponseAlert'>
+          <Alert.Heading
             style={{
-              width: "200px",
-              position: "absolute",
-              // zIndex: "2",
-              margin: "0",
-              padding: "5px",
-              borderRadius: "3px",
-            }}
-            className='unfollowResponseAlert'>
-            <Alert.Heading
-              style={{
-                fontSize: "16px",
-                textAlign: "center",
-                marginBottom: "0",
-              }}>
-              {alertText}
-            </Alert.Heading>
-          </Alert>
-        </Animated>
+              fontSize: "16px",
+              textAlign: "center",
+              marginBottom: "0",
+            }}>
+            {alertText}
+          </Alert.Heading>
+        </Alert>
       );
     } else {
       return "";

@@ -6,14 +6,17 @@ import NavigationContext from "./NavigationContext";
 const NavigationProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(Utilities.getCookie("Notifies_AccountName"));
   const [renderModal, setRenderModal] = useState("login");
+  const [visible, setVisible] = useState(true);
 
   return (
     <NavigationContext.Provider
       value={{
-        isLoggedIn: isLoggedIn,
-        setIsLoggedIn: setIsLoggedIn,
-        renderModal: renderModal,
-        setRenderModal: setRenderModal,
+        isLoggedIn,
+        setIsLoggedIn,
+        renderModal,
+        setRenderModal,
+        visible,
+        setVisible,
       }}>
       {children}
     </NavigationContext.Provider>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Animated } from "react-animated-css";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import TwitchSidebarItem from "./TwitchSidebarItem";
 import styles from "./../Twitch.module.scss";
@@ -9,45 +9,41 @@ const TwitchSidebar = data => {
   const [sidebarTop, setSidebarTop] = useState("false");
 
   return (
-    <Animated animationIn='fadeIn' animationOut='fadeOut' isVisible={true} key={"sidebar"}>
-      <div className={styles.sidebar} id='twitchSidebar' fixedtop={sidebarTop}>
-        <p className={styles.twitchSidebarHeader}>Twitch Live</p>
-        {data.onlineStreams.length > 0 ? (
-          data.onlineStreams.map(stream => {
-            return data.newlyAdded.includes(stream.user_name) ? (
-              <Animated
-                animationIn='fadeIn'
-                animationOut='fadeOut'
-                isVisible={true}
-                key={stream.id}>
+    <div className={styles.sidebar} id='twitchSidebar' fixedtop={sidebarTop}>
+      <p className={styles.twitchSidebarHeader}>Twitch Live</p>
+
+      {data.onlineStreams.length > 0 ? (
+        <TransitionGroup className='sidebar' component={null}>
+          {data.onlineStreams.map(stream => {
+            return (
+              <CSSTransition
+                // in={data.newlyAdded.includes(stream.user_name)}
+                key={stream.id}
+                timeout={0}
+                classNames='fade-1s'
+                unmountOnExit>
                 <TwitchSidebarItem
                   key={stream.id}
                   stream={stream}
                   newlyAdded={data.newlyAdded}
                   REFRESH_RATE={data.REFRESH_RATE}></TwitchSidebarItem>
-              </Animated>
-            ) : (
-              <TwitchSidebarItem
-                key={stream.id}
-                stream={stream}
-                newlyAdded={data.newlyAdded}
-                REFRESH_RATE={data.REFRESH_RATE}></TwitchSidebarItem>
+              </CSSTransition>
             );
-          })
-        ) : (
-          <div
-            style={{
-              height: "45.6px",
-              padding: "8px 5px 8px 10px",
-              fontSize: "1rem",
-              textAlign: "center",
-              fontWeight: "bold",
-            }}>
-            <p>None Live</p>
-          </div>
-        )}
-      </div>
-    </Animated>
+          })}
+        </TransitionGroup>
+      ) : (
+        <div
+          style={{
+            height: "45.6px",
+            padding: "8px 5px 8px 10px",
+            fontSize: "1rem",
+            textAlign: "center",
+            fontWeight: "bold",
+          }}>
+          <p>None Live</p>
+        </div>
+      )}
+    </div>
   );
 };
 

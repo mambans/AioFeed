@@ -41,8 +41,8 @@ export default props => {
         )}
       </div>
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton closeLabel=''></Modal.Header>
+      <Modal show={show} onHide={handleClose} dialogClassName={styles.modal}>
+        <Modal.Header closeButton closeLabel='' style={{ border: "none" }}></Modal.Header>
 
         {props.isLoggedIn ? (
           <NavigationContext.Consumer>

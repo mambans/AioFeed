@@ -12,12 +12,14 @@ const Notification = styled.li`
 
   .profileImg {
     grid-area: img;
+    display: flex;
+    align-items: center;
 
     img {
-      width: 40px;
-      border-radius: 20px;
+      width: 46px;
+      border-radius: 23px;
       grid-area: img;
-      height: 40px;
+      height: 46px;
       object-fit: cover;
     }
   }

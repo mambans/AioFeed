@@ -5,9 +5,10 @@
   margin: var(--feedsMargin);
   margin-top: 0;
 
-  & > div {
-    min-height: 475px;
-  }
+  min-height: 475px;
+  // & > div {
+  //   min-height: 475px;
+  // }
 }
 
 .twitchContainer {

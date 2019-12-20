@@ -1,20 +1,20 @@
-import { Animated } from "react-animated-css";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { ic_settings } from "react-icons-kit/md/ic_settings";
+import { reload } from "react-icons-kit/iconic/reload";
 import { Spinner } from "react-bootstrap";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { video } from "react-icons-kit/iconic/video";
+import Icon from "react-icons-kit";
+import LazyLoad from "react-lazyload";
 import Moment from "react-moment";
 import Popup from "reactjs-popup";
-import Icon from "react-icons-kit";
-import { reload } from "react-icons-kit/iconic/reload";
-import { ic_settings } from "react-icons-kit/md/ic_settings";
-import { video } from "react-icons-kit/iconic/video";
-import LazyLoad from "react-lazyload";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
-import ErrorHandeling from "../../error/Error";
-import Utilities from "../../../utilities/Utilities";
-import styles from "./../Twitch.module.scss";
-import RenderTwitchVods from "./Render-Twitch-Vods";
-import getFollowedVods from "./GetFollowedVods";
 import AddChannelForm from "./VodSettings";
+import ErrorHandeling from "../../error/Error";
+import getFollowedVods from "./GetFollowedVods";
+import RenderTwitchVods from "./Render-Twitch-Vods";
+import styles from "./../Twitch.module.scss";
+import Utilities from "../../../utilities/Utilities";
 import {
   RefreshButton,
   HeaderTitle,
@@ -23,12 +23,74 @@ import {
   ButtonList,
 } from "./../../sharedStyledComponents";
 
+const HeaderContainerFade = props => {
+  const { refresh, refreshing, vods } = props;
+  return (
+    <CSSTransition in={true} timeout={0} classNames='fade-1s' unmountOnExit>
+      <HeaderContainer>
+        <div
+          style={{
+            width: "300px",
+            minWidth: "300px",
+            alignItems: "end",
+            display: "flex",
+          }}>
+          <RefreshButton
+            onClick={() => {
+              refresh(true);
+            }}>
+            {refreshing ? (
+              <div style={{ height: "25.5px" }}>
+                <Spinner
+                  animation='border'
+                  role='status'
+                  variant='light'
+                  style={Utilities.loadingSpinnerSmall}></Spinner>
+              </div>
+            ) : (
+              <Icon icon={reload} size={22}></Icon>
+            )}
+          </RefreshButton>
+          <Moment
+            from={(vods && vods.expire) || new Date()}
+            ago
+            className={styles.vodRefreshTimer}></Moment>
+        </div>
+        <HeaderTitle>
+          Twitch vods
+          <Icon icon={video} size={32} style={{ paddingLeft: "10px", color: "#6f166f" }}></Icon>
+        </HeaderTitle>
+        <Popup
+          placeholder='Channel name..'
+          arrow={false}
+          trigger={
+            <ButtonList variant='outline-secondary' className={styles.settings}>
+              <Icon
+                icon={ic_settings}
+                size={22}
+                style={{
+                  height: "22px",
+                  alignItems: "center",
+                  display: "flex",
+                }}></Icon>
+            </ButtonList>
+          }
+          position='left top'
+          className='settingsPopup'>
+          <AddChannelForm></AddChannelForm>
+        </Popup>
+      </HeaderContainer>
+    </CSSTransition>
+  );
+};
+
 function TwitchVods() {
   const [vods, setVods] = useState();
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const initialOpen = useRef(true);
+  const transition = useRef("fade-1s");
 
   function onChange(newRun) {
     initialOpen.current = newRun;
@@ -94,12 +156,7 @@ function TwitchVods() {
   if (!isLoaded) {
     return (
       <>
-        <HeaderContainer>
-          <HeaderTitle style={{ margin: "0" }}>
-            Twitch vods
-            <Icon icon={video} size={32} style={{ paddingLeft: "10px", color: "#6f166f" }}></Icon>
-          </HeaderTitle>
-        </HeaderContainer>
+        <HeaderContainerFade refresh={refresh} refreshing={refreshing} vods={vods} />
         <Spinner animation='grow' role='status' style={Utilities.loadingSpinner} variant='light'>
           <span className='sr-only'>Loading...</span>
         </Spinner>
@@ -116,70 +173,30 @@ function TwitchVods() {
   } else {
     return (
       <>
-        <HeaderContainer>
-          <div
-            style={{
-              width: "300px",
-              minWidth: "300px",
-              alignItems: "end",
-              display: "flex",
-            }}>
-            <RefreshButton
-              onClick={() => {
-                refresh(true);
-              }}>
-              {refreshing ? (
-                <div style={{ height: "25.5px" }}>
-                  <Spinner
-                    animation='border'
-                    role='status'
-                    variant='light'
-                    style={Utilities.loadingSpinnerSmall}></Spinner>
-                </div>
-              ) : (
-                <Icon icon={reload} size={22}></Icon>
-              )}
-            </RefreshButton>
-            <Moment from={vods.expire} ago className={styles.vodRefreshTimer}></Moment>
-          </div>
-          <HeaderTitle>
-            Twitch vods
-            <Icon icon={video} size={32} style={{ paddingLeft: "10px", color: "#6f166f" }}></Icon>
-          </HeaderTitle>
-          <Popup
-            placeholder='Channel name..'
-            arrow={false}
-            trigger={
-              <ButtonList variant='outline-secondary' className={styles.settings}>
-                <Icon
-                  icon={ic_settings}
-                  size={22}
-                  style={{
-                    height: "22px",
-                    alignItems: "center",
-                    display: "flex",
-                  }}></Icon>
-              </ButtonList>
-            }
-            position='left top'
-            className='settingsPopup'>
-            <AddChannelForm></AddChannelForm>
-          </Popup>
-        </HeaderContainer>
+        <HeaderContainerFade refresh={refresh} refreshing={refreshing} vods={vods} />
         <SubFeedContainer>
-          {vods.data.map(vod => {
-            return (
-              <LazyLoad key={vod.id} height={312} offset={25} once>
-                <Animated animationIn='fadeIn' animationOut='fadeOut' isVisible={true}>
-                  <RenderTwitchVods
-                    data={vod}
-                    run={{ initial: initialOpen.current }}
-                    runChange={onChange}
-                  />
-                </Animated>
-              </LazyLoad>
-            );
-          })}
+          <TransitionGroup className='twitch-vods' component={null}>
+            {vods.data.map(vod => {
+              return (
+                <LazyLoad key={vod.id} height={312} offset={25} once>
+                  <CSSTransition
+                    in={vod ? true : false}
+                    key={vod.id}
+                    timeout={1000}
+                    classNames={transition.current}
+                    // classNames='videoFade-1s'
+                    unmountOnExit>
+                    <RenderTwitchVods
+                      data={vod}
+                      run={{ initial: initialOpen.current }}
+                      runChange={onChange}
+                    />
+                  </CSSTransition>
+                </LazyLoad>
+              );
+            })}
+            {(transition.current = "videoFade-1s")}
+          </TransitionGroup>
         </SubFeedContainer>
       </>
     );

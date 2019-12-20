@@ -20,7 +20,7 @@ const ButtonList = styled(Button).attrs({ variant: "outline-secondary" })`
   display: flex;
   color: rgb(230, 230, 230);
   position: relative;
-  right: 14px;
+  /* right: 14px; */
 
   color: var(--refreshButtonColor);
   background: var(--refreshButtonBackground);
@@ -74,7 +74,7 @@ const VideoContainer = styled.div`
   max-height: 336px;
   margin-bottom: 15px;
 
-  a { 
+  a {
     text-shadow: var(--linkTextShadow);
   }
 `;

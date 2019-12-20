@@ -1,0 +1,27 @@
+.modal {
+  position: absolute;
+  z-index: 2;
+  background: rgb(255, 255, 255) none repeat scroll 0% 0%;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
+  padding: 5px;
+  top: 65px;
+  left: 280px;
+  max-height: 590px !important;
+  height: 590px !important;
+  width: 400px !important;
+  scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0) !important;
+  scrollbar-width: thin !important;
+  background: var(--sidebarBackground) !important;
+  border-radius: 0 0 10px 10px !important;
+  -webkit-border-radius: 0 0 10px 10px !important;
+  -moz-border-radius: 0 0 10px 10px !important;
+  -ms-border-radius: 0 0 10px 10px !important;
+  -o-border-radius: 0 0 10px 10px !important;
+  overflow: scroll;
+  border: none !important;
+  margin: 0;
+}
+
+.modalBackdrop {
+  opacity: 0 !important;
+}
