@@ -94,6 +94,7 @@ function TwitchVods() {
 
   function onChange(newRun) {
     initialOpen.current = newRun;
+    transition.current = "videoFade-1s";
   }
 
   const refresh = useCallback(async forceRefresh => {
@@ -195,7 +196,6 @@ function TwitchVods() {
                 </LazyLoad>
               );
             })}
-            {(transition.current = "videoFade-1s")}
           </TransitionGroup>
         </SubFeedContainer>
       </>
