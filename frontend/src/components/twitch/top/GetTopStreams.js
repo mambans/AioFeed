@@ -42,7 +42,21 @@ export default async game_param_url => {
     });
 
   try {
-    const TwitchProfiles = JSON.parse(localStorage.getItem("TwitchProfiles")) || {};
+    const ChachedAndExpire = () => {
+      const profiles = JSON.parse(localStorage.getItem("TwitchProfiles")) || {};
+
+      if (!profiles.expireDate || new Date(profiles.expireDate).getTime() < new Date().getTime()) {
+        return {
+          expireDate: new Date(new Date().setTime(new Date().getTime() + 3 * 24 * 60 * 60 * 1000)),
+        };
+      } else {
+        return profiles;
+      }
+    };
+
+    const TwitchProfiles = ChachedAndExpire();
+
+    // const TwitchProfiles = JSON.parse(localStorage.getItem("TwitchProfiles")) || {};
 
     await Promise.all(
       topStreams.data.data.map(async user => {
