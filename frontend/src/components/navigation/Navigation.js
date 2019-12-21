@@ -18,7 +18,7 @@ function NavigationBar(prop) {
   const { visible } = useContext(NavigationContext);
 
   return (
-    <CSSTransition STransition in={visible} timeout={0} classNames='fade-1s' unmountOnExit>
+    <CSSTransition in={visible} timeout={0} classNames='fade-1s' unmountOnExit>
       <Navbar
         mode={prop.fixed ? "fixed" : "unset"}
         collapseOnSelect
