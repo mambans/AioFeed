@@ -154,6 +154,11 @@
   overflow: unset !important;
 }
 
+.updateProfilePopup-content {
+  min-height: unset !important;
+  height: unset !important;
+}
+
 .popup-content {
   // scrollbar-color: var(--scrollbarColors) !important;
   scrollbar-color: rgb(240, 240, 240) rgba(0, 0, 0, 0) !important;
