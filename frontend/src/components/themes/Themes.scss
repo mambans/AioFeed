@@ -3,7 +3,8 @@ $videoTitle: rgb(240, 240, 240);
 
 html,
 html[data-theme="original"] {
-  --accountContainerBackgroundColor: #000000c7;
+  // --accountContainerBackgroundColor: #000000c7;
+  --accountContainerBackgroundColor: #05080cd6;
   --backgroundBlue: #01010b;
   --backgroundImg: url("/images/treeCoffee.jpg");
   --channelHover: rgb(179, 30, 248);
@@ -22,7 +23,9 @@ html[data-theme="original"] {
   --modalCloseButtonColorHover: white;
   // --navigationbarBackground: #0000003d;
   // --navigationbarBackground: hsla(0, 0%, 0%, 0.45);
-  --navigationbarBackground: rgba(0, 0, 0, 0.75);
+  // --navigationbarBackground: rgba(0, 0, 0, 0.75);
+  // --navigationbarBackground: #090b0dc7;
+  --navigationbarBackground: #050a0fc7;
   --newHighlight: #ffffff;
   // --newHighlight: #ff3000;
   --popupModalBackground: #000000c7;
@@ -34,7 +37,8 @@ html[data-theme="original"] {
   --refreshButtonHoverColor: #ffffff;
   --refreshButtonShadow: 4px 4px 5px 0px #000c;
   --scrollbarColors: rgb(75, 64, 49) rgb(5, 8, 10);
-  --sidebarBackground: rgba(7, 7, 7, 0.5);
+  // --sidebarBackground: rgba(7, 7, 7, 0.5);
+  --sidebarBackground: #050a0fc7;
   --subFeedHeaderBorder: 2px solid #bebebe29;
   --subFeedHeaderColor: rgb(163, 163, 163);
   --textColor: rgb(240, 240, 240);
@@ -108,4 +112,8 @@ html[data-theme="new year's eve"] {
 
 html[data-theme="clean"] {
   --backgroundImg: url("/images/pattern.png");
+  --navigationbarBackground: #1f2326;
+  --sidebarBackground: #1c1f22;
+  --scrollbarColors: #1c1f22 rgb(5, 8, 10);
+  --accountContainerBackgroundColor: #131619ed;
 }
