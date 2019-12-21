@@ -1,7 +1,6 @@
 import Popup from "reactjs-popup";
 import React from "react";
 import axios from "axios";
-import randomstring from "randomstring";
 import { Button } from "react-bootstrap";
 import { Icon } from "react-icons-kit";
 import { NavLink } from "react-router-dom";
@@ -12,6 +11,7 @@ import { out } from "react-icons-kit/entypo/out";
 import { twitch } from "react-icons-kit/icomoon/twitch";
 import { youtube } from "react-icons-kit/icomoon/youtube";
 import { ic_refresh } from "react-icons-kit/md/ic_refresh";
+import uniqid from "uniqid";
 
 import NotifiesLogin from "../account/NotifiesLogin";
 import styles from "./Account.module.scss";
@@ -43,10 +43,12 @@ function NotifiesAccount(props) {
     setFeedEnableSecond
   ) {
     async function generateOrginState() {
-      return randomstring.generate({
-        capitalization: "lowercase",
-        length: 32,
-      });
+      return uniqid();
+
+      // return randomstring.generate({
+      //   capitalization: "lowercase",
+      //   length: 32,
+      // });
     }
 
     const orginState = await generateOrginState();

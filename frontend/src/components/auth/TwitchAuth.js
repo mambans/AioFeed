@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Spinner } from "react-bootstrap";
-import randomstring from "randomstring";
+import uniqid from "uniqid";
 
 import Utilities from "../../utilities/Utilities";
 import ErrorHandeling from "./../error/Error";
@@ -10,10 +10,12 @@ function TwitchAuth() {
 
   const initiateAuth = useCallback(async () => {
     async function generateOrginState() {
-      return randomstring.generate({
-        capitalization: "lowercase",
-        length: 32,
-      });
+      return uniqid();
+
+      // return randomstring.generate({
+      //   capitalization: "lowercase",
+      //   length: 32,
+      // });
     }
 
     async function setStateCookie() {
