@@ -1,4 +1,3 @@
-import { store } from "react-notifications-component";
 import axios from "axios";
 import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
@@ -78,7 +77,7 @@ function TwitchVodElement(data) {
             <img
               src={
                 data.data.thumbnail_url
-                  ? data.data.thumbnail_url.replace("%{width}", 858).replace("%{height}", 480)
+                  ? data.data.thumbnail_url.replace("%{width}", 640).replace("%{height}", 360)
                   : "https://vod-secure.twitch.tv/_404/404_processing_320x180.png"
               }
               alt={styles.thumbnail}
@@ -87,23 +86,30 @@ function TwitchVodElement(data) {
         </a>
         <p className={styles.duration}>{Utilities.formatTwitchVodsDuration(data.data.duration)}</p>
       </ImageContainer>
-      <OverlayTrigger
-        key={"bottom"}
-        placement={"bottom"}
-        delay={{ show: 250, hide: 0 }}
-        overlay={
-          <Tooltip
-            id={`tooltip-${"bottom"}`}
-            style={{
-              width: "320px",
-            }}>
-            {data.data.title}
-          </Tooltip>
-        }>
+      {data.data.title.length > 50 ? (
+        <OverlayTrigger
+          key={"bottom"}
+          placement={"bottom"}
+          delay={{ show: 250, hide: 0 }}
+          overlay={
+            <Tooltip
+              id={`tooltip-${"bottom"}`}
+              style={{
+                width: "320px",
+              }}>
+              {data.data.title}
+            </Tooltip>
+          }>
+          <VideoTitle href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+            {Utilities.truncate(data.data.title, 70)}
+            {/* {data.data.title} */}
+          </VideoTitle>
+        </OverlayTrigger>
+      ) : (
         <VideoTitle href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
-          {Utilities.truncate(data.data.title, 50)}
+          {data.data.title}
         </VideoTitle>
-      </OverlayTrigger>
+      )}
 
       <div>
         <div className={styles.channelContainer} style={{ marginBottom: "0px", height: "25px" }}>
@@ -134,48 +140,4 @@ function TwitchVodElement(data) {
   );
 }
 
-function RenderTwitchVods(data) {
-  const vodData = useRef();
-
-  const addNotification = useCallback(
-    (title, type) => {
-      store.addNotification({
-        content: (
-          <div className={`notification-custom-${type}`}>
-            <div className='notification-custom-icon'></div>
-            <div className='notification-custom-content'>
-              <p className='notification-title'>{title}</p>
-              <p className='notification-message'>{Utilities.truncate(data.data.title, 50)}</p>
-              <p className='notification-game'>{data.data.game_name}</p>
-            </div>
-          </div>
-        ),
-        width: 350,
-        insert: "top",
-        container: "bottom-right",
-        animationIn: ["animated", "slideInRight"],
-        animationOut: ["animated", "fadeOut"],
-        dismiss: {
-          duration: 5000,
-        },
-      });
-    },
-    [data.data.game_name, data.data.title]
-  );
-
-  useEffect(() => {
-    vodData.current = data.data;
-    data.runChange(false);
-  }, [
-    addNotification,
-    data,
-    data.data.game_name,
-    data.data.profile_img_url,
-    data.data.title,
-    data.data.user_name,
-  ]);
-
-  return <TwitchVodElement data={data.data} />;
-}
-
-export default RenderTwitchVods;
+export default TwitchVodElement;

@@ -12,7 +12,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import AddChannelForm from "./VodSettings";
 import ErrorHandeling from "../../error/Error";
 import getFollowedVods from "./GetFollowedVods";
-import RenderTwitchVods from "./Render-Twitch-Vods";
+import TwitchVodElement from "./TwitchVodElement";
 import styles from "./../Twitch.module.scss";
 import Utilities from "../../../utilities/Utilities";
 import {
@@ -187,11 +187,7 @@ function TwitchVods() {
                     classNames={transition.current}
                     // classNames='videoFade-1s'
                     unmountOnExit>
-                    <RenderTwitchVods
-                      data={vod}
-                      run={{ initial: initialOpen.current }}
-                      runChange={onChange}
-                    />
+                    <TwitchVodElement data={vod} />
                   </CSSTransition>
                 </LazyLoad>
               );
