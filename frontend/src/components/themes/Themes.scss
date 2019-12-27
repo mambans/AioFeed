@@ -65,7 +65,8 @@ html[data-theme="christmas"] {
   --channelHover: rgb(255, 255, 255);
   --footerLinkColor: rgb(224, 224, 224);
   --footerLinkHoverColor: white;
-  --footerShadow: 0 0 50px 0 #242424;
+  // --footerShadow: 0 0 50px 0 #242424;
+  --footerShadow: 0 0 20px 0 #141414;
   // --greyInfo: rgb(175, 175, 175);
   --greyInfo: rgb(255, 255, 255);
   --headerLogoTextColor: rgb(240, 240, 240);
@@ -111,9 +112,17 @@ html[data-theme="new year's eve"] {
 }
 
 html[data-theme="clean"] {
-  --backgroundImg: url("/images/pattern.png");
+  --backgroundImg: url("/images/clean.png");
   --navigationbarBackground: #1f2326;
   --sidebarBackground: #1c1f22;
   --scrollbarColors: #1c1f22 rgb(5, 8, 10);
   --accountContainerBackgroundColor: #131619ed;
+}
+
+html[data-theme="clean dark"] {
+  --backgroundImg: url("/images/clean_dark.png");
+  --navigationbarBackground: #121415a8;
+  --sidebarBackground: #121415a8;
+  --scrollbarColors: #1c1f22 rgb(5, 8, 10);
+  --accountContainerBackgroundColor: #121415f2;
 }

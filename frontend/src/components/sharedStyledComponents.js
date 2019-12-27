@@ -107,7 +107,6 @@ const ImageContainer = styled.div`
   }
 
   img {
-    transition: all 0.2s ease-in-out;
     border-radius: 10px;
     width: 100%;
     // width: 336px;

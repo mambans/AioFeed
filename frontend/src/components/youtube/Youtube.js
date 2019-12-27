@@ -1,11 +1,10 @@
-import React, { useRef } from "react";
 import { Spinner } from "react-bootstrap";
-import LazyLoad from "react-lazyload";
-import Utilities from "../../utilities/Utilities";
-import { SubFeedContainer } from "./../sharedStyledComponents";
-
-import YoutubeVideoElement from "./YoutubeVideoElement";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import React, { useRef } from "react";
+
+import { SubFeedContainer } from "./../sharedStyledComponents";
+import Utilities from "../../utilities/Utilities";
+import YoutubeVideoElement from "./YoutubeVideoElement";
 
 export default data => {
   const transition = useRef("fade-1s");
@@ -30,20 +29,23 @@ export default data => {
         <TransitionGroup className='twitch-vods' component={null}>
           {data.videos.map(video => {
             return (
-              <LazyLoad key={video.contentDetails.upload.videoId} height={312} offset={25} once>
-                <CSSTransition
-                  in={true}
-                  timeout={1000}
-                  // classNames='videoFade-1s'
-                  classNames={transition.current}
-                  key={video.contentDetails.upload.videoId}
-                  unmountOnExit>
-                  <YoutubeVideoElement id={video.contentDetails.upload.videoId} video={video} />
-                </CSSTransition>
-              </LazyLoad>
+              <CSSTransition
+                timeout={1000}
+                // classNames='videoFade-1s'
+                classNames={transition.current}
+                key={video.contentDetails.upload.videoId}
+                unmountOnExit>
+                <YoutubeVideoElement
+                  id={video.contentDetails.upload.videoId}
+                  video={video}
+                  transition={transition.current}
+                  setTransition={() => {
+                    transition.current = "videoFade-1s";
+                  }}
+                />
+              </CSSTransition>
             );
           })}
-          {(transition.current = "videoFade-1s")}
         </TransitionGroup>
       </SubFeedContainer>
     );

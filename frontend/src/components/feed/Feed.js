@@ -4,7 +4,7 @@ import ReactNotification from "react-notifications-component";
 import { Spinner, Alert } from "react-bootstrap";
 import { CSSTransition } from "react-transition-group";
 
-import "./Notifications.scss";
+// import "./Notifications.scss";
 import DataHandler from "../twitch/DataHandler";
 import ErrorHandeling from "./../error/Error";
 import Twitch from "../twitch/Twitch";
@@ -29,20 +29,20 @@ function Feed(props) {
   }, []);
 
   useEffect(() => {
-    const TIMEOUT = 1000;
+    const FEEDDELAY = 2500;
 
     window.setTimeout(
       () => {
         setDelayedEnableYoutube("true");
       },
-      localStorage.getItem("TwitchFeedEnabled") === "true" ? TIMEOUT : 0
+      localStorage.getItem("TwitchFeedEnabled") === "true" ? FEEDDELAY : 0
     );
 
     window.setTimeout(
       () => {
         setDelayedEnableTwitchVods("true");
       },
-      localStorage.getItem("YoutubeFeedEnabled") === "true" ? TIMEOUT * 3 : TIMEOUT
+      localStorage.getItem("YoutubeFeedEnabled") === "true" ? FEEDDELAY * 2 : FEEDDELAY
     );
   }, []);
 
@@ -56,7 +56,7 @@ function Feed(props) {
       show
     ) {
       return (
-        <CSSTransition timeout={0} classNames='fade-1s' unmountOnExit>
+        <CSSTransition timeout={1000} classNames='fade-1s' unmountOnExit>
           <Alert
             variant='info'
             style={Utilities.feedAlertWarning}

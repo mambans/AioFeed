@@ -19,7 +19,7 @@ const TwitchSidebar = data => {
               <CSSTransition
                 // in={data.newlyAdded.includes(stream.user_name)}
                 key={stream.id}
-                timeout={0}
+                timeout={1000}
                 classNames='fade-1s'
                 unmountOnExit>
                 <TwitchSidebarItem

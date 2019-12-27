@@ -1,4 +1,6 @@
-.themeSelector {
+import styled from "styled-components";
+
+const ThemeSelector = styled.form`
   label {
     min-width: 250px;
   }
@@ -11,4 +13,6 @@
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
   }
-}
+`;
+
+export { ThemeSelector };

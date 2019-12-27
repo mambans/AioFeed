@@ -6,9 +6,9 @@ import "./Navigation.scss";
 import AccountContext from "./../account/AccountContext";
 import FeedsContext from "./../feed/FeedsContext";
 import NavigationContext from "./NavigationContext";
-import NotifiesAccount from "../account/NotifiesAccount";
-import NotifiesCreateAccount from "../account/NotifiesCreateAccount";
-import NotifiesLogin from "../account/NotifiesLogin";
+import AccountModal from "../account/AccountModal";
+import CreateAccountModal from "../account/CreateAccountModal";
+import LoginModal from "../account/LoginModal";
 import styles from "./Navigation.module.scss";
 import Utilities from "../../utilities/Utilities";
 
@@ -26,7 +26,7 @@ export default props => {
       <div onClick={handleShow} className={styles.navProfileContainer}>
         {props.isLoggedIn ? (
           <img
-            onClick={handleShow}
+            // onClick={handleToggle}
             className={styles.navProfile}
             id='NavigationProfileImage'
             src={
@@ -54,11 +54,11 @@ export default props => {
                       <FeedsContext.Consumer>
                         {feedsProps => {
                           return (
-                            <NotifiesAccount
+                            <AccountModal
                               {...accProps}
                               {...feedsProps}
                               {...navProps}
-                              setRenderModal={props.setRenderModal}></NotifiesAccount>
+                              setRenderModal={props.setRenderModal}></AccountModal>
                           );
                         }}
                       </FeedsContext.Consumer>
@@ -71,10 +71,10 @@ export default props => {
         ) : (
           <div className={styles.createAccountContainer}>
             {props.renderModal !== "login" ? (
-              <NotifiesCreateAccount {...props} />
+              <CreateAccountModal {...props} />
             ) : (
               <>
-                <NotifiesLogin {...props}></NotifiesLogin>
+                <LoginModal {...props}></LoginModal>
                 <Button
                   className={styles.disconnectButton}
                   onClick={() => {

@@ -13,7 +13,7 @@ import { youtube } from "react-icons-kit/icomoon/youtube";
 import { ic_refresh } from "react-icons-kit/md/ic_refresh";
 import uniqid from "uniqid";
 
-import NotifiesLogin from "../account/NotifiesLogin";
+import LoginModal from "../account/LoginModal";
 import styles from "./Account.module.scss";
 import Themeselector from "./../themes/Themeselector";
 import ToggleSwitch from "./ToggleSwitch";
@@ -21,7 +21,7 @@ import ToggleSwitchVideoHover from "./ToggleSwitchVideoHover";
 import UpdateProfileImg from "./UpdateProfileImg";
 import Utilities from "../../utilities/Utilities";
 
-function NotifiesAccount(props) {
+export default props => {
   document.title = "Notifies | Account";
 
   function logout() {
@@ -300,7 +300,7 @@ function NotifiesAccount(props) {
         <Redirect to='/account/login' />
       ) : (
         <>
-          <NotifiesLogin />
+          <LoginModal />
           <Button
             className={styles.disconnectButton}
             onClick={() => {
@@ -312,6 +312,4 @@ function NotifiesAccount(props) {
       )}
     </div>
   );
-}
-
-export default NotifiesAccount;
+};

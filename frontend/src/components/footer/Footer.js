@@ -8,11 +8,11 @@ import { github } from "react-icons-kit/icomoon/github";
 import { home } from "react-icons-kit/icomoon/home";
 import { ic_account_circle } from "react-icons-kit/md/ic_account_circle";
 
-import style from "./Footer.module.scss";
+import { StyledFooterContainer, centerBottomText, buttonLinks } from "./styledComponents";
 
 const Footer = () => {
   return (
-    <div id={style.footer}>
+    <StyledFooterContainer>
       <div>
         <ul>
           <li>
@@ -44,10 +44,10 @@ const Footer = () => {
           </li>
         </ul>
       </div>
-      <div id={style.centerText}>
+      <div style={{ flexDirection: "column" }}>
         <p>Test text</p>
         <p>Test text</p>
-        <p className={style.centerBottomText}>
+        <centerBottomText>
           <Nav.Link as={NavLink} to='/legality#Conditions'>
             Conditions of Use
           </Nav.Link>
@@ -55,7 +55,7 @@ const Footer = () => {
             Privacy Notice
           </Nav.Link>
           © 2020 Skåne Sweden, Robin Persson. No rights reserved.
-        </p>
+        </centerBottomText>
       </div>
       <div>
         <ul>
@@ -66,18 +66,17 @@ const Footer = () => {
             </a>
           </li>
           <li>
-            <button
-              className={style.buttonLinks}
+            <buttonLinks
               onClick={() => {
                 window.open("mailto:perssons1996@gmail.com?subject=subject&body=body");
               }}>
               <Icon icon={email} size={20} style={{ paddingRight: "0.75rem" }}></Icon>
               Email
-            </button>
+            </buttonLinks>
           </li>
         </ul>
       </div>
-    </div>
+    </StyledFooterContainer>
   );
 };
 

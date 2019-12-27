@@ -81,12 +81,7 @@ const TwitchSidebarItem = data => {
                   {data.stream.game_name}
                 </Tooltip>
               }>
-              <div
-                className={styles.sidebarGame}
-                // href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}
-              >
-                <p>{Utilities.truncate(data.stream.game_name, 15)}</p>
-              </div>
+              <p className={styles.sidebarGame}>{data.stream.game_name}</p>
             </OverlayTrigger>
           ) : (
             <div

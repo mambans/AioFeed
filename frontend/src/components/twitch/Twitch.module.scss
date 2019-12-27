@@ -1,8 +1,8 @@
 .container {
   display: flex;
   flex-wrap: wrap;
-  width: var(--feedsWidth) !important;
-  margin: var(--feedsMargin) !important;
+  width: var(--feedsWidth);
+  margin: var(--feedsMargin);
   padding-bottom: 50px;
   min-height: 400px;
 }
@@ -137,6 +137,9 @@
     background: none;
     padding-right: 5px;
     font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     color: var(--infoColorGrey);
 
@@ -228,14 +231,13 @@
   width: 275px !important;
   background: var(--sidebarBackground);
   top: 104px;
-  // position: absolute;
   position: fixed;
-  border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
   margin-top: -12px;
+  border-radius: 10px 10px 0 0;
+  -webkit-border-radius: 10px 10px 0 0;
+  -moz-border-radius: 10px 10px 0 0;
+  -ms-border-radius: 10px 10px 0 0;
+  -o-border-radius: 10px 10px 0 0;
 
   .twitchSidebarHeader {
     font-size: 1.15rem;
@@ -255,7 +257,7 @@
     display: grid;
     grid-template-areas: "profile user  viewers" "profile row2 row2";
     // grid-template-columns: 22% 54% 24%;
-    grid-template-columns: 22% 52% 26%;
+    grid-template-columns: 18% 56% 26%;
     grid-template-rows: 50% 50%;
     padding: 8px 5px 8px 10px;
     //margin-bottom: 5px;
@@ -285,11 +287,14 @@
     }
 
     .sidebarGame {
-      overflow: hidden;
+      // overflow: hidden;
+      // width: max-content;
       font-size: 0.9rem;
       color: rgb(150, 150, 150);
       font-weight: bold;
-      width: max-content;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .sidebarUser {

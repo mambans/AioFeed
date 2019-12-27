@@ -162,7 +162,8 @@ async function getFollowedOnlineStreams({ data }) {
             resolve();
           } else {
             // error = "No followed streams online at the momment";
-            reject("No streams online at the momment");
+            // reject("No streams online at the momment");
+            reject();
           }
         };
       });

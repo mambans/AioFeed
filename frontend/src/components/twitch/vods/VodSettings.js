@@ -6,7 +6,7 @@ import React, { useEffect, useState, useCallback } from "react";
 
 import Utilities from "../../../utilities/Utilities";
 
-function AddChannelForm() {
+export default props => {
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);
 
@@ -54,8 +54,8 @@ function AddChannelForm() {
 
   const getChannels = useCallback(async () => {
     const monitoredChannels = await axios.get(`http://localhost:3100/notifies/vod-channels`);
-    localStorage.setItem("VodChannels", JSON.stringify(monitoredChannels.data.channels));
-    setChannels(monitoredChannels.data.channels);
+    // localStorage.setItem("VodChannels", JSON.stringify(monitoredChannels.data.channels));
+    setChannels(monitoredChannels.data.channels.reverse());
   }, []);
 
   const handleSubmit = evt => {
@@ -69,8 +69,9 @@ function AddChannelForm() {
 
     return () => {
       console.log("unloading vodSettings.");
+      props.refresh(true);
     };
-  }, [getChannels]);
+  }, [getChannels, props]);
 
   return (
     <>
@@ -106,6 +107,4 @@ function AddChannelForm() {
       )}
     </>
   );
-}
-
-export default AddChannelForm;
+};

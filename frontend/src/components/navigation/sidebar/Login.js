@@ -1,13 +1,15 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Form, Button } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
+import Alert from "react-bootstrap/Alert";
 
-import styles from "./Account.module.scss";
-import ErrorHandeling from "../error/Error";
+import { StyledCreateFormTitle, StyledCreateForm, StyledAlert } from "./styledComponent";
+import NavigationContext from "./../NavigationContext";
 
-function NotifiesLogin(props) {
+function LoginModal() {
   const currentPage = new URL(window.location.href).pathname;
+  const props = useContext(NavigationContext);
 
   document.title = "Notifies | Login";
   const [error, setError] = useState(null);
@@ -83,9 +85,16 @@ function NotifiesLogin(props) {
 
   return (
     <>
-      {error ? <ErrorHandeling data={error}></ErrorHandeling> : null}
-      <h3 className={styles.formTitle}>Login with your Notifies account.</h3>
-      <Form onSubmit={handleSubmit} validated className={styles.createForm}>
+      {/* {error ? <ErrorHandeling data={error}></ErrorHandeling> : null} */}
+      {error ? (
+        <StyledAlert variant='warning' dismissible onClose={() => setError(null)}>
+          <Alert.Heading>{error.title}</Alert.Heading>
+          <hr />
+          {error.message.toString()}
+        </StyledAlert>
+      ) : null}
+      <StyledCreateFormTitle>Login with your Notifies account.</StyledCreateFormTitle>
+      <StyledCreateForm onSubmit={handleSubmit} validated>
         <Form.Group controlId='formGroupUserName'>
           <Form.Label>Username</Form.Label>
           <Form.Control type='text' placeholder='Username' {...bindUserName} />
@@ -94,10 +103,18 @@ function NotifiesLogin(props) {
           <Form.Label>Password</Form.Label>
           <Form.Control type='password' placeholder='Password' {...bindPassword} />
         </Form.Group>
-        <Button variant='primary' type='submit'>
-          Login
-        </Button>
-      </Form>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Button variant='primary' type='submit'>
+            Login
+          </Button>
+          <Button
+            onClick={() => {
+              props.setRenderModal("create");
+            }}>
+            Create Account
+          </Button>
+        </div>
+      </StyledCreateForm>
       {props.isLoggedIn &&
       !error &&
       (currentPage === "/account/login" || currentPage === "/account") ? (
@@ -107,4 +124,4 @@ function NotifiesLogin(props) {
   );
 }
 
-export default NotifiesLogin;
+export default LoginModal;

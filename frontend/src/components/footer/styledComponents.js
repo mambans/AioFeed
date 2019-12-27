@@ -1,4 +1,6 @@
-#footer {
+import styled from "styled-components";
+
+const StyledFooterContainer = styled.div`
   display: flex;
   background-color: hsla(0, 0%, 0%, 0.5);
   padding: 15px;
@@ -44,18 +46,20 @@
   ul li i {
     margin-left: -28px;
   }
-}
+`;
 
-.buttonLinks {
+const buttonLinks = styled.button`
   background: none;
   border: none;
   text-align: left;
   width: 100%;
   padding: 0;
-}
+`;
 
-.centerBottomText {
+const centerBottomText = styled.p`
   display: flex;
   align-items: center;
   justify-content: center;
-}
+`;
+
+export { StyledFooterContainer, buttonLinks, centerBottomText };

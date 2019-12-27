@@ -108,7 +108,11 @@ function Twitch({ data }) {
         show ? (
           <Alert
             variant='secondary'
-            style={Utilities.feedAlertWarning}
+            style={{
+              ...Utilities.feedAlertWarning,
+              width: "var(--feedsWidth)",
+              margin: "var(--feedsMargin)",
+            }}
             dismissible
             onClose={() => setShow(false)}>
             <Alert.Heading>{data.error}</Alert.Heading>
@@ -119,41 +123,56 @@ function Twitch({ data }) {
           <TwitchSidebar
             onlineStreams={data.liveStreams}
             newlyAdded={data.newlyAddedStreams}
-            REFRESH_RATE={data.REFRESH_RATE}></TwitchSidebar>
-          <div
-            className={styles.container}
-            style={{
-              marginTop: "0",
-            }}>
-            <TransitionGroup className='twitch-live' component={null}>
-              {data.liveStreams.map(stream => {
-                return (
-                  <CSSTransition
-                    // in={true}
-                    key={stream.id}
-                    timeout={1000}
-                    classNames='videoFade-1s'
-                    unmountOnExit>
-                    <FeedsContext.Consumer>
-                      {feedProps => {
-                        return (
-                          <StreamEle
-                            {...feedProps}
-                            key={stream.id}
-                            data={stream}
-                            newlyAddedStreams={data.newlyAddedStreams}
-                            newlyAdded={stream.newlyAdded}
-                            refresh={refresh}
-                            REFRESH_RATE={data.REFRESH_RATE}
-                          />
-                        );
-                      }}
-                    </FeedsContext.Consumer>
-                  </CSSTransition>
-                );
-              })}
-            </TransitionGroup>
-          </div>
+            REFRESH_RATE={data.REFRESH_RATE}
+          />
+          {data.liveStreams.length > 0 ? (
+            <div
+              className={styles.container}
+              style={{
+                marginTop: "0",
+              }}>
+              <TransitionGroup className='twitch-live' component={null}>
+                {data.liveStreams.map(stream => {
+                  return (
+                    <CSSTransition
+                      // in={true}
+                      key={stream.id}
+                      timeout={1000}
+                      classNames='videoFade-1s'
+                      unmountOnExit>
+                      <FeedsContext.Consumer>
+                        {feedProps => {
+                          return (
+                            <StreamEle
+                              {...feedProps}
+                              key={stream.id}
+                              data={stream}
+                              newlyAddedStreams={data.newlyAddedStreams}
+                              newlyAdded={stream.newlyAdded}
+                              refresh={refresh}
+                              REFRESH_RATE={data.REFRESH_RATE}
+                            />
+                          );
+                        }}
+                      </FeedsContext.Consumer>
+                    </CSSTransition>
+                  );
+                })}
+              </TransitionGroup>
+            </div>
+          ) : show ? (
+            <Alert
+              variant='secondary'
+              style={{
+                ...Utilities.feedAlertWarning,
+                width: "var(--feedsWidth)",
+                margin: "var(--feedsMargin)",
+              }}
+              dismissible
+              onClose={() => setShow(false)}>
+              <Alert.Heading>No streams online at the momment</Alert.Heading>
+            </Alert>
+          ) : null}
         </>
       )}
     </>

@@ -46,7 +46,7 @@
   -o-transition: opacity 1000ms;
 }
 
-//fade 1s
+//Videofade 1s
 .videoFade-1s-enter {
   opacity: 0;
   // width: 37px;
@@ -157,3 +157,51 @@
   -ms-transition: opacity 200ms ease-in, transition;
   -o-transition: opacity 200ms ease-in, transition;
 }
+
+//fadeSlide-right-1s 1s
+.fadeSlide-right-1s-enter {
+  opacity: 0;
+  //max-width: 0px;
+  right: -330px;
+  transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+  -webkit-transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+  -moz-transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+  -ms-transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+  -o-transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+}
+.fadeSlide-right-1s-enter-active {
+  opacity: 1;
+  //max-width: 300px;
+  right: 0;
+  transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+  -webkit-transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+  -moz-transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+  -ms-transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+  -o-transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+}
+.fadeSlide-right-1s-exit {
+  opacity: 1;
+  //max-width: 300px;
+  right: 0;
+  transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+  -webkit-transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+  -moz-transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+  -ms-transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+  -o-transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+}
+.fadeSlide-right-1s-exit-active {
+  opacity: 0;
+  //width: 0px;
+  //max-width: 0px;
+  right: -330px;
+  transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+  -webkit-transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+  -moz-transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+  -ms-transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+  -o-transition: opacity 500ms, transform 500ms, max-width 500ms, right 500ms;
+}
+
+.fadeSlide-right-1s-enter-done {
+  right: 0;
+}
+  

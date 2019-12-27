@@ -8,10 +8,10 @@ import { VideoContainer, VideoTitle, ImageContainer } from "./../../sharedStyled
 import styles from "../Twitch.module.scss";
 import Utilities from "../../../utilities/Utilities";
 
-function TwitchVodElement(data) {
+export default ({ ...data }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [previewAvailable, setPreviewAvailable] = useState(null);
-  const ref = useRef();
+  const imgRef = useRef();
   const hoverTimeoutRef = useRef();
 
   const vodPreview = `https://static-cdn.jtvnw.net/s3_vods/${
@@ -49,9 +49,9 @@ function TwitchVodElement(data) {
   }, []);
 
   useEffect(() => {
-    const refEle = ref.current;
-    ref.current.addEventListener("mouseenter", handleMouseOver);
-    ref.current.addEventListener("mouseleave", handleMouseOut);
+    const refEle = imgRef.current;
+    imgRef.current.addEventListener("mouseenter", handleMouseOver);
+    imgRef.current.addEventListener("mouseleave", handleMouseOut);
 
     return () => {
       refEle.removeEventListener("mouseenter", handleMouseOver);
@@ -60,8 +60,11 @@ function TwitchVodElement(data) {
   }, [handleMouseOut, handleMouseOver]);
 
   return (
-    <VideoContainer>
-      <ImageContainer ref={ref}>
+    <VideoContainer
+      onTransitionEnd={() => {
+        if (data.transition !== "videoFade-1s") data.setTransition();
+      }}>
+      <ImageContainer ref={imgRef}>
         <a className={styles.img} href={data.data.url}>
           {isHovered && data.data.thumbnail_url && previewAvailable ? (
             <div
@@ -138,6 +141,4 @@ function TwitchVodElement(data) {
       </div>
     </VideoContainer>
   );
-}
-
-export default TwitchVodElement;
+};

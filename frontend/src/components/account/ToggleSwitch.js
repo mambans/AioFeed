@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Switch from "react-switch";
 
-import styles from "./Account.module.scss";
+import { StyledToggleSwitch } from "./styledComponent";
 
 export default data => {
   const [checked, setChecked] = useState(data[`enable${data.label}`]);
@@ -27,13 +27,13 @@ export default data => {
   }
 
   return (
-    <label className={styles.ToggleSwitch}>
-      <span>{data.label}</span>
+    <StyledToggleSwitch>
       <Switch
         disabled={!data.tokenExists}
         onChange={handleChange}
         checked={tokenExists && checked}
       />
-    </label>
+      <span>{data.label}</span>
+    </StyledToggleSwitch>
   );
 };

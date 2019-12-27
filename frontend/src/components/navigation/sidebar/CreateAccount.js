@@ -1,15 +1,17 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
+import Alert from "react-bootstrap/Alert";
 
-import styles from "./Account.module.scss";
-import ErrorHandeling from "../error/Error";
+import { StyledCreateFormTitle, StyledCreateForm, StyledAlert } from "./styledComponent";
+import NavigationContext from "./../NavigationContext";
 
-function NotifiesCreateAccount() {
+export default () => {
   document.title = "Notifies | Create Account";
   const [error, setError] = useState(null);
   const [created, setCreated] = useState();
+  const props = useContext(NavigationContext);
 
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);
@@ -78,9 +80,15 @@ function NotifiesCreateAccount() {
   } else {
     return (
       <>
-        {error ? <ErrorHandeling data={error}></ErrorHandeling> : null}
-        <h3 className={styles.formTitle}>Create a Notifies account.</h3>
-        <Form onSubmit={handleSubmit} validated className={styles.createForm}>
+        {error ? (
+          <StyledAlert variant='warning' dismissible onClose={() => setError(null)}>
+            <Alert.Heading>{error.title}</Alert.Heading>
+            <hr />
+            {error.message.toString()}
+          </StyledAlert>
+        ) : null}
+        <StyledCreateFormTitle>Create a Notifies account.</StyledCreateFormTitle>
+        <StyledCreateForm onSubmit={handleSubmit} validated>
           <Form.Group controlId='formGroupUserName'>
             <Form.Label>Username</Form.Label>
             <Form.Control type='text' placeholder='Username' nane='username' {...bindUserName} />
@@ -93,13 +101,19 @@ function NotifiesCreateAccount() {
             <Form.Label>Password</Form.Label>
             <Form.Control type='password' placeholder='Password' {...bindPassword} />
           </Form.Group>
-          <Button variant='primary' type='submit'>
-            Create
-          </Button>
-        </Form>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Button variant='primary' type='submit'>
+              Create
+            </Button>
+            <Button
+              onClick={() => {
+                props.setRenderModal("login");
+              }}>
+              Login
+            </Button>
+          </div>
+        </StyledCreateForm>
       </>
     );
   }
-}
-
-export default NotifiesCreateAccount;
+};

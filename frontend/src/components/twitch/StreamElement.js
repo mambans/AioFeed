@@ -74,7 +74,7 @@ function StreamEle(data) {
         <CSSTransition
           in={unfollowError ? true : false}
           // key={stream.id}
-          timeout={0}
+          timeout={2500}
           classNames='fadeout-2500ms'
           unmountOnExit>
           <Alert
@@ -187,24 +187,29 @@ function StreamEle(data) {
         </Moment>
         {/* {streamType(data.data.type)} */}
       </ImageContainer>
-
-      <OverlayTrigger
-        key={"bottom"}
-        placement={"bottom"}
-        delay={{ show: 250, hide: 0 }}
-        overlay={
-          <Tooltip
-            id={`tooltip-${"bottom"}`}
-            style={{
-              width: "336px",
-            }}>
-            {data.data.title}
-          </Tooltip>
-        }>
+      {data.data.title.length > 50 ? (
+        <OverlayTrigger
+          key={"bottom"}
+          placement={"bottom"}
+          delay={{ show: 250, hide: 0 }}
+          overlay={
+            <Tooltip
+              id={`tooltip-${"bottom"}`}
+              style={{
+                width: "336px",
+              }}>
+              {data.data.title}
+            </Tooltip>
+          }>
+          <VideoTitle href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+            {Utilities.truncate(data.data.title, 50)}
+          </VideoTitle>
+        </OverlayTrigger>
+      ) : (
         <VideoTitle href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
-          {Utilities.truncate(data.data.title, 50)}
+          {data.data.title}
         </VideoTitle>
-      </OverlayTrigger>
+      )}
       <div>
         <div className={styles.channelContainer} ref={refChannel}>
           <a
@@ -261,7 +266,7 @@ function StreamEle(data) {
           <a
             className={styles.game}
             href={"https://www.twitch.tv/directory/game/" + data.data.game_name}>
-            {Utilities.truncate(data.data.game_name, 30)}
+            {data.data.game_name}
           </a>
           <p className={styles.viewers}>
             {/* {data.data.viewer_count} */}

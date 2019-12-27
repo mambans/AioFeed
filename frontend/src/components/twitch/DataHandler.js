@@ -67,12 +67,12 @@ export default ({ children }) => {
     // console.log("refreshing");
     setRefreshing(true);
     try {
-      setError(null);
       followedChannels.current = await getFollowedChannels();
 
       const streams = await getFollowedOnlineStreams(followedChannels.current);
 
       if (streams.status === 200) {
+        setError(null);
         oldLiveStreams.current = liveStreams.current;
         liveStreams.current = streams.data;
         setRefreshing(false);
@@ -111,6 +111,7 @@ export default ({ children }) => {
           }
         });
       } else if (streams.status === 201) {
+        setError(streams.error);
         setRefreshing(false);
       }
 

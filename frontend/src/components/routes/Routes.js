@@ -12,18 +12,19 @@ import NavigationContext from "./../navigation/NavigationContext";
 import NavigationProvider from "./../navigation/NavigationProvider";
 import NoMatch from "./NoMatch";
 import NotificationsProvider from "./../notifications/NotificationsProvider";
-import NotifiesAccount from "../account/NotifiesAccount";
-import NotifiesCreateAccount from "../account/NotifiesCreateAccount";
-import NotifiesLogin from "../account/NotifiesLogin";
+import AccountModal from "../account/AccountModal";
+import CreateAccountModal from "../account/CreateAccountModal";
+import LoginModal from "../account/LoginModal";
 import RenderTopStreams from "../twitch/top/RenderTopStreams";
 import streamOnlineWebhook from "../twitch/Twitchwebhooks";
 import style from "./Routes.module.scss";
 import TwitchAuth from "../auth/TwitchAuth";
 import TwitchAuthCallback from "../auth/TwitchAuthCallback";
-import TwitterAuth from "../twitter/TwitterAuth";
+// import TwitterAuth from "../twitter/TwitterAuth";
 import YoutubeAuth from "../auth/YoutubeAuth";
 import YoutubeAuthCallback from "../auth/YoutubeAuthCallback";
 import AccountProvider from "./../account/AccountProvider";
+import AccountContext from "./../account/AccountContext";
 
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
@@ -41,7 +42,7 @@ const Routes = () => {
 
                   return (
                     <TransitionGroup component={null}>
-                      <CSSTransition key={key} timeout={0} classNames='fade-02'>
+                      <CSSTransition key={key} timeout={200} classNames='fade-02'>
                         <main id={style.contentContainer}>
                           <Switch location={location}>
                             <Route exact path='/' component={Home} />
@@ -88,8 +89,8 @@ const Routes = () => {
                                 return <YoutubeAuthCallback />;
                               }}
                             />
-                            <Route exact path='/auth/twitter' component={TwitterAuth} />
-                            <Route exact path='/auth/twitter/callback' component={TwitterAuth} />
+                            {/* <Route exact path='/auth/twitter' component={TwitterAuth} /> */}
+                            {/* <Route exact path='/auth/twitter/callback' component={TwitterAuth} /> */}
                             <Route
                               exact
                               path='/account'
@@ -98,15 +99,22 @@ const Routes = () => {
                                   <NavigationContext.Consumer>
                                     {navProps => {
                                       return (
-                                        <FeedsContext.Consumer>
-                                          {feedsProps => {
+                                        <AccountContext.Consumer>
+                                          {accProps => {
                                             return (
-                                              <NotifiesAccount
-                                                {...feedsProps}
-                                                {...navProps}></NotifiesAccount>
+                                              <FeedsContext.Consumer>
+                                                {feedsProps => {
+                                                  return (
+                                                    <AccountModal
+                                                      {...accProps}
+                                                      {...feedsProps}
+                                                      {...navProps}></AccountModal>
+                                                  );
+                                                }}
+                                              </FeedsContext.Consumer>
                                             );
                                           }}
-                                        </FeedsContext.Consumer>
+                                        </AccountContext.Consumer>
                                       );
                                     }}
                                   </NavigationContext.Consumer>
@@ -118,7 +126,7 @@ const Routes = () => {
                               path='/account/create'
                               render={() => (
                                 <div style={{ width: "1000px", margin: "auto", marginTop: "55px" }}>
-                                  <NotifiesCreateAccount />
+                                  <CreateAccountModal />
                                 </div>
                               )}
                             />
@@ -129,7 +137,7 @@ const Routes = () => {
                                 <div style={{ width: "1000px", margin: "auto", marginTop: "55px" }}>
                                   <NavigationContext.Consumer>
                                     {navProps => {
-                                      return <NotifiesLogin {...navProps} />;
+                                      return <LoginModal {...navProps} />;
                                     }}
                                   </NavigationContext.Consumer>
                                 </div>

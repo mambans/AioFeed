@@ -4,7 +4,6 @@ import { reload } from "react-icons-kit/iconic/reload";
 import { Spinner } from "react-bootstrap";
 import { video } from "react-icons-kit/iconic/video";
 import Icon from "react-icons-kit";
-import LazyLoad from "react-lazyload";
 import Moment from "react-moment";
 import Popup from "reactjs-popup";
 import React, { useState, useEffect, useRef, useCallback } from "react";
@@ -26,7 +25,7 @@ import {
 const HeaderContainerFade = props => {
   const { refresh, refreshing, vods } = props;
   return (
-    <CSSTransition in={true} timeout={0} classNames='fade-1s' unmountOnExit>
+    <CSSTransition in={true} timeout={1000} classNames='fade-1s' unmountOnExit>
       <HeaderContainer>
         <div
           style={{
@@ -77,7 +76,7 @@ const HeaderContainerFade = props => {
           }
           position='left top'
           className='settingsPopup'>
-          <AddChannelForm></AddChannelForm>
+          <AddChannelForm refresh={refresh} />
         </Popup>
       </HeaderContainer>
     </CSSTransition>
@@ -89,13 +88,7 @@ function TwitchVods() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
-  const initialOpen = useRef(true);
   const transition = useRef("fade-1s");
-
-  function onChange(newRun) {
-    initialOpen.current = newRun;
-    transition.current = "videoFade-1s";
-  }
 
   const refresh = useCallback(async forceRefresh => {
     setRefreshing(true);
@@ -179,17 +172,20 @@ function TwitchVods() {
           <TransitionGroup className='twitch-vods' component={null}>
             {vods.data.map(vod => {
               return (
-                <LazyLoad key={vod.id} height={312} offset={25} once>
-                  <CSSTransition
-                    in={vod ? true : false}
-                    key={vod.id}
-                    timeout={1000}
-                    classNames={transition.current}
-                    // classNames='videoFade-1s'
-                    unmountOnExit>
-                    <TwitchVodElement data={vod} />
-                  </CSSTransition>
-                </LazyLoad>
+                <CSSTransition
+                  key={vod.id}
+                  timeout={1000}
+                  classNames={transition.current}
+                  // classNames='videoFade-1s'
+                  unmountOnExit>
+                  <TwitchVodElement
+                    data={vod}
+                    transition={transition.current}
+                    setTransition={() => {
+                      transition.current = "videoFade-1s";
+                    }}
+                  />
+                </CSSTransition>
               );
             })}
           </TransitionGroup>

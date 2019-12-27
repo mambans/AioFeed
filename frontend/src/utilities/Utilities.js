@@ -14,12 +14,9 @@ const Utilities = {
     marginTop: "20px",
   },
   loadingSpinnerSmall: {
-    // position: "relative",
     position: "initial",
     height: "22px",
     width: "22px",
-    // height: "26px",
-    // width: "26px",
     left: "1.5%",
     bottom: "-25px",
   },

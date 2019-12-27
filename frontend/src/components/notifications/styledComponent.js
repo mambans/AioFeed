@@ -40,7 +40,37 @@ const Notification = styled.li`
     grid-area: date;
     font-size: 0.9rem;
     text-align: right;
+    display: flex;
+    justify-content: right;
+
+    & > div:hover {
+      #timeago {
+        display: none;
+      }
+
+      #time {
+        display: inline;
+      }
+    }
+
+    #time {
+      display: none;
+    }
   }
+
+  /* &:hover {
+      #timeago {
+        display: none;
+      }
+
+      #time {
+        display: inline;
+      }
+    }
+
+    #time {
+      display: none;
+    } */
 `;
 
 const UnseenNotifcationCount = styled.div`

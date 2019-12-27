@@ -3,9 +3,10 @@ import { ic_notifications_none } from "react-icons-kit/md/ic_notifications_none"
 import Icon from "react-icons-kit";
 import Modal from "react-bootstrap/Modal";
 import Moment from "react-moment";
+import moment from "moment";
 import React, { useState, useContext } from "react";
 
-import "./Notifications.scss";
+// import "./Notifications.scss";
 import { ButtonList } from "./../sharedStyledComponents";
 import { Notification } from "./styledComponent";
 import { UnseenNotifcationCount } from "./../notifications/styledComponent";
@@ -105,9 +106,14 @@ export default () => {
                         className='title'>
                         {Utilities.truncate(item.title, 50)}
                       </a>
-                      <Moment fromNow className='date'>
-                        {item.date}
-                      </Moment>
+                      <div className='date'>
+                        <div>
+                          <Moment fromNow id='timeago'>
+                            {item.date}
+                          </Moment>
+                          <p id='time'>{moment(item.date).format("MM-DD HH:MM")}</p>
+                        </div>
+                      </div>
                     </Notification>
                   );
                 })

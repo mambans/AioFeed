@@ -105,6 +105,7 @@ nav {
 .dropdown-menu {
   left: -60px !important;
   text-align: center;
+  background-color: var(--navigationbarBackground);
 }
 
 .dropdown.nav-item,
@@ -123,12 +124,4 @@ nav {
 
 .navbar-dark .navbar-nav .nav-link {
   color: var(--headerTextColor);
-}
-
-.green {
-  color: rgb(51, 253, 0) !important;
-}
-
-.red {
-  color: rgb(255, 0, 0) !important;
 }

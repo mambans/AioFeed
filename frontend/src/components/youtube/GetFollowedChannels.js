@@ -30,7 +30,7 @@ async function getFollowedChannels() {
   try {
     if (
       !localStorage.getItem(`YT-followedChannels`) ||
-      JSON.parse(localStorage.getItem(`YT-followedChannels`)).casheExpire <= new Date()
+      JSON.parse(localStorage.getItem(`YT-followedChannels`)).casheExpire <= new Date().getTime()
     ) {
       const previousPage = await axios
         .get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {

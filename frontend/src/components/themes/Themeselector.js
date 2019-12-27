@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-import styles from "./Themes.module.scss";
+import { ThemeSelector } from "./styledComponents";
 
 function Themeselector() {
-  const allThemmes = ["default", "original", "christmas", "new year's eve", "clean"];
+  const allThemmes = ["default", "original", "christmas", "new year's eve", "clean", "clean dark"];
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);
 
@@ -47,11 +47,11 @@ function Themeselector() {
       }
     } else {
       document.documentElement.setAttribute("data-theme", theme);
-      window.setTimeout(function() {
-        document.documentElement.classList.remove("theme-transition");
-        document.body.classList.remove("theme-transition");
-      }, 1000);
     }
+    window.setTimeout(function() {
+      document.documentElement.classList.remove("theme-transition");
+      document.body.classList.remove("theme-transition");
+    }, 1000);
   };
 
   const handleSubmit = event => {
@@ -61,7 +61,7 @@ function Themeselector() {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className={styles.themeSelector}>
+      <ThemeSelector onSubmit={handleSubmit}>
         <label>
           <b>Choose Theme:</b>
           <select
@@ -77,7 +77,7 @@ function Themeselector() {
             })}
           </select>
         </label>
-      </form>
+      </ThemeSelector>
     </>
   );
 }
