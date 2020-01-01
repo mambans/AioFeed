@@ -2,11 +2,12 @@ import { Button, Spinner } from "react-bootstrap";
 import { deleteIconic } from "react-icons-kit/iconic/deleteIconic";
 import axios from "axios";
 import Icon from "react-icons-kit";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 
 import Utilities from "../../../utilities/Utilities";
 
 export default props => {
+  const reload = useRef(false);
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);
 
@@ -33,6 +34,7 @@ export default props => {
       });
 
       getChannels();
+      reload.current = true;
     } catch (e) {
       console.log(e.message);
     }
@@ -47,6 +49,7 @@ export default props => {
       });
 
       getChannels();
+      reload.current = true;
     } catch (e) {
       console.log(e.message);
     }
@@ -68,8 +71,7 @@ export default props => {
     getChannels();
 
     return () => {
-      console.log("unloading vodSettings.");
-      props.refresh(true);
+      if (reload.current === true) props.refresh(true);
     };
   }, [getChannels, props]);
 
