@@ -1,5 +1,5 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { ic_settings } from "react-icons-kit/md/ic_settings";
+import { list2 } from "react-icons-kit/icomoon/list2";
 import { reload } from "react-icons-kit/iconic/reload";
 import { Spinner } from "react-bootstrap";
 import { video } from "react-icons-kit/iconic/video";
@@ -50,10 +50,13 @@ const HeaderContainerFade = props => {
               <Icon icon={reload} size={22}></Icon>
             )}
           </RefreshButton>
-          <Moment
+          <Moment fromNow className={styles.vodRefreshTimer} interval={60000}>
+            {(vods && vods.loaded) || new Date()}
+          </Moment>
+          {/* <Moment
             from={(vods && vods.expire) || new Date()}
             ago
-            className={styles.vodRefreshTimer}></Moment>
+            className={styles.vodRefreshTimer}></Moment> */}
         </div>
         <HeaderTitle>
           Twitch vods
@@ -65,7 +68,7 @@ const HeaderContainerFade = props => {
           trigger={
             <ButtonList variant='outline-secondary' className={styles.settings}>
               <Icon
-                icon={ic_settings}
+                icon={list2}
                 size={22}
                 style={{
                   height: "22px",
