@@ -12,7 +12,7 @@ const SetStartupTheme = () => {
         }, 1000);
         break;
       case 0:
-        if (currentDate <= 7) {
+        if (currentDate <= 1) {
           document.documentElement.classList.add("theme-transition");
           document.documentElement.setAttribute("data-theme", "new year's eve");
           window.setTimeout(function() {
