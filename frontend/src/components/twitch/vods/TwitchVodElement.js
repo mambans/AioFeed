@@ -61,9 +61,10 @@ export default ({ ...data }) => {
 
   return (
     <VideoContainer
-      onTransitionEnd={() => {
-        if (data.transition !== "videoFade-1s") data.setTransition();
-      }}>
+    // onTransitionEnd={() => {
+    //   if (data.transition !== "videoFade-1s") data.setTransition();
+    // }}
+    >
       <ImageContainer ref={imgRef}>
         <a className={styles.img} href={data.data.url}>
           {isHovered && data.data.thumbnail_url && previewAvailable ? (
