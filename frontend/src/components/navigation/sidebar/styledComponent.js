@@ -103,6 +103,7 @@ const StyledLogoutContiner = styled.div`
   position: fixed;
   right: 0;
   width: 160px;
+  margin-right: 20px;
 
   button,
   a[label="linkAsButton"] {

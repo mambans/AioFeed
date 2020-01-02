@@ -77,13 +77,12 @@ const UnseenNotifcationCount = styled.div`
   background-color: var(--unseenNotifcationCountBackground);
   height: 24px;
   width: 24px;
-  border-radius: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  border-radius: 50%;
   position: absolute;
   top: -14px;
   left: 27px;
+  line-height: 24px;
+  text-align: center;
 `;
 
 export { Notification, UnseenNotifcationCount };
