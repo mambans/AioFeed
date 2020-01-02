@@ -48,7 +48,7 @@ const StyledFooterContainer = styled.div`
   }
 `;
 
-const buttonLinks = styled.button`
+const StyledButtonLinks = styled.button`
   background: none;
   border: none;
   text-align: left;
@@ -56,10 +56,10 @@ const buttonLinks = styled.button`
   padding: 0;
 `;
 
-const centerBottomText = styled.p`
+const StyledCenterBottomText = styled.p`
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
-export { StyledFooterContainer, buttonLinks, centerBottomText };
+export { StyledFooterContainer, StyledButtonLinks, StyledCenterBottomText };
