@@ -1,5 +1,5 @@
-import { ic_notifications_active } from "react-icons-kit/md/ic_notifications_active";
 import { ic_notifications_none } from "react-icons-kit/md/ic_notifications_none";
+import { ic_notifications } from "react-icons-kit/md/ic_notifications";
 import Icon from "react-icons-kit";
 import Modal from "react-bootstrap/Modal";
 import Moment from "react-moment";
@@ -40,7 +40,7 @@ export default () => {
         props.unseenNotifications.length > 0 ? (
           <>
             <Icon
-              icon={ic_notifications_active}
+              icon={ic_notifications}
               size={40}
               style={{
                 color: "var(--newHighlight)",
