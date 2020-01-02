@@ -7,6 +7,7 @@ import Icon from "react-icons-kit";
 import Moment from "react-moment";
 import Popup from "reactjs-popup";
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import _ from "lodash";
 
 import AddChannelForm from "./VodSettings";
 import ErrorHandeling from "../../error/Error";
@@ -21,6 +22,8 @@ import {
   SubFeedContainer,
   ButtonList,
 } from "./../../sharedStyledComponents";
+
+import { StyledLoadmore } from "./../styledComponents";
 
 const HeaderContainerFade = props => {
   const { refresh, refreshing, vods } = props;
@@ -91,7 +94,41 @@ function TwitchVods() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [vodAmounts, setVodAmounts] = useState(16);
   const transition = useRef("fade-1s");
+  const loadmoreRef = useRef();
+
+  // let debounce = false;
+
+  const observer = new IntersectionObserver(
+    function(entries) {
+      // isIntersecting is true when element and viewport are overlapping
+      // isIntersecting is false when element and viewport don't overlap
+
+      window.addEventListener(
+        "wheel",
+        _.throttle(function(e) {
+          if (entries[0].isIntersecting === true) {
+            console.log("TCL: TwitchVods -> vodAmounts", vodAmounts);
+            setVodAmounts(vodAmounts + 16);
+
+            // if (!debounce) {
+            //   // debounce = false;
+            //   // console.log("TCL: TwitchVods -> vodAmounts", vodAmounts);
+            //   // window.requestAnimationFrame(function() {
+            //   debounce = true;
+            //   console.log("TCL: TwitchVods -> vodAmounts", vodAmounts);
+            //   setVodAmounts(vodAmounts + 16);
+            //   // });
+
+            //   debounce = false;
+            // }
+          }
+        }, 1000)
+      );
+    },
+    { threshold: 0 }
+  );
 
   const refresh = useCallback(async forceRefresh => {
     setRefreshing(true);
@@ -173,7 +210,7 @@ function TwitchVods() {
         <HeaderContainerFade refresh={refresh} refreshing={refreshing} vods={vods} />
         <SubFeedContainer>
           <TransitionGroup className='twitch-vods' component={null}>
-            {vods.data.map(vod => {
+            {vods.data.slice(0, vodAmounts).map(vod => {
               return (
                 <CSSTransition
                   key={vod.id}
@@ -193,6 +230,17 @@ function TwitchVods() {
             })}
           </TransitionGroup>
         </SubFeedContainer>
+        <StyledLoadmore ref={loadmoreRef}>
+          <div />
+          <p
+            onClick={() => {
+              // console.log("TCL: windowBlurHandler -> vodAmounts", vodAmounts);
+              setVodAmounts(vodAmounts + 16);
+            }}>
+            Load more
+          </p>
+          <div />
+        </StyledLoadmore>
       </>
     );
   }
