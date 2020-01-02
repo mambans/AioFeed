@@ -32,7 +32,7 @@ html[data-theme="original"] {
   --primaryPurple: #040113;
   --refreshButtonBackground: hsla(0, 0%, 0%, 0.205);
   --refreshButtonBorder: thin solid #2d2d2d;
-  --refreshButtonColor: #6c757d;
+  --refreshButtonColor: #acafb1;
   --refreshButtonHoverBackground: #00000026;
   --refreshButtonHoverColor: #ffffff;
   --refreshButtonShadow: 4px 4px 5px 0px #000c;
@@ -65,7 +65,6 @@ html[data-theme="christmas"] {
   --channelHover: rgb(255, 255, 255);
   --footerLinkColor: rgb(224, 224, 224);
   --footerLinkHoverColor: white;
-  // --footerShadow: 0 0 50px 0 #242424;
   --footerShadow: 0 0 20px 0 #141414;
   // --greyInfo: rgb(175, 175, 175);
   --greyInfo: rgb(255, 255, 255);
@@ -76,7 +75,6 @@ html[data-theme="christmas"] {
   --infoHover: lighten($greyInfo, 50%);
   --modalCloseButtonColor: rgba(240, 240, 240, 0.8);
   --modalCloseButtonColorHover: white;
-
   --navigationbarBackground: rgba(0, 0, 0, 0.75);
   --popupModalBackground: #000000e3;
   --primaryPurple: #040113;
@@ -95,20 +93,13 @@ html[data-theme="christmas"] {
   --videoTitleHover: rgb(240, 240, 240);
   --newHighlight: #ffffff;
   --linkTextShadow: 0px 0px 3px black;
-
-  // --newHighlight: #ff3000;
-  // --refreshButtonBorder: thin solid #2d2d2d;
-  // --scrollbarColors: rgb(207, 5, 16) rgb(43, 31, 31);
 }
 
 html[data-theme="new year's eve"] {
   --backgroundImg: url("/images/new years eve33.jpg");
   --footerShadow: 0 0 50px 0 #242424;
-  --newHighlight: #ff9001;
   --refreshButtonHoverBackground: #000000b2;
   --scrollbarColors: rgb(18, 36, 58) rgb(5, 8, 10);
-  // --footerLinkColor: #0eb5bd;
-  // --footerLinkHoverColor: #12ccd6;
 }
 
 html[data-theme="clean"] {
