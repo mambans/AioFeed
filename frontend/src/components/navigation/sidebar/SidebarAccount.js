@@ -141,10 +141,12 @@ export default props => {
         alt=''
       />
 
-      <h1 style={{ fontSize: "2rem", textAlign: "center" }}>
+      <h1 style={{ fontSize: "2rem", textAlign: "center" }} title='Username'>
         {Utilities.getCookie("Notifies_AccountName")}
       </h1>
-      <p style={{ textAlign: "center" }}>{Utilities.getCookie("Notifies_AccountEmail")}</p>
+      <p style={{ textAlign: "center" }} title='Email'>
+        {Utilities.getCookie("Notifies_AccountEmail")}
+      </p>
       <ToggleSwitch {...props} label='Twitch' token='Twitch' tokenExists={props.twitchToken} />
       <ToggleSwitch {...props} label='Youtube' token='Youtube' tokenExists={props.youtubeToken} />
       <ToggleSwitch {...props} label='TwitchVods' token='Twitch' tokenExists={props.twitchToken} />
@@ -162,6 +164,7 @@ export default props => {
       <br></br>
       {!props.twitchToken ? (
         <StyledConnectTwitch
+          title='Authenticate/Connect'
           onClick={() => {
             authenticatePopup(
               `Connect Twitch`,
@@ -178,7 +181,7 @@ export default props => {
       ) : (
         <div style={{ marginBottom: "10px", width: "280px" }}>
           <StyledConnectTwitch
-            // className={styles.connectTwitch}
+            title='Re-authenticate'
             style={{ marginRight: "25px" }}
             onClick={() => {
               authenticatePopup(
@@ -193,6 +196,7 @@ export default props => {
             <Icon icon={ic_refresh} size={24} />
           </StyledConnectTwitch>
           <StyledConnectTwitch
+            title='Disconnect'
             style={{ backgroundColor: "hsla(268, 77%, 15%, 1)" }}
             onClick={disconnectTwitch}>
             Disconnect Twitch
@@ -203,6 +207,7 @@ export default props => {
         <StyledConnectYoutube
           //to unfollow: scope=https://www.googleapis.com/auth/youtube
           //else  scope=https://www.googleapis.com/auth/youtube.readonly
+          title='Authenticate/Connect'
           onClick={() => {
             authenticatePopup(
               `Connect Youtube`,
@@ -221,6 +226,7 @@ export default props => {
             style={{ marginRight: "25px" }}
             //to unfollow: scope=https://www.googleapis.com/auth/youtube
             //else  scope=https://www.googleapis.com/auth/youtube.readonly
+            title='Re-authenticate'
             onClick={() => {
               authenticatePopup(
                 `Connect Youtube`,
@@ -233,6 +239,7 @@ export default props => {
             <Icon icon={ic_refresh} size={24} />
           </StyledConnectYoutube>
           <StyledConnectYoutube
+            title='Disconnect'
             style={{ backgroundColor: "hsla(0, 65%, 10%, 1)" }}
             onClick={disconnectYoutube}>
             Disconnect Youtube

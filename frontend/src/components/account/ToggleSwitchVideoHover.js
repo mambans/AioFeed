@@ -16,7 +16,7 @@ function ToggleSwitchVideoHover(props) {
   }
 
   return (
-    <StyledToggleSwitch>
+    <StyledToggleSwitch title={(checked ? "Disable" : "Enable") + ` ${props.feed} video on hover`}>
       <Switch onChange={handleChange} checked={checked} />
       <span>{props.feed + " hover-video"}</span>
     </StyledToggleSwitch>

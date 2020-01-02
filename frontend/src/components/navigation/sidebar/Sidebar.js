@@ -23,7 +23,7 @@ export default props => {
 
   return (
     <>
-      <div onClick={handleToggle} className={styles.navProfileContainer}>
+      <div onClick={handleToggle} className={styles.navProfileContainer} title='Sidebar'>
         {props.isLoggedIn ? (
           <>
             <StyledSidebarTrigger />

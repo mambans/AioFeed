@@ -27,7 +27,7 @@ export default data => {
   }
 
   return (
-    <StyledToggleSwitch>
+    <StyledToggleSwitch title={(checked ? "Disable" : "Enable") + ` ${data.label} feed`}>
       <Switch
         disabled={!data.tokenExists}
         onChange={handleChange}

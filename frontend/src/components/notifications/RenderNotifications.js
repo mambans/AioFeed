@@ -34,7 +34,8 @@ export default () => {
           background: "none",
           boxShadow: "none",
           padding: "0",
-        }}>
+        }}
+        title='Notifications'>
         {props.unseenNotifications &&
         Array.isArray(props.unseenNotifications) &&
         props.unseenNotifications.length > 0 ? (
