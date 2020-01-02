@@ -52,6 +52,7 @@ const SortAndAddExpire = async (followedStreamVods, vodExpire) => {
     _.sortBy(followedStreamVods, stream => stream.endDate.getTime())
   );
   followedOrderedStreamVods.expire = new Date().setHours(new Date().getHours() + vodExpire);
+  followedOrderedStreamVods.loaded = new Date();
 
   return followedOrderedStreamVods;
 };
@@ -63,8 +64,8 @@ const fetchVodsFromMonitoredChannels = async vodChannels => {
       const response = await axios.get(`https://api.twitch.tv/helix/videos?`, {
         params: {
           user_id: channel,
-          first: 3,
           period: "month",
+          first: 5,
           // type: "archive",
           type: "all",
         },
@@ -73,6 +74,8 @@ const fetchVodsFromMonitoredChannels = async vodChannels => {
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       });
+
+      // console.log("asd:", response)
 
       response.data.data.forEach(vod => {
         followedStreamVods.push(vod);
@@ -115,6 +118,7 @@ async function getFollowedVods(forceRun) {
           JSON.stringify({
             data: followedOrderedStreamVods.data,
             expire: followedOrderedStreamVods.expire,
+            loaded: followedOrderedStreamVods.loaded,
           })
         );
       } catch (error) {
