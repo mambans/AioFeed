@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 
 import GetTopGames from "./GetTopGames";
 import Utilities from "./../../../utilities/Utilities";
+import { StyledGameListElement, StyledShowAllButton } from "./styledComponents";
 
 const RenderTopGamesList = () => {
   const [topGames, setTopGames] = useState();
@@ -19,32 +20,17 @@ const RenderTopGamesList = () => {
 
   return topGames ? (
     <ul>
-      <li
-        style={{
-          cursor: "pointer",
-          justifyContent: "center",
-          fontWeight: "bold",
-          fontSize: "1.1rem",
-        }}
-        key={"showAll"}>
+      <StyledShowAllButton key='showAll'>
         <Link to={"/twitch/top/"}>Show all</Link>
-      </li>
+      </StyledShowAllButton>
       {topGames.map(game => {
         return (
-          <li style={{ justifyContent: "unset", cursor: "pointer" }} key={game.id}>
+          <StyledGameListElement key={game.id}>
             <Link to={"/twitch/top/" + game.name}>
-              <img
-                src={game.box_art_url.replace("{width}", 300).replace("{height}", 300)}
-                alt=''
-                style={{
-                  width: "30px",
-                  height: "30px",
-                  marginRight: "10px",
-                  borderRadius: "3px",
-                }}></img>
-              {Utilities.truncate(game.name, 30)}
+              <img src={game.box_art_url.replace("{width}", 300).replace("{height}", 300)} alt='' />
+              {game.name}
             </Link>
-          </li>
+          </StyledGameListElement>
         );
       })}
     </ul>
