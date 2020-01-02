@@ -45,7 +45,7 @@ export default props => {
         )}
       </div>
 
-      <CSSTransition in={show} timeout={1000} classNames='fade-1s' unmountOnExit>
+      <CSSTransition in={show} timeout={500} classNames='fade-05s' unmountOnExit>
         <StyledNavSidebarBackdrop
           onClick={() => {
             setShow(false);
