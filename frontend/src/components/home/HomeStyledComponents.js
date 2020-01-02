@@ -52,6 +52,7 @@ const LogoText = styled.div`
   grid-template-areas: "logo name" "logo desc";
   justify-content: center; */
   display: flex;
+  justify-content: center;
 
   img {
     /* grid-area: logo; */

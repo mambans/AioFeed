@@ -32,7 +32,7 @@ const Home = () => {
       setVisible(true);
     });
 
-    window.addEventListener("DOMMouseScroll", () => {
+    window.addEventListener("wheel", () => {
       setVisible(true);
     });
 
@@ -46,7 +46,7 @@ const Home = () => {
       window.removeEventListener("scroll", () => {
         setVisible(true);
       });
-      window.removeEventListener("DOMMouseScroll", () => {
+      window.removeEventListener("wheel", () => {
         setVisible(true);
       });
       clearInterval(inactiveTimer.current);
