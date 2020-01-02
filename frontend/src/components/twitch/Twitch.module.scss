@@ -111,6 +111,7 @@
     position: relative;
     padding-left: 5px;
     grid-row: 1;
+    margin-bottom: 0;
   }
 }
 
@@ -240,7 +241,7 @@
   -o-border-radius: 10px 10px 0 0;
 
   .twitchSidebarHeader {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: bold;
     color: var(--subFeedHeaderColor);
     // text-align: center;
@@ -267,15 +268,18 @@
     -moz-transition: ease-in-out 1s;
     -ms-transition: ease-in-out 1s;
     -o-transition: ease-in-out 1s;
+    font-size: 0.9rem;
+
     a {
       height: max-content;
     }
 
     .profileImage {
-      height: 24px !important;
+      grid-area: profile;
+      align-self: center;
 
       img {
-        width: 40px;
+        width: 36px;
         // width: 100%;
         grid-area: profile;
         border-radius: 20px;
@@ -289,7 +293,7 @@
     .sidebarGame {
       // overflow: hidden;
       // width: max-content;
-      font-size: 0.9rem;
+      // font-size: 0.9rem;
       color: rgb(150, 150, 150);
       font-weight: bold;
       white-space: nowrap;
@@ -302,12 +306,14 @@
       font-weight: bold;
       overflow: hidden;
       margin-right: 8px;
+      font-size: 1.05em;
     }
 
     .sidebarViewers {
       color: var(--textColor);
       display: flex;
       justify-content: space-between;
+      font-size: 1.05em;
 
       i {
         // width: 100% !important;
@@ -324,7 +330,7 @@
     }
 
     .sidebarDuration {
-      font-size: 0.9rem;
+      // font-size: 0.9rem;
       color: rgb(150, 150, 150);
       font-weight: bold;
       // margin-right: 28px;
