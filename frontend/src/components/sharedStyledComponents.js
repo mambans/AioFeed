@@ -40,6 +40,7 @@ const HeaderTitle = styled.h4`
   margin: auto;
   letter-spacing: 1px;
   width: 100%;
+  margin: 2px auto;
   margin-right: calc(300px - 48px);
 `;
 
@@ -53,6 +54,7 @@ const HeaderContainer = styled.div`
   min-width: 100%;
   margin-bottom: 10px;
   margin-top: 25px;
+  height: 50.5px;
 `;
 
 const SubFeedContainer = styled.div`
@@ -82,7 +84,7 @@ const VideoContainer = styled.div`
 const VideoTitle = styled.a`
   color: var(--videoTitle);
   margin-top: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   grid-area: title;
   font-size: 1.1rem;
   max-width: 336px;
