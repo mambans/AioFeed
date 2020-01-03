@@ -115,8 +115,8 @@ export default ({ children }) => {
         setRefreshing(false);
       }
 
-      setRefreshing(false);
-      setIsLoaded(true);
+      // setRefreshing(false);
+      // setIsLoaded(true);
     } catch (error) {
       setError(error);
     }
@@ -127,9 +127,7 @@ export default ({ children }) => {
       try {
         console.log("Twtich Datahandler UseEffect()");
         const timeNow = new Date();
-        // setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
 
-        // if (timer.current) clearInterval(timer.current);
         if (!timer.current) {
           console.log("---Twtich Datahandler SetInterval()---");
           setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
@@ -138,16 +136,17 @@ export default ({ children }) => {
             setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
             refresh();
           }, REFRESH_RATE * 1000);
-        }
-        followedChannels.current = await getFollowedChannels();
-        const streams = await getFollowedOnlineStreams(followedChannels.current);
-        if (streams.status === 200) {
-          liveStreams.current = streams.data;
-        } else {
-          setError(streams.error);
-        }
+          followedChannels.current = await getFollowedChannels();
 
-        setIsLoaded(true);
+          await getFollowedOnlineStreams(followedChannels.current).then(res => {
+            if (res.status === 200) {
+              liveStreams.current = res.data;
+            } else {
+              setError(res.error);
+            }
+            setIsLoaded(true);
+          });
+        }
 
         // fetchProfileImages(followedChannels.current);
       } catch (error) {
@@ -157,14 +156,10 @@ export default ({ children }) => {
 
     fetchData();
 
-    return () => {};
-  }, [refresh]);
-
-  useEffect(() => {
     return () => {
       clearInterval(timer.current);
     };
-  }, []);
+  }, [refresh]);
 
   if (!isLoaded) {
     return (
