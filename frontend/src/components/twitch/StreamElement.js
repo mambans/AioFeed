@@ -8,6 +8,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useRef, useCallback, useState, useEffect } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 import { CSSTransition } from "react-transition-group";
+import { Link } from "react-router-dom";
 
 import styles from "./Twitch.module.scss";
 import StreamHoverIframe from "./StreamHoverIframe.js";
@@ -257,18 +258,21 @@ function StreamEle(data) {
         <div className={styles.gameContainer}>
           <a
             className={styles.game_img}
+            // href={"/twitch/top/" + data.data.game_name}
             href={"https://www.twitch.tv/directory/game/" + data.data.game_name}>
             <img
               src={data.data.game_img.replace("{width}", 130).replace("{height}", 173)}
               alt=''
-              className={styles.game_img}></img>
+              className={styles.game_img}
+            />
           </a>
-          <a
+          <Link
             className={styles.game}
-            href={"https://www.twitch.tv/directory/game/" + data.data.game_name}>
+            // href={"https://www.twitch.tv/directory/game/" + data.data.game_name}
+            to={"/twitch/top/" + data.data.game_name}>
             {data.data.game_name}
-          </a>
-          <p className={styles.viewers}>
+          </Link>
+          <p className={styles.viewers} title='Viewers'>
             {/* {data.data.viewer_count} */}
             {formatViewerNumbers(data.data.viewer_count)}
             <Icon
