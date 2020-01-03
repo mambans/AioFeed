@@ -6,7 +6,7 @@ import { video } from "react-icons-kit/iconic/video";
 import Icon from "react-icons-kit";
 import Moment from "react-moment";
 import Popup from "reactjs-popup";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import _ from "lodash";
 
 import AddChannelForm from "./VodSettings";
@@ -98,45 +98,34 @@ function TwitchVods() {
   const transition = useRef("fade-1s");
   const loadmoreRef = useRef();
 
-  // let debounce = false;
+  const observer = useMemo(
+    () =>
+      new IntersectionObserver(
+        function(entries) {
+          // isIntersecting is true when element and viewport are overlapping
+          // isIntersecting is false when element and viewport don't overlap
 
-  const observer = new IntersectionObserver(
-    function(entries) {
-      // isIntersecting is true when element and viewport are overlapping
-      // isIntersecting is false when element and viewport don't overlap
-
-      window.addEventListener(
-        "wheel",
-        _.throttle(function(e) {
-          if (entries[0].isIntersecting === true) {
-            console.log("TCL: TwitchVods -> vodAmounts", vodAmounts);
-            setVodAmounts(vodAmounts + 16);
-
-            // if (!debounce) {
-            //   // debounce = false;
-            //   // console.log("TCL: TwitchVods -> vodAmounts", vodAmounts);
-            //   // window.requestAnimationFrame(function() {
-            //   debounce = true;
-            //   console.log("TCL: TwitchVods -> vodAmounts", vodAmounts);
-            //   setVodAmounts(vodAmounts + 16);
-            //   // });
-
-            //   debounce = false;
-            // }
-          }
-        }, 1000)
-      );
-    },
-    { threshold: 0 }
+          window.addEventListener(
+            "wheel",
+            _.throttle(function(e) {
+              if (entries[0].isIntersecting === true) {
+                setVodAmounts(currVodAmounts => currVodAmounts + 16);
+              }
+            }, 2000)
+          );
+        },
+        { threshold: 1 }
+      ),
+    [vodAmounts]
   );
 
   const refresh = useCallback(async forceRefresh => {
     setRefreshing(true);
     await getFollowedVods(forceRefresh)
       .then(data => {
-        setError(data.error);
+        if (data.error) setError(data.error);
         setVods(data.data);
-        setIsLoaded(true);
+        // setIsLoaded(true);
         setRefreshing(false);
       })
       .catch(data => {
@@ -156,13 +145,18 @@ function TwitchVods() {
       setRefreshing(true);
       await getFollowedVods()
         .then(data => {
+          if (data.error) setError(data.error);
+
+          setVods(data.data);
+          // console.log("TCL: fetchData -> data.data", data.data.data);
+          // setIsLoaded(true);
+          setRefreshing(false);
+
+          if (loadmoreRef.current) observer.observe(loadmoreRef.current);
+        })
+        .catch(data => {
           setError(data.error);
           setVods(data.data);
-          setIsLoaded(true);
-          setRefreshing(false);
-        })
-        .catch(() => {
-          setError(error);
         });
     }
 
@@ -174,7 +168,17 @@ function TwitchVods() {
       window.removeEventListener("blur", windowBlurHandler);
       window.removeEventListener("focus", windowFocusHandler);
     };
-  }, [error, windowBlurHandler, windowFocusHandler]);
+  }, [windowBlurHandler, windowFocusHandler]);
+
+  // function throttle(fn, wait) {
+  //   var time = Date.now();
+  //   return function() {
+  //     if (time + wait - Date.now() < 0) {
+  //       fn();
+  //       time = Date.now();
+  //     }
+  //   };
+  // }
 
   if (Utilities.getCookie("Twitch-access_token") === null) {
     return (
@@ -187,7 +191,8 @@ function TwitchVods() {
   } else if (error) {
     return <ErrorHandeling data={error}></ErrorHandeling>;
   }
-  if (!isLoaded) {
+  // if (!isLoaded) {
+  if (vods === undefined || !vods || !vods.data) {
     return (
       <>
         <HeaderContainerFade refresh={refresh} refreshing={refreshing} vods={vods} />
@@ -234,7 +239,6 @@ function TwitchVods() {
           <div />
           <p
             onClick={() => {
-              // console.log("TCL: windowBlurHandler -> vodAmounts", vodAmounts);
               setVodAmounts(vodAmounts + 16);
             }}>
             Load more
