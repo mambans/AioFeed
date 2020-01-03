@@ -269,6 +269,8 @@
     -ms-transition: ease-in-out 1s;
     -o-transition: ease-in-out 1s;
     font-size: 0.9rem;
+    position: relative;
+    // height: 62px;
 
     a {
       height: max-content;

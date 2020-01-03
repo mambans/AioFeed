@@ -29,7 +29,9 @@ const formatViewerNumbers = viewers => {
 
 const TwitchSidebarItem = data => {
   return (
-    <a href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}>
+    <a
+      href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}
+      style={{ position: "relative", display: "flex", flexDirection: "column" }}>
       <div className={styles.sidebarItems} key={data.stream.id}>
         <NewHighlight data={data}></NewHighlight>
 
