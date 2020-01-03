@@ -4,6 +4,7 @@ const StyledToggleSwitch = styled.label`
   display: flex;
   height: 40px;
   align-items: center;
+  cursor: pointer;
 
   span {
     padding-left: 5px;
