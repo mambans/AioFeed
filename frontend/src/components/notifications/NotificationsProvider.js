@@ -4,7 +4,7 @@ import uniqid from "uniqid";
 import NotificationsContext from "./NotificationsContext";
 
 const NotificationProvider = ({ children }) => {
-  const [notificationIndicator, enableNotificationIndicator] = useState(false);
+  // const [notificationIndicator, enableNotificationIndicator] = useState(false);
   const [notifications, setNotifications] = useState(
     localStorage.getItem("notifications") !== null
       ? JSON.parse(localStorage.getItem("notifications"))
@@ -57,7 +57,7 @@ const NotificationProvider = ({ children }) => {
         setNotifications(res.notifications);
         localStorage.setItem("Unseen-notifications", JSON.stringify(res.newNotifications));
         localStorage.setItem("notifications", JSON.stringify(res.notifications));
-        enableNotificationIndicator(true);
+        // enableNotificationIndicator(true);
       });
     },
     [notifications]
@@ -83,8 +83,8 @@ const NotificationProvider = ({ children }) => {
         notifications: notifications,
         addNotification: addNotification,
         clearNotifications: clearNotifications,
-        notificationIndicator: notificationIndicator,
-        enableNotificationIndicator: enableNotificationIndicator,
+        // notificationIndicator: notificationIndicator,
+        // enableNotificationIndicator: enableNotificationIndicator,
         unseenNotifications: unseenNotifications,
         setUnseenNotifications: setUnseenNotifications,
         clearUnseenNotifications,
