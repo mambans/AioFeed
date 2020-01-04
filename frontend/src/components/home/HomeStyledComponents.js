@@ -63,7 +63,7 @@ const LogoText = styled.div`
     margin: 0;
     height: 255px;
     display: flex;
-    align-items: end;
+    align-items: flex-end;
     /* grid-area: name; */
     letter-spacing: 5px;
   }
