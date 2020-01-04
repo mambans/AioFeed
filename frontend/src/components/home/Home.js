@@ -24,6 +24,7 @@ const Home = () => {
 
     return () => {
       clearTimeout(topNavbarDelay.current);
+      document.documentElement.removeAttribute("homepage");
     };
   }, [setVisible]);
 
