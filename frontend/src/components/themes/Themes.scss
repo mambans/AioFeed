@@ -6,7 +6,7 @@ html[data-theme="original"] {
   // --accountContainerBackgroundColor: #000000c7;
   --accountContainerBackgroundColor: #05080cd6;
   --backgroundBlue: #01010b;
-  --backgroundImg: url("/images/treeCoffee.jpg");
+  --backgroundImg: url("/images/treeCoffee-blur2.jpg");
   --channelHover: rgb(179, 30, 248);
   --feedsMargin: 25px 0 0 430px;
   --feedsWidth: 81.6%;
@@ -36,7 +36,9 @@ html[data-theme="original"] {
   --refreshButtonHoverBackground: #00000026;
   --refreshButtonHoverColor: #ffffff;
   --refreshButtonShadow: 4px 4px 5px 0px #000c;
-  --scrollbarColors: rgb(75, 64, 49) rgb(5, 8, 10);
+  --scrollbarColors: rgb(68, 60, 49) rgb(5, 8, 10);
+  // --scrollbarColors: rgb(13, 29, 34) rgb(5, 8, 10);
+
   // --sidebarBackground: rgba(7, 7, 7, 0.5);
   --sidebarBackground: #050a0fc7;
   --subFeedHeaderBorder: 2px solid #bebebe29;
