@@ -88,7 +88,14 @@ export default ({ ...data }) => {
             />
           )}
         </a>
-        <p className={styles.duration}>{Utilities.formatTwitchVodsDuration(data.data.duration)}</p>
+        <div className={styles.vodVideoInfo}>
+          <p className={styles.vodDuration} title='duration'>
+            {Utilities.formatTwitchVodsDuration(data.data.duration)}
+          </p>
+          <p className={styles.view_count} title='views'>
+            {data.data.view_count}
+          </p>
+        </div>
       </ImageContainer>
       {data.data.title.length > 50 ? (
         <OverlayTrigger
