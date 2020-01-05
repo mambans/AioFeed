@@ -65,7 +65,7 @@ const fetchVodsFromMonitoredChannels = async vodChannels => {
         params: {
           user_id: channel,
           period: "month",
-          first: 5,
+          first: 10,
           // type: "archive",
           type: "all",
         },
