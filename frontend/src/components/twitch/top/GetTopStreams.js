@@ -5,6 +5,9 @@ import Utilities from "./../../../utilities/Utilities";
 export default async (game_param_url, pagination) => {
   let game;
   let error;
+  const nrStreams =
+    Math.floor((document.documentElement.clientWidth - 150) / 350) *
+    Math.floor((document.documentElement.clientHeight - (65 + 60)) / 351);
 
   if (game_param_url && game_param_url !== "undefined") {
     game = await axios
@@ -27,7 +30,7 @@ export default async (game_param_url, pagination) => {
   const topStreams = await axios
     .get(`https://api.twitch.tv/helix/streams`, {
       params: {
-        first: 27,
+        first: nrStreams,
         game_id: game.id,
         after: pagination ? pagination : null,
       },
