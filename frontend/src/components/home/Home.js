@@ -18,6 +18,8 @@ const Home = () => {
     setVisible(false);
     document.documentElement.setAttribute("homepage", "true");
 
+    window.scrollTo(0, 0);
+
     topNavbarDelay.current = setTimeout(() => {
       setVisible(true);
     }, 1000 * NAV_OPEN_DELAY_TIMER);
