@@ -307,7 +307,7 @@ function TwitchVods() {
                 setVodAmounts(nrStreams);
               }, 60000);
             }}>
-            Load more
+            Show more
           </p>
           <div />
         </StyledLoadmore>
