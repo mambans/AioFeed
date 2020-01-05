@@ -4,7 +4,7 @@ import { Spinner } from "react-bootstrap";
 import { twitch } from "react-icons-kit/fa/twitch";
 import Icon from "react-icons-kit";
 import Popup from "reactjs-popup";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import Alert from "react-bootstrap/Alert";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
@@ -15,6 +15,7 @@ import StreamEle from "./StreamElement";
 import styles from "./../Twitch.module.scss";
 import Utilities from "./../../../utilities/Utilities";
 import GameSearchBar from "./GameSearchBar";
+import { StyledLoadmore } from "./../styledComponents";
 
 const RenderTopStreams = () => {
   const game_param_url = decodeURI(new URL(window.location.href).pathname.split("/")[3]);
@@ -23,11 +24,26 @@ const RenderTopStreams = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
+  const oldTopStreams = useRef();
+
+  const loadMore = useCallback(() => {
+    setIsLoaded(false);
+    GetTopStreams(game_param_url, oldTopStreams.current.pagination.cursor).then(res => {
+      const allTopStreams = oldTopStreams.current.data.concat(res.topStreams.data.data);
+      oldTopStreams.current = {
+        data: allTopStreams,
+        pagination: res.topStreams.data.pagination,
+      };
+
+      setIsLoaded(true);
+      setTopStreams(allTopStreams);
+    });
+  }, [game_param_url]);
 
   const refresh = useCallback(() => {
     setRefreshing(true);
-    // setIsLoaded(false);
     GetTopStreams(game_param_url).then(res => {
+      oldTopStreams.current = res.topStreams.data;
       setTopStreams(res.topStreams.data.data);
       setRefreshing(false);
       setIsLoaded(true);
@@ -40,6 +56,7 @@ const RenderTopStreams = () => {
     setError(null);
     GetTopStreams(game_param_url)
       .then(res => {
+        oldTopStreams.current = res.topStreams.data;
         setTopStreams(res.topStreams.data.data);
         setRefreshing(false);
         setIsLoaded(true);
@@ -119,7 +136,7 @@ const RenderTopStreams = () => {
         </Alert>
       ) : (
         <div className={styles.topStreamsContainer}>
-          {isLoaded ? (
+          {topStreams ? (
             <TransitionGroup className='twitch-top-live' component={null}>
               {topStreams.map(stream => {
                 return (
@@ -134,7 +151,8 @@ const RenderTopStreams = () => {
                 );
               })}
             </TransitionGroup>
-          ) : (
+          ) : null}
+          {!isLoaded ? (
             <Spinner
               animation='grow'
               role='status'
@@ -142,6 +160,17 @@ const RenderTopStreams = () => {
               variant='light'>
               <span className='sr-only'>Loading...</span>
             </Spinner>
+          ) : (
+            <StyledLoadmore>
+              <div />
+              <p
+                onClick={() => {
+                  loadMore();
+                }}>
+                Load more
+              </p>
+              <div />
+            </StyledLoadmore>
           )}
         </div>
       )}

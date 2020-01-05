@@ -2,7 +2,7 @@ import axios from "axios";
 
 import Utilities from "./../../../utilities/Utilities";
 
-export default async game_param_url => {
+export default async (game_param_url, pagination) => {
   let game;
   let error;
 
@@ -29,6 +29,7 @@ export default async game_param_url => {
       params: {
         first: 27,
         game_id: game.id,
+        after: pagination ? pagination : null,
       },
       headers: {
         Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
