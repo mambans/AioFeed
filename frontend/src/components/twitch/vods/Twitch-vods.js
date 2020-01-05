@@ -146,7 +146,7 @@ function TwitchVods() {
         },
         { threshold: 1 }
       ),
-    []
+    [nrStreams]
   );
 
   const refresh = useCallback(async forceRefresh => {
