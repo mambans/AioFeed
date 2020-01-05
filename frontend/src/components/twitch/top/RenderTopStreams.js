@@ -25,6 +25,7 @@ const RenderTopStreams = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const oldTopStreams = useRef();
+  const loadmoreRef = useRef();
 
   const loadMore = useCallback(() => {
     setIsLoaded(false);
@@ -37,6 +38,16 @@ const RenderTopStreams = () => {
 
       setIsLoaded(true);
       setTopStreams(allTopStreams);
+
+      setTimeout(() => {
+        if (loadmoreRef.current) {
+          loadmoreRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+            inline: "nearest",
+          });
+        }
+      }, 0);
     });
   }, [game_param_url]);
 
@@ -160,18 +171,17 @@ const RenderTopStreams = () => {
               variant='light'>
               <span className='sr-only'>Loading...</span>
             </Spinner>
-          ) : (
-            <StyledLoadmore>
-              <div />
-              <p
-                onClick={() => {
-                  loadMore();
-                }}>
-                Load more
-              </p>
-              <div />
-            </StyledLoadmore>
-          )}
+          ) : null}
+          <StyledLoadmore ref={loadmoreRef}>
+            <div />
+            <p
+              onClick={() => {
+                loadMore();
+              }}>
+              Load more
+            </p>
+            <div />
+          </StyledLoadmore>
         </div>
       )}
     </>
