@@ -183,7 +183,7 @@ function TwitchVods() {
           // setIsLoaded(true);
           setRefreshing(false);
 
-          // Enable load more vods on Scroll
+          // Enable for "load more" vods on Scroll
           // if (loadmoreRef.current) observer.observe(loadmoreRef.current);
         })
         .catch(data => {
@@ -199,7 +199,8 @@ function TwitchVods() {
     return () => {
       window.removeEventListener("blur", windowBlurHandler);
       window.removeEventListener("focus", windowFocusHandler);
-      observer.unobserve(loadmore);
+      // Enable for "load more" vods on Scroll
+      // observer.unobserve(loadmore);
       clearTimeout(resetVodAmountsTimer.current);
     };
   }, [windowBlurHandler, windowFocusHandler]);
