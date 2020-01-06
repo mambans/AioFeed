@@ -32,6 +32,25 @@
   color: var(--greyInfo);
 }
 
+.vodDates {
+  // grid-area: info;
+  // color: var(--greyInfo);
+
+  & > div:hover {
+    #timeago {
+      display: none;
+    }
+
+    #time {
+      display: flex;
+    }
+  }
+
+  #time {
+    display: none;
+  }
+}
+
 .vodVideoInfo {
   bottom: 30px;
   position: relative;

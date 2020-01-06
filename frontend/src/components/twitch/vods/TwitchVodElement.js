@@ -3,6 +3,7 @@ import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
+import moment from "moment";
 
 import { VideoContainer, VideoTitle, ImageContainer } from "./../../sharedStyledComponents";
 import styles from "../Twitch.module.scss";
@@ -13,6 +14,17 @@ export default ({ ...data }) => {
   const [previewAvailable, setPreviewAvailable] = useState(null);
   const imgRef = useRef();
   const hoverTimeoutRef = useRef();
+
+  const durationToMs = duration => {
+    const hms = Utilities.formatTwitchVodsDuration(duration); // your input string
+    const a = hms.split(":"); // split it at the colons
+
+    // minutes are worth 60 seconds. Hours are worth 60 minutes.
+    const seconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2];
+    const ms = seconds * 1000;
+
+    return ms;
+  };
 
   const formatViewerNumbers = viewers => {
     if (viewers.toString().length === 7) {
@@ -142,19 +154,38 @@ export default ({ ...data }) => {
         </div>
         <div
           className={styles.gameContainer}
-          style={{ gridTemplateColumns: "50% 50%", color: "#979797" }}>
+          style={{ gridTemplateColumns: "40% 60%", color: "#979797" }}>
           <p className={styles.game} style={{ gridColumn: 1, paddingLeft: "5px" }}>
             {data.data.type}
           </p>
-          <Moment
-            className={styles.viewers}
-            style={{
-              gridColumn: 2,
-              justifySelf: "right",
-            }}
-            fromNow>
-            {data.data.endDate}
-          </Moment>
+
+          <div className={styles.vodDates}>
+            <div>
+              <Moment
+                className={styles.viewers}
+                id={styles.timeago}
+                style={{
+                  gridColumn: 2,
+                  justifySelf: "right",
+                }}
+                fromNow>
+                {data.data.endDate}
+              </Moment>
+              <p
+                className={styles.viewers}
+                id={styles.time}
+                style={{
+                  gridColumn: 2,
+                  justifySelf: "right",
+                }}>
+                {moment(
+                  new Date(new Date(data.data.endDate).getTime() - durationToMs (data.data.duration))
+                ).format("dd HH:MM") +
+                  "→" +
+                  moment(data.data.endDate).format("dd HH:MM")}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </VideoContainer>
