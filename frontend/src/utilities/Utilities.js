@@ -19,6 +19,7 @@ const Utilities = {
     width: "22px",
     left: "1.5%",
     bottom: "-25px",
+    background: "none",
   },
   alertWarning: {
     textAlign: "center",
