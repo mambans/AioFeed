@@ -19,16 +19,17 @@ import { StyledLoadmore } from "./../styledComponents";
 
 const RenderTopStreams = () => {
   const game_param_url = decodeURI(new URL(window.location.href).pathname.split("/")[3]);
+  document.title = `Notifies | ${game_param_url || "All"} Top`;
 
   const [topStreams, setTopStreams] = useState();
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [loadmoreLoaded, setLoadmoreLoaded] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const oldTopStreams = useRef();
   const loadmoreRef = useRef();
 
   const loadMore = useCallback(() => {
-    setIsLoaded(false);
+    setLoadmoreLoaded(false);
     GetTopStreams(game_param_url, oldTopStreams.current.pagination.cursor).then(res => {
       const allTopStreams = oldTopStreams.current.data.concat(res.topStreams.data.data);
       oldTopStreams.current = {
@@ -36,7 +37,7 @@ const RenderTopStreams = () => {
         pagination: res.topStreams.data.pagination,
       };
 
-      setIsLoaded(true);
+      setLoadmoreLoaded(true);
       setTopStreams(allTopStreams);
 
       setTimeout(() => {
@@ -57,20 +58,16 @@ const RenderTopStreams = () => {
       oldTopStreams.current = res.topStreams.data;
       setTopStreams(res.topStreams.data.data);
       setRefreshing(false);
-      setIsLoaded(true);
     });
   }, [game_param_url]);
 
   useEffect(() => {
     setRefreshing(true);
-    setIsLoaded(false);
-    setError(null);
     GetTopStreams(game_param_url)
       .then(res => {
         oldTopStreams.current = res.topStreams.data;
         setTopStreams(res.topStreams.data.data);
         setRefreshing(false);
-        setIsLoaded(true);
       })
       .catch(e => {
         if ((e.message = "game is undefined")) {
@@ -79,7 +76,6 @@ const RenderTopStreams = () => {
           setError(e.message);
         }
         setRefreshing(false);
-        setIsLoaded(true);
       });
   }, [game_param_url]);
 
@@ -148,22 +144,45 @@ const RenderTopStreams = () => {
       ) : (
         <div className={styles.topStreamsContainer}>
           {topStreams ? (
-            <TransitionGroup className='twitch-top-live' component={null}>
-              {topStreams.map(stream => {
-                return (
-                  <CSSTransition
-                    // in={true}
-                    key={stream.id}
-                    timeout={1000}
-                    classNames='fade-1s'
-                    unmountOnExit>
-                    <StreamEle data={stream} />
-                  </CSSTransition>
-                );
-              })}
-            </TransitionGroup>
-          ) : null}
-          {!isLoaded ? (
+            <>
+              <TransitionGroup className='twitch-top-live' component={null}>
+                {topStreams.map(stream => {
+                  return (
+                    <CSSTransition
+                      // in={true}
+                      key={stream.id}
+                      timeout={1000}
+                      classNames='fade-1s'
+                      unmountOnExit>
+                      <StreamEle data={stream} />
+                    </CSSTransition>
+                  );
+                })}
+              </TransitionGroup>
+              <StyledLoadmore ref={loadmoreRef}>
+                <div />
+                <p
+                  onClick={() => {
+                    loadMore();
+                  }}>
+                  {!loadmoreLoaded ? (
+                    <>
+                      Loading..
+                      <Spinner
+                        animation='border'
+                        role='status'
+                        variant='light'
+                        style={{ ...Utilities.loadingSpinnerSmall, marginLeft: "10px" }}
+                      />
+                    </>
+                  ) : (
+                    "Load more"
+                  )}
+                </p>
+                <div />
+              </StyledLoadmore>
+            </>
+          ) : (
             <Spinner
               animation='grow'
               role='status'
@@ -171,17 +190,7 @@ const RenderTopStreams = () => {
               variant='light'>
               <span className='sr-only'>Loading...</span>
             </Spinner>
-          ) : null}
-          <StyledLoadmore ref={loadmoreRef}>
-            <div />
-            <p
-              onClick={() => {
-                loadMore();
-              }}>
-              Load more
-            </p>
-            <div />
-          </StyledLoadmore>
+          )}
         </div>
       )}
     </>
