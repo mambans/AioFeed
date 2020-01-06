@@ -38,12 +38,15 @@ function Themeselector() {
           document.documentElement.setAttribute("data-theme", "christmas");
           break;
         case 0:
-          if (currentDate <= 7) {
+          if (currentDate <= 1) {
             document.documentElement.setAttribute("data-theme", "new year's eve");
+          } else {
+            document.documentElement.removeAttribute("data-theme");
           }
           break;
         default:
-          document.documentElement.setAttribute("data-theme", "default");
+          // document.documentElement.setAttribute("data-theme", "default");
+          document.documentElement.removeAttribute("data-theme");
       }
     } else {
       document.documentElement.setAttribute("data-theme", theme);
