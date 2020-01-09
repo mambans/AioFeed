@@ -100,7 +100,7 @@ const StyledConnectYoutube = styled(Button)`
 
 const StyledLogoutContiner = styled.div`
   bottom: 0;
-  position: fixed;
+  position: absolute;
   right: 0;
   width: 160px;
   margin-right: 20px;
