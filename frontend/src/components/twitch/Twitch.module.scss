@@ -224,8 +224,15 @@
   // width: max-content;
   color: var(--greyInfo);
   font-size: 1.1rem;
-
   left: 10%;
+  display: flex;
+
+  span {
+    width: 42px;
+    display: flex;
+    justify-content: right;
+    overflow: hidden;
+  }
 }
 .vodRefreshTimer {
   position: relative;

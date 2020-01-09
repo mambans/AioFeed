@@ -18,6 +18,7 @@ import {
   ButtonList,
 } from "./../sharedStyledComponents";
 import RenderFollowedChannelList from "./channelList/RenderFollowedChannelList";
+import { HeaderLeftSubcontainer } from "./../twitch/styledComponents";
 
 const SubFeedError = props => {
   const { error } = props;
@@ -58,13 +59,7 @@ export default data => {
   return (
     <CSSTransition in={true} timeout={1000} classNames='fade-1s' unmountOnExit>
       <HeaderContainer>
-        <div
-          style={{
-            width: "300px",
-            minWidth: "300px",
-            alignItems: "end",
-            display: "flex",
-          }}>
+        <HeaderLeftSubcontainer>
           <RefreshButton
             onClick={data.refresh}
             // disabled={data.requestError && data.requestError.code === 403 ? true : false}
@@ -84,26 +79,35 @@ export default data => {
           <Moment key={data.isLoaded || new Date()} className={styles.lastRefresh} fromNow>
             {data.isLoaded || new Date()}
           </Moment>
-        </div>
+        </HeaderLeftSubcontainer>
         <SubFeedError error={data.requestError}></SubFeedError>
-        <HeaderTitle style={{ marginRight: "300px " }}>
+        <HeaderTitle>
+          <Icon icon={youtube} size={32} style={{ padding: "0 10px", color: "#a80000" }}></Icon>
           Youtube
-          <Icon icon={youtube} size={32} style={{ paddingLeft: "10px", color: "#a80000" }}></Icon>
         </HeaderTitle>
         <Popup
           placeholder='""'
           arrow={false}
           trigger={
-            <ButtonList>
-              <Icon
-                icon={list2}
-                size={22}
-                style={{
-                  height: "22px",
-                  alignItems: "center",
-                  display: "flex",
-                }}></Icon>
-            </ButtonList>
+            <div
+              style={{
+                width: "50px",
+                minWidth: "50px",
+                marginLeft: "250px",
+                justifyContent: "right",
+                display: "flex",
+              }}>
+              <ButtonList>
+                <Icon
+                  icon={list2}
+                  size={22}
+                  style={{
+                    height: "22px",
+                    alignItems: "center",
+                    display: "flex",
+                  }}></Icon>
+              </ButtonList>
+            </div>
           }
           position='left top'
           className='popupModal'>

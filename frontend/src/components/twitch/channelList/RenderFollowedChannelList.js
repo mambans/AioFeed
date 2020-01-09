@@ -76,7 +76,7 @@ const RenderFollowedChannelList = data => {
     };
 
     try {
-      fetchProfileImages(data.followedChannels);
+      if (data.followedChannels.data) fetchProfileImages(data.followedChannels);
     } catch (error) {
       console.error(error);
     }

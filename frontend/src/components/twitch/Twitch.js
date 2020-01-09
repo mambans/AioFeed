@@ -1,30 +1,27 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { list2 } from "react-icons-kit/icomoon/list2";
-import { reload } from "react-icons-kit/iconic/reload";
-import { Spinner } from "react-bootstrap";
-import { twitch } from "react-icons-kit/fa/twitch";
 import Alert from "react-bootstrap/Alert";
-import Countdown from "react-countdown-now";
-import Icon from "react-icons-kit";
-import Popup from "reactjs-popup";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 
-import { HeaderContainerTwitchLive } from "./styledComponents";
-import { RefreshButton, HeaderTitle, ButtonList } from "./../sharedStyledComponents";
 import FeedsContext from "./../feed/FeedsContext";
-import RenderFollowedChannelList from "./channelList/RenderFollowedChannelList";
 import StreamEle from "./StreamElement.js";
 import styles from "./Twitch.module.scss";
 import TwitchSidebar from "./sidebar/TwitchSidebar";
 import Utilities from "../../utilities/Utilities";
+import Header from "./Header";
 
 function Twitch({ data }) {
   const [show, setShow] = useState(true);
+  const resetTimer = useRef();
 
   const windowFocusHandler = useCallback(() => {
     document.title = "Notifies | Feed";
     // data.refresh();
-  }, []);
+    if (!resetTimer.current) {
+      resetTimer.current = setTimeout(() => {
+        data.resetNewlyAddedStreams();
+      }, 5000);
+    }
+  }, [data]);
 
   const windowBlurHandler = useCallback(() => {
     // document.title = "Notifies | Feed";
@@ -42,68 +39,14 @@ function Twitch({ data }) {
     return () => {
       window.removeEventListener("blur", windowBlurHandler);
       window.removeEventListener("focus", windowFocusHandler);
+      clearTimeout(resetTimer.current);
     };
   }, [data.liveStreams, windowBlurHandler, windowFocusHandler]);
 
   return (
     <>
-      <HeaderContainerTwitchLive>
-        <div
-          style={{
-            width: "300px",
-            minWidth: "300px",
-            alignItems: "end",
-            display: "flex",
-          }}>
-          <RefreshButton onClick={refresh}>
-            {data.refreshing ? (
-              <div style={{ height: "25.5px" }}>
-                <Spinner
-                  animation='border'
-                  role='status'
-                  variant='light'
-                  style={Utilities.loadingSpinnerSmall}></Spinner>
-              </div>
-            ) : (
-              <>
-                <Icon icon={reload} size={22}></Icon>
-              </>
-            )}
-          </RefreshButton>
-          <span key={data.refreshTimer} className={styles.refreshTimer}>
-            <Countdown
-              date={data.refreshTimer}
-              zeroPadDays={0}
-              zeroPadTime={2}
-              key={data.refreshTimer}
-              className={styles.refreshTimer}
-            />
-          </span>
-        </div>
-        <HeaderTitle>
-          Twitch Live
-          <Icon icon={twitch} size={32} style={{ paddingLeft: "10px", color: "#6f166f" }}></Icon>
-        </HeaderTitle>
-        <Popup
-          placeholder='""'
-          arrow={false}
-          trigger={
-            <ButtonList>
-              <Icon
-                icon={list2}
-                size={22}
-                style={{
-                  height: "22px",
-                  alignItems: "center",
-                  display: "flex",
-                }}></Icon>
-            </ButtonList>
-          }
-          position='left top'
-          className='popupModal'>
-          <RenderFollowedChannelList followedChannels={data.followedChannels} />
-        </Popup>
-      </HeaderContainerTwitchLive>
+      <Header data={data} refresh={refresh} />
+
       {data.error ? (
         show ? (
           <Alert

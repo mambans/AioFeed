@@ -15,8 +15,8 @@ const Utilities = {
   },
   loadingSpinnerSmall: {
     position: "initial",
-    height: "22px",
-    width: "22px",
+    height: "24px",
+    width: "24px",
     left: "1.5%",
     bottom: "-25px",
     background: "none",

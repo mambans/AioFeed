@@ -46,4 +46,83 @@ const StyledLoadmore = styled.div`
   }
 `;
 
-export { HeaderContainerTwitchLive, StyledLoadmore };
+const StyledCountdownCircle = styled.div`
+  position: relative;
+  margin: auto;
+  height: 24px;
+  width: 24px;
+  text-align: center;
+
+  div {
+    color: white;
+    display: inline-block;
+    line-height: 24px;
+  }
+
+  svg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 24px;
+    height: 24px;
+    transform: rotateY(-180deg) rotateZ(-90deg);
+  }
+
+  svg circle {
+    stroke-dasharray: 67.8px;
+    /* stroke-dasharray: 113px; */
+    stroke-dashoffset: 0px;
+    stroke-linecap: round;
+    stroke-width: 3px;
+    stroke: white;
+    fill: none;
+    animation: countdown 20s linear 1 forwards;
+  }
+
+  @keyframes countdown {
+    from {
+      stroke-dashoffset: 0px;
+    }
+    to {
+      stroke-dashoffset: 67.8px;
+      /* stroke-dashoffset: 113px; */
+    }
+  }
+`;
+
+const StyledCountdownLine = styled.div`
+  svg {
+    height: 4px;
+    width: 200px;
+    animation: countdown2 20s linear 1 forwards;
+
+    line {
+      stroke: rgb(255, 0, 0);
+      stroke-width: 4;
+    }
+  }
+
+  @keyframes countdown2 {
+    from {
+      width: 200px;
+    }
+    to {
+      width: 0px;
+    }
+  }
+`;
+
+const HeaderLeftSubcontainer = styled.div`
+  width: 300px;
+  min-width: 300px;
+  align-items: end;
+  display: flex;
+`;
+
+export {
+  HeaderContainerTwitchLive,
+  StyledLoadmore,
+  StyledCountdownCircle,
+  HeaderLeftSubcontainer,
+  StyledCountdownLine,
+};

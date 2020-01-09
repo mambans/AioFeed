@@ -108,12 +108,12 @@ function DataHandler({ children }) {
   } else {
     return children({
       isLoaded,
+      initiated,
+      error,
+      videos: videos.current,
+      followedChannels: followedChannels.current,
       refresh,
       requestError,
-      error,
-      followedChannels: followedChannels.current,
-      videos: videos.current,
-      initiated,
     });
   }
 }

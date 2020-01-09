@@ -75,8 +75,6 @@ const fetchVodsFromMonitoredChannels = async vodChannels => {
         },
       });
 
-      // console.log("asd:", response)
-
       response.data.data.forEach(vod => {
         followedStreamVods.push(vod);
       });

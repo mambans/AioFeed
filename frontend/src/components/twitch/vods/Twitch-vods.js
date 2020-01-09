@@ -1,91 +1,17 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { list2 } from "react-icons-kit/icomoon/list2";
-import { reload } from "react-icons-kit/iconic/reload";
 import { Spinner } from "react-bootstrap";
-import { video } from "react-icons-kit/iconic/video";
-import Icon from "react-icons-kit";
-import Moment from "react-moment";
-import Popup from "reactjs-popup";
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import _ from "lodash";
 
-import AddChannelForm from "./VodSettings";
 import ErrorHandeling from "../../error/Error";
 import getFollowedVods from "./GetFollowedVods";
 import TwitchVodElement from "./TwitchVodElement";
-import styles from "./../Twitch.module.scss";
 import Utilities from "../../../utilities/Utilities";
-import {
-  RefreshButton,
-  HeaderTitle,
-  HeaderContainer,
-  SubFeedContainer,
-  ButtonList,
-} from "./../../sharedStyledComponents";
+import { SubFeedContainer } from "./../../sharedStyledComponents";
+
+import Header from "./Header";
 
 import { StyledLoadmore } from "./../styledComponents";
-
-const HeaderContainerFade = React.forwardRef((props, ref) => {
-  const { refresh, refreshing, vods } = props;
-  return (
-    <HeaderContainer ref={ref}>
-      <div
-        style={{
-          width: "300px",
-          minWidth: "300px",
-          alignItems: "end",
-          display: "flex",
-        }}>
-        <RefreshButton
-          onClick={() => {
-            refresh(true);
-          }}>
-          {refreshing ? (
-            <div style={{ height: "25.5px" }}>
-              <Spinner
-                animation='border'
-                role='status'
-                variant='light'
-                style={Utilities.loadingSpinnerSmall}></Spinner>
-            </div>
-          ) : (
-            <Icon icon={reload} size={22}></Icon>
-          )}
-        </RefreshButton>
-        <Moment fromNow className={styles.vodRefreshTimer} interval={60000}>
-          {(vods && vods.loaded) || new Date()}
-        </Moment>
-        {/* <Moment
-            from={(vods && vods.expire) || new Date()}
-            ago
-            className={styles.vodRefreshTimer}></Moment> */}
-      </div>
-      <HeaderTitle>
-        Twitch vods
-        <Icon icon={video} size={32} style={{ paddingLeft: "10px", color: "#6f166f" }}></Icon>
-      </HeaderTitle>
-      <Popup
-        placeholder='Channel name..'
-        arrow={false}
-        trigger={
-          <ButtonList variant='outline-secondary' className={styles.settings}>
-            <Icon
-              icon={list2}
-              size={22}
-              style={{
-                height: "22px",
-                alignItems: "center",
-                display: "flex",
-              }}></Icon>
-          </ButtonList>
-        }
-        position='left top'
-        className='settingsPopup'>
-        <AddChannelForm refresh={refresh} />
-      </Popup>
-    </HeaderContainer>
-  );
-});
 
 function TwitchVods() {
   const nrStreams =
@@ -102,6 +28,7 @@ function TwitchVods() {
   const resetVodAmountsTimer = useRef();
   const VodHeaderRef = useRef();
 
+  //eslint-disable-next-line
   const observer = useMemo(
     () =>
       new IntersectionObserver(
@@ -171,6 +98,7 @@ function TwitchVods() {
   const windowBlurHandler = useCallback(() => {}, []);
 
   useEffect(() => {
+    //eslint-disable-next-line
     const loadmore = loadmoreRef.current;
 
     async function fetchData() {
@@ -205,16 +133,6 @@ function TwitchVods() {
     };
   }, [windowBlurHandler, windowFocusHandler]);
 
-  // function throttle(fn, wait) {
-  //   var time = Date.now();
-  //   return function() {
-  //     if (time + wait - Date.now() < 0) {
-  //       fn();
-  //       time = Date.now();
-  //     }
-  //   };
-  // }
-
   if (Utilities.getCookie("Twitch-access_token") === null) {
     return (
       <ErrorHandeling
@@ -230,12 +148,7 @@ function TwitchVods() {
   if (vods === undefined || !vods || !vods.data) {
     return (
       <>
-        <HeaderContainerFade
-          refresh={refresh}
-          refreshing={refreshing}
-          vods={vods}
-          ref={VodHeaderRef}
-        />
+        <Header refresh={refresh} refreshing={refreshing} vods={vods} ref={VodHeaderRef} />
         <Spinner animation='grow' role='status' style={Utilities.loadingSpinner} variant='light'>
           <span className='sr-only'>Loading...</span>
         </Spinner>
@@ -252,12 +165,7 @@ function TwitchVods() {
   } else {
     return (
       <>
-        <HeaderContainerFade
-          refresh={refresh}
-          refreshing={refreshing}
-          vods={vods}
-          ref={VodHeaderRef}
-        />
+        <Header refresh={refresh} refreshing={refreshing} vods={vods} ref={VodHeaderRef} />
         <SubFeedContainer>
           <TransitionGroup className='twitch-vods' component={null}>
             {vods.data.slice(0, vodAmounts).map(vod => {

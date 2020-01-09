@@ -1,19 +1,13 @@
-import { list2 } from "react-icons-kit/icomoon/list2";
-import { reload } from "react-icons-kit/iconic/reload";
 import { Spinner } from "react-bootstrap";
-import { twitch } from "react-icons-kit/fa/twitch";
-import Icon from "react-icons-kit";
-import Popup from "reactjs-popup";
 import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
 
-import { HeaderContainerTwitchLive } from "./styledComponents";
-import { RefreshButton, HeaderTitle, ButtonList } from "./../sharedStyledComponents";
 import ErrorHandeling from "../error/Error";
 import getFollowedChannels from "./GetFollowedChannels";
 import getFollowedOnlineStreams from "./GetFollowedStreams";
 import NotificationsContext from "./../notifications/NotificationsContext";
 import styles from "./Twitch.module.scss";
 import Utilities from "../../utilities/Utilities";
+import Header from "./Header";
 
 const REFRESH_RATE = 20; // seconds
 
@@ -22,7 +16,7 @@ export default ({ children }) => {
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
-  const [refreshTimer, setRefreshTimer] = useState();
+  const [refreshTimer, setRefreshTimer] = useState(20);
   const [refreshing, setRefreshing] = useState(false);
   const followedChannels = useRef([]);
   const liveStreams = useRef([]);
@@ -63,64 +57,76 @@ export default ({ children }) => {
     }
   }, []);
 
-  const refresh = useCallback(async () => {
-    // console.log("refreshing");
-    setRefreshing(true);
-    try {
-      followedChannels.current = await getFollowedChannels();
+  const refresh = useCallback(
+    async disableNotifications => {
+      // console.log("refreshing");
+      setRefreshing(true);
+      try {
+        followedChannels.current = await getFollowedChannels();
 
-      const streams = await getFollowedOnlineStreams(followedChannels.current);
+        if (
+          followedChannels.current.data &&
+          followedChannels.current.data.data &&
+          followedChannels.current.data.data[0]
+        ) {
+          document.cookie = `Twitch-username=${followedChannels.current.data.data[0].from_name}; path=/`;
+        }
+        const streams = await getFollowedOnlineStreams(followedChannels.current);
 
-      if (streams.status === 200) {
-        setError(null);
-        oldLiveStreams.current = liveStreams.current;
-        liveStreams.current = streams.data;
-        setRefreshing(false);
+        if (streams.status === 200) {
+          setError(null);
+          oldLiveStreams.current = liveStreams.current;
+          liveStreams.current = streams.data;
+          setRefreshing(false);
 
-        liveStreams.current.forEach(async stream => {
-          let isStreamLive = oldLiveStreams.current.find(
-            ({ user_name }) => user_name === stream.user_name
-          );
+          if (!disableNotifications) {
+            liveStreams.current.forEach(async stream => {
+              let isStreamLive = oldLiveStreams.current.find(
+                ({ user_name }) => user_name === stream.user_name
+              );
 
-          if (!isStreamLive) {
-            addSystemNotification("online", stream);
+              if (!isStreamLive) {
+                addSystemNotification("online", stream);
 
-            await addNotification(stream, "Live");
+                await addNotification(stream, "Live");
 
-            newlyAddedStreams.current.push(stream.user_name);
-            stream.newlyAdded = true;
+                newlyAddedStreams.current.push(stream.user_name);
+                stream.newlyAdded = true;
 
-            if (document.title.length > 15) {
-              const title = document.title.substring(4);
-              const count = parseInt(document.title.substring(1, 2)) + 1;
-              document.title = `(${count}) ${title}`;
-            } else {
-              const title = document.title;
-              document.title = `(${1}) ${title}`;
-            }
+                if (document.title.length > 15) {
+                  const title = document.title.substring(4);
+                  const count = parseInt(document.title.substring(1, 2)) + 1;
+                  document.title = `(${count}) ${title}`;
+                } else {
+                  const title = document.title;
+                  document.title = `(${1}) ${title}`;
+                }
+              }
+            });
+
+            oldLiveStreams.current.forEach(stream => {
+              let isStreamLive = liveStreams.current.find(
+                ({ user_name }) => user_name === stream.user_name
+              );
+              if (!isStreamLive) {
+                // console.log(stream.user_name, "went Offline.");
+                addNotification(stream, "Offline");
+              }
+            });
           }
-        });
+        } else if (streams.status === 201) {
+          setError(streams.error);
+          setRefreshing(false);
+        }
 
-        oldLiveStreams.current.forEach(stream => {
-          let isStreamLive = liveStreams.current.find(
-            ({ user_name }) => user_name === stream.user_name
-          );
-          if (!isStreamLive) {
-            // console.log(stream.user_name, "went Offline.");
-            addNotification(stream, "Offline");
-          }
-        });
-      } else if (streams.status === 201) {
-        setError(streams.error);
-        setRefreshing(false);
+        // setRefreshing(false);
+        // setIsLoaded(true);
+      } catch (error) {
+        setError(error);
       }
-
-      // setRefreshing(false);
-      // setIsLoaded(true);
-    } catch (error) {
-      setError(error);
-    }
-  }, [addNotification, addSystemNotification]);
+    },
+    [addNotification, addSystemNotification]
+  );
 
   useEffect(() => {
     async function fetchData() {
@@ -130,22 +136,26 @@ export default ({ children }) => {
 
         if (!timer.current) {
           console.log("---Twtich Datahandler SetInterval()---");
+
+          await refresh(true);
+          await setIsLoaded(true);
+
+          // followedChannels.current = await getFollowedChannels();
+          // await getFollowedOnlineStreams(followedChannels.current).then(res => {
+          //   if (res.status === 200) {
+          //     liveStreams.current = res.data;
+          //   } else {
+          //     setError(res.error);
+          //   }
+          //   setIsLoaded(true);
+          // });
+
           setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
           timer.current = setInterval(() => {
             const timeNow = new Date();
             setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
             refresh();
           }, REFRESH_RATE * 1000);
-          followedChannels.current = await getFollowedChannels();
-
-          await getFollowedOnlineStreams(followedChannels.current).then(res => {
-            if (res.status === 200) {
-              liveStreams.current = res.data;
-            } else {
-              setError(res.error);
-            }
-            setIsLoaded(true);
-          });
         }
 
         // fetchProfileImages(followedChannels.current);
@@ -162,56 +172,26 @@ export default ({ children }) => {
   }, [refresh]);
 
   if (!isLoaded) {
+    // if (true) {
     return (
       <>
-        <HeaderContainerTwitchLive>
-          <div
-            style={{
-              width: "300px",
-              minWidth: "300px",
-              alignItems: "end",
-              display: "flex",
-            }}>
-            <RefreshButton onClick={refresh}>
-              {refreshing ? (
-                <div style={{ height: "25.5px" }}>
-                  <Spinner
-                    animation='border'
-                    role='status'
-                    variant='light'
-                    style={Utilities.loadingSpinnerSmall}></Spinner>
-                </div>
-              ) : (
-                <>
-                  <Icon icon={reload} size={22}></Icon>
-                </>
-              )}
-            </RefreshButton>
-          </div>
-          <HeaderTitle>
-            Twitch Live
-            <Icon icon={twitch} size={32} style={{ paddingLeft: "10px", color: "#6f166f" }}></Icon>
-          </HeaderTitle>
-          <Popup
-            placeholder='""'
-            arrow={false}
-            trigger={
-              <ButtonList>
-                <Icon
-                  icon={list2}
-                  size={22}
-                  style={{
-                    height: "22px",
-                    alignItems: "center",
-                    display: "flex",
-                  }}></Icon>
-              </ButtonList>
-            }
-            position='left center'
-            className='followedList'>
-            <div></div>
-          </Popup>
-        </HeaderContainerTwitchLive>
+        <Header
+          data={{
+            refreshing: refreshing,
+            refreshTimer: refreshTimer,
+            followedChannels: followedChannels.current,
+
+            // REFRESH_RATE: REFRESH_RATE,
+            // error: error,
+            // liveStreams: liveStreams.current,
+            // newlyAddedStreams: newlyAddedStreams.current,
+            // resetNewlyAddedStreams: resetNewlyAddedStreams.current,
+            // setRefreshTimer: setRefreshTimer,
+            // timer: timer.current,
+          }}
+          refresh={refresh}
+        />
+
         <div
           className={styles.container}
           style={{
@@ -234,17 +214,18 @@ export default ({ children }) => {
     );
   } else {
     return children({
-      liveStreams: liveStreams.current,
-      refresh: refresh,
-      refreshTimer: refreshTimer,
-      newlyAddedStreams: newlyAddedStreams.current,
-      resetNewlyAddedStreams: resetNewlyAddedStreams,
-      error: error,
-      timer: timer.current,
       refreshing: refreshing,
-      REFRESH_RATE: REFRESH_RATE,
-      setRefreshTimer: setRefreshTimer,
+      refreshTimer: refreshTimer,
       followedChannels: followedChannels.current,
+      error: error,
+      liveStreams: liveStreams.current,
+      resetNewlyAddedStreams: resetNewlyAddedStreams,
+      refresh: refresh,
+      newlyAddedStreams: newlyAddedStreams.current,
+      REFRESH_RATE: REFRESH_RATE,
+
+      // timer: timer.current,
+      // setRefreshTimer: setRefreshTimer,
     });
   }
 };

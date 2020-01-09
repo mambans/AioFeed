@@ -91,7 +91,7 @@ const RenderTopStreams = () => {
           }}>
           <RefreshButton onClick={refresh}>
             {refreshing ? (
-              <div style={{ height: "25.5px" }}>
+              <div style={{ height: "24px" }}>
                 <Spinner
                   animation='border'
                   role='status'
@@ -105,33 +105,36 @@ const RenderTopStreams = () => {
             )}
           </RefreshButton>
         </div>
-        <HeaderTitle style={{ width: "200px", marginRight: "auto" }}>
-          Top Streams <Icon icon={twitch} size={32} style={{ paddingLeft: "10px" }}></Icon>
+        <HeaderTitle style={{ marginLeft: "10px" }}>
+          <Icon icon={twitch} size={32} style={{ paddingLeft: "10px", color: "#6f166f" }}></Icon>{" "}
+          Top Streams
         </HeaderTitle>
-        <GameSearchBar gameName={game_param_url} />
-        <Popup
-          placeholder='""'
-          arrow={false}
-          trigger={
-            <ButtonList style={{ width: "300px", justifyContent: "center" }}>
-              {game_param_url !== "" && game_param_url !== "" ? game_param_url : "All"}
-              <Icon
-                icon={list2}
-                size={22}
-                style={{
-                  height: "22px",
-                  alignItems: "center",
-                  display: "flex",
-                  paddingLeft: "15px",
-                  right: "7px",
-                  position: "absolute",
-                }}></Icon>
-            </ButtonList>
-          }
-          position='bottom center'
-          className='popupModal'>
-          <RenderTopGamesList />
-        </Popup>
+        <div style={{ display: "flex" }}>
+          <GameSearchBar gameName={game_param_url} />
+          <Popup
+            placeholder='""'
+            arrow={false}
+            trigger={
+              <ButtonList style={{ width: "300px", justifyContent: "center" }}>
+                {game_param_url !== "" && game_param_url !== "" ? game_param_url : "All"}
+                <Icon
+                  icon={list2}
+                  size={22}
+                  style={{
+                    height: "22px",
+                    alignItems: "center",
+                    display: "flex",
+                    paddingLeft: "15px",
+                    right: "7px",
+                    position: "absolute",
+                  }}></Icon>
+              </ButtonList>
+            }
+            position='bottom center'
+            className='popupModal'>
+            <RenderTopGamesList />
+          </Popup>
+        </div>
       </div>
       {error ? (
         <Alert

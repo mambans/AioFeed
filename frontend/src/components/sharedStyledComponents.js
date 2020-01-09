@@ -37,11 +37,16 @@ const ButtonList = styled(Button).attrs({ variant: "outline-secondary" })`
 const HeaderTitle = styled.h4`
   text-align: center;
   color: var(--subFeedHeaderColor);
+  /* margin: 0; */
   margin: auto;
   letter-spacing: 1px;
   width: 100%;
   margin: 2px auto;
-  margin-right: calc(300px - 48px);
+  /* margin-right: calc(300px - 48px); */
+
+  /* font-size: 1.25rem;
+  font-weight: bold;
+  color: #d5d5d5; */
 `;
 
 const HeaderContainer = styled.div`

@@ -121,13 +121,14 @@ function Feed(props) {
                   />
                   {data.error ? <ErrorHandeling data={data.error}></ErrorHandeling> : null}
                   <Youtube
-                    isLoaded={data.isLoaded}
-                    refresh={data.refresh}
                     requestError={data.requestError}
-                    initiated={data.initiated}
-                    followedChannels={data.followedChannels}
                     videos={data.videos}
-                    onChange={data.onChange}
+                    initiated={data.initiated}
+
+                    // refresh={data.refresh}
+                    // isLoaded={data.isLoaded}
+                    // followedChannels={data.followedChannels}
+                    // onChange={data.onChange}
                   />
                 </>
               )}
