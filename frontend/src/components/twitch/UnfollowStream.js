@@ -6,7 +6,7 @@ async function UnfollowStream(data) {
   const myUserId = await axios
     .get(`https://api.twitch.tv/helix/users?`, {
       params: {
-        login: `mambans`,
+        login: Utilities.getCookie("Twitch-username"),
       },
       headers: {
         Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
