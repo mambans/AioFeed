@@ -6,13 +6,13 @@ import NavigationContext from "./../navigation/NavigationContext";
 import styles from "./Home.module.scss";
 
 const INACTIVE_TIMER = 60; // seconds
-const NAV_OPEN_DELAY_TIMER = 2; // seconds
+// const NAV_OPEN_DELAY_TIMER = 2; // seconds
 
 const Home = () => {
   const { setVisible } = useContext(NavigationContext);
   const inactiveTimer = useRef();
   const topNavbarBlur = useRef();
-  const topNavbarDelay = useRef();
+  // const topNavbarDelay = useRef();
 
   useEffect(() => {
     setVisible(false);
@@ -20,12 +20,12 @@ const Home = () => {
 
     window.scrollTo(0, 0);
 
-    topNavbarDelay.current = setTimeout(() => {
-      setVisible(true);
-    }, 1000 * NAV_OPEN_DELAY_TIMER);
+    // topNavbarDelay.current = setTimeout(() => {
+    //   setVisible(true);
+    // }, 1000 * NAV_OPEN_DELAY_TIMER);
 
     return () => {
-      clearTimeout(topNavbarDelay.current);
+      // clearTimeout(topNavbarDelay.current);
       document.documentElement.removeAttribute("homepage");
     };
   }, [setVisible]);
