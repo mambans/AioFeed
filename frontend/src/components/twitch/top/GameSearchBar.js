@@ -49,6 +49,7 @@ const GameSearchBar = props => {
             background: "transparent",
             border: "none",
             borderRadius: "5px",
+            textOverflow: "ellipsis",
           }}
           type='text'
           placeholder={(gameName !== "" && gameName !== "" ? gameName : "All") + "..."}

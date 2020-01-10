@@ -115,8 +115,17 @@ const RenderTopStreams = () => {
             placeholder='""'
             arrow={false}
             trigger={
-              <ButtonList style={{ width: "300px", justifyContent: "center" }}>
-                {game_param_url !== "" && game_param_url !== "" ? game_param_url : "All"}
+              <ButtonList style={{ width: "300px", justifyContent: "left" }}>
+                <p
+                  style={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    width: "250px",
+                    margin: 0,
+                  }}>
+                  {game_param_url !== "" && game_param_url !== "" ? game_param_url : "All"}
+                </p>
                 <Icon
                   icon={list2}
                   size={22}
