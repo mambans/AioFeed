@@ -6,6 +6,8 @@ import Icon from "react-icons-kit";
 import Popup from "reactjs-popup";
 import React from "react";
 
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
+
 import {
   HeaderContainerTwitchLive,
   StyledCountdownCircle,
@@ -35,7 +37,7 @@ export default ({ data, refresh }) => {
             </div>
           ) : (
             <>
-              <StyledCountdownCircle>
+              {/* <StyledCountdownCircle>
                 <svg>
                   <circle
                     style={{
@@ -48,7 +50,29 @@ export default ({ data, refresh }) => {
                     cy='12'
                   />
                 </svg>
-              </StyledCountdownCircle>
+              </StyledCountdownCircle> */}
+              {data.refreshTimer > new Date().getTime() ? (
+                <CountdownCircleTimer
+                  key={data.refreshTimer}
+                  isPlaying
+                  size={24}
+                  strokeWidth={2.5}
+                  durationSeconds={
+                    data.refreshTimer > new Date().getTime()
+                      ? Math.round((data.refreshTimer - new Date().getTime()) / 1000)
+                      : 20
+                  }
+                  colors={[["#ffffff"]]}
+                  trailColor={"#rgba(255, 255, 255, 0)"}
+                  renderTime={() => {
+                    return data.refreshTimer > new Date().getTime()
+                      ? Math.round((data.refreshTimer - new Date().getTime()) / 1000)
+                      : 20;
+                  }}
+                />
+              ) : (
+                ""
+              )}
               {/* <StyledCountdownLine>
                 <svg
                   style={{

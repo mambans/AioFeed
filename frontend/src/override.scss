@@ -164,3 +164,11 @@
   scrollbar-color: rgb(240, 240, 240) rgba(0, 0, 0, 0) !important;
   scrollbar-width: thin !important;
 }
+
+div[aria-label="Countdown timer"] {
+  font-size: 13px;
+
+  & > div {
+    height: 22px !important;
+  }
+}
