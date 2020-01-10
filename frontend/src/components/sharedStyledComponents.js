@@ -140,21 +140,34 @@ const UnfollowButton = styled(Button).attrs({ variant: "link" })`
   padding-left: 0;
   padding: 2px;
 
-  /* i {
-    color: rgba(109, 2, 2, 0.801);
-    transition: all 0.1s ease-in-out;
-    -webkit-transition: all 0.1s ease-in-out;
-    -moz-transition: all 0.1s ease-in-out;
-    -ms-transition: all 0.1s ease-in-out;
-    -o-transition: all 0.1s ease-in-out;
-
-    &:hover {
-      color: lighten(rgba(109, 2, 2, 0.801), 20%);
-    }
-  } */
   &:hover {
-    /* color: lighten(rgba(109, 2, 2, 0.801), 20%) !important; */
     color: rgba(203, 14, 14, 0.8);
+  }
+`;
+
+const VodRemoveButton = styled(Button).attrs({ variant: "link" })`
+  color: rgb(140, 000, 000);
+  grid-row: 1;
+  justify-self: right;
+  width: 36px;
+  padding-left: 0;
+  padding: 2px;
+
+  &:hover {
+    color: rgb(225, 000, 000);
+  }
+`;
+
+const VodAddButton = styled(Button).attrs({ variant: "link" })`
+  color: rgb(200, 200, 200);
+  grid-row: 1;
+  justify-self: right;
+  width: 36px;
+  padding-left: 0;
+  padding: 2px;
+
+  &:hover {
+    color: #ffffff;
   }
 `;
 
@@ -168,4 +181,6 @@ export {
   ImageContainer,
   ButtonList,
   UnfollowButton,
+  VodRemoveButton,
+  VodAddButton,
 };

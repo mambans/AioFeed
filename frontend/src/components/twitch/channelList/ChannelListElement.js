@@ -7,9 +7,9 @@ import axios from "axios";
 import React, { useState, useRef } from "react";
 
 import UnfollowStream from "./../UnfollowStream";
-import { UnfollowButton } from "./../../sharedStyledComponents";
+import { UnfollowButton, VodRemoveButton, VodAddButton } from "./../../sharedStyledComponents";
 
-const ChannelListElement = ({ data, vodChannels, getChannels }) => {
+const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
   const [unfollowResponse, setUnfollowResponse] = useState(null);
   const refUnfollowAlert = useRef();
 
@@ -19,8 +19,8 @@ const ChannelListElement = ({ data, vodChannels, getChannels }) => {
         .post(`http://localhost:3100/notifies/vod-channels`, {
           channelName: channel.toLowerCase(),
         })
-        .then(() => {
-          getChannels();
+        .then(res => {
+          setVodChannels(res.data.channels);
         });
     } catch (e) {
       console.log(e.message);
@@ -35,8 +35,8 @@ const ChannelListElement = ({ data, vodChannels, getChannels }) => {
             channelName: channel.toLowerCase(),
           },
         })
-        .then(() => {
-          getChannels();
+        .then(res => {
+          setVodChannels(res.data.channels);
         });
     } catch (e) {
       console.log(e.message);
@@ -118,25 +118,23 @@ const ChannelListElement = ({ data, vodChannels, getChannels }) => {
       </a>
       <div>
         {ChannelVodEnabled() ? (
-          <UnfollowButton
+          <VodRemoveButton
             data-tip={"Remove " + data.to_name + " vods."}
             variant='link'
-            style={{ color: "#4D4D4D" }}
             onClick={() => {
               removeChannel(data.to_name);
             }}>
             <Icon icon={ic_delete} size={24} />
-          </UnfollowButton>
+          </VodRemoveButton>
         ) : (
-          <UnfollowButton
+          <VodAddButton
             data-tip={"Add " + data.to_name + " vods."}
             variant='link'
-            style={{ color: "#ffffff" }}
             onClick={() => {
               addChannel(data.to_name);
             }}>
             <Icon icon={ic_playlist_add} size={26} />
-          </UnfollowButton>
+          </VodAddButton>
         )}
         <UnfollowButton
           data-tip={"Unfollow " + data.to_name}

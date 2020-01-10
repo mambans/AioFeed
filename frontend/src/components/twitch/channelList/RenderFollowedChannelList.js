@@ -20,6 +20,7 @@ const RenderFollowedChannelList = data => {
 
   const getChannels = useCallback(async () => {
     const monitoredChannels = await axios.get(`http://localhost:3100/notifies/vod-channels`);
+    // const monitoredChannels = await axios.get(`http://79.136.57.214:3100/notifies/vod-channels`);
     // localStorage.setItem("VodChannels", JSON.stringify(monitoredChannels.data.channels));
     setVodChannels(monitoredChannels.data.channels.reverse());
   }, []);
@@ -114,7 +115,7 @@ const RenderFollowedChannelList = data => {
               key={channel.to_id}
               data={channel}
               vodChannels={vodChannels}
-              getChannels={getChannels}
+              setVodChannels={setVodChannels}
             />
           );
         })}
