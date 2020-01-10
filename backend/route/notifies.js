@@ -45,15 +45,15 @@ router.get("/vod-channels", async (req, res) => {
 });
 
 router.post("/vod-channels", async (req, res) => {
-  await notifies.addVodChannels(req.body.channelName);
+  const vodChannels = await notifies.addVodChannels(req.body.channelName);
 
-  res.send();
+  res.json({ channels: vodChannels });
 });
 
 router.delete("/vod-channels", async (req, res) => {
-  await notifies.removeVodChannels(req.body.channelName);
+  const vodChannels = await notifies.removeVodChannels(req.body.channelName);
 
-  res.send();
+  res.json({ channels: vodChannels });
 });
 
 router.post("/account/create", async (req, res) => {
