@@ -15,29 +15,40 @@ const channelList = async followedChannels => {
 
 const RenderFollowedChannelList = data => {
   const [followedChannels, setFollowedChannels] = useState();
+  const [vodChannels, setVodChannels] = useState();
   const streamMetadata = useRef();
 
-  const AddMetadata = useCallback(async followedChannels => {
-    try {
-      followedChannels.data.data.map(stream => {
-        if (
-          streamMetadata.current.find(channel => {
-            return channel.id === stream.to_id;
-          })
-        ) {
-          stream.profile_image_url = streamMetadata.current.find(channel => {
-            return channel.id === stream.to_id;
-          }).profile_image_url;
-        }
-
-        return "";
-      });
-    } catch (error) {
-      console.error(error);
-    }
-
-    setFollowedChannels(followedChannels.data.data);
+  const getChannels = useCallback(async () => {
+    const monitoredChannels = await axios.get(`http://localhost:3100/notifies/vod-channels`);
+    // localStorage.setItem("VodChannels", JSON.stringify(monitoredChannels.data.channels));
+    setVodChannels(monitoredChannels.data.channels.reverse());
   }, []);
+
+  const AddMetadata = useCallback(
+    async followedChannels => {
+      try {
+        followedChannels.data.data.map(stream => {
+          if (
+            streamMetadata.current.find(channel => {
+              return channel.id === stream.to_id;
+            })
+          ) {
+            stream.profile_image_url = streamMetadata.current.find(channel => {
+              return channel.id === stream.to_id;
+            }).profile_image_url;
+          }
+
+          return "";
+        });
+      } catch (error) {
+        console.error(error);
+      }
+
+      await getChannels();
+      setFollowedChannels(followedChannels.data.data);
+    },
+    [getChannels]
+  );
 
   useEffect(() => {
     const fetchProfileImages = async followedChannels => {
@@ -65,7 +76,7 @@ const RenderFollowedChannelList = data => {
 
         localStorage.setItem(`ChannelsMetadata`, JSON.stringify(streamMetadata.current));
       } else {
-        console.log("Metadeta cache used");
+        console.log("Metadata cache used");
 
         streamMetadata.current = JSON.parse(localStorage.getItem("ChannelsMetadata"));
       }
@@ -98,7 +109,14 @@ const RenderFollowedChannelList = data => {
             fontWeight: "bold",
           }}>{`Total: ${followedChannels.length}`}</p>
         {followedChannels.map(channel => {
-          return <ChannelListElement key={channel.to_id} data={channel} />;
+          return (
+            <ChannelListElement
+              key={channel.to_id}
+              data={channel}
+              vodChannels={vodChannels}
+              getChannels={getChannels}
+            />
+          );
         })}
       </ul>
     );

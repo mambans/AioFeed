@@ -1,14 +1,51 @@
-import React, { useState, useRef } from "react";
-import { Icon } from "react-icons-kit";
 import { cross } from "react-icons-kit/icomoon/cross";
+import { ic_delete } from "react-icons-kit/md/ic_delete";
+import { ic_playlist_add } from "react-icons-kit/md/ic_playlist_add";
+import { Icon } from "react-icons-kit";
 import Alert from "react-bootstrap/Alert";
+import axios from "axios";
+import React, { useState, useRef } from "react";
 
 import UnfollowStream from "./../UnfollowStream";
 import { UnfollowButton } from "./../../sharedStyledComponents";
 
-const ChannelListElement = ({ data }) => {
+const ChannelListElement = ({ data, vodChannels, getChannels }) => {
   const [unfollowResponse, setUnfollowResponse] = useState(null);
   const refUnfollowAlert = useRef();
+
+  async function addChannel(channel) {
+    try {
+      await axios
+        .post(`http://localhost:3100/notifies/vod-channels`, {
+          channelName: channel.toLowerCase(),
+        })
+        .then(() => {
+          getChannels();
+        });
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
+
+  async function removeChannel(channel) {
+    try {
+      await axios
+        .delete(`http://localhost:3100/notifies/vod-channels`, {
+          data: {
+            channelName: channel.toLowerCase(),
+          },
+        })
+        .then(() => {
+          getChannels();
+        });
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
+
+  const ChannelVodEnabled = () => {
+    return vodChannels.find(channel => channel.name.toLowerCase() === data.to_name.toLowerCase());
+  };
 
   function UnfollowAlert() {
     let alertText;
@@ -79,24 +116,48 @@ const ChannelListElement = ({ data }) => {
         )}
         {data.to_name}
       </a>
-      <UnfollowButton
-        data-tip={"Unfollow " + data.to_name}
-        variant='link'
-        onClick={async () => {
-          await UnfollowStream({
-            user_id: data.to_id,
-            refresh: data.refresh,
-          })
-            .then(() => {
-              setUnfollowResponse("Success");
+      <div>
+        {ChannelVodEnabled() ? (
+          <UnfollowButton
+            data-tip={"Remove " + data.to_name + " vods."}
+            variant='link'
+            style={{ color: "#4D4D4D" }}
+            onClick={() => {
+              removeChannel(data.to_name);
+            }}>
+            <Icon icon={ic_delete} size={24} />
+          </UnfollowButton>
+        ) : (
+          <UnfollowButton
+            data-tip={"Add " + data.to_name + " vods."}
+            variant='link'
+            style={{ color: "#ffffff" }}
+            onClick={() => {
+              addChannel(data.to_name);
+            }}>
+            <Icon icon={ic_playlist_add} size={26} />
+          </UnfollowButton>
+        )}
+        <UnfollowButton
+          data-tip={"Unfollow " + data.to_name}
+          variant='link'
+          style={{ marginLeft: "5px", padding: "0" }}
+          onClick={async () => {
+            await UnfollowStream({
+              user_id: data.to_id,
+              refresh: data.refresh,
             })
-            .catch(error => {
-              setUnfollowResponse(null);
-              setUnfollowResponse("Failed");
-            });
-        }}>
-        <Icon icon={cross} size={18} />
-      </UnfollowButton>
+              .then(() => {
+                setUnfollowResponse("Success");
+              })
+              .catch(error => {
+                setUnfollowResponse(null);
+                setUnfollowResponse("Failed");
+              });
+          }}>
+          <Icon icon={cross} size={18} />
+        </UnfollowButton>
+      </div>
     </li>
   );
 };
