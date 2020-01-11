@@ -29,12 +29,17 @@ export default props => {
 
   async function addChannel() {
     try {
-      await axios.post(`http://localhost:3100/notifies/vod-channels`, {
-        channelName: channel,
-      });
+      await axios
+        .post(`http://localhost:3100/notifies/vod-channels`, {
+          channelName: channel.toLowerCase(),
+        })
+        .then(res => {
+          setChannels(res.data.channels.reverse());
+          reload.current = true;
+        });
 
-      getChannels();
-      reload.current = true;
+      // getChannels();
+      // reload.current = true;
     } catch (e) {
       console.log(e.message);
     }
@@ -42,14 +47,19 @@ export default props => {
 
   async function removeChannel(channel) {
     try {
-      await axios.delete(`http://localhost:3100/notifies/vod-channels`, {
-        data: {
-          channelName: channel,
-        },
-      });
+      await axios
+        .delete(`http://localhost:3100/notifies/vod-channels`, {
+          data: {
+            channelName: channel.toLowerCase(),
+          },
+        })
+        .then(res => {
+          setChannels(res.data.channels.reverse());
+          reload.current = true;
+        });
 
-      getChannels();
-      reload.current = true;
+      // getChannels();
+      // reload.current = true;
     } catch (e) {
       console.log(e.message);
     }
