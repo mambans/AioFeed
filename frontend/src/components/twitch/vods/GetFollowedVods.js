@@ -21,16 +21,53 @@ const getMonitoredVodChannels = async () => {
 };
 
 const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) => {
-  const vodChannels = followedChannels.data.data
-    .map(channel => {
-      if (FollowedChannelVods.includes(channel.to_name.toLowerCase())) {
-        return channel.to_id;
-      }
+  const vodChannelsWithoutFollow = [];
+  const vodChannels = await FollowedChannelVods.map(vod => {
+    const channelFollowed = followedChannels.data.data.find(
+      channel => channel.to_name.toLowerCase() === vod
+    );
+    if (channelFollowed) {
+      return channelFollowed.to_id;
+    } else {
+      vodChannelsWithoutFollow.push(vod);
       return null;
+    }
+  }).filter(channel => {
+    return channel !== null;
+  });
+
+  await axios
+    .get(`https://api.twitch.tv/helix/users`, {
+      params: {
+        login: vodChannelsWithoutFollow,
+        first: 100,
+      },
+      headers: {
+        Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+        "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+      },
     })
-    .filter(channel => {
-      return channel !== null;
+    .then(res => {
+      res.data.data.map(channel => {
+        vodChannels.push(channel.id);
+        return null;
+      });
     });
+
+  // const vodChannels = followedChannels.data.data
+  //   .map(channel => {
+  //     if (FollowedChannelVods.includes(channel.to_name.toLowerCase())) {
+  //       return channel.to_id;
+  //     }
+  //     // else {
+  //     //   // vodChannelsWithoutFollow.push(channel.to_name);
+  //     //   return null;
+  //     // }
+  //     return null;
+  //   })
+  //   .filter(channel => {
+  //     return channel !== null;
+  //   });
 
   return vodChannels;
 };
