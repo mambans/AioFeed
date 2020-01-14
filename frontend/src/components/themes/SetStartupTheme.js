@@ -1,5 +1,3 @@
-import React from "react";
-
 export default async themesArray => {
   const currentMonth = new Date().getMonth() + 1;
   const currentDate = new Date().getDate();

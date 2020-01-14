@@ -9,7 +9,7 @@ export default () => {
   useEffect(() => {
     // console.log("Mounting App") ;
     SetStartupTheme(themesArray);
-  }, []);
+  }, [themesArray]);
 
   return <Routes />;
 };
