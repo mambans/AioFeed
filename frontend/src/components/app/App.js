@@ -1,15 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import Routes from "./../routes/Routes";
 import SetStartupTheme from "../themes/SetStartupTheme";
+import ThemeContext from "./../themes/ThemeContext";
 
-function App() {
+export default () => {
+  const { themesArray } = useContext(ThemeContext);
+
   useEffect(() => {
-    SetStartupTheme();
-
-    console.log("Mounting App");
+    // console.log("Mounting App") ;
+    SetStartupTheme(themesArray);
   }, []);
 
   return <Routes />;
-}
-
-export default App;
+};

@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import { ThemeSelector } from "./styledComponents";
+import ThemeContext from "./ThemeContext";
 
 function Themeselector() {
-  const allThemmes = ["default", "original", "christmas", "new year's eve", "clean", "clean dark"];
+  const { themesArray } = useContext(ThemeContext);
+
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);
 
@@ -23,31 +25,33 @@ function Themeselector() {
 
   const { value: theme, bind: bindtheme } = useInput("");
 
-  const activateTheme = theme => {
-    console.log("TCL: Themeselector -> theme", theme);
+  const activateTheme = async theme => {
     document.documentElement.classList.add("theme-transition");
     document.body.classList.add("theme-transition");
     localStorage.setItem("activeTheme", theme);
 
     if (theme === "default") {
-      const currentMonth = new Date().getMonth();
+      const currentMonth = new Date().getMonth() + 1;
       const currentDate = new Date().getDate();
 
-      switch (currentMonth) {
-        case 11:
-          document.documentElement.setAttribute("data-theme", "christmas");
-          break;
-        case 0:
-          if (currentDate <= 1) {
-            document.documentElement.setAttribute("data-theme", "new year's eve");
-          } else {
-            document.documentElement.removeAttribute("data-theme");
-          }
-          break;
-        default:
-          // document.documentElement.setAttribute("data-theme", "default");
-          document.documentElement.removeAttribute("data-theme");
-      }
+      const startTheme = await themesArray.find(theme => {
+        return (
+          theme.startMonth <= currentMonth &&
+          theme.endMonth >= currentMonth &&
+          theme.startDate <= currentDate &&
+          theme.endDate >= currentDate
+        );
+      });
+
+      console.log("Theme:", startTheme ? startTheme.name : themesArray[1].name);
+      document.documentElement.classList.add("theme-transition");
+      document.documentElement.setAttribute(
+        "data-theme",
+        startTheme ? startTheme.name : themesArray[1].name
+      );
+      window.setTimeout(function() {
+        document.documentElement.classList.remove("theme-transition");
+      }, 1000);
     } else {
       document.documentElement.setAttribute("data-theme", theme);
     }
@@ -71,10 +75,10 @@ function Themeselector() {
             {...bindtheme}
             value={localStorage.getItem("activeTheme") || "default"}
             className='custom-select custom-select-sm'>
-            {allThemmes.map(theme => {
+            {themesArray.map(theme => {
               return (
-                <option key={theme} value={theme}>
-                  {theme.charAt(0).toUpperCase() + theme.slice(1)}
+                <option key={theme.name} value={theme.name}>
+                  {theme.name.charAt(0).toUpperCase() + theme.name.slice(1)}
                 </option>
               );
             })}
