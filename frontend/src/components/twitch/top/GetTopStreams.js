@@ -126,7 +126,7 @@ export default async (game_param_url, pagination) => {
         ? (stream.game_img = gameNames.data.data.find(game => {
             return game.id === stream.game_id;
           }).box_art_url)
-        : (stream.game_img = `${process.env.PUBLIC_URL}/images/placeholder.png`);
+        : (stream.game_img = `${process.env.PUBLIC_URL}/images/placeholder.jpg`);
 
       return undefined;
     });

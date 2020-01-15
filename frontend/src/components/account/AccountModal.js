@@ -131,7 +131,7 @@ export default props => {
           className={styles.profileImage}
           src={
             Utilities.getCookie("Notifies_AccountProfileImg") ||
-            `${process.env.PUBLIC_URL}/images/placeholder.png`
+            `${process.env.PUBLIC_URL}/images/placeholder.jpg`
           }
           alt=''></img>
         <Popup

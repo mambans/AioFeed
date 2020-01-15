@@ -105,7 +105,7 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
             alt=''></img>
         ) : (
           <img
-            src={`${process.env.PUBLIC_URL}/images/placeholder.png`}
+            src={`${process.env.PUBLIC_URL}/images/placeholder.jpg`}
             style={{
               width: "30px",
               height: "30px",
