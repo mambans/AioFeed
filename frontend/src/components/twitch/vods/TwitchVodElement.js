@@ -4,6 +4,8 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 import moment from "moment";
+import { eye } from "react-icons-kit/icomoon/eye";
+import { Icon } from "react-icons-kit";
 
 import { VideoContainer, VideoTitle, ImageContainer } from "./../../sharedStyledComponents";
 import styles from "../Twitch.module.scss";
@@ -116,6 +118,17 @@ export default ({ ...data }) => {
           </p>
           <p className={styles.view_count} title='views'>
             {formatViewerNumbers(data.data.view_count)}
+            <Icon
+              icon={eye}
+              size={10}
+              style={{
+                color: "rgb(200, 200, 200)",
+                paddingLeft: "5px",
+                paddingTop: "3px",
+                display: "flex",
+                alignItems: "center",
+              }}
+            />
           </p>
         </div>
       </ImageContainer>
@@ -179,7 +192,7 @@ export default ({ ...data }) => {
                   justifySelf: "right",
                 }}>
                 {moment(
-                  new Date(new Date(data.data.endDate).getTime() - durationToMs (data.data.duration))
+                  new Date(new Date(data.data.endDate).getTime() - durationToMs(data.data.duration))
                 ).format("dd HH:MM") +
                   "→" +
                   moment(data.data.endDate).format("dd HH:MM")}
