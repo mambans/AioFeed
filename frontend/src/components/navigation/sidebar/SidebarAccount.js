@@ -88,7 +88,7 @@ export default props => {
         //     console.log(`Successfully authenticate to ${domain}`);
         //   }
         // }, 1);
-        console.log(`Successfully authenticate to ${domain}`);
+        console.log(`Successfully authenticated to ${domain}`);
       };
     } catch (e) {
       alert("Another Authendicate popup window might already be open.");

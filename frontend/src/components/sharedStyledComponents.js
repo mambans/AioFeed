@@ -171,6 +171,17 @@ const VodAddButton = styled(Button).attrs({ variant: "link" })`
   }
 `;
 
+const StyledLoadingContainer = styled.div`
+  display: grid;
+  justify-content: center;
+  transition: all 2s linear ease-in;
+
+  h1 {
+    color: #dddddd;
+    text-align: center;
+  }
+`;
+
 export {
   RefreshButton,
   HeaderTitle,
@@ -183,4 +194,5 @@ export {
   UnfollowButton,
   VodRemoveButton,
   VodAddButton,
+  StyledLoadingContainer,
 };

@@ -1,7 +1,7 @@
 import "react-notifications-component/dist/theme.css";
 import React, { useState, useEffect } from "react";
 import ReactNotification from "react-notifications-component";
-import { Spinner, Alert } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 import { CSSTransition } from "react-transition-group";
 
 // import "./Notifications.scss";
@@ -14,6 +14,7 @@ import Youtube from "./../youtube/Youtube";
 import YoutubeDataHandler from "./../youtube/Datahandler";
 import YoutubeHeader from "./../youtube/Header";
 import styles from "./Feed.module.scss";
+import LoadingIndicator from "./../LoadingIndicator";
 
 function Feed(props) {
   document.title = "Notifies | Feed";
@@ -87,9 +88,11 @@ function Feed(props) {
     return <ErrorHandeling data={error}></ErrorHandeling>;
   } else if (!isLoaded) {
     return (
-      <Spinner animation='grow' role='status' style={Utilities.loadingSpinner} variant='light'>
-        <span className='sr-only'>Loading...</span>
-      </Spinner>
+      <LoadingIndicator
+        height={250}
+        width={250}
+        style={{ height: "80vh", alignContent: "center" }}
+      />
     );
   } else {
     return (

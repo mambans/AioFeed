@@ -6,6 +6,7 @@ import Utilities from "../../utilities/Utilities";
 import ErrorHandeling from "./../error/Error";
 import AccountContext from "./../account/AccountContext";
 import NavigationContext from "./../navigation/NavigationContext";
+import LoadingIndicator from "./../LoadingIndicator";
 
 function TwitchAuthCallback() {
   const [error, setError] = useState();
@@ -102,20 +103,7 @@ function TwitchAuthCallback() {
   if (error) {
     return <ErrorHandeling data={error}></ErrorHandeling>;
   } else {
-    return (
-      <Spinner
-        animation='border'
-        role='status'
-        style={{
-          ...Utilities.loadingSpinner,
-          position: "absolute",
-          margin: "0",
-          top: "calc(50% - 5rem)",
-          left: "calc(50% - 5rem)",
-        }}>
-        <span className='sr-only'>Loading...</span>
-      </Spinner>
-    );
+    return <LoadingIndicator height={150} width={150} />;
   }
 }
 

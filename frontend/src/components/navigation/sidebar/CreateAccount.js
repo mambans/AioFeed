@@ -3,12 +3,11 @@ import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
-import { Spinner } from "react-bootstrap";
 
 import { StyledCreateFormTitle, StyledCreateForm, StyledAlert } from "./StyledComponent";
 import NavigationContext from "./../NavigationContext";
 import AccountContext from "./../../account/AccountContext";
-import Utilities from "./../../../utilities/Utilities";
+import LoadingIndicator from "./../../LoadingIndicator";
 
 export default () => {
   document.title = "Notifies | Create Account";
@@ -122,11 +121,7 @@ export default () => {
           </div>
         </StyledCreateForm>
 
-        {loading ? (
-          <Spinner animation='grow' role='status' style={Utilities.loadingSpinner}>
-            <span className='sr-only'>Loading...</span>
-          </Spinner>
-        ) : null}
+        {loading ? <LoadingIndicator height={150} width={150} /> : null}
       </>
     );
   }

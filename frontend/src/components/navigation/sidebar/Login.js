@@ -1,14 +1,15 @@
 import { Form, Button } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
-import { Spinner } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
 import axios from "axios";
 import React, { useState, useContext } from "react";
+import ReactLoading from "react-loading";
 
 import { StyledCreateFormTitle, StyledCreateForm, StyledAlert } from "./StyledComponent";
 import AccountContext from "./../../account/AccountContext";
 import NavigationContext from "./../NavigationContext";
 import Utilities from "../../../utilities/Utilities";
+import LoadingIndicator from "./../../LoadingIndicator";
 
 export default () => {
   document.title = "Notifies | Login";
@@ -119,11 +120,7 @@ export default () => {
           </Button>
         </div>
       </StyledCreateForm>
-      {loading ? (
-        <Spinner animation='grow' role='status' style={Utilities.loadingSpinner}>
-          <span className='sr-only'>Loading...</span>
-        </Spinner>
-      ) : null}
+      {loading ? <LoadingIndicator height={150} width={150} /> : null}
       {props.isLoggedIn &&
       !error &&
       (currentPage === "/account/login" || currentPage === "/account") ? (
