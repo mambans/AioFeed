@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const HeaderContainerTwitchLive = styled.div`
   border-bottom: var(--subFeedHeaderBorder);
@@ -119,10 +119,93 @@ const HeaderLeftSubcontainer = styled.div`
   display: flex;
 `;
 
+const pulse = keyframes`
+  0% {background: #131416d1;}
+  40% {background: #1f2024d1;}
+  100% {background: #131416d1;}
+`;
+
+const pulseLight = keyframes`
+  0% {background: #36393fd1;}
+  40% {background: #464d54;}
+  100% {background: #36393fd1;}
+`;
+
+const StyledLoadingBox = styled.div`
+  display: grid;
+  grid-template-areas: "video video" "title title" "info info";
+  width: 336px;
+  margin: 7px;
+  max-height: 336px;
+  margin-bottom: 15px;
+  height: 334px;
+  transition: all 1s linear;
+
+  div#video {
+    grid-area: video;
+    max-height: 189px;
+    min-height: 189px;
+    width: 336px;
+    border-radius: 10px;
+    background: #131416d1;
+    animation: ${pulse} 2s linear infinite;
+  }
+
+  div div {
+    background: #131416d1;
+    border-radius: 10px;
+  }
+
+  div#title {
+    color: var(--videoTitle);
+    margin-top: 15px;
+    margin-bottom: 5px;
+    grid-area: title;
+    font-size: 1.1rem;
+    max-width: 336px;
+    overflow: hidden;
+    height: 45px;
+    line-height: 1.2;
+
+    div {
+      width: 200px;
+      height: 20px;
+    }
+  }
+
+  #details {
+    height: 75px;
+
+    #channel {
+      width: 100px;
+      height: 20px;
+      margin: 7px 0;
+    }
+
+    #game {
+      width: 125px;
+      height: 20px;
+      margin: 21px 0 0 0;
+    }
+  }
+`;
+
+const StyledLoadingList = styled.ul`
+  li div {
+    height: 15px;
+    width: 100%;
+    border-radius: 8px;
+    background: #36393fd1;
+    animation: ${pulseLight} 2s linear infinite;
+  }
+`;
+
 export {
   HeaderContainerTwitchLive,
   StyledLoadmore,
   StyledCountdownCircle,
   HeaderLeftSubcontainer,
   StyledCountdownLine,
+  StyledLoadingBox,
+  StyledLoadingList,
 };

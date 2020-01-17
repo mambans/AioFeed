@@ -1,10 +1,12 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
-import Utilities from "../../utilities/Utilities";
 import "./updateProfilePopup.scss";
+import AccountContext from "./../account/AccountContext";
 
 function UpdateProfileImg() {
+  const { username, setProfileImage } = useContext(AccountContext);
+
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);
 
@@ -25,13 +27,14 @@ function UpdateProfileImg() {
 
   async function addProfileImage() {
     await axios
-      .put(`http://localhost:3100/notifies/account/profile/image`, {
-        accountName: Utilities.getCookie("Notifies_AccountName"),
-        accountEmail: Utilities.getCookie("Notifies_AccountEmail"),
-        profileImage: image,
+      .put(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+        username: username,
+        token: image,
+        tokenName: "ProfileImg",
       })
       .then(() => {
         document.cookie = `Notifies_AccountProfileImg=${image}; path=/`;
+        setProfileImage(image);
       })
       .catch(error => {
         console.error(error);

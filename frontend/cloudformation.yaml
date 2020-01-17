@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  Frontend:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      BucketName: notifies.mambans.com
+      WebsiteConfiguration:
+        ErrorDocument: index.html
+        IndexDocument: index.html
+  FrontendPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref Frontend
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:GetObject
+            Resource: !Join ["", [!GetAtt Frontend.Arn, "/*"]]
+            Principal: "*"

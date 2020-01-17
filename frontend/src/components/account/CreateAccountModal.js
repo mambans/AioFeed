@@ -1,15 +1,20 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 
 import styles from "./Account.module.scss";
 import ErrorHandeling from "../error/Error";
+import NavigationContext from "./../navigation/NavigationContext";
+import AccountContext from "./AccountContext";
 
 export default () => {
   document.title = "Notifies | Create Account";
   const [error, setError] = useState(null);
   const [created, setCreated] = useState();
+  const props = useContext(NavigationContext);
+
+  const { setAuthKey, setUsername } = useContext(AccountContext);
 
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);
@@ -38,39 +43,39 @@ export default () => {
 
   async function createAccount() {
     setError(null);
-    await axios
-      .post(`http://localhost:3100/notifies/account/create`, {
-        accountName: userName,
-        accountEmail: email,
-        accountPassword: password,
-      })
-      .then(data => {
-        if (data.status === 200 && data.data === "Account successfully created") {
-          document.cookie = `Notifies_AccountName=${userName}; path=/`;
-          document.cookie = `Notifies_AccountEmail=${email}; path=/`;
-          document.cookie = `Twitch-access_token=null; path=/`;
-          document.cookie = `Youtube-access_token=null; path=/`;
-          document.cookie = `Notifies_AccountProfileImg=null  ; path=/`;
+    try {
+      await axios
+        .post(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/create`, {
+          username: userName,
+          email: email,
+          password: password,
+        })
+        .then(res => {
+          document.cookie = `Notifies_AccountName=${res.data.Username}; path=/`;
+          document.cookie = `Notifies_AccountEmail=${res.data.Email}; path=/`;
+          document.cookie = `Notifies_AuthKey=${res.data.AuthKey}; path=/`;
+          setUsername(res.data.Username);
+          setAuthKey(res.data.AuthKey);
 
           resetUserName();
           resetEmail();
           resetPassword();
+          props.setIsLoggedIn(true);
 
-          if (new URL(window.location.href).pathname !== "/account/create") {
-            // props.setIsLoggedIn(true);
-            // props.setRenderModal("account");
-          } else {
+          if (new URL(window.location.href).pathname === "/account/create") {
             setCreated(true);
           }
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        setError({
-          title: error.response.data,
-          message: error.response.status,
+        })
+        .catch(e => {
+          console.error(e);
+          setError({
+            title: error.response.data,
+            message: error.response.status,
+          });
         });
-      });
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   if (created) {
@@ -83,7 +88,7 @@ export default () => {
         <Form onSubmit={handleSubmit} validated className={styles.createForm}>
           <Form.Group controlId='formGroupUserName'>
             <Form.Label>Username</Form.Label>
-            <Form.Control type='text' placeholder='Username' nane='username' {...bindUserName} />
+            <Form.Control type='text' placeholder='Username' name='username' {...bindUserName} />
           </Form.Group>
           <Form.Group controlId='formGroupEmail'>
             <Form.Label>Email address</Form.Label>

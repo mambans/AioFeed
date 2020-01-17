@@ -41,7 +41,7 @@ Resources:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
       Policies:
-        - DynamoDBReadPolicy:
+        - DynamoDBCrudPolicy:
             TableName: !Ref UserLogins
       Events:
         Http:
@@ -130,3 +130,53 @@ Resources:
                 Required: true
             - method.request.querystring.channels:
                 Required: true
+            - method.request.querystring.authkey:
+                Required: true
+  FetchMonitoredChannels:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Fetch monitored vod channels list."
+      Handler: monitoredChannelsFetch/handler.handler
+      Runtime: nodejs10.x
+      CodeUri: "."
+      Environment:
+        Variables:
+          USERNAME_TABLE: !Ref UserLogins
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref UserLogins
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /monitored-channels/fetch
+            Method: get
+            RequestParameters:
+              - method.request.querystring.username:
+                  Required: true
+              - method.request.querystring.authkey:
+                  Required: true
+  DeleteAccount:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Delete an account"
+      Handler: deleteAccount/handler.handler
+      Runtime: nodejs10.x
+      CodeUri: "."
+      Environment:
+        Variables:
+          USERNAME_TABLE: !Ref UserLogins
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserLogins
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /account/delete
+            Method: delete
+            RequestParameters:
+              - method.request.querystring.username:
+                  Required: true
+              - method.request.querystring.password:
+                  Required: true

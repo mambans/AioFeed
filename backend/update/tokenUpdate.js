@@ -16,6 +16,7 @@ const tokenUpdate = async ({ username, token, tokenName }) => {
       },
     })
     .promise();
+  console.log("TCL: tokenUpdate -> res", res);
 
   return res;
 

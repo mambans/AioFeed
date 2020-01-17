@@ -42,7 +42,7 @@ function StreamEle(data) {
   // console.log("TCL: StreamEle -> data", data);
   const [isHovered, setIsHovered] = useState(false);
   const [channelIsHovered, setChannelIsHovered] = useState(false);
-  const [unfollowError, setUnfollowError] = useState(false);
+  const [unfollowError, setUnfollowError] = useState(null);
 
   const streamHoverTimer = useRef();
   const ref = useRef();
@@ -67,6 +67,12 @@ function StreamEle(data) {
       } else if (unfollowError.includes("Successfully")) {
         alertType = "success";
       }
+      let resetError;
+
+      clearTimeout(resetError);
+      resetError = setTimeout(() => {
+        setUnfollowError(null);
+      }, 5000);
       // clearTimeout(refUnfollowAlert.current);
       // refUnfollowAlert.current = setTimeout(() => {
       //   setUnfollowError(null);
@@ -174,6 +180,11 @@ function StreamEle(data) {
                 data.data.user_name.toLowerCase()
               }> */}
           <img
+            style={
+              data.newlyAddedStreams.includes(data.data.user_name)
+                ? { boxShadow: "white 0px 0px 3px 2px" }
+                : null
+            }
             src={
               // data.data.thumbnail_url.replace("{width}", 1280).replace("{height}", 720) +
               data.data.thumbnail_url.replace("{width}", 858).replace("{height}", 480) +

@@ -12,7 +12,6 @@ function ToggleSwitchVideoHover(props) {
       props.setEnableHover(checked);
       localStorage.setItem(`${props.feed}VideoHoverEnabled`, checked);
     }
-    console.log("TCL: handleChange -> checked", checked);
   }
 
   return (

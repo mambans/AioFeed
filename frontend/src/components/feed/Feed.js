@@ -48,6 +48,7 @@ function Feed(props) {
 
   function NoFeedsEnabled() {
     const [show, setShow] = useState(true);
+
     if (
       localStorage.getItem("TwitchFeedEnabled") === "false" &&
       localStorage.getItem("YoutubeFeedEnabled") === "false" &&
@@ -56,7 +57,7 @@ function Feed(props) {
       show
     ) {
       return (
-        <CSSTransition timeout={1000} classNames='fade-1s' unmountOnExit>
+        <CSSTransition in={true} timeout={1000} classNames='fade-1s' unmountOnExit>
           <Alert
             variant='info'
             style={Utilities.feedAlertWarning}
@@ -124,11 +125,6 @@ function Feed(props) {
                     requestError={data.requestError}
                     videos={data.videos}
                     initiated={data.initiated}
-
-                    // refresh={data.refresh}
-                    // isLoaded={data.isLoaded}
-                    // followedChannels={data.followedChannels}
-                    // onChange={data.onChange}
                   />
                 </>
               )}

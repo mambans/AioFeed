@@ -6,7 +6,6 @@ import Icon from "react-icons-kit";
 import { CSSTransition } from "react-transition-group";
 
 import RenderNotifications from "./../notifications/RenderNotifications";
-// import AccountModalButton from "./AccountModalButton";
 import NavigationContext from "./NavigationContext";
 import "./Navigation.scss";
 import Sidebar from "./sidebar/Sidebar";
@@ -19,7 +18,7 @@ function NavigationBar(prop) {
   const { visible } = useContext(NavigationContext);
 
   return (
-    <CSSTransition in={visible} timeout={1000} classNames='fade-1s' unmountOnExit>
+    <CSSTransition in={visible} timeout={1000} classNames='fade-1s'>
       <Navbar
         mode={prop.fixed ? "fixed" : "unset"}
         collapseOnSelect
@@ -63,16 +62,6 @@ function NavigationBar(prop) {
                 return <Sidebar {...props} refresh={refresh} setRefresh={setRefresh} />;
               }}
             </NavigationContext.Consumer>
-            {/* <NavigationContext.Consumer>
-              {props => {
-                return (
-                  <AccountModalButton
-                    {...props}
-                    refresh={refresh}
-                    setRefresh={setRefresh}></AccountModalButton>
-                );
-              }}
-            </NavigationContext.Consumer> */}
           </Nav>
         </Navbar.Collapse>
       </Navbar>

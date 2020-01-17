@@ -44,7 +44,7 @@ function VideoHoverIframe(data) {
     playerVars: {
       autoplay: 1,
       controls: 1,
-      origin: "http://localhost:3000/feed",
+      origin: "http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/feed",
       start: 10,
       fs: 0,
     },

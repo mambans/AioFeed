@@ -18,7 +18,6 @@ export default data => {
       case "Youtube":
         data.setEnableYoutube(checked);
         break;
-
       default:
         break;
     }

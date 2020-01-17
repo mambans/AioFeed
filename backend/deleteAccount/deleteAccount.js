@@ -8,7 +8,7 @@ const util = require("util");
 var uniqid = require("uniqid");
 const compare = util.promisify(bcrypt.compare);
 
-const login = async ({ username, password }) => {
+const deleteAccount = async ({ username, password }) => {
   const res = await client
     .query({
       TableName: process.env.USERNAME_TABLE,
@@ -54,4 +54,4 @@ const login = async ({ username, password }) => {
   }
 };
 
-module.exports = login;
+module.exports = deleteAccount;

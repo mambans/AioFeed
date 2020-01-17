@@ -1,5 +1,5 @@
 import Popup from "reactjs-popup";
-import React from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import { Icon } from "react-icons-kit";
@@ -20,9 +20,11 @@ import ToggleSwitch from "./ToggleSwitch";
 import ToggleSwitchVideoHover from "./ToggleSwitchVideoHover";
 import UpdateProfileImg from "./UpdateProfileImg";
 import Utilities from "../../utilities/Utilities";
+import AccountContext from "./../account/AccountContext";
 
 export default props => {
   document.title = "Notifies | Account";
+  const { username } = useContext(AccountContext);
 
   function logout() {
     document.cookie = `Notifies_AccountName=null; path=/`;
@@ -44,11 +46,6 @@ export default props => {
   ) {
     async function generateOrginState() {
       return uniqid();
-
-      // return randomstring.generate({
-      //   capitalization: "lowercase",
-      //   length: 32,
-      // });
     }
 
     const orginState = await generateOrginState();
@@ -75,19 +72,17 @@ export default props => {
       };
     } catch (e) {
       alert("Another Authendicate popup window might already be open.");
-      console.error("Another Authendicate popup window might already be open.");
+      console.error("Another Authendicate popup window might already be open in the background.");
       console.error("Auth Popup error:", e);
     }
   }
 
   async function disconnectTwitch() {
-    document.cookie = "Twitch-access_token=null; path=/";
-
     await axios
-      .put(`http://localhost:3100/notifies/account/twitch/connect`, {
-        accountName: Utilities.getCookie("Notifies_AccountName"),
-        accountEmail: Utilities.getCookie("Notifies_AccountEmail"),
-        twitchToken: null,
+      .put(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+        username: username,
+        token: "null",
+        tokenName: "TwitchToken",
       })
       .then(() => {
         document.cookie = `Twitch-access_token=null; path=/`;
@@ -98,19 +93,17 @@ export default props => {
         localStorage.setItem("TwitchVodsFeedEnabled", false);
         console.log(`Successfully disconnected from Twitch`);
       })
-      .catch(error => {
-        console.error(error);
+      .catch(e => {
+        console.error(e);
       });
   }
 
   async function disconnectYoutube() {
-    document.cookie = "Youtube-access_token=null; path=/";
-
     await axios
-      .put(`http://localhost:3100/notifies/account/youtube/connect`, {
-        accountName: Utilities.getCookie("Notifies_AccountName"),
-        accountEmail: Utilities.getCookie("Notifies_AccountEmail"),
-        youtubeToken: null,
+      .put(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+        username: username,
+        token: "null",
+        tokenName: "YoutubeToken",
       })
       .then(() => {
         document.cookie = `Youtube-access_token=null; path=/`;
@@ -119,8 +112,8 @@ export default props => {
         localStorage.setItem("YoutubeFeedEnabled", false);
         console.log(`Successfully disconnected from Youtube`);
       })
-      .catch(error => {
-        console.error(error);
+      .catch(e => {
+        console.error(e);
       });
   }
 
@@ -165,7 +158,7 @@ export default props => {
               authenticatePopup(
                 `Connect Twitch`,
                 "Twitch",
-                `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=http://localhost:3000/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`,
+                `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`,
                 props.setTwitchToken,
                 props.setEnableTwitch,
                 props.setEnableTwitchVods
@@ -187,7 +180,7 @@ export default props => {
                 authenticatePopup(
                   `Connect Twitch`,
                   "Twitch",
-                  `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=http://localhost:3000/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`,
+                  `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`,
                   props.setTwitchToken,
                   props.setEnableTwitch,
                   props.setEnableTwitchVods
@@ -214,7 +207,7 @@ export default props => {
               authenticatePopup(
                 `Connect Youtube`,
                 "Youtube",
-                `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://localhost:3000/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly`,
+                `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly`,
                 props.setYoutubeToken,
                 props.setEnableYoutube
               );
@@ -237,7 +230,7 @@ export default props => {
                 authenticatePopup(
                   `Connect Youtube`,
                   "Youtube",
-                  `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://localhost:3000/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly`,
+                  `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly`,
                   props.setYoutubeToken,
                   props.setEnableYoutube
                 );
@@ -277,7 +270,8 @@ export default props => {
 
       <Themeselector />
       <div className={styles.lastButtonsContainer}>
-        {window.location.href !== "http://localhost:3000/account" ? (
+        {window.location.href !==
+        "http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/account" ? (
           <Button
             className={[styles.notifiesLogoutButton, styles.disconnectButton].join(" ")}
             as={NavLink}

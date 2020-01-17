@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useContext } from "react";
 import axios from "axios";
-import { Spinner } from "react-bootstrap";
 import Utilities from "./../../../utilities/Utilities";
-
 import ChannelListElement from "./ChannelListElement";
+import AccountContext from "./../../account/AccountContext";
+import StyledLoadingList from "./../LoadingList";
 
 const channelList = async followedChannels => {
   const followedChannelsIds = await followedChannels.data.data.map(channel => {
@@ -18,12 +18,27 @@ const RenderFollowedChannelList = data => {
   const [vodChannels, setVodChannels] = useState();
   const streamMetadata = useRef();
 
+  const { authKey, username } = useContext(AccountContext);
+
   const getChannels = useCallback(async () => {
-    const monitoredChannels = await axios.get(`http://localhost:3100/notifies/vod-channels`);
-    // const monitoredChannels = await axios.get(`http://79.136.57.214:3100/notifies/vod-channels`);
-    // localStorage.setItem("VodChannels", JSON.stringify(monitoredChannels.data.channels));
-    setVodChannels(monitoredChannels.data.channels.reverse());
-  }, []);
+    const monitoredChannels = await axios
+      .get(
+        `https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/fetch`,
+        {
+          params: {
+            username: username,
+            authkey: authKey,
+          },
+        }
+      )
+      .then(res => {
+        return res.data;
+      })
+      .catch(err => {
+        console.error(err);
+      });
+    setVodChannels(monitoredChannels);
+  }, [authKey, username]);
 
   const AddMetadata = useCallback(
     async followedChannels => {
@@ -95,11 +110,7 @@ const RenderFollowedChannelList = data => {
   }, [AddMetadata, data.followedChannels]);
 
   if (!followedChannels) {
-    return (
-      <Spinner animation='grow' role='status' style={Utilities.loadingSpinner} variant='light'>
-        <span className='sr-only'>Loading...</span>
-      </Spinner>
-    );
+    return <StyledLoadingList amount={12} />;
   } else {
     return (
       <ul>

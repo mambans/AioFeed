@@ -5,13 +5,15 @@ import { BlurOverlay, TopBlurOverlay, LogoText } from "./HomeStyledComponents";
 import NavigationContext from "./../navigation/NavigationContext";
 import styles from "./Home.module.scss";
 
-const INACTIVE_TIMER = 60; // seconds
+const INACTIVE_TIMER = 120; // seconds
 // const NAV_OPEN_DELAY_TIMER = 2; // seconds
 
-const Home = () => {
-  const { setVisible } = useContext(NavigationContext);
+export default () => {
+  document.title = "Notifies";
+  const { setVisible, visible } = useContext(NavigationContext);
   const inactiveTimer = useRef();
   const topNavbarBlur = useRef();
+
   // const topNavbarDelay = useRef();
 
   useEffect(() => {
@@ -59,17 +61,17 @@ const Home = () => {
   const Logos = () => {
     return (
       <>
-        <TopBlurOverlay
-          ref={topNavbarBlur}
-          onMouseEnter={() => {
-            console.log("mouseenter ");
-            setVisible(true);
-          }}
-          onMouseLeave={() => {
-            console.log("mouseenter");
-            setVisible(false);
-          }}
-        />
+        {visible ? null : (
+          <TopBlurOverlay
+            ref={topNavbarBlur}
+            onMouseEnter={() => {
+              setVisible(true);
+            }}
+            onMouseLeave={() => {
+              setVisible(false);
+            }}
+          />
+        )}
         <BlurOverlay />
         <div className={styles.container}>
           <LogoText>
@@ -119,5 +121,3 @@ const Home = () => {
   };
   return <Logos></Logos>;
 };
-
-export default Home;

@@ -4,23 +4,17 @@ const DynamoDB = require("aws-sdk/clients/dynamodb");
 
 const client = new DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
 
-const monitoredChannelsUpdate = async ({ username, channels, authkey }) => {
+const monitoredChannelsFetch = async ({ username, authkey }) => {
   // Key: { Username: username },
   const res = await client
-    .update({
+    .get({
       TableName: process.env.USERNAME_TABLE,
       Key: { Username: username },
-      UpdateExpression: `set #channels = :channels`,
-      ExpressionAttributeNames: { "#channels": "MonitoredChannels" },
-      ExpressionAttributeValues: {
-        ":channels": channels,
-      },
-      ReturnValues: "ALL_NEW",
     })
     .promise();
 
-  if (authkey === res.Attributes.AuthKey) {
-    return res;
+  if (authkey === res.Item.AuthKey) {
+    return res.Item.MonitoredChannels;
   } else {
     return false;
   }
@@ -31,4 +25,4 @@ const monitoredChannelsUpdate = async ({ username, channels, authkey }) => {
   //   body: "Account successfully created.",
   // };
 };
-module.exports = monitoredChannelsUpdate;
+module.exports = monitoredChannelsFetch;

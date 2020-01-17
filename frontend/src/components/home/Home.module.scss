@@ -1,9 +1,15 @@
 .container {
+  // width: 25%;
+  // left: calc(50% - 12.5%);
+  // top: calc(50vh - 300px);
+
   text-align: center;
   position: absolute;
-  width: 25%;
-  left: calc(50% - 12.5%);
-  top: calc(50vh - 300px);
+  width: 100%;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .logo {
   width: 300px;

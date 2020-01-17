@@ -56,7 +56,7 @@ function streamOnlineWebhook() {
       .post(`https://api.twitch.tv/helix/webhooks/hub`, {
         body: {
           hub: {
-            callback: `http://localhost:3000/twitch/notifications`,
+            callback: `http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/twitch/notifications`,
             mode: "subscribe",
             topic: "https://api.twitch.tv/helix/streams?user_id=62300805",
             lease_seconds: 0,

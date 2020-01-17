@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
-import { Spinner } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 
 import GetTopGames from "./GetTopGames";
-import Utilities from "./../../../utilities/Utilities";
 import { StyledGameListElement, StyledShowAllButton } from "./styledComponents";
+import StyledLoadingList from "./../LoadingList";
 
 const RenderTopGamesList = () => {
   const [topGames, setTopGames] = useState();
@@ -35,11 +34,7 @@ const RenderTopGamesList = () => {
       })}
     </ul>
   ) : (
-    <ul>
-      <Spinner animation='grow' role='status' style={Utilities.loadingSpinner} variant='light'>
-        <span className='sr-only'>Loading...</span>
-      </Spinner>
-    </ul>
+    <StyledLoadingList amount={12} />
   );
 };
 

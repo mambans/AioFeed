@@ -1,21 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { CSSTransition } from "react-transition-group";
 
 import AccountContext from "./../../account/AccountContext";
 import FeedsContext from "./../../feed/FeedsContext";
 import CreateAccount from "./CreateAccount";
-import styles from "./../Navigation.module.scss";
-import Utilities from "../../../utilities/Utilities";
 import {
   StyledNavSidebar,
   StyledNavSidebarBackdrop,
   StyledSidebarTrigger,
-} from "./styledComponent";
+} from "./StyledComponent";
 import Login from "./Login";
 import SidebarAccount from "./SidebarAccount";
+import { StyledNavSidebarTrigger, StyledLoginButton } from "./../StyledComponents";
 
 export default props => {
   const [show, setShow] = useState(false);
+  const { profileImage } = useContext(AccountContext);
 
   const handleToggle = () => {
     setShow(!show);
@@ -23,27 +23,24 @@ export default props => {
 
   return (
     <>
-      <div onClick={handleToggle} className={styles.navProfileContainer} title='Sidebar'>
+      <StyledNavSidebarTrigger onClick={handleToggle} title='Sidebar'>
         {props.isLoggedIn ? (
           <>
             <StyledSidebarTrigger />
             <img
-              // onClick={handleToggle}
-              className={styles.navProfile}
               id='NavigationProfileImage'
               src={
-                Utilities.getCookie("Notifies_AccountProfileImg") !== null
-                  ? Utilities.getCookie("Notifies_AccountProfileImg")
-                  : `${process.env.PUBLIC_URL}/images/placeholder.png`
+                profileImage !== null
+                  ? profileImage
+                  : `${process.env.PUBLIC_URL}/images/placeholder.jpg`
               }
-              style={{ marginLeft: "0" }}
               alt=''
             />
           </>
         ) : (
-          <p className={styles.LoginAccountButton}>Login</p>
+          <StyledLoginButton>Login</StyledLoginButton>
         )}
-      </div>
+      </StyledNavSidebarTrigger>
 
       <CSSTransition in={show} timeout={500} classNames='fade-05s' unmountOnExit>
         <StyledNavSidebarBackdrop
@@ -54,32 +51,25 @@ export default props => {
       </CSSTransition>
 
       <CSSTransition in={show} timeout={1000} classNames='fadeSlide-right-1s' unmountOnExit>
-        <AccountContext.Consumer>
-          {accProps => {
+        <FeedsContext.Consumer>
+          {feedsProps => {
             return (
-              <FeedsContext.Consumer>
-                {feedsProps => {
-                  return (
-                    <StyledNavSidebar>
-                      {props.isLoggedIn ? (
-                        <SidebarAccount
-                          {...accProps}
-                          {...feedsProps}
-                          {...props}
-                          setRenderModal={props.setRenderModal}
-                        />
-                      ) : props.renderModal === "create" ? (
-                        <CreateAccount />
-                      ) : (
-                        <Login />
-                      )}
-                    </StyledNavSidebar>
-                  );
-                }}
-              </FeedsContext.Consumer>
+              <StyledNavSidebar>
+                {props.isLoggedIn ? (
+                  <SidebarAccount
+                    {...feedsProps}
+                    {...props}
+                    setRenderModal={props.setRenderModal}
+                  />
+                ) : props.renderModal === "create" ? (
+                  <CreateAccount />
+                ) : (
+                  <Login />
+                )}
+              </StyledNavSidebar>
             );
           }}
-        </AccountContext.Consumer>
+        </FeedsContext.Consumer>
       </CSSTransition>
     </>
   );

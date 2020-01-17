@@ -6,6 +6,7 @@ import Icon from "react-icons-kit";
 import Moment from "react-moment";
 import Popup from "reactjs-popup";
 import React from "react";
+import Alert from "react-bootstrap/Alert";
 
 import { HeaderLeftSubcontainer } from "./../styledComponents";
 import {
@@ -14,12 +15,12 @@ import {
   HeaderContainer,
   ButtonList,
 } from "./../../sharedStyledComponents";
-import AddChannelForm from "./VodSettings";
+import VodChannelList from "./VodChannelList";
 import styles from "./../Twitch.module.scss";
 import Utilities from "../../../utilities/Utilities";
 
 export default React.forwardRef((props, ref) => {
-  const { refresh, refreshing, vods } = props;
+  const { refresh, refreshing, vods, vodError } = props;
 
   return (
     <HeaderContainer ref={ref}>
@@ -47,6 +48,27 @@ export default React.forwardRef((props, ref) => {
             from={(vods && vods.expire) || new Date()}
             ago
             className={styles.vodRefreshTimer}></Moment> */}
+        {vodError ? (
+          <Alert
+            key={vodError}
+            style={{
+              padding: "5px",
+              opacity: "0.8",
+              margin: "0",
+              position: "absolute",
+              marginLeft: "250px",
+              //color: #ffc51c,
+              backgroundColor: "transparent",
+              border: "none",
+              borderBottom: "1px solid",
+              borderRadius: "0",
+              fontWeight: "bold",
+              filter: "brightness(250%)",
+            }}
+            variant={"warning"}>
+            {vodError}
+          </Alert>
+        ) : null}
       </HeaderLeftSubcontainer>
       <HeaderTitle>
         <Icon icon={video} size={32} style={{ padding: "0 10px", color: "#6f166f" }}></Icon>
@@ -78,7 +100,7 @@ export default React.forwardRef((props, ref) => {
         }
         position='left top'
         className='settingsPopup'>
-        <AddChannelForm refresh={refresh} />
+        <VodChannelList refresh={refresh} />
       </Popup>
     </HeaderContainer>
   );

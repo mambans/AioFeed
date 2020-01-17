@@ -1,18 +1,16 @@
 "use strict";
 
-const monitoredChannelsUpdate = require("./monitoredChannelsUpdate");
+const monitoredChannelsFetch = require("./monitoredChannelsFetch");
 
 const handler = async event => {
   try {
-    const { username, channels, authkey } = JSON.parse(event.body);
+    const { username, authkey } = event.queryStringParameters;
 
     if (!username) throw new Error("`Username` is required");
-    if (!authkey) throw new Error("`authkey` is required");
-    if (!channels) throw new Error("`Channels` is required");
+    if (!authkey) throw new Error("`Authkey` is required");
 
-    const res = await monitoredChannelsUpdate({
+    const res = await monitoredChannelsFetch({
       username,
-      channels,
       authkey,
     }).catch(e => {
       console.log(e);
@@ -20,7 +18,7 @@ const handler = async event => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(res.Attributes.MonitoredChannels),
+      body: JSON.stringify(res),
       headers: {
         "Access-Control-Allow-Origin": "*",
       },

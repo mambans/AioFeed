@@ -9,7 +9,7 @@ Globals:
 Resources:
   Create:
     Properties:
-      CodeUri: s3://rp-deployment/6bfc26ec02deb483b964884f41e256fb
+      CodeUri: s3://rp-deployment/a21c773cc6caabb9d94ce4915fd36152
       Description: Create an Notifies account with tokens and monitored vod channels
         default to null and empty array.
       Environment:
@@ -36,9 +36,61 @@ Resources:
             Ref: UserLogins
       Runtime: nodejs10.x
     Type: AWS::Serverless::Function
+  DeleteAccount:
+    Properties:
+      CodeUri: s3://rp-deployment/a21c773cc6caabb9d94ce4915fd36152
+      Description: Delete an account
+      Environment:
+        Variables:
+          USERNAME_TABLE:
+            Ref: UserLogins
+      Events:
+        Http:
+          Properties:
+            Method: delete
+            Path: /account/delete
+            RequestParameters:
+            - method.request.querystring.username:
+                Required: true
+            - method.request.querystring.password:
+                Required: true
+          Type: Api
+      Handler: deleteAccount/handler.handler
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: UserLogins
+      Runtime: nodejs10.x
+    Type: AWS::Serverless::Function
+  FetchMonitoredChannels:
+    Properties:
+      CodeUri: s3://rp-deployment/a21c773cc6caabb9d94ce4915fd36152
+      Description: Fetch monitored vod channels list.
+      Environment:
+        Variables:
+          USERNAME_TABLE:
+            Ref: UserLogins
+      Events:
+        Http:
+          Properties:
+            Method: get
+            Path: /monitored-channels/fetch
+            RequestParameters:
+            - method.request.querystring.username:
+                Required: true
+            - method.request.querystring.authkey:
+                Required: true
+          Type: Api
+      Handler: monitoredChannelsFetch/handler.handler
+      Policies:
+      - DynamoDBReadPolicy:
+          TableName:
+            Ref: UserLogins
+      Runtime: nodejs10.x
+    Type: AWS::Serverless::Function
   Login:
     Properties:
-      CodeUri: s3://rp-deployment/6bfc26ec02deb483b964884f41e256fb
+      CodeUri: s3://rp-deployment/a21c773cc6caabb9d94ce4915fd36152
       Description: Login with Notifies account and return account info, tokens and
         monitored vod channels.
       Environment:
@@ -58,14 +110,14 @@ Resources:
           Type: Api
       Handler: login/handler.handler
       Policies:
-      - DynamoDBReadPolicy:
+      - DynamoDBCrudPolicy:
           TableName:
             Ref: UserLogins
       Runtime: nodejs10.x
     Type: AWS::Serverless::Function
   Update:
     Properties:
-      CodeUri: s3://rp-deployment/6bfc26ec02deb483b964884f41e256fb
+      CodeUri: s3://rp-deployment/a21c773cc6caabb9d94ce4915fd36152
       Description: Update a specific token mentioned as a param.
       Environment:
         Variables:
@@ -93,7 +145,7 @@ Resources:
     Type: AWS::Serverless::Function
   UpdateMonitoredChannels:
     Properties:
-      CodeUri: s3://rp-deployment/6bfc26ec02deb483b964884f41e256fb
+      CodeUri: s3://rp-deployment/a21c773cc6caabb9d94ce4915fd36152
       Description: Update monitored vod channels list.
       Environment:
         Variables:
@@ -108,6 +160,8 @@ Resources:
           - method.request.querystring.username:
               Required: true
           - method.request.querystring.channels:
+              Required: true
+          - method.request.querystring.authkey:
               Required: true
           Type: Api
       Handler: monitoredChannelsUpdate/handler.handler

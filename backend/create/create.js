@@ -6,6 +6,7 @@ const client = new DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
 const bcrypt = require("bcrypt");
 const util = require("util");
 const hash = util.promisify(bcrypt.hash);
+var uniqid = require("uniqid");
 
 const create = async ({ username, email, password }) => {
   // const userExist = await client
@@ -24,23 +25,34 @@ const create = async ({ username, email, password }) => {
   // if (userExist.Items.length === 0 && userExist.Count === 0) {
   const hashedPassword = await hash(password, 10);
 
+  const key = uniqid(`${username}-AuthKey:`);
+
+  const res = await client
+    .put({
+      TableName: process.env.USERNAME_TABLE,
+      Item: {
+        Username: username,
+        Email: email,
+        Password: hashedPassword,
+        TwitchToken: "null",
+        YoutubeToken: "null",
+        MonitoredChannels: [],
+        ProfileImg: "null",
+        AuthKey: key,
+      },
+      ConditionExpression: "attribute_not_exists(Username)",
+      ReturnItemCollectionMetrics: "SIZE",
+      ReturnValues: "ALL_OLD",
+    })
+    .promise();
+  console.log("TCL: create -> res", res);
+
   return {
-    data: await client
-      .put({
-        TableName: process.env.USERNAME_TABLE,
-        Item: {
-          Username: username,
-          Email: email,
-          Password: hashedPassword,
-          TwitchToken: null,
-          YoutubeToken: null,
-          MonitoredChannels: [],
-        },
-        ConditionExpression: "attribute_not_exists(Username)",
-        ReturnItemCollectionMetrics: "SIZE",
-        ReturnValues: "ALL_OLD",
-      })
-      .promise(),
+    data: {
+      Username: username,
+      Email: email,
+      AuthKey: key,
+    },
   };
   // } else {
   //   return {

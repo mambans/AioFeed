@@ -112,12 +112,16 @@ function StreamEle(data) {
         <div className={styles.gameContainer}>
           <Link className={styles.game_img} to={"/twitch/top/" + data.data.game_name}>
             <img
-              src={data.data.game_img.replace("{width}", 130).replace("{height}", 173)}
+              src={
+                data.data.game_img
+                  ? data.data.game_img.replace("{width}", 130).replace("{height}", 173)
+                  : `${process.env.PUBLIC_URL}/images/placeholder.jpg`
+              }
               alt=''
               className={styles.game_img}></img>
           </Link>
           <Link className={styles.game} to={"/twitch/top/" + data.data.game_name}>
-            {Utilities.truncate(data.data.game_name, 50)}
+            {data.data.game_name}
           </Link>
           <p className={styles.viewers}>
             {/* {data.data.viewer_count} */}

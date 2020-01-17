@@ -16,6 +16,7 @@ import styles from "./../Twitch.module.scss";
 import Utilities from "./../../../utilities/Utilities";
 import GameSearchBar from "./GameSearchBar";
 import { StyledLoadmore } from "./../styledComponents";
+import LoadingBoxs from "./../LoadingBoxs";
 
 const RenderTopStreams = () => {
   const game_param_url = decodeURI(new URL(window.location.href).pathname.split("/")[3]);
@@ -195,13 +196,9 @@ const RenderTopStreams = () => {
               </StyledLoadmore>
             </>
           ) : (
-            <Spinner
-              animation='grow'
-              role='status'
-              style={Utilities.loadingSpinner}
-              variant='light'>
-              <span className='sr-only'>Loading...</span>
-            </Spinner>
+            <LoadingBoxs
+              amount={Math.floor(((document.documentElement.clientWidth - 150) / 350) * 1.5)}
+            />
           )}
         </div>
       )}

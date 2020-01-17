@@ -4,6 +4,7 @@ import Alert from "react-bootstrap/Alert";
 import Utilities from "../../utilities/Utilities";
 
 function ErrorHandeling(data) {
+  console.log("TCL: ErrorHandeling -> data", data);
   const [errorMessage, setErrorMessage] = useState(data.data.message);
   const [errorTitle, setErrorTitle] = useState();
   const [show, setShow] = useState(true);
@@ -25,7 +26,7 @@ function ErrorHandeling(data) {
       setErrorTitle(data.data.title ? data.data.title : "Oh-oh! Something bad happened.");
     }
     handleErrorContent();
-  }, [data.data.manualError, data.data.message, data.data.title, errorMessage]);
+  }, [data.data.message, data.data.title, errorMessage]);
 
   if (show && data) {
     return (

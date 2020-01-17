@@ -1,6 +1,5 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { Spinner } from "react-bootstrap";
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo, useContext } from "react";
 import _ from "lodash";
 
 import ErrorHandeling from "../../error/Error";
@@ -8,10 +7,10 @@ import getFollowedVods from "./GetFollowedVods";
 import TwitchVodElement from "./TwitchVodElement";
 import Utilities from "../../../utilities/Utilities";
 import { SubFeedContainer } from "./../../sharedStyledComponents";
-
 import Header from "./Header";
-
 import { StyledLoadmore } from "./../styledComponents";
+import AccountContext from "./../../account/AccountContext";
+import LoadingBoxs from "./../LoadingBoxs";
 
 function TwitchVods() {
   const nrStreams =
@@ -23,10 +22,12 @@ function TwitchVods() {
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [vodAmounts, setVodAmounts] = useState(nrStreams);
+  const [vodError, setVodError] = useState(null);
   const transition = useRef("fade-1s");
   const loadmoreRef = useRef();
   const resetVodAmountsTimer = useRef();
   const VodHeaderRef = useRef();
+  const { authKey, username, twitchUserId } = useContext(AccountContext);
 
   //eslint-disable-next-line
   const observer = useMemo(
@@ -76,26 +77,49 @@ function TwitchVods() {
     [nrStreams]
   );
 
-  const refresh = useCallback(async forceRefresh => {
-    setRefreshing(true);
-    await getFollowedVods(forceRefresh)
-      .then(data => {
-        if (data.error) setError(data.error);
-        setVods(data.data);
-        // setIsLoaded(true);
-        setRefreshing(false);
-      })
-      .catch(data => {
-        setError(data.error);
-        setVods(data.data);
-      });
-  }, []);
+  const refresh = useCallback(
+    async forceRefresh => {
+      setRefreshing(true);
+      await getFollowedVods(forceRefresh, authKey, username, parseInt(twitchUserId))
+        .then(data => {
+          if (data.error) {
+            setError(data.error);
+          } else if (data.vodError) {
+            setVodError(data.vodError);
+          }
+          setVods(data.data);
+          // setIsLoaded(true);
+          setRefreshing(false);
+        })
+        .catch(data => {
+          setError(data.error);
+          setVods(data.data);
+        });
+    },
+    [authKey, username, twitchUserId]
+  );
 
   const windowFocusHandler = useCallback(async () => {
+    clearTimeout(resetVodAmountsTimer.current);
     refresh(false);
   }, [refresh]);
 
-  const windowBlurHandler = useCallback(() => {}, []);
+  const windowBlurHandler = useCallback(() => {
+    resetVodAmountsTimer.current = setTimeout(() => {
+      // if (VodHeaderRef.current) {
+      //   VodHeaderRef.current.scrollIntoView({
+      //     behavior: "smooth",
+      //     block: "center",
+      //     inline: "nearest",
+      //   });
+      //   setVodAmounts(nrStreams);
+      // }
+      if (vodAmounts > nrStreams) {
+        window.scrollTo(0, 0);
+        setVodAmounts(nrStreams);
+      }
+    }, 350000);
+  }, [nrStreams, vodAmounts]);
 
   useEffect(() => {
     //eslint-disable-next-line
@@ -103,9 +127,13 @@ function TwitchVods() {
 
     async function fetchData() {
       setRefreshing(true);
-      await getFollowedVods()
+      await getFollowedVods(false, authKey, username, parseInt(twitchUserId))
         .then(data => {
-          if (data.error) setError(data.error);
+          if (data.error) {
+            setError(data.error);
+          } else if (data.vodError) {
+            setVodError(data.vodError);
+          }
 
           setVods(data.data);
           // setIsLoaded(true);
@@ -131,7 +159,7 @@ function TwitchVods() {
       // observer.unobserve(loadmore);
       clearTimeout(resetVodAmountsTimer.current);
     };
-  }, [windowBlurHandler, windowFocusHandler]);
+  }, [windowBlurHandler, windowFocusHandler, authKey, username, twitchUserId]);
 
   if (Utilities.getCookie("Twitch-access_token") === null) {
     return (
@@ -142,16 +170,21 @@ function TwitchVods() {
         }}></ErrorHandeling>
     );
   } else if (error) {
-    return <ErrorHandeling data={error}></ErrorHandeling>;
+    return (
+      <>
+        <Header refresh={refresh} refreshing={refreshing} vods={vods} ref={VodHeaderRef} />
+        <ErrorHandeling data={error} style={{ marginTop: "-150px" }}></ErrorHandeling>
+      </>
+    );
   }
   // if (!isLoaded) {
   if (vods === undefined || !vods || !vods.data) {
     return (
       <>
         <Header refresh={refresh} refreshing={refreshing} vods={vods} ref={VodHeaderRef} />
-        <Spinner animation='grow' role='status' style={Utilities.loadingSpinner} variant='light'>
-          <span className='sr-only'>Loading...</span>
-        </Spinner>
+        <LoadingBoxs
+          amount={Math.floor(((document.documentElement.clientWidth - 150) / 350) * 1.5)}
+        />
       </>
     );
   } else if (!Utilities.getCookie("Twitch-access_token")) {
@@ -165,7 +198,13 @@ function TwitchVods() {
   } else {
     return (
       <>
-        <Header refresh={refresh} refreshing={refreshing} vods={vods} ref={VodHeaderRef} />
+        <Header
+          refresh={refresh}
+          refreshing={refreshing}
+          vods={vods}
+          ref={VodHeaderRef}
+          vodError={vodError}
+        />
         <SubFeedContainer>
           <TransitionGroup className='twitch-vods' component={null}>
             {vods.data.slice(0, vodAmounts).map(vod => {
@@ -203,18 +242,6 @@ function TwitchVods() {
                 }
               }, 0);
               clearTimeout(resetVodAmountsTimer.current);
-
-              resetVodAmountsTimer.current = setTimeout(() => {
-                if (VodHeaderRef.current) {
-                  VodHeaderRef.current.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                    inline: "nearest",
-                  });
-                }
-
-                setVodAmounts(nrStreams);
-              }, 60000);
             }}>
             Show more
           </p>

@@ -1,6 +1,6 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Alert from "react-bootstrap/Alert";
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import FeedsContext from "./../feed/FeedsContext";
 import StreamEle from "./StreamElement.js";
@@ -11,16 +11,12 @@ import Header from "./Header";
 
 function Twitch({ data }) {
   const [show, setShow] = useState(true);
-  const resetTimer = useRef();
 
   const windowFocusHandler = useCallback(() => {
     document.title = "Notifies | Feed";
     // data.refresh();
-    if (!resetTimer.current) {
-      resetTimer.current = setTimeout(() => {
-        data.resetNewlyAddedStreams();
-      }, 5000);
-    }
+
+    data.resetNewlyAddedStreams();
   }, [data]);
 
   const windowBlurHandler = useCallback(() => {
@@ -39,7 +35,6 @@ function Twitch({ data }) {
     return () => {
       window.removeEventListener("blur", windowBlurHandler);
       window.removeEventListener("focus", windowFocusHandler);
-      clearTimeout(resetTimer.current);
     };
   }, [data.liveStreams, windowBlurHandler, windowFocusHandler]);
 

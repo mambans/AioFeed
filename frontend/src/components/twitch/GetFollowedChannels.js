@@ -2,10 +2,10 @@ import axios from "axios";
 
 import Utilities from "../../utilities/Utilities";
 
-const fetchNextPageOfFollowers = async (PagePagination, followedchannels) => {
+const fetchNextPageOfFollowers = async (PagePagination, followedchannels, twitchUserId) => {
   const nextPage = await axios.get(`https://api.twitch.tv/helix/users/follows?`, {
     params: {
-      from_id: 32540540,
+      from_id: twitchUserId,
       first: 100,
       after: PagePagination,
     },
@@ -24,12 +24,12 @@ const fetchNextPageOfFollowers = async (PagePagination, followedchannels) => {
   }
 };
 
-async function getFollowedChannels() {
+async function getFollowedChannels(twitchUserId) {
   try {
     const followedchannels = await axios
       .get(`https://api.twitch.tv/helix/users/follows?`, {
         params: {
-          from_id: 32540540,
+          from_id: twitchUserId,
           first: 100,
         },
         headers: {
@@ -43,7 +43,11 @@ async function getFollowedChannels() {
       });
 
     if (followedchannels.total > followedchannels.data.length) {
-      await fetchNextPageOfFollowers(followedchannels.data.pagination.cursor, followedchannels);
+      await fetchNextPageOfFollowers(
+        followedchannels.data.pagination.cursor,
+        followedchannels,
+        twitchUserId
+      );
     }
 
     return followedchannels;

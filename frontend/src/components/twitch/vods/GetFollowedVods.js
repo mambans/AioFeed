@@ -4,17 +4,19 @@ import _ from "lodash";
 import getFollowedChannels from "./../GetFollowedChannels";
 import Utilities from "../../../utilities/Utilities";
 
-const getMonitoredVodChannels = async () => {
+const getMonitoredVodChannels = async (AuthKey, Username) => {
   const vodChannels = await axios
-    .get(`http://localhost:3100/notifies/vod-channels`)
-    .then(channels => {
-      return channels.data.channels.map(channel => {
-        return channel.name;
-      });
+    .get(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/fetch`, {
+      params: {
+        username: Username,
+        authkey: AuthKey,
+      },
     })
-    .catch(error => {
-      console.log({ error });
-      return error;
+    .then(res => {
+      return res.data;
+    })
+    .catch(err => {
+      console.error(err);
     });
 
   return vodChannels;
@@ -22,6 +24,7 @@ const getMonitoredVodChannels = async () => {
 
 const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) => {
   const vodChannelsWithoutFollow = [];
+  let error;
   const vodChannels = await FollowedChannelVods.map(vod => {
     const channelFollowed = followedChannels.data.data.find(
       channel => channel.to_name.toLowerCase() === vod
@@ -36,40 +39,31 @@ const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) =
     return channel !== null;
   });
 
-  await axios
-    .get(`https://api.twitch.tv/helix/users`, {
-      params: {
-        login: vodChannelsWithoutFollow,
-        first: 100,
-      },
-      headers: {
-        Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
-        "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-      },
-    })
-    .then(res => {
-      res.data.data.map(channel => {
-        vodChannels.push(channel.id);
-        return null;
+  if (vodChannelsWithoutFollow.length > 0) {
+    await axios
+      .get(`https://api.twitch.tv/helix/users`, {
+        params: {
+          login: vodChannelsWithoutFollow,
+          first: 100,
+        },
+        headers: {
+          Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+        },
+      })
+      .then(res => {
+        res.data.data.map(channel => {
+          vodChannels.push(channel.id);
+          return null;
+        });
+      })
+      .catch(err => {
+        console.error(err);
+        error = err;
       });
-    });
+  }
 
-  // const vodChannels = followedChannels.data.data
-  //   .map(channel => {
-  //     if (FollowedChannelVods.includes(channel.to_name.toLowerCase())) {
-  //       return channel.to_id;
-  //     }
-  //     // else {
-  //     //   // vodChannelsWithoutFollow.push(channel.to_name);
-  //     //   return null;
-  //     // }
-  //     return null;
-  //   })
-  //   .filter(channel => {
-  //     return channel !== null;
-  //   });
-
-  return vodChannels;
+  return { data: vodChannels, error: error };
 };
 
 const addVodEndTime = async followedStreamVods => {
@@ -96,6 +90,7 @@ const SortAndAddExpire = async (followedStreamVods, vodExpire) => {
 
 const fetchVodsFromMonitoredChannels = async vodChannels => {
   const followedStreamVods = [];
+
   await Promise.all(
     vodChannels.map(async channel => {
       const response = await axios.get(`https://api.twitch.tv/helix/videos?`, {
@@ -121,7 +116,7 @@ const fetchVodsFromMonitoredChannels = async vodChannels => {
   return followedStreamVods;
 };
 
-async function getFollowedVods(forceRun) {
+async function getFollowedVods(forceRun, AuthKey, Username, twitchUserId) {
   const thresholdDate = 1;
   const vodExpire = 3;
 
@@ -136,13 +131,13 @@ async function getFollowedVods(forceRun) {
       forceRun
     ) {
       try {
-        const followedChannels = await getFollowedChannels();
+        const followedChannels = await getFollowedChannels(twitchUserId);
 
-        const FollowedChannelVods = await getMonitoredVodChannels();
+        const FollowedChannelVods = await getMonitoredVodChannels(AuthKey, Username);
 
         const vodChannels = await monitoredChannelNameToId(followedChannels, FollowedChannelVods);
 
-        const followedStreamVods = await fetchVodsFromMonitoredChannels(vodChannels);
+        const followedStreamVods = await fetchVodsFromMonitoredChannels(vodChannels.data);
 
         await addVodEndTime(followedStreamVods);
 
@@ -156,6 +151,15 @@ async function getFollowedVods(forceRun) {
             loaded: followedOrderedStreamVods.loaded,
           })
         );
+
+        return {
+          data: {
+            data: followedOrderedStreamVods.data,
+            expire: followedOrderedStreamVods.expire,
+            loaded: followedOrderedStreamVods.loaded,
+          },
+          vodError: vodChannels.error,
+        };
       } catch (error) {
         console.error(error);
         return {

@@ -1,10 +1,11 @@
 import { Spinner } from "react-bootstrap";
-// import { Redirect } from "react-router-dom";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import axios from "axios";
 
 import Utilities from "../../utilities/Utilities";
 import ErrorHandeling from "./../error/Error";
+import AccountContext from "./../account/AccountContext";
+import NavigationContext from "./../navigation/NavigationContext";
 
 function getParameterByName(name, url) {
   if (!url) url = window.location.href;
@@ -17,37 +18,40 @@ function getParameterByName(name, url) {
 }
 
 function YoutubeAuthCallback() {
-  // const { setConnectedDomain, setAccountModalOpen } = data;
-  // const { setConnectedDomain } = data;
-
+  const { setVisible } = useContext(NavigationContext);
   const [error, setError] = useState();
-  // const [authenticated, setAuthenticated] = useState(false);
+  const { username } = useContext(AccountContext);
 
   const getAccessToken = useCallback(async () => {
     const url = new URL(window.location.href);
 
-    const authCode = getParameterByName("access_token");
-    const authCodeExpireParam = getParameterByName("expires_in");
-    const authCodeExpire = authCodeExpireParam;
+    const accessToken = getParameterByName("access_token");
+    const accessTokenExpireParam = getParameterByName("expires_in");
 
     const validateToken = await axios.post(
-      `https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${authCode}`
+      `https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${accessToken}`
     );
 
     if (validateToken.data.aud === process.env.REACT_APP_YOUTUBE_CLIENT_ID) {
-      document.cookie = `Youtube-access_token=${authCode}; path=/`;
-      document.cookie = `Youtube-access_token_expire=${authCodeExpire}; path=/`;
+      document.cookie = `Youtube-access_token=${accessToken}; path=/`;
+      document.cookie = `Youtube-access_token_expire=${accessTokenExpireParam}; path=/`;
       document.cookie = `Youtube-readonly=${url.hash.split("&")[4].includes(".readonly")}; path=/`;
     }
 
-    await axios.put(`http://localhost:3100/notifies/account/youtube/connect`, {
-      accountName: Utilities.getCookie("Notifies_AccountName"),
-      accountEmail: Utilities.getCookie("Notifies_AccountEmail"),
-      youtubeToken: authCode,
-    });
-  }, []);
+    await axios
+      .put(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+        username: username,
+        token: accessToken,
+        tokenName: "YoutubeToken",
+      })
+      .catch(e => {
+        console.error(e);
+      });
+  }, [username]);
 
   useEffect(() => {
+    setVisible(false);
+
     async function handleAuth() {
       const url = new URL(window.location.href);
 
@@ -79,24 +83,23 @@ function YoutubeAuthCallback() {
     }
 
     handleAuth();
-  }, [getAccessToken]);
+  }, [getAccessToken, setVisible]);
 
   if (error) {
     return <ErrorHandeling data={error}></ErrorHandeling>;
-  }
-  // else if (authenticated) {
-  //   // data.setAccountModalOpen(false);
-  //   // setConnectedDomain("Youtube");
-  //   // localStorage.setItem("YoutubeFeedEnabled", "true");
-  //   window.close();
-
-  //   return "";
-  //   // return <Redirect to='/account'></Redirect>;
-  // }
-  else {
+  } else {
     return (
-      <Spinner animation='border' role='status' style={Utilities.loadingSpinner}>
-        <span className='sr-only'>Loading...</span>
+      <Spinner
+        animation='border'
+        role='status'
+        style={{
+          ...Utilities.loadingSpinner,
+          position: "absolute",
+          margin: "0",
+          top: "calc(50% - 5rem)",
+          left: "calc(50% - 5rem)",
+        }}>
+        ><span className='sr-only'>Loading...</span>
       </Spinner>
     );
   }

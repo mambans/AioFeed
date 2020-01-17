@@ -4,23 +4,37 @@ import { ic_playlist_add } from "react-icons-kit/md/ic_playlist_add";
 import { Icon } from "react-icons-kit";
 import Alert from "react-bootstrap/Alert";
 import axios from "axios";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 
 import UnfollowStream from "./../UnfollowStream";
 import { UnfollowButton, VodRemoveButton, VodAddButton } from "./../../sharedStyledComponents";
+import AccountContext from "./../../account/AccountContext";
 
 const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
   const [unfollowResponse, setUnfollowResponse] = useState(null);
   const refUnfollowAlert = useRef();
+  const { authKey, username } = useContext(AccountContext);
 
   async function addChannel(channel) {
     try {
+      vodChannels.unshift(channel.toLowerCase());
+
+      setVodChannels([...vodChannels]);
+
       await axios
-        .post(`http://localhost:3100/notifies/vod-channels`, {
-          channelName: channel.toLowerCase(),
-        })
-        .then(res => {
-          setVodChannels(res.data.channels);
+        .put(
+          `https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/update`,
+          {
+            username: username,
+            authkey: authKey,
+            channels: vodChannels,
+          }
+        )
+        // .then(res => {
+        //   setVodChannels(res.data);
+        // })
+        .catch(error => {
+          console.error(error);
         });
     } catch (e) {
       console.log(e.message);
@@ -29,14 +43,24 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
 
   async function removeChannel(channel) {
     try {
+      const index = vodChannels.indexOf(channel.toLowerCase());
+      vodChannels.splice(index, 1);
+      setVodChannels([...vodChannels]);
+
       await axios
-        .delete(`http://localhost:3100/notifies/vod-channels`, {
-          data: {
-            channelName: channel.toLowerCase(),
-          },
-        })
-        .then(res => {
-          setVodChannels(res.data.channels);
+        .put(
+          `https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/update`,
+          {
+            username: username,
+            authkey: authKey,
+            channels: vodChannels,
+          }
+        )
+        // .then(res => {
+        //   setVodChannels(res.data);
+        // })
+        .catch(err => {
+          console.error(err);
         });
     } catch (e) {
       console.log(e.message);
@@ -44,7 +68,8 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
   }
 
   const ChannelVodEnabled = () => {
-    return vodChannels.find(channel => channel.name.toLowerCase() === data.to_name.toLowerCase());
+    // return vodChannels.find(channel => channel.name.toLowerCase() === data.to_name.toLowerCase());
+    return vodChannels.includes(data.to_name.toLowerCase());
   };
 
   function UnfollowAlert() {
@@ -120,6 +145,7 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
         {ChannelVodEnabled() ? (
           <VodRemoveButton
             data-tip={"Remove " + data.to_name + " vods."}
+            title={"Remove " + data.to_name + " vods."}
             variant='link'
             onClick={() => {
               removeChannel(data.to_name);
@@ -129,6 +155,7 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
         ) : (
           <VodAddButton
             data-tip={"Add " + data.to_name + " vods."}
+            title={"Add " + data.to_name + " vods."}
             variant='link'
             onClick={() => {
               addChannel(data.to_name);
@@ -138,6 +165,7 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
         )}
         <UnfollowButton
           data-tip={"Unfollow " + data.to_name}
+          title={"Unfollow " + data.to_name}
           variant='link'
           style={{ marginLeft: "5px", padding: "0" }}
           onClick={async () => {

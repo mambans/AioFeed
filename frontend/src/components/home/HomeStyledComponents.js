@@ -34,6 +34,7 @@ const TopBlurOverlay = styled.div`
   padding: 0 !important;
   filter: blur(5px);
   top: 0;
+  z-index: 1000;
 `;
 
 const LogoText = styled.div`

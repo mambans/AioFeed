@@ -7,7 +7,6 @@ const Legality = () => {
 
   window.setTimeout(() => {
     const element = document.getElementById(scrollTo);
-    console.log("TCL: Legality -> element", element);
     element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
   }, 1);
 

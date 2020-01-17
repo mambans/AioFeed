@@ -1,18 +1,25 @@
-import axios from "axios";
-import React, { useState, useContext } from "react";
 import { Form, Button } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
+import { Spinner } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
+import axios from "axios";
+import React, { useState, useContext } from "react";
 
-import { StyledCreateFormTitle, StyledCreateForm, StyledAlert } from "./styledComponent";
+import { StyledCreateFormTitle, StyledCreateForm, StyledAlert } from "./StyledComponent";
+import AccountContext from "./../../account/AccountContext";
 import NavigationContext from "./../NavigationContext";
+import Utilities from "../../../utilities/Utilities";
 
-function LoginModal() {
-  const currentPage = new URL(window.location.href).pathname;
-  const props = useContext(NavigationContext);
-
+export default () => {
   document.title = "Notifies | Login";
+  const currentPage = new URL(window.location.href).pathname;
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const props = useContext(NavigationContext);
+  const { setAuthKey, setUsername, setProfileImage, setTwitchToken, setYoutubeToken } = useContext(
+    AccountContext
+  );
+
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);
 
@@ -34,58 +41,55 @@ function LoginModal() {
 
   const handleSubmit = evt => {
     evt.preventDefault();
-
+    setLoading(true);
     loginAccount();
   };
 
   async function loginAccount() {
     setError(null);
-    // try {
-    //   await axios
-    //     .post(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/login`, {
-    //       username: userName,
-    //       password: password,
-    //     })
-    //     .then(res => {
-    //       console.log("====================================");
-    //       console.log(res);
-    //       console.log("====================================");
-    //     })
-    //     .catch(e => {
-    //       console.error(e);
-    //     });
-    // } catch (e) {
-    //   console.log("TCL: loginAccount -> e", e);
-    // }
 
     await axios
-      .post(`http://localhost:3100/notifies/account/login`, {
-        accountName: userName,
-        accountPassword: password,
+      .post(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/login`, {
+        username: userName,
+        password: password,
       })
       .then(res => {
-        document.cookie = `Notifies_AccountName=${res.data.account.username}; path=/`;
-        document.cookie = `Notifies_AccountEmail=${res.data.account.email}; path=/`;
-        document.cookie = `Twitch-access_token=${res.data.account.twitch_token}; path=/`;
-        document.cookie = `Youtube-access_token=${res.data.account.youtube_token}; path=/`;
-        document.cookie = `Notifies_AccountProfileImg=${res.data.account.profile_img}; path=/`;
+        if (res.status === 200 && res.data.Attributes) {
+          document.cookie = `Notifies_AccountName=${res.data.Attributes.Username}; path=/`;
+          document.cookie = `Notifies_AccountEmail=${res.data.Attributes.Email}; path=/`;
+          document.cookie = `Twitch-access_token=${res.data.Attributes.TwitchToken}; path=/`;
+          document.cookie = `Youtube-access_token=${res.data.Attributes.YoutubeToken}; path=/`;
+          document.cookie = `Notifies_AccountProfileImg=${res.data.Attributes.ProfileImg}; path=/`;
+          document.cookie = `Notifies_AuthKey=${res.data.Attributes.AuthKey}; path=/`;
+          setAuthKey(res.data.Attributes.AuthKey);
+          setUsername(res.data.Attributes.Username);
+          setProfileImage(res.data.Attributes.ProfileImg);
+          setTwitchToken(res.data.Attributes.TwitchToken);
+          setYoutubeToken(res.data.Attributes.YoutubeToken);
 
-        resetUserName();
-        resetPassword();
-        props.setIsLoggedIn(true);
+          resetUserName();
+          resetPassword();
+          props.setIsLoggedIn(true);
+        } else {
+          console.log(res);
+          //   setError({
+          //   title: res.response.data,
+          //   message: e.response.status,
+          // });
+        }
       })
-      .catch(error => {
-        console.error(error);
+      .catch(e => {
+        console.error(e);
+        console.log(e);
         setError({
-          title: error.response.data,
-          message: error.response.status,
+          title: e.response.data,
+          message: e.response.status,
         });
       });
   }
 
   return (
     <>
-      {/* {error ? <ErrorHandeling data={error}></ErrorHandeling> : null} */}
       {error ? (
         <StyledAlert variant='warning' dismissible onClose={() => setError(null)}>
           <Alert.Heading>{error.title}</Alert.Heading>
@@ -115,6 +119,11 @@ function LoginModal() {
           </Button>
         </div>
       </StyledCreateForm>
+      {loading ? (
+        <Spinner animation='grow' role='status' style={Utilities.loadingSpinner}>
+          <span className='sr-only'>Loading...</span>
+        </Spinner>
+      ) : null}
       {props.isLoggedIn &&
       !error &&
       (currentPage === "/account/login" || currentPage === "/account") ? (
@@ -122,6 +131,4 @@ function LoginModal() {
       ) : null}
     </>
   );
-}
-
-export default LoginModal;
+};

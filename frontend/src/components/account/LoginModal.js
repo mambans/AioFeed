@@ -1,12 +1,15 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Form, Button } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 
 import styles from "./Account.module.scss";
 import ErrorHandeling from "../error/Error";
+import AccountContext from "./../account/AccountContext";
+
 export default props => {
   const currentPage = new URL(window.location.href).pathname;
+  const { setAuthKey, setUsername } = useContext(AccountContext);
 
   document.title = "Notifies | Login";
   const [error, setError] = useState(null);
@@ -37,45 +40,30 @@ export default props => {
 
   async function loginAccount() {
     setError(null);
-    // try {
-    //   await axios
-    //     .post(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/login`, {
-    //       username: userName,
-    //       password: password,
-    //     })
-    //     .then(res => {
-    //       console.log("====================================");
-    //       console.log(res);
-    //       console.log("====================================");
-    //     })
-    //     .catch(e => {
-    //       console.error(e);
-    //     });
-    // } catch (e) {
-    //   console.log("TCL: loginAccount -> e", e);
-    // }
-
     await axios
-      .post(`http://localhost:3100/notifies/account/login`, {
-        accountName: userName,
-        accountPassword: password,
+      .post(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/login`, {
+        username: userName,
+        password: password,
       })
       .then(res => {
-        document.cookie = `Notifies_AccountName=${res.data.account.username}; path=/`;
-        document.cookie = `Notifies_AccountEmail=${res.data.account.email}; path=/`;
-        document.cookie = `Twitch-access_token=${res.data.account.twitch_token}; path=/`;
-        document.cookie = `Youtube-access_token=${res.data.account.youtube_token}; path=/`;
-        document.cookie = `Notifies_AccountProfileImg=${res.data.account.profile_img}; path=/`;
+        document.cookie = `Notifies_AccountName=${res.data.Attributes.Username}; path=/`;
+        document.cookie = `Notifies_AccountEmail=${res.data.Attributes.Email}; path=/`;
+        document.cookie = `Twitch-access_token=${res.data.Attributes.TwitchToken}; path=/`;
+        document.cookie = `Youtube-access_token=${res.data.Attributes.YoutubeToken}; path=/`;
+        document.cookie = `Notifies_AccountProfileImg=${res.data.Attributes.ProfileImg}; path=/`;
+        document.cookie = `Notifies_AuthKey=${res.data.Attributes.AuthKey}; path=/`;
+        setAuthKey(res.data.Attributes.AuthKey);
+        setUsername(res.data.Attributes.Username);
 
         resetUserName();
         resetPassword();
         props.setIsLoggedIn(true);
       })
-      .catch(error => {
-        console.error(error);
+      .catch(e => {
+        console.error(e);
         setError({
-          title: error.response.data,
-          message: error.response.status,
+          title: e.response.data,
+          message: e.response.status,
         });
       });
   }

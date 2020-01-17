@@ -1,4 +1,3 @@
-import { Spinner } from "react-bootstrap";
 import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
 
 import ErrorHandeling from "../error/Error";
@@ -8,12 +7,14 @@ import NotificationsContext from "./../notifications/NotificationsContext";
 import styles from "./Twitch.module.scss";
 import Utilities from "../../utilities/Utilities";
 import Header from "./Header";
+import LoadingBoxs from "./LoadingBoxs";
+import AccountContext from "./../account/AccountContext";
 
-const REFRESH_RATE = 20; // seconds
+const REFRESH_RATE = 25; // seconds
 
 export default ({ children }) => {
   const addNotification = useContext(NotificationsContext).addNotification;
-
+  const { twitchUserId } = useContext(AccountContext);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [refreshTimer, setRefreshTimer] = useState(20);
@@ -62,7 +63,7 @@ export default ({ children }) => {
       // console.log("refreshing");
       setRefreshing(true);
       try {
-        followedChannels.current = await getFollowedChannels();
+        followedChannels.current = await getFollowedChannels(parseInt(twitchUserId));
 
         if (
           followedChannels.current.data &&
@@ -125,7 +126,7 @@ export default ({ children }) => {
         setError(error);
       }
     },
-    [addNotification, addSystemNotification]
+    [addNotification, addSystemNotification, twitchUserId]
   );
 
   useEffect(() => {
@@ -172,7 +173,6 @@ export default ({ children }) => {
   }, [refresh]);
 
   if (!isLoaded) {
-    // if (true) {
     return (
       <>
         <Header
@@ -180,14 +180,6 @@ export default ({ children }) => {
             refreshing: refreshing,
             refreshTimer: refreshTimer,
             followedChannels: followedChannels.current,
-
-            // REFRESH_RATE: REFRESH_RATE,
-            // error: error,
-            // liveStreams: liveStreams.current,
-            // newlyAddedStreams: newlyAddedStreams.current,
-            // resetNewlyAddedStreams: resetNewlyAddedStreams.current,
-            // setRefreshTimer: setRefreshTimer,
-            // timer: timer.current,
           }}
           refresh={refresh}
         />
@@ -197,9 +189,7 @@ export default ({ children }) => {
           style={{
             marginTop: "0",
           }}>
-          <Spinner animation='grow' role='status' style={Utilities.loadingSpinner} variant='light'>
-            <span className='sr-only'>Loading...</span>
-          </Spinner>
+          <LoadingBoxs amount={5} />
         </div>
       </>
     );
