@@ -2,9 +2,14 @@ import styled from "styled-components";
 
 const Notification = styled.li`
   display: grid !important;
-  grid-template-areas: "img name name" "img title title" "date date date";
-  min-height: 100px !important;
+  /* grid-template-areas: "img name name" "img title title" "date date date"; */
+  grid-template-areas: ${props =>
+    props.type === "Offline"
+      ? '"img name name" "img date date"'
+      : '"img name name" "img title title" "date date date"'};
+  min-height: ${props => (props.type === "Offline" ? "50px" : "100px")} !important;
   grid-template-columns: 20% 80%;
+  opacity:  ${props => (props.type === "Offline" ? 0.2 : 1)};
 
   * {
     outline-color: transparent;
@@ -27,7 +32,7 @@ const Notification = styled.li`
   .name {
     color: white;
     grid-area: name;
-    padding-bottom: 8px;
+    padding-bottom: ${props => (props.type === "Offline" ? null : "8px")}
   }
 
   .title {
@@ -37,6 +42,7 @@ const Notification = styled.li`
 
   .date {
     color: #838181;
+    /* grid-area: ${props => (props.type === "Offline" ? "title" : "date")}; */
     grid-area: date;
     font-size: 0.9rem;
     text-align: right;

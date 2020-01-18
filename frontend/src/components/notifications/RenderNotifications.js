@@ -89,7 +89,7 @@ export default () => {
             {props.notifications
               ? props.notifications.map(item => {
                   return (
-                    <Notification key={item.key}>
+                    <Notification key={item.key} type={item.status}>
                       <a
                         className='profileImg'
                         href={"https://www.twitch.tv/" + item.user_name.toLowerCase()}
@@ -102,11 +102,13 @@ export default () => {
                         className='name'>
                         <b>{item.user_name}</b> went {item.status}
                       </a>
-                      <a
-                        href={"https://www.twitch.tv/" + item.user_name.toLowerCase() + "/videos"}
-                        className='title'>
-                        {Utilities.truncate(item.title, 50)}
-                      </a>
+                      {item.status === "Live" ? (
+                        <a
+                          href={"https://www.twitch.tv/" + item.user_name.toLowerCase() + "/videos"}
+                          className='title'>
+                          {Utilities.truncate(item.title, 50)}
+                        </a>
+                      ) : null}
                       <div className='date'>
                         <div>
                           <Moment fromNow id='timeago'>
