@@ -41,7 +41,8 @@ const Notification = styled.li`
   }
 
   .date {
-    color: #838181;
+    /* color: #838181; */
+    color: ${props => (props.type === "Offline" ? "#ffffff" : "#838181")};
     /* grid-area: ${props => (props.type === "Offline" ? "title" : "date")}; */
     grid-area: date;
     font-size: 0.9rem;
