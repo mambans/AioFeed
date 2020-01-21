@@ -45,7 +45,7 @@ const TwitchSidebarItem = data => {
                 ? data.stream.profile_img_url.replace("{width}", 640).replace("{height}", 360) +
                   `#` +
                   new Date().getTime()
-                : `${process.env.PUBLIC_URL}/icons/v3/Logo-2k.png`
+                : `${process.env.PUBLIC_URL}/android-chrome-512x512.png`
             }
             alt={styles.thumbnail}></img>
         </div>

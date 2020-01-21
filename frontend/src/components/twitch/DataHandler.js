@@ -38,8 +38,8 @@ export default ({ children }) => {
             status === "offline"
               ? ""
               : `${Utilities.truncate(stream.title, 60)}\n${stream.game_name}`,
-          icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/icons/v3/Logo-2k.png`,
-          badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/icons/v3/Logo-2k.png`,
+          icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+          badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
           silent: status === "offline" ? true : false,
         }
       );

@@ -27,7 +27,11 @@ function NavigationBar(prop) {
         variant='dark'
         shrink={shrinkNavbar}>
         <Nav.Link as={NavLink} to='/' className='logo-link'>
-          <img src={`${process.env.PUBLIC_URL}/icons/v3/Logo-2k.png`} alt='logo' className='logo' />
+          <img
+            src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}
+            alt='logo'
+            className='logo'
+          />
           Notifies
         </Nav.Link>
         <RenderNotifications />

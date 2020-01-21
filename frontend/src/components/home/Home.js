@@ -76,7 +76,7 @@ export default () => {
         <div className={styles.container}>
           <LogoText>
             <img
-              src={`${process.env.PUBLIC_URL}/icons/v3/Logo-2k.png`}
+              src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}
               alt='logo'
               className={styles.logo}
             />
@@ -91,7 +91,7 @@ export default () => {
         {/* <div className={styles.container}>
           <LogoText>
             <img
-              src={`${process.env.PUBLIC_URL}/icons/v3/Logo-2k.png`}
+              src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}
               alt='logo'
               className={styles.logo}
             />
@@ -106,7 +106,7 @@ export default () => {
 
         {/* <div className={styles.container}>
           <img
-            src={`${process.env.PUBLIC_URL}/icons/v3/Logo-2k.png`}
+            src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}
             alt='logo'
             className={styles.logo}
           />
