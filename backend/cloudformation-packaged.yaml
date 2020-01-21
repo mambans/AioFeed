@@ -9,7 +9,7 @@ Globals:
 Resources:
   Create:
     Properties:
-      CodeUri: s3://rp-deployment/a21c773cc6caabb9d94ce4915fd36152
+      CodeUri: s3://rp-deployment/4ff255ab7b1c31a9d18ab2402816b1ab
       Description: Create an Notifies account with tokens and monitored vod channels
         default to null and empty array.
       Environment:
@@ -38,7 +38,7 @@ Resources:
     Type: AWS::Serverless::Function
   DeleteAccount:
     Properties:
-      CodeUri: s3://rp-deployment/a21c773cc6caabb9d94ce4915fd36152
+      CodeUri: s3://rp-deployment/4ff255ab7b1c31a9d18ab2402816b1ab
       Description: Delete an account
       Environment:
         Variables:
@@ -64,7 +64,7 @@ Resources:
     Type: AWS::Serverless::Function
   FetchMonitoredChannels:
     Properties:
-      CodeUri: s3://rp-deployment/a21c773cc6caabb9d94ce4915fd36152
+      CodeUri: s3://rp-deployment/4ff255ab7b1c31a9d18ab2402816b1ab
       Description: Fetch monitored vod channels list.
       Environment:
         Variables:
@@ -90,7 +90,7 @@ Resources:
     Type: AWS::Serverless::Function
   Login:
     Properties:
-      CodeUri: s3://rp-deployment/a21c773cc6caabb9d94ce4915fd36152
+      CodeUri: s3://rp-deployment/4ff255ab7b1c31a9d18ab2402816b1ab
       Description: Login with Notifies account and return account info, tokens and
         monitored vod channels.
       Environment:
@@ -117,7 +117,7 @@ Resources:
     Type: AWS::Serverless::Function
   Update:
     Properties:
-      CodeUri: s3://rp-deployment/a21c773cc6caabb9d94ce4915fd36152
+      CodeUri: s3://rp-deployment/4ff255ab7b1c31a9d18ab2402816b1ab
       Description: Update a specific token mentioned as a param.
       Environment:
         Variables:
@@ -145,7 +145,7 @@ Resources:
     Type: AWS::Serverless::Function
   UpdateMonitoredChannels:
     Properties:
-      CodeUri: s3://rp-deployment/a21c773cc6caabb9d94ce4915fd36152
+      CodeUri: s3://rp-deployment/4ff255ab7b1c31a9d18ab2402816b1ab
       Description: Update monitored vod channels list.
       Environment:
         Variables:
