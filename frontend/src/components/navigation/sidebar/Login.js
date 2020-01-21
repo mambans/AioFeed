@@ -3,12 +3,10 @@ import { Redirect } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 import axios from "axios";
 import React, { useState, useContext } from "react";
-import ReactLoading from "react-loading";
 
 import { StyledCreateFormTitle, StyledCreateForm, StyledAlert } from "./StyledComponent";
 import AccountContext from "./../../account/AccountContext";
 import NavigationContext from "./../NavigationContext";
-import Utilities from "../../../utilities/Utilities";
 import LoadingIndicator from "./../../LoadingIndicator";
 
 export default () => {
