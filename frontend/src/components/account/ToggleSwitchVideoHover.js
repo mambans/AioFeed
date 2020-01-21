@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Switch from "react-switch";
 
 import { StyledToggleSwitch } from "./styledComponent";
@@ -7,11 +7,9 @@ function ToggleSwitchVideoHover(props) {
   const [checked, setChecked] = useState(props.enableHover);
 
   function handleChange(checked) {
-    if (localStorage.getItem(`${props.feed}VideoHoverEnabled`)) {
-      setChecked(checked);
-      props.setEnableHover(checked);
-      localStorage.setItem(`${props.feed}VideoHoverEnabled`, checked);
-    }
+    setChecked(checked);
+    props.setEnableHover(checked);
+    localStorage.setItem(`${props.feed}VideoHoverEnabled`, checked);
   }
 
   return (
