@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import Switch from "react-switch";
 
 import { StyledToggleSwitch } from "./styledComponent";
