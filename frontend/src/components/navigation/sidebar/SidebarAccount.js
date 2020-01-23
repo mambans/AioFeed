@@ -15,6 +15,7 @@ import { exit } from "react-icons-kit/icomoon/exit";
 import Themeselector from "./../../themes/Themeselector";
 import ToggleSwitch from "../../account/ToggleSwitch";
 import ToggleSwitchVideoHover from "../../account/ToggleSwitchVideoHover";
+import ToggleSwitchAutoRefresh from "../../account/ToggleSwitchAutoRefresh";
 import UpdateProfileImg from "../../account/UpdateProfileImg";
 import Utilities from "../../../utilities/Utilities";
 import {
@@ -40,6 +41,8 @@ export default props => {
     setYoutubeToken,
     twitchToken,
     youtubeToken,
+    autoRefreshEnabled,
+    setAutoRefreshEnabled,
   } = useContext(AccountContext);
 
   function logout() {
@@ -79,16 +82,15 @@ export default props => {
 
     try {
       popupWindow.onunload = function() {
-        // window.setTimeout(function() {
-        //   if (popupWindow.closed) {
-        //     localStorage.setItem(domain + "FeedEnabled", true);
-        //     setToken(true);
-        //     setFeedEnable(true);
-        //     if (setFeedEnableSecond) setFeedEnableSecond(true);
-        //     console.log(`Successfully authenticate to ${domain}`);
-        //   }
-        // }, 1);
-        console.log(`Successfully authenticated to ${domain}`);
+        window.setTimeout(function() {
+          if (popupWindow.closed) {
+            localStorage.setItem(domain + "FeedEnabled", true);
+            setToken(true);
+            setFeedEnable(true);
+            if (setFeedEnableSecond) setFeedEnableSecond(true);
+            console.log(`Successfully authenticate to ${domain}`);
+          }
+        }, 1);
       };
     } catch (e) {
       alert("Another Authendicate popup window might already be open.");
@@ -167,6 +169,11 @@ export default props => {
       <ToggleSwitch {...props} label='Youtube' token='Youtube' tokenExists={youtubeToken} />
       <ToggleSwitch {...props} label='TwitchVods' token='Twitch' tokenExists={twitchToken} />
       <br />
+      <ToggleSwitchAutoRefresh
+        autoRefreshEnabled={autoRefreshEnabled}
+        setAutoRefreshEnabled={setAutoRefreshEnabled}
+        tokenExists={twitchToken}
+      />
       <ToggleSwitchVideoHover
         enableHover={props.twitchVideoHoverEnable}
         setEnableHover={props.setTwitchVideoHoverEnable}

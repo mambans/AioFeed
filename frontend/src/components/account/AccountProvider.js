@@ -18,6 +18,9 @@ export default ({ children }) => {
   const [twitchProfileImg, setTwitchProfileImg] = useState(
     Utilities.getCookie(`Notifies_TwitchProfileImg`)
   );
+  const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(
+    Utilities.getCookie(`Notifies_AutoRefreshEnabled`) !== "false" ? true : false
+  );
 
   return (
     <AccountContext.Provider
@@ -38,6 +41,8 @@ export default ({ children }) => {
         setTwitchDisplayName: setTwitchDisplayName,
         twitchProfileImg: twitchProfileImg,
         setTwitchProfileImg: setTwitchProfileImg,
+        autoRefreshEnabled: autoRefreshEnabled,
+        setAutoRefreshEnabled: setAutoRefreshEnabled,
       }}>
       {children}
     </AccountContext.Provider>

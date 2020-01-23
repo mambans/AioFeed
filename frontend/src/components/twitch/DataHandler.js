@@ -14,7 +14,7 @@ const REFRESH_RATE = 25; // seconds
 
 export default ({ children }) => {
   const addNotification = useContext(NotificationsContext).addNotification;
-  const { twitchUserId } = useContext(AccountContext);
+  const { twitchUserId, autoRefreshEnabled } = useContext(AccountContext);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [refreshTimer, setRefreshTimer] = useState(20);
@@ -134,22 +134,16 @@ export default ({ children }) => {
       try {
         console.log("Twtich Datahandler UseEffect()");
         const timeNow = new Date();
-
         if (!timer.current) {
+          await refresh(true);
+          setIsLoaded(true);
+        }
+
+        if (autoRefreshEnabled && !timer.current) {
           console.log("---Twtich Datahandler SetInterval()---");
 
-          await refresh(true);
-          await setIsLoaded(true);
-
-          // followedChannels.current = await getFollowedChannels();
-          // await getFollowedOnlineStreams(followedChannels.current).then(res => {
-          //   if (res.status === 200) {
-          //     liveStreams.current = res.data;
-          //   } else {
-          //     setError(res.error);
-          //   }
-          //   setIsLoaded(true);
-          // });
+          // await refresh(true);
+          // setIsLoaded(true);
 
           setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
           timer.current = setInterval(() => {
@@ -157,6 +151,11 @@ export default ({ children }) => {
             setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
             refresh();
           }, REFRESH_RATE * 1000);
+        } else if (!autoRefreshEnabled && timer.current) {
+          clearInterval(timer.current);
+          timer.current = null;
+          setIsLoaded(true);
+          setRefreshing(false);
         }
 
         // fetchProfileImages(followedChannels.current);
@@ -170,7 +169,7 @@ export default ({ children }) => {
     return () => {
       clearInterval(timer.current);
     };
-  }, [refresh]);
+  }, [refresh, autoRefreshEnabled]);
 
   if (!isLoaded) {
     return (
@@ -213,6 +212,7 @@ export default ({ children }) => {
       refresh: refresh,
       newlyAddedStreams: newlyAddedStreams.current,
       REFRESH_RATE: REFRESH_RATE,
+      autoRefreshEnabled: autoRefreshEnabled,
 
       // timer: timer.current,
       // setRefreshTimer: setRefreshTimer,
