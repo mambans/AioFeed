@@ -5,10 +5,6 @@
 .fadeout-2500ms-enter-active {
   opacity: 0;
   transition: opacity 2500ms;
-  -webkit-transition: opacity 2500ms;
-  -moz-transition: opacity 2500ms;
-  -ms-transition: opacity 2500ms;
-  -o-transition: opacity 2500ms;
 }
 .fadeout-2500ms-exit {
   opacity: 0;
@@ -16,10 +12,6 @@
 .fadeout-2500ms-exit-active {
   opacity: 1;
   transition: opacity 2500ms;
-  -webkit-transition: opacity 1000ms;
-  -moz-transition: opacity 1000ms;
-  -ms-transition: opacity 1000ms;
-  -o-transition: opacity 1000ms;
 }
 
 //fade 1s
@@ -29,10 +21,6 @@
 .fade-1s-enter-active {
   opacity: 1;
   transition: opacity 1000ms;
-  -webkit-transition: opacity 1000ms;
-  -moz-transition: opacity 1000ms;
-  -ms-transition: opacity 1000ms;
-  -o-transition: opacity 1000ms;
 }
 .fade-1s-exit {
   opacity: 1;
@@ -40,10 +28,6 @@
 .fade-1s-exit-active {
   opacity: 0;
   transition: opacity 1000ms;
-  -webkit-transition: opacity 1000ms;
-  -moz-transition: opacity 1000ms;
-  -ms-transition: opacity 1000ms;
-  -o-transition: opacity 1000ms;
 }
 
 .fade-1s-exit-done {
@@ -53,39 +37,39 @@
 //Videofade 1s
 .videoFade-1s-enter {
   opacity: 0;
-  max-width: 0px;
-  transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
-  -webkit-transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
-  -moz-transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
-  -ms-transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
-  -o-transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
+  width: 0px !important;
+  max-width: 0px !important;
+  margin-right: 0px !important;
+  margin-left: 0px !important;
+  transition: opacity 1000ms, margin-left 1000ms, width 1000ms, margin-right 1000ms,
+    max-width 1000ms;
 }
 .videoFade-1s-enter-active {
   opacity: 1;
-  max-width: 336px;
-  transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
-  -webkit-transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
-  -moz-transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
-  -ms-transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
-  -o-transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
+  width: 336px !important;
+  max-width: 336px !important;
+  margin-right: 7px !important;
+  margin-left: 7px !important;
+  transition: opacity 1000ms, margin-left 1000ms, width 1000ms, margin-right 1000ms,
+    max-width 1000ms;
 }
 .videoFade-1s-exit {
   opacity: 1;
-  max-width: 336px;
-  transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
-  -webkit-transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
-  -moz-transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
-  -ms-transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
-  -o-transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
+  width: 336px !important;
+  max-width: 336px !important;
+  margin-right: 7px !important;
+  margin-left: 7px !important;
+  transition: opacity 1000ms, margin-left 1000ms, width 1000ms, margin-right 1000ms,
+    max-width 1000ms;
 }
 .videoFade-1s-exit-active {
   opacity: 0;
-  max-width: 0px;
-  transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
-  -webkit-transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
-  -moz-transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
-  -ms-transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
-  -o-transition: opacity 1000ms, margin 1000ms, max-width 1000ms;
+  width: 0px !important;
+  max-width: 0px !important;
+  margin-right: 0px !important;
+  margin-left: 0px !important;
+  transition: opacity 1000ms, margin-left 1000ms, width 1000ms, margin-right 1000ms,
+    max-width 1000ms;
 }
 
 //fade 05s
@@ -95,10 +79,6 @@
 .fade-05s-enter-active {
   opacity: 1;
   transition: opacity 500ms;
-  -webkit-transition: opacity 500ms;
-  -moz-transition: opacity 500ms;
-  -ms-transition: opacity 500ms;
-  -o-transition: opacity 500ms;
 }
 .fade-05s-exit {
   opacity: 1;
@@ -106,10 +86,6 @@
 .fade-05s-exit-active {
   opacity: 0;
   transition: opacity 500ms;
-  -webkit-transition: opacity 500ms;
-  -moz-transition: opacity 500ms;
-  -ms-transition: opacity 500ms;
-  -o-transition: opacity 500ms;
 }
 
 //fade 0.2s for fade-02s.
@@ -119,10 +95,6 @@
 .fade-02-enter-active {
   opacity: 1;
   transition: opacity 200ms ease-in;
-  -webkit-transition: opacity 200ms ease-in;
-  -moz-transition: opacity 200ms ease-in;
-  -ms-transition: opacity 200ms ease-in;
-  -o-transition: opacity 200ms ease-in;
 }
 
 .fade-02-exit {
@@ -132,10 +104,6 @@
 .fade-02-exit-active {
   opacity: 0;
   transition: opacity 200ms ease-in, transition;
-  -webkit-transition: opacity 200ms ease-in, transition;
-  -moz-transition: opacity 200ms ease-in, transition;
-  -ms-transition: opacity 200ms ease-in, transition;
-  -o-transition: opacity 200ms ease-in, transition;
 }
 
 //fadeSlide-right-1s 1s
@@ -144,30 +112,18 @@
   //max-width: 0px;
   right: -336px;
   transition: opacity 500ms, right 500ms;
-  -webkit-transition: opacity 500ms, right 500ms;
-  -moz-transition: opacity 500ms, right 500ms;
-  -ms-transition: opacity 500ms, right 500ms;
-  -o-transition: opacity 500ms, right 500ms;
 }
 .fadeSlide-right-1s-enter-active {
   opacity: 1;
   //max-width: 300px;
   right: 0;
   transition: opacity 500ms, right 500ms;
-  -webkit-transition: opacity 500ms, right 500ms;
-  -moz-transition: opacity 500ms, right 500ms;
-  -ms-transition: opacity 500ms, right 500ms;
-  -o-transition: opacity 500ms, right 500ms;
 }
 .fadeSlide-right-1s-exit {
   opacity: 1;
   //max-width: 300px;
   right: 0;
   transition: opacity 500ms, right 500ms;
-  -webkit-transition: opacity 500ms, right 500ms;
-  -moz-transition: opacity 500ms, right 500ms;
-  -ms-transition: opacity 500ms, right 500ms;
-  -o-transition: opacity 500ms, right 500ms;
 }
 .fadeSlide-right-1s-exit-active {
   opacity: 0;
@@ -175,10 +131,6 @@
   //max-width: 0px;
   right: -336px;
   transition: opacity 500ms, right 500ms;
-  -webkit-transition: opacity 500ms, right 500ms;
-  -moz-transition: opacity 500ms, right 500ms;
-  -ms-transition: opacity 500ms, right 500ms;
-  -o-transition: opacity 500ms, right 500ms;
 }
 
 .fadeSlide-right-1s-enter-done {
@@ -191,10 +143,6 @@
   top: 62px;
   height: 0px;
   transition: opacity 1000ms, top 1000ms, height 1000ms;
-  -webkit-transition: opacity 1000ms, top 1000ms, height 1000ms;
-  -moz-transition: opacity 1000ms, top 1000ms, height 1000ms;
-  -ms-transition: opacity 1000ms, top 1000ms, height 1000ms;
-  -o-transition: opacity 1000ms, top 1000ms, height 1000ms;
 }
 
 .sidebarVideoFade-1s-enter-active {
@@ -202,10 +150,6 @@
   top: 0;
   height: 62px;
   transition: opacity 1000ms, top 1000ms, height 1000ms;
-  -webkit-transition: opacity 1000ms, top 1000ms, height 1000ms;
-  -moz-transition: opacity 1000ms, top 1000ms, height 1000ms;
-  -ms-transition: opacity 1000ms, top 1000ms, height 1000ms;
-  -o-transition: opacity 1000ms, top 1000ms, height 1000ms;
 }
 
 .sidebarVideoFade-1s-exit {
@@ -213,10 +157,6 @@
   //top: 0;
   height: 62px;
   transition: opacity 1000ms, top 1000ms, height 1000ms;
-  -webkit-transition: opacity 1000ms, top 1000ms, height 1000ms;
-  -moz-transition: opacity 1000ms, top 1000ms, height 1000ms;
-  -ms-transition: opacity 1000ms, top 1000ms, height 1000ms;
-  -o-transition: opacity 1000ms, top 1000ms, height 1000ms;
 }
 
 .sidebarVideoFade-1s-exit-active {
@@ -224,8 +164,4 @@
   //top: 62px;
   height: 0px;
   transition: opacity 1000ms, top 1000ms, height 1000ms;
-  -webkit-transition: opacity 1000ms, top 1000ms, height 1000ms;
-  -moz-transition: opacity 1000ms, top 1000ms, height 1000ms;
-  -ms-transition: opacity 1000ms, top 1000ms, height 1000ms;
-  -o-transition: opacity 1000ms, top 1000ms, height 1000ms;
 }
