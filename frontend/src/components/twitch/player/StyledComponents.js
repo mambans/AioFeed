@@ -14,10 +14,10 @@ const StyledChat = styled.iframe`
   border: none;
   right: 0;
   position: fixed;
-  width: 12vw;
+  width: ${props => props.width || "9vw"};
 `;
 const StyledVideo = styled.iframe`
-  width: ${props => props.width || "88vw"};
+  width: ${props => props.width || "91vw"};
   height: 100vh;
 
   border: none;
