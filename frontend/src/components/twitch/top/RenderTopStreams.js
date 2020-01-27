@@ -7,6 +7,7 @@ import Popup from "reactjs-popup";
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import Alert from "react-bootstrap/Alert";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { useParams } from "react-router-dom";
 
 import { RefreshButton, HeaderTitle, ButtonList } from "./../../sharedStyledComponents";
 import GetTopStreams from "./GetTopStreams";
@@ -18,9 +19,9 @@ import GameSearchBar from "./GameSearchBar";
 import { StyledLoadmore } from "./../styledComponents";
 import LoadingBoxs from "./../LoadingBoxs";
 
-const RenderTopStreams = () => {
-  const game_param_url = decodeURI(new URL(window.location.href).pathname.split("/")[3]);
-  document.title = `Notifies | ${game_param_url || "All"} Top`;
+export default () => {
+  const { category } = useParams();
+  document.title = `Notifies | ${category || "All"} Top`;
 
   const [topStreams, setTopStreams] = useState();
   const [loadmoreLoaded, setLoadmoreLoaded] = useState(true);
@@ -31,7 +32,7 @@ const RenderTopStreams = () => {
 
   const loadMore = useCallback(() => {
     setLoadmoreLoaded(false);
-    GetTopStreams(game_param_url, oldTopStreams.current.pagination.cursor).then(res => {
+    GetTopStreams(category, oldTopStreams.current.pagination.cursor).then(res => {
       const allTopStreams = oldTopStreams.current.data.concat(res.topStreams.data.data);
       oldTopStreams.current = {
         data: allTopStreams,
@@ -51,20 +52,20 @@ const RenderTopStreams = () => {
         }
       }, 0);
     });
-  }, [game_param_url]);
+  }, [category]);
 
   const refresh = useCallback(() => {
     setRefreshing(true);
-    GetTopStreams(game_param_url).then(res => {
+    GetTopStreams(category).then(res => {
       oldTopStreams.current = res.topStreams.data;
       setTopStreams(res.topStreams.data.data);
       setRefreshing(false);
     });
-  }, [game_param_url]);
+  }, [category]);
 
   useEffect(() => {
     setRefreshing(true);
-    GetTopStreams(game_param_url)
+    GetTopStreams(category)
       .then(res => {
         oldTopStreams.current = res.topStreams.data;
         setTopStreams(res.topStreams.data.data);
@@ -78,7 +79,7 @@ const RenderTopStreams = () => {
         }
         setRefreshing(false);
       });
-  }, [game_param_url]);
+  }, [category]);
 
   return (
     <>
@@ -111,7 +112,7 @@ const RenderTopStreams = () => {
           Top Streams
         </HeaderTitle>
         <div style={{ display: "flex" }}>
-          <GameSearchBar gameName={game_param_url} />
+          <GameSearchBar gameName={category} />
           <Popup
             placeholder='""'
             arrow={false}
@@ -125,7 +126,7 @@ const RenderTopStreams = () => {
                     width: "250px",
                     margin: 0,
                   }}>
-                  {game_param_url !== "" && game_param_url !== "" ? game_param_url : "All"}
+                  {category !== "" && category !== undefined ? category : "All"}
                 </p>
                 <Icon
                   icon={list2}
@@ -205,5 +206,3 @@ const RenderTopStreams = () => {
     </>
   );
 };
-
-export default RenderTopStreams;

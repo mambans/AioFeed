@@ -1,5 +1,5 @@
 import Icon from "react-icons-kit";
-import React from "react";
+import React, { useContext } from "react";
 import { Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { email } from "react-icons-kit/entypo/email";
@@ -8,6 +8,7 @@ import { github } from "react-icons-kit/icomoon/github";
 import { home } from "react-icons-kit/icomoon/home";
 import { ic_account_circle } from "react-icons-kit/md/ic_account_circle";
 
+import NavigationContext from "./../navigation/NavigationContext";
 import {
   StyledFooterContainer,
   StyledCenterBottomText,
@@ -15,7 +16,9 @@ import {
 } from "./styledComponents";
 
 const Footer = () => {
-  return (
+  const { footerVisible } = useContext(NavigationContext);
+
+  return footerVisible ? (
     <StyledFooterContainer>
       <div>
         <ul>
@@ -81,7 +84,7 @@ const Footer = () => {
         </ul>
       </div>
     </StyledFooterContainer>
-  );
+  ) : null;
 };
 
 export default Footer;

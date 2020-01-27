@@ -28,6 +28,8 @@ import AccountContext from "./../account/AccountContext";
 
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
+import Player from "./../twitch/player/Player";
+
 const Routes = () => {
   return (
     <BrowserRouter>
@@ -67,7 +69,12 @@ const Routes = () => {
                                 );
                               }}
                             />
-                            <Route path='/twitch/top/' component={RenderTopStreams} />
+                            <Route path='/twitch/live/:channel'>
+                              <Player />
+                            </Route>
+                            <Route path='/twitch/top/:category?'>
+                              <RenderTopStreams />
+                            </Route>
                             <Route
                               exact
                               path='/twitch/notifications'
@@ -89,8 +96,6 @@ const Routes = () => {
                                 return <YoutubeAuthCallback />;
                               }}
                             />
-                            {/* <Route exact path='/auth/twitter' component={TwitterAuth} /> */}
-                            {/* <Route exact path='/auth/twitter/callback' component={TwitterAuth} /> */}
                             <Route
                               exact
                               path='/account'
@@ -151,7 +156,8 @@ const Routes = () => {
                       </CSSTransition>
                     </TransitionGroup>
                   );
-                }}></Route>
+                }}
+              />
               <Footer />
             </FeedsProvider>
           </AccountProvider>

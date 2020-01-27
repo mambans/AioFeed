@@ -2,18 +2,18 @@ import axios from "axios";
 
 import Utilities from "./../../../utilities/Utilities";
 
-export default async (game_param_url, pagination) => {
+export default async (category, pagination) => {
   let game;
   let error;
   const nrStreams =
     Math.floor((document.documentElement.clientWidth - 150) / 350) *
     Math.floor((document.documentElement.clientHeight - (65 + 60)) / 351);
 
-  if (game_param_url && game_param_url !== "undefined") {
+  if (category && category !== "undefined") {
     game = await axios
       .get(`https://api.twitch.tv/helix/games`, {
         params: {
-          name: game_param_url,
+          name: category,
         },
         headers: {
           Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,

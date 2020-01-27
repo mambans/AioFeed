@@ -52,7 +52,7 @@ const GameSearchBar = props => {
             textOverflow: "ellipsis",
           }}
           type='text'
-          placeholder={(gameName !== "" && gameName !== "" ? gameName : "All") + "..."}
+          placeholder={(gameName !== "" && gameName !== undefined ? gameName : "All") + "..."}
           {...bindGame}></input>
       </form>
     </>

@@ -7,6 +7,7 @@ const NavigationProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(Utilities.getCookie("Notifies_AccountName"));
   const [renderModal, setRenderModal] = useState("login");
   const [visible, setVisible] = useState(true);
+  const [footerVisible, setFooterVisible] = useState(true);
 
   return (
     <NavigationContext.Provider
@@ -17,6 +18,8 @@ const NavigationProvider = ({ children }) => {
         setRenderModal,
         visible,
         setVisible,
+        footerVisible,
+        setFooterVisible,
       }}>
       {children}
     </NavigationContext.Provider>
