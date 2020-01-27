@@ -1,5 +1,4 @@
 import React, { useEffect, useCallback, useRef } from "react";
-import Iframe from "react-iframe";
 
 import styles from "./Twitch.module.scss";
 
@@ -40,9 +39,10 @@ function StreamHoverIframe(data) {
 
   return (
     <>
-      <Iframe
+      <iframe
         // url={`https://player.twitch.tv/?channel=${data.data.user_name}&muted=true`}
-        url={`https://player.twitch.tv/?twitch5=1&allowfullscreen&video=&channel=${data.data.user_name}&!playsinline&autoplay&!muted&!controls`}
+        // url={`https://player.twitch.tv/?twitch5=1&channel=${data.data.user_name}&autoplay=true&muted=false&!controls`}
+        src={`https://player.twitch.tv/?twitch5=1&channel=${data.data.user_name}&autoplay=true&muted=false&!controls`}
         title={data.data.user_name + "-iframe"}
         className={styles.StreamHoverIframe}
         theme='dark'
@@ -52,6 +52,8 @@ function StreamHoverIframe(data) {
         display='inline'
         position='absolute'
         loading={"Loading.."}
+        allowFullScreen={true}
+        frameBorder='0'
       />
       <a
         href={`https://www.twitch.tv/${data.data.user_name}`}

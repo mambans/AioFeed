@@ -58,10 +58,7 @@ function StreamEle(data) {
     <div className={`${styles.video}`} key={data.data.id}>
       <ImageContainer ref={ref}>
         {isHovered ? (
-          <StreamHoverIframe
-            id={data.data.id}
-            data={data.data}
-            setIsHovered={setIsHovered}></StreamHoverIframe>
+          <StreamHoverIframe id={data.data.id} data={data.data} setIsHovered={setIsHovered} />
         ) : null}
         <a
           className={styles.img}

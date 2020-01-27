@@ -261,6 +261,9 @@
   z-index: 1;
   cursor: pointer;
   max-width: 360px;
+
+  position: absolute;
+  display: block;
 }
 
 .vodPreview {
