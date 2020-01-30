@@ -1,5 +1,5 @@
 import "react-notifications-component/dist/theme.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ReactNotification from "react-notifications-component";
 import { Alert } from "react-bootstrap";
 import { CSSTransition } from "react-transition-group";
@@ -16,8 +16,13 @@ import YoutubeHeader from "./../youtube/Header";
 import styles from "./Feed.module.scss";
 import LoadingIndicator from "./../LoadingIndicator";
 
-function Feed(props) {
+import NavigationContext from "./../navigation/NavigationContext";
+import FeedContext from "./FeedsContext";
+
+export default function Feed() {
   document.title = "Notifies | Feed";
+  const { isLoggedIn } = useContext(NavigationContext);
+  const { enableTwitch, enableYoutube, enableTwitchVods } = useContext(FeedContext);
   const [isLoaded] = useState(true);
   const [error] = useState(null);
   const [delayedEnableYoutube, setDelayedEnableYoutube] = useState(false);
@@ -54,7 +59,7 @@ function Feed(props) {
       localStorage.getItem("TwitchFeedEnabled") === "false" &&
       localStorage.getItem("YoutubeFeedEnabled") === "false" &&
       localStorage.getItem("TwitchVodsFeedEnabled") === "false" &&
-      props.isLoggedIn &&
+      isLoggedIn &&
       show
     ) {
       return (
@@ -100,10 +105,10 @@ function Feed(props) {
         <ReactNotification />
         <NoFeedsEnabled />
 
-        {props.enableTwitch ? (
+        {enableTwitch ? (
           <DataHandler>
             {liveStreams => (
-              <CSSTransition in={props.enableTwitch} timeout={0} classNames='fade-1s' unmountOnExit>
+              <CSSTransition in={enableTwitch} timeout={0} classNames='fade-1s' unmountOnExit>
                 <div className={styles.twitchContainer}>
                   <Twitch data={liveStreams} />
                 </div>
@@ -112,7 +117,7 @@ function Feed(props) {
           </DataHandler>
         ) : null}
 
-        {props.enableYoutube && delayedEnableYoutube ? (
+        {enableYoutube && delayedEnableYoutube ? (
           <div className={styles.container}>
             <YoutubeDataHandler>
               {data => (
@@ -135,7 +140,7 @@ function Feed(props) {
           </div>
         ) : null}
 
-        {props.enableTwitchVods && delayedEnableTwitchVods ? (
+        {enableTwitchVods && delayedEnableTwitchVods ? (
           <div className={styles.container}>
             <TwitchVods />
           </div>
@@ -144,5 +149,3 @@ function Feed(props) {
     );
   }
 }
-
-export default Feed;
