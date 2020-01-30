@@ -5,10 +5,12 @@ import styles from "./Legality.module.scss";
 const Legality = () => {
   const scrollTo = new URL(window.location.href).hash;
 
-  window.setTimeout(() => {
-    const element = document.getElementById(scrollTo);
-    element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
-  }, 1);
+  if (scrollTo) {
+    window.setTimeout(() => {
+      const element = document.getElementById(scrollTo);
+      element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+    }, 1);
+  }
 
   return (
     <div className={styles.container}>
