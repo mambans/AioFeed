@@ -60,9 +60,7 @@ function StreamEle(data) {
         {isHovered ? (
           <StreamHoverIframe id={data.data.id} data={data.data} setIsHovered={setIsHovered} />
         ) : null}
-        <a
-          className={styles.img}
-          href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+        <a className={styles.img} href={"/twitch/live/" + data.data.user_name.toLowerCase()}>
           <img
             src={
               data.data.thumbnail_url.replace("{width}", 640).replace("{height}", 360) +
@@ -89,19 +87,19 @@ function StreamEle(data) {
             {data.data.title}
           </Tooltip>
         }>
-        <VideoTitle href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+        <VideoTitle href={"/twitch/live/" + data.data.user_name.toLowerCase()}>
           {Utilities.truncate(data.data.title, 50)}
         </VideoTitle>
       </OverlayTrigger>
       <div>
         <div className={styles.channelContainer} ref={refChannel}>
           <a
-            href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase() + "/videos"}
+            href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
             style={{ gridRow: 1 }}>
             <img src={data.data.profile_img_url} alt='' className={styles.profile_img}></img>
           </a>
           <p className={styles.channel}>
-            <a href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase() + "/videos"}>
+            <a href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
               {data.data.user_name}
             </a>
           </p>

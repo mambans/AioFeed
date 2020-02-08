@@ -33,6 +33,25 @@
 .fade-1s-exit-done {
   opacity: 0;
 }
+//fade 300ms
+.fade-300ms-enter {
+  opacity: 0;
+}
+.fade-300ms-enter-active {
+  opacity: 1;
+  transition: opacity 300ms;
+}
+.fade-300ms-exit {
+  opacity: 1;
+}
+.fade-300ms-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+.fade-300ms-exit-done {
+  opacity: 0;
+}
 
 //Videofade 1s
 .videoFade-1s-enter {

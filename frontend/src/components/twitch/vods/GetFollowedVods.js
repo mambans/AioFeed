@@ -88,35 +88,83 @@ const SortAndAddExpire = async (followedStreamVods, vodExpire) => {
   return followedOrderedStreamVods;
 };
 
-const fetchVodsFromMonitoredChannels = async vodChannels => {
+const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRefreshToken) => {
   const followedStreamVods = [];
 
-  await Promise.all(
-    vodChannels.map(async channel => {
-      const response = await axios.get(`https://api.twitch.tv/helix/videos?`, {
-        params: {
-          user_id: channel,
-          period: "month",
-          first: 10,
-          // type: "archive",
-          type: "all",
-        },
-        headers: {
-          Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
-          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-        },
-      });
+  try {
+    await Promise.all(
+      vodChannels.map(async channel => {
+        const response = await axios.get(`https://api.twitch.tv/helix/videos?`, {
+          params: {
+            user_id: channel,
+            period: "month",
+            first: 10,
+            // type: "archive",
+            type: "all",
+          },
+          headers: {
+            Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+          },
+        });
 
-      response.data.data.forEach(vod => {
-        followedStreamVods.push(vod);
+        response.data.data.forEach(vod => {
+          followedStreamVods.push(vod);
+        });
+      })
+    );
+  } catch (e) {
+    console.log("TCL: e", e);
+
+    await axios
+      .post(
+        `https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=${encodeURI(
+          Utilities.getCookie("Twitch-refresh_token")
+        )}&client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&client_secret=${
+          process.env.REACT_APP_TWITCH_SECRET
+        }&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`
+      )
+      .then(async res => {
+        setTwitchToken(res.data.access_token);
+        setRefreshToken(res.data.refresh_token);
+        document.cookie = `Twitch-access_token=${res.data.access_token}; path=/`;
+        document.cookie = `Twitch-refresh_token=${res.data.refresh_token}; path=/`;
+
+        await Promise.all(
+          vodChannels.map(async channel => {
+            const response = await axios.get(`https://api.twitch.tv/helix/videos?`, {
+              params: {
+                user_id: channel,
+                period: "month",
+                first: 10,
+                // type: "archive",
+                type: "all",
+              },
+              headers: {
+                Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+                "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+              },
+            });
+
+            response.data.data.forEach(vod => {
+              followedStreamVods.push(vod);
+            });
+          })
+        );
       });
-    })
-  );
+  }
 
   return followedStreamVods;
 };
 
-async function getFollowedVods(forceRun, AuthKey, Username, twitchUserId) {
+async function getFollowedVods(
+  forceRun,
+  AuthKey,
+  Username,
+  twitchUserId,
+  setTwitchToken,
+  setRefreshToken
+) {
   const thresholdDate = 1;
   const vodExpire = 3;
 
@@ -137,7 +185,11 @@ async function getFollowedVods(forceRun, AuthKey, Username, twitchUserId) {
 
         const vodChannels = await monitoredChannelNameToId(followedChannels, FollowedChannelVods);
 
-        const followedStreamVods = await fetchVodsFromMonitoredChannels(vodChannels.data);
+        const followedStreamVods = await fetchVodsFromMonitoredChannels(
+          vodChannels.data,
+          setTwitchToken,
+          setRefreshToken
+        );
 
         await addVodEndTime(followedStreamVods);
 

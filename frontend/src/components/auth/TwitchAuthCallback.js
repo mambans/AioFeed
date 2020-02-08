@@ -15,6 +15,7 @@ function TwitchAuthCallback() {
     setTwitchDisplayName,
     setTwitchProfileImg,
     setTwitchToken,
+    setRefreshToken,
   } = useContext(AccountContext);
   const { setVisible } = useContext(NavigationContext);
 
@@ -34,6 +35,8 @@ function TwitchAuthCallback() {
 
       document.cookie = `Twitch-access_token=${accessToken}; path=/`;
       document.cookie = `Twitch-refresh_token=${refreshToken}; path=/`;
+      setTwitchToken(accessToken);
+      setRefreshToken(refreshToken);
 
       await axios
         .get(`https://api.twitch.tv/helix/users`, {
@@ -61,7 +64,14 @@ function TwitchAuthCallback() {
           console.error(e);
         });
     },
-    [username, setTwitchUserId, setTwitchDisplayName, setTwitchProfileImg]
+    [
+      username,
+      setTwitchUserId,
+      setTwitchDisplayName,
+      setTwitchProfileImg,
+      setTwitchToken,
+      setRefreshToken,
+    ]
   );
 
   useEffect(() => {
@@ -76,7 +86,7 @@ function TwitchAuthCallback() {
               .then(() => {
                 // setAuthenticated(true);
                 localStorage.setItem("TwitchFeedEnabled", "true");
-                setTwitchToken(true);
+                // setTwitchToken(true);
                 setTimeout(() => {
                   window.close();
                 }, 1);

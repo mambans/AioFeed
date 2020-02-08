@@ -26,7 +26,7 @@ export default props => {
       <StyledNavSidebarTrigger onClick={handleToggle} title='Sidebar'>
         {props.isLoggedIn ? (
           <>
-            <StyledSidebarTrigger />
+            <StyledSidebarTrigger id='NavigationProfileImageHoverOverlay' />
             <img
               id='NavigationProfileImage'
               src={

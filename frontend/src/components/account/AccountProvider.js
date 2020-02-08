@@ -5,6 +5,7 @@ import Utilities from "./../../utilities/Utilities";
 
 export default ({ children }) => {
   const [twitchToken, setTwitchToken] = useState(Utilities.getCookie(`Twitch-access_token`));
+  const [refreshToken, setRefreshToken] = useState(Utilities.getCookie(`Twitch-refresh_token`));
   const [youtubeToken, setYoutubeToken] = useState(Utilities.getCookie(`Youtube-access_token`));
   const [authKey, setAuthKey] = useState(Utilities.getCookie(`Notifies_AuthKey`));
   const [username, setUsername] = useState(Utilities.getCookie(`Notifies_AccountName`));
@@ -43,6 +44,8 @@ export default ({ children }) => {
         setTwitchProfileImg: setTwitchProfileImg,
         autoRefreshEnabled: autoRefreshEnabled,
         setAutoRefreshEnabled: setAutoRefreshEnabled,
+        refreshToken: refreshToken,
+        setRefreshToken: setRefreshToken,
       }}>
       {children}
     </AccountContext.Provider>

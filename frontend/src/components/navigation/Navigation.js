@@ -13,12 +13,11 @@ import Sidebar from "./sidebar/Sidebar";
 function NavigationBar(prop) {
   const [refresh, setRefresh] = useState(false);
   // eslint-disable-next-line
-  const [shrinkNavbar, setShrinkNavbar] = useState("false");
 
-  const { visible } = useContext(NavigationContext);
+  const { visible, shrinkNavbar } = useContext(NavigationContext);
 
   return (
-    <CSSTransition in={visible} timeout={1000} classNames='fade-1s' unmountOnExit>
+    <CSSTransition in={visible} timeout={1000} classNames='fade-300ms' unmountOnExit>
       <Navbar
         mode={prop.fixed ? "fixed" : "unset"}
         collapseOnSelect

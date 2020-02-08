@@ -13,7 +13,7 @@ import Utilities from "../../../utilities/Utilities";
 
 export default ({ ...data }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [previewAvailable, setPreviewAvailable] = useState(null);
+  const [previewAvailable, setPreviewAvailable] = useState();
   const imgRef = useRef();
   const hoverTimeoutRef = useRef();
 
@@ -38,34 +38,23 @@ export default ({ ...data }) => {
     }
   };
 
-  const vodPreview = `https://static-cdn.jtvnw.net/s3_vods/${
-    data.data.thumbnail_url.split("/")[4]
-  }/storyboards/${data.data.id}-strip-0.jpg`;
-
-  const checkVodPreviewAvailability = useCallback(async () => {
-    const Availability = await axios
-      .get(vodPreview)
-      .then(() => {
-        setPreviewAvailable(true);
-        return true;
-      })
-      .catch(() => {
-        setPreviewAvailable(false);
-        return false;
+  const handleMouseOver = useCallback(async () => {
+    if (!previewAvailable) {
+      const res = await axios.get(`https://api.twitch.tv/kraken/videos/${data.data.id}`, {
+        headers: {
+          Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+          Accept: "application/vnd.twitchtv.v5+json",
+        },
       });
-
-    return Availability;
-  }, [vodPreview]);
-
-  const handleMouseOver = useCallback(() => {
-    if (previewAvailable === null) {
-      checkVodPreviewAvailability();
-    }
-    hoverTimeoutRef.current = setTimeout(() => {
       setIsHovered(true);
-    }, 200);
-    // setIsHovered(true);
-  }, [checkVodPreviewAvailability, previewAvailable]);
+      setPreviewAvailable(res.data.animated_preview_url);
+    } else {
+      hoverTimeoutRef.current = setTimeout(() => {
+        setIsHovered(true);
+      }, 200);
+    }
+  }, [previewAvailable, data.data.id]);
 
   const handleMouseOut = useCallback(event => {
     clearTimeout(hoverTimeoutRef.current);
@@ -91,14 +80,14 @@ export default ({ ...data }) => {
     >
       <ImageContainer ref={imgRef}>
         <a className={styles.img} href={data.data.url}>
-          {isHovered && data.data.thumbnail_url && previewAvailable ? (
+          {isHovered && previewAvailable && data.data.thumbnail_url ? (
             <div
               alt=''
               className={styles.vodPreview}
               style={{
                 width: "336px",
                 height: "189px",
-                backgroundImage: `url(${vodPreview})`,
+                backgroundImage: `url(${previewAvailable})`,
                 borderRadius: "10px",
               }}></div>
           ) : (

@@ -5,7 +5,7 @@ import { notification } from "react-icons-kit/icomoon/notification";
 import Alert from "react-bootstrap/Alert";
 import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useRef, useCallback, useState, useEffect, useContext } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 import { CSSTransition } from "react-transition-group";
 import { Link } from "react-router-dom";
@@ -15,6 +15,8 @@ import StreamHoverIframe from "./StreamHoverIframe.js";
 import Utilities from "../../utilities/Utilities";
 import UnfollowStream from "./UnfollowStream";
 import { VideoTitle, ImageContainer, UnfollowButton } from "./../sharedStyledComponents";
+
+import AccountContext from "./../account/AccountContext";
 
 const HOVER_DELAY = 500; // 1000
 
@@ -43,6 +45,7 @@ function StreamEle(data) {
   const [isHovered, setIsHovered] = useState(false);
   const [channelIsHovered, setChannelIsHovered] = useState(false);
   const [unfollowError, setUnfollowError] = useState(null);
+  const { setTwitchToken, twitchToken, setRefreshToken } = useContext(AccountContext);
 
   const streamHoverTimer = useRef();
   const ref = useRef();
@@ -172,9 +175,7 @@ function StreamEle(data) {
             data={data.data}
             setIsHovered={setIsHovered}></StreamHoverIframe>
         ) : null}
-        <a
-          className={styles.img}
-          href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+        <a className={styles.img} href={"/twitch/live/" + data.data.user_name.toLowerCase()}>
           {/* href={
                 "https://player.twitch.tv/?volume=0.1&!muted&channel=" +
                 data.data.user_name.toLowerCase()
@@ -213,24 +214,24 @@ function StreamEle(data) {
               {data.data.title}
             </Tooltip>
           }>
-          <VideoTitle href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+          <VideoTitle href={"/twitch/live/" + data.data.user_name.toLowerCase()}>
             {Utilities.truncate(data.data.title, 50)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
-        <VideoTitle href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+        <VideoTitle href={"/twitch/live/" + data.data.user_name.toLowerCase()}>
           {data.data.title}
         </VideoTitle>
       )}
       <div>
         <div className={styles.channelContainer} ref={refChannel}>
           <a
-            href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase() + "/videos"}
+            href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
             style={{ gridRow: 1 }}>
             <img src={data.data.profile_img_url} alt='' className={styles.profile_img}></img>
           </a>
           <p className={styles.channel}>
-            <a href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase() + "/videos"}>
+            <a href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
               {data.data.user_name}
             </a>
           </p>
@@ -251,6 +252,9 @@ function StreamEle(data) {
                   await UnfollowStream({
                     user_id: data.data.user_id,
                     refresh: data.refresh,
+                    setTwitchToken: setTwitchToken,
+                    twitchToken: twitchToken,
+                    setRefreshToken: setRefreshToken,
                   })
                     .then(() => {
                       setUnfollowError("Successfully unfollowed ");
@@ -259,6 +263,8 @@ function StreamEle(data) {
                     .catch(error => {
                       setUnfollowError(null);
                       setUnfollowError("Failed to unfollow ");
+                      console.log("TCL: StreamEle -> error", error.message);
+                      console.log("::Try re-authenticate from the sidebar::");
                     });
                 }}>
                 <Icon icon={cross} size={18} className={styles.unfollowIcon} />

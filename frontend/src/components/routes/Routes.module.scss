@@ -9,6 +9,10 @@ nav[mode="fixed"] ~ #contentContainer {
   padding-top: 65px;
 }
 
+nav[shrink="true"] ~ #contentContainer {
+  padding-top: 50px;
+}
+
 // html {
 //   overflow: hidden;
 // }

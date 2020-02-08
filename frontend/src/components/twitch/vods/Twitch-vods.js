@@ -27,7 +27,9 @@ function TwitchVods() {
   const loadmoreRef = useRef();
   const resetVodAmountsTimer = useRef();
   const VodHeaderRef = useRef();
-  const { authKey, username, twitchUserId } = useContext(AccountContext);
+  const { authKey, username, twitchUserId, setTwitchToken, setRefreshToken } = useContext(
+    AccountContext
+  );
 
   //eslint-disable-next-line
   const observer = useMemo(
@@ -80,7 +82,14 @@ function TwitchVods() {
   const refresh = useCallback(
     async forceRefresh => {
       setRefreshing(true);
-      await getFollowedVods(forceRefresh, authKey, username, parseInt(twitchUserId))
+      await getFollowedVods(
+        forceRefresh,
+        authKey,
+        username,
+        parseInt(twitchUserId),
+        setRefreshToken,
+        setTwitchToken
+      )
         .then(data => {
           if (data.error) {
             setError(data.error);
@@ -96,7 +105,7 @@ function TwitchVods() {
           setVods(data.data);
         });
     },
-    [authKey, username, twitchUserId]
+    [authKey, username, twitchUserId, setTwitchToken, setRefreshToken]
   );
 
   const windowFocusHandler = useCallback(async () => {
@@ -127,7 +136,14 @@ function TwitchVods() {
 
     async function fetchData() {
       setRefreshing(true);
-      await getFollowedVods(false, authKey, username, parseInt(twitchUserId))
+      await getFollowedVods(
+        false,
+        authKey,
+        username,
+        parseInt(twitchUserId),
+        setRefreshToken,
+        setTwitchToken
+      )
         .then(data => {
           if (data.error) {
             setError(data.error);
@@ -159,7 +175,15 @@ function TwitchVods() {
       // observer.unobserve(loadmore);
       clearTimeout(resetVodAmountsTimer.current);
     };
-  }, [windowBlurHandler, windowFocusHandler, authKey, username, twitchUserId]);
+  }, [
+    windowBlurHandler,
+    windowFocusHandler,
+    authKey,
+    username,
+    twitchUserId,
+    setTwitchToken,
+    setRefreshToken,
+  ]);
 
   if (Utilities.getCookie("Twitch-access_token") === null) {
     return (

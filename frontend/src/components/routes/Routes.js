@@ -16,6 +16,8 @@ import NavigationProvider from "./../navigation/NavigationProvider";
 import NoMatch from "./NoMatch";
 import NotificationsProvider from "./../notifications/NotificationsProvider";
 import Player from "./../twitch/player/Player";
+// import PlayerVideo from "./../twitch/player/PlayerVideo";
+import PlayerNonInteractive from "./../twitch/player/PlayerNonInteractive";
 import RenderTopStreams from "../twitch/top/RenderTopStreams";
 import streamOnlineWebhook from "../twitch/Twitchwebhooks";
 import style from "./Routes.module.scss";
@@ -23,6 +25,9 @@ import TwitchAuth from "../auth/TwitchAuth";
 import TwitchAuthCallback from "../auth/TwitchAuthCallback";
 import YoutubeAuth from "../auth/YoutubeAuth";
 import YoutubeAuthCallback from "../auth/YoutubeAuthCallback";
+
+import test from "./../test";
+import PlayerClip from "../twitch/player/PlayerClip";
 
 const Routes = () => {
   return (
@@ -45,8 +50,17 @@ const Routes = () => {
                             <Route exact path='/index' component={Home} />
                             <Route exact path='/home' component={Home} />
                             <Route exact path='/feed' component={Feed} />
-                            <Route path='/twitch/live/:channel'>
+                            <Route path='/twitch/live/:id'>
                               <Player />
+                            </Route>
+                            <Route path='/twitch/video/:id'>
+                              <Player />
+                            </Route>
+                            <Route path='/twitch/clip/:id'>
+                              <PlayerClip />
+                            </Route>
+                            <Route path='/twitch/live2/:channel'>
+                              <PlayerNonInteractive />
                             </Route>
                             <Route path='/twitch/top/:category?'>
                               <RenderTopStreams />
