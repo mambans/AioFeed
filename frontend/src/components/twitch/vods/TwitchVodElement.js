@@ -40,15 +40,17 @@ export default ({ ...data }) => {
 
   const handleMouseOver = useCallback(async () => {
     if (!previewAvailable) {
-      const res = await axios.get(`https://api.twitch.tv/kraken/videos/${data.data.id}`, {
-        headers: {
-          Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
-          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-          Accept: "application/vnd.twitchtv.v5+json",
-        },
-      });
-      setIsHovered(true);
-      setPreviewAvailable(res.data.animated_preview_url);
+      hoverTimeoutRef.current = setTimeout(async () => {
+        const res = await axios.get(`https://api.twitch.tv/kraken/videos/${data.data.id}`, {
+          headers: {
+            Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+            Accept: "application/vnd.twitchtv.v5+json",
+          },
+        });
+        setIsHovered(true);
+        setPreviewAvailable(res.data.animated_preview_url);
+      }, 300);
     } else {
       hoverTimeoutRef.current = setTimeout(() => {
         setIsHovered(true);
