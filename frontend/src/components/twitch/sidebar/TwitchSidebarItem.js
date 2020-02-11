@@ -5,6 +5,8 @@ import { eye } from "react-icons-kit/icomoon/eye";
 import { clock } from "react-icons-kit/icomoon/clock";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import { Nav } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 
 import styles from "./../Twitch.module.scss";
 import Utilities from "../../../utilities/Utilities";
@@ -29,9 +31,10 @@ const formatViewerNumbers = viewers => {
 
 const TwitchSidebarItem = data => {
   return (
-    <a
-      href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}
-      style={{ position: "relative", display: "flex", flexDirection: "column" }}>
+    <Nav.Link
+      as={NavLink}
+      to={"/twitch/live/" + data.stream.user_name.toLowerCase()}
+      style={{ position: "relative", display: "flex", flexDirection: "column", padding: "0" }}>
       <div className={styles.sidebarItems} key={data.stream.id}>
         <NewHighlight data={data}></NewHighlight>
 
@@ -108,7 +111,7 @@ const TwitchSidebarItem = data => {
           </div>
         </div>
       </div>
-    </a>
+    </Nav.Link>
   );
 };
 

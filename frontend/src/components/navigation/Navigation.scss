@@ -4,21 +4,6 @@
   width: 100vw;
   background-color: transparent !important;
   background: var(--navigationbarBackground) !important;
-  //box-shadow: 0 15px 15px 0 rgba(0, 0, 0, 0.15);
-  //box-shadow: 0 5px 5px rgba(0, 0, 0, 0.6);
-
-  // transition: ease-in 0.2s;
-  // -webkit-transition: ease-in 0.2s;
-  // -moz-transition: ease-in 0.2s;
-  // -ms-transition: ease-in 0.2s;
-  // -o-transition: ease-in 0.2s;
-  // a {
-  //   transition: ease-in 0.2s;
-  //   -webkit-transition: ease-in 0.2s;
-  //   -moz-transition: ease-in 0.2s;
-  //   -ms-transition: ease-in 0.2s;
-  //   -o-transition: ease-in 0.2s;
-  // }
 }
 
 a.nav-link {
@@ -35,7 +20,8 @@ nav[shrink="true"].navbar.navbar-expand-lg.navbar-dark.bg-dark {
   height: 50px;
   padding: 0 30px 0 10px !important;
   // background-color: hsla(0, 0%, 0%, 0.7) !important;
-  background-color: transparent !important;
+  // background-color: transparent !important;
+  background-color: #0000005c !important;
   // background: var(--navigationbarBackgroundFixed) !important;
 
   a {

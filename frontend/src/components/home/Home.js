@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useRef } from "react";
 
 import "./Home.scss";
-import { BlurOverlay, TopBlurOverlay, LogoText } from "./HomeStyledComponents";
+import { BlurOverlay, TopBlurOverlay, LogoText, WelcomeContainer } from "./HomeStyledComponents";
 import NavigationContext from "./../navigation/NavigationContext";
-import styles from "./Home.module.scss";
 
 const INACTIVE_TIMER = 120; // seconds
-// const NAV_OPEN_DELAY_TIMER = 2; // seconds
 
 export default () => {
   document.title = "Notifies";
@@ -14,20 +12,46 @@ export default () => {
   const inactiveTimer = useRef();
   const topNavbarBlur = useRef();
 
-  // const topNavbarDelay = useRef();
+  const Logos = () => {
+    return (
+      <>
+        {visible ? null : (
+          <TopBlurOverlay
+            ref={topNavbarBlur}
+            onMouseEnter={() => {
+              setVisible(true);
+            }}
+            onMouseLeave={() => {
+              setVisible(false);
+            }}
+          />
+        )}
+        <BlurOverlay />
+        <WelcomeContainer>
+          <LogoText>
+            <img
+              src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}
+              alt='logo'
+              id='logo'
+            />
+            <div>
+              <h1>
+                <b>otifies</b>
+              </h1>
+              <p>View Twitch & Youtube feeds and get notified about Twitch Livestreams.</p>
+            </div>
+          </LogoText>
+        </WelcomeContainer>
+      </>
+    );
+  };
 
   useEffect(() => {
     setVisible(false);
     document.documentElement.setAttribute("homepage", "true");
-
     window.scrollTo(0, 0);
 
-    // topNavbarDelay.current = setTimeout(() => {
-    //   setVisible(true);
-    // }, 1000 * NAV_OPEN_DELAY_TIMER);
-
     return () => {
-      // clearTimeout(topNavbarDelay.current);
       document.documentElement.removeAttribute("homepage");
     };
   }, [setVisible]);
@@ -58,66 +82,5 @@ export default () => {
     };
   }, [setVisible]);
 
-  const Logos = () => {
-    return (
-      <>
-        {visible ? null : (
-          <TopBlurOverlay
-            ref={topNavbarBlur}
-            onMouseEnter={() => {
-              setVisible(true);
-            }}
-            onMouseLeave={() => {
-              setVisible(false);
-            }}
-          />
-        )}
-        <BlurOverlay />
-        <div className={styles.container}>
-          <LogoText>
-            <img
-              src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}
-              alt='logo'
-              className={styles.logo}
-            />
-            <div>
-              <h1>
-                <b>otifies</b>
-              </h1>
-              <p>View Twitch & Youtube feeds and get notified about Twitch Livestreams.</p>
-            </div>
-          </LogoText>
-        </div>
-        {/* <div className={styles.container}>
-          <LogoText>
-            <img
-              src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}
-              alt='logo'
-              className={styles.logo}
-            />
-            <h1>
-              <b>otifies</b>
-            </h1>
-          </LogoText>
-          <div className={styles.deviderLine}></div>
-
-          <p>A site/app for viewing feeds and updates from Youtube and Twitch.</p>
-        </div> */}
-
-        {/* <div className={styles.container}>
-          <img
-            src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}
-            alt='logo'
-            className={styles.logo}
-          />
-          <div className={styles.deviderLine}></div>
-          <h1>
-            <b>Notifies</b>
-          </h1>
-          <p>A site/app for viewing feeds and updates from Youtube and Twitch.</p>
-        </div> */}
-      </>
-    );
-  };
   return <Logos></Logos>;
 };

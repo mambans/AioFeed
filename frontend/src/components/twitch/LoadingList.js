@@ -1,4 +1,5 @@
 import React from "react";
+
 import { StyledLoadingList } from "./styledComponents";
 
 export default props => {

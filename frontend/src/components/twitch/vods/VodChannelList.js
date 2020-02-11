@@ -1,15 +1,17 @@
-import { Button } from "react-bootstrap";
 import { deleteIconic } from "react-icons-kit/iconic/deleteIconic";
+import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import Icon from "react-icons-kit";
 import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
-import AccountContext from "./../../account/AccountContext";
 
+import AccountContext from "./../../account/AccountContext";
 import LoadingList from "./../LoadingList";
 
 export default props => {
   const { authKey, username } = useContext(AccountContext);
+  const [validated, setValidated] = useState(false);
   const reload = useRef(false);
+
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);
 
@@ -20,7 +22,7 @@ export default props => {
       bind: {
         value,
         onChange: event => {
-          setValue(event.target.value);
+          setValue(event.target.value.trim());
         },
       },
     };
@@ -72,7 +74,7 @@ export default props => {
           console.error(err);
         });
     } catch (e) {
-      console.log(e.message);
+      console.error(e.message);
     }
   }
 
@@ -99,8 +101,16 @@ export default props => {
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    addChannel();
-    resetchannel();
+
+    const form = evt.currentTarget;
+    if (form.checkValidity() === false) {
+      evt.preventDefault();
+      evt.stopPropagation();
+    } else {
+      setValidated(true);
+      addChannel();
+      resetchannel();
+    }
   };
 
   useEffect(() => {
@@ -113,13 +123,25 @@ export default props => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Add channel:
-          <input type='text' placeholder='Channel name..' {...bindchannel} />
-        </label>
-        <input type='submit' value='Add' />
-      </form>
+      <Form noValidate validated={validated} onSubmit={handleSubmit}>
+        <Form.Group controlId='formGroupChannel'>
+          <Form.Label style={{ width: "100%", textAlign: "center" }}>
+            Add channel:
+            <Form.Text className='text-muted'>Twitch channel to fetch vods from.</Form.Text>
+            <Form.Control
+              type='text'
+              placeholder='Channel name..'
+              required
+              {...bindchannel}
+              isInvalid={!channel}
+              style={{ marginTop: "5px" }}
+            />
+          </Form.Label>
+          <Button type='submit' variant='primary' style={{ width: "100%", padding: "5px" }}>
+            Add
+          </Button>
+        </Form.Group>
+      </Form>
       {channels.length > 0 ? (
         <ul>
           {channels.map(channel => {

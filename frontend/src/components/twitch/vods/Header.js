@@ -2,11 +2,11 @@ import { list2 } from "react-icons-kit/icomoon/list2";
 import { reload } from "react-icons-kit/iconic/reload";
 import { Spinner } from "react-bootstrap";
 import { video } from "react-icons-kit/iconic/video";
+import Alert from "react-bootstrap/Alert";
 import Icon from "react-icons-kit";
 import Moment from "react-moment";
 import Popup from "reactjs-popup";
 import React from "react";
-import Alert from "react-bootstrap/Alert";
 
 import { HeaderLeftSubcontainer } from "./../styledComponents";
 import {
@@ -15,9 +15,9 @@ import {
   HeaderContainer,
   ButtonList,
 } from "./../../sharedStyledComponents";
-import VodChannelList from "./VodChannelList";
 import styles from "./../Twitch.module.scss";
 import Utilities from "../../../utilities/Utilities";
+import VodChannelList from "./VodChannelList";
 
 export default React.forwardRef((props, ref) => {
   const { refresh, refreshing, vods, vodError } = props;
@@ -44,10 +44,6 @@ export default React.forwardRef((props, ref) => {
         <Moment fromNow className={styles.vodRefreshTimer} interval={60000}>
           {(vods && vods.loaded) || new Date()}
         </Moment>
-        {/* <Moment
-            from={(vods && vods.expire) || new Date()}
-            ago
-            className={styles.vodRefreshTimer}></Moment> */}
         {vodError ? (
           <Alert
             key={vodError}

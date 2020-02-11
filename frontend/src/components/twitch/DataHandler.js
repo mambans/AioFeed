@@ -132,7 +132,7 @@ export default ({ children }) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        console.log("Twtich Datahandler UseEffect()");
+        console.log("Remounting Twitch DataHandler.");
         const timeNow = new Date();
         if (!timer.current) {
           await refresh(true);
@@ -140,7 +140,7 @@ export default ({ children }) => {
         }
 
         if (autoRefreshEnabled && !timer.current) {
-          console.log("---Twtich Datahandler SetInterval()---");
+          console.log("---Resetting Twitch live interval timer.---");
 
           // await refresh(true);
           // setIsLoaded(true);
@@ -213,9 +213,6 @@ export default ({ children }) => {
       newlyAddedStreams: newlyAddedStreams.current,
       REFRESH_RATE: REFRESH_RATE,
       autoRefreshEnabled: autoRefreshEnabled,
-
-      // timer: timer.current,
-      // setRefreshTimer: setRefreshTimer,
     });
   }
 };

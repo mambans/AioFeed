@@ -3,11 +3,11 @@ import Alert from "react-bootstrap/Alert";
 import React, { useEffect, useState, useCallback } from "react";
 
 import FeedsContext from "./../feed/FeedsContext";
+import Header from "./Header";
 import StreamEle from "./StreamElement.js";
 import styles from "./Twitch.module.scss";
 import TwitchSidebar from "./sidebar/TwitchSidebar";
 import Utilities from "../../utilities/Utilities";
-import Header from "./Header";
 
 function Twitch({ data }) {
   const [show, setShow] = useState(true);

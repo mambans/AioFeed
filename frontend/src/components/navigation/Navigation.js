@@ -12,12 +12,10 @@ import Sidebar from "./sidebar/Sidebar";
 
 function NavigationBar(prop) {
   const [refresh, setRefresh] = useState(false);
-  // eslint-disable-next-line
-
   const { visible, shrinkNavbar } = useContext(NavigationContext);
 
   return (
-    <CSSTransition in={visible} timeout={1000} classNames='fade-300ms' unmountOnExit>
+    <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
       <Navbar
         mode={prop.fixed ? "fixed" : "unset"}
         collapseOnSelect
@@ -44,9 +42,6 @@ function NavigationBar(prop) {
               <Nav.Link as={NavLink} to='/twitch/top/' activeClassName='active'>
                 Top streams
               </Nav.Link>
-              {/* <Nav.Link as={NavLink} to='/twitch/notifications' activeClassName='active'>
-              Webhooks
-            </Nav.Link> */}
             </Nav>
           </Container>
           <Nav style={{ justifyContent: "right" }}>

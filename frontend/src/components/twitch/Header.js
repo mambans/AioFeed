@@ -1,11 +1,11 @@
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { list2 } from "react-icons-kit/icomoon/list2";
+import { reload } from "react-icons-kit/iconic/reload";
 import { Spinner } from "react-bootstrap";
 import { twitch } from "react-icons-kit/fa/twitch";
 import Icon from "react-icons-kit";
 import Popup from "reactjs-popup";
 import React from "react";
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { reload } from "react-icons-kit/iconic/reload";
 
 import { HeaderContainerTwitchLive, HeaderLeftSubcontainer } from "./styledComponents";
 import { RefreshButton, HeaderTitle, ButtonList } from "./../sharedStyledComponents";
@@ -17,7 +17,6 @@ export default ({ data, refresh }) => {
     <HeaderContainerTwitchLive>
       <HeaderLeftSubcontainer>
         <RefreshButton onClick={refresh}>
-          {/* {data.refreshing || new Date().getTime() > data.refreshTimer ? ( */}
           {data.refreshing ? (
             <div style={{ height: "24px" }}>
               <Spinner

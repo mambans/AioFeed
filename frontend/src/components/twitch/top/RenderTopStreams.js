@@ -1,23 +1,23 @@
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { list2 } from "react-icons-kit/icomoon/list2";
 import { reload } from "react-icons-kit/iconic/reload";
 import { Spinner } from "react-bootstrap";
 import { twitch } from "react-icons-kit/fa/twitch";
+import { useParams } from "react-router-dom";
+import Alert from "react-bootstrap/Alert";
 import Icon from "react-icons-kit";
 import Popup from "reactjs-popup";
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import Alert from "react-bootstrap/Alert";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { useParams } from "react-router-dom";
 
 import { RefreshButton, HeaderTitle, ButtonList } from "./../../sharedStyledComponents";
+import { StyledLoadmore } from "./../styledComponents";
+import GameSearchBar from "./GameSearchBar";
 import GetTopStreams from "./GetTopStreams";
+import LoadingBoxs from "./../LoadingBoxs";
 import RenderTopGamesList from "./RenderTopGamesList";
 import StreamEle from "./StreamElement";
 import styles from "./../Twitch.module.scss";
 import Utilities from "./../../../utilities/Utilities";
-import GameSearchBar from "./GameSearchBar";
-import { StyledLoadmore } from "./../styledComponents";
-import LoadingBoxs from "./../LoadingBoxs";
 
 export default () => {
   const { category } = useParams();

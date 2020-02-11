@@ -1,22 +1,24 @@
 import { cross } from "react-icons-kit/icomoon/cross";
+import { CSSTransition } from "react-transition-group";
 import { eye } from "react-icons-kit/icomoon/eye";
 import { Icon } from "react-icons-kit";
+import { Link } from "react-router-dom";
+import { Nav } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 import { notification } from "react-icons-kit/icomoon/notification";
+import { twitch } from "react-icons-kit/fa/twitch";
 import Alert from "react-bootstrap/Alert";
 import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useRef, useCallback, useState, useEffect, useContext } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
-import { CSSTransition } from "react-transition-group";
-import { Link } from "react-router-dom";
 
-import styles from "./Twitch.module.scss";
-import StreamHoverIframe from "./StreamHoverIframe.js";
-import Utilities from "../../utilities/Utilities";
-import UnfollowStream from "./UnfollowStream";
 import { VideoTitle, ImageContainer, UnfollowButton } from "./../sharedStyledComponents";
-
 import AccountContext from "./../account/AccountContext";
+import StreamHoverIframe from "./StreamHoverIframe.js";
+import styles from "./Twitch.module.scss";
+import UnfollowStream from "./UnfollowStream";
+import Utilities from "../../utilities/Utilities";
 
 const HOVER_DELAY = 500; // 1000
 
@@ -41,7 +43,6 @@ function NewHighlightNoti({ data }) {
 }
 
 function StreamEle(data) {
-  // console.log("TCL: StreamEle -> data", data);
   const [isHovered, setIsHovered] = useState(false);
   const [channelIsHovered, setChannelIsHovered] = useState(false);
   const [unfollowError, setUnfollowError] = useState(null);
@@ -128,8 +129,6 @@ function StreamEle(data) {
   }, []);
 
   useEffect(() => {
-    // console.log(localStorage.getItem(`TwitchVideoHoverEnabled`) === "true");
-
     if (ref.current && data.twitchVideoHoverEnable) {
       const refEle = ref.current;
       ref.current.addEventListener("mouseenter", handleMouseOver);
@@ -225,51 +224,63 @@ function StreamEle(data) {
       )}
       <div>
         <div className={styles.channelContainer} ref={refChannel}>
-          <a
-            href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
-            style={{ gridRow: 1 }}>
+          <Nav.Link
+            as={NavLink}
+            to={`/twitch/channel/${data.data.user_name}`}
+            style={{ gridRow: 1, padding: "0", paddingRight: "5px" }}>
             <img src={data.data.profile_img_url} alt='' className={styles.profile_img}></img>
-          </a>
+          </Nav.Link>
           <p className={styles.channel}>
-            <a href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+            <Nav.Link
+              as={NavLink}
+              to={`/twitch/channel/${data.data.user_name}`}
+              style={{ padding: "0" }}>
               {data.data.user_name}
-            </a>
+            </Nav.Link>
           </p>
           {channelIsHovered ? (
-            <OverlayTrigger
-              key={"bottom"}
-              placement={"bottom"}
-              delay={0}
-              overlay={
-                <Tooltip id={`tooltip-${"bottom"}`}>
-                  Unfollow <strong>{data.data.user_name}</strong>.
-                </Tooltip>
-              }>
-              <UnfollowButton
-                data-tip={"Unfollow " + data.data.user}
-                variant='link'
-                onClick={async () => {
-                  await UnfollowStream({
-                    user_id: data.data.user_id,
-                    refresh: data.refresh,
-                    setTwitchToken: setTwitchToken,
-                    twitchToken: twitchToken,
-                    setRefreshToken: setRefreshToken,
-                  })
-                    .then(() => {
-                      setUnfollowError("Successfully unfollowed ");
-                      data.refresh();
+            <>
+              <a
+                alt=''
+                href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
+                style={{ gridRow: "1" }}>
+                <Icon size={20} icon={twitch} style={{ color: "purple" }} />
+              </a>
+              <OverlayTrigger
+                key={"bottom"}
+                placement={"bottom"}
+                delay={0}
+                overlay={
+                  <Tooltip id={`tooltip-${"bottom"}`}>
+                    Unfollow <strong>{data.data.user_name}</strong>.
+                  </Tooltip>
+                }>
+                <UnfollowButton
+                  data-tip={"Unfollow " + data.data.user}
+                  variant='link'
+                  onClick={async () => {
+                    await UnfollowStream({
+                      user_id: data.data.user_id,
+                      refresh: data.refresh,
+                      setTwitchToken: setTwitchToken,
+                      twitchToken: twitchToken,
+                      setRefreshToken: setRefreshToken,
                     })
-                    .catch(error => {
-                      setUnfollowError(null);
-                      setUnfollowError("Failed to unfollow ");
-                      console.log("TCL: StreamEle -> error", error.message);
-                      console.log("::Try re-authenticate from the sidebar::");
-                    });
-                }}>
-                <Icon icon={cross} size={18} className={styles.unfollowIcon} />
-              </UnfollowButton>
-            </OverlayTrigger>
+                      .then(() => {
+                        setUnfollowError("Successfully unfollowed ");
+                        data.refresh();
+                      })
+                      .catch(error => {
+                        setUnfollowError(null);
+                        setUnfollowError("Failed to unfollow ");
+                        console.log("TCL: StreamEle -> error", error.message);
+                        console.log("::Try re-authenticate from the sidebar::");
+                      });
+                  }}>
+                  <Icon icon={cross} size={18} className={styles.unfollowIcon} />
+                </UnfollowButton>
+              </OverlayTrigger>
+            </>
           ) : null}
         </div>
         <div className={styles.gameContainer}>

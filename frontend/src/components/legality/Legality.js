@@ -1,6 +1,6 @@
 import React from "react";
 
-import styles from "./Legality.module.scss";
+import { Container } from "./StyledComponents";
 
 const Legality = () => {
   const scrollTo = new URL(window.location.href).hash;
@@ -13,7 +13,7 @@ const Legality = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <Container>
       <div id='#Conditions'>
         <h2>
           <a href='#Conditions'>Conditions of Use</a>
@@ -107,7 +107,7 @@ const Legality = () => {
           orci a, rutrum mauris.
         </p>
       </div>
-    </div>
+    </Container>
   );
 };
 

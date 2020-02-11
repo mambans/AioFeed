@@ -6,9 +6,9 @@ import Alert from "react-bootstrap/Alert";
 import axios from "axios";
 import React, { useState, useRef, useContext } from "react";
 
-import UnfollowStream from "./../UnfollowStream";
 import { UnfollowButton, VodRemoveButton, VodAddButton } from "./../../sharedStyledComponents";
 import AccountContext from "./../../account/AccountContext";
+import UnfollowStream from "./../UnfollowStream";
 
 const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
   const [unfollowResponse, setUnfollowResponse] = useState(null);
@@ -18,7 +18,6 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
   async function addChannel(channel) {
     try {
       vodChannels.unshift(channel.toLowerCase());
-
       setVodChannels([...vodChannels]);
 
       await axios
@@ -30,9 +29,6 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
             channels: vodChannels,
           }
         )
-        // .then(res => {
-        //   setVodChannels(res.data);
-        // })
         .catch(error => {
           console.error(error);
         });
@@ -56,9 +52,6 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
             channels: vodChannels,
           }
         )
-        // .then(res => {
-        //   setVodChannels(res.data);
-        // })
         .catch(err => {
           console.error(err);
         });
@@ -68,7 +61,6 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
   }
 
   const ChannelVodEnabled = () => {
-    // return vodChannels.find(channel => channel.name.toLowerCase() === data.to_name.toLowerCase());
     return vodChannels.includes(data.to_name.toLowerCase());
   };
 

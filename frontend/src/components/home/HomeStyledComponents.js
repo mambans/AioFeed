@@ -3,7 +3,6 @@ import styled from "styled-components";
 const BlurOverlay = styled.div`
   height: calc(100vh - 65px);
   width: 100vw;
-  /* position: fixed; */
   position: absolute;
   background: no-repeat center center fixed;
   background-attachment: fixed;
@@ -21,7 +20,6 @@ const BlurOverlay = styled.div`
 const TopBlurOverlay = styled.div`
   height: 65px;
   width: 100vw;
-  /* position: fixed; */
   position: absolute;
   background: no-repeat center center fixed;
   background-attachment: fixed;
@@ -38,26 +36,8 @@ const TopBlurOverlay = styled.div`
 `;
 
 const LogoText = styled.div`
-  /* display: flex;
-  align-items: center;
-  justify-content: center; */
-
-  /* h1 {
-    margin-top: 65px;
-    font-size: 8rem;
-  } */
-
-  /* display: grid;
-  grid-template-columns: 300px auto;
-  grid-template-rows: 250px 50px;
-  grid-template-areas: "logo name" "logo desc";
-  justify-content: center; */
   display: flex;
   justify-content: center;
-
-  img {
-    /* grid-area: logo; */
-  }
 
   h1 {
     font-size: 8rem;
@@ -65,16 +45,32 @@ const LogoText = styled.div`
     height: 255px;
     display: flex;
     align-items: flex-end;
-    /* grid-area: name; */
     letter-spacing: 5px;
   }
 
   p {
-    /* grid-area: desc; */
     text-align: left;
     width: 410px;
     text-align: center;
   }
 `;
 
-export { BlurOverlay, LogoText, TopBlurOverlay };
+const WelcomeContainer = styled.div`
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img#logo {
+    width: 300px;
+    height: 300px;
+    margin-right: -60px;
+    box-shadow: 0 0 5px black;
+    border-radius: 50%;
+  }
+`;
+
+export { BlurOverlay, LogoText, TopBlurOverlay, WelcomeContainer };

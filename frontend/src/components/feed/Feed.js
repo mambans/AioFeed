@@ -1,23 +1,21 @@
 import "react-notifications-component/dist/theme.css";
-import React, { useState, useEffect, useContext } from "react";
-import ReactNotification from "react-notifications-component";
 import { Alert } from "react-bootstrap";
 import { CSSTransition } from "react-transition-group";
+import React, { useState, useEffect, useContext } from "react";
+import ReactNotification from "react-notifications-component";
 
-// import "./Notifications.scss";
 import DataHandler from "../twitch/DataHandler";
 import ErrorHandeling from "./../error/Error";
+import FeedContext from "./FeedsContext";
+import LoadingIndicator from "./../LoadingIndicator";
+import NavigationContext from "./../navigation/NavigationContext";
+import styles from "./Feed.module.scss";
 import Twitch from "../twitch/Twitch";
 import TwitchVods from "../twitch/vods/Twitch-vods";
 import Utilities from "../../utilities/Utilities";
 import Youtube from "./../youtube/Youtube";
 import YoutubeDataHandler from "./../youtube/Datahandler";
 import YoutubeHeader from "./../youtube/Header";
-import styles from "./Feed.module.scss";
-import LoadingIndicator from "./../LoadingIndicator";
-
-import NavigationContext from "./../navigation/NavigationContext";
-import FeedContext from "./FeedsContext";
 
 export default function Feed() {
   document.title = "Notifies | Feed";

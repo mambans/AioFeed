@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import TwitchSidebarItem from "./TwitchSidebarItem";
 import styles from "./../Twitch.module.scss";
 
 const TwitchSidebar = data => {
-  // eslint-disable-next-line
-  const [sidebarTop, setSidebarTop] = useState("false");
-
   return (
-    <div className={styles.sidebar} id='twitchSidebar' fixedtop={sidebarTop}>
+    <div className={styles.sidebar} id='twitchSidebar'>
       <p className={styles.twitchSidebarHeader}>Twitch Live</p>
 
       {data.onlineStreams.length > 0 ? (

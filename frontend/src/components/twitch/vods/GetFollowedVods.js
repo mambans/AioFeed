@@ -114,7 +114,8 @@ const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRe
       })
     );
   } catch (e) {
-    console.log("TCL: e", e);
+    console.error(e);
+    console.log("Re-authenticating with Twitch.");
 
     await axios
       .post(
@@ -165,13 +166,12 @@ async function getFollowedVods(
   setTwitchToken,
   setRefreshToken
 ) {
-  const thresholdDate = 1;
-  const vodExpire = 3;
+  const thresholdDate = 1; // Number of months
+  const vodExpire = 3; // Number of days
 
   try {
-    const today = new Date();
     const OnlyVodsAfterDate = new Date();
-    OnlyVodsAfterDate.setDate(today.getDate() - thresholdDate);
+    OnlyVodsAfterDate.setDate(new Date().getDate() - thresholdDate);
 
     if (
       !localStorage.getItem(`Twitch-vods`) ||

@@ -35,7 +35,8 @@ async function UnfollowStream(data) {
       // data.refresh();
     })
     .catch(async e => {
-      console.error("TCL: UnfollowStream -> e", e);
+      console.error(e);
+      console.log("Re-authenticating with Twitch.");
 
       await axios
         .post(
@@ -46,7 +47,6 @@ async function UnfollowStream(data) {
           }&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`
         )
         .then(async res => {
-          console.log("TCL: UnfollowStream -> res", res);
           setTwitchToken(res.data.access_token);
           setRefreshToken(res.data.refresh_token);
           document.cookie = `Twitch-access_token=${res.data.access_token}; path=/`;
@@ -69,10 +69,6 @@ async function UnfollowStream(data) {
             });
         });
     });
-  // .catch(error => {
-  //   console.error(error);
-  //   // return error;
-  // });
 
   return response;
 }

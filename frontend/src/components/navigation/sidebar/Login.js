@@ -12,8 +12,8 @@ import LoadingIndicator from "./../../LoadingIndicator";
 export default () => {
   document.title = "Notifies | Login";
   const currentPage = new URL(window.location.href).pathname;
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [validated, setValidated] = useState(false);
   const props = useContext(NavigationContext);
   const { setAuthKey, setUsername, setProfileImage, setTwitchToken, setYoutubeToken } = useContext(
     AccountContext
@@ -29,7 +29,7 @@ export default () => {
       bind: {
         value,
         onChange: event => {
-          setValue(event.target.value);
+          setValue(event.target.value.trim());
         },
       },
     };
@@ -40,8 +40,15 @@ export default () => {
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    setLoading(true);
-    loginAccount();
+
+    const form = evt.currentTarget;
+    if (form.checkValidity() === false) {
+      evt.preventDefault();
+      evt.stopPropagation();
+    } else {
+      setValidated(true);
+      loginAccount();
+    }
   };
 
   async function loginAccount() {
@@ -97,14 +104,28 @@ export default () => {
         </StyledAlert>
       ) : null}
       <StyledCreateFormTitle>Login with your Notifies account.</StyledCreateFormTitle>
-      <StyledCreateForm onSubmit={handleSubmit} validated>
+      <StyledCreateForm onSubmit={handleSubmit} noValidate validated={validated}>
         <Form.Group controlId='formGroupUserName'>
           <Form.Label>Username</Form.Label>
-          <Form.Control type='text' placeholder='Username' {...bindUserName} />
+          <Form.Control
+            type='text'
+            placeholder='Username'
+            required
+            {...bindUserName}
+            isInvalid={!userName}
+          />
+          <Form.Control.Feedback type='invalid'>Please enter a username.</Form.Control.Feedback>
         </Form.Group>
         <Form.Group controlId='formGroupPassword'>
           <Form.Label>Password</Form.Label>
-          <Form.Control type='password' placeholder='Password' {...bindPassword} />
+          <Form.Control
+            type='password'
+            placeholder='Password'
+            required
+            {...bindPassword}
+            isInvalid={!password}
+          />
+          <Form.Control.Feedback type='invalid'>Please enter a password.</Form.Control.Feedback>
         </Form.Group>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Button variant='primary' type='submit'>
@@ -118,7 +139,7 @@ export default () => {
           </Button>
         </div>
       </StyledCreateForm>
-      {loading ? <LoadingIndicator height={150} width={150} /> : null}
+      {validated ? <LoadingIndicator height={150} width={150} /> : null}
       {props.isLoggedIn &&
       !error &&
       (currentPage === "/account/login" || currentPage === "/account") ? (

@@ -15,7 +15,6 @@ const HOVER_DELAY = 1000;
 
 function StreamEle(data) {
   const [isHovered, setIsHovered] = useState(false);
-
   const streamHoverTimer = useRef();
   const ref = useRef();
   const refChannel = useRef();
@@ -60,7 +59,7 @@ function StreamEle(data) {
         {isHovered ? (
           <StreamHoverIframe id={data.data.id} data={data.data} setIsHovered={setIsHovered} />
         ) : null}
-        <a className={styles.img} href={"/twitch/live/" + data.data.user_name.toLowerCase()}>
+        <a className={styles.img} href={"/twitch/" + data.data.user_name.toLowerCase()}>
           <img
             src={
               data.data.thumbnail_url.replace("{width}", 640).replace("{height}", 360) +
@@ -87,7 +86,7 @@ function StreamEle(data) {
             {data.data.title}
           </Tooltip>
         }>
-        <VideoTitle href={"/twitch/live/" + data.data.user_name.toLowerCase()}>
+        <VideoTitle href={"/twitch/" + data.data.user_name.toLowerCase()}>
           {Utilities.truncate(data.data.title, 50)}
         </VideoTitle>
       </OverlayTrigger>

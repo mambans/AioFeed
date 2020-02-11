@@ -1,11 +1,11 @@
+import { eye } from "react-icons-kit/icomoon/eye";
+import { Icon } from "react-icons-kit";
 import axios from "axios";
+import moment from "moment";
 import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
-import moment from "moment";
-import { eye } from "react-icons-kit/icomoon/eye";
-import { Icon } from "react-icons-kit";
 
 import { VideoContainer, VideoTitle, ImageContainer } from "./../../sharedStyledComponents";
 import styles from "../Twitch.module.scss";
@@ -50,7 +50,7 @@ export default ({ ...data }) => {
         });
         setIsHovered(true);
         setPreviewAvailable(res.data.animated_preview_url);
-      }, 300);
+      }, 500);
     } else {
       hoverTimeoutRef.current = setTimeout(() => {
         setIsHovered(true);
@@ -137,13 +137,13 @@ export default ({ ...data }) => {
               {data.data.title}
             </Tooltip>
           }>
-          <VideoTitle href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+          <VideoTitle href={"/twitch/video/" + data.data.id + `#${data.data.user_name}`}>
             {Utilities.truncate(data.data.title, 70)}
             {/* {data.data.title} */}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
-        <VideoTitle href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+        <VideoTitle href={"/twitch/video/" + data.data.id + `#${data.data.user_name}`}>
           {data.data.title}
         </VideoTitle>
       )}
@@ -151,7 +151,7 @@ export default ({ ...data }) => {
       <div>
         <div className={styles.channelContainer} style={{ marginBottom: "0px", height: "25px" }}>
           <p className={styles.channel} style={{ paddingLeft: "5px" }}>
-            <a href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase() + "/videos"}>
+            <a href={"/twitch/channel/" + data.data.user_name.toLowerCase()}>
               {data.data.user_name}
             </a>
           </p>
