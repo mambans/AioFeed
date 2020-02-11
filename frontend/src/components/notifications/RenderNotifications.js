@@ -11,12 +11,16 @@ import { ButtonList } from "./../sharedStyledComponents";
 import { Notification } from "./styledComponent";
 import { UnseenNotifcationCount } from "./../notifications/styledComponent";
 import NotificationsContext from "./../notifications/NotificationsContext";
+import NavigationContext from "./../navigation/NavigationContext";
+
 import styles from "./Notifications.module.scss";
 import Utilities from "../../utilities/Utilities";
 
 export default () => {
   const [show, setShow] = useState(false);
   const props = useContext(NotificationsContext);
+  const { shrinkNavbar } = useContext(NavigationContext);
+
   const handleClose = () => {
     setShow(false);
   };
@@ -42,25 +46,27 @@ export default () => {
           <>
             <Icon
               icon={ic_notifications}
-              size={40}
+              size={shrinkNavbar === "true" ? 35 : 40}
               style={{
                 color: "var(--newHighlight)",
                 height: "22px",
                 alignItems: "center",
                 display: "flex",
                 transition: "ease-in-out 1s",
-              }}></Icon>
+              }}
+            />
             <UnseenNotifcationCount>{props.unseenNotifications.length}</UnseenNotifcationCount>
           </>
         ) : (
           <Icon
             icon={ic_notifications_none}
-            size={40}
+            size={shrinkNavbar === "true" ? 35 : 40}
             style={{
               alignItems: "center",
               display: "flex",
               ransition: "ease-in-out 1s",
-            }}></Icon>
+            }}
+          />
         )}
       </ButtonList>
 
