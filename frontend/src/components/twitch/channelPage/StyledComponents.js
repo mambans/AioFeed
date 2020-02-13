@@ -21,7 +21,7 @@ const Banner = styled.div`
 const BannerInfoOverlay = styled.div`
   /* height: 100%; */
   position: absolute;
-  top: 70px;
+  top: 65px;
   width: 100%;
 `;
 

@@ -1,4 +1,6 @@
 import React, { useEffect, useCallback, useRef } from "react";
+import { Nav } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 
 import styles from "./Twitch.module.scss";
 
@@ -55,12 +57,19 @@ function StreamHoverIframe(data) {
         allowFullScreen={true}
         frameBorder='0'
       />
-      <a
-        href={`https://www.twitch.tv/${data.data.user_name}`}
+      <Nav.Link
+        to={`/twitch/live/${data.data.user_name}`}
+        as={NavLink}
         alt=''
-        style={{ position: "absolute", height: "189px", width: "336px", zIndex: "10" }}>
+        style={{
+          position: "absolute",
+          height: "189px",
+          width: "336px",
+          zIndex: "10",
+          padding: "0",
+        }}>
         ""
-      </a>
+      </Nav.Link>
     </>
   );
 }

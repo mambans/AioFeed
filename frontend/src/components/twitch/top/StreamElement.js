@@ -5,6 +5,8 @@ import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useRef, useCallback, useState, useEffect } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
+import { Nav } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 
 import { ImageContainer, VideoTitle } from "./../../sharedStyledComponents";
 import StreamHoverIframe from "./../StreamHoverIframe.js";
@@ -59,7 +61,11 @@ function StreamEle(data) {
         {isHovered ? (
           <StreamHoverIframe id={data.data.id} data={data.data} setIsHovered={setIsHovered} />
         ) : null}
-        <a className={styles.img} href={"/twitch/" + data.data.user_name.toLowerCase()}>
+        <Nav.Link
+          to={`/twitch/live/${data.data.user_name}`}
+          as={NavLink}
+          className={styles.img}
+          style={{ padding: "0" }}>
           <img
             src={
               data.data.thumbnail_url.replace("{width}", 640).replace("{height}", 360) +
@@ -68,7 +74,7 @@ function StreamEle(data) {
             }
             alt={styles.thumbnail}
           />
-        </a>
+        </Nav.Link>
         <Moment className={styles.duration} durationFromNow>
           {data.data.started_at}
         </Moment>
@@ -86,21 +92,27 @@ function StreamEle(data) {
             {data.data.title}
           </Tooltip>
         }>
-        <VideoTitle href={"/twitch/" + data.data.user_name.toLowerCase()}>
+        <VideoTitle href={"/twitch/live/" + data.data.user_name.toLowerCase()}>
           {Utilities.truncate(data.data.title, 50)}
         </VideoTitle>
       </OverlayTrigger>
       <div>
         <div className={styles.channelContainer} ref={refChannel}>
-          <a
-            href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
-            style={{ gridRow: 1 }}>
+          <Nav.Link
+            to={`/twitch/channel/${data.data.user_name}`}
+            as={NavLink}
+            // href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
+            style={{ gridRow: 1, padding: "0", fontSize: "inherit" }}>
             <img src={data.data.profile_img_url} alt='' className={styles.profile_img}></img>
-          </a>
+          </Nav.Link>
           <p className={styles.channel}>
-            <a href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
+            <Nav.Link
+              // href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
+              to={`/twitch/channel/${data.data.user_name}`}
+              as={NavLink}
+              style={{ gridRow: 1, padding: "0", paddingRight: "5px" }}>
               {data.data.user_name}
-            </a>
+            </Nav.Link>
           </p>
         </div>
         <div className={styles.gameContainer}>
