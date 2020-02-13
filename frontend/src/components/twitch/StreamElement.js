@@ -227,7 +227,7 @@ function StreamEle(data) {
           <Nav.Link
             as={NavLink}
             to={`/twitch/channel/${data.data.user_name}`}
-            style={{ gridRow: 1, padding: "0", paddingRight: "5px" }}>
+            style={{ gridRow: 1, padding: "0", paddingRight: "5px", fontSize: "inherit" }}>
             <img src={data.data.profile_img_url} alt='' className={styles.profile_img}></img>
           </Nav.Link>
           <p className={styles.channel}>
