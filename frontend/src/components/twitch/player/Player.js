@@ -167,6 +167,11 @@ export default () => {
     setShrinkNavbar("true");
     setVisible(false);
     setFooterVisible(false);
+
+    return () => {
+      setShrinkNavbar("false");
+      setFooterVisible(true);
+    };
   }, [setShrinkNavbar, setFooterVisible, setVisible]);
 
   if (type === "live") {

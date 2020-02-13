@@ -26,6 +26,11 @@ export default () => {
   useEffect(() => {
     setShrinkNavbar("true");
     setFooterVisible(false);
+
+    return () => {
+      setShrinkNavbar("false");
+      setFooterVisible(true);
+    };
   }, [setShrinkNavbar, setFooterVisible]);
 
   return (
