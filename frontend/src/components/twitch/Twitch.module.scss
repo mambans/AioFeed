@@ -138,7 +138,7 @@
 }
 
 .channel a {
-  bottom: 5px;
+  // bottom: 5px;
   position: relative;
   width: max-content;
   background: none;
@@ -169,8 +169,8 @@
   }
 
   .channel {
-    height: 20px;
-    top: 7px;
+    height: 100%;
+    // top: 7px;
     position: relative;
     padding-left: 5px;
     grid-row: 1;
@@ -216,6 +216,9 @@
 .gameContainer p a,
 .channelContainer p a {
   font-size: 1rem !important;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .refreshTimer {
