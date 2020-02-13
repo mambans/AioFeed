@@ -1,30 +1,29 @@
-import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { ic_favorite } from "react-icons-kit/md/ic_favorite";
+import { ic_favorite_border } from "react-icons-kit/md/ic_favorite_border";
 import { Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { Spinner } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
-import React, { useEffect, useCallback, useState, useRef } from "react";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import React, { useEffect, useCallback, useState, useRef, useContext } from "react";
+import Tooltip from "react-bootstrap/Tooltip";
 
-import { StyledLoadmore } from "./../styledComponents";
-import { SubFeedContainer } from "./../../sharedStyledComponents";
-import LoadingBoxs from "./../LoadingBoxs";
+import AccountContext from "./../../account/AccountContext";
 import LoadingPlaceholderBanner from "./LoadingPlaceholderBanner";
 import LoadingPlaceholderClips from "./LoadingPlaceholderClips";
 import LoadingPlaceholderVods from "./LoadingPlaceholderVods";
-import SortButton from "./SortButton";
-import TwitchClipElement from "./TwitchClipElement";
-import TwitchVodElement from "../vods/TwitchVodElement";
+import SubFeed from "./SubFeed";
+import UnfollowStream from "./../UnfollowStream";
 import Utilities from "./../../../utilities/Utilities";
 import {
   ChannelContainer,
   Banner,
   Name,
   BannerInfoOverlay,
-  SubFeedHeader,
   LiveIndicator,
   LiveIndicatorIcon,
+  FollowUnfollowButton,
 } from "./StyledComponents";
 
 export default () => {
@@ -34,11 +33,12 @@ export default () => {
   const [clips, setClips] = useState();
   const [vodsloadmoreLoaded, setVodsLoadmoreLoaded] = useState(true);
   const [clipsloadmoreLoaded, setClipsLoadmoreLoaded] = useState(true);
-  const [sortVodsBy, setSortVodsBy] = useState("time");
-  const [live, setLive] = useState();
+  const [sortVodsBy, setSortVodsBy] = useState("Time");
+  const [sortClipsBy, setSortClipsBy] = useState(null);
+  const [following, setFollowing] = useState(false);
+  const [channelId, setChannelId] = useState();
 
   const numberOfVideos = Math.floor(document.documentElement.clientWidth / 350);
-  const userName = useRef();
   const vodPagination = useRef();
   const previosVodPage = useRef();
   const previosClipsPage = useRef();
@@ -46,27 +46,29 @@ export default () => {
   const loadmoreVodsRef = useRef();
   const loadmoreClipsRef = useRef();
 
+  const { setTwitchToken, twitchToken, setRefreshToken, twitchUserId } = useContext(AccountContext);
+
   const getIdFromName = useCallback(async () => {
-    return await axios
+    await axios
       .get(`https://api.twitch.tv/helix/users`, {
         params: {
           login: id,
         },
         headers: {
-          Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+          Authorization: `Bearer ${twitchToken}`,
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })
       .then(res => {
-        return res.data.data[0].id;
+        setChannelId(res.data.data[0].id);
       });
-  }, [id]);
+  }, [id, twitchToken]);
 
-  const fetchChannelInfo = useCallback(async UserId => {
+  const fetchChannelInfo = useCallback(async () => {
     return await axios
-      .get(`https://api.twitch.tv/kraken/channels/${UserId}`, {
+      .get(`https://api.twitch.tv/kraken/channels/${channelId}`, {
         headers: {
-          Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+          Authorization: `OAuth ${twitchToken}`,
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           Accept: "application/vnd.twitchtv.v5+json",
         },
@@ -74,23 +76,40 @@ export default () => {
       .then(res => {
         return res.data;
       });
-  }, []);
+  }, [twitchToken, channelId]);
+
+  const followStream = async UserId => {
+    await axios
+      .put(`https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${UserId}`, {
+        headers: {
+          Authorization: `OAuth ${twitchToken}`,
+          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+          Accept: "application/vnd.twitchtv.v5+json",
+        },
+      })
+      .then(res => {
+        if (res.data) console.log("Started following", channelInfo.display_name);
+      })
+      .catch(error => {
+        console.log(`Failed to follow stream ${channelInfo.display_name}: `, error);
+        console.log("::Try re-authenticate from the sidebar::");
+      });
+  };
 
   const fetchChannelVods = useCallback(
-    async (UserId, pagination) => {
+    async pagination => {
       if (pagination) {
         setVodsLoadmoreLoaded(false);
       } else {
-        setVods();
         previosVodPage.current = null;
       }
 
       await axios
         .get(`https://api.twitch.tv/helix/videos?`, {
           params: {
-            user_id: UserId,
+            user_id: channelId,
             first: numberOfVideos,
-            sort: sortVodsBy,
+            sort: sortVodsBy && sortVodsBy.toLowerCase(),
             type: "all",
             after: pagination || null,
           },
@@ -145,19 +164,27 @@ export default () => {
           console.error(e);
         });
     },
-    [numberOfVideos, sortVodsBy]
+    [numberOfVideos, sortVodsBy, channelId]
   );
 
   const fetchClips = useCallback(
-    async (UserId, pagination) => {
-      if (pagination) setClipsLoadmoreLoaded(false);
+    async pagination => {
+      if (pagination) {
+        setClipsLoadmoreLoaded(false);
+      } else {
+        previosClipsPage.current = null;
+      }
 
       await axios
         .get(`https://api.twitch.tv/helix/clips`, {
           params: {
-            broadcaster_id: UserId,
+            broadcaster_id: channelId,
             first: numberOfVideos,
             after: pagination || null,
+            started_at:
+              sortClipsBy &&
+              new Date(new Date().setDate(new Date().getDate() - sortClipsBy)).toISOString(),
+            ended_at: sortClipsBy && new Date().toISOString(),
           },
           headers: {
             Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
@@ -188,23 +215,29 @@ export default () => {
           }
         });
     },
-    [numberOfVideos]
+    [numberOfVideos, sortClipsBy, channelId]
   );
 
-  useEffect(() => {
-    const getChannelInfo = async () => {
-      userName.current = await getIdFromName();
-      const ChannelInfo = await fetchChannelInfo(userName.current);
-
-      document.title = `${ChannelInfo.display_name} | Notifies`;
-
-      setChannelInfo(ChannelInfo);
-      await fetchChannelVods(userName.current);
-      await fetchClips(userName.current);
+  const getChannelInfo = useCallback(async () => {
+    const CheckIfFollowed = async UserId => {
+      await axios
+        .get(`https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${UserId}`, {
+          headers: {
+            Authorization: `OAuth ${twitchToken}`,
+            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+            Accept: "application/vnd.twitchtv.v5+json",
+          },
+        })
+        .then(res => {
+          setFollowing(true);
+        })
+        .catch(error => {
+          setFollowing(false);
+        });
     };
 
     const checkIfLive = async () => {
-      await axios
+      return await axios
         .get(`https://api.twitch.tv/helix/streams`, {
           params: {
             user_login: id,
@@ -215,13 +248,39 @@ export default () => {
           },
         })
         .then(res => {
-          if (res.data.data.length > 0) setLive(true);
+          if (res.data.data.length > 0) return true;
         });
     };
 
-    getChannelInfo();
-    checkIfLive();
-  }, [getIdFromName, fetchChannelInfo, fetchChannelVods, fetchClips, id]);
+    let ChannelInfos = await fetchChannelInfo();
+    ChannelInfos.isLive = await checkIfLive();
+
+    setChannelInfo(ChannelInfos);
+    CheckIfFollowed(ChannelInfos._id);
+
+    document.title = `${ChannelInfos.display_name} | Notifies`;
+  }, [id, fetchChannelInfo, twitchUserId, twitchToken]);
+
+  useEffect(() => {
+    const fetchAllChannelData = async () => {
+      if (!channelId) await getIdFromName();
+      if (!channelInfo && channelId) getChannelInfo();
+    };
+
+    fetchAllChannelData();
+  }, [channelInfo, getChannelInfo, getIdFromName, channelId]);
+
+  useEffect(() => {
+    if (channelId && !vods) {
+      fetchChannelVods();
+    }
+  }, [fetchChannelVods, vods, channelId]);
+
+  useEffect(() => {
+    if (channelId && !clips) {
+      fetchClips();
+    }
+  }, [fetchClips, clips, channelId]);
 
   return (
     <ChannelContainer>
@@ -232,7 +291,7 @@ export default () => {
             <Name>
               <div id='HeaderChannelInfo'>
                 <div id='ChannelName'>
-                  {live ? (
+                  {channelInfo.isLive ? (
                     <Nav.Link as={NavLink} to={`/twitch/live/${id}`} style={{ padding: "0" }}>
                       <LiveIndicator>
                         <LiveIndicatorIcon />
@@ -252,6 +311,57 @@ export default () => {
                       src={`${process.env.PUBLIC_URL}/partnered.png`}
                     />
                   ) : null}
+
+                  {following ? (
+                    <OverlayTrigger
+                      key={"bottom"}
+                      placement={"bottom"}
+                      delay={{ show: 500, hide: 0 }}
+                      overlay={
+                        <Tooltip id={`tooltip-${"bottom"}`}>
+                          Unfollow <strong>{channelInfo.display_name}</strong>.
+                        </Tooltip>
+                      }>
+                      <FollowUnfollowButton
+                        following={following.toString()}
+                        icon={ic_favorite}
+                        onClick={() => {
+                          setFollowing(false);
+                          UnfollowStream({
+                            user_id: channelInfo._id,
+                            setTwitchToken: setTwitchToken,
+                            twitchToken: twitchToken,
+                            setRefreshToken: setRefreshToken,
+                          }).catch(error => {
+                            console.log(
+                              `Failed to unfollow stream ${channelInfo.display_name}: `,
+                              error
+                            );
+                            console.log("::Try re-authenticate from the sidebar::");
+                          });
+                        }}
+                      />
+                    </OverlayTrigger>
+                  ) : (
+                    <OverlayTrigger
+                      key={"bottom"}
+                      placement={"bottom"}
+                      delay={{ show: 500, hide: 0 }}
+                      overlay={
+                        <Tooltip id={`tooltip-${"bottom"}`}>
+                          Follow <strong>{channelInfo.display_name}</strong>.
+                        </Tooltip>
+                      }>
+                      <FollowUnfollowButton
+                        following={following.toString()}
+                        icon={ic_favorite_border}
+                        onClick={() => {
+                          setFollowing(true);
+                          followStream(channelInfo._id);
+                        }}
+                      />
+                    </OverlayTrigger>
+                  )}
                 </div>
                 <p id='title'>{channelInfo.status}</p>
                 <p id='game'>{channelInfo.game}</p>
@@ -271,122 +381,33 @@ export default () => {
         <LoadingPlaceholderBanner />
       )}
       {vods ? (
-        <>
-          <SubFeedHeader
-            style={{
-              margin: "50px auto 10px auto",
-              borderBottom: "1px solid grey",
-              width: `${numberOfVideos * 350}px`,
-            }}>
-            <SortButton sortBy={sortVodsBy} setSortBy={setSortVodsBy} />
-            <h3>Vods</h3>
-          </SubFeedHeader>
-          <SubFeedContainer
-            style={{ justifyContent: "center", minHeight: "345px", paddingBottom: "0" }}>
-            {vods ? (
-              <TransitionGroup className='twitch-vods' component={null}>
-                {vods.map(vod => {
-                  return (
-                    <CSSTransition key={vod.id} timeout={1000} classNames='fade-1s' unmountOnExit>
-                      <TwitchVodElement data={vod} transition='fade-1s' />
-                    </CSSTransition>
-                  );
-                })}
-              </TransitionGroup>
-            ) : (
-              <LoadingBoxs amount={numberOfVideos} />
-            )}
-          </SubFeedContainer>
-          <StyledLoadmore
-            ref={loadmoreVodsRef}
-            style={{
-              width: `${numberOfVideos * 350}px`,
-              margin: "auto",
-            }}>
-            <div />
-            <p
-              onClick={() => {
-                fetchChannelVods(userName.current, vodPagination.current);
-              }}>
-              {!vodsloadmoreLoaded ? (
-                <>
-                  Loading..
-                  <Spinner
-                    animation='border'
-                    role='status'
-                    variant='light'
-                    style={{ ...Utilities.loadingSpinnerSmall, marginLeft: "10px" }}
-                  />
-                </>
-              ) : (
-                "Load more"
-              )}
-            </p>
-            <div />
-          </StyledLoadmore>
-        </>
+        <SubFeed
+          feedName='Vods'
+          items={vods}
+          sortBy={sortVodsBy}
+          setSortBy={setSortVodsBy}
+          setSortData={setVods}
+          loadmoreRef={loadmoreVodsRef.current}
+          fetchItems={fetchChannelVods}
+          itemPagination={vodPagination}
+          itemsloadmoreLoaded={vodsloadmoreLoaded}
+        />
       ) : (
         <LoadingPlaceholderVods numberOfVideos={numberOfVideos} />
       )}
       {clips ? (
-        <>
-          <SubFeedHeader
-            style={{
-              margin: "50px auto 10px auto",
-              borderBottom: "1px solid grey",
-              width: `${numberOfVideos * 350}px`,
-            }}>
-            <h3>Popular clips</h3>
-          </SubFeedHeader>
-
-          <SubFeedContainer
-            style={{ justifyContent: "center", minHeight: "310px", paddingBottom: "0" }}>
-            {clips ? (
-              <TransitionGroup className='twitch-vods' component={null}>
-                {clips.map(clip => {
-                  return (
-                    <CSSTransition key={clip.id} timeout={1000} classNames='fade-1s' unmountOnExit>
-                      <TwitchClipElement
-                        data={clip}
-                        user_name={channelInfo.name}
-                        transition='fade-1s'
-                      />
-                    </CSSTransition>
-                  );
-                })}
-              </TransitionGroup>
-            ) : (
-              <LoadingBoxs amount={numberOfVideos} />
-            )}
-          </SubFeedContainer>
-          <StyledLoadmore
-            ref={loadmoreClipsRef}
-            style={{
-              width: `${numberOfVideos * 350}px`,
-              margin: "auto",
-            }}>
-            <div />
-            <p
-              onClick={() => {
-                fetchClips(userName.current, clipPagination.current);
-              }}>
-              {!clipsloadmoreLoaded ? (
-                <>
-                  Loading..
-                  <Spinner
-                    animation='border'
-                    role='status'
-                    variant='light'
-                    style={{ ...Utilities.loadingSpinnerSmall, marginLeft: "10px" }}
-                  />
-                </>
-              ) : (
-                "Load more"
-              )}
-            </p>
-            <div />
-          </StyledLoadmore>
-        </>
+        <SubFeed
+          feedName='Clips'
+          items={clips}
+          sortBy={sortClipsBy}
+          setSortBy={setSortClipsBy}
+          setSortData={setClips}
+          loadmoreRef={loadmoreClipsRef.current}
+          fetchItems={fetchClips}
+          itemPagination={clipPagination}
+          itemsloadmoreLoaded={clipsloadmoreLoaded}
+          channelInfo={channelInfo}
+        />
       ) : (
         <LoadingPlaceholderClips numberOfVideos={numberOfVideos} />
       )}

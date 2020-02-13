@@ -6,7 +6,16 @@ import { SortButton, SortDropDownList } from "./StyledComponents";
 
 export default ({ sortBy, setSortBy, setData }) => {
   const [open, setOpen] = useState(false);
-  const SortOptions = ["Time", "Trending", "Views"];
+  const SortOptionsNames = {
+    "3": "3 days",
+    "7": "1 week",
+    "14": "2 weeks",
+    "30": "1 month",
+    "90": "3 months",
+    "180": "6 months",
+    "360": "1 year",
+    null: "Lifetime",
+  };
   return (
     <>
       <SortButton
@@ -14,11 +23,11 @@ export default ({ sortBy, setSortBy, setData }) => {
           setOpen(!open);
         }}>
         <Icon icon={ic_sort} size={20} />
-        Sort by: {sortBy}
+        Within: {sortBy ? sortBy + " days" : "Lifetime"}
       </SortButton>
       {open ? (
         <SortDropDownList>
-          {SortOptions.map(option => {
+          {Object.keys(SortOptionsNames).map(option => {
             return (
               <li
                 key={option}
@@ -27,7 +36,7 @@ export default ({ sortBy, setSortBy, setData }) => {
                   setSortBy(option);
                   setOpen(false);
                 }}>
-                {option}
+                {SortOptionsNames[option]}
               </li>
             );
           })}

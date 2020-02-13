@@ -149,6 +149,7 @@ const SortDropDownList = styled.ul`
   width: 200px;
   border-color: #1d2124;
   box-shadow: 0 0.1rem 0 0.2rem rgba(82, 88, 93, 0.5);
+  z-index: 3;
 
   li {
     padding: 5px;
@@ -187,6 +188,32 @@ const LiveIndicatorIcon = styled(Icon).attrs({ icon: videoCamera, size: 30 })`
   /* position: absolute; */
 `;
 
+// const PreFollowUnfollowButton = ({ p_icon, props }) => {
+//   return <Icon icon={p_icon} size={30} {...props}></Icon>;
+// };
+
+// const FollowUnfollowButton = styled(PreFollowUnfollowButton)`
+//   color: red;
+// `;
+
+// const FollowUnfollowButton = styled(Icon).attrs({
+//   icon: props => (props.followed ? checkmark : checkmark2),
+// })`
+//   color: red;
+// `;
+
+const FollowUnfollowButton = styled(Icon).attrs({ size: 30 })`
+  cursor: pointer;
+  color: ${({ following }) => (following === "true" ? "green" : "white ")};
+  transition: color 150ms;
+  padding: 0 10px;
+  margin-right: -30px;
+
+  &:hover {
+    color: ${({ following }) => (following === "true" ? "red" : "green")};
+  }
+`;
+
 export {
   ChannelContainer,
   Banner,
@@ -197,4 +224,5 @@ export {
   SortDropDownList,
   LiveIndicator,
   LiveIndicatorIcon,
+  FollowUnfollowButton,
 };
