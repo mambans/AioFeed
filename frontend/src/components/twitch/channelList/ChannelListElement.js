@@ -2,6 +2,8 @@ import { cross } from "react-icons-kit/icomoon/cross";
 import { ic_delete } from "react-icons-kit/md/ic_delete";
 import { ic_playlist_add } from "react-icons-kit/md/ic_playlist_add";
 import { Icon } from "react-icons-kit";
+import { Nav } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 import axios from "axios";
 import React, { useState, useRef, useContext } from "react";
@@ -109,7 +111,10 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
   return (
     <li key={data.to_id}>
       <UnfollowAlert />
-      <a href={`https://www.twitch.tv/${data.to_name}/videos`}>
+      <Nav.Link
+        as={NavLink}
+        to={"/twitch/channel/" + data.to_name}
+        style={{ padding: "0", fontSize: "unset" }}>
         {data.profile_image_url ? (
           <img
             src={data.profile_image_url}
@@ -132,7 +137,7 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
             alt=''></img>
         )}
         {data.to_name}
-      </a>
+      </Nav.Link>
       <div>
         {ChannelVodEnabled() ? (
           <VodRemoveButton

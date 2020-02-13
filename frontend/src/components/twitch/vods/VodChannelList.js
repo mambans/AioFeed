@@ -1,5 +1,7 @@
 import { deleteIconic } from "react-icons-kit/iconic/deleteIconic";
 import { Form, Button } from "react-bootstrap";
+import { Nav } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 import axios from "axios";
 import Icon from "react-icons-kit";
 import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
@@ -147,7 +149,12 @@ export default props => {
           {channels.map(channel => {
             return (
               <li key={channel}>
-                <p>{channel}</p>
+                <Nav.Link
+                  as={NavLink}
+                  to={"/twitch/channel/" + channel}
+                  style={{ padding: "0", fontSize: "unset", color: "inherit" }}>
+                  {channel}
+                </Nav.Link>
                 <Button
                   variant='danger'
                   size='sm'
