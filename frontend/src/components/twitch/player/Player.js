@@ -68,6 +68,9 @@ const TwitchInteractivePlayer = ({
       if (typeof e === "object" && e.button === 1) {
         TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
         setVolumeMuted(!TwitchPlayer.getMuted());
+      } else if (typeof e === "object" && e.button === 0 && TwitchPlayer.getMuted()) {
+        TwitchPlayer.setMuted(false);
+        setVolumeMuted(false);
       }
     };
 
