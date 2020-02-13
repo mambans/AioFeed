@@ -17,11 +17,11 @@ import {
 } from "./StyledComponents";
 
 export default () => {
-  document.title = "Notifies | Clip";
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const { id } = useParams();
   const location = useLocation();
   const nameFromHash = location.hash !== "" ? location.hash.replace("#", "") : null;
+  document.title = `${nameFromHash} | Clips`;
 
   useEffect(() => {
     setShrinkNavbar("true");
