@@ -10,6 +10,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { VideoContainer, VideoTitle, ImageContainer } from "./../../sharedStyledComponents";
 import styles from "../Twitch.module.scss";
 import Utilities from "../../../utilities/Utilities";
+import { VodLiveIndicator } from "./StyledComponents";
 
 export default ({ ...data }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -81,6 +82,13 @@ export default ({ ...data }) => {
     // }}
     >
       <ImageContainer ref={imgRef}>
+        {data.data.thumbnail_url === "" ? (
+          <VodLiveIndicator
+            // as={NavLink}
+            to={`/twitch/live/${data.data.user_name}`}>
+            Live
+          </VodLiveIndicator>
+        ) : null}
         <a className={styles.img} href={data.data.url}>
           {isHovered && previewAvailable && data.data.thumbnail_url ? (
             <div
@@ -103,6 +111,7 @@ export default ({ ...data }) => {
             />
           )}
         </a>
+
         <div className={styles.vodVideoInfo}>
           <p className={styles.vodDuration} title='duration'>
             {Utilities.formatTwitchVodsDuration(data.data.duration)}
