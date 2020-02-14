@@ -133,6 +133,13 @@ const SubFeedHeader = styled.div`
 
 const SortButton = styled(Button).attrs({ variant: "dark" })`
   width: 200px;
+  background-color: rgba(20, 23, 25, 0.5);
+
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: rgba(20, 23, 25, 0.9);
+  }
 
   i {
     padding-right: 5px;
@@ -144,7 +151,7 @@ const SortDropDownList = styled.ul`
   padding: 10px;
   list-style: none;
   margin-top: 42px;
-  background: #23272b;
+  background-color: rgba(20, 23, 25, 0.9);
   border-radius: 0 0 5px 5px;
   width: 200px;
   border-color: #1d2124;
