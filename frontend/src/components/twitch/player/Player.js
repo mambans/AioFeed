@@ -28,6 +28,7 @@ const TwitchInteractivePlayer = ({
   volumeEventOverlayRef,
   setVolumeText,
   setVolumeMuted,
+  type,
 }) => {
   useEffect(() => {
     let TwitchPlayer = new window.Twitch.Player("twitch-embed", {
@@ -68,9 +69,21 @@ const TwitchInteractivePlayer = ({
       if (typeof e === "object" && e.button === 1) {
         TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
         setVolumeMuted(!TwitchPlayer.getMuted());
+      } else if (e.button === 0 && type === "vod" && TwitchPlayer.isPaused()) {
+        TwitchPlayer.play();
       } else if (typeof e === "object" && e.button === 0 && TwitchPlayer.getMuted()) {
         TwitchPlayer.setMuted(false);
         setVolumeMuted(false);
+      }
+    };
+
+    const pauseOnSpacebar = e => {
+      if (e.keyCode === 32) {
+        if (TwitchPlayer.isPaused()) {
+          TwitchPlayer.play();
+        } else {
+          TwitchPlayer.pause();
+        }
       }
     };
 
@@ -79,6 +92,7 @@ const TwitchInteractivePlayer = ({
 
       volumeEventOverlayRefElement.addEventListener("wheel", scrollChangeVolumeEvent);
       volumeEventOverlayRefElement.addEventListener("mouseup", scrollClickMuteVolume);
+      document.body.addEventListener("keyup", pauseOnSpacebar);
     };
 
     TwitchPlayer.addEventListener(window.Twitch.Player.READY, twitchPlayerEventListeners);
@@ -87,8 +101,9 @@ const TwitchInteractivePlayer = ({
       TwitchPlayer.removeEventListener(window.Twitch.Player.READY, twitchPlayerEventListeners);
       volumeEventOverlayRefElement.removeEventListener("wheel", scrollChangeVolumeEvent);
       volumeEventOverlayRefElement.removeEventListener("mouseup", scrollClickMuteVolume);
+      document.body.removeEventListener("keyup", pauseOnSpacebar);
     };
-  }, [channel, video, volumeEventOverlayRef, setVolumeMuted, setVolumeText]);
+  }, [channel, video, volumeEventOverlayRef, setVolumeMuted, setVolumeText, type]);
 
   return null;
 };
@@ -199,10 +214,6 @@ export default () => {
           switchedChatState={switched}>
           <div id='twitch-embed'>
             <VolumeEventOverlay ref={volumeEventOverlayRef} type='live'>
-              {/* <p>
-                <Icon size={30} icon={volumeIcon()} />
-                {volumeText && volumeText.toFixed(0) + "%"}
-              </p> */}
               <NonInteractiveVolumeSlider volumeMuted={volumeMuted} volumeText={volumeText} />
             </VolumeEventOverlay>
             <TwitchInteractivePlayer
@@ -246,7 +257,7 @@ export default () => {
             {nameFromHash ? (
               <Nav.Link as={NavLink} to={`/twitch/channel/${nameFromHash}`}>
                 <div id='icon'>
-                  <Icon icon={ic_account_circle} size={20}></Icon>
+                  <Icon icon={ic_account_circle} size={20} />
                 </div>
                 {nameFromHash}'s channel page
               </Nav.Link>
@@ -277,6 +288,7 @@ export default () => {
             volumeEventOverlayRef={volumeEventOverlayRef}
             setVolumeText={setVolumeText}
             setVolumeMuted={setVolumeMuted}
+            type={"vod"}
           />
         </VideoAndChatContainer>
       </>
