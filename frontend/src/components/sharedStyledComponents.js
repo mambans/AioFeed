@@ -123,12 +123,12 @@ const ImageContainer = styled.div`
 
   &:hover {
     z-index: 2;
-    transform: scale(1.07);
-    -webkit-transform: scale(1.07);
-    -moz-transform: scale(1.07);
-    -ms-transform: scale(1.07);
-    -o-transform: scale(1.07);
-    //transition-duration: 350ms;
+    /* transform: scale(1.07);*/
+
+    transform: scale(1.15);
+    /* box-shadow: 0px 0px 75px 10px black; */
+    box-shadow: 0 0px 0px 0px #be0e0e00, 0 0px 0px 0px #be0e0e00,
+      12px 0 50px -4px rgba(0, 0, 0, 0.8), -12px 0 50px -4px rgba(0, 0, 0, 0.8);
   }
 `;
 
