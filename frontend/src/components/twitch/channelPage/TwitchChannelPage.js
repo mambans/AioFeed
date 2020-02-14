@@ -80,7 +80,7 @@ export default () => {
 
   const followStream = async UserId => {
     await axios
-      .put(`https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${UserId}`, {
+      .put(`https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${UserId}`, "", {
         headers: {
           Authorization: `OAuth ${twitchToken}`,
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
