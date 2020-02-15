@@ -2,14 +2,14 @@ import React from "react";
 
 import { StyledLoadingBox } from "./styledComponents";
 
-export default props => {
-  const array = Array.apply(null, Array(props.amount)).map(function(x, i) {
+export default ({ amount, type }) => {
+  const array = Array.apply(null, Array(amount)).map(function(x, i) {
     return i;
   });
 
   return array.map(index => {
     return (
-      <StyledLoadingBox key={index}>
+      <StyledLoadingBox key={index} type={type}>
         <div id='video'></div>
         <div id='title'>
           <div></div>

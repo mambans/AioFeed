@@ -18,7 +18,6 @@ function TwitchVods() {
     Math.floor((document.documentElement.clientHeight - (65 + 75 + 450)) / 337);
 
   const [vods, setVods] = useState();
-  // const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [vodAmounts, setVodAmounts] = useState(nrStreams);
@@ -97,7 +96,6 @@ function TwitchVods() {
             setVodError(data.vodError);
           }
           setVods(data.data);
-          // setIsLoaded(true);
           setRefreshing(false);
         })
         .catch(data => {
@@ -152,7 +150,6 @@ function TwitchVods() {
           }
 
           setVods(data.data);
-          // setIsLoaded(true);
           setRefreshing(false);
 
           // Enable for "load more" vods on Scroll
@@ -201,13 +198,13 @@ function TwitchVods() {
       </>
     );
   }
-  // if (!isLoaded) {
   if (vods === undefined || !vods || !vods.data) {
     return (
       <>
         <Header refresh={refresh} refreshing={refreshing} vods={vods} ref={VodHeaderRef} />
         <LoadingBoxs
           amount={Math.floor(((document.documentElement.clientWidth - 150) / 350) * 1.5)}
+          type='Vods'
         />
       </>
     );

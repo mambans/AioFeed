@@ -19,7 +19,7 @@ export default ({ numberOfVideos }) => {
       </SubFeedHeader>
       <SubFeedContainer
         style={{ justifyContent: "center", minHeight: "345px", paddingBottom: "0" }}>
-        <LoadingBoxs amount={numberOfVideos} />
+        <LoadingBoxs amount={numberOfVideos} type='Vods' />
       </SubFeedContainer>
     </>
   );

@@ -140,7 +140,9 @@ const StyledLoadingBox = styled.div`
   margin: 7px;
   max-height: 336px;
   margin-bottom: 15px;
-  height: 334px;
+  /* height: ${({ type }) => (type === "Vods" || type === "Clips" ? "unset" : "334px")}; */
+  height: unset;
+
   transition: all 1s linear;
 
   div#video {
@@ -176,18 +178,22 @@ const StyledLoadingBox = styled.div`
   }
 
   #details {
-    height: 75px;
+    height: ${({ type }) => (type === "Vods" ? "65px" : type === "Clips" ? "25px" : "75px")};
+    /* height: 65px; */
 
     #channel {
       width: 100px;
-      height: 20px;
-      margin: 7px 0;
+      /* height: 20px; */
+      height: ${({ type }) => (type === "Clips" ? "25px" : "20px")};
+      /* margin: 7px 0; */
+      margin: ${({ type }) => (type === "Clips" ? "0" : "7px 0")};
     }
 
     #game {
       width: 125px;
       height: 20px;
       margin: 21px 0 0 0;
+      display: ${({ type }) => (type === "Clips" ? "none" : "block")};
     }
   }
 `;
