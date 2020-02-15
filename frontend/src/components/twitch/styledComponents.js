@@ -27,8 +27,8 @@ const StyledLoadmore = styled.div`
   align-items: center;
 
   div {
-    background: #5a5c5e;
-    height: 2px;
+    background: rgba(90, 92, 94, 0.67);
+    height: 1px;
   }
 
   p {
@@ -37,11 +37,13 @@ const StyledLoadmore = styled.div`
     margin: 0;
     font-weight: bold;
     color: #a4a4a4;
-    text-shadow: 0px 0px 5px black;
-    padding: 10px 20px;
+    /* text-shadow: 0px 0px 5px black; */
+    padding: 0px 15px;
+    transition: all 200ms;
 
     &:hover {
       color: white;
+      padding: 0px 25px;
     }
   }
 `;
