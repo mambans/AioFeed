@@ -1,6 +1,5 @@
 import { eye } from "react-icons-kit/icomoon/eye";
 import { Icon } from "react-icons-kit";
-import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useRef, useCallback, useState, useEffect } from "react";
@@ -92,7 +91,7 @@ function StreamEle(data) {
             {data.data.title}
           </Tooltip>
         }>
-        <VideoTitle href={"/twitch/live/" + data.data.user_name.toLowerCase()}>
+        <VideoTitle to={"/twitch/live/" + data.data.user_name.toLowerCase()}>
           {Utilities.truncate(data.data.title, 50)}
         </VideoTitle>
       </OverlayTrigger>
@@ -105,18 +104,20 @@ function StreamEle(data) {
             style={{ gridRow: 1, padding: "0", fontSize: "inherit" }}>
             <img src={data.data.profile_img_url} alt='' className={styles.profile_img}></img>
           </Nav.Link>
-          <p className={styles.channel}>
-            <Nav.Link
-              // href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
-              to={`/twitch/channel/${data.data.user_name}`}
-              as={NavLink}
-              style={{ gridRow: 1, padding: "0", paddingRight: "5px" }}>
-              {data.data.user_name}
-            </Nav.Link>
-          </p>
+          <Nav.Link
+            // href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
+            to={`/twitch/channel/${data.data.user_name}`}
+            as={NavLink}
+            style={{ gridRow: 1, paddingRight: "5px" }}
+            className={styles.channel}>
+            {data.data.user_name}
+          </Nav.Link>
         </div>
         <div className={styles.gameContainer}>
-          <Link className={styles.game_img} to={"/twitch/top/" + data.data.game_name}>
+          <Nav.Link
+            className={styles.game_img}
+            as={NavLink}
+            to={"/twitch/top/" + data.data.game_name}>
             <img
               src={
                 data.data.game_img
@@ -125,10 +126,10 @@ function StreamEle(data) {
               }
               alt=''
               className={styles.game_img}></img>
-          </Link>
-          <Link className={styles.game} to={"/twitch/top/" + data.data.game_name}>
+          </Nav.Link>
+          <Nav.Link className={styles.game} as={NavLink} to={"/twitch/top/" + data.data.game_name}>
             {data.data.game_name}
-          </Link>
+          </Nav.Link>
           <p className={styles.viewers}>
             {/* {data.data.viewer_count} */}
             {formatViewerNumbers(data.data.viewer_count)}

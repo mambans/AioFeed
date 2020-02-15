@@ -4,6 +4,8 @@ import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useRef } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
+import { Nav } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 
 import { VideoContainer, VideoTitle, ImageContainer } from "./../../sharedStyledComponents";
 import styles from "../Twitch.module.scss";
@@ -63,24 +65,26 @@ export default ({ ...data }) => {
               {data.data.title}
             </Tooltip>
           }>
-          <VideoTitle href={"/twitch/clip/" + data.data.id + `#${data.user_name}`}>
+          <VideoTitle to={"/twitch/clip/" + data.data.id + `#${data.user_name}`}>
             {Utilities.truncate(data.data.title, 70)}
             {/* {data.data.title} */}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
-        <VideoTitle href={"/twitch/clip/" + data.data.id + `#${data.user_name}`}>
+        <VideoTitle to={"/twitch/clip/" + data.data.id + `#${data.user_name}`}>
           {data.data.title}
         </VideoTitle>
       )}
 
       <div style={{ width: "336px" }}>
         <div className={styles.channelContainer} style={{ marginBottom: "0px", height: "25px" }}>
-          <p className={styles.channel} style={{ paddingLeft: "5px" }}>
-            <a href={"/twitch/channel/" + data.data.broadcaster_name.toLowerCase()}>
-              {data.data.broadcaster_name}
-            </a>
-          </p>
+          <Nav.Link
+            to={"/twitch/channel/" + data.data.broadcaster_name.toLowerCase()}
+            as={NavLink}
+            className={styles.channel}
+            style={{ paddingLeft: "5px" }}>
+            {data.data.broadcaster_name}
+          </Nav.Link>
           <Moment
             className={styles.viewers}
             id={styles.timeago}

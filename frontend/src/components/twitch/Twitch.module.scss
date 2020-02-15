@@ -137,21 +137,6 @@
   right: -213px;
 }
 
-.channel a {
-  // bottom: 5px;
-  position: relative;
-  width: max-content;
-  background: none;
-  padding-right: 5px;
-  font-size: 0.9rem;
-  color: var(--infoColorGrey);
-  font-weight: bold;
-
-  &:hover {
-    color: var(--channelHover);
-  }
-}
-
 .domainTitle {
   text-align: center;
 }
@@ -169,12 +154,20 @@
   }
 
   .channel {
-    height: 100%;
-    // top: 7px;
     position: relative;
-    padding-left: 5px;
+    width: max-content;
+    background: none;
+    padding: 0 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--infoColorGrey);
+    height: 100%;
     grid-row: 1;
     margin-bottom: 0;
+
+    &:hover {
+      color: var(--channelHover);
+    }
   }
 }
 
@@ -189,12 +182,13 @@
     grid-column: 1;
     height: 40px;
     object-fit: cover;
+    padding: 0;
   }
 
   .game {
-    height: 20px;
-    top: 7px;
-    position: relative;
+    // height: 20px;
+    // top: 7px;
+    // position: relative;
     padding-left: 5px;
     grid-column: 2;
     bottom: 20px;
@@ -213,8 +207,7 @@
   }
 }
 
-.gameContainer p a,
-.channelContainer p a {
+.channelContainer a {
   font-size: 1rem !important;
   height: 100%;
   display: flex;

@@ -2,7 +2,6 @@ import { cross } from "react-icons-kit/icomoon/cross";
 import { CSSTransition } from "react-transition-group";
 import { eye } from "react-icons-kit/icomoon/eye";
 import { Icon } from "react-icons-kit";
-import { Link } from "react-router-dom";
 import { Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { notification } from "react-icons-kit/icomoon/notification";
@@ -213,12 +212,12 @@ function StreamEle(data) {
               {data.data.title}
             </Tooltip>
           }>
-          <VideoTitle href={"/twitch/live/" + data.data.user_name.toLowerCase()}>
+          <VideoTitle to={"/twitch/live/" + data.data.user_name.toLowerCase()}>
             {Utilities.truncate(data.data.title, 50)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
-        <VideoTitle href={"/twitch/live/" + data.data.user_name.toLowerCase()}>
+        <VideoTitle to={"/twitch/live/" + data.data.user_name.toLowerCase()}>
           {data.data.title}
         </VideoTitle>
       )}
@@ -230,14 +229,13 @@ function StreamEle(data) {
             style={{ gridRow: 1, padding: "0", paddingRight: "5px", fontSize: "inherit" }}>
             <img src={data.data.profile_img_url} alt='' className={styles.profile_img}></img>
           </Nav.Link>
-          <p className={styles.channel}>
-            <Nav.Link
-              as={NavLink}
-              to={`/twitch/channel/${data.data.user_name}`}
-              style={{ padding: "0" }}>
-              {data.data.user_name}
-            </Nav.Link>
-          </p>
+          <Nav.Link
+            as={NavLink}
+            to={`/twitch/channel/${data.data.user_name}`}
+            className={styles.channel}>
+            {data.data.user_name}
+          </Nav.Link>
+
           {channelIsHovered ? (
             <>
               <a
@@ -294,12 +292,13 @@ function StreamEle(data) {
               className={styles.game_img}
             />
           </a>
-          <Link
+          <Nav.Link
+            as={NavLink}
             className={styles.game}
             // href={"https://www.twitch.tv/directory/game/" + data.data.game_name}
             to={"/twitch/top/" + data.data.game_name}>
             {data.data.game_name}
-          </Link>
+          </Nav.Link>
           <p className={styles.viewers} title='Viewers'>
             {/* {data.data.viewer_count} */}
             {formatViewerNumbers(data.data.viewer_count)}

@@ -1,6 +1,7 @@
 // import React from "react";
 import styled from "styled-components";
-import { Button } from "react-bootstrap";
+import { Button, Nav } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 
 const RefreshButton = styled(Button).attrs({ variant: "outline-secondary" })`
   color: var(--refreshButtonColor);
@@ -86,7 +87,7 @@ const VideoContainer = styled.div`
   }
 `;
 
-const VideoTitle = styled.a`
+const VideoTitle = styled(Nav.Link).attrs({ as: NavLink })`
   color: var(--videoTitle);
   margin-top: 15px;
   margin-bottom: 5px;
@@ -96,6 +97,7 @@ const VideoTitle = styled.a`
   overflow: hidden;
   height: 45px;
   line-height: 1.2;
+  padding: 0;
 
   &:hover {
     color: var(--videoTitleHover);
