@@ -23,7 +23,7 @@ export default ({ sortBy, setSortBy, setData }) => {
           setOpen(!open);
         }}>
         <Icon icon={ic_sort} size={20} />
-        Within: {sortBy ? sortBy + " days" : "Lifetime"}
+        Within: {SortOptionsNames[sortBy || "null"]}
       </SortButton>
       {open ? (
         <SortDropDownList>
@@ -33,7 +33,7 @@ export default ({ sortBy, setSortBy, setData }) => {
                 key={option}
                 onClick={() => {
                   setData();
-                  setSortBy(option);
+                  setSortBy(option === "null" ? null : option);
                   setOpen(false);
                 }}>
                 {SortOptionsNames[option]}
