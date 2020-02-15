@@ -90,9 +90,46 @@ export default () => {
       .then(res => {
         if (res.data) console.log("Started following", channelInfo.display_name);
       })
-      .catch(error => {
-        console.log(`Failed to follow stream ${channelInfo.display_name}: `, error);
-        console.log("::Try re-authenticate from the sidebar::");
+      .catch(async error => {
+        console.log(`Failed to unfollow ${channelId.display_name}. `, error);
+        console.log(`Trying to auto re-authenticate with Twitch.`);
+
+        await axios
+          .post(
+            `https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=${encodeURI(
+              Utilities.getCookie("Twitch-refresh_token")
+            )}&client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&client_secret=${
+              process.env.REACT_APP_TWITCH_SECRET
+            }&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`
+          )
+          .then(async res => {
+            setTwitchToken(res.data.access_token);
+            setRefreshToken(res.data.refresh_token);
+            document.cookie = `Twitch-access_token=${res.data.access_token}; path=/`;
+            document.cookie = `Twitch-refresh_token=${res.data.refresh_token}; path=/`;
+
+            await axios
+              .put(
+                `https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${UserId}`,
+                "",
+                {
+                  headers: {
+                    Authorization: `OAuth ${res.data.access_token}`,
+                    "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+                    Accept: "application/vnd.twitchtv.v5+json",
+                  },
+                }
+              )
+              .then(() => {
+                console.log(`Unfollowed: ${channelInfo.display_name}`);
+                // data.refresh();
+              });
+          })
+          .catch(er => {
+            console.error(er);
+            console.log(`Failed to follow stream ${channelInfo.display_name}: `, er);
+            console.log("::Try manually re-authenticate from the sidebar.::");
+          });
       });
   };
 
