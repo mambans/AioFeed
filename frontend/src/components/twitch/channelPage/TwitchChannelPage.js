@@ -401,7 +401,9 @@ export default () => {
                   )}
                 </div>
                 <p id='title'>{channelInfo.status}</p>
-                <p id='game'>{channelInfo.game}</p>
+                <Nav.Link as={NavLink} to={`/twitch/top/${channelInfo.game}`} id='game'>
+                  {channelInfo.game}
+                </Nav.Link>
                 <p id='desc'>{channelInfo.description}</p>
                 <div style={{ display: "flex", justifyContent: "center", color: "#cacaca" }}>
                   <p style={{ marginRight: "50px" }}>Followers: {channelInfo.followers}</p>

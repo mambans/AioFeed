@@ -58,6 +58,17 @@ const Name = styled.div`
       font-size: 1.1rem;
     }
 
+    #game {
+      color: rgb(240, 240, 240);
+      margin-bottom: 0.6rem;
+      font-size: inherit;
+      padding: 0;
+
+      &:hover {
+        color: #ffffff;
+      }
+    }
+
     #desc,
     #updated {
       color: #cacaca;
