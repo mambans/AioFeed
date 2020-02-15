@@ -2,8 +2,7 @@ import { CSSTransition } from "react-transition-group";
 import { ic_account_circle } from "react-icons-kit/md/ic_account_circle";
 import { ic_vertical_align_bottom } from "react-icons-kit/md/ic_vertical_align_bottom";
 import { ic_vertical_align_top } from "react-icons-kit/md/ic_vertical_align_top";
-import { Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useParams, useLocation } from "react-router-dom";
 import Icon from "react-icons-kit";
 import React, { useContext, useEffect } from "react";
@@ -38,12 +37,12 @@ export default () => {
       <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
         <PlayerNavbar>
           {nameFromHash ? (
-            <Nav.Link as={NavLink} to={`/twitch/channel/${nameFromHash}`}>
+            <Link to={`/twitch/channel/${nameFromHash}`}>
               <div id='icon'>
                 <Icon icon={ic_account_circle} size={20}></Icon>
               </div>
               {nameFromHash}'s channel page
-            </Nav.Link>
+            </Link>
           ) : null}
         </PlayerNavbar>
       </CSSTransition>

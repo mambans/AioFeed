@@ -4,8 +4,7 @@ import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useRef } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
-import { Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { VideoContainer, VideoTitle, ImageContainer } from "./../../sharedStyledComponents";
 import styles from "../Twitch.module.scss";
@@ -78,13 +77,11 @@ export default ({ ...data }) => {
 
       <div style={{ width: "336px" }}>
         <div className={styles.channelContainer} style={{ marginBottom: "0px", height: "25px" }}>
-          <Nav.Link
+          <Link
             to={"/twitch/channel/" + data.data.broadcaster_name.toLowerCase()}
-            as={NavLink}
-            className={styles.channel}
-            style={{ paddingLeft: "5px" }}>
+            className={styles.channel}>
             {data.data.broadcaster_name}
-          </Nav.Link>
+          </Link>
           <Moment
             className={styles.viewers}
             id={styles.timeago}

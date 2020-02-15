@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback, useRef } from "react";
-import { Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import styles from "./Twitch.module.scss";
 
@@ -57,9 +56,8 @@ function StreamHoverIframe(data) {
         allowFullScreen={true}
         frameBorder='0'
       />
-      <Nav.Link
+      <Link
         to={`/twitch/live/${data.data.user_name}`}
-        as={NavLink}
         alt=''
         style={{
           position: "absolute",
@@ -69,7 +67,7 @@ function StreamHoverIframe(data) {
           padding: "0",
         }}>
         ""
-      </Nav.Link>
+      </Link>
     </>
   );
 }

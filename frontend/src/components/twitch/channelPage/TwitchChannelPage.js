@@ -1,7 +1,6 @@
 import { ic_favorite } from "react-icons-kit/md/ic_favorite";
 import { ic_favorite_border } from "react-icons-kit/md/ic_favorite_border";
-import { Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
@@ -329,17 +328,17 @@ export default () => {
               <div id='HeaderChannelInfo'>
                 <div id='ChannelName'>
                   {channelInfo.isLive ? (
-                    <Nav.Link as={NavLink} to={`/twitch/live/${id}`} style={{ padding: "0" }}>
+                    <Link to={`/twitch/live/${id}`} style={{ padding: "0" }}>
                       <LiveIndicator>
                         <LiveIndicatorIcon />
                         <p>Live</p>
                       </LiveIndicator>
-                    </Nav.Link>
+                    </Link>
                   ) : null}
-                  <Nav.Link as={NavLink} to={`/twitch/live/${id}`} id='ChannelLiveLink'>
+                  <Link to={`/twitch/live/${id}`} id='ChannelLiveLink'>
                     <img id='profileIcon' alt='' src={channelInfo.logo} />
                     {channelInfo.display_name}
-                  </Nav.Link>
+                  </Link>
                   {channelInfo.partner ? (
                     <img
                       id='partnered'
@@ -401,9 +400,9 @@ export default () => {
                   )}
                 </div>
                 <p id='title'>{channelInfo.status}</p>
-                <Nav.Link as={NavLink} to={`/twitch/top/${channelInfo.game}`} id='game'>
+                <Link to={`/twitch/top/${channelInfo.game}`} id='game'>
                   {channelInfo.game}
-                </Nav.Link>
+                </Link>
                 <p id='desc'>{channelInfo.description}</p>
                 <div style={{ display: "flex", justifyContent: "center", color: "#cacaca" }}>
                   <p style={{ marginRight: "50px" }}>Followers: {channelInfo.followers}</p>

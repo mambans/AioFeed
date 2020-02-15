@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import { Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const VodLiveIndicator = styled(Nav.Link).attrs({ as: NavLink })`
+const VodLiveIndicator = styled(Link)`
   padding: 5px;
   font-size: 0.8rem;
   position: absolute;

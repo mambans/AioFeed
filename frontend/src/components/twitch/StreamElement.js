@@ -2,8 +2,7 @@ import { cross } from "react-icons-kit/icomoon/cross";
 import { CSSTransition } from "react-transition-group";
 import { eye } from "react-icons-kit/icomoon/eye";
 import { Icon } from "react-icons-kit";
-import { Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { notification } from "react-icons-kit/icomoon/notification";
 import { twitch } from "react-icons-kit/fa/twitch";
 import Alert from "react-bootstrap/Alert";
@@ -223,18 +222,14 @@ function StreamEle(data) {
       )}
       <div>
         <div className={styles.channelContainer} ref={refChannel}>
-          <Nav.Link
-            as={NavLink}
+          <Link
             to={`/twitch/channel/${data.data.user_name}`}
-            style={{ gridRow: 1, padding: "0", paddingRight: "5px", fontSize: "inherit" }}>
+            style={{ gridRow: 1, paddingRight: "5px" }}>
             <img src={data.data.profile_img_url} alt='' className={styles.profile_img}></img>
-          </Nav.Link>
-          <Nav.Link
-            as={NavLink}
-            to={`/twitch/channel/${data.data.user_name}`}
-            className={styles.channel}>
+          </Link>
+          <Link to={`/twitch/channel/${data.data.user_name}`} className={styles.channel}>
             {data.data.user_name}
-          </Nav.Link>
+          </Link>
 
           {channelIsHovered ? (
             <>
@@ -292,13 +287,12 @@ function StreamEle(data) {
               className={styles.game_img}
             />
           </a>
-          <Nav.Link
-            as={NavLink}
+          <Link
             className={styles.game}
             // href={"https://www.twitch.tv/directory/game/" + data.data.game_name}
             to={"/twitch/top/" + data.data.game_name}>
             {data.data.game_name}
-          </Nav.Link>
+          </Link>
           <p className={styles.viewers} title='Viewers'>
             {/* {data.data.viewer_count} */}
             {formatViewerNumbers(data.data.viewer_count)}

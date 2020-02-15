@@ -6,8 +6,7 @@ import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
-import { Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { VideoContainer, VideoTitle, ImageContainer } from "./../../sharedStyledComponents";
 import styles from "../Twitch.module.scss";
@@ -78,18 +77,10 @@ export default ({ ...data }) => {
   }, [handleMouseOut, handleMouseOver]);
 
   return (
-    <VideoContainer
-    // onTransitionEnd={() => {
-    //   if (data.transition !== "videoFade-1s") data.setTransition();
-    // }}
-    >
+    <VideoContainer>
       <ImageContainer ref={imgRef}>
         {data.data.thumbnail_url === "" ? (
-          <VodLiveIndicator
-            // as={NavLink}
-            to={`/twitch/live/${data.data.user_name}`}>
-            Live
-          </VodLiveIndicator>
+          <VodLiveIndicator to={`/twitch/live/${data.data.user_name}`}>Live</VodLiveIndicator>
         ) : null}
         <a className={styles.img} href={data.data.url}>
           {isHovered && previewAvailable && data.data.thumbnail_url ? (
@@ -161,13 +152,11 @@ export default ({ ...data }) => {
 
       <div>
         <div className={styles.channelContainer} style={{ marginBottom: "0px", height: "25px" }}>
-          <Nav.Link
+          <Link
             to={"/twitch/channel/" + data.data.user_name.toLowerCase()}
-            as={NavLink}
-            className={styles.channel}
-            style={{ paddingLeft: "5px" }}>
+            className={styles.channel}>
             {data.data.user_name}
-          </Nav.Link>
+          </Link>
         </div>
         <div
           className={styles.gameContainer}

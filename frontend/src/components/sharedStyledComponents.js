@@ -1,7 +1,7 @@
 // import React from "react";
 import styled from "styled-components";
-import { Button, Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const RefreshButton = styled(Button).attrs({ variant: "outline-secondary" })`
   color: var(--refreshButtonColor);
@@ -87,7 +87,7 @@ const VideoContainer = styled.div`
   }
 `;
 
-const VideoTitle = styled(Nav.Link).attrs({ as: NavLink })`
+const VideoTitle = styled(Link)`
   color: var(--videoTitle);
   margin-top: 15px;
   margin-bottom: 5px;

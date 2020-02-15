@@ -4,8 +4,7 @@ import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useRef, useCallback, useState, useEffect } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
-import { Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { ImageContainer, VideoTitle } from "./../../sharedStyledComponents";
 import StreamHoverIframe from "./../StreamHoverIframe.js";
@@ -60,11 +59,7 @@ function StreamEle(data) {
         {isHovered ? (
           <StreamHoverIframe id={data.data.id} data={data.data} setIsHovered={setIsHovered} />
         ) : null}
-        <Nav.Link
-          to={`/twitch/live/${data.data.user_name}`}
-          as={NavLink}
-          className={styles.img}
-          style={{ padding: "0" }}>
+        <Link to={`/twitch/live/${data.data.user_name}`} className={styles.img}>
           <img
             src={
               data.data.thumbnail_url.replace("{width}", 640).replace("{height}", 360) +
@@ -73,7 +68,7 @@ function StreamEle(data) {
             }
             alt={styles.thumbnail}
           />
-        </Nav.Link>
+        </Link>
         <Moment className={styles.duration} durationFromNow>
           {data.data.started_at}
         </Moment>
@@ -97,27 +92,21 @@ function StreamEle(data) {
       </OverlayTrigger>
       <div>
         <div className={styles.channelContainer} ref={refChannel}>
-          <Nav.Link
+          <Link
             to={`/twitch/channel/${data.data.user_name}`}
-            as={NavLink}
             // href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
-            style={{ gridRow: 1, padding: "0", fontSize: "inherit" }}>
+            style={{ gridRow: 1 }}>
             <img src={data.data.profile_img_url} alt='' className={styles.profile_img}></img>
-          </Nav.Link>
-          <Nav.Link
+          </Link>
+          <Link
             // href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
             to={`/twitch/channel/${data.data.user_name}`}
-            as={NavLink}
-            style={{ gridRow: 1, paddingRight: "5px" }}
             className={styles.channel}>
             {data.data.user_name}
-          </Nav.Link>
+          </Link>
         </div>
         <div className={styles.gameContainer}>
-          <Nav.Link
-            className={styles.game_img}
-            as={NavLink}
-            to={"/twitch/top/" + data.data.game_name}>
+          <Link className={styles.game_img} to={"/twitch/top/" + data.data.game_name}>
             <img
               src={
                 data.data.game_img
@@ -126,10 +115,10 @@ function StreamEle(data) {
               }
               alt=''
               className={styles.game_img}></img>
-          </Nav.Link>
-          <Nav.Link className={styles.game} as={NavLink} to={"/twitch/top/" + data.data.game_name}>
+          </Link>
+          <Link className={styles.game} to={"/twitch/top/" + data.data.game_name}>
             {data.data.game_name}
-          </Nav.Link>
+          </Link>
           <p className={styles.viewers}>
             {/* {data.data.viewer_count} */}
             {formatViewerNumbers(data.data.viewer_count)}
