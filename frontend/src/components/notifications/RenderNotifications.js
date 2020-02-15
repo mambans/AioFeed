@@ -5,6 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import Moment from "react-moment";
 import moment from "moment";
 import React, { useState, useContext } from "react";
+import { Link } from "react-router-dom";
 
 // import "./Notifications.scss";
 import { ButtonList } from "./../sharedStyledComponents";
@@ -96,24 +97,24 @@ export default () => {
               ? props.notifications.map(item => {
                   return (
                     <Notification key={item.key} type={item.status}>
-                      <a
+                      <Link
+                        to={`/twitch/channel/${item.user_name.toLowerCase()}`}
                         className='profileImg'
-                        href={"https://www.twitch.tv/" + item.user_name.toLowerCase()}
                         alt=''>
                         <img src={item.profile_img_url} alt=''></img>
-                      </a>
-                      <a
-                        href={"https://www.twitch.tv/" + item.user_name.toLowerCase()}
+                      </Link>
+                      <Link
+                        to={`/twitch/channel/${item.user_name.toLowerCase()}`}
                         alt=''
                         className='name'>
                         <b>{item.user_name}</b> went {item.status}
-                      </a>
+                      </Link>
                       {item.status === "Live" ? (
-                        <a
-                          href={"https://www.twitch.tv/" + item.user_name.toLowerCase() + "/videos"}
+                        <Link
+                          to={`/twitch/channel/${item.user_name.toLowerCase()}`}
                           className='title'>
                           {Utilities.truncate(item.title, 50)}
-                        </a>
+                        </Link>
                       ) : null}
                       <div className='date'>
                         <div>
