@@ -27,7 +27,6 @@ const TwitchInteractivePlayer = ({
   volumeEventOverlayRef,
   setVolumeText,
   setVolumeMuted,
-  type,
 }) => {
   useEffect(() => {
     let TwitchPlayer = new window.Twitch.Player("twitch-embed", {
@@ -64,13 +63,13 @@ const TwitchInteractivePlayer = ({
       }
     };
 
-    const scrollClickMuteVolume = e => {
-      if (typeof e === "object" && e.button === 1) {
+    const clickUnmuteMuteOrPlay = e => {
+      if (e.button === 1) {
         TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
         setVolumeMuted(!TwitchPlayer.getMuted());
-      } else if (e.button === 0 && type === "vod" && TwitchPlayer.isPaused()) {
+      } else if (e.button === 0 && TwitchPlayer.isPaused()) {
         TwitchPlayer.play();
-      } else if (typeof e === "object" && e.button === 0 && TwitchPlayer.getMuted()) {
+      } else if (e.button === 0 && TwitchPlayer.getMuted()) {
         TwitchPlayer.setMuted(false);
         setVolumeMuted(false);
       }
@@ -90,7 +89,7 @@ const TwitchInteractivePlayer = ({
       setVolumeMuted(TwitchPlayer.getMuted());
 
       volumeEventOverlayRefElement.addEventListener("wheel", scrollChangeVolumeEvent);
-      volumeEventOverlayRefElement.addEventListener("mouseup", scrollClickMuteVolume);
+      volumeEventOverlayRefElement.addEventListener("mouseup", clickUnmuteMuteOrPlay);
       document.body.addEventListener("keyup", pauseOnSpacebar);
     };
 
@@ -99,10 +98,10 @@ const TwitchInteractivePlayer = ({
     return () => {
       TwitchPlayer.removeEventListener(window.Twitch.Player.READY, twitchPlayerEventListeners);
       volumeEventOverlayRefElement.removeEventListener("wheel", scrollChangeVolumeEvent);
-      volumeEventOverlayRefElement.removeEventListener("mouseup", scrollClickMuteVolume);
+      volumeEventOverlayRefElement.removeEventListener("mouseup", clickUnmuteMuteOrPlay);
       document.body.removeEventListener("keyup", pauseOnSpacebar);
     };
-  }, [channel, video, volumeEventOverlayRef, setVolumeMuted, setVolumeText, type]);
+  }, [channel, video, volumeEventOverlayRef, setVolumeMuted, setVolumeText]);
 
   return null;
 };
@@ -210,7 +209,7 @@ export default () => {
             height: visible ? "calc(100vh - 75px)" : "100vh",
             top: visible ? "75px" : "0",
           }}
-          switchedChatState={switched}>
+          switchedChatState={switched.toString()}>
           <div id='twitch-embed'>
             <VolumeEventOverlay ref={volumeEventOverlayRef} type='live'>
               <NonInteractiveVolumeSlider volumeMuted={volumeMuted} volumeText={volumeText} />
@@ -223,7 +222,7 @@ export default () => {
             />
             <ToggleSwitchChatSide
               id='switchSides'
-              switched={switched}
+              switched={switched.toString()}
               onClick={() => {
                 setSwitched(!switched);
               }}
@@ -287,7 +286,6 @@ export default () => {
             volumeEventOverlayRef={volumeEventOverlayRef}
             setVolumeText={setVolumeText}
             setVolumeMuted={setVolumeMuted}
-            type={"vod"}
           />
         </VideoAndChatContainer>
       </>

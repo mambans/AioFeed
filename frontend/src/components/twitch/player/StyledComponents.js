@@ -11,7 +11,7 @@ const VideoAndChatContainer = styled.div`
   transition: top 300ms, height 300ms;
   display: grid;
   grid-template-areas: ${({ switchedChatState }) =>
-    switchedChatState ? '"chat video"' : '"video chat"'};
+    switchedChatState === "true" ? '"chat video"' : '"video chat"'};
 
   &:hover #switchSides {
     opacity: 0.6;
@@ -74,7 +74,7 @@ const ToggleSwitchChatSide = styled(Icon).attrs({ size: 30, icon: loop })`
   transition: opacity 300ms;
   opacity: 0;
   bottom: 100px;
-  margin-left: ${({ switched }) => (switched ? "10px" : "calc(91vw - 40px)")};
+  margin-left: ${({ switched }) => (switched === "true" ? "10px" : "calc(91vw - 40px)")};
 
   &:hover {
     opacity: 1 !important;
