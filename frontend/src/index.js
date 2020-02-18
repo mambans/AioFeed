@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.scss";
 import "./transitions.scss";
-// import "./variables.scss";
 import "./components/themes/Themes.scss";
 import App from "./components/app/App";
 import ThemeProvider from "./../src/components/themes/ThemeProvider";

@@ -13,6 +13,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 
 import { VideoTitle, ImageContainer, UnfollowButton } from "./../sharedStyledComponents";
 import AccountContext from "./../account/AccountContext";
+import FeedsContext from "./../feed/FeedsContext";
 import StreamHoverIframe from "./StreamHoverIframe.js";
 import styles from "./Twitch.module.scss";
 import UnfollowStream from "./UnfollowStream";
@@ -45,6 +46,7 @@ function StreamEle(data) {
   const [channelIsHovered, setChannelIsHovered] = useState(false);
   const [unfollowError, setUnfollowError] = useState(null);
   const { setTwitchToken, twitchToken, setRefreshToken } = useContext(AccountContext);
+  const { twitchVideoHoverEnable } = useContext(FeedsContext);
 
   const streamHoverTimer = useRef();
   const ref = useRef();
@@ -127,7 +129,7 @@ function StreamEle(data) {
   }, []);
 
   useEffect(() => {
-    if (ref.current && data.twitchVideoHoverEnable) {
+    if (ref.current && twitchVideoHoverEnable) {
       const refEle = ref.current;
       ref.current.addEventListener("mouseenter", handleMouseOver);
       ref.current.addEventListener("mouseleave", handleMouseOut);
@@ -137,7 +139,7 @@ function StreamEle(data) {
         refEle.removeEventListener("mouseleave", handleMouseOut);
       };
     }
-  }, [data.twitchVideoHoverEnable, handleMouseOut]);
+  }, [twitchVideoHoverEnable, handleMouseOut]);
 
   const handleMouseOverChannel = () => {
     setChannelIsHovered(true);

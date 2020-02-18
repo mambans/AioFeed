@@ -180,3 +180,29 @@ Resources:
                   Required: true
               - method.request.querystring.password:
                   Required: true
+  UpdatePreferences:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Update preferences for mentioned data name/type."
+      Handler: updateStoredPreferences/handler.handler
+      Runtime: nodejs10.x
+      CodeUri: "."
+      Environment:
+        Variables:
+          USERNAME_TABLE: !Ref UserLogins
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserLogins
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /account/preferences
+            Method: put
+          RequestParameters:
+            - method.request.querystring.username:
+                Required: true
+            - method.request.querystring.dataName:
+                Required: true
+            - method.request.querystring.data:
+                Required: true

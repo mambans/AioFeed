@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 import { CSSTransition } from "react-transition-group";
 
 import AccountContext from "./../../account/AccountContext";
-import FeedsContext from "./../../feed/FeedsContext";
 import CreateAccount from "./CreateAccount";
 import {
   StyledNavSidebar,
@@ -12,10 +11,12 @@ import {
 import Login from "./Login";
 import SidebarAccount from "./SidebarAccount";
 import { StyledNavSidebarTrigger, StyledLoginButton } from "./../StyledComponents";
+import NavigationContext from "./../NavigationContext";
 
-export default props => {
+export default () => {
   const [show, setShow] = useState(false);
-  const { profileImage } = useContext(AccountContext);
+  const { profileImage, username } = useContext(AccountContext);
+  const { setRenderModal, renderModal } = useContext(NavigationContext);
 
   const handleToggle = () => {
     setShow(!show);
@@ -24,7 +25,7 @@ export default props => {
   return (
     <>
       <StyledNavSidebarTrigger onClick={handleToggle} title='Sidebar'>
-        {props.isLoggedIn ? (
+        {username ? (
           <>
             <StyledSidebarTrigger id='NavigationProfileImageHoverOverlay' />
             <img
@@ -51,25 +52,15 @@ export default props => {
       </CSSTransition>
 
       <CSSTransition in={show} timeout={1000} classNames='fadeSlide-right-1s' unmountOnExit>
-        <FeedsContext.Consumer>
-          {feedsProps => {
-            return (
-              <StyledNavSidebar>
-                {props.isLoggedIn ? (
-                  <SidebarAccount
-                    {...feedsProps}
-                    {...props}
-                    setRenderModal={props.setRenderModal}
-                  />
-                ) : props.renderModal === "create" ? (
-                  <CreateAccount />
-                ) : (
-                  <Login />
-                )}
-              </StyledNavSidebar>
-            );
-          }}
-        </FeedsContext.Consumer>
+        <StyledNavSidebar>
+          {username ? (
+            <SidebarAccount setRenderModal={setRenderModal} />
+          ) : renderModal === "create" ? (
+            <CreateAccount />
+          ) : (
+            <Login />
+          )}
+        </StyledNavSidebar>
       </CSSTransition>
     </>
   );

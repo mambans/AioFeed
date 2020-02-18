@@ -45,7 +45,9 @@ export default () => {
   const loadmoreVodsRef = useRef();
   const loadmoreClipsRef = useRef();
 
-  const { setTwitchToken, twitchToken, setRefreshToken, twitchUserId } = useContext(AccountContext);
+  const { setTwitchToken, twitchToken, setRefreshToken, refreshToken, twitchUserId } = useContext(
+    AccountContext
+  );
 
   const getIdFromName = useCallback(async () => {
     await axios
@@ -96,7 +98,7 @@ export default () => {
         await axios
           .post(
             `https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=${encodeURI(
-              Utilities.getCookie("Twitch-refresh_token")
+              refreshToken
             )}&client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&client_secret=${
               process.env.REACT_APP_TWITCH_SECRET
             }&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`
@@ -150,7 +152,7 @@ export default () => {
             after: pagination || null,
           },
           headers: {
-            Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+            Authorization: `Bearer ${twitchToken}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         })
@@ -200,7 +202,7 @@ export default () => {
           console.error(e);
         });
     },
-    [numberOfVideos, sortVodsBy, channelId]
+    [numberOfVideos, sortVodsBy, channelId, twitchToken]
   );
 
   const fetchClips = useCallback(
@@ -223,7 +225,7 @@ export default () => {
             ended_at: sortClipsBy && new Date().toISOString(),
           },
           headers: {
-            Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+            Authorization: `Bearer ${twitchToken}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         })
@@ -251,7 +253,7 @@ export default () => {
           }
         });
     },
-    [numberOfVideos, sortClipsBy, channelId]
+    [numberOfVideos, sortClipsBy, channelId, twitchToken]
   );
 
   const getChannelInfo = useCallback(async () => {
@@ -279,7 +281,7 @@ export default () => {
             user_login: id,
           },
           headers: {
-            Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+            Authorization: `Bearer ${twitchToken}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         })

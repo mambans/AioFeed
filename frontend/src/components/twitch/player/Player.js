@@ -5,11 +5,11 @@ import { ic_vertical_align_top } from "react-icons-kit/md/ic_vertical_align_top"
 import { ic_account_circle } from "react-icons-kit/md/ic_account_circle";
 import Icon from "react-icons-kit";
 import { CSSTransition } from "react-transition-group";
-import { volumeLow } from "react-icons-kit/icomoon/volumeLow";
-import { volumeMedium } from "react-icons-kit/icomoon/volumeMedium";
-import { volumeHigh } from "react-icons-kit/icomoon/volumeHigh";
+// import { volumeLow } from "react-icons-kit/icomoon/volumeLow";
+// import { volumeMedium } from "react-icons-kit/icomoon/volumeMedium";
+// import { volumeHigh } from "react-icons-kit/icomoon/volumeHigh";
+// import { volumeMute } from "react-icons-kit/icomoon/volumeMute";
 import { volumeMute2 } from "react-icons-kit/icomoon/volumeMute2";
-import { volumeMute } from "react-icons-kit/icomoon/volumeMute";
 
 import {
   VideoAndChatContainer,
@@ -18,6 +18,7 @@ import {
   ToggleSwitchChatSide,
   PlayerNavbar,
   VolumeEventOverlay,
+  VolumeElement,
 } from "./StyledComponents";
 import NavigationContext from "./../../navigation/NavigationContext";
 
@@ -75,12 +76,32 @@ const TwitchInteractivePlayer = ({
       }
     };
 
-    const pauseOnSpacebar = e => {
-      if (e.keyCode === 32) {
+    const keyboardEvents = e => {
+      if (e.key === "Space") {
         if (TwitchPlayer.isPaused()) {
           TwitchPlayer.play();
         } else {
           TwitchPlayer.pause();
+        }
+      } else if (e.key === "f") {
+        toggleFullscreen();
+      } else if (e.key === "m") {
+        TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
+        setVolumeMuted(!TwitchPlayer.getMuted());
+      }
+    };
+
+    const toggleFullscreen = () => {
+      const el = document.getElementsByTagName("iframe")[0];
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        if (el.requestFullScreen) {
+          el.requestFullScreen();
+        } else if (el.mozRequestFullScreen) {
+          el.mozRequestFullScreen();
+        } else if (el.webkitRequestFullScreen) {
+          el.webkitRequestFullScreen();
         }
       }
     };
@@ -90,7 +111,8 @@ const TwitchInteractivePlayer = ({
 
       volumeEventOverlayRefElement.addEventListener("wheel", scrollChangeVolumeEvent);
       volumeEventOverlayRefElement.addEventListener("mouseup", clickUnmuteMuteOrPlay);
-      document.body.addEventListener("keyup", pauseOnSpacebar);
+      document.body.addEventListener("keyup", keyboardEvents);
+      document.body.addEventListener("dblclick", toggleFullscreen);
     };
 
     TwitchPlayer.addEventListener(window.Twitch.Player.READY, twitchPlayerEventListeners);
@@ -99,7 +121,8 @@ const TwitchInteractivePlayer = ({
       TwitchPlayer.removeEventListener(window.Twitch.Player.READY, twitchPlayerEventListeners);
       volumeEventOverlayRefElement.removeEventListener("wheel", scrollChangeVolumeEvent);
       volumeEventOverlayRefElement.removeEventListener("mouseup", clickUnmuteMuteOrPlay);
-      document.body.removeEventListener("keyup", pauseOnSpacebar);
+      document.body.removeEventListener("keyup", keyboardEvents);
+      document.body.removeEventListener("dblclick", toggleFullscreen);
     };
   }, [channel, video, volumeEventOverlayRef, setVolumeMuted, setVolumeText]);
 
@@ -107,53 +130,59 @@ const TwitchInteractivePlayer = ({
 };
 
 const NonInteractiveVolumeSlider = ({ volumeMuted, volumeText }) => {
-  const volumeIcon = () => {
-    if (volumeMuted) {
-      return volumeMute2;
-    } else if (volumeText <= 33) {
-      return volumeLow;
-    } else if (volumeText <= 66) {
-      return volumeMedium;
-    } else if (volumeText <= 100) {
-      return volumeHigh;
-    } else {
-      return volumeMute;
-    }
-  };
+  // const volumeIcon = () => {
+  //   if (volumeMuted) {
+  //     return volumeMute2;
+  //   } else if (volumeText <= 33) {
+  //     return volumeLow;
+  //   } else if (volumeText <= 66) {
+  //     return volumeMedium;
+  //   } else if (volumeText <= 100) {
+  //     return volumeHigh;
+  //   } else {
+  //     return volumeMute;
+  //   }
+  // };
 
   return (
-    <div className='vlCtrl'>
-      <Icon size={30} icon={volumeIcon()} style={volumeMuted ? { color: "red" } : null} />
-      <svg viewBox='0 0 280 27' xmlns='http://www.w3.org/2000/svg'>
-        <line
-          id='ctrlLineB'
-          className='volElem'
-          stroke='#B28A24'
-          x1='13'
-          y1='13.5'
-          x2='100'
-          y2='13.5'
-          opacity='0.6'
-        />
-        <line
-          id='ctrlLineF'
-          className='volElem'
-          stroke='#F4AF0A'
-          x1='13'
-          y1='13.5'
-          x2={volumeText && volumeText.toFixed(0)}
-          y2='13.5'
-        />
+    <VolumeElement id='VolumeElement'>
+      {volumeMuted ? (
+        <Icon size={33.6} icon={volumeMute2} style={{ color: "red" }} />
+      ) : (
+        <h3> {volumeText && volumeText.toFixed(0)}</h3>
+      )}
+      <div className='vlCtrl'>
+        {/* <Icon size={30} icon={volumeIcon()} style={volumeMuted ? { color: "red" } : null} /> */}
+        <svg viewBox='0 0 100 10' xmlns='http://www.w3.org/2000/svg'>
+          <line
+            id='ctrlLineB'
+            className='volElem'
+            stroke={volumeMuted ? "#c30000" : "#B28A24"}
+            x1='0'
+            y1='5'
+            x2='100'
+            y2='5'
+            opacity='0.6'
+          />
+          <line
+            id='ctrlLineF'
+            className='volElem'
+            stroke={volumeMuted ? "#c30000" : "#F4AF0A"}
+            x1='0'
+            y1='5'
+            x2={volumeText && volumeText.toFixed(0)}
+            y2='5'
+          />
 
-        <circle
-          id='ctrlCirce'
-          cx={volumeText + 10 && (volumeText + 10).toFixed(0)}
-          cy='13.5'
-          r='13'
-          fill='#F4AF0A'
-        />
+          {/* <circle
+            id='ctrlCirce'
+            cx={volumeText + 10 && (volumeText + 10).toFixed(0)}
+            cy='13.5'
+            r='13'
+            fill='#F4AF0A'
+          /> */}
 
-        <text
+          {/* <text
           x={volumeText + 10 && (volumeText + 10).toFixed(0)}
           y='50%'
           textAnchor='middle'
@@ -161,9 +190,10 @@ const NonInteractiveVolumeSlider = ({ volumeMuted, volumeText }) => {
           strokeWidth='2px'
           dy='.3em'>
           {volumeText && volumeText.toFixed(0)}
-        </text>
-      </svg>
-    </div>
+        </text> */}
+        </svg>
+      </div>
+    </VolumeElement>
   );
 };
 
@@ -175,7 +205,7 @@ export default () => {
   const nameFromHash = location.hash !== "" ? location.hash.replace("#", "") : null;
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const [switched, setSwitched] = useState(false);
-  const [volumeText, setVolumeText] = useState(null);
+  const [volumeText, setVolumeText] = useState(0);
   const [volumeMuted, setVolumeMuted] = useState(true);
   const volumeEventOverlayRef = useRef();
 
@@ -196,9 +226,7 @@ export default () => {
         <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
           <PlayerNavbar>
             <Link to={`/twitch/channel/${id}`}>
-              <div id='icon'>
-                <Icon icon={ic_account_circle} size={20}></Icon>
-              </div>
+              <Icon icon={ic_account_circle} size={20}></Icon>
               {id}'s channel page
             </Link>
           </PlayerNavbar>
@@ -212,7 +240,11 @@ export default () => {
           switchedChatState={switched.toString()}>
           <div id='twitch-embed'>
             <VolumeEventOverlay ref={volumeEventOverlayRef} type='live'>
-              <NonInteractiveVolumeSlider volumeMuted={volumeMuted} volumeText={volumeText} />
+              <NonInteractiveVolumeSlider
+                volumeMuted={volumeMuted}
+                volumeText={volumeText}
+                type='live'
+              />
             </VolumeEventOverlay>
             <TwitchInteractivePlayer
               channel={id}
@@ -271,7 +303,11 @@ export default () => {
             display: "unset",
           }}>
           <VolumeEventOverlay ref={volumeEventOverlayRef} type='video'>
-            <NonInteractiveVolumeSlider volumeMuted={volumeMuted} volumeText={volumeText} />
+            <NonInteractiveVolumeSlider
+              volumeMuted={volumeMuted}
+              volumeText={volumeText}
+              type='video'
+            />
           </VolumeEventOverlay>
           <ToggleNavbarButton
             icon={visible ? ic_vertical_align_top : ic_vertical_align_bottom}

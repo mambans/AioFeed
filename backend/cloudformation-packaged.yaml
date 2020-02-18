@@ -9,7 +9,7 @@ Globals:
 Resources:
   Create:
     Properties:
-      CodeUri: s3://rp-deployment/4ff255ab7b1c31a9d18ab2402816b1ab
+      CodeUri: s3://rp-deployment/61fb2800ca10a17a077d5f40b168aa12
       Description: Create an Notifies account with tokens and monitored vod channels
         default to null and empty array.
       Environment:
@@ -38,7 +38,7 @@ Resources:
     Type: AWS::Serverless::Function
   DeleteAccount:
     Properties:
-      CodeUri: s3://rp-deployment/4ff255ab7b1c31a9d18ab2402816b1ab
+      CodeUri: s3://rp-deployment/61fb2800ca10a17a077d5f40b168aa12
       Description: Delete an account
       Environment:
         Variables:
@@ -64,7 +64,7 @@ Resources:
     Type: AWS::Serverless::Function
   FetchMonitoredChannels:
     Properties:
-      CodeUri: s3://rp-deployment/4ff255ab7b1c31a9d18ab2402816b1ab
+      CodeUri: s3://rp-deployment/61fb2800ca10a17a077d5f40b168aa12
       Description: Fetch monitored vod channels list.
       Environment:
         Variables:
@@ -90,7 +90,7 @@ Resources:
     Type: AWS::Serverless::Function
   Login:
     Properties:
-      CodeUri: s3://rp-deployment/4ff255ab7b1c31a9d18ab2402816b1ab
+      CodeUri: s3://rp-deployment/61fb2800ca10a17a077d5f40b168aa12
       Description: Login with Notifies account and return account info, tokens and
         monitored vod channels.
       Environment:
@@ -117,7 +117,7 @@ Resources:
     Type: AWS::Serverless::Function
   Update:
     Properties:
-      CodeUri: s3://rp-deployment/4ff255ab7b1c31a9d18ab2402816b1ab
+      CodeUri: s3://rp-deployment/61fb2800ca10a17a077d5f40b168aa12
       Description: Update a specific token mentioned as a param.
       Environment:
         Variables:
@@ -145,7 +145,7 @@ Resources:
     Type: AWS::Serverless::Function
   UpdateMonitoredChannels:
     Properties:
-      CodeUri: s3://rp-deployment/4ff255ab7b1c31a9d18ab2402816b1ab
+      CodeUri: s3://rp-deployment/61fb2800ca10a17a077d5f40b168aa12
       Description: Update monitored vod channels list.
       Environment:
         Variables:
@@ -165,6 +165,34 @@ Resources:
               Required: true
           Type: Api
       Handler: monitoredChannelsUpdate/handler.handler
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: UserLogins
+      Runtime: nodejs10.x
+    Type: AWS::Serverless::Function
+  UpdatePreferences:
+    Properties:
+      CodeUri: s3://rp-deployment/61fb2800ca10a17a077d5f40b168aa12
+      Description: Update preferences for mentioned data name/type.
+      Environment:
+        Variables:
+          USERNAME_TABLE:
+            Ref: UserLogins
+      Events:
+        Http:
+          Properties:
+            Method: put
+            Path: /account/preferences
+          RequestParameters:
+          - method.request.querystring.username:
+              Required: true
+          - method.request.querystring.dataName:
+              Required: true
+          - method.request.querystring.data:
+              Required: true
+          Type: Api
+      Handler: updateStoredPreferences/handler.handler
       Policies:
       - DynamoDBCrudPolicy:
           TableName:

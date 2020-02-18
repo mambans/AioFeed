@@ -38,9 +38,7 @@ export default () => {
         <PlayerNavbar>
           {nameFromHash ? (
             <Link to={`/twitch/channel/${nameFromHash}`}>
-              <div id='icon'>
-                <Icon icon={ic_account_circle} size={20}></Icon>
-              </div>
+              <Icon icon={ic_account_circle} size={20}></Icon>
               {nameFromHash}'s channel page
             </Link>
           ) : null}

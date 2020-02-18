@@ -8,16 +8,27 @@ import { StyledCreateFormTitle, StyledCreateForm, StyledAlert } from "./StyledCo
 import AccountContext from "./../../account/AccountContext";
 import NavigationContext from "./../NavigationContext";
 import LoadingIndicator from "./../../LoadingIndicator";
+import FeedsContext from "./../../feed/FeedsContext";
 
 export default () => {
   document.title = "Notifies | Login";
   const currentPage = new URL(window.location.href).pathname;
   const [error, setError] = useState(null);
   const [validated, setValidated] = useState(false);
-  const props = useContext(NavigationContext);
-  const { setAuthKey, setUsername, setProfileImage, setTwitchToken, setYoutubeToken } = useContext(
-    AccountContext
-  );
+  const { setRenderModal } = useContext(NavigationContext);
+  const {
+    setAuthKey,
+    setUsername,
+    setProfileImage,
+    setTwitchToken,
+    setYoutubeToken,
+    setTwitchUserId,
+    setTwitchUsername,
+    setTwitchProfileImg,
+    setAutoRefreshEnabled,
+    username,
+  } = useContext(AccountContext);
+  const { setEnableTwitch } = useContext(FeedsContext);
 
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);
@@ -46,8 +57,8 @@ export default () => {
       evt.preventDefault();
       evt.stopPropagation();
     } else {
-      setValidated(true);
       loginAccount();
+      setValidated(true);
     }
   };
 
@@ -61,21 +72,32 @@ export default () => {
       })
       .then(res => {
         if (res.status === 200 && res.data.Attributes) {
+          console.log("TCL: loginAccount -> res.data.Attributes", res.data.Attributes);
           document.cookie = `Notifies_AccountName=${res.data.Attributes.Username}; path=/`;
           document.cookie = `Notifies_AccountEmail=${res.data.Attributes.Email}; path=/`;
           document.cookie = `Twitch-access_token=${res.data.Attributes.TwitchToken}; path=/`;
           document.cookie = `Youtube-access_token=${res.data.Attributes.YoutubeToken}; path=/`;
           document.cookie = `Notifies_AccountProfileImg=${res.data.Attributes.ProfileImg}; path=/`;
           document.cookie = `Notifies_AuthKey=${res.data.Attributes.AuthKey}; path=/`;
+          document.cookie = `Twitch_AutoRefresh=${res.data.Attributes.TwitchPreferences.AutoRefresh}; path=/`;
+          document.cookie = `Twitch_feedEnabled=${res.data.Attributes.TwitchPreferences.enabled}; path=/`;
+
           setAuthKey(res.data.Attributes.AuthKey);
-          setUsername(res.data.Attributes.Username);
           setProfileImage(res.data.Attributes.ProfileImg);
           setTwitchToken(res.data.Attributes.TwitchToken);
+          if (res.data.Attributes.TwitchToken && res.data.Attributes.TwitchPreferences.enabled) {
+            setEnableTwitch(true);
+          }
           setYoutubeToken(res.data.Attributes.YoutubeToken);
+
+          setTwitchUsername(res.data.Attributes.TwitchPreferences.Username);
+          setTwitchUserId(res.data.Attributes.TwitchPreferences.Id);
+          setTwitchProfileImg(res.data.Attributes.TwitchPreferences.Profile);
+          setAutoRefreshEnabled(res.data.Attributes.TwitchPreferences.AutoRefresh);
+          setUsername(res.data.Attributes.Username);
 
           resetUserName();
           resetPassword();
-          props.setIsLoggedIn(true);
         } else {
           console.log(res);
           //   setError({
@@ -103,7 +125,10 @@ export default () => {
           {error.message.toString()}
         </StyledAlert>
       ) : null}
-      <StyledCreateFormTitle>Login with your Notifies account.</StyledCreateFormTitle>
+      <StyledCreateFormTitle>
+        <h3>Login</h3>
+        <p>Login with your Notifies account</p>
+      </StyledCreateFormTitle>
       <StyledCreateForm onSubmit={handleSubmit} noValidate validated={validated}>
         <Form.Group controlId='formGroupUserName'>
           <Form.Label>Username</Form.Label>
@@ -133,16 +158,14 @@ export default () => {
           </Button>
           <Button
             onClick={() => {
-              props.setRenderModal("create");
+              setRenderModal("create");
             }}>
             Create Account
           </Button>
         </div>
       </StyledCreateForm>
       {validated ? <LoadingIndicator height={150} width={150} /> : null}
-      {props.isLoggedIn &&
-      !error &&
-      (currentPage === "/account/login" || currentPage === "/account") ? (
+      {username && !error && (currentPage === "/account/login" || currentPage === "/account") ? (
         <Redirect to='/account'></Redirect>
       ) : null}
     </>

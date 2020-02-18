@@ -2,7 +2,6 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Alert from "react-bootstrap/Alert";
 import React, { useEffect, useState, useCallback } from "react";
 
-import FeedsContext from "./../feed/FeedsContext";
 import Header from "./Header";
 import StreamEle from "./StreamElement.js";
 import styles from "./Twitch.module.scss";
@@ -14,8 +13,6 @@ function Twitch({ data }) {
 
   const windowFocusHandler = useCallback(() => {
     document.title = "Notifies | Feed";
-    // data.refresh();
-
     data.resetNewlyAddedStreams();
   }, [data]);
 
@@ -78,21 +75,14 @@ function Twitch({ data }) {
                       timeout={1000}
                       classNames='videoFade-1s'
                       unmountOnExit>
-                      <FeedsContext.Consumer>
-                        {feedProps => {
-                          return (
-                            <StreamEle
-                              {...feedProps}
-                              key={stream.id}
-                              data={stream}
-                              newlyAddedStreams={data.newlyAddedStreams}
-                              newlyAdded={stream.newlyAdded}
-                              refresh={refresh}
-                              REFRESH_RATE={data.REFRESH_RATE}
-                            />
-                          );
-                        }}
-                      </FeedsContext.Consumer>
+                      <StreamEle
+                        key={stream.id}
+                        data={stream}
+                        newlyAddedStreams={data.newlyAddedStreams}
+                        newlyAdded={stream.newlyAdded}
+                        refresh={refresh}
+                        REFRESH_RATE={data.REFRESH_RATE}
+                      />
                     </CSSTransition>
                   );
                 })}

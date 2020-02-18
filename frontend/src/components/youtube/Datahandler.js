@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useContext } from "react";
 import { store } from "react-notifications-component";
 
 import ErrorHandeling from "../error/Error";
 import getFollowedChannels from "./GetFollowedChannels";
 import getSubscriptionVideos from "./GetSubscriptionVideos";
 import Utilities from "./../../utilities/Utilities";
+import AccountContext from "../account/AccountContext";
 
 const addNotification = (type, video) => {
   store.addNotification({
@@ -44,6 +45,7 @@ function DataHandler({ children }) {
   const followedChannels = useRef();
   const videos = useRef(null);
   const oldVideos = useRef(null);
+  const { youtubeToken } = useContext(AccountContext);
 
   const refresh = useCallback(() => {
     async function fetchData() {
@@ -97,7 +99,7 @@ function DataHandler({ children }) {
 
     fetchData();
   }, []);
-  if (Utilities.getCookie("Youtube-access_token") === null) {
+  if (!youtubeToken) {
     return (
       <ErrorHandeling
         data={{

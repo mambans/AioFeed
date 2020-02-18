@@ -6,9 +6,7 @@ import ReactNotification from "react-notifications-component";
 
 import DataHandler from "../twitch/DataHandler";
 import ErrorHandeling from "./../error/Error";
-import FeedContext from "./FeedsContext";
-import LoadingIndicator from "./../LoadingIndicator";
-import NavigationContext from "./../navigation/NavigationContext";
+import FeedsContext from "./FeedsContext";
 import styles from "./Feed.module.scss";
 import Twitch from "../twitch/Twitch";
 import TwitchVods from "../twitch/vods/Twitch-vods";
@@ -16,13 +14,12 @@ import Utilities from "../../utilities/Utilities";
 import Youtube from "./../youtube/Youtube";
 import YoutubeDataHandler from "./../youtube/Datahandler";
 import YoutubeHeader from "./../youtube/Header";
+import AccountContext from "./../account/AccountContext";
 
 export default function Feed() {
   document.title = "Notifies | Feed";
-  const { isLoggedIn } = useContext(NavigationContext);
-  const { enableTwitch, enableYoutube, enableTwitchVods } = useContext(FeedContext);
-  const [isLoaded] = useState(true);
-  const [error] = useState(null);
+  const { enableTwitch, enableYoutube, enableTwitchVods } = useContext(FeedsContext);
+  const { username } = useContext(AccountContext);
   const [delayedEnableYoutube, setDelayedEnableYoutube] = useState(false);
   const [delayedEnableTwitchVods, setDelayedEnableTwitchVods] = useState(false);
 
@@ -39,45 +36,18 @@ export default function Feed() {
       () => {
         setDelayedEnableYoutube("true");
       },
-      localStorage.getItem("TwitchFeedEnabled") === "true" ? FEEDDELAY : 0
+      enableTwitch ? FEEDDELAY : 0
     );
 
     window.setTimeout(
       () => {
         setDelayedEnableTwitchVods("true");
       },
-      localStorage.getItem("YoutubeFeedEnabled") === "true" ? FEEDDELAY * 2 : FEEDDELAY
+      enableYoutube ? FEEDDELAY * 2 : FEEDDELAY
     );
-  }, []);
+  }, [enableTwitch, enableYoutube]);
 
-  function NoFeedsEnabled() {
-    const [show, setShow] = useState(true);
-
-    if (
-      localStorage.getItem("TwitchFeedEnabled") === "false" &&
-      localStorage.getItem("YoutubeFeedEnabled") === "false" &&
-      localStorage.getItem("TwitchVodsFeedEnabled") === "false" &&
-      isLoggedIn &&
-      show
-    ) {
-      return (
-        <CSSTransition in={true} timeout={1000} classNames='fade-1s' unmountOnExit>
-          <Alert
-            variant='info'
-            style={Utilities.feedAlertWarning}
-            onClose={() => setShow(false)}
-            dismissible>
-            <Alert.Heading>No feeds are enabled</Alert.Heading>
-            <hr />
-            Please enable some feeds in account settings
-          </Alert>
-        </CSSTransition>
-      );
-    }
-    return null;
-  }
-
-  if (!Utilities.getCookie("Notifies_AccountName")) {
+  if (!username) {
     return (
       <>
         <ErrorHandeling
@@ -87,21 +57,20 @@ export default function Feed() {
           }}></ErrorHandeling>
       </>
     );
-  } else if (error) {
-    return <ErrorHandeling data={error}></ErrorHandeling>;
-  } else if (!isLoaded) {
+  } else if (!enableTwitch && !enableYoutube && !enableTwitchVods && username) {
     return (
-      <LoadingIndicator
-        height={250}
-        width={250}
-        style={{ height: "80vh", alignContent: "center" }}
-      />
+      <CSSTransition in={true} timeout={1000} classNames='fade-1s' unmountOnExit>
+        <Alert variant='info' style={Utilities.feedAlertWarning}>
+          <Alert.Heading>No feeds are enabled</Alert.Heading>
+          <hr />
+          Please enable some feeds in account settings
+        </Alert>
+      </CSSTransition>
     );
   } else {
     return (
       <>
         <ReactNotification />
-        <NoFeedsEnabled />
 
         {enableTwitch ? (
           <DataHandler>

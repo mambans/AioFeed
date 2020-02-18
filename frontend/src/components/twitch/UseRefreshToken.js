@@ -6,14 +6,14 @@ import Utilities from "./../../utilities/Utilities";
 
 function useRefreshToken(prevFunc) {
   console.log("Use Refresh token");
-  const { setTwitchToken, setRefreshToken } = useContext(AccountContext);
+  const { refreshToken, setTwitchToken, setRefreshToken } = useContext(AccountContext);
 
   useEffect(() => {
     const refreshTokenRequest = async () => {
       await axios
         .post(
           `https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=${encodeURI(
-            Utilities.getCookie("Twitch-refresh_token")
+            refreshToken
           )}&client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&client_secret=${
             process.env.REACT_APP_TWITCH_SECRET
           }&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`

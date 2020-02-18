@@ -46,7 +46,13 @@ const Utilities = {
       }
       if (c.indexOf(name) === 0) {
         // console.log(`Cookie ${cname}: ${c.substring(name.length, c.length)}`);
-        if (c.substring(name.length, c.length) === "null") return null;
+        if (c.substring(name.length, c.length) === "null") {
+          return null;
+        } else if (c.substring(name.length, c.length) === "false") {
+          return false;
+        } else if (c.substring(name.length, c.length) === "true") {
+          return true;
+        }
 
         return c.substring(name.length, c.length);
       }

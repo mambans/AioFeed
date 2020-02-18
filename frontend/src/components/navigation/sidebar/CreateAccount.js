@@ -69,13 +69,12 @@ export default () => {
           document.cookie = `Notifies_AccountName=${res.data.Username}; path=/`;
           document.cookie = `Notifies_AccountEmail=${res.data.Email}; path=/`;
           document.cookie = `Notifies_AuthKey=${res.data.AuthKey}; path=/`;
-          setUsername(res.data.Username);
           setAuthKey(res.data.AuthKey);
+          setUsername(res.data.Username);
 
           resetUserName();
           resetEmail();
           resetPassword();
-          props.setIsLoggedIn(true);
 
           if (new URL(window.location.href).pathname === "/account/create") {
             setCreated(true);
@@ -105,8 +104,10 @@ export default () => {
             {error.message.toString()}
           </StyledAlert>
         ) : null}
-
-        <StyledCreateFormTitle>Create a Notifies account.</StyledCreateFormTitle>
+        <StyledCreateFormTitle>
+          <h3>Create</h3>
+          <p>Create a Notifies account.</p>
+        </StyledCreateFormTitle>
         <StyledCreateForm onSubmit={handleSubmit} noValidate validated={validated}>
           <Form.Group controlId='formGroupUserName'>
             <Form.Label>Username</Form.Label>

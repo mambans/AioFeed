@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Navbar, NavDropdown, Nav, Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { github } from "react-icons-kit/icomoon/github";
@@ -11,7 +11,6 @@ import "./Navigation.scss";
 import Sidebar from "./sidebar/Sidebar";
 
 function NavigationBar(prop) {
-  const [refresh, setRefresh] = useState(false);
   const { visible, shrinkNavbar } = useContext(NavigationContext);
 
   return (
@@ -55,11 +54,7 @@ function NavigationBar(prop) {
                 Notifies -Github
               </NavDropdown.Item>
             </NavDropdown>
-            <NavigationContext.Consumer>
-              {props => {
-                return <Sidebar {...props} refresh={refresh} setRefresh={setRefresh} />;
-              }}
-            </NavigationContext.Consumer>
+            <Sidebar />
           </Nav>
         </Navbar.Collapse>
       </Navbar>

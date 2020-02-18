@@ -6,12 +6,10 @@ import { Redirect } from "react-router-dom";
 import styles from "./Account.module.scss";
 import ErrorHandeling from "../error/Error";
 import AccountContext from "./../account/AccountContext";
-import NavigationContext from "./../navigation/NavigationContext";
 
 export default () => {
   const currentPage = new URL(window.location.href).pathname;
-  const { isLoggedIn, setIsLoggedIn } = useContext(NavigationContext);
-  const { setAuthKey, setUsername } = useContext(AccountContext);
+  const { setAuthKey, setUsername, username } = useContext(AccountContext);
 
   document.title = "Notifies | Login";
   const [error, setError] = useState(null);
@@ -59,7 +57,6 @@ export default () => {
 
         resetUserName();
         resetPassword();
-        setIsLoggedIn(true);
       })
       .catch(e => {
         console.error(e);
@@ -87,7 +84,7 @@ export default () => {
           Login
         </Button>
       </Form>
-      {isLoggedIn && !error && (currentPage === "/account/login" || currentPage === "/account") ? (
+      {username && !error && (currentPage === "/account/login" || currentPage === "/account") ? (
         <Redirect to='/account'></Redirect>
       ) : null}
     </>

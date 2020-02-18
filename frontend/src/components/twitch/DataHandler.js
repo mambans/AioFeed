@@ -14,7 +14,7 @@ const REFRESH_RATE = 25; // seconds
 
 export default ({ children }) => {
   const addNotification = useContext(NotificationsContext).addNotification;
-  const { twitchUserId, autoRefreshEnabled } = useContext(AccountContext);
+  const { twitchUserId, autoRefreshEnabled, twitchToken } = useContext(AccountContext);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [refreshTimer, setRefreshTimer] = useState(20);
@@ -130,22 +130,20 @@ export default ({ children }) => {
   );
 
   useEffect(() => {
-    async function fetchData() {
+    (async function fetchData() {
       try {
-        console.log("Remounting Twitch DataHandler.");
+        console.log("Mounting Twitch DataHandler.");
         const timeNow = new Date();
         if (!timer.current) {
+          if (autoRefreshEnabled) {
+            setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
+          }
           await refresh(true);
           setIsLoaded(true);
         }
 
         if (autoRefreshEnabled && !timer.current) {
-          console.log("---Resetting Twitch live interval timer.---");
-
-          // await refresh(true);
-          // setIsLoaded(true);
-
-          setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
+          console.log("---SetInterval Twitch live timer.---");
           timer.current = setInterval(() => {
             const timeNow = new Date();
             setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
@@ -157,14 +155,10 @@ export default ({ children }) => {
           setIsLoaded(true);
           setRefreshing(false);
         }
-
-        // fetchProfileImages(followedChannels.current);
       } catch (error) {
         setError(error);
       }
-    }
-
-    fetchData();
+    })();
 
     return () => {
       clearInterval(timer.current);
@@ -182,7 +176,6 @@ export default ({ children }) => {
           }}
           refresh={refresh}
         />
-
         <div
           className={styles.container}
           style={{
@@ -193,13 +186,14 @@ export default ({ children }) => {
       </>
     );
   }
-  if (Utilities.getCookie("Twitch-access_token") === null) {
+  if (!twitchToken) {
     return (
       <ErrorHandeling
         data={{
           title: "Not authenticated/connected with Twitch.",
           message: "No access token for Twitch available.",
-        }}></ErrorHandeling>
+        }}
+      />
     );
   } else {
     return children({

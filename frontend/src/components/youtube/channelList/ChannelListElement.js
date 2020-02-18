@@ -140,7 +140,7 @@ const ChannelListElement = data => {
         {channel.snippet.title}
       </a>
       <UnfollowButton
-        disabled={Utilities.getCookie("Youtube-readonly") ? true : false}
+        disabled={Utilities.getCookie("Youtube-readonly")}
         data-tip={"Unfollow " + channel.snippet.title}
         variant='link'
         onClick={async () => {

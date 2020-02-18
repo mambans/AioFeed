@@ -13,14 +13,12 @@ export default ({ children }) => {
     Utilities.getCookie(`Notifies_AccountProfileImg`)
   );
   const [twitchUserId, setTwitchUserId] = useState(Utilities.getCookie(`Notifies_TwitchUserId`));
-  const [twitchDisplayName, setTwitchDisplayName] = useState(
-    Utilities.getCookie(`Notifies_TwitchDisplayName`)
-  );
+  const [twitchUsername, setTwitchUsername] = useState(Utilities.getCookie(`Twitch-username`));
   const [twitchProfileImg, setTwitchProfileImg] = useState(
     Utilities.getCookie(`Notifies_TwitchProfileImg`)
   );
   const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(
-    Utilities.getCookie(`Notifies_AutoRefreshEnabled`) !== "false" ? true : false
+    Utilities.getCookie(`Twitch_AutoRefresh`) || false
   );
 
   return (
@@ -38,8 +36,8 @@ export default ({ children }) => {
         setProfileImage: setProfileImage,
         twitchUserId: twitchUserId,
         setTwitchUserId: setTwitchUserId,
-        twitchDisplayName: twitchDisplayName,
-        setTwitchDisplayName: setTwitchDisplayName,
+        twitchUsername: twitchUsername,
+        setTwitchUsername: setTwitchUsername,
         twitchProfileImg: twitchProfileImg,
         setTwitchProfileImg: setTwitchProfileImg,
         autoRefreshEnabled: autoRefreshEnabled,

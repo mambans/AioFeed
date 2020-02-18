@@ -3,36 +3,24 @@ import Switch from "react-switch";
 
 import { StyledToggleSwitch } from "./styledComponent";
 
-export default data => {
-  const [checked, setChecked] = useState(data[`enable${data.label}`]);
-  const [tokenExists] = useState(data.tokenExists || false);
+export default ({ setEnable, enabled, label, tokenExists }) => {
+  const [checked, setChecked] = useState(enabled || false);
 
   function handleChange(checked) {
-    switch (data.label) {
-      case "Twitch":
-        data.setEnableTwitch(checked);
-        break;
-      case "TwitchVods":
-        data.setEnableTwitchVods(checked);
-        break;
-      case "Youtube":
-        data.setEnableYoutube(checked);
-        break;
-      default:
-        break;
-    }
+    setEnable(checked);
     setChecked(checked);
-    localStorage.setItem(data.label + "FeedEnabled", checked);
+    localStorage.setItem(label + "FeedEnabled", checked);
+    document.cookie = `${label}_feedEnabled=${checked}; path=/`;
   }
 
   return (
-    <StyledToggleSwitch title={(checked ? "Disable" : "Enable") + ` ${data.label} feed`}>
+    <StyledToggleSwitch title={(checked ? "Disable" : "Enable") + ` ${label} feed`}>
       <Switch
-        disabled={!data.tokenExists}
+        disabled={!tokenExists}
         onChange={handleChange}
-        checked={tokenExists && checked}
+        checked={(tokenExists && checked) || false}
       />
-      <span>{data.label}</span>
+      <span>{label}</span>
     </StyledToggleSwitch>
   );
 };

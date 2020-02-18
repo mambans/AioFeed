@@ -6,18 +6,21 @@ import ErrorHandeling from "./../error/Error";
 import AccountContext from "./../account/AccountContext";
 import NavigationContext from "./../navigation/NavigationContext";
 import LoadingIndicator from "./../LoadingIndicator";
+import FeedsContext from "../feed/FeedsContext";
 
 function TwitchAuthCallback() {
   const [error, setError] = useState();
   const {
     username,
     setTwitchUserId,
-    setTwitchDisplayName,
+    setTwitchUsername,
     setTwitchProfileImg,
     setTwitchToken,
     setRefreshToken,
+    autoRefreshEnabled,
   } = useContext(AccountContext);
   const { setVisible } = useContext(NavigationContext);
+  const { enableTwitch } = useContext(FeedsContext);
 
   const getAccessToken = useCallback(
     async url => {
@@ -35,23 +38,43 @@ function TwitchAuthCallback() {
 
       document.cookie = `Twitch-access_token=${accessToken}; path=/`;
       document.cookie = `Twitch-refresh_token=${refreshToken}; path=/`;
-      setTwitchToken(accessToken);
-      setRefreshToken(refreshToken);
 
       await axios
         .get(`https://api.twitch.tv/helix/users`, {
           headers: {
-            Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+            Authorization: `Bearer ${accessToken}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         })
-        .then(res => {
+        .then(async res => {
           document.cookie = `Notifies_TwitchUserId=${res.data.data[0].id}; path=/`;
-          document.cookie = `Notifies_TwitchDisplayName=${res.data.data[0].display_name}; path=/`;
+          document.cookie = `Twitch-username=${res.data.data[0].login}; path=/`;
           document.cookie = `Notifies_TwitchProfileImg=${res.data.data[0].profile_image_url}; path=/`;
+          setTwitchToken(accessToken);
+          setRefreshToken(refreshToken);
+
           setTwitchUserId(res.data.data[0].id);
-          setTwitchDisplayName(res.data.data[0].display_name);
+          setTwitchUsername(res.data.data[0].login);
           setTwitchProfileImg(res.data.data[0].profile_image_url);
+
+          await axios
+            .put(
+              `https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/preferences`,
+              {
+                username: username,
+                dataName: "TwitchPreferences",
+                data: {
+                  Username: res.data.data[0].login,
+                  Id: res.data.data[0].id,
+                  Profile: res.data.data[0].profile_image_url,
+                  AutoRefresh: autoRefreshEnabled,
+                  enabled: enableTwitch,
+                },
+              }
+            )
+            .catch(e => {
+              console.error(e);
+            });
         });
 
       await axios
@@ -67,16 +90,18 @@ function TwitchAuthCallback() {
     [
       username,
       setTwitchUserId,
-      setTwitchDisplayName,
+      setTwitchUsername,
       setTwitchProfileImg,
       setTwitchToken,
       setRefreshToken,
+      autoRefreshEnabled,
+      enableTwitch,
     ]
   );
 
   useEffect(() => {
     setVisible(false);
-    async function handleAuthCallback() {
+    (async function() {
       try {
         const url = new URL(window.location.href);
 
@@ -84,15 +109,14 @@ function TwitchAuthCallback() {
           if (url.searchParams.get("state") === Utilities.getCookie("Twitch-myState")) {
             await getAccessToken(url)
               .then(() => {
-                // setAuthenticated(true);
-                localStorage.setItem("TwitchFeedEnabled", "true");
-                // setTwitchToken(true);
+                document.cookie = `Twitch_feedEnabled=${true}; path=/`;
+                console.log("successfully authenticated to Twitch.");
                 setTimeout(() => {
                   window.close();
                 }, 1);
               })
               .catch(error => {
-                // setAuthenticated(false);
+                console.log("getAccessToken() failed");
                 setError(error);
               });
           } else {
@@ -104,9 +128,7 @@ function TwitchAuthCallback() {
       } catch (error) {
         setError(error);
       }
-    }
-
-    handleAuthCallback();
+    })();
   }, [getAccessToken, setVisible, setTwitchToken]);
 
   if (error) {

@@ -9,7 +9,7 @@ export default ({ autoRefreshEnabled, setAutoRefreshEnabled, tokenExists }) => {
   function handleChange(checked) {
     setChecked(checked);
     setAutoRefreshEnabled(checked);
-    document.cookie = `Notifies_AutoRefreshEnabled=${checked}; path=/`;
+    document.cookie = `Twitch_AutoRefresh=${checked}; path=/`;
   }
 
   return (
@@ -19,4 +19,3 @@ export default ({ autoRefreshEnabled, setAutoRefreshEnabled, tokenExists }) => {
     </StyledToggleSwitch>
   );
 };
-  

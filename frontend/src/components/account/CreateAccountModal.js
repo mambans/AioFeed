@@ -5,14 +5,12 @@ import { Form, Button } from "react-bootstrap";
 
 import styles from "./Account.module.scss";
 import ErrorHandeling from "../error/Error";
-import NavigationContext from "./../navigation/NavigationContext";
 import AccountContext from "./AccountContext";
 
 export default () => {
   document.title = "Notifies | Create Account";
   const [error, setError] = useState(null);
   const [created, setCreated] = useState();
-  const props = useContext(NavigationContext);
 
   const { setAuthKey, setUsername } = useContext(AccountContext);
 
@@ -54,13 +52,12 @@ export default () => {
           document.cookie = `Notifies_AccountName=${res.data.Username}; path=/`;
           document.cookie = `Notifies_AccountEmail=${res.data.Email}; path=/`;
           document.cookie = `Notifies_AuthKey=${res.data.AuthKey}; path=/`;
-          setUsername(res.data.Username);
           setAuthKey(res.data.AuthKey);
+          setUsername(res.data.Username);
 
           resetUserName();
           resetEmail();
           resetPassword();
-          props.setIsLoggedIn(true);
 
           if (new URL(window.location.href).pathname === "/account/create") {
             setCreated(true);

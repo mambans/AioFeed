@@ -92,7 +92,7 @@ const PlayerNavbar = styled.div`
   align-items: center;
   align-self: center;
 
-  a.nav-link {
+  a {
     color: var(--headerTextColor);
     padding: 0;
     font-size: 1rem !important;
@@ -103,12 +103,9 @@ const PlayerNavbar = styled.div`
       color: #ffffff;
     }
 
-    div#icon {
+    i {
       display: flex;
       align-items: center;
-    }
-
-    i {
       padding-right: 7px;
       display: flex !important;
     }
@@ -117,9 +114,10 @@ const PlayerNavbar = styled.div`
 
 const VolumeEventOverlay = styled.div`
   position: absolute;
-  width: ${({ type }) => (type === "live" ? "91vw" : "100vw")};
-  height: ${({ type }) => (type === "live" ? "calc(100% - 275px)" : "calc(100% - 270px)")};
-  bottom: ${({ type }) => (type === "live" ? "150px" : "180px")};
+  width: ${({ type }) => (type === "live" ? "87vw" : "96vw")};
+  height: ${({ type }) => (type === "live" ? "calc(100% - 375px)" : "calc(100% - 370px)")};
+  bottom: ${({ type }) => (type === "live" ? "200px" : "230px")};
+  left: 2vw;
 
   p {
     font-size: 1.5rem;
@@ -141,12 +139,11 @@ const VolumeEventOverlay = styled.div`
   }
 
   .vlCtrl {
-    position: absolute;
-    width: 27rem;
-    bottom: 0;
-    padding: 5px 20px;
-    transition: opacity 500ms 3s ease;
-    opacity: 0;
+    /* position: absolute; */
+    width: 100%;
+    /* bottom: 0; */
+    /* padding: 5px 20px; */
+
     display: flex;
     align-items: center;
 
@@ -162,8 +159,8 @@ const VolumeEventOverlay = styled.div`
     }
     .volElem {
       fill: none;
-      stroke-width: 5;
-      stroke-linecap: round;
+      stroke-width: 3;
+      /* stroke-linecap: round; */
       stroke-linejoin: round;
       stroke-miterlimit: 10;
     }
@@ -171,10 +168,25 @@ const VolumeEventOverlay = styled.div`
 
   &:hover {
     p,
-    .vlCtrl {
+    #VolumeElement {
       opacity: 1;
       transition: opacity 500ms 0s ease;
     }
+  }
+`;
+
+const VolumeElement = styled.div`
+  width: 250px;
+  text-align: center;
+  position: fixed;
+  top: 0;
+  right: ${({ type }) => (type === "live" ? "calc(87vw / 2 - 125px)" : "calc(96vw / 2 - 125px)")};
+  text-shadow: 0px 0px 2px black;
+  transition: opacity 500ms 3s ease;
+  opacity: 0;
+
+  h3 {
+    margin-bottom: 0;
   }
 `;
 
@@ -187,4 +199,5 @@ export {
   ToggleSwitchChatSide,
   PlayerNavbar,
   VolumeEventOverlay,
+  VolumeElement,
 };

@@ -29,13 +29,17 @@ import {
 } from "./StyledComponent";
 import AccountContext from "./../../account/AccountContext";
 import DeleteAccountButton from "./DeleteAccountButton";
+import FeedsContext from "./../../feed/FeedsContext";
 
-export default props => {
+export default () => {
   document.title = "Notifies | Account";
   const {
     username,
+    setUsername,
     profileImage,
-    twitchDisplayName,
+    setProfileImage,
+    setAuthKey,
+    twitchUsername,
     twitchProfileImg,
     setTwitchToken,
     setYoutubeToken,
@@ -44,6 +48,18 @@ export default props => {
     autoRefreshEnabled,
     setAutoRefreshEnabled,
   } = useContext(AccountContext);
+  const {
+    enableTwitch,
+    setEnableTwitch,
+    enableTwitchVods,
+    setEnableTwitchVods,
+    enableYoutube,
+    setEnableYoutube,
+    twitchVideoHoverEnable,
+    setTwitchVideoHoverEnable,
+    youtubeVideoHoverEnable,
+    setYoutubeVideoHoverEnable,
+  } = useContext(FeedsContext);
 
   function logout() {
     document.cookie = `Notifies_AccountName=null; path=/`;
@@ -52,10 +68,12 @@ export default props => {
     document.cookie = `Youtube-access_token=null; path=/`;
     document.cookie = `Notifies_AccountProfileImg=null; path=/`;
 
-    // localStorage.setItem("TwitchFeedEnabled", false);
     localStorage.setItem("YoutubeFeedEnabled", false);
     localStorage.setItem("TwitchVodsFeedEnabled", false);
-    props.setIsLoggedIn(false);
+
+    setUsername();
+    setProfileImage();
+    setAuthKey();
   }
 
   async function authenticatePopup(
@@ -108,11 +126,11 @@ export default props => {
       })
       .then(() => {
         document.cookie = `Twitch-access_token=null; path=/`;
-        localStorage.setItem("TwitchFeedEnabled", false);
+        document.cookie = `Twitch_feedEnabled=${false}; path=/`;
         localStorage.setItem("TwitchVodsFeedEnabled", false);
         setTwitchToken(null);
-        props.setEnableTwitch(false);
-        props.setEnableTwitchVods(false);
+        setEnableTwitch(false);
+        setEnableTwitchVods(false);
         console.log(`Successfully disconnected from Twitch`);
       })
       .catch(e => {
@@ -131,7 +149,7 @@ export default props => {
         document.cookie = `Youtube-access_token=null; path=/`;
         localStorage.setItem("YoutubeFeedEnabled", false);
         setYoutubeToken(null);
-        props.setEnableYoutube(false);
+        setEnableYoutube(false);
         console.log(`Successfully disconnected from Youtube`);
       })
       .catch(e => {
@@ -151,23 +169,33 @@ export default props => {
       </Popup>
       <StyledProfileImg
         src={profileImage || `${process.env.PUBLIC_URL}/images/placeholder.jpg`}
-        // src={
-        //   Utilities.getCookie("Notifies_AccountProfileImg") ||
-        //   `${process.env.PUBLIC_URL}/images/placeholder.jpg`
-        // }
         alt=''
       />
 
       <h1 style={{ fontSize: "2rem", textAlign: "center" }} title='Username'>
-        {/* {Utilities.getCookie("Notifies_AccountName")} */}
         {username}
       </h1>
       <p style={{ textAlign: "center" }} title='Email'>
         {Utilities.getCookie("Notifies_AccountEmail")}
       </p>
-      <ToggleSwitch {...props} label='Twitch' token='Twitch' tokenExists={twitchToken} />
-      <ToggleSwitch {...props} label='Youtube' token='Youtube' tokenExists={youtubeToken} />
-      <ToggleSwitch {...props} label='TwitchVods' token='Twitch' tokenExists={twitchToken} />
+      <ToggleSwitch
+        setEnable={setEnableTwitch}
+        enabled={enableTwitch}
+        label='Twitch'
+        tokenExists={twitchToken}
+      />
+      <ToggleSwitch
+        setEnable={setEnableYoutube}
+        enabled={enableYoutube}
+        label='Youtube'
+        tokenExists={youtubeToken}
+      />
+      <ToggleSwitch
+        setEnable={setEnableTwitchVods}
+        enabled={enableTwitchVods}
+        label='TwitchVods'
+        tokenExists={twitchToken}
+      />
       <br />
       <ToggleSwitchAutoRefresh
         autoRefreshEnabled={autoRefreshEnabled}
@@ -175,13 +203,13 @@ export default props => {
         tokenExists={twitchToken}
       />
       <ToggleSwitchVideoHover
-        enableHover={props.twitchVideoHoverEnable}
-        setEnableHover={props.setTwitchVideoHoverEnable}
+        enableHover={twitchVideoHoverEnable}
+        setEnableHover={setTwitchVideoHoverEnable}
         feed='Twitch'
       />
       <ToggleSwitchVideoHover
-        enableHover={props.youtubeVideoHoverEnable}
-        setEnableHover={props.setYoutubeVideoHoverEnable}
+        enableHover={youtubeVideoHoverEnable}
+        setEnableHover={setYoutubeVideoHoverEnable}
         feed='Youtube'
       />
       <br></br>
@@ -196,8 +224,8 @@ export default props => {
                 "Twitch",
                 `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code&force_verify=true`,
                 setTwitchToken,
-                props.setEnableTwitch,
-                props.setEnableTwitchVods
+                setEnableTwitch,
+                setEnableTwitchVods
               );
             }}>
             Connect Twitch
@@ -215,14 +243,14 @@ export default props => {
                   "Twitch",
                   `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`,
                   setTwitchToken,
-                  props.setEnableTwitch,
-                  props.setEnableTwitchVods
+                  setEnableTwitch,
+                  setEnableTwitchVods
                 );
               }}>
               <StyledReconnectIcon id='reconnectIcon' />
               <img title='Re-authenticate' src={twitchProfileImg} alt='' />
             </div>
-            <p>{twitchDisplayName}</p>
+            <p>{twitchUsername}</p>
           </div>
           <StyledConnectTwitch
             id='disconnect'
@@ -245,7 +273,7 @@ export default props => {
                 "Youtube",
                 `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly`,
                 setYoutubeToken,
-                props.setEnableYoutube
+                setEnableYoutube
               );
             }}>
             Connect Youtube
@@ -265,7 +293,7 @@ export default props => {
                 "Youtube",
                 `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly`,
                 setYoutubeToken,
-                props.setEnableYoutube
+                setEnableYoutube
               );
             }}>
             <Icon icon={ic_refresh} size={24} />

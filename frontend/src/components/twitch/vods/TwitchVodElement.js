@@ -4,7 +4,7 @@ import axios from "axios";
 import moment from "moment";
 import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import React, { useEffect, useRef, useCallback, useState } from "react";
+import React, { useEffect, useRef, useCallback, useState, useContext } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";
 
@@ -12,8 +12,10 @@ import { VideoContainer, VideoTitle, ImageContainer } from "./../../sharedStyled
 import styles from "../Twitch.module.scss";
 import Utilities from "../../../utilities/Utilities";
 import { VodLiveIndicator } from "./StyledComponents";
+import AccountContext from "../../account/AccountContext";
 
 export default ({ ...data }) => {
+  const { twitchToken } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState(false);
   const [previewAvailable, setPreviewAvailable] = useState();
   const imgRef = useRef();
@@ -45,20 +47,27 @@ export default ({ ...data }) => {
       hoverTimeoutRef.current = setTimeout(async () => {
         const res = await axios.get(`https://api.twitch.tv/kraken/videos/${data.data.id}`, {
           headers: {
-            Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+            Authorization: `Bearer ${twitchToken}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
             Accept: "application/vnd.twitchtv.v5+json",
           },
         });
         setIsHovered(true);
-        setPreviewAvailable(res.data.animated_preview_url);
+        if (res.data.status === "recorded" && data.data.thumbnail_url === "") {
+          data.data.thumbnail_url = null;
+        }
+        if (res.data.status === "recording") {
+          setPreviewAvailable("null");
+        } else {
+          setPreviewAvailable(res.data.animated_preview_url);
+        }
       }, 500);
     } else {
       hoverTimeoutRef.current = setTimeout(() => {
         setIsHovered(true);
       }, 200);
     }
-  }, [previewAvailable, data.data.id]);
+  }, [previewAvailable, data.data.id, data.data.thumbnail_url, twitchToken]);
 
   const handleMouseOut = useCallback(event => {
     clearTimeout(hoverTimeoutRef.current);
@@ -83,7 +92,7 @@ export default ({ ...data }) => {
           <VodLiveIndicator to={`/twitch/live/${data.data.user_name}`}>Live</VodLiveIndicator>
         ) : null}
         <a className={styles.img} href={data.data.url}>
-          {isHovered && previewAvailable && data.data.thumbnail_url ? (
+          {isHovered && previewAvailable && previewAvailable !== "null" ? (
             <div
               alt=''
               className={styles.vodPreview}

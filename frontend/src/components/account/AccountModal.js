@@ -14,7 +14,7 @@ import React, { useContext } from "react";
 import uniqid from "uniqid";
 
 import AccountContext from "./../account/AccountContext";
-import FeedContext from "./../feed/FeedsContext";
+import FeedsContext from "./../feed/FeedsContext";
 import LoginModal from "../account/LoginModal";
 import NavigationContext from "./../navigation/NavigationContext";
 import styles from "./Account.module.scss";
@@ -26,10 +26,16 @@ import Utilities from "../../utilities/Utilities";
 
 export default () => {
   document.title = "Notifies | Account";
-  const { username, setTwitchToken, setYoutubeToken, twitchToken, youtubeToken } = useContext(
-    AccountContext
-  );
-  const { isLoggedIn, setIsLoggedIn, setRenderModal } = useContext(NavigationContext);
+  const {
+    username,
+    profileImage,
+    setTwitchToken,
+    setYoutubeToken,
+    twitchToken,
+    youtubeToken,
+    setUsername,
+  } = useContext(AccountContext);
+  const { setRenderModal } = useContext(NavigationContext);
   const {
     setEnableTwitch,
     enableTwitch,
@@ -41,7 +47,7 @@ export default () => {
     setTwitchVideoHoverEnable,
     youtubeVideoHoverEnable,
     setYoutubeVideoHoverEnable,
-  } = useContext(FeedContext);
+  } = useContext(FeedsContext);
 
   function logout() {
     document.cookie = `Notifies_AccountName=null; path=/`;
@@ -50,7 +56,7 @@ export default () => {
     document.cookie = `Youtube-access_token=null; path=/`;
     document.cookie = `Notifies_AccountProfileImg=null; path=/`;
 
-    setIsLoggedIn(false);
+    setUsername(null);
   }
 
   async function authenticatePopup(
@@ -106,7 +112,7 @@ export default () => {
         setTwitchToken(null);
         setEnableTwitch(false);
         setEnableTwitchVods(false);
-        localStorage.setItem("TwitchFeedEnabled", false);
+        document.cookie = `Twitch_feedEnabled=${false}; path=/`;
         localStorage.setItem("TwitchVodsFeedEnabled", false);
         console.log(`Successfully disconnected from Twitch`);
       })
@@ -134,15 +140,12 @@ export default () => {
       });
   }
 
-  return isLoggedIn ? (
+  return username ? (
     <div className={styles.accountContainer}>
       <div className={styles.profileContainer}>
         <img
           className={styles.profileImage}
-          src={
-            Utilities.getCookie("Notifies_AccountProfileImg") ||
-            `${process.env.PUBLIC_URL}/images/placeholder.jpg`
-          }
+          src={profileImage || `${process.env.PUBLIC_URL}/images/placeholder.jpg`}
           alt=''></img>
         <Popup
           placeholder='Img url...'
@@ -161,7 +164,7 @@ export default () => {
           <p>Email:</p>
         </div>
         <div className={styles.names}>
-          <p>{Utilities.getCookie("Notifies_AccountName")}</p>
+          <p>{username}</p>
           <p>{Utilities.getCookie("Notifies_AccountEmail")}</p>
         </div>
       </div>

@@ -5,15 +5,15 @@ import Utilities from "./../../utilities/Utilities";
 
 export default ({ children }) => {
   const [enableTwitch, setEnableTwitch] = useState(
-    Utilities.getCookie("Twitch-access_token") !== null &&
-      localStorage.getItem("TwitchFeedEnabled") === "true"
+    Utilities.getCookie("Twitch-access_token") && Utilities.getCookie("Twitch_feedEnabled")
   );
+
   const [enableYoutube, setEnableYoutube] = useState(
-    Utilities.getCookie(`Youtube-access_token`) !== null &&
+    Utilities.getCookie(`Youtube-access_token`) &&
       localStorage.getItem("YoutubeFeedEnabled") === "true"
   );
   const [enableTwitchVods, setEnableTwitchVods] = useState(
-    Utilities.getCookie(`Twitch-access_token`) !== null &&
+    Utilities.getCookie(`Twitch-access_token`) &&
       localStorage.getItem("TwitchVodsFeedEnabled") === "true"
   );
 
@@ -24,8 +24,6 @@ export default ({ children }) => {
     localStorage.getItem(`YoutubeVideoHoverEnabled`) === "true"
   );
 
-  const [refresh, setRefresh] = useState(false);
-
   return (
     <FeedsContext.Provider
       value={{
@@ -35,8 +33,6 @@ export default ({ children }) => {
         setEnableYoutube: setEnableYoutube,
         enableTwitchVods: enableTwitchVods,
         setEnableTwitchVods: setEnableTwitchVods,
-        refresh: refresh,
-        setRefresh: setRefresh,
         twitchVideoHoverEnable: twitchVideoHoverEnable,
         setTwitchVideoHoverEnable: setTwitchVideoHoverEnable,
         youtubeVideoHoverEnable: youtubeVideoHoverEnable,

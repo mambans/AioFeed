@@ -5,7 +5,6 @@ import _ from "lodash";
 import ErrorHandeling from "../../error/Error";
 import getFollowedVods from "./GetFollowedVods";
 import TwitchVodElement from "./TwitchVodElement";
-import Utilities from "../../../utilities/Utilities";
 import { SubFeedContainer } from "./../../sharedStyledComponents";
 import Header from "./Header";
 import { StyledLoadmore } from "./../styledComponents";
@@ -26,9 +25,14 @@ function TwitchVods() {
   const loadmoreRef = useRef();
   const resetVodAmountsTimer = useRef();
   const VodHeaderRef = useRef();
-  const { authKey, username, twitchUserId, setTwitchToken, setRefreshToken } = useContext(
-    AccountContext
-  );
+  const {
+    authKey,
+    username,
+    twitchUserId,
+    setTwitchToken,
+    setRefreshToken,
+    twitchToken,
+  } = useContext(AccountContext);
 
   //eslint-disable-next-line
   const observer = useMemo(
@@ -182,7 +186,7 @@ function TwitchVods() {
     setRefreshToken,
   ]);
 
-  if (Utilities.getCookie("Twitch-access_token") === null) {
+  if (!twitchToken) {
     return (
       <ErrorHandeling
         data={{
@@ -208,7 +212,7 @@ function TwitchVods() {
         />
       </>
     );
-  } else if (!Utilities.getCookie("Twitch-access_token")) {
+  } else if (!twitchToken) {
     return (
       <ErrorHandeling
         data={{

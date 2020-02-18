@@ -3,7 +3,6 @@ import ReactLoading from "react-loading";
 import { StyledLoadingContainer } from "./sharedStyledComponents";
 
 export default ({ text, height, width, type, style }) => {
-  console.log("TCL: text, height, width, type", text, height, width, type);
   return (
     <StyledLoadingContainer style={style || null}>
       <ReactLoading

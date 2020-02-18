@@ -99,18 +99,22 @@ const StyledConnectYoutube = styled(Button)`
   }
 `;
 
-const StyledCreateFormTitle = styled.h3`
-  border-bottom: 2px solid var(--greyInfo);
+const StyledCreateFormTitle = styled.div`
   text-align: center;
-  /* width: 280px; */
+  border-bottom: 2px solid var(--greyInfo);
   margin: auto;
   margin-top: 40px;
+
+  p {
+    margin-bottom: 2px;
+    color: #c2c2c2;
+  }
 `;
 
 const StyledCreateForm = styled(Form)`
   /* width: 280px; */
   margin: auto;
-  margin-top: 50px;
+  margin-top: 25px;
 `;
 
 const StyledAlert = styled(Alert)`
@@ -336,7 +340,7 @@ const StyledConnectContainer = styled.div`
     -ms-border-radius: 50%;
     -o-border-radius: 50%;
 
-    &:hover { 
+    &:hover {
       color: #ffffff;
     }
   }
