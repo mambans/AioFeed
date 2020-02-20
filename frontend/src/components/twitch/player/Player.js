@@ -1,201 +1,34 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
-import { useParams, useLocation, Link } from "react-router-dom";
+import { CSSTransition } from "react-transition-group";
+import { ic_account_circle } from "react-icons-kit/md/ic_account_circle";
+import { ic_fullscreen } from "react-icons-kit/md/ic_fullscreen";
+import { ic_fullscreen_exit } from "react-icons-kit/md/ic_fullscreen_exit";
 import { ic_vertical_align_bottom } from "react-icons-kit/md/ic_vertical_align_bottom";
 import { ic_vertical_align_top } from "react-icons-kit/md/ic_vertical_align_top";
-import { ic_account_circle } from "react-icons-kit/md/ic_account_circle";
+import { useParams, useLocation, Link } from "react-router-dom";
+import axios from "axios";
 import Icon from "react-icons-kit";
-import { CSSTransition } from "react-transition-group";
-// import { volumeLow } from "react-icons-kit/icomoon/volumeLow";
-// import { volumeMedium } from "react-icons-kit/icomoon/volumeMedium";
-// import { volumeHigh } from "react-icons-kit/icomoon/volumeHigh";
-// import { volumeMute } from "react-icons-kit/icomoon/volumeMute";
-import { volumeMute2 } from "react-icons-kit/icomoon/volumeMute2";
+import Moment from "react-moment";
+import React, { useContext, useEffect, useState, useRef, useCallback } from "react";
 
 import {
-  VideoAndChatContainer,
+  ButtonShowQualities,
+  ButtonShowStats,
+  InfoDisplay,
+  PausePlay,
+  PausePlayOverlay,
+  PlaybackStats,
+  PlayerNavbar,
+  QualitiesList,
   StyledChat,
   ToggleNavbarButton,
   ToggleSwitchChatSide,
-  PlayerNavbar,
+  VideoAndChatContainer,
   VolumeEventOverlay,
-  VolumeElement,
 } from "./StyledComponents";
+import AccountContext from "../../account/AccountContext";
 import NavigationContext from "./../../navigation/NavigationContext";
-
-const TwitchInteractivePlayer = ({
-  channel,
-  video,
-  volumeEventOverlayRef,
-  setVolumeText,
-  setVolumeMuted,
-}) => {
-  useEffect(() => {
-    let TwitchPlayer = new window.Twitch.Player("twitch-embed", {
-      width: "100%",
-      height: "100%",
-      theme: "dark",
-      layout: "video",
-      channel: channel || null,
-      video: video || null,
-      muted: false,
-    });
-
-    const volumeEventOverlayRefElement = volumeEventOverlayRef.current;
-
-    const scrollChangeVolumeEvent = e => {
-      if ((e.wheelDelta && e.wheelDelta > 0) || e.deltaY < 0) {
-        const newVolume = TwitchPlayer.getVolume() + 0.01;
-        if (newVolume < 1) {
-          TwitchPlayer.setVolume(newVolume);
-          setVolumeText(newVolume * 100);
-        } else {
-          TwitchPlayer.setVolume(1);
-          setVolumeText(100);
-        }
-      } else {
-        const newVolume = TwitchPlayer.getVolume() - 0.01;
-        if (newVolume > 0) {
-          TwitchPlayer.setVolume(newVolume);
-          setVolumeText(newVolume * 100);
-        } else {
-          TwitchPlayer.setVolume(0);
-          setVolumeText(0);
-        }
-      }
-    };
-
-    const clickUnmuteMuteOrPlay = e => {
-      if (e.button === 1) {
-        TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
-        setVolumeMuted(!TwitchPlayer.getMuted());
-      } else if (e.button === 0 && TwitchPlayer.isPaused()) {
-        TwitchPlayer.play();
-      } else if (e.button === 0 && TwitchPlayer.getMuted()) {
-        TwitchPlayer.setMuted(false);
-        setVolumeMuted(false);
-      }
-    };
-
-    const keyboardEvents = e => {
-      if (e.key === "Space") {
-        if (TwitchPlayer.isPaused()) {
-          TwitchPlayer.play();
-        } else {
-          TwitchPlayer.pause();
-        }
-      } else if (e.key === "f") {
-        toggleFullscreen();
-      } else if (e.key === "m") {
-        TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
-        setVolumeMuted(!TwitchPlayer.getMuted());
-      }
-    };
-
-    const toggleFullscreen = () => {
-      const el = document.getElementsByTagName("iframe")[0];
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
-      } else {
-        if (el.requestFullScreen) {
-          el.requestFullScreen();
-        } else if (el.mozRequestFullScreen) {
-          el.mozRequestFullScreen();
-        } else if (el.webkitRequestFullScreen) {
-          el.webkitRequestFullScreen();
-        }
-      }
-    };
-
-    const twitchPlayerEventListeners = () => {
-      setVolumeMuted(TwitchPlayer.getMuted());
-
-      volumeEventOverlayRefElement.addEventListener("wheel", scrollChangeVolumeEvent);
-      volumeEventOverlayRefElement.addEventListener("mouseup", clickUnmuteMuteOrPlay);
-      document.body.addEventListener("keyup", keyboardEvents);
-      document.body.addEventListener("dblclick", toggleFullscreen);
-    };
-
-    TwitchPlayer.addEventListener(window.Twitch.Player.READY, twitchPlayerEventListeners);
-
-    return () => {
-      TwitchPlayer.removeEventListener(window.Twitch.Player.READY, twitchPlayerEventListeners);
-      volumeEventOverlayRefElement.removeEventListener("wheel", scrollChangeVolumeEvent);
-      volumeEventOverlayRefElement.removeEventListener("mouseup", clickUnmuteMuteOrPlay);
-      document.body.removeEventListener("keyup", keyboardEvents);
-      document.body.removeEventListener("dblclick", toggleFullscreen);
-    };
-  }, [channel, video, volumeEventOverlayRef, setVolumeMuted, setVolumeText]);
-
-  return null;
-};
-
-const NonInteractiveVolumeSlider = ({ volumeMuted, volumeText }) => {
-  // const volumeIcon = () => {
-  //   if (volumeMuted) {
-  //     return volumeMute2;
-  //   } else if (volumeText <= 33) {
-  //     return volumeLow;
-  //   } else if (volumeText <= 66) {
-  //     return volumeMedium;
-  //   } else if (volumeText <= 100) {
-  //     return volumeHigh;
-  //   } else {
-  //     return volumeMute;
-  //   }
-  // };
-
-  return (
-    <VolumeElement id='VolumeElement'>
-      {volumeMuted ? (
-        <Icon size={33.6} icon={volumeMute2} style={{ color: "red" }} />
-      ) : (
-        <h3> {volumeText && volumeText.toFixed(0)}</h3>
-      )}
-      <div className='vlCtrl'>
-        {/* <Icon size={30} icon={volumeIcon()} style={volumeMuted ? { color: "red" } : null} /> */}
-        <svg viewBox='0 0 100 10' xmlns='http://www.w3.org/2000/svg'>
-          <line
-            id='ctrlLineB'
-            className='volElem'
-            stroke={volumeMuted ? "#c30000" : "#B28A24"}
-            x1='0'
-            y1='5'
-            x2='100'
-            y2='5'
-            opacity='0.6'
-          />
-          <line
-            id='ctrlLineF'
-            className='volElem'
-            stroke={volumeMuted ? "#c30000" : "#F4AF0A"}
-            x1='0'
-            y1='5'
-            x2={volumeText && volumeText.toFixed(0)}
-            y2='5'
-          />
-
-          {/* <circle
-            id='ctrlCirce'
-            cx={volumeText + 10 && (volumeText + 10).toFixed(0)}
-            cy='13.5'
-            r='13'
-            fill='#F4AF0A'
-          /> */}
-
-          {/* <text
-          x={volumeText + 10 && (volumeText + 10).toFixed(0)}
-          y='50%'
-          textAnchor='middle'
-          stroke='#ffffff'
-          strokeWidth='2px'
-          dy='.3em'>
-          {volumeText && volumeText.toFixed(0)}
-        </text> */}
-        </svg>
-      </div>
-    </VolumeElement>
-  );
-};
+import PlayerEvents from "./PlayerEvents";
+import VolumeSlider from "./VolumeSlider";
 
 export default () => {
   const { id } = useParams();
@@ -207,18 +40,146 @@ export default () => {
   const [switched, setSwitched] = useState(false);
   const [volumeText, setVolumeText] = useState(0);
   const [volumeMuted, setVolumeMuted] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
+  const [channelInfo, setChannelInfo] = useState();
+  const [uptime, setUptime] = useState();
+  const [viewers, setViewers] = useState();
+  const [showPlaybackStats, setShowPlaybackStats] = useState();
+  const [playbackStats, setPlaybackStats] = useState();
+  const [showQualities, setShowQualities] = useState();
+  const [qualities, setQualities] = useState();
+  const [activeQuality, setActiveQuality] = useState();
+  // const [playbackStats, setPlaybackStats] = useState();
   const volumeEventOverlayRef = useRef();
+  const twitchPlayer = useRef();
+  const PlayersatsTimer = useRef();
+  const channelinfoTimer = useRef();
+  const viewersTimer = useRef();
+  const { twitchToken } = useContext(AccountContext);
+
+  const fetchChannelInfo = useCallback(async () => {
+    const channel = await axios
+      .get(`https://api.twitch.tv/kraken/channels/${twitchPlayer.current.getChannelId()}`, {
+        headers: {
+          Authorization: `OAuth ${twitchToken}`,
+          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+          Accept: "application/vnd.twitchtv.v5+json",
+        },
+      })
+      .then(res => {
+        return res.data;
+      })
+      .catch(error => {
+        console.log("fetchChannelInfo channel: error", error);
+      });
+
+    setChannelInfo(channel);
+  }, [twitchToken]);
+
+  const fullscreenIcon = () => {
+    // if (twitchPlayer.current && twitchPlayer.current.getFullscreen()) {
+    if (twitchPlayer.current) {
+      return ic_fullscreen_exit;
+    } else {
+      return ic_fullscreen;
+    }
+  };
 
   useEffect(() => {
+    document.documentElement.style.overflow = "hidden";
     setShrinkNavbar("true");
     setVisible(false);
     setFooterVisible(false);
 
+    twitchPlayer.current = new window.Twitch.Player("twitch-embed", {
+      width: "100%",
+      height: "100%",
+      theme: "dark",
+      layout: "video",
+      channel: id && type === "live" ? id : null,
+      video: id && type === "video" ? id : null,
+      muted: false,
+    });
+
+    if (type === "live") {
+      setTimeout(async () => {
+        fetchChannelInfo();
+        setViewers(twitchPlayer.current.getViewers());
+
+        await axios
+          .get(`https://api.twitch.tv/helix/streams`, {
+            params: {
+              user_id: twitchPlayer.current.getChannelId(),
+              first: 1,
+            },
+            headers: {
+              Authorization: `Bearer ${twitchToken}`,
+              "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+            },
+          })
+          .then(res => {
+            if (res.data.data[0] && res.data.data[0].started_at) {
+              setUptime(res.data.data[0].started_at);
+            }
+            // return res.data.data[0]
+          })
+          .catch(error => {
+            console.log("fetchChannelInfo stream: error", error);
+          });
+      }, 5000);
+
+      if (!channelinfoTimer.current) {
+        channelinfoTimer.current = setInterval(() => {
+          fetchChannelInfo();
+        }, 300000);
+      }
+
+      if (!viewersTimer.current) {
+        viewersTimer.current = setInterval(() => {
+          setViewers(twitchPlayer.current.getViewers());
+        }, 60000);
+      }
+    }
+
     return () => {
+      document.documentElement.style.overflow = "visible";
       setShrinkNavbar("false");
       setFooterVisible(true);
+      clearInterval(PlayersatsTimer.current);
+      clearInterval(channelinfoTimer.current);
+      clearInterval(viewersTimer.current);
     };
-  }, [setShrinkNavbar, setFooterVisible, setVisible]);
+  }, [setShrinkNavbar, setFooterVisible, setVisible, id, fetchChannelInfo, type, twitchToken]);
+
+  const latencyColorValue = (name, value) => {
+    if (name === "hlsLatencyBroadcaster" || name === "hlsLatencyEncoder") {
+      if (value >= 10) {
+        return "#f00";
+      } else if (value >= 5) {
+        return "#f66329";
+      } else if (value >= 2.5) {
+        return "#f6b029";
+      } else {
+        return "#4cf629";
+      }
+    } else {
+      return "unset";
+    }
+  };
+
+  const toggleFullscreen2 = TwitchPlayer => {
+    TwitchPlayer.setFullscreen(!TwitchPlayer.getFullscreen());
+    // if (TwitchPlayer.getFullscreen()) {
+    //   document.exitFullscreen();
+    // } else
+    if (TwitchPlayer._bridge._iframe.requestFullScreen) {
+      TwitchPlayer._bridge._iframe.requestFullScreen();
+    } else if (TwitchPlayer._bridge._iframe.mozRequestFullScreen) {
+      TwitchPlayer._bridge._iframe.mozRequestFullScreen();
+    } else if (TwitchPlayer._bridge._iframe.webkitRequestFullScreen) {
+      TwitchPlayer._bridge._iframe.webkitRequestFullScreen();
+    }
+  };
 
   if (type === "live") {
     return (
@@ -240,18 +201,142 @@ export default () => {
           switchedChatState={switched.toString()}>
           <div id='twitch-embed'>
             <VolumeEventOverlay ref={volumeEventOverlayRef} type='live'>
-              <NonInteractiveVolumeSlider
+              <InfoDisplay>
+                {channelInfo ? (
+                  <>
+                    <img src={channelInfo.logo} alt=''></img>
+                    <a id='name' href={channelInfo.url}>
+                      {channelInfo.display_name}
+                    </a>
+                    <p id='title'>{channelInfo.status}</p>
+                    <Link id='game' to={`/twitch/top/${channelInfo.game}`}>
+                      Playing {channelInfo.game}
+                    </Link>
+                    <p id='viewers'>Viewers: {viewers}</p>
+                    {uptime ? (
+                      <p id='uptime'>
+                        Uptime <Moment durationFromNow>{uptime}</Moment> hours
+                      </p>
+                    ) : (
+                      <p id='uptime'>Offline</p>
+                    )}
+                  </>
+                ) : null}
+              </InfoDisplay>
+              {isPaused ? (
+                <PausePlayOverlay
+                  ispaused={isPaused.toString()}
+                  onClick={() => {
+                    if (twitchPlayer.current.isPaused()) {
+                      twitchPlayer.current.play();
+                      setIsPaused(false);
+                    } else {
+                      twitchPlayer.current.pause();
+                      setIsPaused(true);
+                    }
+                  }}
+                />
+              ) : null}
+              <PausePlay
+                ispaused={isPaused.toString()}
+                onClick={() => {
+                  if (twitchPlayer.current.isPaused()) {
+                    twitchPlayer.current.play();
+                    setIsPaused(false);
+                  } else {
+                    twitchPlayer.current.pause();
+                    setIsPaused(true);
+                  }
+                }}
+              />
+              <VolumeSlider
+                volume={volumeText}
+                setVolumeText={setVolumeText}
+                TwitchPlayer={twitchPlayer.current}
                 volumeMuted={volumeMuted}
-                volumeText={volumeText}
-                type='live'
+                setVolumeMuted={setVolumeMuted}
+                // onChange={Function}
+                // onChangeComplete={Function}
+              />
+              {showPlaybackStats && playbackStats ? (
+                <PlaybackStats>
+                  {Object.keys(playbackStats).map(statName => {
+                    return (
+                      <div key={statName}>
+                        <span>{`${statName}: `}</span>
+                        <span
+                          style={{
+                            color: latencyColorValue(statName, playbackStats[statName]),
+                          }}>
+                          {playbackStats[statName]}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </PlaybackStats>
+              ) : null}
+              <ButtonShowStats
+                onClick={() => {
+                  setShowPlaybackStats(!showPlaybackStats);
+                  setPlaybackStats(twitchPlayer.current.getPlaybackStats());
+
+                  if (PlayersatsTimer.current) {
+                    clearInterval(PlayersatsTimer);
+                  } else {
+                    PlayersatsTimer.current = setInterval(() => {
+                      setPlaybackStats(twitchPlayer.current.getPlaybackStats());
+                    }, 1500);
+                  }
+                }}>
+                Stats
+              </ButtonShowStats>
+              <QualitiesList>
+                {showQualities && qualities
+                  ? qualities.map(quality => {
+                      return (
+                        <li
+                          key={quality.name}
+                          onClick={() => {
+                            twitchPlayer.current.setQuality(quality.group);
+                            setActiveQuality(quality);
+                            setShowQualities(false);
+                          }}>
+                          {quality.name}
+                        </li>
+                      );
+                    })
+                  : null}
+              </QualitiesList>
+              <ButtonShowQualities
+                onClick={() => {
+                  setShowQualities(!showQualities);
+                  setQualities(twitchPlayer.current.getQualities());
+                }}>
+                Quality:
+                {activeQuality
+                  ? activeQuality.name
+                  : twitchPlayer.current
+                  ? twitchPlayer.current.getQuality().name
+                  : null}
+              </ButtonShowQualities>
+              <Icon
+                onClick={() => {
+                  toggleFullscreen2(twitchPlayer.current);
+                }}
+                size={30}
+                icon={fullscreenIcon()}
+                style={{ position: "absolute", right: "12px", bottom: "12px", cursor: "pointer" }}
               />
             </VolumeEventOverlay>
-            <TwitchInteractivePlayer
-              channel={id}
-              volumeEventOverlayRef={volumeEventOverlayRef}
-              setVolumeText={setVolumeText}
-              setVolumeMuted={setVolumeMuted}
-            />
+            {twitchPlayer.current ? (
+              <PlayerEvents
+                volumeEventOverlayRef={volumeEventOverlayRef}
+                setVolumeText={setVolumeText}
+                setVolumeMuted={setVolumeMuted}
+                TwitchPlayer={twitchPlayer.current}
+                type='live'
+              />
+            ) : null}
             <ToggleSwitchChatSide
               id='switchSides'
               switched={switched.toString()}
@@ -302,13 +387,6 @@ export default () => {
             top: visible ? "75px" : "0",
             display: "unset",
           }}>
-          <VolumeEventOverlay ref={volumeEventOverlayRef} type='video'>
-            <NonInteractiveVolumeSlider
-              volumeMuted={volumeMuted}
-              volumeText={volumeText}
-              type='video'
-            />
-          </VolumeEventOverlay>
           <ToggleNavbarButton
             icon={visible ? ic_vertical_align_top : ic_vertical_align_bottom}
             title={visible ? "Hide navbar" : "Show navbar"}
@@ -317,12 +395,14 @@ export default () => {
               setVisible(!visible);
             }}
           />
-          <TwitchInteractivePlayer
-            video={id}
-            volumeEventOverlayRef={volumeEventOverlayRef}
-            setVolumeText={setVolumeText}
-            setVolumeMuted={setVolumeMuted}
-          />
+          {twitchPlayer.current ? (
+            <PlayerEvents
+              volumeEventOverlayRef={volumeEventOverlayRef}
+              setVolumeText={setVolumeText}
+              setVolumeMuted={setVolumeMuted}
+              TwitchPlayer={twitchPlayer.current}
+            />
+          ) : null}
         </VideoAndChatContainer>
       </>
     );

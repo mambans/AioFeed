@@ -25,8 +25,10 @@ export default () => {
   useEffect(() => {
     setShrinkNavbar("true");
     setFooterVisible(false);
+    document.documentElement.style.overflow = "hidden";
 
     return () => {
+      document.documentElement.style.overflow = "visible";
       setShrinkNavbar("false");
       setFooterVisible(true);
     };
@@ -66,7 +68,8 @@ export default () => {
           frameborder='0'
           allowfullscreen='true'
           scrolling='no'
-          preload='auto'></StyledVideo>
+          preload='auto'
+        />
       </VideoAndChatContainer>
     </>
   );

@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import Icon from "react-icons-kit";
 import { loop } from "react-icons-kit/icomoon/loop";
+import { play } from "react-icons-kit/fa/play";
+import { paus } from "react-icons-kit/entypo/paus";
 
 const VideoAndChatContainer = styled.div`
   display: flex;
@@ -40,16 +42,6 @@ const StyledVideo = styled.iframe`
   border: none;
 `;
 
-const ResizeDevider = styled.div`
-  background: red;
-  width: 2px;
-  cursor: w-resize;
-  z-index: 5000;
-  position: absolute;
-  height: 100%;
-  left: ${({ left }) => left};
-`;
-
 const ToggleNavbarButton = styled(Icon).attrs({
   size: 30,
   // icon: props => props.state || ic_vertical_align_bottom,
@@ -73,7 +65,7 @@ const ToggleSwitchChatSide = styled(Icon).attrs({ size: 30, icon: loop })`
   cursor: pointer;
   transition: opacity 300ms;
   opacity: 0;
-  bottom: 100px;
+  bottom: 60px;
   margin-left: ${({ switched }) => (switched === "true" ? "10px" : "calc(91vw - 40px)")};
 
   &:hover {
@@ -114,90 +106,251 @@ const PlayerNavbar = styled.div`
 
 const VolumeEventOverlay = styled.div`
   position: absolute;
-  width: ${({ type }) => (type === "live" ? "87vw" : "96vw")};
+  width: ${({ type }) => (type === "live" ? "91vw" : "100vw")};
+  height: ${({ type }) => (type === "live" ? "100%" : "calc(100% - 70px)")};
+  bottom: ${({ type }) => (type === "live" ? "unset" : "70px")};
+  opacity: 0;
+  transition: opacity 500ms 750ms ease;
+
+  /* bottom: 250px */
+  /* width: ${({ type }) => (type === "live" ? "87vw" : "96vw")};
   height: ${({ type }) => (type === "live" ? "calc(100% - 375px)" : "calc(100% - 370px)")};
   bottom: ${({ type }) => (type === "live" ? "200px" : "230px")};
-  left: 2vw;
+  left: 2vw; */
 
-  p {
-    font-size: 1.5rem;
-    text-shadow: 0px 0px 1px black;
-    /* background: #00000012; */
-    width: max-content;
-    padding: 10px;
-    position: absolute;
-    bottom: 0;
-    opacity: 0;
-    transition: opacity 500ms 3s ease;
-    display: flex;
-    align-items: center;
 
-    i {
-      display: flex;
-      padding-right: 5px;
-    }
+  a, p {
+    text-shadow: 0 0 2px black;
   }
 
-  .vlCtrl {
-    /* position: absolute; */
-    width: 100%;
-    /* bottom: 0; */
-    /* padding: 5px 20px; */
 
-    display: flex;
-    align-items: center;
+  &:hover {
+    opacity: 1;
+    transition: opacity 250ms 0s ease;
+  }
+`;
 
-    i {
-      padding-right: 2px;
-      color: #f4af0a;
-    }
+const StyledVolumeSlider = styled.div`
+  width: 230px;
+  text-align: center;
+  bottom: 10px;
+  position: absolute;
+  left: 50px;
+  display: grid;
+  grid-template-areas: "spacer text" "slider slider";
+  grid-template-columns: 60px auto;
+  margin: 5px 10px;
 
-    svg,
-    path {
-      user-select: none;
-      overflow: visible;
-    }
-    .volElem {
-      fill: none;
-      stroke-width: 3;
-      /* stroke-linecap: round; */
-      stroke-linejoin: round;
-      stroke-miterlimit: 10;
-    }
+  h3 {
+    margin-bottom: 0;
+    grid-area: text;
+  }
+
+  i#icon {
+    color: #f4f4f49c;
+    padding: 0 15px;
+    cursor: pointer;
   }
 
   &:hover {
-    p,
-    #VolumeElement {
-      opacity: 1;
-      transition: opacity 500ms 0s ease;
+    i#icon {
+      color: #ffffff;
+    }
+  }
+
+  #BottomRow {
+    display: flex;
+    grid-area: slider;
+  }
+
+  .rangeslider-horizontal {
+    height: 8px;
+    border-radius: 6px;
+  }
+
+  .rangeslider {
+    /* background: #6b6b6b; */
+    background-color: ${({ volumeMuted }) => (volumeMuted ? "#841010a1" : "#6b6b6b")};
+    margin: 11px 0;
+    width: calc(100% - 30px);
+    cursor: pointer;
+  }
+
+  .rangeslider-horizontal .rangeslider__fill {
+    /* background-color: #42b38e; */
+    background-color: ${({ volumeMuted }) => (volumeMuted ? "#bd0202" : "#42b38e")};
+    border-radius: 6px;
+  }
+`;
+
+const PausePlay = styled(Icon).attrs(props => ({
+  icon: props.ispaused === "true" ? play : paus,
+  size: 30,
+}))`
+  color: #f4f4f49c;
+  cursor: pointer;
+  position: absolute;
+  bottom: 10px;
+  transition: color 150ms;
+  margin: 5px 10px;
+
+  &:hover {
+    color: #ffffff;
+  }
+`;
+
+const PausePlayOverlay = styled(Icon).attrs(props => ({
+  icon: props.ispaused === "true" ? play : paus,
+  size: 70,
+}))`
+  color: white;
+  cursor: pointer;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  display: flex !important;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+`;
+
+const InfoDisplay = styled.div`
+  display: grid;
+  grid-template-areas: "logo name" "logo title" "logo game" "logo viewers" "logo uptime";
+  grid-template-columns: 75px auto;
+  width: 400px;
+  background: #00000080;
+  padding: 15px 15px 5px 15px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px #0000009c;
+  position: absolute;
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    color: #ffffff;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  img {
+    height: 65px;
+    width: 65px;
+    border-radius: 50%;
+    grid-area: logo;
+  }
+
+  #name {
+    grid-area: name;
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
+
+  #title {
+    grid-area: title;
+  }
+
+  #game {
+    grid-area: game;
+  }
+
+  #viewers {
+    grid-area: viewers;
+  }
+
+  #uptime {
+    grid-area: uptime;
+  }
+`;
+
+const ButtonShowStats = styled.p`
+  position: absolute;
+  bottom: 12px;
+  margin: 0;
+  font-weight: bold;
+  left: 350px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin: 5px 10px;
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+const ButtonShowQualities = styled.p`
+  position: absolute;
+  bottom: 12px;
+  margin: 0;
+  font-weight: bold;
+  left: 450px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin: 5px 10px;
+  opacity: 0.7;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+const QualitiesList = styled.ul`
+  width: max-content;
+  position: absolute;
+  bottom: 50px;
+  font-weight: bold;
+  left: 450px;
+  cursor: pointer;
+  margin: 5px 10px;
+  list-style: none;
+  padding: 0;
+
+  background: #00000080;
+  padding: 5px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px #0000009c;
+
+  li {
+    padding: 2px;
+    color: rgb(200, 200, 200);
+
+    &:hover {
+      color: #ffffff;
     }
   }
 `;
 
-const VolumeElement = styled.div`
+const PlaybackStats = styled.div`
   width: 250px;
-  text-align: center;
-  position: fixed;
-  top: 0;
-  right: ${({ type }) => (type === "live" ? "calc(87vw / 2 - 125px)" : "calc(96vw / 2 - 125px)")};
-  text-shadow: 0px 0px 2px black;
-  transition: opacity 500ms 3s ease;
-  opacity: 0;
+  padding: 10px;
+  border-radius: 10px;
+  bottom: 80px;
+  position: absolute;
 
-  h3 {
-    margin-bottom: 0;
-  }
+  background: #00000080;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px #0000009c;
 `;
 
 export {
   VideoAndChatContainer,
   StyledChat,
-  StyledVideo,
-  ResizeDevider,
   ToggleNavbarButton,
   ToggleSwitchChatSide,
   PlayerNavbar,
   VolumeEventOverlay,
-  VolumeElement,
+  StyledVolumeSlider,
+  PausePlay,
+  PausePlayOverlay,
+  InfoDisplay,
+  ButtonShowStats,
+  PlaybackStats,
+  StyledVideo,
+  ButtonShowQualities,
+  QualitiesList,
 };
