@@ -56,6 +56,7 @@ export default () => {
   const channelinfoTimer = useRef();
   const viewersTimer = useRef();
   const { twitchToken } = useContext(AccountContext);
+  const OpenedDate = new Date().getTime();
 
   const fetchChannelInfo = useCallback(async () => {
     const channel = await axios
@@ -200,7 +201,7 @@ export default () => {
           }}
           switchedChatState={switched.toString()}>
           <div id='twitch-embed'>
-            <VolumeEventOverlay ref={volumeEventOverlayRef} type='live'>
+            <VolumeEventOverlay ref={volumeEventOverlayRef} type='live' id='controls'>
               <InfoDisplay>
                 {channelInfo ? (
                   <>
@@ -277,6 +278,11 @@ export default () => {
               ) : null}
               <ButtonShowStats
                 onClick={() => {
+                  if (!showPlaybackStats) {
+                    document.querySelector("#controls").style.opacity = 1;
+                  } else {
+                    document.querySelector("#controls").style.opacity = 0;
+                  }
                   setShowPlaybackStats(!showPlaybackStats);
                   setPlaybackStats(twitchPlayer.current.getPlaybackStats());
 
@@ -335,6 +341,7 @@ export default () => {
                 setVolumeMuted={setVolumeMuted}
                 TwitchPlayer={twitchPlayer.current}
                 type='live'
+                OpenedDate={OpenedDate}
               />
             ) : null}
             <ToggleSwitchChatSide
@@ -401,6 +408,7 @@ export default () => {
               setVolumeText={setVolumeText}
               setVolumeMuted={setVolumeMuted}
               TwitchPlayer={twitchPlayer.current}
+              OpenedDate={OpenedDate}
             />
           ) : null}
         </VideoAndChatContainer>

@@ -110,7 +110,7 @@ const VolumeEventOverlay = styled.div`
   height: ${({ type }) => (type === "live" ? "100%" : "calc(100% - 70px)")};
   bottom: ${({ type }) => (type === "live" ? "unset" : "70px")};
   opacity: 0;
-  transition: opacity 300ms 500ms ease;
+  transition: opacity 500ms 250ms ease;
 
   /* bottom: 250px */
   /* width: ${({ type }) => (type === "live" ? "87vw" : "96vw")};
@@ -125,7 +125,7 @@ const VolumeEventOverlay = styled.div`
 
 
   &:hover {
-    opacity: 1;
+    opacity: 1 !important ;
     transition: opacity 250ms 0s ease;
   }
 `;
@@ -324,7 +324,7 @@ const QualitiesList = styled.ul`
 `;
 
 const PlaybackStats = styled.div`
-  width: 250px;
+  width: max-content;
   padding: 10px;
   border-radius: 10px;
   bottom: 80px;

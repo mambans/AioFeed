@@ -1,6 +1,13 @@
 import { useEffect } from "react";
 
-export default ({ volumeEventOverlayRef, setVolumeText, setVolumeMuted, TwitchPlayer, type }) => {
+export default ({
+  volumeEventOverlayRef,
+  setVolumeText,
+  setVolumeMuted,
+  TwitchPlayer,
+  type,
+  OpenedDate,
+}) => {
   useEffect(() => {
     // console.log("TCL: TwitchPlayer", TwitchPlayer);
     // let TwitchPlayer = new window.Twitch.Player("twitch-embed", {
@@ -48,7 +55,11 @@ export default ({ volumeEventOverlayRef, setVolumeText, setVolumeMuted, TwitchPl
         setVolumeMuted(!TwitchPlayer.getMuted());
       } else if (e.button === 0 && TwitchPlayer.isPaused()) {
         TwitchPlayer.play();
-      } else if (e.button === 0 && TwitchPlayer.getMuted()) {
+      } else if (
+        e.button === 0 &&
+        TwitchPlayer.getMuted() &&
+        new Date().getTime() - OpenedDate <= 15000
+      ) {
         TwitchPlayer.setMuted(false);
         setVolumeMuted(false);
       }
