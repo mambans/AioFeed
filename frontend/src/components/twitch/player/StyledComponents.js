@@ -110,7 +110,7 @@ const VolumeEventOverlay = styled.div`
   height: ${({ type }) => (type === "live" ? "100%" : "calc(100% - 70px)")};
   bottom: ${({ type }) => (type === "live" ? "unset" : "70px")};
   opacity: 0;
-  transition: opacity 500ms 750ms ease;
+  transition: opacity 300ms 500ms ease;
 
   /* bottom: 250px */
   /* width: ${({ type }) => (type === "live" ? "87vw" : "96vw")};
