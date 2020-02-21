@@ -10,6 +10,7 @@ const ChannelContainer = styled.div`
 
 const Banner = styled.div`
   height: 300px;
+  margin-bottom: 20px;
 
   #Banner {
     width: 100%;
@@ -135,6 +136,8 @@ const SubFeedHeader = styled.div`
   display: grid;
   grid-template-areas: "sort title gap";
   grid-template-columns: 20% auto 20%;
+  margin: 20px auto 10px auto;
+  border-bottom: 1px solid grey;
 
   h3 {
     text-align: center;

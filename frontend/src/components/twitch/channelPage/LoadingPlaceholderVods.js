@@ -10,8 +10,6 @@ export default ({ numberOfVideos }) => {
     <>
       <SubFeedHeader
         style={{
-          margin: "50px auto 10px auto",
-          borderBottom: "1px solid grey",
           width: `${numberOfVideos * 350}px`,
         }}>
         <SortButton sortBy={""} />
