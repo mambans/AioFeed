@@ -272,7 +272,7 @@ const ButtonShowStats = styled.p`
   bottom: 12px;
   margin: 0;
   font-weight: bold;
-  left: 350px;
+  left: 315px;
   font-size: 1.1rem;
   cursor: pointer;
   margin: 5px 10px;
@@ -288,7 +288,7 @@ const ButtonShowQualities = styled.p`
   bottom: 12px;
   margin: 0;
   font-weight: bold;
-  left: 450px;
+  left: 375px;
   font-size: 1.1rem;
   cursor: pointer;
   margin: 5px 10px;
@@ -304,12 +304,10 @@ const QualitiesList = styled.ul`
   position: absolute;
   bottom: 50px;
   font-weight: bold;
-  left: 450px;
+  left: 375px;
   cursor: pointer;
-  margin: 5px 10px;
+  margin: 5px;
   list-style: none;
-  padding: 0;
-
   background: #00000080;
   padding: 5px;
   border-radius: 10px;

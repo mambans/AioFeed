@@ -215,7 +215,7 @@ export default () => {
                     <p id='viewers'>Viewers: {viewers}</p>
                     {uptime ? (
                       <p id='uptime'>
-                        Uptime <Moment durationFromNow>{uptime}</Moment> hours
+                        Uptime <Moment durationFromNow>{uptime}</Moment>
                       </p>
                     ) : (
                       <p id='uptime'>Offline</p>
@@ -290,23 +290,23 @@ export default () => {
                 }}>
                 Stats
               </ButtonShowStats>
-              <QualitiesList>
-                {showQualities && qualities
-                  ? qualities.map(quality => {
-                      return (
-                        <li
-                          key={quality.name}
-                          onClick={() => {
-                            twitchPlayer.current.setQuality(quality.group);
-                            setActiveQuality(quality);
-                            setShowQualities(false);
-                          }}>
-                          {quality.name}
-                        </li>
-                      );
-                    })
-                  : null}
-              </QualitiesList>
+              {showQualities && qualities ? (
+                <QualitiesList>
+                  {qualities.map(quality => {
+                    return (
+                      <li
+                        key={quality.name}
+                        onClick={() => {
+                          twitchPlayer.current.setQuality(quality.group);
+                          setActiveQuality(quality);
+                          setShowQualities(false);
+                        }}>
+                        {quality.name}
+                      </li>
+                    );
+                  })}
+                </QualitiesList>
+              ) : null}
               <ButtonShowQualities
                 onClick={() => {
                   setShowQualities(!showQualities);
