@@ -131,7 +131,7 @@ export default ({
       document.body.removeEventListener("keyup", keyboardEvents);
       // document.body.removeEventListener("dblclick", toggleFullscreen);
     };
-  }, [volumeEventOverlayRef, setVolumeMuted, setVolumeText, TwitchPlayer, type]);
+  }, [volumeEventOverlayRef, setVolumeMuted, setVolumeText, TwitchPlayer, type, OpenedDate]);
 
   return null;
 };
