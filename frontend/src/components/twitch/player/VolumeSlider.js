@@ -28,6 +28,10 @@ export default ({ volume, setVolumeText, TwitchPlayer, volumeMuted, setVolumeMut
   };
 
   const handleChange = value => {
+    if (TwitchPlayer.getMuted()) {
+      TwitchPlayer.setMuted(false);
+      setVolumeMuted(false);
+    }
     setVolumeText(value);
     TwitchPlayer.setVolume(value / 100);
   };
