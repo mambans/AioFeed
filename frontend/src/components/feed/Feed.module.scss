@@ -4,21 +4,13 @@
   width: var(--feedsWidth);
   margin: var(--feedsMargin);
   margin-top: 0;
-
   min-height: 475px;
-  // & > div {
-  //   min-height: 475px;
-  // }
 }
 
 .twitchContainer {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-
-  // & > div {
-  //   width: 100%;
-  // }
 }
 
 .video {
@@ -140,11 +132,6 @@
 }
 
 @media screen and (max-width: 1920px) {
-  // html {
-  //   --FeedWidth: 73.5%;
-  //   --FeedMargin: 25px 7.5% 0 19%;
-  // }
-
   .container {
     width: 74%;
     margin: 25px 7.5% 0 19%;
