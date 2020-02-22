@@ -34,7 +34,7 @@ export default () => {
   const { id } = useParams();
   document.title = ` ${id} | Notifies`;
   const location = useLocation();
-  const type = location.pathname.split("/")[2];
+  const type = location.pathname.split("/")[1];
   const nameFromHash = location.hash !== "" ? location.hash.replace("#", "") : null;
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const [switched, setSwitched] = useState(false);
@@ -187,7 +187,7 @@ export default () => {
       <>
         <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
           <PlayerNavbar>
-            <Link to={`/twitch/channel/${id}`}>
+            <Link to={`/channel/${id}`}>
               <Icon icon={ic_account_circle} size={20}></Icon>
               {id}'s channel page
             </Link>
@@ -210,7 +210,7 @@ export default () => {
                       {channelInfo.display_name}
                     </a>
                     <p id='title'>{channelInfo.status}</p>
-                    <Link id='game' to={`/twitch/top/${channelInfo.game}`}>
+                    <Link id='game' to={`/game/${channelInfo.game}`}>
                       Playing {channelInfo.game}
                     </Link>
                     <p id='viewers'>Viewers: {viewers}</p>
@@ -377,7 +377,7 @@ export default () => {
         <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
           <PlayerNavbar>
             {nameFromHash ? (
-              <Link to={`/twitch/channel/${nameFromHash}`}>
+              <Link to={`/channel/${nameFromHash}`}>
                 <div id='icon'>
                   <Icon icon={ic_account_circle} size={20} />
                 </div>
@@ -414,5 +414,7 @@ export default () => {
         </VideoAndChatContainer>
       </>
     );
+  } else {
+    return <p>Error?</p>;
   }
 };

@@ -174,7 +174,7 @@ function StreamEle(data) {
             data={data.data}
             setIsHovered={setIsHovered}></StreamHoverIframe>
         ) : null}
-        <a className={styles.img} href={"/twitch/live/" + data.data.user_name.toLowerCase()}>
+        <a className={styles.img} href={"/live/" + data.data.user_name.toLowerCase()}>
           {/* href={
                 "https://player.twitch.tv/?volume=0.1&!muted&channel=" +
                 data.data.user_name.toLowerCase()
@@ -213,23 +213,19 @@ function StreamEle(data) {
               {data.data.title}
             </Tooltip>
           }>
-          <VideoTitle to={"/twitch/live/" + data.data.user_name.toLowerCase()}>
+          <VideoTitle to={"/live/" + data.data.user_name.toLowerCase()}>
             {Utilities.truncate(data.data.title, 50)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
-        <VideoTitle to={"/twitch/live/" + data.data.user_name.toLowerCase()}>
-          {data.data.title}
-        </VideoTitle>
+        <VideoTitle to={"/live/" + data.data.user_name.toLowerCase()}>{data.data.title}</VideoTitle>
       )}
       <div>
         <div className={styles.channelContainer} ref={refChannel}>
-          <Link
-            to={`/twitch/channel/${data.data.user_name}`}
-            style={{ gridRow: 1, paddingRight: "5px" }}>
+          <Link to={`/channel/${data.data.user_name}`} style={{ gridRow: 1, paddingRight: "5px" }}>
             <img src={data.data.profile_img_url} alt='' className={styles.profile_img}></img>
           </Link>
-          <Link to={`/twitch/channel/${data.data.user_name}`} className={styles.channel}>
+          <Link to={`/channel/${data.data.user_name}`} className={styles.channel}>
             {data.data.user_name}
           </Link>
 
@@ -292,7 +288,7 @@ function StreamEle(data) {
           <Link
             className={styles.game}
             // href={"https://www.twitch.tv/directory/game/" + data.data.game_name}
-            to={"/twitch/top/" + data.data.game_name}>
+            to={"/game/" + data.data.game_name}>
             {data.data.game_name}
           </Link>
           <p className={styles.viewers} title='Viewers'>

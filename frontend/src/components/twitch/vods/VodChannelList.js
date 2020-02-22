@@ -148,7 +148,7 @@ export default props => {
           {channels.map(channel => {
             return (
               <li key={channel}>
-                <Link to={"/twitch/channel/" + channel}>{channel}</Link>
+                <Link to={"/channel/" + channel}>{channel}</Link>
                 <Button
                   variant='danger'
                   size='sm'

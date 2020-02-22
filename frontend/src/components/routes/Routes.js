@@ -48,29 +48,21 @@ const Routes = () => {
                             <Route exact path='/index' component={Home} />
                             <Route exact path='/home' component={Home} />
                             <Route exact path='/feed' component={Feed} />
-                            <Route exact path='/twitch/channel/:id'>
+                            <Route exact path='/live/:id'>
+                              <Player />
+                            </Route>
+                            <Route exact path='/channel/:id'>
                               <TwitchChannelPage />
                             </Route>
-                            <Route exact path='/twitch/video/:id'>
+                            <Route exact path='/video/:id'>
                               <Player />
                             </Route>
-                            <Route exact path='/twitch/clip/:id'>
+                            <Route exact path='/clip/:id'>
                               <PlayerClip />
                             </Route>
-                            <Route exact path='/twitch/live2/:channel'>
-                              <PlayerNonInteractive />
-                            </Route>
-                            <Route exact path='/twitch/top/:category?'>
+                            <Route exact path='/game/:category?'>
                               <RenderTopStreams />
                             </Route>
-                            <Route exact path='/twitch/live/:id'>
-                              <Player />
-                            </Route>
-                            <Route
-                              exact
-                              path='/twitch/notifications'
-                              component={streamOnlineWebhook}
-                            />
                             <Route exact path='/auth/youtube' component={YoutubeAuth} />
                             <Route exact path='/auth/twitch' component={TwitchAuth} />
                             <Route
@@ -115,7 +107,6 @@ const Routes = () => {
                               )}
                             />
                             <Route exact path='/legality' component={Legality} />
-
                             <Route component={NoMatch} />
                           </Switch>
                         </main>

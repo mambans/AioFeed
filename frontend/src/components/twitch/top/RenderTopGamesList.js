@@ -20,12 +20,12 @@ const RenderTopGamesList = () => {
   return topGames ? (
     <ul>
       <StyledShowAllButton key='showAll'>
-        <Link to={"/twitch/top/"}>Show all</Link>
+        <Link to={"/game/"}>Show all</Link>
       </StyledShowAllButton>
       {topGames.map(game => {
         return (
           <StyledGameListElement key={game.id}>
-            <Link to={"/twitch/top/" + game.name}>
+            <Link to={"/game/" + game.name}>
               <img src={game.box_art_url.replace("{width}", 300).replace("{height}", 300)} alt='' />
               {game.name}
             </Link>

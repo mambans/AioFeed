@@ -31,7 +31,7 @@ const formatViewerNumbers = viewers => {
 const TwitchSidebarItem = data => {
   return (
     <Link
-      to={"/twitch/live/" + data.stream.user_name.toLowerCase()}
+      to={"/live/" + data.stream.user_name.toLowerCase()}
       style={{ display: "flex", flexDirection: "column" }}>
       <div className={styles.sidebarItems} key={data.stream.id}>
         <NewHighlight data={data}></NewHighlight>

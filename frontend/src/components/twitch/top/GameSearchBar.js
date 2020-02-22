@@ -31,7 +31,7 @@ const GameSearchBar = props => {
 
   return (
     <>
-      {redirect ? <Redirect to={"/twitch/top/" + game} /> : null}
+      {redirect ? <Redirect to={"/game/" + game} /> : null}
       <form
         onSubmit={handleSubmit}
         style={{

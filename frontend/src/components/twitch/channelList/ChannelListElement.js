@@ -110,7 +110,7 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
   return (
     <li key={data.to_id}>
       <UnfollowAlert />
-      <Link to={"/twitch/channel/" + data.to_name} style={{ padding: "0", fontSize: "unset" }}>
+      <Link to={"/channel/" + data.to_name} style={{ padding: "0", fontSize: "unset" }}>
         {data.profile_image_url ? (
           <img
             src={data.profile_image_url}

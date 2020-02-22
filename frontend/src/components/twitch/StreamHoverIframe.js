@@ -57,7 +57,7 @@ function StreamHoverIframe(data) {
         frameBorder='0'
       />
       <Link
-        to={`/twitch/live/${data.data.user_name}`}
+        to={`/live/${data.data.user_name}`}
         alt=''
         style={{
           position: "absolute",

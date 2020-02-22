@@ -39,7 +39,7 @@ export default () => {
       <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
         <PlayerNavbar>
           {nameFromHash ? (
-            <Link to={`/twitch/channel/${nameFromHash}`}>
+            <Link to={`/channel/${nameFromHash}`}>
               <Icon icon={ic_account_circle} size={20}></Icon>
               {nameFromHash}'s channel page
             </Link>

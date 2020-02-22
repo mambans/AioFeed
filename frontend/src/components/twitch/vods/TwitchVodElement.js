@@ -89,7 +89,7 @@ export default ({ ...data }) => {
     <VideoContainer>
       <ImageContainer ref={imgRef}>
         {data.data.thumbnail_url === "" ? (
-          <VodLiveIndicator to={`/twitch/live/${data.data.user_name}`}>Live</VodLiveIndicator>
+          <VodLiveIndicator to={`/live/${data.data.user_name}`}>Live</VodLiveIndicator>
         ) : null}
         <a className={styles.img} href={data.data.url}>
           {isHovered && previewAvailable && previewAvailable !== "null" ? (
@@ -148,22 +148,20 @@ export default ({ ...data }) => {
               {data.data.title}
             </Tooltip>
           }>
-          <VideoTitle to={`/twitch/video/${data.data.id}#${data.data.user_name}`}>
+          <VideoTitle to={`/video/${data.data.id}#${data.data.user_name}`}>
             {Utilities.truncate(data.data.title, 70)}
             {/* {data.data.title} */}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
-        <VideoTitle to={`/twitch/video/${data.data.id}#${data.data.user_name}`}>
+        <VideoTitle to={`/video/${data.data.id}#${data.data.user_name}`}>
           {data.data.title}
         </VideoTitle>
       )}
 
       <div>
         <div className={styles.channelContainer} style={{ marginBottom: "0px", height: "25px" }}>
-          <Link
-            to={"/twitch/channel/" + data.data.user_name.toLowerCase()}
-            className={styles.channel}>
+          <Link to={"/channel/" + data.data.user_name.toLowerCase()} className={styles.channel}>
             {data.data.user_name}
           </Link>
         </div>

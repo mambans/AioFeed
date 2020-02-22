@@ -62,6 +62,9 @@ export default () => {
       })
       .then(res => {
         setChannelId(res.data.data[0].id);
+      })
+      .catch(error => {
+        console.error("GetIdFromName: ", error);
       });
   }, [id, twitchToken]);
 
@@ -76,6 +79,9 @@ export default () => {
       })
       .then(res => {
         return res.data;
+      })
+      .catch(error => {
+        console.error("fetchChannelInfo: ", error);
       });
   }, [twitchToken, channelId]);
 
@@ -122,8 +128,11 @@ export default () => {
                 }
               )
               .then(() => {
-                console.log(`Unfollowed: ${channelInfo.display_name}`);
+                console.log(`Followed: ${channelInfo.display_name}`);
                 // data.refresh();
+              })
+              .catch(error => {
+                console.error("Followed: ", error);
               });
           })
           .catch(er => {
@@ -251,6 +260,9 @@ export default () => {
             previosClipsPage.current = res.data.data;
             setClips(res.data.data);
           }
+        })
+        .catch(error => {
+          console.error("fetchClips: ", error);
         });
     },
     [numberOfVideos, sortClipsBy, channelId, twitchToken]
@@ -287,6 +299,10 @@ export default () => {
         })
         .then(res => {
           if (res.data.data.length > 0) return true;
+        })
+        .catch(error => {
+          console.error("fetchClips: ", error);
+          return false;
         });
     };
 
@@ -330,14 +346,14 @@ export default () => {
               <div id='HeaderChannelInfo'>
                 <div id='ChannelName'>
                   {channelInfo.isLive ? (
-                    <Link to={`/twitch/live/${id}`} style={{ padding: "0" }}>
+                    <Link to={`/live/${id}`} style={{ padding: "0" }}>
                       <LiveIndicator>
                         <LiveIndicatorIcon />
                         <p>Live</p>
                       </LiveIndicator>
                     </Link>
                   ) : null}
-                  <Link to={`/twitch/live/${id}`} id='ChannelLiveLink'>
+                  <Link to={`/live/${id}`} id='ChannelLiveLink'>
                     <img id='profileIcon' alt='' src={channelInfo.logo} />
                     {channelInfo.display_name}
                   </Link>
@@ -402,7 +418,7 @@ export default () => {
                   )}
                 </div>
                 <p id='title'>{channelInfo.status}</p>
-                <Link to={`/twitch/top/${channelInfo.game}`} id='game'>
+                <Link to={`/game/${channelInfo.game}`} id='game'>
                   {channelInfo.game}
                 </Link>
                 <p id='desc'>{channelInfo.description}</p>

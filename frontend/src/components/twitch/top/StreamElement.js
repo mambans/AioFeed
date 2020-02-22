@@ -59,7 +59,7 @@ function StreamEle(data) {
         {isHovered ? (
           <StreamHoverIframe id={data.data.id} data={data.data} setIsHovered={setIsHovered} />
         ) : null}
-        <Link to={`/twitch/live/${data.data.user_name}`} className={styles.img}>
+        <Link to={`/live/${data.data.user_name}`} className={styles.img}>
           <img
             src={
               data.data.thumbnail_url.replace("{width}", 640).replace("{height}", 360) +
@@ -86,27 +86,27 @@ function StreamEle(data) {
             {data.data.title}
           </Tooltip>
         }>
-        <VideoTitle to={"/twitch/live/" + data.data.user_name.toLowerCase()}>
+        <VideoTitle to={"/live/" + data.data.user_name.toLowerCase()}>
           {Utilities.truncate(data.data.title, 50)}
         </VideoTitle>
       </OverlayTrigger>
       <div>
         <div className={styles.channelContainer} ref={refChannel}>
           <Link
-            to={`/twitch/channel/${data.data.user_name}`}
+            to={`/channel/${data.data.user_name}`}
             // href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
             style={{ gridRow: 1 }}>
             <img src={data.data.profile_img_url} alt='' className={styles.profile_img}></img>
           </Link>
           <Link
             // href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
-            to={`/twitch/channel/${data.data.user_name}`}
+            to={`/channel/${data.data.user_name}`}
             className={styles.channel}>
             {data.data.user_name}
           </Link>
         </div>
         <div className={styles.gameContainer}>
-          <Link className={styles.game_img} to={"/twitch/top/" + data.data.game_name}>
+          <Link className={styles.game_img} to={"/game/" + data.data.game_name}>
             <img
               src={
                 data.data.game_img
@@ -116,7 +116,7 @@ function StreamEle(data) {
               alt=''
               className={styles.game_img}></img>
           </Link>
-          <Link className={styles.game} to={"/twitch/top/" + data.data.game_name}>
+          <Link className={styles.game} to={"/game/" + data.data.game_name}>
             {data.data.game_name}
           </Link>
           <p className={styles.viewers}>

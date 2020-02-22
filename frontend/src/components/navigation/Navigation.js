@@ -38,7 +38,7 @@ function NavigationBar(prop) {
               <Nav.Link as={NavLink} to='/feed/' activeClassName='active'>
                 Feed
               </Nav.Link>
-              <Nav.Link as={NavLink} to='/twitch/top/' activeClassName='active'>
+              <Nav.Link as={NavLink} to='/game/' activeClassName='active'>
                 Top streams
               </Nav.Link>
             </Nav>
