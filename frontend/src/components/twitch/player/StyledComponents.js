@@ -3,6 +3,7 @@ import Icon from "react-icons-kit";
 import { loop } from "react-icons-kit/icomoon/loop";
 import { play } from "react-icons-kit/fa/play";
 import { paus } from "react-icons-kit/entypo/paus";
+import { infoCircle } from "react-icons-kit/fa/infoCircle";
 
 const VideoAndChatContainer = styled.div`
   display: flex;
@@ -270,7 +271,7 @@ const InfoDisplay = styled.div`
   }
 `;
 
-const ButtonShowStats = styled.p`
+const ButtonShowStats = styled(Icon).attrs({ icon: infoCircle, size: 26 })`
   position: absolute;
   bottom: 12px;
   margin: 0;
@@ -291,14 +292,20 @@ const ButtonShowQualities = styled.p`
   bottom: 12px;
   margin: 0;
   font-weight: bold;
-  left: 375px;
+  left: 360px;
   font-size: 1.1rem;
   cursor: pointer;
   margin: 5px 10px;
   opacity: 0.7;
+  display: flex;
+  align-items: center;
 
   &:hover {
     opacity: 1;
+  }
+
+  i {
+    padding-right: 7px;
   }
 `;
 

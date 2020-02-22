@@ -5,6 +5,8 @@ import { ic_fullscreen_exit } from "react-icons-kit/md/ic_fullscreen_exit";
 import { ic_vertical_align_bottom } from "react-icons-kit/md/ic_vertical_align_bottom";
 import { ic_vertical_align_top } from "react-icons-kit/md/ic_vertical_align_top";
 import { useParams, useLocation, Link } from "react-router-dom";
+import { ic_settings } from "react-icons-kit/md/ic_settings";
+
 import axios from "axios";
 import Icon from "react-icons-kit";
 import Moment from "react-moment";
@@ -293,9 +295,8 @@ export default () => {
                       setPlaybackStats(twitchPlayer.current.getPlaybackStats());
                     }, 1500);
                   }
-                }}>
-                Stats
-              </ButtonShowStats>
+                }}
+              />
               {showQualities && qualities ? (
                 <QualitiesList>
                   {qualities.map(quality => {
@@ -318,7 +319,7 @@ export default () => {
                   setShowQualities(!showQualities);
                   setQualities(twitchPlayer.current.getQualities());
                 }}>
-                Quality:
+                <Icon icon={ic_settings} size={26}></Icon>
                 {activeQuality
                   ? activeQuality.name
                   : twitchPlayer.current
