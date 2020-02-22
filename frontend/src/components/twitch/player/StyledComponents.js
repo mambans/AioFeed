@@ -220,7 +220,8 @@ const InfoDisplay = styled.div`
   display: grid;
   grid-template-areas: "logo name" "logo title" "logo game" "logo viewers" "logo uptime";
   grid-template-columns: 75px auto;
-  width: 400px;
+  /* width: 400px; */
+  max-width: 600px;
   background: #00000080;
   padding: 15px 15px 5px 15px;
   border-radius: 10px;
