@@ -1,10 +1,10 @@
 import { eye } from "react-icons-kit/icomoon/eye";
 import { Icon } from "react-icons-kit";
+import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useRef } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
-import { Link } from "react-router-dom";
 
 import { VideoContainer, VideoTitle, ImageContainer } from "./../../sharedStyledComponents";
 import styles from "../Twitch.module.scss";

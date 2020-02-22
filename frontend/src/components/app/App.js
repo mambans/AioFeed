@@ -7,7 +7,6 @@ export default () => {
   const { themesArray } = useContext(ThemeContext);
 
   useEffect(() => {
-    // console.log("Mounting App") ;
     SetStartupTheme(themesArray);
   }, [themesArray]);
 
