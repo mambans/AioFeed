@@ -52,7 +52,7 @@ function YoutubeAuthCallback() {
   useEffect(() => {
     setVisible(false);
 
-    async function handleAuth() {
+    (async () => {
       const url = new URL(window.location.href);
 
       try {
@@ -80,9 +80,7 @@ function YoutubeAuthCallback() {
       } catch (error) {
         setError(error);
       }
-    }
-
-    handleAuth();
+    })();
   }, [getAccessToken, setVisible]);
 
   if (error) {

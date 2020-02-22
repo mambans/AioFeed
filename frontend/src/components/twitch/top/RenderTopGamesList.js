@@ -9,12 +9,10 @@ const RenderTopGamesList = () => {
   const [topGames, setTopGames] = useState();
 
   useEffect(() => {
-    const fetchAndSetTopGames = async () => {
+    (async () => {
       const games = await GetTopGames();
       setTopGames(games.data.data);
-    };
-
-    fetchAndSetTopGames();
+    })();
   }, []);
 
   return topGames ? (

@@ -23,7 +23,7 @@ function YoutubeAuth() {
   }, []);
 
   useEffect(() => {
-    async function handleAuth() {
+    (async () => {
       const url = new URL(window.location.href);
 
       try {
@@ -33,9 +33,7 @@ function YoutubeAuth() {
       } catch (error) {
         setError(error);
       }
-    }
-
-    handleAuth();
+    })();
   }, [initiateAuth]);
 
   if (error) {

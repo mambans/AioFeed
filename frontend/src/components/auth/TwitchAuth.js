@@ -24,7 +24,7 @@ function TwitchAuth() {
   }, []);
 
   useEffect(() => {
-    async function handleAuth() {
+    (async () => {
       try {
         const url = new URL(window.location.href);
 
@@ -34,9 +34,7 @@ function TwitchAuth() {
       } catch (error) {
         setError(error);
       }
-    }
-
-    handleAuth();
+    })();
   }, [initiateAuth]);
 
   if (error) {

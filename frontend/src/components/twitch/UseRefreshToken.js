@@ -9,7 +9,7 @@ function useRefreshToken(prevFunc) {
   const { refreshToken, setTwitchToken, setRefreshToken } = useContext(AccountContext);
 
   useEffect(() => {
-    const refreshTokenRequest = async () => {
+    (async () => {
       await axios
         .post(
           `https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=${encodeURI(
@@ -27,9 +27,7 @@ function useRefreshToken(prevFunc) {
 
           prevFunc(res);
         });
-    };
-
-    refreshTokenRequest();
+    })();
   }, [prevFunc, setRefreshToken, setTwitchToken]);
 }
 export default useRefreshToken;

@@ -78,7 +78,7 @@ function DataHandler({ children }) {
   }, []);
 
   useEffect(() => {
-    async function fetchData() {
+    (async () => {
       try {
         setInitiated(false);
         followedChannels.current = await getFollowedChannels();
@@ -95,9 +95,7 @@ function DataHandler({ children }) {
         setIsLoaded(new Date());
         setError(error);
       }
-    }
-
-    fetchData();
+    })();
   }, []);
   if (!youtubeToken) {
     return (

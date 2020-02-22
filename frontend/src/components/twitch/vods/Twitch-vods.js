@@ -136,7 +136,7 @@ function TwitchVods() {
     //eslint-disable-next-line
     const loadmore = loadmoreRef.current;
 
-    async function fetchData() {
+    (async () => {
       setRefreshing(true);
       await getFollowedVods(
         false,
@@ -163,9 +163,7 @@ function TwitchVods() {
           setError(data.error);
           setVods(data.data);
         });
-    }
-
-    fetchData();
+    })();
     window.addEventListener("focus", windowFocusHandler);
     window.addEventListener("blur", windowBlurHandler);
 

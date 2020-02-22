@@ -316,12 +316,10 @@ export default () => {
   }, [id, fetchChannelInfo, twitchUserId, twitchToken]);
 
   useEffect(() => {
-    const fetchAllChannelData = async () => {
+    (async () => {
       if (!channelId) await getIdFromName();
       if (!channelInfo && channelId) getChannelInfo();
-    };
-
-    fetchAllChannelData();
+    })();
   }, [channelInfo, getChannelInfo, getIdFromName, channelId]);
 
   useEffect(() => {

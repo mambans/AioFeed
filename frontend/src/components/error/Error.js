@@ -10,7 +10,7 @@ function ErrorHandeling(data) {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
-    async function handleErrorContent() {
+    (async () => {
       let error;
 
       switch (data.data.message) {
@@ -24,8 +24,7 @@ function ErrorHandeling(data) {
 
       setErrorMessage(error);
       setErrorTitle(data.data.title ? data.data.title : "Oh-oh! Something bad happened.");
-    }
-    handleErrorContent();
+    })();
   }, [data.data.message, data.data.title, errorMessage]);
 
   if (show && data) {
