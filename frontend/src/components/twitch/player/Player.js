@@ -333,6 +333,13 @@ export default () => {
                 icon={fullscreenIcon()}
                 style={{ position: "absolute", right: "12px", bottom: "12px", cursor: "pointer" }}
               />
+              <ToggleSwitchChatSide
+                id='switchSides'
+                switched={switched.toString()}
+                onClick={() => {
+                  setSwitched(!switched);
+                }}
+              />
             </VolumeEventOverlay>
             {twitchPlayer.current ? (
               <PlayerEvents
@@ -344,13 +351,6 @@ export default () => {
                 OpenedDate={OpenedDate}
               />
             ) : null}
-            <ToggleSwitchChatSide
-              id='switchSides'
-              switched={switched.toString()}
-              onClick={() => {
-                setSwitched(!switched);
-              }}
-            />
           </div>
           <div id='chat'>
             <ToggleNavbarButton

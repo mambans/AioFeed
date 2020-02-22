@@ -64,9 +64,11 @@ const ToggleSwitchChatSide = styled(Icon).attrs({ size: 30, icon: loop })`
   z-index: 1;
   cursor: pointer;
   transition: opacity 300ms;
-  opacity: 0;
+  /* opacity: 0; */
   bottom: 60px;
-  margin-left: ${({ switched }) => (switched === "true" ? "10px" : "calc(91vw - 40px)")};
+  /* margin-left: ${({ switched }) => (switched === "true" ? "10px" : "calc(91vw - 40px)")}; */
+  right: ${({ switched }) => (switched === "true" ? "unset" : "10px")};
+  left: ${({ switched }) => (switched === "true" ? "10px" : "unset")};
 
   &:hover {
     opacity: 1 !important;
@@ -106,7 +108,7 @@ const PlayerNavbar = styled.div`
 
 const VolumeEventOverlay = styled.div`
   position: absolute;
-  width: ${({ type }) => (type === "live" ? "91vw" : "100vw")};
+  width: ${({ type }) => (type === "live" ? "90vw" : "100vw")};
   height: ${({ type }) => (type === "live" ? "100%" : "calc(100% - 70px)")};
   bottom: ${({ type }) => (type === "live" ? "unset" : "70px")};
   opacity: 0;
