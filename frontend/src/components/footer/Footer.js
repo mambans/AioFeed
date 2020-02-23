@@ -1,12 +1,11 @@
-import Icon from "react-icons-kit";
-import React, { useContext } from "react";
+import { FaGithub } from "react-icons/fa";
+import { FaHome } from "react-icons/fa";
+import { MdAccountCircle } from "react-icons/md";
+import { MdEmail } from "react-icons/md";
+import { MdRssFeed } from "react-icons/md";
 import { Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { email } from "react-icons-kit/entypo/email";
-import { feed } from "react-icons-kit/icomoon/feed";
-import { github } from "react-icons-kit/icomoon/github";
-import { home } from "react-icons-kit/icomoon/home";
-import { ic_account_circle } from "react-icons-kit/md/ic_account_circle";
+import React, { useContext } from "react";
 
 import NavigationContext from "./../navigation/NavigationContext";
 import {
@@ -24,28 +23,25 @@ const Footer = () => {
         <ul>
           <li>
             <Nav.Link as={NavLink} to='/'>
-              <Icon icon={home} size={20} style={{ paddingRight: "0.75rem" }}></Icon>
+              <FaHome size={20} style={{ marginRight: "0.75rem" }} />
               Home
             </Nav.Link>
           </li>
           <li>
             <Nav.Link as={NavLink} to='/feed'>
-              <Icon icon={feed} size={20} style={{ paddingRight: "0.75rem" }}></Icon>
+              <MdRssFeed size={20} style={{ marginRight: "0.75rem" }} />
               Feed
             </Nav.Link>
           </li>
           <li>
             <Nav.Link as={NavLink} to='/account'>
-              <Icon icon={ic_account_circle} size={20} style={{ paddingRight: "0.75rem" }}></Icon>
+              <MdAccountCircle size={20} style={{ marginRight: "0.75rem" }} />
               Account
             </Nav.Link>
           </li>
           <li>
             <Nav.Link as={NavLink} to='/account/create'>
-              <Icon
-                icon={ic_account_circle}
-                size={20}
-                style={{ paddingRight: "0.75rem", color: "grey" }}></Icon>
+              <MdAccountCircle size={20} style={{ marginRight: "0.75rem" }} />
               Create account
             </Nav.Link>
           </li>
@@ -68,7 +64,7 @@ const Footer = () => {
         <ul>
           <li>
             <a href='https://github.com/mambans/Notifies'>
-              <Icon icon={github} size={20} style={{ paddingRight: "0.75rem" }}></Icon>
+              <FaGithub size={20} style={{ marginRight: "0.75rem" }} />
               Github-Notifies
             </a>
           </li>
@@ -77,7 +73,7 @@ const Footer = () => {
               onClick={() => {
                 window.open("mailto:perssons1996@gmail.com?subject=subject&body=body");
               }}>
-              <Icon icon={email} size={20} style={{ paddingRight: "0.75rem" }}></Icon>
+              <MdEmail size={20} style={{ marginRight: "0.75rem" }} />
               Email
             </StyledButtonLinks>
           </li>

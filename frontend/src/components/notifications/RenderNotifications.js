@@ -1,6 +1,5 @@
-import { ic_notifications_none } from "react-icons-kit/md/ic_notifications_none";
-import { ic_notifications } from "react-icons-kit/md/ic_notifications";
-import Icon from "react-icons-kit";
+import { MdNotifications } from "react-icons/md";
+import { MdNotificationsNone } from "react-icons/md";
 import Modal from "react-bootstrap/Modal";
 import Moment from "react-moment";
 import moment from "moment";
@@ -45,12 +44,10 @@ export default () => {
         Array.isArray(props.unseenNotifications) &&
         props.unseenNotifications.length > 0 ? (
           <>
-            <Icon
-              icon={ic_notifications}
+            <MdNotifications
               size={shrinkNavbar === "true" ? 35 : 40}
               style={{
                 color: "var(--newHighlight)",
-                height: "22px",
                 alignItems: "center",
                 display: "flex",
                 transition: "ease-in-out 1s",
@@ -59,8 +56,7 @@ export default () => {
             <UnseenNotifcationCount>{props.unseenNotifications.length}</UnseenNotifcationCount>
           </>
         ) : (
-          <Icon
-            icon={ic_notifications_none}
+          <MdNotificationsNone
             size={shrinkNavbar === "true" ? 35 : 40}
             style={{
               alignItems: "center",

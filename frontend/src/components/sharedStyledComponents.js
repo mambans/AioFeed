@@ -1,4 +1,3 @@
-// import React from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -10,6 +9,7 @@ const RefreshButton = styled(Button).attrs({ variant: "outline-secondary" })`
   border: var(--refreshButtonBorder);
   position: relative;
   left: 6px;
+  align-items: center;
 
   &:hover {
     background: var(--refreshButtonHoverBackground);
@@ -28,6 +28,7 @@ const ButtonList = styled(Button).attrs({ variant: "outline-secondary" })`
   box-shadow: var(--refreshButtonShadow);
   border: var(--refreshButtonBorder);
   font-weight: bold;
+  align-items: center;
 
   &:hover {
     background: var(--refreshButtonHoverBackground);
@@ -48,6 +49,10 @@ const HeaderTitle = styled.h4`
   /* font-size: 1.25rem;
   font-weight: bold;
   color: #d5d5d5; */
+
+  svg {
+    margin: 0 10px;
+  }
 `;
 
 const HeaderContainer = styled.div`
@@ -148,7 +153,7 @@ const UnfollowButton = styled(Button).attrs({ variant: "link" })`
 `;
 
 const VodRemoveButton = styled(Button).attrs({ variant: "link" })`
-  color: rgb(140, 000, 000);
+  color: rgb(200, 200, 200);
   grid-row: 1;
   justify-self: right;
   width: 36px;
@@ -169,7 +174,7 @@ const VodAddButton = styled(Button).attrs({ variant: "link" })`
   padding: 2px;
 
   &:hover {
-    color: #ffffff;
+    color: #14ae14;
   }
 `;
 

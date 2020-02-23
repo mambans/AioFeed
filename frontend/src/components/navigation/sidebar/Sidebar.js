@@ -27,7 +27,7 @@ export default () => {
       <StyledNavSidebarTrigger onClick={handleToggle} title='Sidebar'>
         {username ? (
           <>
-            <StyledSidebarTrigger id='NavigationProfileImageHoverOverlay' />
+            <StyledSidebarTrigger id='NavigationProfileImageHoverOverlay' open={show} />
             <img
               id='NavigationProfileImage'
               src={

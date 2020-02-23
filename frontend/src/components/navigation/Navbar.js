@@ -1,16 +1,15 @@
 import React, { useContext } from "react";
 import { Navbar, NavDropdown, Nav, Container } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { github } from "react-icons-kit/icomoon/github";
-import Icon from "react-icons-kit";
 import { CSSTransition } from "react-transition-group";
+import { FaGithub } from "react-icons/fa";
 
 import RenderNotifications from "./../notifications/RenderNotifications";
 import NavigationContext from "./NavigationContext";
 import "./Navigation.scss";
 import Sidebar from "./sidebar/Sidebar";
 
-function NavigationBar(prop) {
+export default prop => {
   const { visible, shrinkNavbar } = useContext(NavigationContext);
 
   return (
@@ -50,7 +49,7 @@ function NavigationBar(prop) {
               </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href='https://github.com/mambans/Notifies'>
-                <Icon icon={github} size={24} style={{ paddingRight: "0.75rem" }}></Icon>
+                <FaGithub size={24} style={{ marginRight: "0.75rem" }} />
                 Notifies -Github
               </NavDropdown.Item>
             </NavDropdown>
@@ -60,6 +59,4 @@ function NavigationBar(prop) {
       </Navbar>
     </CSSTransition>
   );
-}
-
-export default NavigationBar;
+};

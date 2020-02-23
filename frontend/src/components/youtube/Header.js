@@ -1,7 +1,7 @@
-import { list2 } from "react-icons-kit/icomoon/list2";
+import { MdFormatListBulleted } from "react-icons/md";
 import { reload } from "react-icons-kit/iconic/reload";
 import { Spinner } from "react-bootstrap";
-import { youtube } from "react-icons-kit/icomoon/youtube";
+import { FaYoutube } from "react-icons/fa";
 import Alert from "react-bootstrap/Alert";
 import Icon from "react-icons-kit";
 import Moment from "react-moment";
@@ -82,7 +82,7 @@ export default data => {
         </HeaderLeftSubcontainer>
         <SubFeedError error={data.requestError}></SubFeedError>
         <HeaderTitle>
-          <Icon icon={youtube} size={32} style={{ padding: "0 10px", color: "#a80000" }}></Icon>
+          <FaYoutube size={32} style={{ color: "#a80000" }} />
           Youtube
         </HeaderTitle>
         <Popup
@@ -98,14 +98,14 @@ export default data => {
                 display: "flex",
               }}>
               <ButtonList>
-                <Icon
-                  icon={list2}
+                <MdFormatListBulleted
                   size={22}
                   style={{
                     height: "22px",
                     alignItems: "center",
                     display: "flex",
-                  }}></Icon>
+                  }}
+                />
               </ButtonList>
             </div>
           }

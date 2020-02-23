@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Icon } from "react-icons-kit";
-import { cross } from "react-icons-kit/icomoon/cross";
+import { MdDelete } from "react-icons/md";
 import { Animated } from "react-animated-css";
 import Alert from "react-bootstrap/Alert";
 import axios from "axios";
@@ -153,7 +152,7 @@ const ChannelListElement = data => {
               setUnfollowResponse("Failed");
             });
         }}>
-        <Icon icon={cross} size={18} />
+        <MdDelete size={18} />
       </UnfollowButton>
     </li>
   );

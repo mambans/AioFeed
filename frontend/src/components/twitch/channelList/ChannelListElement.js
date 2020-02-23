@@ -1,11 +1,11 @@
-import { cross } from "react-icons-kit/icomoon/cross";
-import { ic_delete } from "react-icons-kit/md/ic_delete";
-import { ic_playlist_add } from "react-icons-kit/md/ic_playlist_add";
-import { Icon } from "react-icons-kit";
+import { MdDelete } from "react-icons/md";
+import { MdVideoCall } from "react-icons/md";
+import { MdVideocamOff } from "react-icons/md";
+import { MdVideocam } from "react-icons/md";
 import { Link } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 import axios from "axios";
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 
 import { UnfollowButton, VodRemoveButton, VodAddButton } from "./../../sharedStyledComponents";
 import AccountContext from "./../../account/AccountContext";
@@ -13,7 +13,9 @@ import UnfollowStream from "./../UnfollowStream";
 
 const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
   const [unfollowResponse, setUnfollowResponse] = useState(null);
+  const [isHovered, setIsHovered] = useState();
   const refUnfollowAlert = useRef();
+  const vodButton = useRef();
   const { authKey, username } = useContext(AccountContext);
 
   async function addChannel(channel) {
@@ -107,6 +109,27 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
     }
   }
 
+  const handleMouseOver = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseOut = () => {
+    setIsHovered(false);
+  };
+
+  useEffect(() => {
+    if (vodButton.current) {
+      const refEle = vodButton.current;
+      refEle.addEventListener("mouseenter", handleMouseOver);
+      refEle.addEventListener("mouseleave", handleMouseOut);
+
+      return () => {
+        refEle.removeEventListener("mouseenter", handleMouseOver);
+        refEle.removeEventListener("mouseleave", handleMouseOut);
+      };
+    }
+  }, []);
+
   return (
     <li key={data.to_id}>
       <UnfollowAlert />
@@ -137,23 +160,29 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
       <div>
         {ChannelVodEnabled() ? (
           <VodRemoveButton
+            ref={vodButton}
             data-tip={"Remove " + data.to_name + " vods."}
             title={"Remove " + data.to_name + " vods."}
             variant='link'
             onClick={() => {
               removeChannel(data.to_name);
             }}>
-            <Icon icon={ic_delete} size={24} />
+            {isHovered ? (
+              <MdVideocamOff size={24} color='red' />
+            ) : (
+              <MdVideocam size={24} color='green' />
+            )}
           </VodRemoveButton>
         ) : (
           <VodAddButton
+            ref={vodButton}
             data-tip={"Add " + data.to_name + " vods."}
             title={"Add " + data.to_name + " vods."}
             variant='link'
             onClick={() => {
               addChannel(data.to_name);
             }}>
-            <Icon icon={ic_playlist_add} size={26} />
+            <MdVideoCall size={24} />
           </VodAddButton>
         )}
         <UnfollowButton
@@ -174,7 +203,7 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
                 setUnfollowResponse("Failed");
               });
           }}>
-          <Icon icon={cross} size={18} />
+          <MdDelete size={22} />
         </UnfollowButton>
       </div>
     </li>

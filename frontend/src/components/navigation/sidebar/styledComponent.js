@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import { Form, Button } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
-import Icon from "react-icons-kit";
-import { outdent } from "react-icons-kit/fa/outdent";
-import { ic_refresh } from "react-icons-kit/md/ic_refresh";
+import { MdRefresh } from "react-icons/md";
+import { MdFormatIndentDecrease } from "react-icons/md";
 
 const StyledNavSidebar = styled.div`
   position: fixed;
@@ -153,23 +152,21 @@ const StyledUploadImageButon = styled(Button).attrs({ variant: "outline-secondar
   }
 `;
 
-const StyledSidebarTrigger = styled(Icon).attrs({ icon: outdent, size: 22 })`
+const StyledSidebarTrigger = styled(MdFormatIndentDecrease).attrs({ size: 32 })`
   position: absolute;
-  width: 52px;
-  height: 80%;
-  border: 2px solid #c6c6c6;
-  border-radius: 80%;
-  -webkit-border-radius: 80%;
-  -moz-border-radius: 80%;
-  -ms-border-radius: 80%;
-  -o-border-radius: 80%;
+  /* width: 52px;
+  height: 80%; */
+  /* border: 2px solid #c6c6c6; */
+  border-radius: 50%;
   display: flex !important  ;
   justify-content: center;
   align-items: center;
-  transition: opacity 0.5s;
-  color: #ffffffd9;
+  transition: opacity 0.5s, transform 250ms;
+  color: #ffffff;
   background: #0000003b;
   opacity: 0;
+  padding: 2px;
+  transform: ${({ open }) => (open ? "rotateY(180deg)" : "unset")};
 
   &:hover {
     opacity: 1;
@@ -346,7 +343,7 @@ const StyledConnectContainer = styled.div`
   }
 `;
 
-const StyledReconnectIcon = styled(Icon).attrs({ icon: ic_refresh, size: 30 })`
+const StyledReconnectIcon = styled(MdRefresh).attrs({ size: 30 })`
   position: absolute;
   width: 50px;
   height: 50px;

@@ -1,17 +1,17 @@
 import { Button } from "react-bootstrap";
-import { checkmark } from "react-icons-kit/icomoon/checkmark";
-import { ic_account_box } from "react-icons-kit/md/ic_account_box";
-import { ic_refresh } from "react-icons-kit/md/ic_refresh";
-import { Icon } from "react-icons-kit";
 import { NavLink } from "react-router-dom";
-import { out } from "react-icons-kit/entypo/out";
 import { Redirect } from "react-router-dom";
-import { twitch } from "react-icons-kit/icomoon/twitch";
-import { youtube } from "react-icons-kit/icomoon/youtube";
 import axios from "axios";
 import Popup from "reactjs-popup";
 import React, { useContext } from "react";
 import uniqid from "uniqid";
+
+import { IoMdCheckmark } from "react-icons/io";
+import { MdAccountCircle } from "react-icons/md";
+import { MdRefresh } from "react-icons/md";
+import { FaTwitch } from "react-icons/fa";
+import { FaYoutube } from "react-icons/fa";
+import { GoSignOut } from "react-icons/go";
 
 import AccountContext from "./../account/AccountContext";
 import FeedsContext from "./../feed/FeedsContext";
@@ -195,13 +195,13 @@ export default () => {
               );
             }}>
             Connect Twitch
-            <Icon icon={twitch} size={24} style={{ paddingLeft: "0.75rem" }} />
+            <FaTwitch size={24} style={{ marginLeft: "0.75rem" }} />
           </Button>
         ) : (
           <div className={styles.connectContainer}>
             <p className={[styles.twitchConnected, styles.connected].join(" ")}>
               Connected to Twitch
-              <Icon icon={checkmark} size={24} style={{ paddingLeft: "0.75rem" }} />
+              <GoSignOut size={24} style={{ marginLeft: "0.75rem" }} />
             </p>
             <Button
               className={styles.connectTwitch}
@@ -216,7 +216,7 @@ export default () => {
                   setEnableTwitchVods
                 );
               }}>
-              <Icon icon={ic_refresh} size={24} />
+              <MdRefresh size={24} />
             </Button>
             <Button className={styles.disconnectButton} onClick={disconnectTwitch}>
               Disconnect Twitch
@@ -253,13 +253,13 @@ export default () => {
               );
             }}>
             Connect Youtube
-            <Icon icon={youtube} size={24} style={{ paddingLeft: "0.75rem" }} />
+            <FaYoutube size={24} style={{ marginLeft: "0.75rem" }} />
           </Button>
         ) : (
           <div className={styles.connectContainer}>
             <p className={[styles.youtubeConnected, styles.connected].join(" ")}>
               Connected to Youtube
-              <Icon icon={checkmark} size={24} style={{ paddingLeft: "0.75rem" }} />
+              <IoMdCheckmark size={24} style={{ paddingLeft: "0.75rem" }} />
             </p>
             <Button
               className={styles.connectYoutube}
@@ -275,7 +275,7 @@ export default () => {
                   setEnableYoutube
                 );
               }}>
-              <Icon icon={ic_refresh} size={24} />
+              <MdRefresh size={24} />
             </Button>
             <Button className={styles.disconnectButton} onClick={disconnectYoutube}>
               Disconnect Youtube
@@ -322,14 +322,14 @@ export default () => {
             as={NavLink}
             to='/account'>
             Go to Account page
-            <Icon icon={ic_account_box} size={24} style={{ paddingLeft: "0.75rem" }} />
+            <MdAccountCircle size={24} style={{ marginLeft: "0.75rem" }} />
           </Button>
         ) : null}
         <Button
           className={[styles.notifiesLogoutButton, styles.disconnectButton].join(" ")}
           onClick={logout}>
           Logout from Notifies
-          <Icon icon={out} size={24} style={{ paddingLeft: "0.75rem" }} />
+          <GoSignOut size={24} style={{ marginLeft: "0.75rem" }} />
         </Button>
       </div>
     </div>

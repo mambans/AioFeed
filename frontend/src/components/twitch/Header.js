@@ -1,11 +1,11 @@
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { list2 } from "react-icons-kit/icomoon/list2";
+import { MdFormatListBulleted } from "react-icons/md";
 import { reload } from "react-icons-kit/iconic/reload";
 import { Spinner } from "react-bootstrap";
-import { twitch } from "react-icons-kit/fa/twitch";
 import Icon from "react-icons-kit";
 import Popup from "reactjs-popup";
 import React from "react";
+import { FaTwitch } from "react-icons/fa";
 
 import { HeaderContainerTwitchLive, HeaderLeftSubcontainer } from "./styledComponents";
 import { RefreshButton, HeaderTitle, ButtonList } from "./../sharedStyledComponents";
@@ -64,7 +64,7 @@ export default ({ data, refresh }) => {
         </RefreshButton>
       </HeaderLeftSubcontainer>
       <HeaderTitle>
-        <Icon icon={twitch} size={32} style={{ padding: "0 10px", color: "#6f166f" }}></Icon>
+        <FaTwitch size={32} style={{ color: "#6f166f" }} />
         Twitch Live
       </HeaderTitle>
       <Popup
@@ -80,14 +80,14 @@ export default ({ data, refresh }) => {
               display: "flex",
             }}>
             <ButtonList>
-              <Icon
-                icon={list2}
+              <MdFormatListBulleted
                 size={22}
                 style={{
                   height: "22px",
                   alignItems: "center",
                   display: "flex",
-                }}></Icon>
+                }}
+              />
             </ButtonList>
           </div>
         }

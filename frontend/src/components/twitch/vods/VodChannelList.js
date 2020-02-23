@@ -1,12 +1,10 @@
-import { deleteIconic } from "react-icons-kit/iconic/deleteIconic";
 import { Form, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import axios from "axios";
-import Icon from "react-icons-kit";
 import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
 
 import AccountContext from "./../../account/AccountContext";
 import LoadingList from "./../LoadingList";
+import VodChannelListElement from "./VodChannelListElement";
 
 export default props => {
   const { authKey, username } = useContext(AccountContext);
@@ -147,17 +145,11 @@ export default props => {
         <ul>
           {channels.map(channel => {
             return (
-              <li key={channel}>
-                <Link to={"/channel/" + channel}>{channel}</Link>
-                <Button
-                  variant='danger'
-                  size='sm'
-                  onClick={() => {
-                    removeChannel(channel);
-                  }}>
-                  <Icon icon={deleteIconic} size={24}></Icon>
-                </Button>
-              </li>
+              <VodChannelListElement
+                key={channel}
+                channel={channel}
+                removeChannel={removeChannel}
+              />
             );
           })}
         </ul>

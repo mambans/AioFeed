@@ -1,8 +1,9 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { list2 } from "react-icons-kit/icomoon/list2";
+import { MdFormatListBulleted } from "react-icons/md";
+// import { MdRefresh } from "react-icons/md";
 import { reload } from "react-icons-kit/iconic/reload";
 import { Spinner } from "react-bootstrap";
-import { twitch } from "react-icons-kit/fa/twitch";
+import { FaTwitch } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 import Icon from "react-icons-kit";
@@ -101,14 +102,13 @@ export default () => {
                   style={Utilities.loadingSpinnerSmall}></Spinner>
               </div>
             ) : (
-              <>
-                <Icon icon={reload} size={22}></Icon>
-              </>
+              <Icon icon={reload} size={22}></Icon>
+              // <MdRefresh size={24} />
             )}
           </RefreshButton>
         </div>
         <HeaderTitle style={{ marginLeft: "10px" }}>
-          <Icon icon={twitch} size={32} style={{ paddingLeft: "10px", color: "#6f166f" }}></Icon>{" "}
+          <FaTwitch size={32} style={{ color: "#6f166f" }} />
           Top Streams
         </HeaderTitle>
         <div style={{ display: "flex" }}>
@@ -128,17 +128,17 @@ export default () => {
                   }}>
                   {category !== "" && category !== undefined ? category : "All"}
                 </p>
-                <Icon
-                  icon={list2}
+                <MdFormatListBulleted
                   size={22}
                   style={{
                     height: "22px",
                     alignItems: "center",
                     display: "flex",
-                    paddingLeft: "15px",
+                    marginLeft: "15px",
                     right: "7px",
                     position: "absolute",
-                  }}></Icon>
+                  }}
+                />
               </ButtonList>
             }
             position='bottom center'

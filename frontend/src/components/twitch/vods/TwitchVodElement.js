@@ -1,5 +1,4 @@
-import { eye } from "react-icons-kit/icomoon/eye";
-import { Icon } from "react-icons-kit";
+import { FaRegEye } from "react-icons/fa";
 import axios from "axios";
 import moment from "moment";
 import Moment from "react-moment";
@@ -120,13 +119,12 @@ export default ({ ...data }) => {
           </p>
           <p className={styles.view_count} title='views'>
             {formatViewerNumbers(data.data.view_count)}
-            <Icon
-              icon={eye}
+            <FaRegEye
               size={10}
               style={{
                 color: "rgb(200, 200, 200)",
-                paddingLeft: "5px",
-                paddingTop: "3px",
+                marginLeft: "5px",
+                marginTop: "3px",
                 display: "flex",
                 alignItems: "center",
               }}

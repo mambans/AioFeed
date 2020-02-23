@@ -11,7 +11,7 @@ import Footer from "../footer/Footer";
 import Home from "../home/Home";
 import Legality from "../legality/Legality";
 import LoginModal from "../account/LoginModal";
-import NavigationBar from "../navigation/Navigation";
+import Navbar from "../navigation/Navbar";
 import NavigationProvider from "./../navigation/NavigationProvider";
 import NoMatch from "./NoMatch";
 import NotificationsProvider from "./../notifications/NotificationsProvider";
@@ -32,7 +32,7 @@ const Routes = () => {
         <NotificationsProvider>
           <AccountProvider>
             <FeedsProvider>
-              <NavigationBar fixed />
+              <Navbar fixed />
               <Route
                 render={({ location }) => {
                   const { key } = location;

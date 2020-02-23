@@ -7,6 +7,7 @@ export default ({
   TwitchPlayer,
   type,
   OpenedDate,
+  setIsPaused,
 }) => {
   useEffect(() => {
     // console.log("TCL: TwitchPlayer", TwitchPlayer);
@@ -55,6 +56,7 @@ export default ({
         setVolumeMuted(!TwitchPlayer.getMuted());
       } else if (e.button === 0 && TwitchPlayer.isPaused()) {
         TwitchPlayer.play();
+        setIsPaused(false);
       } else if (
         e.button === 0 &&
         TwitchPlayer.getMuted() &&
@@ -69,8 +71,10 @@ export default ({
       if (e.key === "Space" || e.keyCode === 32) {
         if (TwitchPlayer.isPaused()) {
           TwitchPlayer.play();
+          setIsPaused(false);
         } else {
           TwitchPlayer.pause();
+          setIsPaused(true);
         }
       } else if (e.key === "f") {
         toggleFullscreen2();
@@ -131,7 +135,15 @@ export default ({
       document.body.removeEventListener("keyup", keyboardEvents);
       // document.body.removeEventListener("dblclick", toggleFullscreen);
     };
-  }, [volumeEventOverlayRef, setVolumeMuted, setVolumeText, TwitchPlayer, type, OpenedDate]);
+  }, [
+    volumeEventOverlayRef,
+    setVolumeMuted,
+    setVolumeText,
+    TwitchPlayer,
+    type,
+    OpenedDate,
+    setIsPaused,
+  ]);
 
   return null;
 };

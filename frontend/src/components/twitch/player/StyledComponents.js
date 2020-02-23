@@ -1,9 +1,6 @@
 import styled from "styled-components";
-import Icon from "react-icons-kit";
-import { loop } from "react-icons-kit/icomoon/loop";
-import { play } from "react-icons-kit/fa/play";
-import { paus } from "react-icons-kit/entypo/paus";
-import { infoCircle } from "react-icons-kit/fa/infoCircle";
+import { FaInfoCircle } from "react-icons/fa";
+import { MdCompareArrows } from "react-icons/md";
 
 const VideoAndChatContainer = styled.div`
   display: flex;
@@ -28,6 +25,20 @@ const VideoAndChatContainer = styled.div`
   div#chat {
     grid-area: chat;
   }
+
+  #ToggleNavbarButton {
+    position: absolute;
+    z-index: 1;
+    padding: 5px;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: opacity 300ms, transform 300ms;
+    padding-top: 10px;
+
+      &:hover {
+      opacity: 1;
+    }
+  }
 `;
 
 const StyledChat = styled.iframe`
@@ -43,24 +54,7 @@ const StyledVideo = styled.iframe`
   border: none;
 `;
 
-const ToggleNavbarButton = styled(Icon).attrs({
-  size: 30,
-  // icon: props => props.state || ic_vertical_align_bottom,
-})`
-  position: absolute;
-  z-index: 1;
-  padding: 5px;
-  cursor: pointer;
-  opacity: 0.4;
-  transition: opacity 300ms;
-  padding-top: 10px;
-
-  &:hover {
-    opacity: 1;
-  }
-`;
-
-const ToggleSwitchChatSide = styled(Icon).attrs({ size: 30, icon: loop })`
+const ToggleSwitchChatSide = styled(MdCompareArrows).attrs({ size: 30 })`
   position: absolute;
   z-index: 1;
   cursor: pointer;
@@ -93,12 +87,13 @@ const PlayerNavbar = styled.div`
     font-size: 1rem !important;
     display: flex;
     transition: color 200ms;
+    align-items: center;
 
     &:hover {
       color: #ffffff;
     }
 
-    i {
+    svg {
       display: flex;
       align-items: center;
       padding-right: 7px;
@@ -131,6 +126,23 @@ const VolumeEventOverlay = styled.div`
     opacity: 1 !important ;
     transition: opacity 250ms 0s ease;
   }
+
+  #PausePlay {
+  color: #f4f4f49c;
+  cursor: pointer;
+  position: absolute;
+  bottom: 10px;
+  transition: color 150ms;
+  margin: 5px 10px;
+
+    &:hover {
+      color: #ffffff;
+    }
+
+  }
+
+
+
 `;
 
 const StyledVolumeSlider = styled.div`
@@ -186,36 +198,35 @@ const StyledVolumeSlider = styled.div`
   }
 `;
 
-const PausePlay = styled(Icon).attrs(props => ({
-  icon: props.ispaused === "true" ? play : paus,
-  size: 30,
-}))`
-  color: #f4f4f49c;
-  cursor: pointer;
-  position: absolute;
-  bottom: 10px;
-  transition: color 150ms;
-  margin: 5px 10px;
+// const PausePlay = styled(props => (props.ispaused === "true" ? FaPlay : FaPause)).attrs({
+// const PausePlay = styled(props => (props.ispaused === "true" ? FaPlay : FaPause)).attrs({
+//   size: 30,
+// })`
+//   color: #f4f4f49c;
+//   cursor: pointer;
+//   position: absolute;
+//   bottom: 10px;
+//   transition: color 150ms;
+//   margin: 5px 10px;
 
-  &:hover {
-    color: #ffffff;
-  }
-`;
+//   &:hover {
+//     color: #ffffff;
+//   }
+// `;
 
-const PausePlayOverlay = styled(Icon).attrs(props => ({
-  icon: props.ispaused === "true" ? play : paus,
-  size: 70,
-}))`
-  color: white;
-  cursor: pointer;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  display: flex !important;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.5);
-`;
+// const PausePlayOverlay = styled(props => (props.ispaused === "true" ? FaPlay : FaPause)).attrs({
+//   size: 70,
+// })`
+//   color: white;
+//   cursor: pointer;
+//   position: absolute;
+//   width: 100%;
+//   height: 100%;
+//   justify-content: center;
+//   display: flex !important;
+//   align-items: center;
+//   background: rgba(0, 0, 0, 0.5);
+// `;
 
 const InfoDisplay = styled.div`
   display: grid;
@@ -271,7 +282,8 @@ const InfoDisplay = styled.div`
   }
 `;
 
-const ButtonShowStats = styled(Icon).attrs({ icon: infoCircle, size: 26 })`
+// const ButtonShowStats = styled(Icon).attrs({ icon: infoCircle, size: 26 })`
+const ButtonShowStats = styled(FaInfoCircle).attrs({ size: 26 })`
   position: absolute;
   bottom: 12px;
   margin: 0;
@@ -304,7 +316,7 @@ const ButtonShowQualities = styled.p`
     opacity: 1;
   }
 
-  i {
+  svg {
     padding-right: 7px;
   }
 `;
@@ -348,13 +360,12 @@ const PlaybackStats = styled.div`
 export {
   VideoAndChatContainer,
   StyledChat,
-  ToggleNavbarButton,
   ToggleSwitchChatSide,
   PlayerNavbar,
   VolumeEventOverlay,
   StyledVolumeSlider,
-  PausePlay,
-  PausePlayOverlay,
+  // PausePlay,
+  // PausePlayOverlay,
   InfoDisplay,
   ButtonShowStats,
   PlaybackStats,

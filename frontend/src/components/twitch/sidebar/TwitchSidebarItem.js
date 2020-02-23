@@ -1,8 +1,7 @@
 import React from "react";
 import Moment from "react-moment";
-import { Icon } from "react-icons-kit";
-import { eye } from "react-icons-kit/icomoon/eye";
-import { clock } from "react-icons-kit/icomoon/clock";
+import { FaRegEye } from "react-icons/fa";
+import { FaRegClock } from "react-icons/fa";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";
@@ -58,8 +57,7 @@ const TwitchSidebarItem = data => {
         </div>
         <p className={styles.sidebarViewers}>
           {formatViewerNumbers(data.stream.viewer_count)}
-          <Icon
-            icon={eye}
+          <FaRegEye
             size={10}
             style={{
               color: "rgb(120, 120, 120)",
@@ -96,8 +94,7 @@ const TwitchSidebarItem = data => {
           )}
           <div className={styles.sidebarDuration}>
             <Moment durationFromNow>{data.stream.started_at}</Moment>
-            <Icon
-              icon={clock}
+            <FaRegClock
               size={9}
               style={{
                 color: "rgb(120, 120, 120)",

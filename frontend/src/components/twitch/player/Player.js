@@ -1,14 +1,14 @@
 import { CSSTransition } from "react-transition-group";
-import { ic_account_circle } from "react-icons-kit/md/ic_account_circle";
-import { ic_fullscreen } from "react-icons-kit/md/ic_fullscreen";
-import { ic_fullscreen_exit } from "react-icons-kit/md/ic_fullscreen_exit";
-import { ic_vertical_align_bottom } from "react-icons-kit/md/ic_vertical_align_bottom";
-import { ic_vertical_align_top } from "react-icons-kit/md/ic_vertical_align_top";
 import { useParams, useLocation, Link } from "react-router-dom";
-import { ic_settings } from "react-icons-kit/md/ic_settings";
+import { MdSettings } from "react-icons/md";
+import { FaPlay } from "react-icons/fa";
+import { FaPause } from "react-icons/fa";
+import { MdVerticalAlignBottom } from "react-icons/md";
+import { MdFullscreen } from "react-icons/md";
+import { MdFullscreenExit } from "react-icons/md";
+import { MdAccountCircle } from "react-icons/md";
 
 import axios from "axios";
-import Icon from "react-icons-kit";
 import Moment from "react-moment";
 import React, { useContext, useEffect, useState, useRef, useCallback } from "react";
 
@@ -16,13 +16,10 @@ import {
   ButtonShowQualities,
   ButtonShowStats,
   InfoDisplay,
-  PausePlay,
-  PausePlayOverlay,
   PlaybackStats,
   PlayerNavbar,
   QualitiesList,
   StyledChat,
-  ToggleNavbarButton,
   ToggleSwitchChatSide,
   VideoAndChatContainer,
   VolumeEventOverlay,
@@ -79,13 +76,16 @@ export default () => {
     setChannelInfo(channel);
   }, [twitchToken]);
 
-  const fullscreenIcon = () => {
-    // if (twitchPlayer.current && twitchPlayer.current.getFullscreen()) {
-    if (twitchPlayer.current) {
-      return ic_fullscreen_exit;
+  const PausePlay = () => {
+    if (twitchPlayer.current.isPaused()) {
+      twitchPlayer.current.play();
+      setIsPaused(false);
     } else {
-      return ic_fullscreen;
+      twitchPlayer.current.pause();
+      setIsPaused(true);
     }
+
+    return null;
   };
 
   useEffect(() => {
@@ -190,7 +190,7 @@ export default () => {
         <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
           <PlayerNavbar>
             <Link to={`/channel/${id}`}>
-              <Icon icon={ic_account_circle} size={20}></Icon>
+              <MdAccountCircle size={20} />
               {id}'s channel page
             </Link>
           </PlayerNavbar>
@@ -227,31 +227,10 @@ export default () => {
                 ) : null}
               </InfoDisplay>
               {isPaused ? (
-                <PausePlayOverlay
-                  ispaused={isPaused.toString()}
-                  onClick={() => {
-                    if (twitchPlayer.current.isPaused()) {
-                      twitchPlayer.current.play();
-                      setIsPaused(false);
-                    } else {
-                      twitchPlayer.current.pause();
-                      setIsPaused(true);
-                    }
-                  }}
-                />
-              ) : null}
-              <PausePlay
-                ispaused={isPaused.toString()}
-                onClick={() => {
-                  if (twitchPlayer.current.isPaused()) {
-                    twitchPlayer.current.play();
-                    setIsPaused(false);
-                  } else {
-                    twitchPlayer.current.pause();
-                    setIsPaused(true);
-                  }
-                }}
-              />
+                <FaPlay id='PausePlay' size={30} onClick={PausePlay} />
+              ) : (
+                <FaPause id='PausePlay' size={30} onClick={PausePlay} />
+              )}
               <VolumeSlider
                 volume={volumeText}
                 setVolumeText={setVolumeText}
@@ -319,21 +298,33 @@ export default () => {
                   setShowQualities(!showQualities);
                   setQualities(twitchPlayer.current.getQualities());
                 }}>
-                <Icon icon={ic_settings} size={26}></Icon>
+                {/* <Icon icon={ic_settings} size={26}></Icon> */}
+                <MdSettings size={26} />
                 {activeQuality
                   ? activeQuality.name
                   : twitchPlayer.current
                   ? twitchPlayer.current.getQuality().name
                   : null}
               </ButtonShowQualities>
-              <Icon
-                onClick={() => {
-                  toggleFullscreen2(twitchPlayer.current);
-                }}
-                size={30}
-                icon={fullscreenIcon()}
-                style={{ position: "absolute", right: "12px", bottom: "12px", cursor: "pointer" }}
-              />
+
+              {true ? (
+                <MdFullscreen
+                  size={30}
+                  style={{ position: "absolute", right: "12px", bottom: "12px", cursor: "pointer" }}
+                  onClick={() => {
+                    toggleFullscreen2(twitchPlayer.current);
+                  }}
+                />
+              ) : (
+                <MdFullscreenExit
+                  size={30}
+                  style={{ position: "absolute", right: "12px", bottom: "12px", cursor: "pointer" }}
+                  onClick={() => {
+                    toggleFullscreen2(twitchPlayer.current);
+                  }}
+                />
+              )}
+
               <ToggleSwitchChatSide
                 id='switchSides'
                 switched={switched.toString()}
@@ -348,15 +339,20 @@ export default () => {
                 setVolumeText={setVolumeText}
                 setVolumeMuted={setVolumeMuted}
                 TwitchPlayer={twitchPlayer.current}
+                setIsPaused={setIsPaused}
                 type='live'
                 OpenedDate={OpenedDate}
               />
             ) : null}
           </div>
           <div id='chat'>
-            <ToggleNavbarButton
-              icon={visible ? ic_vertical_align_top : ic_vertical_align_bottom}
-              title={visible ? "Hide navbar" : "Show navbar"}
+            <MdVerticalAlignBottom
+              style={{
+                transform: visible ? "rotateX(180deg)" : "unset",
+              }}
+              size={45}
+              id='ToggleNavbarButton'
+              title='Show navbar'
               onClick={() => {
                 setVisible(!visible);
               }}
@@ -380,7 +376,7 @@ export default () => {
             {nameFromHash ? (
               <Link to={`/channel/${nameFromHash}`}>
                 <div id='icon'>
-                  <Icon icon={ic_account_circle} size={20} />
+                  <MdAccountCircle size={20} />
                 </div>
                 {nameFromHash}'s channel page
               </Link>
@@ -395,10 +391,14 @@ export default () => {
             top: visible ? "75px" : "0",
             display: "unset",
           }}>
-          <ToggleNavbarButton
-            icon={visible ? ic_vertical_align_top : ic_vertical_align_bottom}
-            title={visible ? "Hide navbar" : "Show navbar"}
-            style={{ right: "10px" }}
+          <MdVerticalAlignBottom
+            style={{
+              transform: visible ? "rotateX(180deg)" : "unset",
+              right: "10px",
+            }}
+            size={45}
+            id='ToggleNavbarButton'
+            title='Show navbar'
             onClick={() => {
               setVisible(!visible);
             }}
@@ -410,6 +410,7 @@ export default () => {
               setVolumeMuted={setVolumeMuted}
               TwitchPlayer={twitchPlayer.current}
               OpenedDate={OpenedDate}
+              setIsPaused={setIsPaused}
             />
           ) : null}
         </VideoAndChatContainer>

@@ -1,5 +1,5 @@
-import { ic_favorite } from "react-icons-kit/md/ic_favorite";
-import { ic_favorite_border } from "react-icons-kit/md/ic_favorite_border";
+import { MdFavorite } from "react-icons/md";
+import { MdFavoriteBorder } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -22,7 +22,6 @@ import {
   BannerInfoOverlay,
   LiveIndicator,
   LiveIndicatorIcon,
-  FollowUnfollowButton,
 } from "./StyledComponents";
 
 export default () => {
@@ -282,6 +281,7 @@ export default () => {
           setFollowing(true);
         })
         .catch(error => {
+          console.log("CheckIfFollowed: Not Following. (or an Error occured)");
           setFollowing(false);
         });
     };
@@ -374,9 +374,10 @@ export default () => {
                           Unfollow <strong>{channelInfo.display_name}</strong>.
                         </Tooltip>
                       }>
-                      <FollowUnfollowButton
-                        following={following.toString()}
-                        icon={ic_favorite}
+                      <MdFavorite
+                        size={30}
+                        // id='FollowUnfollowButton'
+                        id='IsFollowed'
                         onClick={() => {
                           setFollowing(false);
                           UnfollowStream({
@@ -404,9 +405,9 @@ export default () => {
                           Follow <strong>{channelInfo.display_name}</strong>.
                         </Tooltip>
                       }>
-                      <FollowUnfollowButton
-                        following={following.toString()}
-                        icon={ic_favorite_border}
+                      <MdFavoriteBorder
+                        size={30}
+                        id='IsNotFollowed'
                         onClick={() => {
                           setFollowing(true);
                           followStream(channelInfo._id);

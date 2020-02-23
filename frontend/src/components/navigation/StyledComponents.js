@@ -11,6 +11,18 @@ const StyledNavSidebarTrigger = styled.div`
   -o-border-radius: 30px;
   height: inherit;
   display: flex;
+  justify-content: center;
+
+  &:hover {
+    svg {
+      opacity: 1;
+    }
+
+    img#NavigationProfileImage {
+      border: 2px solid rgb(200, 200, 200);
+      box-shadow: 0px 0px 15px #000000;
+    }
+  }
 
   img#NavigationProfileImage {
     /* margin-left: 20px; */
@@ -32,11 +44,13 @@ const StyledNavSidebarTrigger = styled.div`
     border: 2px solid transparent;
     box-shadow: 0px 0px 10px #000000;
 
-    &:hover {
+    /* &:hover {
       border: 2px solid rgb(200, 200, 200);
       box-shadow: 0px 0px 15px #000000;
+
+
     }
-  }
+  } */
 `;
 
 const StyledLoginButton = styled.p`

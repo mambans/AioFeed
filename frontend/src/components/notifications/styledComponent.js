@@ -84,8 +84,8 @@ const UnseenNotifcationCount = styled.div`
   width: 24px;
   border-radius: 50%;
   position: absolute;
-  top: -14px;
-  left: 27px;
+  top: -7px;
+  left: 20px;
   line-height: 24px;
   text-align: center;
 `;

@@ -1,10 +1,10 @@
-import { cross } from "react-icons-kit/icomoon/cross";
+import { MdDelete } from "react-icons/md";
 import { CSSTransition } from "react-transition-group";
-import { eye } from "react-icons-kit/icomoon/eye";
-import { Icon } from "react-icons-kit";
+import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { notification } from "react-icons-kit/icomoon/notification";
-import { twitch } from "react-icons-kit/fa/twitch";
+import { FiAlertCircle } from "react-icons/fi";
+import { FaTwitch } from "react-icons/fa";
+
 import Alert from "react-bootstrap/Alert";
 import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
@@ -24,8 +24,7 @@ const HOVER_DELAY = 500; // 1000
 function NewHighlightNoti({ data }) {
   if (data.newlyAddedStreams.includes(data.data.user_name)) {
     return (
-      <Icon
-        icon={notification}
+      <FiAlertCircle
         size={22}
         style={{
           position: "absolute",
@@ -235,7 +234,7 @@ function StreamEle(data) {
                 alt=''
                 href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
                 style={{ gridRow: "1" }}>
-                <Icon size={20} icon={twitch} style={{ color: "purple" }} />
+                <FaTwitch size={20} style={{ color: "purple" }} />
               </a>
               <OverlayTrigger
                 key={"bottom"}
@@ -268,7 +267,7 @@ function StreamEle(data) {
                         console.log("::Try re-authenticate from the sidebar::");
                       });
                   }}>
-                  <Icon icon={cross} size={18} className={styles.unfollowIcon} />
+                  <MdDelete size={22} className={styles.unfollowIcon} />
                 </UnfollowButton>
               </OverlayTrigger>
             </>
@@ -294,8 +293,7 @@ function StreamEle(data) {
           <p className={styles.viewers} title='Viewers'>
             {/* {data.data.viewer_count} */}
             {formatViewerNumbers(data.data.viewer_count)}
-            <Icon
-              icon={eye}
+            <FaRegEye
               size={14}
               style={{
                 color: "rgb(200, 200, 200)",

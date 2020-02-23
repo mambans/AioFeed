@@ -173,7 +173,7 @@
 
 .gameContainer {
   display: grid;
-  grid-template-columns: 10% 70% 20%;
+  grid-template-columns: 10% 65% 25%;
   width: 336px;
 
   .game_img {
@@ -385,6 +385,7 @@
       display: flex;
       justify-content: space-between;
       font-size: 1.05em;
+      align-items: center;
 
       i {
         // width: 100% !important;
@@ -408,6 +409,7 @@
       // overflow: hidden;
       display: flex;
       justify-content: space-between;
+      align-items: center;
 
       i {
         // width: 100%;

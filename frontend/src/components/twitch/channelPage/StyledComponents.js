@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
-import Icon from "react-icons-kit";
-import { videoCamera } from "react-icons-kit/icomoon/videoCamera";
+import { MdVideocam } from "react-icons/md";
 
 const ChannelContainer = styled.div`
   min-height: 100vh;
@@ -24,6 +23,42 @@ const BannerInfoOverlay = styled.div`
   position: absolute;
   top: 65px;
   width: 100%;
+
+  #IsFollowed {
+    cursor: pointer;
+    color: green;
+    transition: color 250ms;
+    margin: 0 10px;
+    margin-right: -30px;
+
+    &:hover {
+      color: red;
+    }
+  }
+
+  #IsNotFollowed {
+    cursor: pointer;
+    color: red;
+    transition: color 250ms;
+    margin: 0 10px;
+    margin-right: -30px;
+
+    &:hover {
+      color: green;
+    }
+  }
+
+  /* #FollowUnfollowButton {
+    cursor: pointer;
+    color: ${props => (props.following === true ? "green" : "white")};
+    transition: color 150ms;
+    margin: 0 10px;
+    margin-right: -30px;
+
+    &:hover {
+      color: ${({ following }) => (following === "true" ? "red" : "green")};
+    }
+  } */
 `;
 
 const Name = styled.div`
@@ -155,7 +190,7 @@ const SortButton = styled(Button).attrs({ variant: "dark" })`
     background-color: rgba(20, 23, 25, 0.9);
   }
 
-  i {
+  svg {
     padding-right: 5px;
   }
 `;
@@ -205,34 +240,8 @@ const LiveIndicator = styled.div`
   }
 `;
 
-const LiveIndicatorIcon = styled(Icon).attrs({ icon: videoCamera, size: 30 })`
+const LiveIndicatorIcon = styled(MdVideocam).attrs({ size: 30 })`
   /* position: absolute; */
-`;
-
-// const PreFollowUnfollowButton = ({ p_icon, props }) => {
-//   return <Icon icon={p_icon} size={30} {...props}></Icon>;
-// };
-
-// const FollowUnfollowButton = styled(PreFollowUnfollowButton)`
-//   color: red;
-// `;
-
-// const FollowUnfollowButton = styled(Icon).attrs({
-//   icon: props => (props.followed ? checkmark : checkmark2),
-// })`
-//   color: red;
-// `;
-
-const FollowUnfollowButton = styled(Icon).attrs({ size: 30 })`
-  cursor: pointer;
-  color: ${({ following }) => (following === "true" ? "green" : "white ")};
-  transition: color 150ms;
-  padding: 0 10px;
-  margin-right: -30px;
-
-  &:hover {
-    color: ${({ following }) => (following === "true" ? "red" : "green")};
-  }
 `;
 
 export {
@@ -245,5 +254,4 @@ export {
   SortDropDownList,
   LiveIndicator,
   LiveIndicatorIcon,
-  FollowUnfollowButton,
 };

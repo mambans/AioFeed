@@ -1,7 +1,5 @@
 import { Form, Button } from "react-bootstrap";
-import { ic_delete } from "react-icons-kit/md/ic_delete";
-import { Icon } from "react-icons-kit";
-// import axios from "axios";
+import { MdDelete } from "react-icons/md";
 import Modal from "react-bootstrap/Modal";
 import React, { useState, useContext } from "react";
 
@@ -77,7 +75,7 @@ export default () => {
   return (
     <>
       <DeleteAccountButton onClick={handleShow}>
-        <Icon icon={ic_delete} size={24} />
+        <MdDelete size={24} />
       </DeleteAccountButton>
 
       <Modal

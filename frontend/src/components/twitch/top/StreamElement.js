@@ -1,5 +1,4 @@
-import { eye } from "react-icons-kit/icomoon/eye";
-import { Icon } from "react-icons-kit";
+import { FaRegEye } from "react-icons/fa";
 import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useRef, useCallback, useState, useEffect } from "react";
@@ -73,23 +72,27 @@ function StreamEle(data) {
           {data.data.started_at}
         </Moment>
       </ImageContainer>
-      <OverlayTrigger
-        key={"bottom"}
-        placement={"bottom"}
-        delay={{ show: 250, hide: 0 }}
-        overlay={
-          <Tooltip
-            id={`tooltip-${"bottom"}`}
-            style={{
-              width: "336px",
-            }}>
-            {data.data.title}
-          </Tooltip>
-        }>
-        <VideoTitle to={"/live/" + data.data.user_name.toLowerCase()}>
-          {Utilities.truncate(data.data.title, 50)}
-        </VideoTitle>
-      </OverlayTrigger>
+      {data.data.title.length > 50 ? (
+        <OverlayTrigger
+          key={"bottom"}
+          placement={"bottom"}
+          delay={{ show: 250, hide: 0 }}
+          overlay={
+            <Tooltip
+              id={`tooltip-${"bottom"}`}
+              style={{
+                width: "336px",
+              }}>
+              {data.data.title}
+            </Tooltip>
+          }>
+          <VideoTitle to={"/live/" + data.data.user_name.toLowerCase()}>
+            {Utilities.truncate(data.data.title, 50)}
+          </VideoTitle>
+        </OverlayTrigger>
+      ) : (
+        <VideoTitle to={"/live/" + data.data.user_name.toLowerCase()}>{data.data.title}</VideoTitle>
+      )}
       <div>
         <div className={styles.channelContainer} ref={refChannel}>
           <Link
@@ -122,13 +125,11 @@ function StreamEle(data) {
           <p className={styles.viewers}>
             {/* {data.data.viewer_count} */}
             {formatViewerNumbers(data.data.viewer_count)}
-            <Icon
-              icon={eye}
-              size={14}
+            <FaRegEye
               style={{
                 color: "rgb(200, 200, 200)",
-                paddingLeft: "5px",
-                paddingTop: "3px",
+                marginLeft: "5px",
+                marginTop: "3px",
                 display: "flex",
                 alignItems: "center",
               }}

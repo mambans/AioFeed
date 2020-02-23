@@ -1,6 +1,5 @@
-import { ic_sort } from "react-icons-kit/md/ic_sort";
-import Icon from "react-icons-kit";
 import React, { useState } from "react";
+import { MdSort } from "react-icons/md";
 
 import { SortButton, SortDropDownList } from "./StyledComponents";
 
@@ -13,7 +12,7 @@ export default ({ sortBy, setSortBy, setData }) => {
         onClick={() => {
           setOpen(!open);
         }}>
-        <Icon icon={ic_sort} size={20} />
+        <MdSort size={30} />
         Sort by: {sortBy}
       </SortButton>
       {open ? (

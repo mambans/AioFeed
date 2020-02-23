@@ -1,7 +1,7 @@
-import { list2 } from "react-icons-kit/icomoon/list2";
+import { MdFormatListBulleted } from "react-icons/md";
 import { reload } from "react-icons-kit/iconic/reload";
 import { Spinner } from "react-bootstrap";
-import { video } from "react-icons-kit/iconic/video";
+import { MdVideocam } from "react-icons/md";
 import Alert from "react-bootstrap/Alert";
 import Icon from "react-icons-kit";
 import Moment from "react-moment";
@@ -67,7 +67,7 @@ export default React.forwardRef((props, ref) => {
         ) : null}
       </HeaderLeftSubcontainer>
       <HeaderTitle>
-        <Icon icon={video} size={32} style={{ padding: "0 10px", color: "#6f166f" }}></Icon>
+        <MdVideocam size={32} style={{ color: "#6f166f" }} />
         Twitch vods
       </HeaderTitle>
       <Popup
@@ -83,14 +83,14 @@ export default React.forwardRef((props, ref) => {
               display: "flex",
             }}>
             <ButtonList variant='outline-secondary' className={styles.settings}>
-              <Icon
-                icon={list2}
+              <MdFormatListBulleted
                 size={22}
                 style={{
                   height: "22px",
                   alignItems: "center",
                   display: "flex",
-                }}></Icon>
+                }}
+              />
             </ButtonList>
           </div>
         }

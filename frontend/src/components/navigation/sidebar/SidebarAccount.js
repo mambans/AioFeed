@@ -1,16 +1,15 @@
 import { Button } from "react-bootstrap";
-import { ic_account_box } from "react-icons-kit/md/ic_account_box";
-import { ic_refresh } from "react-icons-kit/md/ic_refresh";
-import { Icon } from "react-icons-kit";
+import { MdAccountCircle } from "react-icons/md";
+import { MdRefresh } from "react-icons/md";
+import { FaTwitch } from "react-icons/fa";
+import { FaYoutube } from "react-icons/fa";
+import { GoSignOut } from "react-icons/go";
+import { FiLogOut } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
-import { out } from "react-icons-kit/entypo/out";
-import { twitch } from "react-icons-kit/icomoon/twitch";
-import { youtube } from "react-icons-kit/icomoon/youtube";
 import axios from "axios";
 import Popup from "reactjs-popup";
 import React, { useContext } from "react";
 import uniqid from "uniqid";
-import { exit } from "react-icons-kit/icomoon/exit";
 
 import Themeselector from "./../../themes/Themeselector";
 import ToggleSwitch from "../../account/ToggleSwitch";
@@ -229,7 +228,7 @@ export default () => {
               );
             }}>
             Connect Twitch
-            <Icon icon={twitch} size={24} style={{ paddingLeft: "0.75rem" }} />
+            <FaTwitch ize={24} style={{ marginLeft: "0.75rem" }} />
           </StyledConnectTwitch>
         </StyledConnectContainer>
       ) : (
@@ -257,7 +256,7 @@ export default () => {
             title='Disconnect'
             style={{ backgroundColor: "hsla(268, 77%, 15%, 1)" }}
             onClick={disconnectTwitch}>
-            <Icon icon={exit} size={24} />
+            <FiLogOut size={24} />
           </StyledConnectTwitch>
         </StyledConnectContainer>
       )}
@@ -277,7 +276,7 @@ export default () => {
               );
             }}>
             Connect Youtube
-            <Icon icon={youtube} size={24} style={{ paddingLeft: "0.75rem" }} />
+            <FaYoutube size={24} style={{ marginLeft: "0.75rem" }} />
           </StyledConnectYoutube>
         </div>
       ) : (
@@ -296,7 +295,7 @@ export default () => {
                 setEnableYoutube
               );
             }}>
-            <Icon icon={ic_refresh} size={24} />
+            <MdRefresh size={24} />
           </StyledConnectYoutube>
           <StyledConnectYoutube
             title='Disconnect'
@@ -314,12 +313,12 @@ export default () => {
         "http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/account" ? (
           <Button label='linkAsButton' style={{ width: "100%" }} as={NavLink} to='/account'>
             Account page
-            <Icon icon={ic_account_box} size={24} style={{ paddingLeft: "0.75rem" }} />
+            <MdAccountCircle size={24} style={{ marginLeft: "0.75rem" }} />
           </Button>
         ) : null}
         <Button style={{ width: "100%" }} label='logout' onClick={logout}>
           Logout
-          <Icon icon={out} size={24} style={{ paddingLeft: "0.75rem" }} />
+          <GoSignOut size={24} style={{ marginLeft: "0.75rem" }} />
         </Button>
       </StyledLogoutContiner>
     </div>

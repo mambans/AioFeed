@@ -1,19 +1,12 @@
 import { CSSTransition } from "react-transition-group";
-import { ic_account_circle } from "react-icons-kit/md/ic_account_circle";
-import { ic_vertical_align_bottom } from "react-icons-kit/md/ic_vertical_align_bottom";
-import { ic_vertical_align_top } from "react-icons-kit/md/ic_vertical_align_top";
 import { Link } from "react-router-dom";
+import { MdAccountCircle } from "react-icons/md";
+import { MdVerticalAlignBottom } from "react-icons/md";
 import { useParams, useLocation } from "react-router-dom";
-import Icon from "react-icons-kit";
 import React, { useContext, useEffect } from "react";
 
 import NavigationContext from "./../../navigation/NavigationContext";
-import {
-  VideoAndChatContainer,
-  StyledVideo,
-  ToggleNavbarButton,
-  PlayerNavbar,
-} from "./StyledComponents";
+import { VideoAndChatContainer, StyledVideo, PlayerNavbar } from "./StyledComponents";
 
 export default () => {
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
@@ -40,7 +33,7 @@ export default () => {
         <PlayerNavbar>
           {nameFromHash ? (
             <Link to={`/channel/${nameFromHash}`}>
-              <Icon icon={ic_account_circle} size={20}></Icon>
+              <MdAccountCircle size={20} />
               {nameFromHash}'s channel page
             </Link>
           ) : null}
@@ -53,10 +46,14 @@ export default () => {
           top: visible ? "75px" : "0",
           display: "unset",
         }}>
-        <ToggleNavbarButton
-          icon={visible ? ic_vertical_align_top : ic_vertical_align_bottom}
-          title={visible ? "Hide navbar" : "Show navbar"}
-          style={{ right: "10px" }}
+        <MdVerticalAlignBottom
+          style={{
+            transform: visible ? "rotateX(180deg)" : "unset",
+            right: "10px",
+          }}
+          size={45}
+          id='ToggleNavbarButton'
+          title='Show navbar'
           onClick={() => {
             setVisible(!visible);
           }}
