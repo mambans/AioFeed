@@ -1,9 +1,8 @@
 import { MdFormatListBulleted } from "react-icons/md";
-import { reload } from "react-icons-kit/iconic/reload";
+import { MdRefresh } from "react-icons/md";
 import { Spinner } from "react-bootstrap";
 import { FaYoutube } from "react-icons/fa";
 import Alert from "react-bootstrap/Alert";
-import Icon from "react-icons-kit";
 import Moment from "react-moment";
 import Popup from "reactjs-popup";
 import React from "react";
@@ -65,14 +64,14 @@ export default data => {
             // disabled={data.requestError && data.requestError.code === 403 ? true : false}
           >
             {!data.isLoaded ? (
-              <div style={{ height: "25.5px" }}>
+              <div className='SpinnerWrapper'>
                 <Spinner
                   animation='border'
                   role='status'
                   style={Utilities.loadingSpinnerSmall}></Spinner>
               </div>
             ) : (
-              <Icon icon={reload} size={22}></Icon>
+              <MdRefresh size={34} />
             )}
           </RefreshButton>
 

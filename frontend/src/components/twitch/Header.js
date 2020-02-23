@@ -1,8 +1,7 @@
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { MdFormatListBulleted } from "react-icons/md";
-import { reload } from "react-icons-kit/iconic/reload";
+import { MdRefresh } from "react-icons/md";
 import { Spinner } from "react-bootstrap";
-import Icon from "react-icons-kit";
 import Popup from "reactjs-popup";
 import React from "react";
 import { FaTwitch } from "react-icons/fa";
@@ -18,7 +17,7 @@ export default ({ data, refresh }) => {
       <HeaderLeftSubcontainer>
         <RefreshButton onClick={refresh}>
           {data.refreshing ? (
-            <div style={{ height: "24px" }}>
+            <div className='SpinnerWrapper'>
               <Spinner
                 animation='border'
                 role='status'
@@ -51,15 +50,7 @@ export default ({ data, refresh }) => {
               ""
             )
           ) : (
-            <Icon
-              icon={reload}
-              size={24}
-              style={{
-                position: "relative",
-                width: "24px",
-                height: "24px",
-                margin: "0px auto",
-              }}></Icon>
+            <MdRefresh size={34} />
           )}
         </RefreshButton>
       </HeaderLeftSubcontainer>

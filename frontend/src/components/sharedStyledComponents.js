@@ -11,6 +11,20 @@ const RefreshButton = styled(Button).attrs({ variant: "outline-secondary" })`
   left: 6px;
   align-items: center;
 
+  padding: 4px;
+  width: 50px;
+
+  .SpinnerWrapper {
+    height: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  div[aria-label="Countdown timer"] {
+    margin: 5px auto !important ;
+  }
+
   &:hover {
     background: var(--refreshButtonHoverBackground);
     color: var(--refreshButtonHoverColor);

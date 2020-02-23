@@ -1,9 +1,8 @@
-import { volumeHigh } from "react-icons-kit/icomoon/volumeHigh";
-import { volumeLow } from "react-icons-kit/icomoon/volumeLow";
-import { volumeMedium } from "react-icons-kit/icomoon/volumeMedium";
-import { volumeMute } from "react-icons-kit/icomoon/volumeMute";
-import { volumeMute2 } from "react-icons-kit/icomoon/volumeMute2";
-import Icon from "react-icons-kit";
+import { FaVolumeMute } from "react-icons/fa";
+import { FaVolumeUp } from "react-icons/fa";
+import { MdVolumeDown } from "react-icons/md";
+import { MdVolumeMute } from "react-icons/md";
+import { MdVolumeUp } from "react-icons/md";
 import React from "react";
 import Slider from "react-rangeslider";
 
@@ -12,19 +11,34 @@ import "react-rangeslider/lib/index.css";
 
 export default ({ volume, setVolumeText, TwitchPlayer, volumeMuted, setVolumeMuted }) => {
   const volumeIcon = () => {
+    const attrs = {
+      id: "icon",
+      size: 30,
+      style: {
+        color: volumeMuted ? "#bd0202" : "inherit",
+      },
+      onClick: () => {
+        TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
+        setVolumeMuted(!TwitchPlayer.getMuted());
+      },
+    };
+    let IconVolume = MdVolumeMute;
+
     if (volumeMuted) {
-      return volumeMute2;
+      IconVolume = FaVolumeMute;
     } else if (volume < 1) {
-      return volumeMute;
+      IconVolume = MdVolumeMute;
     } else if (volume <= 33) {
-      return volumeLow;
+      IconVolume = MdVolumeDown;
     } else if (volume <= 66) {
-      return volumeMedium;
+      IconVolume = MdVolumeUp;
     } else if (volume <= 100) {
-      return volumeHigh;
+      IconVolume = FaVolumeUp;
     } else {
-      return volumeMute;
+      IconVolume = MdVolumeMute;
     }
+
+    return <IconVolume {...attrs} />;
   };
 
   const handleChange = value => {
@@ -41,18 +55,7 @@ export default ({ volume, setVolumeText, TwitchPlayer, volumeMuted, setVolumeMut
       <h3 className='value'>{volume && volume.toFixed(0)}</h3>
 
       <div id='BottomRow'>
-        <Icon
-          id='icon'
-          icon={volumeIcon()}
-          size={30}
-          style={{
-            color: volumeMuted ? "#bd0202" : "inherit",
-          }}
-          onClick={() => {
-            TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
-            setVolumeMuted(!TwitchPlayer.getMuted());
-          }}
-        />
+        {volumeIcon()}
         <Slider value={volume} orientation='horizontal' onChange={handleChange} />
       </div>
     </StyledVolumeSlider>

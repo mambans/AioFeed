@@ -1,12 +1,10 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { MdFormatListBulleted } from "react-icons/md";
-// import { MdRefresh } from "react-icons/md";
-import { reload } from "react-icons-kit/iconic/reload";
+import { MdRefresh } from "react-icons/md";
 import { Spinner } from "react-bootstrap";
 import { FaTwitch } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
-import Icon from "react-icons-kit";
 import Popup from "reactjs-popup";
 import React, { useEffect, useState, useCallback, useRef } from "react";
 
@@ -94,7 +92,7 @@ export default () => {
           }}>
           <RefreshButton onClick={refresh}>
             {refreshing ? (
-              <div style={{ height: "24px" }}>
+              <div className='SpinnerWrapper'>
                 <Spinner
                   animation='border'
                   role='status'
@@ -102,8 +100,7 @@ export default () => {
                   style={Utilities.loadingSpinnerSmall}></Spinner>
               </div>
             ) : (
-              <Icon icon={reload} size={22}></Icon>
-              // <MdRefresh size={24} />
+              <MdRefresh size={34} />
             )}
           </RefreshButton>
         </div>

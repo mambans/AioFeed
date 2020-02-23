@@ -1,9 +1,8 @@
 import { MdFormatListBulleted } from "react-icons/md";
-import { reload } from "react-icons-kit/iconic/reload";
+import { MdRefresh } from "react-icons/md";
 import { Spinner } from "react-bootstrap";
 import { MdVideocam } from "react-icons/md";
 import Alert from "react-bootstrap/Alert";
-import Icon from "react-icons-kit";
 import Moment from "react-moment";
 import Popup from "reactjs-popup";
 import React from "react";
@@ -30,7 +29,7 @@ export default React.forwardRef((props, ref) => {
             refresh(true);
           }}>
           {refreshing ? (
-            <div style={{ height: "25.5px" }}>
+            <div className='SpinnerWrapper'>
               <Spinner
                 animation='border'
                 role='status'
@@ -38,7 +37,7 @@ export default React.forwardRef((props, ref) => {
                 style={Utilities.loadingSpinnerSmall}></Spinner>
             </div>
           ) : (
-            <Icon icon={reload} size={22}></Icon>
+            <MdRefresh size={34} />
           )}
         </RefreshButton>
         <Moment fromNow className={styles.vodRefreshTimer} interval={60000}>

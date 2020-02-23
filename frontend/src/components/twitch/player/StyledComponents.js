@@ -35,7 +35,7 @@ const VideoAndChatContainer = styled.div`
     transition: opacity 300ms, transform 300ms;
     padding-top: 10px;
 
-      &:hover {
+    &:hover {
       opacity: 1;
     }
   }
@@ -161,14 +161,14 @@ const StyledVolumeSlider = styled.div`
     grid-area: text;
   }
 
-  i#icon {
+  svg#icon {
     color: #f4f4f49c;
-    padding: 0 15px;
+    margin-right: 15px;
     cursor: pointer;
   }
 
   &:hover {
-    i#icon {
+    svg#icon {
       color: #ffffff;
     }
   }
