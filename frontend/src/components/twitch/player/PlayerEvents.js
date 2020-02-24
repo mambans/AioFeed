@@ -57,6 +57,10 @@ export default ({
       } else if (e.button === 0 && TwitchPlayer.isPaused()) {
         TwitchPlayer.play();
         setIsPaused(false);
+        if (TwitchPlayer.getVolume() <= 0) {
+          TwitchPlayer.setVolume(0.05);
+          setVolumeText(5);
+        }
       } else if (
         e.button === 0 &&
         TwitchPlayer.getMuted() &&
@@ -64,6 +68,10 @@ export default ({
       ) {
         TwitchPlayer.setMuted(false);
         setVolumeMuted(false);
+        if (TwitchPlayer.getVolume() <= 0) {
+          TwitchPlayer.setVolume(0.05);
+          setVolumeText(5);
+        }
       }
     };
 
@@ -127,12 +135,10 @@ export default ({
     TwitchPlayer.addEventListener(window.Twitch.Player.READY, twitchPlayerEventListeners);
 
     return () => {
-      TwitchPlayer.removeEventListener(window.Twitch.Player.READY, twitchPlayerEventListeners);
-      if (volumeEventOverlayRefElement) {
-        volumeEventOverlayRefElement.removeEventListener("wheel", scrollChangeVolumeEvent);
-        volumeEventOverlayRefElement.removeEventListener("mouseup", clickUnmuteMuteOrPlay);
-      }
+      volumeEventOverlayRefElement.removeEventListener("wheel", scrollChangeVolumeEvent);
+      volumeEventOverlayRefElement.removeEventListener("mouseup", clickUnmuteMuteOrPlay);
       document.body.removeEventListener("keyup", keyboardEvents);
+      TwitchPlayer.removeEventListener(window.Twitch.Player.READY, twitchPlayerEventListeners);
       // document.body.removeEventListener("dblclick", toggleFullscreen);
     };
   }, [

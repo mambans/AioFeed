@@ -283,7 +283,7 @@ const InfoDisplay = styled.div`
 `;
 
 // const ButtonShowStats = styled(Icon).attrs({ icon: infoCircle, size: 26 })`
-const ButtonShowStats = styled(FaInfoCircle).attrs({ size: 26 })`
+const ButtonShowStats = styled(FaInfoCircle).attrs({ size: 24 })`
   position: absolute;
   bottom: 12px;
   margin: 0;
@@ -317,7 +317,7 @@ const ButtonShowQualities = styled.p`
   }
 
   svg {
-    padding-right: 7px;
+    margin-right: 7px;
   }
 `;
 
