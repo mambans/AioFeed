@@ -263,6 +263,7 @@ export default () => {
       {!youtubeToken ? (
         <div style={{ marginBottom: "10px" }}>
           <StyledConnectYoutube
+            disabled
             //to unfollow: scope=https://www.googleapis.com/auth/youtube
             //else  scope=https://www.googleapis.com/auth/youtube.readonly
             title='Authenticate/Connect'

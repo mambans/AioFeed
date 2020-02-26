@@ -96,6 +96,10 @@ const StyledConnectYoutube = styled(Button)`
     background-color: hsla(0, 65%, 40%, 1) !important;
     border-color: hsla(0, 65%, 45%, 1) !important;
   }
+
+  :disabled {
+    background-color: hsla(0, 65%, 18%, 1);
+  }
 `;
 
 const StyledCreateFormTitle = styled.div`
