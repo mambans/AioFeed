@@ -44,10 +44,10 @@ export default prop => {
           </Container>
           <Nav style={{ justifyContent: "right" }}>
             <NavDropdown title='Other' id='collasible-nav-dropdown'>
-              <NavDropdown.Item as={NavLink} to='/account/create' id='login'>
+              {/* <NavDropdown.Item as={NavLink} to='/account/create' id='login'>
                 Create Account
               </NavDropdown.Item>
-              <NavDropdown.Divider />
+              <NavDropdown.Divider /> */}
               <NavDropdown.Item href='https://github.com/mambans/Notifies'>
                 <FaGithub size={24} style={{ marginRight: "0.75rem" }} />
                 Notifies -Github
