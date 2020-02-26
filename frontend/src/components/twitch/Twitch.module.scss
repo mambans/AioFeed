@@ -308,6 +308,10 @@
   -moz-border-radius: 10px 10px 0 0;
   -ms-border-radius: 10px 10px 0 0;
   -o-border-radius: 10px 10px 0 0;
+  overflow: scroll;
+  scrollbar-color: #232526 transparent !important;
+  scrollbar-width: thin !important;
+  max-height: calc(100vh - (65px + 50px));
 
   .twitchSidebarHeader {
     font-size: 1.1rem;
