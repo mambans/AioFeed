@@ -420,16 +420,6 @@ export default () => {
               setVisible(!visible);
             }}
           />
-          {twitchPlayer.current ? (
-            <PlayerEvents
-              volumeEventOverlayRef={volumeEventOverlayRef}
-              setVolumeText={setVolumeText}
-              setVolumeMuted={setVolumeMuted}
-              TwitchPlayer={twitchPlayer.current}
-              OpenedDate={OpenedDate}
-              setIsPaused={setIsPaused}
-            />
-          ) : null}
         </VideoAndChatContainer>
       </>
     );
