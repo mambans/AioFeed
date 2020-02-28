@@ -10,86 +10,101 @@ export default ({
   setIsPaused,
 }) => {
   useEffect(() => {
-    // console.log("TCL: TwitchPlayer", TwitchPlayer);
-    // let TwitchPlayer = new window.Twitch.Player("twitch-embed", {
-    //   width: "100%",
-    //   height: "100%",
-    //   theme: "dark",
-    //   layout: "video",
-    //   channel: channel || null,
-    //   video: video || null,
-    //   muted: false,
-    // });
-
+    console.log("TCL: TwitchPlayer", TwitchPlayer);
     const volumeEventOverlayRefElement = volumeEventOverlayRef.current;
 
-    const scrollChangeVolumeEvent = e => {
+    const mouseEvents = e => {
+      switch (e.button) {
+        case 1:
+          TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
+          setVolumeMuted(!TwitchPlayer.getMuted());
+          break;
+
+        case 0:
+          if (TwitchPlayer.isPaused()) {
+            TwitchPlayer.play();
+            setIsPaused(false);
+          } else if (TwitchPlayer.getMuted() && new Date().getTime() - OpenedDate <= 15000) {
+            TwitchPlayer.setMuted(false);
+            setVolumeMuted(false);
+          }
+          break;
+
+        case 1:
+          TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
+          setVolumeMuted(!TwitchPlayer.getMuted());
+          break;
+
+        case 1:
+          TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
+          setVolumeMuted(!TwitchPlayer.getMuted());
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    const changeVolume = (operator, amount) => {
       if (TwitchPlayer.getMuted()) {
         TwitchPlayer.setMuted(false);
         setVolumeMuted(false);
       }
 
-      if ((e.wheelDelta && e.wheelDelta > 0) || e.deltaY < 0) {
-        const newVolume = TwitchPlayer.getVolume() + 0.01;
-        if (newVolume < 1) {
-          TwitchPlayer.setVolume(newVolume);
-          setVolumeText(newVolume * 100);
-        } else {
-          TwitchPlayer.setVolume(1);
-          setVolumeText(100);
-        }
-      } else {
-        const newVolume = TwitchPlayer.getVolume() - 0.01;
-        if (newVolume > 0) {
-          TwitchPlayer.setVolume(newVolume);
-          setVolumeText(newVolume * 100);
-        } else {
-          TwitchPlayer.setVolume(0);
-          setVolumeText(0);
-        }
-      }
+      const newVolume = Math.min(
+        Math.max(
+          operator === "increase"
+            ? TwitchPlayer.getVolume() + amount
+            : TwitchPlayer.getVolume() - amount,
+          0
+        ),
+        1
+      );
+
+      TwitchPlayer.setVolume(newVolume);
+      setVolumeText(newVolume * 100);
     };
 
-    const clickUnmuteMuteOrPlay = e => {
-      if (e.button === 1) {
-        TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
-        setVolumeMuted(!TwitchPlayer.getMuted());
-      } else if (e.button === 0 && TwitchPlayer.isPaused()) {
-        TwitchPlayer.play();
-        setIsPaused(false);
-        if (TwitchPlayer.getVolume() <= 0) {
-          TwitchPlayer.setVolume(0.05);
-          setVolumeText(5);
-        }
-      } else if (
-        e.button === 0 &&
-        TwitchPlayer.getMuted() &&
-        new Date().getTime() - OpenedDate <= 15000
-      ) {
-        TwitchPlayer.setMuted(false);
-        setVolumeMuted(false);
-        if (TwitchPlayer.getVolume() <= 0) {
-          TwitchPlayer.setVolume(0.05);
-          setVolumeText(5);
-        }
+    const scrollChangeVolumeEvent = e => {
+      if ((e.wheelDelta && e.wheelDelta > 0) || e.deltaY < 0) {
+        changeVolume("increase", 0.01);
+      } else {
+        changeVolume("decrease", 0.01);
       }
     };
 
     const keyboardEvents = e => {
-      if (e.key === "Space" || e.keyCode === 32) {
-        if (TwitchPlayer.isPaused()) {
-          TwitchPlayer.play();
-          setIsPaused(false);
-        } else {
-          TwitchPlayer.pause();
-          setIsPaused(true);
-        }
-      } else if (e.key === "f") {
-        toggleFullscreen2();
-      } else if (e.key === "m") {
-        TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
-        setVolumeMuted(!TwitchPlayer.getMuted());
+      // console.time();
+      switch (e.key) {
+        case " ":
+        case "Space":
+          if (!TwitchPlayer.isPaused()) {
+            TwitchPlayer.pause();
+            setIsPaused(true);
+          } else {
+            TwitchPlayer.play();
+            setIsPaused(false);
+          }
+          break;
+        case "f":
+        case "F":
+          toggleFullscreen2();
+          break;
+        case "m":
+        case "M":
+          TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
+          setVolumeMuted(!TwitchPlayer.getMuted());
+          break;
+        case "ArrowDown":
+          changeVolume("decrease", 0.05);
+          break;
+        case "ArrowUp":
+          changeVolume("increase", 0.05);
+          break;
+        default:
+          break;
       }
+      // console.timeEnd();
     };
 
     // const toggleFullscreen = () => {
@@ -108,8 +123,11 @@ export default ({
     // };
 
     const toggleFullscreen2 = () => {
-      TwitchPlayer.setFullscreen(!TwitchPlayer.getFullscreen());
-      if (TwitchPlayer.getFullscreen()) {
+      const isFullScreen = TwitchPlayer.getFullscreen();
+      TwitchPlayer.setFullscreen(!isFullScreen);
+      TwitchPlayer.showPlayerControls(!isFullScreen);
+
+      if (TwitchPlayer.getFullscreen() && document.fullscreenElement) {
         document.exitFullscreen();
       } else if (TwitchPlayer._bridge._iframe.requestFullScreen) {
         TwitchPlayer._bridge._iframe.requestFullScreen();
@@ -121,14 +139,14 @@ export default ({
     };
 
     const twitchPlayerEventListeners = () => {
-      if (type === "live") TwitchPlayer.showPlayerControls();
+      if (type === "live") TwitchPlayer.showPlayerControls(false);
       setVolumeMuted(TwitchPlayer.getMuted());
       setVolumeText(TwitchPlayer.getVolume() * 100);
       if (volumeEventOverlayRefElement) {
         volumeEventOverlayRefElement.addEventListener("wheel", scrollChangeVolumeEvent);
-        volumeEventOverlayRefElement.addEventListener("mouseup", clickUnmuteMuteOrPlay);
+        volumeEventOverlayRefElement.addEventListener("mousedown", mouseEvents);
       }
-      document.body.addEventListener("keyup", keyboardEvents);
+      document.body.addEventListener("keydown", keyboardEvents);
       // document.body.addEventListener("dblclick", toggleFullscreen);
     };
 
@@ -136,8 +154,8 @@ export default ({
 
     return () => {
       volumeEventOverlayRefElement.removeEventListener("wheel", scrollChangeVolumeEvent);
-      volumeEventOverlayRefElement.removeEventListener("mouseup", clickUnmuteMuteOrPlay);
-      document.body.removeEventListener("keyup", keyboardEvents);
+      volumeEventOverlayRefElement.removeEventListener("mousedown", mouseEvents);
+      document.body.removeEventListener("keydown", keyboardEvents);
       TwitchPlayer.removeEventListener(window.Twitch.Player.READY, twitchPlayerEventListeners);
       // document.body.removeEventListener("dblclick", toggleFullscreen);
     };

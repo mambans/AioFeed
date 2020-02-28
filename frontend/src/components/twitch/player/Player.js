@@ -188,7 +188,10 @@ export default () => {
   };
 
   const toggleFullscreen2 = TwitchPlayer => {
-    TwitchPlayer.setFullscreen(!TwitchPlayer.getFullscreen());
+    const isFullScreen = TwitchPlayer.getFullscreen();
+    TwitchPlayer.setFullscreen(!isFullScreen);
+    TwitchPlayer.showPlayerControls(!isFullScreen);
+
     // if (TwitchPlayer.getFullscreen()) {
     //   document.exitFullscreen();
     // } else
