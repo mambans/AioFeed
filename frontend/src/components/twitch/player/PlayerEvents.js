@@ -30,16 +30,6 @@ export default ({
           }
           break;
 
-        case 1:
-          TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
-          setVolumeMuted(!TwitchPlayer.getMuted());
-          break;
-
-        case 1:
-          TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
-          setVolumeMuted(!TwitchPlayer.getMuted());
-          break;
-
         default:
           break;
       }
