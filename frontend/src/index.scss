@@ -14,17 +14,17 @@ body {
     "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: no-repeat center center fixed;
   background-attachment: fixed;
-  color: var(--textColor);
-  background-image: var(--backgroundImg);
-  object-fit: cover;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
   padding: 0 !important;
   overflow-y: scroll !important;
+
+  object-fit: cover;
+  background-position-x: center;
+  background-position-y: center;
+  background-size: var(--bgSize);
+  background-repeat: var(--bgRepeat);
+  color: var(--textColor);
+  background-image: var(--backgroundImg);
 }
 
 code {
