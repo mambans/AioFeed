@@ -8,7 +8,7 @@ import { FaTwitch } from "react-icons/fa";
 import Alert from "react-bootstrap/Alert";
 import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import React, { useRef, useCallback, useState, useEffect, useContext } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 
 import { VideoTitle, ImageContainer, UnfollowButton } from "./../sharedStyledComponents";
@@ -122,23 +122,23 @@ function StreamEle(data) {
     }, HOVER_DELAY);
   };
 
-  const handleMouseOut = useCallback(event => {
+  const handleMouseOut = () => {
     clearTimeout(streamHoverTimer.current);
     setIsHovered(false);
-  }, []);
+  };
 
   useEffect(() => {
     if (ref.current && twitchVideoHoverEnable) {
       const refEle = ref.current;
-      ref.current.addEventListener("mouseenter", handleMouseOver);
-      ref.current.addEventListener("mouseleave", handleMouseOut);
+      refEle.addEventListener("mouseenter", handleMouseOver);
+      refEle.addEventListener("mouseleave", handleMouseOut);
 
       return () => {
         refEle.removeEventListener("mouseenter", handleMouseOver);
         refEle.removeEventListener("mouseleave", handleMouseOut);
       };
     }
-  }, [twitchVideoHoverEnable, handleMouseOut]);
+  }, [twitchVideoHoverEnable]);
 
   const handleMouseOverChannel = () => {
     setChannelIsHovered(true);
@@ -151,8 +151,8 @@ function StreamEle(data) {
   useEffect(() => {
     if (refChannel.current) {
       const refEle = refChannel.current;
-      refChannel.current.addEventListener("mouseenter", handleMouseOverChannel);
-      refChannel.current.addEventListener("mouseleave", handleMouseOutChannel);
+      refEle.addEventListener("mouseenter", handleMouseOverChannel);
+      refEle.addEventListener("mouseleave", handleMouseOutChannel);
 
       return () => {
         refEle.removeEventListener("mouseenter", handleMouseOverChannel);

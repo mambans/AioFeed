@@ -75,8 +75,8 @@ export default ({ ...data }) => {
 
   useEffect(() => {
     const refEle = imgRef.current;
-    imgRef.current.addEventListener("mouseenter", handleMouseOver);
-    imgRef.current.addEventListener("mouseleave", handleMouseOut);
+    refEle.addEventListener("mouseenter", handleMouseOver);
+    refEle.addEventListener("mouseleave", handleMouseOut);
 
     return () => {
       refEle.removeEventListener("mouseenter", handleMouseOver);

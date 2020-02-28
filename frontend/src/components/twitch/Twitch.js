@@ -30,8 +30,8 @@ function Twitch({ data }) {
     window.addEventListener("blur", windowBlurHandler);
 
     return () => {
-      window.removeEventListener("blur", windowBlurHandler);
       window.removeEventListener("focus", windowFocusHandler);
+      window.removeEventListener("blur", windowBlurHandler);
     };
   }, [data.liveStreams, windowBlurHandler, windowFocusHandler]);
 

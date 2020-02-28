@@ -28,8 +28,8 @@ function StreamHoverIframe(data) {
 
     if (ref.current) {
       const refEle = ref.current;
-      ref.current.addEventListener("mouseover", handleMouseOver);
-      ref.current.addEventListener("mouseout", handleMouseOut);
+      refEle.addEventListener("mouseover", handleMouseOver);
+      refEle.addEventListener("mouseout", handleMouseOut);
 
       return () => {
         refEle.removeEventListener("mouseover", handleMouseOver);
