@@ -10,7 +10,6 @@ export default ({
   setIsPaused,
 }) => {
   useEffect(() => {
-    console.log("TCL: TwitchPlayer", TwitchPlayer);
     const volumeEventOverlayRefElement = volumeEventOverlayRef.current;
 
     const mouseEvents = e => {
@@ -24,9 +23,13 @@ export default ({
           if (TwitchPlayer.isPaused()) {
             TwitchPlayer.play();
             setIsPaused(false);
-          } else if (TwitchPlayer.getMuted() && new Date().getTime() - OpenedDate <= 15000) {
+          } else if (
+            TwitchPlayer.getMuted() &&
+            new Date().getTime() - OpenedDate.current <= 15000
+          ) {
             TwitchPlayer.setMuted(false);
             setVolumeMuted(false);
+            setVolumeText(TwitchPlayer.getVolume() * 100);
           }
           break;
 

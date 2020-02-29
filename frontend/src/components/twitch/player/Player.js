@@ -55,7 +55,7 @@ export default () => {
   const channelinfoTimer = useRef();
   const viewersTimer = useRef();
   const { twitchToken } = useContext(AccountContext);
-  const OpenedDate = new Date().getTime();
+  const OpenedDate = useRef();
 
   const fetchChannelInfo = useCallback(async () => {
     const channel = await axios
@@ -110,6 +110,20 @@ export default () => {
 
     return null;
   };
+
+  const setOpenedTime = () => {
+    if (!OpenedDate.current) {
+      OpenedDate.current = new Date().getTime();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("focus", setOpenedTime);
+
+    return () => {
+      window.removeEventListener("focus", setOpenedTime);
+    };
+  }, []);
 
   useEffect(() => {
     document.documentElement.style.overflow = "hidden";
