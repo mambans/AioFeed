@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import _ from "lodash";
 
 export default ({
   volumeEventOverlayRef,
@@ -9,6 +10,22 @@ export default ({
   OpenedDate,
   setIsPaused,
 }) => {
+  // eslint-disable-next-line
+  const unmute = useMemo(
+    () =>
+      _.debounce(
+        () => {
+          if (TwitchPlayer.getMuted()) {
+            TwitchPlayer.setMuted(false);
+            setVolumeMuted(false);
+          }
+        },
+        3000,
+        { leading: true, trailing: false }
+      ),
+    [TwitchPlayer, setVolumeMuted]
+  );
+
   useEffect(() => {
     const volumeEventOverlayRefElement = volumeEventOverlayRef.current;
 
@@ -39,10 +56,7 @@ export default ({
     };
 
     const changeVolume = (operator, amount) => {
-      if (TwitchPlayer.getMuted()) {
-        TwitchPlayer.setMuted(false);
-        setVolumeMuted(false);
-      }
+      // unmute();
 
       const newVolume = Math.min(
         Math.max(
