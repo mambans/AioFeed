@@ -22,6 +22,8 @@ import {
   BannerInfoOverlay,
   LiveIndicator,
   LiveIndicatorIcon,
+  VideoPlayer,
+  Chat,
 } from "./StyledComponents";
 
 export default () => {
@@ -35,6 +37,7 @@ export default () => {
   const [sortClipsBy, setSortClipsBy] = useState(null);
   const [following, setFollowing] = useState(false);
   const [channelId, setChannelId] = useState();
+  const [isLive, setIsLive] = useState();
 
   const numberOfVideos = Math.floor(document.documentElement.clientWidth / 350);
   const vodPagination = useRef();
@@ -281,39 +284,26 @@ export default () => {
           setFollowing(true);
         })
         .catch(error => {
-          console.log("CheckIfFollowed: Not Following. (or an Error occured)");
-          setFollowing(false);
+          if (
+            error.response &&
+            error.response.status === 404 &&
+            error.response.statusText === "Not Found"
+          ) {
+            console.log(`Not following ${UserId}`);
+            setFollowing(false);
+          } else {
+            console.error(error);
+          }
         });
     };
 
-    const checkIfLive = async () => {
-      return await axios
-        .get(`https://api.twitch.tv/helix/streams`, {
-          params: {
-            user_login: id,
-          },
-          headers: {
-            Authorization: `Bearer ${twitchToken}`,
-            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-          },
-        })
-        .then(res => {
-          if (res.data.data.length > 0) return true;
-        })
-        .catch(error => {
-          console.error("fetchClips: ", error);
-          return false;
-        });
-    };
-
-    let ChannelInfos = await fetchChannelInfo();
-    ChannelInfos.isLive = await checkIfLive();
+    const ChannelInfos = await fetchChannelInfo();
 
     setChannelInfo(ChannelInfos);
     CheckIfFollowed(ChannelInfos._id);
 
     document.title = `${ChannelInfos.display_name} | Notifies`;
-  }, [id, fetchChannelInfo, twitchUserId, twitchToken]);
+  }, [fetchChannelInfo, twitchUserId, twitchToken]);
 
   useEffect(() => {
     (async () => {
@@ -321,6 +311,41 @@ export default () => {
       if (!channelInfo && channelId) getChannelInfo();
     })();
   }, [channelInfo, getChannelInfo, getIdFromName, channelId]);
+
+  const OnlineEvents = () => {
+    console.log("Stream is Online");
+    setIsLive(true);
+  };
+
+  const offlineEvents = () => {
+    console.log("Stream is Offline");
+    setIsLive(false);
+  };
+
+  useEffect(() => {
+    try {
+      const twitchPlayer = new window.Twitch.Player("twitch-embed", {
+        width: `${300 * 1.777777777777778}px`,
+        height: "300px",
+        theme: "dark",
+        layout: "video",
+        channel: id,
+        muted: true,
+      });
+
+      if (twitchPlayer) {
+        twitchPlayer.addEventListener(window.Twitch.Player.ONLINE, OnlineEvents);
+        twitchPlayer.addEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
+      }
+
+      return () => {
+        twitchPlayer.removeEventListener(window.Twitch.Player.ONLINE, OnlineEvents);
+        twitchPlayer.removeEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
+      };
+    } catch (error) {
+      console.log("error", error);
+    }
+  }, [id]);
 
   useEffect(() => {
     if (channelId && !vods) {
@@ -336,6 +361,14 @@ export default () => {
 
   return (
     <ChannelContainer>
+      <VideoPlayer id='twitch-embed' />
+      <Chat
+        frameborder='0'
+        scrolling='yes'
+        theme='dark'
+        // id={id + "-chat"}
+        src={`https://www.twitch.tv/embed/${id}/chat?darkpopout`}
+      />
       {channelInfo ? (
         <Banner>
           <img id='Banner' alt='' src={channelInfo.profile_banner} />
@@ -343,7 +376,7 @@ export default () => {
             <Name>
               <div id='HeaderChannelInfo'>
                 <div id='ChannelName'>
-                  {channelInfo.isLive ? (
+                  {isLive ? (
                     <Link to={`/live/${id}`} style={{ padding: "0" }}>
                       <LiveIndicator>
                         <LiveIndicatorIcon />
