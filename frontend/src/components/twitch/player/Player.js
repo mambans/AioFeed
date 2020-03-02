@@ -48,7 +48,6 @@ export default () => {
   const [showQualities, setShowQualities] = useState();
   const [qualities, setQualities] = useState();
   const [activeQuality, setActiveQuality] = useState();
-  // const [playbackStats, setPlaybackStats] = useState();
   const volumeEventOverlayRef = useRef();
   const twitchPlayer = useRef();
   const PlayersatsTimer = useRef();
@@ -58,7 +57,7 @@ export default () => {
   const OpenedDate = useRef();
 
   const fetchChannelInfo = useCallback(async () => {
-    const channel = await axios
+    await axios
       .get(`https://api.twitch.tv/kraken/channels/${twitchPlayer.current.getChannelId()}`, {
         headers: {
           Authorization: `OAuth ${twitchToken}`,
@@ -67,13 +66,11 @@ export default () => {
         },
       })
       .then(res => {
-        return res.data;
+        setChannelInfo(res.data);
       })
       .catch(error => {
         console.log("fetchChannelInfo channel: error", error);
       });
-
-    setChannelInfo(channel);
   }, [twitchToken]);
 
   const fetchUptime = useCallback(async () => {
@@ -91,8 +88,27 @@ export default () => {
       .then(res => {
         if (res.data.data[0] && res.data.data[0].started_at) {
           setUptime(res.data.data[0].started_at);
+        } else {
+          setTimeout(async () => {
+            await axios
+              .get(`https://api.twitch.tv/helix/streams`, {
+                params: {
+                  user_id: twitchPlayer.current.getChannelId(),
+                  first: 1,
+                },
+                headers: {
+                  Authorization: `Bearer ${twitchToken}`,
+                  "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+                },
+              })
+              .then(res => {
+                if (res.data.data[0] && res.data.data[0].started_at) {
+                  setUptime(res.data.data[0].started_at);
+                } else {
+                }
+              });
+          }, 60000);
         }
-        // return res.data.data[0]
       })
       .catch(error => {
         console.log("fetchChannelInfo stream: error", error);
@@ -107,8 +123,6 @@ export default () => {
       twitchPlayer.current.pause();
       setIsPaused(true);
     }
-
-    return null;
   };
 
   const setOpenedTime = () => {
@@ -116,74 +130,6 @@ export default () => {
       OpenedDate.current = new Date().getTime();
     }
   };
-
-  useEffect(() => {
-    window.addEventListener("focus", setOpenedTime);
-
-    return () => {
-      window.removeEventListener("focus", setOpenedTime);
-    };
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.style.overflow = "hidden";
-    setShrinkNavbar("true");
-    setVisible(false);
-    setFooterVisible(false);
-
-    twitchPlayer.current = new window.Twitch.Player("twitch-embed", {
-      width: "100%",
-      height: "100%",
-      theme: "dark",
-      layout: "video",
-      channel: id && type === "live" ? id : null,
-      video: id && type === "video" ? id : null,
-      muted: false,
-    });
-
-    if (type === "live") {
-      setTimeout(async () => {
-        fetchChannelInfo();
-        setViewers(twitchPlayer.current.getViewers());
-
-        fetchUptime();
-      }, 5000);
-
-      if (!channelinfoTimer.current) {
-        channelinfoTimer.current = setInterval(() => {
-          fetchChannelInfo();
-        }, 300000);
-      }
-
-      if (!viewersTimer.current) {
-        viewersTimer.current = setInterval(() => {
-          setViewers(twitchPlayer.current.getViewers());
-        }, 60000);
-      }
-    }
-
-    return () => {
-      document.documentElement.style.overflow = "visible";
-      setShrinkNavbar("false");
-      setFooterVisible(true);
-      clearInterval(PlayersatsTimer.current);
-      clearInterval(channelinfoTimer.current);
-      clearInterval(viewersTimer.current);
-    };
-  }, [
-    setShrinkNavbar,
-    setFooterVisible,
-    setVisible,
-    id,
-    fetchChannelInfo,
-    type,
-    twitchToken,
-    fetchUptime,
-  ]);
-
-  useEffect(() => {
-    if (!uptime && viewers) fetchUptime();
-  }, [fetchUptime, uptime, viewers]);
 
   const latencyColorValue = (name, value) => {
     if (name === "hlsLatencyBroadcaster" || name === "hlsLatencyEncoder") {
@@ -218,6 +164,96 @@ export default () => {
     }
   };
 
+  useEffect(() => {
+    window.addEventListener("focus", setOpenedTime);
+
+    return () => {
+      window.removeEventListener("focus", setOpenedTime);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.style.overflow = "hidden";
+    setShrinkNavbar("true");
+    setVisible(false);
+    setFooterVisible(false);
+
+    twitchPlayer.current = new window.Twitch.Player("twitch-embed", {
+      width: "100%",
+      height: "100%",
+      theme: "dark",
+      layout: "video",
+      channel: id && type === "live" ? id : null,
+      video: id && type === "video" ? id : null,
+      muted: false,
+    });
+
+    return () => {
+      document.documentElement.style.overflow = "visible";
+      setShrinkNavbar("false");
+      setFooterVisible(true);
+      clearInterval(PlayersatsTimer.current);
+      clearInterval(channelinfoTimer.current);
+      clearInterval(viewersTimer.current);
+    };
+  }, [
+    setShrinkNavbar,
+    setFooterVisible,
+    setVisible,
+    id,
+    fetchChannelInfo,
+    type,
+    twitchToken,
+    fetchUptime,
+  ]);
+
+  const OnlineEvents = useCallback(() => {
+    console.log("Stream is Online");
+    setTimeout(() => {
+      fetchChannelInfo();
+      fetchUptime();
+      setViewers(twitchPlayer.current.getViewers());
+    }, 5000);
+
+    if (!viewersTimer.current) {
+      viewersTimer.current = setInterval(() => {
+        setViewers(twitchPlayer.current.getViewers());
+      }, 1000 * 60 * 1);
+    }
+
+    if (!channelinfoTimer.current) {
+      channelinfoTimer.current = setInterval(() => {
+        fetchChannelInfo();
+      }, 1000 * 60 * 5);
+    }
+  }, [fetchUptime, fetchChannelInfo]);
+
+  const offlineEvents = useCallback(() => {
+    console.log("Stream is Offline");
+    fetchChannelInfo();
+    clearInterval(viewersTimer.current);
+    clearInterval(channelinfoTimer.current);
+    setUptime(null);
+
+    if (!channelinfoTimer.current) {
+      channelinfoTimer.current = setInterval(() => {
+        fetchChannelInfo();
+      }, 1000 * 60 * 15);
+    }
+  }, [fetchChannelInfo]);
+
+  useEffect(() => {
+    if (twitchPlayer.current) {
+      twitchPlayer.current.addEventListener(window.Twitch.Player.ONLINE, OnlineEvents);
+      twitchPlayer.current.addEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
+    }
+
+    return () => {
+      twitchPlayer.current.removeEventListener(window.Twitch.Player.ONLINE, OnlineEvents);
+      twitchPlayer.current.removeEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
+    };
+  }, [OnlineEvents, offlineEvents]);
+
   if (type === "live") {
     return (
       <>
@@ -249,7 +285,7 @@ export default () => {
                     <Link id='game' to={`/game/${channelInfo.game}`}>
                       Playing {channelInfo.game}
                     </Link>
-                    <p id='viewers'>Viewers: {viewers}</p>
+                    {viewers ? <p id='viewers'> Viewers: {viewers} </p> : null}
                     {uptime ? (
                       <p id='uptime'>
                         Uptime <Moment durationFromNow>{uptime}</Moment>
