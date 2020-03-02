@@ -179,14 +179,14 @@ const StyledVolumeSlider = styled.div`
   }
 
   .rangeslider-horizontal {
-    height: 8px;
+    height: 12px;
     border-radius: 6px;
   }
 
   .rangeslider {
     /* background: #6b6b6b; */
     background-color: ${({ volumeMuted }) => (volumeMuted ? "#841010a1" : "#6b6b6b")};
-    margin: 11px 0;
+    margin: 9px 0;
     width: calc(100% - 30px);
     cursor: pointer;
   }
