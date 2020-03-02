@@ -173,6 +173,7 @@ const SubFeedHeader = styled.div`
   grid-template-columns: 20% auto 20%;
   margin: 20px auto 10px auto;
   border-bottom: 1px solid grey;
+  max-width: 100%;
 
   h3 {
     text-align: center;
@@ -244,6 +245,22 @@ const LiveIndicatorIcon = styled(MdVideocam).attrs({ size: 30 })`
   /* position: absolute; */
 `;
 
+const VideoPlayer = styled.div`
+  height: 300px;
+  width: calc(300px * 1.777777777777778);
+  position: absolute;
+  z-index: 100;
+`;
+
+const Chat = styled.iframe`
+  height: 300px;
+  width: calc(300px * 1.777777777777778);
+  position: absolute;
+  z-index: 100;
+  right: 0;
+  border: none;
+`;
+
 export {
   ChannelContainer,
   Banner,
@@ -254,4 +271,6 @@ export {
   SortDropDownList,
   LiveIndicator,
   LiveIndicatorIcon,
+  VideoPlayer,
+  Chat,
 };

@@ -25,6 +25,7 @@ const StyledLoadmore = styled.div`
   display: grid;
   grid-template-columns: auto min-content auto;
   align-items: center;
+  max-width: 100%;
 
   div {
     background: rgba(90, 92, 94, 0.67);

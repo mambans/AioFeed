@@ -87,6 +87,7 @@ const SubFeedContainer = styled.div`
   flex-wrap: wrap;
   padding-bottom: 50px;
   min-height: 400px;
+  max-width: 100%;
 `;
 
 const VideoContainer = styled.div`

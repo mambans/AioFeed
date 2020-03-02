@@ -1,6 +1,7 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { Spinner } from "react-bootstrap";
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import _ from "lodash";
 
 import { StyledLoadmore } from "./../styledComponents";
 import { SubFeedContainer } from "./../../sharedStyledComponents";
@@ -23,7 +24,30 @@ export default ({
   itemsloadmoreLoaded,
   channelInfo,
 }) => {
-  const numberOfVideos = Math.floor(document.documentElement.clientWidth / 350);
+  const [numberOfVideos, setNumberOfVideos] = useState(
+    Math.floor(document.documentElement.clientWidth / 350)
+  );
+  // const numberOfVideos = Math.floor(document.documentElement.clientWidth / 350);
+
+  const recalcWidth = useMemo(
+    () =>
+      _.debounce(
+        () => {
+          setNumberOfVideos(Math.floor(document.documentElement.clientWidth / 350));
+        },
+        100,
+        { leading: true, trailing: false }
+      ),
+    []
+  );
+
+  useEffect(() => {
+    window.addEventListener("resize", recalcWidth);
+
+    return () => {
+      window.removeEventListener("resize", recalcWidth);
+    };
+  }, [recalcWidth]);
 
   return (
     <>
