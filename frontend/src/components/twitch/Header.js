@@ -12,11 +12,13 @@ import RenderFollowedChannelList from "./channelList/RenderFollowedChannelList";
 import Utilities from "../../utilities/Utilities";
 
 export default ({ data, refresh }) => {
+  const { refreshing, autoRefreshEnabled, refreshTimer, followedChannels } = data;
+
   return (
     <HeaderContainerTwitchLive>
       <HeaderLeftSubcontainer>
         <RefreshButton onClick={refresh}>
-          {data.refreshing ? (
+          {refreshing ? (
             <div className='SpinnerWrapper'>
               <Spinner
                 animation='border'
@@ -25,14 +27,14 @@ export default ({ data, refresh }) => {
                 style={Utilities.loadingSpinnerSmall}
               />
             </div>
-          ) : data.autoRefreshEnabled ? (
-            data.refreshTimer > new Date().getTime() ? (
+          ) : autoRefreshEnabled ? (
+            refreshTimer > new Date().getTime() ? (
               <CountdownCircleTimer
-                key={data.refreshTimer}
+                key={refreshTimer}
                 isPlaying
                 size={24}
                 strokeWidth={2.5}
-                durationSeconds={Math.round((data.refreshTimer - new Date().getTime()) / 1000)}
+                durationSeconds={Math.round((refreshTimer - new Date().getTime()) / 1000)}
                 // startAt={
                 //   data.refreshTimer > new Date().getTime()
                 //     ? 20 - Math.round((data.refreshTimer - new Date().getTime()) / 1000)
@@ -41,8 +43,8 @@ export default ({ data, refresh }) => {
                 colors={[["#ffffff"]]}
                 trailColor={"#rgba(255, 255, 255, 0)"}
                 renderTime={() => {
-                  return data.refreshTimer > new Date().getTime()
-                    ? Math.round((data.refreshTimer - new Date().getTime()) / 1000)
+                  return refreshTimer > new Date().getTime()
+                    ? Math.round((refreshTimer - new Date().getTime()) / 1000)
                     : 20;
                 }}
               />
@@ -84,7 +86,7 @@ export default ({ data, refresh }) => {
         }
         position='left top'
         className='popupModal'>
-        <RenderFollowedChannelList followedChannels={data.followedChannels} />
+        <RenderFollowedChannelList followedChannels={followedChannels} />
       </Popup>
     </HeaderContainerTwitchLive>
   );

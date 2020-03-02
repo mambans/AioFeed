@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import Utilities from "./../../../utilities/Utilities";
+import GetCachedProfiles from "./../GetCachedProfiles";
 
 export default async (category, pagination) => {
   let game;
@@ -46,44 +47,56 @@ export default async (category, pagination) => {
     });
 
   try {
-    const ChachedAndExpire = () => {
-      const profiles = JSON.parse(localStorage.getItem("TwitchProfiles")) || {};
+    const TwitchProfiles = GetCachedProfiles();
 
-      if (!profiles.expireDate || new Date(profiles.expireDate).getTime() < new Date().getTime()) {
-        return {
-          expireDate: new Date(new Date().setTime(new Date().getTime() + 3 * 24 * 60 * 60 * 1000)),
-        };
-      } else {
-        return profiles;
-      }
-    };
+    const noCachedProfileArrayObject = await topStreams.data.data.filter(user => {
+      return !Object.keys(TwitchProfiles).some(id => id === user.user_id);
+    });
 
-    const TwitchProfiles = ChachedAndExpire();
+    const noCachedProfileArrayIds = Object.values(noCachedProfileArrayObject).map(user => {
+      return user.user_id;
+    });
 
-    // const TwitchProfiles = JSON.parse(localStorage.getItem("TwitchProfiles")) || {};
+    let newProfileImgUrls;
 
-    await Promise.all(
-      topStreams.data.data.map(async user => {
+    if (noCachedProfileArrayIds.length > 0) {
+      newProfileImgUrls = await axios
+        .get(`https://api.twitch.tv/helix/users?`, {
+          params: {
+            id: noCachedProfileArrayIds,
+          },
+          headers: {
+            Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+          },
+        })
+        .catch(e => {
+          console.log("newProfileImgUrls: ", e);
+        });
+    }
+
+    Promise.all(
+      await topStreams.data.data.map(async user => {
         if (!TwitchProfiles[user.user_id]) {
-          const profileImgUrl = await axios.get(`https://api.twitch.tv/helix/users?`, {
-            params: {
-              id: user.user_id,
-            },
-            headers: {
-              Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
-              "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-            },
-          });
-
-          user.profile_img_url = profileImgUrl.data.data[0].profile_image_url;
-          TwitchProfiles[user.user_id] = profileImgUrl.data.data[0].profile_image_url;
+          user.profile_img_url = newProfileImgUrls.data.data.find(p_user => {
+            return p_user.id === user.user_id;
+          }).profile_image_url;
         } else {
           user.profile_img_url = TwitchProfiles[user.user_id];
         }
+        return user;
       })
-    );
+    ).then(res => {
+      const newProfiles = res.reduce(
+        // eslint-disable-next-line no-sequences
+        (obj, item) => ((obj[item.user_id] = item.profile_img_url), obj),
+        {}
+      );
 
-    localStorage.setItem("TwitchProfiles", JSON.stringify(TwitchProfiles));
+      const FinallTwitchProfilesObj = { ...newProfiles, ...TwitchProfiles };
+
+      localStorage.setItem("TwitchProfiles", JSON.stringify(FinallTwitchProfilesObj));
+    });
 
     // Removes game id duplicates before sending game request.
     const games = [

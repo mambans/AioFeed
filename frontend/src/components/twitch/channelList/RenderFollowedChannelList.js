@@ -6,7 +6,7 @@ import AccountContext from "./../../account/AccountContext";
 import StyledLoadingList from "./../LoadingList";
 
 const channelList = async followedChannels => {
-  const followedChannelsIds = await followedChannels.data.data.map(channel => {
+  const followedChannelsIds = await followedChannels.map(channel => {
     return channel.to_id;
   });
 
@@ -43,7 +43,7 @@ const RenderFollowedChannelList = data => {
   const AddMetadata = useCallback(
     async followedChannels => {
       try {
-        followedChannels.data.data.map(stream => {
+        followedChannels.map(stream => {
           if (
             streamMetadata.current.find(channel => {
               return channel.id === stream.to_id;
@@ -61,7 +61,7 @@ const RenderFollowedChannelList = data => {
       }
 
       await getChannels();
-      setFollowedChannels(followedChannels.data.data);
+      setFollowedChannels(followedChannels);
     },
     [getChannels]
   );
@@ -70,8 +70,7 @@ const RenderFollowedChannelList = data => {
     const fetchProfileImages = async followedChannels => {
       if (
         !localStorage.getItem("ChannelsMetadata") ||
-        JSON.parse(localStorage.getItem("ChannelsMetadata")).length !==
-          followedChannels.data.data.length
+        JSON.parse(localStorage.getItem("ChannelsMetadata")).length !== followedChannels.length
       ) {
         console.log("Metadata request sent");
 
@@ -103,7 +102,7 @@ const RenderFollowedChannelList = data => {
     };
 
     try {
-      if (data.followedChannels.data) fetchProfileImages(data.followedChannels);
+      if (data.followedChannels) fetchProfileImages(data.followedChannels);
     } catch (error) {
       console.error(error);
     }

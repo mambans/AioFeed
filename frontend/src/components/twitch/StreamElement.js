@@ -222,7 +222,7 @@ function StreamEle(data) {
       <div>
         <div className={styles.channelContainer} ref={refChannel}>
           <Link to={`/channel/${data.data.user_name}`} style={{ gridRow: 1, paddingRight: "5px" }}>
-            <img src={data.data.profile_img_url} alt='' className={styles.profile_img}></img>
+            <img src={data.data.profile_img_url} alt='' className={styles.profile_img} />
           </Link>
           <Link to={`/channel/${data.data.user_name}`} className={styles.channel}>
             {data.data.user_name}

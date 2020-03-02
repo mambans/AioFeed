@@ -74,10 +74,10 @@ export default function Feed() {
 
         {enableTwitch ? (
           <DataHandler>
-            {liveStreams => (
+            {data => (
               <CSSTransition in={enableTwitch} timeout={0} classNames='fade-1s' unmountOnExit>
                 <div className={styles.twitchContainer}>
-                  <Twitch data={liveStreams} />
+                  <Twitch data={data} />
                 </div>
               </CSSTransition>
             )}

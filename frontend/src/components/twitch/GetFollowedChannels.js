@@ -50,7 +50,7 @@ async function getFollowedChannels(twitchUserId) {
       );
     }
 
-    return followedchannels;
+    return followedchannels.data.data;
   } catch (error) {
     console.error(error.message);
     return error;
