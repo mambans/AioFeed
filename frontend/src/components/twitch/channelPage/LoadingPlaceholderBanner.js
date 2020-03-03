@@ -5,7 +5,7 @@ import { Banner, Name, BannerInfoOverlay } from "./StyledComponents";
 export default () => {
   return (
     <Banner>
-      <div id='Banner' alt='' style={{ backgroundColor: "rgba(28, 30, 32, 0.92)" }} />
+      <div id='Banner' alt='' style={{ backgroundColor: "var(--navigationbarBackground)" }} />
       <BannerInfoOverlay>
         <Name>
           <div id='HeaderChannelInfo'>
