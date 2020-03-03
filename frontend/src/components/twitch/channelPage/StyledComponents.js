@@ -217,8 +217,8 @@ const SortDropDownList = styled.ul`
 
 const LiveIndicator = styled.div`
   color: red;
-  margin-left: -55px;
-  padding-right: 15px;
+  /* margin-left: -55px;
+  padding-right: 15px; */
   animation: breathRedColor 3s linear 1s infinite;
 
   p {
@@ -261,6 +261,18 @@ const Chat = styled.iframe`
   border: none;
 `;
 
+const StyledLiveInfoContainer = styled.div`
+  position: absolute;
+  margin-right: 15%;
+  display: flex;
+  align-items: center;
+
+  #LiveDetails {
+    display: flex;
+    flex-direction: column;
+  }
+`;
+
 export {
   ChannelContainer,
   Banner,
@@ -273,4 +285,5 @@ export {
   LiveIndicatorIcon,
   VideoPlayer,
   Chat,
+  StyledLiveInfoContainer,
 };

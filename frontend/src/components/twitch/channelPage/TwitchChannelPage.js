@@ -1,12 +1,13 @@
 import { MdFavorite } from "react-icons/md";
 import { MdFavoriteBorder } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useEffect, useCallback, useState, useRef, useContext } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
+import Moment from "react-moment";
 
 import AccountContext from "./../../account/AccountContext";
 import LoadingPlaceholderBanner from "./LoadingPlaceholderBanner";
@@ -24,11 +25,15 @@ import {
   LiveIndicatorIcon,
   VideoPlayer,
   Chat,
+  StyledLiveInfoContainer,
 } from "./StyledComponents";
 
 export default () => {
   const { id } = useParams();
-  const [channelInfo, setChannelInfo] = useState();
+  const { p_channelInfos, p_uptime, p_viewers, p_id } = useLocation().state || {};
+  const [channelInfo, setChannelInfo] = useState(p_channelInfos);
+  const numberOfVideos = Math.floor(document.documentElement.clientWidth / 350);
+
   const [vods, setVods] = useState();
   const [clips, setClips] = useState();
   const [vodsloadmoreLoaded, setVodsLoadmoreLoaded] = useState(true);
@@ -36,16 +41,19 @@ export default () => {
   const [sortVodsBy, setSortVodsBy] = useState("Time");
   const [sortClipsBy, setSortClipsBy] = useState(null);
   const [following, setFollowing] = useState(false);
-  const [channelId, setChannelId] = useState();
+  const [channelId, setChannelId] = useState(p_id);
   const [isLive, setIsLive] = useState();
+  const [viewers, setViewers] = useState(p_viewers);
+  const [uptime, setUptime] = useState(p_uptime);
 
-  const numberOfVideos = Math.floor(document.documentElement.clientWidth / 350);
   const vodPagination = useRef();
   const previosVodPage = useRef();
   const previosClipsPage = useRef();
   const clipPagination = useRef();
   const loadmoreVodsRef = useRef();
   const loadmoreClipsRef = useRef();
+  const twitchPlayer = useRef();
+  const viewersTimer = useRef();
 
   const { setTwitchToken, twitchToken, setRefreshToken, refreshToken, twitchUserId } = useContext(
     AccountContext
@@ -71,21 +79,25 @@ export default () => {
   }, [id, twitchToken]);
 
   const fetchChannelInfo = useCallback(async () => {
-    return await axios
-      .get(`https://api.twitch.tv/kraken/channels/${channelId}`, {
-        headers: {
-          Authorization: `OAuth ${twitchToken}`,
-          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-          Accept: "application/vnd.twitchtv.v5+json",
-        },
-      })
-      .then(res => {
-        return res.data;
-      })
-      .catch(error => {
-        console.error("fetchChannelInfo: ", error);
-      });
-  }, [twitchToken, channelId]);
+    if (p_channelInfos) {
+      return p_channelInfos;
+    } else {
+      return await axios
+        .get(`https://api.twitch.tv/kraken/channels/${channelId}`, {
+          headers: {
+            Authorization: `OAuth ${twitchToken}`,
+            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+            Accept: "application/vnd.twitchtv.v5+json",
+          },
+        })
+        .then(res => {
+          return res.data;
+        })
+        .catch(error => {
+          console.error("fetchChannelInfo: ", error);
+        });
+    }
+  }, [twitchToken, channelId, p_channelInfos]);
 
   const followStream = async UserId => {
     await axios
@@ -100,7 +112,7 @@ export default () => {
         if (res.data) console.log("Started following", channelInfo.display_name);
       })
       .catch(async error => {
-        console.log(`Failed to unfollow ${channelId.display_name}. `, error);
+        console.log(`Failed to unfollow ${channelInfo.display_name}. `, error);
         console.log(`Trying to auto re-authenticate with Twitch.`);
 
         await axios
@@ -299,53 +311,115 @@ export default () => {
 
     const ChannelInfos = await fetchChannelInfo();
 
-    setChannelInfo(ChannelInfos);
+    if (!channelInfo) setChannelInfo(ChannelInfos);
     CheckIfFollowed(ChannelInfos._id);
 
     document.title = `${ChannelInfos.display_name} | Notifies`;
-  }, [fetchChannelInfo, twitchUserId, twitchToken]);
+  }, [fetchChannelInfo, twitchUserId, twitchToken, channelInfo]);
+
+  const fetchUptime = useCallback(async () => {
+    await axios
+      .get(`https://api.twitch.tv/helix/streams`, {
+        params: {
+          user_id: twitchPlayer.current.getChannelId(),
+          first: 1,
+        },
+        headers: {
+          Authorization: `Bearer ${twitchToken}`,
+          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+        },
+      })
+      .then(res => {
+        if (res.data.data[0] && res.data.data[0].started_at) {
+          setUptime(res.data.data[0].started_at);
+        } else {
+          setTimeout(async () => {
+            await axios
+              .get(`https://api.twitch.tv/helix/streams`, {
+                params: {
+                  user_id: twitchPlayer.current.getChannelId(),
+                  first: 1,
+                },
+                headers: {
+                  Authorization: `Bearer ${twitchToken}`,
+                  "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+                },
+              })
+              .then(res => {
+                if (res.data.data[0] && res.data.data[0].started_at) {
+                  setUptime(res.data.data[0].started_at);
+                } else {
+                }
+              });
+          }, 60000);
+        }
+      })
+      .catch(error => {
+        console.log("fetchChannelInfo stream: error", error);
+      });
+  }, [twitchToken]);
 
   useEffect(() => {
     (async () => {
       if (!channelId) await getIdFromName();
       if (!channelInfo && channelId) getChannelInfo();
     })();
+
+    return () => {
+      clearInterval(viewersTimer.current);
+    };
   }, [channelInfo, getChannelInfo, getIdFromName, channelId]);
 
-  const OnlineEvents = () => {
+  const OnlineEvents = useCallback(() => {
     console.log("Stream is Online");
     setIsLive(true);
-  };
+
+    setViewers(twitchPlayer.current.getViewers());
+    if (!uptime) {
+      setTimeout(() => {
+        fetchUptime();
+      }, 5000);
+    }
+
+    if (!viewersTimer.current) {
+      viewersTimer.current = setInterval(() => {
+        setViewers(twitchPlayer.current.getViewers());
+      }, 1000 * 60 * 2);
+    }
+  }, [fetchUptime, uptime]);
 
   const offlineEvents = () => {
     console.log("Stream is Offline");
     setIsLive(false);
+    clearInterval(viewersTimer.current);
   };
 
   useEffect(() => {
     try {
-      const twitchPlayer = new window.Twitch.Player("twitch-embed", {
-        width: `${300 * 1.777777777777778}px`,
-        height: "300px",
-        theme: "dark",
-        layout: "video",
-        channel: id,
-        muted: true,
-      });
+      if (!twitchPlayer.current) {
+        twitchPlayer.current = new window.Twitch.Player("twitch-embed", {
+          width: `${300 * 1.777777777777778}px`,
+          height: "300px",
+          theme: "dark",
+          layout: "video",
+          channel: id,
+          muted: true,
+        });
+      }
 
-      if (twitchPlayer) {
-        twitchPlayer.addEventListener(window.Twitch.Player.ONLINE, OnlineEvents);
-        twitchPlayer.addEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
+      if (twitchPlayer.current) {
+        twitchPlayer.current.addEventListener(window.Twitch.Player.ONLINE, OnlineEvents);
+        twitchPlayer.current.addEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
       }
 
       return () => {
-        twitchPlayer.removeEventListener(window.Twitch.Player.ONLINE, OnlineEvents);
-        twitchPlayer.removeEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
+        twitchPlayer.current.removeEventListener(window.Twitch.Player.ONLINE, OnlineEvents);
+        twitchPlayer.current.removeEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
       };
     } catch (error) {
       console.log("error", error);
     }
-  }, [id]);
+  }, [id, OnlineEvents]);
 
   useEffect(() => {
     if (channelId && !vods) {
@@ -377,14 +451,38 @@ export default () => {
               <div id='HeaderChannelInfo'>
                 <div id='ChannelName'>
                   {isLive ? (
-                    <Link to={`/live/${id}`} style={{ padding: "0" }}>
-                      <LiveIndicator>
-                        <LiveIndicatorIcon />
-                        <p>Live</p>
-                      </LiveIndicator>
-                    </Link>
+                    <StyledLiveInfoContainer>
+                      <div id='LiveDetails'>
+                        <span>Viewers: {viewers}</span>
+                        <span>Uptime: {<Moment durationFromNow>{uptime}</Moment>}</span>
+                      </div>
+                      <Link
+                        to={{
+                          pathname: `/live/${id}`,
+                          state: {
+                            p_channelInfos: channelInfo,
+                            p_viewers: viewers,
+                            p_uptime: uptime,
+                          },
+                        }}
+                        style={{ padding: "0 15px" }}>
+                        <LiveIndicator>
+                          <LiveIndicatorIcon />
+                          <p>Live</p>
+                        </LiveIndicator>
+                      </Link>
+                    </StyledLiveInfoContainer>
                   ) : null}
-                  <Link to={`/live/${id}`} id='ChannelLiveLink'>
+                  <Link
+                    to={{
+                      pathname: `/live/${id}`,
+                      state: {
+                        p_channelInfos: channelInfo,
+                        p_viewers: viewers,
+                        p_uptime: uptime,
+                      },
+                    }}
+                    id='ChannelLiveLink'>
                     <img id='profileIcon' alt='' src={channelInfo.logo} />
                     {channelInfo.display_name}
                   </Link>

@@ -30,30 +30,33 @@ import PlayerEvents from "./PlayerEvents";
 import VolumeSlider from "./VolumeSlider";
 
 export default () => {
+  const { p_uptime, p_viewers, p_title, p_game, p_channelInfos } = useLocation().state || {};
   const { id } = useParams();
   document.title = ` ${id} | Notifies`;
   const location = useLocation();
   const type = location.pathname.split("/")[1];
   const nameFromHash = location.hash !== "" ? location.hash.replace("#", "") : null;
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
+  const { twitchToken } = useContext(AccountContext);
+
   const [switched, setSwitched] = useState(false);
   const [volumeText, setVolumeText] = useState(0);
   const [volumeMuted, setVolumeMuted] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
-  const [channelInfo, setChannelInfo] = useState();
-  const [uptime, setUptime] = useState();
-  const [viewers, setViewers] = useState();
+  const [channelInfo, setChannelInfo] = useState(p_channelInfos);
+  const [uptime, setUptime] = useState(p_uptime);
+  const [viewers, setViewers] = useState(p_viewers);
   const [showPlaybackStats, setShowPlaybackStats] = useState();
   const [playbackStats, setPlaybackStats] = useState();
   const [showQualities, setShowQualities] = useState();
   const [qualities, setQualities] = useState();
   const [activeQuality, setActiveQuality] = useState();
+
   const volumeEventOverlayRef = useRef();
   const twitchPlayer = useRef();
   const PlayersatsTimer = useRef();
   const channelinfoTimer = useRef();
   const viewersTimer = useRef();
-  const { twitchToken } = useContext(AccountContext);
   const OpenedDate = useRef();
 
   const fetchChannelInfo = useCallback(async () => {
@@ -192,6 +195,7 @@ export default () => {
       document.documentElement.style.overflow = "visible";
       setShrinkNavbar("false");
       setFooterVisible(true);
+      setVisible(true);
       clearInterval(PlayersatsTimer.current);
       clearInterval(channelinfoTimer.current);
       clearInterval(viewersTimer.current);
@@ -210,8 +214,8 @@ export default () => {
   const OnlineEvents = useCallback(() => {
     console.log("Stream is Online");
     setTimeout(() => {
-      fetchChannelInfo();
-      fetchUptime();
+      if (!channelInfo) fetchChannelInfo();
+      if (!uptime) fetchUptime();
       setViewers(twitchPlayer.current.getViewers());
     }, 5000);
 
@@ -226,7 +230,7 @@ export default () => {
         fetchChannelInfo();
       }, 1000 * 60 * 5);
     }
-  }, [fetchUptime, fetchChannelInfo]);
+  }, [fetchUptime, fetchChannelInfo, channelInfo, uptime]);
 
   const offlineEvents = useCallback(() => {
     console.log("Stream is Offline");
@@ -259,7 +263,16 @@ export default () => {
       <>
         <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
           <PlayerNavbar>
-            <Link to={`/channel/${id}`}>
+            <Link
+              to={{
+                pathname: `/channel/${id}`,
+                state: {
+                  p_channelInfos: channelInfo,
+                  p_viewers: viewers,
+                  p_uptime: uptime,
+                  p_id: twitchPlayer.current ? twitchPlayer.current.getChannelId() : null,
+                },
+              }}>
               <MdAccountCircle size={20} />
               {id}'s channel page
             </Link>
@@ -275,26 +288,25 @@ export default () => {
           <div id='twitch-embed'>
             <VolumeEventOverlay ref={volumeEventOverlayRef} type='live' id='controls'>
               <InfoDisplay>
-                {channelInfo ? (
-                  <>
-                    <img src={channelInfo.logo} alt=''></img>
-                    <a id='name' href={channelInfo.url}>
-                      {channelInfo.display_name}
-                    </a>
-                    <p id='title'>{channelInfo.status}</p>
-                    <Link id='game' to={`/game/${channelInfo.game}`}>
-                      Playing {channelInfo.game}
-                    </Link>
-                    {viewers ? <p id='viewers'> Viewers: {viewers} </p> : null}
-                    {uptime ? (
-                      <p id='uptime'>
-                        Uptime <Moment durationFromNow>{uptime}</Moment>
-                      </p>
-                    ) : (
-                      <p id='uptime'>Offline</p>
-                    )}
-                  </>
-                ) : null}
+                <>
+                  {channelInfo ? <img src={channelInfo.logo} alt=''></img> : null}
+                  <a id='name' href={channelInfo ? channelInfo.url : `https://www.twitch.tv/${id}`}>
+                    {channelInfo ? channelInfo.display_name : id}
+                  </a>
+                  <p id='title'>{channelInfo ? channelInfo.status : p_title}</p>
+                  <Link id='game' to={`/game/${channelInfo ? channelInfo.game : p_game}`}>
+                    Playing {channelInfo ? channelInfo.game : p_game}
+                  </Link>
+                </>
+
+                {viewers ? <p id='viewers'> Viewers: {viewers} </p> : null}
+                {uptime ? (
+                  <p id='uptime'>
+                    Uptime <Moment durationFromNow>{uptime}</Moment>
+                  </p>
+                ) : (
+                  <p id='uptime'>Offline</p>
+                )}
               </InfoDisplay>
               {isPaused ? (
                 <FaPlay id='PausePlay' size={30} onClick={PausePlay} />

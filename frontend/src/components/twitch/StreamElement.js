@@ -173,7 +173,17 @@ function StreamEle(data) {
             data={data.data}
             setIsHovered={setIsHovered}></StreamHoverIframe>
         ) : null}
-        <a className={styles.img} href={"/live/" + data.data.user_name.toLowerCase()}>
+        <Link
+          className={styles.img}
+          to={{
+            pathname: "/live/" + data.data.user_name.toLowerCase(),
+            state: {
+              p_uptime: data.data.started_at,
+              p_title: data.data.title,
+              p_game: data.data.game_name,
+              p_viewers: data.data.viewers,
+            },
+          }}>
           {/* href={
                 "https://player.twitch.tv/?volume=0.1&!muted&channel=" +
                 data.data.user_name.toLowerCase()
@@ -192,7 +202,7 @@ function StreamEle(data) {
             }
             alt={styles.thumbnail}
           />
-        </a>
+        </Link>
         <Moment className={styles.duration} durationFromNow>
           {data.data.started_at}
         </Moment>
@@ -212,19 +222,53 @@ function StreamEle(data) {
               {data.data.title}
             </Tooltip>
           }>
-          <VideoTitle to={"/live/" + data.data.user_name.toLowerCase()}>
+          <VideoTitle
+            to={{
+              pathname: "/live/" + data.data.user_name.toLowerCase(),
+              state: {
+                p_uptime: data.data.started_at,
+                p_title: data.data.title,
+                p_game: data.data.game_name,
+                p_viewers: data.data.viewers,
+              },
+            }}>
             {Utilities.truncate(data.data.title, 50)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
-        <VideoTitle to={"/live/" + data.data.user_name.toLowerCase()}>{data.data.title}</VideoTitle>
+        <VideoTitle
+          to={{
+            pathname: "/live/" + data.data.user_name.toLowerCase(),
+            state: {
+              p_uptime: data.data.started_at,
+              p_title: data.data.title,
+              p_game: data.data.game_name,
+              p_viewers: data.data.viewers,
+            },
+          }}>
+          {data.data.title}
+        </VideoTitle>
       )}
       <div>
         <div className={styles.channelContainer} ref={refChannel}>
-          <Link to={`/channel/${data.data.user_name}`} style={{ gridRow: 1, paddingRight: "5px" }}>
+          <Link
+            to={{
+              pathname: `/channel/${data.data.user_name}`,
+              state: {
+                p_id: data.data.user_id,
+              },
+            }}
+            style={{ gridRow: 1, paddingRight: "5px" }}>
             <img src={data.data.profile_img_url} alt='' className={styles.profile_img} />
           </Link>
-          <Link to={`/channel/${data.data.user_name}`} className={styles.channel}>
+          <Link
+            to={{
+              pathname: `/channel/${data.data.user_name}`,
+              state: {
+                p_id: data.data.user_id,
+              },
+            }}
+            className={styles.channel}>
             {data.data.user_name}
           </Link>
 

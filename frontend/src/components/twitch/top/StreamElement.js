@@ -58,7 +58,17 @@ function StreamEle(data) {
         {isHovered ? (
           <StreamHoverIframe id={data.data.id} data={data.data} setIsHovered={setIsHovered} />
         ) : null}
-        <Link to={`/live/${data.data.user_name}`} className={styles.img}>
+        <Link
+          to={{
+            pathname: "/live/" + data.data.user_name.toLowerCase(),
+            state: {
+              p_uptime: data.data.started_at,
+              p_title: data.data.title,
+              p_game: data.data.game_name,
+              p_viewers: data.data.viewers,
+            },
+          }}
+          className={styles.img}>
           <img
             src={
               data.data.thumbnail_url.replace("{width}", 640).replace("{height}", 360) +
@@ -86,24 +96,52 @@ function StreamEle(data) {
               {data.data.title}
             </Tooltip>
           }>
-          <VideoTitle to={"/live/" + data.data.user_name.toLowerCase()}>
+          <VideoTitle
+            to={{
+              pathname: "/live/" + data.data.user_name.toLowerCase(),
+              state: {
+                p_uptime: data.data.started_at,
+                p_title: data.data.title,
+                p_game: data.data.game_name,
+                p_viewers: data.data.viewers,
+              },
+            }}>
             {Utilities.truncate(data.data.title, 50)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
-        <VideoTitle to={"/live/" + data.data.user_name.toLowerCase()}>{data.data.title}</VideoTitle>
+        <VideoTitle
+          to={{
+            pathname: "/live/" + data.data.user_name.toLowerCase(),
+            state: {
+              p_uptime: data.data.started_at,
+              p_title: data.data.title,
+              p_game: data.data.game_name,
+              p_viewers: data.data.viewers,
+            },
+          }}>
+          {data.data.title}
+        </VideoTitle>
       )}
       <div>
         <div className={styles.channelContainer} ref={refChannel}>
           <Link
-            to={`/channel/${data.data.user_name}`}
-            // href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
+            to={{
+              pathname: `/channel/${data.data.user_name}`,
+              state: {
+                p_id: data.data.user_id,
+              },
+            }}
             style={{ gridRow: 1 }}>
             <img src={data.data.profile_img_url} alt='' className={styles.profile_img}></img>
           </Link>
           <Link
-            // href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
-            to={`/channel/${data.data.user_name}`}
+            to={{
+              pathname: `/channel/${data.data.user_name}`,
+              state: {
+                p_id: data.data.user_id,
+              },
+            }}
             className={styles.channel}>
             {data.data.user_name}
           </Link>
