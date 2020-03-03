@@ -30,7 +30,7 @@ import {
 
 export default () => {
   const { id } = useParams();
-  const { p_channelInfos, p_uptime, p_viewers, p_id } = useLocation().state || {};
+  const { p_channelInfos, p_uptime, p_viewers, p_id, p_logo } = useLocation().state || {};
   const [channelInfo, setChannelInfo] = useState(p_channelInfos);
   const numberOfVideos = Math.floor(document.documentElement.clientWidth / 350);
 
@@ -483,7 +483,7 @@ export default () => {
                       },
                     }}
                     id='ChannelLiveLink'>
-                    <img id='profileIcon' alt='' src={channelInfo.logo} />
+                    <img id='profileIcon' alt='' src={channelInfo.logo || p_logo} />
                     {channelInfo.display_name}
                   </Link>
                   {channelInfo.partner ? (

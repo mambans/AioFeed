@@ -127,7 +127,7 @@ function StreamEle(data) {
         <div className={styles.channelContainer} ref={refChannel}>
           <Link
             to={{
-              pathname: `/channel/${data.data.user_name}`,
+              pathname: `/channel/${data.data.user_name.toLowerCase()}`,
               state: {
                 p_id: data.data.user_id,
               },
@@ -137,7 +137,7 @@ function StreamEle(data) {
           </Link>
           <Link
             to={{
-              pathname: `/channel/${data.data.user_name}`,
+              pathname: `/channel/${data.data.user_name.toLowerCase()}`,
               state: {
                 p_id: data.data.user_id,
               },
