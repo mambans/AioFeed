@@ -80,6 +80,10 @@ const Name = styled.div`
     padding: 10px;
     width: 30%;
 
+    @media screen and (max-width: 1920px) {
+      width: 40%;
+    }
+
     p {
       margin-bottom: 0.6rem;
     }
@@ -270,6 +274,10 @@ const StyledLiveInfoContainer = styled.div`
   #LiveDetails {
     display: flex;
     flex-direction: column;
+  }
+
+  @media screen and (max-width: 1920px) {
+    margin-right: calc(40% - 250px);
   }
 `;
 
