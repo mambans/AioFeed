@@ -9,10 +9,16 @@ import AccountContext from "./AccountContext";
 
 export default () => {
   document.title = "Notifies | Create Account";
+  const { setAuthKey, setUsername } = useContext(AccountContext);
   const [error, setError] = useState(null);
+  const [validated, setValidated] = useState(false);
+
   const [created, setCreated] = useState();
 
-  const { setAuthKey, setUsername } = useContext(AccountContext);
+  const validateEmail = email => {
+    var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  };
 
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);
@@ -24,7 +30,7 @@ export default () => {
       bind: {
         value,
         onChange: event => {
-          setValue(event.target.value);
+          setValue(event.target.value.trim());
         },
       },
     };
@@ -36,7 +42,14 @@ export default () => {
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    createAccount();
+    const form = evt.currentTarget;
+    if (form.checkValidity() === false) {
+      evt.preventDefault();
+      evt.stopPropagation();
+    } else {
+      setValidated(true);
+      createAccount();
+    }
   };
 
   async function createAccount() {
@@ -82,18 +95,42 @@ export default () => {
       <>
         {error ? <ErrorHandeling data={error}></ErrorHandeling> : null}
         <h3 className={styles.formTitle}>Create a Notifies account.</h3>
-        <Form onSubmit={handleSubmit} validated className={styles.createForm}>
+        <Form
+          onSubmit={handleSubmit}
+          noValidate
+          validated={validated}
+          className={styles.createForm}>
           <Form.Group controlId='formGroupUserName'>
             <Form.Label>Username</Form.Label>
-            <Form.Control type='text' placeholder='Username' name='username' {...bindUserName} />
+            <Form.Control
+              type='text'
+              placeholder='Username'
+              name='username'
+              required
+              isInvalid={!userName}
+              {...bindUserName}
+            />
+            <Form.Control.Feedback type='invalid'>Please enter a username.</Form.Control.Feedback>
           </Form.Group>
           <Form.Group controlId='formGroupEmail'>
             <Form.Label>Email address</Form.Label>
-            <Form.Control type='email' placeholder='Enter email' {...bindEmail} />
+            <Form.Control
+              type='email'
+              placeholder='Enter email'
+              required
+              isInvalid={!email || !validateEmail(email)}
+              {...bindEmail}
+            />
+            <Form.Control.Feedback type='invalid'>Please enter an email.</Form.Control.Feedback>
           </Form.Group>
           <Form.Group controlId='formGroupPassword'>
             <Form.Label>Password</Form.Label>
-            <Form.Control type='password' placeholder='Password' {...bindPassword} />
+            <Form.Control
+              type='password'
+              placeholder='Password'
+              isInvalid={!password}
+              {...bindPassword}
+            />
           </Form.Group>
           <Button variant='primary' type='submit'>
             Create
