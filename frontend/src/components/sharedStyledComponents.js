@@ -135,6 +135,22 @@ const ImageContainer = styled.div`
     display: block;
   }
 
+  &:hover .loadingSpinner {
+    opacity: 0.5;
+  }
+
+  .loadingSpinner {
+    position: absolute;
+    height: 75px;
+    width: 75px;
+    background: rgba(0, 0, 0, 0) none repeat scroll 0% 0%;
+    margin-left: 129.5px;
+    margin-top: 57px;
+    border-width: 0.5em;
+    transition: opacity 300ms;
+    opacity: 0;
+  }
+
   img {
     border-radius: 10px;
     width: 100%;

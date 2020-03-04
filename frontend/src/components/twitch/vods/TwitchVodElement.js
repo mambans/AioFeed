@@ -12,6 +12,7 @@ import styles from "../Twitch.module.scss";
 import Utilities from "../../../utilities/Utilities";
 import { VodLiveIndicator } from "./StyledComponents";
 import AccountContext from "../../account/AccountContext";
+import { Spinner } from "react-bootstrap";
 
 export default ({ ...data }) => {
   const { twitchToken } = useContext(AccountContext);
@@ -60,7 +61,7 @@ export default ({ ...data }) => {
         } else {
           setPreviewAvailable(res.data.animated_preview_url);
         }
-      }, 500);
+      }, 1000);
     } else {
       hoverTimeoutRef.current = setTimeout(() => {
         setIsHovered(true);
@@ -91,6 +92,9 @@ export default ({ ...data }) => {
           <VodLiveIndicator to={`/live/${data.data.user_name}`}>Live</VodLiveIndicator>
         ) : null}
         <a className={styles.img} href={data.data.url}>
+          {!previewAvailable ? (
+            <Spinner className='loadingSpinner' animation='border' role='status' variant='light' />
+          ) : null}
           {isHovered && previewAvailable && previewAvailable !== "null" ? (
             <div
               alt=''
