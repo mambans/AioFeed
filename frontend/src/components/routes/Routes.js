@@ -82,7 +82,7 @@ const Routes = () => {
                               path='/account'
                               render={() => (
                                 <div style={{ width: "1000px", margin: "auto", marginTop: "55px" }}>
-                                  return <AccountModal></AccountModal>;
+                                  <AccountModal></AccountModal>
                                 </div>
                               )}
                             />
