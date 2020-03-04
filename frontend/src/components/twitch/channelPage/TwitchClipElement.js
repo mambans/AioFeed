@@ -84,6 +84,7 @@ export default ({ ...data }) => {
             className={styles.viewers}
             id={styles.timeago}
             style={{
+              color: "var(--infoColorGrey)",
               gridColumn: 2,
               justifySelf: "right",
             }}
