@@ -1,7 +1,9 @@
 import { MdFavorite } from "react-icons/md";
+import { MdChat } from "react-icons/md";
+import { FaWindowClose } from "react-icons/fa";
+import { MdLiveTv } from "react-icons/md";
 import { MdFavoriteBorder } from "react-icons/md";
-import { Link } from "react-router-dom";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
@@ -45,6 +47,8 @@ export default () => {
   const [isLive, setIsLive] = useState();
   const [viewers, setViewers] = useState(p_viewers);
   const [uptime, setUptime] = useState(p_uptime);
+  const [videoOpen, setVideoOpen] = useState(true);
+  const [chatOpen, setChatOpen] = useState(true);
 
   const vodPagination = useRef();
   const previosVodPage = useRef();
@@ -435,14 +439,57 @@ export default () => {
 
   return (
     <ChannelContainer>
-      <VideoPlayer id='twitch-embed' />
+      <VideoPlayer id='twitch-embed' style={{ display: videoOpen ? "block" : "none" }} />
       <Chat
         frameborder='0'
         scrolling='yes'
         theme='dark'
         // id={id + "-chat"}
         src={`https://www.twitch.tv/embed/${id}/chat?darkpopout`}
+        style={{ display: chatOpen ? "block" : "none" }}
       />
+      {videoOpen ? (
+        <FaWindowClose
+          title='Close video'
+          className='svgButton'
+          id='closeVideo'
+          size={20}
+          onClick={() => {
+            setVideoOpen(!videoOpen);
+          }}
+        />
+      ) : (
+        <MdLiveTv
+          title='Open video'
+          className='svgButton'
+          id='openVideo'
+          size={20}
+          onClick={() => {
+            setVideoOpen(!videoOpen);
+          }}
+        />
+      )}
+      {chatOpen ? (
+        <FaWindowClose
+          title='Close chat'
+          className='svgButton'
+          id='closeChat'
+          size={20}
+          onClick={() => {
+            setChatOpen(!chatOpen);
+          }}
+        />
+      ) : (
+        <MdChat
+          title='Open chat'
+          className='svgButton'
+          id='openChat'
+          size={20}
+          onClick={() => {
+            setChatOpen(!chatOpen);
+          }}
+        />
+      )}
       {channelInfo ? (
         <Banner>
           <img id='Banner' alt='' src={channelInfo.profile_banner} />

@@ -5,6 +5,54 @@ import { MdVideocam } from "react-icons/md";
 const ChannelContainer = styled.div`
   min-height: 100vh;
   min-width: 100%;
+
+  svg.svgButton {
+    position: absolute;
+    z-index: 2;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: color 250ms, opacity 250ms;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &#closeChat {
+      right: 534px;
+      color: #b50000;
+
+      &:hover {
+        color: red;
+      }
+    }
+
+    &#openChat {
+      right: 5px;
+      color: black;
+
+      &:hover {
+        color: #3e3e3e;
+      }
+    }
+
+    &#closeVideo {
+      left: 534px;
+      color: #b50000;
+
+      &:hover {
+        color: red;
+      }
+    }
+
+    &#openVideo {
+      left: 5px;
+      color: black;
+
+      &:hover {
+        color: #3e3e3e;
+      }
+    }
+  }
 `;
 
 const Banner = styled.div`
