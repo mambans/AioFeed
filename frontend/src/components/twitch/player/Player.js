@@ -57,6 +57,7 @@ export default () => {
   const PlayersatsTimer = useRef();
   const channelinfoTimer = useRef();
   const viewersTimer = useRef();
+  const uptimeTimer = useRef();
   const OpenedDate = useRef();
 
   const fetchChannelInfo = useCallback(async () => {
@@ -92,7 +93,7 @@ export default () => {
         if (res.data.data[0] && res.data.data[0].started_at) {
           setUptime(res.data.data[0].started_at);
         } else {
-          setTimeout(async () => {
+          uptimeTimer.current = setInterval(async () => {
             await axios
               .get(`https://api.twitch.tv/helix/streams`, {
                 params: {
@@ -107,10 +108,10 @@ export default () => {
               .then(res => {
                 if (res.data.data[0] && res.data.data[0].started_at) {
                   setUptime(res.data.data[0].started_at);
-                } else {
+                  clearInterval(uptimeTimer.current);
                 }
               });
-          }, 60000);
+          }, 1000 * 60 * 0.5);
         }
       })
       .catch(error => {
@@ -199,6 +200,7 @@ export default () => {
       clearInterval(PlayersatsTimer.current);
       clearInterval(channelinfoTimer.current);
       clearInterval(viewersTimer.current);
+      clearInterval(uptimeTimer.current);
     };
   }, [
     setShrinkNavbar,
@@ -238,6 +240,7 @@ export default () => {
     clearInterval(viewersTimer.current);
     clearInterval(channelinfoTimer.current);
     setUptime(null);
+    clearInterval(uptimeTimer.current);
 
     if (!channelinfoTimer.current) {
       channelinfoTimer.current = setInterval(() => {
