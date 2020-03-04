@@ -6,7 +6,7 @@ My personal project **Notifies**, is a site that combines feeds from different s
 
 ## Account
 
-Notifies stores the Notifies account Username, email and **Hashed** password in databse and Youtube and Twitch access tokens so you don't need to reconnected on each session.
+Notifies stores the Notifies account Username, email, **hashed** password in database and Youtube and Twitch access tokens so you don't need to reconnected on each session.
 It also stores:
 
 - Profile image url
