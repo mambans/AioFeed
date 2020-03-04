@@ -162,7 +162,7 @@ export default () => {
         placeholder='Img url...'
         arrow={false}
         trigger={<StyledUploadImageButon>Change Profile image</StyledUploadImageButon>}
-        position='bottom center'
+        position='top center'
         className='updateProfilePopup'>
         <UpdateProfileImg />
       </Popup>

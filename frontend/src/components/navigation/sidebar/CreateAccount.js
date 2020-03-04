@@ -114,7 +114,7 @@ export default () => {
             <Form.Control
               type='text'
               placeholder='Username'
-              nane='username'
+              name='username'
               required
               isInvalid={!userName}
               {...bindUserName}
