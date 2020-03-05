@@ -382,7 +382,7 @@ export default () => {
                   setPlaybackStats(twitchPlayer.current.getPlaybackStats());
 
                   if (PlayersatsTimer.current) {
-                    clearInterval(PlayersatsTimer);
+                    clearInterval(PlayersatsTimer.current);
                   } else {
                     PlayersatsTimer.current = setInterval(() => {
                       setPlaybackStats(twitchPlayer.current.getPlaybackStats());

@@ -59,6 +59,7 @@ export default () => {
   const loadmoreClipsRef = useRef();
   const twitchPlayer = useRef();
   const viewersTimer = useRef();
+  const refetchUptimeTimer = useRef();
 
   const { setTwitchToken, twitchToken, setRefreshToken, refreshToken, twitchUserId } = useContext(
     AccountContext
@@ -336,7 +337,7 @@ export default () => {
         if (res.data.data[0] && res.data.data[0].started_at) {
           setUptime(res.data.data[0].started_at);
         } else {
-          setTimeout(async () => {
+          refetchUptimeTimer.current = setTimeout(async () => {
             await axios
               .get(`https://api.twitch.tv/helix/streams`, {
                 params: {
@@ -435,6 +436,13 @@ export default () => {
       fetchClips();
     }
   }, [fetchClips, clips, channelId]);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(refetchUptimeTimer.current);
+      clearInterval(viewersTimer.current);
+    };
+  });
 
   return (
     <ChannelContainer>
