@@ -150,13 +150,27 @@ export default ({ ...data }) => {
               {data.data.title}
             </Tooltip>
           }>
-          <VideoTitle to={`/video/${data.data.id}#${data.data.user_name}`}>
+          <VideoTitle
+            to={{
+              pathname: `/video/${data.data.id}#${data.data.user_name}`,
+              state: {
+                p_title: data.data.title,
+                p_channel: data.data.user_name,
+              },
+            }}>
             {Utilities.truncate(data.data.title, 70)}
             {/* {data.data.title} */}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
-        <VideoTitle to={`/video/${data.data.id}#${data.data.user_name}`}>
+        <VideoTitle
+          to={{
+            pathname: `/video/${data.data.id}#${data.data.user_name}`,
+            state: {
+              p_title: data.data.title,
+              p_channel: data.data.user_name,
+            },
+          }}>
           {data.data.title}
         </VideoTitle>
       )}

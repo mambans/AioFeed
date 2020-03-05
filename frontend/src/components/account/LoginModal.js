@@ -8,10 +8,10 @@ import ErrorHandeling from "../error/Error";
 import AccountContext from "./../account/AccountContext";
 
 export default () => {
+  document.title = "N | Login";
   const currentPage = new URL(window.location.href).pathname;
   const { setAuthKey, setUsername, username } = useContext(AccountContext);
 
-  document.title = "Notifies | Login";
   const [error, setError] = useState(null);
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);

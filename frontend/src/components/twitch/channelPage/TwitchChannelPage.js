@@ -32,6 +32,7 @@ import {
 
 export default () => {
   const { id } = useParams();
+  document.title = `N | ${id}'s Channel`;
   const { p_channelInfos, p_uptime, p_viewers, p_id, p_logo } = useLocation().state || {};
   const [channelInfo, setChannelInfo] = useState(p_channelInfos);
   const numberOfVideos = Math.floor(document.documentElement.clientWidth / 350);
@@ -317,8 +318,6 @@ export default () => {
 
     if (!channelInfo) setChannelInfo(ChannelInfos);
     CheckIfFollowed(ChannelInfos._id);
-
-    document.title = `${ChannelInfos.display_name} | Notifies`;
   }, [fetchChannelInfo, twitchUserId, twitchToken, channelInfo]);
 
   const fetchUptime = useCallback(async () => {

@@ -62,15 +62,12 @@ export default ({ ...data }) => {
               {data.data.title}
             </Tooltip>
           }>
-          <VideoTitle to={"/clip/" + data.data.id + `#${data.user_name}`}>
+          <VideoTitle to={`/clip/${data.data.id}#${data.user_name}`}>
             {Utilities.truncate(data.data.title, 70)}
-            {/* {data.data.title} */}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
-        <VideoTitle to={"/clip/" + data.data.id + `#${data.user_name}`}>
-          {data.data.title}
-        </VideoTitle>
+        <VideoTitle to={`/clip/${data.data.id}#${data.user_name}`}>{data.data.title}</VideoTitle>
       )}
 
       <div style={{ width: "336px" }}>

@@ -8,7 +8,7 @@ import ErrorHandeling from "../error/Error";
 import AccountContext from "./AccountContext";
 
 export default () => {
-  document.title = "Notifies | Create Account";
+  document.title = "N | Create Account";
   const { setAuthKey, setUsername } = useContext(AccountContext);
   const [error, setError] = useState(null);
   const [validated, setValidated] = useState(false);

@@ -30,12 +30,12 @@ import PlayerEvents from "./PlayerEvents";
 import VolumeSlider from "./VolumeSlider";
 
 export default () => {
-  const { p_uptime, p_viewers, p_title, p_game, p_channelInfos } = useLocation().state || {};
-  const { id } = useParams();
-  document.title = ` ${id} | Notifies`;
+  const { p_uptime, p_viewers, p_title, p_game, p_channelInfos, p_channel } =
+    useLocation().state || {};
+  const id = useParams().id.split("#")[0] || useParams().id || undefined;
   const location = useLocation();
   const type = location.pathname.split("/")[1];
-  const nameFromHash = location.hash !== "" ? location.hash.replace("#", "") : null;
+  const nameFromHash = location.hash !== "" ? location.hash.replace("#", "") : p_channel || null;
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const { twitchToken } = useContext(AccountContext);
 
@@ -59,6 +59,12 @@ export default () => {
   const viewersTimer = useRef();
   const uptimeTimer = useRef();
   const OpenedDate = useRef();
+
+  if (type === "live") {
+    document.title = `N | ${id} Live`;
+  } else if (type === "video") {
+    document.title = `N | ${nameFromHash} - ${p_title || id}`;
+  }
 
   const fetchChannelInfo = useCallback(async () => {
     await axios
@@ -213,6 +219,28 @@ export default () => {
     fetchUptime,
   ]);
 
+  useEffect(() => {
+    if (type === "video" && (!nameFromHash || !p_title)) {
+      console.log("type", type);
+      const videoInfoTimer = setTimeout(async () => {
+        await axios
+          .get(`https://api.twitch.tv/kraken/videos/${id}`, {
+            headers: {
+              Authorization: `Bearer ${twitchToken}`,
+              "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+              Accept: "application/vnd.twitchtv.v5+json",
+            },
+          })
+          .then(res => {
+            document.title = `N | ${res.data.channel.display_name} - ${res.data.title}`;
+          });
+      }, 5000);
+      return () => {
+        clearTimeout(videoInfoTimer);
+      };
+    }
+  }, [id, nameFromHash, p_title, type, twitchToken]);
+
   const OnlineEvents = useCallback(() => {
     console.log("Stream is Online");
     setTimeout(() => {
@@ -236,18 +264,19 @@ export default () => {
 
   const offlineEvents = useCallback(() => {
     console.log("Stream is Offline");
-    fetchChannelInfo();
+
     clearInterval(viewersTimer.current);
     clearInterval(channelinfoTimer.current);
     setUptime(null);
     clearInterval(uptimeTimer.current);
 
-    if (!channelinfoTimer.current) {
+    if (!channelinfoTimer.current && type === "live") {
+      fetchChannelInfo();
       channelinfoTimer.current = setInterval(() => {
         fetchChannelInfo();
       }, 1000 * 60 * 15);
     }
-  }, [fetchChannelInfo]);
+  }, [fetchChannelInfo, type]);
 
   useEffect(() => {
     if (twitchPlayer.current) {
