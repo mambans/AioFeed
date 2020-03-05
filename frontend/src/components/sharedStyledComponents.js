@@ -147,7 +147,7 @@ const ImageContainer = styled.div`
     margin-left: 129.5px;
     margin-top: 57px;
     border-width: 0.5em;
-    transition: opacity 300ms;
+    transition: opacity 300ms 700ms;
     opacity: 0;
   }
 
