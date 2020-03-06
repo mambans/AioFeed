@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import { FaInfoCircle } from "react-icons/fa";
 import { MdCompareArrows } from "react-icons/md";
+import { FaWindowClose } from "react-icons/fa";
+import { MdChat } from "react-icons/md";
 
 const VideoAndChatContainer = styled.div`
-  display: flex;
   position: fixed;
   width: 100vw;
   height: calc(100vh - 50px);
@@ -11,14 +12,18 @@ const VideoAndChatContainer = styled.div`
   transition: top 300ms, height 300ms;
   display: grid;
   grid-template-areas: ${({ switchedChatState }) =>
-    switchedChatState === "true" ? '"chat video"' : '"video chat"'};
+    switchedChatState === "true"
+      ? '"chat video"'
+      : switchedChatState === "hide"
+      ? "video"
+      : '"video chat"'};
 
   &:hover #switchSides {
     opacity: 0.6;
   }
 
   div#twitch-embed {
-    width: 91vw;
+    width: ${({ hideChat }) => (hideChat === "true" ? "100vw" : "91vw")};
     grid-area: video;
   }
 
@@ -104,7 +109,9 @@ const PlayerNavbar = styled.div`
 
 const VolumeEventOverlay = styled.div`
   position: absolute;
-  width: ${({ type }) => (type === "live" ? "90vw" : "100vw")};
+  width: ${({ type, hideChat }) =>
+    hideChat === "true" ? "99vw" : type === "live" ? "90vw" : "100vw"};
+  /* width: ${({ hideChat }) => (hideChat === "true" ? "99vw" : "90vw")}; */
   height: ${({ type }) => (type === "live" ? "100%" : "calc(100% - 70px)")};
   bottom: ${({ type }) => (type === "live" ? "unset" : "70px")};
   opacity: 0;
@@ -358,6 +365,36 @@ const PlaybackStats = styled.div`
   box-shadow: 5px 5px 10px #0000009c;
 `;
 
+// const StyledHideChatButton = styled(({ hideChat }) =>
+//   hideChat === "true" ? MdCompareArrows : FaWindowClose
+// ).attrs({ size: 26, color: "red" })`
+
+const HideChatButton = styled(FaWindowClose).attrs({ size: 26, color: "red" })`
+  position: absolute;
+  right: 0;
+  top: 1vh;
+  opacity: 0.5;
+  transition: opacity 300ms;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+const OpenChatButton = styled(MdChat).attrs({ size: 26, color: "white" })`
+  position: absolute;
+  right: 0;
+  top: 1vh;
+  opacity: 0.5;
+  transition: opacity 300ms;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
 export {
   VideoAndChatContainer,
   StyledChat,
@@ -365,12 +402,12 @@ export {
   PlayerNavbar,
   VolumeEventOverlay,
   StyledVolumeSlider,
-  // PausePlay,
-  // PausePlayOverlay,
   InfoDisplay,
   ButtonShowStats,
   PlaybackStats,
   StyledVideo,
   ButtonShowQualities,
   QualitiesList,
+  HideChatButton,
+  OpenChatButton,
 };

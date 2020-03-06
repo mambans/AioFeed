@@ -23,6 +23,8 @@ import {
   ToggleSwitchChatSide,
   VideoAndChatContainer,
   VolumeEventOverlay,
+  HideChatButton,
+  OpenChatButton,
 } from "./StyledComponents";
 import AccountContext from "../../account/AccountContext";
 import NavigationContext from "./../../navigation/NavigationContext";
@@ -52,6 +54,7 @@ export default () => {
   const [showQualities, setShowQualities] = useState();
   const [qualities, setQualities] = useState();
   const [activeQuality, setActiveQuality] = useState();
+  const [hideChat, setHideChat] = useState(false);
 
   const volumeEventOverlayRef = useRef();
   const twitchPlayer = useRef();
@@ -316,9 +319,14 @@ export default () => {
             height: visible ? "calc(100vh - 75px)" : "100vh",
             top: visible ? "75px" : "0",
           }}
-          switchedChatState={switched.toString()}>
+          switchedChatState={switched.toString()}
+          hideChat={hideChat.toString()}>
           <div id='twitch-embed'>
-            <VolumeEventOverlay ref={volumeEventOverlayRef} type='live' id='controls'>
+            <VolumeEventOverlay
+              ref={volumeEventOverlayRef}
+              type='live'
+              id='controls'
+              hideChat={hideChat.toString()}>
               <InfoDisplay>
                 <>
                   {channelInfo ? <img src={channelInfo.logo} alt=''></img> : null}
@@ -448,6 +456,21 @@ export default () => {
                   setSwitched(!switched);
                 }}
               />
+              {hideChat ? (
+                <OpenChatButton
+                  hideChat={hideChat.toString()}
+                  onClick={() => {
+                    setHideChat(!hideChat);
+                  }}
+                />
+              ) : (
+                <HideChatButton
+                  hideChat={hideChat.toString()}
+                  onClick={() => {
+                    setHideChat(!hideChat);
+                  }}
+                />
+              )}
             </VolumeEventOverlay>
             {twitchPlayer.current ? (
               <PlayerEvents
@@ -461,26 +484,28 @@ export default () => {
               />
             ) : null}
           </div>
-          <div id='chat'>
-            <MdVerticalAlignBottom
-              style={{
-                transform: visible ? "rotateX(180deg)" : "unset",
-              }}
-              size={45}
-              id='ToggleNavbarButton'
-              title='Show navbar'
-              onClick={() => {
-                setVisible(!visible);
-              }}
-            />
-            <StyledChat
-              frameborder='0'
-              scrolling='yes'
-              theme='dark'
-              id={id + "-chat"}
-              src={`https://www.twitch.tv/embed/${id}/chat?darkpopout`}
-            />
-          </div>
+          {!hideChat ? (
+            <div id='chat'>
+              <MdVerticalAlignBottom
+                style={{
+                  transform: visible ? "rotateX(180deg)" : "unset",
+                }}
+                size={45}
+                id='ToggleNavbarButton'
+                title='Show navbar'
+                onClick={() => {
+                  setVisible(!visible);
+                }}
+              />
+              <StyledChat
+                frameborder='0'
+                scrolling='yes'
+                theme='dark'
+                id={id + "-chat"}
+                src={`https://www.twitch.tv/embed/${id}/chat?darkpopout`}
+              />
+            </div>
+          ) : null}
         </VideoAndChatContainer>
       </>
     );
