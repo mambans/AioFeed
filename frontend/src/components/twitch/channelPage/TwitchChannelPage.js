@@ -507,7 +507,7 @@ export default () => {
                   {isLive ? (
                     <StyledLiveInfoContainer>
                       <div id='LiveDetails'>
-                        <span>Viewers: {viewers}</span>
+                        <span>Viewers: {Utilities.formatViewerNumbers(viewers)}</span>
                         <span>Uptime: {<Moment durationFromNow>{uptime}</Moment>}</span>
                       </div>
                       <Link

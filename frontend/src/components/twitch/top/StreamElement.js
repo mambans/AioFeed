@@ -18,16 +18,6 @@ function StreamEle(data) {
   const ref = useRef();
   const refChannel = useRef();
 
-  const formatViewerNumbers = viewers => {
-    if (viewers.toString().length === 7) {
-      return (viewers / 1000000).toString().substring(0, 5) + "m";
-    } else if (viewers.toString().length >= 5) {
-      return viewers.toString().substring(0, viewers.toString().length - 3) + "k";
-    } else {
-      return viewers;
-    }
-  };
-
   const handleMouseOver = () => {
     streamHoverTimer.current = setTimeout(function() {
       setIsHovered(true);
@@ -162,7 +152,7 @@ function StreamEle(data) {
           </Link>
           <p className={styles.viewers}>
             {/* {data.data.viewer_count} */}
-            {formatViewerNumbers(data.data.viewer_count)}
+            {Utilities.formatViewerNumbers(data.data.viewer_count)}
             <FaRegEye
               style={{
                 color: "rgb(200, 200, 200)",

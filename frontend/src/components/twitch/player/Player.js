@@ -28,6 +28,7 @@ import AccountContext from "../../account/AccountContext";
 import NavigationContext from "./../../navigation/NavigationContext";
 import PlayerEvents from "./PlayerEvents";
 import VolumeSlider from "./VolumeSlider";
+import Utilities from "./../../../utilities/Utilities";
 
 export default () => {
   const { p_uptime, p_viewers, p_title, p_game, p_channelInfos, p_channel } =
@@ -331,7 +332,9 @@ export default () => {
                   </Link>
                 </>
 
-                {viewers ? <p id='viewers'> Viewers: {viewers} </p> : null}
+                {viewers ? (
+                  <p id='viewers'> Viewers: {Utilities.formatViewerNumbers(viewers)} </p>
+                ) : null}
                 {uptime ? (
                   <p id='uptime'>
                     Uptime <Moment durationFromNow>{uptime}</Moment>

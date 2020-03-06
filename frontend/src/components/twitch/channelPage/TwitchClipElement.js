@@ -12,16 +12,6 @@ import Utilities from "../../../utilities/Utilities";
 export default ({ ...data }) => {
   const imgRef = useRef();
 
-  const formatViewerNumbers = viewers => {
-    if (viewers.toString().length === 7) {
-      return (viewers / 1000000).toString().substring(0, 5) + "m";
-    } else if (viewers.toString().length >= 5) {
-      return viewers.toString().substring(0, viewers.toString().length - 3) + "k";
-    } else {
-      return viewers;
-    }
-  };
-
   return (
     <VideoContainer>
       <ImageContainer ref={imgRef}>
@@ -34,7 +24,7 @@ export default ({ ...data }) => {
         <div className={styles.vodVideoInfo}>
           <p className={styles.vodDuration} title='duration'></p>
           <p className={styles.view_count} title='views'>
-            {formatViewerNumbers(data.data.view_count)}
+            {Utilities.formatViewerNumbers(data.data.view_count)}
             <FaRegEye
               size={10}
               style={{
