@@ -12,14 +12,10 @@ import AccountContext from "./../../account/AccountContext";
 import LoadingBoxs from "./../LoadingBoxs";
 
 function TwitchVods() {
-  const nrStreams =
-    Math.floor((document.documentElement.clientWidth - 430) / 350) *
-    Math.floor((document.documentElement.clientHeight - (65 + 75 + 450)) / 337);
-
   const [vods, setVods] = useState();
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
-  const [vodAmounts, setVodAmounts] = useState(nrStreams);
+
   const [vodError, setVodError] = useState(null);
   const transition = useRef("fade-1s");
   const loadmoreRef = useRef();
@@ -34,6 +30,39 @@ function TwitchVods() {
     twitchToken,
   } = useContext(AccountContext);
 
+  const [numberOfVideos, setNumberOfVideos] = useState(
+    Math.floor((document.documentElement.clientWidth - 430) / 350) *
+      Math.floor((document.documentElement.clientHeight - (65 + 484)) / 341)
+  );  
+  const [vodAmounts, setVodAmounts] = useState(numberOfVideos);
+
+  const recalcWidth = useMemo(
+    () =>
+      _.debounce(
+        () => {
+          setNumberOfVideos(
+            Math.floor((document.documentElement.clientWidth - 430) / 350) *
+              Math.floor((document.documentElement.clientHeight - (65 + 484)) / 341)
+          );
+          setVodAmounts(
+            Math.floor((document.documentElement.clientWidth - 430) / 350) *
+              Math.floor((document.documentElement.clientHeight - (65 + 484)) / 341)
+          );
+        },
+        100,
+        { leading: true, trailing: false }
+      ),
+    []
+  );
+
+  useEffect(() => {
+    window.addEventListener("resize", recalcWidth);
+
+    return () => {
+      window.removeEventListener("resize", recalcWidth);
+    };
+  }, [recalcWidth]);
+
   //eslint-disable-next-line
   const observer = useMemo(
     () =>
@@ -47,7 +76,7 @@ function TwitchVods() {
             _.throttle(
               function(e) {
                 if (entries[0].isIntersecting === true) {
-                  setVodAmounts(currVodAmounts => currVodAmounts + nrStreams / 2);
+                  setVodAmounts(currVodAmounts => currVodAmounts + numberOfVideos / 2);
                   setTimeout(() => {
                     if (loadmoreRef.current) {
                       loadmoreRef.current.scrollIntoView({
@@ -68,7 +97,7 @@ function TwitchVods() {
                       });
                     }
 
-                    setVodAmounts(nrStreams);
+                    setVodAmounts(numberOfVideos);
                   }, 60000);
                 }
               },
@@ -79,7 +108,7 @@ function TwitchVods() {
         },
         { threshold: 1 }
       ),
-    [nrStreams]
+    [numberOfVideos]
   );
 
   const refresh = useCallback(
@@ -125,12 +154,12 @@ function TwitchVods() {
       //   });
       //   setVodAmounts(nrStreams);
       // }
-      if (vodAmounts > nrStreams) {
+      if (vodAmounts > numberOfVideos) {
         window.scrollTo(0, 0);
-        setVodAmounts(nrStreams);
+        setVodAmounts(numberOfVideos);
       }
     }, 350000);
-  }, [nrStreams, vodAmounts]);
+  }, [numberOfVideos, vodAmounts]);
 
   useEffect(() => {
     //eslint-disable-next-line
@@ -254,7 +283,7 @@ function TwitchVods() {
           <div />
           <p
             onClick={() => {
-              setVodAmounts(vodAmounts + nrStreams);
+              setVodAmounts(vodAmounts + numberOfVideos);
               setTimeout(() => {
                 if (loadmoreRef.current) {
                   loadmoreRef.current.scrollIntoView({
