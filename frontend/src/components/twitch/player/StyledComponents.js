@@ -159,6 +159,7 @@ const StyledVolumeSlider = styled.div`
   h3 {
     margin-bottom: 0;
     grid-area: text;
+    text-shadow: 0 0 5px black;
   }
 
   svg#icon {
