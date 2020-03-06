@@ -61,9 +61,9 @@ export default () => {
   const uptimeTimer = useRef();
   const OpenedDate = useRef();
 
-  if (type === "live") {
+  if (type === "live" || type === "player") {
     document.title = `N | ${id} Live`;
-  } else if (type === "video") {
+  } else if (type === "video" || type === "vod") {
     document.title = `N | ${nameFromHash} - ${p_title || id}`;
   }
 
@@ -194,8 +194,8 @@ export default () => {
       height: "100%",
       theme: "dark",
       layout: "video",
-      channel: id && type === "live" ? id : null,
-      video: id && type === "video" ? id : null,
+      channel: id && (type === "live" || type === "player") ? id : null,
+      video: id && (type === "video" || type === "vod") ? id : null,
       muted: false,
     });
 
@@ -221,8 +221,7 @@ export default () => {
   ]);
 
   useEffect(() => {
-    if (type === "video" && (!nameFromHash || !p_title)) {
-      console.log("type", type);
+    if ((type === "video" || type === "vod") && (!nameFromHash || !p_title)) {
       const videoInfoTimer = setTimeout(async () => {
         await axios
           .get(`https://api.twitch.tv/kraken/videos/${id}`, {
@@ -271,7 +270,7 @@ export default () => {
     setUptime(null);
     clearInterval(uptimeTimer.current);
 
-    if (!channelinfoTimer.current && type === "live") {
+    if (!channelinfoTimer.current && (type === "live" || type === "player")) {
       fetchChannelInfo();
       channelinfoTimer.current = setInterval(() => {
         fetchChannelInfo();
@@ -291,7 +290,7 @@ export default () => {
     };
   }, [OnlineEvents, offlineEvents]);
 
-  if (type === "live") {
+  if (type === "live" || type === "player") {
     return (
       <>
         <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
@@ -485,7 +484,7 @@ export default () => {
         </VideoAndChatContainer>
       </>
     );
-  } else if (type === "video") {
+  } else if (type === "video" || type === "vod") {
     return (
       <>
         <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>

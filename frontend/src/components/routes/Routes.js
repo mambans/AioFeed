@@ -42,23 +42,20 @@ const Routes = () => {
                       <CSSTransition key={key} timeout={200} classNames='fade-02'>
                         <main id={style.contentContainer}>
                           <Switch location={location}>
-                            <Route exact path='/' component={Home} />
-                            <Route exact path='/index' component={Home} />
-                            <Route exact path='/home' component={Home} />
+                            <Route exact path={["/", "/index", "/home"]} component={Home} />
                             <Route exact path='/feed' component={Feed} />
-                            <Route exact path='/live/:id'>
+                            <Route
+                              exact
+                              path={["/live/:id", "/player/:id", "/video/:id", "/vod/:id"]}>
                               <Player />
                             </Route>
-                            <Route exact path='/channel/:id'>
+                            <Route exact path={["/channel/:id", "/c/:id"]}>
                               <TwitchChannelPage />
-                            </Route>
-                            <Route exact path='/video/:id'>
-                              <Player />
                             </Route>
                             <Route exact path='/clip/:id'>
                               <PlayerClip />
                             </Route>
-                            <Route exact path='/game/:category?'>
+                            <Route exact path={["/game/:category?", "/category/:category?"]}>
                               <RenderTopStreams />
                             </Route>
                             <Route exact path='/auth/youtube' component={YoutubeAuth} />
@@ -104,7 +101,7 @@ const Routes = () => {
                                 </div>
                               )}
                             />
-                            <Route exact path='/legality' component={Legality} />
+                            <Route exact path={["/legality", "/privacy"]} component={Legality} />
                             <Route component={NoMatch} />
                           </Switch>
                         </main>
