@@ -25,6 +25,7 @@ import {
   VolumeEventOverlay,
   HideChatButton,
   OpenChatButton,
+  CreateClipButton,
 } from "./StyledComponents";
 import AccountContext from "../../account/AccountContext";
 import NavigationContext from "./../../navigation/NavigationContext";
@@ -293,6 +294,33 @@ export default () => {
     };
   }, [OnlineEvents, offlineEvents]);
 
+  const CreateAndOpenClip = async () => {
+    const Width = window.screen.width * 0.6;
+    const Height = window.screen.height * 0.8;
+    const LeftPosition = (window.screen.width - Width) / 2;
+    const TopPosition = (window.screen.height - Height) / 2;
+    const settings = `height=${Height},width=${Width},top=${TopPosition},left=${LeftPosition},scrollbars=yes,resizable`;
+
+    await axios
+      .post(
+        `https://api.twitch.tv/helix/clips?broadcaster_id=${channelInfo._id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${twitchToken}`,
+            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+          },
+        }
+      )
+      .then(res => {
+        console.log("res", res);
+        window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
+      })
+      .catch(error => {
+        console.log("error", error);
+      });
+  };
+
   if (type === "live" || type === "player") {
     return (
       <>
@@ -320,16 +348,16 @@ export default () => {
             top: visible ? "75px" : "0",
           }}
           switchedChatState={switched.toString()}
-          hideChat={hideChat.toString()}>
+          hidechat={hideChat.toString()}>
           <div id='twitch-embed'>
             <VolumeEventOverlay
               ref={volumeEventOverlayRef}
               type='live'
               id='controls'
-              hideChat={hideChat.toString()}>
+              hidechat={hideChat.toString()}>
               <InfoDisplay>
                 <>
-                  {channelInfo ? <img src={channelInfo.logo} alt=''></img> : null}
+                  {channelInfo ? <img src={channelInfo.logo} alt='' /> : null}
                   <a id='name' href={channelInfo ? channelInfo.url : `https://www.twitch.tv/${id}`}>
                     {channelInfo ? channelInfo.display_name : id}
                   </a>
@@ -382,6 +410,7 @@ export default () => {
                 </PlaybackStats>
               ) : null}
               <ButtonShowStats
+                title='Show video stats'
                 onClick={() => {
                   if (!showPlaybackStats) {
                     document.querySelector("#controls").style.opacity = 1;
@@ -418,6 +447,7 @@ export default () => {
                 </QualitiesList>
               ) : null}
               <ButtonShowQualities
+                title='Show qualities'
                 onClick={() => {
                   setShowQualities(!showQualities);
                   setQualities(twitchPlayer.current.getQualities());
@@ -430,6 +460,9 @@ export default () => {
                   ? twitchPlayer.current.getQuality().name
                   : null}
               </ButtonShowQualities>
+              {channelInfo ? (
+                <CreateClipButton title='Create clip' onClick={CreateAndOpenClip} />
+              ) : null}
 
               {true ? (
                 <MdFullscreen
@@ -450,6 +483,7 @@ export default () => {
               )}
 
               <ToggleSwitchChatSide
+                title='Switch chat side'
                 id='switchSides'
                 switched={switched.toString()}
                 onClick={() => {
@@ -458,14 +492,16 @@ export default () => {
               />
               {hideChat ? (
                 <OpenChatButton
-                  hideChat={hideChat.toString()}
+                  title='Open chat'
+                  hidechat={hideChat.toString()}
                   onClick={() => {
                     setHideChat(!hideChat);
                   }}
                 />
               ) : (
                 <HideChatButton
-                  hideChat={hideChat.toString()}
+                  title='Hide chat'
+                  hidechat={hideChat.toString()}
                   onClick={() => {
                     setHideChat(!hideChat);
                   }}

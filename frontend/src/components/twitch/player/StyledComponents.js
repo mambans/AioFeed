@@ -3,6 +3,7 @@ import { FaInfoCircle } from "react-icons/fa";
 import { MdCompareArrows } from "react-icons/md";
 import { FaWindowClose } from "react-icons/fa";
 import { MdChat } from "react-icons/md";
+import { MdMovieCreation } from "react-icons/md";
 
 const VideoAndChatContainer = styled.div`
   position: fixed;
@@ -23,7 +24,7 @@ const VideoAndChatContainer = styled.div`
   }
 
   div#twitch-embed {
-    width: ${({ hideChat }) => (hideChat === "true" ? "100vw" : "91vw")};
+    width: ${({ hidechat }) => (hidechat === "true" ? "100vw" : "91vw")};
     grid-area: video;
   }
 
@@ -109,29 +110,21 @@ const PlayerNavbar = styled.div`
 
 const VolumeEventOverlay = styled.div`
   position: absolute;
-  width: ${({ type, hideChat }) =>
-    hideChat === "true" ? "99vw" : type === "live" ? "90vw" : "100vw"};
+  width: ${({ type, hidechat }) =>
+    hidechat === "true" ? "99vw" : type === "live" ? "90vw" : "100vw"};
   /* width: ${({ hideChat }) => (hideChat === "true" ? "99vw" : "90vw")}; */
-  height: ${({ type }) => (type === "live" ? "100%" : "calc(100% - 70px)")};
+  height: 100%;
   bottom: ${({ type }) => (type === "live" ? "unset" : "70px")};
   opacity: 0;
-  transition: opacity 500ms 0ms ease;
-
-  /* bottom: 250px */
-  /* width: ${({ type }) => (type === "live" ? "87vw" : "96vw")};
-  height: ${({ type }) => (type === "live" ? "calc(100% - 375px)" : "calc(100% - 370px)")};
-  bottom: ${({ type }) => (type === "live" ? "200px" : "230px")};
-  left: 2vw; */
-
+  transition: opacity 500ms 0ms;
 
   a, p {
     text-shadow: 0 0 2px black;
   }
 
-
   &:hover {
     opacity: 1 !important ;
-    transition: opacity 250ms 0s ease;
+    transition: opacity 250ms 0s;
   }
 
   #PausePlay {
@@ -148,8 +141,14 @@ const VolumeEventOverlay = styled.div`
 
   }
 
+  svg, p {
+    opacity: 0.7;
+    transition: opacity 300ms;
 
-
+    &:hover {
+      opacity: 1;
+    }
+  }
 `;
 
 const StyledVolumeSlider = styled.div`
@@ -374,12 +373,7 @@ const HideChatButton = styled(FaWindowClose).attrs({ size: 26, color: "red" })`
   right: 0;
   top: 1vh;
   opacity: 0.5;
-  transition: opacity 300ms;
   cursor: pointer;
-
-  &:hover {
-    opacity: 1;
-  }
 `;
 
 const OpenChatButton = styled(MdChat).attrs({ size: 26, color: "white" })`
@@ -387,12 +381,17 @@ const OpenChatButton = styled(MdChat).attrs({ size: 26, color: "white" })`
   right: 0;
   top: 1vh;
   opacity: 0.5;
-  transition: opacity 300ms;
   cursor: pointer;
+`;
 
-  &:hover {
-    opacity: 1;
-  }
+const CreateClipButton = styled(MdMovieCreation).attrs({ size: 24, color: "white" })`
+  position: absolute;
+  /* right: 45px; */
+  left: 400px;
+  bottom: 12px;
+  opacity: 0.7;
+  cursor: pointer;
+  margin: 5px 10px;
 `;
 
 export {
@@ -410,4 +409,5 @@ export {
   QualitiesList,
   HideChatButton,
   OpenChatButton,
+  CreateClipButton,
 };
