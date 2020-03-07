@@ -141,7 +141,7 @@ const VolumeEventOverlay = styled.div`
 
   }
 
-  svg, p {
+  svg, p#showQualities {
     opacity: 0.7;
     transition: opacity 300ms;
 

@@ -447,6 +447,7 @@ export default () => {
                 </QualitiesList>
               ) : null}
               <ButtonShowQualities
+                id='showQualities'
                 title='Show qualities'
                 onClick={() => {
                   setShowQualities(!showQualities);
