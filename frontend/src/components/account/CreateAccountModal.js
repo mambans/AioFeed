@@ -6,6 +6,7 @@ import { Form, Button } from "react-bootstrap";
 import styles from "./Account.module.scss";
 import ErrorHandeling from "../error/Error";
 import AccountContext from "./AccountContext";
+import useInput from "./../useInput";
 
 export default () => {
   document.title = "N | Create Account";
@@ -18,22 +19,6 @@ export default () => {
   const validateEmail = email => {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
-  };
-
-  const useInput = initialValue => {
-    const [value, setValue] = useState(initialValue);
-
-    return {
-      value,
-      setValue,
-      reset: () => setValue(""),
-      bind: {
-        value,
-        onChange: event => {
-          setValue(event.target.value.trim());
-        },
-      },
-    };
   };
 
   const { value: userName, bind: bindUserName, reset: resetUserName } = useInput("");

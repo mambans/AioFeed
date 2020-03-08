@@ -9,6 +9,7 @@ import AccountContext from "./../../account/AccountContext";
 import NavigationContext from "./../NavigationContext";
 import LoadingIndicator from "./../../LoadingIndicator";
 import FeedsContext from "./../../feed/FeedsContext";
+import useInput from "./../../useInput";
 
 export default () => {
   document.title = "Notifies | Login";
@@ -29,22 +30,6 @@ export default () => {
     username,
   } = useContext(AccountContext);
   const { setEnableTwitch } = useContext(FeedsContext);
-
-  const useInput = initialValue => {
-    const [value, setValue] = useState(initialValue);
-
-    return {
-      value,
-      setValue,
-      reset: () => setValue(""),
-      bind: {
-        value,
-        onChange: event => {
-          setValue(event.target.value.trim());
-        },
-      },
-    };
-  };
 
   const { value: userName, bind: bindUserName, reset: resetUserName } = useInput("");
   const { value: password, bind: bindPassword, reset: resetPassword } = useInput("");

@@ -6,6 +6,7 @@ import { Redirect } from "react-router-dom";
 import styles from "./Account.module.scss";
 import ErrorHandeling from "../error/Error";
 import AccountContext from "./../account/AccountContext";
+import useInput from "./../useInput";
 
 export default () => {
   document.title = "N | Login";
@@ -13,21 +14,6 @@ export default () => {
   const { setAuthKey, setUsername, username } = useContext(AccountContext);
 
   const [error, setError] = useState(null);
-  const useInput = initialValue => {
-    const [value, setValue] = useState(initialValue);
-
-    return {
-      value,
-      setValue,
-      reset: () => setValue(""),
-      bind: {
-        value,
-        onChange: event => {
-          setValue(event.target.value);
-        },
-      },
-    };
-  };
 
   const { value: userName, bind: bindUserName, reset: resetUserName } = useInput("");
   const { value: password, bind: bindPassword, reset: resetPassword } = useInput("");

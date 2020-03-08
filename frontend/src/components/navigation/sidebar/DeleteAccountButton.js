@@ -6,26 +6,12 @@ import React, { useState, useContext } from "react";
 import { DeleteAccountForm, DeleteAccountFooter, DeleteAccountButton } from "./StyledComponent";
 import AccountContext from "./../../account/AccountContext";
 import styles from "./Sidebar.module.scss";
+import useInput from "./../../useInput";
 
 export default () => {
   const { username } = useContext(AccountContext);
   const [show, setShow] = useState(false);
   const [validated, setValidated] = useState(false);
-  const useInput = initialValue => {
-    const [value, setValue] = useState(initialValue);
-
-    return {
-      value,
-      setValue,
-      reset: () => setValue(""),
-      bind: {
-        value,
-        onChange: event => {
-          setValue(event.target.value);
-        },
-      },
-    };
-  };
 
   const handleClose = () => {
     setShow(false);

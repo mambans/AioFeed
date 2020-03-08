@@ -5,27 +5,12 @@ import React, { useEffect, useState, useRef, useCallback, useContext } from "rea
 import AccountContext from "./../../account/AccountContext";
 import LoadingList from "./../LoadingList";
 import VodChannelListElement from "./VodChannelListElement";
+import useInput from "./../../useInput";
 
 export default props => {
   const { authKey, username } = useContext(AccountContext);
   const [validated, setValidated] = useState(false);
   const reload = useRef(false);
-
-  const useInput = initialValue => {
-    const [value, setValue] = useState(initialValue);
-
-    return {
-      value,
-      setValue,
-      reset: () => setValue(""),
-      bind: {
-        value,
-        onChange: event => {
-          setValue(event.target.value.trim());
-        },
-      },
-    };
-  };
 
   const [channels, setChannels] = useState([]);
   const { value: channel, bind: bindchannel, reset: resetchannel } = useInput("");

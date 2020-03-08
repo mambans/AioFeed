@@ -1,27 +1,12 @@
 import axios from "axios";
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 
 import "./updateProfilePopup.scss";
 import AccountContext from "./../account/AccountContext";
+import useInput from "./../useInput";
 
 function UpdateProfileImg() {
   const { username, setProfileImage } = useContext(AccountContext);
-
-  const useInput = initialValue => {
-    const [value, setValue] = useState(initialValue);
-
-    return {
-      value,
-      setValue,
-      reset: () => setValue(""),
-      bind: {
-        value,
-        onChange: event => {
-          setValue(event.target.value);
-        },
-      },
-    };
-  };
 
   const { value: image, bind: bindimage, reset: resetimage } = useInput("");
 
