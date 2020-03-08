@@ -1,4 +1,3 @@
-import { MdDelete } from "react-icons/md";
 import { MdVideoCall } from "react-icons/md";
 import { MdVideocamOff } from "react-icons/md";
 import { MdVideocam } from "react-icons/md";
@@ -7,9 +6,10 @@ import Alert from "react-bootstrap/Alert";
 import axios from "axios";
 import React, { useState, useRef, useContext, useEffect } from "react";
 
-import { UnfollowButton, VodRemoveButton, VodAddButton } from "./../../sharedStyledComponents";
+import { VodRemoveButton, VodAddButton } from "./../../sharedStyledComponents";
 import AccountContext from "./../../account/AccountContext";
-import UnfollowStream from "./../UnfollowStream";
+
+import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 
 const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
   const [unfollowResponse, setUnfollowResponse] = useState(null);
@@ -193,26 +193,13 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
             <MdVideoCall size={24} />
           </VodAddButton>
         )}
-        <UnfollowButton
-          data-tip={"Unfollow " + data.to_name}
-          title={"Unfollow " + data.to_name}
-          variant='link'
+        <FollowUnfollowBtn
           style={{ marginLeft: "5px", padding: "0" }}
-          onClick={async () => {
-            await UnfollowStream({
-              user_id: data.to_id,
-              refresh: data.refresh,
-            })
-              .then(() => {
-                setUnfollowResponse("Success");
-              })
-              .catch(error => {
-                setUnfollowResponse(null);
-                setUnfollowResponse("Failed");
-              });
-          }}>
-          <MdDelete size={22} />
-        </UnfollowButton>
+          size={22}
+          channelName={data.to_name}
+          id={data.to_id}
+          alreadyFollowedStatus={true}
+        />
       </div>
     </li>
   );

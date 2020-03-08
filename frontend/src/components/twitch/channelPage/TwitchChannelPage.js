@@ -1,14 +1,10 @@
-import { MdFavorite } from "react-icons/md";
 import { MdChat } from "react-icons/md";
 import { FaWindowClose } from "react-icons/fa";
 import { MdLiveTv } from "react-icons/md";
-import { MdFavoriteBorder } from "react-icons/md";
 import { useParams, useLocation, Link } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useEffect, useCallback, useState, useRef, useContext } from "react";
-import Tooltip from "react-bootstrap/Tooltip";
 import Moment from "react-moment";
 
 import AccountContext from "./../../account/AccountContext";
@@ -16,7 +12,6 @@ import LoadingPlaceholderBanner from "./LoadingPlaceholderBanner";
 import LoadingPlaceholderClips from "./LoadingPlaceholderClips";
 import LoadingPlaceholderVods from "./LoadingPlaceholderVods";
 import SubFeed from "./SubFeed";
-import UnfollowStream from "./../UnfollowStream";
 import Utilities from "./../../../utilities/Utilities";
 import {
   ChannelContainer,
@@ -29,6 +24,7 @@ import {
   Chat,
   StyledLiveInfoContainer,
 } from "./StyledComponents";
+import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 
 export default () => {
   const { id } = useParams();
@@ -43,7 +39,6 @@ export default () => {
   const [clipsloadmoreLoaded, setClipsLoadmoreLoaded] = useState(true);
   const [sortVodsBy, setSortVodsBy] = useState("Time");
   const [sortClipsBy, setSortClipsBy] = useState(null);
-  const [following, setFollowing] = useState(false);
   const [channelId, setChannelId] = useState(p_id);
   const [isLive, setIsLive] = useState();
   const [viewers, setViewers] = useState(p_viewers);
@@ -61,9 +56,7 @@ export default () => {
   const viewersTimer = useRef();
   const refetchUptimeTimer = useRef();
 
-  const { setTwitchToken, twitchToken, setRefreshToken, refreshToken, twitchUserId } = useContext(
-    AccountContext
-  );
+  const { twitchToken } = useContext(AccountContext);
 
   const getIdFromName = useCallback(async () => {
     await axios
@@ -104,64 +97,6 @@ export default () => {
         });
     }
   }, [twitchToken, channelId, p_channelInfos]);
-
-  const followStream = async UserId => {
-    await axios
-      .put(`https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${UserId}`, "", {
-        headers: {
-          Authorization: `OAuth ${twitchToken}`,
-          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-          Accept: "application/vnd.twitchtv.v5+json",
-        },
-      })
-      .then(res => {
-        if (res.data) console.log("Started following", channelInfo.display_name);
-      })
-      .catch(async error => {
-        console.log(`Failed to unfollow ${channelInfo.display_name}. `, error);
-        console.log(`Trying to auto re-authenticate with Twitch.`);
-
-        await axios
-          .post(
-            `https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=${encodeURI(
-              refreshToken
-            )}&client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&client_secret=${
-              process.env.REACT_APP_TWITCH_SECRET
-            }&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`
-          )
-          .then(async res => {
-            setTwitchToken(res.data.access_token);
-            setRefreshToken(res.data.refresh_token);
-            document.cookie = `Twitch-access_token=${res.data.access_token}; path=/`;
-            document.cookie = `Twitch-refresh_token=${res.data.refresh_token}; path=/`;
-
-            await axios
-              .put(
-                `https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${UserId}`,
-                "",
-                {
-                  headers: {
-                    Authorization: `OAuth ${res.data.access_token}`,
-                    "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-                    Accept: "application/vnd.twitchtv.v5+json",
-                  },
-                }
-              )
-              .then(() => {
-                console.log(`Followed: ${channelInfo.display_name}`);
-                // data.refresh();
-              })
-              .catch(error => {
-                console.error("Followed: ", error);
-              });
-          })
-          .catch(er => {
-            console.error(er);
-            console.log(`Failed to follow stream ${channelInfo.display_name}: `, er);
-            console.log("::Try manually re-authenticate from the sidebar.::");
-          });
-      });
-  };
 
   const fetchChannelVods = useCallback(
     async pagination => {
@@ -289,37 +224,10 @@ export default () => {
   );
 
   const getChannelInfo = useCallback(async () => {
-    const CheckIfFollowed = async UserId => {
-      await axios
-        .get(`https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${UserId}`, {
-          headers: {
-            Authorization: `OAuth ${twitchToken}`,
-            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-            Accept: "application/vnd.twitchtv.v5+json",
-          },
-        })
-        .then(res => {
-          setFollowing(true);
-        })
-        .catch(error => {
-          if (
-            error.response &&
-            error.response.status === 404 &&
-            error.response.statusText === "Not Found"
-          ) {
-            console.log(`Not following ${UserId}`);
-            setFollowing(false);
-          } else {
-            console.error(error);
-          }
-        });
-    };
-
     const ChannelInfos = await fetchChannelInfo();
 
     if (!channelInfo) setChannelInfo(ChannelInfos);
-    CheckIfFollowed(ChannelInfos._id);
-  }, [fetchChannelInfo, twitchUserId, twitchToken, channelInfo]);
+  }, [fetchChannelInfo, channelInfo]);
 
   const fetchUptime = useCallback(async () => {
     await axios
@@ -548,58 +456,7 @@ export default () => {
                       src={`${process.env.PUBLIC_URL}/partnered.png`}
                     />
                   ) : null}
-
-                  {following ? (
-                    <OverlayTrigger
-                      key={"bottom"}
-                      placement={"bottom"}
-                      delay={{ show: 500, hide: 0 }}
-                      overlay={
-                        <Tooltip id={`tooltip-${"bottom"}`}>
-                          Unfollow <strong>{channelInfo.display_name}</strong>.
-                        </Tooltip>
-                      }>
-                      <MdFavorite
-                        size={30}
-                        // id='FollowUnfollowButton'
-                        id='IsFollowed'
-                        onClick={() => {
-                          setFollowing(false);
-                          UnfollowStream({
-                            user_id: channelInfo._id,
-                            setTwitchToken: setTwitchToken,
-                            twitchToken: twitchToken,
-                            setRefreshToken: setRefreshToken,
-                          }).catch(error => {
-                            console.log(
-                              `Failed to unfollow stream ${channelInfo.display_name}: `,
-                              error
-                            );
-                            console.log("::Try re-authenticate from the sidebar::");
-                          });
-                        }}
-                      />
-                    </OverlayTrigger>
-                  ) : (
-                    <OverlayTrigger
-                      key={"bottom"}
-                      placement={"bottom"}
-                      delay={{ show: 500, hide: 0 }}
-                      overlay={
-                        <Tooltip id={`tooltip-${"bottom"}`}>
-                          Follow <strong>{channelInfo.display_name}</strong>.
-                        </Tooltip>
-                      }>
-                      <MdFavoriteBorder
-                        size={30}
-                        id='IsNotFollowed'
-                        onClick={() => {
-                          setFollowing(true);
-                          followStream(channelInfo._id);
-                        }}
-                      />
-                    </OverlayTrigger>
-                  )}
+                  {channelInfo ? <FollowUnfollowBtn channelName={id} id={channelInfo._id} /> : null}
                 </div>
                 <p id='title'>{channelInfo.status}</p>
                 <Link to={`/game/${channelInfo.game}`} id='game'>

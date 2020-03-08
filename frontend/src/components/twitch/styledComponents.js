@@ -1,4 +1,6 @@
 import styled, { keyframes } from "styled-components";
+import { MdFavorite } from "react-icons/md";
+import { MdFavoriteBorder } from "react-icons/md";
 
 const HeaderContainerTwitchLive = styled.div`
   border-bottom: var(--subFeedHeaderBorder);
@@ -187,6 +189,28 @@ const StyledLoadingList = styled.ul`
   }
 `;
 
+const FollowBtn = styled(MdFavoriteBorder)`
+  cursor: pointer;
+  color: red;
+  transition: color 250ms;
+  margin: 0 10px;
+
+  &:hover {
+    color: green;
+  }
+`;
+
+const UnfollowBtn = styled(MdFavorite)`
+  cursor: pointer;
+  color: green;
+  transition: color 250ms;
+  margin: 0 10px;
+
+  &:hover {
+    color: red;
+  }
+`;
+
 export {
   HeaderContainerTwitchLive,
   StyledLoadmore,
@@ -194,4 +218,6 @@ export {
   HeaderLeftSubcontainer,
   StyledLoadingBox,
   StyledLoadingList,
+  FollowBtn,
+  UnfollowBtn,
 };

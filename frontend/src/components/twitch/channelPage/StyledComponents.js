@@ -71,42 +71,6 @@ const BannerInfoOverlay = styled.div`
   position: absolute;
   top: 65px;
   width: 100%;
-
-  #IsFollowed {
-    cursor: pointer;
-    color: green;
-    transition: color 250ms;
-    margin: 0 10px;
-    margin-right: -30px;
-
-    &:hover {
-      color: red;
-    }
-  }
-
-  #IsNotFollowed {
-    cursor: pointer;
-    color: red;
-    transition: color 250ms;
-    margin: 0 10px;
-    margin-right: -30px;
-
-    &:hover {
-      color: green;
-    }
-  }
-
-  /* #FollowUnfollowButton {
-    cursor: pointer;
-    color: ${props => (props.following === true ? "green" : "white")};
-    transition: color 150ms;
-    margin: 0 10px;
-    margin-right: -30px;
-
-    &:hover {
-      color: ${({ following }) => (following === "true" ? "red" : "green")};
-    }
-  } */
 `;
 
 const Name = styled.div`

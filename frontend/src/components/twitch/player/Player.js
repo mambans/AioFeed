@@ -32,6 +32,7 @@ import NavigationContext from "./../../navigation/NavigationContext";
 import PlayerEvents from "./PlayerEvents";
 import VolumeSlider from "./VolumeSlider";
 import Utilities from "./../../../utilities/Utilities";
+import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 
 export default () => {
   const { p_uptime, p_viewers, p_title, p_game, p_channelInfos, p_channel } =
@@ -358,9 +359,17 @@ export default () => {
               <InfoDisplay>
                 <>
                   {channelInfo ? <img src={channelInfo.logo} alt='' /> : null}
-                  <a id='name' href={channelInfo ? channelInfo.url : `https://www.twitch.tv/${id}`}>
-                    {channelInfo ? channelInfo.display_name : id}
-                  </a>
+                  <div id='name'>
+                    <a href={channelInfo ? channelInfo.url : `https://www.twitch.tv/${id}`}>
+                      {channelInfo ? channelInfo.display_name : id}
+                    </a>
+                    {channelInfo ? (
+                      <FollowUnfollowBtn
+                        channelName={channelInfo ? channelInfo.display_name : id}
+                        id={channelInfo._id}
+                      />
+                    ) : null}
+                  </div>
                   <p id='title'>{channelInfo ? channelInfo.status : p_title}</p>
                   <Link id='game' to={`/game/${channelInfo ? channelInfo.game : p_game}`}>
                     Playing {channelInfo ? channelInfo.game : p_game}

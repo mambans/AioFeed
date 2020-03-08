@@ -1,4 +1,3 @@
-import { MdDelete } from "react-icons/md";
 import { CSSTransition } from "react-transition-group";
 import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -11,13 +10,12 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useRef, useState, useEffect, useContext } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 
-import { VideoTitle, ImageContainer, UnfollowButton } from "./../sharedStyledComponents";
-import AccountContext from "./../account/AccountContext";
+import { VideoTitle, ImageContainer } from "./../sharedStyledComponents";
 import FeedsContext from "./../feed/FeedsContext";
 import StreamHoverIframe from "./StreamHoverIframe.js";
 import styles from "./Twitch.module.scss";
-import UnfollowStream from "./UnfollowStream";
 import Utilities from "../../utilities/Utilities";
+import FollowUnfollowBtn from "./FollowUnfollowBtn";
 
 const HOVER_DELAY = 500; // 1000
 
@@ -44,7 +42,6 @@ function StreamEle(data) {
   const [isHovered, setIsHovered] = useState(false);
   const [channelIsHovered, setChannelIsHovered] = useState(false);
   const [unfollowError, setUnfollowError] = useState(null);
-  const { setTwitchToken, twitchToken, setRefreshToken } = useContext(AccountContext);
   const { twitchVideoHoverEnable } = useContext(FeedsContext);
 
   const streamHoverTimer = useRef();
@@ -270,40 +267,19 @@ function StreamEle(data) {
                 style={{ gridRow: "1" }}>
                 <FaTwitch size={20} style={{ color: "purple" }} />
               </a>
-              <OverlayTrigger
-                key={"bottom"}
-                placement={"bottom"}
-                delay={0}
-                overlay={
-                  <Tooltip id={`tooltip-${"bottom"}`}>
-                    Unfollow <strong>{data.data.user_name}</strong>.
-                  </Tooltip>
-                }>
-                <UnfollowButton
-                  data-tip={"Unfollow " + data.data.user}
-                  variant='link'
-                  onClick={async () => {
-                    await UnfollowStream({
-                      user_id: data.data.user_id,
-                      refresh: data.refresh,
-                      setTwitchToken: setTwitchToken,
-                      twitchToken: twitchToken,
-                      setRefreshToken: setRefreshToken,
-                    })
-                      .then(() => {
-                        setUnfollowError("Successfully unfollowed ");
-                        data.refresh();
-                      })
-                      .catch(error => {
-                        setUnfollowError(null);
-                        setUnfollowError("Failed to unfollow ");
-                        console.log("TCL: StreamEle -> error", error.message);
-                        console.log("::Try re-authenticate from the sidebar::");
-                      });
-                  }}>
-                  <MdDelete size={22} className={styles.unfollowIcon} />
-                </UnfollowButton>
-              </OverlayTrigger>
+              <FollowUnfollowBtn
+                style={{
+                  gridRow: "1",
+                  justifySelf: "right",
+                  margin: "0",
+                  marginRight: "8px",
+                  height: "100%",
+                }}
+                size={22}
+                channelName={data.data.user_name}
+                id={data.data.user_id}
+                alreadyFollowedStatus={true}
+              />
             </>
           ) : null}
         </div>
@@ -325,7 +301,6 @@ function StreamEle(data) {
             {data.data.game_name}
           </Link>
           <p className={styles.viewers} title='Viewers'>
-            {/* {data.data.viewer_count} */}
             {Utilities.formatViewerNumbers(data.data.viewer_count)}
             <FaRegEye
               size={14}
