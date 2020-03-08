@@ -2,16 +2,12 @@
 
 <img src="https://github.com/mambans/Notifies/blob/master/frontend/public/logo-text.png" alt="Logo" width="300"/>
 
-My personal project **Notifies**, is a site that combines feeds from different sites such as Twitch.tv and Youtube.com into one page.
+My personal project **Notifies**, is a site that combines feeds from different sites such as Twitch.tv and Youtube.com into one page. And features for that I personally thought was missing from Twitch.tv.
 
 ## Account
 
 Notifies stores the Notifies account Username, email, **hashed** password in database and Youtube and Twitch access tokens so you don't need to reconnected on each session.
-It also stores:
-
-- Profile image url
-- Twitch channels to fetch vods from.
-- Notifies Twitch settings (enbled/disabled, auto refresh, id ..)
+It also stores profile image url, twitch channels to fetch vods from, Notifies twitch settings (enbled/disabled, auto refresh, id ..).
 
 ## Feeds
 
@@ -19,24 +15,41 @@ Individual feeds can be disable.
 
 - Twitch followed online streams
 - Twitch Vods
-- Twitch top streams (all/category) (most viewers)
 - Youtube subscriptions
+
+* Twitch top streams (all/category)
 
 ### Twitch
 
-Notifies auto refreshes the live Twitch feed every 25sec with Notifications. Notifies also shows most recent vods from specific Twitch channels you have enabled fods for in Notifies, so you can follow a live stream but dont't enbled vods for them and the other way around. Auto refreches vods every 3 hours, can be manually refreshed from a button.
+Notifies auto refreshes the live Twitch feed every 25sec with live Notifications. Notifies also shows most recent vods from specific Twitch channels you have enabled/selected vods for in Notifies. Auto refreches vods every 3 hours, can be manually refreshed from a button.
 
-Features:
+#### Features
 
 - Online followed streams feed
 - Vods feed
-- Preview Vods and Live streams on hover.
-- Top streams (all/category) feed.
-- See all followed channels
+- Top streams.
+- Followed channels list.
 - Follow/Unfollow button
 - Channel page with Vods and Clips. (+Sort buttons)
 - Player to watch live streams, vods(no chat) and clips(no chat).
-- Notifications list for Online and Offline notifications.
+
+#### Added features I personally thought was missing from Twitch
+
+- Auto refresh streams and their stats incl. viewers, games, title, thumbnail (For when Site stays Open or Pinned.)
+- Adjust volume with scroll wheel and mute with scroll click.
+- Seperate Live follows and vod follows so I only fetch vods from selected channels.
+- Bigger live video & smaller chat.
+- Switch chat side and able to hide chat.
+- See Uptime on both Live video, thumbnails and sidebar.
+- Repacing the "vigenette" effect on hover only have black background/shadow where text is.
+- Live preview of the stream when Hovering thumbnails.
+- Channel, title, category info in notification.
+- More stable/consistant notifications (imo).
+- Notification list to see a "log" of live/offline notifications.
+- Removing reruns from live feed.
+- Load more vods without leaving the main/feed page.
+
+* (Small/normal delay ~1 sec with no ads)
 
 ### Youtube
 
