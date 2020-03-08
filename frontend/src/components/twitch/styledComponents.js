@@ -93,28 +93,6 @@ const StyledCountdownCircle = styled.div`
   }
 `;
 
-const StyledCountdownLine = styled.div`
-  svg {
-    height: 4px;
-    width: 200px;
-    animation: countdown2 20s linear 1 forwards;
-
-    line {
-      stroke: rgb(255, 0, 0);
-      stroke-width: 4;
-    }
-  }
-
-  @keyframes countdown2 {
-    from {
-      width: 200px;
-    }
-    to {
-      width: 0px;
-    }
-  }
-`;
-
 const HeaderLeftSubcontainer = styled.div`
   width: 300px;
   min-width: 300px;
@@ -214,7 +192,6 @@ export {
   StyledLoadmore,
   StyledCountdownCircle,
   HeaderLeftSubcontainer,
-  StyledCountdownLine,
   StyledLoadingBox,
   StyledLoadingList,
 };

@@ -1,9 +1,22 @@
-import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
+import React, { useState, useEffect, useMemo } from "react";
+import { Redirect, Link } from "react-router-dom";
+import GetTopGames from "./GetTopGames";
+import {
+  StyledGameListElement,
+  GameListUlContainer,
+  SearchGameForm,
+  StyledShowAllButton,
+} from "./styledComponents";
+import _ from "lodash";
+import { MdFormatListBulleted } from "react-icons/md";
+import StyledLoadingList from "./LoadingList";
 
 const GameSearchBar = props => {
   const { gameName } = props;
   const [redirect, setRedirect] = useState(false);
+  const [topGames, setTopGames] = useState();
+  const [openGameList, setOpenGameList] = useState();
+
   const useInput = initialValue => {
     const [value, setValue] = useState(initialValue);
 
@@ -15,13 +28,19 @@ const GameSearchBar = props => {
         value,
         onChange: event => {
           setValue(event.target.value);
+          if (openGameList && event.target.value === "") {
+            setOpenGameList(false);
+          }
         },
+      },
+      showValue: () => {
+        return value;
       },
     };
   };
 
   //eslint-disable-next-line
-  const { value: game, bind: bindGame, reset: resetGame } = useInput("");
+  const { value: game, bind: bindGame, reset: resetGame, showValue } = useInput("");
 
   const handleSubmit = evt => {
     evt.preventDefault();
@@ -29,32 +48,73 @@ const GameSearchBar = props => {
     // resetGame();
   };
 
+  const fetchTopGamesOnce = useMemo(
+    () =>
+      _.throttle(
+        () => {
+          GetTopGames().then(res => {
+            console.log("res", res);
+            setTopGames(res.data.data);
+          });
+        },
+        5000,
+        { leading: true, trailing: false }
+      ),
+    []
+  );
+
+  useEffect(() => {
+    const input = showValue();
+    if ((!topGames && openGameList) || (input && input.length >= 2)) {
+      fetchTopGamesOnce();
+    }
+  }, [showValue, openGameList, fetchTopGamesOnce, topGames]);
+
   return (
     <>
       {redirect ? <Redirect to={"/game/" + game} /> : null}
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          marginRight: "25px",
-          padding: "0.5rem 0.75rem",
-          background: "var(--refreshButtonBackground)",
-          boxShadow: "var(--refreshButtonShadow)",
-          border: "thin solid rgb(47, 47, 47)",
-          borderRadius: "5px",
-          width: "250px",
-        }}>
+      <SearchGameForm onSubmit={handleSubmit}>
         <input
-          style={{
-            color: "var(--refreshButtonColor)",
-            background: "transparent",
-            border: "none",
-            borderRadius: "5px",
-            textOverflow: "ellipsis",
-          }}
           type='text'
           placeholder={(gameName !== "" && gameName !== undefined ? gameName : "All") + "..."}
           {...bindGame}></input>
-      </form>
+        <MdFormatListBulleted
+          onClick={() => {
+            setOpenGameList(!openGameList);
+          }}
+          size={42}
+        />
+        {openGameList || (showValue() && showValue().length >= 2) ? (
+          <GameListUlContainer>
+            {topGames ? (
+              <StyledShowAllButton key='showAll'>
+                <Link to={"/game/"}>Show all</Link>
+              </StyledShowAllButton>
+            ) : null}
+            {topGames ? (
+              topGames
+                .filter(game => {
+                  return game.name.toLowerCase().includes(showValue());
+                })
+                .map(game => {
+                  return (
+                    <StyledGameListElement key={game.id}>
+                      <Link to={"/game/" + game.name}>
+                        <img
+                          src={game.box_art_url.replace("{width}", 300).replace("{height}", 300)}
+                          alt=''
+                        />
+                        {game.name}
+                      </Link>
+                    </StyledGameListElement>
+                  );
+                })
+            ) : (
+              <StyledLoadingList amount={12} />
+            )}
+          </GameListUlContainer>
+        ) : null}
+      </SearchGameForm>
     </>
   );
 };

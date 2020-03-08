@@ -1,19 +1,16 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { MdFormatListBulleted } from "react-icons/md";
 import { MdRefresh } from "react-icons/md";
 import { Spinner } from "react-bootstrap";
 import { FaTwitch } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
-import Popup from "reactjs-popup";
 import React, { useEffect, useState, useCallback, useRef } from "react";
 
-import { RefreshButton, HeaderTitle, ButtonList } from "./../../sharedStyledComponents";
+import { RefreshButton, HeaderTitle } from "./../../sharedStyledComponents";
 import { StyledLoadmore } from "./../styledComponents";
 import GameSearchBar from "./GameSearchBar";
 import GetTopStreams from "./GetTopStreams";
 import LoadingBoxs from "./../LoadingBoxs";
-import RenderTopGamesList from "./RenderTopGamesList";
 import StreamEle from "./StreamElement";
 import styles from "./../Twitch.module.scss";
 import Utilities from "./../../../utilities/Utilities";
@@ -85,8 +82,8 @@ export default () => {
       <div className={styles.headerContainerTopStreams}>
         <div
           style={{
-            width: "575px",
-            minWidth: "575px",
+            width: "325px",
+            minWidth: "325px",
             alignItems: "end",
             display: "flex",
           }}>
@@ -110,38 +107,6 @@ export default () => {
         </HeaderTitle>
         <div style={{ display: "flex" }}>
           <GameSearchBar gameName={category} />
-          <Popup
-            placeholder='""'
-            arrow={false}
-            trigger={
-              <ButtonList style={{ width: "300px", justifyContent: "left" }}>
-                <p
-                  style={{
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    width: "250px",
-                    margin: 0,
-                  }}>
-                  {category !== "" && category !== undefined ? category : "All"}
-                </p>
-                <MdFormatListBulleted
-                  size={22}
-                  style={{
-                    height: "22px",
-                    alignItems: "center",
-                    display: "flex",
-                    marginLeft: "15px",
-                    right: "7px",
-                    position: "absolute",
-                  }}
-                />
-              </ButtonList>
-            }
-            position='bottom center'
-            className='popupModal'>
-            <RenderTopGamesList />
-          </Popup>
         </div>
       </div>
       {error ? (
