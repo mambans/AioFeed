@@ -200,6 +200,7 @@ const SubFeedHeader = styled.div`
 const SortButton = styled(Button).attrs({ variant: "dark" })`
   width: 200px;
   background-color: rgba(20, 23, 25, 0.5);
+  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
 
   &:hover,
   &:active,
@@ -216,7 +217,7 @@ const SortDropDownList = styled.ul`
   position: absolute;
   padding: 10px;
   list-style: none;
-  margin-top: 42px;
+  /* margin-top: 42px; */
   background-color: rgba(20, 23, 25, 0.9);
   border-radius: 0 0 5px 5px;
   width: 200px;

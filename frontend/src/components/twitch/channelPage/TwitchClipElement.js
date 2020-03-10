@@ -18,7 +18,9 @@ export default ({ ...data }) => {
         <a
           className={styles.img}
           // href={data.data.embed_url}
-          href={`https://www.twitch.tv/${data.user_name}/clip/${data.data.id}`}>
+          href={`https://www.twitch.tv/${data.user_name || data.data.broadcaster_name}/clip/${
+            data.data.id
+          }`}>
           <img src={data.data.thumbnail_url} alt={styles.thumbnail} />
         </a>
         <div className={styles.vodVideoInfo}>
@@ -52,12 +54,14 @@ export default ({ ...data }) => {
               {data.data.title}
             </Tooltip>
           }>
-          <VideoTitle to={`/clip/${data.data.id}#${data.user_name}`}>
+          <VideoTitle to={`/clip/${data.data.id}#${data.user_name || data.data.broadcaster_name}`}>
             {Utilities.truncate(data.data.title, 70)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
-        <VideoTitle to={`/clip/${data.data.id}#${data.user_name}`}>{data.data.title}</VideoTitle>
+        <VideoTitle to={`/clip/${data.data.id}#${data.user_name || data.data.broadcaster_name}`}>
+          {data.data.title}
+        </VideoTitle>
       )}
 
       <div style={{ width: "336px" }}>

@@ -53,7 +53,6 @@ const GameSearchBar = props => {
       _.throttle(
         () => {
           GetTopGames().then(res => {
-            console.log("res", res);
             setTopGames(res.data.data);
           });
         },

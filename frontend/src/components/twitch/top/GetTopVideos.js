@@ -3,7 +3,7 @@ import axios from "axios";
 import Utilities from "./../../../utilities/Utilities";
 import GetCachedProfiles from "./../GetCachedProfiles";
 
-export default async (category, page) => {
+export default async (category, sortBy, page) => {
   let game;
   let error;
   const nrStreams =
@@ -28,11 +28,14 @@ export default async (category, page) => {
     game = { id: null };
   }
   try {
-    const topStreams = await axios
-      .get(`https://api.twitch.tv/helix/streams`, {
+    const topVideos = await axios
+      .get(`https://api.twitch.tv/helix/videos`, {
         params: {
           first: nrStreams,
           game_id: game.id,
+          sort: sortBy && sortBy.toLowerCase(),
+          type: "all",
+          period: "all",
           after: page ? page.pagination.cursor : null,
         },
         headers: {
@@ -48,7 +51,7 @@ export default async (category, page) => {
 
     const TwitchProfiles = GetCachedProfiles();
 
-    const noCachedProfileArrayObject = await topStreams.data.data.filter(user => {
+    const noCachedProfileArrayObject = await topVideos.data.data.filter(user => {
       return !Object.keys(TwitchProfiles).some(id => id === user.user_id);
     });
 
@@ -75,7 +78,7 @@ export default async (category, page) => {
     }
 
     Promise.all(
-      await topStreams.data.data.map(async user => {
+      await topVideos.data.data.map(async user => {
         if (!TwitchProfiles[user.user_id]) {
           user.profile_img_url = newProfileImgUrls.data.data.find(p_user => {
             return p_user.id === user.user_id;
@@ -100,7 +103,7 @@ export default async (category, page) => {
     // Removes game id duplicates before sending game request.
     const games = [
       ...new Set(
-        topStreams.data.data.map(channel => {
+        topVideos.data.data.map(channel => {
           return channel.game_id;
         })
       ),
@@ -118,7 +121,7 @@ export default async (category, page) => {
     });
 
     // Add the game name to each stream object.
-    topStreams.data.data.map(stream => {
+    topVideos.data.data.map(stream => {
       gameNames.data.data.find(game => {
         return game.id === stream.game_id;
       }) !== undefined
@@ -131,7 +134,7 @@ export default async (category, page) => {
     });
 
     // Add the game img to each stream object.
-    topStreams.data.data.map(stream => {
+    topVideos.data.data.map(stream => {
       gameNames.data.data.find(game => {
         return game.id === stream.game_id;
       }) !== undefined
@@ -143,7 +146,7 @@ export default async (category, page) => {
       return undefined;
     });
 
-    return { topData: topStreams, error };
+    return { topData: topVideos, error };
   } catch (e) {
     console.error(e);
   }

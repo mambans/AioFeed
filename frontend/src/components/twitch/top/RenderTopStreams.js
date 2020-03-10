@@ -1,42 +1,70 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { MdRefresh } from "react-icons/md";
-import { Spinner } from "react-bootstrap";
+import { FaRegFileVideo } from "react-icons/fa";
 import { FaTwitch } from "react-icons/fa";
+import { MdLiveTv } from "react-icons/md";
+import { MdMovieCreation } from "react-icons/md";
+import { MdRefresh } from "react-icons/md";
+import { MdVideocam } from "react-icons/md";
+import { Spinner } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 import React, { useEffect, useState, useCallback, useRef } from "react";
 
 import { RefreshButton, HeaderTitle } from "./../../sharedStyledComponents";
 import { StyledLoadmore } from "./../styledComponents";
+import { TypeListUlContainer, TypeButton, TopDataSortButtonsContainer } from "./styledComponents";
+import ClipsSortButton from "./../channelPage/ClipsSortButton";
 import GameSearchBar from "./GameSearchBar";
+import GetTopClips from "./GetTopClips";
 import GetTopStreams from "./GetTopStreams";
+import GetTopVideos from "./GetTopVideos";
 import LoadingBoxs from "./../LoadingBoxs";
+import SortButton from "./../channelPage/SortButton";
 import StreamEle from "./StreamElement";
 import styles from "./../Twitch.module.scss";
+import TwitchClipElement from "./../channelPage/TwitchClipElement";
+import TwitchVodElement from "./../vods/TwitchVodElement";
 import Utilities from "./../../../utilities/Utilities";
 
 export default () => {
   const { category } = useParams();
-  document.title = `Notifies | ${category || "All"} Top`;
-
-  const [topStreams, setTopStreams] = useState();
+  const [topData, setTopData] = useState();
+  const [videoType, setVideoType] = useState("Streams");
+  const [typeListOpen, setTypeListOpen] = useState();
   const [loadmoreLoaded, setLoadmoreLoaded] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
-  const oldTopStreams = useRef();
+  const [sortBy, setSortBy] = useState("Views");
+  const [sortByTime, setSortByTime] = useState(null);
+
+  const oldTopData = useRef();
   const loadmoreRef = useRef();
 
-  const loadMore = useCallback(() => {
-    setLoadmoreLoaded(false);
-    GetTopStreams(category, oldTopStreams.current.pagination.cursor).then(res => {
-      const allTopStreams = oldTopStreams.current.data.concat(res.topStreams.data.data);
-      oldTopStreams.current = {
-        data: allTopStreams,
-        pagination: res.topStreams.data.pagination,
+  document.title = `Notifies | ${category || "All"} ${videoType}`;
+
+  const videoElementTypeComp = data => {
+    switch (videoType) {
+      case "Streams":
+        return <StreamEle data={data} />;
+      case "Clips":
+        return <TwitchClipElement data={data} />;
+      case "Videos":
+        return <TwitchVodElement data={data} />;
+      default:
+        return <StreamEle data={data} />;
+    }
+  };
+
+  const fetchVideosDataHandler = (res, shouldLoadMore) => {
+    if (shouldLoadMore) {
+      const allTopData = oldTopData.current.data.concat(res.topData.data.data);
+      oldTopData.current = {
+        data: allTopData,
+        pagination: res.topData.data.pagination,
       };
 
       setLoadmoreLoaded(true);
-      setTopStreams(allTopStreams);
+      setTopData(allTopData);
 
       setTimeout(() => {
         if (loadmoreRef.current) {
@@ -47,43 +75,102 @@ export default () => {
           });
         }
       }, 0);
-    });
-  }, [category]);
+    } else {
+      oldTopData.current = res.topData.data;
+      setTopData(res.topData.data.data);
+      setRefreshing(false);
+    }
+  };
+
+  const fetchVideos = useCallback(
+    shouldLoadMore => {
+      if (shouldLoadMore) setLoadmoreLoaded(false);
+
+      switch (videoType) {
+        case "Streams":
+          GetTopStreams(category, oldTopData.current)
+            .then(res => {
+              fetchVideosDataHandler(res, shouldLoadMore);
+            })
+            .catch(e => {
+              if ((e.message = "game is undefined")) {
+                setError("Invalid game name");
+              } else {
+                setError(e.message);
+              }
+              setRefreshing(false);
+            });
+          break;
+        case "Clips":
+          GetTopClips(category, sortByTime, oldTopData.current)
+            .then(res => {
+              fetchVideosDataHandler(res, shouldLoadMore);
+            })
+            .catch(e => {
+              if ((e.message = "game is undefined")) {
+                setError("Invalid game name");
+              } else {
+                setError(e.message);
+              }
+              setRefreshing(false);
+            });
+          break;
+        case "Videos":
+          GetTopVideos(category, sortBy, oldTopData.current)
+            .then(res => {
+              fetchVideosDataHandler(res, shouldLoadMore);
+            })
+            .catch(e => {
+              if ((e.message = "game is undefined")) {
+                setError("Invalid game name");
+              } else {
+                setError(e.message);
+              }
+              setRefreshing(false);
+            });
+          break;
+        default:
+          GetTopStreams(category, oldTopData.current)
+            .then(res => {
+              fetchVideosDataHandler(res, shouldLoadMore);
+            })
+            .catch(e => {
+              if ((e.message = "game is undefined")) {
+                setError("Invalid game name");
+              } else {
+                setError(e.message);
+              }
+              setRefreshing(false);
+            });
+      }
+    },
+    [category, sortBy, sortByTime, videoType]
+  );
+
+  const videoTypeBtnOnClick = type => {
+    setTopData();
+    oldTopData.current = null;
+    setVideoType(type);
+    setTypeListOpen(false);
+  };
 
   const refresh = useCallback(() => {
     setRefreshing(true);
-    GetTopStreams(category).then(res => {
-      oldTopStreams.current = res.topStreams.data;
-      setTopStreams(res.topStreams.data.data);
-      setRefreshing(false);
-    });
-  }, [category]);
+    fetchVideos();
+  }, [fetchVideos]);
 
   useEffect(() => {
     setRefreshing(true);
-    GetTopStreams(category)
-      .then(res => {
-        oldTopStreams.current = res.topStreams.data;
-        setTopStreams(res.topStreams.data.data);
-        setRefreshing(false);
-      })
-      .catch(e => {
-        if ((e.message = "game is undefined")) {
-          setError("Invalid game name");
-        } else {
-          setError(e.message);
-        }
-        setRefreshing(false);
-      });
-  }, [category]);
+    fetchVideos();
+  }, [fetchVideos]);
 
   return (
     <>
-      <div className={styles.headerContainerTopStreams}>
+      <div className={styles.headerContainerTopData}>
         <div
           style={{
-            width: "325px",
-            minWidth: "325px",
+            width: "675px",
+            minWidth: "675px",
             alignItems: "end",
             display: "flex",
           }}>
@@ -103,11 +190,55 @@ export default () => {
         </div>
         <HeaderTitle style={{ marginLeft: "10px" }}>
           <FaTwitch size={32} style={{ color: "#6f166f" }} />
-          Top Streams
+          Top {videoType}
         </HeaderTitle>
-        <div style={{ display: "flex" }}>
+        <TopDataSortButtonsContainer>
           <GameSearchBar gameName={category} />
-        </div>
+          <div>
+            <TypeButton
+              title={`Fetch top ${videoType}`}
+              disabled={category ? false : true}
+              onClick={() => {
+                setTypeListOpen(!typeListOpen);
+              }}>
+              <FaRegFileVideo size={20} />
+              {videoType}
+            </TypeButton>
+
+            {typeListOpen ? (
+              <TypeListUlContainer>
+                <li
+                  onClick={() => {
+                    videoTypeBtnOnClick("Streams");
+                  }}>
+                  <MdLiveTv size={24} />
+                  Live
+                </li>
+                <li
+                  onClick={() => {
+                    videoTypeBtnOnClick("Clips");
+                    setSortBy("Views");
+                  }}>
+                  <MdMovieCreation size={24} />
+                  Clips
+                </li>
+                <li
+                  onClick={() => {
+                    videoTypeBtnOnClick("Videos");
+                  }}>
+                  <MdVideocam size={24} />
+                  Videos
+                </li>
+              </TypeListUlContainer>
+            ) : null}
+          </div>
+
+          {videoType === "Videos" ? (
+            <SortButton sortBy={sortBy} setSortBy={setSortBy} setData={setTopData} />
+          ) : videoType === "Clips" ? (
+            <ClipsSortButton sortBy={sortByTime} setSortBy={setSortByTime} setData={setTopData} />
+          ) : null}
+        </TopDataSortButtonsContainer>
       </div>
       {error ? (
         <Alert
@@ -118,11 +249,11 @@ export default () => {
           <Alert.Heading>{error}</Alert.Heading>
         </Alert>
       ) : (
-        <div className={styles.topStreamsContainer}>
-          {topStreams ? (
+        <div className={styles.topDataContainer}>
+          {topData ? (
             <>
               <TransitionGroup className='twitch-top-live' component={null}>
-                {topStreams.map(stream => {
+                {topData.map(stream => {
                   return (
                     <CSSTransition
                       // in={true}
@@ -130,16 +261,17 @@ export default () => {
                       timeout={1000}
                       classNames='fade-1s'
                       unmountOnExit>
-                      <StreamEle data={stream} />
+                      {videoElementTypeComp(stream)}
                     </CSSTransition>
                   );
                 })}
               </TransitionGroup>
               <StyledLoadmore ref={loadmoreRef}>
                 <div />
-                <p
+                <div
+                  id='Button'
                   onClick={() => {
-                    loadMore();
+                    fetchVideos(true);
                   }}>
                   {!loadmoreLoaded ? (
                     <>
@@ -154,7 +286,7 @@ export default () => {
                   ) : (
                     "Load more"
                   )}
-                </p>
+                </div>
                 <div />
               </StyledLoadmore>
             </>

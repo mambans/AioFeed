@@ -22,11 +22,9 @@ export default ({ ...data }) => {
   const hoverTimeoutRef = useRef();
 
   const durationToMs = duration => {
-    const hms = Utilities.formatTwitchVodsDuration(duration); // your input string
-    const a = hms.split(":"); // split it at the colons
-
-    // minutes are worth 60 seconds. Hours are worth 60 minutes.
-    const seconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2];
+    const hms = Utilities.formatTwitchVodsDuration(duration);
+    const parts = hms.split(":");
+    const seconds = +parts[0] * 60 * 60 + +parts[1] * 60 + +parts[2];
     const ms = seconds * 1000;
 
     return ms;
@@ -188,7 +186,7 @@ export default ({ ...data }) => {
                   justifySelf: "right",
                 }}
                 fromNow>
-                {data.data.endDate}
+                {data.data.endDate || data.data.created_at}
               </Moment>
               <p
                 className={styles.viewers}

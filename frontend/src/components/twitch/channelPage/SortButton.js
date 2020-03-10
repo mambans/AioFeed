@@ -7,7 +7,7 @@ export default ({ sortBy, setSortBy, setData }) => {
   const [open, setOpen] = useState(false);
   const SortOptions = ["Time", "Trending", "Views"];
   return (
-    <>
+    <div>
       <SortButton
         onClick={() => {
           setOpen(!open);
@@ -32,6 +32,6 @@ export default ({ sortBy, setSortBy, setData }) => {
           })}
         </SortDropDownList>
       ) : null}
-    </>
+    </div>
   );
 };

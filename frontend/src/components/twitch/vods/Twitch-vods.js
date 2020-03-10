@@ -33,7 +33,7 @@ function TwitchVods() {
   const [numberOfVideos, setNumberOfVideos] = useState(
     Math.floor((document.documentElement.clientWidth - 430) / 350) *
       Math.floor((document.documentElement.clientHeight - (65 + 484)) / 341)
-  );  
+  );
   const [vodAmounts, setVodAmounts] = useState(numberOfVideos);
 
   const recalcWidth = useMemo(
@@ -281,7 +281,8 @@ function TwitchVods() {
         </SubFeedContainer>
         <StyledLoadmore ref={loadmoreRef}>
           <div />
-          <p
+          <div
+            id='Button'
             onClick={() => {
               setVodAmounts(vodAmounts + numberOfVideos);
               setTimeout(() => {
@@ -296,7 +297,7 @@ function TwitchVods() {
               clearTimeout(resetVodAmountsTimer.current);
             }}>
             Show more
-          </p>
+          </div>
           <div />
         </StyledLoadmore>
       </>

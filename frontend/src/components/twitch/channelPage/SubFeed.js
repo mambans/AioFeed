@@ -94,7 +94,8 @@ export default ({
           margin: "auto",
         }}>
         <div />
-        <p
+        <div
+          id='Button'
           onClick={() => {
             fetchItems(itemPagination.current);
           }}>
@@ -111,7 +112,7 @@ export default ({
           ) : (
             "Load more"
           )}
-        </p>
+        </div>
         <div />
       </StyledLoadmore>
     </>

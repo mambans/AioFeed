@@ -3,7 +3,7 @@ import axios from "axios";
 import Utilities from "./../../../utilities/Utilities";
 import GetCachedProfiles from "./../GetCachedProfiles";
 
-export default async (category, page) => {
+export default async (category, setSortByTime, page) => {
   let game;
   let error;
   const nrStreams =
@@ -28,12 +28,16 @@ export default async (category, page) => {
     game = { id: null };
   }
   try {
-    const topStreams = await axios
-      .get(`https://api.twitch.tv/helix/streams`, {
+    const topClips = await axios
+      .get(`https://api.twitch.tv/helix/clips`, {
         params: {
           first: nrStreams,
           game_id: game.id,
           after: page ? page.pagination.cursor : null,
+          started_at:
+            setSortByTime &&
+            new Date(new Date().setDate(new Date().getDate() - setSortByTime)).toISOString(),
+          ended_at: setSortByTime && new Date().toISOString(),
         },
         headers: {
           Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
@@ -48,12 +52,12 @@ export default async (category, page) => {
 
     const TwitchProfiles = GetCachedProfiles();
 
-    const noCachedProfileArrayObject = await topStreams.data.data.filter(user => {
-      return !Object.keys(TwitchProfiles).some(id => id === user.user_id);
+    const noCachedProfileArrayObject = await topClips.data.data.filter(user => {
+      return !Object.keys(TwitchProfiles).some(id => id === user.broadcaster_id);
     });
 
     const noCachedProfileArrayIds = Object.values(noCachedProfileArrayObject).map(user => {
-      return user.user_id;
+      return user.broadcaster_id;
     });
 
     let newProfileImgUrls;
@@ -75,20 +79,20 @@ export default async (category, page) => {
     }
 
     Promise.all(
-      await topStreams.data.data.map(async user => {
-        if (!TwitchProfiles[user.user_id]) {
+      await topClips.data.data.map(async user => {
+        if (!TwitchProfiles[user.broadcaster_id]) {
           user.profile_img_url = newProfileImgUrls.data.data.find(p_user => {
-            return p_user.id === user.user_id;
+            return p_user.id === user.broadcaster_id;
           }).profile_image_url;
         } else {
-          user.profile_img_url = TwitchProfiles[user.user_id];
+          user.profile_img_url = TwitchProfiles[user.broadcaster_id];
         }
         return user;
       })
     ).then(res => {
       const newProfiles = res.reduce(
         // eslint-disable-next-line no-sequences
-        (obj, item) => ((obj[item.user_id] = item.profile_img_url), obj),
+        (obj, item) => ((obj[item.broadcaster_id] = item.profile_img_url), obj),
         {}
       );
 
@@ -100,7 +104,7 @@ export default async (category, page) => {
     // Removes game id duplicates before sending game request.
     const games = [
       ...new Set(
-        topStreams.data.data.map(channel => {
+        topClips.data.data.map(channel => {
           return channel.game_id;
         })
       ),
@@ -118,7 +122,7 @@ export default async (category, page) => {
     });
 
     // Add the game name to each stream object.
-    topStreams.data.data.map(stream => {
+    topClips.data.data.map(stream => {
       gameNames.data.data.find(game => {
         return game.id === stream.game_id;
       }) !== undefined
@@ -131,7 +135,7 @@ export default async (category, page) => {
     });
 
     // Add the game img to each stream object.
-    topStreams.data.data.map(stream => {
+    topClips.data.data.map(stream => {
       gameNames.data.data.find(game => {
         return game.id === stream.game_id;
       }) !== undefined
@@ -143,7 +147,7 @@ export default async (category, page) => {
       return undefined;
     });
 
-    return { topData: topStreams, error };
+    return { topData: topClips, error };
   } catch (e) {
     console.error(e);
   }

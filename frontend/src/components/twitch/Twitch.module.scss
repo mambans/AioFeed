@@ -7,7 +7,7 @@
   min-height: 400px;
 }
 
-.headerContainerTopStreams {
+.headerContainerTopData {
   border-bottom: var(--subFeedHeaderBorder);
   display: flex;
   justify-content: space-between;
@@ -438,7 +438,7 @@
   margin-top: 50px;
 }
 
-.topStreamsContainer {
+.topDataContainer {
   display: flex;
   flex-wrap: wrap;
   width: 92.1%;
@@ -454,8 +454,8 @@
     margin: 25px 0 0 360px;
   }
 
-  .topStreamsContainer,
-  .headerContainerTopStreams {
+  .topDataContainer,
+  .headerContainerTopData {
     width: 82.3% !important;
   }
 }
@@ -466,8 +466,8 @@
     margin: 25px 7.5% 0 19%;
   }
 
-  .topStreamsContainer,
-  .headerContainerTopStreams {
+  .topDataContainer,
+  .headerContainerTopData {
     // width: 74% !important;
     width: 92% !important;
   }

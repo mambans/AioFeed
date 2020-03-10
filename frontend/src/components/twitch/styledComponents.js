@@ -29,12 +29,12 @@ const StyledLoadmore = styled.div`
   align-items: center;
   max-width: 100%;
 
-  div {
+  div:not(#Button) {
     background: rgba(90, 92, 94, 0.67);
     height: 1px;
   }
 
-  p {
+  div#Button {
     width: max-content;
     cursor: pointer;
     margin: 0;

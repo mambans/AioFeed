@@ -5,6 +5,7 @@ import { SortButton, SortDropDownList } from "./StyledComponents";
 
 export default ({ sortBy, setSortBy, setData }) => {
   const [open, setOpen] = useState(false);
+
   const SortOptionsNames = {
     "3": "3 days",
     "7": "1 week",
@@ -15,9 +16,11 @@ export default ({ sortBy, setSortBy, setData }) => {
     "360": "1 year",
     null: "Lifetime",
   };
+
   return (
-    <>
+    <div>
       <SortButton
+        title={`Fetch clips from the last ${SortOptionsNames[sortBy || "null"]}`}
         onClick={() => {
           setOpen(!open);
         }}>
@@ -31,9 +34,11 @@ export default ({ sortBy, setSortBy, setData }) => {
               <li
                 key={option}
                 onClick={() => {
-                  setData();
-                  setSortBy(option === "null" ? null : option);
-                  setOpen(false);
+                  if (option !== sortBy) {
+                    setData();
+                    setSortBy(option === "null" ? null : option);
+                    setOpen(false);
+                  }
                 }}>
                 {SortOptionsNames[option]}
               </li>
@@ -41,6 +46,6 @@ export default ({ sortBy, setSortBy, setData }) => {
           })}
         </SortDropDownList>
       ) : null}
-    </>
+    </div>
   );
 };

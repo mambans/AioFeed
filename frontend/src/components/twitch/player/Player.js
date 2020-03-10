@@ -297,7 +297,7 @@ export default () => {
 
   const CreateAndOpenClip = async () => {
     const Width = window.screen.width * 0.6;
-    const Height = window.screen.height * 0.8;
+    const Height = window.screen.height * 0.65;
     const LeftPosition = (window.screen.width - Width) / 2;
     const TopPosition = (window.screen.height - Height) / 2;
     const settings = `height=${Height},width=${Width},top=${TopPosition},left=${LeftPosition},scrollbars=yes,resizable`;
@@ -314,7 +314,6 @@ export default () => {
         }
       )
       .then(res => {
-        console.log("res", res);
         window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
       })
       .catch(error => {
