@@ -156,6 +156,7 @@ export default () => {
 
   const refresh = useCallback(() => {
     setRefreshing(true);
+    oldTopData.current = null;
     fetchVideos();
   }, [fetchVideos]);
 
