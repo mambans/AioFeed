@@ -5,9 +5,9 @@ import Tooltip from "react-bootstrap/Tooltip";
 
 import { FollowBtn, UnfollowBtn } from "./styledComponents";
 import AccountContext from "./../account/AccountContext";
-import Utilities from "../../utilities/Utilities";
+import reauthenticate from "./reauthenticate";
 
-export default ({ channelName, id, alreadyFollowedStatus, size, style }) => {
+export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshStreams }) => {
   const [following, setFollowing] = useState(false);
   const { setTwitchToken, twitchToken, setRefreshToken, refreshToken, twitchUserId } = useContext(
     AccountContext
@@ -33,116 +33,49 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style }) => {
   //     });
   // };
 
-  async function UnfollowStream(data) {
-    const { user_id, setTwitchToken, twitchToken, setRefreshToken } = data;
+  const axiosConfig = (method, user_id, access_token = twitchToken) => {
+    return {
+      method: method,
+      url: `https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${user_id}`,
+      headers: {
+        Authorization: `OAuth ${access_token}`,
+        "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+        Accept: "application/vnd.twitchtv.v5+json",
+      },
+    };
+  };
 
-    await axios
-      .delete(`https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${user_id}`, {
-        headers: {
-          Authorization: `OAuth ${twitchToken}`,
-          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-          Accept: "application/vnd.twitchtv.v5+json",
-        },
-      })
+  const UnfollowStream = async user_id => {
+    await axios(axiosConfig("delete", user_id))
       .then(() => {
         console.log(`Unfollowed: ${channelName}`);
-        // data.refresh();
+        if (refreshStreams) refreshStreams();
       })
-      .catch(async e => {
-        console.error(e);
-        console.log("Re-authenticating with Twitch.");
-
-        await axios
-          .post(
-            `https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=${encodeURI(
-              Utilities.getCookie("Twitch-refresh_token")
-            )}&client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&client_secret=${
-              process.env.REACT_APP_TWITCH_SECRET
-            }&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`
-          )
-          .then(async res => {
-            setTwitchToken(res.data.access_token);
-            setRefreshToken(res.data.refresh_token);
-            document.cookie = `Twitch-access_token=${res.data.access_token}; path=/`;
-            document.cookie = `Twitch-refresh_token=${res.data.refresh_token}; path=/`;
-
-            await axios
-              .delete(
-                `https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${user_id}`,
-                {
-                  headers: {
-                    Authorization: `OAuth ${res.data.access_token}`,
-                    "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-                    Accept: "application/vnd.twitchtv.v5+json",
-                  },
-                }
-              )
-              .then(() => {
-                console.log(`Unfollowed: ${channelName}`);
-                // data.refresh();
-              });
+      .catch(() => {
+        reauthenticate(setTwitchToken, setRefreshToken, refreshToken).then(async access_token => {
+          await axios(axiosConfig("delete", user_id, access_token)).then(() => {
+            console.log(`Unfollowed: ${channelName}`);
+            if (refreshStreams) refreshStreams();
           });
-      });
-  }
-
-  const followStream = async UserId => {
-    await axios
-      .put(`https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${UserId}`, "", {
-        headers: {
-          Authorization: `OAuth ${twitchToken}`,
-          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-          Accept: "application/vnd.twitchtv.v5+json",
-        },
-      })
-      .then(res => {
-        console.log("res", res);
-        if (res.data) console.log("Started following ", channelName);
-      })
-      .catch(async error => {
-        console.log(`Failed to unfollow . `, error);
-        console.log(`Trying to auto re-authenticate with Twitch.`);
-
-        await axios
-          .post(
-            `https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=${encodeURI(
-              refreshToken
-            )}&client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&client_secret=${
-              process.env.REACT_APP_TWITCH_SECRET
-            }&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`
-          )
-          .then(async res => {
-            setTwitchToken(res.data.access_token);
-            setRefreshToken(res.data.refresh_token);
-            document.cookie = `Twitch-access_token=${res.data.access_token}; path=/`;
-            document.cookie = `Twitch-refresh_token=${res.data.refresh_token}; path=/`;
-
-            await axios
-              .put(
-                `https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${UserId}`,
-                "",
-                {
-                  headers: {
-                    Authorization: `OAuth ${res.data.access_token}`,
-                    "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-                    Accept: "application/vnd.twitchtv.v5+json",
-                  },
-                }
-              )
-              .then(() => {
-                console.log(`Followed: `);
-                // data.refresh();
-              })
-              .catch(error => {
-                console.error("Followed: ", error);
-              });
-          })
-          .catch(er => {
-            console.error(er);
-            console.log(`Failed to follow stream : `, er);
-            console.log("::Try manually re-authenticate from the sidebar.::");
-          });
+        });
       });
   };
+
+  async function followStream(user_id) {
+    await axios(axiosConfig("put", user_id))
+      .then(() => {
+        console.log(`Followed: ${channelName}`);
+        if (refreshStreams) refreshStreams();
+      })
+      .catch(() => {
+        reauthenticate(setTwitchToken, setRefreshToken, refreshToken).then(async access_token => {
+          await axios(axiosConfig("put", user_id, access_token)).then(() => {
+            console.log(`Followed: ${channelName}`);
+            if (refreshStreams) refreshStreams();
+          });
+        });
+      });
+  }
 
   useEffect(() => {
     const checkFollowing = async () => {
@@ -195,15 +128,7 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style }) => {
           style={{ ...style }}
           onClick={() => {
             setFollowing(false);
-            UnfollowStream({
-              user_id: id,
-              setTwitchToken: setTwitchToken,
-              twitchToken: twitchToken,
-              setRefreshToken: setRefreshToken,
-            }).catch(error => {
-              console.log(`Failed to unfollow stream ${channelName}: `, error);
-              console.log("::Try re-authenticate from the sidebar::");
-            });
+            UnfollowStream(id);
           }}
         />
       </OverlayTrigger>

@@ -63,7 +63,7 @@ export default () => {
   function logout() {
     document.cookie = `Notifies_AccountName=null; path=/`;
     document.cookie = `Notifies_AccountEmail=null; path=/`;
-    document.cookie = `Twitch-access_token=null; path=/`;
+    document.cookie = `Twitch-access_token=null; path=/; SameSite=Lax`;
     document.cookie = `Youtube-access_token=null; path=/`;
     document.cookie = `Notifies_AccountProfileImg=null; path=/`;
 
@@ -124,7 +124,7 @@ export default () => {
         tokenName: "TwitchToken",
       })
       .then(() => {
-        document.cookie = `Twitch-access_token=null; path=/`;
+        document.cookie = `Twitch-access_token=null; path=/; SameSite=Lax`;
         document.cookie = `Twitch_feedEnabled=${false}; path=/`;
         localStorage.setItem("TwitchVodsFeedEnabled", false);
         setTwitchToken(null);

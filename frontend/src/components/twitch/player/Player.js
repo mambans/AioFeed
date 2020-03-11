@@ -12,6 +12,7 @@ import axios from "axios";
 import Moment from "react-moment";
 import React, { useContext, useEffect, useState, useRef, useCallback } from "react";
 
+import reauthenticate from "./../reauthenticate";
 import AccountContext from "../../account/AccountContext";
 import fetchAndSetChannelInfo from "./fetchAndSetChannelInfo";
 import fetchUptime from "./fetchUptime";
@@ -44,7 +45,7 @@ export default () => {
   const type = location.pathname.split("/")[1];
   const nameFromHash = location.hash !== "" ? location.hash.replace("#", "") : p_channel || null;
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
-  const { twitchToken } = useContext(AccountContext);
+  const { twitchToken, setTwitchToken, setRefreshToken, refreshToken } = useContext(AccountContext);
 
   const [switched, setSwitched] = useState(false);
   const [volumeText, setVolumeText] = useState(0);
@@ -231,6 +232,17 @@ export default () => {
     };
   }, [OnlineEvents, offlineEvents]);
 
+  const axiosConfig = (method, access_token = twitchToken) => {
+    return {
+      method: method,
+      url: `https://api.twitch.tv/helix/clips?broadcaster_id=${channelInfo._id}`,
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+      },
+    };
+  };
+
   const CreateAndOpenClip = async () => {
     const Width = window.screen.width * 0.6;
     const Height = window.screen.height * 0.65;
@@ -238,48 +250,16 @@ export default () => {
     const TopPosition = (window.screen.height - Height) / 2;
     const settings = `height=${Height},width=${Width},top=${TopPosition},left=${LeftPosition},scrollbars=yes,resizable`;
 
-    await axios
-      .post(
-        `https://api.twitch.tv/helix/clips?broadcaster_id=${channelInfo._id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${twitchToken}`,
-            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-          },
-        }
-      )
+    await axios(axiosConfig("post"))
       .then(res => {
         window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
       })
-      .catch(async error => {
-        console.log("error", error);
-        console.log("Re-authenticating with Twitch.");
-
-        await axios
-          .post(
-            `https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=${encodeURI(
-              Utilities.getCookie("Twitch-refresh_token")
-            )}&client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&client_secret=${
-              process.env.REACT_APP_TWITCH_SECRET
-            }&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`
-          )
-          .then(async () => {
-            await axios
-              .post(
-                `https://api.twitch.tv/helix/clips?broadcaster_id=${channelInfo._id}`,
-                {},
-                {
-                  headers: {
-                    Authorization: `Bearer ${twitchToken}`,
-                    "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-                  },
-                }
-              )
-              .catch(error => {
-                console.log("error", error);
-              });
+      .catch(() => {
+        reauthenticate(setTwitchToken, setRefreshToken, refreshToken).then(async access_token => {
+          await axios(axiosConfig("post", access_token)).then(res => {
+            window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
           });
+        });
       });
   };
 

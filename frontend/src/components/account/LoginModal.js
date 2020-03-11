@@ -34,7 +34,7 @@ export default () => {
       .then(res => {
         document.cookie = `Notifies_AccountName=${res.data.Attributes.Username}; path=/`;
         document.cookie = `Notifies_AccountEmail=${res.data.Attributes.Email}; path=/`;
-        document.cookie = `Twitch-access_token=${res.data.Attributes.TwitchToken}; path=/`;
+        document.cookie = `Twitch-access_token=${res.data.Attributes.TwitchToken}; path=/; SameSite=Lax`;
         document.cookie = `Youtube-access_token=${res.data.Attributes.YoutubeToken}; path=/`;
         document.cookie = `Notifies_AccountProfileImg=${res.data.Attributes.ProfileImg}; path=/`;
         document.cookie = `Notifies_AuthKey=${res.data.Attributes.AuthKey}; path=/`;

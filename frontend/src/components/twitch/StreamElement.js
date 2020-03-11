@@ -279,6 +279,7 @@ function StreamEle(data) {
                 channelName={data.data.user_name}
                 id={data.data.user_id}
                 alreadyFollowedStatus={true}
+                refreshStreams={data.refresh}
               />
             </>
           ) : null}

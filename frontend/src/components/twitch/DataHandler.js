@@ -65,11 +65,8 @@ export default ({ children }) => {
       try {
         followedChannels.current = await getFollowedChannels(parseInt(twitchUserId));
 
-        if (
-          followedChannels.current &&
-          followedChannels.current[0]
-        ) {
-          document.cookie = `Twitch-username=${followedChannels.current[0].from_name}; path=/`;
+        if (followedChannels.current && followedChannels.current[0]) {
+          document.cookie = `Twitch-username=${followedChannels.current[0].from_name}; path=/; SameSite=Lax`;
         }
         const streams = await getFollowedOnlineStreams(followedChannels.current);
 
