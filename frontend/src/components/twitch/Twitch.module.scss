@@ -173,8 +173,9 @@
 
 .gameContainer {
   display: grid;
-  grid-template-columns: 10% 65% 25%;
+  grid-template-columns: 10% 50% 40%;
   width: 336px;
+  align-items: center;
 
   .game_img {
     width: 30px;

@@ -4,9 +4,9 @@ import { FaTwitch } from "react-icons/fa";
 import { MdLiveTv } from "react-icons/md";
 import { MdMovieCreation } from "react-icons/md";
 import { MdRefresh } from "react-icons/md";
-import { MdVideocam } from "react-icons/md";
+// import { MdVideocam } from "react-icons/md";
 import { Spinner } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 import React, { useEffect, useState, useCallback, useRef } from "react";
 
@@ -28,8 +28,9 @@ import Utilities from "./../../../utilities/Utilities";
 
 export default () => {
   const { category } = useParams();
+  const { p_videoType } = useLocation().state || {};
   const [topData, setTopData] = useState();
-  const [videoType, setVideoType] = useState("Streams");
+  const [videoType, setVideoType] = useState(p_videoType || "Streams");
   const [typeListOpen, setTypeListOpen] = useState();
   const [loadmoreLoaded, setLoadmoreLoaded] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -57,10 +58,10 @@ export default () => {
 
   const fetchVideosDataHandler = (res, shouldLoadMore) => {
     if (shouldLoadMore) {
-      const allTopData = oldTopData.current.data.concat(res.topData.data.data);
+      const allTopData = oldTopData.current.data.concat(res.topData.data);
       oldTopData.current = {
         data: allTopData,
-        pagination: res.topData.data.pagination,
+        pagination: res.topData.pagination,
       };
 
       setLoadmoreLoaded(true);
@@ -76,8 +77,8 @@ export default () => {
         }
       }, 0);
     } else {
-      oldTopData.current = res.topData.data;
-      setTopData(res.topData.data.data);
+      oldTopData.current = res.topData;
+      setTopData(res.topData.data);
       setRefreshing(false);
     }
   };
@@ -194,7 +195,7 @@ export default () => {
           Top {videoType}
         </HeaderTitle>
         <TopDataSortButtonsContainer>
-          <GameSearchBar gameName={category} />
+          <GameSearchBar gameName={category} videoType={videoType} />
           <div>
             <TypeButton
               title={`Fetch top ${videoType}`}
@@ -223,13 +224,13 @@ export default () => {
                   <MdMovieCreation size={24} />
                   Clips
                 </li>
-                <li
+                {/* <li
                   onClick={() => {
                     videoTypeBtnOnClick("Videos");
                   }}>
                   <MdVideocam size={24} />
                   Videos
-                </li>
+                </li> */}
               </TypeListUlContainer>
             ) : null}
           </div>
@@ -237,7 +238,14 @@ export default () => {
           {videoType === "Videos" ? (
             <SortButton sortBy={sortBy} setSortBy={setSortBy} setData={setTopData} />
           ) : videoType === "Clips" ? (
-            <ClipsSortButton sortBy={sortByTime} setSortBy={setSortByTime} setData={setTopData} />
+            <ClipsSortButton
+              sortBy={sortByTime}
+              setSortBy={setSortByTime}
+              setData={setTopData}
+              resetOldData={() => {
+                oldTopData.current = null;
+              }}
+            />
           ) : null}
         </TopDataSortButtonsContainer>
       </div>

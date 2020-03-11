@@ -1,5 +1,9 @@
 import { useState } from "react";
 
+/**
+ * @param {any} initialValue - Start value
+ * @returns
+ */
 export default initialValue => {
   const [value, setValue] = useState(initialValue);
 

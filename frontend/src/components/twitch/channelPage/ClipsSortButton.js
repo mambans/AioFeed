@@ -3,7 +3,7 @@ import { MdSort } from "react-icons/md";
 
 import { SortButton, SortDropDownList } from "./StyledComponents";
 
-export default ({ sortBy, setSortBy, setData }) => {
+export default ({ sortBy, setSortBy, setData, resetOldData }) => {
   const [open, setOpen] = useState(false);
 
   const SortOptionsNames = {
@@ -34,8 +34,9 @@ export default ({ sortBy, setSortBy, setData }) => {
               <li
                 key={option}
                 onClick={() => {
-                  if (option !== sortBy) {
+                  if (option !== sortBy && option !== "" + sortBy) {
                     setData();
+                    if (resetOldData) resetOldData();
                     setSortBy(option === "null" ? null : option);
                     setOpen(false);
                   }

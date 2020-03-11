@@ -67,16 +67,44 @@ export default ({ ...data }) => {
       <div style={{ width: "336px" }}>
         <div className={styles.channelContainer} style={{ marginBottom: "0px", height: "25px" }}>
           <Link
+            to={{
+              pathname: `/channel/${data.data.broadcaster_name.toLowerCase()}`,
+              state: {
+                p_id: data.data.broadcaster_id,
+              },
+            }}
+            style={{ gridRow: 1, paddingRight: "5px" }}>
+            <img src={data.data.profile_img_url} alt='' className={styles.profile_img} />
+          </Link>
+          <Link
             to={"/channel/" + data.data.broadcaster_name.toLowerCase()}
             className={styles.channel}>
             {data.data.broadcaster_name}
+          </Link>
+        </div>
+        <div className={styles.gameContainer}>
+          <a
+            className={styles.game_img}
+            // href={"/twitch/top/" + data.data.game_name}
+            href={"https://www.twitch.tv/directory/game/" + data.data.game_name}>
+            <img
+              src={data.data.game_img.replace("{width}", 130).replace("{height}", 173)}
+              alt=''
+              className={styles.game_img}
+            />
+          </a>
+          <Link
+            className={styles.game}
+            // href={"https://www.twitch.tv/directory/game/" + data.data.game_name}
+            to={"/game/" + data.data.game_name}>
+            {data.data.game_name}
           </Link>
           <Moment
             className={styles.viewers}
             id={styles.timeago}
             style={{
               color: "var(--infoColorGrey)",
-              gridColumn: 2,
+              gridColumn: 3,
               justifySelf: "right",
             }}
             fromNow>

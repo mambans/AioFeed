@@ -311,7 +311,7 @@ const ButtonShowQualities = styled.p`
   bottom: 12px;
   margin: 0;
   font-weight: bold;
-  left: 360px;
+  left: 400px;
   font-size: 1.1rem;
   cursor: pointer;
   margin: 5px 10px;
@@ -333,7 +333,7 @@ const QualitiesList = styled.ul`
   position: absolute;
   bottom: 50px;
   font-weight: bold;
-  left: 375px;
+  left: 415px;
   cursor: pointer;
   margin: 5px;
   list-style: none;
@@ -387,7 +387,7 @@ const OpenChatButton = styled(MdChat).attrs({ size: 26, color: "white" })`
 const CreateClipButton = styled(MdMovieCreation).attrs({ size: 24, color: "white" })`
   position: absolute;
   /* right: 45px; */
-  left: 400px;
+  left: 360px;
   bottom: 12px;
   opacity: 0.7;
   cursor: pointer;

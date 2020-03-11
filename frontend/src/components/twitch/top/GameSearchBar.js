@@ -12,7 +12,7 @@ import { MdFormatListBulleted } from "react-icons/md";
 import StyledLoadingList from "./LoadingList";
 
 const GameSearchBar = props => {
-  const { gameName } = props;
+  const { gameName, videoType } = props;
   const [redirect, setRedirect] = useState(false);
   const [topGames, setTopGames] = useState();
   const [openGameList, setOpenGameList] = useState();
@@ -98,7 +98,13 @@ const GameSearchBar = props => {
                 .map(game => {
                   return (
                     <StyledGameListElement key={game.id}>
-                      <Link to={"/game/" + game.name}>
+                      <Link
+                        to={{
+                          pathname: "/game/" + game.name,
+                          state: {
+                            p_videoType: videoType,
+                          },
+                        }}>
                         <img
                           src={game.box_art_url.replace("{width}", 300).replace("{height}", 300)}
                           alt=''

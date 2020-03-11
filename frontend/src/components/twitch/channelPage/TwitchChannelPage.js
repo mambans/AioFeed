@@ -25,6 +25,9 @@ import {
   StyledLiveInfoContainer,
 } from "./StyledComponents";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
+import AddVideoExtraData from "../AddVideoExtraData";
+import fetchUptime from "./../player/fetchUptime";
+import fetchAndSetChannelInfo from "./../player/fetchAndSetChannelInfo";
 
 export default () => {
   const { id } = useParams();
@@ -54,7 +57,7 @@ export default () => {
   const loadmoreClipsRef = useRef();
   const twitchPlayer = useRef();
   const viewersTimer = useRef();
-  const refetchUptimeTimer = useRef();
+  const uptimeTimer = useRef();
 
   const { twitchToken } = useContext(AccountContext);
 
@@ -76,27 +79,6 @@ export default () => {
         console.error("GetIdFromName: ", error);
       });
   }, [id, twitchToken]);
-
-  const fetchChannelInfo = useCallback(async () => {
-    if (p_channelInfos) {
-      return p_channelInfos;
-    } else {
-      return await axios
-        .get(`https://api.twitch.tv/kraken/channels/${channelId}`, {
-          headers: {
-            Authorization: `OAuth ${twitchToken}`,
-            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-            Accept: "application/vnd.twitchtv.v5+json",
-          },
-        })
-        .then(res => {
-          return res.data;
-        })
-        .catch(error => {
-          console.error("fetchChannelInfo: ", error);
-        });
-    }
-  }, [twitchToken, channelId, p_channelInfos]);
 
   const fetchChannelVods = useCallback(
     async pagination => {
@@ -193,11 +175,12 @@ export default () => {
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         })
-        .then(res => {
+        .then(async res => {
           clipPagination.current = res.data.pagination.cursor;
+          const finallClips = await AddVideoExtraData(res);
 
           if (pagination) {
-            const allClips = previosClipsPage.current.concat(res.data.data);
+            const allClips = previosClipsPage.current.concat(finallClips.data);
             previosClipsPage.current = allClips;
             setClipsLoadmoreLoaded(true);
             setClips(allClips);
@@ -212,8 +195,8 @@ export default () => {
               }
             }, 0);
           } else {
-            previosClipsPage.current = res.data.data;
-            setClips(res.data.data);
+            previosClipsPage.current = finallClips.data;
+            setClips(finallClips.data);
           }
         })
         .catch(error => {
@@ -224,52 +207,8 @@ export default () => {
   );
 
   const getChannelInfo = useCallback(async () => {
-    const ChannelInfos = await fetchChannelInfo();
-
-    if (!channelInfo) setChannelInfo(ChannelInfos);
-  }, [fetchChannelInfo, channelInfo]);
-
-  const fetchUptime = useCallback(async () => {
-    await axios
-      .get(`https://api.twitch.tv/helix/streams`, {
-        params: {
-          user_id: twitchPlayer.current.getChannelId(),
-          first: 1,
-        },
-        headers: {
-          Authorization: `Bearer ${twitchToken}`,
-          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-        },
-      })
-      .then(res => {
-        if (res.data.data[0] && res.data.data[0].started_at) {
-          setUptime(res.data.data[0].started_at);
-        } else {
-          refetchUptimeTimer.current = setTimeout(async () => {
-            await axios
-              .get(`https://api.twitch.tv/helix/streams`, {
-                params: {
-                  user_id: twitchPlayer.current.getChannelId(),
-                  first: 1,
-                },
-                headers: {
-                  Authorization: `Bearer ${twitchToken}`,
-                  "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-                },
-              })
-              .then(res => {
-                if (res.data.data[0] && res.data.data[0].started_at) {
-                  setUptime(res.data.data[0].started_at);
-                } else {
-                }
-              });
-          }, 60000);
-        }
-      })
-      .catch(error => {
-        console.log("fetchChannelInfo stream: error", error);
-      });
-  }, [twitchToken]);
+    if (!channelInfo) await fetchAndSetChannelInfo(channelId, setChannelInfo, twitchToken);
+  }, [channelInfo, channelId, twitchToken]);
 
   useEffect(() => {
     (async () => {
@@ -289,7 +228,7 @@ export default () => {
     setViewers(twitchPlayer.current.getViewers());
     if (!uptime) {
       setTimeout(() => {
-        fetchUptime();
+        fetchUptime(twitchPlayer, twitchToken, setUptime, uptimeTimer);
       }, 5000);
     }
 
@@ -298,7 +237,7 @@ export default () => {
         setViewers(twitchPlayer.current.getViewers());
       }, 1000 * 60 * 2);
     }
-  }, [fetchUptime, uptime]);
+  }, [uptime, twitchToken]);
 
   const offlineEvents = () => {
     console.log("Stream is Offline");
@@ -346,8 +285,10 @@ export default () => {
   }, [fetchClips, clips, channelId]);
 
   useEffect(() => {
+    const uptTimer = uptimeTimer.current;
+
     return () => {
-      clearTimeout(refetchUptimeTimer.current);
+      clearTimeout(uptTimer);
       clearInterval(viewersTimer.current);
     };
   });
