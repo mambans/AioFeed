@@ -16,7 +16,7 @@ import ToggleSwitch from "../../account/ToggleSwitch";
 import ToggleSwitchVideoHover from "../../account/ToggleSwitchVideoHover";
 import ToggleSwitchAutoRefresh from "../../account/ToggleSwitchAutoRefresh";
 import UpdateProfileImg from "../../account/UpdateProfileImg";
-import Utilities from "../../../utilities/Utilities";
+import Util from "../../../util/Util";
 import {
   StyledProfileImg,
   StyledConnectTwitch,
@@ -175,7 +175,7 @@ export default () => {
         {username}
       </h1>
       <p style={{ textAlign: "center" }} title='Email'>
-        {Utilities.getCookie("Notifies_AccountEmail")}
+        {Util.getCookie("Notifies_AccountEmail")}
       </p>
       <ToggleSwitch
         setEnable={setEnableTwitch}

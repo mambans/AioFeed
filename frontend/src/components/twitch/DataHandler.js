@@ -5,7 +5,7 @@ import getFollowedChannels from "./GetFollowedChannels";
 import getFollowedOnlineStreams from "./GetFollowedStreams";
 import NotificationsContext from "./../notifications/NotificationsContext";
 import styles from "./Twitch.module.scss";
-import Utilities from "../../utilities/Utilities";
+import Util from "../../util/Util";
 import Header from "./Header";
 import LoadingBoxs from "./LoadingBoxs";
 import AccountContext from "./../account/AccountContext";
@@ -35,9 +35,7 @@ export default ({ children }) => {
         `${stream.user_name} ${status === "offline" ? "Offline" : "Live"}`,
         {
           body:
-            status === "offline"
-              ? ""
-              : `${Utilities.truncate(stream.title, 60)}\n${stream.game_name}`,
+            status === "offline" ? "" : `${Util.truncate(stream.title, 60)}\n${stream.game_name}`,
           icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
           badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
           silent: status === "offline" ? true : false,

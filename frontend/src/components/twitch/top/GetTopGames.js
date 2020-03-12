@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import Utilities from "./../../../utilities/Utilities";
+import Util from "./../../../util/Util";
 
 export default async () => {
   const topGames = await axios.get(`https://api.twitch.tv/helix/games/top`, {
@@ -8,7 +8,7 @@ export default async () => {
       first: 100,
     },
     headers: {
-      Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+      Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
       "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
     },
   });

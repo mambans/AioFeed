@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Spinner } from "react-bootstrap";
 import uniqid from "uniqid";
 
-import Utilities from "../../utilities/Utilities";
+import Util from "../../util/Util";
 import ErrorHandeling from "./../error/Error";
 
 function TwitchAuth() {
@@ -41,7 +41,7 @@ function TwitchAuth() {
     return <ErrorHandeling data={error}></ErrorHandeling>;
   } else {
     return (
-      <Spinner animation='border' role='status' style={Utilities.loadingSpinner}>
+      <Spinner animation='border' role='status' style={Util.loadingSpinner}>
         <span className='sr-only'>Loading...</span>
       </Spinner>
     );

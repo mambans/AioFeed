@@ -1,24 +1,22 @@
 import React, { useState } from "react";
 import AccountContext from "./AccountContext";
 
-import Utilities from "./../../utilities/Utilities";
+import Util from "./../../util/Util";
 
 export default ({ children }) => {
-  const [twitchToken, setTwitchToken] = useState(Utilities.getCookie(`Twitch-access_token`));
-  const [refreshToken, setRefreshToken] = useState(Utilities.getCookie(`Twitch-refresh_token`));
-  const [youtubeToken, setYoutubeToken] = useState(Utilities.getCookie(`Youtube-access_token`));
-  const [authKey, setAuthKey] = useState(Utilities.getCookie(`Notifies_AuthKey`));
-  const [username, setUsername] = useState(Utilities.getCookie(`Notifies_AccountName`));
-  const [profileImage, setProfileImage] = useState(
-    Utilities.getCookie(`Notifies_AccountProfileImg`)
-  );
-  const [twitchUserId, setTwitchUserId] = useState(Utilities.getCookie(`Notifies_TwitchUserId`));
-  const [twitchUsername, setTwitchUsername] = useState(Utilities.getCookie(`Twitch-username`));
+  const [twitchToken, setTwitchToken] = useState(Util.getCookie(`Twitch-access_token`));
+  const [refreshToken, setRefreshToken] = useState(Util.getCookie(`Twitch-refresh_token`));
+  const [youtubeToken, setYoutubeToken] = useState(Util.getCookie(`Youtube-access_token`));
+  const [authKey, setAuthKey] = useState(Util.getCookie(`Notifies_AuthKey`));
+  const [username, setUsername] = useState(Util.getCookie(`Notifies_AccountName`));
+  const [profileImage, setProfileImage] = useState(Util.getCookie(`Notifies_AccountProfileImg`));
+  const [twitchUserId, setTwitchUserId] = useState(Util.getCookie(`Notifies_TwitchUserId`));
+  const [twitchUsername, setTwitchUsername] = useState(Util.getCookie(`Twitch-username`));
   const [twitchProfileImg, setTwitchProfileImg] = useState(
-    Utilities.getCookie(`Notifies_TwitchProfileImg`)
+    Util.getCookie(`Notifies_TwitchProfileImg`)
   );
   const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(
-    Utilities.getCookie(`Twitch_AutoRefresh`) || false
+    Util.getCookie(`Twitch_AutoRefresh`) || false
   );
 
   return (

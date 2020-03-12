@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 
-import Utilities from "../../utilities/Utilities";
+import Util from "../../util/Util";
 
 function ErrorHandeling(data) {
   console.log("TCL: ErrorHandeling -> data", data);
@@ -31,7 +31,7 @@ function ErrorHandeling(data) {
     return (
       <Alert
         variant='warning'
-        style={Utilities.feedAlertWarning}
+        style={Util.feedAlertWarning}
         dismissible
         onClose={() => setShow(false)}>
         <Alert.Heading>{errorTitle}</Alert.Heading>

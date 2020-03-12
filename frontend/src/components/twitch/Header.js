@@ -9,7 +9,7 @@ import { FaTwitch } from "react-icons/fa";
 import { HeaderContainerTwitchLive, HeaderLeftSubcontainer } from "./styledComponents";
 import { RefreshButton, HeaderTitle, ButtonList } from "./../sharedStyledComponents";
 import RenderFollowedChannelList from "./channelList/RenderFollowedChannelList";
-import Utilities from "../../utilities/Utilities";
+import Util from "../../util/Util";
 
 export default ({ data, refresh }) => {
   const { refreshing, autoRefreshEnabled, refreshTimer, followedChannels } = data;
@@ -24,7 +24,7 @@ export default ({ data, refresh }) => {
                 animation='border'
                 role='status'
                 variant='light'
-                style={Utilities.loadingSpinnerSmall}
+                style={Util.loadingSpinnerSmall}
               />
             </div>
           ) : autoRefreshEnabled ? (

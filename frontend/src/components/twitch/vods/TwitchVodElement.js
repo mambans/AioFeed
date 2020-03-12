@@ -3,26 +3,24 @@ import axios from "axios";
 import moment from "moment";
 import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import React, { useEffect, useRef, useCallback, useState, useContext } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";
 
 import { VideoContainer, VideoTitle, ImageContainer } from "./../../sharedStyledComponents";
 import styles from "../Twitch.module.scss";
-import Utilities from "../../../utilities/Utilities";
+import Util from "../../../util/Util";
 import { VodLiveIndicator } from "./StyledComponents";
-import AccountContext from "../../account/AccountContext";
 import { Spinner } from "react-bootstrap";
 
 export default ({ ...data }) => {
-  const { twitchToken } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState(false);
   const [previewAvailable, setPreviewAvailable] = useState();
   const imgRef = useRef();
   const hoverTimeoutRef = useRef();
 
   const durationToMs = duration => {
-    const hms = Utilities.formatTwitchVodsDuration(duration);
+    const hms = Util.formatTwitchVodsDuration(duration);
     const parts = hms.split(":");
     const seconds = +parts[0] * 60 * 60 + +parts[1] * 60 + +parts[2];
     const ms = seconds * 1000;
@@ -35,7 +33,7 @@ export default ({ ...data }) => {
       hoverTimeoutRef.current = setTimeout(async () => {
         const res = await axios.get(`https://api.twitch.tv/kraken/videos/${data.data.id}`, {
           headers: {
-            Authorization: `Bearer ${twitchToken}`,
+            Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
             Accept: "application/vnd.twitchtv.v5+json",
           },
@@ -55,7 +53,7 @@ export default ({ ...data }) => {
         setIsHovered(true);
       }, 200);
     }
-  }, [previewAvailable, data.data.id, data.data.thumbnail_url, twitchToken]);
+  }, [previewAvailable, data.data.id, data.data.thumbnail_url]);
 
   const handleMouseOut = useCallback(event => {
     clearTimeout(hoverTimeoutRef.current);
@@ -107,10 +105,10 @@ export default ({ ...data }) => {
 
         <div className={styles.vodVideoInfo}>
           <p className={styles.vodDuration} title='duration'>
-            {Utilities.formatTwitchVodsDuration(data.data.duration)}
+            {Util.formatTwitchVodsDuration(data.data.duration)}
           </p>
           <p className={styles.view_count} title='views'>
-            {Utilities.formatViewerNumbers(data.data.view_count)}
+            {Util.formatViewerNumbers(data.data.view_count)}
             <FaRegEye
               size={10}
               style={{
@@ -146,7 +144,7 @@ export default ({ ...data }) => {
                 p_channel: data.data.user_name,
               },
             }}>
-            {Utilities.truncate(data.data.title, 70)}
+            {Util.truncate(data.data.title, 70)}
             {/* {data.data.title} */}
           </VideoTitle>
         </OverlayTrigger>

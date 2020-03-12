@@ -2,12 +2,12 @@ import React from "react";
 import { Alert } from "react-bootstrap";
 import { Animated } from "react-animated-css";
 
-import Utilities from "../../utilities/Utilities";
+import Util from "../../util/Util";
 
 function SuccessfullyConnected(data) {
   if (
-    (data.domain === "Twitch" && Utilities.getCookie("Twitch-access_token")) ||
-    (data.domain === "Youtube" && Utilities.getCookie("Youtube-access_token"))
+    (data.domain === "Twitch" && Util.getCookie("Twitch-access_token")) ||
+    (data.domain === "Youtube" && Util.getCookie("Youtube-access_token"))
   ) {
     return (
       <Animated
@@ -17,7 +17,7 @@ function SuccessfullyConnected(data) {
         animationOutDuration={2000}
         isVisible={false}
         style={{ width: "40%", minWidth: "1000px", margin: "auto" }}>
-        <Alert variant='success' style={Utilities.alertWarning} dismissible>
+        <Alert variant='success' style={Util.alertWarning} dismissible>
           <Alert.Heading>Successfully connected with {data.domain}!</Alert.Heading>
           <hr />
         </Alert>

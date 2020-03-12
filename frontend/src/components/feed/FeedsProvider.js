@@ -1,19 +1,18 @@
 import React, { useState } from "react";
 
 import FeedsContext from "./FeedsContext";
-import Utilities from "./../../utilities/Utilities";
+import Util from "./../../util/Util";
 
 export default ({ children }) => {
   const [enableTwitch, setEnableTwitch] = useState(
-    Utilities.getCookie("Twitch-access_token") && Utilities.getCookie("Twitch_feedEnabled")
+    Util.getCookie("Twitch-access_token") && Util.getCookie("Twitch_feedEnabled")
   );
 
   const [enableYoutube, setEnableYoutube] = useState(
-    Utilities.getCookie(`Youtube-access_token`) &&
-      localStorage.getItem("YoutubeFeedEnabled") === "true"
+    Util.getCookie(`Youtube-access_token`) && localStorage.getItem("YoutubeFeedEnabled") === "true"
   );
   const [enableTwitchVods, setEnableTwitchVods] = useState(
-    Utilities.getCookie(`Twitch-access_token`) &&
+    Util.getCookie(`Twitch-access_token`) &&
       localStorage.getItem("TwitchVodsFeedEnabled") === "true"
   );
 

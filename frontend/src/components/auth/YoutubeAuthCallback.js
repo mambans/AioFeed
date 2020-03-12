@@ -2,7 +2,7 @@ import { Spinner } from "react-bootstrap";
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import axios from "axios";
 
-import Utilities from "../../utilities/Utilities";
+import Util from "../../util/Util";
 import ErrorHandeling from "./../error/Error";
 import AccountContext from "./../account/AccountContext";
 import NavigationContext from "./../navigation/NavigationContext";
@@ -60,7 +60,7 @@ function YoutubeAuthCallback() {
           url.hash
             .split("#")[1]
             .split("&")[0]
-            .slice(6) === Utilities.getCookie("Youtube-myState")
+            .slice(6) === Util.getCookie("Youtube-myState")
         ) {
           await getAccessToken()
             .then(() => {
@@ -91,7 +91,7 @@ function YoutubeAuthCallback() {
         animation='border'
         role='status'
         style={{
-          ...Utilities.loadingSpinner,
+          ...Util.loadingSpinner,
           position: "absolute",
           margin: "0",
           top: "calc(50% - 5rem)",

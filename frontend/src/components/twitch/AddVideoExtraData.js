@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import Utilities from "./../../utilities/Utilities";
+import Util from "./../../util/Util";
 import GetCachedProfiles from "./GetCachedProfiles";
 
 /**
@@ -33,7 +33,7 @@ export default async (items, fetchGameInfo = true) => {
           id: noCachedProfileArrayIds,
         },
         headers: {
-          Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+          Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })
@@ -44,19 +44,19 @@ export default async (items, fetchGameInfo = true) => {
 
   Promise.all(
     await items.data.data.map(async user => {
-      if (!TwitchProfiles[user.broadcaster_id || user.user_id]) {
+      if (!TwitchProfiles[user.user_id || user.broadcaster_id]) {
         user.profile_img_url = newProfileImgUrls.data.data.find(p_user => {
-          return p_user.id === (user.broadcaster_id || user.user_id);
+          return p_user.id === (user.user_id || user.broadcaster_id);
         }).profile_image_url;
       } else {
-        user.profile_img_url = TwitchProfiles[user.broadcaster_id || user.user_id];
+        user.profile_img_url = TwitchProfiles[user.user_id || user.broadcaster_id];
       }
       return user;
     })
   ).then(res => {
     const newProfiles = res.reduce(
       // eslint-disable-next-line no-sequences
-      (obj, item) => ((obj[item.broadcaster_id || item.user_id] = item.profile_img_url), obj),
+      (obj, item) => ((obj[item.user_id || item.broadcaster_id] = item.profile_img_url), obj),
       {}
     );
 
@@ -80,7 +80,7 @@ export default async (items, fetchGameInfo = true) => {
         id: games,
       },
       headers: {
-        Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+        Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
         "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
       },
     });

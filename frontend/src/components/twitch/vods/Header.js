@@ -15,7 +15,7 @@ import {
   ButtonList,
 } from "./../../sharedStyledComponents";
 import styles from "./../Twitch.module.scss";
-import Utilities from "../../../utilities/Utilities";
+import Util from "../../../util/Util";
 import VodChannelList from "./VodChannelList";
 
 export default React.forwardRef((props, ref) => {
@@ -34,7 +34,7 @@ export default React.forwardRef((props, ref) => {
                 animation='border'
                 role='status'
                 variant='light'
-                style={Utilities.loadingSpinnerSmall}></Spinner>
+                style={Util.loadingSpinnerSmall}></Spinner>
             </div>
           ) : (
             <MdRefresh size={34} />

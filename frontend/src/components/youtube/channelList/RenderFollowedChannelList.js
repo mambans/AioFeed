@@ -1,13 +1,13 @@
 import React from "react";
 import { Spinner } from "react-bootstrap";
 
-import Utilities from "./../../../utilities/Utilities";
+import Util from "./../../../util/Util";
 import ChannelListElement from "./ChannelListElement";
 
 const RenderFollowedChannelList = data => {
   if (!data.followedChannels) {
     return (
-      <Spinner animation='grow' role='status' style={Utilities.loadingSpinner} variant='light'>
+      <Spinner animation='grow' role='status' style={Util.loadingSpinner} variant='light'>
         <span className='sr-only'>Loading...</span>
       </Spinner>
     );

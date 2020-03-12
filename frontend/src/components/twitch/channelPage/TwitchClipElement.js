@@ -7,7 +7,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 
 import { VideoContainer, VideoTitle, ImageContainer } from "./../../sharedStyledComponents";
 import styles from "../Twitch.module.scss";
-import Utilities from "../../../utilities/Utilities";
+import Util from "../../../util/Util";
 
 export default ({ ...data }) => {
   const imgRef = useRef();
@@ -26,7 +26,7 @@ export default ({ ...data }) => {
         <div className={styles.vodVideoInfo}>
           <p className={styles.vodDuration} title='duration'></p>
           <p className={styles.view_count} title='views'>
-            {Utilities.formatViewerNumbers(data.data.view_count)}
+            {Util.formatViewerNumbers(data.data.view_count)}
             <FaRegEye
               size={10}
               style={{
@@ -55,7 +55,7 @@ export default ({ ...data }) => {
             </Tooltip>
           }>
           <VideoTitle to={`/clip/${data.data.id}#${data.user_name || data.data.broadcaster_name}`}>
-            {Utilities.truncate(data.data.title, 70)}
+            {Util.truncate(data.data.title, 70)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (

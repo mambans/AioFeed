@@ -9,7 +9,7 @@ import React from "react";
 import { CSSTransition } from "react-transition-group";
 
 import styles from "./Youtube.module.scss";
-import Utilities from "../../utilities/Utilities";
+import Util from "../../util/Util";
 import {
   RefreshButton,
   HeaderTitle,
@@ -68,7 +68,7 @@ export default data => {
                 <Spinner
                   animation='border'
                   role='status'
-                  style={Utilities.loadingSpinnerSmall}></Spinner>
+                  style={Util.loadingSpinnerSmall}></Spinner>
               </div>
             ) : (
               <MdRefresh size={34} />

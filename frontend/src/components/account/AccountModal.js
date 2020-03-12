@@ -22,7 +22,7 @@ import Themeselector from "./../themes/Themeselector";
 import ToggleSwitch from "./ToggleSwitch";
 import ToggleSwitchVideoHover from "./ToggleSwitchVideoHover";
 import UpdateProfileImg from "./UpdateProfileImg";
-import Utilities from "../../utilities/Utilities";
+import Util from "../../util/Util";
 import ToggleSwitchAutoRefresh from "./ToggleSwitchAutoRefresh";
 
 import {
@@ -183,7 +183,7 @@ export default () => {
         </div>
         <div className={styles.names}>
           <p>{username}</p>
-          <p>{Utilities.getCookie("Notifies_AccountEmail")}</p>
+          <p>{Util.getCookie("Notifies_AccountEmail")}</p>
         </div>
       </div>
       <div className={styles.toggleContainer}>

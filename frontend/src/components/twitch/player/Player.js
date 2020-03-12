@@ -19,7 +19,7 @@ import fetchUptime from "./fetchUptime";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 import NavigationContext from "./../../navigation/NavigationContext";
 import PlayerEvents from "./PlayerEvents";
-import Utilities from "./../../../utilities/Utilities";
+import Util from "./../../../util/Util";
 import VolumeSlider from "./VolumeSlider";
 import {
   ButtonShowQualities,
@@ -45,7 +45,7 @@ export default () => {
   const type = location.pathname.split("/")[1];
   const nameFromHash = location.hash !== "" ? location.hash.replace("#", "") : p_channel || null;
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
-  const { twitchToken, setTwitchToken, setRefreshToken, refreshToken } = useContext(AccountContext);
+  const { setTwitchToken, setRefreshToken } = useContext(AccountContext);
 
   const [switched, setSwitched] = useState(false);
   const [volumeText, setVolumeText] = useState(0);
@@ -159,7 +159,7 @@ export default () => {
       clearInterval(viewersTimer.current);
       clearInterval(uptTimer);
     };
-  }, [setShrinkNavbar, setFooterVisible, setVisible, id, type, twitchToken]);
+  }, [setShrinkNavbar, setFooterVisible, setVisible, id, type]);
 
   useEffect(() => {
     if ((type === "video" || type === "vod") && (!nameFromHash || !p_title)) {
@@ -167,7 +167,7 @@ export default () => {
         await axios
           .get(`https://api.twitch.tv/kraken/videos/${id}`, {
             headers: {
-              Authorization: `Bearer ${twitchToken}`,
+              Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
               "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
               Accept: "application/vnd.twitchtv.v5+json",
             },
@@ -180,14 +180,13 @@ export default () => {
         clearTimeout(videoInfoTimer);
       };
     }
-  }, [id, nameFromHash, p_title, type, twitchToken]);
+  }, [id, nameFromHash, p_title, type]);
 
   const OnlineEvents = useCallback(() => {
     console.log("Stream is Online");
     setTimeout(() => {
-      if (!channelInfo)
-        fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo, twitchToken);
-      if (!uptime) fetchUptime(twitchPlayer, twitchToken, setUptime, uptimeTimer);
+      if (!channelInfo) fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
+      if (!uptime) fetchUptime(twitchPlayer, setUptime, uptimeTimer);
       setViewers(twitchPlayer.current.getViewers());
     }, 5000);
 
@@ -199,10 +198,10 @@ export default () => {
 
     if (!channelinfoTimer.current) {
       channelinfoTimer.current = setInterval(() => {
-        fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo, twitchToken);
+        fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
       }, 1000 * 60 * 5);
     }
-  }, [channelInfo, uptime, twitchToken]);
+  }, [channelInfo, uptime]);
 
   const offlineEvents = useCallback(() => {
     console.log("Stream is Offline");
@@ -213,12 +212,12 @@ export default () => {
     clearInterval(uptimeTimer.current);
 
     if (!channelinfoTimer.current && (type === "live" || type === "player")) {
-      fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo, twitchToken);
+      fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
       channelinfoTimer.current = setInterval(() => {
-        fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo, twitchToken);
+        fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
       }, 1000 * 60 * 15);
     }
-  }, [type, twitchToken]);
+  }, [type]);
 
   useEffect(() => {
     if (twitchPlayer.current) {
@@ -232,7 +231,7 @@ export default () => {
     };
   }, [OnlineEvents, offlineEvents]);
 
-  const axiosConfig = (method, access_token = twitchToken) => {
+  const axiosConfig = (method, access_token = Util.getCookie("Twitch-access_token")) => {
     return {
       method: method,
       url: `https://api.twitch.tv/helix/clips?broadcaster_id=${channelInfo._id}`,
@@ -255,7 +254,7 @@ export default () => {
         window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
       })
       .catch(() => {
-        reauthenticate(setTwitchToken, setRefreshToken, refreshToken).then(async access_token => {
+        reauthenticate(setTwitchToken, setRefreshToken).then(async access_token => {
           await axios(axiosConfig("post", access_token)).then(res => {
             window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
           });
@@ -318,7 +317,7 @@ export default () => {
                 </>
 
                 {viewers ? (
-                  <p id='viewers'> Viewers: {Utilities.formatViewerNumbers(viewers)} </p>
+                  <p id='viewers'> Viewers: {Util.formatViewerNumbers(viewers)} </p>
                 ) : null}
                 {uptime ? (
                   <p id='uptime'>

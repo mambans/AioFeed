@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import AddVideoExtraData from "./AddVideoExtraData";
-import Utilities from "../../utilities/Utilities";
+import Util from "../../util/Util";
 
 const fetchAllOnlineStreams = async followedChannelsIds => {
   return await axios.get(`https://api.twitch.tv/helix/streams`, {
@@ -10,7 +10,7 @@ const fetchAllOnlineStreams = async followedChannelsIds => {
       first: 100,
     },
     headers: {
-      Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+      Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
       "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
     },
   });

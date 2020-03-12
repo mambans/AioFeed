@@ -4,13 +4,13 @@ import { store } from "react-notifications-component";
 import ErrorHandeling from "../error/Error";
 import getFollowedChannels from "./GetFollowedChannels";
 import getSubscriptionVideos from "./GetSubscriptionVideos";
-import Utilities from "./../../utilities/Utilities";
+import Util from "./../../util/Util";
 import AccountContext from "../account/AccountContext";
 
 const addNotification = (type, video) => {
   store.addNotification({
     title: video.snippet.channelTitle,
-    message: `${Utilities.truncate(video.snippet.title, 50)}`,
+    message: `${Util.truncate(video.snippet.title, 50)}`,
     content: (
       <div className={`notification-custom-${type}`}>
         <div className='notification-custom-icon'>
@@ -21,7 +21,7 @@ const addNotification = (type, video) => {
         </div>
         <div className='notification-custom-content'>
           <p className='notification-title'>{video.snippet.channelTitle}</p>
-          <p className='notification-message'>{Utilities.truncate(video.snippet.title, 50)}</p>
+          <p className='notification-message'>{Util.truncate(video.snippet.title, 50)}</p>
           <p className='notification-duration'>{video.duration}</p>
         </div>
       </div>

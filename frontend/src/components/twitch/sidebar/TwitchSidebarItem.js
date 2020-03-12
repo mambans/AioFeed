@@ -7,7 +7,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";
 
 import styles from "./../Twitch.module.scss";
-import Utilities from "../../../utilities/Utilities";
+import Util from "../../../util/Util";
 
 const NewHighlight = ({ data }) => {
   if (data.newlyAdded.includes(data.stream.user_name)) {
@@ -43,10 +43,10 @@ const TwitchSidebarItem = data => {
           className={styles.sidebarUser}
           // href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}
         >
-          {Utilities.truncate(data.stream.user_name, 16)}
+          {Util.truncate(data.stream.user_name, 16)}
         </div>
         <p className={styles.sidebarViewers}>
-          {Utilities.formatViewerNumbers(data.stream.viewer_count)}
+          {Util.formatViewerNumbers(data.stream.viewer_count)}
           <FaRegEye
             size={10}
             style={{
@@ -79,7 +79,7 @@ const TwitchSidebarItem = data => {
               className={styles.sidebarGame}
               // href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}
             >
-              <p>{Utilities.truncate(data.stream.game_name, 15)}</p>
+              <p>{Util.truncate(data.stream.game_name, 15)}</p>
             </div>
           )}
           <div className={styles.sidebarDuration}>

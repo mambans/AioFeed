@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useContext } from "react";
 import axios from "axios";
-import Utilities from "./../../../utilities/Utilities";
+import Util from "./../../../util/Util";
 import ChannelListElement from "./ChannelListElement";
 import AccountContext from "./../../account/AccountContext";
 import StyledLoadingList from "./../LoadingList";
@@ -82,7 +82,7 @@ const RenderFollowedChannelList = data => {
             first: 100,
           },
           headers: {
-            Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+            Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         });

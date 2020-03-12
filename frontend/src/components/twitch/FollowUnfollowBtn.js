@@ -6,21 +6,20 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { FollowBtn, UnfollowBtn } from "./styledComponents";
 import AccountContext from "./../account/AccountContext";
 import reauthenticate from "./reauthenticate";
+import Util from "./../../util/Util";
 
 export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshStreams }) => {
   const [following, setFollowing] = useState(false);
-  const { setTwitchToken, twitchToken, setRefreshToken, refreshToken, twitchUserId } = useContext(
-    AccountContext
-  );
+  const { setTwitchToken, setRefreshToken, twitchUserId } = useContext(AccountContext);
 
   // const myUserId = async () => {
   //   await axios
   //     .get(`https://api.twitch.tv/helix/users?`, {
   //       params: {
-  //         login: Utilities.getCookie("Twitch-username"),
+  //         login: Util.getCookie("Twitch-username"),
   //       },
   //       headers: {
-  //         Authorization: `Bearer ${twitchToken}`,
+  //         Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
   //         "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
   //       },
   //     })
@@ -33,7 +32,7 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
   //     });
   // };
 
-  const axiosConfig = (method, user_id, access_token = twitchToken) => {
+  const axiosConfig = (method, user_id, access_token = Util.getCookie("Twitch-access_token")) => {
     return {
       method: method,
       url: `https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${user_id}`,
@@ -52,7 +51,7 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
         if (refreshStreams) refreshStreams();
       })
       .catch(() => {
-        reauthenticate(setTwitchToken, setRefreshToken, refreshToken).then(async access_token => {
+        reauthenticate(setTwitchToken, setRefreshToken).then(async access_token => {
           await axios(axiosConfig("delete", user_id, access_token)).then(() => {
             console.log(`Unfollowed: ${channelName}`);
             if (refreshStreams) refreshStreams();
@@ -68,7 +67,7 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
         if (refreshStreams) refreshStreams();
       })
       .catch(() => {
-        reauthenticate(setTwitchToken, setRefreshToken, refreshToken).then(async access_token => {
+        reauthenticate(setTwitchToken, setRefreshToken).then(async access_token => {
           await axios(axiosConfig("put", user_id, access_token)).then(() => {
             console.log(`Followed: ${channelName}`);
             if (refreshStreams) refreshStreams();
@@ -82,7 +81,7 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
       await axios
         .get(`https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${id}`, {
           headers: {
-            Authorization: `OAuth ${twitchToken}`,
+            Authorization: `OAuth ${Util.getCookie("Twitch-access_token")}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
             Accept: "application/vnd.twitchtv.v5+json",
           },
@@ -108,7 +107,7 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
     } else {
       setFollowing(alreadyFollowedStatus);
     }
-  }, [channelName, twitchToken, twitchUserId, id, alreadyFollowedStatus]);
+  }, [channelName, twitchUserId, id, alreadyFollowedStatus]);
 
   if (following) {
     return (

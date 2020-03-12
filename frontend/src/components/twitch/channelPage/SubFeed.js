@@ -10,7 +10,7 @@ import ClipsSortButton from "./ClipsSortButton";
 import SortButton from "./SortButton";
 import TwitchClipElement from "./TwitchClipElement";
 import TwitchVodElement from "../vods/TwitchVodElement";
-import Utilities from "./../../../utilities/Utilities";
+import Util from "./../../../util/Util";
 
 export default ({
   feedName,
@@ -106,7 +106,7 @@ export default ({
                 animation='border'
                 role='status'
                 variant='light'
-                style={{ ...Utilities.loadingSpinnerSmall, marginLeft: "10px" }}
+                style={{ ...Util.loadingSpinnerSmall, marginLeft: "10px" }}
               />
             </>
           ) : (

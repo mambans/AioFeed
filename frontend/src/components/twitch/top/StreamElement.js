@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { ImageContainer, VideoTitle } from "./../../sharedStyledComponents";
 import StreamHoverIframe from "./../StreamHoverIframe.js";
 import styles from "./../Twitch.module.scss";
-import Utilities from "../../../utilities/Utilities";
+import Util from "../../../util/Util";
 
 const HOVER_DELAY = 1000;
 
@@ -96,7 +96,7 @@ function StreamEle(data) {
                 p_viewers: data.data.viewers,
               },
             }}>
-            {Utilities.truncate(data.data.title, 50)}
+            {Util.truncate(data.data.title, 50)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
@@ -152,7 +152,7 @@ function StreamEle(data) {
           </Link>
           <p className={styles.viewers}>
             {/* {data.data.viewer_count} */}
-            {Utilities.formatViewerNumbers(data.data.viewer_count)}
+            {Util.formatViewerNumbers(data.data.viewer_count)}
             <FaRegEye
               style={{
                 color: "rgb(200, 200, 200)",

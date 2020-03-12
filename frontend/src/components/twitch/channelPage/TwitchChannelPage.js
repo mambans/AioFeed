@@ -4,15 +4,14 @@ import { MdLiveTv } from "react-icons/md";
 import { useParams, useLocation, Link } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
-import React, { useEffect, useCallback, useState, useRef, useContext } from "react";
+import React, { useEffect, useCallback, useState, useRef } from "react";
 import Moment from "react-moment";
 
-import AccountContext from "./../../account/AccountContext";
 import LoadingPlaceholderBanner from "./LoadingPlaceholderBanner";
 import LoadingPlaceholderClips from "./LoadingPlaceholderClips";
 import LoadingPlaceholderVods from "./LoadingPlaceholderVods";
 import SubFeed from "./SubFeed";
-import Utilities from "./../../../utilities/Utilities";
+import Util from "./../../../util/Util";
 import {
   ChannelContainer,
   Banner,
@@ -59,8 +58,6 @@ export default () => {
   const viewersTimer = useRef();
   const uptimeTimer = useRef();
 
-  const { twitchToken } = useContext(AccountContext);
-
   const getIdFromName = useCallback(async () => {
     await axios
       .get(`https://api.twitch.tv/helix/users`, {
@@ -68,7 +65,7 @@ export default () => {
           login: id,
         },
         headers: {
-          Authorization: `Bearer ${twitchToken}`,
+          Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })
@@ -78,7 +75,7 @@ export default () => {
       .catch(error => {
         console.error("GetIdFromName: ", error);
       });
-  }, [id, twitchToken]);
+  }, [id]);
 
   const fetchChannelVods = useCallback(
     async pagination => {
@@ -98,7 +95,7 @@ export default () => {
             after: pagination || null,
           },
           headers: {
-            Authorization: `Bearer ${twitchToken}`,
+            Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         })
@@ -108,7 +105,7 @@ export default () => {
           if (pagination) {
             const vodsWithEndDate = res.data.data.map(stream => {
               if (stream.type === "archive") {
-                stream.endDate = Utilities.durationToMs(stream.duration, stream.published_at);
+                stream.endDate = Util.durationToMs(stream.duration, stream.published_at);
               } else {
                 stream.endDate = new Date(stream.published_at);
               }
@@ -133,7 +130,7 @@ export default () => {
           } else {
             const vodsWithEndDate = res.data.data.map(stream => {
               if (stream.type === "archive") {
-                stream.endDate = Utilities.durationToMs(stream.duration, stream.published_at);
+                stream.endDate = Util.durationToMs(stream.duration, stream.published_at);
               } else {
                 stream.endDate = new Date(stream.published_at);
               }
@@ -148,7 +145,7 @@ export default () => {
           console.error(e);
         });
     },
-    [numberOfVideos, sortVodsBy, channelId, twitchToken]
+    [numberOfVideos, sortVodsBy, channelId]
   );
 
   const fetchClips = useCallback(
@@ -171,7 +168,7 @@ export default () => {
             ended_at: sortClipsBy && new Date().toISOString(),
           },
           headers: {
-            Authorization: `Bearer ${twitchToken}`,
+            Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         })
@@ -203,12 +200,12 @@ export default () => {
           console.error("fetchClips: ", error);
         });
     },
-    [numberOfVideos, sortClipsBy, channelId, twitchToken]
+    [numberOfVideos, sortClipsBy, channelId]
   );
 
   const getChannelInfo = useCallback(async () => {
-    if (!channelInfo) await fetchAndSetChannelInfo(channelId, setChannelInfo, twitchToken);
-  }, [channelInfo, channelId, twitchToken]);
+    if (!channelInfo) await fetchAndSetChannelInfo(channelId, setChannelInfo);
+  }, [channelInfo, channelId]);
 
   useEffect(() => {
     (async () => {
@@ -228,7 +225,7 @@ export default () => {
     setViewers(twitchPlayer.current.getViewers());
     if (!uptime) {
       setTimeout(() => {
-        fetchUptime(twitchPlayer, twitchToken, setUptime, uptimeTimer);
+        fetchUptime(twitchPlayer, setUptime, uptimeTimer);
       }, 5000);
     }
 
@@ -237,7 +234,7 @@ export default () => {
         setViewers(twitchPlayer.current.getViewers());
       }, 1000 * 60 * 2);
     }
-  }, [uptime, twitchToken]);
+  }, [uptime]);
 
   const offlineEvents = () => {
     console.log("Stream is Offline");
@@ -356,7 +353,7 @@ export default () => {
                   {isLive ? (
                     <StyledLiveInfoContainer>
                       <div id='LiveDetails'>
-                        <span>Viewers: {Utilities.formatViewerNumbers(viewers)}</span>
+                        <span>Viewers: {Util.formatViewerNumbers(viewers)}</span>
                         <span>Uptime: {<Moment durationFromNow>{uptime}</Moment>}</span>
                       </div>
                       <Link

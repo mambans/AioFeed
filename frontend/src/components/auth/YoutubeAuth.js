@@ -2,7 +2,7 @@ import { Spinner } from "react-bootstrap";
 import React, { useEffect, useState, useCallback } from "react";
 import uniqid from "uniqid";
 
-import Utilities from "../../utilities/Utilities";
+import Util from "../../util/Util";
 import ErrorHandeling from "./../error/Error";
 
 function YoutubeAuth() {
@@ -40,7 +40,7 @@ function YoutubeAuth() {
     return <ErrorHandeling data={error}></ErrorHandeling>;
   } else {
     return (
-      <Spinner animation='border' role='status' style={Utilities.loadingSpinner}>
+      <Spinner animation='border' role='status' style={Util.loadingSpinner}>
         <span className='sr-only'>Loading...</span>
       </Spinner>
     );

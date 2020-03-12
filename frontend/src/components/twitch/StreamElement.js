@@ -14,7 +14,7 @@ import { VideoTitle, ImageContainer } from "./../sharedStyledComponents";
 import FeedsContext from "./../feed/FeedsContext";
 import StreamHoverIframe from "./StreamHoverIframe.js";
 import styles from "./Twitch.module.scss";
-import Utilities from "../../utilities/Utilities";
+import Util from "../../util/Util";
 import FollowUnfollowBtn from "./FollowUnfollowBtn";
 
 const HOVER_DELAY = 500; // 1000
@@ -219,7 +219,7 @@ function StreamEle(data) {
                 p_viewers: data.data.viewers,
               },
             }}>
-            {Utilities.truncate(data.data.title, 50)}
+            {Util.truncate(data.data.title, 50)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
@@ -302,7 +302,7 @@ function StreamEle(data) {
             {data.data.game_name}
           </Link>
           <p className={styles.viewers} title='Viewers'>
-            {Utilities.formatViewerNumbers(data.data.viewer_count)}
+            {Util.formatViewerNumbers(data.data.viewer_count)}
             <FaRegEye
               size={14}
               style={{

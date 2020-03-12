@@ -24,7 +24,7 @@ import StreamEle from "./StreamElement";
 import styles from "./../Twitch.module.scss";
 import TwitchClipElement from "./../channelPage/TwitchClipElement";
 import TwitchVodElement from "./../vods/TwitchVodElement";
-import Utilities from "./../../../utilities/Utilities";
+import Util from "./../../../util/Util";
 
 export default () => {
   const { category } = useParams();
@@ -183,7 +183,7 @@ export default () => {
                   animation='border'
                   role='status'
                   variant='light'
-                  style={Utilities.loadingSpinnerSmall}></Spinner>
+                  style={Util.loadingSpinnerSmall}></Spinner>
               </div>
             ) : (
               <MdRefresh size={34} />
@@ -289,7 +289,7 @@ export default () => {
                         animation='border'
                         role='status'
                         variant='light'
-                        style={{ ...Utilities.loadingSpinnerSmall, marginLeft: "10px" }}
+                        style={{ ...Util.loadingSpinnerSmall, marginLeft: "10px" }}
                       />
                     </>
                   ) : (

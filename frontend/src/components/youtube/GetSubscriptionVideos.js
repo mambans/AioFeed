@@ -2,7 +2,7 @@ import axios from "axios";
 import _ from "lodash";
 
 import getVideoInfo from "./GetVideoInfo";
-import Utilities from "./../../utilities/Utilities";
+import Util from "./../../util/Util";
 
 const filterVideos = async response => {
   if (response && response.items && response.items.length > 0) {
@@ -37,7 +37,7 @@ const fetchSubscriptionData = async (videosCACHE, channel) => {
         },
         headers: {
           "If-None-Match": videosCACHE[channel.snippet.resourceId.channelId].etag,
-          Authorization: `Bearer ${Utilities.getCookie("Youtube-access_token")}`,
+          Authorization: `Bearer ${Util.getCookie("Youtube-access_token")}`,
           Accept: "application/json",
         },
       })
@@ -60,7 +60,7 @@ const fetchSubscriptionData = async (videosCACHE, channel) => {
           key: process.env.REACT_APP_YOUTUBE_API_KEY,
         },
         headers: {
-          Authorization: `Bearer ${Utilities.getCookie("Youtube-access_token")}`,
+          Authorization: `Bearer ${Util.getCookie("Youtube-access_token")}`,
           Accept: "application/json",
         },
       })

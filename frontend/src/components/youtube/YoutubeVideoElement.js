@@ -5,7 +5,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 
 import VideoHoverIframe from "./VideoHoverIframe";
 import styles from "./Youtube.module.scss";
-import Utilities from "../../utilities/Utilities";
+import Util from "../../util/Util";
 
 import { VideoContainer, VideoTitle, ImageContainer } from "./../sharedStyledComponents";
 
@@ -65,10 +65,7 @@ function YoutubeVideoElement(data) {
         <a
           className={styles.img}
           href={`https://www.youtube.com/watch?v=` + data.video.contentDetails.upload.videoId}>
-          <img
-            src={Utilities.videoImageUrls(data.video.snippet.thumbnails)}
-            alt={styles.thumbnail}
-          />
+          <img src={Util.videoImageUrls(data.video.snippet.thumbnails)} alt={styles.thumbnail} />
         </a>
         <p className={styles.duration}>{data.video.duration}</p>
         {/* {data.video.df === "liveYoutube" ? (
@@ -95,7 +92,7 @@ function YoutubeVideoElement(data) {
         }>
         <VideoTitle
           href={`https://www.youtube.com/watch?v=` + data.video.contentDetails.upload.videoId}>
-          {Utilities.truncate(data.video.snippet.title, 50)}
+          {Util.truncate(data.video.snippet.title, 50)}
         </VideoTitle>
       </OverlayTrigger>
       <Moment className={styles.date} fromNow>

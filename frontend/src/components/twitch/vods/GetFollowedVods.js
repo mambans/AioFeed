@@ -2,7 +2,7 @@ import axios from "axios";
 import _ from "lodash";
 
 import getFollowedChannels from "./../GetFollowedChannels";
-import Utilities from "../../../utilities/Utilities";
+import Util from "../../../util/Util";
 import reauthenticate from "./../reauthenticate";
 
 const getMonitoredVodChannels = async (AuthKey, Username) => {
@@ -46,7 +46,7 @@ const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) =
           first: 100,
         },
         headers: {
-          Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+          Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })
@@ -68,7 +68,7 @@ const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) =
 const addVodEndTime = async followedStreamVods => {
   followedStreamVods.map(stream => {
     if (stream.type === "archive") {
-      stream.endDate = Utilities.durationToMs(stream.duration, stream.published_at);
+      stream.endDate = Util.durationToMs(stream.duration, stream.published_at);
     } else {
       stream.endDate = new Date(stream.published_at);
     }
@@ -87,7 +87,7 @@ const SortAndAddExpire = async (followedStreamVods, vodExpire) => {
   return followedOrderedStreamVods;
 };
 
-const axiosConfig = (method, channel, access_token) => {
+const axiosConfig = (method, channel, access_token = Util.getCookie("Twitch-access_token")) => {
   return {
     method: method,
     url: `https://api.twitch.tv/helix/videos?`,
@@ -105,25 +105,19 @@ const axiosConfig = (method, channel, access_token) => {
   };
 };
 
-const fetchVodsFromMonitoredChannels = async (
-  vodChannels,
-  setTwitchToken,
-  setRefreshToken,
-  twitchToken,
-  refreshToken
-) => {
+const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRefreshToken) => {
   const followedStreamVods = [];
 
   await Promise.all(
     vodChannels.map(async channel => {
-      await axios(axiosConfig("get", channel, twitchToken))
+      await axios(axiosConfig("get", channel))
         .then(response => {
           response.data.data.forEach(vod => {
             followedStreamVods.push(vod);
           });
         })
         .catch(() => {
-          reauthenticate(setTwitchToken, setRefreshToken, refreshToken).then(async access_token => {
+          reauthenticate(setTwitchToken, setRefreshToken).then(async access_token => {
             await axios(axiosConfig("get", channel, access_token)).then(response => {
               response.data.data.forEach(vod => {
                 followedStreamVods.push(vod);
@@ -143,9 +137,7 @@ async function getFollowedVods(
   Username,
   twitchUserId,
   setRefreshToken,
-  setTwitchToken,
-  twitchToken,
-  refreshToken
+  setTwitchToken
 ) {
   const thresholdDate = 1; // Number of months
   const vodExpire = 3; // Number of days
@@ -169,9 +161,7 @@ async function getFollowedVods(
         const followedStreamVods = await fetchVodsFromMonitoredChannels(
           vodChannels.data,
           setTwitchToken,
-          setRefreshToken,
-          twitchToken,
-          refreshToken
+          setRefreshToken
         );
 
         await addVodEndTime(followedStreamVods);

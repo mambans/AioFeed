@@ -3,7 +3,7 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import React, { useRef } from "react";
 
 import { SubFeedContainer } from "./../sharedStyledComponents";
-import Utilities from "../../utilities/Utilities";
+import Util from "../../util/Util";
 import YoutubeVideoElement from "./YoutubeVideoElement";
 
 export default data => {
@@ -13,12 +13,7 @@ export default data => {
     return "";
   } else if (!data.initiated || !data.videos || data.videos.length < 1) {
     return (
-      <Spinner
-        animation='grow'
-        role='status'
-        id='asd'
-        style={Utilities.loadingSpinner}
-        variant='light'>
+      <Spinner animation='grow' role='status' id='asd' style={Util.loadingSpinner} variant='light'>
         <span className='sr-only'>Loading...</span>
       </Spinner>
     );

@@ -10,7 +10,7 @@ import FeedsContext from "./FeedsContext";
 import styles from "./Feed.module.scss";
 import Twitch from "../twitch/Twitch";
 import TwitchVods from "../twitch/vods/Twitch-vods";
-import Utilities from "../../utilities/Utilities";
+import Util from "../../util/Util";
 import Youtube from "./../youtube/Youtube";
 import YoutubeDataHandler from "./../youtube/Datahandler";
 import YoutubeHeader from "./../youtube/Header";
@@ -60,7 +60,7 @@ export default function Feed() {
   } else if (!enableTwitch && !enableYoutube && !enableTwitchVods && username) {
     return (
       <CSSTransition in={true} timeout={1000} classNames='fade-1s' unmountOnExit>
-        <Alert variant='info' style={Utilities.feedAlertWarning}>
+        <Alert variant='info' style={Util.feedAlertWarning}>
           <Alert.Heading>No feeds are enabled</Alert.Heading>
           <hr />
           Please enable some feeds in account settings

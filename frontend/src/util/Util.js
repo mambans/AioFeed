@@ -1,8 +1,4 @@
-import React from "react";
-
-import styles from "../components/twitch/Twitch.module.scss";
-
-const Utilities = {
+export default {
   loadingSpinner: {
     // position: "absolute",
     // left: "calc(50% - 5rem)",
@@ -75,103 +71,97 @@ const Utilities = {
   },
 
   // Format PT25M1S to 25:10
-  async formatDuration(duration) {
-    let hours;
-    let minutes;
-    let seconds;
-    let formatDuration;
-    let time;
-    let timeformat;
+  // formatDuration(duration) {
+  //   let hours;
+  //   let minutes;
+  //   let seconds;
+  //   let formatedDuration;
+  //   let time;
+  //   let timeformat;
 
-    try {
-      if (duration.includes("H")) {
-        time = duration
-          .replace("PT", "")
-          .replace("H", ":")
-          .replace("M", ":")
-          .replace("S", "");
-        timeformat = "hours";
-      } else if (duration.includes("M")) {
-        time = duration
-          .replace("PT", "")
-          .replace("M", ":")
-          .replace("S", "");
-        timeformat = "minutes";
-      } else {
-        time = duration.replace("PT", "").replace("S", "");
-        timeformat = "seconds";
-      }
-    } catch (error) {
-      console.trace(error);
-    }
+  //   try {
+  //     if (duration.includes("H")) {
+  //       time = duration
+  //         .replace("PT", "")
+  //         .replace("H", ":")
+  //         .replace("M", ":")
+  //         .replace("S", "");
+  //       timeformat = "hours";
+  //     } else if (duration.includes("M")) {
+  //       time = duration
+  //         .replace("PT", "")
+  //         .replace("M", ":")
+  //         .replace("S", "");
+  //       timeformat = "minutes";
+  //     } else {
+  //       time = duration.replace("PT", "").replace("S", "");
+  //       timeformat = "seconds";
+  //     }
+  //   } catch (error) {
+  //     console.trace(error);
+  //   }
 
-    let timeSegments = time.split(":");
-    if (timeformat === "hours") {
-      hours = timeSegments[0] || "00";
-      minutes = timeSegments[1] || "00";
-      seconds = timeSegments[2] || "00";
+  //   let timeSegments = time.split(":");
+  //   if (timeformat === "hours") {
+  //     hours = timeSegments[0] || "00";
+  //     minutes = timeSegments[1] || "00";
+  //     seconds = timeSegments[2] || "00";
 
-      if (hours.length <= 1) {
-        hours = "0" + hours;
-      }
+  //     if (hours.length <= 1) {
+  //       hours = "0" + hours;
+  //     }
 
-      if (minutes.length <= 1) {
-        minutes = "0" + minutes;
-      }
+  //     if (minutes.length <= 1) {
+  //       minutes = "0" + minutes;
+  //     }
 
-      if (seconds.length <= 1) {
-        if (seconds.length <= 0) {
-          seconds = "00";
-        } else {
-          seconds = "0" + seconds;
-        }
-      }
+  //     if (seconds.length <= 1) {
+  //       if (seconds.length <= 0) {
+  //         seconds = "00";
+  //       } else {
+  //         seconds = "0" + seconds;
+  //       }
+  //     }
 
-      formatDuration = hours + ":" + minutes + ":" + seconds;
-    } else if (timeformat === "minutes") {
-      minutes = timeSegments[0];
-      seconds = timeSegments[1];
+  //     formatedDuration = hours + ":" + minutes + ":" + seconds;
+  //   } else if (timeformat === "minutes") {
+  //     minutes = timeSegments[0];
+  //     seconds = timeSegments[1];
 
-      if (minutes.length <= 1) {
-        minutes = "0" + minutes;
-      }
+  //     if (minutes.length <= 1) {
+  //       minutes = "0" + minutes;
+  //     }
 
-      if (seconds.length <= 1) {
-        seconds = "0" + seconds;
-      }
+  //     if (seconds.length <= 1) {
+  //       seconds = "0" + seconds;
+  //     }
 
-      formatDuration = minutes + ":" + seconds;
-    } else if (timeformat === "seconds") {
-      seconds = timeSegments[0];
+  //     formatedDuration = minutes + ":" + seconds;
+  //   } else if (timeformat === "seconds") {
+  //     seconds = timeSegments[0];
 
-      if (seconds.length <= 1) {
-        seconds = "0" + seconds;
-      }
+  //     if (seconds.length <= 1) {
+  //       seconds = "0" + seconds;
+  //     }
 
-      formatDuration = seconds;
-    }
+  //     formatedDuration = seconds;
+  //   }
 
-    return formatDuration;
-  },
+  //   return formatedDuration;
+  // },
 
-  OnlyReruns(type) {
-    if (!type === "live") {
-      return <p className={styles.type}>{type}</p>;
-    }
-  },
+  // msToTime(duration) {
+  //   var milliseconds = parseInt((duration % 1000) / 100),
+  //     seconds = Math.floor((duration / 1000) % 60),
+  //     minutes = Math.floor((duration / (1000 * 60)) % 60),
+  //     hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
 
-  msToTime(duration) {
-    var milliseconds = parseInt((duration % 1000) / 100),
-      seconds = Math.floor((duration / 1000) % 60),
-      minutes = Math.floor((duration / (1000 * 60)) % 60),
-      hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+  //   hours = hours < 10 ? "0" + hours : hours;
+  //   minutes = minutes < 10 ? "0" + minutes : minutes;
+  //   seconds = seconds < 10 ? "0" + seconds : seconds;
 
-    hours = hours < 10 ? "0" + hours : hours;
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    seconds = seconds < 10 ? "0" + seconds : seconds;
-
-    return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
-  },
+  //   return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+  // },
 
   formatTwitchVodsDuration(duration) {
     let hour = "0";
@@ -243,5 +233,3 @@ const Utilities = {
     }
   },
 };
-
-export default Utilities;

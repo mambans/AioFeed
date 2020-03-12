@@ -28,7 +28,6 @@ function TwitchVods() {
     setTwitchToken,
     setRefreshToken,
     twitchToken,
-    refreshToken,
   } = useContext(AccountContext);
 
   const [numberOfVideos, setNumberOfVideos] = useState(
@@ -121,9 +120,7 @@ function TwitchVods() {
         username,
         parseInt(twitchUserId),
         setRefreshToken,
-        setTwitchToken,
-        twitchToken,
-        refreshToken
+        setTwitchToken
       )
         .then(data => {
           if (data.error) {
@@ -139,7 +136,7 @@ function TwitchVods() {
           setVods(data.data);
         });
     },
-    [authKey, username, twitchUserId, setTwitchToken, setRefreshToken, refreshToken, twitchToken]
+    [authKey, username, twitchUserId, setTwitchToken, setRefreshToken]
   );
 
   const windowFocusHandler = useCallback(async () => {
@@ -176,10 +173,7 @@ function TwitchVods() {
         username,
         parseInt(twitchUserId),
         setRefreshToken,
-        setTwitchToken,
-        twitchToken,
-        refreshToken,
-        twitchToken
+        setTwitchToken
       )
         .then(data => {
           if (data.error) {
@@ -217,8 +211,6 @@ function TwitchVods() {
     twitchUserId,
     setTwitchToken,
     setRefreshToken,
-    refreshToken,
-    twitchToken,
   ]);
 
   if (!twitchToken) {

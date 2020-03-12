@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import Utilities from "./../../../utilities/Utilities";
+import Util from "./../../../util/Util";
 import AddVideoExtraData from "../AddVideoExtraData";
 
 export default async (category, page) => {
@@ -17,7 +17,7 @@ export default async (category, page) => {
           name: category,
         },
         headers: {
-          Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+          Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })
@@ -36,7 +36,7 @@ export default async (category, page) => {
           after: page ? page.pagination.cursor : null,
         },
         headers: {
-          Authorization: `Bearer ${Utilities.getCookie("Twitch-access_token")}`,
+          Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })

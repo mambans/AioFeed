@@ -6,7 +6,7 @@ import Header from "./Header";
 import StreamEle from "./StreamElement.js";
 import styles from "./Twitch.module.scss";
 import TwitchSidebar from "./sidebar/TwitchSidebar";
-import Utilities from "../../utilities/Utilities";
+import Util from "../../util/Util";
 
 function Twitch({ data }) {
   const [show, setShow] = useState(true);
@@ -44,7 +44,7 @@ function Twitch({ data }) {
           <Alert
             variant='secondary'
             style={{
-              ...Utilities.feedAlertWarning,
+              ...Util.feedAlertWarning,
               width: "var(--feedsWidth)",
               margin: "var(--feedsMargin)",
             }}
@@ -92,7 +92,7 @@ function Twitch({ data }) {
             <Alert
               variant='secondary'
               style={{
-                ...Utilities.feedAlertWarning,
+                ...Util.feedAlertWarning,
                 width: "var(--feedsWidth)",
                 margin: "var(--feedsMargin)",
               }}

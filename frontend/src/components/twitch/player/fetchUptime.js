@@ -1,14 +1,15 @@
 import axios from "axios";
 
+import Util from "./../../../util/Util";
+
 /**
  * Fetch and Set uptime state from a Live stream.
  * @param {Object} twitchPlayer twitchPlayer.current (useRef)
- * @param {String} twitchToken Twitch access token
  * @param {Function} setUptime Function to set uptime state (useState)
  * @param {Object} uptimeTimer uptime interval timer (useRef)
  * @async
  */
-export default async (twitchPlayer, twitchToken, setUptime, uptimeTimer) => {
+export default async (twitchPlayer, setUptime, uptimeTimer) => {
   await axios
     .get(`https://api.twitch.tv/helix/streams`, {
       params: {
@@ -16,7 +17,7 @@ export default async (twitchPlayer, twitchToken, setUptime, uptimeTimer) => {
         first: 1,
       },
       headers: {
-        Authorization: `Bearer ${twitchToken}`,
+        Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
         "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
       },
     })
@@ -32,7 +33,7 @@ export default async (twitchPlayer, twitchToken, setUptime, uptimeTimer) => {
                 first: 1,
               },
               headers: {
-                Authorization: `Bearer ${twitchToken}`,
+                Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
                 "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
               },
             })
