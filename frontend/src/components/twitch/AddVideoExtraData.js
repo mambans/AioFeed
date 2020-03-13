@@ -65,16 +65,16 @@ export default async (items, fetchGameInfo = true) => {
     localStorage.setItem("TwitchProfiles", JSON.stringify(FinallTwitchProfilesObj));
   });
 
-  // Removes game id duplicates before sending game request.
-  const games = [
-    ...new Set(
-      items.data.data.map(channel => {
-        return channel.game_id;
-      })
-    ),
-  ];
-
   if (fetchGameInfo) {
+    // Removes game id duplicates before sending game request.
+    const games = [
+      ...new Set(
+        items.data.data.map(channel => {
+          return channel.game_id;
+        })
+      ),
+    ];
+
     const gameNames = await axios.get(`https://api.twitch.tv/helix/games`, {
       params: {
         id: games,

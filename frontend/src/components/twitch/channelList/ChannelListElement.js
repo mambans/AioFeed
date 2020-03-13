@@ -8,7 +8,6 @@ import React, { useState, useRef, useContext, useEffect } from "react";
 
 import { VodRemoveButton, VodAddButton } from "./../../sharedStyledComponents";
 import AccountContext from "./../../account/AccountContext";
-
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 
 const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
@@ -64,7 +63,7 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
   }
 
   const ChannelVodEnabled = () => {
-    return vodChannels.includes(data.to_name.toLowerCase());
+    return vodChannels.includes(data.user_name.toLowerCase());
   };
 
   function UnfollowAlert() {
@@ -131,20 +130,20 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
   }, []);
 
   return (
-    <li key={data.to_id}>
+    <li key={data.user_id}>
       <UnfollowAlert />
       <Link
         to={{
-          pathname: "/channel/" + data.to_name.toLowerCase(),
+          pathname: "/channel/" + data.user_name.toLowerCase(),
           state: {
-            p_id: data.to_id,
-            p_logo: data.profile_image_url,
+            p_id: data.user_id,
+            p_logo: data.profile_img_url,
           },
         }}
         style={{ padding: "0", fontSize: "unset" }}>
-        {data.profile_image_url ? (
+        {data.profile_img_url ? (
           <img
-            src={data.profile_image_url}
+            src={data.profile_img_url}
             style={{
               width: "30px",
               height: "30px",
@@ -163,17 +162,17 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
             }}
             alt=''></img>
         )}
-        {data.to_name}
+        {data.user_name}
       </Link>
       <div>
         {ChannelVodEnabled() ? (
           <VodRemoveButton
             ref={vodButton}
-            data-tip={"Remove " + data.to_name + " vods."}
-            title={"Remove " + data.to_name + " vods."}
+            data-tip={"Remove " + data.user_name + " vods."}
+            title={"Remove " + data.user_name + " vods."}
             variant='link'
             onClick={() => {
-              removeChannel(data.to_name);
+              removeChannel(data.user_name);
             }}>
             {isHovered ? (
               <MdVideocamOff size={24} color='red' />
@@ -184,11 +183,11 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
         ) : (
           <VodAddButton
             ref={vodButton}
-            data-tip={"Add " + data.to_name + " vods."}
-            title={"Add " + data.to_name + " vods."}
+            data-tip={"Add " + data.user_name + " vods."}
+            title={"Add " + data.user_name + " vods."}
             variant='link'
             onClick={() => {
-              addChannel(data.to_name);
+              addChannel(data.user_name);
             }}>
             <MdVideoCall size={24} />
           </VodAddButton>
@@ -197,7 +196,7 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
           style={{ marginLeft: "5px", padding: "0" }}
           size={22}
           channelName={data.to_name}
-          id={data.to_id}
+          id={data.user_id}
           alreadyFollowedStatus={true}
         />
       </div>

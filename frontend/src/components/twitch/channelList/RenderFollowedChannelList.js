@@ -1,27 +1,19 @@
-import React, { useState, useEffect, useRef, useCallback, useContext } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import axios from "axios";
-import Util from "./../../../util/Util";
+
 import ChannelListElement from "./ChannelListElement";
 import AccountContext from "./../../account/AccountContext";
 import StyledLoadingList from "./../LoadingList";
-
-const channelList = async followedChannels => {
-  const followedChannelsIds = await followedChannels.map(channel => {
-    return channel.to_id;
-  });
-
-  return followedChannelsIds;
-};
+import AddVideoExtraData from "./../AddVideoExtraData";
 
 const RenderFollowedChannelList = data => {
   const [followedChannels, setFollowedChannels] = useState();
-  const [vodChannels, setVodChannels] = useState();
-  const streamMetadata = useRef();
+  const [vodChannels, setVodChannels] = useState([]);
 
   const { authKey, username } = useContext(AccountContext);
 
   const getChannels = useCallback(async () => {
-    const monitoredChannels = await axios
+    await axios
       .get(
         `https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/fetch`,
         {
@@ -32,81 +24,40 @@ const RenderFollowedChannelList = data => {
         }
       )
       .then(res => {
+        setVodChannels(res.data);
         return res.data;
       })
       .catch(err => {
         console.error(err);
       });
-    setVodChannels(monitoredChannels);
   }, [authKey, username]);
 
-  const AddMetadata = useCallback(
-    async followedChannels => {
-      try {
-        followedChannels.map(stream => {
-          if (
-            streamMetadata.current.find(channel => {
-              return channel.id === stream.to_id;
-            })
-          ) {
-            stream.profile_image_url = streamMetadata.current.find(channel => {
-              return channel.id === stream.to_id;
-            }).profile_image_url;
-          }
-
-          return "";
-        });
-      } catch (error) {
-        console.error(error);
-      }
-
-      await getChannels();
-      setFollowedChannels(followedChannels);
-    },
-    [getChannels]
-  );
-
   useEffect(() => {
-    const fetchProfileImages = async followedChannels => {
-      if (
-        !localStorage.getItem("ChannelsMetadata") ||
-        JSON.parse(localStorage.getItem("ChannelsMetadata")).length !== followedChannels.length
-      ) {
-        console.log("Metadata request sent");
+    const channelObjectList = async followedChannels => {
+      const followedChannelsIds = {
+        data: {
+          data: await followedChannels.map(channel => {
+            return { user_id: channel.to_id, user_name: channel.to_name };
+          }),
+        },
+      };
 
-        const followedChannelsIds = await channelList(followedChannels);
-
-        const res = await axios.get(`https://api.twitch.tv/helix/users`, {
-          params: {
-            id: followedChannelsIds,
-            first: 100,
-          },
-          headers: {
-            Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
-            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-          },
-        });
-
-        streamMetadata.current = res.data.data;
-
-        localStorage.setItem(`ChannelsMetadata`, JSON.stringify(streamMetadata.current));
-      } else {
-        console.log("Metadata cache used");
-
-        streamMetadata.current = JSON.parse(localStorage.getItem("ChannelsMetadata"));
-      }
-
-      await AddMetadata(followedChannels);
-
-      return "";
+      return followedChannelsIds;
     };
 
     try {
-      if (data.followedChannels) fetchProfileImages(data.followedChannels);
+      if (data.followedChannels) {
+        channelObjectList(data.followedChannels).then(async res => {
+          await AddVideoExtraData(res, false).then(async res => {
+            await getChannels();
+            setFollowedChannels(res.data);
+          });
+        });
+      }
     } catch (error) {
       console.error(error);
     }
-  }, [AddMetadata, data.followedChannels]);
+  }, [data.followedChannels, getChannels]);
 
   if (!followedChannels) {
     return <StyledLoadingList amount={12} />;
@@ -122,7 +73,7 @@ const RenderFollowedChannelList = data => {
         {followedChannels.map(channel => {
           return (
             <ChannelListElement
-              key={channel.to_id}
+              key={channel.user_id}
               data={channel}
               vodChannels={vodChannels}
               setVodChannels={setVodChannels}
