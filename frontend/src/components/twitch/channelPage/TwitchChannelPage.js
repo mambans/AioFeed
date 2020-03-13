@@ -99,11 +99,13 @@ export default () => {
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         })
-        .then(res => {
+        .then(async res => {
           vodPagination.current = res.data.pagination.cursor;
 
+          const videos = await AddVideoExtraData(res, false);
+
           if (pagination) {
-            const vodsWithEndDate = res.data.data.map(stream => {
+            const finallVideos = videos.data.map(stream => {
               if (stream.type === "archive") {
                 stream.endDate = Util.durationToMs(stream.duration, stream.published_at);
               } else {
@@ -112,7 +114,7 @@ export default () => {
               return stream;
             });
 
-            const allVods = previosVodPage.current.concat(vodsWithEndDate);
+            const allVods = previosVodPage.current.concat(finallVideos);
             previosVodPage.current = allVods;
 
             setVodsLoadmoreLoaded(true);
@@ -128,7 +130,7 @@ export default () => {
               }
             }, 0);
           } else {
-            const vodsWithEndDate = res.data.data.map(stream => {
+            const finallVideos = await videos.data.map(stream => {
               if (stream.type === "archive") {
                 stream.endDate = Util.durationToMs(stream.duration, stream.published_at);
               } else {
@@ -137,8 +139,9 @@ export default () => {
               return stream;
             });
 
-            previosVodPage.current = vodsWithEndDate;
-            setVods(vodsWithEndDate);
+            previosVodPage.current = finallVideos;
+
+            setVods(finallVideos);
           }
         })
         .catch(e => {

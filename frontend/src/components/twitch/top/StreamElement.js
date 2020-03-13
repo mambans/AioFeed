@@ -5,7 +5,7 @@ import React, { useRef, useCallback, useState, useEffect } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";
 
-import { ImageContainer, VideoTitle } from "./../../sharedStyledComponents";
+import { ImageContainer, VideoTitle, VideoContainer } from "./../../sharedStyledComponents";
 import StreamHoverIframe from "./../StreamHoverIframe.js";
 import styles from "./../Twitch.module.scss";
 import Util from "../../../util/Util";
@@ -43,7 +43,7 @@ function StreamEle(data) {
   }, [handleMouseOut]);
 
   return (
-    <div className={`${styles.video}`} key={data.data.id}>
+    <VideoContainer key={data.data.id}>
       <ImageContainer ref={ref}>
         {isHovered ? (
           <StreamHoverIframe id={data.data.id} data={data.data} setIsHovered={setIsHovered} />
@@ -96,7 +96,7 @@ function StreamEle(data) {
                 p_viewers: data.data.viewers,
               },
             }}>
-            {Util.truncate(data.data.title, 50)}
+            {Util.truncate(data.data.title, 60)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
@@ -165,7 +165,7 @@ function StreamEle(data) {
           </p>
         </div>
       </div>
-    </div>
+    </VideoContainer>
   );
 }
 

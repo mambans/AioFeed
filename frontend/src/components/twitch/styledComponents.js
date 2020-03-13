@@ -146,7 +146,7 @@ const StyledLoadingBox = styled.div`
     margin-top: 15px;
     margin-bottom: 5px;
     grid-area: title;
-    font-size: 1.1rem;
+    font-size: 1.05 rem;
     max-width: 336px;
     overflow: hidden;
     height: 45px;

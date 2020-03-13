@@ -65,7 +65,7 @@ export default ({ ...data }) => {
       )}
 
       <div style={{ width: "336px" }}>
-        <div className={styles.channelContainer} style={{ marginBottom: "0px", height: "25px" }}>
+        <div className={styles.channelContainer}>
           <Link
             to={{
               pathname: `/channel/${data.data.broadcaster_name.toLowerCase()}`,

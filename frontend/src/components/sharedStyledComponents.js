@@ -118,6 +118,7 @@ const VideoTitle = styled(Link)`
   height: 45px;
   line-height: 1.2;
   padding: 0;
+  z-index: 2;
 
   &:hover {
     color: var(--videoTitleHover);
@@ -161,10 +162,7 @@ const ImageContainer = styled.div`
 
   &:hover {
     z-index: 2;
-    /* transform: scale(1.07);*/
-
     transform: scale(1.15);
-    /* box-shadow: 0px 0px 75px 10px black; */
     box-shadow: 0 0px 0px 0px #be0e0e00, 0 0px 0px 0px #be0e0e00,
       12px 0 50px -4px rgba(0, 0, 0, 0.8), -12px 0 50px -4px rgba(0, 0, 0, 0.8);
   }

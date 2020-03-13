@@ -162,8 +162,25 @@ export default ({ ...data }) => {
       )}
 
       <div>
-        <div className={styles.channelContainer} style={{ marginBottom: "0px", height: "25px" }}>
-          <Link to={"/channel/" + data.data.user_name.toLowerCase()} className={styles.channel}>
+        <div className={styles.channelContainer}>
+          <Link
+            to={{
+              pathname: `/channel/${data.data.user_name.toLowerCase()}`,
+              state: {
+                p_id: data.data.user_id,
+              },
+            }}
+            style={{ gridRow: 1, paddingRight: "5px" }}>
+            <img src={data.data.profile_img_url} alt='' className={styles.profile_img} />
+          </Link>
+          <Link
+            to={{
+              pathname: `/channel/${data.data.user_name.toLowerCase()}`,
+              state: {
+                p_id: data.data.user_id,
+              },
+            }}
+            className={styles.channel}>
             {data.data.user_name}
           </Link>
         </div>

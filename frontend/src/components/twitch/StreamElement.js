@@ -10,7 +10,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useRef, useState, useEffect, useContext } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 
-import { VideoTitle, ImageContainer } from "./../sharedStyledComponents";
+import { VideoTitle, ImageContainer, VideoContainer } from "./../sharedStyledComponents";
 import FeedsContext from "./../feed/FeedsContext";
 import StreamHoverIframe from "./StreamHoverIframe.js";
 import styles from "./Twitch.module.scss";
@@ -149,7 +149,7 @@ function StreamEle(data) {
   }, []);
 
   return (
-    <div className={styles.video} key={data.data.id}>
+    <VideoContainer key={data.data.id}>
       <UnfollowAlert></UnfollowAlert>
 
       <ImageContainer id={data.data.id} ref={ref} style={{ marginTop: "5px" }}>
@@ -219,7 +219,7 @@ function StreamEle(data) {
                 p_viewers: data.data.viewers,
               },
             }}>
-            {Util.truncate(data.data.title, 50)}
+            {Util.truncate(data.data.title, 60)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
@@ -316,7 +316,7 @@ function StreamEle(data) {
           </p>
         </div>
       </div>
-    </div>
+    </VideoContainer>
   );
 }
 

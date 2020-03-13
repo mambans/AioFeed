@@ -92,7 +92,7 @@ function YoutubeVideoElement(data) {
         }>
         <VideoTitle
           href={`https://www.youtube.com/watch?v=` + data.video.contentDetails.upload.videoId}>
-          {Util.truncate(data.video.snippet.title, 50)}
+          {Util.truncate(data.video.snippet.title, 60)}
         </VideoTitle>
       </OverlayTrigger>
       <Moment className={styles.date} fromNow>

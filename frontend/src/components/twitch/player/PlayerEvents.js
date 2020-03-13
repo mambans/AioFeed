@@ -131,7 +131,13 @@ export default ({
       TwitchPlayer.showPlayerControls(!isFullScreen);
 
       if (TwitchPlayer.getFullscreen() && document.fullscreenElement) {
-        document.exitFullscreen();
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
       } else if (TwitchPlayer._bridge._iframe.requestFullScreen) {
         TwitchPlayer._bridge._iframe.requestFullScreen();
       } else if (TwitchPlayer._bridge._iframe.mozRequestFullScreen) {

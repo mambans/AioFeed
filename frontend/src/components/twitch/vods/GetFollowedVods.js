@@ -4,6 +4,7 @@ import _ from "lodash";
 import getFollowedChannels from "./../GetFollowedChannels";
 import Util from "../../../util/Util";
 import reauthenticate from "./../reauthenticate";
+import AddVideoExtraData from "../AddVideoExtraData";
 
 const getMonitoredVodChannels = async (AuthKey, Username) => {
   const vodChannels = await axios
@@ -164,9 +165,15 @@ async function getFollowedVods(
           setRefreshToken
         );
 
-        await addVodEndTime(followedStreamVods);
+        const videos = await AddVideoExtraData({
+          data: {
+            data: followedStreamVods,
+          },
+        });
 
-        const followedOrderedStreamVods = await SortAndAddExpire(followedStreamVods, vodExpire);
+        await addVodEndTime(videos.data);
+
+        const followedOrderedStreamVods = await SortAndAddExpire(videos.data, vodExpire);
 
         localStorage.setItem(
           `Twitch-vods`,
