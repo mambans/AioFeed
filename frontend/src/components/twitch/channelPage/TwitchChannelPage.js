@@ -73,7 +73,10 @@ export default () => {
         setChannelId(res.data.data[0].id);
       })
       .catch(error => {
-        console.error("GetIdFromName: ", error);
+        console.error(error);
+        // if (error.message === `can't access property "id", res.data.data[0] is undefined`) {
+        setChannelId("Not Found");
+        // }
       });
   }, [id]);
 
@@ -213,7 +216,7 @@ export default () => {
   useEffect(() => {
     (async () => {
       if (!channelId) await getIdFromName();
-      if (!channelInfo && channelId) getChannelInfo();
+      if (!channelInfo && channelId && channelId !== "Not Found") getChannelInfo();
     })();
 
     return () => {
@@ -273,13 +276,13 @@ export default () => {
   }, [id, OnlineEvents]);
 
   useEffect(() => {
-    if (channelId && !vods) {
+    if (channelId && !vods && channelId !== "Not Found") {
       fetchChannelVods();
     }
   }, [fetchChannelVods, vods, channelId]);
 
   useEffect(() => {
-    if (channelId && !clips) {
+    if (channelId && !clips && channelId !== "Not Found") {
       fetchClips();
     }
   }, [fetchClips, clips, channelId]);
@@ -293,162 +296,189 @@ export default () => {
     };
   });
 
-  return (
-    <ChannelContainer>
-      <VideoPlayer id='twitch-embed' style={{ display: videoOpen ? "block" : "none" }} />
-      <Chat
-        frameborder='0'
-        scrolling='yes'
-        theme='dark'
-        // id={id + "-chat"}
-        src={`https://www.twitch.tv/embed/${id}/chat?darkpopout`}
-        style={{ display: chatOpen ? "block" : "none" }}
-      />
-      {videoOpen ? (
-        <FaWindowClose
-          title='Close video'
-          className='svgButton'
-          id='closeVideo'
-          size={20}
-          onClick={() => {
-            setVideoOpen(!videoOpen);
-          }}
-        />
-      ) : (
-        <MdLiveTv
-          title='Open video'
-          className='svgButton'
-          id='openVideo'
-          size={20}
-          onClick={() => {
-            setVideoOpen(!videoOpen);
-          }}
-        />
-      )}
-      {chatOpen ? (
-        <FaWindowClose
-          title='Close chat'
-          className='svgButton'
-          id='closeChat'
-          size={20}
-          onClick={() => {
-            setChatOpen(!chatOpen);
-          }}
-        />
-      ) : (
-        <MdChat
-          title='Open chat'
-          className='svgButton'
-          id='openChat'
-          size={20}
-          onClick={() => {
-            setChatOpen(!chatOpen);
-          }}
-        />
-      )}
-      {channelInfo ? (
+  if (channelId === "Not Found") {
+    return (
+      <ChannelContainer>
         <Banner>
-          <img id='Banner' alt='' src={channelInfo.profile_banner} />
+          <div id='Banner' alt='' style={{ backgroundColor: "var(--navigationbarBackground)" }} />
           <BannerInfoOverlay>
             <Name>
-              <div id='HeaderChannelInfo'>
+              <div id='HeaderChannelInfo' style={{ height: "80%" }}>
                 <div id='ChannelName'>
-                  {isLive ? (
-                    <StyledLiveInfoContainer>
-                      <div id='LiveDetails'>
-                        <span>Viewers: {Util.formatViewerNumbers(viewers)}</span>
-                        <span>Uptime: {<Moment durationFromNow>{uptime}</Moment>}</span>
-                      </div>
-                      <Link
-                        to={{
-                          pathname: `/live/${id}`,
-                          state: {
-                            p_channelInfos: channelInfo,
-                            p_viewers: viewers,
-                            p_uptime: uptime,
-                          },
-                        }}
-                        style={{ padding: "0 15px" }}>
-                        <LiveIndicator>
-                          <LiveIndicatorIcon />
-                          <p>Live</p>
-                        </LiveIndicator>
-                      </Link>
-                    </StyledLiveInfoContainer>
-                  ) : null}
-                  <Link
-                    to={{
-                      pathname: `/live/${id}`,
-                      state: {
-                        p_channelInfos: channelInfo,
-                        p_viewers: viewers,
-                        p_uptime: uptime,
-                      },
-                    }}
-                    id='ChannelLiveLink'>
-                    <img id='profileIcon' alt='' src={channelInfo.logo || p_logo} />
-                    {channelInfo.display_name}
-                  </Link>
-                  {channelInfo.partner ? (
-                    <img
-                      id='partnered'
-                      title='Partnered'
-                      alt=''
-                      src={`${process.env.PUBLIC_URL}/partnered.png`}
-                    />
-                  ) : null}
-                  {channelInfo ? <FollowUnfollowBtn channelName={id} id={channelInfo._id} /> : null}
+                  <p id='ChannelLiveLink'>
+                    <img id='profileIcon' alt='' src={"asd"} />
+                    {id}
+                  </p>
                 </div>
-                <p id='title'>{channelInfo.status}</p>
-                <Link to={`/game/${channelInfo.game}`} id='game'>
-                  {channelInfo.game}
-                </Link>
-                <p id='desc'>{channelInfo.description}</p>
-                <div style={{ display: "flex", justifyContent: "center", color: "#cacaca" }}>
-                  <p style={{ marginRight: "50px" }}>Followers: {channelInfo.followers}</p>
-                  <p>Views: {channelInfo.views}</p>
-                </div>
-                <p id='updated'>
-                  Updated: {moment(channelInfo.updated_at).format("YYYY/MM/DD HH:MM")}
-                </p>
+                <p id='title'>Channel Not Found!</p>
               </div>
             </Name>
           </BannerInfoOverlay>
         </Banner>
-      ) : (
-        <LoadingPlaceholderBanner />
-      )}
-      {vods ? (
-        <SubFeed
-          feedName='Vods'
-          items={vods}
-          sortBy={sortVodsBy}
-          setSortBy={setSortVodsBy}
-          setSortData={setVods}
-          loadmoreRef={loadmoreVodsRef.current}
-          fetchItems={fetchChannelVods}
-          itemPagination={vodPagination}
-          itemsloadmoreLoaded={vodsloadmoreLoaded}
+        {/* <LoadingPlaceholderVods numberOfVideos={numberOfVideos} />
+        <LoadingPlaceholderClips numberOfVideos={numberOfVideos} /> */}
+      </ChannelContainer>
+    );
+  } else {
+    return (
+      <ChannelContainer>
+        <VideoPlayer id='twitch-embed' style={{ display: videoOpen ? "block" : "none" }} />
+        <Chat
+          frameborder='0'
+          scrolling='yes'
+          theme='dark'
+          // id={id + "-chat"}
+          src={`https://www.twitch.tv/embed/${id}/chat?darkpopout`}
+          style={{ display: chatOpen ? "block" : "none" }}
         />
-      ) : (
-        <LoadingPlaceholderVods numberOfVideos={numberOfVideos} />
-      )}
-      {clips ? (
-        <SubFeed
-          feedName='Clips'
-          items={clips}
-          sortBy={sortClipsBy}
-          setSortBy={setSortClipsBy}
-          setSortData={setClips}
-          loadmoreRef={loadmoreClipsRef.current}
-          fetchItems={fetchClips}
-          itemPagination={clipPagination}
-          itemsloadmoreLoaded={clipsloadmoreLoaded}
-          channelInfo={channelInfo}
-        />
-      ) : (
-        <LoadingPlaceholderClips numberOfVideos={numberOfVideos} />
-      )}
-    </ChannelContainer>
-  );
+        {videoOpen ? (
+          <FaWindowClose
+            title='Close video'
+            className='svgButton'
+            id='closeVideo'
+            size={20}
+            onClick={() => {
+              setVideoOpen(!videoOpen);
+            }}
+          />
+        ) : (
+          <MdLiveTv
+            title='Open video'
+            className='svgButton'
+            id='openVideo'
+            size={20}
+            onClick={() => {
+              setVideoOpen(!videoOpen);
+            }}
+          />
+        )}
+        {chatOpen ? (
+          <FaWindowClose
+            title='Close chat'
+            className='svgButton'
+            id='closeChat'
+            size={20}
+            onClick={() => {
+              setChatOpen(!chatOpen);
+            }}
+          />
+        ) : (
+          <MdChat
+            title='Open chat'
+            className='svgButton'
+            id='openChat'
+            size={20}
+            onClick={() => {
+              setChatOpen(!chatOpen);
+            }}
+          />
+        )}
+        {channelInfo ? (
+          <Banner>
+            <img id='Banner' alt='' src={channelInfo.profile_banner} />
+            <BannerInfoOverlay>
+              <Name>
+                <div id='HeaderChannelInfo'>
+                  <div id='ChannelName'>
+                    {isLive ? (
+                      <StyledLiveInfoContainer>
+                        <div id='LiveDetails'>
+                          <span>Viewers: {Util.formatViewerNumbers(viewers)}</span>
+                          <span>Uptime: {<Moment durationFromNow>{uptime}</Moment>}</span>
+                        </div>
+                        <Link
+                          to={{
+                            pathname: `/live/${id}`,
+                            state: {
+                              p_channelInfos: channelInfo,
+                              p_viewers: viewers,
+                              p_uptime: uptime,
+                            },
+                          }}
+                          style={{ padding: "0 15px" }}>
+                          <LiveIndicator>
+                            <LiveIndicatorIcon />
+                            <p>Live</p>
+                          </LiveIndicator>
+                        </Link>
+                      </StyledLiveInfoContainer>
+                    ) : null}
+                    <Link
+                      to={{
+                        pathname: `/live/${id}`,
+                        state: {
+                          p_channelInfos: channelInfo,
+                          p_viewers: viewers,
+                          p_uptime: uptime,
+                        },
+                      }}
+                      id='ChannelLiveLink'>
+                      <img id='profileIcon' alt='' src={channelInfo.logo || p_logo} />
+                      {channelInfo.display_name}
+                    </Link>
+                    {channelInfo.partner ? (
+                      <img
+                        id='partnered'
+                        title='Partnered'
+                        alt=''
+                        src={`${process.env.PUBLIC_URL}/partnered.png`}
+                      />
+                    ) : null}
+                    {channelInfo ? (
+                      <FollowUnfollowBtn channelName={id} id={channelInfo._id} />
+                    ) : null}
+                  </div>
+                  <p id='title'>{channelInfo.status}</p>
+                  <Link to={`/game/${channelInfo.game}`} id='game'>
+                    {channelInfo.game}
+                  </Link>
+                  <p id='desc'>{channelInfo.description}</p>
+                  <div style={{ display: "flex", justifyContent: "center", color: "#cacaca" }}>
+                    <p style={{ marginRight: "50px" }}>Followers: {channelInfo.followers}</p>
+                    <p>Views: {channelInfo.views}</p>
+                  </div>
+                  <p id='updated'>
+                    Updated: {moment(channelInfo.updated_at).format("YYYY/MM/DD HH:MM")}
+                  </p>
+                </div>
+              </Name>
+            </BannerInfoOverlay>
+          </Banner>
+        ) : (
+          <LoadingPlaceholderBanner />
+        )}
+        {vods ? (
+          <SubFeed
+            feedName='Vods'
+            items={vods}
+            sortBy={sortVodsBy}
+            setSortBy={setSortVodsBy}
+            setSortData={setVods}
+            loadmoreRef={loadmoreVodsRef.current}
+            fetchItems={fetchChannelVods}
+            itemPagination={vodPagination}
+            itemsloadmoreLoaded={vodsloadmoreLoaded}
+          />
+        ) : (
+          <LoadingPlaceholderVods numberOfVideos={numberOfVideos} />
+        )}
+        {clips ? (
+          <SubFeed
+            feedName='Clips'
+            items={clips}
+            sortBy={sortClipsBy}
+            setSortBy={setSortClipsBy}
+            setSortData={setClips}
+            loadmoreRef={loadmoreClipsRef.current}
+            fetchItems={fetchClips}
+            itemPagination={clipPagination}
+            itemsloadmoreLoaded={clipsloadmoreLoaded}
+            channelInfo={channelInfo}
+          />
+        ) : (
+          <LoadingPlaceholderClips numberOfVideos={numberOfVideos} />
+        )}
+      </ChannelContainer>
+    );
+  }
 };

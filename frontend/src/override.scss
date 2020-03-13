@@ -50,6 +50,7 @@
   overflow: scroll;
   overflow-x: hidden;
   border: none !important;
+  z-index: 3 !important;
 
   ul {
     list-style: none;

@@ -371,9 +371,10 @@ const PlaybackStats = styled.div`
 const HideChatButton = styled(FaWindowClose).attrs({ size: 26, color: "red" })`
   position: absolute;
   right: 0;
-  top: 1vh;
-  opacity: 0.5;
+  bottom: 100px;
+  opacity: 0.5; 
   cursor: pointer;
+  right: 10px;
 `;
 
 const OpenChatButton = styled(MdChat).attrs({ size: 26, color: "white" })`
