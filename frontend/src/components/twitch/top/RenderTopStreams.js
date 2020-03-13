@@ -41,7 +41,7 @@ export default () => {
   const oldTopData = useRef();
   const loadmoreRef = useRef();
 
-  document.title = `Notifies | ${category || "All"} ${videoType}`;
+  document.title = `N | ${category || "All"} - Top ${videoType}`;
 
   const videoElementTypeComp = data => {
     switch (videoType) {
