@@ -201,7 +201,7 @@ export default ({ ...data }) => {
                   justifySelf: "right",
                 }}
                 fromNow>
-                {data.data.endDate || data.data.created_at}
+                {data.data.thumbnail_url === "" ? data.data.created_at : data.data.endDate}
               </Moment>
               <p
                 className={styles.viewers}
