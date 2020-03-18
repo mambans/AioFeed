@@ -64,7 +64,7 @@ export default ({
       </SubFeedHeader>
       <SubFeedContainer
         style={{
-          minHeight: feedName === "Vods" ? "345px" : "310px",
+          minHeight: feedName === "Vods" ? "unset" : "310px",
           paddingBottom: "0",
           width: `${numberOfVideos * 350}px`,
           margin: "auto",
@@ -74,7 +74,7 @@ export default ({
             return (
               <CSSTransition key={item.id} timeout={1000} classNames='fade-1s' unmountOnExit>
                 {feedName === "Vods" ? (
-                  <TwitchVodElement data={item} transition='fade-1s' />
+                  <TwitchVodElement data={item} transition='fade-1s' vodBtnDisabled={true} />
                 ) : (
                   <TwitchClipElement
                     data={item}

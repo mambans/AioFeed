@@ -15,6 +15,7 @@ import Navbar from "../navigation/Navbar";
 import NavigationProvider from "./../navigation/NavigationProvider";
 import NoMatch from "./NoMatch";
 import NotificationsProvider from "./../notifications/NotificationsProvider";
+import VodsProvider from "./../twitch/vods/VodsProvider";
 import Player from "./../twitch/player/Player";
 import RenderTopStreams from "../twitch/top/RenderTopStreams";
 import style from "./Routes.module.scss";
@@ -43,7 +44,17 @@ const Routes = () => {
                         <main id={style.contentContainer}>
                           <Switch location={location}>
                             <Route exact path={["/", "/index", "/home"]} component={Home} />
-                            <Route exact path='/feed' component={Feed} />
+                            <Route
+                              exact
+                              path='/feed'
+                              render={() => {
+                                return (
+                                  <VodsProvider>
+                                    <Feed />
+                                  </VodsProvider>
+                                );
+                              }}
+                            />
                             <Route
                               exact
                               path={["/live/:id", "/player/:id", "/video/:id", "/vod/:id"]}>

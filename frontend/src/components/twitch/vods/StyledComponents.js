@@ -26,4 +26,19 @@ const VodLiveIndicator = styled(Link)`
   }
 `;
 
-export { VodLiveIndicator };
+const VodType = styled.div`
+  position: relative;
+  bottom: 219px;
+  display: flex;
+  justify-content: right;
+
+  span {
+    border-radius: 0px 10px 0px 10px;
+    background: rgba(10, 10, 10, 0.8) none repeat scroll 0% 0%;
+    padding: 3px;
+    font-size: 0.95rem;
+    color: #dcdcdc;
+  }
+`;
+
+export { VodLiveIndicator, VodType };

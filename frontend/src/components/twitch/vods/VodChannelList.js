@@ -1,22 +1,22 @@
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
-import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
+import React, { useState, useContext } from "react";
 
 import AccountContext from "./../../account/AccountContext";
 import LoadingList from "./../LoadingList";
 import VodChannelListElement from "./VodChannelListElement";
 import useInput from "./../../useInput";
+import VodsContext from "./VodsContext";
 
-export default props => {
+export default () => {
   const { authKey, username } = useContext(AccountContext);
+  const { channels, setChannels } = useContext(VodsContext);
   const [validated, setValidated] = useState(false);
-  const reload = useRef(false);
-
-  const [channels, setChannels] = useState([]);
   const { value: channel, bind: bindchannel, reset: resetchannel } = useInput("");
 
   async function addChannel() {
     channels.unshift(channel);
+    setChannels([...channels]);
 
     await axios
       .put(
@@ -27,10 +27,7 @@ export default props => {
           channels: channels,
         }
       )
-      .then(res => {
-        setChannels(res.data);
-        reload.current = true;
-      })
+      .then(res => {})
       .catch(error => {
         console.error(error);
       });
@@ -40,6 +37,7 @@ export default props => {
     try {
       const index = channels.indexOf(channel);
       channels.splice(index, 1);
+      setChannels([...channels]);
 
       await axios
         .put(
@@ -50,10 +48,7 @@ export default props => {
             channels: channels,
           }
         )
-        .then(res => {
-          setChannels(res.data);
-          reload.current = true;
-        })
+        .then(res => {})
         .catch(err => {
           console.error(err);
         });
@@ -61,27 +56,6 @@ export default props => {
       console.error(e.message);
     }
   }
-
-  const getChannels = useCallback(async () => {
-    const monitoredChannels = await axios
-      .get(
-        `https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/fetch`,
-        {
-          params: {
-            username: username,
-            authkey: authKey,
-          },
-        }
-      )
-      .then(res => {
-        // reload.current = true;
-        return res.data;
-      })
-      .catch(err => {
-        console.error(err);
-      });
-    setChannels(monitoredChannels);
-  }, [authKey, username]);
 
   const handleSubmit = evt => {
     evt.preventDefault();
@@ -96,14 +70,6 @@ export default props => {
       resetchannel();
     }
   };
-
-  useEffect(() => {
-    getChannels();
-
-    return () => {
-      if (reload.current === true) props.refresh(true);
-    };
-  }, [getChannels, props]);
 
   return (
     <>

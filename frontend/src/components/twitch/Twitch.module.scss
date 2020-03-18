@@ -20,7 +20,13 @@
 
 .vodDates {
   // grid-area: info;
-  // color: var(--greyInfo);
+  color: var(--greyInfo);
+  font-size: 0.95rem;
+  grid-column: 3;
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: right;
 
   & > div:hover {
     #timeago {
@@ -54,7 +60,7 @@
 
   // top: 7px;
   grid-column: 3;
-  padding-right: 15px;
+  padding-right: 10px;
   margin-bottom: 0;
   align-items: center;
 }
@@ -116,7 +122,8 @@
   height: 26px;
   align-content: center;
   margin-bottom: 5px;
-  grid-template-columns: 10% auto;
+  grid-template-columns: min-content;
+  width: inherit;
 
   .profile_img {
     width: 26px;
@@ -124,16 +131,16 @@
   }
 
   .channel {
-    position: relative;
-    width: max-content;
-    background: none;
+    // position: relative;
+    // width: max-content;
+    // background: none;
     padding: 0 5px;
-    font-size: 0.9rem;
+    // font-size: 0.9rem;
     font-weight: bold;
     color: var(--infoColorGrey);
-    height: 100%;
+    // height: 100%;
     grid-row: 1;
-    margin-bottom: 0;
+    // margin-bottom: 0;
 
     &:hover {
       color: var(--channelHover);
@@ -147,6 +154,7 @@
   width: 336px;
   align-items: center;
   min-height: 34px;
+  transition: color 250ms;
 
   .game_img {
     width: 26px;

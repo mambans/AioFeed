@@ -6,14 +6,15 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";
+import { Spinner } from "react-bootstrap";
 
 import { VideoContainer, VideoTitle, ImageContainer } from "./../../sharedStyledComponents";
 import styles from "../Twitch.module.scss";
 import Util from "../../../util/Util";
-import { VodLiveIndicator } from "./StyledComponents";
-import { Spinner } from "react-bootstrap";
+import { VodLiveIndicator, VodType } from "./StyledComponents";
+import VodsFollowUnfollowBtn from "./VodsFollowUnfollowBtn";
 
-export default ({ ...data }) => {
+export default ({ data, vodBtnDisabled }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [previewAvailable, setPreviewAvailable] = useState();
   const imgRef = useRef();
@@ -31,7 +32,7 @@ export default ({ ...data }) => {
   const handleMouseOver = useCallback(async () => {
     if (!previewAvailable) {
       hoverTimeoutRef.current = setTimeout(async () => {
-        const res = await axios.get(`https://api.twitch.tv/kraken/videos/${data.data.id}`, {
+        const res = await axios.get(`https://api.twitch.tv/kraken/videos/${data.id}`, {
           headers: {
             Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
@@ -39,8 +40,8 @@ export default ({ ...data }) => {
           },
         });
         setIsHovered(true);
-        if (res.data.status === "recorded" && data.data.thumbnail_url === "") {
-          data.data.thumbnail_url = null;
+        if (res.data.status === "recorded" && data.thumbnail_url === "") {
+          data.thumbnail_url = null;
         }
         if (res.data.status === "recording") {
           setPreviewAvailable("null");
@@ -53,7 +54,7 @@ export default ({ ...data }) => {
         setIsHovered(true);
       }, 200);
     }
-  }, [previewAvailable, data.data.id, data.data.thumbnail_url]);
+  }, [previewAvailable, data.id, data.thumbnail_url]);
 
   const handleMouseOut = useCallback(event => {
     clearTimeout(hoverTimeoutRef.current);
@@ -74,10 +75,10 @@ export default ({ ...data }) => {
   return (
     <VideoContainer>
       <ImageContainer ref={imgRef}>
-        {data.data.thumbnail_url === "" ? (
-          <VodLiveIndicator to={`/live/${data.data.user_name}`}>Live</VodLiveIndicator>
+        {data.thumbnail_url === "" ? (
+          <VodLiveIndicator to={`/live/${data.user_name}`}>Live</VodLiveIndicator>
         ) : null}
-        <a className={styles.img} href={data.data.url}>
+        <a className={styles.img} href={data.url}>
           {!previewAvailable ? (
             <Spinner className='loadingSpinner' animation='border' role='status' variant='light' />
           ) : null}
@@ -94,8 +95,8 @@ export default ({ ...data }) => {
           ) : (
             <img
               src={
-                data.data.thumbnail_url
-                  ? data.data.thumbnail_url.replace("%{width}", 640).replace("%{height}", 360)
+                data.thumbnail_url
+                  ? data.thumbnail_url.replace("%{width}", 640).replace("%{height}", 360)
                   : "https://vod-secure.twitch.tv/_404/404_processing_320x180.png"
               }
               alt={styles.thumbnail}
@@ -105,10 +106,10 @@ export default ({ ...data }) => {
 
         <div className={styles.vodVideoInfo}>
           <p className={styles.vodDuration} title='duration'>
-            {Util.formatTwitchVodsDuration(data.data.duration)}
+            {Util.formatTwitchVodsDuration(data.duration)}
           </p>
           <p className={styles.view_count} title='views'>
-            {Util.formatViewerNumbers(data.data.view_count)}
+            {Util.formatViewerNumbers(data.view_count)}
             <FaRegEye
               size={10}
               style={{
@@ -121,8 +122,13 @@ export default ({ ...data }) => {
             />
           </p>
         </div>
+        {data.type !== "archive" ? (
+          <VodType>
+            <span>{data.type}</span>
+          </VodType>
+        ) : null}
       </ImageContainer>
-      {data.data.title.length > 50 ? (
+      {data.title.length > 50 ? (
         <OverlayTrigger
           key={"bottom"}
           placement={"bottom"}
@@ -133,91 +139,84 @@ export default ({ ...data }) => {
               style={{
                 width: "320px",
               }}>
-              {data.data.title}
+              {data.title}
             </Tooltip>
           }>
           <VideoTitle
             to={{
-              pathname: `/video/${data.data.id}#${data.data.user_name}`,
+              pathname: `/video/${data.id}#${data.user_name}`,
               state: {
-                p_title: data.data.title,
-                p_channel: data.data.user_name,
+                p_title: data.title,
+                p_channel: data.user_name,
               },
             }}>
-            {Util.truncate(data.data.title, 70)}
+            {Util.truncate(data.title, 70)}
             {/* {data.data.title} */}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
         <VideoTitle
           to={{
-            pathname: `/video/${data.data.id}#${data.data.user_name}`,
+            pathname: `/video/${data.id}#${data.user_name}`,
             state: {
-              p_title: data.data.title,
-              p_channel: data.data.user_name,
+              p_title: data.title,
+              p_channel: data.user_name,
             },
           }}>
-          {data.data.title}
+          {data.title}
         </VideoTitle>
       )}
 
-      <div>
-        <div className={styles.channelContainer}>
-          <Link
-            to={{
-              pathname: `/channel/${data.data.user_name.toLowerCase()}`,
-              state: {
-                p_id: data.data.user_id,
-              },
-            }}
-            style={{ gridRow: 1, paddingRight: "5px" }}>
-            <img src={data.data.profile_img_url} alt='' className={styles.profile_img} />
-          </Link>
-          <Link
-            to={{
-              pathname: `/channel/${data.data.user_name.toLowerCase()}`,
-              state: {
-                p_id: data.data.user_id,
-              },
-            }}
-            className={styles.channel}>
-            {data.data.user_name}
-          </Link>
-        </div>
-        <div
-          className={styles.gameContainer}
-          style={{ gridTemplateColumns: "40% 60%", color: "#979797" }}>
-          <p className={styles.game} style={{ gridColumn: 1, paddingLeft: "5px" }}>
-            {data.data.type}
-          </p>
-
-          <div className={styles.vodDates}>
-            <div>
-              <Moment
-                className={styles.viewers}
-                id={styles.timeago}
-                style={{
-                  gridColumn: 2,
-                  justifySelf: "right",
-                }}
-                fromNow>
-                {data.data.thumbnail_url === "" ? data.data.created_at : data.data.endDate}
-              </Moment>
-              <p
-                className={styles.viewers}
-                id={styles.time}
-                style={{
-                  gridColumn: 2,
-                  justifySelf: "right",
-                }}>
-                {moment(
-                  new Date(new Date(data.data.endDate).getTime() - durationToMs(data.data.duration))
-                ).format("dd HH:MM") +
-                  "→" +
-                  moment(data.data.endDate).format("dd HH:MM")}
-              </p>
-            </div>
+      <div className={styles.channelContainer}>
+        <Link
+          to={{
+            pathname: `/channel/${data.user_name.toLowerCase()}`,
+            state: {
+              p_id: data.user_id,
+            },
+          }}
+          style={{ gridRow: 1, paddingRight: "5px" }}>
+          <img src={data.profile_img_url} alt='' className={styles.profile_img} />
+        </Link>
+        <Link
+          to={{
+            pathname: `/channel/${data.user_name.toLowerCase()}`,
+            state: {
+              p_id: data.user_id,
+            },
+          }}
+          className={styles.channel}>
+          {data.user_name}
+        </Link>
+        <div className={styles.vodDates}>
+          <div>
+            <Moment
+              className={styles.viewers}
+              id={styles.timeago}
+              style={{
+                gridColumn: 2,
+                justifySelf: "right",
+              }}
+              fromNow>
+              {data.thumbnail_url === "" ? data.created_at : data.endDate}
+            </Moment>
+            <p
+              className={styles.viewers}
+              id={styles.time}
+              style={{
+                gridColumn: 2,
+                justifySelf: "right",
+              }}>
+              {moment(
+                new Date(new Date(data.endDate).getTime() - durationToMs(data.duration))
+              ).format("dd HH:MM") +
+                "→" +
+                moment(data.endDate).format("dd HH:MM")}
+            </p>
           </div>
+          {vodBtnDisabled ? null : (
+            <VodsFollowUnfollowBtn channel={data.user_name} lowerOpacity='0.5' />
+          )}
         </div>
       </div>
     </VideoContainer>

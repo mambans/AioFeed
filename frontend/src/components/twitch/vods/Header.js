@@ -95,7 +95,7 @@ export default React.forwardRef((props, ref) => {
         }
         position='left top'
         className='settingsPopup'>
-        <VodChannelList refresh={refresh} />
+        <VodChannelList />
       </Popup>
     </HeaderContainer>
   );

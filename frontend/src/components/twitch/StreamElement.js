@@ -1,26 +1,26 @@
-import { CSSTransition } from "react-transition-group";
 import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { FiAlertCircle } from "react-icons/fi";
 import { FaTwitch } from "react-icons/fa";
 
-import Alert from "react-bootstrap/Alert";
 import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useRef, useState, useEffect, useContext } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 
 import { VideoTitle, ImageContainer, VideoContainer } from "./../sharedStyledComponents";
+import { ChannelNameDiv } from "./styledComponents";
 import FeedsContext from "./../feed/FeedsContext";
 import StreamHoverIframe from "./StreamHoverIframe.js";
 import styles from "./Twitch.module.scss";
 import Util from "../../util/Util";
 import FollowUnfollowBtn from "./FollowUnfollowBtn";
+import VodsFollowUnfollowBtn from "./vods/VodsFollowUnfollowBtn";
 
 const HOVER_DELAY = 500; // 1000
 
 function NewHighlightNoti({ data }) {
-  if (data.newlyAddedStreams.includes(data.data.user_name)) {
+  if (data.newlyAddedStreams.includes(data.data.user_name.toLowerCase())) {
     return (
       <FiAlertCircle
         size={22}
@@ -41,67 +41,11 @@ function NewHighlightNoti({ data }) {
 function StreamEle(data) {
   const [isHovered, setIsHovered] = useState(false);
   const [channelIsHovered, setChannelIsHovered] = useState(false);
-  const [unfollowError, setUnfollowError] = useState(null);
   const { twitchVideoHoverEnable } = useContext(FeedsContext);
 
   const streamHoverTimer = useRef();
   const ref = useRef();
   const refChannel = useRef();
-  // const refUnfollowAlert = useRef();
-
-  function UnfollowAlert() {
-    if (unfollowError) {
-      let alertType = "warning";
-      if (unfollowError.includes("Failed")) {
-        alertType = "warning";
-      } else if (unfollowError.includes("Successfully")) {
-        alertType = "success";
-      }
-      let resetError;
-
-      clearTimeout(resetError);
-      resetError = setTimeout(() => {
-        setUnfollowError(null);
-      }, 5000);
-      // clearTimeout(refUnfollowAlert.current);
-      // refUnfollowAlert.current = setTimeout(() => {
-      //   setUnfollowError(null);
-      // }, 6000);
-      return (
-        <CSSTransition
-          in={unfollowError ? true : false}
-          // key={stream.id}
-          timeout={2500}
-          classNames='fadeout-2500ms'
-          unmountOnExit>
-          <Alert
-            variant={alertType}
-            style={{
-              width: "inherit",
-              position: "absolute",
-              margin: "0",
-              padding: "5px",
-              borderRadius: "10px 10px 0 0",
-            }}
-            className='unfollowErrorAlert'>
-            <Alert.Heading
-              style={{
-                fontSize: "16px",
-                textAlign: "center",
-                marginBottom: "0",
-              }}>
-              {unfollowError}
-              <Alert.Link href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}>
-                {data.data.user_name}
-              </Alert.Link>
-            </Alert.Heading>
-          </Alert>
-        </CSSTransition>
-      );
-    } else {
-      return "";
-    }
-  }
 
   const handleMouseOver = () => {
     streamHoverTimer.current = setTimeout(function() {
@@ -150,8 +94,6 @@ function StreamEle(data) {
 
   return (
     <VideoContainer key={data.data.id}>
-      <UnfollowAlert></UnfollowAlert>
-
       <ImageContainer id={data.data.id} ref={ref} style={{ marginTop: "5px" }}>
         <NewHighlightNoti data={data}></NewHighlightNoti>
         {isHovered ? (
@@ -248,25 +190,30 @@ function StreamEle(data) {
             style={{ gridRow: 1, paddingRight: "5px" }}>
             <img src={data.data.profile_img_url} alt='' className={styles.profile_img} />
           </Link>
-          <Link
-            to={{
-              pathname: `/channel/${data.data.user_name.toLowerCase()}`,
-              state: {
-                p_id: data.data.user_id,
-              },
-            }}
-            className={styles.channel}>
-            {data.data.user_name}
-          </Link>
-
-          {channelIsHovered ? (
-            <>
+          <ChannelNameDiv>
+            <Link
+              to={{
+                pathname: `/channel/${data.data.user_name.toLowerCase()}`,
+                state: {
+                  p_id: data.data.user_id,
+                },
+              }}
+              className='name'>
+              {data.data.user_name}
+            </Link>
+            {channelIsHovered ? (
               <a
                 alt=''
                 href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
-                style={{ gridRow: "1" }}>
+                className='twitchIcon'>
                 <FaTwitch size={20} style={{ color: "purple" }} />
               </a>
+            ) : null}
+          </ChannelNameDiv>
+
+          {channelIsHovered ? (
+            <div style={{ display: "flex", gridRow: "1", justifyContent: "right" }}>
+              <VodsFollowUnfollowBtn channel={data.data.user_name} marginRight='7px;' />
               <FollowUnfollowBtn
                 style={{
                   gridRow: "1",
@@ -281,7 +228,7 @@ function StreamEle(data) {
                 alreadyFollowedStatus={true}
                 refreshStreams={data.refresh}
               />
-            </>
+            </div>
           ) : null}
         </div>
         <div className={styles.gameContainer}>

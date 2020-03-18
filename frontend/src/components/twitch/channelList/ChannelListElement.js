@@ -1,137 +1,12 @@
-import { MdVideoCall } from "react-icons/md";
-import { MdVideocamOff } from "react-icons/md";
-import { MdVideocam } from "react-icons/md";
 import { Link } from "react-router-dom";
-import Alert from "react-bootstrap/Alert";
-import axios from "axios";
-import React, { useState, useRef, useContext, useEffect } from "react";
+import React from "react";
 
-import { VodRemoveButton, VodAddButton } from "./../../sharedStyledComponents";
-import AccountContext from "./../../account/AccountContext";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
+import VodsFollowUnfollowBtn from "../vods/VodsFollowUnfollowBtn";
 
-const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
-  const [unfollowResponse, setUnfollowResponse] = useState(null);
-  const [isHovered, setIsHovered] = useState();
-  const refUnfollowAlert = useRef();
-  const vodButton = useRef();
-  const { authKey, username } = useContext(AccountContext);
-
-  async function addChannel(channel) {
-    try {
-      vodChannels.unshift(channel.toLowerCase());
-      setVodChannels([...vodChannels]);
-
-      await axios
-        .put(
-          `https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/update`,
-          {
-            username: username,
-            authkey: authKey,
-            channels: vodChannels,
-          }
-        )
-        .catch(error => {
-          console.error(error);
-        });
-    } catch (e) {
-      console.log(e.message);
-    }
-  }
-
-  async function removeChannel(channel) {
-    try {
-      const index = vodChannels.indexOf(channel.toLowerCase());
-      vodChannels.splice(index, 1);
-      setVodChannels([...vodChannels]);
-
-      await axios
-        .put(
-          `https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/update`,
-          {
-            username: username,
-            authkey: authKey,
-            channels: vodChannels,
-          }
-        )
-        .catch(err => {
-          console.error(err);
-        });
-    } catch (e) {
-      console.log(e.message);
-    }
-  }
-
-  const ChannelVodEnabled = () => {
-    return vodChannels.includes(data.user_name.toLowerCase());
-  };
-
-  function UnfollowAlert() {
-    let alertText;
-    if (unfollowResponse) {
-      let alertType = "warning";
-      if (unfollowResponse.includes("Failed")) {
-        alertType = "warning";
-        alertText = "Failed to Unfollow.";
-      } else if (unfollowResponse.includes("Success")) {
-        alertType = "success";
-        alertText = "Successfully Unfollowed";
-      }
-      clearTimeout(refUnfollowAlert.current);
-      refUnfollowAlert.current = setTimeout(() => {
-        setUnfollowResponse(null);
-      }, 6000);
-      return (
-        <Alert
-          variant={alertType}
-          style={{
-            width: "200px",
-            position: "absolute",
-            // zIndex: "2",
-            margin: "0",
-            padding: "5px",
-            borderRadius: "3px",
-          }}
-          className='unfollowResponseAlert'>
-          <Alert.Heading
-            style={{
-              fontSize: "16px",
-              textAlign: "center",
-              marginBottom: "0",
-            }}>
-            {alertText}
-          </Alert.Heading>
-        </Alert>
-      );
-    } else {
-      return "";
-    }
-  }
-
-  const handleMouseOver = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseOut = () => {
-    setIsHovered(false);
-  };
-
-  useEffect(() => {
-    if (vodButton.current) {
-      const refEle = vodButton.current;
-      refEle.addEventListener("mouseenter", handleMouseOver);
-      refEle.addEventListener("mouseleave", handleMouseOut);
-
-      return () => {
-        refEle.removeEventListener("mouseenter", handleMouseOver);
-        refEle.removeEventListener("mouseleave", handleMouseOut);
-      };
-    }
-  }, []);
-
+const ChannelListElement = ({ data }) => {
   return (
     <li key={data.user_id}>
-      <UnfollowAlert />
       <Link
         to={{
           pathname: "/channel/" + data.user_name.toLowerCase(),
@@ -165,37 +40,12 @@ const ChannelListElement = ({ data, vodChannels, setVodChannels }) => {
         {data.user_name}
       </Link>
       <div>
-        {ChannelVodEnabled() ? (
-          <VodRemoveButton
-            ref={vodButton}
-            data-tip={"Remove " + data.user_name + " vods."}
-            title={"Remove " + data.user_name + " vods."}
-            variant='link'
-            onClick={() => {
-              removeChannel(data.user_name);
-            }}>
-            {isHovered ? (
-              <MdVideocamOff size={24} color='red' />
-            ) : (
-              <MdVideocam size={24} color='green' />
-            )}
-          </VodRemoveButton>
-        ) : (
-          <VodAddButton
-            ref={vodButton}
-            data-tip={"Add " + data.user_name + " vods."}
-            title={"Add " + data.user_name + " vods."}
-            variant='link'
-            onClick={() => {
-              addChannel(data.user_name);
-            }}>
-            <MdVideoCall size={24} />
-          </VodAddButton>
-        )}
+        <VodsFollowUnfollowBtn channel={data.user_name} />
+
         <FollowUnfollowBtn
           style={{ marginLeft: "5px", padding: "0" }}
           size={22}
-          channelName={data.to_name}
+          channelName={data.user_name}
           id={data.user_id}
           alreadyFollowedStatus={true}
         />

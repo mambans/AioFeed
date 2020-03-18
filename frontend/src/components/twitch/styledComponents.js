@@ -211,6 +211,43 @@ const UnfollowBtn = styled(MdFavorite)`
   }
 `;
 
+const ChannelNameDiv = styled.div`
+  padding: 0 5px;
+  font-weight: 700;
+  height: 100%;
+  grid-row: 1;
+  display: flex;
+  transition: color 250ms;
+  /* position: relative;
+  width: max-content;
+  background: none; */
+  /* font-size: 0.9rem; */
+  /* color: var(--infoColorGrey); */
+  /* margin-bottom: 0; */
+
+  .name {
+    padding: 0 5px;
+    color: var(--infoColorGrey);
+    font-size: 1rem !important;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      color: var(--channelHover);
+    }
+  }
+
+  .twitchIcon {
+    grid-row: 1;
+    color: #710271;
+    margin-left: 5px;
+
+    &:hover {
+      color: #af2caf;
+    }
+  }
+`;
+
 export {
   HeaderContainerTwitchLive,
   StyledLoadmore,
@@ -220,4 +257,5 @@ export {
   StyledLoadingList,
   FollowBtn,
   UnfollowBtn,
+  ChannelNameDiv,
 };

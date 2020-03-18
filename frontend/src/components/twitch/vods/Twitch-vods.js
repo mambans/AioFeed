@@ -9,10 +9,11 @@ import { SubFeedContainer } from "./../../sharedStyledComponents";
 import Header from "./Header";
 import { StyledLoadmore } from "./../styledComponents";
 import AccountContext from "./../../account/AccountContext";
+import VodsContext from "./VodsContext";
 import LoadingBoxs from "./../LoadingBoxs";
 
 function TwitchVods() {
-  const [vods, setVods] = useState();
+  const { vods, setVods } = useContext(VodsContext);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -136,7 +137,7 @@ function TwitchVods() {
           setVods(data.data);
         });
     },
-    [authKey, username, twitchUserId, setTwitchToken, setRefreshToken]
+    [authKey, username, twitchUserId, setTwitchToken, setRefreshToken, setVods]
   );
 
   const windowFocusHandler = useCallback(async () => {
@@ -211,6 +212,7 @@ function TwitchVods() {
     twitchUserId,
     setTwitchToken,
     setRefreshToken,
+    setVods,
   ]);
 
   if (!twitchToken) {

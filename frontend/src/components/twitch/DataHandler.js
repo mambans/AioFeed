@@ -9,12 +9,17 @@ import Util from "../../util/Util";
 import Header from "./Header";
 import LoadingBoxs from "./LoadingBoxs";
 import AccountContext from "./../account/AccountContext";
+import FeedsContext from "./../feed/FeedsContext";
+import VodsContext from "./vods/VodsContext";
+import FetchSingelChannelVods from "./FetchSingelChannelVods";
 
 const REFRESH_RATE = 25; // seconds
 
 export default ({ children }) => {
   const addNotification = useContext(NotificationsContext).addNotification;
   const { twitchUserId, autoRefreshEnabled, twitchToken } = useContext(AccountContext);
+  const { setVods, channels } = useContext(VodsContext);
+  const { enableTwitchVods } = useContext(FeedsContext);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [refreshTimer, setRefreshTimer] = useState(20);
@@ -75,7 +80,7 @@ export default ({ children }) => {
           setRefreshing(false);
 
           if (!disableNotifications) {
-            liveStreams.current.forEach(async stream => {
+            liveStreams.current.forEach(stream => {
               let isStreamLive = oldLiveStreams.current.find(
                 ({ user_name }) => user_name === stream.user_name
               );
@@ -83,7 +88,13 @@ export default ({ children }) => {
               if (!isStreamLive) {
                 addSystemNotification("online", stream);
 
-                await addNotification(stream, "Live");
+                addNotification(stream, "Live");
+
+                if (enableTwitchVods && channels.includes(stream.user_name.toLowerCase())) {
+                  setTimeout(async () => {
+                    await FetchSingelChannelVods(stream.user_id, setVods);
+                  }, 30000);
+                }
 
                 newlyAddedStreams.current.push(stream.user_name);
                 stream.newlyAdded = true;
@@ -106,6 +117,12 @@ export default ({ children }) => {
               if (!isStreamLive) {
                 // console.log(stream.user_name, "went Offline.");
                 addNotification(stream, "Offline");
+
+                if (enableTwitchVods && channels.includes(stream.user_name.toLowerCase())) {
+                  setTimeout(async () => {
+                    await FetchSingelChannelVods(stream.user_id, setVods);
+                  }, 0);
+                }
               }
             });
           }
@@ -120,13 +137,12 @@ export default ({ children }) => {
         setError(error);
       }
     },
-    [addNotification, addSystemNotification, twitchUserId]
+    [addNotification, addSystemNotification, twitchUserId, channels, enableTwitchVods, setVods]
   );
 
   useEffect(() => {
-    (async function fetchData() {
+    (async () => {
       try {
-        console.log("Mounting Twitch DataHandler.");
         const timeNow = new Date();
         if (!timer.current) {
           if (autoRefreshEnabled) {
@@ -153,11 +169,14 @@ export default ({ children }) => {
         setError(error);
       }
     })();
+  }, [refresh, autoRefreshEnabled]);
 
+  useEffect(() => {
     return () => {
+      console.log("Unmounting");
       clearInterval(timer.current);
     };
-  }, [refresh, autoRefreshEnabled]);
+  }, []);
 
   if (!isLoaded) {
     return (
