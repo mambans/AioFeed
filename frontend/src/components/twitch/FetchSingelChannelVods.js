@@ -10,7 +10,7 @@ export default async (channelId, setVods) => {
   const addVodEndTime = async followedStreamVods => {
     return followedStreamVods.map(stream => {
       if (stream.type === "archive") {
-        stream.endDate = Util.durationToMs(stream.duration, stream.published_at);
+        stream.endDate = Util.durationToDate(stream.duration, stream.published_at);
       } else {
         stream.endDate = new Date(stream.published_at);
       }
