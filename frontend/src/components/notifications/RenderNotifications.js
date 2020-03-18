@@ -112,7 +112,7 @@ export default () => {
                           <Moment fromNow id='timeago'>
                             {item.date}
                           </Moment>
-                          <p id='time'>{moment(item.date).format("MM-DD HH:MM")}</p>
+                          <p id='time'>{moment(item.date).format("MM-DD HH:mm")}</p>
                         </div>
                       </div>
                     </Notification>

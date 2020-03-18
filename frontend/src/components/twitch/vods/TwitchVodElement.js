@@ -20,15 +20,6 @@ export default ({ data, vodBtnDisabled }) => {
   const imgRef = useRef();
   const hoverTimeoutRef = useRef();
 
-  const durationToMs = duration => {
-    const hms = Util.formatTwitchVodsDuration(duration);
-    const parts = hms.split(":");
-    const seconds = +parts[0] * 60 * 60 + +parts[1] * 60 + +parts[2];
-    const ms = seconds * 1000;
-
-    return ms;
-  };
-
   const handleMouseOver = useCallback(async () => {
     if (!previewAvailable) {
       hoverTimeoutRef.current = setTimeout(async () => {
@@ -191,13 +182,14 @@ export default ({ data, vodBtnDisabled }) => {
         <div className={styles.vodDates}>
           <div>
             <Moment
-              className={styles.viewers}
+              interval={60000}
+              durationFromNow
+              className={styles.date}
               id={styles.timeago}
               style={{
                 gridColumn: 2,
                 justifySelf: "right",
-              }}
-              fromNow>
+              }}>
               {data.thumbnail_url === "" ? data.created_at : data.endDate}
             </Moment>
             <p
@@ -207,11 +199,9 @@ export default ({ data, vodBtnDisabled }) => {
                 gridColumn: 2,
                 justifySelf: "right",
               }}>
-              {moment(
-                new Date(new Date(data.endDate).getTime() - durationToMs(data.duration))
-              ).format("dd HH:MM") +
+              {moment(data.created_at).format("dd HH:mm") +
                 "→" +
-                moment(data.endDate).format("dd HH:MM")}
+                moment(data.endDate).format("dd HH:mm")}
             </p>
           </div>
           {vodBtnDisabled ? null : (
