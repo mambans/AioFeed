@@ -190,36 +190,66 @@ export default {
     }
   },
 
-  durationToMs(duration, vodCreateDate) {
-    let hour = "0";
-
-    const duration1 = duration
+  durationToDate(duration, vodCreateDate) {
+    const durationParts = duration
       .replace("h", ":")
       .replace("m", ":")
-      .replace("s", "");
+      .replace("s", "")
+      .split(":");
 
-    const durationParts = duration1.split(":");
-    if (duration.includes("h")) hour = durationParts.shift();
-
-    let i = 0;
-    durationParts.map(number => {
-      if (number.length < 2) durationParts[i] = 0 + number;
-
-      i++;
-
-      return "";
+    const asd = ["h", "m", "s"].map(char => {
+      if (char === "h" && duration.includes("h")) {
+        return durationParts[durationParts.length - 3] * 3600000;
+      } else if (char === "m" && duration.includes("m")) {
+        return durationParts[durationParts.length - 2] * 60000;
+      } else if (char === "s" && duration.includes("s")) {
+        return durationParts[durationParts.length - 1] * 1000;
+      }
+      return null;
     });
 
-    const durationMs = hour * 3600000 + durationParts[0] * 60000 + durationParts[1] * 1000;
-    let streamEndedDate = new Date(vodCreateDate);
+    const durationMs = asd.reduce(function(s, v) {
+      return s + (v || 0);
+    }, 0);
 
-    if (durationMs) {
-      const time = new Date(vodCreateDate);
-      streamEndedDate = new Date(time.setTime(time.getTime() + durationMs));
-    }
+    const time = new Date(vodCreateDate);
 
-    return streamEndedDate;
+    return new Date(time.setTime(time.getTime() + durationMs));
   },
+
+  // durationToMs_old(duration, vodCreateDate) {
+  //   try {
+  //     let hour = "0";
+
+  //     const duration1 = duration
+  //       .replace("h", ":")
+  //       .replace("m", ":")
+  //       .replace("s", "");
+
+  //     const durationParts = duration1.split(":");
+  //     if (duration.includes("h")) hour = durationParts.shift();
+
+  //     let i = 0;
+  //     durationParts.map(number => {
+  //       if (number.length < 2) durationParts[i] = 0 + number;
+
+  //       i++;
+
+  //       return "";
+  //     });
+
+  //     const durationMs = hour * 3600000 + durationParts[0] * 60000 + durationParts[1] * 1000;
+  //     // let streamEndedDate = new Date(vodCreateDate);
+
+  //     const time = new Date(vodCreateDate);
+  //     const streamEndedDate = new Date(time.setTime(time.getTime() + durationMs));
+  //     return streamEndedDate;
+  //   } catch (e) {
+  //     console.log("Error", e);
+
+  //     return new Date(vodCreateDate);
+  //   }
+  // },
 
   formatViewerNumbers(viewers) {
     if (!viewers) {
