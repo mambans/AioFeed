@@ -438,7 +438,7 @@ export default () => {
                     <p>Views: {channelInfo.views}</p>
                   </div>
                   <p id='updated'>
-                    Updated: {moment(channelInfo.updated_at).format("YYYY/MM/DD HH:MM")}
+                    Updated: {moment(channelInfo.updated_at).format("YYYY/MM/DD HH:mm")}
                   </p>
                 </div>
               </Name>
