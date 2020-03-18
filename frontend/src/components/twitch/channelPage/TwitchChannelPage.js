@@ -46,7 +46,7 @@ export default () => {
   const [viewers, setViewers] = useState(p_viewers);
   const [uptime, setUptime] = useState(p_uptime);
   const [videoOpen, setVideoOpen] = useState(true);
-  const [chatOpen, setChatOpen] = useState(true);
+  const [chatOpen, setChatOpen] = useState(false);
 
   const vodPagination = useRef();
   const previosVodPage = useRef();
@@ -323,14 +323,16 @@ export default () => {
     return (
       <ChannelContainer>
         <VideoPlayer id='twitch-embed' style={{ display: videoOpen ? "block" : "none" }} />
-        <Chat
-          frameborder='0'
-          scrolling='yes'
-          theme='dark'
-          // id={id + "-chat"}
-          src={`https://www.twitch.tv/embed/${id}/chat?darkpopout`}
-          style={{ display: chatOpen ? "block" : "none" }}
-        />
+        {chatOpen ? (
+          <Chat
+            frameborder='0'
+            scrolling='yes'
+            theme='dark'
+            // id={id + "-chat"}
+            src={`https://www.twitch.tv/embed/${id}/chat?darkpopout`}
+            // style={{ display: chatOpen ? "block" : "none" }}
+          />
+        ) : null}
         {videoOpen ? (
           <FaWindowClose
             title='Close video'
@@ -346,7 +348,7 @@ export default () => {
             title='Open video'
             className='svgButton'
             id='openVideo'
-            size={20}
+            size={30}
             onClick={() => {
               setVideoOpen(!videoOpen);
             }}

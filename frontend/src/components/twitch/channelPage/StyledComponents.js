@@ -12,6 +12,8 @@ const ChannelContainer = styled.div`
     cursor: pointer;
     opacity: 0.5;
     transition: color 250ms, opacity 250ms;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 5px;
 
     &:hover {
       opacity: 1;
@@ -20,37 +22,21 @@ const ChannelContainer = styled.div`
     &#closeChat {
       right: 534px;
       color: #b50000;
-
-      &:hover {
-        color: red;
-      }
     }
 
     &#openChat {
       right: 5px;
-      color: black;
-
-      &:hover {
-        color: #3e3e3e;
-      }
+      color: #ffffff;
     }
 
     &#closeVideo {
       left: 534px;
       color: #b50000;
-
-      &:hover {
-        color: red;
-      }
     }
 
     &#openVideo {
       left: 5px;
-      color: black;
-
-      &:hover {
-        color: #3e3e3e;
-      }
+      color: #ffffff;
     }
   }
 `;
