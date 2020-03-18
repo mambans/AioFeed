@@ -169,16 +169,21 @@ export default ({ data, vodBtnDisabled }) => {
           style={{ gridRow: 1, paddingRight: "5px" }}>
           <img src={data.profile_img_url} alt='' className={styles.profile_img} />
         </Link>
-        <Link
-          to={{
-            pathname: `/channel/${data.user_name.toLowerCase()}`,
-            state: {
-              p_id: data.user_id,
-            },
-          }}
-          className={styles.channel}>
-          {data.user_name}
-        </Link>
+        <div style={{ display: "flex" }}>
+          <Link
+            to={{
+              pathname: `/channel/${data.user_name.toLowerCase()}`,
+              state: {
+                p_id: data.user_id,
+              },
+            }}
+            className={styles.channel}>
+            {data.user_name}
+          </Link>
+          {vodBtnDisabled ? null : (
+            <VodsFollowUnfollowBtn channel={data.user_name} lowerOpacity='0.5' />
+          )}
+        </div>
         <div className={styles.vodDates}>
           <div>
             <Moment
@@ -204,9 +209,6 @@ export default ({ data, vodBtnDisabled }) => {
                 moment(data.endDate).format("dd HH:mm")}
             </p>
           </div>
-          {vodBtnDisabled ? null : (
-            <VodsFollowUnfollowBtn channel={data.user_name} lowerOpacity='0.5' />
-          )}
         </div>
       </div>
     </VideoContainer>

@@ -4,6 +4,7 @@ import ChannelListElement from "./ChannelListElement";
 import AccountContext from "./../../account/AccountContext";
 import StyledLoadingList from "./../LoadingList";
 import AddVideoExtraData from "./../AddVideoExtraData";
+import { ChannelListUl } from "./StyledComponents";
 
 const RenderFollowedChannelList = data => {
   const [followedChannels, setFollowedChannels] = useState();
@@ -39,7 +40,7 @@ const RenderFollowedChannelList = data => {
     return <StyledLoadingList amount={12} />;
   } else {
     return (
-      <ul>
+      <ChannelListUl>
         <p
           style={{
             textAlign: "center",
@@ -49,7 +50,7 @@ const RenderFollowedChannelList = data => {
         {followedChannels.map(channel => {
           return <ChannelListElement key={channel.user_id} data={channel} />;
         })}
-      </ul>
+      </ChannelListUl>
     );
   }
 };

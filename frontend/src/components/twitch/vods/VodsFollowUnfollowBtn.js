@@ -98,6 +98,7 @@ export default ({ channel, lowerOpacity, marginRight }) => {
           </Tooltip>
         }>
         <VodRemoveButton
+          className='VodButton'
           marginRight={marginRight}
           ref={vodButton}
           lowerOpacity={lowerOpacity}
@@ -126,6 +127,7 @@ export default ({ channel, lowerOpacity, marginRight }) => {
           </Tooltip>
         }>
         <VodAddButton
+          className='VodButton'
           marginRight={marginRight}
           ref={vodButton}
           title={"Add " + channel + " vods."}

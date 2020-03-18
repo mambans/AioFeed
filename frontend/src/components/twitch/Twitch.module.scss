@@ -148,20 +148,31 @@
   }
 
   .channel {
-    // position: relative;
-    // width: max-content;
-    // background: none;
     padding: 0 5px;
-    // font-size: 0.9rem;
     font-weight: bold;
     color: var(--infoColorGrey);
-    // height: 100%;
     grid-row: 1;
-    // margin-bottom: 0;
+    width: max-content;
 
     &:hover {
       color: var(--channelHover);
     }
+  }
+
+  &:hover button {
+    opacity: 0.75;
+  }
+}
+
+@keyframes delay-pointer-events {
+  0% {
+    pointer-events: none;
+  }
+  50% {
+    pointer-events: none;
+  }
+  100% {
+    pointer-events: all;
   }
 }
 
