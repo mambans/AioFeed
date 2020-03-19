@@ -1,8 +1,8 @@
 import axios from "axios";
 import _ from "lodash";
 
-import Util from "./../../util/Util";
-import AddVideoExtraData from "./AddVideoExtraData";
+import Util from "./../../../util/Util";
+import AddVideoExtraData from "./../AddVideoExtraData";
 
 export default async (channelId, setVods) => {
   const vodExpire = 3; // Number of days
@@ -18,13 +18,14 @@ export default async (channelId, setVods) => {
     });
   };
 
-  const SortAndAddExpire = (followedStreamVods, vodExpire) => {
+  const SortAndAddExpire = (followedStreamVods, vodExpire, loaded) => {
     let followedOrderedStreamVods = {};
     followedOrderedStreamVods.data = _.reverse(
       _.sortBy(followedStreamVods, stream => new Date(stream.endDate).getTime())
     );
     followedOrderedStreamVods.expire = new Date().setHours(new Date().getHours() + vodExpire);
-    followedOrderedStreamVods.loaded = new Date();
+    // followedOrderedStreamVods.loaded = new Date();
+    followedOrderedStreamVods.loaded = loaded;
 
     return followedOrderedStreamVods;
   };
@@ -54,7 +55,7 @@ export default async (channelId, setVods) => {
 
       existingVods.push(newVodWithEndtime[0]);
 
-      const FinallVods = SortAndAddExpire(existingVods, vodExpire);
+      const FinallVods = SortAndAddExpire(existingVods, vodExpire, vods.loaded);
 
       localStorage.setItem(`Twitch-vods`, JSON.stringify(FinallVods));
 

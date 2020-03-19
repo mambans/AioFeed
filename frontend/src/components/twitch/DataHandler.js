@@ -11,7 +11,7 @@ import LoadingBoxs from "./LoadingBoxs";
 import AccountContext from "./../account/AccountContext";
 import FeedsContext from "./../feed/FeedsContext";
 import VodsContext from "./vods/VodsContext";
-import FetchSingelChannelVods from "./FetchSingelChannelVods";
+import FetchSingelChannelVods from "./vods/FetchSingelChannelVods";
 
 const REFRESH_RATE = 25; // seconds
 
