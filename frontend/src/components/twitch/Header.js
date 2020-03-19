@@ -6,7 +6,7 @@ import Popup from "reactjs-popup";
 import React from "react";
 import { FaTwitch } from "react-icons/fa";
 
-import { HeaderContainerTwitchLive, HeaderLeftSubcontainer } from "./styledComponents";
+import { HeaderContainerTwitchLive, HeaderLeftSubcontainer } from "./StyledComponents";
 import { RefreshButton, HeaderTitle, ButtonList } from "./../sharedStyledComponents";
 import RenderFollowedChannelList from "./channelList/RenderFollowedChannelList";
 import Util from "../../util/Util";

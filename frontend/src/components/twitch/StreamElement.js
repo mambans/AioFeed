@@ -9,7 +9,7 @@ import React, { useRef, useState, useEffect, useContext } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 
 import { VideoTitle, ImageContainer, VideoContainer } from "./../sharedStyledComponents";
-import { ChannelNameDiv } from "./styledComponents";
+import { ChannelNameDiv } from "./StyledComponents";
 import FeedsContext from "./../feed/FeedsContext";
 import StreamHoverIframe from "./StreamHoverIframe.js";
 import styles from "./Twitch.module.scss";

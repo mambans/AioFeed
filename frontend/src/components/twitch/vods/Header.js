@@ -7,7 +7,7 @@ import Moment from "react-moment";
 import Popup from "reactjs-popup";
 import React from "react";
 
-import { HeaderLeftSubcontainer } from "./../styledComponents";
+import { HeaderLeftSubcontainer } from "./../StyledComponents";
 import {
   RefreshButton,
   HeaderTitle,

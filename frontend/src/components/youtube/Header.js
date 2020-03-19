@@ -17,7 +17,7 @@ import {
   ButtonList,
 } from "./../sharedStyledComponents";
 import RenderFollowedChannelList from "./channelList/RenderFollowedChannelList";
-import { HeaderLeftSubcontainer } from "./../twitch/styledComponents";
+import { HeaderLeftSubcontainer } from "./../twitch/StyledComponents";
 
 const SubFeedError = props => {
   const { error } = props;

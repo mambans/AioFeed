@@ -7,7 +7,7 @@ import getFollowedVods from "./GetFollowedVods";
 import TwitchVodElement from "./TwitchVodElement";
 import { SubFeedContainer } from "./../../sharedStyledComponents";
 import Header from "./Header";
-import { StyledLoadmore } from "./../styledComponents";
+import { StyledLoadmore } from "./../StyledComponents";
 import AccountContext from "./../../account/AccountContext";
 import VodsContext from "./VodsContext";
 import LoadingBoxs from "./../LoadingBoxs";

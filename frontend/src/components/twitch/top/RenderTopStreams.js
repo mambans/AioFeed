@@ -11,7 +11,7 @@ import Alert from "react-bootstrap/Alert";
 import React, { useEffect, useState, useCallback, useRef } from "react";
 
 import { RefreshButton, HeaderTitle } from "./../../sharedStyledComponents";
-import { StyledLoadmore } from "./../styledComponents";
+import { StyledLoadmore } from "./../StyledComponents";
 import { TypeListUlContainer, TypeButton, TopDataSortButtonsContainer } from "./styledComponents";
 import ClipsSortButton from "./../channelPage/ClipsSortButton";
 import GameSearchBar from "./GameSearchBar";

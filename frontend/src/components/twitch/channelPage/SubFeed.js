@@ -3,7 +3,7 @@ import { Spinner } from "react-bootstrap";
 import React, { useState, useEffect, useMemo } from "react";
 import _ from "lodash";
 
-import { StyledLoadmore } from "./../styledComponents";
+import { StyledLoadmore } from "./../StyledComponents";
 import { SubFeedContainer } from "./../../sharedStyledComponents";
 import { SubFeedHeader } from "./StyledComponents";
 import ClipsSortButton from "./ClipsSortButton";

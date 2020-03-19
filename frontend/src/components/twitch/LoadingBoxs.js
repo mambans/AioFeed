@@ -1,6 +1,6 @@
 import React from "react";
 
-import { StyledLoadingBox } from "./styledComponents";
+import { StyledLoadingBox } from "./StyledComponents";
 
 export default ({ amount, type }) => {
   const array = Array.apply(null, Array(amount)).map(function(x, i) {
