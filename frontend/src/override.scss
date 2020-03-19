@@ -6,10 +6,6 @@
   background-color: #131313;
   max-width: unset;
   border-radius: 3px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -ms-border-radius: 3px;
-  -o-border-radius: 3px;
   font-size: 16px;
 }
 
@@ -39,10 +35,6 @@
 .popup-content {
   background: linear-gradient(rgba(0, 0, 0, 0.4) 0%, var(--popupModalBackground) 15%) !important;
   border-radius: 0 0 10px 10px !important;
-  -webkit-border-radius: 0 0 10px 10px !important;
-  -moz-border-radius: 0 0 10px 10px !important;
-  -ms-border-radius: 0 0 10px 10px !important;
-  -o-border-radius: 0 0 10px 10px !important;
   width: 300px !important;
   min-width: min-content !important;
   max-height: 485px;
@@ -137,10 +129,6 @@
   width: 1000px !important;
   min-width: 1000px;
   border-radius: 25px !important;
-  -webkit-border-radius: 25px !important;
-  -moz-border-radius: 25px !important;
-  -ms-border-radius: 25px !important;
-  -o-border-radius: 25px !important;
   background-color: transparent !important;
   left: calc(50% - 500px) !important;
   border: none !important;

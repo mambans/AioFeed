@@ -18,10 +18,6 @@
   margin: auto;
   display: grid;
   border-radius: 25px;
-  -webkit-border-radius: 25px;
-  -moz-border-radius: 25px;
-  -ms-border-radius: 25px;
-  -o-border-radius: 25px;
   background-color: var(--accountContainerBackgroundColor);
   // margin-top: 25px;
   padding: 25px;
@@ -32,10 +28,6 @@
 
   .profileImage {
     border-radius: 30px;
-    -webkit-border-radius: 30px;
-    -moz-border-radius: 30px;
-    -ms-border-radius: 30px;
-    -o-border-radius: 30px;
     object-fit: cover;
     width: 300px;
     height: 169px;
@@ -48,10 +40,6 @@
     height: 42.5px;
     border: thin solid #313131;
     border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
 
     &:hover {
       background-color: lighten(#8a1f1f, 10%);
@@ -72,10 +60,6 @@
     margin-left: 0;
     height: 42px;
     border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
   }
 
   .connectTwitch {
@@ -84,10 +68,6 @@
     margin-left: 0;
     height: 42px;
     border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
     border: thin solid lighten(#42107d, 0%);
 
     &:hover {
@@ -110,10 +90,6 @@
     margin-left: 0;
     height: 42px;
     border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
     border: thin solid lighten(#4b1010, 0%);
 
     &:hover {
@@ -138,10 +114,6 @@
     min-width: 220px;
     text-align: center;
     border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
     // margin-right: 50px;
     height: min-content;
     margin-bottom: 0;
@@ -165,10 +137,6 @@
   min-width: 220px;
   text-align: center;
   border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
   height: min-content;
 }
 
@@ -195,10 +163,6 @@
 
   img {
     border-radius: 15px;
-    -webkit-border-radius: 15px;
-    -moz-border-radius: 15px;
-    -ms-border-radius: 15px;
-    -o-border-radius: 15px;
   }
 }
 
@@ -247,8 +211,4 @@
   min-width: 1000px;
   box-shadow: 10px 10px 10px 0 rgba(0, 0, 0, 0.25) !important;
   border-radius: 25px;
-  -webkit-border-radius: 25px;
-  -moz-border-radius: 25px;
-  -ms-border-radius: 25px;
-  -o-border-radius: 25px;
 }

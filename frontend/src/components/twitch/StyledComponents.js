@@ -51,49 +51,49 @@ const StyledLoadmore = styled.div`
   }
 `;
 
-const StyledCountdownCircle = styled.div`
-  position: relative;
-  margin: auto;
-  height: 24px;
-  width: 24px;
-  text-align: center;
+// const StyledCountdownCircle = styled.div`
+//   position: relative;
+//   margin: auto;
+//   height: 24px;
+//   width: 24px;
+//   text-align: center;
 
-  div {
-    color: white;
-    display: inline-block;
-    line-height: 24px;
-  }
+//   div {
+//     color: white;
+//     display: inline-block;
+//     line-height: 24px;
+//   }
 
-  svg {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 24px;
-    height: 24px;
-    transform: rotateY(-180deg) rotateZ(-90deg);
-  }
+//   svg {
+//     position: absolute;
+//     top: 0;
+//     right: 0;
+//     width: 24px;
+//     height: 24px;
+//     transform: rotateY(-180deg) rotateZ(-90deg);
+//   }
 
-  svg circle {
-    stroke-dasharray: 67.8px;
-    /* stroke-dasharray: 113px; */
-    stroke-dashoffset: 0px;
-    stroke-linecap: round;
-    stroke-width: 3px;
-    stroke: white;
-    fill: none;
-    animation: countdown 20s linear 1 forwards;
-  }
+//   svg circle {
+//     stroke-dasharray: 67.8px;
+//     /* stroke-dasharray: 113px; */
+//     stroke-dashoffset: 0px;
+//     stroke-linecap: round;
+//     stroke-width: 3px;
+//     stroke: white;
+//     fill: none;
+//     animation: countdown 20s linear 1 forwards;
+//   }
 
-  @keyframes countdown {
-    from {
-      stroke-dashoffset: 0px;
-    }
-    to {
-      stroke-dashoffset: 67.8px;
-      /* stroke-dashoffset: 113px; */
-    }
-  }
-`;
+//   @keyframes countdown {
+//     from {
+//       stroke-dashoffset: 0px;
+//     }
+//     to {
+//       stroke-dashoffset: 67.8px;
+//       /* stroke-dashoffset: 113px; */
+//     }
+//   }
+// `;
 
 const HeaderLeftSubcontainer = styled.div`
   width: 300px;
@@ -192,22 +192,26 @@ const StyledLoadingList = styled.ul`
 const FollowBtn = styled(MdFavoriteBorder)`
   cursor: pointer;
   color: red;
-  transition: color 250ms;
+  transition: color 250ms, opacity 250ms;
   margin: 0 10px;
+  opacity: 0;
 
   &:hover {
     color: green;
+    opacity: 1;
   }
 `;
 
 const UnfollowBtn = styled(MdFavorite)`
   cursor: pointer;
   color: green;
-  transition: color 250ms;
+  transition: color 250ms, opacity 250ms;
   margin: 0 10px;
+  opacity: 0;
 
   &:hover {
     color: red;
+    opacity: 1;
   }
 `;
 
@@ -218,12 +222,7 @@ const ChannelNameDiv = styled.div`
   grid-row: 1;
   display: flex;
   transition: color 250ms;
-  /* position: relative;
   width: max-content;
-  background: none; */
-  /* font-size: 0.9rem; */
-  /* color: var(--infoColorGrey); */
-  /* margin-bottom: 0; */
 
   .name {
     padding: 0 5px;
@@ -231,6 +230,7 @@ const ChannelNameDiv = styled.div`
     font-size: 1rem !important;
     display: flex;
     align-items: center;
+    transition: color 250ms;
 
     &:hover {
       color: var(--channelHover);
@@ -240,10 +240,19 @@ const ChannelNameDiv = styled.div`
   .twitchIcon {
     grid-row: 1;
     color: #710271;
-    margin-left: 5px;
+    padding: 0px 10px;
+    opacity: 0;
+    transition: opacity 150ms;
 
     &:hover {
       color: #af2caf;
+      opacity: 1;
+    }
+  }
+
+  &:hover {
+    .twitchIcon {
+      opacity: 1;
     }
   }
 `;
@@ -251,7 +260,7 @@ const ChannelNameDiv = styled.div`
 export {
   HeaderContainerTwitchLive,
   StyledLoadmore,
-  StyledCountdownCircle,
+  // StyledCountdownCircle,
   HeaderLeftSubcontainer,
   StyledLoadingBox,
   StyledLoadingList,

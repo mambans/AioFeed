@@ -8,10 +8,6 @@ const ThemeSelector = styled.form`
     border: none;
     color: black;
     border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
   }
 `;
 

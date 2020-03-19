@@ -27,6 +27,7 @@
   display: flex;
   height: 100%;
   justify-content: right;
+  justify-self: right;
 
   & > div:hover {
     #timeago {
@@ -108,10 +109,6 @@
   margin: 0;
   margin-left: 3px;
   border-radius: 12px;
-  -webkit-border-radius: 12px;
-  -moz-border-radius: 12px;
-  -ms-border-radius: 12px;
-  -o-border-radius: 12px;
   height: 24px;
   display: flex;
   align-items: center;
@@ -125,10 +122,6 @@
   margin: 0;
   margin-right: 3px;
   border-radius: 12px;
-  -webkit-border-radius: 12px;
-  -moz-border-radius: 12px;
-  -ms-border-radius: 12px;
-  -o-border-radius: 12px;
   height: 24px;
   display: flex;
   align-items: center;
@@ -153,14 +146,18 @@
     color: var(--infoColorGrey);
     grid-row: 1;
     width: max-content;
+    transition: color 250ms;
 
     &:hover {
       color: var(--channelHover);
     }
   }
 
-  &:hover button {
-    opacity: 0.75;
+  &:hover {
+    button,
+    svg {
+      opacity: 1;
+    }
   }
 }
 
@@ -205,7 +202,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-
+    transition: color 250ms;
     color: var(--infoColorGrey);
 
     &:hover {
@@ -238,10 +235,6 @@
 .StreamHoverIframe {
   border: none;
   border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
   z-index: 1;
   cursor: pointer;
   max-width: 360px;
@@ -252,13 +245,9 @@
 
 .vodPreview {
   animation: animateVodPreview 5s steps(9);
-  -webkit-animation: animateVodPreview 5s steps(9);
   animation-fill-mode: forwards;
   object-fit: cover;
   background-size: cover;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
 
   //animation: animateVodPreview 5s;
   //animation-delay: 0.5s;
@@ -278,10 +267,6 @@
   height: 45.6px;
   width: 4px;
   border-radius: 2px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  -ms-border-radius: 2px;
-  -o-border-radius: 2px;
   background: var(--newHighlight);
 }
 
@@ -292,14 +277,11 @@
   position: fixed;
   margin-top: -12px;
   border-radius: 10px 10px 0 0;
-  -webkit-border-radius: 10px 10px 0 0;
-  -moz-border-radius: 10px 10px 0 0;
-  -ms-border-radius: 10px 10px 0 0;
-  -o-border-radius: 10px 10px 0 0;
   overflow: scroll;
   scrollbar-color: #232526 transparent !important;
   scrollbar-width: thin !important;
   max-height: calc(100vh - (65px + 50px));
+  padding-bottom: 2px;
 
   .twitchSidebarHeader {
     font-size: 1.1rem;
@@ -315,6 +297,15 @@
     align-items: center;
   }
 
+  @keyframes box-shadow-slide {
+    from {
+      box-shadow: -250px 0 2px white;
+    }
+    to {
+      box-shadow: 0px 0 2px white;
+    }
+  }
+
   .sidebarItems {
     display: grid;
     grid-template-areas: "profile user  viewers" "profile row2 row2";
@@ -324,14 +315,17 @@
     padding: 8px 5px 8px 10px;
     //margin-bottom: 5px;
     border-bottom: 1px solid #2f2f2f;
-    transition: ease-in-out 1s;
-    -webkit-transition: ease-in-out 1s;
-    -moz-transition: ease-in-out 1s;
-    -ms-transition: ease-in-out 1s;
-    -o-transition: ease-in-out 1s;
+    transition: ease-in-out 1s, box-shadow 1s cubic-bezier(0.23, 0.82, 0, 0.7);
     font-size: 0.9rem;
     position: relative;
     // height: 62px;
+    box-shadow: -268px 0 0 1px #aaaaaa;
+
+    &:hover {
+      box-shadow: 0 0 0 1px #aaaaaa;
+      // animation: box-shadow-slide 1.5s cubic-bezier(0.33, 0.66, 0.37, 0.94);
+      // animation-fill-mode: forwards;
+    }
 
     a {
       height: max-content;

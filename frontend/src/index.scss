@@ -47,8 +47,4 @@ html.theme-transition *:before,
 html.theme-transition *:after {
   transition-delay: 0 !important;
   transition: all 750ms !important;
-  -webkit-transition: all 750ms !important;
-  -moz-transition: all 750ms !important;
-  -ms-transition: all 750ms !important;
-  -o-transition: all 750ms !important;
 }

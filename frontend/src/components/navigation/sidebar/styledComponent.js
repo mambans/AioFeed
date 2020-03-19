@@ -48,10 +48,6 @@ const StyledConnectTwitch = styled(Button)`
   margin-left: 0;
   /* height: 42px; */
   border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
   border: thin solid hsla(268, 77%, 30%, 1) !important;
 
   &:hover {
@@ -76,10 +72,6 @@ const StyledConnectYoutube = styled(Button)`
   margin-left: 0;
   height: 42px;
   border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
   border: thin solid hsla(0, 65%, 18%, 1) !important;
 
   &:hover {
@@ -196,10 +188,6 @@ const StyledLogoutContiner = styled.div`
     /* height: 42.5px; */
     border: thin solid #313131;
     border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
 
     &:hover {
       background-color: lighten(#8a1f1f, 10%);
@@ -336,10 +324,6 @@ const StyledConnectContainer = styled.div`
     grid-area: disconnect;
     color: #b5b5b5;
     border-radius: 50%;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -ms-border-radius: 50%;
-    -o-border-radius: 50%;
 
     &:hover {
       color: #ffffff;
@@ -353,10 +337,6 @@ const StyledReconnectIcon = styled(MdRefresh).attrs({ size: 30 })`
   height: 50px;
   border: 2px solid #292929;
   border-radius: 80%;
-  -webkit-border-radius: 80%;
-  -moz-border-radius: 80%;
-  -ms-border-radius: 80%;
-  -o-border-radius: 80%;
   display: flex !important  ;
   justify-content: center;
   align-items: center;

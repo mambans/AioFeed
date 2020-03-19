@@ -40,7 +40,7 @@ function NewHighlightNoti({ data }) {
 
 function StreamEle(data) {
   const [isHovered, setIsHovered] = useState(false);
-  const [channelIsHovered, setChannelIsHovered] = useState(false);
+  // const [channelIsHovered, setChannelIsHovered] = useState(false);
   const { twitchVideoHoverEnable } = useContext(FeedsContext);
 
   const streamHoverTimer = useRef();
@@ -71,26 +71,26 @@ function StreamEle(data) {
     }
   }, [twitchVideoHoverEnable]);
 
-  const handleMouseOverChannel = () => {
-    setChannelIsHovered(true);
-  };
+  // const handleMouseOverChannel = () => {
+  //   setChannelIsHovered(true);
+  // };
 
-  const handleMouseOutChannel = () => {
-    setChannelIsHovered(false);
-  };
+  // const handleMouseOutChannel = () => {
+  //   setChannelIsHovered(false);
+  // };
 
-  useEffect(() => {
-    if (refChannel.current) {
-      const refEle = refChannel.current;
-      refEle.addEventListener("mouseenter", handleMouseOverChannel);
-      refEle.addEventListener("mouseleave", handleMouseOutChannel);
+  // useEffect(() => {
+  //   if (refChannel.current) {
+  //     const refEle = refChannel.current;
+  //     refEle.addEventListener("mouseenter", handleMouseOverChannel);
+  //     refEle.addEventListener("mouseleave", handleMouseOutChannel);
 
-      return () => {
-        refEle.removeEventListener("mouseenter", handleMouseOverChannel);
-        refEle.removeEventListener("mouseleave", handleMouseOutChannel);
-      };
-    }
-  }, []);
+  //     return () => {
+  //       refEle.removeEventListener("mouseenter", handleMouseOverChannel);
+  //       refEle.removeEventListener("mouseleave", handleMouseOutChannel);
+  //     };
+  //   }
+  // }, []);
 
   return (
     <VideoContainer key={data.data.id}>
@@ -201,35 +201,34 @@ function StreamEle(data) {
               className='name'>
               {data.data.user_name}
             </Link>
-            {channelIsHovered ? (
-              <a
-                alt=''
-                href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
-                className='twitchIcon'>
-                <FaTwitch size={20} style={{ color: "purple" }} />
-              </a>
-            ) : null}
+            {/* {channelIsHovered ? ( */}
+            <a
+              alt=''
+              href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
+              className='twitchIcon'>
+              <FaTwitch size={20} className />
+            </a>
+            {/* // ) : null} */}
           </ChannelNameDiv>
-
-          {channelIsHovered ? (
-            <div style={{ display: "flex", gridRow: "1", justifyContent: "right" }}>
-              <VodsFollowUnfollowBtn channel={data.data.user_name} marginRight='7px;' />
-              <FollowUnfollowBtn
-                style={{
-                  gridRow: "1",
-                  justifySelf: "right",
-                  margin: "0",
-                  marginRight: "8px",
-                  height: "100%",
-                }}
-                size={22}
-                channelName={data.data.user_name}
-                id={data.data.user_id}
-                alreadyFollowedStatus={true}
-                refreshStreams={data.refresh}
-              />
-            </div>
-          ) : null}
+          {/* {channelIsHovered ? ( */}
+          <div style={{ display: "flex", gridRow: "1", justifyContent: "right" }}>
+            <VodsFollowUnfollowBtn channel={data.data.user_name} marginRight='7px;' />
+            <FollowUnfollowBtn
+              style={{
+                gridRow: "1",
+                justifySelf: "right",
+                margin: "0",
+                marginRight: "8px",
+                height: "100%",
+              }}
+              size={22}
+              channelName={data.data.user_name}
+              id={data.data.user_id}
+              alreadyFollowedStatus={true}
+              refreshStreams={data.refresh}
+            />
+          </div>
+          {/* // ) : null} */}
         </div>
         <div className={styles.gameContainer}>
           <a
