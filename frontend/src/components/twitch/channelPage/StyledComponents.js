@@ -154,6 +154,11 @@ const Name = styled.div`
       margin: 0;
       padding: 0 10px;
     }
+
+    #IsNotFollowed,
+    #IsFollowed {
+      opacity: 1;
+    }
   }
 
   #profileIcon {
