@@ -1,11 +1,13 @@
-import React from "react";
-import Moment from "react-moment";
-import { FaRegEye } from "react-icons/fa";
+import { CSSTransition } from "react-transition-group";
 import { FaRegClock } from "react-icons/fa";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
+import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import Moment from "react-moment";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import Tooltip from "react-bootstrap/Tooltip";
 
+import { SidebarTitlePopup } from "./StyledComponents";
 import styles from "./../Twitch.module.scss";
 import Util from "../../../util/Util";
 
@@ -18,8 +20,36 @@ const NewHighlight = ({ data }) => {
 };
 
 const TwitchSidebarItem = data => {
+  const [showTitle, setShowTitle] = useState();
+  const ref = useRef();
+  const timerRef = useRef();
+
+  const handleMouseOver = useCallback(() => {
+    timerRef.current = setTimeout(() => {
+      setShowTitle(true);
+    }, 1200);
+  }, []);
+
+  const handleMouseOut = useCallback(() => {
+    clearTimeout(timerRef.current);
+    setShowTitle(false);
+  }, []);
+
+  useEffect(() => {
+    const refEle = ref.current;
+    refEle.addEventListener("mouseenter", handleMouseOver);
+    refEle.addEventListener("mouseleave", handleMouseOut);
+
+    return () => {
+      refEle.removeEventListener("mouseenter", handleMouseOver);
+      refEle.removeEventListener("mouseleave", handleMouseOut);
+      clearTimeout(timerRef.current);
+    };
+  }, [handleMouseOut, handleMouseOver]);
+
   return (
     <Link
+      ref={ref}
       to={"/live/" + data.stream.user_name.toLowerCase()}
       style={{ display: "flex", flexDirection: "column" }}>
       <div className={styles.sidebarItems} key={data.stream.id}>
@@ -96,6 +126,18 @@ const TwitchSidebarItem = data => {
           </div>
         </div>
       </div>
+      <CSSTransition
+        in={showTitle}
+        key={data.stream.id}
+        timeout={1500}
+        classNames='sidebarTitlePopup'
+        unmountOnExit>
+        <SidebarTitlePopup>
+          <div className='borderTop'></div>
+          <span>{data.stream.title}</span>
+          <div className='borderBottom'></div>
+        </SidebarTitlePopup>
+      </CSSTransition>
     </Link>
   );
 };

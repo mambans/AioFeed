@@ -112,6 +112,7 @@
   height: 24px;
   display: flex;
   align-items: center;
+  z-index: 1;
 }
 
 .view_count {
@@ -282,6 +283,7 @@
   scrollbar-width: thin !important;
   max-height: calc(100vh - (65px + 50px));
   padding-bottom: 2px;
+  z-index: 2;
 
   .twitchSidebarHeader {
     font-size: 1.1rem;
@@ -315,10 +317,10 @@
     padding: 8px 5px 8px 10px;
     //margin-bottom: 5px;
     border-bottom: 1px solid #2f2f2f;
-    transition: ease-in-out 1s, box-shadow 1s cubic-bezier(0.23, 0.82, 0, 0.7);
+    transition: ease-in-out 1s, box-shadow 2s cubic-bezier(0.07, 0.81, 0.13, 0.9);
     font-size: 0.9rem;
     position: relative;
-    // height: 62px;
+    height: 62px;
     box-shadow: -268px 0 0 1px #aaaaaa;
 
     &:hover {
