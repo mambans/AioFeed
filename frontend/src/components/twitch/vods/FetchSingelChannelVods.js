@@ -1,8 +1,8 @@
 import axios from "axios";
-import _ from "lodash";
 
 import Util from "./../../../util/Util";
 import AddVideoExtraData from "./../AddVideoExtraData";
+import SortAndAddExpire from "./SortAndAddExpire";
 
 export default async (channelId, setVods) => {
   const vodExpire = 3; // Number of days
@@ -10,24 +10,12 @@ export default async (channelId, setVods) => {
   const addVodEndTime = async followedStreamVods => {
     return followedStreamVods.map(stream => {
       if (stream.type === "archive") {
-        stream.endDate = Util.durationToDate(stream.duration, stream.published_at);
+        stream.endDate = Util.durationToDate(stream.duration, stream.created_at);
       } else {
-        stream.endDate = new Date(stream.published_at);
+        stream.endDate = new Date(stream.created_at);
       }
       return stream;
     });
-  };
-
-  const SortAndAddExpire = (followedStreamVods, vodExpire, loaded) => {
-    let followedOrderedStreamVods = {};
-    followedOrderedStreamVods.data = _.reverse(
-      _.sortBy(followedStreamVods, stream => new Date(stream.endDate).getTime())
-    );
-    followedOrderedStreamVods.expire = new Date().setHours(new Date().getHours() + vodExpire);
-    // followedOrderedStreamVods.loaded = new Date();
-    followedOrderedStreamVods.loaded = loaded;
-
-    return followedOrderedStreamVods;
   };
 
   const axiosConfig = {
@@ -52,11 +40,15 @@ export default async (channelId, setVods) => {
 
     setVods(vods => {
       const existingVods = [...vods.data];
+      const vodToAdd = newVodWithEndtime[0];
+      const objectToUpdateIndex = existingVods.findIndex(item => {
+        return item.id === vodToAdd.id;
+      });
 
-      existingVods.push(newVodWithEndtime[0]);
+      existingVods.splice(objectToUpdateIndex, 1);
+      existingVods.push(vodToAdd);
 
-      const FinallVods = SortAndAddExpire(existingVods, vodExpire, vods.loaded);
-
+      const FinallVods = SortAndAddExpire(existingVods, vodExpire, vods.loaded, vods.expire);
       localStorage.setItem(`Twitch-vods`, JSON.stringify(FinallVods));
 
       return FinallVods;

@@ -1,11 +1,11 @@
 import axios from "axios";
-import _ from "lodash";
 
 import getFollowedChannels from "./../GetFollowedChannels";
 import Util from "../../../util/Util";
 import reauthenticate from "./../reauthenticate";
 import AddVideoExtraData from "../AddVideoExtraData";
 import FetchMonitoredVodChannelsList from "./FetchMonitoredVodChannelsList";
+import SortAndAddExpire from "./SortAndAddExpire";
 
 const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) => {
   const vodChannelsWithoutFollow = [];
@@ -52,23 +52,12 @@ const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) =
 const addVodEndTime = async followedStreamVods => {
   followedStreamVods.map(stream => {
     if (stream.type === "archive") {
-      stream.endDate = Util.durationToDate(stream.duration, stream.published_at);
+      stream.endDate = Util.durationToDate(stream.duration, stream.created_at);
     } else {
-      stream.endDate = new Date(stream.published_at);
+      stream.endDate = new Date(stream.created_at);
     }
     return "";
   });
-};
-
-const SortAndAddExpire = async (followedStreamVods, vodExpire) => {
-  let followedOrderedStreamVods = {};
-  followedOrderedStreamVods.data = _.reverse(
-    _.sortBy(followedStreamVods, stream => stream.endDate.getTime())
-  );
-  followedOrderedStreamVods.expire = new Date().setHours(new Date().getHours() + vodExpire);
-  followedOrderedStreamVods.loaded = new Date();
-
-  return followedOrderedStreamVods;
 };
 
 const axiosConfig = (method, channel, access_token = Util.getCookie("Twitch-access_token")) => {
