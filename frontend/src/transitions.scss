@@ -17,6 +17,7 @@
 //fade 1s
 .fade-1s-enter {
   opacity: 0;
+  transition: opacity 1000ms;
 }
 .fade-1s-enter-active {
   opacity: 1;
@@ -24,6 +25,7 @@
 }
 .fade-1s-exit {
   opacity: 1;
+  transition: opacity 1000ms;
 }
 .fade-1s-exit-active {
   opacity: 0;
@@ -32,7 +34,31 @@
 
 .fade-1s-exit-done {
   opacity: 0;
+  transition: opacity 1000ms;
 }
+
+.fade-controllUI-1s-enter {
+  opacity: 0;
+  transition: opacity 1000ms;
+}
+.fade-controllUI-1s-enter-active {
+  opacity: 1;
+  transition: opacity 1000ms;
+}
+.fade-controllUI-1s-exit {
+  opacity: 1;
+  transition: opacity 500ms;
+}
+.fade-controllUI-1s-exit-active {
+  opacity: 0;
+  transition: opacity 500ms;
+}
+
+.fade-controllUI-1s-exit-done {
+  opacity: 0;
+  transition: opacity 500ms;
+}
+
 //fade 300ms
 .fade-300ms-enter {
   opacity: 0;

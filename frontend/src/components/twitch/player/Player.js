@@ -11,6 +11,7 @@ import { MdAccountCircle } from "react-icons/md";
 import axios from "axios";
 import Moment from "react-moment";
 import React, { useContext, useEffect, useState, useRef, useCallback } from "react";
+import _ from "lodash";
 
 import reauthenticate from "./../reauthenticate";
 import AccountContext from "../../account/AccountContext";
@@ -60,6 +61,7 @@ export default () => {
   const [qualities, setQualities] = useState();
   const [activeQuality, setActiveQuality] = useState();
   const [hideChat, setHideChat] = useState(false);
+  const [showControlls, setShowControlls] = useState();
 
   const volumeEventOverlayRef = useRef();
   const twitchPlayer = useRef();
@@ -68,6 +70,7 @@ export default () => {
   const viewersTimer = useRef();
   const uptimeTimer = useRef();
   const OpenedDate = useRef();
+  const fadeTimer = useRef();
 
   if (type === "live" || type === "player") {
     document.title = `N | ${id} Live`;
@@ -231,6 +234,48 @@ export default () => {
     };
   }, [OnlineEvents, offlineEvents]);
 
+  const showAndResetTimer = _.throttle(
+    () => {
+      setShowControlls(true);
+      clearTimeout(fadeTimer.current);
+
+      fadeTimer.current = setTimeout(() => {
+        setShowControlls(false);
+      }, 5000);
+    },
+    250,
+    { leading: true, trailing: false }
+  );
+
+  // const handleMouseOver = useCallback(() => {
+  //   setShowControlls(true);
+  // }, []);
+
+  const handleMouseOut = useCallback(() => {
+    clearTimeout(fadeTimer.current);
+    setShowControlls(false);
+  }, []);
+
+  useEffect(() => {
+    const refEle = volumeEventOverlayRef.current;
+    // refEle.addEventListener("mouseenter", handleMouseOver);
+    refEle.addEventListener("mouseleave", handleMouseOut);
+    document.addEventListener("mousemove", showAndResetTimer);
+    document.addEventListener("mousedown", showAndResetTimer);
+    document.body.addEventListener("keydown", showAndResetTimer);
+    document.addEventListener("touchmove", showAndResetTimer);
+
+    return () => {
+      // refEle.removeEventListener("mouseenter", handleMouseOver);
+      refEle.removeEventListener("mouseleave", handleMouseOut);
+      document.removeEventListener("mousemove", showAndResetTimer);
+      document.removeEventListener("mousedown", showAndResetTimer);
+      document.body.removeEventListener("keydown", showAndResetTimer);
+      document.removeEventListener("touchmove", showAndResetTimer);
+      clearTimeout(fadeTimer.current);
+    };
+  }, [handleMouseOut, showAndResetTimer]);
+
   const axiosConfig = (method, access_token = Util.getCookie("Twitch-access_token")) => {
     return {
       method: method,
@@ -291,175 +336,192 @@ export default () => {
           switchedChatState={switched.toString()}
           hidechat={hideChat.toString()}>
           <div id='twitch-embed'>
-            <VolumeEventOverlay
-              ref={volumeEventOverlayRef}
-              type='live'
-              id='controls'
-              hidechat={hideChat.toString()}>
-              <InfoDisplay>
-                <>
-                  {channelInfo ? <img src={channelInfo.logo} alt='' /> : null}
-                  <div id='name'>
-                    <a href={channelInfo ? channelInfo.url : `https://www.twitch.tv/${id}`}>
-                      {channelInfo ? channelInfo.display_name : id}
-                    </a>
-                    {channelInfo ? (
-                      <FollowUnfollowBtn
-                        channelName={channelInfo ? channelInfo.display_name : id}
-                        id={channelInfo._id}
-                      />
-                    ) : null}
-                  </div>
-                  <p id='title'>{channelInfo ? channelInfo.status : p_title}</p>
-                  <Link id='game' to={`/game/${channelInfo ? channelInfo.game : p_game}`}>
-                    Playing {channelInfo ? channelInfo.game : p_game}
-                  </Link>
-                </>
+            <CSSTransition
+              in={showControlls}
+              // in={true}
+              key={"controllsUI"}
+              timeout={1000}
+              classNames='fade-controllUI-1s'>
+              <VolumeEventOverlay
+                ref={volumeEventOverlayRef}
+                type='live'
+                id='controls'
+                hidechat={hideChat.toString()}>
+                <InfoDisplay>
+                  <>
+                    {channelInfo ? <img src={channelInfo.logo} alt='' /> : null}
+                    <div id='name'>
+                      <a href={channelInfo ? channelInfo.url : `https://www.twitch.tv/${id}`}>
+                        {channelInfo ? channelInfo.display_name : id}
+                      </a>
+                      {channelInfo ? (
+                        <FollowUnfollowBtn
+                          channelName={channelInfo ? channelInfo.display_name : id}
+                          id={channelInfo._id}
+                        />
+                      ) : null}
+                    </div>
+                    <p id='title'>{channelInfo ? channelInfo.status : p_title}</p>
+                    <Link id='game' to={`/game/${channelInfo ? channelInfo.game : p_game}`}>
+                      Playing {channelInfo ? channelInfo.game : p_game}
+                    </Link>
+                  </>
 
-                {viewers ? (
-                  <p id='viewers'> Viewers: {Util.formatViewerNumbers(viewers)} </p>
-                ) : null}
-                {uptime ? (
-                  <p id='uptime'>
-                    Uptime <Moment durationFromNow>{uptime}</Moment>
-                  </p>
+                  {viewers ? (
+                    <p id='viewers'> Viewers: {Util.formatViewerNumbers(viewers)} </p>
+                  ) : null}
+                  {uptime ? (
+                    <p id='uptime'>
+                      Uptime <Moment durationFromNow>{uptime}</Moment>
+                    </p>
+                  ) : (
+                    <p id='uptime'>Offline</p>
+                  )}
+                </InfoDisplay>
+                {isPaused ? (
+                  <FaPlay id='PausePlay' size={30} onClick={PausePlay} />
                 ) : (
-                  <p id='uptime'>Offline</p>
+                  <FaPause id='PausePlay' size={30} onClick={PausePlay} />
                 )}
-              </InfoDisplay>
-              {isPaused ? (
-                <FaPlay id='PausePlay' size={30} onClick={PausePlay} />
-              ) : (
-                <FaPause id='PausePlay' size={30} onClick={PausePlay} />
-              )}
-              <VolumeSlider
-                volume={volumeText}
-                setVolumeText={setVolumeText}
-                TwitchPlayer={twitchPlayer.current}
-                volumeMuted={volumeMuted}
-                setVolumeMuted={setVolumeMuted}
-                // onChange={Function}
-                // onChangeComplete={Function}
-              />
-              {showPlaybackStats && playbackStats ? (
-                <PlaybackStats>
-                  {Object.keys(playbackStats).map(statName => {
-                    return (
-                      <div key={statName}>
-                        <span>{`${statName}: `}</span>
-                        <span
-                          style={{
-                            color: latencyColorValue(statName, playbackStats[statName]),
+                <VolumeSlider
+                  volume={volumeText}
+                  setVolumeText={setVolumeText}
+                  TwitchPlayer={twitchPlayer.current}
+                  volumeMuted={volumeMuted}
+                  setVolumeMuted={setVolumeMuted}
+                  // onChange={Function}
+                  // onChangeComplete={Function}
+                />
+                {showPlaybackStats && playbackStats ? (
+                  <PlaybackStats>
+                    {Object.keys(playbackStats).map(statName => {
+                      return (
+                        <div key={statName}>
+                          <span>{`${statName}: `}</span>
+                          <span
+                            style={{
+                              color: latencyColorValue(statName, playbackStats[statName]),
+                            }}>
+                            {playbackStats[statName]}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </PlaybackStats>
+                ) : null}
+                <ButtonShowStats
+                  title='Show video stats'
+                  onClick={() => {
+                    if (!showPlaybackStats) {
+                      document.querySelector("#controls").style.opacity = 1;
+                    } else {
+                      document.querySelector("#controls").style.opacity = 0;
+                    }
+                    setShowPlaybackStats(!showPlaybackStats);
+                    setPlaybackStats(twitchPlayer.current.getPlaybackStats());
+
+                    if (PlayersatsTimer.current) {
+                      clearInterval(PlayersatsTimer.current);
+                    } else {
+                      PlayersatsTimer.current = setInterval(() => {
+                        setPlaybackStats(twitchPlayer.current.getPlaybackStats());
+                      }, 1500);
+                    }
+                  }}
+                />
+
+                {channelInfo ? (
+                  <CreateClipButton title='Create clip' onClick={CreateAndOpenClip} />
+                ) : null}
+
+                {showQualities && qualities ? (
+                  <QualitiesList>
+                    {qualities.map(quality => {
+                      return (
+                        <li
+                          key={quality.name}
+                          onClick={() => {
+                            twitchPlayer.current.setQuality(quality.group);
+                            setActiveQuality(quality);
+                            setShowQualities(false);
                           }}>
-                          {playbackStats[statName]}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </PlaybackStats>
-              ) : null}
-              <ButtonShowStats
-                title='Show video stats'
-                onClick={() => {
-                  if (!showPlaybackStats) {
-                    document.querySelector("#controls").style.opacity = 1;
-                  } else {
-                    document.querySelector("#controls").style.opacity = 0;
-                  }
-                  setShowPlaybackStats(!showPlaybackStats);
-                  setPlaybackStats(twitchPlayer.current.getPlaybackStats());
-
-                  if (PlayersatsTimer.current) {
-                    clearInterval(PlayersatsTimer.current);
-                  } else {
-                    PlayersatsTimer.current = setInterval(() => {
-                      setPlaybackStats(twitchPlayer.current.getPlaybackStats());
-                    }, 1500);
-                  }
-                }}
-              />
-
-              {channelInfo ? (
-                <CreateClipButton title='Create clip' onClick={CreateAndOpenClip} />
-              ) : null}
-
-              {showQualities && qualities ? (
-                <QualitiesList>
-                  {qualities.map(quality => {
-                    return (
-                      <li
-                        key={quality.name}
-                        onClick={() => {
-                          twitchPlayer.current.setQuality(quality.group);
-                          setActiveQuality(quality);
-                          setShowQualities(false);
-                        }}>
-                        {quality.name}
-                      </li>
-                    );
-                  })}
-                </QualitiesList>
-              ) : null}
-              <ButtonShowQualities
-                id='showQualities'
-                title='Show qualities'
-                onClick={() => {
-                  setShowQualities(!showQualities);
-                  setQualities(twitchPlayer.current.getQualities());
-                }}>
-                {/* <Icon icon={ic_settings} size={26}></Icon> */}
-                <MdSettings size={24} />
-                {activeQuality
-                  ? activeQuality.name
-                  : twitchPlayer.current
-                  ? twitchPlayer.current.getQuality().name
-                  : null}
-              </ButtonShowQualities>
-
-              {true ? (
-                <MdFullscreen
-                  size={30}
-                  style={{ position: "absolute", right: "12px", bottom: "12px", cursor: "pointer" }}
+                          {quality.name}
+                        </li>
+                      );
+                    })}
+                  </QualitiesList>
+                ) : null}
+                <ButtonShowQualities
+                  id='showQualities'
+                  title='Show qualities'
                   onClick={() => {
-                    toggleFullscreen2(twitchPlayer.current);
+                    setShowQualities(!showQualities);
+                    setQualities(twitchPlayer.current.getQualities());
+                  }}>
+                  {/* <Icon icon={ic_settings} size={26}></Icon> */}
+                  <MdSettings size={24} />
+                  {activeQuality
+                    ? activeQuality.name
+                    : twitchPlayer.current
+                    ? twitchPlayer.current.getQuality().name
+                    : null}
+                </ButtonShowQualities>
+
+                {true ? (
+                  <MdFullscreen
+                    size={30}
+                    style={{
+                      position: "absolute",
+                      right: "12px",
+                      bottom: "12px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      toggleFullscreen2(twitchPlayer.current);
+                    }}
+                  />
+                ) : (
+                  <MdFullscreenExit
+                    size={30}
+                    style={{
+                      position: "absolute",
+                      right: "12px",
+                      bottom: "12px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      toggleFullscreen2(twitchPlayer.current);
+                    }}
+                  />
+                )}
+
+                <ToggleSwitchChatSide
+                  title='Switch chat side'
+                  id='switchSides'
+                  switched={switched.toString()}
+                  onClick={() => {
+                    setSwitched(!switched);
                   }}
                 />
-              ) : (
-                <MdFullscreenExit
-                  size={30}
-                  style={{ position: "absolute", right: "12px", bottom: "12px", cursor: "pointer" }}
-                  onClick={() => {
-                    toggleFullscreen2(twitchPlayer.current);
-                  }}
-                />
-              )}
-
-              <ToggleSwitchChatSide
-                title='Switch chat side'
-                id='switchSides'
-                switched={switched.toString()}
-                onClick={() => {
-                  setSwitched(!switched);
-                }}
-              />
-              {hideChat ? (
-                <OpenChatButton
-                  title='Open chat'
-                  hidechat={hideChat.toString()}
-                  onClick={() => {
-                    setHideChat(!hideChat);
-                  }}
-                />
-              ) : (
-                <HideChatButton
-                  title='Hide chat'
-                  hidechat={hideChat.toString()}
-                  onClick={() => {
-                    setHideChat(!hideChat);
-                  }}
-                />
-              )}
-            </VolumeEventOverlay>
+                {hideChat ? (
+                  <OpenChatButton
+                    title='Open chat'
+                    hidechat={hideChat.toString()}
+                    onClick={() => {
+                      setHideChat(!hideChat);
+                    }}
+                  />
+                ) : (
+                  <HideChatButton
+                    title='Hide chat'
+                    hidechat={hideChat.toString()}
+                    onClick={() => {
+                      setHideChat(!hideChat);
+                    }}
+                  />
+                )}
+              </VolumeEventOverlay>
+            </CSSTransition>
             {twitchPlayer.current ? (
               <PlayerEvents
                 volumeEventOverlayRef={volumeEventOverlayRef}

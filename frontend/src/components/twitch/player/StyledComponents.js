@@ -115,16 +115,9 @@ const VolumeEventOverlay = styled.div`
   /* width: ${({ hideChat }) => (hideChat === "true" ? "99vw" : "90vw")}; */
   height: 100%;
   bottom: ${({ type }) => (type === "live" ? "unset" : "70px")};
-  opacity: 0;
-  transition: opacity 500ms 0ms;
 
   a, p {
     text-shadow: 0 0 2px black;
-  }
-
-  &:hover {
-    opacity: 1 !important ;
-    transition: opacity 250ms 0s;
   }
 
   #PausePlay {
