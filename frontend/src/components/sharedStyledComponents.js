@@ -118,7 +118,6 @@ const VideoTitle = styled(Link)`
   height: 45px;
   line-height: 1.2;
   padding: 0;
-  z-index: 2;
 
   &:hover {
     color: var(--videoTitleHover);
@@ -134,10 +133,6 @@ const ImageContainer = styled.div`
 
   a {
     display: block;
-  }
-
-  &:hover .loadingSpinner {
-    opacity: 0.5;
   }
 
   .loadingSpinner {
@@ -165,6 +160,14 @@ const ImageContainer = styled.div`
     transform: scale(1.15);
     box-shadow: 0 0px 0px 0px #be0e0e00, 0 0px 0px 0px #be0e0e00,
       12px 0 50px -4px rgba(0, 0, 0, 0.8), -12px 0 50px -4px rgba(0, 0, 0, 0.8);
+
+    .loadingSpinner {
+      opacity: 0.5;
+    }
+
+    time {
+      z-index: 1;
+    }
   }
 `;
 

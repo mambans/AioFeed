@@ -264,7 +264,7 @@ function TwitchVods() {
             {vods.data.slice(0, vodAmounts).map(vod => {
               return (
                 <CSSTransition
-                  key={vod.id}
+                  key={vod.id + vod.duration}
                   timeout={1000}
                   classNames={transition.current}
                   // classNames='videoFade-1s'

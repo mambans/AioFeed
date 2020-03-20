@@ -97,7 +97,11 @@ export default ({ data, vodBtnDisabled }) => {
 
         <div className={styles.vodVideoInfo}>
           <p className={styles.vodDuration} title='duration'>
-            {Util.formatTwitchVodsDuration(data.duration)}
+            {data.thumbnail_url === "" ? (
+              <Moment durationFromNow>{data.created_at}</Moment>
+            ) : (
+              Util.formatTwitchVodsDuration(data.duration)
+            )}
           </p>
           <p className={styles.view_count} title='views'>
             {Util.formatViewerNumbers(data.view_count)}
@@ -187,7 +191,7 @@ export default ({ data, vodBtnDisabled }) => {
         <div className={styles.vodDates}>
           <div>
             <Moment
-              interval={60000}
+              interval={300000}
               durationFromNow
               className={styles.date}
               id={styles.timeago}
@@ -204,9 +208,11 @@ export default ({ data, vodBtnDisabled }) => {
                 gridColumn: 2,
                 justifySelf: "right",
               }}>
-              {moment(data.created_at).format("dd HH:mm") +
-                "→" +
-                moment(data.endDate).format("dd HH:mm")}
+              {`${moment(data.created_at).format("dd HH:mm")} → ${
+                data.thumbnail_url === ""
+                  ? moment(new Date()).format("dd HH:mm")
+                  : moment(data.endDate).format("dd HH:mm")
+              }`}
             </p>
           </div>
         </div>
