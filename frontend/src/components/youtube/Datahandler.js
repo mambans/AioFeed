@@ -1,41 +1,9 @@
 import React, { useEffect, useRef, useState, useCallback, useContext } from "react";
-import { store } from "react-notifications-component";
 
 import ErrorHandeling from "../error/Error";
 import getFollowedChannels from "./GetFollowedChannels";
 import getSubscriptionVideos from "./GetSubscriptionVideos";
-import Util from "./../../util/Util";
 import AccountContext from "../account/AccountContext";
-
-const addNotification = (type, video) => {
-  store.addNotification({
-    title: video.snippet.channelTitle,
-    message: `${Util.truncate(video.snippet.title, 50)}`,
-    content: (
-      <div className={`notification-custom-${type}`}>
-        <div className='notification-custom-icon'>
-          <img
-            src={video.snippet.thumbnails.medium.url}
-            alt=''
-            className={"youtube-notificationProfileIcon"}></img>
-        </div>
-        <div className='notification-custom-content'>
-          <p className='notification-title'>{video.snippet.channelTitle}</p>
-          <p className='notification-message'>{Util.truncate(video.snippet.title, 50)}</p>
-          <p className='notification-duration'>{video.duration}</p>
-        </div>
-      </div>
-    ),
-    width: 450,
-    insert: "top",
-    container: "bottom-right",
-    animationIn: ["animated", "slideInRight"],
-    animationOut: ["animated", "fadeOut"],
-    dismiss: {
-      duration: 7500,
-    },
-  });
-};
 
 function DataHandler({ children }) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -65,7 +33,7 @@ function DataHandler({ children }) {
             return old_video.contentDetails.upload.videoId === video.contentDetails.upload.videoId;
           });
 
-          if (!videoExists) addNotification("youtube-new-video", video);
+          if (!videoExists) console.log("New video Notification.");
           return "";
         });
       } catch (error) {

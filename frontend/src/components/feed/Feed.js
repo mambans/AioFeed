@@ -1,8 +1,6 @@
-import "react-notifications-component/dist/theme.css";
 import { Alert } from "react-bootstrap";
 import { CSSTransition } from "react-transition-group";
 import React, { useState, useEffect, useContext } from "react";
-import ReactNotification from "react-notifications-component";
 
 import DataHandler from "../twitch/DataHandler";
 import ErrorHandeling from "./../error/Error";
@@ -70,8 +68,6 @@ export default function Feed() {
   } else {
     return (
       <>
-        <ReactNotification />
-
         {enableTwitch ? (
           <DataHandler>
             {data => (
