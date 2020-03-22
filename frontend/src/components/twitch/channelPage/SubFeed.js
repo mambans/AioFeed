@@ -1,7 +1,7 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { Spinner } from "react-bootstrap";
 import React, { useState, useEffect, useMemo } from "react";
-import _ from "lodash";
+import { debounce } from "lodash";
 
 import { StyledLoadmore } from "./../StyledComponents";
 import { SubFeedContainer } from "./../../sharedStyledComponents";
@@ -31,7 +31,7 @@ export default ({
 
   const recalcWidth = useMemo(
     () =>
-      _.debounce(
+      debounce(
         () => {
           setNumberOfVideos(Math.floor(document.documentElement.clientWidth / 350));
         },

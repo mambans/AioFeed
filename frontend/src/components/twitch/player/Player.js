@@ -11,7 +11,7 @@ import { MdAccountCircle } from "react-icons/md";
 import axios from "axios";
 import Moment from "react-moment";
 import React, { useContext, useEffect, useState, useRef, useCallback } from "react";
-import _ from "lodash";
+import { throttle } from "lodash";
 
 import reauthenticate from "./../reauthenticate";
 import AccountContext from "../../account/AccountContext";
@@ -234,7 +234,7 @@ export default () => {
     };
   }, [OnlineEvents, offlineEvents]);
 
-  const showAndResetTimer = _.throttle(
+  const showAndResetTimer = throttle(
     () => {
       setShowControlls(true);
       clearTimeout(fadeTimer.current);

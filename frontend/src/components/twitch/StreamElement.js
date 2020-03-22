@@ -40,7 +40,6 @@ function NewHighlightNoti({ data }) {
 
 function StreamEle(data) {
   const [isHovered, setIsHovered] = useState(false);
-  // const [channelIsHovered, setChannelIsHovered] = useState(false);
   const { twitchVideoHoverEnable } = useContext(FeedsContext);
 
   const streamHoverTimer = useRef();
@@ -70,27 +69,6 @@ function StreamEle(data) {
       };
     }
   }, [twitchVideoHoverEnable]);
-
-  // const handleMouseOverChannel = () => {
-  //   setChannelIsHovered(true);
-  // };
-
-  // const handleMouseOutChannel = () => {
-  //   setChannelIsHovered(false);
-  // };
-
-  // useEffect(() => {
-  //   if (refChannel.current) {
-  //     const refEle = refChannel.current;
-  //     refEle.addEventListener("mouseenter", handleMouseOverChannel);
-  //     refEle.addEventListener("mouseleave", handleMouseOutChannel);
-
-  //     return () => {
-  //       refEle.removeEventListener("mouseenter", handleMouseOverChannel);
-  //       refEle.removeEventListener("mouseleave", handleMouseOutChannel);
-  //     };
-  //   }
-  // }, []);
 
   return (
     <VideoContainer key={data.data.id}>
@@ -210,9 +188,8 @@ function StreamEle(data) {
             </a>
             {/* // ) : null} */}
           </ChannelNameDiv>
-          {/* {channelIsHovered ? ( */}
           <div style={{ display: "flex", gridRow: "1", justifyContent: "right" }}>
-            <VodsFollowUnfollowBtn channel={data.data.user_name} marginRight='7px;' />
+            <VodsFollowUnfollowBtn channel={data.data.user_name} marginright='7px;' />
             <FollowUnfollowBtn
               style={{
                 gridRow: "1",
@@ -228,7 +205,6 @@ function StreamEle(data) {
               refreshStreams={data.refresh}
             />
           </div>
-          {/* // ) : null} */}
         </div>
         <div className={styles.gameContainer}>
           <a

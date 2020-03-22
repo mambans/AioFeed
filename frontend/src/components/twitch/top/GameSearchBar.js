@@ -7,7 +7,7 @@ import {
   SearchGameForm,
   StyledShowAllButton,
 } from "./styledComponents";
-import _ from "lodash";
+import { throttle } from "lodash";
 import { MdFormatListBulleted } from "react-icons/md";
 import StyledLoadingList from "./LoadingList";
 
@@ -50,7 +50,7 @@ const GameSearchBar = props => {
 
   const fetchTopGamesOnce = useMemo(
     () =>
-      _.throttle(
+      throttle(
         () => {
           GetTopGames().then(res => {
             setTopGames(res.data.data);

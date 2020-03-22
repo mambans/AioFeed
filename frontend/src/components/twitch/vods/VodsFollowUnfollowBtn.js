@@ -9,44 +9,27 @@ import Tooltip from "react-bootstrap/Tooltip";
 import VodsContext from "./VodsContext";
 import AccountContext from "./../../account/AccountContext";
 import { VodRemoveButton, VodAddButton } from "./../../sharedStyledComponents";
+import AddVodChannel from "./AddVodChannel";
 
-export default ({ channel, lowerOpacity, marginRight }) => {
+/**
+ * @param {String} channel - channel name
+ * @param {String} [loweropacity] - overwrite opacity (0.5)
+ * @param {String} [marginright] - overwrite marginright (7px;)
+ */
+
+export default ({ channel, loweropacity, marginright }) => {
   const { channels, setChannels } = useContext(VodsContext);
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
   const vodButton = useRef();
 
-  const [vodsEnabled, setVodsEnabled] = useState(channels.includes(channel.toLowerCase()));
-
-  async function addChannel(channel) {
-    try {
-      channels.unshift(channel.toLowerCase());
-      setChannels([...channels]);
-      setVodsEnabled(true);
-
-      await axios
-        .put(
-          `https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/update`,
-          {
-            username: username,
-            authkey: authKey,
-            channels: channels,
-          }
-        )
-        .catch(error => {
-          console.error(error);
-        });
-    } catch (e) {
-      console.log(e.message);
-    }
-  }
-
   async function removeChannel(channel) {
     try {
       const index = channels.indexOf(channel.toLowerCase());
-      channels.splice(index, 1);
-      setChannels([...channels]);
-      setVodsEnabled(false);
+      const existingChannels = [...channels];
+      existingChannels.splice(index, 1);
+      setChannels(existingChannels);
+      localStorage.setItem("VodChannels", JSON.stringify(existingChannels));
 
       await axios
         .put(
@@ -54,7 +37,7 @@ export default ({ channel, lowerOpacity, marginRight }) => {
           {
             username: username,
             authkey: authKey,
-            channels: channels,
+            channels: existingChannels,
           }
         )
         .catch(err => {
@@ -86,7 +69,7 @@ export default ({ channel, lowerOpacity, marginRight }) => {
     }
   }, []);
 
-  if (vodsEnabled) {
+  if (channels.includes(channel.toLowerCase())) {
     return (
       <OverlayTrigger
         key={"bottom"}
@@ -99,9 +82,9 @@ export default ({ channel, lowerOpacity, marginRight }) => {
         }>
         <VodRemoveButton
           className='VodButton'
-          marginRight={marginRight}
+          marginright={marginright}
           ref={vodButton}
-          lowerOpacity={lowerOpacity}
+          loweropacity={loweropacity}
           title={"Remove " + channel + " vods."}
           variant='link'
           onClick={() => {
@@ -128,12 +111,12 @@ export default ({ channel, lowerOpacity, marginRight }) => {
         }>
         <VodAddButton
           className='VodButton'
-          marginRight={marginRight}
+          marginright={marginright}
           ref={vodButton}
           title={"Add " + channel + " vods."}
           variant='link'
           onClick={() => {
-            addChannel(channel);
+            AddVodChannel({ channel, channels, setChannels, username, authKey });
           }}>
           <MdVideoCall size={24} />
         </VodAddButton>

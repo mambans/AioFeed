@@ -3,7 +3,7 @@ import { MdDelete } from "react-icons/md";
 import { Animated } from "react-animated-css";
 import Alert from "react-bootstrap/Alert";
 import axios from "axios";
-import _ from "lodash";
+import { remove } from "lodash";
 
 // import UnfollowStream from "./UnfollowStream";
 import Util from "./../../../util/Util";
@@ -24,7 +24,7 @@ const UnfollowChannel = async subId => {
     .then(res => {
       const followedChannels = JSON.parse(localStorage.getItem(`YT-followedChannels`));
 
-      _.remove(followedChannels.data, function(channel) {
+      remove(followedChannels.data, function(channel) {
         return channel.id === subId;
       });
 

@@ -121,7 +121,7 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
           </Tooltip>
         }>
         <UnfollowBtn
-          // id='FollowUnfollowButton'
+          className='StreamFollowBtn'
           id='IsFollowed'
           size={size || 30}
           style={{ ...style }}
@@ -144,6 +144,7 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
           </Tooltip>
         }>
         <FollowBtn
+          className='StreamFollowBtn'
           id='IsNotFollowed'
           size={size || 30}
           style={{ ...style }}

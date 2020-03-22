@@ -41,4 +41,10 @@ const VodType = styled.div`
   }
 `;
 
-export { VodLiveIndicator, VodType };
+const VodChannelListLi = styled.li`
+  button {
+    opacity: 1;
+  }
+`;
+
+export { VodLiveIndicator, VodType, VodChannelListLi };

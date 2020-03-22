@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 const ChannelListUl = styled.ul`
   li {
-    button.VodButton {
+    button.VodButton,
+    svg.StreamFollowBtn {
       opacity: 1;
     }
   }

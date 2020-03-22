@@ -1,6 +1,6 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import React, { useState, useEffect, useRef, useCallback, useMemo, useContext } from "react";
-import _ from "lodash";
+import { throttle, debounce } from "lodash";
 
 import ErrorHandeling from "../../error/Error";
 import getFollowedVods from "./GetFollowedVods";
@@ -12,16 +12,8 @@ import AccountContext from "./../../account/AccountContext";
 import VodsContext from "./VodsContext";
 import LoadingBoxs from "./../LoadingBoxs";
 
-function TwitchVods() {
+export default () => {
   const { vods, setVods } = useContext(VodsContext);
-  const [error, setError] = useState(null);
-  const [refreshing, setRefreshing] = useState(false);
-
-  const [vodError, setVodError] = useState(null);
-  const transition = useRef("fade-1s");
-  const loadmoreRef = useRef();
-  const resetVodAmountsTimer = useRef();
-  const VodHeaderRef = useRef();
   const {
     authKey,
     username,
@@ -30,6 +22,13 @@ function TwitchVods() {
     setRefreshToken,
     twitchToken,
   } = useContext(AccountContext);
+  const [error, setError] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
+  const [vodError, setVodError] = useState(null);
+  const transition = useRef("fade-1s");
+  const loadmoreRef = useRef();
+  const resetVodAmountsTimer = useRef();
+  const VodHeaderRef = useRef();
 
   const [numberOfVideos, setNumberOfVideos] = useState(
     Math.floor((document.documentElement.clientWidth - 430) / 350) *
@@ -39,7 +38,7 @@ function TwitchVods() {
 
   const recalcWidth = useMemo(
     () =>
-      _.debounce(
+      debounce(
         () => {
           setNumberOfVideos(
             Math.floor((document.documentElement.clientWidth - 430) / 350) *
@@ -74,7 +73,7 @@ function TwitchVods() {
 
           window.addEventListener(
             "wheel",
-            _.throttle(
+            throttle(
               function(e) {
                 if (entries[0].isIntersecting === true) {
                   setVodAmounts(currVodAmounts => currVodAmounts + numberOfVideos / 2);
@@ -305,6 +304,4 @@ function TwitchVods() {
       </>
     );
   }
-}
-
-export default TwitchVods;
+};

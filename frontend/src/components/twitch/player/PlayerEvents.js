@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import _ from "lodash";
+import { debounce } from "lodash";
 
 export default ({
   volumeEventOverlayRef,
@@ -13,7 +13,7 @@ export default ({
   // eslint-disable-next-line
   const unmute = useMemo(
     () =>
-      _.debounce(
+      debounce(
         () => {
           if (TwitchPlayer.getMuted()) {
             TwitchPlayer.setMuted(false);

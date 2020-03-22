@@ -189,8 +189,8 @@ const VodRemoveButton = styled(Button).attrs({ variant: "link" })`
   grid-row: 1;
   justify-self: right;
   padding: 0px;
-  opacity: ${({ lowerOpacity }) => lowerOpacity || 1};
-  margin-right: ${({ marginRight }) => marginRight || "unset"};
+  opacity: ${({ loweropacity }) => loweropacity || 1};
+  margin-right: ${({ marginright }) => marginright || "unset"};
   opacity: 0;
   transition: opacity 250ms;
 
@@ -205,7 +205,7 @@ const VodAddButton = styled(Button).attrs({ variant: "link" })`
   grid-row: 1;
   justify-self: right;
   padding: 0px;
-  margin-right: ${({ marginRight }) => marginRight || "unset"};
+  margin-right: ${({ marginright }) => marginright || "unset"};
   opacity: 0;
   transition: opacity 250ms;
 

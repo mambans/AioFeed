@@ -128,7 +128,7 @@ const TwitchSidebarItem = data => {
       </div>
       <CSSTransition
         in={showTitle}
-        key={data.stream.id}
+        key={data.stream.id + data.stream.title}
         timeout={1500}
         classNames='sidebarTitlePopup'
         unmountOnExit>

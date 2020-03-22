@@ -1,5 +1,5 @@
 import axios from "axios";
-import _ from "lodash";
+import { reverse, sortBy } from "lodash";
 
 import getVideoInfo from "./GetVideoInfo";
 import Util from "./../../util/Util";
@@ -120,7 +120,7 @@ async function getSubscriptionVideos(followedChannels) {
       })
     );
 
-    const allVideos = _.reverse(_.sortBy(videosUnorderedNew, video => video.snippet.publishedAt));
+    const allVideos = reverse(sortBy(videosUnorderedNew, video => video.snippet.publishedAt));
 
     return { data: allVideos, error: error };
   } catch (error) {
