@@ -346,7 +346,8 @@ export default () => {
                 ref={volumeEventOverlayRef}
                 type='live'
                 id='controls'
-                hidechat={hideChat.toString()}>
+                hidechat={hideChat.toString()}
+                showcursor={showControlls}>
                 <InfoDisplay>
                   <>
                     {channelInfo ? <img src={channelInfo.logo} alt='' /> : null}
@@ -415,7 +416,7 @@ export default () => {
                     if (!showPlaybackStats) {
                       document.querySelector("#controls").style.opacity = 1;
                     } else {
-                      document.querySelector("#controls").style.opacity = 0;
+                      document.querySelector("#controls").style.removeProperty("opacity");
                     }
                     setShowPlaybackStats(!showPlaybackStats);
                     setPlaybackStats(twitchPlayer.current.getPlaybackStats());

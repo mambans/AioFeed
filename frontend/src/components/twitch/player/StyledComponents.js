@@ -115,6 +115,7 @@ const VolumeEventOverlay = styled.div`
   /* width: ${({ hideChat }) => (hideChat === "true" ? "99vw" : "90vw")}; */
   height: 100%;
   bottom: ${({ type }) => (type === "live" ? "unset" : "70px")};
+  cursor: ${({ showcursor }) => (showcursor ? "auto" : "none")};
 
   a, p {
     text-shadow: 0 0 2px black;
@@ -233,7 +234,7 @@ const InfoDisplay = styled.div`
   grid-template-areas: "logo name" "logo title" "logo game" "logo viewers" "logo uptime";
   grid-template-columns: 75px auto;
   /* width: 400px; */
-  max-width: 600px;
+  max-width: 500px;
   background: #00000080;
   padding: 15px 15px 5px 15px;
   border-radius: 10px;
