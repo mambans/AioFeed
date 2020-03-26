@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback, useContext } from "react";
 import axios from "axios";
 
 import Util from "../../util/Util";
-import ErrorHandeling from "./../error/Error";
+import ErrorHandler from "./../error/Index";
 import AccountContext from "./../account/AccountContext";
 import NavigationContext from "./../navigation/NavigationContext";
 
@@ -84,7 +84,7 @@ function YoutubeAuthCallback() {
   }, [getAccessToken, setVisible]);
 
   if (error) {
-    return <ErrorHandeling data={error}></ErrorHandeling>;
+    return <ErrorHandler data={error}></ErrorHandler>;
   } else {
     return (
       <Spinner

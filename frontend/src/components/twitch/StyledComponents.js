@@ -2,7 +2,7 @@ import styled, { keyframes } from "styled-components";
 import { MdFavorite } from "react-icons/md";
 import { MdFavoriteBorder } from "react-icons/md";
 
-const HeaderContainerTwitchLive = styled.div`
+export const HeaderContainerTwitchLive = styled.div`
   border-bottom: var(--subFeedHeaderBorder);
   display: flex;
   justify-content: space-between;
@@ -22,7 +22,7 @@ const HeaderContainerTwitchLive = styled.div`
   }
 `;
 
-const StyledLoadmore = styled.div`
+export const StyledLoadmore = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: auto min-content auto;
@@ -51,70 +51,76 @@ const StyledLoadmore = styled.div`
   }
 `;
 
-// const StyledCountdownCircle = styled.div`
-//   position: relative;
-//   margin: auto;
-//   height: 24px;
-//   width: 24px;
-//   text-align: center;
+export const StyledCountdownCircle = styled.div`
+  position: relative;
+  margin: auto;
+  height: 24px;
+  width: 24px;
+  text-align: center;
+  margin: 5px auto !important;
 
-//   div {
-//     color: white;
-//     display: inline-block;
-//     line-height: 24px;
-//   }
+  div#countdown-number {
+    display: inline-block;
+    line-height: 24px;
+    width: 24px;
+    height: 24px;
+    color: rgb(255, 255, 255);
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+  }
 
-//   svg {
-//     position: absolute;
-//     top: 0;
-//     right: 0;
-//     width: 24px;
-//     height: 24px;
-//     transform: rotateY(-180deg) rotateZ(-90deg);
-//   }
+  svg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 24px;
+    height: 24px;
+    transform: rotateY(-180deg) rotateZ(-90deg);
+  }
 
-//   svg circle {
-//     stroke-dasharray: 67.8px;
-//     /* stroke-dasharray: 113px; */
-//     stroke-dashoffset: 0px;
-//     stroke-linecap: round;
-//     stroke-width: 3px;
-//     stroke: white;
-//     fill: none;
-//     animation: countdown 20s linear 1 forwards;
-//   }
+  svg circle {
+    stroke-dasharray: 67.8px;
+    stroke-dashoffset: 0px;
+    stroke-linecap: round;
+    stroke-width: 3px;
+    stroke: white;
+    fill: none;
+    animation: countdown ${({ duration }) => duration}s linear 1 forwards;
+    /* animation: countdown 25s linear 1 forwards; */
+  }
 
-//   @keyframes countdown {
-//     from {
-//       stroke-dashoffset: 0px;
-//     }
-//     to {
-//       stroke-dashoffset: 67.8px;
-//       /* stroke-dashoffset: 113px; */
-//     }
-//   }
-// `;
+  @keyframes countdown {
+    from {
+      stroke-dashoffset: 0px;
+      /* stroke-dashoffset: ${({ startPoint }) => (startPoint > 5.424 ? startPoint : 0)}px; */
+    }
+    to {
+      stroke-dashoffset: 67.8px;
+    }
+  }
+`;
 
-const HeaderLeftSubcontainer = styled.div`
+export const HeaderLeftSubcontainer = styled.div`
   width: 300px;
   min-width: 300px;
   align-items: end;
   display: flex;
 `;
 
-const pulse = keyframes`
+export const pulse = keyframes`
   0% {background: #131416d1;}
   40% {background: #1f2024d1;}
   100% {background: #131416d1;}
 `;
 
-const pulseLight = keyframes`
+export const pulseLight = keyframes`
   0% {background: #36393fd1;}
   40% {background: #464d54;}
   100% {background: #36393fd1;}
 `;
 
-const StyledLoadingBox = styled.div`
+export const StyledLoadingBox = styled.div`
   display: grid;
   grid-template-areas: "video video" "title title" "info info";
   width: 336px;
@@ -179,7 +185,7 @@ const StyledLoadingBox = styled.div`
   }
 `;
 
-const StyledLoadingList = styled.ul`
+export const StyledLoadingList = styled.ul`
   li div {
     height: 15px;
     width: 100%;
@@ -189,7 +195,7 @@ const StyledLoadingList = styled.ul`
   }
 `;
 
-const FollowBtn = styled(MdFavoriteBorder)`
+export const FollowBtn = styled(MdFavoriteBorder)`
   cursor: pointer;
   color: red;
   transition: color 250ms, opacity 250ms;
@@ -202,7 +208,7 @@ const FollowBtn = styled(MdFavoriteBorder)`
   }
 `;
 
-const UnfollowBtn = styled(MdFavorite)`
+export const UnfollowBtn = styled(MdFavorite)`
   cursor: pointer;
   color: green;
   transition: color 250ms, opacity 250ms;
@@ -215,7 +221,7 @@ const UnfollowBtn = styled(MdFavorite)`
   }
 `;
 
-const ChannelNameDiv = styled.div`
+export const ChannelNameDiv = styled.div`
   padding: 0 5px;
   font-weight: 700;
   height: 100%;
@@ -256,15 +262,3 @@ const ChannelNameDiv = styled.div`
     }
   }
 `;
-
-export {
-  HeaderContainerTwitchLive,
-  StyledLoadmore,
-  // StyledCountdownCircle,
-  HeaderLeftSubcontainer,
-  StyledLoadingBox,
-  StyledLoadingList,
-  FollowBtn,
-  UnfollowBtn,
-  ChannelNameDiv,
-};

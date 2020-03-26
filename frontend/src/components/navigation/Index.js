@@ -4,10 +4,10 @@ import { NavLink } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import { FaGithub } from "react-icons/fa";
 
-import RenderNotifications from "./../notifications/RenderNotifications";
+import RenderNotifications from "./../notifications/Index";
 import NavigationContext from "./NavigationContext";
 import "./Navigation.scss";
-import Sidebar from "./sidebar/Sidebar";
+import Sidebar from "./sidebar/Index";
 
 export default prop => {
   const { visible, shrinkNavbar } = useContext(NavigationContext);

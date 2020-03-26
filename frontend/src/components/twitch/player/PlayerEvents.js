@@ -77,7 +77,6 @@ export default ({
     };
 
     const keyboardEvents = e => {
-      // console.time();
       switch (e.key) {
         case " ":
         case "Space":
@@ -107,7 +106,6 @@ export default ({
         default:
           break;
       }
-      // console.timeEnd();
     };
 
     // const toggleFullscreen = () => {

@@ -4,7 +4,7 @@ import { Spinner } from "react-bootstrap";
 import Util from "./../../../util/Util";
 import ChannelListElement from "./ChannelListElement";
 
-const RenderFollowedChannelList = data => {
+export default data => {
   if (!data.followedChannels) {
     return (
       <Spinner animation='grow' role='status' style={Util.loadingSpinner} variant='light'>
@@ -31,5 +31,3 @@ const RenderFollowedChannelList = data => {
     );
   }
 };
-
-export default RenderFollowedChannelList;

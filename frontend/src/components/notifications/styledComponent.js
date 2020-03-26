@@ -1,8 +1,7 @@
 import styled from "styled-components";
 
-const Notification = styled.li`
+export const Notification = styled.li`
   display: grid !important;
-  /* grid-template-areas: "img name name" "img title title" "date date date"; */
   grid-template-areas: ${({ type }) =>
     type === "Offline"
       ? '"img name name" "img date date"'
@@ -62,23 +61,9 @@ const Notification = styled.li`
       display: none;
     }
   }
-
-  /* &:hover {
-      #timeago {
-        display: none;
-      }
-
-      #time {
-        display: inline;
-      }
-    }
-
-    #time {
-      display: none;
-    } */
 `;
 
-const UnseenNotifcationCount = styled.div`
+export const UnseenNotifcationCount = styled.div`
   background-color: var(--unseenNotifcationCountBackground);
   height: 24px;
   width: 24px;
@@ -89,5 +74,3 @@ const UnseenNotifcationCount = styled.div`
   line-height: 24px;
   text-align: center;
 `;
-
-export { Notification, UnseenNotifcationCount };

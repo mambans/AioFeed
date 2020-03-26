@@ -3,15 +3,15 @@ import { CSSTransition } from "react-transition-group";
 
 import AccountContext from "./../../account/AccountContext";
 import CreateAccount from "./CreateAccount";
+import Login from "./Login";
+import NavigationContext from "./../NavigationContext";
+import SidebarAccount from "./SidebarAccount";
+import { StyledNavSidebarTrigger, StyledLoginButton } from "./../StyledComponents";
 import {
   StyledNavSidebar,
   StyledNavSidebarBackdrop,
   StyledSidebarTrigger,
 } from "./StyledComponent";
-import Login from "./Login";
-import SidebarAccount from "./SidebarAccount";
-import { StyledNavSidebarTrigger, StyledLoginButton } from "./../StyledComponents";
-import NavigationContext from "./../NavigationContext";
 
 export default () => {
   const [show, setShow] = useState(false);

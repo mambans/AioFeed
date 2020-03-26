@@ -19,7 +19,7 @@ const NewHighlight = ({ data }) => {
   }
 };
 
-const TwitchSidebarItem = data => {
+const SidebarItem = data => {
   const [showTitle, setShowTitle] = useState();
   const ref = useRef();
   const timerRef = useRef();
@@ -142,4 +142,4 @@ const TwitchSidebarItem = data => {
   );
 };
 
-export default TwitchSidebarItem;
+export default SidebarItem;

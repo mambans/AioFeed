@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-const RefreshButton = styled(Button).attrs({ variant: "outline-secondary" })`
+export const RefreshButton = styled(Button).attrs({ variant: "outline-secondary" })`
   color: var(--refreshButtonColor);
   background: var(--refreshButtonBackground);
   box-shadow: var(--refreshButtonShadow);
@@ -31,7 +31,7 @@ const RefreshButton = styled(Button).attrs({ variant: "outline-secondary" })`
   }
 `;
 
-const ButtonList = styled(Button).attrs({ variant: "outline-secondary" })`
+export const ButtonList = styled(Button).attrs({ variant: "outline-secondary" })`
   display: flex;
   color: rgb(230, 230, 230);
   position: relative;
@@ -50,26 +50,20 @@ const ButtonList = styled(Button).attrs({ variant: "outline-secondary" })`
   }
 `;
 
-const HeaderTitle = styled.h4`
+export const HeaderTitle = styled.h4`
   text-align: center;
   color: var(--subFeedHeaderColor);
-  /* margin: 0; */
   margin: auto;
   letter-spacing: 1px;
   width: 100%;
   margin: 2px auto;
-  /* margin-right: calc(300px - 48px); */
-
-  /* font-size: 1.25rem;
-  font-weight: bold;
-  color: #d5d5d5; */
 
   svg {
     margin: 0 10px;
   }
 `;
 
-const HeaderContainer = styled.div`
+export const HeaderContainer = styled.div`
   border-bottom: var(--subFeedHeaderBorder);
   display: flex;
   justify-content: space-between;
@@ -82,7 +76,7 @@ const HeaderContainer = styled.div`
   height: 50.5px;
 `;
 
-const SubFeedContainer = styled.div`
+export const SubFeedContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   padding-bottom: 50px;
@@ -90,7 +84,7 @@ const SubFeedContainer = styled.div`
   max-width: 100%;
 `;
 
-const VideoContainer = styled.div`
+export const VideoContainer = styled.div`
   display: grid;
   grid-template-areas:
     "video video"
@@ -101,13 +95,14 @@ const VideoContainer = styled.div`
   margin: 7px;
   max-height: 336px;
   margin-bottom: 15px;
+  position: relative;
 
   a {
     text-shadow: var(--linkTextShadow);
   }
 `;
 
-const VideoTitle = styled(Link)`
+export const VideoTitle = styled(Link)`
   color: var(--videoTitle);
   margin-top: 15px;
   margin-bottom: 5px;
@@ -124,7 +119,7 @@ const VideoTitle = styled(Link)`
   }
 `;
 
-const ImageContainer = styled.div`
+export const ImageContainer = styled.div`
   grid-area: video;
   transition: all 0.2s ease-in-out;
   max-height: 189px;
@@ -171,7 +166,7 @@ const ImageContainer = styled.div`
   }
 `;
 
-const UnfollowButton = styled(Button).attrs({ variant: "link" })`
+export const UnfollowButton = styled(Button).attrs({ variant: "link" })`
   color: rgba(109, 2, 2, 0.801);
   grid-row: 1;
   justify-self: right;
@@ -184,7 +179,7 @@ const UnfollowButton = styled(Button).attrs({ variant: "link" })`
   }
 `;
 
-const VodRemoveButton = styled(Button).attrs({ variant: "link" })`
+export const VodRemoveButton = styled(Button).attrs({ variant: "link" })`
   color: rgb(200, 200, 200);
   grid-row: 1;
   justify-self: right;
@@ -200,7 +195,7 @@ const VodRemoveButton = styled(Button).attrs({ variant: "link" })`
   }
 `;
 
-const VodAddButton = styled(Button).attrs({ variant: "link" })`
+export const VodAddButton = styled(Button).attrs({ variant: "link" })`
   color: rgb(200, 200, 200);
   grid-row: 1;
   justify-self: right;
@@ -215,7 +210,7 @@ const VodAddButton = styled(Button).attrs({ variant: "link" })`
   }
 `;
 
-const StyledLoadingContainer = styled.div`
+export const StyledLoadingContainer = styled.div`
   display: grid;
   justify-content: center;
   transition: all 2s linear ease-in;
@@ -225,18 +220,3 @@ const StyledLoadingContainer = styled.div`
     text-align: center;
   }
 `;
-
-export {
-  RefreshButton,
-  HeaderTitle,
-  HeaderContainer,
-  SubFeedContainer,
-  VideoContainer,
-  VideoTitle,
-  ImageContainer,
-  ButtonList,
-  UnfollowButton,
-  VodRemoveButton,
-  VodAddButton,
-  StyledLoadingContainer,
-};

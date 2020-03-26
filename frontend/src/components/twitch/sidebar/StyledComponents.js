@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const SidebarTitlePopup = styled.div`
+export const SidebarTitlePopup = styled.div`
   width: 325px;
   height: 62px;
   position: fixed;
@@ -33,5 +33,3 @@ const SidebarTitlePopup = styled.div`
     }
   }
 `;
-
-export { SidebarTitlePopup };

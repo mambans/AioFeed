@@ -1,7 +1,7 @@
 import axios from "axios";
 
-import AddVideoExtraData from "./AddVideoExtraData";
-import Util from "../../util/Util";
+import AddVideoExtraData from "./../AddVideoExtraData";
+import Util from "../../../util/Util";
 
 const fetchAllOnlineStreams = async followedChannelsIds => {
   return await axios.get(`https://api.twitch.tv/helix/streams`, {

@@ -7,24 +7,24 @@ import { GoSignOut } from "react-icons/go";
 import { FiLogOut } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
-import Popup from "reactjs-popup";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import uniqid from "uniqid";
 
 import Themeselector from "./../../themes/Themeselector";
-import ToggleSwitch from "../../account/ToggleSwitch";
-import ToggleSwitchVideoHover from "../../account/ToggleSwitchVideoHover";
-import ToggleSwitchAutoRefresh from "../../account/ToggleSwitchAutoRefresh";
-import UpdateProfileImg from "../../account/UpdateProfileImg";
+import ToggleSwitch from "./ToggleSwitch";
+import ToggleSwitchVideoHover from "./ToggleSwitchVideoHover";
+import ToggleSwitchAutoRefresh from "./ToggleSwitchAutoRefresh";
+import UpdateProfileImg from "./UpdateProfileImg";
 import Util from "../../../util/Util";
 import {
   StyledProfileImg,
   StyledConnectTwitch,
   StyledConnectYoutube,
   StyledLogoutContiner,
-  StyledUploadImageButon,
+  ShowAddFormBtn,
   StyledConnectContainer,
   StyledReconnectIcon,
+  CloseAddFormBtn,
 } from "./StyledComponent";
 import AccountContext from "./../../account/AccountContext";
 import DeleteAccountButton from "./DeleteAccountButton";
@@ -59,6 +59,7 @@ export default () => {
     youtubeVideoHoverEnable,
     setYoutubeVideoHoverEnable,
   } = useContext(FeedsContext);
+  const [showAddImage, setShowAddImage] = useState(false);
 
   function logout() {
     document.cookie = `Notifies_AccountName=null; path=/`;
@@ -158,14 +159,21 @@ export default () => {
 
   return (
     <div>
-      <Popup
-        placeholder='Img url...'
-        arrow={false}
-        trigger={<StyledUploadImageButon>Change Profile image</StyledUploadImageButon>}
-        position='top center'
-        className='updateProfilePopup'>
-        <UpdateProfileImg />
-      </Popup>
+      {showAddImage ? (
+        <CloseAddFormBtn
+          onClick={() => {
+            setShowAddImage(false);
+          }}
+        />
+      ) : (
+        <ShowAddFormBtn
+          onClick={() => {
+            setShowAddImage(true);
+          }}>
+          Change Profile image
+        </ShowAddFormBtn>
+      )}
+      {showAddImage ? <UpdateProfileImg /> : null}
       <StyledProfileImg
         src={profileImage || `${process.env.PUBLIC_URL}/images/placeholder.jpg`}
         alt=''

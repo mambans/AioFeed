@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback, useContext } from "react";
 
-import ErrorHandeling from "../error/Error";
+import ErrorHandler from "../error/Index";
 import getFollowedChannels from "./GetFollowedChannels";
 import getSubscriptionVideos from "./GetSubscriptionVideos";
 import AccountContext from "../account/AccountContext";
@@ -67,11 +67,11 @@ function DataHandler({ children }) {
   }, []);
   if (!youtubeToken) {
     return (
-      <ErrorHandeling
+      <ErrorHandler
         data={{
           title: "Couldn't load Youtube feed",
           message: "You are not connected with your Youtube account to Notifies",
-        }}></ErrorHandeling>
+        }}></ErrorHandler>
     );
   } else {
     return children({

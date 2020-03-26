@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import styles from "./Twitch.module.scss";
 
-function StreamHoverIframe(data) {
+export default data => {
   const ref = useRef();
   const streamHoverOutTimer = useRef();
 
@@ -70,6 +70,4 @@ function StreamHoverIframe(data) {
       </Link>
     </>
   );
-}
-
-export default StreamHoverIframe;
+};

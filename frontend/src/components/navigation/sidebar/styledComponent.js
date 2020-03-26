@@ -3,8 +3,9 @@ import { Form, Button } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
 import { MdRefresh } from "react-icons/md";
 import { MdFormatIndentDecrease } from "react-icons/md";
+import { FaWindowClose } from "react-icons/fa";
 
-const StyledNavSidebar = styled.div`
+export const StyledNavSidebar = styled.div`
   position: fixed;
   top: 65px;
   /* right: 0; */
@@ -16,7 +17,7 @@ const StyledNavSidebar = styled.div`
   padding: 10px;
 `;
 
-const StyledNavSidebarBackdrop = styled.div`
+export const StyledNavSidebarBackdrop = styled.div`
   background: rgba(0, 0, 0, 0.1);
   width: calc(100vw - 308px);
   position: fixed;
@@ -25,15 +26,16 @@ const StyledNavSidebarBackdrop = styled.div`
   top: 65px;
 `;
 
-const StyledProfileImg = styled.img`
+export const StyledProfileImg = styled.img`
   width: 280px;
   height: calc(280px / 16 * 9);
 `;
 
-const StyledToggleSwitch = styled.label`
+export const StyledToggleSwitch = styled.label`
   display: flex;
   height: 40px;
   align-items: center;
+  cursor: pointer;
 
   span {
     padding-left: 5px;
@@ -42,7 +44,7 @@ const StyledToggleSwitch = styled.label`
   }
 `;
 
-const StyledConnectTwitch = styled(Button)`
+export const StyledConnectTwitch = styled(Button)`
   background-color: hsla(268, 77%, 30%, 1);
   /* width: max-content; */
   margin-left: 0;
@@ -66,7 +68,7 @@ const StyledConnectTwitch = styled(Button)`
   }
 `;
 
-const StyledConnectYoutube = styled(Button)`
+export const StyledConnectYoutube = styled(Button)`
   background-color: hsla(0, 65%, 18%, 1);
   width: max-content;
   margin-left: 0;
@@ -94,7 +96,7 @@ const StyledConnectYoutube = styled(Button)`
   }
 `;
 
-const StyledCreateFormTitle = styled.div`
+export const StyledCreateFormTitle = styled.div`
   text-align: center;
   border-bottom: 2px solid var(--greyInfo);
   margin: auto;
@@ -106,13 +108,13 @@ const StyledCreateFormTitle = styled.div`
   }
 `;
 
-const StyledCreateForm = styled(Form)`
+export const StyledCreateForm = styled(Form)`
   /* width: 280px; */
   margin: auto;
   margin-top: 25px;
 `;
 
-const StyledAlert = styled(Alert)`
+export const StyledAlert = styled(Alert)`
   text-align: "center";
   margin: "auto";
   opacity: "0.7";
@@ -124,13 +126,16 @@ const StyledAlert = styled(Alert)`
   }
 `;
 
-const StyledUploadImageButon = styled(Button).attrs({ variant: "outline-secondary" })`
+export const ShowAddFormBtn = styled(Button).attrs({ variant: "outline-secondary" })`
   position: absolute;
   opacity: 0;
+  background: #00000073;
   width: 280px;
   height: calc(280px / 16 * 9);
-  transition: all 0.5s;
+  transition: opacity 500ms, background 500ms;
   transition-delay: 0.2s;
+  border: none;
+  color: white;
 
   &:hover {
     opacity: 1;
@@ -148,7 +153,7 @@ const StyledUploadImageButon = styled(Button).attrs({ variant: "outline-secondar
   }
 `;
 
-const StyledSidebarTrigger = styled(MdFormatIndentDecrease).attrs({ size: 32 })`
+export const StyledSidebarTrigger = styled(MdFormatIndentDecrease).attrs({ size: 32 })`
   position: absolute;
   /* width: 52px;
   height: 80%; */
@@ -157,7 +162,7 @@ const StyledSidebarTrigger = styled(MdFormatIndentDecrease).attrs({ size: 32 })`
   display: flex !important  ;
   justify-content: center;
   align-items: center;
-  transition: opacity 0.5s, transform 250ms;
+  transition: opacity 500ms, transform 350ms;
   color: #ffffff;
   background: #0000003b;
   opacity: 0;
@@ -169,7 +174,7 @@ const StyledSidebarTrigger = styled(MdFormatIndentDecrease).attrs({ size: 32 })`
   }
 `;
 
-const StyledLogoutContiner = styled.div`
+export const StyledLogoutContiner = styled.div`
   bottom: 5px;
   position: absolute;
   right: 0;
@@ -214,7 +219,7 @@ const StyledLogoutContiner = styled.div`
   }
 `;
 
-const DeleteAccountButton = styled(Button).attrs({ variant: "danger" })`
+export const DeleteAccountButton = styled(Button).attrs({ variant: "danger" })`
   background: hsla(0, 65%, 28%, 1);
   border-radius: 10px;
   width: 52px;
@@ -231,7 +236,7 @@ const DeleteAccountButton = styled(Button).attrs({ variant: "danger" })`
   }
 `;
 
-const DeleteAccountForm = styled(Form)`
+export const DeleteAccountForm = styled(Form)`
   margin-top: 25px;
 
   label {
@@ -264,13 +269,13 @@ const DeleteAccountForm = styled(Form)`
   }
 `;
 
-const DeleteAccountFooter = styled.div`
+export const DeleteAccountFooter = styled.div`
   /* margin-top: 60px; */
   position: absolute;
   bottom: 0;
 `;
 
-const StyledConnectContainer = styled.div`
+export const StyledConnectContainer = styled.div`
   margin-bottom: 10px;
   display: grid;
   grid-template-areas: "name disconnect";
@@ -331,7 +336,7 @@ const StyledConnectContainer = styled.div`
   }
 `;
 
-const StyledReconnectIcon = styled(MdRefresh).attrs({ size: 30 })`
+export const StyledReconnectIcon = styled(MdRefresh).attrs({ size: 30 })`
   position: absolute;
   width: 50px;
   height: 50px;
@@ -350,22 +355,80 @@ const StyledReconnectIcon = styled(MdRefresh).attrs({ size: 30 })`
   }
 `;
 
-export {
-  StyledNavSidebar,
-  StyledNavSidebarBackdrop,
-  StyledProfileImg,
-  StyledToggleSwitch,
-  StyledConnectTwitch,
-  StyledConnectYoutube,
-  StyledLogoutContiner,
-  StyledCreateFormTitle,
-  StyledCreateForm,
-  StyledAlert,
-  StyledUploadImageButon,
-  StyledSidebarTrigger,
-  DeleteAccountButton,
-  DeleteAccountForm,
-  DeleteAccountFooter,
-  StyledConnectContainer,
-  StyledReconnectIcon,
-};
+export const CloseAddFormBtn = styled(FaWindowClose).attrs({ size: 26 })`
+  color: rgb(225, 225, 255);
+  position: absolute;
+  margin-left: 254px;
+  cursor: pointer;
+  z-index: 1;
+  transition: color 250ms;
+
+  &:hover {
+    color: #ffffff;
+  }
+`;
+
+export const ProfileImgInput = styled.form`
+  position: absolute;
+  border-radius: 5px !important;
+  width: 280px !important;
+  height: calc(280px / 16 * 9);
+  top: unset !important;
+  padding-top: 8px;
+
+  background: #00000087 !important;
+  border: none !important;
+  box-shadow: 0 5px 10px 3px rgba(0, 0, 0, 0.25) !important // top: 1785px !important;
+    form {
+    padding: 5px;
+  }
+
+  label {
+    text-align: center;
+  }
+
+  input[type="text"] {
+    color: white;
+    border: none;
+    border-bottom: 1px solid white;
+    background-color: transparent;
+    background: transparent;
+    width: 100%;
+    text-align: center;
+    margin: 10px 0;
+  }
+
+  input[type="submit"] {
+    border-radius: 5px;
+    border: thin solid #484848;
+    background-color: #035879;
+    color: rgb(224, 224, 224);
+    width: 100%;
+    margin-top: 5px;
+    transition: color 250ms, background-color 250ms;
+
+    &:hover {
+      color: white;
+      background-color: #097099;
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: rgb(8, 3, 20);
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      height: 35px;
+      align-items: center;
+    }
+
+    li p {
+      margin: 0;
+    }
+  }
+`;

@@ -8,14 +8,14 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useRef, useState, useEffect, useContext } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 
-import { VideoTitle, ImageContainer, VideoContainer } from "./../sharedStyledComponents";
-import { ChannelNameDiv } from "./StyledComponents";
-import FeedsContext from "./../feed/FeedsContext";
-import StreamHoverIframe from "./StreamHoverIframe.js";
-import styles from "./Twitch.module.scss";
-import Util from "../../util/Util";
-import FollowUnfollowBtn from "./FollowUnfollowBtn";
-import VodsFollowUnfollowBtn from "./vods/VodsFollowUnfollowBtn";
+import { VideoTitle, ImageContainer, VideoContainer } from "./../../sharedStyledComponents";
+import { ChannelNameDiv } from "./../StyledComponents";
+import FeedsContext from "./../../feed/FeedsContext";
+import StreamHoverIframe from "../StreamHoverIframe.js";
+import styles from "./../Twitch.module.scss";
+import Util from "../../../util/Util";
+import FollowUnfollowBtn from "./../FollowUnfollowBtn";
+import VodsFollowUnfollowBtn from "./../vods/VodsFollowUnfollowBtn";
 
 const HOVER_DELAY = 500; // 1000
 

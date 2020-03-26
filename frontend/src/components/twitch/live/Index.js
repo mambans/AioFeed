@@ -4,11 +4,11 @@ import React, { useEffect, useState, useCallback } from "react";
 
 import Header from "./Header";
 import StreamEle from "./StreamElement.js";
-import styles from "./Twitch.module.scss";
-import TwitchSidebar from "./sidebar/TwitchSidebar";
-import Util from "../../util/Util";
+import styles from "./../Twitch.module.scss";
+import Sidebar from "./../sidebar/Index";
+import Util from "../../../util/Util";
 
-function Twitch({ data }) {
+export default ({ data }) => {
   const [show, setShow] = useState(true);
 
   const windowFocusHandler = useCallback(() => {
@@ -55,7 +55,7 @@ function Twitch({ data }) {
         ) : null
       ) : (
         <>
-          <TwitchSidebar
+          <Sidebar
             onlineStreams={data.liveStreams}
             newlyAdded={data.newlyAddedStreams}
             REFRESH_RATE={data.REFRESH_RATE}
@@ -105,6 +105,4 @@ function Twitch({ data }) {
       )}
     </>
   );
-}
-
-export default Twitch;
+};

@@ -49,7 +49,7 @@ export default async (channelId, setVods) => {
       existingVods.push(vodToAdd);
 
       const FinallVods = SortAndAddExpire(existingVods, vodExpire, vods.loaded, vods.expire);
-      localStorage.setItem(`Twitch-vods`, JSON.stringify(FinallVods));
+      localStorage.setItem(`Vods`, JSON.stringify(FinallVods));
 
       return FinallVods;
     });

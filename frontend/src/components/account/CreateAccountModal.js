@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 
 import styles from "./Account.module.scss";
-import ErrorHandeling from "../error/Error";
+import ErrorHandler from "../error/Index";
 import AccountContext from "./AccountContext";
 import useInput from "./../useInput";
 
@@ -78,7 +78,7 @@ export default () => {
   } else {
     return (
       <>
-        {error ? <ErrorHandeling data={error}></ErrorHandeling> : null}
+        {error ? <ErrorHandler data={error}></ErrorHandler> : null}
         <h3 className={styles.formTitle}>Create a Notifies account.</h3>
         <Form
           onSubmit={handleSubmit}

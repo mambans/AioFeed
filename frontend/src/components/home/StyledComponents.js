@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const BlurOverlay = styled.div`
+export const BlurOverlay = styled.div`
   height: calc(100vh - 65px);
   width: 100vw;
   position: absolute;
@@ -17,7 +17,7 @@ const BlurOverlay = styled.div`
   top: 65px;
 `;
 
-const TopBlurOverlay = styled.div`
+export const TopBlurOverlay = styled.div`
   height: 65px;
   width: 100vw;
   position: absolute;
@@ -35,7 +35,7 @@ const TopBlurOverlay = styled.div`
   z-index: 1000;
 `;
 
-const LogoText = styled.div`
+export const LogoText = styled.div`
   display: flex;
   justify-content: center;
 
@@ -55,7 +55,7 @@ const LogoText = styled.div`
   }
 `;
 
-const WelcomeContainer = styled.div`
+export const WelcomeContainer = styled.div`
   text-align: center;
   position: absolute;
   width: 100%;
@@ -72,5 +72,3 @@ const WelcomeContainer = styled.div`
     border-radius: 50%;
   }
 `;
-
-export { BlurOverlay, LogoText, TopBlurOverlay, WelcomeContainer };

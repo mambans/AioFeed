@@ -5,7 +5,7 @@ import { FaWindowClose } from "react-icons/fa";
 import { MdChat } from "react-icons/md";
 import { MdMovieCreation } from "react-icons/md";
 
-const VideoAndChatContainer = styled.div`
+export const VideoAndChatContainer = styled.div`
   position: fixed;
   width: 100vw;
   height: calc(100vh - 50px);
@@ -47,7 +47,7 @@ const VideoAndChatContainer = styled.div`
   }
 `;
 
-const StyledChat = styled.iframe`
+export const StyledChat = styled.iframe`
   height: 100%;
   border: none;
   /* right: 0;
@@ -55,12 +55,12 @@ const StyledChat = styled.iframe`
   width: ${({ width }) => width || "9vw"};
 `;
 
-const StyledVideo = styled.iframe`
+export const StyledVideo = styled.iframe`
   width: ${({ width }) => width || "91vw"};
   border: none;
 `;
 
-const ToggleSwitchChatSide = styled(MdCompareArrows).attrs({ size: 30 })`
+export const ToggleSwitchChatSide = styled(MdCompareArrows).attrs({ size: 30 })`
   position: absolute;
   z-index: 1;
   cursor: pointer;
@@ -76,7 +76,7 @@ const ToggleSwitchChatSide = styled(MdCompareArrows).attrs({ size: 30 })`
   }
 `;
 
-const PlayerNavbar = styled.div`
+export const PlayerNavbar = styled.div`
   height: 25px;
   /* background: var(--navigationbarBackground); */
   background: #0000005c;
@@ -108,7 +108,7 @@ const PlayerNavbar = styled.div`
   }
 `;
 
-const VolumeEventOverlay = styled.div`
+export const VolumeEventOverlay = styled.div`
   position: absolute;
   width: ${({ type, hidechat }) =>
     hidechat === "true" ? "99vw" : type === "live" ? "90vw" : "100vw"};
@@ -145,7 +145,7 @@ const VolumeEventOverlay = styled.div`
   }
 `;
 
-const StyledVolumeSlider = styled.div`
+export const StyledVolumeSlider = styled.div`
   width: 230px;
   text-align: center;
   bottom: 10px;
@@ -199,8 +199,8 @@ const StyledVolumeSlider = styled.div`
   }
 `;
 
-// const PausePlay = styled(props => (props.ispaused === "true" ? FaPlay : FaPause)).attrs({
-// const PausePlay = styled(props => (props.ispaused === "true" ? FaPlay : FaPause)).attrs({
+// export const PausePlay = styled(props => (props.ispaused === "true" ? FaPlay : FaPause)).attrs({
+// export const PausePlay = styled(props => (props.ispaused === "true" ? FaPlay : FaPause)).attrs({
 //   size: 30,
 // })`
 //   color: #f4f4f49c;
@@ -215,7 +215,7 @@ const StyledVolumeSlider = styled.div`
 //   }
 // `;
 
-// const PausePlayOverlay = styled(props => (props.ispaused === "true" ? FaPlay : FaPause)).attrs({
+// export const PausePlayOverlay = styled(props => (props.ispaused === "true" ? FaPlay : FaPause)).attrs({
 //   size: 70,
 // })`
 //   color: white;
@@ -229,7 +229,7 @@ const StyledVolumeSlider = styled.div`
 //   background: rgba(0, 0, 0, 0.5);
 // `;
 
-const InfoDisplay = styled.div`
+export const InfoDisplay = styled.div`
   display: grid;
   grid-template-areas: "logo name" "logo title" "logo game" "logo viewers" "logo uptime";
   grid-template-columns: 75px auto;
@@ -283,8 +283,8 @@ const InfoDisplay = styled.div`
   }
 `;
 
-// const ButtonShowStats = styled(Icon).attrs({ icon: infoCircle, size: 26 })`
-const ButtonShowStats = styled(FaInfoCircle).attrs({ size: 24 })`
+// export const ButtonShowStats = styled(Icon).attrs({ icon: infoCircle, size: 26 })`
+export const ButtonShowStats = styled(FaInfoCircle).attrs({ size: 24 })`
   position: absolute;
   bottom: 12px;
   margin: 0;
@@ -300,7 +300,7 @@ const ButtonShowStats = styled(FaInfoCircle).attrs({ size: 24 })`
   }
 `;
 
-const ButtonShowQualities = styled.p`
+export const ButtonShowQualities = styled.p`
   position: absolute;
   bottom: 12px;
   margin: 0;
@@ -322,7 +322,7 @@ const ButtonShowQualities = styled.p`
   }
 `;
 
-const QualitiesList = styled.ul`
+export const QualitiesList = styled.ul`
   width: max-content;
   position: absolute;
   bottom: 50px;
@@ -346,7 +346,7 @@ const QualitiesList = styled.ul`
   }
 `;
 
-const PlaybackStats = styled.div`
+export const PlaybackStats = styled.div`
   width: max-content;
   padding: 10px;
   border-radius: 10px;
@@ -358,11 +358,11 @@ const PlaybackStats = styled.div`
   box-shadow: 5px 5px 10px #0000009c;
 `;
 
-// const StyledHideChatButton = styled(({ hideChat }) =>
+// export const StyledHideChatButton = styled(({ hideChat }) =>
 //   hideChat === "true" ? MdCompareArrows : FaWindowClose
 // ).attrs({ size: 26, color: "red" })`
 
-const HideChatButton = styled(FaWindowClose).attrs({ size: 26, color: "red" })`
+export const HideChatButton = styled(FaWindowClose).attrs({ size: 26, color: "red" })`
   position: absolute;
   bottom: 100px;
   opacity: 0.5;
@@ -370,7 +370,7 @@ const HideChatButton = styled(FaWindowClose).attrs({ size: 26, color: "red" })`
   right: 10px;
 `;
 
-const OpenChatButton = styled(MdChat).attrs({ size: 26, color: "white" })`
+export const OpenChatButton = styled(MdChat).attrs({ size: 26, color: "white" })`
   position: absolute;
   bottom: 100px;
   opacity: 0.5;
@@ -378,7 +378,7 @@ const OpenChatButton = styled(MdChat).attrs({ size: 26, color: "white" })`
   right: 10px;
 `;
 
-const CreateClipButton = styled(MdMovieCreation).attrs({ size: 24, color: "white" })`
+export const CreateClipButton = styled(MdMovieCreation).attrs({ size: 24, color: "white" })`
   position: absolute;
   /* right: 45px; */
   left: 360px;
@@ -387,21 +387,3 @@ const CreateClipButton = styled(MdMovieCreation).attrs({ size: 24, color: "white
   cursor: pointer;
   margin: 5px 10px;
 `;
-
-export {
-  VideoAndChatContainer,
-  StyledChat,
-  ToggleSwitchChatSide,
-  PlayerNavbar,
-  VolumeEventOverlay,
-  StyledVolumeSlider,
-  InfoDisplay,
-  ButtonShowStats,
-  PlaybackStats,
-  StyledVideo,
-  ButtonShowQualities,
-  QualitiesList,
-  HideChatButton,
-  OpenChatButton,
-  CreateClipButton,
-};

@@ -8,8 +8,8 @@ import { SubFeedContainer } from "./../../sharedStyledComponents";
 import { SubFeedHeader } from "./StyledComponents";
 import ClipsSortButton from "./ClipsSortButton";
 import SortButton from "./SortButton";
-import TwitchClipElement from "./TwitchClipElement";
-import TwitchVodElement from "../vods/TwitchVodElement";
+import ClipElement from "./ClipElement";
+import VodElement from "../vods/VodElement";
 import Util from "./../../../util/Util";
 
 export default ({
@@ -74,9 +74,9 @@ export default ({
             return (
               <CSSTransition key={item.id} timeout={1000} classNames='fade-1s' unmountOnExit>
                 {feedName === "Vods" ? (
-                  <TwitchVodElement data={item} transition='fade-1s' vodBtnDisabled={true} />
+                  <VodElement data={item} transition='fade-1s' vodBtnDisabled={true} />
                 ) : (
-                  <TwitchClipElement
+                  <ClipElement
                     data={item}
                     user_name={channelInfo ? channelInfo.name : null}
                     transition='fade-1s'

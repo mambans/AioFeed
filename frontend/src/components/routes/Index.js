@@ -4,29 +4,29 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import AccountModal from "../account/AccountModal";
 import AccountProvider from "./../account/AccountProvider";
+import ChannelPage from "./../twitch/channelPage/Index";
 import CreateAccountModal from "../account/CreateAccountModal";
-import Feed from "../feed/Feed";
+import Feed from "../feed/Index";
 import FeedsProvider from "./../feed/FeedsProvider";
-import Footer from "../footer/Footer";
-import Home from "../home/Home";
-import Legality from "../legality/Legality";
+import Footer from "../footer/Index";
+import Home from "../home/Index";
+import Legality from "../legality/Index";
 import LoginModal from "../account/LoginModal";
-import Navbar from "../navigation/Navbar";
+import Navbar from "../navigation/Index";
 import NavigationProvider from "./../navigation/NavigationProvider";
 import NoMatch from "./NoMatch";
 import NotificationsProvider from "./../notifications/NotificationsProvider";
-import VodsProvider from "./../twitch/vods/VodsProvider";
 import Player from "./../twitch/player/Player";
-import RenderTopStreams from "../twitch/top/RenderTopStreams";
+import PlayerClip from "../twitch/player/PlayerClip";
 import style from "./Routes.module.scss";
+import TopStreams from "../twitch/categoryTopStreams/Index";
 import TwitchAuth from "../auth/TwitchAuth";
 import TwitchAuthCallback from "../auth/TwitchAuthCallback";
+import VodsProvider from "./../twitch/vods/VodsProvider";
 import YoutubeAuth from "../auth/YoutubeAuth";
 import YoutubeAuthCallback from "../auth/YoutubeAuthCallback";
-import TwitchChannelPage from "./../twitch/channelPage/TwitchChannelPage";
-import PlayerClip from "../twitch/player/PlayerClip";
 
-const Routes = () => {
+export default () => {
   return (
     <BrowserRouter>
       <NavigationProvider>
@@ -61,13 +61,13 @@ const Routes = () => {
                               <Player />
                             </Route>
                             <Route exact path={["/channel/:id", "/c/:id"]}>
-                              <TwitchChannelPage />
+                              <ChannelPage />
                             </Route>
                             <Route exact path='/clip/:id'>
                               <PlayerClip />
                             </Route>
                             <Route exact path={["/game/:category?", "/category/:category?"]}>
-                              <RenderTopStreams />
+                              <TopStreams />
                             </Route>
                             <Route exact path='/auth/youtube' component={YoutubeAuth} />
                             <Route exact path='/auth/twitch' component={TwitchAuth} />
@@ -129,5 +129,3 @@ const Routes = () => {
     </BrowserRouter>
   );
 };
-
-export default Routes;

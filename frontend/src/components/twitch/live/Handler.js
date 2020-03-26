@@ -1,17 +1,17 @@
 import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
 
-import ErrorHandeling from "../error/Error";
-import getFollowedChannels from "./GetFollowedChannels";
+import ErrorHandler from "../../error/Index";
+import getFollowedChannels from "./../GetFollowedChannels";
 import getFollowedOnlineStreams from "./GetFollowedStreams";
-import NotificationsContext from "./../notifications/NotificationsContext";
-import styles from "./Twitch.module.scss";
-import Util from "../../util/Util";
+import NotificationsContext from "./../../notifications/NotificationsContext";
+import styles from "./../Twitch.module.scss";
+import Util from "../../../util/Util";
 import Header from "./Header";
-import LoadingBoxs from "./LoadingBoxs";
-import AccountContext from "./../account/AccountContext";
-import FeedsContext from "./../feed/FeedsContext";
-import VodsContext from "./vods/VodsContext";
-import FetchSingelChannelVods from "./vods/FetchSingelChannelVods";
+import LoadingBoxs from "./../LoadingBoxs";
+import AccountContext from "./../../account/AccountContext";
+import FeedsContext from "./../../feed/FeedsContext";
+import VodsContext from "./../vods/VodsContext";
+import FetchSingelChannelVods from "./../vods/FetchSingelChannelVods";
 
 const REFRESH_RATE = 25; // seconds
 
@@ -90,8 +90,16 @@ export default ({ children }) => {
 
                 addNotification(stream, "Live");
 
-                if (enableTwitchVods && channels.includes(stream.user_name.toLowerCase())) {
+                console.log(`${stream.user_name} went online - array: `, channels);
+
+                if (
+                  enableTwitchVods &&
+                  JSON.parse(localStorage.getItem("VodChannels")).includes(
+                    stream.user_name.toLowerCase()
+                  )
+                ) {
                   setTimeout(async () => {
+                    console.log("Fetching", stream.user_name, "live vod");
                     await FetchSingelChannelVods(stream.user_id, setVods);
                   }, 30000);
                 }
@@ -118,8 +126,16 @@ export default ({ children }) => {
                 // console.log(stream.user_name, "went Offline.");
                 addNotification(stream, "Offline");
 
-                if (enableTwitchVods && channels.includes(stream.user_name.toLowerCase())) {
+                console.log(`${stream.user_name} went offline - array: `, channels);
+
+                if (
+                  enableTwitchVods &&
+                  JSON.parse(localStorage.getItem("VodChannels")).includes(
+                    stream.user_name.toLowerCase()
+                  )
+                ) {
                   setTimeout(async () => {
+                    console.log("Fetching", stream.user_name, "offline vod");
                     await FetchSingelChannelVods(stream.user_id, setVods);
                   }, 0);
                 }
@@ -201,7 +217,7 @@ export default ({ children }) => {
   }
   if (!twitchToken) {
     return (
-      <ErrorHandeling
+      <ErrorHandler
         data={{
           title: "Not authenticated/connected with Twitch.",
           message: "No access token for Twitch available.",

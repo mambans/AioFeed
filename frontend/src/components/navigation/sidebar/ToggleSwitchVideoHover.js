@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Switch from "react-switch";
 
-import { StyledToggleSwitch } from "./styledComponent";
+import { StyledToggleSwitch } from "./StyledComponent";
 
-function ToggleSwitchVideoHover(props) {
+export default props => {
   const [checked, setChecked] = useState(props.enableHover);
 
   function handleChange(checked) {
@@ -18,6 +18,4 @@ function ToggleSwitchVideoHover(props) {
       <span>{props.feed + " hover-video"}</span>
     </StyledToggleSwitch>
   );
-}
-
-export default ToggleSwitchVideoHover;
+};

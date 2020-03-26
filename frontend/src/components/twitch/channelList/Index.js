@@ -6,7 +6,7 @@ import StyledLoadingList from "./../LoadingList";
 import AddVideoExtraData from "./../AddVideoExtraData";
 import { ChannelListUl } from "./StyledComponents";
 
-const RenderFollowedChannelList = data => {
+export default data => {
   const [followedChannels, setFollowedChannels] = useState();
   const { authKey, username } = useContext(AccountContext);
 
@@ -54,5 +54,3 @@ const RenderFollowedChannelList = data => {
     );
   }
 };
-
-export default RenderFollowedChannelList;

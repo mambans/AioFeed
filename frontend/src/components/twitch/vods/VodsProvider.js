@@ -6,22 +6,23 @@ import AccountContext from "../../account/AccountContext";
 export default ({ children }) => {
   const { username, authKey } = useContext(AccountContext);
   const [vods, setVods] = useState();
-  const [channels, setChannels] = useState();
+  const [channels, setChannels] = useState([]);
 
   useEffect(() => {
-    if (!channels) {
-      (async () => {
-        setChannels(await FetchMonitoredVodChannelsList(username, authKey));
-      })();
-    }
-  }, [username, authKey, channels]);
+    (async () => {
+      const fetchedChannels = await FetchMonitoredVodChannelsList(username, authKey);
+      console.log("useEffect-fetchedChannels", fetchedChannels);
+      setChannels(fetchedChannels);
+      localStorage.setItem("VodChannels", JSON.stringify(fetchedChannels));
+    })();
+  }, [username, authKey]);
 
   return (
     <VodsContext.Provider
       value={{
         vods: vods,
         setVods: setVods,
-        channels: channels || [],
+        channels: channels,
         setChannels: setChannels,
       }}>
       {children}

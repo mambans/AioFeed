@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import { MdVideocam } from "react-icons/md";
 
-const ChannelContainer = styled.div`
+export const ChannelContainer = styled.div`
   min-height: 100vh;
   min-width: 100%;
 
@@ -41,7 +41,7 @@ const ChannelContainer = styled.div`
   }
 `;
 
-const Banner = styled.div`
+export const Banner = styled.div`
   height: 300px;
   margin-bottom: 20px;
 
@@ -52,14 +52,14 @@ const Banner = styled.div`
   }
 `;
 
-const BannerInfoOverlay = styled.div`
+export const BannerInfoOverlay = styled.div`
   /* height: 100%; */
   position: absolute;
   top: 65px;
   width: 100%;
 `;
 
-const Name = styled.div`
+export const Name = styled.div`
   height: 300px;
   display: flex;
   align-items: center;
@@ -174,7 +174,7 @@ const Name = styled.div`
   }
 `;
 
-const SubFeedHeader = styled.div`
+export const SubFeedHeader = styled.div`
   display: grid;
   grid-template-areas: "sort title gap";
   grid-template-columns: 20% auto 20%;
@@ -188,7 +188,7 @@ const SubFeedHeader = styled.div`
   }
 `;
 
-const SortButton = styled(Button).attrs({ variant: "dark" })`
+export const SortButton = styled(Button).attrs({ variant: "dark" })`
   width: 200px;
   background-color: rgba(20, 23, 25, 0.5);
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
@@ -204,7 +204,7 @@ const SortButton = styled(Button).attrs({ variant: "dark" })`
   }
 `;
 
-const SortDropDownList = styled.ul`
+export const SortDropDownList = styled.ul`
   position: absolute;
   padding: 10px;
   list-style: none;
@@ -223,7 +223,7 @@ const SortDropDownList = styled.ul`
   }
 `;
 
-const LiveIndicator = styled.div`
+export const LiveIndicator = styled.div`
   color: red;
   /* margin-left: -55px;
   padding-right: 15px; */
@@ -249,18 +249,18 @@ const LiveIndicator = styled.div`
   }
 `;
 
-const LiveIndicatorIcon = styled(MdVideocam).attrs({ size: 30 })`
+export const LiveIndicatorIcon = styled(MdVideocam).attrs({ size: 30 })`
   /* position: absolute; */
 `;
 
-const VideoPlayer = styled.div`
+export const VideoPlayer = styled.div`
   height: 300px;
   width: calc(300px * 1.777777777777778);
   position: absolute;
   z-index: 100;
 `;
 
-const Chat = styled.iframe`
+export const Chat = styled.iframe`
   height: 300px;
   width: calc(300px * 1.777777777777778);
   position: absolute;
@@ -269,7 +269,7 @@ const Chat = styled.iframe`
   border: none;
 `;
 
-const StyledLiveInfoContainer = styled.div`
+export const StyledLiveInfoContainer = styled.div`
   position: absolute;
   margin-right: 15%;
   display: flex;
@@ -284,18 +284,3 @@ const StyledLiveInfoContainer = styled.div`
     margin-right: calc(40% - 250px);
   }
 `;
-
-export {
-  ChannelContainer,
-  Banner,
-  Name,
-  BannerInfoOverlay,
-  SubFeedHeader,
-  SortButton,
-  SortDropDownList,
-  LiveIndicator,
-  LiveIndicatorIcon,
-  VideoPlayer,
-  Chat,
-  StyledLiveInfoContainer,
-};

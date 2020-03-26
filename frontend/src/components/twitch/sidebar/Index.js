@@ -1,7 +1,7 @@
 import React from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
-import TwitchSidebarItem from "./TwitchSidebarItem";
+import SidebarItem from "./SidebarItem";
 import styles from "./../Twitch.module.scss";
 
 const TwitchSidebar = data => {
@@ -20,11 +20,12 @@ const TwitchSidebar = data => {
                 // classNames='fade-1s'
                 classNames='sidebarVideoFade-1s'
                 unmountOnExit>
-                <TwitchSidebarItem
+                <SidebarItem
                   key={stream.id}
                   stream={stream}
                   newlyAdded={data.newlyAdded}
-                  REFRESH_RATE={data.REFRESH_RATE}></TwitchSidebarItem>
+                  REFRESH_RATE={data.REFRESH_RATE}
+                />
               </CSSTransition>
             );
           })}

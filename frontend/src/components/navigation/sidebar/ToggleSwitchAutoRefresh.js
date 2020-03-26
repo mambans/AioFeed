@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Switch from "react-switch";
 
-import { StyledToggleSwitch } from "./styledComponent";
+import { StyledToggleSwitch } from "./StyledComponent";
 
 export default ({ autoRefreshEnabled, setAutoRefreshEnabled, tokenExists }) => {
   const [checked, setChecked] = useState(autoRefreshEnabled);

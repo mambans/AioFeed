@@ -135,8 +135,8 @@ async function getFollowedVods(
     OnlyVodsAfterDate.setDate(new Date().getDate() - thresholdDate);
 
     if (
-      !localStorage.getItem(`Twitch-vods`) ||
-      JSON.parse(localStorage.getItem("Twitch-vods")).expire <= new Date() ||
+      !localStorage.getItem(`Vods`) ||
+      JSON.parse(localStorage.getItem("Vods")).expire <= new Date() ||
       forceRun
     ) {
       try {
@@ -162,7 +162,7 @@ async function getFollowedVods(
 
         const followedOrderedStreamVods = await SortAndAddExpire(videos.data, vodExpire);
 
-        localStorage.setItem(`Twitch-vods`, JSON.stringify(followedOrderedStreamVods));
+        localStorage.setItem(`Vods`, JSON.stringify(followedOrderedStreamVods));
 
         return {
           data: followedOrderedStreamVods,
@@ -171,16 +171,16 @@ async function getFollowedVods(
       } catch (error) {
         console.error(error);
         return {
-          data: JSON.parse(localStorage.getItem("Twitch-vods")),
+          data: JSON.parse(localStorage.getItem("Vods")),
           error: error,
         };
       }
     }
-    return { data: JSON.parse(localStorage.getItem("Twitch-vods")) };
+    return { data: JSON.parse(localStorage.getItem("Vods")) };
   } catch (error) {
     console.error("message: ", error.message);
     return {
-      data: JSON.parse(localStorage.getItem("Twitch-vods")),
+      data: JSON.parse(localStorage.getItem("Vods")),
       error: error,
     };
   }

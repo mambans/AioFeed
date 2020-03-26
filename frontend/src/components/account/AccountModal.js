@@ -2,8 +2,7 @@ import { Button } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
-import Popup from "reactjs-popup";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import uniqid from "uniqid";
 
 import { FiLogOut } from "react-icons/fi";
@@ -19,19 +18,20 @@ import LoginModal from "../account/LoginModal";
 import NavigationContext from "./../navigation/NavigationContext";
 import styles from "./Account.module.scss";
 import Themeselector from "./../themes/Themeselector";
-import ToggleSwitch from "./ToggleSwitch";
-import ToggleSwitchVideoHover from "./ToggleSwitchVideoHover";
-import UpdateProfileImg from "./UpdateProfileImg";
+import ToggleSwitch from "./../navigation/sidebar/ToggleSwitch";
+import ToggleSwitchVideoHover from "./../navigation/sidebar/ToggleSwitchVideoHover";
+import UpdateProfileImg from "./../navigation/sidebar/UpdateProfileImg";
 import Util from "../../util/Util";
-import ToggleSwitchAutoRefresh from "./ToggleSwitchAutoRefresh";
+import ToggleSwitchAutoRefresh from "./../navigation/sidebar/ToggleSwitchAutoRefresh";
 
 import {
   StyledProfileImg,
   StyledConnectTwitch,
   StyledConnectYoutube,
-  StyledUploadImageButon,
+  ShowAddFormBtn,
   StyledConnectContainer,
   StyledReconnectIcon,
+  CloseAddFormBtn,
 } from "./../navigation/sidebar/StyledComponent";
 
 export default () => {
@@ -64,6 +64,7 @@ export default () => {
     youtubeVideoHoverEnable,
     setYoutubeVideoHoverEnable,
   } = useContext(FeedsContext);
+  const [showAddImage, setShowAddImage] = useState(false);
 
   function logout() {
     document.cookie = `Notifies_AccountName=null; path=/`;
@@ -165,14 +166,21 @@ export default () => {
   return username ? (
     <div className={styles.accountContainer}>
       <div className={styles.profileContainer}>
-        <Popup
-          placeholder='Img url...'
-          arrow={false}
-          trigger={<StyledUploadImageButon>Change Profile image</StyledUploadImageButon>}
-          position='top center'
-          className='updateProfilePopup'>
-          <UpdateProfileImg />
-        </Popup>
+        {showAddImage ? (
+          <CloseAddFormBtn
+            onClick={() => {
+              setShowAddImage(false);
+            }}
+          />
+        ) : (
+          <ShowAddFormBtn
+            onClick={() => {
+              setShowAddImage(true);
+            }}>
+            Change Profile image
+          </ShowAddFormBtn>
+        )}
+        {showAddImage ? <UpdateProfileImg /> : null}
         <StyledProfileImg
           src={profileImage || `${process.env.PUBLIC_URL}/images/placeholder.jpg`}
           alt=''

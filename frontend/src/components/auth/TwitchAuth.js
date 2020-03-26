@@ -3,7 +3,7 @@ import { Spinner } from "react-bootstrap";
 import uniqid from "uniqid";
 
 import Util from "../../util/Util";
-import ErrorHandeling from "./../error/Error";
+import ErrorHandler from "./../error/Index";
 
 function TwitchAuth() {
   const [error, setError] = useState();
@@ -38,7 +38,7 @@ function TwitchAuth() {
   }, [initiateAuth]);
 
   if (error) {
-    return <ErrorHandeling data={error}></ErrorHandeling>;
+    return <ErrorHandler data={error}></ErrorHandler>;
   } else {
     return (
       <Spinner animation='border' role='status' style={Util.loadingSpinner}>

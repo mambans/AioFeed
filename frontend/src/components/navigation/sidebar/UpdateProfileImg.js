@@ -1,16 +1,15 @@
 import axios from "axios";
 import React, { useContext } from "react";
 
-import "./updateProfilePopup.scss";
-import AccountContext from "./../account/AccountContext";
-import useInput from "./../useInput";
+import AccountContext from "./../../account/AccountContext";
+import useInput from "./../../useInput";
+import { ProfileImgInput } from "./StyledComponent";
 
-function UpdateProfileImg() {
+export default () => {
   const { username, setProfileImage } = useContext(AccountContext);
-
   const { value: image, bind: bindimage, reset: resetimage } = useInput("");
 
-  async function addProfileImage() {
+  const addProfileImage = async () => {
     await axios
       .put(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
         username: username,
@@ -24,7 +23,7 @@ function UpdateProfileImg() {
       .catch(error => {
         console.error(error);
       });
-  }
+  };
 
   const handleSubmit = evt => {
     evt.preventDefault();
@@ -34,15 +33,13 @@ function UpdateProfileImg() {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <ProfileImgInput onSubmit={handleSubmit}>
         <label>
-          Enter image url:
-          <input type='text' placeholder='Img url..' {...bindimage} />
+          Image Url:
+          <input type='text' placeholder='https://...' {...bindimage} />
         </label>
         <input type='submit' value='Update' />
-      </form>
+      </ProfileImgInput>
     </>
   );
-}
-
-export default UpdateProfileImg;
+};

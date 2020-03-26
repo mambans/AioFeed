@@ -1,4 +1,4 @@
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
+// import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { MdFormatListBulleted } from "react-icons/md";
 import { MdRefresh } from "react-icons/md";
 import { Spinner } from "react-bootstrap";
@@ -6,10 +6,11 @@ import Popup from "reactjs-popup";
 import React from "react";
 import { FaTwitch } from "react-icons/fa";
 
-import { HeaderContainerTwitchLive, HeaderLeftSubcontainer } from "./StyledComponents";
-import { RefreshButton, HeaderTitle, ButtonList } from "./../sharedStyledComponents";
-import RenderFollowedChannelList from "./channelList/RenderFollowedChannelList";
-import Util from "../../util/Util";
+import { HeaderContainerTwitchLive, HeaderLeftSubcontainer } from "./../StyledComponents";
+import { RefreshButton, HeaderTitle, ButtonList } from "./../../sharedStyledComponents";
+import RenderFollowedChannelList from "./../channelList/Index";
+import Util from "../../../util/Util";
+import CountdownCircleTimer from "./CountdownCircleTimer";
 
 export default ({ data, refresh }) => {
   const { refreshing, autoRefreshEnabled, refreshTimer, followedChannels } = data;
@@ -28,30 +29,30 @@ export default ({ data, refresh }) => {
               />
             </div>
           ) : autoRefreshEnabled ? (
-            refreshTimer > new Date().getTime() ? (
-              <CountdownCircleTimer
-                key={refreshTimer}
-                isPlaying
-                size={24}
-                strokeWidth={2.5}
-                durationSeconds={Math.round((refreshTimer - new Date().getTime()) / 1000)}
-                // startAt={
-                //   data.refreshTimer > new Date().getTime()
-                //     ? 20 - Math.round((data.refreshTimer - new Date().getTime()) / 1000)
-                //     : 0
-                // }
-                colors={[["#ffffff"]]}
-                trailColor={"#rgba(255, 255, 255, 0)"}
-                renderTime={() => {
-                  return refreshTimer > new Date().getTime()
-                    ? Math.round((refreshTimer - new Date().getTime()) / 1000)
-                    : 20;
-                }}
-              />
-            ) : (
-              ""
-            )
+            <CountdownCircleTimer
+              key={refreshTimer}
+              startDuration={parseFloat(((refreshTimer - new Date().getTime()) / 1000).toFixed(0))}
+              duration={25}
+            />
           ) : (
+            // <CountdownCircleTimer
+            //   key={refreshTimer}
+            //   isPlaying
+            //   size={24}
+            //   strokeWidth={2.5}
+            //   durationSeconds={25}
+            //   initialRemainingTime={parseFloat(
+            //     ((refreshTimer - new Date().getTime()) / 1000).toFixed(0)
+            //   )}
+            //   colors={[["#ffffff"]]}
+            //   trailColor={"#rgba(255, 255, 255, 0)"}
+            //   renderTime={() => {
+            //     const countdownNr = parseFloat(
+            //       ((refreshTimer - new Date().getTime()) / 1000).toFixed(0)
+            //     );
+            //     return countdownNr > 0 ? countdownNr : 0;
+            //   }}
+            // />
             <MdRefresh size={34} />
           )}
         </RefreshButton>

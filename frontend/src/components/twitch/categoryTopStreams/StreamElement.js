@@ -12,7 +12,7 @@ import Util from "../../../util/Util";
 
 const HOVER_DELAY = 1000;
 
-function StreamEle(data) {
+export default ({ data }) => {
   const [isHovered, setIsHovered] = useState(false);
   const streamHoverTimer = useRef();
   const ref = useRef();
@@ -43,25 +43,25 @@ function StreamEle(data) {
   }, [handleMouseOut]);
 
   return (
-    <VideoContainer key={data.data.id}>
+    <VideoContainer key={data.id}>
       <ImageContainer ref={ref}>
         {isHovered ? (
-          <StreamHoverIframe id={data.data.id} data={data.data} setIsHovered={setIsHovered} />
+          <StreamHoverIframe id={data.id} data={data} setIsHovered={setIsHovered} />
         ) : null}
         <Link
           to={{
-            pathname: "/live/" + data.data.user_name.toLowerCase(),
+            pathname: "/live/" + data.user_name.toLowerCase(),
             state: {
-              p_uptime: data.data.started_at,
-              p_title: data.data.title,
-              p_game: data.data.game_name,
-              p_viewers: data.data.viewers,
+              p_uptime: data.started_at,
+              p_title: data.title,
+              p_game: data.game_name,
+              p_viewers: data.viewers,
             },
           }}
           className={styles.img}>
           <img
             src={
-              data.data.thumbnail_url.replace("{width}", 640).replace("{height}", 360) +
+              data.thumbnail_url.replace("{width}", 640).replace("{height}", 360) +
               `#` +
               new Date().getTime()
             }
@@ -69,10 +69,10 @@ function StreamEle(data) {
           />
         </Link>
         <Moment className={styles.duration} durationFromNow>
-          {data.data.started_at}
+          {data.started_at}
         </Moment>
       </ImageContainer>
-      {data.data.title.length > 50 ? (
+      {data.title.length > 50 ? (
         <OverlayTrigger
           key={"bottom"}
           placement={"bottom"}
@@ -83,76 +83,76 @@ function StreamEle(data) {
               style={{
                 width: "336px",
               }}>
-              {data.data.title}
+              {data.title}
             </Tooltip>
           }>
           <VideoTitle
             to={{
-              pathname: "/live/" + data.data.user_name.toLowerCase(),
+              pathname: "/live/" + data.user_name.toLowerCase(),
               state: {
-                p_uptime: data.data.started_at,
-                p_title: data.data.title,
-                p_game: data.data.game_name,
-                p_viewers: data.data.viewers,
+                p_uptime: data.started_at,
+                p_title: data.title,
+                p_game: data.game_name,
+                p_viewers: data.viewers,
               },
             }}>
-            {Util.truncate(data.data.title, 60)}
+            {Util.truncate(data.title, 60)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
         <VideoTitle
           to={{
-            pathname: "/live/" + data.data.user_name.toLowerCase(),
+            pathname: "/live/" + data.user_name.toLowerCase(),
             state: {
-              p_uptime: data.data.started_at,
-              p_title: data.data.title,
-              p_game: data.data.game_name,
-              p_viewers: data.data.viewers,
+              p_uptime: data.started_at,
+              p_title: data.title,
+              p_game: data.game_name,
+              p_viewers: data.viewers,
             },
           }}>
-          {data.data.title}
+          {data.title}
         </VideoTitle>
       )}
       <div>
         <div className={styles.channelContainer} ref={refChannel}>
           <Link
             to={{
-              pathname: `/channel/${data.data.user_name.toLowerCase()}`,
+              pathname: `/channel/${data.user_name.toLowerCase()}`,
               state: {
-                p_id: data.data.user_id,
+                p_id: data.user_id,
               },
             }}
             style={{ gridRow: 1 }}>
-            <img src={data.data.profile_img_url} alt='' className={styles.profile_img}></img>
+            <img src={data.profile_img_url} alt='' className={styles.profile_img}></img>
           </Link>
           <Link
             to={{
-              pathname: `/channel/${data.data.user_name.toLowerCase()}`,
+              pathname: `/channel/${data.user_name.toLowerCase()}`,
               state: {
-                p_id: data.data.user_id,
+                p_id: data.user_id,
               },
             }}
             className={styles.channel}>
-            {data.data.user_name}
+            {data.user_name}
           </Link>
         </div>
         <div className={styles.gameContainer}>
-          <Link className={styles.game_img} to={"/game/" + data.data.game_name}>
+          <Link className={styles.game_img} to={"/game/" + data.game_name}>
             <img
               src={
-                data.data.game_img
-                  ? data.data.game_img.replace("{width}", 130).replace("{height}", 173)
+                data.game_img
+                  ? data.game_img.replace("{width}", 130).replace("{height}", 173)
                   : `${process.env.PUBLIC_URL}/images/placeholder.jpg`
               }
               alt=''
               className={styles.game_img}></img>
           </Link>
-          <Link className={styles.game} to={"/game/" + data.data.game_name}>
-            {data.data.game_name}
+          <Link className={styles.game} to={"/game/" + data.game_name}>
+            {data.game_name}
           </Link>
           <p className={styles.viewers}>
-            {/* {data.data.viewer_count} */}
-            {Util.formatViewerNumbers(data.data.viewer_count)}
+            {/* {data.viewer_count} */}
+            {Util.formatViewerNumbers(data.viewer_count)}
             <FaRegEye
               style={{
                 color: "rgb(200, 200, 200)",
@@ -167,6 +167,4 @@ function StreamEle(data) {
       </div>
     </VideoContainer>
   );
-}
-
-export default StreamEle;
+};

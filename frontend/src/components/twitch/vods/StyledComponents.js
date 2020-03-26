@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-const VodLiveIndicator = styled(Link)`
+export const VodLiveIndicator = styled(Link)`
   padding: 5px;
   font-size: 0.8rem;
   position: absolute;
@@ -26,7 +26,7 @@ const VodLiveIndicator = styled(Link)`
   }
 `;
 
-const VodType = styled.div`
+export const VodType = styled.div`
   position: relative;
   bottom: 219px;
   display: flex;
@@ -41,10 +41,8 @@ const VodType = styled.div`
   }
 `;
 
-const VodChannelListLi = styled.li`
+export const VodChannelListLi = styled.li`
   button {
     opacity: 1;
   }
 `;
-
-export { VodLiveIndicator, VodType, VodChannelListLi };

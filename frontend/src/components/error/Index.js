@@ -3,8 +3,8 @@ import Alert from "react-bootstrap/Alert";
 
 import Util from "../../util/Util";
 
-function ErrorHandeling(data) {
-  console.log("TCL: ErrorHandeling -> data", data);
+export default data => {
+  console.log("TCL: ErrorHandler -> data", data);
   const [errorMessage, setErrorMessage] = useState(data.data.message);
   const [errorTitle, setErrorTitle] = useState();
   const [show, setShow] = useState(true);
@@ -42,6 +42,4 @@ function ErrorHandeling(data) {
   } else {
     return null;
   }
-}
-
-export default ErrorHandeling;
+};

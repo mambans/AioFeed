@@ -22,8 +22,8 @@ import LoadingBoxs from "./../LoadingBoxs";
 import SortButton from "./../channelPage/SortButton";
 import StreamEle from "./StreamElement";
 import styles from "./../Twitch.module.scss";
-import TwitchClipElement from "./../channelPage/TwitchClipElement";
-import TwitchVodElement from "./../vods/TwitchVodElement";
+import ClipElement from "./../channelPage/ClipElement";
+import VodElement from "./../vods/VodElement";
 import Util from "./../../../util/Util";
 
 export default () => {
@@ -48,9 +48,9 @@ export default () => {
       case "Streams":
         return <StreamEle data={data} />;
       case "Clips":
-        return <TwitchClipElement data={data} />;
+        return <ClipElement data={data} />;
       case "Videos":
-        return <TwitchVodElement data={data} />;
+        return <VodElement data={data} />;
       default:
         return <StreamEle data={data} />;
     }

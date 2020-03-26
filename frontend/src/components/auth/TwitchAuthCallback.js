@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState, useCallback, useContext } from "react";
 
 import Util from "../../util/Util";
-import ErrorHandeling from "./../error/Error";
+import ErrorHandler from "./../error/Index";
 import AccountContext from "./../account/AccountContext";
 import NavigationContext from "./../navigation/NavigationContext";
 import LoadingIndicator from "./../LoadingIndicator";
@@ -132,7 +132,7 @@ function TwitchAuthCallback() {
   }, [getAccessToken, setVisible, setTwitchToken]);
 
   if (error) {
-    return <ErrorHandeling data={error}></ErrorHandeling>;
+    return <ErrorHandler data={error}></ErrorHandler>;
   } else {
     return <LoadingIndicator height={150} width={150} />;
   }

@@ -1,7 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import { Button } from "react-bootstrap";
 
-const StyledGameListElement = styled.li`
+export const StyledGameListElement = styled.li`
   justify-content: unset;
   cursor: pointer;
 
@@ -20,14 +20,14 @@ const StyledGameListElement = styled.li`
   }
 `;
 
-const StyledShowAllButton = styled.li`
+export const StyledShowAllButton = styled.li`
   cursor: pointer;
   justify-content: center !important;
   font-weight: bold;
   font-size: 1.1rem;
 `;
 
-const GameListUlContainer = styled.ul`
+export const GameListUlContainer = styled.ul`
   color: white;
   list-style: none;
   padding-left: 0.75rem;
@@ -66,7 +66,7 @@ const GameListUlContainer = styled.ul`
   }
 `;
 
-const TypeListUlContainer = styled.ul`
+export const TypeListUlContainer = styled.ul`
   color: white;
   list-style: none;
   padding-left: 0.75rem;
@@ -106,13 +106,13 @@ const TypeListUlContainer = styled.ul`
   }
 `;
 
-const pulseLight = keyframes`
+export const pulseLight = keyframes`
   0% {background: #36393fd1;}
   40% {background: #464d54;}
   100% {background: #36393fd1;}
 `;
 
-const StyledLoadingListElement = styled.li`
+export const StyledLoadingListElement = styled.li`
   div {
     height: 15px;
     width: 100%;
@@ -122,7 +122,7 @@ const StyledLoadingListElement = styled.li`
   }
 `;
 
-const SearchGameForm = styled.form`
+export const SearchGameForm = styled.form`
   margin-right: 25px;
 
   background: var(--refreshButtonBackground);
@@ -148,7 +148,7 @@ const SearchGameForm = styled.form`
   }
 `;
 
-const TypeButton = styled(Button).attrs({ variant: "dark" })`
+export const TypeButton = styled(Button).attrs({ variant: "dark" })`
   width: 150px;
   background-color: rgba(20, 23, 25, 0.5);
   display: grid;
@@ -167,7 +167,7 @@ const TypeButton = styled(Button).attrs({ variant: "dark" })`
   }
 `;
 
-const TopDataSortButtonsContainer = styled.div`
+export const TopDataSortButtonsContainer = styled.div`
   display: flex;
   justify-content: right;
   width: 675px;
@@ -181,14 +181,3 @@ const TopDataSortButtonsContainer = styled.div`
     height: 42px;
   }
 `;
-
-export {
-  StyledGameListElement,
-  StyledShowAllButton,
-  GameListUlContainer,
-  StyledLoadingListElement,
-  SearchGameForm,
-  TypeListUlContainer,
-  TypeButton,
-  TopDataSortButtonsContainer,
-};

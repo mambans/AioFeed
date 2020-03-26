@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const ChannelListUl = styled.ul`
+export const ChannelListUl = styled.ul`
   li {
     button.VodButton,
     svg.StreamFollowBtn {
@@ -8,5 +8,3 @@ const ChannelListUl = styled.ul`
     }
   }
 `;
-
-export { ChannelListUl };

@@ -2,12 +2,12 @@ import { Alert } from "react-bootstrap";
 import { CSSTransition } from "react-transition-group";
 import React, { useState, useEffect, useContext } from "react";
 
-import DataHandler from "../twitch/DataHandler";
-import ErrorHandeling from "./../error/Error";
+import Handler from "../twitch/live/Handler";
+import ErrorHandler from "./../error/Index";
 import FeedsContext from "./FeedsContext";
 import styles from "./Feed.module.scss";
-import Twitch from "../twitch/Twitch";
-import TwitchVods from "../twitch/vods/Twitch-vods";
+import TwitchLive from "../twitch/live/Index";
+import TwitchVods from "../twitch/vods/Index";
 import Util from "../../util/Util";
 import Youtube from "./../youtube/Youtube";
 import YoutubeDataHandler from "./../youtube/Datahandler";
@@ -48,11 +48,11 @@ export default function Feed() {
   if (!username) {
     return (
       <>
-        <ErrorHandeling
+        <ErrorHandler
           data={{
             title: "Please login",
             message: "You are not logged with your Notifies account.",
-          }}></ErrorHandeling>
+          }}></ErrorHandler>
       </>
     );
   } else if (!enableTwitch && !enableYoutube && !enableTwitchVods && username) {
@@ -69,15 +69,15 @@ export default function Feed() {
     return (
       <>
         {enableTwitch ? (
-          <DataHandler>
+          <Handler>
             {data => (
               <CSSTransition in={enableTwitch} timeout={0} classNames='fade-1s' unmountOnExit>
                 <div className={styles.twitchContainer}>
-                  <Twitch data={data} />
+                  <TwitchLive data={data} />
                 </div>
               </CSSTransition>
             )}
-          </DataHandler>
+          </Handler>
         ) : null}
 
         {enableYoutube && delayedEnableYoutube ? (
@@ -91,7 +91,7 @@ export default function Feed() {
                     requestError={data.requestError}
                     followedChannels={data.followedChannels}
                   />
-                  {data.error ? <ErrorHandeling data={data.error}></ErrorHandeling> : null}
+                  {data.error ? <ErrorHandler data={data.error}></ErrorHandler> : null}
                   <Youtube
                     requestError={data.requestError}
                     videos={data.videos}

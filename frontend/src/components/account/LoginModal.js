@@ -4,7 +4,7 @@ import { Form, Button } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 
 import styles from "./Account.module.scss";
-import ErrorHandeling from "../error/Error";
+import ErrorHandler from "../error/Index";
 import AccountContext from "./../account/AccountContext";
 import useInput from "./../useInput";
 
@@ -55,7 +55,7 @@ export default () => {
 
   return (
     <>
-      {error ? <ErrorHandeling data={error}></ErrorHandeling> : null}
+      {error ? <ErrorHandler data={error}></ErrorHandler> : null}
       <h3 className={styles.formTitle}>Login with your Notifies account.</h3>
       <Form onSubmit={handleSubmit} validated className={styles.createForm}>
         <Form.Group controlId='formGroupUserName'>

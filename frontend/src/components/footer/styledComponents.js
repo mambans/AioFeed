@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const StyledFooterContainer = styled.div`
+export const StyledFooterContainer = styled.div`
   display: flex;
   background-color: hsla(0, 0%, 0%, 0.5);
   padding: 15px;
@@ -48,7 +48,7 @@ const StyledFooterContainer = styled.div`
   }
 `;
 
-const StyledButtonLinks = styled.button`
+export const StyledButtonLinks = styled.button`
   background: none;
   border: none;
   text-align: left;
@@ -56,10 +56,8 @@ const StyledButtonLinks = styled.button`
   padding: 0;
 `;
 
-const StyledCenterBottomText = styled.p`
+export const StyledCenterBottomText = styled.p`
   display: flex;
   align-items: center;
   justify-content: center;
 `;
-
-export { StyledFooterContainer, StyledButtonLinks, StyledCenterBottomText };

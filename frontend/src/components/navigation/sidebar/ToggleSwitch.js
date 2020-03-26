@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Switch from "react-switch";
 
-import { StyledToggleSwitch } from "./styledComponent";
+import { StyledToggleSwitch } from "./StyledComponent";
 
 export default ({ setEnable, enabled, label, tokenExists }) => {
   const [checked, setChecked] = useState(enabled || false);

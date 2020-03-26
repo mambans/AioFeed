@@ -2,9 +2,9 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import React, { useState, useEffect, useRef, useCallback, useMemo, useContext } from "react";
 import { throttle, debounce } from "lodash";
 
-import ErrorHandeling from "../../error/Error";
+import ErrorHandler from "../../error/Index";
 import getFollowedVods from "./GetFollowedVods";
-import TwitchVodElement from "./TwitchVodElement";
+import VodElement from "./VodElement";
 import { SubFeedContainer } from "./../../sharedStyledComponents";
 import Header from "./Header";
 import { StyledLoadmore } from "./../StyledComponents";
@@ -25,7 +25,8 @@ export default () => {
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [vodError, setVodError] = useState(null);
-  const transition = useRef("fade-1s");
+  // const transition = useRef("fade-1s");
+  const transition = useRef("videoFade-1s");
   const loadmoreRef = useRef();
   const resetVodAmountsTimer = useRef();
   const VodHeaderRef = useRef();
@@ -216,17 +217,17 @@ export default () => {
 
   if (!twitchToken) {
     return (
-      <ErrorHandeling
+      <ErrorHandler
         data={{
           title: "Not authenticated/connected with Twitch.",
           message: "No access token for twitch available.",
-        }}></ErrorHandeling>
+        }}></ErrorHandler>
     );
   } else if (error) {
     return (
       <>
         <Header refresh={refresh} refreshing={refreshing} vods={vods} ref={VodHeaderRef} />
-        <ErrorHandeling data={error} style={{ marginTop: "-150px" }}></ErrorHandeling>
+        <ErrorHandler data={error} style={{ marginTop: "-150px" }}></ErrorHandler>
       </>
     );
   }
@@ -242,11 +243,11 @@ export default () => {
     );
   } else if (!twitchToken) {
     return (
-      <ErrorHandeling
+      <ErrorHandler
         data={{
           title: "Couldn't load Twitch-vod feed",
           message: "You are not connected with your Twitch account to Notifies",
-        }}></ErrorHandeling>
+        }}></ErrorHandler>
     );
   } else {
     return (
@@ -268,7 +269,7 @@ export default () => {
                   classNames={transition.current}
                   // classNames='videoFade-1s'
                   unmountOnExit>
-                  <TwitchVodElement
+                  <VodElement
                     data={vod}
                     transition={transition.current}
                     // setTransition={() => {
