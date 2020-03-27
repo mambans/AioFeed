@@ -69,7 +69,7 @@ export default () => {
   const channelinfoTimer = useRef();
   const viewersTimer = useRef();
   const uptimeTimer = useRef();
-  const OpenedDate = useRef();
+  const OpenedDate = useRef(new Date().getTime());
   const fadeTimer = useRef();
 
   if (type === "live" || type === "player") {
@@ -85,12 +85,6 @@ export default () => {
     } else {
       twitchPlayer.current.pause();
       setIsPaused(true);
-    }
-  };
-
-  const setOpenedTime = () => {
-    if (!OpenedDate.current) {
-      OpenedDate.current = new Date().getTime();
     }
   };
 
@@ -126,14 +120,6 @@ export default () => {
       TwitchPlayer._bridge._iframe.webkitRequestFullScreen();
     }
   };
-
-  useEffect(() => {
-    window.addEventListener("focus", setOpenedTime);
-
-    return () => {
-      window.removeEventListener("focus", setOpenedTime);
-    };
-  }, []);
 
   useEffect(() => {
     const uptTimer = uptimeTimer.current;
