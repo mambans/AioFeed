@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import React, { useState, useContext } from "react";
 
 import { DeleteAccountForm, DeleteAccountFooter, DeleteAccountButton } from "./StyledComponent";
-import AccountContext from "./../../account/AccountContext";
+import { AccountContext } from "./../../account/AccountContext";
 import styles from "./Sidebar.module.scss";
 import useInput from "./../../useInput";
 

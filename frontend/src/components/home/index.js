@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from "react";
 
 import "./Home.scss";
 import { BlurOverlay, TopBlurOverlay, LogoText, WelcomeContainer } from "./StyledComponents";
-import NavigationContext from "./../navigation/NavigationContext";
+import { NavigationContext } from "./../navigation/NavigationContext";
 
 const INACTIVE_TIMER = 120; // seconds
 

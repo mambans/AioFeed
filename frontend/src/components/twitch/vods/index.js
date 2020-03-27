@@ -8,8 +8,8 @@ import VodElement from "./VodElement";
 import { SubFeedContainer } from "./../../sharedStyledComponents";
 import Header from "./Header";
 import { StyledLoadmore } from "./../StyledComponents";
-import AccountContext from "./../../account/AccountContext";
-import VodsContext from "./VodsContext";
+import { AccountContext } from "./../../account/AccountContext";
+import { VodsContext } from "./VodsContext";
 import LoadingBoxs from "./../LoadingBoxs";
 
 export default () => {

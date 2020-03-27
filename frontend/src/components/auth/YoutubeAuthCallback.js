@@ -4,8 +4,8 @@ import axios from "axios";
 
 import Util from "../../util/Util";
 import ErrorHandler from "./../error";
-import AccountContext from "./../account/AccountContext";
-import NavigationContext from "./../navigation/NavigationContext";
+import { AccountContext } from "./../account/AccountContext";
+import { NavigationContext } from "./../navigation/NavigationContext";
 
 function getParameterByName(name, url) {
   if (!url) url = window.location.href;

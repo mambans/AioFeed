@@ -5,7 +5,7 @@ import { CSSTransition } from "react-transition-group";
 import { FaGithub } from "react-icons/fa";
 
 import RenderNotifications from "./../notifications";
-import NavigationContext from "./NavigationContext";
+import { NavigationContext } from "./NavigationContext";
 import "./Navigation.scss";
 import Sidebar from "./sidebar";
 

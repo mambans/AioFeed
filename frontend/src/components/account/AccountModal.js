@@ -12,10 +12,10 @@ import { FaTwitch } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa";
 import { GoSignOut } from "react-icons/go";
 
-import AccountContext from "./../account/AccountContext";
-import FeedsContext from "./../feed/FeedsContext";
+import { AccountContext } from "./../account/AccountContext";
+import { FeedsContext } from "./../feed/FeedsContext";
 import LoginModal from "../account/LoginModal";
-import NavigationContext from "./../navigation/NavigationContext";
+import { NavigationContext } from "./../navigation/NavigationContext";
 import styles from "./Account.module.scss";
 import Themeselector from "./../themes/Themeselector";
 import ToggleSwitch from "./../navigation/sidebar/ToggleSwitch";

@@ -10,8 +10,8 @@ import { Link } from "react-router-dom";
 import { ButtonList } from "./../sharedStyledComponents";
 import { Notification } from "./styledComponent";
 import { UnseenNotifcationCount } from "./../notifications/styledComponent";
-import NotificationsContext from "./../notifications/NotificationsContext";
-import NavigationContext from "./../navigation/NavigationContext";
+import { NotificationsContext } from "./../notifications/NotificationsContext";
+import { NavigationContext } from "./../navigation/NavigationContext";
 
 import styles from "./Notifications.module.scss";
 import Util from "../../util/Util";

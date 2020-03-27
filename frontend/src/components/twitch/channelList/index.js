@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 
 import ChannelListElement from "./ChannelListElement";
-import AccountContext from "./../../account/AccountContext";
+import { AccountContext } from "./../../account/AccountContext";
 import StyledLoadingList from "./../LoadingList";
 import AddVideoExtraData from "./../AddVideoExtraData";
 import { ChannelListUl } from "./StyledComponents";

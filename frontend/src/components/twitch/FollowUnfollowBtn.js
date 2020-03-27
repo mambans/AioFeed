@@ -4,7 +4,7 @@ import React, { useEffect, useState, useContext } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 
 import { FollowBtn, UnfollowBtn } from "./StyledComponents";
-import AccountContext from "./../account/AccountContext";
+import { AccountContext } from "./../account/AccountContext";
 import reauthenticate from "./reauthenticate";
 import Util from "./../../util/Util";
 

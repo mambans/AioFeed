@@ -14,11 +14,11 @@ import React, { useContext, useEffect, useState, useRef, useCallback } from "rea
 import { throttle } from "lodash";
 
 import reauthenticate from "./../reauthenticate";
-import AccountContext from "../../account/AccountContext";
+import { AccountContext } from "../../account/AccountContext";
 import fetchAndSetChannelInfo from "./fetchAndSetChannelInfo";
 import fetchUptime from "./fetchUptime";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
-import NavigationContext from "./../../navigation/NavigationContext";
+import { NavigationContext } from "./../../navigation/NavigationContext";
 import PlayerEvents from "./PlayerEvents";
 import Util from "./../../../util/Util";
 import VolumeSlider from "./VolumeSlider";

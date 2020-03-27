@@ -3,14 +3,14 @@ import React, { useEffect, useState, useRef, useCallback, useContext } from "rea
 import ErrorHandler from "../../error";
 import getFollowedChannels from "./../GetFollowedChannels";
 import getFollowedOnlineStreams from "./GetFollowedStreams";
-import NotificationsContext from "./../../notifications/NotificationsContext";
+import { NotificationsContext } from "./../../notifications/NotificationsContext";
 import styles from "./../Twitch.module.scss";
 import Util from "../../../util/Util";
 import Header from "./Header";
 import LoadingBoxs from "./../LoadingBoxs";
-import AccountContext from "./../../account/AccountContext";
-import FeedsContext from "./../../feed/FeedsContext";
-import VodsContext from "./../vods/VodsContext";
+import { AccountContext } from "./../../account/AccountContext";
+import { FeedsContext } from "./../../feed/FeedsContext";
+import { VodsContext } from "./../vods/VodsContext";
 import FetchSingelChannelVods from "./../vods/FetchSingelChannelVods";
 
 const REFRESH_RATE = 25; // seconds

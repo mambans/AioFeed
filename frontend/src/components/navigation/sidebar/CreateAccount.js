@@ -5,8 +5,8 @@ import { Form, Button } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
 
 import { StyledCreateFormTitle, StyledCreateForm, StyledAlert } from "./StyledComponent";
-import NavigationContext from "./../NavigationContext";
-import AccountContext from "./../../account/AccountContext";
+import { NavigationContext } from "./../NavigationContext";
+import { AccountContext } from "./../../account/AccountContext";
 import LoadingIndicator from "./../../LoadingIndicator";
 import useInput from "./../../useInput";
 

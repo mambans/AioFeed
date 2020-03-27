@@ -4,7 +4,7 @@ import "./index.scss";
 import "./transitions.scss";
 import "./components/themes/Themes.scss";
 import App from "./components/app/App";
-import ThemeProvider from "./../src/components/themes/ThemeProvider";
+import { ThemeProvider } from "./../src/components/themes/ThemeContext";
 
 import * as serviceWorker from "./serviceWorker";
 

@@ -1,11 +1,11 @@
 import { Form, Button } from "react-bootstrap";
 import React, { useState, useContext } from "react";
 
-import AccountContext from "./../../account/AccountContext";
+import { AccountContext } from "./../../account/AccountContext";
 import LoadingList from "./../LoadingList";
 import VodChannelListElement from "./VodChannelListElement";
 import useInput from "./../../useInput";
-import VodsContext from "./VodsContext";
+import { VodsContext } from "./VodsContext";
 import AddVodChannel from "./AddVodChannel";
 
 export default () => {

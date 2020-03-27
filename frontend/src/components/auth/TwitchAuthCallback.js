@@ -3,10 +3,10 @@ import React, { useEffect, useState, useCallback, useContext } from "react";
 
 import Util from "../../util/Util";
 import ErrorHandler from "./../error";
-import AccountContext from "./../account/AccountContext";
-import NavigationContext from "./../navigation/NavigationContext";
+import { AccountContext } from "./../account/AccountContext";
+import { NavigationContext } from "./../navigation/NavigationContext";
 import LoadingIndicator from "./../LoadingIndicator";
-import FeedsContext from "../feed/FeedsContext";
+import { FeedsContext } from "../feed/FeedsContext";
 
 function TwitchAuthCallback() {
   const [error, setError] = useState();

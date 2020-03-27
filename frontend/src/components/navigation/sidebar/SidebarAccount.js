@@ -26,9 +26,9 @@ import {
   StyledReconnectIcon,
   CloseAddFormBtn,
 } from "./StyledComponent";
-import AccountContext from "./../../account/AccountContext";
+import { AccountContext } from "./../../account/AccountContext";
 import DeleteAccountButton from "./DeleteAccountButton";
-import FeedsContext from "./../../feed/FeedsContext";
+import { FeedsContext } from "./../../feed/FeedsContext";
 
 export default () => {
   document.title = "Notifies | Account";
