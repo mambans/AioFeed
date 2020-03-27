@@ -3,8 +3,16 @@ import axios from "axios";
 export default async ({ channel, channels, setChannels, username, authKey }) => {
   try {
     const existingChannels = [channel.toLowerCase(), ...channels];
-    setChannels(existingChannels);
-    localStorage.setItem("VodChannels", JSON.stringify(existingChannels));
+    const newChannels = [
+      ...new Set(
+        existingChannels.map(user => {
+          return user;
+        })
+      ),
+    ];
+
+    setChannels(newChannels);
+    localStorage.setItem("VodChannels", JSON.stringify(newChannels));
 
     await axios
       .put(
@@ -12,7 +20,7 @@ export default async ({ channel, channels, setChannels, username, authKey }) => 
         {
           username: username,
           authkey: authKey,
-          channels: existingChannels,
+          channels: newChannels,
         }
       )
       .catch(error => {
