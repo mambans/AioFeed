@@ -86,8 +86,8 @@ export const StyledCountdownCircle = styled.div`
     stroke-width: 3px;
     stroke: white;
     fill: none;
-    animation: countdown ${({ duration }) => duration}s linear 1 forwards;
-    /* animation: countdown 25s linear 1 forwards; */
+    /* animation: countdown ${({ startDuration }) => startDuration}s linear 1 forwards; */
+    animation: countdown 25s linear 1 forwards;
   }
 
   @keyframes countdown {
