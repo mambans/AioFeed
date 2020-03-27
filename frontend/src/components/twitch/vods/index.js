@@ -25,8 +25,6 @@ export default () => {
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [vodError, setVodError] = useState(null);
-  // const transition = useRef("fade-1s");
-  const transition = useRef("videoFade-1s");
   const loadmoreRef = useRef();
   const resetVodAmountsTimer = useRef();
   const VodHeaderRef = useRef();
@@ -266,16 +264,9 @@ export default () => {
                 <CSSTransition
                   key={vod.id + vod.duration}
                   timeout={1000}
-                  classNames={transition.current}
-                  // classNames='videoFade-1s'
+                  classNames={vod.transition || "fade-1s"}
                   unmountOnExit>
-                  <VodElement
-                    data={vod}
-                    transition={transition.current}
-                    // setTransition={() => {
-                    //   transition.current = "videoFade-1s";
-                    // }}
-                  />
+                  <VodElement data={vod} />
                 </CSSTransition>
               );
             })}
