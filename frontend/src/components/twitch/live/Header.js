@@ -8,7 +8,7 @@ import { FaTwitch } from "react-icons/fa";
 
 import { HeaderContainerTwitchLive, HeaderLeftSubcontainer } from "./../StyledComponents";
 import { RefreshButton, HeaderTitle, ButtonList } from "./../../sharedStyledComponents";
-import RenderFollowedChannelList from "./../channelList/Index";
+import RenderFollowedChannelList from "./../channelList";
 import Util from "../../../util/Util";
 import CountdownCircleTimer from "./CountdownCircleTimer";
 

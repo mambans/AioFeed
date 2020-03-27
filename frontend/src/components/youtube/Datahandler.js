@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback, useContext } from "react";
 
-import ErrorHandler from "../error/Index";
+import ErrorHandler from "../error";
 import getFollowedChannels from "./GetFollowedChannels";
 import getSubscriptionVideos from "./GetSubscriptionVideos";
 import AccountContext from "../account/AccountContext";

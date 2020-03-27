@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import uniqid from "uniqid";
 
 import Util from "../../util/Util";
-import ErrorHandler from "./../error/Index";
+import ErrorHandler from "./../error";
 
 function YoutubeAuth() {
   const [error, setError] = useState();

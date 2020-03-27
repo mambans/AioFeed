@@ -3,11 +3,11 @@ import { CSSTransition } from "react-transition-group";
 import React, { useState, useEffect, useContext } from "react";
 
 import Handler from "../twitch/live/Handler";
-import ErrorHandler from "./../error/Index";
+import ErrorHandler from "./../error";
 import FeedsContext from "./FeedsContext";
 import styles from "./Feed.module.scss";
-import TwitchLive from "../twitch/live/Index";
-import TwitchVods from "../twitch/vods/Index";
+import TwitchLive from "../twitch/live";
+import TwitchVods from "../twitch/vods";
 import Util from "../../util/Util";
 import Youtube from "./../youtube/Youtube";
 import YoutubeDataHandler from "./../youtube/Datahandler";

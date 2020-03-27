@@ -2,7 +2,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import React, { useState, useEffect, useRef, useCallback, useMemo, useContext } from "react";
 import { throttle, debounce } from "lodash";
 
-import ErrorHandler from "../../error/Index";
+import ErrorHandler from "../../error";
 import getFollowedVods from "./GetFollowedVods";
 import VodElement from "./VodElement";
 import { SubFeedContainer } from "./../../sharedStyledComponents";

@@ -4,7 +4,7 @@ import { Form, Button } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
 
 import styles from "./Account.module.scss";
-import ErrorHandler from "../error/Index";
+import ErrorHandler from "../error";
 import AccountContext from "./../account/AccountContext";
 import useInput from "./../useInput";
 

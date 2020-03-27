@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
 
-import ErrorHandler from "../../error/Index";
+import ErrorHandler from "../../error";
 import getFollowedChannels from "./../GetFollowedChannels";
 import getFollowedOnlineStreams from "./GetFollowedStreams";
 import NotificationsContext from "./../../notifications/NotificationsContext";

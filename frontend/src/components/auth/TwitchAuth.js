@@ -3,7 +3,7 @@ import { Spinner } from "react-bootstrap";
 import uniqid from "uniqid";
 
 import Util from "../../util/Util";
-import ErrorHandler from "./../error/Index";
+import ErrorHandler from "./../error";
 
 function TwitchAuth() {
   const [error, setError] = useState();

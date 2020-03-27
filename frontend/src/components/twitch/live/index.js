@@ -5,7 +5,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import Header from "./Header";
 import StreamEle from "./StreamElement.js";
 import styles from "./../Twitch.module.scss";
-import Sidebar from "./../sidebar/Index";
+import Sidebar from "./../sidebar";
 import Util from "../../../util/Util";
 
 export default ({ data }) => {
