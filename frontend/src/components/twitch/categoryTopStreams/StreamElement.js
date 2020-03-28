@@ -45,9 +45,7 @@ export default ({ data }) => {
   return (
     <VideoContainer key={data.id}>
       <ImageContainer ref={ref}>
-        {isHovered ? (
-          <StreamHoverIframe id={data.id} data={data} setIsHovered={setIsHovered} />
-        ) : null}
+        {isHovered && <StreamHoverIframe id={data.id} data={data} setIsHovered={setIsHovered} />}
         <Link
           to={{
             pathname: "/live/" + data.user_name.toLowerCase(),

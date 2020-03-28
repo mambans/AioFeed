@@ -66,13 +66,13 @@ export default ({ data, vodBtnDisabled }) => {
   return (
     <VideoContainer>
       <ImageContainer ref={imgRef}>
-        {data.thumbnail_url === "" ? (
+        {data.thumbnail_url === "" && (
           <VodLiveIndicator to={`/live/${data.user_name}`}>Live</VodLiveIndicator>
-        ) : null}
+        )}
         <a className={styles.img} href={data.url}>
-          {!previewAvailable ? (
+          {!previewAvailable && (
             <Spinner className='loadingSpinner' animation='border' role='status' variant='light' />
-          ) : null}
+          )}
           {isHovered && previewAvailable && previewAvailable !== "null" ? (
             <div
               alt=''
@@ -117,11 +117,11 @@ export default ({ data, vodBtnDisabled }) => {
             />
           </p>
         </div>
-        {data.type !== "archive" ? (
+        {data.type !== "archive" && (
           <VodType>
             <span>{data.type}</span>
           </VodType>
-        ) : null}
+        )}
       </ImageContainer>
       {data.title.length > 50 ? (
         <OverlayTrigger

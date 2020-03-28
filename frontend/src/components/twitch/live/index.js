@@ -40,7 +40,7 @@ export default ({ data }) => {
       <Header data={data} refresh={refresh} />
 
       {data.error ? (
-        show ? (
+        show && (
           <Alert
             variant='secondary'
             style={{
@@ -52,7 +52,7 @@ export default ({ data }) => {
             onClose={() => setShow(false)}>
             <Alert.Heading>{data.error}</Alert.Heading>
           </Alert>
-        ) : null
+        )
       ) : (
         <>
           <Sidebar
@@ -88,19 +88,21 @@ export default ({ data }) => {
                 })}
               </TransitionGroup>
             </div>
-          ) : show ? (
-            <Alert
-              variant='secondary'
-              style={{
-                ...Util.feedAlertWarning,
-                width: "var(--feedsWidth)",
-                margin: "var(--feedsMargin)",
-              }}
-              dismissible
-              onClose={() => setShow(false)}>
-              <Alert.Heading>No streams online at the momment</Alert.Heading>
-            </Alert>
-          ) : null}
+          ) : (
+            show && (
+              <Alert
+                variant='secondary'
+                style={{
+                  ...Util.feedAlertWarning,
+                  width: "var(--feedsWidth)",
+                  margin: "var(--feedsMargin)",
+                }}
+                dismissible
+                onClose={() => setShow(false)}>
+                <Alert.Heading>No streams online at the momment</Alert.Heading>
+              </Alert>
+            )
+          )}
         </>
       )}
     </>

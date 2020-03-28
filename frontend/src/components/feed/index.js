@@ -68,7 +68,7 @@ export default function Feed() {
   } else {
     return (
       <>
-        {enableTwitch ? (
+        {enableTwitch && (
           <Handler>
             {data => (
               <CSSTransition in={enableTwitch} timeout={0} classNames='fade-1s' unmountOnExit>
@@ -78,9 +78,9 @@ export default function Feed() {
               </CSSTransition>
             )}
           </Handler>
-        ) : null}
+        )}
 
-        {enableYoutube && delayedEnableYoutube ? (
+        {enableYoutube && delayedEnableYoutube && (
           <div className={styles.container}>
             <YoutubeDataHandler>
               {data => (
@@ -91,7 +91,7 @@ export default function Feed() {
                     requestError={data.requestError}
                     followedChannels={data.followedChannels}
                   />
-                  {data.error ? <ErrorHandler data={data.error}></ErrorHandler> : null}
+                  {data.error && <ErrorHandler data={data.error}></ErrorHandler>}
                   <Youtube
                     requestError={data.requestError}
                     videos={data.videos}
@@ -101,13 +101,13 @@ export default function Feed() {
               )}
             </YoutubeDataHandler>
           </div>
-        ) : null}
+        )}
 
-        {enableTwitchVods && delayedEnableTwitchVods ? (
+        {enableTwitchVods && delayedEnableTwitchVods && (
           <div className={styles.container}>
             <TwitchVods />
           </div>
-        ) : null}
+        )}
       </>
     );
   }

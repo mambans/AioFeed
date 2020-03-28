@@ -78,7 +78,7 @@ export default ({
                 ) : (
                   <ClipElement
                     data={item}
-                    user_name={channelInfo ? channelInfo.name : null}
+                    user_name={channelInfo && channelInfo.name}
                     transition='fade-1s'
                   />
                 )}

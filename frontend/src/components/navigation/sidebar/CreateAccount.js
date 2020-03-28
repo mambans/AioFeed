@@ -82,13 +82,13 @@ export default () => {
   } else {
     return (
       <>
-        {error ? (
+        {error && (
           <StyledAlert variant='warning' dismissible onClose={() => setError(null)}>
             <Alert.Heading>{error.title}</Alert.Heading>
             <hr />
             {error.message.toString()}
           </StyledAlert>
-        ) : null}
+        )}
         <StyledCreateFormTitle>
           <h3>Create</h3>
           <p>Create a Notifies account.</p>
@@ -141,7 +141,7 @@ export default () => {
           </div>
         </StyledCreateForm>
 
-        {validated ? <LoadingIndicator height={150} width={150} /> : null}
+        {validated && <LoadingIndicator height={150} width={150} />}
       </>
     );
   }

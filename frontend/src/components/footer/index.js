@@ -17,70 +17,72 @@ import {
 const Footer = () => {
   const { footerVisible } = useContext(NavigationContext);
 
-  return footerVisible ? (
-    <StyledFooterContainer>
-      <div>
-        <ul>
-          <li>
-            <Nav.Link as={NavLink} to='/'>
-              <FaHome size={20} style={{ marginRight: "0.75rem" }} />
-              Home
+  return (
+    footerVisible && (
+      <StyledFooterContainer>
+        <div>
+          <ul>
+            <li>
+              <Nav.Link as={NavLink} to='/'>
+                <FaHome size={20} style={{ marginRight: "0.75rem" }} />
+                Home
+              </Nav.Link>
+            </li>
+            <li>
+              <Nav.Link as={NavLink} to='/feed'>
+                <MdRssFeed size={20} style={{ marginRight: "0.75rem" }} />
+                Feed
+              </Nav.Link>
+            </li>
+            <li>
+              <Nav.Link as={NavLink} to='/account'>
+                <MdAccountCircle size={20} style={{ marginRight: "0.75rem" }} />
+                Account
+              </Nav.Link>
+            </li>
+            <li>
+              <Nav.Link as={NavLink} to='/account/create'>
+                <MdAccountCircle size={20} style={{ marginRight: "0.75rem" }} />
+                Create account
+              </Nav.Link>
+            </li>
+          </ul>
+        </div>
+        <div style={{ flexDirection: "column" }}>
+          <p>Test text</p>
+          <p>Test text</p>
+          <StyledCenterBottomText>
+            <Nav.Link as={NavLink} to='/legality#Conditions'>
+              Conditions of Use
             </Nav.Link>
-          </li>
-          <li>
-            <Nav.Link as={NavLink} to='/feed'>
-              <MdRssFeed size={20} style={{ marginRight: "0.75rem" }} />
-              Feed
+            <Nav.Link as={NavLink} to='/legality#Privacy'>
+              Privacy Notice
             </Nav.Link>
-          </li>
-          <li>
-            <Nav.Link as={NavLink} to='/account'>
-              <MdAccountCircle size={20} style={{ marginRight: "0.75rem" }} />
-              Account
-            </Nav.Link>
-          </li>
-          <li>
-            <Nav.Link as={NavLink} to='/account/create'>
-              <MdAccountCircle size={20} style={{ marginRight: "0.75rem" }} />
-              Create account
-            </Nav.Link>
-          </li>
-        </ul>
-      </div>
-      <div style={{ flexDirection: "column" }}>
-        <p>Test text</p>
-        <p>Test text</p>
-        <StyledCenterBottomText>
-          <Nav.Link as={NavLink} to='/legality#Conditions'>
-            Conditions of Use
-          </Nav.Link>
-          <Nav.Link as={NavLink} to='/legality#Privacy'>
-            Privacy Notice
-          </Nav.Link>
-          © 2020 Skåne Sweden, Robin Persson. No rights reserved.
-        </StyledCenterBottomText>
-      </div>
-      <div>
-        <ul>
-          <li>
-            <a href='https://github.com/mambans/Notifies'>
-              <FaGithub size={20} style={{ marginRight: "0.75rem" }} />
-              Github-Notifies
-            </a>
-          </li>
-          <li>
-            <StyledButtonLinks
-              onClick={() => {
-                window.open("mailto:perssons1996@gmail.com?subject=subject&body=body");
-              }}>
-              <MdEmail size={20} style={{ marginRight: "0.75rem" }} />
-              Email
-            </StyledButtonLinks>
-          </li>
-        </ul>
-      </div>
-    </StyledFooterContainer>
-  ) : null;
+            © 2020 Skåne Sweden, Robin Persson. No rights reserved.
+          </StyledCenterBottomText>
+        </div>
+        <div>
+          <ul>
+            <li>
+              <a href='https://github.com/mambans/Notifies'>
+                <FaGithub size={20} style={{ marginRight: "0.75rem" }} />
+                Github-Notifies
+              </a>
+            </li>
+            <li>
+              <StyledButtonLinks
+                onClick={() => {
+                  window.open("mailto:perssons1996@gmail.com?subject=subject&body=body");
+                }}>
+                <MdEmail size={20} style={{ marginRight: "0.75rem" }} />
+                Email
+              </StyledButtonLinks>
+            </li>
+          </ul>
+        </div>
+      </StyledFooterContainer>
+    )
+  );
 };
 
 export default Footer;

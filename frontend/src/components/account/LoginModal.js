@@ -55,7 +55,7 @@ export default () => {
 
   return (
     <>
-      {error ? <ErrorHandler data={error}></ErrorHandler> : null}
+      {error && <ErrorHandler data={error}></ErrorHandler>}
       <h3 className={styles.formTitle}>Login with your Notifies account.</h3>
       <Form onSubmit={handleSubmit} validated className={styles.createForm}>
         <Form.Group controlId='formGroupUserName'>
@@ -70,9 +70,9 @@ export default () => {
           Login
         </Button>
       </Form>
-      {username && !error && (currentPage === "/account/login" || currentPage === "/account") ? (
+      {username && !error && (currentPage === "/account/login" || currentPage === "/account") && (
         <Redirect to='/account'></Redirect>
-      ) : null}
+      )}
     </>
   );
 };

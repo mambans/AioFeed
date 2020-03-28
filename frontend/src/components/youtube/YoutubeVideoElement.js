@@ -56,12 +56,12 @@ function YoutubeVideoElement(data) {
         if (data.transition !== "videoFade-1s") data.setTransition();
       }}>
       <ImageContainer id={data.video.contentDetails.upload.videoId} ref={ref}>
-        {isHovered ? (
+        {isHovered && (
           <VideoHoverIframe
             id={data.video.contentDetails.upload.videoId}
             data={data.video}
             setIsHovered={setIsHovered}></VideoHoverIframe>
-        ) : null}
+        )}
         <a
           className={styles.img}
           href={`https://www.youtube.com/watch?v=` + data.video.contentDetails.upload.videoId}>

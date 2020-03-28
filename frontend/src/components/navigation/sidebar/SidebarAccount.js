@@ -173,7 +173,7 @@ export default () => {
           Change Profile image
         </ShowAddFormBtn>
       )}
-      {showAddImage ? <UpdateProfileImg /> : null}
+      {showAddImage && <UpdateProfileImg />}
       <StyledProfileImg
         src={profileImage || `${process.env.PUBLIC_URL}/images/placeholder.jpg`}
         alt=''
@@ -319,12 +319,12 @@ export default () => {
       <StyledLogoutContiner>
         <DeleteAccountButton />
         {window.location.href !==
-        "http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/account" ? (
+          "http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/account" && (
           <Button label='linkAsButton' style={{ width: "100%" }} as={NavLink} to='/account'>
             Account page
             <MdAccountCircle size={24} style={{ marginLeft: "0.75rem" }} />
           </Button>
-        ) : null}
+        )}
         <Button style={{ width: "100%" }} label='logout' onClick={logout}>
           Logout
           <GoSignOut size={24} style={{ marginLeft: "0.75rem" }} />

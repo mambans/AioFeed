@@ -207,7 +207,7 @@ export default () => {
               {videoType}
             </TypeButton>
 
-            {typeListOpen ? (
+            {typeListOpen && (
               <TypeListUlContainer>
                 <li
                   onClick={() => {
@@ -232,7 +232,7 @@ export default () => {
                   Videos
                 </li> */}
               </TypeListUlContainer>
-            ) : null}
+            )}
           </div>
 
           {videoType === "Videos" ? (

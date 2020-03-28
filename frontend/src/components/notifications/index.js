@@ -89,36 +89,35 @@ export default () => {
               }}>
               Clear all ({props.notifications ? props.notifications.length : 0})
             </li>
-            {props.notifications
-              ? props.notifications.map(item => {
-                  return (
-                    <Notification key={item.key} type={item.status}>
-                      <Link
-                        to={`/channel/${item.user_name.toLowerCase()}`}
-                        className='profileImg'
-                        alt=''>
-                        <img src={item.profile_img_url} alt=''></img>
+            {props.notifications &&
+              props.notifications.map(item => {
+                return (
+                  <Notification key={item.key} type={item.status}>
+                    <Link
+                      to={`/channel/${item.user_name.toLowerCase()}`}
+                      className='profileImg'
+                      alt=''>
+                      <img src={item.profile_img_url} alt=''></img>
+                    </Link>
+                    <Link to={`/channel/${item.user_name.toLowerCase()}`} alt='' className='name'>
+                      <b>{item.user_name}</b> went {item.status}
+                    </Link>
+                    {item.status === "Live" && (
+                      <Link to={`/channel/${item.user_name.toLowerCase()}`} className='title'>
+                        {Util.truncate(item.title, 50)}
                       </Link>
-                      <Link to={`/channel/${item.user_name.toLowerCase()}`} alt='' className='name'>
-                        <b>{item.user_name}</b> went {item.status}
-                      </Link>
-                      {item.status === "Live" ? (
-                        <Link to={`/channel/${item.user_name.toLowerCase()}`} className='title'>
-                          {Util.truncate(item.title, 50)}
-                        </Link>
-                      ) : null}
-                      <div className='date'>
-                        <div>
-                          <Moment fromNow id='timeago'>
-                            {item.date}
-                          </Moment>
-                          <p id='time'>{moment(item.date).format("MM-DD HH:mm")}</p>
-                        </div>
+                    )}
+                    <div className='date'>
+                      <div>
+                        <Moment fromNow id='timeago'>
+                          {item.date}
+                        </Moment>
+                        <p id='time'>{moment(item.date).format("MM-DD HH:mm")}</p>
                       </div>
-                    </Notification>
-                  );
-                })
-              : null}
+                    </div>
+                  </Notification>
+                );
+              })}
           </ul>
         </div>
       </Modal>

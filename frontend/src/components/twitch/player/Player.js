@@ -336,17 +336,17 @@ export default () => {
                 showcursor={showControlls}>
                 <InfoDisplay>
                   <>
-                    {channelInfo ? <img src={channelInfo.logo} alt='' /> : null}
+                    {channelInfo && <img src={channelInfo.logo} alt='' />}
                     <div id='name'>
                       <a href={channelInfo ? channelInfo.url : `https://www.twitch.tv/${id}`}>
                         {channelInfo ? channelInfo.display_name : id}
                       </a>
-                      {channelInfo ? (
+                      {channelInfo && (
                         <FollowUnfollowBtn
                           channelName={channelInfo ? channelInfo.display_name : id}
                           id={channelInfo._id}
                         />
-                      ) : null}
+                      )}
                     </div>
                     <p id='title'>{channelInfo ? channelInfo.status : p_title}</p>
                     <Link id='game' to={`/game/${channelInfo ? channelInfo.game : p_game}`}>
@@ -354,9 +354,7 @@ export default () => {
                     </Link>
                   </>
 
-                  {viewers ? (
-                    <p id='viewers'> Viewers: {Util.formatViewerNumbers(viewers)} </p>
-                  ) : null}
+                  {viewers && <p id='viewers'> Viewers: {Util.formatViewerNumbers(viewers)} </p>}
                   {uptime ? (
                     <p id='uptime'>
                       Uptime <Moment durationFromNow>{uptime}</Moment>
@@ -379,7 +377,7 @@ export default () => {
                   // onChange={Function}
                   // onChangeComplete={Function}
                 />
-                {showPlaybackStats && playbackStats ? (
+                {showPlaybackStats && playbackStats && (
                   <PlaybackStats>
                     {Object.keys(playbackStats).map(statName => {
                       return (
@@ -395,7 +393,7 @@ export default () => {
                       );
                     })}
                   </PlaybackStats>
-                ) : null}
+                )}
                 <ButtonShowStats
                   title='Show video stats'
                   onClick={() => {
@@ -417,11 +415,11 @@ export default () => {
                   }}
                 />
 
-                {channelInfo ? (
+                {channelInfo && (
                   <CreateClipButton title='Create clip' onClick={CreateAndOpenClip} />
-                ) : null}
+                )}
 
-                {showQualities && qualities ? (
+                {showQualities && qualities && (
                   <QualitiesList>
                     {qualities.map(quality => {
                       return (
@@ -437,7 +435,7 @@ export default () => {
                       );
                     })}
                   </QualitiesList>
-                ) : null}
+                )}
                 <ButtonShowQualities
                   id='showQualities'
                   title='Show qualities'
@@ -449,9 +447,7 @@ export default () => {
                   <MdSettings size={24} />
                   {activeQuality
                     ? activeQuality.name
-                    : twitchPlayer.current
-                    ? twitchPlayer.current.getQuality().name
-                    : null}
+                    : twitchPlayer.current && twitchPlayer.current.getQuality().name}
                 </ButtonShowQualities>
 
                 {true ? (
@@ -509,7 +505,7 @@ export default () => {
                 )}
               </VolumeEventOverlay>
             </CSSTransition>
-            {twitchPlayer.current ? (
+            {twitchPlayer.current && (
               <PlayerEvents
                 volumeEventOverlayRef={volumeEventOverlayRef}
                 setVolumeText={setVolumeText}
@@ -519,9 +515,9 @@ export default () => {
                 type='live'
                 OpenedDate={OpenedDate}
               />
-            ) : null}
+            )}
           </div>
-          {!hideChat ? (
+          {!hideChat && (
             <div id='chat'>
               <MdVerticalAlignBottom
                 style={{
@@ -542,7 +538,7 @@ export default () => {
                 src={`https://www.twitch.tv/embed/${id}/chat?darkpopout`}
               />
             </div>
-          ) : null}
+          )}
         </VideoAndChatContainer>
       </>
     );
@@ -551,14 +547,14 @@ export default () => {
       <>
         <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
           <PlayerNavbar>
-            {nameFromHash ? (
+            {nameFromHash && (
               <Link to={`/channel/${nameFromHash}`}>
                 <div id='icon'>
                   <MdAccountCircle size={20} />
                 </div>
                 {nameFromHash}'s channel page
               </Link>
-            ) : null}
+            )}
           </PlayerNavbar>
         </CSSTransition>
 

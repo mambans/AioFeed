@@ -11,7 +11,7 @@ export default ({ text, height, width, type, style }) => {
         height={height || 150}
         width={width || 150}
       />
-      {text ? <h1>{text}</h1> : null}
+      {text && <h1>{text}</h1>}
     </StyledLoadingContainer>
   );
 };

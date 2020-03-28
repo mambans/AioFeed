@@ -43,7 +43,7 @@ export default React.forwardRef((props, ref) => {
         <Moment fromNow className={styles.vodRefreshTimer} interval={60000}>
           {(vods && vods.loaded) || new Date()}
         </Moment>
-        {vodError ? (
+        {vodError && (
           <Alert
             key={vodError}
             style={{
@@ -63,7 +63,7 @@ export default React.forwardRef((props, ref) => {
             variant={"warning"}>
             {vodError}
           </Alert>
-        ) : null}
+        )}
       </HeaderLeftSubcontainer>
       <HeaderTitle>
         <MdVideocam size={32} style={{ color: "#6f166f" }} />

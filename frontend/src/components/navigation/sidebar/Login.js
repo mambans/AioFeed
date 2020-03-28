@@ -103,13 +103,13 @@ export default () => {
 
   return (
     <>
-      {error ? (
+      {error && (
         <StyledAlert variant='warning' dismissible onClose={() => setError(null)}>
           <Alert.Heading>{error.title}</Alert.Heading>
           <hr />
           {error.message.toString()}
         </StyledAlert>
-      ) : null}
+      )}
       <StyledCreateFormTitle>
         <h3>Login</h3>
         <p>Login with your Notifies account</p>
@@ -149,10 +149,10 @@ export default () => {
           </Button>
         </div>
       </StyledCreateForm>
-      {validated ? <LoadingIndicator height={150} width={150} /> : null}
-      {username && !error && (currentPage === "/account/login" || currentPage === "/account") ? (
+      {validated && <LoadingIndicator height={150} width={150} />}
+      {username && !error && (currentPage === "/account/login" || currentPage === "/account") && (
         <Redirect to='/account'></Redirect>
-      ) : null}
+      )}
     </>
   );
 };

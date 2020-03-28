@@ -15,7 +15,7 @@ export default ({ sortBy, setSortBy, setData }) => {
         <MdSort size={30} />
         Sort by: {sortBy}
       </SortButton>
-      {open ? (
+      {open && (
         <SortDropDownList>
           {SortOptions.map(option => {
             return (
@@ -31,7 +31,7 @@ export default ({ sortBy, setSortBy, setData }) => {
             );
           })}
         </SortDropDownList>
-      ) : null}
+      )}
     </div>
   );
 };

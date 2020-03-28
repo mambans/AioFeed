@@ -78,7 +78,7 @@ export default () => {
   } else {
     return (
       <>
-        {error ? <ErrorHandler data={error}></ErrorHandler> : null}
+        {error && <ErrorHandler data={error}></ErrorHandler>}
         <h3 className={styles.formTitle}>Create a Notifies account.</h3>
         <Form
           onSubmit={handleSubmit}

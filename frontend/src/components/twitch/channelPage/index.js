@@ -323,7 +323,7 @@ export default () => {
     return (
       <ChannelContainer>
         <VideoPlayer id='twitch-embed' style={{ display: videoOpen ? "block" : "none" }} />
-        {chatOpen ? (
+        {chatOpen && (
           <Chat
             frameborder='0'
             scrolling='yes'
@@ -332,7 +332,7 @@ export default () => {
             src={`https://www.twitch.tv/embed/${id}/chat?darkpopout`}
             // style={{ display: chatOpen ? "block" : "none" }}
           />
-        ) : null}
+        )}
         {videoOpen ? (
           <FaWindowClose
             title='Close video'
@@ -382,7 +382,7 @@ export default () => {
               <Name>
                 <div id='HeaderChannelInfo'>
                   <div id='ChannelName'>
-                    {isLive ? (
+                    {isLive && (
                       <StyledLiveInfoContainer>
                         <div id='LiveDetails'>
                           <span>Viewers: {Util.formatViewerNumbers(viewers)}</span>
@@ -404,7 +404,7 @@ export default () => {
                           </LiveIndicator>
                         </Link>
                       </StyledLiveInfoContainer>
-                    ) : null}
+                    )}
                     <Link
                       to={{
                         pathname: `/live/${id}`,
@@ -418,17 +418,15 @@ export default () => {
                       <img id='profileIcon' alt='' src={channelInfo.logo || p_logo} />
                       {channelInfo.display_name}
                     </Link>
-                    {channelInfo.partner ? (
+                    {channelInfo.partner && (
                       <img
                         id='partnered'
                         title='Partnered'
                         alt=''
                         src={`${process.env.PUBLIC_URL}/partnered.png`}
                       />
-                    ) : null}
-                    {channelInfo ? (
-                      <FollowUnfollowBtn channelName={id} id={channelInfo._id} />
-                    ) : null}
+                    )}
+                    {channelInfo && <FollowUnfollowBtn channelName={id} id={channelInfo._id} />}
                   </div>
                   <p id='title'>{channelInfo.status}</p>
                   <Link to={`/game/${channelInfo.game}`} id='game'>

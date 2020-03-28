@@ -71,7 +71,7 @@ const GameSearchBar = props => {
 
   return (
     <>
-      {redirect ? <Redirect to={"/game/" + game} /> : null}
+      {redirect && <Redirect to={"/game/" + game} />}
       <SearchGameForm onSubmit={handleSubmit}>
         <input
           type='text'
@@ -83,42 +83,43 @@ const GameSearchBar = props => {
           }}
           size={42}
         />
-        {openGameList || (showValue() && showValue().length >= 2) ? (
-          <GameListUlContainer>
-            {topGames ? (
-              <StyledShowAllButton key='showAll'>
-                <Link to={"/game/"}>Show all</Link>
-              </StyledShowAllButton>
-            ) : null}
-            {topGames ? (
-              topGames
-                .filter(game => {
-                  return game.name.toLowerCase().includes(showValue());
-                })
-                .map(game => {
-                  return (
-                    <StyledGameListElement key={game.id}>
-                      <Link
-                        to={{
-                          pathname: "/game/" + game.name,
-                          state: {
-                            p_videoType: videoType,
-                          },
-                        }}>
-                        <img
-                          src={game.box_art_url.replace("{width}", 300).replace("{height}", 300)}
-                          alt=''
-                        />
-                        {game.name}
-                      </Link>
-                    </StyledGameListElement>
-                  );
-                })
-            ) : (
-              <StyledLoadingList amount={12} />
-            )}
-          </GameListUlContainer>
-        ) : null}
+        {openGameList ||
+          (showValue() && showValue().length >= 2 && (
+            <GameListUlContainer>
+              {topGames && (
+                <StyledShowAllButton key='showAll'>
+                  <Link to={"/game/"}>Show all</Link>
+                </StyledShowAllButton>
+              )}
+              {topGames ? (
+                topGames
+                  .filter(game => {
+                    return game.name.toLowerCase().includes(showValue());
+                  })
+                  .map(game => {
+                    return (
+                      <StyledGameListElement key={game.id}>
+                        <Link
+                          to={{
+                            pathname: "/game/" + game.name,
+                            state: {
+                              p_videoType: videoType,
+                            },
+                          }}>
+                          <img
+                            src={game.box_art_url.replace("{width}", 300).replace("{height}", 300)}
+                            alt=''
+                          />
+                          {game.name}
+                        </Link>
+                      </StyledGameListElement>
+                    );
+                  })
+              ) : (
+                <StyledLoadingList amount={12} />
+              )}
+            </GameListUlContainer>
+          ))}
       </SearchGameForm>
     </>
   );

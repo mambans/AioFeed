@@ -12,7 +12,7 @@ export default () => {
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const { id } = useParams();
   const location = useLocation();
-  const nameFromHash = location.hash !== "" ? location.hash.replace("#", "") : null;
+  const nameFromHash = location.hash !== "" && location.hash.replace("#", "");
   document.title = `${nameFromHash} | Clips`;
 
   useEffect(() => {
@@ -31,12 +31,12 @@ export default () => {
     <>
       <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
         <PlayerNavbar>
-          {nameFromHash ? (
+          {nameFromHash && (
             <Link to={`/channel/${nameFromHash}`}>
               <MdAccountCircle size={20} />
               {nameFromHash}'s channel page
             </Link>
-          ) : null}
+          )}
         </PlayerNavbar>
       </CSSTransition>
       <VideoAndChatContainer

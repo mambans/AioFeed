@@ -15,7 +15,7 @@ export default () => {
   const Logos = () => {
     return (
       <>
-        {visible ? null : (
+        {!visible && (
           <TopBlurOverlay
             ref={topNavbarBlur}
             onMouseEnter={() => {

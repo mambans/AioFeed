@@ -74,12 +74,12 @@ function StreamEle(data) {
     <VideoContainer key={data.data.id}>
       <ImageContainer id={data.data.id} ref={ref} style={{ marginTop: "5px" }}>
         <NewHighlightNoti data={data}></NewHighlightNoti>
-        {isHovered ? (
+        {isHovered && (
           <StreamHoverIframe
             id={data.data.id}
             data={data.data}
             setIsHovered={setIsHovered}></StreamHoverIframe>
-        ) : null}
+        )}
         <Link
           className={styles.img}
           to={{
@@ -179,14 +179,12 @@ function StreamEle(data) {
               className='name'>
               {data.data.user_name}
             </Link>
-            {/* {channelIsHovered ? ( */}
             <a
               alt=''
               href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
               className='twitchIcon'>
               <FaTwitch size={20} className />
             </a>
-            {/* // ) : null} */}
           </ChannelNameDiv>
           <div style={{ display: "flex", gridRow: "1", justifyContent: "right" }}>
             <VodsFollowUnfollowBtn channel={data.data.user_name} marginright='7px;' />

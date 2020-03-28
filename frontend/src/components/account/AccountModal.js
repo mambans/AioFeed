@@ -180,7 +180,7 @@ export default () => {
             Change Profile image
           </ShowAddFormBtn>
         )}
-        {showAddImage ? <UpdateProfileImg /> : null}
+        {showAddImage && <UpdateProfileImg />}
         <StyledProfileImg
           src={profileImage || `${process.env.PUBLIC_URL}/images/placeholder.jpg`}
           alt=''
@@ -427,7 +427,7 @@ export default () => {
       <Themeselector />
       <div className={styles.lastButtonsContainer}>
         {window.location.href !==
-        "http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/account" ? (
+          "http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/account" && (
           <Button
             className={[styles.notifiesLogoutButton, styles.disconnectButton].join(" ")}
             as={NavLink}
@@ -435,7 +435,7 @@ export default () => {
             Go to Account page
             <MdAccountCircle size={24} style={{ marginLeft: "0.75rem" }} />
           </Button>
-        ) : null}
+        )}
         <Button
           className={[styles.notifiesLogoutButton, styles.disconnectButton].join(" ")}
           onClick={logout}>
