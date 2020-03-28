@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 
 import { ThemeSelector } from "./styledComponents";
-import { ThemeContext } from "./ThemeContext";
+import ThemeContext from "./ThemeContext";
 
 function Themeselector() {
   const { themesArray } = useContext(ThemeContext);

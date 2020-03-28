@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import Util from "./../../util/Util";
 
-export const AccountContext = React.createContext();
+const AccountContext = React.createContext();
 
 export const AccountProvider = ({ children }) => {
   const [twitchToken, setTwitchToken] = useState(Util.getCookie(`Twitch-access_token`));
@@ -48,3 +48,5 @@ export const AccountProvider = ({ children }) => {
     </AccountContext.Provider>
   );
 };
+
+export default AccountContext;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import Util from "./../../util/Util";
 
-export const FeedsContext = React.createContext();
+const FeedsContext = React.createContext();
 
 export const FeedsProvider = ({ children }) => {
   const [enableTwitch, setEnableTwitch] = useState(
@@ -42,3 +42,5 @@ export const FeedsProvider = ({ children }) => {
     </FeedsContext.Provider>
   );
 };
+
+export default FeedsContext;

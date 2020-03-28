@@ -5,7 +5,7 @@ import { MdVerticalAlignBottom } from "react-icons/md";
 import { useParams, useLocation } from "react-router-dom";
 import React, { useContext, useEffect } from "react";
 
-import { NavigationContext } from "./../../navigation/NavigationContext";
+import NavigationContext from "./../../navigation/NavigationContext";
 import { VideoAndChatContainer, StyledVideo, PlayerNavbar } from "./StyledComponents";
 
 export default () => {

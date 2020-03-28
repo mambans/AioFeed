@@ -1,10 +1,10 @@
 import React, { useState, useContext } from "react";
 import { CSSTransition } from "react-transition-group";
 
-import { AccountContext } from "./../../account/AccountContext";
+import AccountContext from "./../../account/AccountContext";
 import CreateAccount from "./CreateAccount";
 import Login from "./Login";
-import { NavigationContext } from "./../NavigationContext";
+import NavigationContext from "./../NavigationContext";
 import SidebarAccount from "./SidebarAccount";
 import { StyledNavSidebarTrigger, StyledLoginButton } from "./../StyledComponents";
 import {

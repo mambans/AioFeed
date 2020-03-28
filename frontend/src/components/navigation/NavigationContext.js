@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export const NavigationContext = React.createContext();
+const NavigationContext = React.createContext();
 
 export const NavigationProvider = ({ children }) => {
   const [renderModal, setRenderModal] = useState("login");
@@ -24,3 +24,5 @@ export const NavigationProvider = ({ children }) => {
     </NavigationContext.Provider>
   );
 };
+
+export default NavigationContext;

@@ -6,8 +6,8 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useState, useContext, useRef, useEffect } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 
-import { VodsContext } from "./VodsContext";
-import { AccountContext } from "./../../account/AccountContext";
+import VodsContext from "./VodsContext";
+import AccountContext from "./../../account/AccountContext";
 import { VodRemoveButton, VodAddButton } from "./../../sharedStyledComponents";
 import AddVodChannel from "./AddVodChannel";
 

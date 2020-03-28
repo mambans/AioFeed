@@ -7,7 +7,7 @@ import { Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import React, { useContext } from "react";
 
-import { NavigationContext } from "./../navigation/NavigationContext";
+import NavigationContext from "./../navigation/NavigationContext";
 import {
   StyledFooterContainer,
   StyledCenterBottomText,

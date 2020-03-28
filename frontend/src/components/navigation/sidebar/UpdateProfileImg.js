@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useContext } from "react";
 
-import { AccountContext } from "./../../account/AccountContext";
+import AccountContext from "./../../account/AccountContext";
 import useInput from "./../../useInput";
 import { ProfileImgInput } from "./StyledComponent";
 

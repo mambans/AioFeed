@@ -5,10 +5,10 @@ import axios from "axios";
 import React, { useState, useContext } from "react";
 
 import { StyledCreateFormTitle, StyledCreateForm, StyledAlert } from "./StyledComponent";
-import { AccountContext } from "./../../account/AccountContext";
-import { NavigationContext } from "./../NavigationContext";
+import AccountContext from "./../../account/AccountContext";
+import NavigationContext from "./../NavigationContext";
 import LoadingIndicator from "./../../LoadingIndicator";
-import { FeedsContext } from "./../../feed/FeedsContext";
+import FeedsContext from "./../../feed/FeedsContext";
 import useInput from "./../../useInput";
 
 export default () => {

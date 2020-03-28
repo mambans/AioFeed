@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import FetchMonitoredVodChannelsList from "./FetchMonitoredVodChannelsList";
-import { AccountContext } from "../../account/AccountContext";
+import AccountContext from "../../account/AccountContext";
 
-export const VodsContext = React.createContext();
+const VodsContext = React.createContext();
 
 export const VodsProvider = ({ children }) => {
   const { username, authKey } = useContext(AccountContext);
@@ -30,3 +30,5 @@ export const VodsProvider = ({ children }) => {
     </VodsContext.Provider>
   );
 };
+
+export default VodsContext;

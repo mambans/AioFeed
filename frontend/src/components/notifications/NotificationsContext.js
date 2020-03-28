@@ -1,16 +1,14 @@
 import React, { useState, useCallback } from "react";
 import uniqid from "uniqid";
 
-export const NotificationsContext = React.createContext();
+const NotificationsContext = React.createContext();
 
 export const NotificationsProvider = ({ children }) => {
-  // const [notificationIndicator, enableNotificationIndicator] = useState(false);
   const [notifications, setNotifications] = useState(
     localStorage.getItem("notifications") !== null
       ? JSON.parse(localStorage.getItem("notifications"))
       : []
   );
-  // const [unseenNotifications, setUnseenNotifications] = useState();
 
   const [unseenNotifications, setUnseenNotifications] = useState(
     localStorage.getItem("Unseen-notifications") !== "null" &&
@@ -24,9 +22,6 @@ export const NotificationsProvider = ({ children }) => {
     async (noti, status) => {
       await new Promise((resolve, reject) => {
         try {
-          // const newNotifications = unseenNotifications ? [...unseenNotifications] : [];
-          // const newNotifications = unseenNotifications ? Array.from(unseenNotifications) : [];
-
           const newNotifications =
             localStorage.getItem("Unseen-notifications") !== "null" &&
             localStorage.getItem("Unseen-notifications") !== "undefined" &&
@@ -52,12 +47,10 @@ export const NotificationsProvider = ({ children }) => {
           reject(e);
         }
       }).then(res => {
-        // setNewNotifications(res.unseenNotifications);
         setUnseenNotifications(res.newNotifications);
         setNotifications(res.notifications);
         localStorage.setItem("Unseen-notifications", JSON.stringify(res.newNotifications));
         localStorage.setItem("notifications", JSON.stringify(res.notifications));
-        // enableNotificationIndicator(true);
       });
     },
     [notifications]
@@ -74,7 +67,6 @@ export const NotificationsProvider = ({ children }) => {
 
     setNotifications([]);
     setUnseenNotifications([]);
-    // enableNotificationIndicator(false);
   }, []);
 
   return (
@@ -83,8 +75,6 @@ export const NotificationsProvider = ({ children }) => {
         notifications: notifications,
         addNotification: addNotification,
         clearNotifications: clearNotifications,
-        // notificationIndicator: notificationIndicator,
-        // enableNotificationIndicator: enableNotificationIndicator,
         unseenNotifications: unseenNotifications,
         setUnseenNotifications: setUnseenNotifications,
         clearUnseenNotifications,
@@ -93,3 +83,5 @@ export const NotificationsProvider = ({ children }) => {
     </NotificationsContext.Provider>
   );
 };
+
+export default NotificationsContext;

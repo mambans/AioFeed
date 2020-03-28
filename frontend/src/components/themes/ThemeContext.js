@@ -1,6 +1,6 @@
 import React from "react";
 
-export const ThemeContext = React.createContext();
+const ThemeContext = React.createContext();
 
 export const ThemeProvider = ({ children }) => {
   const themesArray = [
@@ -21,3 +21,5 @@ export const ThemeProvider = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
+
+export default ThemeContext;

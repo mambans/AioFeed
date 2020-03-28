@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState, useCallback, useContext } from "rea
 import ErrorHandler from "../error";
 import getFollowedChannels from "./GetFollowedChannels";
 import getSubscriptionVideos from "./GetSubscriptionVideos";
-import { AccountContext } from "../account/AccountContext";
+import AccountContext from "../account/AccountContext";
 
 function DataHandler({ children }) {
   const [isLoaded, setIsLoaded] = useState(false);
