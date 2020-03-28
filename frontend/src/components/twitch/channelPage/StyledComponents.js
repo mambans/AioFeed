@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Button } from "react-bootstrap";
 import { MdVideocam } from "react-icons/md";
 
@@ -57,6 +57,18 @@ export const BannerInfoOverlay = styled.div`
   position: absolute;
   top: 65px;
   width: 100%;
+`;
+
+const pulse = keyframes`
+  0% {
+    background: #1a1b1dd1;
+  }
+  40% {
+    background: #25262ad1;
+  }
+  100% {
+    background: #1a1b1dd1;
+  }
 `;
 
 export const Name = styled.div`
@@ -120,7 +132,7 @@ export const Name = styled.div`
       margin-right: 20px;
       margin-right: 20px;
       margin-left: -70px;
-      animation: pulse 4s linear infinite;
+      animation: ${pulse} 4s linear infinite;
     }
 
     #PlaceholderSmallText {
@@ -129,18 +141,7 @@ export const Name = styled.div`
       margin-bottom: 1rem;
       width: 100px;
       border-radius: 10px;
-      animation: pulse 4s linear infinite;
-    }
-    @keyframes pulse {
-      0% {
-        background: #1a1b1dd1;
-      }
-      40% {
-        background: #25262ad1;
-      }
-      100% {
-        background: #1a1b1dd1;
-      }
+      animation: ${pulse} 4s linear infinite;
     }
   }
 
@@ -204,6 +205,18 @@ export const SortButton = styled(Button).attrs({ variant: "dark" })`
   }
 `;
 
+const breathRedColor = keyframes`
+    0% {
+      color: #ff0000;
+    }
+    50% {
+      color: #8a0000;
+    }
+    100% {
+      color: #ff0000;
+    }
+  `;
+
 export const SortDropDownList = styled.ul`
   position: absolute;
   padding: 10px;
@@ -227,25 +240,13 @@ export const LiveIndicator = styled.div`
   color: red;
   /* margin-left: -55px;
   padding-right: 15px; */
-  animation: breathRedColor 3s linear 1s infinite;
+  animation: ${breathRedColor} 3s linear 1s infinite;
 
   p {
     margin: 0;
     text-align: left;
     padding-left: 5px;
     margin-bottom: 0 !important;
-  }
-
-  @keyframes breathRedColor {
-    0% {
-      color: #ff0000;
-    }
-    50% {
-      color: #8a0000;
-    }
-    100% {
-      color: #ff0000;
-    }
   }
 `;
 

@@ -51,6 +51,15 @@ export const StyledLoadmore = styled.div`
   }
 `;
 
+const countdown = keyframes`
+    from {
+      stroke-dashoffset: 0px;
+    }
+    to {
+      stroke-dashoffset: 67.8px;
+    }
+`;
+
 export const StyledCountdownCircle = styled.div`
   position: relative;
   margin: auto;
@@ -86,19 +95,13 @@ export const StyledCountdownCircle = styled.div`
     stroke-width: 3px;
     stroke: white;
     fill: none;
-    /* animation: countdown ${({ startDuration }) => startDuration}s linear 1 forwards; */
-    animation: countdown 25s linear 1 forwards;
+    animation: ${countdown} 25s linear 1 forwards;
+    /* animation: ${countdown} ${({ delay }) => delay || 25}s linear 1 forwards; */
+    /* animation-delay: ${({ delay }) => delay || 0}s; */
+    animation-delay:  0s;
   }
 
-  @keyframes countdown {
-    from {
-      stroke-dashoffset: 0px;
-      /* stroke-dashoffset: ${({ startPoint }) => (startPoint > 5.424 ? startPoint : 0)}px; */
-    }
-    to {
-      stroke-dashoffset: 67.8px;
-    }
-  }
+
 `;
 
 export const HeaderLeftSubcontainer = styled.div`
