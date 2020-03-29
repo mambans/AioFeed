@@ -79,47 +79,47 @@ const GameSearchBar = props => {
           {...bindGame}></input>
         <MdFormatListBulleted
           onClick={() => {
+            console.log("openGameList", openGameList);
             setOpenGameList(!openGameList);
           }}
           size={42}
         />
-        {openGameList ||
-          (showValue() && showValue().length >= 2 && (
-            <GameListUlContainer>
-              {topGames && (
-                <StyledShowAllButton key='showAll'>
-                  <Link to={"/game/"}>Show all</Link>
-                </StyledShowAllButton>
-              )}
-              {topGames ? (
-                topGames
-                  .filter(game => {
-                    return game.name.toLowerCase().includes(showValue());
-                  })
-                  .map(game => {
-                    return (
-                      <StyledGameListElement key={game.id}>
-                        <Link
-                          to={{
-                            pathname: "/game/" + game.name,
-                            state: {
-                              p_videoType: videoType,
-                            },
-                          }}>
-                          <img
-                            src={game.box_art_url.replace("{width}", 300).replace("{height}", 300)}
-                            alt=''
-                          />
-                          {game.name}
-                        </Link>
-                      </StyledGameListElement>
-                    );
-                  })
-              ) : (
-                <StyledLoadingList amount={12} />
-              )}
-            </GameListUlContainer>
-          ))}
+        {(openGameList || (showValue() && showValue().length >= 2)) && (
+          <GameListUlContainer>
+            {topGames && (
+              <StyledShowAllButton key='showAll'>
+                <Link to={"/game/"}>Show all</Link>
+              </StyledShowAllButton>
+            )}
+            {topGames ? (
+              topGames
+                .filter(game => {
+                  return game.name.toLowerCase().includes(showValue());
+                })
+                .map(game => {
+                  return (
+                    <StyledGameListElement key={game.id}>
+                      <Link
+                        to={{
+                          pathname: "/game/" + game.name,
+                          state: {
+                            p_videoType: videoType,
+                          },
+                        }}>
+                        <img
+                          src={game.box_art_url.replace("{width}", 300).replace("{height}", 300)}
+                          alt=''
+                        />
+                        {game.name}
+                      </Link>
+                    </StyledGameListElement>
+                  );
+                })
+            ) : (
+              <StyledLoadingList amount={12} />
+            )}
+          </GameListUlContainer>
+        )}
       </SearchGameForm>
     </>
   );
