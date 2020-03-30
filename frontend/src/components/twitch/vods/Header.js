@@ -3,7 +3,6 @@ import { MdRefresh } from "react-icons/md";
 import { Spinner } from "react-bootstrap";
 import { MdVideocam } from "react-icons/md";
 import Alert from "react-bootstrap/Alert";
-import Moment from "react-moment";
 import Popup from "reactjs-popup";
 import React from "react";
 
@@ -14,7 +13,7 @@ import {
   HeaderContainer,
   ButtonList,
 } from "./../../sharedStyledComponents";
-import styles from "./../Twitch.module.scss";
+import { LastRefreshText } from "./StyledComponents";
 import Util from "../../../util/Util";
 import VodChannelList from "./VodChannelList";
 
@@ -40,9 +39,7 @@ export default React.forwardRef((props, ref) => {
             <MdRefresh size={34} />
           )}
         </RefreshButton>
-        <Moment fromNow className={styles.vodRefreshTimer} interval={60000}>
-          {(vods && vods.loaded) || new Date()}
-        </Moment>
+        <LastRefreshText>{(vods && vods.loaded) || new Date()}</LastRefreshText>
         {vodError && (
           <Alert
             key={vodError}
@@ -81,7 +78,7 @@ export default React.forwardRef((props, ref) => {
               justifyContent: "right",
               display: "flex",
             }}>
-            <ButtonList variant='outline-secondary' className={styles.settings}>
+            <ButtonList variant='outline-secondary'>
               <MdFormatListBulleted
                 size={22}
                 style={{

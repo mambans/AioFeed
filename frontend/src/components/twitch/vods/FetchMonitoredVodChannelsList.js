@@ -9,7 +9,6 @@ export default async (username, authKey) => {
       },
     })
     .then(res => {
-      console.log("Fetched Channels: ", res);
       return res.data;
     })
     .catch(err => {

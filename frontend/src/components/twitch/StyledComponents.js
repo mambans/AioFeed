@@ -28,6 +28,7 @@ export const StyledLoadmore = styled.div`
   grid-template-columns: auto min-content auto;
   align-items: center;
   max-width: 100%;
+  padding-bottom: 10px;
 
   div:not(#Button) {
     background: rgba(90, 92, 94, 0.67);
@@ -263,5 +264,24 @@ export const ChannelNameDiv = styled.div`
     .twitchIcon {
       opacity: 1;
     }
+  }
+`;
+
+export const Container = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: var(--feedsWidth);
+  margin: var(--feedsMargin);
+  margin-top: 0;
+  padding-bottom: 50px;
+  min-height: 400px;
+
+  @media screen and (max-width: 2560px) {
+    width: 82.5%;
+    margin: 25px 0 0 360px;
+  }
+  @media screen and (max-width: 1920px) {
+    width: 74%;
+    margin: 25px 7.5% 0 19%;
   }
 `;

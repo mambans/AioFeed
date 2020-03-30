@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Moment from "react-moment";
 
 export const VodLiveIndicator = styled(Link)`
   padding: 5px;
@@ -45,4 +46,10 @@ export const VodChannelListLi = styled.li`
   button {
     opacity: 1;
   }
+`;
+
+export const LastRefreshText = styled(Moment).attrs({ fromNow: true, interval: 60000 })`
+  position: relative;
+  left: 10%;
+  color: var(--greyInfo);
 `;

@@ -33,10 +33,7 @@ export const RefreshButton = styled(Button).attrs({ variant: "outline-secondary"
 
 export const ButtonList = styled(Button).attrs({ variant: "outline-secondary" })`
   display: flex;
-  color: rgb(230, 230, 230);
   position: relative;
-  /* right: 14px; */
-
   color: var(--refreshButtonColor);
   background: var(--refreshButtonBackground);
   box-shadow: var(--refreshButtonShadow);

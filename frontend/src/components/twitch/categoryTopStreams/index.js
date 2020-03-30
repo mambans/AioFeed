@@ -12,7 +12,13 @@ import React, { useEffect, useState, useCallback, useRef } from "react";
 
 import { RefreshButton, HeaderTitle } from "./../../sharedStyledComponents";
 import { StyledLoadmore } from "./../StyledComponents";
-import { TypeListUlContainer, TypeButton, TopDataSortButtonsContainer } from "./styledComponents";
+import {
+  TypeListUlContainer,
+  TypeButton,
+  TopDataSortButtonsContainer,
+  HeaderContainer,
+  TopStreamsContainer,
+} from "./styledComponents";
 import ClipsSortButton from "./../channelPage/ClipsSortButton";
 import GameSearchBar from "./GameSearchBar";
 import GetTopClips from "./GetTopClips";
@@ -21,7 +27,6 @@ import GetTopVideos from "./GetTopVideos";
 import LoadingBoxs from "./../LoadingBoxs";
 import SortButton from "./../channelPage/SortButton";
 import StreamEle from "./StreamElement";
-import styles from "./../Twitch.module.scss";
 import ClipElement from "./../channelPage/ClipElement";
 import VodElement from "./../vods/VodElement";
 import Util from "./../../../util/Util";
@@ -168,7 +173,7 @@ export default () => {
 
   return (
     <>
-      <div className={styles.headerContainerTopData}>
+      <HeaderContainer>
         <div
           style={{
             width: "675px",
@@ -248,7 +253,7 @@ export default () => {
             />
           ) : null}
         </TopDataSortButtonsContainer>
-      </div>
+      </HeaderContainer>
       {error ? (
         <Alert
           variant='warning'
@@ -258,7 +263,7 @@ export default () => {
           <Alert.Heading>{error}</Alert.Heading>
         </Alert>
       ) : (
-        <div className={styles.topDataContainer}>
+        <TopStreamsContainer>
           {topData ? (
             <>
               <TransitionGroup className='twitch-top-live' component={null}>
@@ -304,7 +309,7 @@ export default () => {
               amount={Math.floor(((document.documentElement.clientWidth - 150) / 350) * 1.5)}
             />
           )}
-        </div>
+        </TopStreamsContainer>
       )}
     </>
   );

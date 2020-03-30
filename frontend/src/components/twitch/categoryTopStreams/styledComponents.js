@@ -181,3 +181,37 @@ export const TopDataSortButtonsContainer = styled.div`
     height: 42px;
   }
 `;
+
+export const HeaderContainer = styled.div`
+  border-bottom: var(--subFeedHeaderBorder);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 7px;
+  width: 92.1%;
+  margin: auto;
+  margin-top: 25px;
+
+  @media screen and (max-width: 2560px) {
+    width: 82.5% !important;
+  }
+
+  @media screen and (max-width: 1920px) {
+    width: 92% !important;
+  }
+`;
+
+export const TopStreamsContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 92.1%;
+  margin: auto;
+
+  @media screen and (max-width: 2560px) {
+    width: 82.5% !important;
+  }
+
+  @media screen and (max-width: 1920px) {
+    width: 92% !important;
+  }
+`;

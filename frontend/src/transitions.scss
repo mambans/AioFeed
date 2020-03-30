@@ -218,32 +218,34 @@
 .sidebarTitlePopup-enter {
   opacity: 0;
   left: 0;
-  transition: opacity 500ms cubic-bezier(0.23, 0.82, 0, 0.7),
-    left 1500ms cubic-bezier(0.23, 0.82, 0, 0.7);
+  transition: opacity 350ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
+    left 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
 }
 
 .sidebarTitlePopup-enter-active {
   opacity: 1;
   left: 275px;
-  transition: opacity 500ms cubic-bezier(0.23, 0.82, 0, 0.7),
-    left 1500ms cubic-bezier(0.23, 0.82, 0, 0.7);
+  transition: opacity 350ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
+    left 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
 }
 
 .sidebarTitlePopup-exit {
   opacity: 1;
   left: 275px;
-  transition: opacity 500ms cubic-bezier(0.23, 0.82, 0, 0.7),
-    left 1500ms cubic-bezier(0.23, 0.82, 0, 0.7);
+  transition: opacity 350ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
+    left 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
 }
 
 .sidebarTitlePopup-exit-active {
   opacity: 0;
   left: 0;
-  transition: opacity 500ms cubic-bezier(0.23, 0.82, 0, 0.7),
-    left 1500ms cubic-bezier(0.23, 0.82, 0, 0.7);
+  transition: opacity 350ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
+    left 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
 }
 
 .sidebarTitlePopup-enter-done {
   left: 275px;
   opacity: 1;
+  transition: opacity 350ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
+    left 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
 }

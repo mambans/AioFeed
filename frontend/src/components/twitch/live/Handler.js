@@ -4,7 +4,6 @@ import ErrorHandler from "../../error";
 import getFollowedChannels from "./../GetFollowedChannels";
 import getFollowedOnlineStreams from "./GetFollowedStreams";
 import NotificationsContext from "./../../notifications/NotificationsContext";
-import styles from "./../Twitch.module.scss";
 import Util from "../../../util/Util";
 import Header from "./Header";
 import LoadingBoxs from "./../LoadingBoxs";
@@ -12,6 +11,8 @@ import AccountContext from "./../../account/AccountContext";
 import FeedsContext from "./../../feed/FeedsContext";
 import VodsContext from "./../vods/VodsContext";
 import FetchSingelChannelVods from "./../vods/FetchSingelChannelVods";
+import { Container } from "../StyledComponents";
+import LoadingSidebar from "../sidebar/LoadingSidebar";
 
 const REFRESH_RATE = 25; // seconds
 
@@ -20,12 +21,16 @@ export default ({ children }) => {
   const { twitchUserId, autoRefreshEnabled, twitchToken } = useContext(AccountContext);
   const { setVods, channels } = useContext(VodsContext);
   const { enableTwitchVods } = useContext(FeedsContext);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [error, setError] = useState(null);
+  // const [isLoaded, setIsLoaded] = useState(false);
+  // const [error, setError] = useState(null);
   const [refreshTimer, setRefreshTimer] = useState(20);
-  const [refreshing, setRefreshing] = useState(false);
+  const [loadingStates, setLoadingStates] = useState({
+    refreshing: false,
+    error: null,
+    loaded: false,
+  });
   const followedChannels = useRef([]);
-  const liveStreams = useRef([]);
+  const liveStreams = useRef();
   const oldLiveStreams = useRef([]);
   const newlyAddedStreams = useRef([]);
   const timer = useRef();
@@ -64,7 +69,9 @@ export default ({ children }) => {
   const refresh = useCallback(
     async disableNotifications => {
       // console.log("refreshing");
-      setRefreshing(true);
+      setLoadingStates(({ loaded }) => {
+        return { refreshing: true, error: null, loaded: loaded };
+      });
       try {
         followedChannels.current = await getFollowedChannels(parseInt(twitchUserId));
 
@@ -74,10 +81,10 @@ export default ({ children }) => {
         const streams = await getFollowedOnlineStreams(followedChannels.current);
 
         if (streams.status === 200) {
-          setError(null);
+          // setError(null);
           oldLiveStreams.current = liveStreams.current;
           liveStreams.current = streams.data;
-          setRefreshing(false);
+          setLoadingStates({ refreshing: false, error: null, loaded: true });
 
           if (!disableNotifications) {
             liveStreams.current.forEach(stream => {
@@ -143,14 +150,12 @@ export default ({ children }) => {
             });
           }
         } else if (streams.status === 201) {
-          setError(streams.error);
-          setRefreshing(false);
+          // setError(streams.error);
+          setLoadingStates({ refreshing: false, error: streams.error, loaded: true });
         }
-
-        // setRefreshing(false);
-        // setIsLoaded(true);
       } catch (error) {
-        setError(error);
+        // setError(error);
+        setLoadingStates({ refreshing: false, error: error, loaded: true });
       }
     },
     [addNotification, addSystemNotification, twitchUserId, channels, enableTwitchVods, setVods]
@@ -165,7 +170,7 @@ export default ({ children }) => {
             setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
           }
           await refresh(true);
-          setIsLoaded(true);
+          // setIsLoaded(true);
         }
 
         if (autoRefreshEnabled && !timer.current) {
@@ -178,11 +183,12 @@ export default ({ children }) => {
         } else if (!autoRefreshEnabled && timer.current) {
           clearInterval(timer.current);
           timer.current = null;
-          setIsLoaded(true);
-          setRefreshing(false);
+          // setIsLoaded(true);
+          setLoadingStates({ refreshing: false, loaded: true, error: null });
         }
       } catch (error) {
-        setError(error);
+        // setError(error);
+        setLoadingStates({ refreshing: false, error: error, loaded: true });
       }
     })();
   }, [refresh, autoRefreshEnabled]);
@@ -194,24 +200,22 @@ export default ({ children }) => {
     };
   }, []);
 
-  if (!isLoaded) {
+  if (!loadingStates.loaded) {
+    // if (true) {
     return (
       <>
         <Header
           data={{
-            refreshing: refreshing,
+            refreshing: loadingStates.refreshing,
             refreshTimer: refreshTimer,
             followedChannels: followedChannels.current,
           }}
           refresh={refresh}
         />
-        <div
-          className={styles.container}
-          style={{
-            marginTop: "0",
-          }}>
+        <LoadingSidebar />
+        <Container>
           <LoadingBoxs amount={5} />
-        </div>
+        </Container>
       </>
     );
   }
@@ -226,11 +230,11 @@ export default ({ children }) => {
     );
   } else {
     return children({
-      refreshing: refreshing,
+      refreshing: loadingStates.refreshing,
       refreshTimer: refreshTimer,
       followedChannels: followedChannels.current,
-      error: error,
-      liveStreams: liveStreams.current,
+      error: loadingStates.error,
+      liveStreams: liveStreams.current || [],
       resetNewlyAddedStreams: resetNewlyAddedStreams,
       refresh: refresh,
       newlyAddedStreams: newlyAddedStreams.current,

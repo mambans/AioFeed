@@ -1,20 +1,35 @@
-import React from "react";
+import React, { useRef, useCallback, useEffect, useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import SidebarItem from "./SidebarItem";
-import styles from "./../Twitch.module.scss";
+import { Styledsidebar, SidebarHeader } from "./StyledComponents";
 
 const TwitchSidebar = data => {
+  const [shows, setShows] = useState();
+  const sidebarRef = useRef();
+
+  const handleMouseOut = useCallback(() => {
+    setShows(false);
+  }, []);
+
+  useEffect(() => {
+    const refEle = sidebarRef.current;
+    refEle.addEventListener("mouseleave", handleMouseOut);
+
+    return () => {
+      refEle.removeEventListener("mouseleave", handleMouseOut);
+    };
+  }, [handleMouseOut]);
+
   return (
-    <div className={styles.sidebar} id='twitchSidebar'>
-      <p className={styles.twitchSidebarHeader}>Twitch Live</p>
+    <Styledsidebar id='twitchSidebar' ref={sidebarRef}>
+      <SidebarHeader>Twitch Live</SidebarHeader>
 
       {data.onlineStreams.length > 0 ? (
         <TransitionGroup className='sidebar' component={null}>
           {data.onlineStreams.map(stream => {
             return (
               <CSSTransition
-                // in={data.newlyAdded.includes(stream.user_name)}
                 key={stream.id}
                 timeout={1000}
                 // classNames='fade-1s'
@@ -24,7 +39,8 @@ const TwitchSidebar = data => {
                   key={stream.id}
                   stream={stream}
                   newlyAdded={data.newlyAdded}
-                  REFRESH_RATE={data.REFRESH_RATE}
+                  shows={shows}
+                  setShows={setShows}
                 />
               </CSSTransition>
             );
@@ -42,7 +58,7 @@ const TwitchSidebar = data => {
           <p>None Live</p>
         </div>
       )}
-    </div>
+    </Styledsidebar>
   );
 };
 

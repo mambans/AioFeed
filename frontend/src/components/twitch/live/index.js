@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback } from "react";
 
 import Header from "./Header";
 import StreamEle from "./StreamElement.js";
-import styles from "./../Twitch.module.scss";
+import { Container } from "../StyledComponents";
 import Sidebar from "./../sidebar";
 import Util from "../../../util/Util";
 
@@ -33,7 +33,7 @@ export default ({ data }) => {
       window.removeEventListener("focus", windowFocusHandler);
       window.removeEventListener("blur", windowBlurHandler);
     };
-  }, [data.liveStreams, windowBlurHandler, windowFocusHandler]);
+  }, [windowBlurHandler, windowFocusHandler]);
 
   return (
     <>
@@ -61,11 +61,7 @@ export default ({ data }) => {
             REFRESH_RATE={data.REFRESH_RATE}
           />
           {data.liveStreams.length > 0 ? (
-            <div
-              className={styles.container}
-              style={{
-                marginTop: "0",
-              }}>
+            <Container>
               <TransitionGroup className='twitch-live' component={null}>
                 {data.liveStreams.map(stream => {
                   return (
@@ -87,7 +83,7 @@ export default ({ data }) => {
                   );
                 })}
               </TransitionGroup>
-            </div>
+            </Container>
           ) : (
             show && (
               <Alert
