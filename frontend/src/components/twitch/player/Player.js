@@ -490,6 +490,7 @@ export default () => {
                   <OpenChatButton
                     title='Open chat'
                     hidechat={hideChat.toString()}
+                    switched={switched.toString()}
                     onClick={() => {
                       setHideChat(!hideChat);
                     }}
@@ -498,6 +499,7 @@ export default () => {
                   <HideChatButton
                     title='Hide chat'
                     hidechat={hideChat.toString()}
+                    switched={switched.toString()}
                     onClick={() => {
                       setHideChat(!hideChat);
                     }}

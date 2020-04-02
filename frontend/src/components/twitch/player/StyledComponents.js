@@ -368,6 +368,8 @@ export const HideChatButton = styled(FaWindowClose).attrs({ size: 26, color: "re
   opacity: 0.5;
   cursor: pointer;
   right: 10px;
+  right: ${({ switched }) => (switched === "true" ? "unset" : "10px")};
+  left: ${({ switched }) => (switched === "true" ? "10px" : "unset")};
 `;
 
 export const OpenChatButton = styled(MdChat).attrs({ size: 26, color: "white" })`
@@ -376,6 +378,8 @@ export const OpenChatButton = styled(MdChat).attrs({ size: 26, color: "white" })
   opacity: 0.5;
   cursor: pointer;
   right: 10px;
+  right: ${({ switched }) => (switched === "true" ? "unset" : "10px")};
+  left: ${({ switched }) => (switched === "true" ? "10px" : "unset")};
 `;
 
 export const CreateClipButton = styled(MdMovieCreation).attrs({ size: 24, color: "white" })`
