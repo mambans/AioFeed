@@ -1,33 +1,21 @@
 import React, { useState, useCallback } from "react";
 import uniqid from "uniqid";
+import Util from "../../util/Util";
 
 const NotificationsContext = React.createContext();
 
 export const NotificationsProvider = ({ children }) => {
-  const [notifications, setNotifications] = useState(
-    localStorage.getItem("notifications") !== null
-      ? JSON.parse(localStorage.getItem("notifications"))
-      : []
-  );
+  const [notifications, setNotifications] = useState(Util.getLocalstorage("notifications") || []);
 
   const [unseenNotifications, setUnseenNotifications] = useState(
-    localStorage.getItem("Unseen-notifications") !== "null" &&
-      localStorage.getItem("Unseen-notifications") !== "undefined" &&
-      localStorage.getItem("Unseen-notifications")
-      ? JSON.parse(localStorage.getItem("Unseen-notifications"))
-      : []
+    Util.getLocalstorage("Unseen-notifications") || []
   );
 
   const addNotification = useCallback(
     async (noti, status) => {
       await new Promise((resolve, reject) => {
         try {
-          const newNotifications =
-            localStorage.getItem("Unseen-notifications") !== "null" &&
-            localStorage.getItem("Unseen-notifications") !== "undefined" &&
-            localStorage.getItem("Unseen-notifications")
-              ? Array.from(JSON.parse(localStorage.getItem("Unseen-notifications")))
-              : [];
+          const newNotifications = Util.getLocalstorage("Unseen-notifications") || [];
 
           newNotifications.push(noti);
 

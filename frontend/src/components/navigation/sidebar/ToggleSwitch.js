@@ -9,8 +9,7 @@ export default ({ setEnable, enabled, label, tokenExists }) => {
   function handleChange(checked) {
     setEnable(checked);
     setChecked(checked);
-    localStorage.setItem(label + "FeedEnabled", checked);
-    document.cookie = `${label}_feedEnabled=${checked}; path=/`;
+    document.cookie = `${label}_FeedEnabled=${checked}; path=/`;
   }
 
   return (

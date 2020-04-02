@@ -1,7 +1,7 @@
 import { FaRegEye } from "react-icons/fa";
 import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useRef, useCallback, useState, useEffect, useContext } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";
 
@@ -9,6 +9,7 @@ import { ImageContainer, VideoTitle, VideoContainer } from "./../../sharedStyled
 import StreamHoverIframe from "./../StreamHoverIframe.js";
 import styles from "./../Twitch.module.scss";
 import Util from "../../../util/Util";
+import FeedsContext from "../../feed/FeedsContext";
 
 const HOVER_DELAY = 1000;
 
@@ -17,6 +18,7 @@ export default ({ data }) => {
   const streamHoverTimer = useRef();
   const ref = useRef();
   const refChannel = useRef();
+  const { twitchVideoHoverEnable } = useContext(FeedsContext);
 
   const handleMouseOver = () => {
     streamHoverTimer.current = setTimeout(function() {
@@ -30,7 +32,7 @@ export default ({ data }) => {
   }, []);
 
   useEffect(() => {
-    if (ref.current && localStorage.getItem(`TwitchVideoHoverEnabled`) === "true") {
+    if (ref.current && twitchVideoHoverEnable) {
       const refEle = ref.current;
       ref.current.addEventListener("mouseenter", handleMouseOver);
       ref.current.addEventListener("mouseleave", handleMouseOut);
@@ -40,7 +42,7 @@ export default ({ data }) => {
         refEle.removeEventListener("mouseleave", handleMouseOut);
       };
     }
-  }, [handleMouseOut]);
+  }, [handleMouseOut, twitchVideoHoverEnable]);
 
   return (
     <VideoContainer key={data.id}>

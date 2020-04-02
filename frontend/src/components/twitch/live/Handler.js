@@ -101,9 +101,7 @@ export default ({ children }) => {
 
                 if (
                   enableTwitchVods &&
-                  JSON.parse(localStorage.getItem("VodChannels")).includes(
-                    stream.user_name.toLowerCase()
-                  )
+                  Util.getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
                 ) {
                   setTimeout(async () => {
                     console.log("Fetching", stream.user_name, "live vod");
@@ -137,9 +135,7 @@ export default ({ children }) => {
 
                 if (
                   enableTwitchVods &&
-                  JSON.parse(localStorage.getItem("VodChannels")).includes(
-                    stream.user_name.toLowerCase()
-                  )
+                  Util.getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
                 ) {
                   setTimeout(async () => {
                     console.log("Fetching", stream.user_name, "offline vod");

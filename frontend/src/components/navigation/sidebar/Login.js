@@ -65,7 +65,7 @@ export default () => {
           document.cookie = `Notifies_AccountProfileImg=${res.data.Attributes.ProfileImg}; path=/`;
           document.cookie = `Notifies_AuthKey=${res.data.Attributes.AuthKey}; path=/`;
           document.cookie = `Twitch_AutoRefresh=${res.data.Attributes.TwitchPreferences.AutoRefresh}; path=/`;
-          document.cookie = `Twitch_feedEnabled=${res.data.Attributes.TwitchPreferences.enabled}; path=/`;
+          document.cookie = `Twitch_FeedEnabled=${res.data.Attributes.TwitchPreferences.enabled}; path=/`;
 
           setAuthKey(res.data.Attributes.AuthKey);
           setProfileImage(res.data.Attributes.ProfileImg);

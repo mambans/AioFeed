@@ -68,8 +68,8 @@ export default () => {
     document.cookie = `Youtube-access_token=null; path=/`;
     document.cookie = `Notifies_AccountProfileImg=null; path=/`;
 
-    localStorage.setItem("YoutubeFeedEnabled", false);
-    localStorage.setItem("TwitchVodsFeedEnabled", false);
+    document.cookie = `Youtube_FeedEnabled=${false}; path=/`;
+    document.cookie = `TwitchVods_FeedEnabled=${false}; path=/`;
 
     setUsername();
     setProfileImage();
@@ -102,7 +102,7 @@ export default () => {
       popupWindow.onunload = function() {
         window.setTimeout(function() {
           if (popupWindow.closed) {
-            localStorage.setItem(domain + "FeedEnabled", true);
+            document.cookie = `${domain}_FeedEnabled=${true}; path=/`;
             setToken(true);
             setFeedEnable(true);
             if (setFeedEnableSecond) setFeedEnableSecond(true);
@@ -126,8 +126,7 @@ export default () => {
       })
       .then(() => {
         document.cookie = `Twitch-access_token=null; path=/; SameSite=Lax`;
-        document.cookie = `Twitch_feedEnabled=${false}; path=/`;
-        localStorage.setItem("TwitchVodsFeedEnabled", false);
+        document.cookie = `Twitch_FeedEnabled=${false}; path=/`;
         setTwitchToken(null);
         setEnableTwitch(false);
         setEnableTwitchVods(false);
@@ -147,7 +146,7 @@ export default () => {
       })
       .then(() => {
         document.cookie = `Youtube-access_token=null; path=/`;
-        localStorage.setItem("YoutubeFeedEnabled", false);
+        document.cookie = `YoutubeFeedEnabled=null; path=/`;
         setYoutubeToken(null);
         setEnableYoutube(false);
         console.log(`Successfully disconnected from Youtube`);

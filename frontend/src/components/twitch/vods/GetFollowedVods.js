@@ -133,10 +133,9 @@ async function getFollowedVods(
   try {
     const OnlyVodsAfterDate = new Date();
     OnlyVodsAfterDate.setDate(new Date().getDate() - thresholdDate);
-
     if (
-      !localStorage.getItem(`Vods`) ||
-      JSON.parse(localStorage.getItem("Vods")).expire <= new Date() ||
+      !Util.getLocalstorage(`Vods`) ||
+      Util.getLocalstorage("Vods").expire <= new Date() ||
       forceRun
     ) {
       try {
@@ -171,16 +170,16 @@ async function getFollowedVods(
       } catch (error) {
         console.error(error);
         return {
-          data: JSON.parse(localStorage.getItem("Vods")),
+          data: Util.getLocalstorage("Vods"),
           error: error,
         };
       }
     }
-    return { data: JSON.parse(localStorage.getItem("Vods")) };
+    return { data: Util.getLocalstorage("Vods") };
   } catch (error) {
     console.error("message: ", error.message);
     return {
-      data: JSON.parse(localStorage.getItem("Vods")),
+      data: Util.getLocalstorage("Vods"),
       error: error,
     };
   }

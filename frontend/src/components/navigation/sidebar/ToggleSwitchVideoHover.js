@@ -4,12 +4,12 @@ import Switch from "react-switch";
 import { StyledToggleSwitch } from "./StyledComponent";
 
 export default props => {
-  const [checked, setChecked] = useState(props.enableHover);
+  const [checked, setChecked] = useState(props.enableHover === null ? false : props.enableHover);
 
   function handleChange(checked) {
     setChecked(checked);
+    document.cookie = `${props.feed}VideoHoverEnabled=${checked}; path=/`;
     props.setEnableHover(checked);
-    localStorage.setItem(`${props.feed}VideoHoverEnabled`, checked);
   }
 
   return (

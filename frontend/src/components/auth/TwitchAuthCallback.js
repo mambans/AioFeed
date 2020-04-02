@@ -109,7 +109,7 @@ function TwitchAuthCallback() {
           if (url.searchParams.get("state") === Util.getCookie("Twitch-myState")) {
             await getAccessToken(url)
               .then(() => {
-                document.cookie = `Twitch_feedEnabled=${true}; path=/`;
+                document.cookie = `Twitch_FeedEnabled=${true}; path=/`;
                 console.log("successfully authenticated to Twitch.");
                 setTimeout(() => {
                   window.close();

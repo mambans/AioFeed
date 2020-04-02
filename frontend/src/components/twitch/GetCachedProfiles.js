@@ -1,5 +1,7 @@
+import Util from "../../util/Util";
+
 export default () => {
-  const profiles = JSON.parse(localStorage.getItem("TwitchProfiles")) || {};
+  const profiles = Util.getLocalstorage("TwitchProfiles") || {};
 
   if (!profiles.expireDate || new Date(profiles.expireDate).getTime() < new Date().getTime()) {
     return {
@@ -9,4 +11,3 @@ export default () => {
     return profiles;
   }
 };
-  

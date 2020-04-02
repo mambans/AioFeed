@@ -6,22 +6,23 @@ const FeedsContext = React.createContext();
 
 export const FeedsProvider = ({ children }) => {
   const [enableTwitch, setEnableTwitch] = useState(
-    Util.getCookie("Twitch-access_token") && Util.getCookie("Twitch_feedEnabled")
+    Util.getCookie("Twitch-access_token") && Util.getCookie("Twitch_FeedEnabled")
   );
 
   const [enableYoutube, setEnableYoutube] = useState(
-    Util.getCookie(`Youtube-access_token`) && localStorage.getItem("YoutubeFeedEnabled") === "true"
+    Util.getCookie(`Youtube-access_token`) && Util.getCookie("YoutubeFeedEnabled")
   );
+
   const [enableTwitchVods, setEnableTwitchVods] = useState(
-    Util.getCookie(`Twitch-access_token`) &&
-      localStorage.getItem("TwitchVodsFeedEnabled") === "true"
+    Util.getCookie(`Twitch-access_token`) && Util.getCookie("Twitch_FeedEnabled")
   );
 
   const [twitchVideoHoverEnable, setTwitchVideoHoverEnable] = useState(
-    localStorage.getItem(`TwitchVideoHoverEnabled`) === "true"
+    Util.getCookie("TwitchVideoHoverEnabled")
   );
+
   const [youtubeVideoHoverEnable, setYoutubeVideoHoverEnable] = useState(
-    localStorage.getItem(`YoutubeVideoHoverEnabled`) === "true"
+    Util.getCookie("YoutubeVideoHoverEnabled")
   );
 
   return (
