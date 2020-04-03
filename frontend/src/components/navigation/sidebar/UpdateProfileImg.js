@@ -5,11 +5,13 @@ import AccountContext from "./../../account/AccountContext";
 import useInput from "./../../useInput";
 import { ProfileImgInput } from "./StyledComponent";
 
-export default () => {
+export default ({ close }) => {
   const { username, setProfileImage } = useContext(AccountContext);
   const { value: image, bind: bindimage, reset: resetimage } = useInput("");
 
   const addProfileImage = async () => {
+    document.cookie = `Notifies_AccountProfileImg=${image}; path=/`;
+    setProfileImage(image);
     await axios
       .put(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
         username: username,
@@ -17,8 +19,7 @@ export default () => {
         tokenName: "ProfileImg",
       })
       .then(() => {
-        document.cookie = `Notifies_AccountProfileImg=${image}; path=/`;
-        setProfileImage(image);
+        close();
       })
       .catch(error => {
         console.error(error);

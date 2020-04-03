@@ -27,8 +27,10 @@ export const StyledNavSidebarBackdrop = styled.div`
 `;
 
 export const StyledProfileImg = styled.img`
-  width: 280px;
+  max-width: 280px;
   height: calc(280px / 16 * 9);
+  display: flex;
+  margin: auto;
 `;
 
 export const StyledToggleSwitch = styled.label`
@@ -256,6 +258,7 @@ export const DeleteAccountForm = styled(Form)`
     color: white;
     border-radius: 10px;
     box-shadow: 2px 2px 5px black;
+    margin-top: 50px;
 
     :hover {
       background: #c70f0f;

@@ -172,7 +172,13 @@ export default () => {
           Change Profile image
         </ShowAddFormBtn>
       )}
-      {showAddImage && <UpdateProfileImg />}
+      {showAddImage && (
+        <UpdateProfileImg
+          close={() => {
+            setShowAddImage(false);
+          }}
+        />
+      )}
       <StyledProfileImg
         src={profileImage || `${process.env.PUBLIC_URL}/images/placeholder.jpg`}
         alt=''
