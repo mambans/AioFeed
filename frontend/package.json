@@ -7,20 +7,19 @@
     "bootstrap": "^4.4.1",
     "moment": "^2.24.0",
     "node-sass": "^4.13.1",
-    "react": "^16.13.0",
-    "react-animated-css": "^1.2.1",
-    "react-bootstrap": "^1.0.0-beta.17",
+    "react": "^16.13.1",
+    "react-bootstrap": "^1.0.0",
     "react-countdown-circle-timer": "^1.1.1",
-    "react-dom": "^16.13.0",
+    "react-dom": "^16.13.1",
     "react-icons": "^3.9.0",
     "react-loading": "^2.0.3",
     "react-moment": "^0.9.7",
     "react-rangeslider": "^2.2.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.4.0",
+    "react-scripts": "^3.4.1",
     "react-switch": "^5.0.1",
     "react-transition-group": "^4.3.0",
-    "react-youtube": "^7.9.0",
+    "react-youtube": "^7.10.0",
     "reactjs-popup": "^1.5.0",
     "styled-components": "^5.0.1",
     "uniqid": "^5.2.0"
@@ -47,6 +46,6 @@
     ]
   },
   "devDependencies": {
-    "eslint-plugin-react-hooks": "^2.5.0"
+    "eslint-plugin-react-hooks": "^2.5.1"
   }
 }

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { MdDelete } from "react-icons/md";
-import { Animated } from "react-animated-css";
 import Alert from "react-bootstrap/Alert";
 import axios from "axios";
 import { remove } from "lodash";
@@ -9,7 +8,7 @@ import { remove } from "lodash";
 import Util from "./../../../util/Util";
 import { UnfollowButton } from "./../../sharedStyledComponents";
 
-const UnfollowChannel = async subId => {
+const UnfollowChannel = async (subId) => {
   const response = await axios
     .delete(`https://www.googleapis.com/youtube/v3/subscriptions`, {
       params: {
@@ -21,10 +20,10 @@ const UnfollowChannel = async subId => {
         Accept: "application/json",
       },
     })
-    .then(res => {
+    .then((res) => {
       const followedChannels = JSON.parse(localStorage.getItem(`YT-followedChannels`));
 
-      remove(followedChannels.data, function(channel) {
+      remove(followedChannels.data, function (channel) {
         return channel.id === subId;
       });
 
@@ -44,7 +43,7 @@ const UnfollowChannel = async subId => {
   return response;
 };
 
-const ChannelListElement = data => {
+const ChannelListElement = (data) => {
   const { channel } = data;
   const [unfollowResponse, setUnfollowResponse] = useState(null);
   const refUnfollowAlert = useRef();
@@ -65,40 +64,26 @@ const ChannelListElement = data => {
         setUnfollowResponse(null);
       }, 6000);
       return (
-        <Animated
-          animationIn='fadeInUp'
-          animationOut='fadeOut'
-          animationOutDelay={2000}
-          animationOutDuration={2500}
-          isVisible={false}
+        <Alert
+          variant={alertType}
           style={{
             width: "200px",
             position: "absolute",
+            // zIndex: "2",
             margin: "0",
-            height: "43px",
-            marginTop: "10px",
-          }}>
-          <Alert
-            variant={alertType}
+            padding: "5px",
+            borderRadius: "3px",
+          }}
+          className='unfollowResponseAlert'>
+          <Alert.Heading
             style={{
-              width: "200px",
-              position: "absolute",
-              // zIndex: "2",
-              margin: "0",
-              padding: "5px",
-              borderRadius: "3px",
-            }}
-            className='unfollowResponseAlert'>
-            <Alert.Heading
-              style={{
-                fontSize: "16px",
-                textAlign: "center",
-                marginBottom: "0",
-              }}>
-              {alertText}
-            </Alert.Heading>
-          </Alert>
-        </Animated>
+              fontSize: "16px",
+              textAlign: "center",
+              marginBottom: "0",
+            }}>
+            {alertText}
+          </Alert.Heading>
+        </Alert>
       );
     } else {
       return "";
@@ -144,10 +129,10 @@ const ChannelListElement = data => {
         variant='link'
         onClick={async () => {
           await UnfollowChannel(channel.id)
-            .then(res => {
+            .then((res) => {
               setUnfollowResponse("Success");
             })
-            .catch(error => {
+            .catch((error) => {
               setUnfollowResponse(null);
               setUnfollowResponse("Failed");
             });
