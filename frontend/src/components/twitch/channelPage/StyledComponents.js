@@ -271,12 +271,12 @@ export const Chat = styled.iframe`
 `;
 
 export const StyledLiveInfoContainer = styled.div`
-    align-items: center;
-    width: 200px;
-    display: flex;
-    margin-left: -200px;
-    justify-content: center;
-}
+  align-items: center;
+  width: 200px;
+  display: flex;
+  margin-left: -200px;
+  justify-content: center;
+
   #LiveDetails {
     display: flex;
     flex-direction: column;
