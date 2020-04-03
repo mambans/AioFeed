@@ -7,6 +7,7 @@ export const NavigationProvider = ({ children }) => {
   const [visible, setVisible] = useState(true);
   const [footerVisible, setFooterVisible] = useState(true);
   const [shrinkNavbar, setShrinkNavbar] = useState("false");
+  const [alert, setAlert] = useState();
 
   return (
     <NavigationContext.Provider
@@ -19,6 +20,8 @@ export const NavigationProvider = ({ children }) => {
         setFooterVisible,
         shrinkNavbar,
         setShrinkNavbar,
+        setAlert,
+        alert,
       }}>
       {children}
     </NavigationContext.Provider>

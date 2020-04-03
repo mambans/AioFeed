@@ -2,16 +2,28 @@ import { Form, Button } from "react-bootstrap";
 import { MdDelete } from "react-icons/md";
 import Modal from "react-bootstrap/Modal";
 import React, { useState, useContext } from "react";
+import axios from "axios";
 
-import { DeleteAccountForm, DeleteAccountFooter, DeleteAccountButton } from "./StyledComponent";
+import { DeleteAccountForm, DeleteAccountButton } from "./StyledComponent";
 import AccountContext from "./../../account/AccountContext";
 import styles from "./Sidebar.module.scss";
 import useInput from "./../../useInput";
+import NavigationContext from "../NavigationContext";
+import Alert from "./Alert";
 
 export default () => {
-  const { username } = useContext(AccountContext);
+  const {
+    username,
+    setUsername,
+    setProfileImage,
+    setAuthKey,
+    setTwitchToken,
+    setYoutubeToken,
+    authKey,
+  } = useContext(AccountContext);
   const [show, setShow] = useState(false);
   const [validated, setValidated] = useState(false);
+  const { setRenderModal, setAlert } = useContext(NavigationContext);
 
   const handleClose = () => {
     setShow(false);
@@ -27,20 +39,47 @@ export default () => {
       // console.log("Deleted account " + account);
       setValidated(true);
 
-      // await axios
-      //   .put(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/delete`, {
-      //     username: account,
-      //     password: password,
-      //   })
-      //   .then(res => {
-      //     console.log("TCL: deleteAccount -> res", res);
-      //   })
-      //   .catch(err => {
-      //     console.error(err);
-      //   });
+      await axios
+        .delete(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/delete`, {
+          data: { username: account, password: password, authKey: authKey },
+        })
+        .then(res => {
+          document.cookie = `Twitch-access_token=null; path=/; SameSite=Lax`;
+          document.cookie = `Twitch-refresh_token=null; path=/; SameSite=Lax`;
+          document.cookie = `Twitch_FeedEnabled=${false}; path=/`;
+          document.cookie = `Notifies_TwitchUserId=null; path=/; SameSite=Lax`;
+          document.cookie = `Twitch-username=null; path=/; SameSite=Lax`;
+          document.cookie = `YoutubeFeedEnabled=null; path=/`;
+          document.cookie = `Notifies_AccountName=null; path=/`;
+          document.cookie = `Notifies_AccountEmail=null; path=/`;
+          document.cookie = `Youtube-access_token=null; path=/`;
+          document.cookie = `Notifies_AccountProfileImg=null; path=/`;
+          document.cookie = `Twitch-refresh_token=null; path=/; SameSite=Lax`;
+          document.cookie = `Youtube_FeedEnabled=${false}; path=/`;
+          document.cookie = `TwitchVods_FeedEnabled=${false}; path=/`;
 
-      resetAccount();
-      resetPassword();
+          setTwitchToken(null);
+          setYoutubeToken(null);
+          setUsername();
+          setProfileImage();
+          setAuthKey();
+
+          setRenderModal("create");
+          setAlert({
+            bold: res.data.Attributes.Username,
+            message: ` account deleted`,
+            variant: "success",
+          });
+        })
+        .catch(err => {
+          console.error(err);
+          setAlert({
+            message: err.response.data.message,
+            variant: "warning",
+          });
+          setValidated(false);
+          resetPassword();
+        });
     } else {
       event.preventDefault();
       event.stopPropagation();
@@ -54,8 +93,8 @@ export default () => {
     deleteAccount(evt);
   };
 
+  // eslint-disable-next-line no-unused-vars
   const { value: account, bind: bindAccount, reset: resetAccount } = useInput("");
-  //eslint-disable-next-line
   const { value: password, bind: bindPassword, reset: resetPassword } = useInput("");
 
   return (
@@ -71,8 +110,9 @@ export default () => {
         backdropClassName={styles.modalBackdrop}>
         <h2>Delete Account</h2>
         <div>
-          <h4>Sure you want to delete your account?</h4>
+          <h4>Enter account name and password to delete</h4>
         </div>
+        <Alert />
         <DeleteAccountForm onSubmit={handleSubmit} validated={validated}>
           <Form.Group controlId='formBasicUsername'>
             <Form.Label>Username</Form.Label>
@@ -82,6 +122,7 @@ export default () => {
               type='text'
               placeholder='Enter Username'
               {...bindAccount}
+              isInvalid={account !== username}
             />
           </Form.Group>
 
@@ -93,32 +134,14 @@ export default () => {
               type='password'
               placeholder='Password'
               {...bindPassword}
+              isInvalid={!password}
             />
           </Form.Group>
 
-          <Button variant='danger' type='submit'>
+          <Button variant='danger' type='submit' disabled={account !== username}>
             Delete
           </Button>
         </DeleteAccountForm>
-        {/* <DeleteAccountForm onSubmit={handleSubmit}>
-          <label>
-            Username:
-            <input type='text' placeholder='Account name..' {...bindAccount} />
-          </label>
-          <label>
-            Password:
-            <input type='password' placeholder='Password..' {...bindPassword} />
-          </label>
-          <input type='submit' value='Delete' />
-        </DeleteAccountForm> */}
-        <DeleteAccountFooter>
-          <p>All you stored data will be deleted:</p>
-          <ul>
-            <li>Data stored in server</li>
-            <li>Cookies & Localstorage (cached data)</li>
-            <li>Preferences/Settings</li>
-          </ul>
-        </DeleteAccountFooter>
       </Modal>
     </>
   );

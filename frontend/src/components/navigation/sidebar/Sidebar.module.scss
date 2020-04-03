@@ -6,13 +6,13 @@
   padding: 15px;
   top: calc(40% - (600px / 2));
   left: calc(50% - (800px / 2));
-  height: 600px !important;
+  // height: 600px !important;
   width: 800px !important;
   max-height: unset !important;
   max-width: unset !important;
   scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0) !important;
   scrollbar-width: thin !important;
-  background: var(--sidebarBackground) !important;
+  background: var(--navigationbarBackground) !important;
   overflow: scroll;
   border: none !important;
   border-radius: 10px;

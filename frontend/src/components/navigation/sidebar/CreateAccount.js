@@ -9,12 +9,13 @@ import NavigationContext from "./../NavigationContext";
 import AccountContext from "./../../account/AccountContext";
 import LoadingIndicator from "./../../LoadingIndicator";
 import useInput from "./../../useInput";
+import ALert from "./Alert";
 
 export default () => {
   document.title = "Notifies | Create Account";
   const [error, setError] = useState(null);
   const [created, setCreated] = useState();
-  const props = useContext(NavigationContext);
+  const { setAlert, setRenderModal } = useContext(NavigationContext);
   const [validated, setValidated] = useState(false);
   const { setAuthKey, setUsername } = useContext(AccountContext);
 
@@ -65,12 +66,18 @@ export default () => {
             setCreated(true);
           }
         })
-        .catch(e => {
-          console.error(e);
-          setError({
-            title: error.response.data,
-            message: error.response.status,
-          });
+        .catch(error => {
+          console.error(error.response);
+          if (error.response.data.code === "ConditionalCheckFailedException") {
+            setAlert({
+              message: `Username is already taken`,
+              variant: "warning",
+            });
+          }
+          // setError({
+          //   title: error.response.data,
+          //   message: error.response.status,
+          // });
         });
     } catch (e) {
       console.error(e);
@@ -82,6 +89,8 @@ export default () => {
   } else {
     return (
       <>
+        <ALert />
+
         {error && (
           <StyledAlert variant='warning' dismissible onClose={() => setError(null)}>
             <Alert.Heading>{error.title}</Alert.Heading>
@@ -134,7 +143,7 @@ export default () => {
             </Button>
             <Button
               onClick={() => {
-                props.setRenderModal("login");
+                setRenderModal("login");
               }}>
               Login
             </Button>

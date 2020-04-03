@@ -435,3 +435,12 @@ export const ProfileImgInput = styled.form`
     }
   }
 `;
+
+export const StyledAccAlert = styled(Alert)`
+  text-align: center;
+  opacity: "0.7";
+
+  .close {
+    padding: 0 7px 0 0;
+  }
+`;
