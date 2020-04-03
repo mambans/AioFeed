@@ -241,6 +241,11 @@ export const DeleteAccountButton = styled(Button).attrs({ variant: "danger" })`
 export const DeleteAccountForm = styled(Form)`
   margin-top: 25px;
 
+  .form-group {
+    width: 400px;
+    margin: auto;
+  }
+
   label {
     display: flex;
     flex-direction: column;
@@ -263,12 +268,6 @@ export const DeleteAccountForm = styled(Form)`
     :hover {
       background: #c70f0f;
     }
-  }
-  input[type="text"],
-  input[type="password"] {
-    width: 400px;
-    margin: auto;
-    /* font-size: 20px; */
   }
 `;
 

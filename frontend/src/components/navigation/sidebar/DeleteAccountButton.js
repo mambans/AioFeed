@@ -10,6 +10,7 @@ import styles from "./Sidebar.module.scss";
 import useInput from "./../../useInput";
 import NavigationContext from "../NavigationContext";
 import Alert from "./Alert";
+import LoadingIndicator from "./../../LoadingIndicator";
 
 export default () => {
   const {
@@ -33,7 +34,7 @@ export default () => {
     setShow(true);
   };
 
-  const deleteAccount = async event => {
+  const deleteAccount = async (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === true && account === username) {
       // console.log("Deleted account " + account);
@@ -43,7 +44,7 @@ export default () => {
         .delete(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/delete`, {
           data: { username: account, password: password, authKey: authKey },
         })
-        .then(res => {
+        .then((res) => {
           document.cookie = `Twitch-access_token=null; path=/; SameSite=Lax`;
           document.cookie = `Twitch-refresh_token=null; path=/; SameSite=Lax`;
           document.cookie = `Twitch_FeedEnabled=${false}; path=/`;
@@ -71,7 +72,7 @@ export default () => {
             variant: "success",
           });
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(err);
           setAlert({
             message: err.response.data.message,
@@ -87,7 +88,7 @@ export default () => {
     }
   };
 
-  const handleSubmit = evt => {
+  const handleSubmit = (evt) => {
     console.log(account);
     evt.preventDefault();
     deleteAccount(evt);
@@ -124,6 +125,7 @@ export default () => {
               {...bindAccount}
               isInvalid={account !== username}
             />
+            <Form.Control.Feedback type='invalid'>Invalid Username</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group controlId='formBasicPassword'>
@@ -136,12 +138,15 @@ export default () => {
               {...bindPassword}
               isInvalid={!password}
             />
+            <Form.Control.Feedback type='invalid'>Invalid Password</Form.Control.Feedback>
           </Form.Group>
 
-          <Button variant='danger' type='submit' disabled={account !== username}>
+          <Button variant='danger' type='submit' disabled={account !== username || validated}>
             Delete
           </Button>
         </DeleteAccountForm>
+
+        {validated && <LoadingIndicator height={150} width={150} />}
       </Modal>
     </>
   );
