@@ -1,10 +1,8 @@
 import { Form, Button } from "react-bootstrap";
-import { Redirect } from "react-router-dom";
-import Alert from "react-bootstrap/Alert";
 import axios from "axios";
 import React, { useState, useContext } from "react";
 
-import { StyledCreateFormTitle, StyledCreateForm, StyledAlert } from "./StyledComponent";
+import { StyledCreateFormTitle, StyledCreateForm } from "./StyledComponent";
 import AccountContext from "./../../account/AccountContext";
 import NavigationContext from "./../NavigationContext";
 import LoadingIndicator from "./../../LoadingIndicator";
@@ -13,9 +11,9 @@ import useInput from "./../../useInput";
 
 export default () => {
   document.title = "Notifies | Login";
-  const currentPage = new URL(window.location.href).pathname;
-  const [error, setError] = useState(null);
   const [validated, setValidated] = useState(false);
+  const [validatedUsername, setValidatedUsername] = useState(true);
+  const [validatedPassword, setValidatedPassword] = useState(true);
   const { setRenderModal } = useContext(NavigationContext);
   const {
     setAuthKey,
@@ -27,14 +25,13 @@ export default () => {
     setTwitchUsername,
     setTwitchProfileImg,
     setAutoRefreshEnabled,
-    username,
   } = useContext(AccountContext);
   const { setEnableTwitch } = useContext(FeedsContext);
 
-  const { value: userName, bind: bindUserName, reset: resetUserName } = useInput("");
+  const { value: username, bind: bindUsername, reset: resetUsername } = useInput("");
   const { value: password, bind: bindPassword, reset: resetPassword } = useInput("");
 
-  const handleSubmit = evt => {
+  const handleSubmit = (evt) => {
     evt.preventDefault();
 
     const form = evt.currentTarget;
@@ -42,21 +39,31 @@ export default () => {
       evt.preventDefault();
       evt.stopPropagation();
     } else {
-      loginAccount();
       setValidated(true);
+      setValidatedUsername(true);
+      setValidatedPassword(true);
+      loginAccount();
     }
   };
 
-  async function loginAccount() {
-    setError(null);
+  function parseBolean(value) {
+    if (value === "null" || !value) {
+      return null;
+    } else {
+      return value;
+    }
+  }
 
+  async function loginAccount() {
     await axios
       .post(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/login`, {
-        username: userName,
+        username: username,
         password: password,
       })
-      .then(res => {
+      .then((res) => {
         if (res.status === 200 && res.data.Attributes) {
+          resetUsername();
+          resetPassword();
           // console.log("TCL: loginAccount -> res.data.Attributes", res.data.Attributes);
           document.cookie = `Notifies_AccountName=${res.data.Attributes.Username}; path=/`;
           document.cookie = `Notifies_AccountEmail=${res.data.Attributes.Email}; path=/`;
@@ -66,54 +73,43 @@ export default () => {
           document.cookie = `Notifies_AuthKey=${res.data.Attributes.AuthKey}; path=/`;
 
           if (res.data.Attributes.TwitchPreference) {
-            document.cookie = `Twitch_AutoRefresh=${res.data.Attributes.TwitchPreferences
-              .AutoRefresh || null}; path=/`;
-            document.cookie = `Twitch_FeedEnabled=${res.data.Attributes.TwitchPreferences.enabled ||
-              null}; path=/`;
+            document.cookie = `Twitch_AutoRefresh=${parseBolean(
+              res.data.Attributes.TwitchPreferences.AutoRefresh
+            )}; path=/`;
+            document.cookie = `Twitch_FeedEnabled=${parseBolean(
+              res.data.Attributes.TwitchPreferences.enabled
+            )}; path=/`;
 
             setEnableTwitch(res.data.Attributes.TwitchPreferences.enabled === "true" || false);
-            setTwitchUsername(res.data.Attributes.TwitchPreferences.Username || null);
-            setTwitchUserId(res.data.Attributes.TwitchPreferences.Id || null);
-            setTwitchProfileImg(res.data.Attributes.TwitchPreferences.Profile || null);
-            setAutoRefreshEnabled(res.data.Attributes.TwitchPreferences.AutoRefresh || null);
+            setTwitchUsername(parseBolean(res.data.Attributes.TwitchPreferences.Username));
+            setTwitchUserId(parseBolean(res.data.Attributes.TwitchPreferences.Id));
+            setTwitchProfileImg(parseBolean(res.data.Attributes.TwitchPreferences.Profile));
+            setAutoRefreshEnabled(parseBolean(res.data.Attributes.TwitchPreferences.AutoRefresh));
           }
 
-          setAuthKey(res.data.Attributes.AuthKey);
-          setProfileImage(res.data.Attributes.ProfileImg);
-          setTwitchToken(res.data.Attributes.TwitchToken);
-          setYoutubeToken(res.data.Attributes.YoutubeToken);
+          setAuthKey(parseBolean(res.data.Attributes.AuthKey));
+          setProfileImage(parseBolean(res.data.Attributes.ProfileImg));
+          setTwitchToken(parseBolean(res.data.Attributes.TwitchToken));
+          setYoutubeToken(parseBolean(res.data.Attributes.YoutubeToken));
 
-          setUsername(res.data.Attributes.Username);
-
-          resetUserName();
-          resetPassword();
+          setUsername(parseBolean(res.data.Attributes.Username));
         } else {
           console.log(res);
-          //   setError({
-          //   title: res.response.data,
-          //   message: e.response.status,
-          // });
         }
       })
-      .catch(e => {
-        console.error(e);
-        console.log(e);
-        setError({
-          title: e.response.data,
-          message: e.response.status,
-        });
+      .catch((e) => {
+        setValidated(false);
+        if (e.response.data.message === "Invalid Password") {
+          resetPassword();
+          setValidatedPassword(false);
+        } else if (e.response.data.message === "Invalid Username") {
+          setValidatedUsername(false);
+        }
       });
   }
 
   return (
     <>
-      {error && (
-        <StyledAlert variant='warning' dismissible onClose={() => setError(null)}>
-          <Alert.Heading>{error.title}</Alert.Heading>
-          <hr />
-          {error.message.toString()}
-        </StyledAlert>
-      )}
       <StyledCreateFormTitle>
         <h3>Login</h3>
         <p>Login with your Notifies account</p>
@@ -125,10 +121,10 @@ export default () => {
             type='text'
             placeholder='Username'
             required
-            {...bindUserName}
-            isInvalid={!userName}
+            {...bindUsername}
+            isInvalid={!validatedUsername}
           />
-          <Form.Control.Feedback type='invalid'>Please enter a username.</Form.Control.Feedback>
+          <Form.Control.Feedback type='invalid'>Invalid Username</Form.Control.Feedback>
         </Form.Group>
         <Form.Group controlId='formGroupPassword'>
           <Form.Label>Password</Form.Label>
@@ -137,12 +133,12 @@ export default () => {
             placeholder='Password'
             required
             {...bindPassword}
-            isInvalid={!password}
+            isInvalid={!validatedPassword}
           />
-          <Form.Control.Feedback type='invalid'>Please enter a password.</Form.Control.Feedback>
+          <Form.Control.Feedback type='invalid'>Invalid Password</Form.Control.Feedback>
         </Form.Group>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Button variant='primary' type='submit'>
+          <Button variant='primary' type='submit' disabled={(!username && !password) || validated}>
             Login
           </Button>
           <Button
@@ -154,9 +150,6 @@ export default () => {
         </div>
       </StyledCreateForm>
       {validated && <LoadingIndicator height={150} width={150} />}
-      {username && !error && (currentPage === "/account/login" || currentPage === "/account") && (
-        <Redirect to='/account'></Redirect>
-      )}
     </>
   );
 };
