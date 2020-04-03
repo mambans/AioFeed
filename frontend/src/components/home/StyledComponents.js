@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const BlurOverlay = styled.div`
   height: calc(100vh - 65px);
-  width: 100vw;
+  width: 100%;
   position: absolute;
   background: no-repeat center center fixed;
   background-attachment: fixed;
