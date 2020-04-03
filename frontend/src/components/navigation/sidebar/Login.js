@@ -57,28 +57,32 @@ export default () => {
       })
       .then(res => {
         if (res.status === 200 && res.data.Attributes) {
-          console.log("TCL: loginAccount -> res.data.Attributes", res.data.Attributes);
+          // console.log("TCL: loginAccount -> res.data.Attributes", res.data.Attributes);
           document.cookie = `Notifies_AccountName=${res.data.Attributes.Username}; path=/`;
           document.cookie = `Notifies_AccountEmail=${res.data.Attributes.Email}; path=/`;
           document.cookie = `Twitch-access_token=${res.data.Attributes.TwitchToken}; path=/; SameSite=Lax`;
           document.cookie = `Youtube-access_token=${res.data.Attributes.YoutubeToken}; path=/`;
           document.cookie = `Notifies_AccountProfileImg=${res.data.Attributes.ProfileImg}; path=/`;
           document.cookie = `Notifies_AuthKey=${res.data.Attributes.AuthKey}; path=/`;
-          document.cookie = `Twitch_AutoRefresh=${res.data.Attributes.TwitchPreferences.AutoRefresh}; path=/`;
-          document.cookie = `Twitch_FeedEnabled=${res.data.Attributes.TwitchPreferences.enabled}; path=/`;
+
+          if (res.data.Attributes.TwitchPreference) {
+            document.cookie = `Twitch_AutoRefresh=${res.data.Attributes.TwitchPreferences
+              .AutoRefresh || null}; path=/`;
+            document.cookie = `Twitch_FeedEnabled=${res.data.Attributes.TwitchPreferences.enabled ||
+              null}; path=/`;
+
+            setEnableTwitch(res.data.Attributes.TwitchPreferences.enabled === "true" || false);
+            setTwitchUsername(res.data.Attributes.TwitchPreferences.Username || null);
+            setTwitchUserId(res.data.Attributes.TwitchPreferences.Id || null);
+            setTwitchProfileImg(res.data.Attributes.TwitchPreferences.Profile || null);
+            setAutoRefreshEnabled(res.data.Attributes.TwitchPreferences.AutoRefresh || null);
+          }
 
           setAuthKey(res.data.Attributes.AuthKey);
           setProfileImage(res.data.Attributes.ProfileImg);
           setTwitchToken(res.data.Attributes.TwitchToken);
-          if (res.data.Attributes.TwitchToken && res.data.Attributes.TwitchPreferences.enabled) {
-            setEnableTwitch(true);
-          }
           setYoutubeToken(res.data.Attributes.YoutubeToken);
 
-          setTwitchUsername(res.data.Attributes.TwitchPreferences.Username);
-          setTwitchUserId(res.data.Attributes.TwitchPreferences.Id);
-          setTwitchProfileImg(res.data.Attributes.TwitchPreferences.Profile);
-          setAutoRefreshEnabled(res.data.Attributes.TwitchPreferences.AutoRefresh);
           setUsername(res.data.Attributes.Username);
 
           resetUserName();
