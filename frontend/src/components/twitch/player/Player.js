@@ -227,7 +227,7 @@ export default () => {
 
       fadeTimer.current = setTimeout(() => {
         setShowControlls(false);
-      }, 5000);
+      }, 2000);
     },
     250,
     { leading: true, trailing: false }
