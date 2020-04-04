@@ -104,7 +104,7 @@ export default () => {
     }
   };
 
-  const toggleFullscreen2 = TwitchPlayer => {
+  const toggleFullscreen2 = (TwitchPlayer) => {
     const isFullScreen = TwitchPlayer.getFullscreen();
     TwitchPlayer.setFullscreen(!isFullScreen);
     TwitchPlayer.showPlayerControls(!isFullScreen);
@@ -161,7 +161,7 @@ export default () => {
               Accept: "application/vnd.twitchtv.v5+json",
             },
           })
-          .then(res => {
+          .then((res) => {
             document.title = `N | ${res.data.channel.display_name} - ${res.data.title}`;
           });
       }, 5000);
@@ -245,20 +245,24 @@ export default () => {
   useEffect(() => {
     const refEle = volumeEventOverlayRef.current;
     // refEle.addEventListener("mouseenter", handleMouseOver);
-    refEle.addEventListener("mouseleave", handleMouseOut);
-    document.addEventListener("mousemove", showAndResetTimer);
-    document.addEventListener("mousedown", showAndResetTimer);
-    document.body.addEventListener("keydown", showAndResetTimer);
-    document.addEventListener("touchmove", showAndResetTimer);
+    if (refEle) {
+      refEle.addEventListener("mouseleave", handleMouseOut);
+      document.addEventListener("mousemove", showAndResetTimer);
+      document.addEventListener("mousedown", showAndResetTimer);
+      document.body.addEventListener("keydown", showAndResetTimer);
+      document.addEventListener("touchmove", showAndResetTimer);
+    }
 
     return () => {
       // refEle.removeEventListener("mouseenter", handleMouseOver);
-      refEle.removeEventListener("mouseleave", handleMouseOut);
-      document.removeEventListener("mousemove", showAndResetTimer);
-      document.removeEventListener("mousedown", showAndResetTimer);
-      document.body.removeEventListener("keydown", showAndResetTimer);
-      document.removeEventListener("touchmove", showAndResetTimer);
-      clearTimeout(fadeTimer.current);
+      if (refEle) {
+        refEle.removeEventListener("mouseleave", handleMouseOut);
+        document.removeEventListener("mousemove", showAndResetTimer);
+        document.removeEventListener("mousedown", showAndResetTimer);
+        document.body.removeEventListener("keydown", showAndResetTimer);
+        document.removeEventListener("touchmove", showAndResetTimer);
+        clearTimeout(fadeTimer.current);
+      }
     };
   }, [handleMouseOut, showAndResetTimer]);
 
@@ -281,12 +285,12 @@ export default () => {
     const settings = `height=${Height},width=${Width},top=${TopPosition},left=${LeftPosition},scrollbars=yes,resizable`;
 
     await axios(axiosConfig("post"))
-      .then(res => {
+      .then((res) => {
         window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
       })
       .catch(() => {
-        reauthenticate(setTwitchToken, setRefreshToken).then(async access_token => {
-          await axios(axiosConfig("post", access_token)).then(res => {
+        reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
+          await axios(axiosConfig("post", access_token)).then((res) => {
             window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
           });
         });
@@ -379,7 +383,7 @@ export default () => {
                 />
                 {showPlaybackStats && playbackStats && (
                   <PlaybackStats>
-                    {Object.keys(playbackStats).map(statName => {
+                    {Object.keys(playbackStats).map((statName) => {
                       return (
                         <div key={statName}>
                           <span>{`${statName}: `}</span>
@@ -421,7 +425,7 @@ export default () => {
 
                 {showQualities && qualities && (
                   <QualitiesList>
-                    {qualities.map(quality => {
+                    {qualities.map((quality) => {
                       return (
                         <li
                           key={quality.name}
