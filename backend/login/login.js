@@ -48,9 +48,14 @@ const login = async ({ username, password }) => {
     } else {
       return {
         statusCode: 401,
-        data: { message: "Invalid password." },
+        data: { message: "Invalid Password" },
       };
     }
+  } else {
+    return {
+      statusCode: 401,
+      data: { message: "Invalid Username" },
+    };
   }
 };
 
