@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useCallback } from "react";
 
 import "./Home.scss";
 import { BlurOverlay, TopBlurOverlay, LogoText, WelcomeContainer } from "./StyledComponents";
@@ -46,6 +46,10 @@ export default () => {
     );
   };
 
+  const setVisibleNavbar = useCallback(() => {
+    setVisible(true);
+  }, [setVisible]);
+
   useEffect(() => {
     setVisible(false);
     document.documentElement.setAttribute("homepage", "true");
@@ -57,13 +61,9 @@ export default () => {
   }, [setVisible]);
 
   useEffect(() => {
-    window.addEventListener("scroll", () => {
-      setVisible(true);
-    });
+    window.addEventListener("scroll", setVisibleNavbar);
 
-    window.addEventListener("wheel", () => {
-      setVisible(true);
-    });
+    window.addEventListener("wheel", setVisibleNavbar);
 
     if (!inactiveTimer.current) {
       inactiveTimer.current = setInterval(() => {
@@ -72,15 +72,11 @@ export default () => {
     }
 
     return () => {
-      window.removeEventListener("scroll", () => {
-        setVisible(true);
-      });
-      window.removeEventListener("wheel", () => {
-        setVisible(true);
-      });
+      window.removeEventListener("scroll", setVisibleNavbar);
+      window.removeEventListener("wheel", setVisibleNavbar);
       clearInterval(inactiveTimer.current);
     };
-  }, [setVisible]);
+  }, [setVisible, setVisibleNavbar]);
 
   return <Logos></Logos>;
 };
