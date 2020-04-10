@@ -1,6 +1,6 @@
 # AioFeed
 
-<img src="https://github.com/mambans/AioFeed/blob/master/frontend/public/logo-text.png" alt="Logo" width="300"/>
+<img src="https://github.com/mambans/AioFeed/blob/master/frontend/public/android-chrome-192x192.png" alt="Logo" width="300"/>
 
 My personal project **AioFeed**, is a site that combines feeds from different sites such as Twitch.tv and Youtube.com into one page. And features for that I personally thought was missing from Twitch.tv.
 
