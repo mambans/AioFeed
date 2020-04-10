@@ -17,7 +17,15 @@ import AccountContext from "./../account/AccountContext";
 import { VodsProvider } from "./../twitch/vods/VodsContext";
 import Twitter from "../twitter";
 import { Container } from "../twitch/StyledComponents";
-import { CenterContainer } from "../sharedStyledComponents";
+
+const CenterContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-flow: column;
+  margin-top: 25px;
+  margin-left: ${({ marginLeft }) => marginLeft + "px"};
+  width: ${({ width }) => width + "px"} !important;
+`;
 
 const TwitchContainer = styled.div`
   display: flex;

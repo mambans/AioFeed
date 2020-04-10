@@ -218,12 +218,3 @@ export const StyledLoadingContainer = styled.div`
     text-align: center;
   }
 `;
-
-export const CenterContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-flow: column;
-  margin-top: 20px;
-  margin-left: ${({ marginLeft }) => marginLeft + "px"};
-  width: ${({ width }) => width + "px"} !important;
-`;

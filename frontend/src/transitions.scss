@@ -159,8 +159,12 @@
 .fadeSlide-right-1s-enter {
   opacity: 0;
   //max-width: 0px;
-  right: -336px;
+  right: -400px;
   transition: opacity 500ms, right 500ms;
+
+  @media screen and (max-width: 1920px) {
+    right: -300px;
+  }
 }
 .fadeSlide-right-1s-enter-active {
   opacity: 1;
@@ -178,8 +182,12 @@
   opacity: 0;
   //width: 0px;
   //max-width: 0px;
-  right: -336px;
+  right: -400px;
   transition: opacity 500ms, right 500ms;
+
+  @media screen and (max-width: 1920px) {
+    right: -300px;
+  }
 }
 
 .fadeSlide-right-1s-enter-done {

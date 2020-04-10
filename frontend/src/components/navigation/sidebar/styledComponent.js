@@ -12,9 +12,13 @@ export const StyledNavSidebar = styled.div`
   width: 100px;
   height: calc(100vh - 65px);
   background: var(--navigationbarBackground);
-  width: 300px;
+  width: 400px;
   border-left: 2px solid #494949;
   padding: 10px;
+
+  @media screen and (max-width: 1920px) {
+    width: 300px;
+  }
 `;
 
 export const StyledNavSidebarBackdrop = styled.div`
