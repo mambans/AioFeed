@@ -44,14 +44,14 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
     };
   };
 
-  const UnfollowStream = async user_id => {
+  const UnfollowStream = async (user_id) => {
     await axios(axiosConfig("delete", user_id))
       .then(() => {
         console.log(`Unfollowed: ${channelName}`);
         if (refreshStreams) refreshStreams();
       })
       .catch(() => {
-        reauthenticate(setTwitchToken, setRefreshToken).then(async access_token => {
+        reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
           await axios(axiosConfig("delete", user_id, access_token)).then(() => {
             console.log(`Unfollowed: ${channelName}`);
             if (refreshStreams) refreshStreams();
@@ -67,7 +67,7 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
         if (refreshStreams) refreshStreams();
       })
       .catch(() => {
-        reauthenticate(setTwitchToken, setRefreshToken).then(async access_token => {
+        reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
           await axios(axiosConfig("put", user_id, access_token)).then(() => {
             console.log(`Followed: ${channelName}`);
             if (refreshStreams) refreshStreams();
@@ -86,10 +86,10 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
             Accept: "application/vnd.twitchtv.v5+json",
           },
         })
-        .then(res => {
+        .then((res) => {
           setFollowing(true);
         })
-        .catch(error => {
+        .catch((error) => {
           if (
             error.response &&
             error.response.status === 404 &&

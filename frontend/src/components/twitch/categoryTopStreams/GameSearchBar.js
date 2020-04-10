@@ -11,13 +11,13 @@ import { throttle } from "lodash";
 import { MdFormatListBulleted } from "react-icons/md";
 import StyledLoadingList from "./LoadingList";
 
-const GameSearchBar = props => {
+const GameSearchBar = (props) => {
   const { gameName, videoType } = props;
   const [redirect, setRedirect] = useState(false);
   const [topGames, setTopGames] = useState();
   const [openGameList, setOpenGameList] = useState();
 
-  const useInput = initialValue => {
+  const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue);
 
     return {
@@ -26,7 +26,7 @@ const GameSearchBar = props => {
       reset: () => setValue(""),
       bind: {
         value,
-        onChange: event => {
+        onChange: (event) => {
           setValue(event.target.value);
           if (openGameList && event.target.value === "") {
             setOpenGameList(false);
@@ -42,7 +42,7 @@ const GameSearchBar = props => {
   //eslint-disable-next-line
   const { value: game, bind: bindGame, reset: resetGame, showValue } = useInput("");
 
-  const handleSubmit = evt => {
+  const handleSubmit = (evt) => {
     evt.preventDefault();
     setRedirect(true);
     // resetGame();
@@ -52,7 +52,7 @@ const GameSearchBar = props => {
     () =>
       throttle(
         () => {
-          GetTopGames().then(res => {
+          GetTopGames().then((res) => {
             setTopGames(res.data.data);
           });
         },
@@ -93,10 +93,10 @@ const GameSearchBar = props => {
             )}
             {topGames ? (
               topGames
-                .filter(game => {
+                .filter((game) => {
                   return game.name.toLowerCase().includes(showValue());
                 })
-                .map(game => {
+                .map((game) => {
                   return (
                     <StyledGameListElement key={game.id}>
                       <Link

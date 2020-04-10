@@ -46,7 +46,7 @@ async function getFollowedChannels() {
             Accept: "application/json",
           },
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error);
         });
 

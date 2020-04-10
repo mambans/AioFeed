@@ -19,7 +19,7 @@ import {
 import RenderFollowedChannelList from "./channelList/RenderFollowedChannelList";
 import { HeaderLeftSubcontainer } from "./../twitch/StyledComponents";
 
-const SubFeedError = props => {
+const SubFeedError = (props) => {
   const { error } = props;
   let alertError;
   let alertVariant;
@@ -54,7 +54,7 @@ const SubFeedError = props => {
   }
 };
 
-export default data => {
+export default (data) => {
   return (
     <CSSTransition in={true} timeout={1000} classNames='fade-1s' unmountOnExit>
       <HeaderContainer>

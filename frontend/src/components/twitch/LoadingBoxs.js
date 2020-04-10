@@ -3,11 +3,11 @@ import React from "react";
 import { StyledLoadingBox } from "./StyledComponents";
 
 export default ({ amount, type }) => {
-  const array = Array.apply(null, Array(amount)).map(function(x, i) {
+  const array = Array.apply(null, Array(amount)).map(function (x, i) {
     return i;
   });
 
-  return array.map(index => {
+  return array.map((index) => {
     return (
       <StyledLoadingBox key={index} type={type}>
         <div id='video'></div>

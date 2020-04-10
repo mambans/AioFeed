@@ -166,22 +166,21 @@
     right: -300px;
   }
 }
+
 .fadeSlide-right-1s-enter-active {
   opacity: 1;
-  //max-width: 300px;
   right: 0;
   transition: opacity 500ms, right 500ms;
 }
+
 .fadeSlide-right-1s-exit {
   opacity: 1;
-  //max-width: 300px;
   right: 0;
   transition: opacity 500ms, right 500ms;
 }
+
 .fadeSlide-right-1s-exit-active {
   opacity: 0;
-  //width: 0px;
-  //max-width: 0px;
   right: -400px;
   transition: opacity 500ms, right 500ms;
 

@@ -3,7 +3,7 @@ import Switch from "react-switch";
 
 import { StyledToggleSwitch } from "./StyledComponent";
 
-export default props => {
+export default (props) => {
   const [checked, setChecked] = useState(props.enableHover === null ? false : props.enableHover);
 
   function handleChange(checked) {

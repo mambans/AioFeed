@@ -21,12 +21,12 @@ export default ({ data }) => {
   const { twitchVideoHoverEnable } = useContext(FeedsContext);
 
   const handleMouseOver = () => {
-    streamHoverTimer.current = setTimeout(function() {
+    streamHoverTimer.current = setTimeout(function () {
       setIsHovered(true);
     }, HOVER_DELAY);
   };
 
-  const handleMouseOut = useCallback(event => {
+  const handleMouseOut = useCallback((event) => {
     clearTimeout(streamHoverTimer.current);
     setIsHovered(false);
   }, []);

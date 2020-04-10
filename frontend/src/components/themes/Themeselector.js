@@ -6,7 +6,7 @@ import ThemeContext from "./ThemeContext";
 function Themeselector() {
   const { themesArray } = useContext(ThemeContext);
 
-  const useInput = initialValue => {
+  const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue);
 
     return {
@@ -15,7 +15,7 @@ function Themeselector() {
       reset: () => setValue(""),
       bind: {
         value,
-        onChange: event => {
+        onChange: (event) => {
           setValue(event.target.value);
           activateTheme(event.target.value);
         },
@@ -25,7 +25,7 @@ function Themeselector() {
 
   const { value: theme, bind: bindtheme } = useInput("");
 
-  const activateTheme = async theme => {
+  const activateTheme = async (theme) => {
     document.documentElement.classList.add("theme-transition");
     document.body.classList.add("theme-transition");
     localStorage.setItem("activeTheme", theme);
@@ -34,7 +34,7 @@ function Themeselector() {
       const currentMonth = new Date().getMonth() + 1;
       const currentDate = new Date().getDate();
 
-      const startTheme = await themesArray.find(theme => {
+      const startTheme = await themesArray.find((theme) => {
         return (
           theme.startMonth <= currentMonth &&
           theme.endMonth >= currentMonth &&
@@ -49,19 +49,19 @@ function Themeselector() {
         "data-theme",
         startTheme ? startTheme.name : themesArray[1].name
       );
-      window.setTimeout(function() {
+      window.setTimeout(function () {
         document.documentElement.classList.remove("theme-transition");
       }, 1000);
     } else {
       document.documentElement.setAttribute("data-theme", theme);
     }
-    window.setTimeout(function() {
+    window.setTimeout(function () {
       document.documentElement.classList.remove("theme-transition");
       document.body.classList.remove("theme-transition");
     }, 1000);
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     activateTheme(theme);
   };
@@ -75,7 +75,7 @@ function Themeselector() {
             {...bindtheme}
             value={localStorage.getItem("activeTheme") || "default"}
             className='custom-select custom-select-sm'>
-            {themesArray.map(theme => {
+            {themesArray.map((theme) => {
               return (
                 <option key={theme.name} value={theme.name}>
                   {theme.name.charAt(0).toUpperCase() + theme.name.slice(1)}

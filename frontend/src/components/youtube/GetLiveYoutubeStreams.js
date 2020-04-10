@@ -20,7 +20,7 @@ async function GetLiveYoutubeStreams(channel) {
               "If-None-Match": JSON.parse(localStorage.getItem(`live-${channel}`)).data.etag,
             },
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.error(error);
             return JSON.parse(localStorage.getItem(`live-${channel}`));
           }))
@@ -39,7 +39,7 @@ async function GetLiveYoutubeStreams(channel) {
 
     if (liveResponse.data.items.length >= 1) {
       liveStreams = await Promise.all(
-        liveResponse.data.items.map(async stream => {
+        liveResponse.data.items.map(async (stream) => {
           const liveDetailsResponse = await axios.get(
             `https://www.googleapis.com/youtube/v3/videos?`,
             {

@@ -29,7 +29,7 @@ export default ({
   useEffect(() => {
     const volumeEventOverlayRefElement = volumeEventOverlayRef.current;
 
-    const mouseEvents = e => {
+    const mouseEvents = (e) => {
       switch (e.button) {
         case 1:
           TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
@@ -68,7 +68,7 @@ export default ({
       setVolumeText(newVolume * 100);
     };
 
-    const scrollChangeVolumeEvent = e => {
+    const scrollChangeVolumeEvent = (e) => {
       if ((e.wheelDelta && e.wheelDelta > 0) || e.deltaY < 0) {
         changeVolume("increase", 0.01);
       } else {
@@ -76,7 +76,7 @@ export default ({
       }
     };
 
-    const keyboardEvents = e => {
+    const keyboardEvents = (e) => {
       switch (e.key) {
         case " ":
         case "Space":

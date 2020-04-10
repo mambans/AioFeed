@@ -34,7 +34,7 @@ export const NotificationsProvider = ({ children }) => {
           console.log("addNotification error", e);
           reject(e);
         }
-      }).then(res => {
+      }).then((res) => {
         setUnseenNotifications(res.newNotifications);
         setNotifications(res.notifications);
         localStorage.setItem("Unseen-notifications", JSON.stringify(res.newNotifications));

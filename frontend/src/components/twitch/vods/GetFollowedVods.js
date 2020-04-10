@@ -10,15 +10,17 @@ import SortAndAddExpire from "./SortAndAddExpire";
 const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) => {
   const vodChannelsWithoutFollow = [];
   let error;
-  const vodChannels = await FollowedChannelVods.map(vod => {
-    const channelFollowed = followedChannels.find(channel => channel.to_name.toLowerCase() === vod);
+  const vodChannels = await FollowedChannelVods.map((vod) => {
+    const channelFollowed = followedChannels.find(
+      (channel) => channel.to_name.toLowerCase() === vod
+    );
     if (channelFollowed) {
       return channelFollowed.to_id;
     } else {
       vodChannelsWithoutFollow.push(vod);
       return null;
     }
-  }).filter(channel => {
+  }).filter((channel) => {
     return channel !== null;
   });
 
@@ -34,13 +36,13 @@ const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) =
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })
-      .then(res => {
-        res.data.data.map(channel => {
+      .then((res) => {
+        res.data.data.map((channel) => {
           vodChannels.push(channel.id);
           return null;
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         error = err;
       });
@@ -49,8 +51,8 @@ const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) =
   return { data: vodChannels, error: error };
 };
 
-const addVodEndTime = async followedStreamVods => {
-  followedStreamVods.map(stream => {
+const addVodEndTime = async (followedStreamVods) => {
+  followedStreamVods.map((stream) => {
     if (stream.type === "archive") {
       stream.endDate = Util.durationToDate(stream.duration, stream.created_at);
     } else {
@@ -82,30 +84,30 @@ const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRe
   let followedStreamVods = [];
 
   const PromiseAllVods = await Promise.all(
-    vodChannels.map(async channel => {
-      followedStreamVods = await axios(axiosConfig("get", channel)).then(response => {
+    vodChannels.map(async (channel) => {
+      followedStreamVods = await axios(axiosConfig("get", channel)).then((response) => {
         return response.data.data;
       });
 
       return followedStreamVods;
     })
   ).catch(async () => {
-    return await reauthenticate(setTwitchToken, setRefreshToken).then(async access_token => {
+    return await reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
       const channelFetchedVods = [
         ...new Set(
-          followedStreamVods.map(vod => {
+          followedStreamVods.map((vod) => {
             return vod.user_id;
           })
         ),
       ];
 
-      const channelsIdsUnfetchedVods = await vodChannels.filter(channel => {
+      const channelsIdsUnfetchedVods = await vodChannels.filter((channel) => {
         return !channelFetchedVods.includes(channel);
       });
 
       return await Promise.all(
-        channelsIdsUnfetchedVods.map(async channel => {
-          return await axios(axiosConfig("get", channel, access_token)).then(response => {
+        channelsIdsUnfetchedVods.map(async (channel) => {
+          return await axios(axiosConfig("get", channel, access_token)).then((response) => {
             return response.data.data;
           });
         })

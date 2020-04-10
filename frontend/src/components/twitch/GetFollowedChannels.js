@@ -15,7 +15,7 @@ const fetchNextPageOfFollowers = async (PagePagination, followedchannels, twitch
     },
   });
 
-  nextPage.data.data.forEach(channel => {
+  nextPage.data.data.forEach((channel) => {
     followedchannels.data.data.push(channel);
   });
 
@@ -37,7 +37,7 @@ async function getFollowedChannels(twitchUserId) {
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error.message);
         return error;
       });

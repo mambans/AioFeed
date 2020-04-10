@@ -21,7 +21,7 @@ export default async (category, page) => {
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })
-      .then(res => {
+      .then((res) => {
         return res.data.data[0];
       });
   } else {
@@ -40,7 +40,7 @@ export default async (category, page) => {
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })
-      .catch(e => {
+      .catch((e) => {
         console.error(e.message);
         error = e;
         return e;

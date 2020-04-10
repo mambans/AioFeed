@@ -9,8 +9,8 @@ async function getVideoInfo(videoList) {
   const durations = {};
 
   await Promise.all(
-    await Object.values(videoList).map(async channel => {
-      await channel.items.map(async video => {
+    await Object.values(videoList).map(async (channel) => {
+      await channel.items.map(async (video) => {
         try {
           if (!detailsCached[video.contentDetails.upload.videoId]) {
             console.log("---Details req sent---");

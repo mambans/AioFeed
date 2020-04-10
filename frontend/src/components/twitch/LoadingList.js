@@ -2,8 +2,8 @@ import React from "react";
 
 import { StyledLoadingList } from "./StyledComponents";
 
-export default props => {
-  const array = Array.apply(null, Array(props.amount)).map(function(x, i) {
+export default (props) => {
+  const array = Array.apply(null, Array(props.amount)).map(function (x, i) {
     return i;
   });
 

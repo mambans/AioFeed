@@ -47,7 +47,7 @@ export default ({ data, vodBtnDisabled }) => {
     }
   }, [previewAvailable, data.id, data.thumbnail_url]);
 
-  const handleMouseOut = useCallback(event => {
+  const handleMouseOut = useCallback(() => {
     clearTimeout(hoverTimeoutRef.current);
     setIsHovered(false);
   }, []);

@@ -24,12 +24,12 @@ export default async (twitchPlayer, setUptime, uptimeTimer) => {
   };
 
   await axios(axiosConfig)
-    .then(res => {
+    .then((res) => {
       if (res.data.data[0] && res.data.data[0].started_at) {
         setUptime(res.data.data[0].started_at);
       } else {
         uptimeTimer.current = setInterval(async () => {
-          await axios(axiosConfig).then(res => {
+          await axios(axiosConfig).then((res) => {
             if (res.data.data[0] && res.data.data[0].started_at) {
               setUptime(res.data.data[0].started_at);
               clearInterval(uptimeTimer.current);
@@ -38,7 +38,7 @@ export default async (twitchPlayer, setUptime, uptimeTimer) => {
         }, 1000 * 30);
       }
     })
-    .catch(error => {
+    .catch((error) => {
       console.log("Uptime stream: error", error);
     });
 };

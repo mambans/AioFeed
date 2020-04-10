@@ -6,7 +6,7 @@ import { SubFeedContainer } from "./../sharedStyledComponents";
 import Util from "../../util/Util";
 import YoutubeVideoElement from "./YoutubeVideoElement";
 
-export default data => {
+export default (data) => {
   const transition = useRef("fade-1s");
 
   if (data.requestError && data.requestError.code === 401 && !data.videos) {
@@ -22,7 +22,7 @@ export default data => {
     return (
       <SubFeedContainer>
         <TransitionGroup className='twitch-vods' component={null}>
-          {data.videos.map(video => {
+          {data.videos.map((video) => {
             return (
               <CSSTransition
                 timeout={1000}

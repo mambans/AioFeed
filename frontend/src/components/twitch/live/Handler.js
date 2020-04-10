@@ -81,7 +81,11 @@ export default ({ children }) => {
           // setError(null);
           oldLiveStreams.current = liveStreams.current;
           liveStreams.current = streams.data;
-          setLoadingStates({ refreshing: false, error: null, loaded: true });
+          setLoadingStates({
+            refreshing: false,
+            error: null,
+            loaded: true,
+          });
 
           if (!disableNotifications) {
             liveStreams.current.forEach((stream) => {
@@ -144,11 +148,19 @@ export default ({ children }) => {
           }
         } else if (streams.status === 201) {
           // setError(streams.error);
-          setLoadingStates({ refreshing: false, error: streams.error, loaded: true });
+          setLoadingStates({
+            refreshing: false,
+            error: streams.error,
+            loaded: true,
+          });
         }
       } catch (error) {
         // setError(error);
-        setLoadingStates({ refreshing: false, error: error, loaded: true });
+        setLoadingStates({
+          refreshing: false,
+          error: error,
+          loaded: true,
+        });
       }
     },
     [addNotification, addSystemNotification, twitchUserId, channels, enableTwitchVods, setVods]
@@ -187,14 +199,15 @@ export default ({ children }) => {
   }, [refresh, autoRefreshEnabled]);
 
   useEffect(() => {
+    const refreshTimer = timer.current;
+
     return () => {
       console.log("Unmounting");
-      clearInterval(timer.current);
+      clearInterval(refreshTimer);
     };
   }, []);
 
   if (!loadingStates.loaded) {
-    // if (true) {
     return (
       <>
         <Header

@@ -16,11 +16,11 @@ import GetCachedProfiles from "./GetCachedProfiles";
 export default async (items, fetchGameInfo = true) => {
   const TwitchProfiles = GetCachedProfiles();
 
-  const noCachedProfileArrayObject = await items.data.data.filter(user => {
-    return !Object.keys(TwitchProfiles).some(id => id === (user.user_id || user.broadcaster_id));
+  const noCachedProfileArrayObject = await items.data.data.filter((user) => {
+    return !Object.keys(TwitchProfiles).some((id) => id === (user.user_id || user.broadcaster_id));
   });
 
-  const noCachedProfileArrayIds = Object.values(noCachedProfileArrayObject).map(user => {
+  const noCachedProfileArrayIds = Object.values(noCachedProfileArrayObject).map((user) => {
     return user.user_id || user.broadcaster_id;
   });
 
@@ -37,15 +37,15 @@ export default async (items, fetchGameInfo = true) => {
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })
-      .catch(e => {
+      .catch((e) => {
         console.log("newProfileImgUrls: ", e);
       });
   }
 
   Promise.all(
-    await items.data.data.map(async user => {
+    await items.data.data.map(async (user) => {
       if (!TwitchProfiles[user.user_id || user.broadcaster_id]) {
-        user.profile_img_url = newProfileImgUrls.data.data.find(p_user => {
+        user.profile_img_url = newProfileImgUrls.data.data.find((p_user) => {
           return p_user.id === (user.user_id || user.broadcaster_id);
         }).profile_image_url;
       } else {
@@ -53,7 +53,7 @@ export default async (items, fetchGameInfo = true) => {
       }
       return user;
     })
-  ).then(res => {
+  ).then((res) => {
     const newProfiles = res.reduce(
       // eslint-disable-next-line no-sequences
       (obj, item) => ((obj[item.user_id || item.broadcaster_id] = item.profile_img_url), obj),
@@ -69,7 +69,7 @@ export default async (items, fetchGameInfo = true) => {
     // Removes game id duplicates before sending game request.
     const games = [
       ...new Set(
-        items.data.data.map(channel => {
+        items.data.data.map((channel) => {
           return channel.game_id;
         })
       ),
@@ -86,11 +86,11 @@ export default async (items, fetchGameInfo = true) => {
     });
 
     // Add the game name to each stream object.
-    items.data.data.map(stream => {
-      gameNames.data.data.find(game => {
+    items.data.data.map((stream) => {
+      gameNames.data.data.find((game) => {
         return game.id === stream.game_id;
       }) !== undefined
-        ? (stream.game_name = gameNames.data.data.find(game => {
+        ? (stream.game_name = gameNames.data.data.find((game) => {
             return game.id === stream.game_id;
           }).name)
         : (stream.game_name = "");
@@ -99,11 +99,11 @@ export default async (items, fetchGameInfo = true) => {
     });
 
     // Add the game img to each stream object.
-    items.data.data.map(stream => {
-      gameNames.data.data.find(game => {
+    items.data.data.map((stream) => {
+      gameNames.data.data.find((game) => {
         return game.id === stream.game_id;
       }) !== undefined
-        ? (stream.game_img = gameNames.data.data.find(game => {
+        ? (stream.game_img = gameNames.data.data.find((game) => {
             return game.id === stream.game_id;
           }).box_art_url)
         : (stream.game_img = `${process.env.PUBLIC_URL}/images/placeholder.jpg`);

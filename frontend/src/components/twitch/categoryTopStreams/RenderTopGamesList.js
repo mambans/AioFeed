@@ -20,7 +20,7 @@ const RenderTopGamesList = () => {
       <StyledShowAllButton key='showAll'>
         <Link to={"/game/"}>Show all</Link>
       </StyledShowAllButton>
-      {topGames.map(game => {
+      {topGames.map((game) => {
         return (
           <StyledGameListElement key={game.id}>
             <Link to={"/game/" + game.name}>

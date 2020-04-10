@@ -29,7 +29,7 @@ export default ({ sortBy, setSortBy, setData, resetOldData }) => {
       </SortButton>
       {open && (
         <SortDropDownList>
-          {Object.keys(SortOptionsNames).map(option => {
+          {Object.keys(SortOptionsNames).map((option) => {
             return (
               <li
                 key={option}

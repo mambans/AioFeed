@@ -26,7 +26,7 @@ export default {
     marginTop: "50px",
     opacity: "0.7",
   },
-  truncate: function(input, max) {
+  truncate: function (input, max) {
     if (input.length > max) return input.substring(0, max) + "..";
     else return input;
   },
@@ -166,16 +166,13 @@ export default {
   formatTwitchVodsDuration(duration) {
     let hour = "0";
 
-    const duration1 = duration
-      .replace("h", ":")
-      .replace("m", ":")
-      .replace("s", "");
+    const duration1 = duration.replace("h", ":").replace("m", ":").replace("s", "");
 
     const durationParts = duration1.split(":");
     if (duration.includes("h")) hour = durationParts.shift();
 
     let i = 0;
-    durationParts.map(number => {
+    durationParts.map((number) => {
       if (number.length < 2) durationParts[i] = 0 + number;
 
       i++;
@@ -191,13 +188,9 @@ export default {
   },
 
   durationToDate(duration, vodCreateDate) {
-    const durationParts = duration
-      .replace("h", ":")
-      .replace("m", ":")
-      .replace("s", "")
-      .split(":");
+    const durationParts = duration.replace("h", ":").replace("m", ":").replace("s", "").split(":");
 
-    const asd = ["h", "m", "s"].map(char => {
+    const asd = ["h", "m", "s"].map((char) => {
       if (char === "h" && duration.includes("h")) {
         return durationParts[durationParts.length - 3] * 3600000;
       } else if (char === "m" && duration.includes("m")) {
@@ -208,7 +201,7 @@ export default {
       return null;
     });
 
-    const durationMs = asd.reduce(function(s, v) {
+    const durationMs = asd.reduce(function (s, v) {
       return s + (v || 0);
     }, 0);
 

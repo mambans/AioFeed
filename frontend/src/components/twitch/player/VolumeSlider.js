@@ -41,7 +41,7 @@ export default ({ volume, setVolumeText, TwitchPlayer, volumeMuted, setVolumeMut
     return <IconVolume {...attrs} />;
   };
 
-  const handleChange = value => {
+  const handleChange = (value) => {
     if (TwitchPlayer.getMuted()) {
       TwitchPlayer.setMuted(false);
       setVolumeMuted(false);

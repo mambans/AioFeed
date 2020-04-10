@@ -6,7 +6,6 @@ import FeedsContext from "../feed/FeedsContext";
 
 export default ({ width }) => {
   const { twitterListName } = useContext(FeedsContext);
-  console.log("qasdasd");
 
   return (
     <Container width={width} key={twitterListName}>

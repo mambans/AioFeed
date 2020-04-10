@@ -3,7 +3,7 @@ import axios from "axios";
 import AddVideoExtraData from "./../AddVideoExtraData";
 import Util from "../../../util/Util";
 
-const fetchAllOnlineStreams = async followedChannelsIds => {
+const fetchAllOnlineStreams = async (followedChannelsIds) => {
   return await axios.get(`https://api.twitch.tv/helix/streams`, {
     params: {
       user_id: followedChannelsIds,
@@ -21,7 +21,7 @@ async function getFollowedOnlineStreams(followedchannels) {
 
   try {
     // Make an array of all followed channels id's for easier/less API reuqests.
-    const followedChannelsIds = await followedchannels.map(channel => {
+    const followedChannelsIds = await followedchannels.map((channel) => {
       return channel.to_id;
     });
 

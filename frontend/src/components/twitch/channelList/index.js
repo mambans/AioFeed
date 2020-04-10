@@ -6,15 +6,15 @@ import StyledLoadingList from "./../LoadingList";
 import AddVideoExtraData from "./../AddVideoExtraData";
 import { ChannelListUl } from "./StyledComponents";
 
-export default data => {
+export default (data) => {
   const [followedChannels, setFollowedChannels] = useState();
   const { authKey, username } = useContext(AccountContext);
 
   useEffect(() => {
-    const channelObjectList = async followedChannels => {
+    const channelObjectList = async (followedChannels) => {
       const followedChannelsIds = {
         data: {
-          data: await followedChannels.map(channel => {
+          data: await followedChannels.map((channel) => {
             return { user_id: channel.to_id, user_name: channel.to_name };
           }),
         },
@@ -25,8 +25,8 @@ export default data => {
 
     try {
       if (data.followedChannels) {
-        channelObjectList(data.followedChannels).then(async res => {
-          await AddVideoExtraData(res, false).then(async res => {
+        channelObjectList(data.followedChannels).then(async (res) => {
+          await AddVideoExtraData(res, false).then(async (res) => {
             setFollowedChannels(res.data);
           });
         });
@@ -47,7 +47,7 @@ export default data => {
             fontSize: "1.1rem",
             fontWeight: "bold",
           }}>{`Total: ${followedChannels.length}`}</p>
-        {followedChannels.map(channel => {
+        {followedChannels.map((channel) => {
           return <ChannelListElement key={channel.user_id} data={channel} />;
         })}
       </ChannelListUl>

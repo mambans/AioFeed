@@ -2,14 +2,14 @@ import React from "react";
 import { Styledsidebar, SidebarHeader, LoadingSidebarItems } from "./StyledComponents";
 
 export default () => {
-  const array = Array.apply(null, Array(7)).map(function(x, i) {
+  const array = Array.apply(null, Array(7)).map(function (x, i) {
     return i;
   });
 
   return (
     <Styledsidebar>
       <SidebarHeader />
-      {array.map(value => {
+      {array.map((value) => {
         return (
           <LoadingSidebarItems
             key={value}

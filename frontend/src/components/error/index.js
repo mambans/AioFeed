@@ -3,7 +3,7 @@ import Alert from "react-bootstrap/Alert";
 
 import Util from "../../util/Util";
 
-export default data => {
+export default (data) => {
   console.log("TCL: ErrorHandler -> data", data);
   const [errorMessage, setErrorMessage] = useState(data.data.message);
   const [errorTitle, setErrorTitle] = useState();

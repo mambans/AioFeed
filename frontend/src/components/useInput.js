@@ -4,7 +4,7 @@ import { useState } from "react";
  * @param {any} initialValue - Start value
  * @returns
  */
-export default initialValue => {
+export default (initialValue) => {
   const [value, setValue] = useState(initialValue);
 
   return {
@@ -12,13 +12,13 @@ export default initialValue => {
     setValue,
     reset: () => setValue(""),
     manualSet: {
-      onClick: event => {
+      onClick: (event) => {
         setValue(event.target.textContent.trim());
       },
     },
     bind: {
       value,
-      onChange: event => {
+      onChange: (event) => {
         setValue(event.target.value.trim());
       },
     },

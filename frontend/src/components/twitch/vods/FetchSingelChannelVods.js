@@ -7,8 +7,8 @@ import SortAndAddExpire from "./SortAndAddExpire";
 export default async (channelId, setVods) => {
   const vodExpire = 3; // Number of days
 
-  const addVodEndTime = async followedStreamVods => {
-    return followedStreamVods.map(stream => {
+  const addVodEndTime = async (followedStreamVods) => {
+    return followedStreamVods.map((stream) => {
       if (stream.type === "archive") {
         stream.endDate = Util.durationToDate(stream.duration, stream.created_at);
       } else {
@@ -34,14 +34,14 @@ export default async (channelId, setVods) => {
     },
   };
 
-  await axios(axiosConfig).then(async res => {
+  await axios(axiosConfig).then(async (res) => {
     const newVodWithProfile = await AddVideoExtraData(res);
     const newVodWithEndtime = await addVodEndTime(newVodWithProfile.data);
 
-    setVods(vods => {
+    setVods((vods) => {
       const existingVods = [...vods.data];
       const vodToAdd = { ...newVodWithEndtime[0], transition: "videoFade-1s" };
-      const objectToUpdateIndex = existingVods.findIndex(item => {
+      const objectToUpdateIndex = existingVods.findIndex((item) => {
         return item.id === vodToAdd.id;
       });
 

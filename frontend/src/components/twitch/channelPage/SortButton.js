@@ -17,7 +17,7 @@ export default ({ sortBy, setSortBy, setData }) => {
       </SortButton>
       {open && (
         <SortDropDownList>
-          {SortOptions.map(option => {
+          {SortOptions.map((option) => {
             return (
               <li
                 key={option}

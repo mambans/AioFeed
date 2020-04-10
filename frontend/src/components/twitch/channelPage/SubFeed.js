@@ -70,7 +70,7 @@ export default ({
           margin: "auto",
         }}>
         <TransitionGroup className='twitch-vods' component={null}>
-          {items.map(item => {
+          {items.map((item) => {
             return (
               <CSSTransition key={item.id} timeout={1000} classNames='fade-1s' unmountOnExit>
                 {feedName === "Vods" ? (

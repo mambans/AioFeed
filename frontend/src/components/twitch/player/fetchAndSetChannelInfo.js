@@ -15,10 +15,10 @@ export default async (channelId, setChannelInfo) => {
         Accept: "application/vnd.twitchtv.v5+json",
       },
     })
-    .then(res => {
+    .then((res) => {
       setChannelInfo(res.data);
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("fetchChannelInfo: ", error);
     });
 };

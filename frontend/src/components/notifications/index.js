@@ -90,7 +90,7 @@ export default () => {
               Clear all ({props.notifications ? props.notifications.length : 0})
             </li>
             {props.notifications &&
-              props.notifications.map(item => {
+              props.notifications.map((item) => {
                 return (
                   <Notification key={item.key} type={item.status}>
                     <Link

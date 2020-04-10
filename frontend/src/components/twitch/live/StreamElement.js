@@ -47,7 +47,7 @@ function StreamEle(data) {
   const refChannel = useRef();
 
   const handleMouseOver = () => {
-    streamHoverTimer.current = setTimeout(function() {
+    streamHoverTimer.current = setTimeout(function () {
       setIsHovered(true);
     }, HOVER_DELAY);
   };

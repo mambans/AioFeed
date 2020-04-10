@@ -28,7 +28,7 @@ export default ({ startDuration }) => {
     setCountdown(startDuration);
 
     const timer = setInterval(() => {
-      setCountdown(countdown => {
+      setCountdown((countdown) => {
         return --countdown <= 0 ? 0 : countdown;
       });
     }, 1000);

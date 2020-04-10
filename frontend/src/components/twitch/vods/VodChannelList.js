@@ -14,7 +14,7 @@ export default () => {
   const [validated, setValidated] = useState(false);
   const { value: channel, bind: bindchannel, reset: resetchannel } = useInput("");
 
-  const handleSubmit = evt => {
+  const handleSubmit = (evt) => {
     evt.preventDefault();
 
     const form = evt.currentTarget;
@@ -52,7 +52,7 @@ export default () => {
       </Form>
       {channels.length > 0 ? (
         <ul>
-          {channels.map(channel => {
+          {channels.map((channel) => {
             return <VodChannelListElement key={channel} channel={channel} />;
           })}
         </ul>

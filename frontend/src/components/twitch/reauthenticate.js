@@ -12,7 +12,7 @@ export default async (setTwitchToken, setRefreshToken) => {
         process.env.REACT_APP_TWITCH_SECRET
       }&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`
     )
-    .then(async res => {
+    .then(async (res) => {
       setTwitchToken(res.data.access_token);
       setRefreshToken(res.data.refresh_token);
       document.cookie = `Twitch-access_token=${res.data.access_token}; path=/; SameSite=Lax`;

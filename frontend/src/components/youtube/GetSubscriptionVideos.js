@@ -4,10 +4,10 @@ import { reverse, sortBy } from "lodash";
 import getVideoInfo from "./GetVideoInfo";
 import Util from "./../../util/Util";
 
-const filterVideos = async response => {
+const filterVideos = async (response) => {
   if (response && response.items && response.items.length > 0) {
     const items = await Promise.all(
-      response.items.filter(video => {
+      response.items.filter((video) => {
         return video.snippet.type === "upload";
       })
     );
@@ -41,10 +41,10 @@ const fetchSubscriptionData = async (videosCACHE, channel) => {
           Accept: "application/json",
         },
       })
-      .then(result => {
+      .then((result) => {
         return result.data;
       })
-      .catch(function(e) {
+      .catch(function (e) {
         error = e;
         return videosCACHE[channel.snippet.resourceId.channelId];
       });
@@ -64,10 +64,10 @@ const fetchSubscriptionData = async (videosCACHE, channel) => {
           Accept: "application/json",
         },
       })
-      .then(result => {
+      .then((result) => {
         return result.data;
       })
-      .catch(function(e) {
+      .catch(function (e) {
         error = e;
       });
   }
@@ -95,7 +95,7 @@ async function getSubscriptionVideos(followedChannels) {
     const videos = {};
 
     await Promise.all(
-      followedChannels.map(async channel => {
+      followedChannels.map(async (channel) => {
         const response = await fetchSubscriptionData(videosCACHE, channel);
 
         response.res.items = await filterVideos(response.res);
@@ -113,14 +113,14 @@ async function getSubscriptionVideos(followedChannels) {
 
     await Promise.all(
       Object.values(videos).map(async (channel, index) => {
-        await channel.items.map(video => {
+        await channel.items.map((video) => {
           videosUnorderedNew.push(video);
           return video;
         });
       })
     );
 
-    const allVideos = reverse(sortBy(videosUnorderedNew, video => video.snippet.publishedAt));
+    const allVideos = reverse(sortBy(videosUnorderedNew, (video) => video.snippet.publishedAt));
 
     return { data: allVideos, error: error };
   } catch (error) {

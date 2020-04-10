@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import styles from "./Twitch.module.scss";
 
-export default data => {
+export default (data) => {
   const ref = useRef();
   const streamHoverOutTimer = useRef();
 
@@ -13,7 +13,7 @@ export default data => {
   }, [data]);
 
   const handleMouseOut = useCallback(
-    event => {
+    (event) => {
       data.setIsHovered(false);
       streamHoverOutTimer.current = setTimeout(() => {
         event.target.src = "about:blank";

@@ -25,7 +25,7 @@ function YoutubeVideoElement(data) {
   // }
 
   const handleMouseOver = () => {
-    streamHoverTimer.current = setTimeout(function() {
+    streamHoverTimer.current = setTimeout(function () {
       setIsHovered(true);
     }, HOVER_DELAY);
   };
