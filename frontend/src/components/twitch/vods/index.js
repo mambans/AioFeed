@@ -66,16 +66,16 @@ export default () => {
   const observer = useMemo(
     () =>
       new IntersectionObserver(
-        function(entries) {
+        function (entries) {
           // isIntersecting is true when element and viewport are overlapping
           // isIntersecting is false when element and viewport don't overlap
 
           window.addEventListener(
             "wheel",
             throttle(
-              function(e) {
+              function (e) {
                 if (entries[0].isIntersecting === true) {
-                  setVodAmounts(currVodAmounts => currVodAmounts + numberOfVideos / 2);
+                  setVodAmounts((currVodAmounts) => currVodAmounts + numberOfVideos / 2);
                   setTimeout(() => {
                     if (loadmoreRef.current) {
                       loadmoreRef.current.scrollIntoView({
@@ -111,7 +111,7 @@ export default () => {
   );
 
   const refresh = useCallback(
-    async forceRefresh => {
+    async (forceRefresh) => {
       setRefreshing(true);
       await getFollowedVods(
         forceRefresh,
@@ -121,7 +121,7 @@ export default () => {
         setRefreshToken,
         setTwitchToken
       )
-        .then(data => {
+        .then((data) => {
           if (data.error) {
             setError(data.error);
           } else if (data.vodError) {
@@ -130,7 +130,7 @@ export default () => {
           setVods(data.data);
           setRefreshing(false);
         })
-        .catch(data => {
+        .catch((data) => {
           setError(data.error);
           setVods(data.data);
         });
@@ -174,7 +174,7 @@ export default () => {
         setRefreshToken,
         setTwitchToken
       )
-        .then(data => {
+        .then((data) => {
           if (data.error) {
             setError(data.error);
           } else if (data.vodError) {
@@ -187,7 +187,7 @@ export default () => {
           // Enable for "load more" vods on Scroll
           // if (loadmoreRef.current) observer.observe(loadmoreRef.current);
         })
-        .catch(data => {
+        .catch((data) => {
           setError(data.error);
           setVods(data.data);
         });
@@ -244,7 +244,7 @@ export default () => {
       <ErrorHandler
         data={{
           title: "Couldn't load Twitch-vod feed",
-          message: "You are not connected with your Twitch account to Notifies",
+          message: "You are not connected with your Twitch account to AioFeed",
         }}></ErrorHandler>
     );
   } else {
@@ -259,7 +259,7 @@ export default () => {
         />
         <SubFeedContainer>
           <TransitionGroup className='twitch-vods' component={null}>
-            {vods.data.slice(0, vodAmounts).map(vod => {
+            {vods.data.slice(0, vodAmounts).map((vod) => {
               return (
                 <CSSTransition
                   key={vod.id + vod.duration}

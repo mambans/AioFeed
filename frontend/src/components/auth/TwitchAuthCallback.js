@@ -23,7 +23,7 @@ function TwitchAuthCallback() {
   const { enableTwitch } = useContext(FeedsContext);
 
   const getAccessToken = useCallback(
-    async url => {
+    async (url) => {
       const authCode = url.searchParams.get("code");
 
       const requestAccessToken = await axios.post(`https://id.twitch.tv/oauth2/token
@@ -31,7 +31,7 @@ function TwitchAuthCallback() {
 &client_secret=${process.env.REACT_APP_TWITCH_SECRET}
 &code=${authCode}
 &grant_type=authorization_code
-&redirect_uri=http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/auth/twitch/callback`);
+&redirect_uri=https://aiofeed.com/auth/twitch/callback`);
 
       const accessToken = requestAccessToken.data.access_token;
       const refreshToken = requestAccessToken.data.refresh_token;
@@ -46,10 +46,10 @@ function TwitchAuthCallback() {
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         })
-        .then(async res => {
-          document.cookie = `Notifies_TwitchUserId=${res.data.data[0].id}; path=/; SameSite=Lax`;
+        .then(async (res) => {
+          document.cookie = `AioFeed_TwitchUserId=${res.data.data[0].id}; path=/; SameSite=Lax`;
           document.cookie = `Twitch-username=${res.data.data[0].login}; path=/; SameSite=Lax`;
-          document.cookie = `Notifies_TwitchProfileImg=${res.data.data[0].profile_image_url}; path=/`;
+          document.cookie = `AioFeed_TwitchProfileImg=${res.data.data[0].profile_image_url}; path=/`;
           setTwitchToken(accessToken);
           setRefreshToken(refreshToken);
 
@@ -59,7 +59,7 @@ function TwitchAuthCallback() {
 
           await axios
             .put(
-              `https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/preferences`,
+              `https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/preferences`,
               {
                 username: username,
                 dataName: "TwitchPreferences",
@@ -72,18 +72,18 @@ function TwitchAuthCallback() {
                 },
               }
             )
-            .catch(e => {
+            .catch((e) => {
               console.error(e);
             });
         });
 
       await axios
-        .put(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+        .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
           username: username,
-          token: accessToken,
-          tokenName: "TwitchToken",
+          columnValue: accessToken,
+          columnName: "TwitchToken",
         })
-        .catch(e => {
+        .catch((e) => {
           console.error(e);
         });
     },
@@ -101,7 +101,7 @@ function TwitchAuthCallback() {
 
   useEffect(() => {
     setVisible(false);
-    (async function() {
+    (async function () {
       try {
         const url = new URL(window.location.href);
 
@@ -115,7 +115,7 @@ function TwitchAuthCallback() {
                   window.close();
                 }, 1);
               })
-              .catch(error => {
+              .catch((error) => {
                 console.log("getAccessToken() failed");
                 setError(error);
               });

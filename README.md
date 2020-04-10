@@ -1,13 +1,13 @@
-# Notifies
+# AioFeed
 
-<img src="https://github.com/mambans/Notifies/blob/master/frontend/public/logo-text.png" alt="Logo" width="300"/>
+<img src="https://github.com/mambans/AioFeed/blob/master/frontend/public/logo-text.png" alt="Logo" width="300"/>
 
-My personal project **Notifies**, is a site that combines feeds from different sites such as Twitch.tv and Youtube.com into one page. And features for that I personally thought was missing from Twitch.tv.
+My personal project **AioFeed**, is a site that combines feeds from different sites such as Twitch.tv and Youtube.com into one page. And features for that I personally thought was missing from Twitch.tv.
 
 ## Account
 
-Notifies stores the Notifies account Username, email, **hashed** password in database and Youtube and Twitch access tokens so you don't need to reconnected on each session.
-It also stores profile image url, twitch channels to fetch vods from, Notifies twitch settings (enbled/disabled, auto refresh, id ..).
+AioFeed stores the AioFeed account Username, email, **hashed** password in database and Youtube and Twitch access tokens so you don't need to reconnected on each session.
+It also stores profile image url, twitch channels to fetch vods from, AioFeed twitch settings (enbled/disabled, auto refresh, id ..).
 
 ## Feeds
 
@@ -21,7 +21,7 @@ Individual feeds can be disable.
 
 ### Twitch
 
-Notifies auto refreshes the live Twitch feed every 25sec with live Notifications. Notifies also shows most recent vods from specific Twitch channels you have enabled/selected vods for in Notifies. Auto refreches vods every 3 hours, can be manually refreshed from a button.
+AioFeed auto refreshes the live Twitch feed every 25sec with live Notifications. AioFeed also shows most recent vods from specific Twitch channels you have enabled/selected vods for in AioFeed. Auto refreches vods every 3 hours, can be manually refreshed from a button.
 
 #### Features
 

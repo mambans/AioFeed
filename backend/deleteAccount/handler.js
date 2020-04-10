@@ -2,7 +2,7 @@
 
 const deleteAccount = require("./deleteAccount");
 
-const handler = async event => {
+const handler = async (event) => {
   try {
     const { username, password, authKey } = JSON.parse(event.body);
     if (!username) throw { statusCode: 422, message: "Username is required" };

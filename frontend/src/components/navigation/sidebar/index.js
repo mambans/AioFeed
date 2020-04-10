@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { CSSTransition } from "react-transition-group";
 
 import AccountContext from "./../../account/AccountContext";
@@ -14,12 +14,13 @@ import {
 } from "./StyledComponent";
 
 export default () => {
-  const [show, setShow] = useState(false);
   const { profileImage, username } = useContext(AccountContext);
-  const { setRenderModal, renderModal } = useContext(NavigationContext);
+  const { setRenderModal, renderModal, showSidebar, setShowSidebar } = useContext(
+    NavigationContext
+  );
 
   const handleToggle = () => {
-    setShow(!show);
+    setShowSidebar(!showSidebar);
   };
 
   return (
@@ -27,7 +28,7 @@ export default () => {
       <StyledNavSidebarTrigger onClick={handleToggle} title='Sidebar'>
         {username ? (
           <>
-            <StyledSidebarTrigger id='NavigationProfileImageHoverOverlay' open={show} />
+            <StyledSidebarTrigger id='NavigationProfileImageHoverOverlay' open={showSidebar} />
             <img
               id='NavigationProfileImage'
               src={
@@ -43,15 +44,15 @@ export default () => {
         )}
       </StyledNavSidebarTrigger>
 
-      <CSSTransition in={show} timeout={500} classNames='fade-05s' unmountOnExit>
+      <CSSTransition in={showSidebar} timeout={500} classNames='fade-05s' unmountOnExit>
         <StyledNavSidebarBackdrop
           onClick={() => {
-            setShow(false);
+            setShowSidebar(false);
           }}
         />
       </CSSTransition>
 
-      <CSSTransition in={show} timeout={1000} classNames='fadeSlide-right-1s' unmountOnExit>
+      <CSSTransition in={showSidebar} timeout={1000} classNames='fadeSlide-right-1s' unmountOnExit>
         <StyledNavSidebar>
           {username ? (
             <SidebarAccount setRenderModal={setRenderModal} />

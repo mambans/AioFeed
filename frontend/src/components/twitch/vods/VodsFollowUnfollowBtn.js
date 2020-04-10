@@ -33,14 +33,14 @@ export default ({ channel, loweropacity, marginright }) => {
 
       await axios
         .put(
-          `https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/update`,
+          `https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/update`,
           {
             username: username,
             authkey: authKey,
             channels: existingChannels,
           }
         )
-        .catch(err => {
+        .catch((err) => {
           console.error(err);
         });
     } catch (e) {

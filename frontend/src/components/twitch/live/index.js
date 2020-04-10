@@ -12,12 +12,12 @@ export default ({ data }) => {
   const [show, setShow] = useState(true);
 
   const windowFocusHandler = useCallback(() => {
-    document.title = "Notifies | Feed";
+    document.title = "AioFeed | Feed";
     data.resetNewlyAddedStreams();
   }, [data]);
 
   const windowBlurHandler = useCallback(() => {
-    // document.title = "Notifies | Feed";
+    // document.title = "AioFeed | Feed";
     data.resetNewlyAddedStreams();
   }, [data]);
 
@@ -45,8 +45,8 @@ export default ({ data }) => {
             variant='secondary'
             style={{
               ...Util.feedAlertWarning,
-              width: "var(--feedsWidth)",
-              margin: "var(--feedsMargin)",
+              width: "50%",
+              margin: "auto",
             }}
             dismissible
             onClose={() => setShow(false)}>
@@ -63,7 +63,7 @@ export default ({ data }) => {
           {data.liveStreams.length > 0 ? (
             <Container>
               <TransitionGroup className='twitch-live' component={null}>
-                {data.liveStreams.map(stream => {
+                {data.liveStreams.map((stream) => {
                   return (
                     <CSSTransition
                       // in={true}
@@ -90,8 +90,8 @@ export default ({ data }) => {
                 variant='secondary'
                 style={{
                   ...Util.feedAlertWarning,
-                  width: "var(--feedsWidth)",
-                  margin: "var(--feedsMargin)",
+                  width: "50%",
+                  margin: "auto",
                 }}
                 dismissible
                 onClose={() => setShow(false)}>

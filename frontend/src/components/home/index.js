@@ -7,7 +7,7 @@ import NavigationContext from "./../navigation/NavigationContext";
 const INACTIVE_TIMER = 120; // seconds
 
 export default () => {
-  document.title = "Notifies";
+  document.title = "AioFeed";
   const { setVisible, visible } = useContext(NavigationContext);
   const inactiveTimer = useRef();
   const topNavbarBlur = useRef();
@@ -30,13 +30,13 @@ export default () => {
         <WelcomeContainer>
           <LogoText>
             <img
-              src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}
+              src={`${process.env.PUBLIC_URL}/A/android-chrome-512x512.png`}
               alt='logo'
               id='logo'
             />
             <div>
               <h1>
-                <b>otifies</b>
+                <b>ioFeed</b>
               </h1>
               <p>View Twitch & Youtube feeds and get notified about Twitch Livestreams.</p>
             </div>

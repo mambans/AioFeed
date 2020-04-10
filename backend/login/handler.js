@@ -18,7 +18,6 @@ const handler = async (event) => {
       body: JSON.stringify(result.data),
     };
   } catch (e) {
-    console.log("TCL: e", e);
     return {
       statusCode: e.statusCode,
       headers: {

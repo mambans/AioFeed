@@ -1,5 +1,5 @@
 {
-  "name": "notifies",
+  "name": "aiofeed",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,7 +9,6 @@
     "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0",
-    "react-countdown-circle-timer": "^1.1.1",
     "react-dom": "^16.13.1",
     "react-icons": "^3.9.0",
     "react-loading": "^2.0.3",
@@ -19,9 +18,10 @@
     "react-scripts": "^3.4.1",
     "react-switch": "^5.0.1",
     "react-transition-group": "^4.3.0",
-    "react-youtube": "^7.10.0",
+    "react-twitter-embed": "^3.0.3",
+    "react-youtube": "^7.11.1",
     "reactjs-popup": "^1.5.0",
-    "styled-components": "^5.0.1",
+    "styled-components": "^5.1.0",
     "uniqid": "^5.2.0"
   },
   "scripts": {

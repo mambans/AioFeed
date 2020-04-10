@@ -5,7 +5,7 @@ export default async ({ channel, channels, setChannels, username, authKey }) => 
     const existingChannels = [channel.toLowerCase(), ...channels];
     const newChannels = [
       ...new Set(
-        existingChannels.map(user => {
+        existingChannels.map((user) => {
           return user;
         })
       ),
@@ -16,14 +16,14 @@ export default async ({ channel, channels, setChannels, username, authKey }) => 
 
     await axios
       .put(
-        `https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/update`,
+        `https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/update`,
         {
           username: username,
           authkey: authKey,
           channels: newChannels,
         }
       )
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
   } catch (e) {

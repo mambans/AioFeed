@@ -41,20 +41,20 @@ export default () => {
       setValidated(true);
 
       await axios
-        .delete(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/delete`, {
+        .delete(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/delete`, {
           data: { username: account, password: password, authKey: authKey },
         })
         .then((res) => {
           document.cookie = `Twitch-access_token=null; path=/; SameSite=Lax`;
           document.cookie = `Twitch-refresh_token=null; path=/; SameSite=Lax`;
           document.cookie = `Twitch_FeedEnabled=${false}; path=/`;
-          document.cookie = `Notifies_TwitchUserId=null; path=/; SameSite=Lax`;
+          document.cookie = `AioFeed_TwitchUserId=null; path=/; SameSite=Lax`;
           document.cookie = `Twitch-username=null; path=/; SameSite=Lax`;
           document.cookie = `YoutubeFeedEnabled=null; path=/`;
-          document.cookie = `Notifies_AccountName=null; path=/`;
-          document.cookie = `Notifies_AccountEmail=null; path=/`;
+          document.cookie = `AioFeed_AccountName=null; path=/`;
+          document.cookie = `AioFeed_AccountEmail=null; path=/`;
           document.cookie = `Youtube-access_token=null; path=/`;
-          document.cookie = `Notifies_AccountProfileImg=null; path=/`;
+          document.cookie = `AioFeed_AccountProfileImg=null; path=/`;
           document.cookie = `Twitch-refresh_token=null; path=/; SameSite=Lax`;
           document.cookie = `Youtube_FeedEnabled=${false}; path=/`;
           document.cookie = `TwitchVods_FeedEnabled=${false}; path=/`;

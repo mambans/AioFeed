@@ -10,23 +10,23 @@ export default ({ close }) => {
   const { value: image, bind: bindimage, reset: resetimage } = useInput("");
 
   const addProfileImage = async () => {
-    document.cookie = `Notifies_AccountProfileImg=${image}; path=/`;
+    document.cookie = `AioFeed_AccountProfileImg=${image}; path=/`;
     setProfileImage(image);
     await axios
-      .put(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
         username: username,
-        token: image,
-        tokenName: "ProfileImg",
+        columnValue: image,
+        columnName: "ProfileImg",
       })
       .then(() => {
         close();
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
   };
 
-  const handleSubmit = evt => {
+  const handleSubmit = (evt) => {
     evt.preventDefault();
     addProfileImage();
     resetimage();

@@ -52,14 +52,11 @@ export default ({ children }) => {
         }
       );
 
-      notification.onclick = function(event) {
+      notification.onclick = function (event) {
         event.preventDefault(); // prevent the browser from focusing the Notification's tab
         status === "offline"
-          ? window.open(
-              "https://www.twitch.tv/" + stream.user_name.toLowerCase() + "/videos/" + stream.id,
-              "_blank"
-            )
-          : window.open("https://www.twitch.tv/" + stream.user_name.toLowerCase(), "_blank");
+          ? window.open("https://www.twitch.tv/videos/" + stream.id, "_blank")
+          : window.open("https://aiofeed.com/live/" + stream.user_name.toLowerCase(), "_blank");
       };
 
       return notification;
@@ -67,7 +64,7 @@ export default ({ children }) => {
   }, []);
 
   const refresh = useCallback(
-    async disableNotifications => {
+    async (disableNotifications) => {
       // console.log("refreshing");
       setLoadingStates(({ loaded }) => {
         return { refreshing: true, error: null, loaded: loaded };
@@ -87,7 +84,7 @@ export default ({ children }) => {
           setLoadingStates({ refreshing: false, error: null, loaded: true });
 
           if (!disableNotifications) {
-            liveStreams.current.forEach(stream => {
+            liveStreams.current.forEach((stream) => {
               let isStreamLive = oldLiveStreams.current.find(
                 ({ user_name }) => user_name === stream.user_name
               );
@@ -123,7 +120,7 @@ export default ({ children }) => {
               }
             });
 
-            oldLiveStreams.current.forEach(stream => {
+            oldLiveStreams.current.forEach((stream) => {
               let isStreamLive = liveStreams.current.find(
                 ({ user_name }) => user_name === stream.user_name
               );
@@ -210,7 +207,7 @@ export default ({ children }) => {
         />
         <LoadingSidebar />
         <Container>
-          <LoadingBoxs amount={5} />
+          <LoadingBoxs amount={7} />
         </Container>
       </>
     );

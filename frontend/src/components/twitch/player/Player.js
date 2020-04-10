@@ -73,9 +73,9 @@ export default () => {
   const fadeTimer = useRef();
 
   if (type === "live" || type === "player") {
-    document.title = `N | ${id} Live`;
+    document.title = `AF | ${id} Live`;
   } else if (type === "video" || type === "vod") {
-    document.title = `N | ${nameFromHash} - ${p_title || id}`;
+    document.title = `AF | ${nameFromHash} - ${p_title || id}`;
   }
 
   const PausePlay = () => {
@@ -162,7 +162,7 @@ export default () => {
             },
           })
           .then((res) => {
-            document.title = `N | ${res.data.channel.display_name} - ${res.data.title}`;
+            document.title = `AF | ${res.data.channel.display_name} - ${res.data.title}`;
           });
       }, 5000);
       return () => {

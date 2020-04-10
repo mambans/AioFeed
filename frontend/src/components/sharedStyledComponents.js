@@ -71,6 +71,7 @@ export const HeaderContainer = styled.div`
   margin-bottom: 10px;
   margin-top: 25px;
   height: 50.5px;
+  width: 100%;
 `;
 
 export const SubFeedContainer = styled.div`
@@ -216,4 +217,13 @@ export const StyledLoadingContainer = styled.div`
     color: #dddddd;
     text-align: center;
   }
+`;
+
+export const CenterContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-flow: column;
+  margin-top: 20px;
+  margin-left: ${({ marginLeft }) => marginLeft + "px"};
+  width: ${({ width }) => width + "px"} !important;
 `;

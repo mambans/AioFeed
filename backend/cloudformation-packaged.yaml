@@ -9,8 +9,8 @@ Globals:
 Resources:
   Create:
     Properties:
-      CodeUri: s3://rp-deployment/61fb2800ca10a17a077d5f40b168aa12
-      Description: Create an Notifies account with tokens and monitored vod channels
+      CodeUri: s3://aiofeed-backend/b875933eda64ca8872541a58ab6095a0
+      Description: Create an AioFeed account with tokens and monitored vod channels
         default to null and empty array.
       Environment:
         Variables:
@@ -38,7 +38,7 @@ Resources:
     Type: AWS::Serverless::Function
   DeleteAccount:
     Properties:
-      CodeUri: s3://rp-deployment/61fb2800ca10a17a077d5f40b168aa12
+      CodeUri: s3://aiofeed-backend/b875933eda64ca8872541a58ab6095a0
       Description: Delete an account
       Environment:
         Variables:
@@ -64,7 +64,7 @@ Resources:
     Type: AWS::Serverless::Function
   FetchMonitoredChannels:
     Properties:
-      CodeUri: s3://rp-deployment/61fb2800ca10a17a077d5f40b168aa12
+      CodeUri: s3://aiofeed-backend/b875933eda64ca8872541a58ab6095a0
       Description: Fetch monitored vod channels list.
       Environment:
         Variables:
@@ -90,8 +90,8 @@ Resources:
     Type: AWS::Serverless::Function
   Login:
     Properties:
-      CodeUri: s3://rp-deployment/61fb2800ca10a17a077d5f40b168aa12
-      Description: Login with Notifies account and return account info, tokens and
+      CodeUri: s3://aiofeed-backend/b875933eda64ca8872541a58ab6095a0
+      Description: Login with AioFeed account and return account info, tokens and
         monitored vod channels.
       Environment:
         Variables:
@@ -117,8 +117,8 @@ Resources:
     Type: AWS::Serverless::Function
   Update:
     Properties:
-      CodeUri: s3://rp-deployment/61fb2800ca10a17a077d5f40b168aa12
-      Description: Update a specific token mentioned as a param.
+      CodeUri: s3://aiofeed-backend/b875933eda64ca8872541a58ab6095a0
+      Description: Update a specific column mentioned as a param.
       Environment:
         Variables:
           USERNAME_TABLE:
@@ -131,9 +131,9 @@ Resources:
           RequestParameters:
           - method.request.querystring.username:
               Required: true
-          - method.request.querystring.token:
+          - method.request.querystring.columnValue:
               Required: true
-          - method.request.querystring.tokenName:
+          - method.request.querystring.columnName:
               Required: true
           Type: Api
       Handler: update/handler.handler
@@ -145,7 +145,7 @@ Resources:
     Type: AWS::Serverless::Function
   UpdateMonitoredChannels:
     Properties:
-      CodeUri: s3://rp-deployment/61fb2800ca10a17a077d5f40b168aa12
+      CodeUri: s3://aiofeed-backend/b875933eda64ca8872541a58ab6095a0
       Description: Update monitored vod channels list.
       Environment:
         Variables:
@@ -173,7 +173,7 @@ Resources:
     Type: AWS::Serverless::Function
   UpdatePreferences:
     Properties:
-      CodeUri: s3://rp-deployment/61fb2800ca10a17a077d5f40b168aa12
+      CodeUri: s3://aiofeed-backend/b875933eda64ca8872541a58ab6095a0
       Description: Update preferences for mentioned data name/type.
       Environment:
         Variables:

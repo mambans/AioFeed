@@ -30,7 +30,7 @@ import fetchAndSetChannelInfo from "./../player/fetchAndSetChannelInfo";
 
 export default () => {
   const { id } = useParams();
-  document.title = `N | ${id}'s Channel`;
+  document.title = `AF | ${id}'s Channel`;
   const { p_channelInfos, p_uptime, p_viewers, p_id, p_logo } = useLocation().state || {};
   const [channelInfo, setChannelInfo] = useState(p_channelInfos);
   const numberOfVideos = Math.floor(document.documentElement.clientWidth / 350);
@@ -45,7 +45,7 @@ export default () => {
   const [isLive, setIsLive] = useState();
   const [viewers, setViewers] = useState(p_viewers);
   const [uptime, setUptime] = useState(p_uptime);
-  const [videoOpen, setVideoOpen] = useState(true);
+  const [videoOpen, setVideoOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
 
   const vodPagination = useRef();
@@ -69,10 +69,10 @@ export default () => {
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })
-      .then(res => {
+      .then((res) => {
         setChannelId(res.data.data[0].id);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
         // if (error.message === `can't access property "id", res.data.data[0] is undefined`) {
         setChannelId("Not Found");
@@ -81,7 +81,7 @@ export default () => {
   }, [id]);
 
   const fetchChannelVods = useCallback(
-    async pagination => {
+    async (pagination) => {
       if (pagination) {
         setVodsLoadmoreLoaded(false);
       } else {
@@ -102,13 +102,13 @@ export default () => {
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         })
-        .then(async res => {
+        .then(async (res) => {
           vodPagination.current = res.data.pagination.cursor;
 
           const videos = await AddVideoExtraData(res, false);
 
           if (pagination) {
-            const finallVideos = videos.data.map(stream => {
+            const finallVideos = videos.data.map((stream) => {
               if (stream.type === "archive") {
                 stream.endDate = Util.durationToDate(stream.duration, stream.published_at);
               } else {
@@ -133,7 +133,7 @@ export default () => {
               }
             }, 0);
           } else {
-            const finallVideos = await videos.data.map(stream => {
+            const finallVideos = await videos.data.map((stream) => {
               if (stream.type === "archive") {
                 stream.endDate = Util.durationToDate(stream.duration, stream.published_at);
               } else {
@@ -147,7 +147,7 @@ export default () => {
             setVods(finallVideos);
           }
         })
-        .catch(e => {
+        .catch((e) => {
           console.error(e);
         });
     },
@@ -155,7 +155,7 @@ export default () => {
   );
 
   const fetchClips = useCallback(
-    async pagination => {
+    async (pagination) => {
       if (pagination) {
         setClipsLoadmoreLoaded(false);
       } else {
@@ -178,7 +178,7 @@ export default () => {
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         })
-        .then(async res => {
+        .then(async (res) => {
           clipPagination.current = res.data.pagination.cursor;
           const finallClips = await AddVideoExtraData(res);
 
@@ -202,7 +202,7 @@ export default () => {
             setClips(finallClips.data);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("fetchClips: ", error);
         });
     },

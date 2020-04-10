@@ -1,9 +1,9 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Resources:
   Frontend:
     Properties:
       AccessControl: PublicRead
-      BucketName: notifies.mambans.com
+      BucketName: aiofeed.com
       WebsiteConfiguration:
         ErrorDocument: index.html
         IndexDocument: index.html

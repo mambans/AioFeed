@@ -1,6 +1,6 @@
 {
-  "short_name": "Notifies",
-  "name": "Notifies",
+  "short_name": "AioFeed",
+  "name": "AioFeed",
   "icons": [
     {
       "src": "favicon.ico",

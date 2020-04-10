@@ -8,13 +8,13 @@ export const AccountProvider = ({ children }) => {
   const [twitchToken, setTwitchToken] = useState(Util.getCookie(`Twitch-access_token`));
   const [refreshToken, setRefreshToken] = useState(Util.getCookie(`Twitch-refresh_token`));
   const [youtubeToken, setYoutubeToken] = useState(Util.getCookie(`Youtube-access_token`));
-  const [authKey, setAuthKey] = useState(Util.getCookie(`Notifies_AuthKey`));
-  const [username, setUsername] = useState(Util.getCookie(`Notifies_AccountName`));
-  const [profileImage, setProfileImage] = useState(Util.getCookie(`Notifies_AccountProfileImg`));
-  const [twitchUserId, setTwitchUserId] = useState(Util.getCookie(`Notifies_TwitchUserId`));
+  const [authKey, setAuthKey] = useState(Util.getCookie(`AioFeed_AuthKey`));
+  const [username, setUsername] = useState(Util.getCookie(`AioFeed_AccountName`));
+  const [profileImage, setProfileImage] = useState(Util.getCookie(`AioFeed_AccountProfileImg`));
+  const [twitchUserId, setTwitchUserId] = useState(Util.getCookie(`AioFeed_TwitchUserId`));
   const [twitchUsername, setTwitchUsername] = useState(Util.getCookie(`Twitch-username`));
   const [twitchProfileImg, setTwitchProfileImg] = useState(
-    Util.getCookie(`Notifies_TwitchProfileImg`)
+    Util.getCookie(`AioFeed_TwitchProfileImg`)
   );
   const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(
     Util.getCookie(`Twitch_AutoRefresh`) || false

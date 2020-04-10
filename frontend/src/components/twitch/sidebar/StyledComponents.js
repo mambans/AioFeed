@@ -48,6 +48,7 @@ export const Styledsidebar = styled.div`
   max-height: calc(100vh - (65px + 50px));
   padding-bottom: 2px;
   z-index: 2;
+  left: 0;
 `;
 
 export const SidebarHeader = styled.p`

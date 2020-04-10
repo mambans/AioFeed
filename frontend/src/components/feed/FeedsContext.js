@@ -9,6 +9,10 @@ export const FeedsProvider = ({ children }) => {
     Util.getCookie("Twitch-access_token") && Util.getCookie("Twitch_FeedEnabled")
   );
 
+  const [enableTwitter, setEnableTwitter] = useState(Util.getCookie("Twitter_FeedEnabled"));
+
+  const [twitterListName, setTwitterListName] = useState(Util.getCookie("Twitter-Listname"));
+
   const [enableYoutube, setEnableYoutube] = useState(
     Util.getCookie(`Youtube-access_token`) && Util.getCookie("YoutubeFeedEnabled")
   );
@@ -38,6 +42,10 @@ export const FeedsProvider = ({ children }) => {
         setTwitchVideoHoverEnable: setTwitchVideoHoverEnable,
         youtubeVideoHoverEnable: youtubeVideoHoverEnable,
         setYoutubeVideoHoverEnable: setYoutubeVideoHoverEnable,
+        setEnableTwitter: setEnableTwitter,
+        enableTwitter: enableTwitter,
+        twitterListName: twitterListName,
+        setTwitterListName: setTwitterListName,
       }}>
       {children}
     </FeedsContext.Provider>

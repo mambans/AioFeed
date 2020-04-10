@@ -19,7 +19,7 @@ export const BlurOverlay = styled.div`
 
 export const TopBlurOverlay = styled.div`
   height: 65px;
-  width: 100vw;
+  width: 100%;
   position: absolute;
   background: no-repeat center center fixed;
   background-attachment: fixed;

@@ -8,18 +8,7 @@ export const HeaderContainerTwitchLive = styled.div`
   justify-content: space-between;
   align-items: center;
   padding-bottom: 7px;
-  width: var(--feedsWidth) !important;
-  margin: var(--feedsMargin);
-
-  @media screen and (max-width: 2560px) {
-    margin: 25px 0 0 360px;
-    width: 82%;
-  }
-
-  @media screen and (max-width: 1920px) {
-    width: 73.5%;
-    margin: 25px 7.5% 0 19%;
-  }
+  width: 100%;
 `;
 
 export const StyledLoadmore = styled.div`
@@ -113,9 +102,10 @@ export const HeaderLeftSubcontainer = styled.div`
 `;
 
 export const pulse = keyframes`
-  0% {background: #131416d1;}
-  40% {background: #1f2024d1;}
-  100% {background: #131416d1;}
+  /* 0% {background: #131416d1;} */
+  0% {background: #121415d1;}
+  40% {background: #1d1e23d1;}
+  100% {background: #121415d1;}
 `;
 
 export const pulseLight = keyframes`
@@ -142,16 +132,17 @@ export const StyledLoadingBox = styled.div`
     min-height: 189px;
     width: 336px;
     border-radius: 10px;
-    background: #131416d1;
+    background: #121415d1;
     animation: ${pulse} 2s linear infinite;
   }
 
   div div {
-    background: #131416d1;
+    background: #121415d1;
     border-radius: 10px;
   }
 
   div#title {
+
     color: var(--videoTitle);
     margin-top: 15px;
     margin-bottom: 5px;
@@ -163,6 +154,7 @@ export const StyledLoadingBox = styled.div`
     line-height: 1.2;
 
     div {
+      animation: ${pulse} 2s linear infinite;
       width: 200px;
       height: 20px;
     }
@@ -173,6 +165,7 @@ export const StyledLoadingBox = styled.div`
     /* height: 65px; */
 
     #channel {
+      animation: ${pulse} 2s linear infinite;
       width: 100px;
       /* height: 20px; */
       height: ${({ type }) => (type === "Clips" ? "25px" : "20px")};
@@ -181,6 +174,7 @@ export const StyledLoadingBox = styled.div`
     }
 
     #game {
+      animation: ${pulse} 2s linear infinite;
       width: 125px;
       height: 20px;
       margin: 21px 0 0 0;
@@ -270,18 +264,8 @@ export const ChannelNameDiv = styled.div`
 export const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: var(--feedsWidth);
-  margin: var(--feedsMargin);
   margin-top: 0;
   padding-bottom: 50px;
   min-height: 400px;
-
-  @media screen and (max-width: 2560px) {
-    width: 82.5%;
-    margin: 25px 0 0 360px;
-  }
-  @media screen and (max-width: 1920px) {
-    width: 74%;
-    margin: 25px 7.5% 0 19%;
-  }
+  /* min-height: 475px; */
 `;

@@ -5,13 +5,32 @@ export const StyledFooterContainer = styled.div`
   background-color: hsla(0, 0%, 0%, 0.5);
   padding: 15px;
   text-align: center;
-  // border-top: thin solid #352f2f;
   box-shadow: var(--footerShadow);
   margin-top: var(--footerMargin);
   border-top: 2px solid #53463f;
+  max-height: 200px;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin: 0;
+  }
+
+  ul li {
+    padding: 0 10px;
+    i {
+      margin-left: -28px;
+    }
+  }
 
   a,
-  button {
+  button,
+  div.button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
     font-size: 16px !important;
     color: var(--footerLinkColor);
 
@@ -20,16 +39,19 @@ export const StyledFooterContainer = styled.div`
     }
   }
 
-  ul a {
+  ul a,
+  div.button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
     font-size: 16px;
-
     width: max-content;
     padding: 0;
     line-height: 30px;
     display: flex;
   }
 
-  div {
+  div:not(.button) {
     width: 33%;
     display: flex;
     justify-content: center;
@@ -41,10 +63,6 @@ export const StyledFooterContainer = styled.div`
     ul {
       list-style-type: none;
     }
-  }
-
-  ul li i {
-    margin-left: -28px;
   }
 `;
 

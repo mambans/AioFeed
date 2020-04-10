@@ -1,20 +1,19 @@
 "use strict";
 
-const tokenUpdate = require("./tokenUpdate");
+const columnUpdate = require("./columnUpdate");
 
-const handler = async event => {
+const handler = async (event) => {
   try {
-    const { username, token, tokenName } = JSON.parse(event.body);
+    const { username, columnValue, columnName } = JSON.parse(event.body);
 
     if (!username) throw new Error("`Username` is required");
-    if (!token) throw new Error("`Token` is required");
-    if (!tokenName) throw new Error("`Token name` is required");
+    if (!columnValue) throw new Error("`Column value` is required");
+    if (!columnName) throw new Error("`Column name` is required");
 
-    // const res = await tokenUpdate({
-    const res = await tokenUpdate({
+    const res = await columnUpdate({
       username,
-      token,
-      tokenName,
+      columnValue,
+      columnName,
     });
 
     return {

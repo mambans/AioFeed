@@ -4,7 +4,7 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: PublicRead
-      BucketName: notifies.mambans.com
+      BucketName: aiofeed.com
       WebsiteConfiguration:
         ErrorDocument: index.html
         IndexDocument: index.html

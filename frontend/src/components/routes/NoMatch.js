@@ -3,7 +3,7 @@ import React from "react";
 import "./NoMatch.scss";
 
 function NoMatch() {
-  document.title = "Notifies | 404 Error";
+  document.title = "AioFeed | 404 Error";
 
   return (
     <section className='error-container'>

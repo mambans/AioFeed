@@ -5,10 +5,8 @@ html,
 html[data-theme="original"] {
   --accountContainerBackgroundColor: #05080cd6;
   --backgroundBlue: #01010b;
-  --backgroundImg: url("/images/treeCoffee-blur2.jpg");
+  --backgroundImg: url("/images/woodCoffe-blur2.5.jpg");
   --channelHover: #ffffff;
-  --feedsMargin: 25px 0 0 430px;
-  --feedsWidth: 81.9%;
   --footerLinkColor: #fff;
   --footerLinkHoverColor: #bd3d0a;
   --footerShadow: 0 0 100px 0 black;
@@ -102,4 +100,15 @@ html[data-theme="clean dark"] {
   --sidebarBackground: #121415a8;
   --scrollbarColors: #1c1f22 rgb(5, 8, 10);
   --accountContainerBackgroundColor: #121415f2;
+}
+
+html[data-theme="simple dark"] {
+  --backgroundImg: none;
+  --backgroundColor: #101010;
+  --scrollbarColors: #1c1f22 rgb(5, 8, 10);
+
+  --navigationbarBackground: #1a1a1ae3;
+  --sidebarBackground: #1a1a1ae3;
+  --accountContainerBackgroundColor: #1a1a1ae3;
+  --headerTextColor: rgba(255, 255, 255 0.7);
 }

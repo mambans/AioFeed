@@ -1,4 +1,3 @@
-// import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { MdFormatListBulleted } from "react-icons/md";
 import { MdRefresh } from "react-icons/md";
 import { Spinner } from "react-bootstrap";
@@ -35,24 +34,6 @@ export default ({ data, refresh }) => {
               duration={25}
             />
           ) : (
-            // <CountdownCircleTimer
-            //   key={refreshTimer}
-            //   isPlaying
-            //   size={24}
-            //   strokeWidth={2.5}
-            //   durationSeconds={25}
-            //   initialRemainingTime={parseFloat(
-            //     ((refreshTimer - new Date().getTime()) / 1000).toFixed(0)
-            //   )}
-            //   colors={[["#ffffff"]]}
-            //   trailColor={"#rgba(255, 255, 255, 0)"}
-            //   renderTime={() => {
-            //     const countdownNr = parseFloat(
-            //       ((refreshTimer - new Date().getTime()) / 1000).toFixed(0)
-            //     );
-            //     return countdownNr > 0 ? countdownNr : 0;
-            //   }}
-            // />
             <MdRefresh size={34} />
           )}
         </RefreshButton>

@@ -14,8 +14,8 @@ import {
   StyledButtonLinks,
 } from "./styledComponents";
 
-const Footer = () => {
-  const { footerVisible } = useContext(NavigationContext);
+export default () => {
+  const { footerVisible, setRenderModal, setShowSidebar } = useContext(NavigationContext);
 
   return (
     footerVisible && (
@@ -35,16 +35,32 @@ const Footer = () => {
               </Nav.Link>
             </li>
             <li>
-              <Nav.Link as={NavLink} to='/account'>
-                <MdAccountCircle size={20} style={{ marginRight: "0.75rem" }} />
-                Account
+              <Nav.Link as={NavLink} to='/category'>
+                <MdRssFeed size={20} style={{ marginRight: "0.75rem" }} />
+                Top streams
               </Nav.Link>
             </li>
             <li>
-              <Nav.Link as={NavLink} to='/account/create'>
+              <div
+                className='button'
+                onClick={() => {
+                  setRenderModal("account");
+                  setShowSidebar(true);
+                }}>
+                <MdAccountCircle size={20} style={{ marginRight: "0.75rem" }} />
+                Account
+              </div>
+            </li>
+            <li>
+              <div
+                className='button'
+                onClick={() => {
+                  setRenderModal("create");
+                  setShowSidebar(true);
+                }}>
                 <MdAccountCircle size={20} style={{ marginRight: "0.75rem" }} />
                 Create account
-              </Nav.Link>
+              </div>
             </li>
           </ul>
         </div>
@@ -64,9 +80,9 @@ const Footer = () => {
         <div>
           <ul>
             <li>
-              <a href='https://github.com/mambans/Notifies'>
+              <a href='https://github.com/mambans/AioFeed'>
                 <FaGithub size={20} style={{ marginRight: "0.75rem" }} />
-                Github-Notifies
+                Github-AioFeed
               </a>
             </li>
             <li>
@@ -84,5 +100,3 @@ const Footer = () => {
     )
   );
 };
-
-export default Footer;

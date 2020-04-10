@@ -3,6 +3,8 @@ import React, { useState } from "react";
 const NavigationContext = React.createContext();
 
 export const NavigationProvider = ({ children }) => {
+  const [showSidebar, setShowSidebar] = useState(false);
+
   const [renderModal, setRenderModal] = useState("login");
   const [visible, setVisible] = useState(true);
   const [footerVisible, setFooterVisible] = useState(true);
@@ -12,6 +14,8 @@ export const NavigationProvider = ({ children }) => {
   return (
     <NavigationContext.Provider
       value={{
+        setShowSidebar,
+        showSidebar,
         renderModal,
         setRenderModal,
         visible,

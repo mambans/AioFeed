@@ -2,9 +2,7 @@
 
 const create = require("./create");
 
-
-const handler = async event => {
-  console.log("TCL: event", event);
+const handler = async (event) => {
   try {
     const { username, email, password } = JSON.parse(event.body);
 
@@ -18,8 +16,6 @@ const handler = async event => {
       password,
     });
 
-    console.log("TCL: res", res);
-
     if (res.data) {
       return {
         statusCode: 200,
@@ -30,7 +26,6 @@ const handler = async event => {
       };
     }
   } catch (e) {
-    console.log("TCL: e", e);
     return {
       statusCode: e.statusCode,
       headers: {
@@ -39,12 +34,6 @@ const handler = async event => {
       body: JSON.stringify(e),
     };
   }
-  // else {
-  //   return {
-  //     statusCode: 401,
-  //     message: "Username is already taken.",
-  //   };
-  // }
 };
 
 exports.handler = handler;

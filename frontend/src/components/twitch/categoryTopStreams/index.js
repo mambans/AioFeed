@@ -46,9 +46,9 @@ export default () => {
   const oldTopData = useRef();
   const loadmoreRef = useRef();
 
-  document.title = `N | ${category || "All"} - Top ${videoType}`;
+  document.title = `AF | ${category || "All"} - Top ${videoType}`;
 
-  const videoElementTypeComp = data => {
+  const videoElementTypeComp = (data) => {
     switch (videoType) {
       case "Streams":
         return <StreamEle data={data} />;
@@ -89,16 +89,16 @@ export default () => {
   };
 
   const fetchVideos = useCallback(
-    shouldLoadMore => {
+    (shouldLoadMore) => {
       if (shouldLoadMore) setLoadmoreLoaded(false);
 
       switch (videoType) {
         case "Streams":
           GetTopStreams(category, oldTopData.current)
-            .then(res => {
+            .then((res) => {
               fetchVideosDataHandler(res, shouldLoadMore);
             })
-            .catch(e => {
+            .catch((e) => {
               if ((e.message = "game is undefined")) {
                 setError("Invalid game name");
               } else {
@@ -109,10 +109,10 @@ export default () => {
           break;
         case "Clips":
           GetTopClips(category, sortByTime, oldTopData.current)
-            .then(res => {
+            .then((res) => {
               fetchVideosDataHandler(res, shouldLoadMore);
             })
-            .catch(e => {
+            .catch((e) => {
               if ((e.message = "game is undefined")) {
                 setError("Invalid game name");
               } else {
@@ -123,10 +123,10 @@ export default () => {
           break;
         case "Videos":
           GetTopVideos(category, sortBy, oldTopData.current)
-            .then(res => {
+            .then((res) => {
               fetchVideosDataHandler(res, shouldLoadMore);
             })
-            .catch(e => {
+            .catch((e) => {
               if ((e.message = "game is undefined")) {
                 setError("Invalid game name");
               } else {
@@ -137,10 +137,10 @@ export default () => {
           break;
         default:
           GetTopStreams(category, oldTopData.current)
-            .then(res => {
+            .then((res) => {
               fetchVideosDataHandler(res, shouldLoadMore);
             })
-            .catch(e => {
+            .catch((e) => {
               if ((e.message = "game is undefined")) {
                 setError("Invalid game name");
               } else {
@@ -153,7 +153,7 @@ export default () => {
     [category, sortBy, sortByTime, videoType]
   );
 
-  const videoTypeBtnOnClick = type => {
+  const videoTypeBtnOnClick = (type) => {
     setTopData();
     oldTopData.current = null;
     setVideoType(type);
@@ -267,7 +267,7 @@ export default () => {
           {topData ? (
             <>
               <TransitionGroup className='twitch-top-live' component={null}>
-                {topData.map(stream => {
+                {topData.map((stream) => {
                   return (
                     <CSSTransition
                       // in={true}

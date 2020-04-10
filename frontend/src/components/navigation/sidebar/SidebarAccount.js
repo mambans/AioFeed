@@ -1,11 +1,9 @@
 import { Button } from "react-bootstrap";
-import { MdAccountCircle } from "react-icons/md";
 import { MdRefresh } from "react-icons/md";
 import { FaTwitch } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa";
 import { GoSignOut } from "react-icons/go";
 import { FiLogOut } from "react-icons/fi";
-import { NavLink } from "react-router-dom";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import uniqid from "uniqid";
@@ -29,9 +27,10 @@ import {
 import AccountContext from "./../../account/AccountContext";
 import DeleteAccountButton from "./DeleteAccountButton";
 import FeedsContext from "./../../feed/FeedsContext";
+import UpdateTwitterListName from "./UpdateTwitterListName";
 
 export default () => {
-  document.title = "Notifies | Account";
+  document.title = "AioFeed | Account";
   const {
     username,
     setUsername,
@@ -47,6 +46,7 @@ export default () => {
     autoRefreshEnabled,
     setAutoRefreshEnabled,
   } = useContext(AccountContext);
+
   const {
     enableTwitch,
     setEnableTwitch,
@@ -58,15 +58,17 @@ export default () => {
     setTwitchVideoHoverEnable,
     youtubeVideoHoverEnable,
     setYoutubeVideoHoverEnable,
+    enableTwitter,
+    setEnableTwitter,
   } = useContext(FeedsContext);
   const [showAddImage, setShowAddImage] = useState(false);
 
   function logout() {
-    document.cookie = `Notifies_AccountName=null; path=/`;
-    document.cookie = `Notifies_AccountEmail=null; path=/`;
+    document.cookie = `AioFeed_AccountName=null; path=/`;
+    document.cookie = `AioFeed_AccountEmail=null; path=/`;
     document.cookie = `Twitch-access_token=null; path=/; SameSite=Lax`;
     document.cookie = `Youtube-access_token=null; path=/`;
-    document.cookie = `Notifies_AccountProfileImg=null; path=/`;
+    document.cookie = `AioFeed_AccountProfileImg=null; path=/`;
 
     document.cookie = `Youtube_FeedEnabled=${false}; path=/`;
     document.cookie = `TwitchVods_FeedEnabled=${false}; path=/`;
@@ -99,8 +101,8 @@ export default () => {
     const popupWindow = window.open(url, winName, settings);
 
     try {
-      popupWindow.onunload = function() {
-        window.setTimeout(function() {
+      popupWindow.onunload = function () {
+        window.setTimeout(function () {
           if (popupWindow.closed) {
             document.cookie = `${domain}_FeedEnabled=${true}; path=/`;
             setToken(true);
@@ -119,10 +121,10 @@ export default () => {
 
   async function disconnectTwitch() {
     await axios
-      .put(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
         username: username,
-        token: "null",
-        tokenName: "TwitchToken",
+        columnValue: "null",
+        columnName: "TwitchToken",
       })
       .then(() => {
         document.cookie = `Twitch-access_token=null; path=/; SameSite=Lax`;
@@ -132,17 +134,17 @@ export default () => {
         setEnableTwitchVods(false);
         console.log(`Successfully disconnected from Twitch`);
       })
-      .catch(e => {
+      .catch((e) => {
         console.error(e);
       });
   }
 
   async function disconnectYoutube() {
     await axios
-      .put(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
         username: username,
-        token: "null",
-        tokenName: "YoutubeToken",
+        columnValue: "null",
+        columnName: "YoutubeToken",
       })
       .then(() => {
         document.cookie = `Youtube-access_token=null; path=/`;
@@ -151,7 +153,7 @@ export default () => {
         setEnableYoutube(false);
         console.log(`Successfully disconnected from Youtube`);
       })
-      .catch(e => {
+      .catch((e) => {
         console.error(e);
       });
   }
@@ -188,7 +190,7 @@ export default () => {
         {username}
       </h1>
       <p style={{ textAlign: "center" }} title='Email'>
-        {Util.getCookie("Notifies_AccountEmail")}
+        {Util.getCookie("AioFeed_AccountEmail")}
       </p>
       <ToggleSwitch
         setEnable={setEnableTwitch}
@@ -196,6 +198,14 @@ export default () => {
         label='Twitch'
         tokenExists={twitchToken}
       />
+      <ToggleSwitch
+        setEnable={setEnableTwitter}
+        enabled={enableTwitter}
+        label='Twitter'
+        tokenExists={true}
+        // tokenExists={twitterListName}
+      />
+      <UpdateTwitterListName />
       <ToggleSwitch
         setEnable={setEnableYoutube}
         enabled={enableYoutube}
@@ -234,7 +244,7 @@ export default () => {
               authenticatePopup(
                 `Connect Twitch`,
                 "Twitch",
-                `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit+clips:edit&response_type=code&force_verify=true`,
+                `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit+clips:edit&response_type=code&force_verify=true`,
                 setTwitchToken,
                 setEnableTwitch,
                 setEnableTwitchVods
@@ -253,7 +263,7 @@ export default () => {
                 authenticatePopup(
                   `Connect Twitch`,
                   "Twitch",
-                  `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit+clips:edit&response_type=code`,
+                  `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit+clips:edit&response_type=code`,
                   setTwitchToken,
                   setEnableTwitch,
                   setEnableTwitchVods
@@ -284,7 +294,7 @@ export default () => {
               authenticatePopup(
                 `Connect Youtube`,
                 "Youtube",
-                `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly`,
+                `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly`,
                 setYoutubeToken,
                 setEnableYoutube
               );
@@ -304,7 +314,7 @@ export default () => {
               authenticatePopup(
                 `Connect Youtube`,
                 "Youtube",
-                `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly`,
+                `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly`,
                 setYoutubeToken,
                 setEnableYoutube
               );
@@ -323,13 +333,6 @@ export default () => {
 
       <StyledLogoutContiner>
         <DeleteAccountButton />
-        {window.location.href !==
-          "http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/account" && (
-          <Button label='linkAsButton' style={{ width: "100%" }} as={NavLink} to='/account'>
-            Account page
-            <MdAccountCircle size={24} style={{ marginLeft: "0.75rem" }} />
-          </Button>
-        )}
         <Button style={{ width: "100%" }} label='logout' onClick={logout}>
           Logout
           <GoSignOut size={24} style={{ marginLeft: "0.75rem" }} />

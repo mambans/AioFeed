@@ -13,7 +13,7 @@ function VideoHoverIframe(data) {
   }, [data]);
 
   const handleMouseOut = useCallback(
-    event => {
+    (event) => {
       data.setIsHovered(false);
       videoHoverOutTimer.current = setTimeout(() => {
         event.target.src = "about:blank";
@@ -44,7 +44,7 @@ function VideoHoverIframe(data) {
     playerVars: {
       autoplay: 1,
       controls: 1,
-      origin: "http://notifies.mambans.com.s3-website.eu-north-1.amazonaws.com/feed",
+      origin: "https://aiofeed.com/feed",
       start: 10,
       fs: 0,
     },

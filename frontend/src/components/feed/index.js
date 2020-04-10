@@ -1,11 +1,12 @@
 import { Alert } from "react-bootstrap";
 import { CSSTransition } from "react-transition-group";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
+import { debounce } from "lodash";
+import styled from "styled-components";
 
 import Handler from "../twitch/live/Handler";
 import ErrorHandler from "./../error";
 import FeedsContext from "./FeedsContext";
-import styles from "./Feed.module.scss";
 import TwitchLive from "../twitch/live";
 import TwitchVods from "../twitch/vods";
 import Util from "../../util/Util";
@@ -13,19 +14,91 @@ import Youtube from "./../youtube/Youtube";
 import YoutubeDataHandler from "./../youtube/Datahandler";
 import YoutubeHeader from "./../youtube/Header";
 import AccountContext from "./../account/AccountContext";
+import { VodsProvider } from "./../twitch/vods/VodsContext";
+import Twitter from "../twitter";
+import { Container } from "../twitch/StyledComponents";
+import { CenterContainer } from "../sharedStyledComponents";
 
-export default function Feed() {
-  document.title = "Notifies | Feed";
-  const { enableTwitch, enableYoutube, enableTwitchVods } = useContext(FeedsContext);
+const TwitchContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+`;
+
+export default () => {
+  document.title = "AioFeed | Feed";
+  const {
+    enableTwitch,
+    enableYoutube,
+    enableTwitchVods,
+    enableTwitter,
+    twitterListName,
+  } = useContext(FeedsContext);
   const { username } = useContext(AccountContext);
   const [delayedEnableYoutube, setDelayedEnableYoutube] = useState(false);
   const [delayedEnableTwitchVods, setDelayedEnableTwitchVods] = useState(false);
+  const [twitterWidth, setTwitterWidth] = useState(
+    window.innerWidth <= 1920
+      ? window.innerWidth * 0.2
+      : window.innerWidth <= 2560
+      ? window.innerWidth * 0.2
+      : window.innerWidth * 0.15
+  );
+  const [centerWidth, setCenterWidth] = useState(
+    enableTwitter
+      ? 350 * Math.floor((window.innerWidth - (275 + window.innerWidth * 0.2 + 25)) / 350)
+      : 350 * Math.floor((window.innerWidth - (275 + 150)) / 350)
+  );
+  // eslint-disable-next-line no-unused-vars
+  const [marginLeft, setMarginLeft] = useState(
+    enableTwitter
+      ? (window.innerWidth - (275 + twitterWidth + 25 + centerWidth)) / 2 + 275
+      : (window.innerWidth - (275 + centerWidth)) / 2 + 275 - 50
+  );
 
   useEffect(() => {
-    Notification.requestPermission().then(function(result) {
+    Notification.requestPermission().then(function (result) {
       console.log("Notifications: ", result);
     });
   }, []);
+
+  const recalcWidth = useMemo(
+    () =>
+      debounce(
+        () => {
+          const newTwitterWidth = enableTwitter
+            ? window.innerWidth <= 1920
+              ? window.innerWidth * 0.2
+              : window.innerWidth <= 2560
+              ? window.innerWidth * 0.2
+              : window.innerWidth * 0.15
+            : 0;
+
+          setTwitterWidth(newTwitterWidth);
+          setCenterWidth(
+            enableTwitter
+              ? 350 * Math.floor((window.innerWidth - (275 + newTwitterWidth + 25)) / 350)
+              : 350 * Math.floor((window.innerWidth - (275 + 150)) / 350)
+          );
+          // setMarginLeft(
+          //   false
+          //     ? (window.innerWidth - (275 + newTwitterWidth + 25 + centerWidth)) / 2 + 275
+          //     : window.innerWidth - (275 + centerWidth) / 2 + 275 - 50
+          // );
+        },
+        50,
+        { leading: true, trailing: false }
+      ),
+    [enableTwitter]
+  );
+
+  useEffect(() => {
+    window.addEventListener("resize", recalcWidth);
+
+    return () => {
+      window.removeEventListener("resize", recalcWidth);
+    };
+  }, [recalcWidth, enableTwitter]);
 
   useEffect(() => {
     const FEEDDELAY = 2500;
@@ -51,11 +124,18 @@ export default function Feed() {
         <ErrorHandler
           data={{
             title: "Please login",
-            message: "You are not logged with your Notifies account.",
+            message: "You are not logged with your AioFeed account.",
           }}></ErrorHandler>
       </>
     );
-  } else if (!enableTwitch && !enableYoutube && !enableTwitchVods && username) {
+  } else if (
+    !enableTwitch &&
+    !enableTwitter &&
+    !twitterListName &&
+    !enableYoutube &&
+    !enableTwitchVods &&
+    username
+  ) {
     return (
       <CSSTransition in={true} timeout={1000} classNames='fade-1s' unmountOnExit>
         <Alert variant='info' style={Util.feedAlertWarning}>
@@ -67,23 +147,27 @@ export default function Feed() {
     );
   } else {
     return (
-      <>
-        {enableTwitch && (
-          <Handler>
-            {data => (
-              <CSSTransition in={enableTwitch} timeout={0} classNames='fade-1s' unmountOnExit>
-                <div className={styles.twitchContainer}>
-                  <TwitchLive data={data} />
-                </div>
-              </CSSTransition>
-            )}
-          </Handler>
-        )}
+      <CenterContainer width={centerWidth} marginLeft={marginLeft}>
+        {enableTwitter && twitterListName && <Twitter width={twitterWidth} />}
+
+        <VodsProvider>
+          {enableTwitch && (
+            <Handler>
+              {(data) => (
+                <CSSTransition in={enableTwitch} timeout={0} classNames='fade-1s' unmountOnExit>
+                  <TwitchContainer>
+                    <TwitchLive data={data} />
+                  </TwitchContainer>
+                </CSSTransition>
+              )}
+            </Handler>
+          )}
+        </VodsProvider>
 
         {enableYoutube && delayedEnableYoutube && (
-          <div className={styles.container}>
+          <Container>
             <YoutubeDataHandler>
-              {data => (
+              {(data) => (
                 <>
                   <YoutubeHeader
                     refresh={data.refresh}
@@ -100,15 +184,17 @@ export default function Feed() {
                 </>
               )}
             </YoutubeDataHandler>
-          </div>
+          </Container>
         )}
 
-        {enableTwitchVods && delayedEnableTwitchVods && (
-          <div className={styles.container}>
-            <TwitchVods />
-          </div>
-        )}
-      </>
+        <VodsProvider>
+          {enableTwitchVods && delayedEnableTwitchVods && (
+            <Container>
+              <TwitchVods />
+            </Container>
+          )}
+        </VodsProvider>
+      </CenterContainer>
     );
   }
-}
+};

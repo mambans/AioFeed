@@ -39,12 +39,12 @@ function YoutubeAuthCallback() {
     }
 
     await axios
-      .put(`https://1zqep8agka.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
         username: username,
-        token: accessToken,
-        tokenName: "YoutubeToken",
+        columnValue: accessToken,
+        columnName: "YoutubeToken",
       })
-      .catch(e => {
+      .catch((e) => {
         console.error(e);
       });
   }, [username]);
@@ -56,12 +56,7 @@ function YoutubeAuthCallback() {
       const url = new URL(window.location.href);
 
       try {
-        if (
-          url.hash
-            .split("#")[1]
-            .split("&")[0]
-            .slice(6) === Util.getCookie("Youtube-myState")
-        ) {
+        if (url.hash.split("#")[1].split("&")[0].slice(6) === Util.getCookie("Youtube-myState")) {
           await getAccessToken()
             .then(() => {
               window.close();
@@ -71,7 +66,7 @@ function YoutubeAuthCallback() {
               // setAccountModalOpen(false);
               // setConnectedDomain("Youtube");
             })
-            .catch(error => {
+            .catch((error) => {
               setError(error);
             });
         } else {

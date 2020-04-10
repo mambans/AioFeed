@@ -28,8 +28,8 @@ function DataHandler({ children }) {
         if (SubscriptionData.error) setRequestError(SubscriptionData.error.response.data.error);
 
         setIsLoaded(new Date());
-        videos.current.forEach(video => {
-          let videoExists = oldVideos.current.find(old_video => {
+        videos.current.forEach((video) => {
+          const videoExists = oldVideos.current.find((old_video) => {
             return old_video.contentDetails.upload.videoId === video.contentDetails.upload.videoId;
           });
 
@@ -70,7 +70,7 @@ function DataHandler({ children }) {
       <ErrorHandler
         data={{
           title: "Couldn't load Youtube feed",
-          message: "You are not connected with your Youtube account to Notifies",
+          message: "You are not connected with your Youtube account to AioFeed",
         }}></ErrorHandler>
     );
   } else {

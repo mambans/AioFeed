@@ -33,7 +33,7 @@ Resources:
   Login:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Login with Notifies account and return account info, tokens and monitored vod channels."
+      Description: "Login with AioFeed account and return account info, tokens and monitored vod channels."
       Handler: login/handler.handler
       Runtime: nodejs10.x
       CodeUri: "."
@@ -57,7 +57,7 @@ Resources:
   Create:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Create an Notifies account with tokens and monitored vod channels default to null and empty array."
+      Description: "Create an AioFeed account with tokens and monitored vod channels default to null and empty array."
       Handler: create/handler.handler
       Runtime: nodejs10.x
       CodeUri: "."
@@ -83,7 +83,7 @@ Resources:
   Update:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Update a specific token mentioned as a param."
+      Description: "Update a specific column mentioned as a param."
       Handler: update/handler.handler
       Runtime: nodejs10.x
       CodeUri: "."
@@ -102,9 +102,9 @@ Resources:
           RequestParameters:
             - method.request.querystring.username:
                 Required: true
-            - method.request.querystring.token:
+            - method.request.querystring.columnValue:
                 Required: true
-            - method.request.querystring.tokenName:
+            - method.request.querystring.columnName:
                 Required: true
   UpdateMonitoredChannels:
     Type: AWS::Serverless::Function

@@ -39,13 +39,13 @@ const create = async ({ username, email, password }) => {
         MonitoredChannels: [],
         ProfileImg: "null",
         AuthKey: key,
+        TwitterListId: "null",
       },
-      ConditionExpression: "attribute_not_exists(Username)",
+      ConditionExpression: "attribute_not_exists(Username) AND attribute_not_exists(Email)",
       ReturnItemCollectionMetrics: "SIZE",
       ReturnValues: "ALL_OLD",
     })
     .promise();
-  console.log("TCL: create -> res", res);
 
   return {
     data: {
@@ -54,12 +54,5 @@ const create = async ({ username, email, password }) => {
       AuthKey: key,
     },
   };
-  // } else {
-  //   return {
-  //     statusCode: 401,
-  //     data: { message: "Username is already taken." },
-  //   };
-  //   // return "Username is already taken.";
-  // }
 };
 module.exports = create;

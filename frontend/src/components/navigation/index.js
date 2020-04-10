@@ -9,7 +9,7 @@ import NavigationContext from "./NavigationContext";
 import "./Navigation.scss";
 import Sidebar from "./sidebar";
 
-export default prop => {
+export default (prop) => {
   const { visible, shrinkNavbar } = useContext(NavigationContext);
 
   return (
@@ -27,7 +27,7 @@ export default prop => {
             alt='logo'
             className='logo'
           />
-          Notifies
+          AioFeed
         </Nav.Link>
         <RenderNotifications />
         <Navbar.Toggle aria-controls='responsive-navbar-nav' />
@@ -44,13 +44,9 @@ export default prop => {
           </Container>
           <Nav style={{ justifyContent: "right" }}>
             <NavDropdown title='Other' id='collasible-nav-dropdown'>
-              {/* <NavDropdown.Item as={NavLink} to='/account/create' id='login'>
-                Create Account
-              </NavDropdown.Item>
-              <NavDropdown.Divider /> */}
-              <NavDropdown.Item href='https://github.com/mambans/Notifies'>
+              <NavDropdown.Item href='https://github.com/mambans/AioFeed'>
                 <FaGithub size={24} style={{ marginRight: "0.75rem" }} />
-                Notifies -Github
+                AioFeed-Github
               </NavDropdown.Item>
             </NavDropdown>
             <Sidebar />

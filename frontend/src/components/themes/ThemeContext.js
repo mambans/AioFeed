@@ -10,6 +10,7 @@ export const ThemeProvider = ({ children }) => {
     { name: "new year's eve", startMonth: 1, startDate: 1, endMonth: 1, endDate: 1 },
     { name: "clean", startMonth: 0, startDate: 0, endMonth: 0, endDate: 0 },
     { name: "clean dark", startMonth: 0, startDate: 0, endMonth: 0, endDate: 0 },
+    { name: "simple dark", startMonth: 0, startDate: 0, endMonth: 0, endDate: 0 },
   ];
 
   return (
