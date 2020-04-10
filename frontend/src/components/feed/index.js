@@ -1,22 +1,22 @@
 import { Alert } from "react-bootstrap";
 import { CSSTransition } from "react-transition-group";
-import React, { useState, useEffect, useContext, useMemo } from "react";
 import { debounce } from "lodash";
+import React, { useState, useEffect, useContext, useCallback, useMemo } from "react";
 import styled from "styled-components";
 
-import Handler from "../twitch/live/Handler";
+import { Container } from "../twitch/StyledComponents";
+import { VodsProvider } from "./../twitch/vods/VodsContext";
+import AccountContext from "./../account/AccountContext";
 import ErrorHandler from "./../error";
 import FeedsContext from "./FeedsContext";
+import Handler from "../twitch/live/Handler";
 import TwitchLive from "../twitch/live";
 import TwitchVods from "../twitch/vods";
+import Twitter from "../twitter";
 import Util from "../../util/Util";
 import Youtube from "./../youtube/Youtube";
 import YoutubeDataHandler from "./../youtube/Datahandler";
 import YoutubeHeader from "./../youtube/Header";
-import AccountContext from "./../account/AccountContext";
-import { VodsProvider } from "./../twitch/vods/VodsContext";
-import Twitter from "../twitter";
-import { Container } from "../twitch/StyledComponents";
 
 const CenterContainer = styled.div`
   display: flex;
@@ -45,23 +45,41 @@ export default () => {
   const { username } = useContext(AccountContext);
   const [delayedEnableYoutube, setDelayedEnableYoutube] = useState(false);
   const [delayedEnableTwitchVods, setDelayedEnableTwitchVods] = useState(false);
-  const [twitterWidth, setTwitterWidth] = useState(
-    window.innerWidth <= 1920
-      ? window.innerWidth * 0.2
-      : window.innerWidth <= 2560
-      ? window.innerWidth * 0.2
-      : window.innerWidth * 0.15
-  );
-  const [centerWidth, setCenterWidth] = useState(
-    enableTwitter
+  const calcAlignments = useCallback(() => {
+    const twitterWidth = enableTwitter
+      ? window.innerWidth <= 1920
+        ? window.innerWidth * 0.2
+        : window.innerWidth <= 2560
+        ? window.innerWidth * 0.2
+        : window.innerWidth * 0.15
+      : 0;
+
+    const centerWidth = enableTwitter
       ? 350 * Math.floor((window.innerWidth - (275 + window.innerWidth * 0.2 + 25)) / 350)
-      : 350 * Math.floor((window.innerWidth - (275 + 150)) / 350)
-  );
-  // eslint-disable-next-line no-unused-vars
-  const [marginLeft, setMarginLeft] = useState(
-    enableTwitter
+      : 350 * Math.floor((window.innerWidth - (275 + 150)) / 350);
+
+    const centerMargin = enableTwitter
       ? (window.innerWidth - (275 + twitterWidth + 25 + centerWidth)) / 2 + 275
-      : (window.innerWidth - (275 + centerWidth)) / 2 + 275 - 50
+      : (window.innerWidth - (275 + centerWidth)) / 2 + 275 - 50;
+
+    return {
+      width: centerWidth,
+      margin: centerMargin,
+      twitterWidth: twitterWidth,
+    };
+  }, [enableTwitter]);
+  const [alignments, setAlignments] = useState(calcAlignments);
+
+  const recalcWidth = useMemo(
+    () =>
+      debounce(
+        () => {
+          setAlignments(calcAlignments());
+        },
+        75,
+        { leading: true, trailing: false }
+      ),
+    [calcAlignments]
   );
 
   useEffect(() => {
@@ -70,43 +88,13 @@ export default () => {
     });
   }, []);
 
-  const recalcWidth = useMemo(
-    () =>
-      debounce(
-        () => {
-          const newTwitterWidth = enableTwitter
-            ? window.innerWidth <= 1920
-              ? window.innerWidth * 0.2
-              : window.innerWidth <= 2560
-              ? window.innerWidth * 0.2
-              : window.innerWidth * 0.15
-            : 0;
-
-          setTwitterWidth(newTwitterWidth);
-          setCenterWidth(
-            enableTwitter
-              ? 350 * Math.floor((window.innerWidth - (275 + newTwitterWidth + 25)) / 350)
-              : 350 * Math.floor((window.innerWidth - (275 + 150)) / 350)
-          );
-          // setMarginLeft(
-          //   false
-          //     ? (window.innerWidth - (275 + newTwitterWidth + 25 + centerWidth)) / 2 + 275
-          //     : window.innerWidth - (275 + centerWidth) / 2 + 275 - 50
-          // );
-        },
-        50,
-        { leading: true, trailing: false }
-      ),
-    [enableTwitter]
-  );
-
   useEffect(() => {
     window.addEventListener("resize", recalcWidth);
 
     return () => {
       window.removeEventListener("resize", recalcWidth);
     };
-  }, [recalcWidth, enableTwitter]);
+  }, [recalcWidth]);
 
   useEffect(() => {
     const FEEDDELAY = 2500;
@@ -125,6 +113,10 @@ export default () => {
       enableYoutube ? FEEDDELAY * 2 : FEEDDELAY
     );
   }, [enableTwitch, enableYoutube]);
+
+  useEffect(() => {
+    setAlignments(calcAlignments());
+  }, [enableTwitter, calcAlignments]);
 
   if (!username) {
     return (
@@ -155,8 +147,8 @@ export default () => {
     );
   } else {
     return (
-      <CenterContainer width={centerWidth} marginLeft={marginLeft}>
-        {enableTwitter && twitterListName && <Twitter width={twitterWidth} />}
+      <CenterContainer width={alignments.width} marginLeft={alignments.margin}>
+        {enableTwitter && twitterListName && <Twitter width={alignments.twitterWidth} />}
 
         <VodsProvider>
           {enableTwitch && (
@@ -169,6 +161,12 @@ export default () => {
                 </CSSTransition>
               )}
             </Handler>
+          )}
+
+          {enableTwitchVods && delayedEnableTwitchVods && (
+            <Container>
+              <TwitchVods />
+            </Container>
           )}
         </VodsProvider>
 
@@ -194,14 +192,6 @@ export default () => {
             </YoutubeDataHandler>
           </Container>
         )}
-
-        <VodsProvider>
-          {enableTwitchVods && delayedEnableTwitchVods && (
-            <Container>
-              <TwitchVods />
-            </Container>
-          )}
-        </VodsProvider>
       </CenterContainer>
     );
   }
