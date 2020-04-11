@@ -40,7 +40,7 @@ export default async (channelId, setVods) => {
 
     setVods((vods) => {
       const existingVods = [...vods.data];
-      const vodToAdd = { ...newVodWithEndtime[0], transition: "videoFade-1s" };
+      const vodToAdd = { ...newVodWithEndtime[0], transition: "videoFadeSlide" };
       const objectToUpdateIndex = existingVods.findIndex((item) => {
         return item.id === vodToAdd.id;
       });

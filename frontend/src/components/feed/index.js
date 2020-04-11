@@ -154,7 +154,11 @@ export default () => {
           {enableTwitch && (
             <Handler>
               {(data) => (
-                <CSSTransition in={enableTwitch} timeout={0} classNames='fade-1s' unmountOnExit>
+                <CSSTransition
+                  in={enableTwitch}
+                  timeout={750}
+                  classNames='fade-750ms'
+                  unmountOnExit>
                   <TwitchContainer>
                     <TwitchLive data={data} />
                   </TwitchContainer>

@@ -7,7 +7,7 @@ import Util from "../../util/Util";
 import YoutubeVideoElement from "./YoutubeVideoElement";
 
 export default (data) => {
-  const transition = useRef("fade-1s");
+  const transition = useRef("fade-750ms");
 
   if (data.requestError && data.requestError.code === 401 && !data.videos) {
     return "";
@@ -26,7 +26,6 @@ export default (data) => {
             return (
               <CSSTransition
                 timeout={1000}
-                // classNames='videoFade-1s'
                 classNames={transition.current}
                 key={video.contentDetails.upload.videoId}
                 unmountOnExit>
@@ -34,9 +33,6 @@ export default (data) => {
                   id={video.contentDetails.upload.videoId}
                   video={video}
                   transition={transition.current}
-                  setTransition={() => {
-                    transition.current = "videoFade-1s";
-                  }}
                 />
               </CSSTransition>
             );

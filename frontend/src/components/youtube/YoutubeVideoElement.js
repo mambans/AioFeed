@@ -53,7 +53,7 @@ function YoutubeVideoElement(data) {
     <VideoContainer
       key={data.video.contentDetails.upload.videoId}
       onTransitionEnd={() => {
-        if (data.transition !== "videoFade-1s") data.setTransition();
+        if (data.transition !== "videoFadeSlide") data.setTransition();
       }}>
       <ImageContainer id={data.video.contentDetails.upload.videoId} ref={ref}>
         {isHovered && (

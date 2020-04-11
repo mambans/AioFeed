@@ -56,7 +56,7 @@ const SubFeedError = (props) => {
 
 export default (data) => {
   return (
-    <CSSTransition in={true} timeout={1000} classNames='fade-1s' unmountOnExit>
+    <CSSTransition in={true} timeout={750} classNames='fade-750ms' unmountOnExit>
       <HeaderContainer>
         <HeaderLeftSubcontainer>
           <RefreshButton

@@ -36,7 +36,7 @@ export default () => {
 
                   return (
                     <TransitionGroup component={null}>
-                      <CSSTransition key={key} timeout={200} classNames='fade-02'>
+                      <CSSTransition key={key} timeout={200} classNames='RoutesFade'>
                         <main id={style.contentContainer}>
                           <Switch location={location}>
                             <Route exact path={["/", "/index", "/home"]}>

@@ -72,14 +72,14 @@ export default ({
         <TransitionGroup className='twitch-vods' component={null}>
           {items.map((item) => {
             return (
-              <CSSTransition key={item.id} timeout={1000} classNames='fade-1s' unmountOnExit>
+              <CSSTransition key={item.id} timeout={750} classNames='fade-750ms' unmountOnExit>
                 {feedName === "Vods" ? (
-                  <VodElement data={item} transition='fade-1s' vodBtnDisabled={true} />
+                  <VodElement data={item} transition='fade-750ms' vodBtnDisabled={true} />
                 ) : (
                   <ClipElement
                     data={item}
                     user_name={channelInfo && channelInfo.name}
-                    transition='fade-1s'
+                    transition='fade-750ms'
                   />
                 )}
               </CSSTransition>

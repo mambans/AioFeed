@@ -44,7 +44,11 @@ export default () => {
         )}
       </StyledNavSidebarTrigger>
 
-      <CSSTransition in={showSidebar} timeout={500} classNames='fade-05s' unmountOnExit>
+      <CSSTransition
+        in={showSidebar}
+        timeout={500}
+        classNames='NavSidebarBackdropFade'
+        unmountOnExit>
         <StyledNavSidebarBackdrop
           onClick={() => {
             setShowSidebar(false);
@@ -52,7 +56,11 @@ export default () => {
         />
       </CSSTransition>
 
-      <CSSTransition in={showSidebar} timeout={1000} classNames='fadeSlide-right-1s' unmountOnExit>
+      <CSSTransition
+        in={showSidebar}
+        timeout={1000}
+        classNames='NavSidebarSlideRight'
+        unmountOnExit>
         <StyledNavSidebar>
           {username ? (
             <SidebarAccount setRenderModal={setRenderModal} />

@@ -263,8 +263,8 @@ export default () => {
               return (
                 <CSSTransition
                   key={vod.id + vod.duration}
-                  timeout={1000}
-                  classNames={vod.transition || "fade-1s"}
+                  timeout={750}
+                  classNames={vod.transition || "fade-750ms"}
                   unmountOnExit>
                   <VodElement data={vod} />
                 </CSSTransition>

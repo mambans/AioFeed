@@ -272,8 +272,8 @@ export default () => {
                     <CSSTransition
                       // in={true}
                       key={stream.id}
-                      timeout={1000}
-                      classNames='fade-1s'
+                      timeout={750}
+                      classNames='fade-750ms'
                       unmountOnExit>
                       {videoElementTypeComp(stream)}
                     </CSSTransition>

@@ -68,8 +68,8 @@ export default ({ data }) => {
                     <CSSTransition
                       // in={true}
                       key={stream.id}
-                      timeout={1000}
-                      classNames='videoFade-1s'
+                      timeout={750}
+                      classNames='videoFadeSlide'
                       unmountOnExit>
                       <StreamEle
                         key={stream.id}
