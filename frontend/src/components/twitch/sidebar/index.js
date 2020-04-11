@@ -4,7 +4,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import SidebarItem from "./SidebarItem";
 import { Styledsidebar, SidebarHeader } from "./StyledComponents";
 
-const TwitchSidebar = data => {
+const TwitchSidebar = (data) => {
   const [shows, setShows] = useState();
   const sidebarRef = useRef();
 
@@ -27,12 +27,11 @@ const TwitchSidebar = data => {
 
       {data.onlineStreams.length > 0 ? (
         <TransitionGroup className='sidebar' component={null}>
-          {data.onlineStreams.map(stream => {
+          {data.onlineStreams.map((stream) => {
             return (
               <CSSTransition
                 key={stream.id}
                 timeout={1000}
-                // classNames='fade-1s'
                 classNames='sidebarVideoFade-1s'
                 unmountOnExit>
                 <SidebarItem

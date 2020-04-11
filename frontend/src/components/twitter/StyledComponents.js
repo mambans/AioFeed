@@ -3,13 +3,20 @@ import styled from "styled-components";
 import { pulse } from "../twitch/StyledComponents";
 
 export const Container = styled.div`
-  width: ${({ width }) => width || "300"}px;
+  /* width: ${({ width }) => width + "px" || "15vw"}; */
+  /* width: ${({ width }) => width}; */
+  width: 15vw;
   height: 92vh;
   position: fixed;
-  right: 25px;
+  /* right: 25px; */
   top: 90px;
   background: #1010108c;
   border-radius: 20px;
+
+  @media screen and (max-width: 2560px) {
+    width: 20vw;
+  }
+
 `;
 
 export const LoadingTextBox = styled.div`
@@ -23,9 +30,13 @@ export const LoadingImageBox = styled.div`
   height: 450px;
 
   .img {
-    height: ${({ width }) => width / 1.777 + "px"};
+    height: calc(15vw / 1.777);
     border-radius: 20px;
     animation: ${pulse} 2s linear infinite;
+
+    @media screen and (max-width: 2560px) {
+      height: calc(20vw / 1.777);
+    }
   }
 `;
 
@@ -54,7 +65,7 @@ export const LoadingContainer = styled.div`
   }
 `;
 
-export const LoadingPlaceholder = ({ width }) => {
+export const LoadingPlaceholder = () => {
   return (
     <LoadingContainer>
       <LoadingTextBox>
@@ -65,7 +76,7 @@ export const LoadingPlaceholder = ({ width }) => {
           <div></div>
         </div>
       </LoadingTextBox>
-      <LoadingImageBox width={width}>
+      <LoadingImageBox>
         <div className='username'></div>
         <div className='text'>
           <div></div>

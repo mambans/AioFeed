@@ -1,4 +1,3 @@
-import { Alert } from "react-bootstrap";
 import { CSSTransition } from "react-transition-group";
 import { debounce } from "lodash";
 import React, { useState, useEffect, useContext, useCallback, useMemo } from "react";
@@ -13,18 +12,48 @@ import Handler from "../twitch/live/Handler";
 import TwitchLive from "../twitch/live";
 import TwitchVods from "../twitch/vods";
 import Twitter from "../twitter";
-import Util from "../../util/Util";
 import Youtube from "./../youtube/Youtube";
 import YoutubeDataHandler from "./../youtube/Datahandler";
 import YoutubeHeader from "./../youtube/Header";
+import NoFeedsEnable from "./NoFeedsEnabled";
 
 const CenterContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-flow: column;
   margin-top: 25px;
-  margin-left: ${({ marginLeft }) => marginLeft + "px"};
-  width: ${({ width }) => width + "px"} !important;
+  /* margin-left: ${({ marginLeft }) => marginLeft + "px"}; */
+  margin-left: ${({ enableTwitter, alignments }) =>
+    alignments || enableTwitter
+      ? (window.innerWidth -
+          (275 +
+            (enableTwitter
+              ? window.innerWidth <= 1920
+                ? window.innerWidth * 0.2
+                : window.innerWidth <= 2560
+                ? window.innerWidth * 0.2
+                : window.innerWidth * 0.15
+              : 0) +
+            25 +
+            (enableTwitter
+              ? 350 * Math.floor((window.innerWidth - (275 + window.innerWidth * 0.2 + 25)) / 350)
+              : 350 * Math.floor((window.innerWidth - (275 + 150)) / 350)))) /
+          2 +
+        275
+      : (window.innerWidth -
+          (275 +
+            (enableTwitter
+              ? 350 * Math.floor((window.innerWidth - (275 + window.innerWidth * 0.2 + 25)) / 350)
+              : 350 * Math.floor((window.innerWidth - (275 + 150)) / 350)))) /
+          2 +
+        275 -
+        50}px;
+  /* width: ${({ width }) => width + "px"} !important; */
+  width: ${({ enableTwitter, alignments }) =>
+    alignments || enableTwitter
+      ? 350 * Math.floor((window.innerWidth - (275 + window.innerWidth * 0.2 + 25)) / 350)
+      : 350 * Math.floor((window.innerWidth - (275 + 150)) / 350)}px !important;
+  transition: width 750ms, margin 750ms;
 `;
 
 const TwitchContainer = styled.div`
@@ -35,16 +64,9 @@ const TwitchContainer = styled.div`
 
 export default () => {
   document.title = "AioFeed | Feed";
-  const {
-    enableTwitch,
-    enableYoutube,
-    enableTwitchVods,
-    enableTwitter,
-    twitterListName,
-  } = useContext(FeedsContext);
+  const { enableTwitch, enableYoutube, enableTwitchVods, enableTwitter } = useContext(FeedsContext);
   const { username } = useContext(AccountContext);
   const [delayedEnableYoutube, setDelayedEnableYoutube] = useState(false);
-  const [delayedEnableTwitchVods, setDelayedEnableTwitchVods] = useState(false);
   const calcAlignments = useCallback(() => {
     const twitterWidth = enableTwitter
       ? window.innerWidth <= 1920
@@ -68,6 +90,7 @@ export default () => {
       twitterWidth: twitterWidth,
     };
   }, [enableTwitter]);
+
   const [alignments, setAlignments] = useState(calcAlignments);
 
   const recalcWidth = useMemo(
@@ -99,24 +122,21 @@ export default () => {
   useEffect(() => {
     const FEEDDELAY = 2500;
 
-    window.setTimeout(
+    const YoutubeTimer = setTimeout(
       () => {
         setDelayedEnableYoutube("true");
       },
-      enableTwitch ? FEEDDELAY : 0
+      enableYoutube && enableTwitch ? FEEDDELAY * 2 : 0
     );
 
-    window.setTimeout(
-      () => {
-        setDelayedEnableTwitchVods("true");
-      },
-      enableYoutube ? FEEDDELAY * 2 : FEEDDELAY
-    );
+    return () => {
+      clearTimeout(YoutubeTimer);
+    };
   }, [enableTwitch, enableYoutube]);
 
-  useEffect(() => {
-    setAlignments(calcAlignments());
-  }, [enableTwitter, calcAlignments]);
+  // useEffect(() => {
+  //   // setAlignments(calcAlignments());
+  // }, [enableTwitter, calcAlignments]);
 
   if (!username) {
     return (
@@ -128,28 +148,11 @@ export default () => {
           }}></ErrorHandler>
       </>
     );
-  } else if (
-    !enableTwitch &&
-    !enableTwitter &&
-    !twitterListName &&
-    !enableYoutube &&
-    !enableTwitchVods &&
-    username
-  ) {
-    return (
-      <CSSTransition in={true} timeout={1000} classNames='fade-1s' unmountOnExit>
-        <Alert variant='info' style={Util.feedAlertWarning}>
-          <Alert.Heading>No feeds are enabled</Alert.Heading>
-          <hr />
-          Please enable some feeds in account settings
-        </Alert>
-      </CSSTransition>
-    );
   } else {
     return (
-      <CenterContainer width={alignments.width} marginLeft={alignments.margin}>
-        {enableTwitter && twitterListName && <Twitter width={alignments.twitterWidth} />}
-
+      <CenterContainer enableTwitter={enableTwitter} alignments={alignments}>
+        <NoFeedsEnable />
+        <Twitter />
         <VodsProvider>
           {enableTwitch && (
             <Handler>
@@ -167,13 +170,12 @@ export default () => {
             </Handler>
           )}
 
-          {enableTwitchVods && delayedEnableTwitchVods && (
+          {enableTwitchVods && (
             <Container>
               <TwitchVods />
             </Container>
           )}
         </VodsProvider>
-
         {enableYoutube && delayedEnableYoutube && (
           <Container>
             <YoutubeDataHandler>
