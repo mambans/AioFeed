@@ -1,54 +1,44 @@
-//fade 2500ms
-.fadeout-2500ms-enter {
-  opacity: 1;
-}
-.fadeout-2500ms-enter-active {
-  opacity: 0;
-  transition: opacity 2500ms;
-}
-.fadeout-2500ms-exit {
-  opacity: 0;
-}
-.fadeout-2500ms-exit-active {
-  opacity: 1;
-  transition: opacity 2500ms;
-}
-
 //fade 1s
-.fade-1s-enter {
+.fade-750ms-enter {
   opacity: 0;
-  transition: opacity 1000ms;
-}
-.fade-1s-enter-active {
-  opacity: 1;
-  transition: opacity 1000ms;
-}
-.fade-1s-exit {
-  opacity: 1;
-  transition: opacity 1000ms;
-}
-.fade-1s-exit-active {
-  opacity: 0;
-  transition: opacity 1000ms;
+  transition: opacity 750ms;
 }
 
-.fade-1s-exit-done {
+.fade-750ms-enter-active {
+  opacity: 1;
+  transition: opacity 750ms;
+}
+
+.fade-750ms-exit {
+  opacity: 1;
+  transition: opacity 750ms;
+}
+
+.fade-750ms-exit-active {
   opacity: 0;
-  transition: opacity 1000ms;
+  transition: opacity 750ms;
+}
+
+.fade-750ms-exit-done {
+  opacity: 0;
+  transition: opacity 750ms;
 }
 
 .fade-controllUI-1s-enter {
   opacity: 0;
   transition: opacity 1000ms;
 }
+
 .fade-controllUI-1s-enter-active {
   opacity: 1;
   transition: opacity 1000ms;
 }
+
 .fade-controllUI-1s-exit {
   opacity: 1;
   transition: opacity 500ms;
 }
+
 .fade-controllUI-1s-exit-active {
   opacity: 0;
   transition: opacity 500ms;
@@ -63,13 +53,16 @@
 .fade-300ms-enter {
   opacity: 0;
 }
+
 .fade-300ms-enter-active {
   opacity: 1;
   transition: opacity 300ms;
 }
+
 .fade-300ms-exit {
   opacity: 1;
 }
+
 .fade-300ms-exit-active {
   opacity: 0;
   transition: opacity 300ms;
@@ -79,84 +72,90 @@
   opacity: 0;
 }
 
-//Videofade 1s
-.videoFade-1s-enter {
+//New Streams/Vods
+.videoFadeSlide-enter {
   opacity: 0;
   width: 0px !important;
   max-width: 0px !important;
   left: -336px;
   margin-right: 0px !important;
   margin-left: 0px !important;
-  transition: opacity 1000ms, margin-left 1000ms, width 1000ms, margin-right 1000ms,
-    max-width 1000ms, left 1000ms;
+  transition: opacity 750ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
+    left 750ms;
 }
-.videoFade-1s-enter-active {
+
+.videoFadeSlide-enter-active {
   opacity: 1;
   width: 336px !important;
   max-width: 336px !important;
   left: 0;
   margin-right: 7px !important;
   margin-left: 7px !important;
-  transition: opacity 1000ms, margin-left 1000ms, width 1000ms, margin-right 1000ms,
-    max-width 1000ms, left 1000ms;
+  transition: opacity 750ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
+    left 750ms;
 }
-.videoFade-1s-exit {
+
+.videoFadeSlide-exit {
   opacity: 1;
   width: 336px !important;
   max-width: 336px !important;
   left: 0;
   margin-right: 7px !important;
   margin-left: 7px !important;
-  transition: opacity 1000ms, margin-left 1000ms, width 1000ms, margin-right 1000ms,
-    max-width 1000ms, left 1000ms;
+  transition: opacity 750ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
+    left 750ms;
 }
-.videoFade-1s-exit-active {
+
+.videoFadeSlide-exit-active {
   opacity: 0;
   width: 0px !important;
   max-width: 0px !important;
   left: -336px;
   margin-right: 0px !important;
   margin-left: 0px !important;
-  transition: opacity 1000ms, margin-left 1000ms, width 1000ms, margin-right 1000ms,
-    max-width 1000ms, left 1000ms;
+  transition: opacity 750ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
+    left 750ms;
 }
 
-//fade 05s
-.fade-05s-enter {
+.NavSidebarBackdropFade-enter {
   opacity: 0;
 }
-.fade-05s-enter-active {
+
+.NavSidebarBackdropFade-enter-active {
   opacity: 1;
   transition: opacity 500ms;
 }
-.fade-05s-exit {
+
+.NavSidebarBackdropFade-exit {
   opacity: 1;
 }
-.fade-05s-exit-active {
+
+.NavSidebarBackdropFade-exit-active {
   opacity: 0;
   transition: opacity 500ms;
 }
 
-//fade 0.2s for fade-02s.
-.fade-02-enter {
+//fade 0.2s for RoutesFades.
+.RoutesFade-enter {
   opacity: 0;
 }
-.fade-02-enter-active {
+
+.RoutesFade-enter-active {
   opacity: 1;
   transition: opacity 200ms ease-in;
 }
 
-.fade-02-exit {
+.RoutesFade-exit {
   opacity: 1;
 }
 
-.fade-02-exit-active {
+.RoutesFade-exit-active {
   opacity: 0;
   transition: opacity 200ms ease-in, transition;
 }
 
-//fadeSlide-right-1s 1s
-.fadeSlide-right-1s-enter {
+//NavSidebarSlideRight 1s
+.NavSidebarSlideRight-enter {
   opacity: 0;
   //max-width: 0px;
   right: -400px;
@@ -167,19 +166,19 @@
   }
 }
 
-.fadeSlide-right-1s-enter-active {
+.NavSidebarSlideRight-enter-active {
   opacity: 1;
   right: 0;
   transition: opacity 500ms, right 500ms;
 }
 
-.fadeSlide-right-1s-exit {
+.NavSidebarSlideRight-exit {
   opacity: 1;
   right: 0;
   transition: opacity 500ms, right 500ms;
 }
 
-.fadeSlide-right-1s-exit-active {
+.NavSidebarSlideRight-exit-active {
   opacity: 0;
   right: -400px;
   transition: opacity 500ms, right 500ms;
@@ -189,7 +188,7 @@
   }
 }
 
-.fadeSlide-right-1s-enter-done {
+.NavSidebarSlideRight-enter-done {
   right: 0;
 }
 
@@ -255,4 +254,47 @@
   opacity: 1;
   transition: opacity 350ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
     left 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
+}
+
+//Twitter
+.twitter-slide-enter {
+  opacity: 0;
+  right: -15vw;
+  transition: opacity 375ms, right 750ms;
+
+  @media screen and (max-width: 3420px) {
+    right: -20vw;
+  }
+}
+
+.twitter-slide-enter-active {
+  opacity: 1;
+  right: 25px;
+  transition: opacity 375ms, right 750ms;
+}
+
+.twitter-slide-exit {
+  opacity: 1;
+  right: 25px;
+  transition: opacity 375ms, right 750ms;
+}
+
+.twitter-slide-exit-active {
+  opacity: 0;
+  right: -15vw;
+  transition: opacity 375ms, right 750ms;
+
+  @media screen and (max-width: 3420px) {
+    right: -20vw;
+  }
+}
+
+.twitter-slide-enter-done {
+  right: 25px;
+  transition: opacity 375ms, right 750ms;
+}
+
+.twitter-slide-appear-active {
+  right: 25px;
+  transition: opacity 500ms, right 750ms;
 }
