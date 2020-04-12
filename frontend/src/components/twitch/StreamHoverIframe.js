@@ -1,7 +1,16 @@
 import React, { useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 
-import styles from "./Twitch.module.scss";
+const HoverIframe = styled.iframe`
+  border: none;
+  border-radius: 10px;
+  z-index: 1;
+  cursor: pointer;
+  max-width: 360px;
+  position: absolute;
+  display: block;
+`;
 
 export default (data) => {
   const ref = useRef();
@@ -40,12 +49,11 @@ export default (data) => {
 
   return (
     <>
-      <iframe
+      <HoverIframe
         // url={`https://player.twitch.tv/?channel=${data.data.user_name}&muted=true`}
         // url={`https://player.twitch.tv/?twitch5=1&channel=${data.data.user_name}&autoplay=true&muted=false&!controls`}
         src={`https://player.twitch.tv/?twitch5=1&channel=${data.data.user_name}&autoplay=true&muted=false&!controls`}
         title={data.data.user_name + "-iframe"}
-        className={styles.StreamHoverIframe}
         theme='dark'
         id={data.data.id + "-iframe"}
         width='336px'
@@ -57,7 +65,7 @@ export default (data) => {
         frameBorder='0'
       />
       <Link
-        to={`/live/${data.data.user_name}`}
+        to={`/${data.data.user_name}`}
         alt=''
         style={{
           position: "absolute",

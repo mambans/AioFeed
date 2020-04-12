@@ -10,6 +10,7 @@ export const RefreshButton = styled(Button).attrs({ variant: "outline-secondary"
   position: relative;
   left: 6px;
   align-items: center;
+  transition-duration: 250ms;
 
   padding: 4px;
   width: 50px;
@@ -28,6 +29,7 @@ export const RefreshButton = styled(Button).attrs({ variant: "outline-secondary"
   &:hover {
     background: var(--refreshButtonHoverBackground);
     color: var(--refreshButtonHoverColor);
+    border: var(--refreshButtonHoverBorder);
   }
 `;
 
@@ -40,10 +42,12 @@ export const ButtonList = styled(Button).attrs({ variant: "outline-secondary" })
   border: var(--refreshButtonBorder);
   font-weight: bold;
   align-items: center;
+  transition-duration: 250ms;
 
   &:hover {
     background: var(--refreshButtonHoverBackground);
     color: var(--refreshButtonHoverColor);
+    border: var(--refreshButtonHoverBorder);
   }
 `;
 
@@ -96,7 +100,129 @@ export const VideoContainer = styled.div`
   position: relative;
 
   a {
-    text-shadow: var(--linkTextShadow);
+    text-shadow: var(--VideoContainerLinkShadow);
+
+    .channelContainer {
+      display: grid;
+      height: 26px;
+      align-content: center;
+      margin-bottom: 5px;
+      grid-template-columns: min-content;
+      width: inherit;
+
+      .profile_img {
+        width: 26px;
+        border-radius: 3px;
+      }
+
+      &:hover {
+        button,
+        svg {
+          opacity: 1;
+        }
+      }
+      a {
+        font-size: 1rem !important;
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    .game {
+      color: var(--VideoContainerLinks);
+    }
+
+    &:hover {
+      color: var(--VideoContainerLinksHover);
+    }
+  }
+`;
+
+export const ChannelContainer = styled.div`
+  display: grid;
+  height: 26px;
+  align-content: center;
+  margin-bottom: 5px;
+  grid-template-columns: min-content;
+  width: inherit;
+
+  .profileImg {
+    width: 26px;
+    border-radius: 3px;
+  }
+
+  .channelName {
+    padding: 0 5px;
+    font-weight: bold;
+    color: var(--VideoContainerLinks);
+    grid-row: 1;
+    width: max-content;
+    transition: color 250ms;
+  }
+
+  &:hover {
+    button,
+    svg {
+      opacity: 1;
+    }
+  }
+
+  a {
+    font-size: 1rem !important;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+`;
+
+export const GameContainer = styled.div`
+  display: grid;
+  grid-template-columns: 10% 50% 40%;
+  width: 336px;
+  align-items: center;
+  min-height: 34px;
+  transition: color 250ms;
+
+  .gameImg {
+    width: 26px;
+    border-radius: 3px;
+    grid-column: 1;
+    object-fit: cover;
+    padding: 0;
+  }
+
+  .gameName {
+    padding-left: 5px;
+    grid-column: 2;
+    bottom: 20px;
+    background: none;
+    padding-right: 5px;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 250ms;
+    color: var(--VideoContainerLinks);
+  }
+
+  .viewers {
+    color: var(--VideoContainerViewers);
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    grid-column: 3;
+    padding-right: 10px;
+    margin-bottom: 0;
+    align-items: center;
+
+    svg {
+      color: rgb(200, 200, 200);
+      padding-left: 5px;
+      padding-top: 3px;
+      display: flex;
+      align-items: center;
+    }
   }
 `;
 
@@ -162,6 +288,23 @@ export const ImageContainer = styled.div`
       z-index: 1;
     }
   }
+
+  .duration {
+    position: relative;
+    width: max-content;
+    background: #2222228c;
+    padding-right: 5px;
+    font-size: 0.9rem;
+    padding-left: 5px;
+    z-index: 1;
+    height: 24px;
+    bottom: 28px;
+    left: 4px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    background: #161616b0;
+  }
 `;
 
 export const UnfollowButton = styled(Button).attrs({ variant: "link" })`
@@ -216,5 +359,43 @@ export const StyledLoadingContainer = styled.div`
   h1 {
     color: #dddddd;
     text-align: center;
+  }
+`;
+
+export const VodVideoInfo = styled.div`
+  bottom: 30px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  align-items: center;
+  height: 30px;
+
+  .vodDuration {
+    width: max-content;
+    background: #2222228c;
+    padding-right: 5px;
+    padding-left: 5px;
+    background: #161616b0;
+    margin: 0;
+    margin-left: 3px;
+    border-radius: 12px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    z-index: 1;
+  }
+
+  .view_count {
+    width: max-content;
+    padding-right: 5px;
+    padding-left: 5px;
+    background: #161616b0;
+    margin: 0;
+    margin-right: 3px;
+    border-radius: 12px;
+    height: 24px;
+    display: flex;
+    align-items: center;
   }
 `;

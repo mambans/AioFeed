@@ -12,7 +12,7 @@ import AccountContext from "./../../account/AccountContext";
 import VodsContext from "./VodsContext";
 import LoadingBoxs from "./../LoadingBoxs";
 
-export default () => {
+export default ({ enableTwitter }) => {
   const { vods, setVods } = useContext(VodsContext);
   const {
     authKey,
@@ -30,7 +30,9 @@ export default () => {
   const VodHeaderRef = useRef();
 
   const [numberOfVideos, setNumberOfVideos] = useState(
-    Math.floor((document.documentElement.clientWidth - 430) / 350) *
+    (enableTwitter
+      ? Math.floor((window.innerWidth - (275 + window.innerWidth * 0.2 + 25)) / 350)
+      : Math.floor((window.innerWidth - (275 + 150)) / 350)) *
       Math.floor((document.documentElement.clientHeight - (65 + 484)) / 341)
   );
   const [vodAmounts, setVodAmounts] = useState(numberOfVideos);
@@ -40,7 +42,9 @@ export default () => {
       debounce(
         () => {
           setNumberOfVideos(
-            Math.floor((document.documentElement.clientWidth - 430) / 350) *
+            (enableTwitter
+              ? Math.floor((window.innerWidth - (275 + window.innerWidth * 0.2 + 25)) / 350)
+              : Math.floor((window.innerWidth - (275 + 150)) / 350)) *
               Math.floor((document.documentElement.clientHeight - (65 + 484)) / 341)
           );
           setVodAmounts(
@@ -51,7 +55,7 @@ export default () => {
         100,
         { leading: true, trailing: false }
       ),
-    []
+    [enableTwitter]
   );
 
   useEffect(() => {

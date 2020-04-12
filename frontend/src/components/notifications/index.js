@@ -6,19 +6,22 @@ import moment from "moment";
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 
-// import "./Notifications.scss";
 import { ButtonList } from "./../sharedStyledComponents";
 import { Notification } from "./styledComponent";
 import { UnseenNotifcationCount } from "./../notifications/styledComponent";
 import NotificationsContext from "./../notifications/NotificationsContext";
 import NavigationContext from "./../navigation/NavigationContext";
-
 import styles from "./Notifications.module.scss";
 import Util from "../../util/Util";
 
 export default () => {
   const [show, setShow] = useState(false);
-  const props = useContext(NotificationsContext);
+  const {
+    clearUnseenNotifications,
+    unseenNotifications,
+    clearNotifications,
+    notifications,
+  } = useContext(NotificationsContext);
   const { shrinkNavbar } = useContext(NavigationContext);
 
   const handleClose = () => {
@@ -26,7 +29,7 @@ export default () => {
   };
   const handleShow = () => {
     setShow(true);
-    props.clearUnseenNotifications();
+    clearUnseenNotifications();
   };
 
   return (
@@ -40,20 +43,20 @@ export default () => {
           padding: "0",
         }}
         title='Notifications'>
-        {props.unseenNotifications &&
-        Array.isArray(props.unseenNotifications) &&
-        props.unseenNotifications.length > 0 ? (
+        {unseenNotifications &&
+        Array.isArray(unseenNotifications) &&
+        unseenNotifications.length > 0 ? (
           <>
             <MdNotifications
               size={shrinkNavbar === "true" ? 35 : 40}
               style={{
-                color: "var(--newHighlight)",
+                color: "var(--newHighlightColor)",
                 alignItems: "center",
                 display: "flex",
                 transition: "ease-in-out 1s",
               }}
             />
-            <UnseenNotifcationCount>{props.unseenNotifications.length}</UnseenNotifcationCount>
+            <UnseenNotifcationCount>{unseenNotifications.length}</UnseenNotifcationCount>
           </>
         ) : (
           <MdNotificationsNone
@@ -77,7 +80,7 @@ export default () => {
           <ul>
             <li
               onClick={() => {
-                props.clearNotifications();
+                clearNotifications();
               }}
               style={{
                 cursor: "pointer",
@@ -87,10 +90,10 @@ export default () => {
                 height: "47px",
                 alignItems: "center",
               }}>
-              Clear all ({props.notifications ? props.notifications.length : 0})
+              Clear all ({notifications ? notifications.length : 0})
             </li>
-            {props.notifications &&
-              props.notifications.map((item) => {
+            {notifications &&
+              notifications.map((item) => {
                 return (
                   <Notification key={item.key} type={item.status}>
                     <Link

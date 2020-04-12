@@ -6,6 +6,7 @@ import { MdFormatIndentDecrease } from "react-icons/md";
 import { FaWindowClose } from "react-icons/fa";
 
 export const StyledNavSidebar = styled.div`
+  color: var(--navSidebarColor);
   position: fixed;
   top: 65px;
   /* right: 0; */
@@ -23,7 +24,7 @@ export const StyledNavSidebar = styled.div`
 
 export const StyledNavSidebarBackdrop = styled.div`
   background: rgba(0, 0, 0, 0.1);
-  width: calc(100vw - 308px);
+  width: calc(100vw - 400px);
   position: fixed;
   left: 0;
   height: 100vh;
@@ -104,7 +105,7 @@ export const StyledConnectYoutube = styled(Button)`
 
 export const StyledCreateFormTitle = styled.div`
   text-align: center;
-  border-bottom: 2px solid var(--greyInfo);
+  border-bottom: 2px solid rgb(163, 163, 163);
   margin: auto;
   margin-top: 40px;
 

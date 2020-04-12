@@ -228,17 +228,13 @@ export const ChannelNameDiv = styled.div`
   transition: color 250ms;
   width: max-content;
 
-  .name {
+  .channelName {
     padding: 0 5px;
-    color: var(--infoColorGrey);
+    color: var(--VideoContainerLinks);
     font-size: 1rem !important;
     display: flex;
     align-items: center;
     transition: color 250ms;
-
-    &:hover {
-      color: var(--channelHover);
-    }
   }
 
   .twitchIcon {

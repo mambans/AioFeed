@@ -7,7 +7,7 @@ import AccountContext from "./../../account/AccountContext";
 import NavigationContext from "./../NavigationContext";
 import LoadingIndicator from "./../../LoadingIndicator";
 import FeedsContext from "./../../feed/FeedsContext";
-import useInput from "./../../useInput";
+import useInput from "./../../../hooks/useInput";
 
 export default () => {
   document.title = "AioFeed | Login";

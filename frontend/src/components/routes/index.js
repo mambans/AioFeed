@@ -45,16 +45,6 @@ export default () => {
                             <Route exact path='/feed'>
                               <Feed />
                             </Route>
-                            <Route
-                              exact
-                              path={["/live/:id", "/player/:id", "/video/:id", "/vod/:id"]}
-                              children={<Player />}
-                            />
-                            <Route
-                              exact
-                              path={["/channel/:id", "/c/:id"]}
-                              children={<ChannelPage />}
-                            />
                             <Route exact path='/clip/:id' children={<PlayerClip />} />
                             <Route
                               exact
@@ -84,6 +74,15 @@ export default () => {
                             <Route exact path={["/legality", "/privacy"]}>
                               <Legality />
                             </Route>
+                            <Route
+                              exact
+                              path={["/:id", "/live/:id", "/player/:id", "/video/:id", "/vod/:id"]}
+                              children={<Player />}></Route>
+                            <Route
+                              exact
+                              path={["/:id/c", "/:id/channel", "/channel/:id", "/c/:id"]}
+                              children={<ChannelPage />}
+                            />
                             <Route>
                               <NoMatch />
                             </Route>

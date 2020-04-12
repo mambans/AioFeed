@@ -56,7 +56,7 @@ export default ({ children }) => {
         event.preventDefault(); // prevent the browser from focusing the Notification's tab
         status === "offline"
           ? window.open("https://www.twitch.tv/videos/" + stream.id, "_blank")
-          : window.open("https://aiofeed.com/live/" + stream.user_name.toLowerCase(), "_blank");
+          : window.open("https://aiofeed.com/" + stream.user_name.toLowerCase(), "_blank");
       };
 
       return notification;

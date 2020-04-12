@@ -70,16 +70,16 @@ export const StyledsidebarItem = styled.div`
   grid-template-columns: 18% 56% 26%;
   grid-template-rows: 50% 50%;
   padding: 8px 5px 8px 10px;
-  border-bottom: 1px solid #2f2f2f;
+  border-bottom: 1px solid var(--twitchSidebarItemBorderColor);
   transition: ease-in-out 1s,
     box-shadow ${({ duration }) => (duration ? 1 : 2)}s cubic-bezier(0.07, 0.81, 0.13, 0.9);
   font-size: 0.9rem;
   position: relative;
   height: 62px;
-  box-shadow: -268px 0 0 1px #aaaaaa;
+  box-shadow: -268px 0 1px 1px var(--twitchSidebarItemAnimationColor);
 
   &:hover {
-    box-shadow: 0 0 0 1px #aaaaaa;
+    box-shadow: 0 0 1px 1px var(--twitchSidebarItemAnimationColor);
   }
 
   a {
@@ -107,10 +107,11 @@ export const StyledsidebarItem = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: var(--VideoContainerLinks);
   }
 
   .sidebarUser {
-    color: white;
+    color: var(--VideoContainerLinks);
     font-weight: bold;
     overflow: hidden;
     margin-right: 8px;
@@ -118,7 +119,7 @@ export const StyledsidebarItem = styled.div`
   }
 
   .sidebarViewers {
-    color: var(--textColor);
+    color: var(--VideoContainerViewers);
     display: flex;
     justify-content: space-between;
     font-size: 1.05em;

@@ -7,27 +7,33 @@ import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useRef, useState, useEffect, useContext } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
+import { useLocation } from "react-router-dom";
 
-import { VideoTitle, ImageContainer, VideoContainer } from "./../../sharedStyledComponents";
+import {
+  VideoTitle,
+  ImageContainer,
+  VideoContainer,
+  ChannelContainer,
+  GameContainer,
+} from "./../../sharedStyledComponents";
 import { ChannelNameDiv } from "./../StyledComponents";
 import FeedsContext from "./../../feed/FeedsContext";
 import StreamHoverIframe from "../StreamHoverIframe.js";
-import styles from "./../Twitch.module.scss";
 import Util from "../../../util/Util";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 import VodsFollowUnfollowBtn from "./../vods/VodsFollowUnfollowBtn";
 
 const HOVER_DELAY = 500; // 1000
 
-function NewHighlightNoti({ data }) {
-  if (data.newlyAddedStreams.includes(data.data.user_name.toLowerCase())) {
+function NewHighlightNoti({ newlyAddedStreams, user_name }) {
+  if (newlyAddedStreams && newlyAddedStreams.includes(user_name.toLowerCase())) {
     return (
       <FiAlertCircle
         size={22}
         style={{
           position: "absolute",
           display: "flex",
-          color: "var(--newHighlight)",
+          color: "var(--newHighlightColor)",
           backgroundColor: "#00000042",
           borderRadius: "8px",
           margin: "5px",
@@ -38,7 +44,9 @@ function NewHighlightNoti({ data }) {
   return "";
 }
 
-function StreamEle(data) {
+function StreamEle(data_p) {
+  const location = useLocation();
+  const { data, newlyAddedStreams, refresh } = data_p;
   const [isHovered, setIsHovered] = useState(false);
   const { twitchVideoHoverEnable } = useContext(FeedsContext);
 
@@ -71,51 +79,52 @@ function StreamEle(data) {
   }, [twitchVideoHoverEnable]);
 
   return (
-    <VideoContainer key={data.data.id}>
-      <ImageContainer id={data.data.id} ref={ref} style={{ marginTop: "5px" }}>
-        <NewHighlightNoti data={data}></NewHighlightNoti>
+    <VideoContainer key={data.id}>
+      <ImageContainer id={data.id} ref={ref} style={{ marginTop: "5px" }}>
+        <NewHighlightNoti
+          newlyAddedStreams={newlyAddedStreams}
+          user_name={data.user_name}></NewHighlightNoti>
         {isHovered && (
           <StreamHoverIframe
-            id={data.data.id}
-            data={data.data}
+            id={data.id}
+            data={data}
             setIsHovered={setIsHovered}></StreamHoverIframe>
         )}
         <Link
-          className={styles.img}
           to={{
-            pathname: "/live/" + data.data.user_name.toLowerCase(),
+            pathname: "/" + data.user_name.toLowerCase(),
             state: {
-              p_uptime: data.data.started_at,
-              p_title: data.data.title,
-              p_game: data.data.game_name,
-              p_viewers: data.data.viewers,
+              p_uptime: data.started_at,
+              p_title: data.title,
+              p_game: data.game_name,
+              p_viewers: data.viewers,
             },
           }}>
           {/* href={
                 "https://player.twitch.tv/?volume=0.1&!muted&channel=" +
-                data.data.user_name.toLowerCase()
+                data.user_name.toLowerCase()
               }> */}
           <img
+            alt=''
             style={
-              data.newlyAddedStreams.includes(data.data.user_name)
+              newlyAddedStreams && newlyAddedStreams.includes(data.user_name)
                 ? { boxShadow: "white 0px 0px 3px 2px" }
                 : null
             }
             src={
-              // data.data.thumbnail_url.replace("{width}", 1280).replace("{height}", 720) +
-              data.data.thumbnail_url.replace("{width}", 858).replace("{height}", 480) +
+              // data.thumbnail_url.replace("{width}", 1280).replace("{height}", 720) +
+              data.thumbnail_url.replace("{width}", 858).replace("{height}", 480) +
               `#` +
               new Date().getTime()
             }
-            alt={styles.thumbnail}
           />
         </Link>
-        <Moment className={styles.duration} durationFromNow>
-          {data.data.started_at}
+        <Moment className={"duration"} durationFromNow>
+          {data.started_at}
         </Moment>
         {/* {streamType(data.data.type)} */}
       </ImageContainer>
-      {data.data.title.length > 50 ? (
+      {data.title.length > 50 ? (
         <OverlayTrigger
           key={"bottom"}
           placement={"bottom"}
@@ -126,115 +135,109 @@ function StreamEle(data) {
               style={{
                 width: "336px",
               }}>
-              {data.data.title}
+              {data.title}
             </Tooltip>
           }>
           <VideoTitle
             to={{
-              pathname: "/live/" + data.data.user_name.toLowerCase(),
+              pathname: "/" + data.user_name.toLowerCase(),
               state: {
-                p_uptime: data.data.started_at,
-                p_title: data.data.title,
-                p_game: data.data.game_name,
-                p_viewers: data.data.viewers,
+                p_uptime: data.started_at,
+                p_title: data.title,
+                p_game: data.game_name,
+                p_viewers: data.viewers,
               },
             }}>
-            {Util.truncate(data.data.title, 60)}
+            {Util.truncate(data.title, 60)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
         <VideoTitle
           to={{
-            pathname: "/live/" + data.data.user_name.toLowerCase(),
+            pathname: "/" + data.user_name.toLowerCase(),
             state: {
-              p_uptime: data.data.started_at,
-              p_title: data.data.title,
-              p_game: data.data.game_name,
-              p_viewers: data.data.viewers,
+              p_uptime: data.started_at,
+              p_title: data.title,
+              p_game: data.game_name,
+              p_viewers: data.viewers,
             },
           }}>
-          {data.data.title}
+          {data.title}
         </VideoTitle>
       )}
       <div>
-        <div className={styles.channelContainer} ref={refChannel}>
+        <ChannelContainer ref={refChannel}>
           <Link
             to={{
-              pathname: `/channel/${data.data.user_name.toLowerCase()}`,
+              pathname: `/channel/${data.user_name.toLowerCase()}`,
               state: {
-                p_id: data.data.user_id,
+                p_id: data.user_id,
               },
             }}
             style={{ gridRow: 1, paddingRight: "5px" }}>
-            <img src={data.data.profile_img_url} alt='' className={styles.profile_img} />
+            <img src={data.profile_img_url} alt='' className={"profileImg"} />
           </Link>
           <ChannelNameDiv>
             <Link
               to={{
-                pathname: `/channel/${data.data.user_name.toLowerCase()}`,
+                pathname: `/channel/${data.user_name.toLowerCase()}`,
                 state: {
-                  p_id: data.data.user_id,
+                  p_id: data.user_id,
                 },
               }}
-              className='name'>
-              {data.data.user_name}
+              className='channelName'>
+              {data.user_name}
             </Link>
             <a
               alt=''
-              href={"https://www.twitch.tv/" + data.data.user_name.toLowerCase()}
+              href={"https://www.twitch.tv/" + data.user_name.toLowerCase()}
               className='twitchIcon'>
-              <FaTwitch size={20} className />
+              <FaTwitch size={20} />
             </a>
           </ChannelNameDiv>
-          <div style={{ display: "flex", gridRow: "1", justifyContent: "right" }}>
-            <VodsFollowUnfollowBtn channel={data.data.user_name} marginright='7px;' />
-            <FollowUnfollowBtn
-              style={{
-                gridRow: "1",
-                justifySelf: "right",
-                margin: "0",
-                marginRight: "8px",
-                height: "100%",
-              }}
-              size={22}
-              channelName={data.data.user_name}
-              id={data.data.user_id}
-              alreadyFollowedStatus={true}
-              refreshStreams={data.refresh}
-            />
-          </div>
-        </div>
-        <div className={styles.gameContainer}>
+          {(location.pathname === "/feed/" || location.pathname === "/feed") && (
+            <div style={{ display: "flex", gridRow: "1", justifyContent: "right" }}>
+              <VodsFollowUnfollowBtn channel={data.user_name} marginright='7px;' />
+              <FollowUnfollowBtn
+                style={{
+                  gridRow: "1",
+                  justifySelf: "right",
+                  margin: "0",
+                  marginRight: "8px",
+                  height: "100%",
+                }}
+                size={22}
+                channelName={data.user_name}
+                id={data.user_id}
+                alreadyFollowedStatus={true}
+                refreshStreams={refresh}
+              />
+            </div>
+          )}
+        </ChannelContainer>
+
+        <GameContainer>
           <a
-            className={styles.game_img}
-            // href={"/twitch/top/" + data.data.game_name}
-            href={"https://www.twitch.tv/directory/game/" + data.data.game_name}>
+            className={"gameImg"}
+            // href={"/twitch/top/" + data.game_name}
+            href={"https://www.twitch.tv/directory/game/" + data.game_name}>
             <img
-              src={data.data.game_img.replace("{width}", 130).replace("{height}", 173)}
+              src={data.game_img.replace("{width}", 130).replace("{height}", 173)}
               alt=''
-              className={styles.game_img}
+              className={"gameImg"}
             />
           </a>
           <Link
-            className={styles.game}
-            // href={"https://www.twitch.tv/directory/game/" + data.data.game_name}
-            to={"/game/" + data.data.game_name}>
-            {data.data.game_name}
+            className={"gameName"}
+            // href={"https://www.twitch.tv/directory/game/" + data.game_name}
+            to={"/game/" + data.game_name}>
+            {data.game_name}
           </Link>
-          <p className={styles.viewers} title='Viewers'>
-            {Util.formatViewerNumbers(data.data.viewer_count)}
-            <FaRegEye
-              size={14}
-              style={{
-                color: "rgb(200, 200, 200)",
-                paddingLeft: "5px",
-                paddingTop: "3px",
-                display: "flex",
-                alignItems: "center",
-              }}
-            />
+          <p title='Viewers' className='viewers'>
+            {Util.formatViewerNumbers(data.viewer_count)}
+            <FaRegEye size={14} />
           </p>
-        </div>
+        </GameContainer>
       </div>
     </VideoContainer>
   );

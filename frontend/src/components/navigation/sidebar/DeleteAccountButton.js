@@ -7,7 +7,7 @@ import axios from "axios";
 import { DeleteAccountForm, DeleteAccountButton } from "./StyledComponent";
 import AccountContext from "./../../account/AccountContext";
 import styles from "./Sidebar.module.scss";
-import useInput from "./../../useInput";
+import useInput from "./../../../hooks/useInput";
 import NavigationContext from "../NavigationContext";
 import Alert from "./Alert";
 import LoadingIndicator from "./../../LoadingIndicator";

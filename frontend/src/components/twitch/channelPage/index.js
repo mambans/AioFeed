@@ -390,7 +390,7 @@ export default () => {
                         </div>
                         <Link
                           to={{
-                            pathname: `/live/${id}`,
+                            pathname: `/${id}`,
                             state: {
                               p_channelInfos: channelInfo,
                               p_viewers: viewers,
@@ -407,7 +407,7 @@ export default () => {
                     )}
                     <Link
                       to={{
-                        pathname: `/live/${id}`,
+                        pathname: `/${id}`,
                         state: {
                           p_channelInfos: channelInfo,
                           p_viewers: viewers,

@@ -7,7 +7,7 @@ import { StyledCreateFormTitle, StyledCreateForm, StyledAlert } from "./StyledCo
 import NavigationContext from "./../NavigationContext";
 import AccountContext from "./../../account/AccountContext";
 import LoadingIndicator from "./../../LoadingIndicator";
-import useInput from "./../../useInput";
+import useInput from "./../../../hooks/useInput";
 import ALert from "./Alert";
 
 export default () => {

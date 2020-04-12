@@ -40,6 +40,7 @@ export const LogoText = styled.div`
   justify-content: center;
 
   h1 {
+    color: var(--homeLogoH1Color);
     font-size: 8rem;
     margin: 0;
     height: 255px;
@@ -49,6 +50,7 @@ export const LogoText = styled.div`
   }
 
   p {
+    color: var(--homeLogoPColor);
     text-align: left;
     width: 410px;
     text-align: center;

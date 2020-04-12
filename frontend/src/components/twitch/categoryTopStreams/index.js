@@ -26,7 +26,7 @@ import GetTopStreams from "./GetTopStreams";
 import GetTopVideos from "./GetTopVideos";
 import LoadingBoxs from "./../LoadingBoxs";
 import SortButton from "./../channelPage/SortButton";
-import StreamEle from "./StreamElement";
+import StreamEle from "./../live/StreamElement";
 import ClipElement from "./../channelPage/ClipElement";
 import VodElement from "./../vods/VodElement";
 import Util from "./../../../util/Util";

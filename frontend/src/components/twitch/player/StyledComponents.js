@@ -88,22 +88,34 @@ export const PlayerNavbar = styled.div`
   align-self: center;
 
   a {
-    color: var(--headerTextColor);
+    color: var(--navTextColor);
     padding: 0;
     font-size: 1rem !important;
     display: flex;
     transition: color 200ms;
     align-items: center;
+    margin: 0 20px;
 
     &:hover {
       color: #ffffff;
     }
 
     svg {
+      transition: color 200ms;
       display: flex;
       align-items: center;
       padding-right: 7px;
       display: flex !important;
+    }
+  }
+
+  .linkWithIcon {
+    svg {
+      color: #720072;
+    }
+
+    &:hover svg {
+      color: #ae02ae;
     }
   }
 `;
@@ -280,6 +292,10 @@ export const InfoDisplay = styled.div`
 
   #uptime {
     grid-area: uptime;
+  }
+
+  .twitchRedirect {
+    margin-left: 10px;
   }
 `;
 

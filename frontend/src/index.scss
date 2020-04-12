@@ -22,9 +22,9 @@ body {
   object-fit: cover;
   background-position-x: center;
   background-position-y: center;
-  background-size: var(--bgSize);
-  background-repeat: var(--bgRepeat);
-  color: var(--textColor);
+  background-size: var(--backgroundImgSize);
+  background-repeat: var(--backgroundImgRepeat);
+  color: var(--BodyGeneralTextColor);
   background-image: var(--backgroundImg);
 }
 

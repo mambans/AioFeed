@@ -8,10 +8,15 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { Link } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
 
-import { VideoContainer, VideoTitle, ImageContainer } from "./../../sharedStyledComponents";
-import styles from "../Twitch.module.scss";
+import {
+  VideoContainer,
+  VideoTitle,
+  ImageContainer,
+  VodVideoInfo,
+  ChannelContainer,
+} from "./../../sharedStyledComponents";
 import Util from "../../../util/Util";
-import { VodLiveIndicator, VodType } from "./StyledComponents";
+import { VodLiveIndicator, VodType, VodPreview, VodDates } from "./StyledComponents";
 import VodsFollowUnfollowBtn from "./VodsFollowUnfollowBtn";
 
 export default ({ data, vodBtnDisabled }) => {
@@ -67,22 +72,14 @@ export default ({ data, vodBtnDisabled }) => {
     <VideoContainer>
       <ImageContainer ref={imgRef}>
         {data.thumbnail_url === "" && (
-          <VodLiveIndicator to={`/live/${data.user_name}`}>Live</VodLiveIndicator>
+          <VodLiveIndicator to={`/${data.user_name}`}>Live</VodLiveIndicator>
         )}
-        <a className={styles.img} href={data.url}>
+        <a href={data.url}>
           {!previewAvailable && (
             <Spinner className='loadingSpinner' animation='border' role='status' variant='light' />
           )}
           {isHovered && previewAvailable && previewAvailable !== "null" ? (
-            <div
-              alt=''
-              className={styles.vodPreview}
-              style={{
-                width: "336px",
-                height: "189px",
-                backgroundImage: `url(${previewAvailable})`,
-                borderRadius: "10px",
-              }}></div>
+            <VodPreview previewAvailable={previewAvailable} />
           ) : (
             <img
               src={
@@ -90,20 +87,20 @@ export default ({ data, vodBtnDisabled }) => {
                   ? data.thumbnail_url.replace("%{width}", 640).replace("%{height}", 360)
                   : "https://vod-secure.twitch.tv/_404/404_processing_320x180.png"
               }
-              alt={styles.thumbnail}
+              alt=''
             />
           )}
         </a>
 
-        <div className={styles.vodVideoInfo}>
-          <p className={styles.vodDuration} title='duration'>
+        <VodVideoInfo>
+          <p className={"vodDuration"} title='duration'>
             {data.thumbnail_url === "" ? (
               <Moment durationFromNow>{data.created_at}</Moment>
             ) : (
               Util.formatTwitchVodsDuration(data.duration)
             )}
           </p>
-          <p className={styles.view_count} title='views'>
+          <p className={"view_count"} title='views'>
             {Util.formatViewerNumbers(data.view_count)}
             <FaRegEye
               size={10}
@@ -116,7 +113,7 @@ export default ({ data, vodBtnDisabled }) => {
               }}
             />
           </p>
-        </div>
+        </VodVideoInfo>
         {data.type !== "archive" && (
           <VodType>
             <span>{data.type}</span>
@@ -162,7 +159,7 @@ export default ({ data, vodBtnDisabled }) => {
         </VideoTitle>
       )}
 
-      <div className={styles.channelContainer}>
+      <ChannelContainer>
         <Link
           to={{
             pathname: `/channel/${data.user_name.toLowerCase()}`,
@@ -171,7 +168,7 @@ export default ({ data, vodBtnDisabled }) => {
             },
           }}
           style={{ gridRow: 1, paddingRight: "5px" }}>
-          <img src={data.profile_img_url} alt='' className={styles.profile_img} />
+          <img src={data.profile_img_url} alt='' className={"profileImg"} />
         </Link>
         <div style={{ display: "flex" }}>
           <Link
@@ -181,20 +178,20 @@ export default ({ data, vodBtnDisabled }) => {
                 p_id: data.user_id,
               },
             }}
-            className={styles.channel}>
+            className={"channelName"}>
             {data.user_name}
           </Link>
           {vodBtnDisabled ? null : (
             <VodsFollowUnfollowBtn channel={data.user_name} loweropacity='0.5' />
           )}
         </div>
-        <div className={styles.vodDates}>
+        <VodDates>
           <div>
             <Moment
               interval={300000}
               durationFromNow
-              className={styles.date}
-              id={styles.timeago}
+              className={"date"}
+              id={"timeago"}
               style={{
                 gridColumn: 2,
                 justifySelf: "right",
@@ -202,8 +199,8 @@ export default ({ data, vodBtnDisabled }) => {
               {data.thumbnail_url === "" ? data.created_at : data.endDate}
             </Moment>
             <p
-              className={styles.viewers}
-              id={styles.time}
+              id={"time"}
+              className='viewers'
               style={{
                 gridColumn: 2,
                 justifySelf: "right",
@@ -215,8 +212,8 @@ export default ({ data, vodBtnDisabled }) => {
               }`}
             </p>
           </div>
-        </div>
-      </div>
+        </VodDates>
+      </ChannelContainer>
     </VideoContainer>
   );
 };

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 
@@ -51,5 +51,77 @@ export const VodChannelListLi = styled.li`
 export const LastRefreshText = styled(Moment).attrs({ fromNow: true, interval: 60000 })`
   position: relative;
   left: 10%;
-  color: var(--greyInfo);
+  color: var(--VideoContainerLinks);
+`;
+
+const AnimateVodPreview = keyframes`
+  from {
+    background-position-y: 1890px;
+  }
+  to {
+    background-position-y: 189px;
+  }
+`;
+
+export const VodPreview = styled.div`
+  animation: ${AnimateVodPreview} 5s steps(9);
+  animation-fill-mode: forwards;
+  object-fit: cover;
+  background-size: cover;
+
+  width: 336px;
+  height: 189px;
+  background-image: ${({ previewAvailable }) => `url(${previewAvailable})`};
+  border-radius: 10px;
+
+  /* animation: AnimateVodPreview 5s; */
+  /* animation-delay: 0.5s; */
+  /* image-rendering: optimizequality; */
+  /* image-rendering: crisp-edges; */
+  /* image-rendering: optimizespeed; */
+`;
+
+export const VodDates = styled.div`
+  /* grid-area: info; */
+  color: var(--VideoContainerLinks);
+  font-size: 0.95rem;
+  grid-column: 3;
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: right;
+  justify-self: right;
+
+  p {
+    margin: 0;
+  }
+
+  .date {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    grid-column: 3;
+    padding-right: 10px;
+    margin-bottom: 0;
+    align-items: center;
+
+    &::after {
+      content: "ago";
+      padding-left: 5px;
+    }
+  }
+
+  & > div:hover {
+    #timeago {
+      display: none;
+    }
+
+    #time {
+      display: flex;
+    }
+  }
+
+  #time {
+    display: none;
+  }
 `;

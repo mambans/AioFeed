@@ -3,65 +3,66 @@ $videoTitle: rgb(240, 240, 240);
 
 html,
 html[data-theme="original"] {
-  --accountContainerBackgroundColor: #05080cd6;
-  --backgroundBlue: #01010b;
   --backgroundImg: url("/images/woodCoffe-blur2.5.jpg");
-  --channelHover: #ffffff;
+  --backgroundImgSize: cover;
+  --backgroundImgRepeat: no-repeat;
+  --VideoContainerLinks: rgb(151, 151, 151);
+  --VideoContainerLinksHover: #ffffff;
+  --videoTitle: rgb(240, 240, 240);
+  --videoTitleHover: rgb(255, 255, 255);
+  --VideoContainerViewers: rgb(255, 255, 255);
   --footerLinkColor: #fff;
   --footerLinkHoverColor: #bd3d0a;
   --footerShadow: 0 0 100px 0 black;
-  --greyInfo: rgb(163, 163, 163);
-  --headerLogoTextColor: rgb(240, 240, 240);
-  --headerTextColor: rgba(255, 255, 255, 0.5);
-  --headerTextColorActive: rgba(255, 255, 255, 1);
-  --infoColorGrey: rgb(151, 151, 151);
-  --infoHover: lighten($greyInfo, 50%);
-  --modalCloseButtonColor: rgba(240, 240, 240, 0.8);
-  --modalCloseButtonColorHover: white;
+  --navLogoTextColor: rgb(240, 240, 240);
+  --navTextColor: rgba(255, 255, 255, 0.5);
+  --navTextHoverColor: rgba(255, 255, 255, 1);
+  --navTextColorActive: rgba(255, 255, 255, 1);
+
   --navigationbarBackground: #050a0fc7;
-  --newHighlight: #ffffff;
-  --popupModalBackground: #000000c7;
-  --primaryPurple: #040113;
-  --refreshButtonBackground: hsla(0, 0%, 0%, 0.205);
+  --navSidebarColor: white;
+  --sidebarBackground: #050a0fc7;
+  --twitchSidebarItemAnimationColor: #aaaaaa;
+  --twitchSidebarItemBorderColor: #585858;
+  --newHighlightColor: #ffffff;
+  --newStreamBackgroundColor: #ffffff;
+  --popupListsBackground: #000000c7;
+
+  --refreshButtonBackground: #00000026;
   --refreshButtonBorder: thin solid #2d2d2d;
   --refreshButtonColor: #acafb1;
-  --refreshButtonHoverBackground: #00000026;
+  --refreshButtonHoverBackground: #00000067;
   --refreshButtonHoverColor: #ffffff;
+  --refreshButtonHoverBorder: 1px solid #00000026;
   --refreshButtonShadow: 4px 4px 5px 0px #000c;
   --scrollbarColors: rgb(33, 53, 66) rgb(5, 8, 10);
-  --sidebarBackground: #050a0fc7;
+  --scrollbarWidth: thin !important;
+
   --subFeedHeaderBorder: 2px solid #bebebe29;
   --subFeedHeaderColor: rgb(163, 163, 163);
-  --textColor: rgb(240, 240, 240);
-  --videoTitle: rgb(240, 240, 240);
-  --videoTitleHover: rgb(255, 255, 255);
+  --BodyGeneralTextColor: rgb(240, 240, 240);
+
   --unseenNotifcationCountBackground: rgb(170, 0, 0);
-  --linkTextShadow: 0px 0px 0px black;
-  --scrollbarWidth: thin !important;
+  --VideoContainerLinkShadow: 0px 0px 0px black;
+
   --footerMargin: 100px;
-  --bgSize: cover;
-  --bgRepeat: no-repeat;
+  --themeSelectorBackgroundColor: white;
 }
 
 html[data-theme="christmas"] {
-  --accountContainerBackgroundColor: #000000c7;
-  --backgroundBlue: #01010b;
   --backgroundImg: url("/images/wood-christmas5-blur.jpg");
-  --channelHover: rgb(255, 255, 255);
+  --VideoContainerLinks: rgb(151, 151, 151);
+  --VideoContainerLinksHover: rgb(255, 255, 255);
+  --VideoContainerViewers: rgb(255, 255, 255);
   --footerLinkColor: rgb(224, 224, 224);
   --footerLinkHoverColor: white;
   --footerShadow: 0 0 20px 0 #141414;
   --greyInfo: rgb(255, 255, 255);
-  --headerLogoTextColor: rgb(240, 240, 240);
-  --headerTextColor: rgba(255, 255, 255, 0.5);
-  --headerTextColorActive: rgba(255, 255, 255, 1);
-  --infoColorGrey: rgb(151, 151, 151);
-  --infoHover: lighten($greyInfo, 50%);
-  --modalCloseButtonColor: rgba(240, 240, 240, 0.8);
-  --modalCloseButtonColorHover: white;
+  --navLogoTextColor: rgb(240, 240, 240);
+  --navTextColor: rgba(255, 255, 255, 0.5);
+  --navTextColorActive: rgba(255, 255, 255, 1);
   --navigationbarBackground: rgba(0, 0, 0, 0.75);
-  --popupModalBackground: #000000e3;
-  --primaryPurple: #040113;
+  --popupListsBackground: #000000e3;
   --refreshButtonBackground: #0000007a;
   --refreshButtonBorder: none;
   --refreshButtonColor: #a8a8a8;
@@ -72,11 +73,11 @@ html[data-theme="christmas"] {
   --sidebarBackground: rgba(5, 5, 5, 0.9);
   --subFeedHeaderBorder: 2px solid #80808029;
   --subFeedHeaderColor: #ffffff;
-  --textColor: rgb(240, 240, 240);
+  --BodyGeneralTextColor: rgb(240, 240, 240);
   --videoTitle: rgb(240, 240, 240);
   --videoTitleHover: rgb(240, 240, 240);
-  --newHighlight: #ffffff;
-  --linkTextShadow: 0px 0px 3px black;
+  --newHighlightColor: #ffffff;
+  --VideoContainerLinkShadow: 0px 0px 3px black;
 }
 
 html[data-theme="new year's eve"] {
@@ -91,7 +92,6 @@ html[data-theme="clean"] {
   --navigationbarBackground: #1f2326;
   --sidebarBackground: #1c1f22;
   --scrollbarColors: #1c1f22 rgb(5, 8, 10);
-  --accountContainerBackgroundColor: #131619ed;
 }
 
 html[data-theme="clean dark"] {
@@ -99,7 +99,6 @@ html[data-theme="clean dark"] {
   --navigationbarBackground: #121415a8;
   --sidebarBackground: #121415a8;
   --scrollbarColors: #1c1f22 rgb(5, 8, 10);
-  --accountContainerBackgroundColor: #121415f2;
 }
 
 html[data-theme="simple dark"] {
@@ -109,6 +108,57 @@ html[data-theme="simple dark"] {
 
   --navigationbarBackground: #1a1a1ae3;
   --sidebarBackground: #1a1a1ae3;
-  --accountContainerBackgroundColor: #1a1a1ae3;
-  --headerTextColor: rgba(255, 255, 255 0.7);
+  --navTextColor: rgba(255, 255, 255 0.7);
+}
+
+html[data-theme="light"] {
+  --backgroundImg: none;
+  --backgroundImgSize: unset;
+  --backgroundImgRepeat: unset;
+  --backgroundColor: #f1f1f1;
+
+  --VideoContainerLinks: rgb(32, 32, 32);
+  --VideoContainerLinksHover: #464646;
+
+  --videoTitle: rgb(0, 0, 0);
+  --videoTitleHover: rgb(24, 24, 24);
+
+  --VideoContainerViewers: rgb(0, 0, 0);
+  --footerLinkColor: rgb(0, 0, 0);
+  --footerLinkHoverColor: #bd3d0a;
+  --footerShadow: 0 0 100px 0 black;
+  --navLogoTextColor: rgb(10, 10, 10);
+  --navTextColor: rgb(10, 10, 10);
+  --navTextHoverColor: rgb(75, 75, 75);
+  --navTextColorActive: rgb(75, 75, 75);
+  --homeLogoH1Color: rgb(10, 10, 10);
+  --homeLogoPColor: rgb(10, 10, 10);
+
+  --navigationbarBackground: #ffffffe1;
+  --navSidebarColor: black;
+  --sidebarBackground: #ffffffe1;
+  --newHighlightColor: #ffffff;
+  --newStreamBackgroundColor: #ffffff;
+  --popupListsBackground: #;
+
+  --refreshButtonBackground: rgb(230, 230, 230);
+  --refreshButtonBorder: thin solid #eeeeee;
+  --refreshButtonColor: #2a2a2a;
+  --refreshButtonHoverBackground: rgb(255, 255, 255);
+  --refreshButtonHoverColor: #1d1d1d;
+  --refreshButtonHoverBorder: 1px solid rgb(255, 255, 255);
+  --refreshButtonShadow: 4px 4px 5px 0px #000c;
+  --scrollbarColors: rgb(33, 53, 66) rgb(5, 8, 10);
+  --scrollbarWidth: thin !important;
+
+  --subFeedHeaderBorder: 2px solid #29292988;
+  --subFeedHeaderColor: rgb(31, 31, 31);
+  --BodyGeneralTextColor: rgb(240, 240, 240);
+
+  --unseenNotifcationCountBackground: rgb(170, 0, 0);
+  --VideoContainerLinkShadow: 0px 0px 0px black;
+
+  --footerMargin: 100px;
+  --twitchSidebarBorderAnimationColor: black;
+  --themeSelectorBackgroundColor: #d1d0d0;
 }

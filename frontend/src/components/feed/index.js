@@ -172,7 +172,7 @@ export default () => {
 
           {enableTwitchVods && (
             <Container>
-              <TwitchVods />
+              <TwitchVods enableTwitter={enableTwitter} />
             </Container>
           )}
         </VodsProvider>

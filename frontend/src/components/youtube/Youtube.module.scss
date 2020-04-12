@@ -1,6 +1,6 @@
 .date {
   grid-area: info;
-  color: var(--greyInfo);
+  color: var(--VideoContainerLinks);
 }
 
 .channel {
@@ -9,11 +9,7 @@
   padding-right: 15px;
 
   a {
-    color: var(--greyInfo);
-
-    &:hover {
-      color: var(--infoHover);
-    }
+    color: var(--VideoContainerLinks);
   }
 }
 
@@ -51,7 +47,7 @@
 .lastRefresh {
   position: relative;
   left: 10%;
-  color: var(--greyInfo);
+  color: var(--VideoContainerLinks);
 }
 
 .requestError {

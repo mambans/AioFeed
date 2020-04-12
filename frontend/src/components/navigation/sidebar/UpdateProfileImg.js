@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useContext } from "react";
 
 import AccountContext from "./../../account/AccountContext";
-import useInput from "./../../useInput";
+import useInput from "./../../../hooks/useInput";
 import { ProfileImgInput } from "./StyledComponent";
 
 export default ({ close }) => {

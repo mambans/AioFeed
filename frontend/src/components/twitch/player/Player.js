@@ -6,7 +6,7 @@ import { FaPause } from "react-icons/fa";
 import { MdVerticalAlignBottom } from "react-icons/md";
 import { MdFullscreen } from "react-icons/md";
 import { MdFullscreenExit } from "react-icons/md";
-import { MdAccountCircle } from "react-icons/md";
+import { FaTwitch } from "react-icons/fa";
 
 import axios from "axios";
 import Moment from "react-moment";
@@ -27,7 +27,6 @@ import {
   ButtonShowStats,
   InfoDisplay,
   PlaybackStats,
-  PlayerNavbar,
   QualitiesList,
   StyledChat,
   ToggleSwitchChatSide,
@@ -37,6 +36,8 @@ import {
   OpenChatButton,
   CreateClipButton,
 } from "./StyledComponents";
+
+import PlayerNavbar from "./PlayerNavbar";
 
 export default () => {
   const { p_uptime, p_viewers, p_title, p_game, p_channelInfos, p_channel } =
@@ -72,7 +73,7 @@ export default () => {
   const OpenedDate = useRef(new Date().getTime());
   const fadeTimer = useRef();
 
-  if (type === "live" || type === "player") {
+  if (type === id || type === "live" || type === "player") {
     document.title = `AF | ${id} Live`;
   } else if (type === "video" || type === "vod") {
     document.title = `AF | ${nameFromHash} - ${p_title || id}`;
@@ -133,7 +134,7 @@ export default () => {
       height: "100%",
       theme: "dark",
       layout: "video",
-      channel: id && (type === "live" || type === "player") ? id : null,
+      channel: id && (type === id || type === "live" || type === "player") ? id : null,
       video: id && (type === "video" || type === "vod") ? id : null,
       muted: false,
     });
@@ -200,13 +201,13 @@ export default () => {
     setUptime(null);
     clearInterval(uptimeTimer.current);
 
-    if (!channelinfoTimer.current && (type === "live" || type === "player")) {
+    if (!channelinfoTimer.current && (type === id || type === "live" || type === "player")) {
       fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
       channelinfoTimer.current = setInterval(() => {
         fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
       }, 1000 * 60 * 15);
     }
-  }, [type]);
+  }, [type, id]);
 
   useEffect(() => {
     if (twitchPlayer.current) {
@@ -297,25 +298,20 @@ export default () => {
       });
   };
 
-  if (type === "live" || type === "player") {
+  if (type === id || type === "live" || type === "player") {
     return (
       <>
         <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
-          <PlayerNavbar>
-            <Link
-              to={{
-                pathname: `/channel/${id}`,
-                state: {
-                  p_channelInfos: channelInfo,
-                  p_viewers: viewers,
-                  p_uptime: uptime,
-                  p_id: twitchPlayer.current ? twitchPlayer.current.getChannelId() : null,
-                },
-              }}>
-              <MdAccountCircle size={20} />
-              {id}'s channel page
-            </Link>
-          </PlayerNavbar>
+          <PlayerNavbar
+            id={id}
+            type={"live"}
+            channelInfo={channelInfo}
+            viewers={viewers}
+            uptime={uptime}
+            twitchPlayer={twitchPlayer}
+            setVisible={setVisible}
+            visible={visible}
+          />
         </CSSTransition>
 
         <VideoAndChatContainer
@@ -342,8 +338,12 @@ export default () => {
                   <>
                     {channelInfo && <img src={channelInfo.logo} alt='' />}
                     <div id='name'>
-                      <a href={channelInfo ? channelInfo.url : `https://www.twitch.tv/${id}`}>
-                        {channelInfo ? channelInfo.display_name : id}
+                      <a href={`/channel/${id}`}>{channelInfo ? channelInfo.display_name : id}</a>
+                      <a
+                        className='twitchRedirect'
+                        alt=''
+                        href={channelInfo ? channelInfo.url : `https://www.twitch.tv/${id}`}>
+                        <FaTwitch size={30} color='purple' />
                       </a>
                       {channelInfo && (
                         <FollowUnfollowBtn
@@ -552,16 +552,13 @@ export default () => {
     return (
       <>
         <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
-          <PlayerNavbar>
-            {nameFromHash && (
-              <Link to={`/channel/${nameFromHash}`}>
-                <div id='icon'>
-                  <MdAccountCircle size={20} />
-                </div>
-                {nameFromHash}'s channel page
-              </Link>
-            )}
-          </PlayerNavbar>
+          <PlayerNavbar
+            nameFromHash={nameFromHash}
+            type={"vod"}
+            twitchPlayer={twitchPlayer}
+            setVisible={setVisible}
+            visible={visible}
+          />
         </CSSTransition>
 
         <VideoAndChatContainer

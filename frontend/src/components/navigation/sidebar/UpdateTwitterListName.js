@@ -3,7 +3,7 @@ import { Form } from "react-bootstrap";
 import axios from "axios";
 import styled from "styled-components";
 
-import useInput from "./../../useInput";
+import useInput from "./../../../hooks/useInput";
 import Util from "../../../util/Util";
 import FeedsContext from "../../feed/FeedsContext";
 import AccountContext from "../../account/AccountContext";

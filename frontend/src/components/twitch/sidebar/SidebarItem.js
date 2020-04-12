@@ -6,14 +6,23 @@ import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
+import styled from "styled-components";
 
 import { SidebarTitlePopup, StyledsidebarItem } from "./StyledComponents";
-import styles from "./../Twitch.module.scss";
 import Util from "../../../util/Util";
+
+const StyledNewHighlight = styled.div`
+  position: absolute;
+  left: 0;
+  height: 45.6px;
+  width: 4px;
+  border-radius: 2px;
+  background: var(--newStreamBackgroundColor);
+`;
 
 const NewHighlight = ({ newlyAdded, stream }) => {
   if (newlyAdded.includes(stream.user_name)) {
-    return <div className={styles.newHighlight}></div>;
+    return <StyledNewHighlight />;
   } else {
     return "";
   }
@@ -52,7 +61,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
   return (
     <Link
       ref={ref}
-      to={"/live/" + stream.user_name.toLowerCase()}
+      to={"/" + stream.user_name.toLowerCase()}
       style={{ display: "flex", flexDirection: "column" }}>
       {/* <div className={styles.sidebarItems} key={data.stream.id}> */}
       <StyledsidebarItem key={stream.id} duration={shows}>

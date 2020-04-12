@@ -1,25 +1,26 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
 import uniqid from "uniqid";
-import Util from "../../util/Util";
+import useSyncedLocalState from "./../../hooks/useSyncedLocalState";
 
 const NotificationsContext = React.createContext();
 
 export const NotificationsProvider = ({ children }) => {
-  const [notifications, setNotifications] = useState(Util.getLocalstorage("notifications") || []);
-
-  const [unseenNotifications, setUnseenNotifications] = useState(
-    Util.getLocalstorage("Unseen-notifications") || []
+  const [notifications, setNotifications] = useSyncedLocalState("notifications", []);
+  const [unseenNotifications, setUnseenNotifications] = useSyncedLocalState(
+    "Unseen-notifications",
+    []
   );
 
   const addNotification = useCallback(
     async (noti, status) => {
+      console.log("addNotification");
       await new Promise((resolve, reject) => {
         try {
-          const newNotifications = Util.getLocalstorage("Unseen-notifications") || [];
+          const newNotifications = [...unseenNotifications];
 
           newNotifications.push(noti);
 
-          const existingNotifications = notifications || [];
+          const existingNotifications = [...notifications];
           noti.date = new Date();
           noti.key = uniqid(noti.id, new Date().getTime()) + status;
           noti.status = status;
@@ -37,25 +38,19 @@ export const NotificationsProvider = ({ children }) => {
       }).then((res) => {
         setUnseenNotifications(res.newNotifications);
         setNotifications(res.notifications);
-        localStorage.setItem("Unseen-notifications", JSON.stringify(res.newNotifications));
-        localStorage.setItem("notifications", JSON.stringify(res.notifications));
       });
     },
-    [notifications]
+    [notifications, setNotifications, setUnseenNotifications, unseenNotifications]
   );
 
   const clearUnseenNotifications = useCallback(() => {
-    localStorage.setItem("Unseen-notifications", JSON.stringify(null));
-    setUnseenNotifications(null);
-  }, []);
+    setUnseenNotifications([]);
+  }, [setUnseenNotifications]);
 
   const clearNotifications = useCallback(() => {
-    localStorage.setItem("Unseen-notifications", JSON.stringify([]));
-    localStorage.setItem("notifications", JSON.stringify([]));
-
     setNotifications([]);
     setUnseenNotifications([]);
-  }, []);
+  }, [setNotifications, setUnseenNotifications]);
 
   return (
     <NotificationsContext.Provider
