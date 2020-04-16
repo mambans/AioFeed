@@ -3,10 +3,10 @@ $videoTitle: rgb(240, 240, 240);
 
 html,
 html[data-theme="original"] {
-  --backgroundImg: url("/images/woodCoffe-blur2.5.jpg");
+  --backgroundImg: url("/images/woodCoffe-blur4.0.jpg");
   --backgroundImgSize: cover;
   --backgroundImgRepeat: no-repeat;
-  --VideoContainerLinks: rgb(151, 151, 151);
+  --VideoContainerLinks: rgb(175, 175, 175);
   --VideoContainerLinksHover: #ffffff;
   --videoTitle: rgb(240, 240, 240);
   --videoTitleHover: rgb(255, 255, 255);
@@ -23,7 +23,7 @@ html[data-theme="original"] {
   --navSidebarColor: white;
   --sidebarBackground: #050a0fc7;
   --twitchSidebarItemAnimationColor: #aaaaaa;
-  --twitchSidebarItemBorderColor: #585858;
+  --twitchSidebarItemBorderColor: #3d3d3d;
   --newHighlightColor: #ffffff;
   --newStreamBackgroundColor: #ffffff;
   --popupListsBackground: #000000c7;
@@ -77,7 +77,7 @@ html[data-theme="christmas"] {
   --videoTitle: rgb(240, 240, 240);
   --videoTitleHover: rgb(240, 240, 240);
   --newHighlightColor: #ffffff;
-  --VideoContainerLinkShadow: 0px 0px 3px black;
+  --VideoContainerLinkShadow: 0px 0px 0px black;
 }
 
 html[data-theme="new year's eve"] {

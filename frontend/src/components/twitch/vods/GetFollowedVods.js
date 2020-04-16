@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import getFollowedChannels from "./../GetFollowedChannels";
+import GetFollowedChannels from "./../GetFollowedChannels";
 import Util from "../../../util/Util";
 import reauthenticate from "./../reauthenticate";
 import AddVideoExtraData from "../AddVideoExtraData";
@@ -117,18 +117,10 @@ const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRe
 
   const AllVods = PromiseAllVods.flat(1);
 
-  console.log("fetchVodsFromMonitoredChannels -> AllVods", AllVods);
   return AllVods;
 };
 
-async function getFollowedVods(
-  forceRun,
-  AuthKey,
-  Username,
-  twitchUserId,
-  setRefreshToken,
-  setTwitchToken
-) {
+export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchToken) => {
   const thresholdDate = 1; // Number of months
   const vodExpire = 3; // Number of days
 
@@ -137,13 +129,23 @@ async function getFollowedVods(
     OnlyVodsAfterDate.setDate(new Date().getDate() - thresholdDate);
     if (
       !Util.getLocalstorage(`Vods`) ||
-      Util.getLocalstorage("Vods").expire <= new Date() ||
+      Util.getLocalstorage(`Vods`).expire <= new Date() ||
       forceRun
     ) {
       try {
-        const followedChannels = await getFollowedChannels(twitchUserId);
+        const followedChannels = await GetFollowedChannels();
 
         const FollowedChannelVods = await FetchMonitoredVodChannelsList(Username, AuthKey);
+        if (FollowedChannelVods.length === 0) {
+          return {
+            error: {
+              data: {
+                title: "No monitored vod channels.",
+                message: "You have not added any Twitch channels to fetch vods from yet.",
+              },
+            },
+          };
+        }
 
         const vodChannels = await monitoredChannelNameToId(followedChannels, FollowedChannelVods);
 
@@ -170,7 +172,6 @@ async function getFollowedVods(
           vodError: vodChannels.error,
         };
       } catch (error) {
-        console.error(error);
         return {
           data: Util.getLocalstorage("Vods"),
           error: error,
@@ -185,6 +186,4 @@ async function getFollowedVods(
       error: error,
     };
   }
-}
-
-export default getFollowedVods;
+};

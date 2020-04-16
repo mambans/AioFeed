@@ -1,5 +1,5 @@
 import Moment from "react-moment";
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useContext } from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
@@ -8,10 +8,12 @@ import styles from "./Youtube.module.scss";
 import Util from "../../util/Util";
 
 import { VideoContainer, VideoTitle, ImageContainer } from "./../sharedStyledComponents";
+import FeedsContext from "../feed/FeedsContext";
 
 const HOVER_DELAY = 1000;
 
-function YoutubeVideoElement(data) {
+export default (data) => {
+  const { youtubeVideoHoverEnable } = useContext(FeedsContext);
   const streamHoverTimer = useRef();
   const [isHovered, setIsHovered] = useState(false);
   const ref = useRef();
@@ -37,7 +39,7 @@ function YoutubeVideoElement(data) {
   }, [data.video.contentDetails.upload.videoId]);
 
   useEffect(() => {
-    if (ref.current && localStorage.getItem(`YoutubeVideoHoverEnabled`) === "true") {
+    if (ref.current && youtubeVideoHoverEnable) {
       const refEle = ref.current;
       ref.current.addEventListener("mouseenter", handleMouseOver);
       ref.current.addEventListener("mouseleave", handleMouseOut);
@@ -47,19 +49,16 @@ function YoutubeVideoElement(data) {
         refEle.removeEventListener("mouseleave", handleMouseOut);
       };
     }
-  }, [handleMouseOut]);
+  }, [handleMouseOut, youtubeVideoHoverEnable]);
 
   return (
-    <VideoContainer
-      key={data.video.contentDetails.upload.videoId}
-      onTransitionEnd={() => {
-        if (data.transition !== "videoFadeSlide") data.setTransition();
-      }}>
+    <VideoContainer key={data.video.contentDetails.upload.videoId}>
       <ImageContainer id={data.video.contentDetails.upload.videoId} ref={ref}>
         {isHovered && (
           <VideoHoverIframe
             id={data.video.contentDetails.upload.videoId}
             data={data.video}
+            isHovered={isHovered}
             setIsHovered={setIsHovered}></VideoHoverIframe>
         )}
         <a
@@ -105,6 +104,4 @@ function YoutubeVideoElement(data) {
       </p>
     </VideoContainer>
   );
-}
-
-export default YoutubeVideoElement;
+};

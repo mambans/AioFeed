@@ -3,39 +3,23 @@ import React from "react";
 
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 import VodsFollowUnfollowBtn from "../vods/VodsFollowUnfollowBtn";
+import { ChannelListLi } from "./StyledComponents";
 
-const ChannelListElement = ({ data }) => {
+export default ({ data }) => {
   return (
-    <li key={data.user_id}>
+    <ChannelListLi key={data.user_id}>
       <Link
         to={{
-          pathname: "/channel/" + data.user_name.toLowerCase(),
+          pathname: `/${data.user_name.toLowerCase()}/channel/`,
           state: {
             p_id: data.user_id,
             p_logo: data.profile_img_url,
           },
-        }}
-        style={{ padding: "0", fontSize: "unset" }}>
+        }}>
         {data.profile_img_url ? (
-          <img
-            src={data.profile_img_url}
-            style={{
-              width: "30px",
-              height: "30px",
-              marginRight: "10px",
-              borderRadius: "3px",
-            }}
-            alt=''></img>
+          <img src={data.profile_img_url} alt=''></img>
         ) : (
-          <img
-            src={`${process.env.PUBLIC_URL}/images/placeholder.jpg`}
-            style={{
-              width: "30px",
-              height: "30px",
-              marginRight: "10px",
-              borderRadius: "3px",
-            }}
-            alt=''></img>
+          <img src={`${process.env.PUBLIC_URL}/images/placeholder.jpg`} alt=''></img>
         )}
         {data.user_name}
       </Link>
@@ -50,8 +34,6 @@ const ChannelListElement = ({ data }) => {
           alreadyFollowedStatus={true}
         />
       </div>
-    </li>
+    </ChannelListLi>
   );
 };
-
-export default ChannelListElement;

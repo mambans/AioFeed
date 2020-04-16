@@ -1,7 +1,7 @@
 import axios from "axios";
 import { reverse, sortBy } from "lodash";
 
-import getVideoInfo from "./GetVideoInfo";
+import GetVideoInfo from "./GetVideoInfo";
 import Util from "./../../util/Util";
 
 const filterVideos = async (response) => {
@@ -17,26 +17,39 @@ const filterVideos = async (response) => {
   }
 };
 
-const fetchSubscriptionData = async (videosCACHE, channel) => {
+const fetchSubscriptionVideos = async (videosCACHE, channel) => {
   const currentDate = new Date();
   const DATE_THRESHOLD = new Date(currentDate.setDate(currentDate.getDate() - 5));
 
   let error = null;
   let res = null;
 
-  if (videosCACHE[channel.snippet.resourceId.channelId]) {
+  const CheckForCachedChannel = () => {
+    // console.log("CheckForCachedChannel -> channel", channel);
+    try {
+      return videosCACHE.find((chan) => chan.channel.snippet.resourceId.channelId);
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const cachedChannelObj = CheckForCachedChannel();
+
+  // console.log("fetchSubscriptionVideos -> cachedChannelObj", cachedChannelObj);
+
+  if (cachedChannelObj) {
     console.log(":::video cache exists!:::");
     res = await axios
       .get(`https://www.googleapis.com/youtube/v3/activities?`, {
         params: {
           part: "snippet,contentDetails",
           channelId: channel.snippet.resourceId.channelId,
-          maxResults: 5,
+          maxResults: 7,
           publishedAfter: DATE_THRESHOLD.toISOString(),
           key: process.env.REACT_APP_YOUTUBE_API_KEY,
         },
         headers: {
-          "If-None-Match": videosCACHE[channel.snippet.resourceId.channelId].etag,
+          "If-None-Match": cachedChannelObj.channel.etag,
           Authorization: `Bearer ${Util.getCookie("Youtube-access_token")}`,
           Accept: "application/json",
         },
@@ -46,7 +59,7 @@ const fetchSubscriptionData = async (videosCACHE, channel) => {
       })
       .catch(function (e) {
         error = e;
-        return videosCACHE[channel.snippet.resourceId.channelId];
+        return cachedChannelObj;
       });
   } else {
     console.log("---Video request sent!---");
@@ -55,7 +68,7 @@ const fetchSubscriptionData = async (videosCACHE, channel) => {
         params: {
           part: "snippet,contentDetails",
           channelId: channel.snippet.resourceId.channelId,
-          maxResults: 5,
+          maxResults: 7,
           publishedAfter: DATE_THRESHOLD.toISOString(),
           key: process.env.REACT_APP_YOUTUBE_API_KEY,
         },
@@ -75,7 +88,7 @@ const fetchSubscriptionData = async (videosCACHE, channel) => {
   return { res, error };
 };
 
-async function getSubscriptionVideos(followedChannels) {
+export default async (followedChannels) => {
   const THRESHOLD_DATE = 5;
   // const videosUnordered = [];
   const DATE_THRESHOLD = new Date();
@@ -84,49 +97,37 @@ async function getSubscriptionVideos(followedChannels) {
   let error = null;
 
   try {
-    const videosCACHE =
-      localStorage.getItem("YoutubeVideos") !== "undefined" &&
-      localStorage.getItem("YoutubeVideos") !== undefined &&
-      localStorage.getItem("YoutubeVideos") !== "null" &&
-      localStorage.getItem("YoutubeVideos") !== null
-        ? JSON.parse(localStorage.getItem("YoutubeVideos"))
-        : {};
+    const videosCACHE = Util.getLocalstorage("YoutubeChannelsObj") || [];
 
-    const videos = {};
-
-    await Promise.all(
+    const channelWithVideos = await Promise.all(
       followedChannels.map(async (channel) => {
-        const response = await fetchSubscriptionData(videosCACHE, channel);
+        return await fetchSubscriptionVideos(videosCACHE, channel).then(async (result) => {
+          if (result.error) {
+            error = result.error;
+          }
 
-        response.res.items = await filterVideos(response.res);
-        error = response.error;
+          const items = await filterVideos(result.res);
 
-        videos[channel.snippet.resourceId.channelId] = response.res;
-      })
-    );
-
-    const videosWithDetails = await getVideoInfo(videos);
-
-    localStorage.setItem("YoutubeVideos", JSON.stringify(videosWithDetails));
-
-    let videosUnorderedNew = [];
-
-    await Promise.all(
-      Object.values(videos).map(async (channel, index) => {
-        await channel.items.map((video) => {
-          videosUnorderedNew.push(video);
-          return video;
+          return { channel: channel, items: items };
         });
       })
     );
 
-    const allVideos = reverse(sortBy(videosUnorderedNew, (video) => video.snippet.publishedAt));
+    localStorage.setItem("YoutubeChannelsObj", JSON.stringify(channelWithVideos));
 
-    return { data: allVideos, error: error };
+    const videoOnlyArray = await Promise.all(
+      channelWithVideos.map((channel) => (Array.isArray(channel.items) ? channel.items : null))
+    );
+
+    const flattedVideosArray = videoOnlyArray.flat(1).filter((items) => items);
+
+    const videosWithDetails = await GetVideoInfo(flattedVideosArray);
+
+    const sortedVideos = reverse(sortBy(videosWithDetails, (video) => video.snippet.publishedAt));
+
+    return { data: sortedVideos, error: error };
   } catch (error) {
     console.error(error);
     return error;
   }
-}
-
-export default getSubscriptionVideos;
+};

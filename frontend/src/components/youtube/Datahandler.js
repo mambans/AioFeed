@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState, useCallback, useContext } from "rea
 
 import ErrorHandler from "../error";
 import getFollowedChannels from "./GetFollowedChannels";
-import getSubscriptionVideos from "./GetSubscriptionVideos";
+import GetSubscriptionVideos from "./GetSubscriptionVideos";
 import AccountContext from "../account/AccountContext";
 
-function DataHandler({ children }) {
+export default ({ children }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [initiated, setInitiated] = useState(false);
   const [error, setError] = useState(null);
@@ -15,14 +15,14 @@ function DataHandler({ children }) {
   const oldVideos = useRef(null);
   const { youtubeToken } = useContext(AccountContext);
 
-  const refresh = useCallback(() => {
+  const refresh = useCallback(async () => {
     async function fetchData() {
       try {
         setIsLoaded(false);
         followedChannels.current = await getFollowedChannels();
 
-        const SubscriptionData = await getSubscriptionVideos(followedChannels.current);
-        oldVideos.current = videos.current;
+        const SubscriptionData = await GetSubscriptionVideos(followedChannels.current);
+        oldVideos.current = videos.current || SubscriptionData.data;
         videos.current = SubscriptionData.data;
 
         if (SubscriptionData.error) setRequestError(SubscriptionData.error.response.data.error);
@@ -49,22 +49,17 @@ function DataHandler({ children }) {
     (async () => {
       try {
         setInitiated(false);
-        followedChannels.current = await getFollowedChannels();
 
-        const SubscriptionData = await getSubscriptionVideos(followedChannels.current);
-        videos.current = SubscriptionData.data;
-
-        if (SubscriptionData.error) setRequestError(SubscriptionData.error.response.data.error);
+        refresh();
 
         setInitiated(new Date());
-        setIsLoaded(new Date());
       } catch (error) {
         setInitiated(new Date());
-        setIsLoaded(new Date());
         setError(error);
       }
     })();
-  }, []);
+  }, [refresh]);
+
   if (!youtubeToken) {
     return (
       <ErrorHandler
@@ -84,6 +79,4 @@ function DataHandler({ children }) {
       requestError,
     });
   }
-}
-
-export default DataHandler;
+};

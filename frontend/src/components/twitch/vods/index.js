@@ -1,6 +1,7 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import React, { useState, useEffect, useRef, useCallback, useMemo, useContext } from "react";
-import { throttle, debounce } from "lodash";
+import { throttle } from "lodash";
+import { Button } from "react-bootstrap";
 
 import ErrorHandler from "../../error";
 import getFollowedVods from "./GetFollowedVods";
@@ -11,8 +12,9 @@ import { StyledLoadmore } from "./../StyledComponents";
 import AccountContext from "./../../account/AccountContext";
 import VodsContext from "./VodsContext";
 import LoadingBoxs from "./../LoadingBoxs";
+import FeedsContext from "../../feed/FeedsContext";
 
-export default ({ enableTwitter }) => {
+export default ({ enableTwitter, centerContainerRef }) => {
   const { vods, setVods } = useContext(VodsContext);
   const {
     authKey,
@@ -22,6 +24,7 @@ export default ({ enableTwitter }) => {
     setRefreshToken,
     twitchToken,
   } = useContext(AccountContext);
+  const { setEnableTwitchVods } = useContext(FeedsContext);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [vodError, setVodError] = useState(null);
@@ -29,42 +32,45 @@ export default ({ enableTwitter }) => {
   const resetVodAmountsTimer = useRef();
   const VodHeaderRef = useRef();
 
+  // const [numberOfVideos, setNumberOfVideos] = useState(
+  //   centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 2) : 10
+  // );
+
   const [numberOfVideos, setNumberOfVideos] = useState(
-    (enableTwitter
-      ? Math.floor((window.innerWidth - (275 + window.innerWidth * 0.2 + 25)) / 350)
-      : Math.floor((window.innerWidth - (275 + 150)) / 350)) *
-      Math.floor((document.documentElement.clientHeight - (65 + 484)) / 341)
+    centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 2) : 14
   );
   const [vodAmounts, setVodAmounts] = useState(numberOfVideos);
 
-  const recalcWidth = useMemo(
-    () =>
-      debounce(
-        () => {
-          setNumberOfVideos(
-            (enableTwitter
-              ? Math.floor((window.innerWidth - (275 + window.innerWidth * 0.2 + 25)) / 350)
-              : Math.floor((window.innerWidth - (275 + 150)) / 350)) *
-              Math.floor((document.documentElement.clientHeight - (65 + 484)) / 341)
-          );
-          setVodAmounts(
-            Math.floor((document.documentElement.clientWidth - 430) / 350) *
-              Math.floor((document.documentElement.clientHeight - (65 + 484)) / 341)
-          );
-        },
-        100,
-        { leading: true, trailing: false }
-      ),
-    [enableTwitter]
-  );
-
   useEffect(() => {
-    window.addEventListener("resize", recalcWidth);
+    if (centerContainerRef) {
+      setNumberOfVideos(Math.floor((centerContainerRef.clientWidth / 350) * 2));
+    }
+  }, [centerContainerRef]);
 
-    return () => {
-      window.removeEventListener("resize", recalcWidth);
-    };
-  }, [recalcWidth]);
+  // const recalcWidth = useMemo(
+  //   () =>
+  //     debounce(
+  //       () => {
+  //         setNumberOfVideos(
+  //           centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 2) : 10
+  //         );
+  //         setVodAmounts(
+  //           centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 2) : 10
+  //         );
+  //       },
+  //       100,
+  //       { leading: true, trailing: false }
+  //     ),
+  //   [centerContainerRef]
+  // );
+
+  // useEffect(() => {
+  //   window.addEventListener("resize", recalcWidth);
+
+  //   return () => {
+  //     window.removeEventListener("resize", recalcWidth);
+  //   };
+  // }, [recalcWidth]);
 
   //eslint-disable-next-line
   const observer = useMemo(
@@ -117,14 +123,7 @@ export default ({ enableTwitter }) => {
   const refresh = useCallback(
     async (forceRefresh) => {
       setRefreshing(true);
-      await getFollowedVods(
-        forceRefresh,
-        authKey,
-        username,
-        parseInt(twitchUserId),
-        setRefreshToken,
-        setTwitchToken
-      )
+      await getFollowedVods(forceRefresh, authKey, username, setRefreshToken, setTwitchToken)
         .then((data) => {
           if (data.error) {
             setError(data.error);
@@ -132,14 +131,16 @@ export default ({ enableTwitter }) => {
             setVodError(data.vodError);
           }
           setVods(data.data);
+
           setRefreshing(false);
         })
         .catch((data) => {
           setError(data.error);
+
           setVods(data.data);
         });
     },
-    [authKey, username, twitchUserId, setTwitchToken, setRefreshToken, setVods]
+    [authKey, username, setTwitchToken, setRefreshToken, setVods]
   );
 
   const windowFocusHandler = useCallback(async () => {
@@ -170,14 +171,7 @@ export default ({ enableTwitter }) => {
 
     (async () => {
       setRefreshing(true);
-      await getFollowedVods(
-        false,
-        authKey,
-        username,
-        parseInt(twitchUserId),
-        setRefreshToken,
-        setTwitchToken
-      )
+      await getFollowedVods(false, authKey, username, setRefreshToken, setTwitchToken)
         .then((data) => {
           if (data.error) {
             setError(data.error);
@@ -193,6 +187,7 @@ export default ({ enableTwitter }) => {
         })
         .catch((data) => {
           setError(data.error);
+
           setVods(data.data);
         });
     })();
@@ -222,34 +217,40 @@ export default ({ enableTwitter }) => {
       <ErrorHandler
         data={{
           title: "Not authenticated/connected with Twitch.",
-          message: "No access token for twitch available.",
+          message: "No access token for twitch availible.",
         }}></ErrorHandler>
     );
   } else if (error) {
     return (
       <>
         <Header refresh={refresh} refreshing={refreshing} vods={vods} ref={VodHeaderRef} />
-        <ErrorHandler data={error} style={{ marginTop: "-150px" }}></ErrorHandler>
+        <ErrorHandler
+          data={error}
+          style={{ marginTop: "-150px" }}
+          element={
+            <Button
+              style={{ margin: "0 20px" }}
+              variant='danger'
+              onClick={() => {
+                document.cookie = "Twitch_FeedEnabled=false; path=/ ";
+                setEnableTwitchVods(false);
+              }}>
+              Disable vods
+            </Button>
+          }></ErrorHandler>
       </>
     );
   }
-  if (vods === undefined || !vods || !vods.data) {
+  // if (vods === undefined || !vods || !vods.data) {
+  if (!vods || !vods.data) {
     return (
       <>
         <Header refresh={refresh} refreshing={refreshing} vods={vods} ref={VodHeaderRef} />
         <LoadingBoxs
-          amount={Math.floor(((document.documentElement.clientWidth - 150) / 350) * 1.5)}
+          amount={centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 1.5) : 9}
           type='Vods'
         />
       </>
-    );
-  } else if (!twitchToken) {
-    return (
-      <ErrorHandler
-        data={{
-          title: "Couldn't load Twitch-vod feed",
-          message: "You are not connected with your Twitch account to AioFeed",
-        }}></ErrorHandler>
     );
   } else {
     return (

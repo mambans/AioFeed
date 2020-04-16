@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { Button } from "react-bootstrap";
+import { FaSearch } from "react-icons/fa";
 
 export const StyledGameListElement = styled.li`
   justify-content: unset;
@@ -35,7 +36,7 @@ export const GameListUlContainer = styled.ul`
   position: absolute;
   background: linear-gradient(rgba(0, 0, 0, 0.4) 0%, var(--popupListsBackground) 15%) !important;
   box-shadow: var(--refreshButtonShadow);
-  width: 250px;
+  width: 275px;
   scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0) !important;
   scrollbar-width: thin !important;
 
@@ -58,7 +59,7 @@ export const GameListUlContainer = styled.ul`
   }
 
   a {
-    color: rgb(200, 200, 200);
+    color: rgb(230, 230, 230);
 
     &:hover {
       color: #ffffff;
@@ -123,24 +124,38 @@ export const StyledLoadingListElement = styled.li`
 `;
 
 export const SearchGameForm = styled.form`
-  margin-right: 25px;
-
   background: var(--refreshButtonBackground);
   box-shadow: var(--refreshButtonShadow);
   border-radius: 5px;
-  width: 250px;
+  transition: width 250ms, min-width 250ms, margin-left 250ms;
+  width: ${({ open }) => (open ? "275px" : "125px")};
+  min-width: ${({ open }) => (open ? "275px" : "125px")};
+  margin-left: ${({ open }) => (open ? "0px" : "150px")};
+
+  li {
+    button.VodButton,
+    svg.StreamFollowBtn {
+      opacity: 1;
+    }
+  }
+
+  &:focus-within {
+    width: 275px;
+    min-width: 275px;
+    margin-left: 0px;
+  }
 
   input {
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem 25px 0.5rem 0.75rem;
     color: var(--refreshButtonColor);
     background: transparent;
     border: none;
     border-radius: 5px;
     text-overflow: ellipsis;
-    width: calc(250px - (26px + 1.5rem));
+    width: calc(100% - (26px + 1.5rem));
   }
 
-  svg {
+  svg#ToggleListBtn {
     /* padding: 0.5em 0.75em; */
     padding: 7px;
     cursor: pointer;
@@ -213,5 +228,15 @@ export const TopStreamsContainer = styled.div`
 
   @media screen and (max-width: 1920px) {
     width: 92% !important;
+  }
+`;
+
+export const SearchSubmitBtn = styled(FaSearch).attrs({ size: 20 })`
+  margin-left: -20px;
+  cursor: pointer;
+  color: rgb(240, 240, 240);
+
+  &:hover {
+    color: rgb(255, 255, 255);
   }
 `;

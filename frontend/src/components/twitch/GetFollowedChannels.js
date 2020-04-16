@@ -24,12 +24,12 @@ const fetchNextPageOfFollowers = async (PagePagination, followedchannels, twitch
   }
 };
 
-async function getFollowedChannels(twitchUserId) {
+export default async () => {
   try {
     const followedchannels = await axios
       .get(`https://api.twitch.tv/helix/users/follows?`, {
         params: {
-          from_id: twitchUserId,
+          from_id: Util.getCookie("AioFeed_TwitchUserId"),
           first: 100,
         },
         headers: {
@@ -46,7 +46,7 @@ async function getFollowedChannels(twitchUserId) {
       await fetchNextPageOfFollowers(
         followedchannels.data.pagination.cursor,
         followedchannels,
-        twitchUserId
+        Util.getCookie("AioFeed_TwitchUserId")
       );
     }
 
@@ -55,6 +55,4 @@ async function getFollowedChannels(twitchUserId) {
     console.error(error.message);
     return error;
   }
-}
-
-export default getFollowedChannels;
+};

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
 
 import ErrorHandler from "../../error";
-import getFollowedChannels from "./../GetFollowedChannels";
+import GetFollowedChannels from "./../GetFollowedChannels";
 import getFollowedOnlineStreams from "./GetFollowedStreams";
 import NotificationsContext from "./../../notifications/NotificationsContext";
 import Util from "../../../util/Util";
@@ -16,13 +16,11 @@ import LoadingSidebar from "../sidebar/LoadingSidebar";
 
 const REFRESH_RATE = 25; // seconds
 
-export default ({ children }) => {
+export default ({ children, centerContainerRef }) => {
   const addNotification = useContext(NotificationsContext).addNotification;
-  const { twitchUserId, autoRefreshEnabled, twitchToken } = useContext(AccountContext);
+  const { autoRefreshEnabled, twitchToken } = useContext(AccountContext);
   const { setVods, channels } = useContext(VodsContext);
   const { enableTwitchVods } = useContext(FeedsContext);
-  // const [isLoaded, setIsLoaded] = useState(false);
-  // const [error, setError] = useState(null);
   const [refreshTimer, setRefreshTimer] = useState(20);
   const [loadingStates, setLoadingStates] = useState({
     refreshing: false,
@@ -70,7 +68,8 @@ export default ({ children }) => {
         return { refreshing: true, error: null, loaded: loaded };
       });
       try {
-        followedChannels.current = await getFollowedChannels(parseInt(twitchUserId));
+        // followedChannels.current = await getFollowedChannels(parseInt(twitchUserId));
+        followedChannels.current = await GetFollowedChannels();
 
         if (followedChannels.current && followedChannels.current[0]) {
           document.cookie = `Twitch-username=${followedChannels.current[0].from_name}; path=/; SameSite=Lax`;
@@ -163,7 +162,7 @@ export default ({ children }) => {
         });
       }
     },
-    [addNotification, addSystemNotification, twitchUserId, channels, enableTwitchVods, setVods]
+    [addNotification, addSystemNotification, channels, enableTwitchVods, setVods]
   );
 
   useEffect(() => {
@@ -220,7 +219,11 @@ export default ({ children }) => {
         />
         <LoadingSidebar />
         <Container>
-          <LoadingBoxs amount={7} />
+          <LoadingBoxs
+            amount={
+              centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 0.8) : 4
+            }
+          />
         </Container>
       </>
     );

@@ -4,7 +4,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import SidebarItem from "./SidebarItem";
 import { Styledsidebar, SidebarHeader } from "./StyledComponents";
 
-const TwitchSidebar = (data) => {
+export default (data) => {
   const [shows, setShows] = useState();
   const sidebarRef = useRef();
 
@@ -60,5 +60,3 @@ const TwitchSidebar = (data) => {
     </Styledsidebar>
   );
 };
-
-export default TwitchSidebar;

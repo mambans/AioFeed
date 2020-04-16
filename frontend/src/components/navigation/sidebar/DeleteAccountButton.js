@@ -50,7 +50,7 @@ export default () => {
           document.cookie = `Twitch_FeedEnabled=${false}; path=/`;
           document.cookie = `AioFeed_TwitchUserId=null; path=/; SameSite=Lax`;
           document.cookie = `Twitch-username=null; path=/; SameSite=Lax`;
-          document.cookie = `YoutubeFeedEnabled=null; path=/`;
+          document.cookie = `Youtube_FeedEnabled=null; path=/`;
           document.cookie = `AioFeed_AccountName=null; path=/`;
           document.cookie = `AioFeed_AccountEmail=null; path=/`;
           document.cookie = `Youtube-access_token=null; path=/`;

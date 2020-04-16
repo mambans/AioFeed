@@ -1,49 +1,64 @@
 import axios from "axios";
 import moment from "moment";
+import Util from "../../util/Util";
 
-async function getVideoInfo(videoList) {
-  const detailsCached = localStorage.getItem("YT-VideoDetails")
-    ? JSON.parse(localStorage.getItem("YT-VideoDetails"))
-    : {};
+export default async (flattedVideosArray) => {
+  const videosArray = [...flattedVideosArray];
+  const detailsCached =
+    Util.getLocalstorage("YT-VideoDetails") && Util.getLocalstorage("YT-VideoDetails").data
+      ? // Util.getLocalstorage("YT-VideoDetails").expire <= new Date()
+        Util.getLocalstorage("YT-VideoDetails")
+      : { data: [], expire: new Date().setDate(new Date().getDate() + 3) };
 
-  const durations = {};
 
-  await Promise.all(
-    await Object.values(videoList).map(async (channel) => {
-      await channel.items.map(async (video) => {
-        try {
-          if (!detailsCached[video.contentDetails.upload.videoId]) {
-            console.log("---Details req sent---");
-            const response = await axios.get(
-              `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${video.contentDetails.upload.videoId}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`
-            );
+  const comparer = (otherArray) => {
+    return function (current) {
+      return (
+        otherArray.filter(function (other) {
+          return other.id === current.contentDetails.upload.videoId;
+        }).length === 0
+      );
+    };
+  };
 
-            const setDuration = await moment
-              .duration(response.data.items[0].contentDetails.duration)
-              .format("hh:mm:ss");
+  const noVideoDetails =
+    detailsCached && detailsCached.data.length >= 1
+      ? videosArray.filter(comparer(detailsCached.data))
+      : videosArray;
 
-            video.duration = setDuration;
-            durations[video.contentDetails.upload.videoId] = setDuration;
-          } else {
-            console.log(":::Details CAHCE used:::");
+  const noVideoDetailsIDS = noVideoDetails.map((video) => video.contentDetails.upload.videoId);
 
-            durations[video.contentDetails.upload.videoId] =
-              detailsCached[video.contentDetails.upload.videoId];
+  const newVideosDetails = noVideoDetails
+    ? await axios
+        .get(
+          `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${noVideoDetailsIDS}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`
+        )
+        .then((res) => {
+          console.log(
+            `Fetched VideoDeails for {${res.data.items.length}} videos..`,
+            res.data.items
+          );
 
-            video.duration = detailsCached[video.contentDetails.upload.videoId];
-          }
-        } catch (e) {
-          console.log(":::Details CAHCE used:::");
-        }
-        return video;
-      });
-      return channel.items;
-    })
-  );
+          const aLLDetails = {
+            data: detailsCached.data.concat(res.data.items),
+            expire: detailsCached.expire,
+          };
+          localStorage.setItem("YT-VideoDetails", JSON.stringify(aLLDetails));
 
-  await localStorage.setItem("YT-VideoDetails", JSON.stringify(durations));
+          return aLLDetails;
+        })
+    : detailsCached.data;
 
-  return videoList;
-}
 
-export default getVideoInfo;
+  const allVideos = videosArray.map((video) => {
+    video.duration = moment
+      .duration(
+        newVideosDetails.data.find((detail) => detail.id === video.contentDetails.upload.videoId)
+          .contentDetails.duration
+      )
+      .format("hh:mm:ss");
+    return video;
+  });
+
+  return allVideos;
+};

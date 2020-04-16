@@ -14,11 +14,11 @@ export const FeedsProvider = ({ children }) => {
   const [twitterListName, setTwitterListName] = useState(Util.getCookie("Twitter-Listname"));
 
   const [enableYoutube, setEnableYoutube] = useState(
-    Util.getCookie(`Youtube-access_token`) && Util.getCookie("YoutubeFeedEnabled")
+    Util.getCookie(`Youtube-access_token`) && Util.getCookie("Youtube_FeedEnabled")
   );
 
   const [enableTwitchVods, setEnableTwitchVods] = useState(
-    Util.getCookie(`Twitch-access_token`) && Util.getCookie("Twitch_FeedEnabled")
+    Util.getCookie(`Twitch-access_token`) && Util.getCookie("TwitchVods_FeedEnabled")
   );
 
   const [twitchVideoHoverEnable, setTwitchVideoHoverEnable] = useState(

@@ -24,6 +24,31 @@
   transition: opacity 750ms;
 }
 
+.fade-250ms-enter {
+  opacity: 0;
+  transition: opacity 250ms;
+}
+
+.fade-250ms-enter-active {
+  opacity: 1;
+  transition: opacity 250ms;
+}
+
+.fade-250ms-exit {
+  opacity: 1;
+  transition: opacity 250ms;
+}
+
+.fade-250ms-exit-active {
+  opacity: 0;
+  transition: opacity 250ms;
+}
+
+.fade-250ms-exit-done {
+  opacity: 0;
+  transition: opacity 250ms;
+}
+
 .fade-controllUI-1s-enter {
   opacity: 0;
   transition: opacity 1000ms;

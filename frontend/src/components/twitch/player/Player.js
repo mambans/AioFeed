@@ -38,6 +38,7 @@ import {
 } from "./StyledComponents";
 
 import PlayerNavbar from "./PlayerNavbar";
+import setFavion from "../../setFavion";
 
 export default () => {
   const { p_uptime, p_viewers, p_title, p_game, p_channelInfos, p_channel } =
@@ -72,12 +73,6 @@ export default () => {
   const uptimeTimer = useRef();
   const OpenedDate = useRef(new Date().getTime());
   const fadeTimer = useRef();
-
-  if (type === id || type === "live" || type === "player") {
-    document.title = `AF | ${id} Live`;
-  } else if (type === "video" || type === "vod") {
-    document.title = `AF | ${nameFromHash} - ${p_title || id}`;
-  }
 
   const PausePlay = () => {
     if (twitchPlayer.current.isPaused()) {
@@ -121,6 +116,17 @@ export default () => {
       TwitchPlayer._bridge._iframe.webkitRequestFullScreen();
     }
   };
+
+  useEffect(() => {
+    if (type === id || type === "live" || type === "player") {
+      document.title = `AF | ${id} player`;
+    } else if (type === "video" || type === "vod") {
+      document.title = `AF | ${nameFromHash} - ${p_title || id}`;
+    }
+    if (channelInfo) {
+      setFavion(channelInfo.logo);
+    }
+  }, [channelInfo, id, type, p_title, nameFromHash]);
 
   useEffect(() => {
     const uptTimer = uptimeTimer.current;
@@ -174,6 +180,7 @@ export default () => {
 
   const OnlineEvents = useCallback(() => {
     console.log("Stream is Online");
+    document.title = `AF | ${id} Live`;
     setTimeout(() => {
       if (!channelInfo) fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
       if (!uptime) fetchUptime(twitchPlayer, setUptime, uptimeTimer);
@@ -191,7 +198,7 @@ export default () => {
         fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
       }, 1000 * 60 * 5);
     }
-  }, [channelInfo, uptime]);
+  }, [channelInfo, uptime, id]);
 
   const offlineEvents = useCallback(() => {
     console.log("Stream is Offline");

@@ -80,6 +80,9 @@ export default () => {
             document.cookie = `Twitch_FeedEnabled=${parseBolean(
               res.data.Attributes.TwitchPreferences.enabled
             )}; path=/`;
+            document.cookie = `AioFeed_TwitchUserId=${parseBolean(
+              res.data.Attributes.TwitchPreferences.id
+            )}; path=/`;
 
             setEnableTwitch(res.data.Attributes.TwitchPreferences.enabled === "true" || false);
             setTwitchUsername(parseBolean(res.data.Attributes.TwitchPreferences.Username));

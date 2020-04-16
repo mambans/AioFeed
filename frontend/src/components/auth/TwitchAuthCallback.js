@@ -120,10 +120,16 @@ function TwitchAuthCallback() {
                 setError(error);
               });
           } else {
-            setError({ message: "Request didn't come from this website." });
+            setError({
+              title: "Twitch authentication failed.",
+              message: "Request didn't come from this website.!",
+            });
           }
         } else {
-          setError({ message: "Authenticate to Twitch failed." });
+          setError({
+            title: "Twitch authentication failed.",
+            message: "Authenticate to Twitch failed.",
+          });
         }
       } catch (error) {
         setError(error);

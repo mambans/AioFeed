@@ -1,16 +1,11 @@
 import React from "react";
-import { Spinner } from "react-bootstrap";
 
-import Util from "./../../../util/Util";
+import StyledLoadingList from "./../../twitch/LoadingList";
 import ChannelListElement from "./ChannelListElement";
 
 export default (data) => {
   if (!data.followedChannels) {
-    return (
-      <Spinner animation='grow' role='status' style={Util.loadingSpinner} variant='light'>
-        <span className='sr-only'>Loading...</span>
-      </Spinner>
-    );
+    return <StyledLoadingList amount={12} />;
   } else {
     return (
       <ul>

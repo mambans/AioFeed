@@ -95,8 +95,8 @@ export const StyledCountdownCircle = styled.div`
 `;
 
 export const HeaderLeftSubcontainer = styled.div`
-  width: 300px;
-  min-width: 300px;
+  width: 250px;
+  min-width: 250px;
   align-items: end;
   display: flex;
 `;

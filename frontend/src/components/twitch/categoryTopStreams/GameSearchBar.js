@@ -10,6 +10,7 @@ import {
 import { throttle } from "lodash";
 import { MdFormatListBulleted } from "react-icons/md";
 import StyledLoadingList from "./LoadingList";
+import { CSSTransition } from "react-transition-group";
 
 const GameSearchBar = (props) => {
   const { gameName, videoType } = props;
@@ -30,6 +31,8 @@ const GameSearchBar = (props) => {
           setValue(event.target.value);
           if (openGameList && event.target.value === "") {
             setOpenGameList(false);
+          } else if (!openGameList && event.target.value.length >= 2) {
+            setOpenGameList(true);
           }
         },
       },
@@ -53,7 +56,7 @@ const GameSearchBar = (props) => {
       throttle(
         () => {
           GetTopGames().then((res) => {
-            setTopGames(res.data.data);
+            setTopGames(res);
           });
         },
         5000,
@@ -72,19 +75,19 @@ const GameSearchBar = (props) => {
   return (
     <>
       {redirect && <Redirect to={"/game/" + game} />}
-      <SearchGameForm onSubmit={handleSubmit}>
+      <SearchGameForm onSubmit={handleSubmit} open={openGameList}>
         <input
           type='text'
           placeholder={(gameName !== "" && gameName !== undefined ? gameName : "All") + "..."}
           {...bindGame}></input>
         <MdFormatListBulleted
+          id='ToggleListBtn'
           onClick={() => {
-            console.log("openGameList", openGameList);
             setOpenGameList(!openGameList);
           }}
           size={42}
         />
-        {(openGameList || (showValue() && showValue().length >= 2)) && (
+        <CSSTransition in={openGameList} timeout={250} classNames='fade-250ms' unmountOnExit>
           <GameListUlContainer>
             {topGames && (
               <StyledShowAllButton key='showAll'>
@@ -119,7 +122,7 @@ const GameSearchBar = (props) => {
               <StyledLoadingList amount={12} />
             )}
           </GameListUlContainer>
-        )}
+        </CSSTransition>
       </SearchGameForm>
     </>
   );

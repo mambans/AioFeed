@@ -1,4 +1,3 @@
-import { Spinner } from "react-bootstrap";
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import axios from "axios";
 
@@ -6,6 +5,7 @@ import Util from "../../util/Util";
 import ErrorHandler from "./../error";
 import AccountContext from "./../account/AccountContext";
 import NavigationContext from "./../navigation/NavigationContext";
+import LoadingIndicator from "../LoadingIndicator";
 
 function getParameterByName(name, url) {
   if (!url) url = window.location.href;
@@ -17,7 +17,7 @@ function getParameterByName(name, url) {
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function YoutubeAuthCallback() {
+export default () => {
   const { setVisible } = useContext(NavigationContext);
   const [error, setError] = useState();
   const { username } = useContext(AccountContext);
@@ -81,21 +81,6 @@ function YoutubeAuthCallback() {
   if (error) {
     return <ErrorHandler data={error}></ErrorHandler>;
   } else {
-    return (
-      <Spinner
-        animation='border'
-        role='status'
-        style={{
-          ...Util.loadingSpinner,
-          position: "absolute",
-          margin: "0",
-          top: "calc(50% - 5rem)",
-          left: "calc(50% - 5rem)",
-        }}>
-        ><span className='sr-only'>Loading...</span>
-      </Spinner>
-    );
+    return <LoadingIndicator height={150} width={150} />;
   }
-}
-
-export default YoutubeAuthCallback;
+};

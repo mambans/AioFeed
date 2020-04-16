@@ -29,7 +29,6 @@ import AddVideoExtraData from "../AddVideoExtraData";
 import fetchUptime from "./../player/fetchUptime";
 import fetchAndSetChannelInfo from "./../player/fetchAndSetChannelInfo";
 import setFavion from "../../setFavion";
-import { Alert } from "react-bootstrap";
 
 export default () => {
   const { id } = useParams();

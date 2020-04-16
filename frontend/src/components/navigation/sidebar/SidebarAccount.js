@@ -78,14 +78,7 @@ export default () => {
     setAuthKey();
   }
 
-  async function authenticatePopup(
-    winName,
-    domain,
-    urlParam,
-    setToken,
-    setFeedEnable,
-    setFeedEnableSecond
-  ) {
+  async function authenticatePopup(winName, domain, urlParam, setFeedEnable) {
     async function generateOrginState() {
       return uniqid();
     }
@@ -105,9 +98,7 @@ export default () => {
         window.setTimeout(function () {
           if (popupWindow.closed) {
             document.cookie = `${domain}_FeedEnabled=${true}; path=/`;
-            setToken(true);
             setFeedEnable(true);
-            if (setFeedEnableSecond) setFeedEnableSecond(true);
             console.log(`Successfully authenticate to ${domain}`);
           }
         }, 1);
@@ -148,7 +139,7 @@ export default () => {
       })
       .then(() => {
         document.cookie = `Youtube-access_token=null; path=/`;
-        document.cookie = `YoutubeFeedEnabled=null; path=/`;
+        document.cookie = `Youtube_FeedEnabled=null; path=/`;
         setYoutubeToken(null);
         setEnableYoutube(false);
         console.log(`Successfully disconnected from Youtube`);
@@ -245,9 +236,7 @@ export default () => {
                 `Connect Twitch`,
                 "Twitch",
                 `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit+clips:edit&response_type=code&force_verify=true`,
-                setTwitchToken,
-                setEnableTwitch,
-                setEnableTwitchVods
+                setEnableTwitch
               );
             }}>
             Connect Twitch
@@ -264,9 +253,7 @@ export default () => {
                   `Connect Twitch`,
                   "Twitch",
                   `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit+clips:edit&response_type=code`,
-                  setTwitchToken,
-                  setEnableTwitch,
-                  setEnableTwitchVods
+                  setEnableTwitch
                 );
               }}>
               <StyledReconnectIcon id='reconnectIcon' />
@@ -286,7 +273,6 @@ export default () => {
       {!youtubeToken ? (
         <div style={{ marginBottom: "10px" }}>
           <StyledConnectYoutube
-            disabled
             //to unfollow: scope=https://www.googleapis.com/auth/youtube
             //else  scope=https://www.googleapis.com/auth/youtube.readonly
             title='Authenticate/Connect'
@@ -294,8 +280,7 @@ export default () => {
               authenticatePopup(
                 `Connect Youtube`,
                 "Youtube",
-                `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly`,
-                setYoutubeToken,
+                `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube`,
                 setEnableYoutube
               );
             }}>
@@ -314,8 +299,7 @@ export default () => {
               authenticatePopup(
                 `Connect Youtube`,
                 "Youtube",
-                `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly`,
-                setYoutubeToken,
+                `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube`,
                 setEnableYoutube
               );
             }}>

@@ -3,7 +3,7 @@ import YouTube from "react-youtube";
 
 import styles from "./Youtube.module.scss";
 
-function VideoHoverIframe(data) {
+export default (data) => {
   const ref = useRef();
   const videoHoverOutTimer = useRef();
 
@@ -58,6 +58,4 @@ function VideoHoverIframe(data) {
       className={styles.VideoHoverIframe}
     />
   );
-}
-
-export default VideoHoverIframe;
+};

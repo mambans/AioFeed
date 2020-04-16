@@ -12,5 +12,5 @@ export default async () => {
       "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
     },
   });
-  return topGames;
+  return topGames.data.data;
 };
