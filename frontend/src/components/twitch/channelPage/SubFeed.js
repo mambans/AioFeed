@@ -1,5 +1,5 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { Spinner } from "react-bootstrap";
+import { Spinner, Alert } from "react-bootstrap";
 import React, { useState, useEffect, useMemo } from "react";
 import { debounce } from "lodash";
 
@@ -64,57 +64,69 @@ export default ({
       </SubFeedHeader>
       <SubFeedContainer
         style={{
-          minHeight: feedName === "Vods" ? "unset" : "310px",
+          minHeight: feedName === "Vods" ? "310px" : "310px",
           paddingBottom: "0",
           width: `${numberOfVideos * 350}px`,
           margin: "auto",
         }}>
-        <TransitionGroup className='twitch-vods' component={null}>
-          {items.map((item) => {
-            return (
-              <CSSTransition key={item.id} timeout={750} classNames='fade-750ms' unmountOnExit>
-                {feedName === "Vods" ? (
-                  <VodElement data={item} transition='fade-750ms' vodBtnDisabled={true} />
-                ) : (
-                  <ClipElement
-                    data={item}
-                    user_name={channelInfo && channelInfo.name}
-                    transition='fade-750ms'
-                  />
-                )}
-              </CSSTransition>
-            );
-          })}
-        </TransitionGroup>
+        {
+          <TransitionGroup className='twitch-vods' component={null}>
+            {items && !items.error ? (
+              items.map((item) => {
+                return (
+                  <CSSTransition key={item.id} timeout={750} classNames='fade-750ms' unmountOnExit>
+                    {feedName === "Vods" ? (
+                      <VodElement data={item} transition='fade-750ms' vodBtnDisabled={true} />
+                    ) : (
+                      <ClipElement
+                        data={item}
+                        user_name={channelInfo && channelInfo.name}
+                        transition='fade-750ms'
+                      />
+                    )}
+                  </CSSTransition>
+                );
+              })
+            ) : (
+              <Alert
+                variant='info'
+                style={{ width: "15%", minWidth: "250px", margin: "auto", textAlign: "center" }}>
+                <b>{items.error}</b>
+              </Alert>
+            )}
+          </TransitionGroup>
+        }
       </SubFeedContainer>
-      <StyledLoadmore
-        ref={loadmoreRef}
-        style={{
-          width: `${numberOfVideos * 350}px`,
-          margin: "auto",
-        }}>
-        <div />
-        <div
-          id='Button'
-          onClick={() => {
-            fetchItems(itemPagination.current);
+      {items && !items.error && (
+        <StyledLoadmore
+          ref={loadmoreRef}
+          style={{
+            width: `${numberOfVideos * 350}px`,
+            margin: "auto",
           }}>
-          {!itemsloadmoreLoaded ? (
-            <>
-              Loading..
-              <Spinner
-                animation='border'
-                role='status'
-                variant='light'
-                style={{ ...Util.loadingSpinnerSmall, marginLeft: "10px" }}
-              />
-            </>
-          ) : (
-            "Load more"
-          )}
-        </div>
-        <div />
-      </StyledLoadmore>
+          <div />
+          <div
+            id='Button'
+            onClick={() => {
+              fetchItems(itemPagination.current);
+            }}>
+            {!itemsloadmoreLoaded ? (
+              <>
+                Loading..
+                <Spinner
+                  animation='border'
+                  role='status'
+                  variant='light'
+                  style={{ ...Util.loadingSpinnerSmall, marginLeft: "10px" }}
+                />
+              </>
+            ) : (
+              "Load more"
+            )}
+          </div>
+          <div />
+        </StyledLoadmore>
+      )}
     </>
   );
 };

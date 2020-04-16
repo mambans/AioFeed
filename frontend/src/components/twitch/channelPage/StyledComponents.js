@@ -1,6 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import { Button } from "react-bootstrap";
 import { MdVideocam } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 export const ChannelContainer = styled.div`
   min-height: 100vh;
@@ -81,21 +82,30 @@ export const Name = styled.div`
   text-shadow: 0px 0px 2px black;
 
   #HeaderChannelInfo {
+    z-index: 1;
     display: flex;
     flex-flow: column;
     text-align: center;
-    background-color: #000000ab;
+    background-color: #00000021;
     box-shadow: 20px 20px 20px #000000bd;
     border-radius: 15px;
     padding: 10px;
-    width: 30%;
+    width: calc(30% - 6px);
+    height: calc(100% - 6px);
+    margin-top: 15px;
 
     @media screen and (max-width: 1920px) {
-      width: 40%;
+      width: calc(40% - 6px);
     }
 
     p {
       margin-bottom: 0.6rem;
+    }
+
+    h1,
+    p,
+    a {
+      mix-blend-mode: screen;
     }
 
     #ChannelLiveLink {
@@ -115,15 +125,25 @@ export const Name = styled.div`
       padding: 0;
 
       &:hover {
-        color: #ffffff;
+        text-decoration: underline;
       }
     }
 
     #desc,
-    #updated {
-      color: #cacaca;
+    #updated,
+    #game,
+    #followViews {
+      color: #ffffff;
     }
 
+    #followViews {
+      display: flex;
+      justify-content: center;
+
+      p:first-child {
+        margin-right: 50px;
+      }
+    }
     #placeholderProfileImgCircle {
       height: 50px;
       border-radius: 50%;
@@ -270,12 +290,17 @@ export const Chat = styled.iframe`
   border: none;
 `;
 
-export const StyledLiveInfoContainer = styled.div`
+export const StyledLiveInfoContainer = styled(Link)`
   align-items: center;
   width: 200px;
   display: flex;
   margin-left: -200px;
   justify-content: center;
+  color: white;
+
+  &:hover {
+    color: white;
+  }
 
   #LiveDetails {
     display: flex;
@@ -284,5 +309,29 @@ export const StyledLiveInfoContainer = styled.div`
 
   @media screen and (max-width: 1920px) {
     margin-right: calc(40% - 250px);
+  }
+`;
+
+export const BlurredBackgroundImage = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  filter: blur(10px) brightness(0.75);
+  background-image: url(${({ image }) => image});
+  background-size: cover;
+`;
+
+export const BlurredBannerImage = styled.div`
+  position: absolute;
+  width: 30%;
+  height: 100%;
+  filter: blur(3px) brightness(0.75);
+  background-image: url(${({ image }) => image});
+  background-size: cover;
+  border-radius: 15px;
+  margin-top: 15px;
+
+  @media screen and (max-width: 1920px) {
+    width: 40%;
   }
 `;
