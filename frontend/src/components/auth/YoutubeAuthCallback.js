@@ -18,7 +18,7 @@ function getParameterByName(name, url) {
 }
 
 export default () => {
-  const { setVisible } = useContext(NavigationContext);
+  const { setVisible, setFooterVisible } = useContext(NavigationContext);
   const [error, setError] = useState();
   const { username } = useContext(AccountContext);
 
@@ -51,6 +51,7 @@ export default () => {
 
   useEffect(() => {
     setVisible(false);
+    setFooterVisible(false);
 
     (async () => {
       const url = new URL(window.location.href);
@@ -76,7 +77,7 @@ export default () => {
         setError(error);
       }
     })();
-  }, [getAccessToken, setVisible]);
+  }, [getAccessToken, setVisible, setFooterVisible]);
 
   if (error) {
     return <ErrorHandler data={error}></ErrorHandler>;

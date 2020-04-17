@@ -136,10 +136,9 @@ export default ({ data, vodBtnDisabled }) => {
           }>
           <VideoTitle
             to={{
-              pathname: `/video/${data.id}#${data.user_name}`,
+              pathname: `/${data.user_name}/video/${data.id}`,
               state: {
                 p_title: data.title,
-                p_channel: data.user_name,
               },
             }}>
             {Util.truncate(data.title, 70)}
@@ -149,10 +148,9 @@ export default ({ data, vodBtnDisabled }) => {
       ) : (
         <VideoTitle
           to={{
-            pathname: `/video/${data.id}#${data.user_name}`,
+            pathname: `/${data.user_name}/video/${data.id}`,
             state: {
               p_title: data.title,
-              p_channel: data.user_name,
             },
           }}>
           {data.title}
@@ -162,7 +160,7 @@ export default ({ data, vodBtnDisabled }) => {
       <ChannelContainer>
         <Link
           to={{
-            pathname: `/channel/${data.user_name.toLowerCase()}`,
+            pathname: `/${data.user_name.toLowerCase()}/channel`,
             state: {
               p_id: data.user_id,
             },
@@ -173,7 +171,7 @@ export default ({ data, vodBtnDisabled }) => {
         <div style={{ display: "flex" }}>
           <Link
             to={{
-              pathname: `/channel/${data.user_name.toLowerCase()}`,
+              pathname: `/${data.user_name.toLowerCase()}/channel`,
               state: {
                 p_id: data.user_id,
               },

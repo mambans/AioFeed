@@ -169,7 +169,7 @@ function StreamEle(data_p) {
         <ChannelContainer ref={refChannel}>
           <Link
             to={{
-              pathname: `/channel/${data.user_name.toLowerCase()}`,
+              pathname: `/${data.user_name.toLowerCase()}/channel`,
               state: {
                 p_id: data.user_id,
               },
@@ -180,7 +180,7 @@ function StreamEle(data_p) {
           <ChannelNameDiv>
             <Link
               to={{
-                pathname: `/channel/${data.user_name.toLowerCase()}`,
+                pathname: `/${data.user_name.toLowerCase()}/channel`,
                 state: {
                   p_id: data.user_id,
                 },
@@ -219,18 +219,14 @@ function StreamEle(data_p) {
         <GameContainer>
           <a
             className={"gameImg"}
-            // href={"/twitch/top/" + data.game_name}
-            href={"https://www.twitch.tv/directory/game/" + data.game_name}>
+            href={"https://www.twitch.tv/directory/category/" + data.game_name}>
             <img
               src={data.game_img.replace("{width}", 130).replace("{height}", 173)}
               alt=''
               className={"gameImg"}
             />
           </a>
-          <Link
-            className={"gameName"}
-            // href={"https://www.twitch.tv/directory/game/" + data.game_name}
-            to={"/game/" + data.game_name}>
+          <Link className={"gameName"} to={"/category/" + data.game_name}>
             {data.game_name}
           </Link>
           <p title='Viewers' className='viewers'>

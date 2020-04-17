@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Redirect, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { throttle } from "lodash";
 import { MdFormatListBulleted } from "react-icons/md";
 
@@ -15,7 +15,7 @@ import GetFollowedChannels from "../GetFollowedChannels";
 import { CSSTransition } from "react-transition-group";
 
 export default () => {
-  const [redirect, setRedirect] = useState(false);
+  const navigate = useNavigate();
   const [channels, setChannels] = useState();
   const [listIsOpen, setListIsOpen] = useState();
 
@@ -50,8 +50,8 @@ export default () => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    setRedirect(true);
     resetChannel();
+    navigate(`/${channel}/channel/`);
   };
 
   const channelObjectList = async (channelsList) => {
@@ -96,7 +96,6 @@ export default () => {
 
   return (
     <>
-      {redirect && <Redirect to={`/${channel} /channel/`} />}
       <SearchGameForm onSubmit={handleSubmit} open={listIsOpen}>
         <input type='text' placeholder={"..."} {...bindChannel}></input>
         {channel && (

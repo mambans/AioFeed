@@ -37,7 +37,7 @@ export default (prop) => {
               <Nav.Link as={NavLink} to='/feed/' activeClassName='active'>
                 Feed
               </Nav.Link>
-              <Nav.Link as={NavLink} to='/game/' activeClassName='active'>
+              <Nav.Link as={NavLink} to='/category/' activeClassName='active'>
                 Top streams
               </Nav.Link>
             </Nav>

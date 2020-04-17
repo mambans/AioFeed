@@ -1,5 +1,5 @@
 export default (icon) => {
-  let favicon = document.querySelector('link[rel="shortcut icon"]');
+  let favicon = document.querySelector('link[rel="icon"]');
 
   if (!favicon) {
     favicon = document.createElement("link");
@@ -9,5 +9,5 @@ export default (icon) => {
   }
 
   favicon.setAttribute("type", "image/png");
-  favicon.setAttribute("href", icon);
+  favicon.setAttribute("href", icon || `${process.env.PUBLIC_URL}/favicon-32x32.png`);
 };

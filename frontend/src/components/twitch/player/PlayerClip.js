@@ -2,7 +2,7 @@ import { CSSTransition } from "react-transition-group";
 import { Link } from "react-router-dom";
 import { MdAccountCircle } from "react-icons/md";
 import { MdVerticalAlignBottom } from "react-icons/md";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import React, { useContext, useEffect } from "react";
 
 import NavigationContext from "./../../navigation/NavigationContext";
@@ -10,10 +10,8 @@ import { VideoAndChatContainer, StyledVideo, PlayerNavbar } from "./StyledCompon
 
 export default () => {
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
-  const { id } = useParams();
-  const location = useLocation();
-  const nameFromHash = location.hash !== "" && location.hash.replace("#", "");
-  document.title = `${nameFromHash} | Clips`;
+  const { videoId, channelName } = useParams();
+  document.title = `${channelName} | Clip -${videoId}`;
 
   useEffect(() => {
     setShrinkNavbar("true");
@@ -31,10 +29,10 @@ export default () => {
     <>
       <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
         <PlayerNavbar>
-          {nameFromHash && (
-            <Link to={`/channel/${nameFromHash}`}>
+          {channelName && (
+            <Link to={`/${channelName}/channel`}>
               <MdAccountCircle size={20} />
-              {nameFromHash}'s channel page
+              {channelName}'s channel page
             </Link>
           )}
         </PlayerNavbar>
@@ -59,7 +57,7 @@ export default () => {
           }}
         />
         <StyledVideo
-          src={`https://clips.twitch.tv/embed?clip=${id}`}
+          src={`https://clips.twitch.tv/embed?clip=${videoId}`}
           height='100%'
           width='100%'
           frameborder='0'

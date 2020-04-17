@@ -78,7 +78,7 @@ export const ToggleSwitchChatSide = styled(MdCompareArrows).attrs({ size: 30 })`
 
 export const PlayerNavbar = styled.div`
   height: 25px;
-  /* background: var(--navigationbarBackground); */
+  /* background: var(--navigationbarBacklinkWithIconground); */
   background: #0000005c;
   /* text-align: center; */
   display: flex;
@@ -87,7 +87,8 @@ export const PlayerNavbar = styled.div`
   align-items: center;
   align-self: center;
 
-  a {
+  a,
+  p {
     color: var(--navTextColor);
     padding: 0;
     font-size: 1rem !important;

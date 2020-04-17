@@ -32,8 +32,8 @@ export const StyledNavSidebarBackdrop = styled.div`
 `;
 
 export const StyledProfileImg = styled.img`
-  max-width: 280px;
-  height: calc(280px / 16 * 9);
+  max-width: calc(100% - 20px);
+  height: calc(380px / 16 * 9);
   display: flex;
   margin: auto;
 `;
@@ -137,8 +137,8 @@ export const ShowAddFormBtn = styled(Button).attrs({ variant: "outline-secondary
   position: absolute;
   opacity: 0;
   background: #00000073;
-  width: 280px;
-  height: calc(280px / 16 * 9);
+  width: calc(100% - 20px);
+  height: calc(380px / 16 * 9);
   transition: opacity 500ms, background 500ms;
   transition-delay: 0.2s;
   border: none;
@@ -365,7 +365,7 @@ export const StyledReconnectIcon = styled(MdRefresh).attrs({ size: 30 })`
 export const CloseAddFormBtn = styled(FaWindowClose).attrs({ size: 26 })`
   color: rgb(225, 225, 255);
   position: absolute;
-  margin-left: 254px;
+  margin-left: calc(100% - 46px);
   cursor: pointer;
   z-index: 1;
   transition: color 250ms;
@@ -378,8 +378,8 @@ export const CloseAddFormBtn = styled(FaWindowClose).attrs({ size: 26 })`
 export const ProfileImgInput = styled.form`
   position: absolute;
   border-radius: 5px !important;
-  width: 280px !important;
-  height: calc(280px / 16 * 9);
+  width: calc(100% - 20px);
+  height: calc(380px / 16 * 9);
   top: unset !important;
   padding-top: 8px;
 
@@ -392,6 +392,7 @@ export const ProfileImgInput = styled.form`
 
   label {
     text-align: center;
+    width: inherit;
   }
 
   input[type="text"] {

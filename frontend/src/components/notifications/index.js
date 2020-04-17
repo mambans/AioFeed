@@ -97,16 +97,16 @@ export default () => {
                 return (
                   <Notification key={item.key} type={item.status}>
                     <Link
-                      to={`/channel/${item.user_name.toLowerCase()}`}
+                      to={`/${item.user_name.toLowerCase()}/channel`}
                       className='profileImg'
                       alt=''>
                       <img src={item.profile_img_url} alt=''></img>
                     </Link>
-                    <Link to={`/channel/${item.user_name.toLowerCase()}`} alt='' className='name'>
+                    <Link to={`/${item.user_name.toLowerCase()}/channel`} alt='' className='name'>
                       <b>{item.user_name}</b> went {item.status}
                     </Link>
                     {item.status === "Live" && (
-                      <Link to={`/channel/${item.user_name.toLowerCase()}`} className='title'>
+                      <Link to={`/${item.user_name.toLowerCase()}/channel`} className='title'>
                         {Util.truncate(item.title, 50)}
                       </Link>
                     )}

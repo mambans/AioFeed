@@ -1,6 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { AccountProvider } from "./../account/AccountContext";
 import ChannelPage from "./../twitch/channelPage";
@@ -11,6 +10,7 @@ import Home from "../home";
 import Legality from "../legality";
 import Navbar from "../navigation";
 import { NavigationProvider } from "./../navigation/NavigationContext";
+// eslint-disable-next-line no-unused-vars
 import NoMatch from "./NoMatch";
 import { NotificationsProvider } from "./../notifications/NotificationsContext";
 import Player from "./../twitch/player/Player";
@@ -30,69 +30,38 @@ export default () => {
           <AccountProvider>
             <FeedsProvider>
               <Navbar fixed />
-              <Route
-                render={({ location }) => {
-                  const { key } = location;
+              <main id={style.contentContainer}>
+                <Routes>
+                  <Route path='/' element={<Home />} />
+                  <Route path='/index' element={<Home />} />
+                  <Route path='/home' element={<Home />} />
+                  <Route path='/feed' element={<Feed />} />
+                  <Route path='/auth/youtube' element={<YoutubeAuth />} />
+                  <Route path='/auth/twitch' element={<TwitchAuth />} />
+                  <Route path='/auth/twitch/callback' element={<TwitchAuthCallback />} />
+                  <Route path='/auth/youtube/callback' element={<YoutubeAuthCallback />} />
+                  <Route path='/legality' element={<Legality />} />
+                  <Route path='/privacy' element={<Legality />} />
 
-                  return (
-                    <TransitionGroup component={null}>
-                      <CSSTransition key={key} timeout={200} classNames='RoutesFade'>
-                        <main id={style.contentContainer}>
-                          <Switch location={location}>
-                            <Route exact path={["/", "/index", "/home"]}>
-                              <Home />
-                            </Route>
-                            <Route exact path='/feed'>
-                              <Feed />
-                            </Route>
-                            <Route exact path='/clip/:id' children={<PlayerClip />} />
-                            <Route
-                              exact
-                              path={["/game/:category?", "/category/:category?", "/top/:category?"]}
-                              children={<TopStreams />}
-                            />
-                            <Route exact path='/auth/youtube'>
-                              <YoutubeAuth />
-                            </Route>
-                            <Route exact path='/auth/twitch'>
-                              <TwitchAuth />
-                            </Route>
-                            <Route
-                              exact
-                              path='/auth/twitch/callback'
-                              render={() => {
-                                return <TwitchAuthCallback />;
-                              }}
-                            />
-                            <Route
-                              exact
-                              path='/auth/youtube/callback'
-                              render={() => {
-                                return <YoutubeAuthCallback />;
-                              }}
-                            />
-                            <Route exact path={["/legality", "/privacy"]}>
-                              <Legality />
-                            </Route>
-                            <Route
-                              exact
-                              path={["/:id", "/live/:id", "/player/:id", "/video/:id", "/vod/:id"]}
-                              children={<Player />}></Route>
-                            <Route
-                              exact
-                              path={["/:id/c", "/:id/channel", "/channel/:id", "/c/:id"]}
-                              children={<ChannelPage />}
-                            />
-                            <Route>
-                              <NoMatch />
-                            </Route>
-                          </Switch>
-                        </main>
-                      </CSSTransition>
-                    </TransitionGroup>
-                  );
-                }}
-              />
+                  <Route path='/game' element={<TopStreams />} />
+                  <Route path='/category' element={<TopStreams />} />
+                  <Route path='/top' element={<TopStreams />} />
+                  <Route path='/game/:category' element={<TopStreams />} />
+                  <Route path='/category/:category' element={<TopStreams />} />
+                  <Route path='/top/:category' element={<TopStreams />} />
+
+                  <Route path='/video/:videoId' element={<Player />} />
+                  <Route path='/vod/:videoId' element={<Player />} />
+                  <Route path='/:channelName' element={<Player />} />
+                  <Route path='/:channelName/channel' element={<ChannelPage />} />
+                  <Route path='/:channelName/videos' element={<ChannelPage />} />
+                  <Route path='/:channelName/clips' element={<ChannelPage />} />
+                  <Route path='/:channelName/video/:videoId' element={<Player />} />
+                  <Route path='/:channelName/vod/:videoId' element={<Player />} />
+                  <Route path='/:channelName/clip/:videoId' children={<PlayerClip />} />
+                  <Route element={<NoMatch />} />
+                </Routes>
+              </main>
               <Footer />
             </FeedsProvider>
           </AccountProvider>

@@ -7,7 +7,7 @@ import Util from "./../../../util/Util";
  * @param {Function} setChannelInfo - Set state func.
  */
 export default async (channelId, setChannelInfo) => {
-  await axios
+  return await axios
     .get(`https://api.twitch.tv/kraken/channels/${channelId}`, {
       headers: {
         Authorization: `OAuth ${Util.getCookie("Twitch-access_token")}`,
@@ -16,7 +16,8 @@ export default async (channelId, setChannelInfo) => {
       },
     })
     .then((res) => {
-      setChannelInfo(res.data);
+      if (setChannelInfo) setChannelInfo(res.data);
+      return res.data;
     })
     .catch((error) => {
       console.error("fetchChannelInfo: ", error);

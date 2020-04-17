@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Redirect, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GetTopGames from "./GetTopGames";
 import {
   StyledGameListElement,
@@ -12,9 +12,9 @@ import { MdFormatListBulleted } from "react-icons/md";
 import StyledLoadingList from "./LoadingList";
 import { CSSTransition } from "react-transition-group";
 
-const GameSearchBar = (props) => {
+export default (props) => {
   const { gameName, videoType } = props;
-  const [redirect, setRedirect] = useState(false);
+  const navigate = useNavigate();
   const [topGames, setTopGames] = useState();
   const [openGameList, setOpenGameList] = useState();
 
@@ -47,7 +47,7 @@ const GameSearchBar = (props) => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    setRedirect(true);
+    navigate("/category/" + game);
     // resetGame();
   };
 
@@ -74,7 +74,6 @@ const GameSearchBar = (props) => {
 
   return (
     <>
-      {redirect && <Redirect to={"/game/" + game} />}
       <SearchGameForm onSubmit={handleSubmit} open={openGameList}>
         <input
           type='text'
@@ -91,7 +90,7 @@ const GameSearchBar = (props) => {
           <GameListUlContainer>
             {topGames && (
               <StyledShowAllButton key='showAll'>
-                <Link to={"/game/"}>Show all</Link>
+                <Link to={"/category/"}>Show all</Link>
               </StyledShowAllButton>
             )}
             {topGames ? (
@@ -103,8 +102,11 @@ const GameSearchBar = (props) => {
                   return (
                     <StyledGameListElement key={game.id}>
                       <Link
+                        onClick={() => {
+                          setOpenGameList(false);
+                        }}
                         to={{
-                          pathname: "/game/" + game.name,
+                          pathname: "/category/" + game.name,
                           state: {
                             p_videoType: videoType,
                           },
@@ -127,5 +129,3 @@ const GameSearchBar = (props) => {
     </>
   );
 };
-
-export default GameSearchBar;

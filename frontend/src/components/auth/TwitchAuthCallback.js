@@ -19,7 +19,7 @@ function TwitchAuthCallback() {
     setRefreshToken,
     autoRefreshEnabled,
   } = useContext(AccountContext);
-  const { setVisible } = useContext(NavigationContext);
+  const { setVisible, setFooterVisible } = useContext(NavigationContext);
   const { enableTwitch } = useContext(FeedsContext);
 
   const getAccessToken = useCallback(
@@ -101,6 +101,7 @@ function TwitchAuthCallback() {
 
   useEffect(() => {
     setVisible(false);
+    setFooterVisible(false);
     (async function () {
       try {
         const url = new URL(window.location.href);
@@ -135,7 +136,7 @@ function TwitchAuthCallback() {
         setError(error);
       }
     })();
-  }, [getAccessToken, setVisible, setTwitchToken]);
+  }, [getAccessToken, setVisible, setTwitchToken, setFooterVisible]);
 
   if (error) {
     return <ErrorHandler data={error}></ErrorHandler>;

@@ -31,7 +31,7 @@ import fetchAndSetChannelInfo from "./../player/fetchAndSetChannelInfo";
 import setFavion from "../../setFavion";
 
 export default () => {
-  const { id } = useParams();
+  const { channelName } = useParams();
   const { p_channelInfos, p_uptime, p_viewers, p_id, p_logo } = useLocation().state || {};
   const [channelInfo, setChannelInfo] = useState(p_channelInfos);
   const numberOfVideos = Math.floor(document.documentElement.clientWidth / 350);
@@ -63,7 +63,7 @@ export default () => {
     await axios
       .get(`https://api.twitch.tv/helix/users`, {
         params: {
-          login: id,
+          login: channelName,
         },
         headers: {
           Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
@@ -79,7 +79,7 @@ export default () => {
         setChannelId("Not Found");
         // }
       });
-  }, [id]);
+  }, [channelName]);
 
   const fetchChannelVods = useCallback(
     async (pagination) => {
@@ -223,8 +223,8 @@ export default () => {
   }, [channelInfo, channelId]);
 
   useEffect(() => {
-    document.title = `AF | ${id}'s Channel`;
-  }, [id]);
+    document.title = `AF | ${channelName}'s Channel`;
+  }, [channelName]);
 
   useEffect(() => {
     (async () => {
@@ -239,7 +239,7 @@ export default () => {
 
   const OnlineEvents = useCallback(() => {
     console.log("Stream is Online");
-    document.title = `AF | ${id}'s Channel (Live)`;
+    document.title = `AF | ${channelName}'s Channel (Live)`;
 
     setIsLive(true);
 
@@ -255,7 +255,7 @@ export default () => {
         setViewers(twitchPlayer.current.getViewers());
       }, 1000 * 60 * 2);
     }
-  }, [uptime, id]);
+  }, [uptime, channelName]);
 
   const offlineEvents = () => {
     console.log("Stream is Offline");
@@ -271,7 +271,7 @@ export default () => {
           height: "300px",
           theme: "dark",
           layout: "video",
-          channel: id,
+          channel: channelName,
           muted: true,
         });
       }
@@ -288,7 +288,7 @@ export default () => {
     } catch (error) {
       console.log("error", error);
     }
-  }, [id, OnlineEvents]);
+  }, [channelName, OnlineEvents]);
 
   useEffect(() => {
     if (channelId && !vods && channelId !== "Not Found") {
@@ -310,6 +310,10 @@ export default () => {
       //   `url(${channelInfo.profile_banner})`
       // );
     }
+
+    return () => {
+      setFavion();
+    };
   }, [channelInfo]);
 
   useEffect(() => {
@@ -332,7 +336,7 @@ export default () => {
                 <div id='ChannelName'>
                   <p id='ChannelLiveLink'>
                     <img id='profileIcon' alt='' src={"asd"} />
-                    {id}
+                    {channelName}
                   </p>
                 </div>
                 <p id='title'>Channel Not Found!</p>
@@ -356,7 +360,7 @@ export default () => {
               scrolling='yes'
               theme='dark'
               // id={id + "-chat"}
-              src={`https://www.twitch.tv/embed/${id}/chat?darkpopout`}
+              src={`https://www.twitch.tv/embed/${channelName}/chat?darkpopout`}
               // style={{ display: chatOpen ? "block" : "none" }}
             />
           )}
@@ -414,7 +418,7 @@ export default () => {
                       {isLive && (
                         <StyledLiveInfoContainer
                           to={{
-                            pathname: `/${id}`,
+                            pathname: `/${channelName}`,
                             state: {
                               p_channelInfos: channelInfo,
                               p_viewers: viewers,
@@ -425,26 +429,16 @@ export default () => {
                             <span>Viewers: {Util.formatViewerNumbers(viewers)}</span>
                             <span>Uptime: {<Moment durationFromNow>{uptime}</Moment>}</span>
                           </div>
-                          <Link
-                            to={{
-                              pathname: `/${id}`,
-                              state: {
-                                p_channelInfos: channelInfo,
-                                p_viewers: viewers,
-                                p_uptime: uptime,
-                              },
-                            }}
-                            style={{ padding: "0 15px" }}>
-                            <LiveIndicator>
-                              <LiveIndicatorIcon />
-                              <p>Live</p>
-                            </LiveIndicator>
-                          </Link>
+
+                          <LiveIndicator style={{ padding: "0 15px" }}>
+                            <LiveIndicatorIcon />
+                            <p>Live</p>
+                          </LiveIndicator>
                         </StyledLiveInfoContainer>
                       )}
                       <Link
                         to={{
-                          pathname: `/${id}`,
+                          pathname: `/${channelName}`,
                           state: {
                             p_channelInfos: channelInfo,
                             p_viewers: viewers,
@@ -463,10 +457,12 @@ export default () => {
                           src={`${process.env.PUBLIC_URL}/partnered.png`}
                         />
                       )}
-                      {channelInfo && <FollowUnfollowBtn channelName={id} id={channelInfo._id} />}
+                      {channelInfo && (
+                        <FollowUnfollowBtn channelName={channelName} id={channelInfo._id} />
+                      )}
                     </div>
                     <p id='title'>{channelInfo.status}</p>
-                    <Link to={`/game/${channelInfo.game}`} id='game'>
+                    <Link to={`/category/${channelInfo.game}`} id='game'>
                       {channelInfo.game}
                     </Link>
                     <p id='desc'>{channelInfo.description}</p>

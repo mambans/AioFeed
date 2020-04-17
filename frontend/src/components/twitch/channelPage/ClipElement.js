@@ -59,12 +59,12 @@ export default ({ ...data }) => {
               {data.data.title}
             </Tooltip>
           }>
-          <VideoTitle to={`/clip/${data.data.id}#${data.user_name || data.data.broadcaster_name}`}>
+          <VideoTitle to={`/${data.user_name || data.data.broadcaster_name}/clip/${data.data.id}`}>
             {Util.truncate(data.data.title, 70)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
-        <VideoTitle to={`/clip/${data.data.id}#${data.user_name || data.data.broadcaster_name}`}>
+        <VideoTitle to={`/${data.user_name || data.data.broadcaster_name}/clip/${data.data.id}`}>
           {data.data.title}
         </VideoTitle>
       )}
@@ -73,7 +73,7 @@ export default ({ ...data }) => {
         <ChannelContainer>
           <Link
             to={{
-              pathname: `/channel/${data.data.broadcaster_name.toLowerCase()}`,
+              pathname: `/${data.data.broadcaster_name.toLowerCase()}/channel`,
               state: {
                 p_id: data.data.broadcaster_id,
               },
@@ -81,25 +81,21 @@ export default ({ ...data }) => {
             style={{ gridRow: 1, paddingRight: "5px" }}>
             <img src={data.data.profile_img_url} alt='' className={"profileImg"} />
           </Link>
-          <Link to={"/channel/" + data.data.broadcaster_name.toLowerCase()} className='channelName'>
+          <Link to={`/${data.data.broadcaster_name.toLowerCase()}/channel`} className='channelName'>
             {data.data.broadcaster_name}
           </Link>
         </ChannelContainer>
         <GameContainer>
           <a
             className={"gameImg"}
-            // href={"/twitch/top/" + data.data.game_name}
-            href={"https://www.twitch.tv/directory/game/" + data.data.game_name}>
+            href={"https://www.twitch.tv/directory/category/" + data.data.game_name}>
             <img
               src={data.data.game_img.replace("{width}", 130).replace("{height}", 173)}
               alt=''
               className={"gameImg"}
             />
           </a>
-          <Link
-            className={"gameName"}
-            // href={"https://www.twitch.tv/directory/game/" + data.data.game_name}
-            to={"/game/" + data.data.game_name}>
+          <Link className={"gameName"} to={"/category/" + data.data.game_name}>
             {data.data.game_name}
           </Link>
           <Moment

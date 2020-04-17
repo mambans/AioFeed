@@ -41,12 +41,10 @@ import PlayerNavbar from "./PlayerNavbar";
 import setFavion from "../../setFavion";
 
 export default () => {
-  const { p_uptime, p_viewers, p_title, p_game, p_channelInfos, p_channel } =
-    useLocation().state || {};
-  const id = useParams().id.split("#")[0] || useParams().id || undefined;
-  const location = useLocation();
-  const type = location.pathname.split("/")[1];
-  const nameFromHash = location.hash !== "" ? location.hash.replace("#", "") : p_channel || null;
+  const { p_uptime, p_viewers, p_title, p_game, p_channelInfos } = useLocation().state || {};
+  const channelName = useParams().channelName || undefined;
+  const videoId = useParams().videoId || undefined;
+
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const { setTwitchToken, setRefreshToken } = useContext(AccountContext);
 
@@ -118,15 +116,34 @@ export default () => {
   };
 
   useEffect(() => {
-    if (type === id || type === "live" || type === "player") {
-      document.title = `AF | ${id} player`;
-    } else if (type === "video" || type === "vod") {
-      document.title = `AF | ${nameFromHash} - ${p_title || id}`;
+    if (channelName && !videoId) {
+      document.title = `AF | ${channelName} player`;
+    } else if (videoId) {
+      document.title = `AF | ${channelName || (channelInfo && channelInfo.display_name)} - ${
+        p_title || videoId
+      }`;
     }
     if (channelInfo) {
       setFavion(channelInfo.logo);
     }
-  }, [channelInfo, id, type, p_title, nameFromHash]);
+
+    return () => {
+      setFavion();
+    };
+  }, [channelInfo, channelName, p_title, videoId]);
+
+  useEffect(() => {
+    if (videoId && !channelName) {
+      const timer = setTimeout(async () => {
+        if (twitchPlayer.current)
+          await fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
+      }, 5000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [videoId, channelName, p_title]);
 
   useEffect(() => {
     const uptTimer = uptimeTimer.current;
@@ -140,8 +157,8 @@ export default () => {
       height: "100%",
       theme: "dark",
       layout: "video",
-      channel: id && (type === id || type === "live" || type === "player") ? id : null,
-      video: id && (type === "video" || type === "vod") ? id : null,
+      channel: channelName && !videoId ? channelName : null,
+      video: videoId || null,
       muted: false,
     });
 
@@ -155,32 +172,11 @@ export default () => {
       clearInterval(viewersTimer.current);
       clearInterval(uptTimer);
     };
-  }, [setShrinkNavbar, setFooterVisible, setVisible, id, type]);
-
-  useEffect(() => {
-    if ((type === "video" || type === "vod") && (!nameFromHash || !p_title)) {
-      const videoInfoTimer = setTimeout(async () => {
-        await axios
-          .get(`https://api.twitch.tv/kraken/videos/${id}`, {
-            headers: {
-              Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
-              "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-              Accept: "application/vnd.twitchtv.v5+json",
-            },
-          })
-          .then((res) => {
-            document.title = `AF | ${res.data.channel.display_name} - ${res.data.title}`;
-          });
-      }, 5000);
-      return () => {
-        clearTimeout(videoInfoTimer);
-      };
-    }
-  }, [id, nameFromHash, p_title, type]);
+  }, [setShrinkNavbar, setFooterVisible, setVisible, channelName, videoId]);
 
   const OnlineEvents = useCallback(() => {
     console.log("Stream is Online");
-    document.title = `AF | ${id} Live`;
+    document.title = `AF | ${channelName} Live`;
     setTimeout(() => {
       if (!channelInfo) fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
       if (!uptime) fetchUptime(twitchPlayer, setUptime, uptimeTimer);
@@ -198,7 +194,7 @@ export default () => {
         fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
       }, 1000 * 60 * 5);
     }
-  }, [channelInfo, uptime, id]);
+  }, [channelInfo, uptime, channelName]);
 
   const offlineEvents = useCallback(() => {
     console.log("Stream is Offline");
@@ -208,13 +204,13 @@ export default () => {
     setUptime(null);
     clearInterval(uptimeTimer.current);
 
-    if (!channelinfoTimer.current && (type === id || type === "live" || type === "player")) {
+    if (!channelinfoTimer.current && channelName && !videoId) {
       fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
       channelinfoTimer.current = setInterval(() => {
         fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
       }, 1000 * 60 * 15);
     }
-  }, [type, id]);
+  }, [channelName, videoId]);
 
   useEffect(() => {
     if (twitchPlayer.current) {
@@ -228,19 +224,6 @@ export default () => {
     };
   }, [OnlineEvents, offlineEvents]);
 
-  const showAndResetTimer = throttle(
-    () => {
-      setShowControlls(true);
-      clearTimeout(fadeTimer.current);
-
-      fadeTimer.current = setTimeout(() => {
-        setShowControlls(false);
-      }, 2000);
-    },
-    250,
-    { leading: true, trailing: false }
-  );
-
   // const handleMouseOver = useCallback(() => {
   //   setShowControlls(true);
   // }, []);
@@ -251,6 +234,19 @@ export default () => {
   }, []);
 
   useEffect(() => {
+    const showAndResetTimer = throttle(
+      () => {
+        setShowControlls(true);
+        clearTimeout(fadeTimer.current);
+
+        fadeTimer.current = setTimeout(() => {
+          setShowControlls(false);
+        }, 2000);
+      },
+      250,
+      { leading: true, trailing: false }
+    );
+
     const refEle = volumeEventOverlayRef.current;
     // refEle.addEventListener("mouseenter", handleMouseOver);
     if (refEle) {
@@ -259,20 +255,19 @@ export default () => {
       document.addEventListener("mousedown", showAndResetTimer);
       document.body.addEventListener("keydown", showAndResetTimer);
       document.addEventListener("touchmove", showAndResetTimer);
-    }
 
-    return () => {
-      // refEle.removeEventListener("mouseenter", handleMouseOver);
-      if (refEle) {
+      return () => {
+        // refEle.removeEventListener("mouseenter", handleMouseOver);
+
         refEle.removeEventListener("mouseleave", handleMouseOut);
         document.removeEventListener("mousemove", showAndResetTimer);
         document.removeEventListener("mousedown", showAndResetTimer);
         document.body.removeEventListener("keydown", showAndResetTimer);
         document.removeEventListener("touchmove", showAndResetTimer);
         clearTimeout(fadeTimer.current);
-      }
-    };
-  }, [handleMouseOut, showAndResetTimer]);
+      };
+    }
+  }, [handleMouseOut]);
 
   const axiosConfig = (method, access_token = Util.getCookie("Twitch-access_token")) => {
     return {
@@ -305,22 +300,22 @@ export default () => {
       });
   };
 
-  if (type === id || type === "live" || type === "player") {
-    return (
-      <>
-        <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
-          <PlayerNavbar
-            id={id}
-            type={"live"}
-            channelInfo={channelInfo}
-            viewers={viewers}
-            uptime={uptime}
-            twitchPlayer={twitchPlayer}
-            setVisible={setVisible}
-            visible={visible}
-          />
-        </CSSTransition>
+  return (
+    <>
+      <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
+        <PlayerNavbar
+          channelName={channelName}
+          type={videoId ? "vod" : "live"}
+          channelInfo={channelInfo}
+          viewers={viewers}
+          uptime={uptime}
+          twitchPlayer={twitchPlayer}
+          setVisible={setVisible}
+          visible={visible}
+        />
+      </CSSTransition>
 
+      {channelName && !videoId ? (
         <VideoAndChatContainer
           style={{
             height: visible ? "calc(100vh - 75px)" : "100vh",
@@ -345,22 +340,32 @@ export default () => {
                   <>
                     {channelInfo && <img src={channelInfo.logo} alt='' />}
                     <div id='name'>
-                      <a href={`/channel/${id}`}>{channelInfo ? channelInfo.display_name : id}</a>
+                      <Link
+                        to={{
+                          pathname: `channel`,
+                          state: {
+                            p_id: channelInfo && channelInfo._id,
+                          },
+                        }}>
+                        {channelInfo ? channelInfo.display_name : channelName}
+                      </Link>
                       <a
                         className='twitchRedirect'
                         alt=''
-                        href={channelInfo ? channelInfo.url : `https://www.twitch.tv/${id}`}>
+                        href={
+                          channelInfo ? channelInfo.url : `https://www.twitch.tv/${channelName}`
+                        }>
                         <FaTwitch size={30} color='purple' />
                       </a>
                       {channelInfo && (
                         <FollowUnfollowBtn
-                          channelName={channelInfo ? channelInfo.display_name : id}
+                          channelName={channelInfo ? channelInfo.display_name : channelName}
                           id={channelInfo._id}
                         />
                       )}
                     </div>
                     <p id='title'>{channelInfo ? channelInfo.status : p_title}</p>
-                    <Link id='game' to={`/game/${channelInfo ? channelInfo.game : p_game}`}>
+                    <Link id='game' to={`/category/${channelInfo ? channelInfo.game : p_game}`}>
                       Playing {channelInfo ? channelInfo.game : p_game}
                     </Link>
                   </>
@@ -547,27 +552,13 @@ export default () => {
                 frameborder='0'
                 scrolling='yes'
                 theme='dark'
-                id={id + "-chat"}
-                src={`https://www.twitch.tv/embed/${id}/chat?darkpopout`}
+                id={channelName + "-chat"}
+                src={`https://www.twitch.tv/embed/${channelName}/chat?darkpopout`}
               />
             </div>
           )}
         </VideoAndChatContainer>
-      </>
-    );
-  } else if (type === "video" || type === "vod") {
-    return (
-      <>
-        <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
-          <PlayerNavbar
-            nameFromHash={nameFromHash}
-            type={"vod"}
-            twitchPlayer={twitchPlayer}
-            setVisible={setVisible}
-            visible={visible}
-          />
-        </CSSTransition>
-
+      ) : videoId ? (
         <VideoAndChatContainer
           id='twitch-embed'
           style={{
@@ -588,9 +579,9 @@ export default () => {
             }}
           />
         </VideoAndChatContainer>
-      </>
-    );
-  } else {
-    return <p>Error?</p>;
-  }
+      ) : (
+        <p>Error?</p>
+      )}
+    </>
+  );
 };

@@ -27,6 +27,13 @@ export default ({
   );
 
   useEffect(() => {
+    if (TwitchPlayer) {
+      setVolumeMuted(TwitchPlayer.getMuted());
+      setVolumeText(TwitchPlayer.getVolume());
+    }
+  }, [TwitchPlayer, setVolumeMuted, setVolumeText]);
+
+  useEffect(() => {
     const volumeEventOverlayRefElement = volumeEventOverlayRef.current;
 
     const mouseEvents = (e) => {

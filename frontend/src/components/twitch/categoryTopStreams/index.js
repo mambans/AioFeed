@@ -168,6 +168,7 @@ export default () => {
 
   useEffect(() => {
     setRefreshing(true);
+    setTopData();
     fetchVideos();
   }, [fetchVideos]);
 
@@ -219,7 +220,7 @@ export default () => {
                     videoTypeBtnOnClick("Streams");
                   }}>
                   <MdLiveTv size={24} />
-                  Live
+                  Streams
                 </li>
                 <li
                   onClick={() => {
