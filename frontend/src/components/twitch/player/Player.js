@@ -282,7 +282,7 @@ export default () => {
 
   const CreateAndOpenClip = async () => {
     const Width = window.screen.width * 0.6;
-    const Height = window.screen.height * 0.65;
+    const Height = 920;
     const LeftPosition = (window.screen.width - Width) / 2;
     const TopPosition = (window.screen.height - Height) / 2;
     const settings = `height=${Height},width=${Width},top=${TopPosition},left=${LeftPosition},scrollbars=yes,resizable`;
