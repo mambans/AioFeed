@@ -1,6 +1,6 @@
 import { CSSTransition } from "react-transition-group";
 import { debounce } from "lodash";
-import React, { useState, useEffect, useContext, useCallback, useMemo, useRef } from "react";
+import React, { useState, useEffect, useContext, useMemo, useRef } from "react";
 import styled from "styled-components";
 
 import { Container } from "../twitch/StyledComponents";
@@ -23,8 +23,8 @@ const CenterContainer = styled.div`
   flex-flow: column;
   margin-top: 25px;
   /* margin-left: ${({ marginLeft }) => marginLeft + "px"}; */
-  margin-left: ${({ enableTwitter, alignments }) =>
-    alignments || enableTwitter
+  margin-left: ${({ enableTwitter }) =>
+    enableTwitter
       ? (window.innerWidth -
           (275 +
             (enableTwitter
@@ -49,8 +49,8 @@ const CenterContainer = styled.div`
         275 -
         50}px;
   /* width: ${({ width }) => width + "px"} !important; */
-  width: ${({ enableTwitter, alignments }) =>
-    alignments || enableTwitter
+  width: ${({ enableTwitter }) =>
+    enableTwitter
       ? 350 * Math.floor((window.innerWidth - (275 + window.innerWidth * 0.2 + 25)) / 350)
       : 350 * Math.floor((window.innerWidth - (275 + 150)) / 350)}px !important;
   transition: width 750ms, margin 750ms;
@@ -66,44 +66,9 @@ export default () => {
   document.title = "AioFeed | Feed";
   const { enableTwitch, enableYoutube, enableTwitchVods, enableTwitter } = useContext(FeedsContext);
   const { username } = useContext(AccountContext);
+  // eslint-disable-next-line no-unused-vars
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const centerContainerRef = useRef();
-  const calcAlignments = useCallback(() => {
-    const twitterWidth = enableTwitter
-      ? window.innerWidth <= 1920
-        ? window.innerWidth * 0.2
-        : window.innerWidth <= 2560
-        ? window.innerWidth * 0.2
-        : window.innerWidth * 0.15
-      : 0;
-
-    const centerWidth = enableTwitter
-      ? 350 * Math.floor((window.innerWidth - (275 + window.innerWidth * 0.2 + 25)) / 350)
-      : 350 * Math.floor((window.innerWidth - (275 + 150)) / 350);
-
-    const centerMargin = enableTwitter
-      ? (window.innerWidth - (275 + twitterWidth + 25 + centerWidth)) / 2 + 275
-      : (window.innerWidth - (275 + centerWidth)) / 2 + 275 - 50;
-
-    return {
-      width: centerWidth,
-      margin: centerMargin,
-      twitterWidth: twitterWidth,
-    };
-  }, [enableTwitter]);
-
-  const [alignments, setAlignments] = useState(calcAlignments);
-
-  const recalcWidth = useMemo(
-    () =>
-      debounce(
-        () => {
-          setAlignments(calcAlignments());
-        },
-        75,
-        { leading: true, trailing: false }
-      ),
-    [calcAlignments]
-  );
 
   useEffect(() => {
     Notification.requestPermission().then(function (result) {
@@ -111,17 +76,34 @@ export default () => {
     });
   }, []);
 
+  const setScreenWidthToCalcAlignments = useMemo(
+    () =>
+      debounce(
+        () => {
+          setScreenWidth(window.innerWidth);
+        },
+        50,
+        { leading: true, trailing: false }
+      ),
+    []
+  );
+
+  // const asd = () => {
+  //   console.log("asd");
+  //   setScreenWidth(window.innerWidth);
+  // };
+
   useEffect(() => {
-    window.addEventListener("resize", recalcWidth);
+    window.addEventListener("resize", setScreenWidthToCalcAlignments);
 
     return () => {
-      window.removeEventListener("resize", recalcWidth);
+      window.removeEventListener("resize", setScreenWidthToCalcAlignments);
     };
-  }, [recalcWidth]);
+  }, [setScreenWidthToCalcAlignments]);
 
   // useEffect(() => {
-  //   // setAlignments(calcAlignments());
-  // }, [enableTwitter, calcAlignments]);
+  //
+  // }, [screenWidth]);
 
   if (!username) {
     return (
@@ -138,7 +120,7 @@ export default () => {
       <CenterContainer
         ref={centerContainerRef}
         enableTwitter={enableTwitter}
-        alignments={alignments}
+        // screenWidth={screenWidth}
         id='CenterContainer'>
         <NoFeedsEnable />
         <Twitter />
