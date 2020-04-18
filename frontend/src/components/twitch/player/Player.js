@@ -116,7 +116,7 @@ export default () => {
   };
 
   useEffect(() => {
-    if (channelName && !videoId) {
+    if (channelName && !videoId && !channelInfo) {
       document.title = `AF | ${channelName} player`;
     } else if (videoId) {
       document.title = `AF | ${channelName || (channelInfo && channelInfo.display_name)} - ${
@@ -532,6 +532,7 @@ export default () => {
                 setIsPaused={setIsPaused}
                 type='live'
                 OpenedDate={OpenedDate}
+                setActiveQuality={setActiveQuality}
               />
             )}
           </div>

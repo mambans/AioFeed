@@ -9,6 +9,7 @@ export default ({
   type,
   OpenedDate,
   setIsPaused,
+  setActiveQuality,
 }) => {
   // eslint-disable-next-line
   const unmute = useMemo(
@@ -25,13 +26,6 @@ export default ({
       ),
     [TwitchPlayer, setVolumeMuted]
   );
-
-  useEffect(() => {
-    if (TwitchPlayer) {
-      setVolumeMuted(TwitchPlayer.getMuted());
-      setVolumeText(TwitchPlayer.getVolume());
-    }
-  }, [TwitchPlayer, setVolumeMuted, setVolumeText]);
 
   useEffect(() => {
     const volumeEventOverlayRefElement = volumeEventOverlayRef.current;
@@ -130,6 +124,19 @@ export default ({
     //   }
     // };
 
+    const onPlaying = () => {
+      if (TwitchPlayer) {
+        const defaultQuality = TwitchPlayer.getQuality();
+        setVolumeMuted(TwitchPlayer.getMuted());
+        setVolumeText(TwitchPlayer.getVolume() * 100);
+        setActiveQuality(
+          TwitchPlayer.getQualities().find((quality) => {
+            return quality.group === defaultQuality;
+          })
+        );
+      }
+    };
+
     const toggleFullscreen2 = () => {
       const isFullScreen = TwitchPlayer.getFullscreen();
       TwitchPlayer.setFullscreen(!isFullScreen);
@@ -154,8 +161,6 @@ export default ({
 
     const twitchPlayerEventListeners = () => {
       if (type === "live") TwitchPlayer.showPlayerControls(false);
-      setVolumeMuted(TwitchPlayer.getMuted());
-      setVolumeText(TwitchPlayer.getVolume() * 100);
       if (volumeEventOverlayRefElement) {
         volumeEventOverlayRefElement.addEventListener("wheel", scrollChangeVolumeEvent);
         volumeEventOverlayRefElement.addEventListener("mousedown", mouseEvents);
@@ -165,12 +170,14 @@ export default ({
     };
 
     TwitchPlayer.addEventListener(window.Twitch.Player.READY, twitchPlayerEventListeners);
+    TwitchPlayer.addEventListener(window.Twitch.Player.PLAYING, onPlaying);
 
     return () => {
       volumeEventOverlayRefElement.removeEventListener("wheel", scrollChangeVolumeEvent);
       volumeEventOverlayRefElement.removeEventListener("mousedown", mouseEvents);
       document.body.removeEventListener("keydown", keyboardEvents);
       TwitchPlayer.removeEventListener(window.Twitch.Player.READY, twitchPlayerEventListeners);
+      TwitchPlayer.removeEventListener(window.Twitch.Player.PLAYING, onPlaying);
       // document.body.removeEventListener("dblclick", toggleFullscreen);
     };
   }, [
@@ -181,6 +188,7 @@ export default ({
     type,
     OpenedDate,
     setIsPaused,
+    setActiveQuality,
   ]);
 
   return null;

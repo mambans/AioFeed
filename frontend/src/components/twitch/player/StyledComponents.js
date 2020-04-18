@@ -70,6 +70,9 @@ export const ToggleSwitchChatSide = styled(MdCompareArrows).attrs({ size: 30 })`
   /* margin-left: ${({ switched }) => (switched === "true" ? "10px" : "calc(91vw - 40px)")}; */
   right: ${({ switched }) => (switched === "true" ? "unset" : "10px")};
   left: ${({ switched }) => (switched === "true" ? "10px" : "unset")};
+  background: rgba(0, 0, 0, 0.25) none repeat scroll 0% 0%;
+border-radius: 5px;
+box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
 
   &:hover {
     opacity: 1 !important;
@@ -311,6 +314,9 @@ export const ButtonShowStats = styled(FaInfoCircle).attrs({ size: 24 })`
   cursor: pointer;
   margin: 5px 10px;
   opacity: 0.7;
+  background: rgba(0, 0, 0, 0.25) none repeat scroll 0% 0%;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
 
   &:hover {
     opacity: 1;
@@ -329,6 +335,9 @@ export const ButtonShowQualities = styled.p`
   opacity: 0.7;
   display: flex;
   align-items: center;
+  background: rgba(0, 0, 0, 0.25) none repeat scroll 0% 0%;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
 
   &:hover {
     opacity: 1;
@@ -387,6 +396,9 @@ export const HideChatButton = styled(FaWindowClose).attrs({ size: 26, color: "re
   right: 10px;
   right: ${({ switched }) => (switched === "true" ? "unset" : "10px")};
   left: ${({ switched }) => (switched === "true" ? "10px" : "unset")};
+  background: rgba(0, 0, 0, 0.25) none repeat scroll 0% 0%;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
 `;
 
 export const OpenChatButton = styled(MdChat).attrs({ size: 26, color: "white" })`
@@ -397,6 +409,9 @@ export const OpenChatButton = styled(MdChat).attrs({ size: 26, color: "white" })
   right: 10px;
   right: ${({ switched }) => (switched === "true" ? "unset" : "10px")};
   left: ${({ switched }) => (switched === "true" ? "10px" : "unset")};
+  background: rgba(0, 0, 0, 0.25) none repeat scroll 0% 0%;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
 `;
 
 export const CreateClipButton = styled(MdMovieCreation).attrs({ size: 24, color: "white" })`
@@ -407,4 +422,7 @@ export const CreateClipButton = styled(MdMovieCreation).attrs({ size: 24, color:
   opacity: 0.7;
   cursor: pointer;
   margin: 5px 10px;
+  background: rgba(0, 0, 0, 0.25) none repeat scroll 0% 0%;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
 `;
