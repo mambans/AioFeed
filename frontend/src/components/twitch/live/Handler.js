@@ -61,50 +61,65 @@ export default ({ children, centerContainerRef }) => {
   const addSystemNotification = useCallback(
     async (status, stream) => {
       if (Notification.permission === "granted") {
-        let notification = new Notification(
-          `${stream.user_name} ${status === "offline" ? "Offline" : "Live"}`,
-          {
-            body:
-              status === "offline" ? "" : `${Util.truncate(stream.title, 60)}\n${stream.game_name}`,
+        if (
+          status === "offline" &&
+          enableTwitchVods &&
+          Util.getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
+        ) {
+          let notification = new Notification(`${stream.user_name} "Offline"`, {
+            body: "",
+
             icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
             badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-            silent: status === "offline" ? true : false,
-          }
-        );
+            silent: true,
+          });
 
-        const vodId =
-          enableTwitchVods &&
-          status === "offline" &&
-          Util.getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
-            ? await axios
-                .get(`https://api.twitch.tv/helix/videos?`, {
-                  params: {
-                    user_id: stream.user_id,
-                    first: 1,
-                    type: "archive",
-                  },
-                  headers: {
-                    Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
-                    "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-                  },
-                })
-                .then((res) => {
-                  return res.data.data[0];
-                })
-                .catch((error) => {
-                  console.error(error);
-                })
-            : null;
+          const vodId = await axios
+            .get(`https://api.twitch.tv/helix/videos?`, {
+              params: {
+                user_id: stream.user_id,
+                first: 1,
+                type: "archive",
+              },
+              headers: {
+                Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+                "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+              },
+            })
+            .then((res) => {
+              return res.data.data[0];
+            })
+            .catch((error) => {
+              console.error(error);
+            });
 
-        notification.onclick = async function (event) {
-          event.preventDefault(); // prevent the browser from focusing the Notification's tab
-          await markStreamAsSeen();
-          status === "offline" && vodId
-            ? window.open("https://www.twitch.tv/videos/" + vodId.id, "_blank")
-            : window.open("https://aiofeed.com/" + stream.user_name.toLowerCase(), "_blank");
-        };
+          notification.onclick = async function (event) {
+            event.preventDefault(); // prevent the browser from focusing the Notification's tab
+            await markStreamAsSeen();
+            window.open("https://www.twitch.tv/videos/" + vodId.id, "_blank");
+          };
+          return notification;
+        } else if (status === "online") {
+          let notification = new Notification(
+            `${stream.user_name} ${status === "offline" ? "Offline" : "Live"}`,
+            {
+              body: `${Util.truncate(stream.title, 60)}\n${stream.game_name}`,
+              icon:
+                stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+              badge:
+                stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+              silent: false,
+            }
+          );
 
-        return notification;
+          notification.onclick = async function (event) {
+            event.preventDefault(); // prevent the browser from focusing the Notification's tab
+            await markStreamAsSeen();
+            window.open("https://aiofeed.com/" + stream.user_name.toLowerCase(), "_blank");
+          };
+
+          return notification;
+        }
       }
     },
     [enableTwitchVods]
