@@ -82,6 +82,7 @@ export const StyledConnectYoutube = styled(Button)`
   height: 42px;
   border-radius: 10px;
   border: thin solid hsla(0, 65%, 18%, 1) !important;
+  display: flex;
 
   &:hover {
     background-color: hsla(0, 65%, 28%, 1);
@@ -336,6 +337,7 @@ export const StyledConnectContainer = styled.div`
     grid-area: disconnect;
     color: #b5b5b5;
     border-radius: 50%;
+    width: 50px;
 
     &:hover {
       color: #ffffff;

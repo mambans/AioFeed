@@ -17,7 +17,7 @@ export default ({ data }) => {
   }, [data]);
 
   const windowBlurHandler = useCallback(() => {
-    // document.title = "AioFeed | Feed";
+    if (document.title !== "AioFeed | Feed") document.title = "AioFeed | Feed";
     data.resetNewlyAddedStreams();
   }, [data]);
 

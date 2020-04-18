@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
+import axios from "axios";
 
 import ErrorHandler from "../../error";
 import GetFollowedChannels from "./../GetFollowedChannels";
@@ -37,29 +38,77 @@ export default ({ children, centerContainerRef }) => {
     newlyAddedStreams.current = [];
   }
 
-  const addSystemNotification = useCallback((status, stream) => {
-    if (Notification.permission === "granted") {
-      let notification = new Notification(
-        `${stream.user_name} ${status === "offline" ? "Offline" : "Live"}`,
-        {
-          body:
-            status === "offline" ? "" : `${Util.truncate(stream.title, 60)}\n${stream.game_name}`,
-          icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-          badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-          silent: status === "offline" ? true : false,
-        }
-      );
+  const markStreamAsSeen = async (streamName) => {
+    const unSeenStreams = [...newlyAddedStreams.current];
 
-      notification.onclick = function (event) {
-        event.preventDefault(); // prevent the browser from focusing the Notification's tab
-        status === "offline"
-          ? window.open("https://www.twitch.tv/videos/" + stream.id, "_blank")
-          : window.open("https://aiofeed.com/" + stream.user_name.toLowerCase(), "_blank");
-      };
+    const index = unSeenStreams.indexOf(streamName);
 
-      return notification;
+    if (index !== -1) {
+      const newUnSeenStreams = unSeenStreams.splice(index, 1);
+
+      newlyAddedStreams.current = newUnSeenStreams;
+
+      if (document.title.length > 15 && newUnSeenStreams.length > 0) {
+        const title = document.title.substring(4);
+        const count = parseInt(document.title.substring(1, 2)) - 1;
+        document.title = `(${count}) ${title}`;
+      } else if (newUnSeenStreams.length === 0 && document.title !== "AioFeed | Feed") {
+        document.title = "AioFeed | Feed";
+      }
     }
-  }, []);
+  };
+
+  const addSystemNotification = useCallback(
+    async (status, stream) => {
+      if (Notification.permission === "granted") {
+        let notification = new Notification(
+          `${stream.user_name} ${status === "offline" ? "Offline" : "Live"}`,
+          {
+            body:
+              status === "offline" ? "" : `${Util.truncate(stream.title, 60)}\n${stream.game_name}`,
+            icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+            badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+            silent: status === "offline" ? true : false,
+          }
+        );
+
+        const vodId =
+          enableTwitchVods &&
+          status === "offline" &&
+          Util.getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
+            ? await axios
+                .get(`https://api.twitch.tv/helix/videos?`, {
+                  params: {
+                    user_id: stream.user_id,
+                    first: 1,
+                    type: "archive",
+                  },
+                  headers: {
+                    Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+                    "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+                  },
+                })
+                .then((res) => {
+                  return res.data.data[0];
+                })
+                .catch((error) => {
+                  console.error(error);
+                })
+            : null;
+
+        notification.onclick = async function (event) {
+          event.preventDefault(); // prevent the browser from focusing the Notification's tab
+          await markStreamAsSeen();
+          status === "offline" && vodId
+            ? window.open("https://www.twitch.tv/videos/" + vodId.id, "_blank")
+            : window.open("https://aiofeed.com/" + stream.user_name.toLowerCase(), "_blank");
+        };
+
+        return notification;
+      }
+    },
+    [enableTwitchVods]
+  );
 
   const refresh = useCallback(
     async (disableNotifications) => {
@@ -130,6 +179,7 @@ export default ({ children, centerContainerRef }) => {
               if (!isStreamLive) {
                 // console.log(stream.user_name, "went Offline.");
                 addNotification(stream, "Offline");
+                addSystemNotification("offline", stream);
 
                 console.log(`${stream.user_name} went offline - array: `, channels);
 

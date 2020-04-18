@@ -30,7 +30,6 @@ import FeedsContext from "./../../feed/FeedsContext";
 import UpdateTwitterListName from "./UpdateTwitterListName";
 
 export default () => {
-  document.title = "AioFeed | Account";
   const {
     username,
     setUsername,
@@ -271,7 +270,7 @@ export default () => {
         </StyledConnectContainer>
       )}
       {!youtubeToken ? (
-        <div style={{ marginBottom: "10px" }}>
+        <div style={{ marginBottom: "10px", display: "flex" }}>
           <StyledConnectYoutube
             //to unfollow: scope=https://www.googleapis.com/auth/youtube
             //else  scope=https://www.googleapis.com/auth/youtube.readonly
