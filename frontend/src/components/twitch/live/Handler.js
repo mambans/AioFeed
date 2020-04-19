@@ -34,6 +34,26 @@ export default ({ children, centerContainerRef }) => {
   const newlyAddedStreams = useRef([]);
   const timer = useRef();
 
+  const windowFocusHandler = useCallback(() => {
+    document.title = "AioFeed | Feed";
+    resetNewlyAddedStreams();
+  }, []);
+
+  const windowBlurHandler = useCallback(() => {
+    if (document.title !== "AioFeed | Feed") document.title = "AioFeed | Feed";
+    resetNewlyAddedStreams();
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("focus", windowFocusHandler);
+    window.addEventListener("blur", windowBlurHandler);
+
+    return () => {
+      window.removeEventListener("focus", windowFocusHandler);
+      window.removeEventListener("blur", windowBlurHandler);
+    };
+  }, [windowBlurHandler, windowFocusHandler]);
+
   function resetNewlyAddedStreams() {
     newlyAddedStreams.current = [];
   }
@@ -176,6 +196,7 @@ export default ({ children, centerContainerRef }) => {
                 newlyAddedStreams.current.push(stream.user_name);
                 stream.newlyAdded = true;
 
+                // if (document.visibilityState !== "visible") {
                 if (document.title.length > 15) {
                   const title = document.title.substring(4);
                   const count = parseInt(document.title.substring(1, 2)) + 1;
@@ -184,6 +205,7 @@ export default ({ children, centerContainerRef }) => {
                   const title = document.title;
                   document.title = `(${1}) ${title}`;
                 }
+                // }
               }
             });
 
@@ -193,8 +215,9 @@ export default ({ children, centerContainerRef }) => {
               );
               if (!isStreamLive) {
                 // console.log(stream.user_name, "went Offline.");
-                addNotification(stream, "Offline");
                 addSystemNotification("offline", stream);
+
+                addNotification(stream, "Offline");
 
                 console.log(`${stream.user_name} went offline - array: `, channels);
 

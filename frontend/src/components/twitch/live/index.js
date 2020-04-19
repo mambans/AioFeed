@@ -11,33 +11,14 @@ import Util from "../../../util/Util";
 export default ({ data }) => {
   const [show, setShow] = useState(true);
 
-  const windowFocusHandler = useCallback(() => {
-    document.title = "AioFeed | Feed";
-    data.resetNewlyAddedStreams();
-  }, [data]);
-
-  const windowBlurHandler = useCallback(() => {
-    if (document.title !== "AioFeed | Feed") document.title = "AioFeed | Feed";
-    data.resetNewlyAddedStreams();
-  }, [data]);
-
-  const refresh = useCallback(async () => {
-    await data.refresh();
-  }, [data]);
-
-  useEffect(() => {
-    window.addEventListener("focus", windowFocusHandler);
-    window.addEventListener("blur", windowBlurHandler);
-
-    return () => {
-      window.removeEventListener("focus", windowFocusHandler);
-      window.removeEventListener("blur", windowBlurHandler);
-    };
-  }, [windowBlurHandler, windowFocusHandler]);
-
   return (
     <>
-      <Header data={data} refresh={refresh} />
+      <Header
+        data={data}
+        refresh={async () => {
+          await data.refresh();
+        }}
+      />
 
       {data.error ? (
         show && (
@@ -76,7 +57,9 @@ export default ({ data }) => {
                         data={stream}
                         newlyAddedStreams={data.newlyAddedStreams}
                         newlyAdded={stream.newlyAdded}
-                        refresh={refresh}
+                        refresh={async () => {
+                          await data.refresh();
+                        }}
                         REFRESH_RATE={data.REFRESH_RATE}
                       />
                     </CSSTransition>
