@@ -249,6 +249,25 @@ export const VideoTitle = styled(Link)`
   }
 `;
 
+export const VideoTitleHref = styled.a`
+  color: var(--videoTitle);
+  margin-top: 15px;
+  margin-bottom: 5px;
+  grid-area: title;
+  font-size: 1.1rem;
+  max-width: 336px;
+  overflow: hidden;
+  height: 45px;
+  line-height: 1.2;
+  padding: 0;
+  mix-blend-mode: screen;
+
+  &:hover {
+    color: var(--videoTitleHover);
+    mix-blend-mode: unset;
+  }
+`;
+
 export const ImageContainer = styled.div`
   grid-area: video;
   transition: all 0.2s ease-in-out;

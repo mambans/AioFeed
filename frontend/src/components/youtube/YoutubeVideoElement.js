@@ -7,7 +7,7 @@ import VideoHoverIframe from "./VideoHoverIframe";
 import styles from "./Youtube.module.scss";
 import Util from "../../util/Util";
 
-import { VideoContainer, VideoTitle, ImageContainer } from "./../sharedStyledComponents";
+import { VideoContainer, VideoTitleHref, ImageContainer } from "./../sharedStyledComponents";
 import FeedsContext from "../feed/FeedsContext";
 
 const HOVER_DELAY = 1000;
@@ -89,10 +89,10 @@ export default (data) => {
             {data.video.snippet.title}
           </Tooltip>
         }>
-        <VideoTitle
+        <VideoTitleHref
           href={`https://www.youtube.com/watch?v=` + data.video.contentDetails.upload.videoId}>
           {Util.truncate(data.video.snippet.title, 60)}
-        </VideoTitle>
+        </VideoTitleHref>
       </OverlayTrigger>
       <Moment className={styles.date} fromNow>
         {data.video.snippet.publishedAt}
