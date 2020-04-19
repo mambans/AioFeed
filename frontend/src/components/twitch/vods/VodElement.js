@@ -14,47 +14,62 @@ import {
   ImageContainer,
   VodVideoInfo,
   ChannelContainer,
+  StyledVideoElementAlert,
 } from "./../../sharedStyledComponents";
 import Util from "../../../util/Util";
 import { VodLiveIndicator, VodType, VodPreview, VodDates } from "./StyledComponents";
 import VodsFollowUnfollowBtn from "./VodsFollowUnfollowBtn";
 
 export default ({ data, vodBtnDisabled }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [previewAvailable, setPreviewAvailable] = useState();
+  const [previewAvailable, setPreviewAvailable] = useState({});
+  const [showPreview, setShowPreview] = useState();
   const imgRef = useRef();
   const hoverTimeoutRef = useRef();
 
   const handleMouseOver = useCallback(async () => {
-    if (!previewAvailable) {
-      hoverTimeoutRef.current = setTimeout(async () => {
-        const res = await axios.get(`https://api.twitch.tv/kraken/videos/${data.id}`, {
-          headers: {
-            Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
-            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-            Accept: "application/vnd.twitchtv.v5+json",
-          },
-        });
-        setIsHovered(true);
-        if (res.data.status === "recorded" && data.thumbnail_url === "") {
-          data.thumbnail_url = null;
-        }
-        if (res.data.status === "recording") {
-          setPreviewAvailable("null");
-        } else {
-          setPreviewAvailable(res.data.animated_preview_url);
-        }
-      }, 1000);
+    if (!previewAvailable.data) {
+      hoverTimeoutRef.current = setTimeout(
+        async () => {
+          await axios
+            .get(`https://api.twitch.tv/kraken/videos/${data.id}`, {
+              headers: {
+                Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+                "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+                Accept: "application/vnd.twitchtv.v5+json",
+              },
+            })
+            .then((res) => {
+              console.log("handleMouseOver -> res", res.data.preview);
+              if (res.data.status === "recording") {
+                setPreviewAvailable({
+                  status: "recording",
+                  error: "Stream is live - no preview yet",
+                });
+              } else {
+                if (data.thumbnail_url === "") data.thumbnail_url = res.data.preview.template;
+                setPreviewAvailable({
+                  data: res.data.animated_preview_url,
+                });
+              }
+              setShowPreview(true);
+            })
+            .catch((error) => {
+              setPreviewAvailable({ error: "Preview failed" });
+              console.error(error);
+            });
+        },
+        previewAvailable.error ? 5000 : 1000
+      );
     } else {
       hoverTimeoutRef.current = setTimeout(() => {
-        setIsHovered(true);
-      }, 200);
+        setShowPreview(true);
+      }, 250);
     }
-  }, [previewAvailable, data.id, data.thumbnail_url]);
+  }, [data.id, previewAvailable.error, previewAvailable.data, data.thumbnail_url]);
 
   const handleMouseOut = useCallback(() => {
     clearTimeout(hoverTimeoutRef.current);
-    setIsHovered(false);
+    setShowPreview(false);
   }, []);
 
   useEffect(() => {
@@ -71,25 +86,29 @@ export default ({ data, vodBtnDisabled }) => {
   return (
     <VideoContainer>
       <ImageContainer ref={imgRef}>
+        {previewAvailable.error && (
+          <StyledVideoElementAlert variant='danger' className='error'>
+            {previewAvailable.error}
+          </StyledVideoElementAlert>
+        )}
         {data.thumbnail_url === "" && (
           <VodLiveIndicator to={`/${data.user_name}`}>Live</VodLiveIndicator>
         )}
         <a href={data.url}>
-          {!previewAvailable && (
+          {!previewAvailable.error && !previewAvailable.data && (
             <Spinner className='loadingSpinner' animation='border' role='status' variant='light' />
           )}
-          {isHovered && previewAvailable && previewAvailable !== "null" ? (
-            <VodPreview previewAvailable={previewAvailable} />
-          ) : (
-            <img
-              src={
-                data.thumbnail_url
-                  ? data.thumbnail_url.replace("%{width}", 640).replace("%{height}", 360)
-                  : "https://vod-secure.twitch.tv/_404/404_processing_320x180.png"
-              }
-              alt=''
-            />
+          {previewAvailable.data && showPreview && (
+            <VodPreview previewAvailable={previewAvailable.data} className='VodPreview' />
           )}
+          <img
+            src={
+              data.thumbnail_url
+                ? data.thumbnail_url.replace("%{width}", 640).replace("%{height}", 360)
+                : "https://vod-secure.twitch.tv/_404/404_processing_320x180.png"
+            }
+            alt=''
+          />
         </a>
 
         <VodVideoInfo>
@@ -156,7 +175,6 @@ export default ({ data, vodBtnDisabled }) => {
           {data.title}
         </VideoTitle>
       )}
-
       <ChannelContainer>
         <Link
           to={{

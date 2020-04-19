@@ -64,15 +64,20 @@ const AnimateVodPreview = keyframes`
 `;
 
 export const VodPreview = styled.div`
+  position: absolute;
   animation: ${AnimateVodPreview} 5s steps(9);
   animation-fill-mode: forwards;
   object-fit: cover;
   background-size: cover;
+  /* opacity: 0; */
 
   width: 336px;
   height: 189px;
   background-image: ${({ previewAvailable }) => `url(${previewAvailable})`};
   border-radius: 10px;
+
+  /* display: none; */
+  /* opacity: 0; */
 
   /* animation: AnimateVodPreview 5s; */
   /* animation-delay: 0.5s; */

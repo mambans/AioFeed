@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button } from "react-bootstrap";
+import { Button, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 export const RefreshButton = styled(Button).attrs({ variant: "outline-secondary" })`
@@ -275,7 +275,7 @@ export const ImageContainer = styled.div`
   img {
     border-radius: 10px;
     width: 100%;
-    // width: 336px;
+    /*  width: 336px; */
     max-height: 189px;
     object-fit: cover;
   }
@@ -288,6 +288,10 @@ export const ImageContainer = styled.div`
 
     .loadingSpinner {
       opacity: 0.5;
+    }
+
+    .error {
+      opacity: 1;
     }
 
     time {
@@ -404,4 +408,14 @@ export const VodVideoInfo = styled.div`
     display: flex;
     align-items: center;
   }
+`;
+
+export const StyledVideoElementAlert = styled(Alert)`
+  text-align: center;
+  padding: 3px;
+  position: absolute;
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+  transition: opacity 250ms;
+  opacity: 0;
 `;
