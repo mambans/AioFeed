@@ -1,56 +1,150 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { throttle } from "lodash";
+import { MdFormatListBulleted } from "react-icons/md";
 
-import ChannelListElement from "./ChannelListElement";
-import AccountContext from "./../../account/AccountContext";
-import StyledLoadingList from "./../LoadingList";
-import AddVideoExtraData from "./../AddVideoExtraData";
-import { ChannelListUl } from "./StyledComponents";
+import {
+  GameListUlContainer,
+  SearchGameForm,
+  SearchSubmitBtn,
+} from "./../categoryTopStreams/styledComponents";
+import StyledLoadingList from "./../categoryTopStreams/LoadingList";
+import ChannelListElement from "../channelList/ChannelListElement";
+import AddVideoExtraData from "../AddVideoExtraData";
+import GetFollowedChannels from "../GetFollowedChannels";
+import { CSSTransition } from "react-transition-group";
 
-export default (data) => {
-  const [followedChannels, setFollowedChannels] = useState();
-  const { authKey, username } = useContext(AccountContext);
+export default () => {
+  // eslint-disable-next-line no-unused-vars
+  const navigate = useNavigate();
+  const [channels, setChannels] = useState();
+  const [listIsOpen, setListIsOpen] = useState();
+
+  const useInput = (initialValue) => {
+    const [value, setValue] = useState(initialValue);
+
+    return {
+      value,
+      setValue,
+      reset: () => setValue(""),
+      bind: {
+        value,
+        onChange: (event) => {
+          setValue(event.target.value);
+          if (event.target.value && event.target.value.length >= 2) {
+          }
+          if (listIsOpen && event.target.value === "") {
+            setListIsOpen(false);
+          } else if (!listIsOpen && event.target.value) {
+            setListIsOpen(true);
+          }
+        },
+      },
+      showValue: () => {
+        return value;
+      },
+    };
+  };
+
+  //eslint-disable-next-line
+  const { value: channel, bind: bindChannel, reset: resetChannel, showValue } = useInput("");
+
+  const channelObjectList = async (channelsList) => {
+    return {
+      data: {
+        data: await channelsList.map((channel) => {
+          return {
+            user_id: channel.to_id || channel.user_id,
+            user_name: channel.to_name || channel.user_name,
+          };
+        }),
+      },
+    };
+  };
+
+  const fetchFollowedChannels = useMemo(
+    () =>
+      throttle(
+        () => {
+          GetFollowedChannels().then(async (res) => {
+            if (res) {
+              channelObjectList(res).then(async (res) => {
+                await AddVideoExtraData(res, false).then(async (res) => {
+                  setChannels(res.data);
+                });
+              });
+            }
+          });
+        },
+        60000,
+        { leading: true, trailing: false }
+      ),
+    []
+  );
 
   useEffect(() => {
-    const channelObjectList = async (followedChannels) => {
-      const followedChannelsIds = {
-        data: {
-          data: await followedChannels.map((channel) => {
-            return { user_id: channel.to_id, user_name: channel.to_name };
-          }),
-        },
-      };
-
-      return followedChannelsIds;
-    };
-
-    try {
-      if (data.followedChannels) {
-        channelObjectList(data.followedChannels).then(async (res) => {
-          await AddVideoExtraData(res, false).then(async (res) => {
-            setFollowedChannels(res.data);
-          });
-        });
-      }
-    } catch (error) {
-      console.error(error);
+    const input = showValue();
+    if (!channels && (listIsOpen || (input && input.length >= 2))) {
+      fetchFollowedChannels();
     }
-  }, [data.followedChannels, username, authKey]);
+  }, [showValue, listIsOpen, fetchFollowedChannels, channels]);
 
-  if (!followedChannels) {
-    return <StyledLoadingList amount={12} />;
-  } else {
-    return (
-      <ChannelListUl>
-        <p
-          style={{
-            textAlign: "center",
-            fontSize: "1.1rem",
-            fontWeight: "bold",
-          }}>{`Total: ${followedChannels.length}`}</p>
-        {followedChannels.map((channel) => {
-          return <ChannelListElement key={channel.user_id} data={channel} />;
-        })}
-      </ChannelListUl>
-    );
-  }
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    resetChannel();
+    // navigate(`/${channel}/channel/`);
+    window.open(`/${channel}/channel/`);
+  };
+
+  return (
+    <>
+      <SearchGameForm onSubmit={handleSubmit} open={listIsOpen}>
+        <input type='text' placeholder={"..."} {...bindChannel}></input>
+        {channel && (
+          <Link
+            to={{
+              pathname: `/${channel.toLowerCase()}/channel/`,
+            }}>
+            <SearchSubmitBtn />
+          </Link>
+        )}
+        <MdFormatListBulleted
+          id='ToggleListBtn'
+          onClick={() => {
+            setListIsOpen(!listIsOpen);
+            resetChannel();
+          }}
+          size={42}
+        />
+        <CSSTransition in={listIsOpen} timeout={250} classNames='fade-250ms' unmountOnExit>
+          <GameListUlContainer>
+            {channels ? (
+              <>
+                <p
+                  style={{
+                    textAlign: "center",
+                    fontSize: "0.9rem",
+                    fontWeight: "bold",
+                    margin: "9px 0",
+                  }}>{`Total: ${channels.length}`}</p>
+
+                {channels
+                  .filter((channel) => {
+                    return (
+                      channel.user_name.toLowerCase().includes(showValue()) ||
+                      channel.user_name.toUpperCase().includes(showValue())
+                    );
+                  })
+                  .map((channel) => {
+                    return <ChannelListElement key={channel.user_id} data={channel} />;
+                  })}
+              </>
+            ) : (
+              <StyledLoadingList amount={12} />
+            )}
+          </GameListUlContainer>
+        </CSSTransition>
+      </SearchGameForm>
+    </>
+  );
 };

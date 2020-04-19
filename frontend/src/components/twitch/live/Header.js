@@ -5,7 +5,7 @@ import React from "react";
 
 import { HeaderContainerTwitchLive, HeaderLeftSubcontainer } from "./../StyledComponents";
 import { RefreshButton, HeaderTitle } from "./../../sharedStyledComponents";
-import ChannelSearchList from "./../channelList/ChannelSearchList";
+import ChannelSearchList from "./../channelList";
 import CountdownCircleTimer from "./CountdownCircleTimer";
 import Util from "../../../util/Util";
 
