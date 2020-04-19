@@ -1,6 +1,6 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Alert from "react-bootstrap/Alert";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState } from "react";
 
 import Header from "./Header";
 import StreamEle from "./StreamElement.js";
