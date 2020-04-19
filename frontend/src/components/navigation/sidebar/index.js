@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
 
 import AccountContext from "./../../account/AccountContext";
@@ -14,7 +14,9 @@ import {
 } from "./StyledComponent";
 
 export default () => {
-  const { profileImage, username } = useContext(AccountContext);
+  const { profileImage, username, setTwitchToken, setYoutubeToken, setRefreshToken } = useContext(
+    AccountContext
+  );
   const { setRenderModal, renderModal, showSidebar, setShowSidebar } = useContext(
     NavigationContext
   );
@@ -22,6 +24,30 @@ export default () => {
   const handleToggle = () => {
     setShowSidebar(!showSidebar);
   };
+
+  useEffect(() => {
+    function receiveMessage(event) {
+      if (
+        event.origin === "https://aiofeed.com" &&
+        typeof event.data === "object" &&
+        event.data.token &&
+        event.data.service
+      ) {
+        if (event.data.service === "twitch") {
+          setTwitchToken(event.data.token);
+          setRefreshToken(event.data.refresh_token);
+        } else if (event.data.service === "youtube") {
+          setYoutubeToken(event.data.token);
+        }
+      }
+    }
+
+    window.addEventListener("message", receiveMessage, false);
+
+    return () => {
+      window.removeEventListener("message", receiveMessage, false);
+    };
+  }, [setTwitchToken, setYoutubeToken, setRefreshToken]);
 
   return (
     <>

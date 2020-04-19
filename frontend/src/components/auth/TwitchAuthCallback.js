@@ -10,15 +10,7 @@ import FeedsContext from "../feed/FeedsContext";
 
 function TwitchAuthCallback() {
   const [error, setError] = useState();
-  const {
-    username,
-    setTwitchUserId,
-    setTwitchUsername,
-    setTwitchProfileImg,
-    setTwitchToken,
-    setRefreshToken,
-    autoRefreshEnabled,
-  } = useContext(AccountContext);
+  const { username, autoRefreshEnabled } = useContext(AccountContext);
   const { setVisible, setFooterVisible } = useContext(NavigationContext);
   const { enableTwitch } = useContext(FeedsContext);
 
@@ -50,12 +42,6 @@ function TwitchAuthCallback() {
           document.cookie = `AioFeed_TwitchUserId=${res.data.data[0].id}; path=/; SameSite=Lax`;
           document.cookie = `Twitch-username=${res.data.data[0].login}; path=/; SameSite=Lax`;
           document.cookie = `AioFeed_TwitchProfileImg=${res.data.data[0].profile_image_url}; path=/`;
-          setTwitchToken(accessToken);
-          setRefreshToken(refreshToken);
-
-          setTwitchUserId(res.data.data[0].id);
-          setTwitchUsername(res.data.data[0].login);
-          setTwitchProfileImg(res.data.data[0].profile_image_url);
 
           await axios
             .put(
@@ -86,17 +72,10 @@ function TwitchAuthCallback() {
         .catch((e) => {
           console.error(e);
         });
+
+      return { token: accessToken, refresh_token: refreshToken };
     },
-    [
-      username,
-      setTwitchUserId,
-      setTwitchUsername,
-      setTwitchProfileImg,
-      setTwitchToken,
-      setRefreshToken,
-      autoRefreshEnabled,
-      enableTwitch,
-    ]
+    [username, autoRefreshEnabled, enableTwitch]
   );
 
   useEffect(() => {
@@ -105,13 +84,20 @@ function TwitchAuthCallback() {
     (async function () {
       try {
         const url = new URL(window.location.href);
-
         if (url.pathname === "/auth/twitch/callback") {
           if (url.searchParams.get("state") === Util.getCookie("Twitch-myState")) {
             await getAccessToken(url)
-              .then(() => {
-                document.cookie = `Twitch_FeedEnabled=${true}; path=/`;
+              .then((res) => {
                 console.log("successfully authenticated to Twitch.");
+                window.opener.postMessage(
+                  {
+                    service: "twitch",
+                    token: res.token,
+                    refresh_token: res.refresh_token,
+                  },
+                  "*"
+                );
+
                 setTimeout(() => {
                   window.close();
                 }, 1);
@@ -136,7 +122,7 @@ function TwitchAuthCallback() {
         setError(error);
       }
     })();
-  }, [getAccessToken, setVisible, setTwitchToken, setFooterVisible]);
+  }, [getAccessToken, setVisible, setFooterVisible]);
 
   if (error) {
     return <ErrorHandler data={error}></ErrorHandler>;

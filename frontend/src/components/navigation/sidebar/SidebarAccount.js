@@ -77,7 +77,7 @@ export default () => {
     setAuthKey();
   }
 
-  async function authenticatePopup(winName, domain, urlParam, setFeedEnable) {
+  async function authenticatePopup(winName, domain, urlParam) {
     async function generateOrginState() {
       return uniqid();
     }
@@ -90,18 +90,9 @@ export default () => {
     const LeftPosition = window.screen.width ? (window.screen.width - 700) / 2 : 0;
     const TopPosition = window.screen.height ? (window.screen.height - 850) / 2 : 0;
     const settings = `height=700,width=600,top=${TopPosition},left=${LeftPosition},scrollbars=yes,resizable`;
-    const popupWindow = window.open(url, winName, settings);
 
     try {
-      popupWindow.onunload = function () {
-        window.setTimeout(function () {
-          if (popupWindow.closed) {
-            document.cookie = `${domain}_FeedEnabled=${true}; path=/`;
-            setFeedEnable(true);
-            console.log(`Successfully authenticate to ${domain}`);
-          }
-        }, 1);
-      };
+      window.open(url, winName, settings);
     } catch (e) {
       alert("Another Authendicate popup window might already be open.");
       console.error("Another Authendicate popup window might already be open.");
@@ -288,7 +279,7 @@ export default () => {
           </StyledConnectYoutube>
         </div>
       ) : (
-        <div style={{ marginBottom: "10px", width: "280px" }}>
+        <div style={{ marginBottom: "10px", display: "flex" }}>
           <StyledConnectYoutube
             style={{ marginRight: "25px" }}
             //to unfollow: scope=https://www.googleapis.com/auth/youtube

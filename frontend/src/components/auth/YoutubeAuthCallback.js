@@ -35,7 +35,7 @@ export default () => {
     if (validateToken.data.aud === process.env.REACT_APP_YOUTUBE_CLIENT_ID) {
       document.cookie = `Youtube-access_token=${accessToken}; path=/`;
       document.cookie = `Youtube-access_token_expire=${accessTokenExpireParam}; path=/`;
-      document.cookie = `Youtube-readonly=${url.hash.split("&")[4].includes(".readonly")}; path=/`;
+      document.cookie = `Youtube-readonly=${url.hash.includes(".readonly")}; path=/`;
     }
 
     await axios
@@ -47,6 +47,8 @@ export default () => {
       .catch((e) => {
         console.error(e);
       });
+
+    return accessToken;
   }, [username]);
 
   useEffect(() => {
@@ -55,17 +57,21 @@ export default () => {
 
     (async () => {
       const url = new URL(window.location.href);
-
       try {
         if (url.hash.split("#")[1].split("&")[0].slice(6) === Util.getCookie("Youtube-myState")) {
           await getAccessToken()
-            .then(() => {
-              window.close();
-
-              // setAuthenticated(true);
-              // localStorage.setItem("YoutubeFeedEnabled", "true");
-              // setAccountModalOpen(false);
-              // setConnectedDomain("Youtube");
+            .then((res) => {
+              console.log("successfully authenticated to Youtube.");
+              window.opener.postMessage(
+                {
+                  service: "youtube",
+                  token: res,
+                },
+                "*"
+              );
+              // setTimeout(() => {
+              //   window.close();
+              // }, 1);
             })
             .catch((error) => {
               setError(error);
