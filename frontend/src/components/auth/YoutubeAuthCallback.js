@@ -69,9 +69,9 @@ export default () => {
                 },
                 "*"
               );
-              // setTimeout(() => {
-              //   window.close();
-              // }, 1);
+              setTimeout(() => {
+                window.close();
+              }, 1);
             })
             .catch((error) => {
               setError(error);
