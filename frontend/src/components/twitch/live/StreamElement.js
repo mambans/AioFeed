@@ -217,18 +217,22 @@ function StreamEle(data_p) {
         </ChannelContainer>
 
         <GameContainer>
-          <a
-            className={"gameImg"}
-            href={"https://www.twitch.tv/directory/category/" + data.game_name}>
-            <img
-              src={data.game_img.replace("{width}", 130).replace("{height}", 173)}
-              alt=''
-              className={"gameImg"}
-            />
-          </a>
-          <Link className={"gameName"} to={"/category/" + data.game_name}>
-            {data.game_name}
-          </Link>
+          {data.game_img && (
+            <>
+              <a
+                className={"gameImg"}
+                href={"https://www.twitch.tv/directory/category/" + data.game_name}>
+                <img
+                  src={data.game_img.replace("{width}", 130).replace("{height}", 173)}
+                  alt=''
+                  className={"gameImg"}
+                />
+              </a>
+              <Link className={"gameName"} to={"/category/" + data.game_name}>
+                {data.game_name}
+              </Link>
+            </>
+          )}
           <p title='Viewers' className='viewers'>
             {Util.formatViewerNumbers(data.viewer_count)}
             <FaRegEye size={14} />
