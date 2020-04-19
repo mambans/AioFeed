@@ -2,7 +2,7 @@ import React from "react";
 
 import "./NoMatch.scss";
 
-function NoMatch() {
+export default () => {
   document.title = "AioFeed | 404 Error";
 
   return (
@@ -27,6 +27,4 @@ function NoMatch() {
       </div>
     </section>
   );
-}
-
-export default NoMatch;
+};

@@ -86,7 +86,7 @@ export default ({ children, centerContainerRef }) => {
           enableTwitchVods &&
           Util.getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
         ) {
-          let notification = new Notification(`${stream.user_name} "Offline"`, {
+          let notification = new Notification(`${stream.user_name} Offline`, {
             body: "",
 
             icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
@@ -120,17 +120,12 @@ export default ({ children, centerContainerRef }) => {
           };
           return notification;
         } else if (status === "online") {
-          let notification = new Notification(
-            `${stream.user_name} ${status === "offline" ? "Offline" : "Live"}`,
-            {
-              body: `${Util.truncate(stream.title, 60)}\n${stream.game_name}`,
-              icon:
-                stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-              badge:
-                stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-              silent: false,
-            }
-          );
+          let notification = new Notification(`${stream.user_name} Live`, {
+            body: `${Util.truncate(stream.title, 60)}\n${stream.game_name}`,
+            icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+            badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+            silent: false,
+          });
 
           notification.onclick = async function (event) {
             event.preventDefault(); // prevent the browser from focusing the Notification's tab
