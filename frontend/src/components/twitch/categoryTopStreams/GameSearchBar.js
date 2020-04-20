@@ -6,6 +6,7 @@ import {
   GameListUlContainer,
   SearchGameForm,
   StyledShowAllButton,
+  BackdropChannelList,
 } from "./styledComponents";
 import { throttle } from "lodash";
 import { MdFormatListBulleted } from "react-icons/md";
@@ -16,7 +17,7 @@ export default (props) => {
   const { gameName, videoType } = props;
   const navigate = useNavigate();
   const [topGames, setTopGames] = useState();
-  const [openGameList, setOpenGameList] = useState();
+  const [listIsOpen, setListIsOpen] = useState();
 
   const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue);
@@ -29,10 +30,10 @@ export default (props) => {
         value,
         onChange: (event) => {
           setValue(event.target.value);
-          if (openGameList && event.target.value === "") {
-            setOpenGameList(false);
-          } else if (!openGameList && event.target.value.length >= 2) {
-            setOpenGameList(true);
+          if (listIsOpen && event.target.value === "") {
+            setListIsOpen(false);
+          } else if (!listIsOpen && event.target.value.length >= 2) {
+            setListIsOpen(true);
           }
         },
       },
@@ -67,14 +68,14 @@ export default (props) => {
 
   useEffect(() => {
     const input = showValue();
-    if ((!topGames && openGameList) || (input && input.length >= 2)) {
+    if ((!topGames && listIsOpen) || (input && input.length >= 2)) {
       fetchTopGamesOnce();
     }
-  }, [showValue, openGameList, fetchTopGamesOnce, topGames]);
+  }, [showValue, listIsOpen, fetchTopGamesOnce, topGames]);
 
   return (
     <>
-      <SearchGameForm onSubmit={handleSubmit} open={openGameList}>
+      <SearchGameForm onSubmit={handleSubmit} open={listIsOpen}>
         <input
           type='text'
           placeholder={(gameName !== "" && gameName !== undefined ? gameName : "All") + "..."}
@@ -82,11 +83,11 @@ export default (props) => {
         <MdFormatListBulleted
           id='ToggleListBtn'
           onClick={() => {
-            setOpenGameList(!openGameList);
+            setListIsOpen(!listIsOpen);
           }}
           size={42}
         />
-        <CSSTransition in={openGameList} timeout={250} classNames='fade-250ms' unmountOnExit>
+        <CSSTransition in={listIsOpen} timeout={250} classNames='fade-250ms' unmountOnExit>
           <GameListUlContainer>
             {topGames && (
               <StyledShowAllButton key='showAll'>
@@ -103,7 +104,7 @@ export default (props) => {
                     <StyledGameListElement key={game.id}>
                       <Link
                         onClick={() => {
-                          setOpenGameList(false);
+                          setListIsOpen(false);
                         }}
                         to={{
                           pathname: "/category/" + game.name,
@@ -125,6 +126,14 @@ export default (props) => {
             )}
           </GameListUlContainer>
         </CSSTransition>
+        {listIsOpen && (
+          <BackdropChannelList
+            id='BackdropChannelList'
+            onClick={() => {
+              setListIsOpen(!listIsOpen);
+            }}
+          />
+        )}
       </SearchGameForm>
     </>
   );

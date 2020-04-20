@@ -47,7 +47,7 @@ export const GameListUlContainer = styled.ul`
   overflow-x: scroll;
   overflow-x: hidden;
   border: none !important;
-  z-index: 3;
+  z-index: 4;
 
   li {
     display: flex;
@@ -65,6 +65,16 @@ export const GameListUlContainer = styled.ul`
       color: #ffffff;
     }
   }
+`;
+
+export const BackdropChannelList = styled.div`
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  transition: 175ms;
+  left: 0;
+  top: 0;
+  z-index: 3;
 `;
 
 export const TypeListUlContainer = styled.ul`
@@ -131,6 +141,7 @@ export const SearchGameForm = styled.form`
   width: ${({ open }) => (open ? "275px" : "125px")};
   min-width: ${({ open }) => (open ? "275px" : "125px")};
   margin-left: ${({ open }) => (open ? "0px" : "150px")};
+  z-index: 4;
 
   li {
     button.VodButton,
@@ -160,6 +171,12 @@ export const SearchGameForm = styled.form`
     padding: 7px;
     cursor: pointer;
     position: absolute;
+    color: var(--refreshButtonColor);
+    transition: color 250ms;
+
+    &:hover {
+      color: #ffffff;
+    }
   }
 `;
 
