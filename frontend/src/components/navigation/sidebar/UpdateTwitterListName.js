@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Form } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import styled from "styled-components";
 
@@ -42,6 +42,20 @@ export default () => {
       });
   };
 
+  const clearListId = async () => {
+    document.cookie = `Twitter-Listname=null; path=/`;
+    setTwitterListName(false);
+    await axios
+      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+        username: username,
+        columnValue: null,
+        columnName: "TwitterListId",
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
@@ -54,7 +68,13 @@ export default () => {
     return (
       <StyledForm onSubmit={handleSubmit}>
         <Form.Group controlId='formGroupListName'>
-          <Form.Label>Twitter list id</Form.Label>
+          <Form.Label
+            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            Twitter list id
+            <Button variant='secondary' style={{ padding: "0.3rem 0.5rem" }} onClick={clearListId}>
+              Clear
+            </Button>
+          </Form.Label>
           <Form.Control
             type='text'
             placeholder='674523...'
