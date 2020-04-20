@@ -7,6 +7,7 @@ import {
   GameListUlContainer,
   SearchGameForm,
   SearchSubmitBtn,
+  BackdropChannelList,
 } from "./../categoryTopStreams/styledComponents";
 import StyledLoadingList from "./../categoryTopStreams/LoadingList";
 import ChannelListElement from "../channelList/ChannelListElement";
@@ -113,6 +114,7 @@ export default () => {
           onClick={() => {
             setListIsOpen(!listIsOpen);
             resetChannel();
+            setListIsOpen(!listIsOpen);
           }}
           size={42}
         />
@@ -145,6 +147,15 @@ export default () => {
           </GameListUlContainer>
         </CSSTransition>
       </SearchGameForm>
+      {listIsOpen && (
+        <BackdropChannelList
+          id='BackdropChannelList'
+          onClick={() => {
+            resetChannel();
+            setListIsOpen(!listIsOpen);
+          }}
+        />
+      )}
     </>
   );
 };

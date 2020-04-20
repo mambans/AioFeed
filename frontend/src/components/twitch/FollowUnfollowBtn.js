@@ -1,7 +1,5 @@
 import axios from "axios";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import React, { useEffect, useState, useContext } from "react";
-import Tooltip from "react-bootstrap/Tooltip";
 
 import { FollowBtn, UnfollowBtn } from "./StyledComponents";
 import AccountContext from "./../account/AccountContext";
@@ -9,28 +7,8 @@ import reauthenticate from "./reauthenticate";
 import Util from "./../../util/Util";
 
 export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshStreams }) => {
-  const [following, setFollowing] = useState(false);
+  const [following, setFollowing] = useState(alreadyFollowedStatus || false);
   const { setTwitchToken, setRefreshToken, twitchUserId } = useContext(AccountContext);
-
-  // const myUserId = async () => {
-  //   await axios
-  //     .get(`https://api.twitch.tv/helix/users?`, {
-  //       params: {
-  //         login: Util.getCookie("Twitch-username"),
-  //       },
-  //       headers: {
-  //         Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
-  //         "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-  //       },
-  //     })
-  //     .then(res => {
-  //       console.log("myUserId -> res", res);
-  //       return res.data.data[0].id;
-  //     })
-  //     .catch(async error => {
-  //       console.error(error);
-  //     });
-  // };
 
   const axiosConfig = (method, user_id, access_token = Util.getCookie("Twitch-access_token")) => {
     return {
@@ -102,58 +80,40 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
           }
         });
     };
+
     if (!alreadyFollowedStatus) {
       checkFollowing();
-    } else {
-      setFollowing(alreadyFollowedStatus);
     }
+    // else {
+    //   setFollowing(alreadyFollowedStatus);
+    // }
   }, [channelName, twitchUserId, id, alreadyFollowedStatus]);
 
   if (following) {
     return (
-      <OverlayTrigger
-        key={"bottom"}
-        placement={"bottom"}
-        delay={{ show: 300, hide: 0 }}
-        overlay={
-          <Tooltip id={`tooltip-${"bottom"}`}>
-            Unfollow <strong>{channelName}</strong>.
-          </Tooltip>
-        }>
-        <UnfollowBtn
-          className='StreamFollowBtn'
-          id='IsFollowed'
-          size={size || 30}
-          style={{ ...style }}
-          onClick={() => {
-            setFollowing(false);
-            UnfollowStream(id);
-          }}
-        />
-      </OverlayTrigger>
+      <UnfollowBtn
+        className='StreamFollowBtn'
+        title={`Unfollow ${channelName}`}
+        size={size || 30}
+        style={{ ...style }}
+        onClick={() => {
+          setFollowing(false);
+          UnfollowStream(id);
+        }}
+      />
     );
   } else {
     return (
-      <OverlayTrigger
-        key={"bottom"}
-        placement={"bottom"}
-        delay={{ show: 500, hide: 0 }}
-        overlay={
-          <Tooltip id={`tooltip-${"bottom"}`}>
-            Follow <strong>{channelName}</strong>.
-          </Tooltip>
-        }>
-        <FollowBtn
-          className='StreamFollowBtn'
-          id='IsNotFollowed'
-          size={size || 30}
-          style={{ ...style }}
-          onClick={() => {
-            setFollowing(true);
-            followStream(id);
-          }}
-        />
-      </OverlayTrigger>
+      <FollowBtn
+        className='StreamFollowBtn'
+        title={`Follow ${channelName}`}
+        size={size || 30}
+        style={{ ...style }}
+        onClick={() => {
+          setFollowing(true);
+          followStream(id);
+        }}
+      />
     );
   }
 };

@@ -176,8 +176,7 @@ export const Name = styled.div`
       padding: 0 10px;
     }
 
-    #IsNotFollowed,
-    #IsFollowed {
+    .StreamFollowBtn {
       opacity: 1;
     }
   }
