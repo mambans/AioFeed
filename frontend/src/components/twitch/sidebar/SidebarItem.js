@@ -14,7 +14,7 @@ import Util from "../../../util/Util";
 const StyledNewHighlight = styled.div`
   position: absolute;
   left: 0;
-  height: 45.6px;
+  height: 62px;
   width: 4px;
   border-radius: 2px;
   background: var(--newStreamBackgroundColor);

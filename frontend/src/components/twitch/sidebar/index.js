@@ -48,7 +48,7 @@ export default (data) => {
       ) : (
         <div
           style={{
-            height: "45.6px",
+            height: "62px",
             padding: "8px 5px 8px 10px",
             fontSize: "1rem",
             textAlign: "center",
