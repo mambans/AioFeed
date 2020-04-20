@@ -20,8 +20,8 @@ const REFRESH_RATE = 25; // seconds
 export default ({ children, centerContainerRef }) => {
   const addNotification = useContext(NotificationsContext).addNotification;
   const { autoRefreshEnabled, twitchToken } = useContext(AccountContext);
-  const { setVods, channels } = useContext(VodsContext);
-  const { enableTwitchVods } = useContext(FeedsContext);
+  const { setVods } = useContext(VodsContext);
+  const { enableTwitchVods, isEnabledOfflineNotifications } = useContext(FeedsContext);
   const [refreshTimer, setRefreshTimer] = useState(20);
   const [loadingStates, setLoadingStates] = useState({
     refreshing: false,
@@ -82,6 +82,7 @@ export default ({ children, centerContainerRef }) => {
     async (status, stream) => {
       if (Notification.permission === "granted") {
         if (
+          isEnabledOfflineNotifications &&
           status === "offline" &&
           enableTwitchVods &&
           Util.getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
@@ -137,7 +138,7 @@ export default ({ children, centerContainerRef }) => {
         }
       }
     },
-    [enableTwitchVods]
+    [enableTwitchVods, isEnabledOfflineNotifications]
   );
 
   const refresh = useCallback(
@@ -176,7 +177,7 @@ export default ({ children, centerContainerRef }) => {
 
                 addNotification(stream, "Live");
 
-                console.log(`${stream.user_name} went online - array: `, channels);
+                // console.log(`${stream.user_name} went online - array: `, channels);
 
                 if (
                   enableTwitchVods &&
@@ -214,7 +215,7 @@ export default ({ children, centerContainerRef }) => {
 
                 addNotification(stream, "Offline");
 
-                console.log(`${stream.user_name} went offline - array: `, channels);
+                // console.log(`${stream.user_name} went offline - array: `, channels);
 
                 if (
                   enableTwitchVods &&
@@ -245,7 +246,7 @@ export default ({ children, centerContainerRef }) => {
         });
       }
     },
-    [addNotification, addSystemNotification, channels, enableTwitchVods, setVods]
+    [addNotification, addSystemNotification, enableTwitchVods, setVods]
   );
 
   useEffect(() => {

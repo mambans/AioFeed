@@ -16,6 +16,9 @@ export const StyledNavSidebar = styled.div`
   width: 400px;
   border-left: 2px solid #494949;
   padding: 10px;
+  overflow-y: scroll;
+  scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0) !important;
+  scrollbar-width: thin;
 
   @media screen and (max-width: 1920px) {
     width: 300px;
@@ -33,17 +36,18 @@ export const StyledNavSidebarBackdrop = styled.div`
 
 export const StyledProfileImg = styled.img`
   max-width: calc(100% - 20px);
-  height: calc(380px / 16 * 9);
+  max-height: calc(380px / 16 * 9);
   display: flex;
   margin: auto;
 `;
 
 export const StyledToggleSwitch = styled.label`
   display: flex;
-  height: 40px;
+  /* height: 40px; */
   align-items: center;
   cursor: pointer;
   width: max-content;
+  padding: ${({ padding }) => `${padding}px 0`};
 
   span {
     padding-left: 5px;
@@ -184,8 +188,8 @@ export const StyledSidebarTrigger = styled(MdFormatIndentDecrease).attrs({ size:
 `;
 
 export const StyledLogoutContiner = styled.div`
-  bottom: 5px;
-  position: absolute;
+  /* bottom: 5px; */
+  /* position: absolute; */
   right: 0;
   width: 100%;
   display: grid;
@@ -194,9 +198,11 @@ export const StyledLogoutContiner = styled.div`
   grid-template-columns: 70% 30%;
   grid-template-rows: 60px;
 
+  height: 120px;
+
   button[label="logout"],
   a[label="linkAsButton"] {
-    background-color: #333;
+    /* background-color: #333; */
     width: max-content;
     min-width: 170px;
     /* height: 42.5px; */
@@ -288,16 +294,37 @@ export const StyledConnectContainer = styled.div`
   margin-bottom: 10px;
   display: grid;
   grid-template-areas: "name disconnect";
-  grid-template-columns: 80% 20%;
-  grid-template-rows: 50px;
+  /* grid-template-columns: 80% 20%; */
+  /* grid-template-rows: 50px; */
+  grid-template-columns: min-content;
 
-  #username {
+  button {
+    min-width: 200px;
+    justify-self: left;
+    display: flex;
+    align-items: center;
+    border-radius: 22px;
+
+    svg {
+      margin-right: 10px;
+    }
+  }
+
+  .username#Twitch {
+    background: #240944;
+  }
+  .username#Youtube {
+    background: rgb(42, 9, 9);
+  }
+
+  .username {
     grid-area: name;
     display: flex;
     align-items: center;
-    background: #240944;
-    border-radius: 25px;
+    border-radius: 22px;
     margin-right: 15px;
+    height: 42px;
+    min-width: 200px;
 
     &:hover #reconnectIcon {
       opacity: 1;
@@ -318,7 +345,7 @@ export const StyledConnectContainer = styled.div`
     p {
       margin: 0;
       /* height: 100%; */
-      width: 100%;
+      /* width: 100%; */
       align-items: center;
       display: flex;
       justify-content: center;
@@ -348,8 +375,8 @@ export const StyledConnectContainer = styled.div`
 
 export const StyledReconnectIcon = styled(MdRefresh).attrs({ size: 30 })`
   position: absolute;
-  width: 50px;
-  height: 50px;
+  width: 42px;
+  height: 42px;
   border: 2px solid #292929;
   border-radius: 80%;
   display: flex !important  ;

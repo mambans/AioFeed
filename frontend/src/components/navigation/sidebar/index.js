@@ -14,9 +14,17 @@ import {
 } from "./StyledComponent";
 
 export default () => {
-  const { profileImage, username, setTwitchToken, setYoutubeToken, setRefreshToken } = useContext(
-    AccountContext
-  );
+  const {
+    profileImage,
+    username,
+    setTwitchToken,
+    setYoutubeToken,
+    setRefreshToken,
+    setYoutubeUsername,
+    setYoutubeProfileImg,
+    setTwitchUsername,
+    setTwitchProfileImg,
+  } = useContext(AccountContext);
   const { setRenderModal, renderModal, showSidebar, setShowSidebar } = useContext(
     NavigationContext
   );
@@ -36,8 +44,12 @@ export default () => {
         if (event.data.service === "twitch") {
           setTwitchToken(event.data.token);
           setRefreshToken(event.data.refresh_token);
+          setTwitchUsername(event.data.username);
+          setTwitchProfileImg(event.data.profileImg);
         } else if (event.data.service === "youtube") {
           setYoutubeToken(event.data.token);
+          setYoutubeUsername(event.data.username);
+          setYoutubeProfileImg(event.data.profileImg);
         }
       }
     }
@@ -47,7 +59,15 @@ export default () => {
     return () => {
       window.removeEventListener("message", receiveMessage, false);
     };
-  }, [setTwitchToken, setYoutubeToken, setRefreshToken]);
+  }, [
+    setTwitchToken,
+    setYoutubeToken,
+    setRefreshToken,
+    setTwitchUsername,
+    setTwitchProfileImg,
+    setYoutubeUsername,
+    setYoutubeProfileImg,
+  ]);
 
   return (
     <>

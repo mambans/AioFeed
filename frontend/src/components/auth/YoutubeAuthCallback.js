@@ -36,19 +36,40 @@ export default () => {
       document.cookie = `Youtube-access_token=${accessToken}; path=/`;
       document.cookie = `Youtube-access_token_expire=${accessTokenExpireParam}; path=/`;
       document.cookie = `Youtube-readonly=${url.hash.includes(".readonly")}; path=/`;
+
+      await axios
+        .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+          username: username,
+          columnValue: accessToken,
+          columnName: "YoutubeToken",
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+
+      const MyYoutube = await axios
+        .get(
+          `https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+          {
+            headers: {
+              Authorization: "Bearer " + Util.getCookie("Youtube-access_token"),
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log("getAccessToken -> res", res);
+          document.cookie = `YoutubeUsername=${res.data.items[0].snippet.title}; path=/; SameSite=Lax`;
+          document.cookie = `YoutubeProfileImg=${res.data.items[0].snippet.thumbnails.default.url}; path=/; SameSite=Lax`;
+
+          return {
+            Username: res.data.items[0].snippet.title,
+            ProfileImg: res.data.items[0].snippet.thumbnails.default.url,
+          };
+        });
+
+      return { token: accessToken, ...MyYoutube };
     }
-
-    await axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
-        username: username,
-        columnValue: accessToken,
-        columnName: "YoutubeToken",
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-
-    return accessToken;
   }, [username]);
 
   useEffect(() => {
@@ -65,10 +86,13 @@ export default () => {
               window.opener.postMessage(
                 {
                   service: "youtube",
-                  token: res,
+                  token: res.token,
+                  username: res.Username,
+                  profileImg: res.ProfileImg,
                 },
                 "*"
               );
+
               setTimeout(() => {
                 window.close();
               }, 1);

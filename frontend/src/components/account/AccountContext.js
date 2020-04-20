@@ -16,6 +16,8 @@ export const AccountProvider = ({ children }) => {
   const [twitchProfileImg, setTwitchProfileImg] = useState(
     Util.getCookie(`AioFeed_TwitchProfileImg`)
   );
+  const [youtubeUsername, setYoutubeUsername] = useState(Util.getCookie(`YoutubeUsername`));
+  const [youtubeProfileImg, setYoutubeProfileImg] = useState(Util.getCookie(`YoutubeProfileImg`));
   const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(
     Util.getCookie(`Twitch_AutoRefresh`) || false
   );
@@ -43,6 +45,10 @@ export const AccountProvider = ({ children }) => {
         setAutoRefreshEnabled: setAutoRefreshEnabled,
         refreshToken: refreshToken,
         setRefreshToken: setRefreshToken,
+        youtubeUsername: youtubeUsername,
+        setYoutubeUsername: setYoutubeUsername,
+        youtubeProfileImg: youtubeProfileImg,
+        setYoutubeProfileImg: setYoutubeProfileImg,
       }}>
       {children}
     </AccountContext.Provider>

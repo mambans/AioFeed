@@ -31,7 +31,7 @@ function TwitchAuthCallback() {
       document.cookie = `Twitch-access_token=${accessToken}; path=/; SameSite=Lax`;
       document.cookie = `Twitch-refresh_token=${refreshToken}; path=/; SameSite=Lax`;
 
-      await axios
+      const MyTwitch = await axios
         .get(`https://api.twitch.tv/helix/users`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -61,6 +61,11 @@ function TwitchAuthCallback() {
             .catch((e) => {
               console.error(e);
             });
+
+          return {
+            Username: res.data.data[0].login,
+            ProfileImg: res.data.data[0].profile_image_url,
+          };
         });
 
       await axios
@@ -73,7 +78,7 @@ function TwitchAuthCallback() {
           console.error(e);
         });
 
-      return { token: accessToken, refresh_token: refreshToken };
+      return { token: accessToken, refresh_token: refreshToken, ...MyTwitch };
     },
     [username, autoRefreshEnabled, enableTwitch]
   );
@@ -94,6 +99,8 @@ function TwitchAuthCallback() {
                     service: "twitch",
                     token: res.token,
                     refresh_token: res.refresh_token,
+                    username: res.Username,
+                    profileImg: res.ProfileImg,
                   },
                   "*"
                 );

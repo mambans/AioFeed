@@ -29,6 +29,10 @@ export const FeedsProvider = ({ children }) => {
     Util.getCookie("YoutubeVideoHoverEnabled")
   );
 
+  const [isEnabledOfflineNotifications, setIsEnabledOfflineNotifications] = useState(
+    Util.getCookie("Twitch_offline_notifications")
+  );
+
   return (
     <FeedsContext.Provider
       value={{
@@ -46,6 +50,8 @@ export const FeedsProvider = ({ children }) => {
         enableTwitter: enableTwitter,
         twitterListName: twitterListName,
         setTwitterListName: setTwitterListName,
+        isEnabledOfflineNotifications: isEnabledOfflineNotifications,
+        setIsEnabledOfflineNotifications: setIsEnabledOfflineNotifications,
       }}>
       {children}
     </FeedsContext.Provider>

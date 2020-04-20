@@ -64,7 +64,7 @@ export default () => {
             </li>
           </ul>
         </div>
-        <div style={{ flexDirection: "column" }}>
+        <div style={{ flexDirection: "column", width: "50%" }}>
           <p>Test text</p>
           <p>Test text</p>
           <StyledCenterBottomText>

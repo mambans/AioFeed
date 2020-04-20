@@ -100,7 +100,7 @@ export default () => {
 
   return (
     <>
-      <DeleteAccountButton onClick={handleShow}>
+      <DeleteAccountButton onClick={handleShow} title='Delete account'>
         <MdDelete size={24} />
       </DeleteAccountButton>
 

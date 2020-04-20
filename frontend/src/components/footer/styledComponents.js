@@ -52,7 +52,7 @@ export const StyledFooterContainer = styled.div`
   }
 
   div:not(.button) {
-    width: 33%;
+    width: 25%;
     display: flex;
     justify-content: center;
 

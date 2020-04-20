@@ -5,7 +5,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 
 import { StyledToggleSwitch } from "./StyledComponent";
 
-export default ({ setEnable, enabled, label, tokenExists }) => {
+export default ({ setEnable, enabled, label, tokenExists, tooltip, height, width }) => {
   const [checked, setChecked] = useState(enabled || false);
 
   function handleChange(checked) {
@@ -19,15 +19,11 @@ export default ({ setEnable, enabled, label, tokenExists }) => {
       key={"bottom"}
       placement={"left"}
       delay={{ show: 500, hide: 0 }}
-      overlay={
-        <Tooltip id={`tooltip-${"bottom"}`}>
-          {tokenExists
-            ? (checked ? "Disable" : "Enable") + ` ${label} feed`
-            : `Need to connect/authenticate with a ${label} account first.`}
-        </Tooltip>
-      }>
-      <StyledToggleSwitch>
+      overlay={<Tooltip id={`tooltip-${"bottom"}`}>{tooltip}</Tooltip>}>
+      <StyledToggleSwitch padding={height ? height / 4 : 6}>
         <Switch
+          height={height || 25}
+          width={width || 50}
           disabled={!tokenExists}
           onChange={handleChange}
           checked={(tokenExists && checked) || false}
