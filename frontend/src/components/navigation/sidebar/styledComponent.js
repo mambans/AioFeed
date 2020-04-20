@@ -43,6 +43,7 @@ export const StyledToggleSwitch = styled.label`
   height: 40px;
   align-items: center;
   cursor: pointer;
+  width: max-content;
 
   span {
     padding-left: 5px;
