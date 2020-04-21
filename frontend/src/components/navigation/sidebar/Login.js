@@ -8,6 +8,7 @@ import NavigationContext from "./../NavigationContext";
 import LoadingIndicator from "./../../LoadingIndicator";
 import FeedsContext from "./../../feed/FeedsContext";
 import useInput from "./../../../hooks/useInput";
+import { AddCookie } from "../../../util/Utils";
 
 export default () => {
   document.title = "AioFeed | Login";
@@ -65,26 +66,29 @@ export default () => {
           resetUsername();
           resetPassword();
           // console.log("TCL: loginAccount -> res.data.Attributes", res.data.Attributes);
-          document.cookie = `AioFeed_AccountName=${res.data.Attributes.Username}; path=/`;
-          document.cookie = `AioFeed_AccountProfileImg=${res.data.Attributes.ProfileImg}; path=/`;
-          document.cookie = `AioFeed_AuthKey=${res.data.Attributes.AuthKey}; path=/`;
-          document.cookie = `AioFeed_AccountEmail=${res.data.Attributes.Email}; path=/`;
+          AddCookie("AioFeed_AccountName", res.data.Attributes.Username);
+          AddCookie("AioFeed_AccountProfileImg", res.data.Attributes.ProfileImg);
+          AddCookie("AioFeed_AuthKey", res.data.Attributes.AuthKey);
+          AddCookie("AioFeed_AccountEmail", res.data.Attributes.Email);
 
-          document.cookie = `Twitch-access_token=${res.data.Attributes.TwitchToken}; path=/; SameSite=Lax`;
-          document.cookie = `Twitter-Listname=${res.data.Attributes.TwitterListId}; path=/; SameSite=Lax`;
-
-          document.cookie = `Youtube-access_token=${res.data.Attributes.YoutubeToken}; path=/; SameSite=Lax`;
+          AddCookie("Twitch-access_token", res.data.Attributes.TwitchToken);
+          AddCookie("Twitter-Listname", res.data.Attributes.TwitterListId);
+          AddCookie("Youtube-access_token", res.data.Attributes.YoutubeToken);
+          AddCookie("");
 
           if (res.data.Attributes.TwitchPreference) {
-            document.cookie = `Twitch_AutoRefresh=${parseBolean(
-              res.data.Attributes.TwitchPreferences.AutoRefresh
-            )}; path=/`;
-            document.cookie = `Twitch_FeedEnabled=${parseBolean(
-              res.data.Attributes.TwitchPreferences.enabled
-            )}; path=/`;
-            document.cookie = `Twitch-userId=${parseBolean(
-              res.data.Attributes.TwitchPreferences.id
-            )}; path=/`;
+            AddCookie(
+              "Youtube-Twitch_AutoRefresh",
+              parseBolean(res.data.Attributes.TwitchPreferences.AutoRefresh)
+            );
+            AddCookie(
+              "Youtube-Twitch_FeedEnabled",
+              parseBolean(res.data.Attributes.TwitchPreferences.enabled)
+            );
+            AddCookie(
+              "Youtube-Twitch-userId",
+              parseBolean(res.data.Attributes.TwitchPreferences.id)
+            );
 
             setEnableTwitch(res.data.Attributes.TwitchPreferences.enabled === "true" || false);
             setTwitchUsername(parseBolean(res.data.Attributes.TwitchPreferences.Username));

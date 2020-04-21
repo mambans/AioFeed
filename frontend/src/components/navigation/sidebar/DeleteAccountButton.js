@@ -10,18 +10,11 @@ import styles from "./Sidebar.module.scss";
 import useInput from "./../../../hooks/useInput";
 import NavigationContext from "../NavigationContext";
 import Alert from "./Alert";
+import ClearAllAccountCookiesStates from "./ClearAllAccountCookiesStates";
 import LoadingIndicator from "./../../LoadingIndicator";
 
 export default () => {
-  const {
-    username,
-    setUsername,
-    setProfileImage,
-    setAuthKey,
-    setTwitchToken,
-    setYoutubeToken,
-    authKey,
-  } = useContext(AccountContext);
+  const { username, setUsername, authKey } = useContext(AccountContext);
   const [show, setShow] = useState(false);
   const [validated, setValidated] = useState(false);
   const { setRenderModal, setAlert } = useContext(NavigationContext);
@@ -45,25 +38,7 @@ export default () => {
           data: { username: account, password: password, authKey: authKey },
         })
         .then((res) => {
-          document.cookie = `Twitch-access_token=null; path=/; SameSite=Lax`;
-          document.cookie = `Twitch-refresh_token=null; path=/; SameSite=Lax`;
-          document.cookie = `Twitch_FeedEnabled=${false}; path=/`;
-          document.cookie = `AioFeed_TwitchUserId=null; path=/; SameSite=Lax`;
-          document.cookie = `Twitch-username=null; path=/; SameSite=Lax`;
-          document.cookie = `Youtube_FeedEnabled=null; path=/`;
-          document.cookie = `AioFeed_AccountName=null; path=/`;
-          document.cookie = `AioFeed_AccountEmail=null; path=/`;
-          document.cookie = `Youtube-access_token=null; path=/`;
-          document.cookie = `AioFeed_AccountProfileImg=null; path=/`;
-          document.cookie = `Twitch-refresh_token=null; path=/; SameSite=Lax`;
-          document.cookie = `Youtube_FeedEnabled=${false}; path=/`;
-          document.cookie = `TwitchVods_FeedEnabled=${false}; path=/`;
-
-          setTwitchToken(null);
-          setYoutubeToken(null);
-          setUsername();
-          setProfileImage();
-          setAuthKey();
+          ClearAllAccountCookiesStates(setUsername);
 
           setRenderModal("create");
           setAlert({

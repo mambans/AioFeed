@@ -14,6 +14,7 @@ import VodsContext from "./../vods/VodsContext";
 import FetchSingelChannelVods from "./../vods/FetchSingelChannelVods";
 import { Container } from "../StyledComponents";
 import LoadingSidebar from "../sidebar/LoadingSidebar";
+import { AddCookie } from "../../../util/Utils";
 
 const REFRESH_RATE = 25; // seconds
 
@@ -152,7 +153,7 @@ export default ({ children, centerContainerRef }) => {
         followedChannels.current = await GetFollowedChannels();
 
         if (followedChannels.current && followedChannels.current[0]) {
-          document.cookie = `Twitch-username=${followedChannels.current[0].from_name}; path=/; SameSite=Lax`;
+          AddCookie("Twitch-username", followedChannels.current[0].from_name);
         }
         const streams = await getFollowedOnlineStreams(followedChannels.current);
 

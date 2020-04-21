@@ -9,6 +9,7 @@ import AccountContext from "./../../account/AccountContext";
 import LoadingIndicator from "./../../LoadingIndicator";
 import useInput from "./../../../hooks/useInput";
 import ALert from "./Alert";
+import { AddCookie } from "../../../util/Utils";
 
 export default () => {
   document.title = "AioFeed | Create Account";
@@ -50,9 +51,10 @@ export default () => {
           password: password,
         })
         .then((res) => {
-          document.cookie = `AioFeed_AccountName=${res.data.Username}; path=/`;
-          document.cookie = `AioFeed_AccountEmail=${res.data.Email}; path=/`;
-          document.cookie = `AioFeed_AuthKey=${res.data.AuthKey}; path=/`;
+          AddCookie("AioFeed_AccountName", res.data.Username);
+          AddCookie("AioFeed_AccountEmail", res.data.Email);
+          AddCookie("AioFeed_AuthKey", res.data.AuthKey);
+
           setAuthKey(res.data.AuthKey);
           setUsername(res.data.Username);
 

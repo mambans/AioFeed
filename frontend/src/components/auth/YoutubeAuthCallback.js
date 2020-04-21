@@ -6,6 +6,7 @@ import ErrorHandler from "./../error";
 import AccountContext from "./../account/AccountContext";
 import NavigationContext from "./../navigation/NavigationContext";
 import LoadingIndicator from "../LoadingIndicator";
+import { AddCookie } from "../../util/Utils";
 
 function getParameterByName(name, url) {
   if (!url) url = window.location.href;
@@ -35,9 +36,9 @@ export default () => {
       });
 
     if (validateToken.data.aud === process.env.REACT_APP_YOUTUBE_CLIENT_ID) {
-      document.cookie = `Youtube-access_token=${accessToken}; path=/; SameSite=Lax`;
-      document.cookie = `Youtube-access_token_expire=${accessTokenExpireParam}; path=/; SameSite=Lax`;
-      document.cookie = `Youtube-readonly=${url.hash.includes(".readonly")}; path=/`;
+      AddCookie("Youtube-access_token", accessToken);
+      AddCookie("Youtube-access_token_expire", accessTokenExpireParam);
+      AddCookie("Youtube-readonly", url.hash.includes(".readonly"));
 
       await axios
         .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
@@ -60,9 +61,8 @@ export default () => {
           }
         )
         .then((res) => {
-          console.log("getAccessToken -> res", res);
-          document.cookie = `YoutubeUsername=${res.data.items[0].snippet.title}; path=/; SameSite=Lax`;
-          document.cookie = `YoutubeProfileImg=${res.data.items[0].snippet.thumbnails.default.url}; path=/; SameSite=Lax`;
+          AddCookie("YoutubeUsername", res.data.items[0].snippet.title);
+          AddCookie("YoutubeProfileImg", res.data.items[0].snippet.thumbnails.default.url);
 
           return {
             Username: res.data.items[0].snippet.title,

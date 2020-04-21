@@ -4,6 +4,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
 import { StyledToggleSwitch } from "./StyledComponent";
+import { AddCookie } from "../../../util/Utils";
 
 export default ({ setEnable, enabled, label, tokenExists, tooltip, height, width }) => {
   const [checked, setChecked] = useState(enabled || false);
@@ -11,7 +12,7 @@ export default ({ setEnable, enabled, label, tokenExists, tooltip, height, width
   function handleChange(checked) {
     setEnable(checked);
     setChecked(checked);
-    document.cookie = `${label}_FeedEnabled=${checked}; path=/`;
+    AddCookie(`${label}_FeedEnabled`, checked);
   }
 
   return (

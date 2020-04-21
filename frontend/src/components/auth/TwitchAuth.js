@@ -4,6 +4,7 @@ import uniqid from "uniqid";
 
 import Util from "../../util/Util";
 import ErrorHandler from "./../error";
+import { AddCookie } from "../../util/Utils";
 
 function TwitchAuth() {
   const [error, setError] = useState();
@@ -13,12 +14,8 @@ function TwitchAuth() {
       return uniqid();
     }
 
-    async function setStateCookie() {
-      document.cookie = `Twitch-myState=${orginState}; path=/`;
-    }
-
     const orginState = await generateOrginState();
-    await setStateCookie();
+    AddCookie("Twitch-myState", orginState);
 
     window.location.href = `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code&state=${orginState}`;
   }, []);

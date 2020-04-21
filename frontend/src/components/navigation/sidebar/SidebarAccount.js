@@ -26,14 +26,14 @@ import AccountContext from "./../../account/AccountContext";
 import DeleteAccountButton from "./DeleteAccountButton";
 import FeedsContext from "./../../feed/FeedsContext";
 import UpdateTwitterListName from "./UpdateTwitterListName";
+import ClearAllAccountCookiesStates from "./ClearAllAccountCookiesStates";
+import { RemoveCookie, AddCookie } from "../../../util/Utils";
 
 export default () => {
   const {
     username,
     setUsername,
     profileImage,
-    setProfileImage,
-    setAuthKey,
     twitchUsername,
     twitchProfileImg,
     setTwitchToken,
@@ -44,12 +44,6 @@ export default () => {
     setAutoRefreshEnabled,
     youtubeUsername,
     youtubeProfileImg,
-    setTwitchUserId,
-    setTwitchUsername,
-    setTwitchProfileImg,
-    setYoutubeUsername,
-    setYoutubeProfileImg,
-    setRefreshToken,
   } = useContext(AccountContext);
 
   const {
@@ -71,18 +65,7 @@ export default () => {
   const [showAddImage, setShowAddImage] = useState(false);
 
   function logout() {
-    document.cookie = `AioFeed_AccountName=null; path=/`;
-    document.cookie = `AioFeed_AccountEmail=null; path=/`;
-    document.cookie = `Twitch-access_token=null; path=/; SameSite=Lax`;
-    document.cookie = `Youtube-access_token=null; path=/`;
-    document.cookie = `AioFeed_AccountProfileImg=null; path=/`;
-
-    document.cookie = `Youtube_FeedEnabled=${false}; path=/`;
-    document.cookie = `TwitchVods_FeedEnabled=${false}; path=/`;
-
-    setUsername();
-    setProfileImage();
-    setAuthKey();
+    ClearAllAccountCookiesStates(setUsername);
   }
 
   async function authenticatePopup(winName, domain, urlParam) {
@@ -92,7 +75,7 @@ export default () => {
 
     const orginState = await generateOrginState();
 
-    document.cookie = `${domain}-myState=${orginState}; path=/`;
+    AddCookie(`${domain}-myState`, orginState);
 
     const url = urlParam + `&state=${orginState}`;
     const LeftPosition = window.screen.width ? (window.screen.width - 700) / 2 : 0;
@@ -116,20 +99,16 @@ export default () => {
         columnName: "TwitchToken",
       })
       .then(() => {
-        document.cookie = `Twitch-access_token=null; path=/; SameSite=Lax`;
-        document.cookie = `Twitch-refresh_token=null; path=/; SameSite=Lax`;
-        document.cookie = `Twitch-userId=null; path=/; SameSite=Lax`;
-        document.cookie = `Twitch-username=null; path=/; SameSite=Lax`;
-        document.cookie = `Twitch-profileImg=null; path=/; SameSite=Lax`;
-        document.cookie = `TwitchVods_FeedEnabled=${false}; path=/`;
+        RemoveCookie("Twitch-access_token");
+        RemoveCookie("Twitch-refresh_token");
+        RemoveCookie("Twitch-userId");
+        RemoveCookie("Twitch-username");
+        RemoveCookie("Twitch-profileImg");
+        RemoveCookie("TwitchVods_FeedEnabled");
+        RemoveCookie("Twitch-myState");
 
         setTwitchToken();
-        setRefreshToken();
-        setTwitchUserId();
-        setTwitchUsername();
-        setTwitchProfileImg();
         setEnableTwitch(false);
-        setEnableTwitchVods(false);
         console.log(`Successfully disconnected from Twitch`);
       })
       .catch((e) => {
@@ -145,14 +124,12 @@ export default () => {
         columnName: "YoutubeToken",
       })
       .then(() => {
-        document.cookie = `Youtube-access_token=null; path=/; SameSite=Lax`;
-        document.cookie = `YoutubeUsername=null; path=/; SameSite=Lax`;
-        document.cookie = `YoutubeProfileImg=null; path=/; SameSite=Lax`;
-        document.cookie = `Youtube_FeedEnabled=${false}; path=/`;
+        RemoveCookie("Youtube-access_token");
+        RemoveCookie("YoutubeUsername");
+        RemoveCookie("YoutubeProfileImg");
+        RemoveCookie("Youtube_FeedEnabled");
 
         setYoutubeToken();
-        setYoutubeUsername();
-        setYoutubeProfileImg();
         setEnableYoutube(false);
         console.log(`Successfully disconnected from Youtube`);
       })
@@ -200,7 +177,7 @@ export default () => {
         <ToggleSwitch
           setEnable={(value) => {
             setEnableTwitch(value);
-            document.cookie = `Twitch_FeedEnabled=${value}; path=/`;
+            AddCookie("Twitch_FeedEnabled", value);
           }}
           enabled={enableTwitch}
           label='Twitch'
@@ -214,7 +191,7 @@ export default () => {
         <ToggleSwitch
           setEnable={(value) => {
             setEnableTwitter(value);
-            document.cookie = `Twitter_FeedEnabled=${value}; path=/`;
+            AddCookie("Twitter_FeedEnabled", value);
           }}
           enabled={enableTwitter}
           label='Twitter'
@@ -226,7 +203,7 @@ export default () => {
         <ToggleSwitch
           setEnable={(value) => {
             setEnableYoutube(value);
-            document.cookie = `Youtube_FeedEnabled=${value}; path=/`;
+            AddCookie("Youtube_FeedEnabled", value);
           }}
           enabled={enableYoutube}
           label='Youtube'
@@ -240,7 +217,7 @@ export default () => {
         <ToggleSwitch
           setEnable={(value) => {
             setEnableTwitchVods(value);
-            document.cookie = `TwitchVods_FeedEnabled=${value}; path=/`;
+            AddCookie("TwitchVods_FeedEnabled", value);
           }}
           enabled={enableTwitchVods}
           label='TwitchVods'
@@ -255,7 +232,7 @@ export default () => {
         <ToggleSwitch
           setEnable={(value) => {
             setAutoRefreshEnabled(value);
-            document.cookie = `Twitch_AutoRefresh=${value}; path=/`;
+            AddCookie("Twitch_AutoRefresh", value);
           }}
           enabled={autoRefreshEnabled}
           label='Twitch auto-refresh (25s)'
@@ -271,7 +248,7 @@ export default () => {
         <ToggleSwitch
           setEnable={(value) => {
             setIsEnabledOfflineNotifications(value);
-            document.cookie = `Twitch_offline_notifications=${value}; path=/`;
+            AddCookie("Twitch_offline_notifications", value);
           }}
           enabled={isEnabledOfflineNotifications}
           label='Twitch offline notifications'
@@ -288,7 +265,7 @@ export default () => {
         <ToggleSwitch
           setEnable={(value) => {
             setTwitchVideoHoverEnable(value);
-            document.cookie = `TwitchVideoHoverEnabled=${value}; path=/`;
+            AddCookie("TwitchVideoHoverEnabled", value);
           }}
           enabled={twitchVideoHoverEnable}
           label='Twitch hover-video'
@@ -304,7 +281,7 @@ export default () => {
         <ToggleSwitch
           setEnable={(value) => {
             setYoutubeVideoHoverEnable(value);
-            document.cookie = `YoutubeVideoHoverEnabled=${value}; path=/`;
+            AddCookie("YoutubeVideoHoverEnabled", value);
           }}
           enabled={youtubeVideoHoverEnable}
           label='Youtube hover-video'

@@ -4,13 +4,14 @@ import React, { useContext } from "react";
 import AccountContext from "./../../account/AccountContext";
 import useInput from "./../../../hooks/useInput";
 import { ProfileImgInput } from "./StyledComponent";
+import { AddCookie } from "../../../util/Utils";
 
 export default ({ close }) => {
   const { username, setProfileImage } = useContext(AccountContext);
   const { value: image, bind: bindimage, reset: resetimage } = useInput("");
 
   const addProfileImage = async () => {
-    document.cookie = `AioFeed_AccountProfileImg=${image}; path=/`;
+    AddCookie("AioFeed_AccountProfileImg", image);
     setProfileImage(image);
     await axios
       .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {

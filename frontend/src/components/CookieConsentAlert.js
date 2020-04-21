@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
 import Util from "../util/Util";
+import { AddCookie } from "../util/Utils";
 
 const Container = styled.div`
   position: fixed;
@@ -26,7 +27,7 @@ export default () => {
         <Button
           variant='info'
           onClick={() => {
-            document.cookie = "cookieConsentAccepted=true; path=/; SameSite=Lax";
+            AddCookie("cookieConsentAccepted", "true");
             setAccepted(true);
           }}>
           I understand

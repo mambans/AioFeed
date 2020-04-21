@@ -4,6 +4,7 @@ import uniqid from "uniqid";
 
 import Util from "../../util/Util";
 import ErrorHandler from "./../error";
+import { AddCookie } from "../../util/Utils";
 
 function YoutubeAuth() {
   const [error, setError] = useState();
@@ -15,7 +16,7 @@ function YoutubeAuth() {
 
     const orginState = await generateOrginState();
 
-    document.cookie = `Youtube-myState=${orginState}; path=/`;
+    AddCookie("Youtube-myState", orginState);
 
     // window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=http://localhost:3000/youtube/auth&response_type=code&scope=https://www.googleapis.com/auth/youtube.readonly&include_granted_scopes=true&state=${myState.current}`;
 

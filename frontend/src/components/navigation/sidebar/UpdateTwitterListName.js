@@ -7,6 +7,7 @@ import useInput from "./../../../hooks/useInput";
 import Util from "../../../util/Util";
 import FeedsContext from "../../feed/FeedsContext";
 import AccountContext from "../../account/AccountContext";
+import { RemoveCookie, AddCookie } from "../../../util/Utils";
 
 const StyledForm = styled(Form)`
   input {
@@ -28,7 +29,7 @@ export default () => {
   );
 
   const addList = async () => {
-    document.cookie = `Twitter-Listname=${listName}; path=/; SameSite=Lax`;
+    AddCookie("Twitter-Listname", listName);
     setTwitterListName(listName);
 
     await axios
@@ -43,7 +44,7 @@ export default () => {
   };
 
   const clearListId = async () => {
-    document.cookie = `Twitter-Listname=null; path=/; SameSite=Lax`;
+    RemoveCookie("Twitter-Listname");
     setTwitterListName(false);
     await axios
       .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {

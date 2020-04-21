@@ -7,6 +7,7 @@ import AccountContext from "./../account/AccountContext";
 import NavigationContext from "./../navigation/NavigationContext";
 import LoadingIndicator from "./../LoadingIndicator";
 import FeedsContext from "../feed/FeedsContext";
+import { AddCookie } from "../../util/Utils";
 
 function TwitchAuthCallback() {
   const [error, setError] = useState();
@@ -33,9 +34,8 @@ function TwitchAuthCallback() {
 
       const accessToken = requestAccessToken.data.access_token;
       const refreshToken = requestAccessToken.data.refresh_token;
-
-      document.cookie = `Twitch-access_token=${accessToken}; path=/; SameSite=Lax`;
-      document.cookie = `Twitch-refresh_token=${refreshToken}; path=/; SameSite=Lax`;
+      AddCookie("Twitch-access_token", accessToken);
+      AddCookie("Twitch-refresh_token", refreshToken);
 
       const MyTwitch = await axios
         .get(`https://api.twitch.tv/helix/users`, {
@@ -45,9 +45,9 @@ function TwitchAuthCallback() {
           },
         })
         .then(async (res) => {
-          document.cookie = `Twitch-userId=${res.data.data[0].id}; path=/; SameSite=Lax`;
-          document.cookie = `Twitch-username=${res.data.data[0].login}; path=/; SameSite=Lax`;
-          document.cookie = `Twitch-profileImg=${res.data.data[0].profile_image_url}; path=/; SameSite=Lax`;
+          AddCookie("Twitch-userId", res.data.data[0].id);
+          AddCookie("Twitch-username", res.data.data[0].login);
+          AddCookie("Twitch-profileImg", res.data.data[0].profile_image_url);
 
           await axios
             .put(

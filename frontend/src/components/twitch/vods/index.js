@@ -13,6 +13,7 @@ import AccountContext from "./../../account/AccountContext";
 import VodsContext from "./VodsContext";
 import LoadingBoxs from "./../LoadingBoxs";
 import FeedsContext from "../../feed/FeedsContext";
+import { AddCookie } from "../../../util/Utils";
 
 export default ({ enableTwitter, centerContainerRef }) => {
   const { vods, setVods } = useContext(VodsContext);
@@ -232,7 +233,7 @@ export default ({ enableTwitter, centerContainerRef }) => {
               style={{ margin: "0 20px" }}
               variant='danger'
               onClick={() => {
-                document.cookie = "Twitch_FeedEnabled=false; path=/ ";
+                AddCookie("Twitch_FeedEnabled", false);
                 setEnableTwitchVods(false);
               }}>
               Disable vods
