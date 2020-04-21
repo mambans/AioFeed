@@ -7,12 +7,12 @@ const Container = styled.div`
   position: fixed;
   bottom: 0;
   height: 7rem;
-  background: #0f0f0f;
-  color: white;
+  background: rgb(21, 23, 24);
+  color: rgb(200, 200, 200);
   text-align: center;
   width: 100vw;
   font-size: 1.1rem;
-  border-top: 2px solid #fff;
+  border-top: 1px solid rgb(49, 49, 49);
   padding: 10px;
 `;
 
@@ -22,7 +22,7 @@ export default () => {
   if (!accepted) {
     return (
       <Container>
-        <p>This website uses cookies to deliver the best experience on our website.</p>
+        <p>We use cookies to improve performance and deliver the best experience on our website.</p>
         <Button
           variant='info'
           onClick={() => {

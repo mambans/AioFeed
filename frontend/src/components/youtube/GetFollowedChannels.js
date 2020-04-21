@@ -2,20 +2,24 @@ import axios from "axios";
 import Util from "../../util/Util";
 
 const fetchNextPgeOfSubscriptions = async (previousPage, totalResults, prevpPageItems) => {
-  const nextPage = await axios.get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {
-    params: {
-      maxResults: 50,
-      mine: true,
-      part: "snippet",
-      order: "relevance",
-      key: process.env.REACT_APP_YOUTUBE_API_KEY,
-      pageToken: previousPage.data.nextPageToken,
-    },
-    headers: {
-      Authorization: "Bearer " + Util.getCookie("Youtube-access_token"),
-      Accept: "application/json",
-    },
-  });
+  const nextPage = await axios
+    .get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {
+      params: {
+        maxResults: 50,
+        mine: true,
+        part: "snippet",
+        order: "relevance",
+        key: process.env.REACT_APP_YOUTUBE_API_KEY,
+        pageToken: previousPage.data.nextPageToken,
+      },
+      headers: {
+        Authorization: "Bearer " + Util.getCookie("Youtube-access_token"),
+        Accept: "application/json",
+      },
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
   const pageItems = await prevpPageItems.concat(nextPage.data.items);
 

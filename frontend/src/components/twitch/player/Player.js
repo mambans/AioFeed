@@ -35,6 +35,7 @@ import {
   HideChatButton,
   OpenChatButton,
   CreateClipButton,
+  ShowNavbarBtn,
 } from "./StyledComponents";
 
 import PlayerNavbar from "./PlayerNavbar";
@@ -62,6 +63,7 @@ export default () => {
   const [activeQuality, setActiveQuality] = useState();
   const [hideChat, setHideChat] = useState(false);
   const [showControlls, setShowControlls] = useState();
+  const [latestVod, setLatestVod] = useState();
 
   const volumeEventOverlayRef = useRef();
   const twitchPlayer = useRef();
@@ -312,14 +314,16 @@ export default () => {
           twitchPlayer={twitchPlayer}
           setVisible={setVisible}
           visible={visible}
+          setLatestVod={setLatestVod}
+          latestVod={latestVod}
         />
       </CSSTransition>
 
       {channelName && !videoId ? (
         <VideoAndChatContainer
           style={{
-            height: visible ? "calc(100vh - 75px)" : "100vh",
-            top: visible ? "75px" : "0",
+            height: visible ? "calc(100vh - 85px)" : "100vh",
+            top: visible ? "85px" : "0",
           }}
           switchedChatState={switched.toString()}
           hidechat={hideChat.toString()}>
@@ -538,17 +542,21 @@ export default () => {
           </div>
           {!hideChat && (
             <div id='chat'>
-              <MdVerticalAlignBottom
-                style={{
-                  transform: visible ? "rotateX(180deg)" : "unset",
-                }}
-                size={45}
-                id='ToggleNavbarButton'
-                title='Show navbar'
+              <ShowNavbarBtn
+                variant='dark'
                 onClick={() => {
                   setVisible(!visible);
-                }}
-              />
+                }}>
+                <MdVerticalAlignBottom
+                  style={{
+                    transform: visible ? "rotateX(180deg)" : "unset",
+                    right: "10px",
+                  }}
+                  size={30}
+                  title='Show navbar'
+                />
+                Navbar
+              </ShowNavbarBtn>
               <StyledChat
                 frameborder='0'
                 scrolling='yes'
@@ -563,22 +571,25 @@ export default () => {
         <VideoAndChatContainer
           id='twitch-embed'
           style={{
-            height: visible ? "calc(100vh - 75px)" : "100vh",
-            top: visible ? "75px" : "0",
+            height: visible ? "calc(100vh - 85px)" : "100vh",
+            top: visible ? "85px" : "0",
             display: "unset",
           }}>
-          <MdVerticalAlignBottom
-            style={{
-              transform: visible ? "rotateX(180deg)" : "unset",
-              right: "10px",
-            }}
-            size={45}
-            id='ToggleNavbarButton'
-            title='Show navbar'
+          <ShowNavbarBtn
+            variant='dark'
             onClick={() => {
               setVisible(!visible);
-            }}
-          />
+            }}>
+            <MdVerticalAlignBottom
+              style={{
+                transform: visible ? "rotateX(180deg)" : "unset",
+                right: "10px",
+              }}
+              size={30}
+              title='Show navbar'
+            />
+            Navbar
+          </ShowNavbarBtn>
         </VideoAndChatContainer>
       ) : (
         <p>Error?</p>

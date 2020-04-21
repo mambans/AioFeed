@@ -20,10 +20,10 @@ export default ({ setEnable, enabled, label, tokenExists, tooltip, height, width
       placement={"left"}
       delay={{ show: 500, hide: 0 }}
       overlay={<Tooltip id={`tooltip-${"bottom"}`}>{tooltip}</Tooltip>}>
-      <StyledToggleSwitch padding={height ? height / 4 : 6}>
+      <StyledToggleSwitch padding={height ? height / 4 : 5}>
         <Switch
-          height={height || 25}
-          width={width || 50}
+          height={height || 23}
+          width={width || 46}
           disabled={!tokenExists}
           onChange={handleChange}
           checked={(tokenExists && checked) || false}

@@ -6,7 +6,12 @@ import { useParams } from "react-router-dom";
 import React, { useContext, useEffect } from "react";
 
 import NavigationContext from "./../../navigation/NavigationContext";
-import { VideoAndChatContainer, StyledVideo, PlayerNavbar } from "./StyledComponents";
+import {
+  VideoAndChatContainer,
+  StyledVideo,
+  PlayerNavbar,
+  ShowNavbarBtn,
+} from "./StyledComponents";
 
 export default () => {
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
@@ -40,22 +45,25 @@ export default () => {
       <VideoAndChatContainer
         id='twitch-embed'
         style={{
-          height: visible ? "calc(100vh - 75px)" : "100vh",
-          top: visible ? "75px" : "0",
+          height: visible ? "calc(100vh - 85px)" : "100vh",
+          top: visible ? "85px" : "0",
           display: "unset",
         }}>
-        <MdVerticalAlignBottom
-          style={{
-            transform: visible ? "rotateX(180deg)" : "unset",
-            right: "10px",
-          }}
-          size={45}
-          id='ToggleNavbarButton'
-          title='Show navbar'
+        <ShowNavbarBtn
+          variant='dark'
           onClick={() => {
             setVisible(!visible);
-          }}
-        />
+          }}>
+          <MdVerticalAlignBottom
+            style={{
+              transform: visible ? "rotateX(180deg)" : "unset",
+              right: "10px",
+            }}
+            size={30}
+            title='Show navbar'
+          />
+          Navbar
+        </ShowNavbarBtn>
         <StyledVideo
           src={`https://clips.twitch.tv/embed?clip=${videoId}`}
           height='100%'

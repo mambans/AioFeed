@@ -38,7 +38,10 @@ export default () => {
               <h1>
                 <b>ioFeed</b>
               </h1>
-              <p>View Twitch & Youtube feeds and get notified about Twitch Livestreams.</p>
+              <p>
+                View Twitch/Youtube feeds and Twitter list feed and get notified about Twitch
+                Livestreams.
+              </p>
             </div>
           </LogoText>
         </WelcomeContainer>

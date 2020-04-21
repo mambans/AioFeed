@@ -4,16 +4,10 @@ import "./index.scss";
 import "./transitions.scss";
 import "./components/themes/Themes.scss";
 import App from "./components/app/App";
-import { ThemeProvider } from "./../src/components/themes/ThemeContext";
 
 import * as serviceWorker from "./serviceWorker";
 
-ReactDOM.render(
-  <ThemeProvider>
-    <App />
-  </ThemeProvider>,
-  document.getElementById("root")
-);
+ReactDOM.render(<App />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

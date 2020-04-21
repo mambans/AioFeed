@@ -20,6 +20,7 @@ import {
   StyledConnectContainer,
   StyledReconnectIcon,
   CloseAddFormBtn,
+  ProfileImgContainer,
 } from "./StyledComponent";
 import AccountContext from "./../../account/AccountContext";
 import DeleteAccountButton from "./DeleteAccountButton";
@@ -43,6 +44,12 @@ export default () => {
     setAutoRefreshEnabled,
     youtubeUsername,
     youtubeProfileImg,
+    setTwitchUserId,
+    setTwitchUsername,
+    setTwitchProfileImg,
+    setYoutubeUsername,
+    setYoutubeProfileImg,
+    setRefreshToken,
   } = useContext(AccountContext);
 
   const {
@@ -110,8 +117,17 @@ export default () => {
       })
       .then(() => {
         document.cookie = `Twitch-access_token=null; path=/; SameSite=Lax`;
-        document.cookie = `Twitch_FeedEnabled=${false}; path=/`;
-        setTwitchToken(null);
+        document.cookie = `Twitch-refresh_token=null; path=/; SameSite=Lax`;
+        document.cookie = `Twitch-userId=null; path=/; SameSite=Lax`;
+        document.cookie = `Twitch-username=null; path=/; SameSite=Lax`;
+        document.cookie = `Twitch-profileImg=null; path=/; SameSite=Lax`;
+        document.cookie = `TwitchVods_FeedEnabled=${false}; path=/`;
+
+        setTwitchToken();
+        setRefreshToken();
+        setTwitchUserId();
+        setTwitchUsername();
+        setTwitchProfileImg();
         setEnableTwitch(false);
         setEnableTwitchVods(false);
         console.log(`Successfully disconnected from Twitch`);
@@ -129,11 +145,14 @@ export default () => {
         columnName: "YoutubeToken",
       })
       .then(() => {
-        document.cookie = `Youtube-access_token=null; path=/`;
-        document.cookie = `Youtube_FeedEnabled=null; path=/`;
-        document.cookie = `AioFeed_TwitchProfileImg=null; path=/`;
-        document.cookie = `AioFeed_TwitchUserId=null; path=/`;
-        setYoutubeToken(null);
+        document.cookie = `Youtube-access_token=null; path=/; SameSite=Lax`;
+        document.cookie = `YoutubeUsername=null; path=/; SameSite=Lax`;
+        document.cookie = `YoutubeProfileImg=null; path=/; SameSite=Lax`;
+        document.cookie = `Youtube_FeedEnabled=${false}; path=/`;
+
+        setYoutubeToken();
+        setYoutubeUsername();
+        setYoutubeProfileImg();
         setEnableYoutube(false);
         console.log(`Successfully disconnected from Youtube`);
       })
@@ -145,32 +164,33 @@ export default () => {
   return (
     <>
       <div style={{ minHeight: "calc(100% - 120px)" }}>
-        {showAddImage ? (
-          <CloseAddFormBtn
-            onClick={() => {
-              setShowAddImage(false);
-            }}
+        <ProfileImgContainer>
+          {showAddImage ? (
+            <CloseAddFormBtn
+              onClick={() => {
+                setShowAddImage(false);
+              }}
+            />
+          ) : (
+            <ShowAddFormBtn
+              onClick={() => {
+                setShowAddImage(true);
+              }}>
+              Change Profile image
+            </ShowAddFormBtn>
+          )}
+          {showAddImage && (
+            <UpdateProfileImg
+              close={() => {
+                setShowAddImage(false);
+              }}
+            />
+          )}
+          <StyledProfileImg
+            src={profileImage || `${process.env.PUBLIC_URL}/images/placeholder.jpg`}
+            alt=''
           />
-        ) : (
-          <ShowAddFormBtn
-            onClick={() => {
-              setShowAddImage(true);
-            }}>
-            Change Profile image
-          </ShowAddFormBtn>
-        )}
-        {showAddImage && (
-          <UpdateProfileImg
-            close={() => {
-              setShowAddImage(false);
-            }}
-          />
-        )}
-        <StyledProfileImg
-          src={profileImage || `${process.env.PUBLIC_URL}/images/placeholder.jpg`}
-          alt=''
-        />
-
+        </ProfileImgContainer>
         <h1 style={{ fontSize: "2rem", textAlign: "center" }} title='Username'>
           {username}
         </h1>

@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { MdAccountCircle } from "react-icons/md";
 import axios from "axios";
 import { FaTwitch } from "react-icons/fa";
 import { MdVideocam } from "react-icons/md";
+import { MdArrowBack } from "react-icons/md";
 
-import { PlayerNavbar } from "./StyledComponents";
+import { PlayerNavbar, NavigateBack } from "./StyledComponents";
 import Util from "../../../util/Util";
+import { Button } from "react-bootstrap";
 
 export default ({
   type,
@@ -17,8 +19,10 @@ export default ({
   twitchPlayer,
   setVisible,
   visible,
+  setLatestVod,
+  latestVod,
 }) => {
-  const [latestVod, setLatestVod] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -26,6 +30,7 @@ export default ({
         type === "live" &&
         twitchPlayer.current &&
         twitchPlayer.current.getChannelId() &&
+        !latestVod &&
         visible
       ) {
         await axios
@@ -48,11 +53,17 @@ export default ({
           });
       }
     })();
-  }, [twitchPlayer, visible, type]);
+  }, [twitchPlayer, visible, type, latestVod, setLatestVod]);
 
   return (
     <PlayerNavbar>
-      <Link
+      <NavigateBack onClick={() => navigate(-1)} variant='dark' title='Go back'>
+        <MdArrowBack size={25} />
+        Go back
+      </NavigateBack>
+      <Button
+        variant='dark'
+        as={Link}
         to={{
           pathname: `/${channelName || (channelInfo && channelInfo.display_name)}/channel`,
           state: {
@@ -64,14 +75,17 @@ export default ({
         }}>
         <MdAccountCircle size={26} />
         {channelName || (channelInfo && channelInfo.display_name)}'s channel page
-      </Link>
+      </Button>
 
       {latestVod ? (
         <>
-          <Link
+          <Button
+            variant='dark'
+            as={Link}
             onClick={() => {
               setVisible(false);
             }}
+            style={{ marginRight: "10px" }}
             className='linkWithIcon'
             to={{
               pathname: `/${latestVod.user_name}/video/${latestVod.id}`,
@@ -82,7 +96,7 @@ export default ({
             }}>
             <MdVideocam size={26} />
             Latest Vod
-          </Link>
+          </Button>
           <a
             className='linkWithIcon'
             href={latestVod.url}
@@ -93,7 +107,7 @@ export default ({
           </a>
         </>
       ) : (
-        <p className='linkWithIcon' style={{ width: "126px" }} />
+        <div style={{ width: "174.75px" }}></div>
       )}
     </PlayerNavbar>
   );

@@ -66,12 +66,14 @@ export default () => {
           resetPassword();
           // console.log("TCL: loginAccount -> res.data.Attributes", res.data.Attributes);
           document.cookie = `AioFeed_AccountName=${res.data.Attributes.Username}; path=/`;
-          document.cookie = `AioFeed_AccountEmail=${res.data.Attributes.Email}; path=/`;
-          document.cookie = `Twitch-access_token=${res.data.Attributes.TwitchToken}; path=/; SameSite=Lax`;
-          document.cookie = `Youtube-access_token=${res.data.Attributes.YoutubeToken}; path=/`;
           document.cookie = `AioFeed_AccountProfileImg=${res.data.Attributes.ProfileImg}; path=/`;
           document.cookie = `AioFeed_AuthKey=${res.data.Attributes.AuthKey}; path=/`;
-          document.cookie = `Twitter-Listname=${res.data.Attributes.TwitterListId}; path=/`;
+          document.cookie = `AioFeed_AccountEmail=${res.data.Attributes.Email}; path=/`;
+
+          document.cookie = `Twitch-access_token=${res.data.Attributes.TwitchToken}; path=/; SameSite=Lax`;
+          document.cookie = `Twitter-Listname=${res.data.Attributes.TwitterListId}; path=/; SameSite=Lax`;
+
+          document.cookie = `Youtube-access_token=${res.data.Attributes.YoutubeToken}; path=/; SameSite=Lax`;
 
           if (res.data.Attributes.TwitchPreference) {
             document.cookie = `Twitch_AutoRefresh=${parseBolean(
@@ -80,7 +82,7 @@ export default () => {
             document.cookie = `Twitch_FeedEnabled=${parseBolean(
               res.data.Attributes.TwitchPreferences.enabled
             )}; path=/`;
-            document.cookie = `AioFeed_TwitchUserId=${parseBolean(
+            document.cookie = `Twitch-userId=${parseBolean(
               res.data.Attributes.TwitchPreferences.id
             )}; path=/`;
 

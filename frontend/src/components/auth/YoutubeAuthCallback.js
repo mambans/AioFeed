@@ -28,13 +28,15 @@ export default () => {
     const accessToken = getParameterByName("access_token");
     const accessTokenExpireParam = getParameterByName("expires_in");
 
-    const validateToken = await axios.post(
-      `https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${accessToken}`
-    );
+    const validateToken = await axios
+      .post(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${accessToken}`)
+      .catch((error) => {
+        console.log(error);
+      });
 
     if (validateToken.data.aud === process.env.REACT_APP_YOUTUBE_CLIENT_ID) {
-      document.cookie = `Youtube-access_token=${accessToken}; path=/`;
-      document.cookie = `Youtube-access_token_expire=${accessTokenExpireParam}; path=/`;
+      document.cookie = `Youtube-access_token=${accessToken}; path=/; SameSite=Lax`;
+      document.cookie = `Youtube-access_token_expire=${accessTokenExpireParam}; path=/; SameSite=Lax`;
       document.cookie = `Youtube-readonly=${url.hash.includes(".readonly")}; path=/`;
 
       await axios

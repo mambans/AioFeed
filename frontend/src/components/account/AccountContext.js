@@ -11,11 +11,9 @@ export const AccountProvider = ({ children }) => {
   const [authKey, setAuthKey] = useState(Util.getCookie(`AioFeed_AuthKey`));
   const [username, setUsername] = useState(Util.getCookie(`AioFeed_AccountName`));
   const [profileImage, setProfileImage] = useState(Util.getCookie(`AioFeed_AccountProfileImg`));
-  const [twitchUserId, setTwitchUserId] = useState(Util.getCookie(`AioFeed_TwitchUserId`));
+  const [twitchUserId, setTwitchUserId] = useState(Util.getCookie(`Twitch-userId`));
   const [twitchUsername, setTwitchUsername] = useState(Util.getCookie(`Twitch-username`));
-  const [twitchProfileImg, setTwitchProfileImg] = useState(
-    Util.getCookie(`AioFeed_TwitchProfileImg`)
-  );
+  const [twitchProfileImg, setTwitchProfileImg] = useState(Util.getCookie(`Twitch-profileImg`));
   const [youtubeUsername, setYoutubeUsername] = useState(Util.getCookie(`YoutubeUsername`));
   const [youtubeProfileImg, setYoutubeProfileImg] = useState(Util.getCookie(`YoutubeProfileImg`));
   const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(

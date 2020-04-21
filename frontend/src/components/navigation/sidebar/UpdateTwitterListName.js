@@ -28,7 +28,7 @@ export default () => {
   );
 
   const addList = async () => {
-    document.cookie = `Twitter-Listname=${listName}; path=/`;
+    document.cookie = `Twitter-Listname=${listName}; path=/; SameSite=Lax`;
     setTwitterListName(listName);
 
     await axios
@@ -43,7 +43,7 @@ export default () => {
   };
 
   const clearListId = async () => {
-    document.cookie = `Twitter-Listname=null; path=/`;
+    document.cookie = `Twitter-Listname=null; path=/; SameSite=Lax`;
     setTwitterListName(false);
     await axios
       .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {

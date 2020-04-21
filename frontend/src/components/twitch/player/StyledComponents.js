@@ -4,6 +4,7 @@ import { MdCompareArrows } from "react-icons/md";
 import { FaWindowClose } from "react-icons/fa";
 import { MdChat } from "react-icons/md";
 import { MdMovieCreation } from "react-icons/md";
+import { Button } from "react-bootstrap";
 
 export const VideoAndChatContainer = styled.div`
   position: fixed;
@@ -30,20 +31,6 @@ export const VideoAndChatContainer = styled.div`
 
   div#chat {
     grid-area: chat;
-  }
-
-  #ToggleNavbarButton {
-    position: absolute;
-    z-index: 1;
-    padding: 5px;
-    cursor: pointer;
-    opacity: 0.4;
-    transition: opacity 300ms, transform 300ms;
-    padding-top: 10px;
-
-    &:hover {
-      opacity: 1;
-    }
   }
 `;
 
@@ -80,7 +67,7 @@ box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
 `;
 
 export const PlayerNavbar = styled.div`
-  height: 25px;
+  height: 35px;
   /* background: var(--navigationbarBacklinkWithIconground); */
   background: #0000005c;
   /* text-align: center; */
@@ -89,6 +76,25 @@ export const PlayerNavbar = styled.div`
   align-content: center;
   align-items: center;
   align-self: center;
+
+  button,
+  a.btn {
+    margin: 2px 25px;
+    transition: background-color 200ms, border-color 200ms, color 200ms, box-shadow 200ms;
+    padding: 0px 6px;
+
+    background-color: #26292f8a;
+    border-color: #26292f8a;
+    box-shadow: 3px 3px 2px #161515d4;
+    color: var(--navTextColor);
+
+    &:hover {
+      box-shadow: 4px 4px 2px #161515ed;
+      color: #fff;
+      background-color: #23272b;
+      border-color: #1d2124;
+    }
+  }
 
   a,
   p {
@@ -425,4 +431,25 @@ export const CreateClipButton = styled(MdMovieCreation).attrs({ size: 24, color:
   background: rgba(0, 0, 0, 0.25) none repeat scroll 0% 0%;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
+`;
+
+export const ShowNavbarBtn = styled(Button)`
+  display: flex;
+  align-items: center;
+  position: absolute;
+  z-index: 1;
+  padding: 4px;
+  margin: 4px;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 200ms, transform 200ms;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+export const NavigateBack = styled(Button)`
+  left: 0;
+  position: absolute;
 `;

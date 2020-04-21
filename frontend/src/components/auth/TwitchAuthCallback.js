@@ -18,12 +18,18 @@ function TwitchAuthCallback() {
     async (url) => {
       const authCode = url.searchParams.get("code");
 
-      const requestAccessToken = await axios.post(`https://id.twitch.tv/oauth2/token
+      const requestAccessToken = await axios
+        .post(
+          `https://id.twitch.tv/oauth2/token
 ?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}
 &client_secret=${process.env.REACT_APP_TWITCH_SECRET}
 &code=${authCode}
 &grant_type=authorization_code
-&redirect_uri=https://aiofeed.com/auth/twitch/callback`);
+&redirect_uri=https://aiofeed.com/auth/twitch/callback`
+        )
+        .catch((error) => {
+          console.log(error);
+        });
 
       const accessToken = requestAccessToken.data.access_token;
       const refreshToken = requestAccessToken.data.refresh_token;
@@ -39,9 +45,9 @@ function TwitchAuthCallback() {
           },
         })
         .then(async (res) => {
-          document.cookie = `AioFeed_TwitchUserId=${res.data.data[0].id}; path=/; SameSite=Lax`;
+          document.cookie = `Twitch-userId=${res.data.data[0].id}; path=/; SameSite=Lax`;
           document.cookie = `Twitch-username=${res.data.data[0].login}; path=/; SameSite=Lax`;
-          document.cookie = `AioFeed_TwitchProfileImg=${res.data.data[0].profile_image_url}; path=/`;
+          document.cookie = `Twitch-profileImg=${res.data.data[0].profile_image_url}; path=/; SameSite=Lax`;
 
           await axios
             .put(

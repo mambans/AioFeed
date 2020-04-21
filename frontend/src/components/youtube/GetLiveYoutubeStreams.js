@@ -24,32 +24,37 @@ async function GetLiveYoutubeStreams(channel) {
             console.error(error);
             return JSON.parse(localStorage.getItem(`live-${channel}`));
           }))
-      : (liveResponse = await axios.get(`https://www.googleapis.com/youtube/v3/search?`, {
-          params: {
-            part: "snippet",
-            channelId: channel,
-            eventType: "live",
-            maxResults: 1,
-            type: "video",
-            key: process.env.REACT_APP_YOUTUBE_API_KEY,
-          },
-        }));
+      : (liveResponse = await axios
+          .get(`https://www.googleapis.com/youtube/v3/search?`, {
+            params: {
+              part: "snippet",
+              channelId: channel,
+              eventType: "live",
+              maxResults: 1,
+              type: "video",
+              key: process.env.REACT_APP_YOUTUBE_API_KEY,
+            },
+          })
+          .catch((error) => {
+            console.log(error);
+          }));
 
     localStorage.setItem(`live-${channel}`, JSON.stringify(liveResponse));
 
     if (liveResponse.data.items.length >= 1) {
       liveStreams = await Promise.all(
         liveResponse.data.items.map(async (stream) => {
-          const liveDetailsResponse = await axios.get(
-            `https://www.googleapis.com/youtube/v3/videos?`,
-            {
+          const liveDetailsResponse = await axios
+            .get(`https://www.googleapis.com/youtube/v3/videos?`, {
               params: {
                 part: "liveStreamingDetails",
                 id: stream.id.videoId,
                 key: process.env.REACT_APP_YOUTUBE_API_KEY,
               },
-            }
-          );
+            })
+            .catch((error) => {
+              console.log(error);
+            });
 
           stream.snippet.publishedAt =
             liveDetailsResponse.data.items[0].liveStreamingDetails.actualStartTime;

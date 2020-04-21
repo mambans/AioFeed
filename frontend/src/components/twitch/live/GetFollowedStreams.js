@@ -4,16 +4,20 @@ import AddVideoExtraData from "./../AddVideoExtraData";
 import Util from "../../../util/Util";
 
 const fetchAllOnlineStreams = async (followedChannelsIds) => {
-  return await axios.get(`https://api.twitch.tv/helix/streams`, {
-    params: {
-      user_id: followedChannelsIds,
-      first: 100,
-    },
-    headers: {
-      Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
-      "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-    },
-  });
+  return await axios
+    .get(`https://api.twitch.tv/helix/streams`, {
+      params: {
+        user_id: followedChannelsIds,
+        first: 100,
+      },
+      headers: {
+        Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+        "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+      },
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 async function getFollowedOnlineStreams(followedchannels) {

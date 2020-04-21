@@ -35,8 +35,9 @@ export const StyledNavSidebarBackdrop = styled.div`
 `;
 
 export const StyledProfileImg = styled.img`
-  max-width: calc(100% - 20px);
-  max-height: calc(380px / 16 * 9);
+  /* max-width: calc(100% - 20px);
+  max-height: calc(380px / 16 * 9); */
+  width: 100%;
   display: flex;
   margin: auto;
 `;
@@ -478,4 +479,10 @@ export const StyledAccAlert = styled(Alert)`
   .close {
     padding: 0 7px 0 0;
   }
+`;
+
+export const ProfileImgContainer = styled.div`
+  /* max-width: calc(100% - 20px); */
+  width: 100%;
+  max-height: calc(380px / 16 * 9);
 `;

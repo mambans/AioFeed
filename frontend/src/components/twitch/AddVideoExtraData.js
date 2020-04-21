@@ -3,6 +3,58 @@ import axios from "axios";
 import Util from "./../../util/Util";
 import GetCachedProfiles from "./GetCachedProfiles";
 
+const getGameDetails = async (items) => {
+  // Removes game id duplicates before sending game request.
+  const games = [
+    ...new Set(
+      items.data.data.map((channel) => {
+        return channel.game_id;
+      })
+    ),
+  ];
+
+  const cachedGameInfo = Util.getLocalstorage("Twitch_game_details") || { data: [] };
+
+  const unCachedGameDetails = games.filter((game) => {
+    return !cachedGameInfo.data.find((cachedGame) => cachedGame.id === game);
+  });
+
+
+
+  if (cachedGameInfo.expire < new Date().getTime() || unCachedGameDetails.length >= 1 ) {
+    return await axios
+      .get(`https://api.twitch.tv/helix/games`, {
+        params: {
+          id: cachedGameInfo.expire < new Date().getTime() ? games : unCachedGameDetails,
+        },
+        headers: {
+          Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+        },
+      })
+      .then((res) => {
+        localStorage.setItem(
+          "Twitch_game_details",
+          JSON.stringify({
+            data: cachedGameInfo.data.concat(res.data.data),
+            expire:
+              cachedGameInfo.expire < new Date().getTime()
+                ? new Date().setDate(new Date().getDate() + 3)
+                : cachedGameInfo.expire,
+          })
+        );
+
+        return cachedGameInfo.data.concat(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        return cachedGameInfo.data;
+      });
+  } else {
+    return cachedGameInfo.data;
+  }
+};
+
 /**
  * Fetch and add following data to stream objects.
  * - profile_img_url
@@ -66,31 +118,14 @@ export default async (items, fetchGameInfo = true) => {
   });
 
   if (fetchGameInfo) {
-    // Removes game id duplicates before sending game request.
-    const games = [
-      ...new Set(
-        items.data.data.map((channel) => {
-          return channel.game_id;
-        })
-      ),
-    ];
-
-    const gameNames = await axios.get(`https://api.twitch.tv/helix/games`, {
-      params: {
-        id: games,
-      },
-      headers: {
-        Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
-        "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-      },
-    });
+    const gameNames = await getGameDetails(items);
 
     // Add the game name to each stream object.
     items.data.data.map((stream) => {
-      gameNames.data.data.find((game) => {
+      gameNames.find((game) => {
         return game.id === stream.game_id;
       }) !== undefined
-        ? (stream.game_name = gameNames.data.data.find((game) => {
+        ? (stream.game_name = gameNames.find((game) => {
             return game.id === stream.game_id;
           }).name)
         : (stream.game_name = "");
@@ -100,10 +135,10 @@ export default async (items, fetchGameInfo = true) => {
 
     // Add the game img to each stream object.
     items.data.data.map((stream) => {
-      gameNames.data.data.find((game) => {
+      gameNames.find((game) => {
         return game.id === stream.game_id;
       }) !== undefined
-        ? (stream.game_img = gameNames.data.data.find((game) => {
+        ? (stream.game_img = gameNames.find((game) => {
             return game.id === stream.game_id;
           }).box_art_url)
         : (stream.game_img =
