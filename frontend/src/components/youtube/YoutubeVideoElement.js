@@ -2,6 +2,7 @@ import Moment from "react-moment";
 import React, { useEffect, useRef, useState, useCallback, useContext } from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import { Link } from "react-router-dom";
 
 import VideoHoverIframe from "./VideoHoverIframe";
 import styles from "./Youtube.module.scss";
@@ -61,11 +62,12 @@ export default (data) => {
             isHovered={isHovered}
             setIsHovered={setIsHovered}></VideoHoverIframe>
         )}
-        <a
+        <Link
           className={styles.img}
-          href={`https://www.youtube.com/watch?v=` + data.video.contentDetails.upload.videoId}>
+          // href={`https://www.youtube.com/watch?v=` + data.video.contentDetails.upload.videoId}
+          to={`/youtube/` + data.video.contentDetails.upload.videoId}>
           <img src={Util.videoImageUrls(data.video.snippet.thumbnails)} alt={styles.thumbnail} />
-        </a>
+        </Link>
         <p className={styles.duration}>{data.video.duration}</p>
         {/* {data.video.df === "liveYoutube" ? (
           <Moment className={styles.duration} durationFromNow>

@@ -18,6 +18,7 @@ import TwitchAuthCallback from "../auth/TwitchAuthCallback";
 import YoutubeAuth from "../auth/YoutubeAuth";
 import YoutubeAuthCallback from "../auth/YoutubeAuthCallback";
 import TwitchChannelRoutes from "./../twitch/Routes";
+import YoutubeVideoPlayer from "./../youtube/YoutubeVideoPlayer";
 
 export default () => {
   return (
@@ -39,6 +40,7 @@ export default () => {
                   <Route path='auth/youtube/callback' element={<YoutubeAuthCallback />} />
                   <Route path='legality' element={<Legality />} />
                   <Route path='privacy' element={<Legality />} />
+                  <Route path='youtube/:videoId' element={<YoutubeVideoPlayer />} />
 
                   <Route path='category' element={<TopStreams />} />
                   {/* <Route path='game' element={<TopStreams />} />
