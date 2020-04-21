@@ -112,7 +112,6 @@ export default () => {
         <MdFormatListBulleted
           id='ToggleListBtn'
           onClick={() => {
-            setListIsOpen(!listIsOpen);
             resetChannel();
             setListIsOpen(!listIsOpen);
           }}

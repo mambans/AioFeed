@@ -5,12 +5,14 @@ import AccountContext from "./../../account/AccountContext";
 import LoadingList from "./../LoadingList";
 import VodChannelListElement from "./VodChannelListElement";
 import useInput from "./../../../hooks/useInput";
-import VodsContext from "./VodsContext";
+// import VodsContext from "./VodsContext";
 import AddVodChannel from "./AddVodChannel";
+import Util from "../../../util/Util";
 
 export default () => {
   const { authKey, username } = useContext(AccountContext);
-  const { channels, setChannels } = useContext(VodsContext);
+  // const { channels, setChannels } = useContext(VodsContext);
+  const channels = Util.getLocalstorage("VodChannels") || [];
   const [validated, setValidated] = useState(false);
   const { value: channel, bind: bindchannel, reset: resetchannel } = useInput("");
 
@@ -23,7 +25,7 @@ export default () => {
       evt.stopPropagation();
     } else {
       setValidated(true);
-      AddVodChannel({ channel, channels, setChannels, username, authKey });
+      AddVodChannel({ channel, channels, username, authKey });
 
       resetchannel();
     }
@@ -53,7 +55,9 @@ export default () => {
       {channels.length > 0 ? (
         <ul>
           {channels.map((channel) => {
-            return <VodChannelListElement key={channel} channel={channel} />;
+            return (
+              <VodChannelListElement key={channel} channel={channel} param_Channels={channels} />
+            );
           })}
         </ul>
       ) : (

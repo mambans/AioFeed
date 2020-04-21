@@ -9,7 +9,10 @@ export default async (username, authKey) => {
       },
     })
     .then((res) => {
-      return res.data;
+      if (res.data && res.data !== "") {
+        return res.data;
+      }
+      return [];
     })
     .catch((err) => {
       console.error(err);

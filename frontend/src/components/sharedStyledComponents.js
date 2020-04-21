@@ -349,7 +349,7 @@ export const UnfollowButton = styled(Button).attrs({ variant: "link" })`
   }
 `;
 
-export const VodRemoveButton = styled(Button).attrs({ variant: "link" })`
+export const VodAddRemoveButton = styled(Button).attrs({ variant: "link" })`
   color: rgb(200, 200, 200);
   grid-row: 1;
   justify-self: right;
@@ -360,25 +360,25 @@ export const VodRemoveButton = styled(Button).attrs({ variant: "link" })`
   transition: opacity 250ms;
 
   &:hover {
-    color: rgb(225, 000, 000);
+    color: ${({ vodenabled }) => (vodenabled === "true" ? "rgb(225, 000, 000)" : "#14ae14")};
     opacity: 1;
   }
 `;
 
-export const VodAddButton = styled(Button).attrs({ variant: "link" })`
-  color: rgb(200, 200, 200);
-  grid-row: 1;
-  justify-self: right;
-  padding: 0px;
-  margin-right: ${({ marginright }) => marginright || "unset"};
-  opacity: 0;
-  transition: opacity 250ms;
+// export const VodAddButton = styled(Button).attrs({ variant: "link" })`
+//   color: rgb(200, 200, 200);
+//   grid-row: 1;
+//   justify-self: right;
+//   padding: 0px;
+//   margin-right: ${({ marginright }) => marginright || "unset"};
+//   opacity: 0;
+//   transition: opacity 250ms;
 
-  &:hover {
-    color: #14ae14;
-    opacity: 1;
-  }
-`;
+//   &:hover {
+//     color: #14ae14;
+//     opacity: 1;
+//   }
+// `;
 
 export const StyledLoadingContainer = styled.div`
   display: grid;
