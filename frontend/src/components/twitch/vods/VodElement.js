@@ -39,7 +39,6 @@ export default ({ data, vodBtnDisabled }) => {
               },
             })
             .then((res) => {
-              console.log("handleMouseOver -> res", res.data.preview);
               if (res.data.status === "recording") {
                 setPreviewAvailable({
                   status: "recording",
