@@ -38,7 +38,7 @@ export default () => {
           <Alert variant='info' style={{ textAlign: "center" }}>
             <Alert.Heading>No twitter list entered</Alert.Heading>
             <hr />
-            Please enter a punblic twitter list id below.
+            Please enter a public twitter list id below.
           </Alert>
         )}
       </Container>

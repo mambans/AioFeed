@@ -6,7 +6,7 @@ My personal project **AioFeed**, is a site that combines feeds from different si
 
 ## Account
 
-AioFeed stores the AioFeed account Username, email, **hashed** password in database and Youtube and Twitch access tokens so you don't need to reconnected on each session, tokens might still have expired on next login.
+AioFeed stores the AioFeed account Username, email, **hashed** password in database and encrypted Youtube and Twitch access tokens so you don't need to reconnected on each session, tokens can still have expired until next login.
 It also stores profile image url, vod channel list (twitch channels to fetch vods from).
 
 ## Pages
