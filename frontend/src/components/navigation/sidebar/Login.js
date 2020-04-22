@@ -17,6 +17,7 @@ export default () => {
   const { setRenderModal } = useContext(NavigationContext);
   const { setUsername } = useContext(AccountContext);
 
+  // eslint-disable-next-line no-unused-vars
   const { value: username, bind: bindUsername, reset: resetUsername } = useInput("");
   const { value: password, bind: bindPassword, reset: resetPassword } = useInput("");
 
@@ -52,13 +53,12 @@ export default () => {
       .then((result) => {
         const res = result.data.Attributes;
         if (result.status === 200 && res) {
-          resetUsername();
-          resetPassword();
           AddCookie("AioFeed_AccountName", res.Username);
           AddCookie("AioFeed_AccountProfileImg", res.ProfileImg);
           AddCookie("AioFeed_AuthKey", res.AuthKey);
           AddCookie("AioFeed_AccountEmail", res.Email);
           AddCookie("Twitter-Listname", res.TwitterListId);
+          localStorage.setItem("VodChannels", JSON.stringify(res.MonitoredChannels));
 
           if (res.TwitchPreferences && Object.keys(res.TwitchPreferences).length !== 0) {
             AddCookie("Twitch-access_token", res.TwitchPreferences.Token);
