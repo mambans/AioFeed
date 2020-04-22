@@ -6,7 +6,6 @@ import { StyledCreateFormTitle, StyledCreateForm } from "./StyledComponent";
 import AccountContext from "./../../account/AccountContext";
 import NavigationContext from "./../NavigationContext";
 import LoadingIndicator from "./../../LoadingIndicator";
-import FeedsContext from "./../../feed/FeedsContext";
 import useInput from "./../../../hooks/useInput";
 import { AddCookie } from "../../../util/Utils";
 
@@ -16,18 +15,7 @@ export default () => {
   const [validatedUsername, setValidatedUsername] = useState(true);
   const [validatedPassword, setValidatedPassword] = useState(true);
   const { setRenderModal } = useContext(NavigationContext);
-  const {
-    setAuthKey,
-    setUsername,
-    setProfileImage,
-    setTwitchToken,
-    setYoutubeToken,
-    setTwitchUserId,
-    setTwitchUsername,
-    setTwitchProfileImg,
-    setAutoRefreshEnabled,
-  } = useContext(AccountContext);
-  const { setEnableTwitch, setTwitterListName } = useContext(FeedsContext);
+  const { setUsername } = useContext(AccountContext);
 
   const { value: username, bind: bindUsername, reset: resetUsername } = useInput("");
   const { value: password, bind: bindPassword, reset: resetPassword } = useInput("");
@@ -61,49 +49,38 @@ export default () => {
         username: username,
         password: password,
       })
-      .then((res) => {
-        if (res.status === 200 && res.data.Attributes) {
+      .then((result) => {
+        const res = result.data.Attributes;
+        if (result.status === 200 && res) {
           resetUsername();
           resetPassword();
-          // console.log("TCL: loginAccount -> res.data.Attributes", res.data.Attributes);
-          AddCookie("AioFeed_AccountName", res.data.Attributes.Username);
-          AddCookie("AioFeed_AccountProfileImg", res.data.Attributes.ProfileImg);
-          AddCookie("AioFeed_AuthKey", res.data.Attributes.AuthKey);
-          AddCookie("AioFeed_AccountEmail", res.data.Attributes.Email);
+          AddCookie("AioFeed_AccountName", res.Username);
+          AddCookie("AioFeed_AccountProfileImg", res.ProfileImg);
+          AddCookie("AioFeed_AuthKey", res.AuthKey);
+          AddCookie("AioFeed_AccountEmail", res.Email);
+          AddCookie("Twitter-Listname", res.TwitterListId);
 
-          AddCookie("Twitch-access_token", res.data.Attributes.TwitchToken);
-          AddCookie("Twitter-Listname", res.data.Attributes.TwitterListId);
-          AddCookie("Youtube-access_token", res.data.Attributes.YoutubeToken);
-          AddCookie("");
+          if (res.TwitchPreferences) {
+            AddCookie("Twitch-access_token", res.TwitchPreferences.Token);
+            AddCookie("Twitch-refresh_token", res.TwitchPreferences.Refresh_token);
 
-          if (res.data.Attributes.TwitchPreference) {
-            AddCookie(
-              "Youtube-Twitch_AutoRefresh",
-              parseBolean(res.data.Attributes.TwitchPreferences.AutoRefresh)
-            );
-            AddCookie(
-              "Youtube-Twitch_FeedEnabled",
-              parseBolean(res.data.Attributes.TwitchPreferences.enabled)
-            );
-            AddCookie(
-              "Youtube-Twitch-userId",
-              parseBolean(res.data.Attributes.TwitchPreferences.id)
-            );
+            AddCookie("Twitch-userId", res.TwitchPreferences.Id);
+            AddCookie("Twitch-username", res.TwitchPreferences.Username);
+            AddCookie("Twitch-profileImg", res.TwitchPreferences.Profile);
+            AddCookie("Twitch_AutoRefresh", parseBolean(res.TwitchPreferences.AutoRefresh));
 
-            setEnableTwitch(res.data.Attributes.TwitchPreferences.enabled === "true" || false);
-            setTwitchUsername(parseBolean(res.data.Attributes.TwitchPreferences.Username));
-            setTwitchUserId(parseBolean(res.data.Attributes.TwitchPreferences.Id));
-            setTwitchProfileImg(parseBolean(res.data.Attributes.TwitchPreferences.Profile));
-            setAutoRefreshEnabled(parseBolean(res.data.Attributes.TwitchPreferences.AutoRefresh));
+            // AddCookie("Youtube-Twitch_FeedEnabled", parseBolean(res.TwitchPreferences.enabled));
           }
 
-          setTwitterListName(res.data.Attributes.TwitterListId);
-          setAuthKey(parseBolean(res.data.Attributes.AuthKey));
-          setProfileImage(parseBolean(res.data.Attributes.ProfileImg));
-          setTwitchToken(parseBolean(res.data.Attributes.TwitchToken));
-          setYoutubeToken(parseBolean(res.data.Attributes.YoutubeToken));
+          if (res.YoutubePreferences) {
+            AddCookie("Youtube-access_token", res.YoutubePreferences.Token);
+            AddCookie("YoutubeUsername", res.YoutubePreferences.Username);
+            AddCookie("YoutubeProfileImg", res.YoutubePreferences.Profile);
+          }
 
-          setUsername(parseBolean(res.data.Attributes.Username));
+          setTimeout(() => {
+            setUsername(res.Username);
+          }, 0);
         } else {
           console.log(res);
         }

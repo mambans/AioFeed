@@ -50,20 +50,19 @@ function TwitchAuthCallback() {
           AddCookie("Twitch-profileImg", res.data.data[0].profile_image_url);
 
           await axios
-            .put(
-              `https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/preferences`,
-              {
-                username: username,
-                dataName: "TwitchPreferences",
-                data: {
-                  Username: res.data.data[0].login,
-                  Id: res.data.data[0].id,
-                  Profile: res.data.data[0].profile_image_url,
-                  AutoRefresh: autoRefreshEnabled,
-                  enabled: enableTwitch,
-                },
-              }
-            )
+            .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+              username: username,
+              columnName: "TwitchPreferences",
+              columnValue: {
+                Username: res.data.data[0].login,
+                Id: res.data.data[0].id,
+                Profile: res.data.data[0].profile_image_url,
+                Token: accessToken,
+                Refresh_token: refreshToken,
+                AutoRefresh: autoRefreshEnabled,
+                enabled: enableTwitch,
+              },
+            })
             .catch((e) => {
               console.error(e);
             });
@@ -72,16 +71,6 @@ function TwitchAuthCallback() {
             Username: res.data.data[0].login,
             ProfileImg: res.data.data[0].profile_image_url,
           };
-        });
-
-      await axios
-        .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
-          username: username,
-          columnValue: accessToken,
-          columnName: "TwitchToken",
-        })
-        .catch((e) => {
-          console.error(e);
         });
 
       return { token: accessToken, refresh_token: refreshToken, ...MyTwitch };

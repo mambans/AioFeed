@@ -40,16 +40,6 @@ export default () => {
       AddCookie("Youtube-access_token_expire", accessTokenExpireParam);
       AddCookie("Youtube-readonly", url.hash.includes(".readonly"));
 
-      await axios
-        .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
-          username: username,
-          columnValue: accessToken,
-          columnName: "YoutubeToken",
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-
       const MyYoutube = await axios
         .get(
           `https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
@@ -68,6 +58,20 @@ export default () => {
             Username: res.data.items[0].snippet.title,
             ProfileImg: res.data.items[0].snippet.thumbnails.default.url,
           };
+        });
+
+      await axios
+        .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+          username: username,
+          columnName: "YoutubePreferences",
+          columnValue: {
+            Username: MyYoutube.Username,
+            Profile: MyYoutube.ProfileImg,
+            Token: accessToken,
+          },
+        })
+        .catch((e) => {
+          console.error(e);
         });
 
       return { token: accessToken, ...MyYoutube };
