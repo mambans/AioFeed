@@ -69,9 +69,10 @@ export default () => {
     playerVars: {
       autoplay: 1,
       controls: 1,
-      origin: "https://aiofeed.com/feed",
+      origin: "https://aiofeed.com/youtube",
       start: startTime || 0,
-      fs: 0,
+      frameborder: "0",
+      fs: 1,
     },
   };
 
