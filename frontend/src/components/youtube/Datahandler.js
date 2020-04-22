@@ -25,7 +25,11 @@ export default ({ children }) => {
         oldVideos.current = videos.current || SubscriptionData.data;
         videos.current = SubscriptionData.data;
 
-        if (SubscriptionData.error) setRequestError(SubscriptionData.error.response.data.error);
+        if (SubscriptionData.error) {
+          setRequestError(SubscriptionData.error.response.data.error);
+        } else {
+          setRequestError();
+        }
 
         setIsLoaded(new Date());
         videos.current.forEach((video) => {

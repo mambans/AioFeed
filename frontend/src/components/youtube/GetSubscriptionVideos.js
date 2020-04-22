@@ -27,7 +27,10 @@ const fetchSubscriptionVideos = async (videosCACHE, channel) => {
   const CheckForCachedChannel = () => {
     // console.log("CheckForCachedChannel -> channel", channel);
     try {
-      return videosCACHE.find((chan) => chan.channel.snippet.resourceId.channelId);
+      return videosCACHE.find(
+        (cacheChannel) =>
+          cacheChannel.channel.snippet.resourceId.channelId === channel.snippet.resourceId.channelId
+      );
     } catch (error) {
       return null;
     }
@@ -85,7 +88,7 @@ const fetchSubscriptionVideos = async (videosCACHE, channel) => {
       });
   }
 
-  return { res, error };
+  return { res: error && error.response.status === 401 ? cachedChannelObj : res, error };
 };
 
 export default async (followedChannels) => {
@@ -102,9 +105,7 @@ export default async (followedChannels) => {
     const channelWithVideos = await Promise.all(
       followedChannels.map(async (channel) => {
         return await fetchSubscriptionVideos(videosCACHE, channel).then(async (result) => {
-          if (result.error) {
-            error = result.error;
-          }
+          error = result.error;
 
           const items = await filterVideos(result.res);
 
