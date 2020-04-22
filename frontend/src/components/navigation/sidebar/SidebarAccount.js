@@ -93,10 +93,20 @@ export default () => {
 
   async function disconnectTwitch() {
     await axios
+      .post(
+        `https://id.twitch.tv/oauth2/revoke?client_id=${
+          process.env.REACT_APP_TWITCH_CLIENT_ID
+        }&token=${Util.getCookie("Twitch-access_token")}`
+      )
+      .catch((er) => {
+        console.error(er);
+      });
+
+    await axios
       .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
         username: username,
-        columnValue: "null",
-        columnName: "TwitchToken",
+        columnName: "TwitchPreferences",
+        columnValue: {},
       })
       .then(() => {
         RemoveCookie("Twitch-access_token");
@@ -106,6 +116,7 @@ export default () => {
         RemoveCookie("Twitch-profileImg");
         RemoveCookie("TwitchVods_FeedEnabled");
         RemoveCookie("Twitch-myState");
+        RemoveCookie("Twitch_AutoRefresh");
 
         setTwitchToken();
         setEnableTwitch(false);
@@ -120,8 +131,8 @@ export default () => {
     await axios
       .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
         username: username,
-        columnValue: "null",
-        columnName: "YoutubeToken",
+        columnName: "YoutubePreferences",
+        columnValue: {},
       })
       .then(() => {
         RemoveCookie("Youtube-access_token");
