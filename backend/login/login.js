@@ -7,6 +7,15 @@ const bcrypt = require("bcrypt");
 const util = require("util");
 var uniqid = require("uniqid");
 const compare = util.promisify(bcrypt.compare);
+const CryptoJS = require("crypto-js");
+
+const decryptData = async (data, secretString) => {
+  if (data) {
+    const bytes = await CryptoJS.AES.decrypt(data, secretString);
+    return bytes.toString(CryptoJS.enc.Utf8);
+  }
+  return null;
+};
 
 const login = async ({ username, password }) => {
   const res = await client
@@ -28,7 +37,7 @@ const login = async ({ username, password }) => {
     if (valid) {
       const key = uniqid(`${res.Items[0].Username}-AuthKey:`);
 
-      const auth_data = await client
+      const data = await client
         .update({
           TableName: process.env.USERNAME_TABLE,
           Key: { Username: username },
@@ -41,9 +50,38 @@ const login = async ({ username, password }) => {
         })
         .promise();
 
+      const decryptedData = {
+        Attributes: {
+          ...data.Attributes,
+          TwitchPreferences: data.Attributes.TwitchPreferences
+            ? {
+                ...data.Attributes.TwitchPreferences,
+                Token: await decryptData(
+                  data.Attributes.TwitchPreferences.Token,
+                  "TwitchPreferences"
+                ),
+                Refresh_token: await decryptData(
+                  data.Attributes.TwitchPreferences.Refresh_token,
+                  "TwitchPreferences"
+                ),
+              }
+            : {},
+
+          YoutubePreferences: data.Attributes.YoutubePreferences
+            ? {
+                ...data.Attributes.YoutubePreferences,
+                Token: await decryptData(
+                  data.Attributes.YoutubePreferences.Token,
+                  "YoutubePreferences"
+                ),
+              }
+            : {},
+        },
+      };
+
       return {
         statusCode: 200,
-        data: auth_data,
+        data: decryptedData,
       };
     } else {
       return {
