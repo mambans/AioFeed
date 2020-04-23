@@ -9,6 +9,10 @@ export const StyledFooterContainer = styled.div`
   margin-top: var(--footerMargin);
   border-top: 2px solid #53463f;
   max-height: 200px;
+  width: ${({ enableTwitter, location }) =>
+    enableTwitter && (location === "/feed" || location === "/feed/")
+      ? "calc(85vw - (25px + 10px))"
+      : "100vw"};
 
   ul {
     display: flex;

@@ -4,10 +4,11 @@ import { MdAccountCircle } from "react-icons/md";
 import { MdEmail } from "react-icons/md";
 import { MdRssFeed } from "react-icons/md";
 import { Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import React, { useContext } from "react";
 
 import NavigationContext from "./../navigation/NavigationContext";
+import FeedsContext from "./../feed/FeedsContext";
 import {
   StyledFooterContainer,
   StyledCenterBottomText,
@@ -16,10 +17,12 @@ import {
 
 export default () => {
   const { footerVisible, setRenderModal, setShowSidebar } = useContext(NavigationContext);
+  const { enableTwitter } = useContext(FeedsContext);
+  const location = useLocation();
 
   return (
     footerVisible && (
-      <StyledFooterContainer>
+      <StyledFooterContainer enableTwitter={enableTwitter} location={location.pathname}>
         <div>
           <ul>
             <li>
