@@ -284,7 +284,7 @@
 //Twitter
 .twitter-slide-enter {
   opacity: 0;
-  right: -15vw;
+  right: -15vw !important;
   transition: opacity 375ms, right 750ms;
 
   @media screen and (max-width: 3420px) {
@@ -294,19 +294,19 @@
 
 .twitter-slide-enter-active {
   opacity: 1;
-  right: 25px;
+  right: 25px !important;
   transition: opacity 375ms, right 750ms;
 }
 
 .twitter-slide-exit {
   opacity: 1;
-  right: 25px;
+  right: 25px !important;
   transition: opacity 375ms, right 750ms;
 }
 
 .twitter-slide-exit-active {
   opacity: 0;
-  right: -15vw;
+  right: -15vw !important;
   transition: opacity 375ms, right 750ms;
 
   @media screen and (max-width: 3420px) {
@@ -315,11 +315,11 @@
 }
 
 .twitter-slide-enter-done {
-  right: 25px;
+  right: 25px !important;
   transition: opacity 375ms, right 750ms;
 }
 
 .twitter-slide-appear-active {
-  right: 25px;
+  right: 25px !important;
   transition: opacity 500ms, right 750ms;
 }
