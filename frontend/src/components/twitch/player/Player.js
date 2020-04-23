@@ -555,7 +555,7 @@ export default () => {
                   size={30}
                   title='Show navbar'
                 />
-                Navbar
+                Nav
               </ShowNavbarBtn>
               <StyledChat
                 frameborder='0'
@@ -588,7 +588,7 @@ export default () => {
               size={30}
               title='Show navbar'
             />
-            Navbar
+            Nav
           </ShowNavbarBtn>
         </VideoAndChatContainer>
       ) : (

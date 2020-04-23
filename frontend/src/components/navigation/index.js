@@ -1,16 +1,28 @@
-import React, { useContext } from "react";
-import { Navbar, NavDropdown, Nav, Container } from "react-bootstrap";
+import React, { useContext, useState } from "react";
+import { Navbar, NavDropdown, Nav, Container, Button } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import { FaGithub } from "react-icons/fa";
+import Modal from "react-bootstrap/Modal";
 
 import RenderNotifications from "./../notifications";
 import NavigationContext from "./NavigationContext";
 import "./Navigation.scss";
 import Sidebar from "./sidebar";
+import ChangeLogs from "../changeLogs";
+import styles from "../changeLogs/ChangeLogs.module.scss";
+import Util from "../../util/Util";
+import { AddCookie } from "../../util/Utils";
 
 export default (prop) => {
+  const NewAlertName = `GlobalAlert-NewAlertName`;
+  AddCookie(NewAlertName, true);
   const { visible, shrinkNavbar } = useContext(NavigationContext);
+  const [show, setShow] = useState(!Util.getCookie(NewAlertName));
+
+  const handleClose = () => {
+    setShow(false);
+  };
 
   return (
     <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
@@ -48,7 +60,23 @@ export default (prop) => {
                 <FaGithub size={24} style={{ marginRight: "0.75rem" }} />
                 AioFeed-Github
               </NavDropdown.Item>
+
+              <NavDropdown.Item
+                as={Button}
+                onClick={() => {
+                  setShow(!show);
+                }}>
+                <FaGithub size={24} style={{ marginRight: "0.75rem" }} />
+                Changelog
+              </NavDropdown.Item>
             </NavDropdown>
+            <Modal
+              show={show}
+              onHide={handleClose}
+              dialogClassName={styles.modal}
+              backdropClassName={styles.modalBackdrop}>
+              <ChangeLogs handleClose={handleClose} NewAlertName={NewAlertName} />
+            </Modal>
             <Sidebar />
           </Nav>
         </Navbar.Collapse>

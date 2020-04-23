@@ -1,0 +1,33 @@
+.modal {
+  background: rgba(12, 12, 17, 0.95);
+  padding: 5px 15px;
+  border-radius: 10px;
+  min-width: 30%;
+}
+
+.modalBackdrop {
+  opacity: 0.3;
+}
+
+.ulContainer {
+  font-size: 1.15rem;
+  line-height: 2rem;
+  padding: 15px;
+  text-align: start;
+  color: rgb(245, 245, 245);
+  overflow-y: scroll;
+  scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0) !important;
+  scrollbar-width: thin !important;
+  max-height: 50vh;
+}
+
+.header {
+  text-align: center;
+  color: white;
+  border-bottom: 2px solid rgb(163, 163, 163);
+  padding: 10px 0;
+
+  .title {
+    display: inline;
+  }
+}

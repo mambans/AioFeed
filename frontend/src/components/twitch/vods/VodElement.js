@@ -57,7 +57,7 @@ export default ({ data, vodBtnDisabled }) => {
               console.error(error);
             });
         },
-        previewAvailable.error ? 5000 : 1000
+        previewAvailable.error ? 5000 : 1500
       );
     } else {
       hoverTimeoutRef.current = setTimeout(() => {
