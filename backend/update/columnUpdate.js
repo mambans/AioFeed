@@ -2,15 +2,15 @@
 
 const DynamoDB = require("aws-sdk/clients/dynamodb");
 const client = new DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
-const CryptoJS = require("crypto-js");
+const AES = require("crypto-js/aes");
 
 const columnUpdate = async ({ username, columnValue, columnName }) => {
   const valueData = await (async () => {
     if (columnValue.Token) {
-      const Hached_Token = await CryptoJS.AES.encrypt(columnValue.Token, columnName).toString();
+      const Hached_Token = await AES.encrypt(columnValue.Token, columnName).toString();
 
       if (columnValue.Refresh_token) {
-        const Hached_Refresh_token = await CryptoJS.AES.encrypt(
+        const Hached_Refresh_token = await AES.encrypt(
           columnValue.Refresh_token,
           columnName
         ).toString();

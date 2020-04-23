@@ -5,14 +5,15 @@ const client = new DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
 
 const bcrypt = require("bcrypt");
 const util = require("util");
-var uniqid = require("uniqid");
+const uniqid = require("uniqid");
 const compare = util.promisify(bcrypt.compare);
-const CryptoJS = require("crypto-js");
+const AES = require("crypto-js/aes");
+const enc = require("crypto-js/enc-utf8");
 
 const decryptData = async (data, secretString) => {
   if (data) {
-    const bytes = await CryptoJS.AES.decrypt(data, secretString);
-    return bytes.toString(CryptoJS.enc.Utf8);
+    const bytes = await AES.decrypt(data, secretString);
+    return bytes.toString(enc);
   }
   return null;
 };
