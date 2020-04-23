@@ -9,7 +9,7 @@ Globals:
 Resources:
   Create:
     Properties:
-      CodeUri: s3://aiofeed-backend/feaef4d606e6b73cb2788b5a49af038d
+      CodeUri: s3://aiofeed-backend/a8884ed391663eda63cd005296baf983
       Description: Create an AioFeed account with tokens and monitored vod channels
         default to null and empty array.
       Environment:
@@ -38,7 +38,7 @@ Resources:
     Type: AWS::Serverless::Function
   DeleteAccount:
     Properties:
-      CodeUri: s3://aiofeed-backend/feaef4d606e6b73cb2788b5a49af038d
+      CodeUri: s3://aiofeed-backend/a8884ed391663eda63cd005296baf983
       Description: Delete an account
       Environment:
         Variables:
@@ -64,7 +64,7 @@ Resources:
     Type: AWS::Serverless::Function
   FetchMonitoredChannels:
     Properties:
-      CodeUri: s3://aiofeed-backend/feaef4d606e6b73cb2788b5a49af038d
+      CodeUri: s3://aiofeed-backend/a8884ed391663eda63cd005296baf983
       Description: Fetch monitored vod channels list.
       Environment:
         Variables:
@@ -90,7 +90,7 @@ Resources:
     Type: AWS::Serverless::Function
   Login:
     Properties:
-      CodeUri: s3://aiofeed-backend/feaef4d606e6b73cb2788b5a49af038d
+      CodeUri: s3://aiofeed-backend/a8884ed391663eda63cd005296baf983
       Description: Login with AioFeed account and return account info, tokens and
         monitored vod channels.
       Environment:
@@ -117,7 +117,7 @@ Resources:
     Type: AWS::Serverless::Function
   Update:
     Properties:
-      CodeUri: s3://aiofeed-backend/feaef4d606e6b73cb2788b5a49af038d
+      CodeUri: s3://aiofeed-backend/a8884ed391663eda63cd005296baf983
       Description: Update a specific column mentioned as a param.
       Environment:
         Variables:
@@ -145,7 +145,7 @@ Resources:
     Type: AWS::Serverless::Function
   UpdateMonitoredChannels:
     Properties:
-      CodeUri: s3://aiofeed-backend/feaef4d606e6b73cb2788b5a49af038d
+      CodeUri: s3://aiofeed-backend/a8884ed391663eda63cd005296baf983
       Description: Update monitored vod channels list.
       Environment:
         Variables:
@@ -173,7 +173,7 @@ Resources:
     Type: AWS::Serverless::Function
   UpdatePreferences:
     Properties:
-      CodeUri: s3://aiofeed-backend/feaef4d606e6b73cb2788b5a49af038d
+      CodeUri: s3://aiofeed-backend/a8884ed391663eda63cd005296baf983
       Description: Update preferences for mentioned data name/type.
       Environment:
         Variables:
