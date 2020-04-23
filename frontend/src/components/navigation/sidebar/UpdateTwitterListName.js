@@ -21,7 +21,7 @@ const StyledForm = styled(Form)`
   }
 `;
 
-export default () => {
+export default ({ style }) => {
   const { enableTwitter, setTwitterListName } = useContext(FeedsContext);
   const { username } = useContext(AccountContext);
   const { value: listName, bind: bindListName } = useInput(
@@ -67,7 +67,7 @@ export default () => {
 
   if (enableTwitter) {
     return (
-      <StyledForm onSubmit={handleSubmit}>
+      <StyledForm onSubmit={handleSubmit} style={{ ...style }}>
         <Form.Group controlId='formGroupListName'>
           <Form.Label
             style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -76,15 +76,23 @@ export default () => {
               Clear
             </Button>
           </Form.Label>
-          <Form.Control
-            type='text'
-            placeholder='674523...'
-            name='listName'
-            required
-            // isInvalid={!listName}
-            {...bindListName}
-          />
-          {/* <Form.Control.Feedback type='invalid'>Enter</Form.Control.Feedback> */}
+          <div style={{ display: "flex" }}>
+            <Form.Control
+              type='text'
+              placeholder='674523...'
+              name='listName'
+              required
+              // isInvalid={!listName}
+              {...bindListName}
+            />
+            {/* <Form.Control.Feedback type='invalid'>Enter</Form.Control.Feedback> */}
+            <Button
+              type='submit'
+              variant='secondary'
+              style={{ padding: "0.3rem 0.5rem", marginLeft: "10px" }}>
+              Add
+            </Button>
+          </div>
         </Form.Group>
       </StyledForm>
     );

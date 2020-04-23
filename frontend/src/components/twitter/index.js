@@ -5,6 +5,7 @@ import React, { useContext } from "react";
 
 import { Container, LoadingPlaceholder } from "./StyledComponents";
 import FeedsContext from "../feed/FeedsContext";
+import UpdateTwitterListName from "../navigation/sidebar/UpdateTwitterListName";
 
 export default () => {
   const { twitterListName, enableTwitter } = useContext(FeedsContext);
@@ -35,11 +36,14 @@ export default () => {
             }}
           />
         ) : (
-          <Alert variant='info' style={{ textAlign: "center" }}>
-            <Alert.Heading>No twitter list entered</Alert.Heading>
-            <hr />
-            Please enter a public twitter list id below.
-          </Alert>
+          <>
+            <Alert variant='info' style={{ textAlign: "center" }}>
+              <Alert.Heading>No twitter list entered</Alert.Heading>
+              <hr />
+              Please enter a public twitter list id below.
+            </Alert>
+            <UpdateTwitterListName style={{ padding: "10px" }} />
+          </>
         )}
       </Container>
     </CSSTransition>
