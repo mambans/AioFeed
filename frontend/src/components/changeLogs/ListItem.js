@@ -2,9 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import { MdAddCircleOutline, MdRemoveCircleOutline } from "react-icons/md";
 import { FaExchangeAlt } from "react-icons/fa";
-
 import { Button } from "react-bootstrap";
-// import FetchRepoTagInfo from "./FetchRepoTagInfo";
 
 const AddIcon = styled(MdAddCircleOutline).attrs({ size: 16 })`
   color: green;
@@ -98,13 +96,15 @@ const List = {
   `,
 };
 
-export default ({ title, commitUrl, showInfo, children, body, created_at }) => {
+export default ({ name, body, published_at, showInfo, children }) => {
   const [info, setInfo] = useState({ loading: false, data: null });
   const [showFullMessage, setShowFullMessage] = useState(false);
 
   const handleClick = useCallback(() => {
     setInfo({ loading: true });
-    // FetchRepoTagInfo(commitUrl).then((res) => {
+    // FetchRepoTagInfo(name).then((res) => {
+    //   console.log("handleClick -> res", res);
+
     if (body) {
       let additions = [];
       let deletions = [];
@@ -149,7 +149,7 @@ export default ({ title, commitUrl, showInfo, children, body, created_at }) => {
       setInfo({
         loading: false,
         data: body,
-        date: created_at,
+        date: published_at,
         additions: additions,
         deletions: deletions,
         changes: changes,
@@ -157,7 +157,7 @@ export default ({ title, commitUrl, showInfo, children, body, created_at }) => {
       });
     }
     // });
-  }, [body, created_at]);
+  }, [body, published_at]);
 
   useEffect(() => {
     if (showInfo) {
@@ -168,7 +168,7 @@ export default ({ title, commitUrl, showInfo, children, body, created_at }) => {
   return (
     <List.Container>
       <List.Header>
-        <List.Title>{title}</List.Title>
+        <List.Title>{name}</List.Title>
         {info.data && <List.Date>{new Date(info.date).toLocaleDateString()}</List.Date>}
       </List.Header>
 
@@ -214,7 +214,6 @@ export default ({ title, commitUrl, showInfo, children, body, created_at }) => {
           onClick={
             info.data
               ? () => {
-                  console.log(body);
                   setShowFullMessage(!showFullMessage);
                 }
               : null
@@ -224,7 +223,7 @@ export default ({ title, commitUrl, showInfo, children, body, created_at }) => {
       )}
       {info.data && (
         <div>
-          {showFullMessage && <List.Message>{body}</List.Message>}
+          {showFullMessage && <List.Message>{info.data}</List.Message>}
           <List.Items>{children}</List.Items>
           {/* <List.Stats>
             {Object.keys(info.data.stats).map((key) => {

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./ChangeLogs.module.scss";
 
 import { Modal } from "react-bootstrap";
-// import FetchRepoTags from "./FetchRepoTags";
 import FetchRepoReleases from "./FetchRepoReleases";
 import Alert from "./Alert";
 import ListItem from "./ListItem";
@@ -29,11 +28,10 @@ export default ({ NewAlertName }) => {
           repo.tags.slice(0, 1).map((tag) => {
             return (
               <ListItem
-                title={tag.name}
+                name={tag.name}
                 key={tag.node_id}
                 body={tag.body}
-                created_at={tag.created_at}
-                // commitUrl={tag.commit.url}
+                published_at={tag.published_at}
                 showInfo></ListItem>
             );
           })}
@@ -41,10 +39,10 @@ export default ({ NewAlertName }) => {
           repo.tags.slice(1, 15).map((tag) => {
             return (
               <ListItem
-                title={tag.name}
+                name={tag.name}
                 key={tag.node_id}
-                // commitUrl={tag.commit.url}
-              ></ListItem>
+                body={tag.body}
+                published_at={tag.published_at}></ListItem>
             );
           })}
       </Modal.Body>
