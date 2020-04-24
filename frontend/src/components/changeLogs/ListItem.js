@@ -157,7 +157,7 @@ export default ({ title, commitUrl, showInfo, children, body, created_at }) => {
       });
     }
     // });
-  }, [body]);
+  }, [body, created_at]);
 
   useEffect(() => {
     if (showInfo) {
