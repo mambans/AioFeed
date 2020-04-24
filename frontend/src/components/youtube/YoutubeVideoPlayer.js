@@ -1,8 +1,8 @@
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import YouTube from "react-youtube";
 import { MdVerticalAlignBottom } from "react-icons/md";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 // import queryString from "query-string";
 
 import NavigationContext from "./../navigation/NavigationContext";
@@ -15,39 +15,27 @@ const StyledYoutubeIframe = styled(YouTube)`
   width: 100%;
 `;
 
-// const VideoInfoContainer = styled.div`
-//   position: absolute;
-//   background: rgba(25, 25, 25, 0.5);
-//   border-radius: 10px;
-//   position: absolute;
-//   bottom: 60px;
-//   left: 10px;
-
-//   p {
-//     padding: 5px 10px;
-//     margin: 0;
-//   }
-// `;
-
 export default () => {
-  const videoId = (() => {
-    const param = useParams().videoId;
-    if (param.includes("&t=")) {
-      return param.split("&t=")[0];
-    } else {
-      return param;
-    }
-  })();
-  const locationPathname = useLocation().pathname;
+  const [video, setVideo] = useState({});
+  const param = useParams().videoId;
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
+  // const video = (() => {
+  //   const param = useParams().videoId;
 
-  const startTime = (() => {
-    if (locationPathname.includes("&t=")) {
-      return locationPathname.split("&t=")[1].replace("s", "");
+  //   if (param.includes("&t=")) {
+  //     return { id: param.split("&t=")[0], startTime: param.split("&t=")[1].replace("s", "") };
+  //   } else {
+  //     return { id: param };
+  //   }
+  // })();
+
+  useEffect(() => {
+    if (param.includes("&t=")) {
+      setVideo({ id: param.split("&t=")[0], startTime: param.split("&t=")[1].replace("s", "") });
     } else {
-      return null;
+      setVideo({ id: param });
     }
-  })();
+  }, [param]);
 
   useEffect(() => {
     document.documentElement.style.overflow = "hidden";
@@ -70,7 +58,7 @@ export default () => {
       autoplay: 1,
       controls: 1,
       origin: "https://aiofeed.com/youtube",
-      start: startTime || 0,
+      start: video.startTime || 0,
       frameborder: "0",
       fs: 1,
     },
@@ -102,9 +90,9 @@ export default () => {
           Navbar
         </ShowNavbarBtn>
         <StyledYoutubeIframe
-          videoId={videoId}
+          videoId={video.id}
           opts={opts}
-          id={videoId + "player"}
+          id={video.id + "player"}
           containerClassName='IframeContainer'
         />
       </VideoAndChatContainer>
