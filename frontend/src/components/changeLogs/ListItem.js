@@ -135,7 +135,8 @@ export default ({ title, commitUrl, showInfo, children }) => {
           sentArray.includes("moved") ||
           sentArray.includes("move") ||
           sentArray.includes("renamed") ||
-          sentArray.includes("rename")
+          sentArray.includes("rename") ||
+          sentArray.includes("changes")
         ) {
           changes.push(sentence);
         } else {
