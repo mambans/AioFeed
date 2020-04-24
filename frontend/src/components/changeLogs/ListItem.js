@@ -112,8 +112,7 @@ export default ({ title, commitUrl, showInfo, children }) => {
 
       // "Added something todate.\\Removed anoher tomorrow but toeday.\\Changed that one thing you told me to change.\\Add nabbar to that.\\Dont dio that but asd."
       res.commit.message.split("\n").map((sentence) => {
-        console.log("sentence", sentence);
-        if (sentence.toLowerCase().includes("add")) {
+        if (sentence.toLowerCase().includes("add") || sentence.toLowerCase().includes("fixed")) {
           additions.push(sentence);
           // return <List.Add key={sentence}>{sentence}</List.Add>;
         } else if (
