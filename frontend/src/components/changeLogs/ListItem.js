@@ -6,13 +6,13 @@ import { FaExchangeAlt } from "react-icons/fa";
 import { Button } from "react-bootstrap";
 import FetchRepoTagInfo from "./FetchRepoTagInfo";
 
-const AddIcon = styled(MdAddCircleOutline).attrs({ size: 20 })`
+const AddIcon = styled(MdAddCircleOutline).attrs({ size: 16 })`
   color: green;
 `;
-const RemoveIcon = styled(MdRemoveCircleOutline).attrs({ size: 20 })`
+const RemoveIcon = styled(MdRemoveCircleOutline).attrs({ size: 16 })`
   color: red;
 `;
-const ChangeIcon = styled(FaExchangeAlt).attrs({ size: 20 })`
+const ChangeIcon = styled(FaExchangeAlt).attrs({ size: 16 })`
   color: blue;
 `;
 
@@ -44,6 +44,10 @@ const List = {
     p {
       margin: 0;
     }
+  `,
+  Group: styled.div`
+    padding: 5px 0;
+    color: rgb(220, 220, 220);
   `,
   Add: ({ children }) => {
     return (
@@ -96,11 +100,50 @@ const List = {
 
 export default ({ title, commitUrl, showInfo, children }) => {
   const [info, setInfo] = useState({ loading: false, data: null });
+  const [showFullMessage, setShowFullMessage] = useState(false);
 
   const handleClick = useCallback(() => {
     setInfo({ loading: true });
     FetchRepoTagInfo(commitUrl).then((res) => {
-      setInfo({ loading: false, data: res });
+      let additions = [];
+      let deletions = [];
+      let changes = [];
+      let rest = [];
+
+      // "Added something todate.\\Removed anoher tomorrow but toeday.\\Changed that one thing you told me to change.\\Add nabbar to that.\\Dont dio that but asd."
+      res.commit.message.split("\n").map((sentence) => {
+        console.log("sentence", sentence);
+        if (sentence.toLowerCase().includes("add")) {
+          additions.push(sentence);
+          // return <List.Add key={sentence}>{sentence}</List.Add>;
+        } else if (
+          sentence.toLowerCase().includes("remove") ||
+          sentence.toLowerCase().includes("delete")
+        ) {
+          deletions.push(sentence);
+          // return <List.Remove key={sentence}>{sentence}</List.Remove>;
+        } else if (
+          sentence.toLowerCase().includes("change") ||
+          sentence.toLowerCase().includes("refactor") ||
+          sentence.toLowerCase().includes("moved")
+        ) {
+          changes.push(sentence);
+          // return <List.Change key={sentence}>{sentence}</List.Change>;
+        } else {
+          rest.push(sentence);
+        }
+
+        return "";
+      });
+
+      setInfo({
+        loading: false,
+        data: res,
+        additions: additions,
+        deletions: deletions,
+        changes: changes,
+        rest: rest,
+      });
     });
   }, [commitUrl]);
 
@@ -126,12 +169,52 @@ export default ({ title, commitUrl, showInfo, children }) => {
         onClick={!info.data ? handleClick : null}>
         {info.loading ? "Loading" : "Info"}
       </List.Button>
+      {info.additions && (
+        <List.Group>
+          {info.additions.map((sent) => {
+            return <List.Add key={sent}>{sent}</List.Add>;
+          })}
+        </List.Group>
+      )}
+      {info.deletions && (
+        <List.Group>
+          {info.deletions.map((sent) => {
+            return <List.Remove key={sent}>{sent}</List.Remove>;
+          })}
+        </List.Group>
+      )}
+      {info.changes && (
+        <List.Group>
+          {info.changes.map((sent) => {
+            return <List.Change key={sent}>{sent}</List.Change>;
+          })}
+        </List.Group>
+      )}
+      {info.rest && (
+        <List.Group>
+          {info.rest.map((sent) => {
+            return <List.Item key={sent}>{sent}</List.Item>;
+          })}
+        </List.Group>
+      )}
+      {info.data && (
+        <List.Button
+          size='sm'
+          variant='dark'
+          onClick={
+            info.data
+              ? () => {
+                  console.log(info.data.commit.message);
+                  setShowFullMessage(!showFullMessage);
+                }
+              : null
+          }>
+          Full message
+        </List.Button>
+      )}
       {info.data && (
         <div>
-          <List.Message>{info.data.commit.message}</List.Message>
-          {/* {info.commit.message.split(".").map((sentence) => {
-            return <li>{sentence}</li>;
-          })} */}
+          {showFullMessage && <List.Message>{info.data.commit.message}</List.Message>}
           <List.Items>{children}</List.Items>
           <List.Stats>
             {Object.keys(info.data.stats).map((key) => {
