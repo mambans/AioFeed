@@ -4,7 +4,7 @@ import { MdAddCircleOutline, MdRemoveCircleOutline } from "react-icons/md";
 import { FaExchangeAlt } from "react-icons/fa";
 
 import { Button } from "react-bootstrap";
-import FetchRepoTagInfo from "./FetchRepoTagInfo";
+// import FetchRepoTagInfo from "./FetchRepoTagInfo";
 
 const AddIcon = styled(MdAddCircleOutline).attrs({ size: 16 })`
   color: green;
@@ -98,20 +98,20 @@ const List = {
   `,
 };
 
-export default ({ title, commitUrl, showInfo, children }) => {
+export default ({ title, commitUrl, showInfo, children, body, created_at }) => {
   const [info, setInfo] = useState({ loading: false, data: null });
   const [showFullMessage, setShowFullMessage] = useState(false);
 
   const handleClick = useCallback(() => {
     setInfo({ loading: true });
-    FetchRepoTagInfo(commitUrl).then((res) => {
+    // FetchRepoTagInfo(commitUrl).then((res) => {
+    if (body) {
       let additions = [];
       let deletions = [];
       let changes = [];
       let rest = [];
 
-      // "Added something todate.\\Removed anoher tomorrow but toeday.\\Changed that one thing you told me to change.\\Add nabbar to that.\\Dont dio that but asd."
-      res.commit.message.split("\n").map((sentence) => {
+      body.split("\n").map((sentence) => {
         const sentArray = sentence.toLowerCase().split(" ");
         if (
           sentArray.includes("added") ||
@@ -148,14 +148,16 @@ export default ({ title, commitUrl, showInfo, children }) => {
 
       setInfo({
         loading: false,
-        data: res,
+        data: body,
+        date: created_at,
         additions: additions,
         deletions: deletions,
         changes: changes,
         rest: rest,
       });
-    });
-  }, [commitUrl]);
+    }
+    // });
+  }, [body]);
 
   useEffect(() => {
     if (showInfo) {
@@ -167,9 +169,7 @@ export default ({ title, commitUrl, showInfo, children }) => {
     <List.Container>
       <List.Header>
         <List.Title>{title}</List.Title>
-        {info.data && (
-          <List.Date>{new Date(info.data.commit.committer.date).toLocaleDateString()}</List.Date>
-        )}
+        {info.data && <List.Date>{new Date(info.date).toLocaleDateString()}</List.Date>}
       </List.Header>
 
       <List.Button
@@ -214,7 +214,7 @@ export default ({ title, commitUrl, showInfo, children }) => {
           onClick={
             info.data
               ? () => {
-                  console.log(info.data.commit.message);
+                  console.log(body);
                   setShowFullMessage(!showFullMessage);
                 }
               : null
@@ -224,9 +224,9 @@ export default ({ title, commitUrl, showInfo, children }) => {
       )}
       {info.data && (
         <div>
-          {showFullMessage && <List.Message>{info.data.commit.message}</List.Message>}
+          {showFullMessage && <List.Message>{body}</List.Message>}
           <List.Items>{children}</List.Items>
-          <List.Stats>
+          {/* <List.Stats>
             {Object.keys(info.data.stats).map((key) => {
               return (
                 <span key={key} id={key}>
@@ -234,7 +234,7 @@ export default ({ title, commitUrl, showInfo, children }) => {
                 </span>
               );
             })}
-          </List.Stats>
+          </List.Stats> */}
         </div>
       )}
     </List.Container>

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import styles from "./ChangeLogs.module.scss";
 
 import { Modal } from "react-bootstrap";
-import FetchRepoTags from "./FetchRepoTags";
+// import FetchRepoTags from "./FetchRepoTags";
+import FetchRepoReleases from "./FetchRepoReleases";
 import Alert from "./Alert";
 import ListItem from "./ListItem";
 
@@ -11,7 +12,7 @@ export default ({ NewAlertName }) => {
 
   useEffect(() => {
     (async () => {
-      await FetchRepoTags().then((tags) => {
+      await FetchRepoReleases().then((tags) => {
         setRepo({ tags: tags });
       });
     })();
@@ -30,14 +31,20 @@ export default ({ NewAlertName }) => {
               <ListItem
                 title={tag.name}
                 key={tag.node_id}
-                commitUrl={tag.commit.url}
+                body={tag.body}
+                created_at={tag.created_at}
+                // commitUrl={tag.commit.url}
                 showInfo></ListItem>
             );
           })}
         {repo &&
           repo.tags.slice(1, 15).map((tag) => {
             return (
-              <ListItem title={tag.name} key={tag.node_id} commitUrl={tag.commit.url}></ListItem>
+              <ListItem
+                title={tag.name}
+                key={tag.node_id}
+                // commitUrl={tag.commit.url}
+              ></ListItem>
             );
           })}
       </Modal.Body>
