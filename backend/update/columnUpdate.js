@@ -6,7 +6,7 @@ const AES = require("crypto-js/aes");
 
 const columnUpdate = async ({ username, columnValue, columnName }) => {
   const valueData = await (async () => {
-    if (columnValue.Token) {
+    if (columnValue && columnValue.Token) {
       const Hached_Token = await AES.encrypt(columnValue.Token, columnName).toString();
 
       if (columnValue.Refresh_token) {
@@ -18,8 +18,10 @@ const columnUpdate = async ({ username, columnValue, columnName }) => {
         return { ...columnValue, Token: Hached_Token, Refresh_token: Hached_Refresh_token };
       }
       return { ...columnValue, Token: Hached_Token };
-    } else {
+    } else if (columnValue && typeof columnValue === "object") {
       return { ...columnValue };
+    } else {
+      return columnValue;
     }
   })();
 

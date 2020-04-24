@@ -49,7 +49,7 @@ export default ({ style }) => {
     await axios
       .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
         username: username,
-        columnValue: null,
+        columnValue: "null",
         columnName: "TwitterListId",
       })
       .catch((e) => {
