@@ -164,6 +164,8 @@ export const SearchGameForm = styled.form`
     border-radius: 5px;
     text-overflow: ellipsis;
     width: calc(100% - (26px + 1.5rem));
+    position: relative;
+    z-index: 5;
   }
 
   svg#ToggleListBtn {
@@ -173,6 +175,7 @@ export const SearchGameForm = styled.form`
     position: absolute;
     color: var(--refreshButtonColor);
     transition: color 250ms;
+    z-index: 4;
 
     &:hover {
       color: #ffffff;
