@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import YouTube from "react-youtube";
 import { MdVerticalAlignBottom } from "react-icons/md";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 // import queryString from "query-string";
 
 import NavigationContext from "./../navigation/NavigationContext";
@@ -19,6 +19,7 @@ export default () => {
   const [video, setVideo] = useState({});
   const param = useParams().videoId;
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
+  const getVideoInfoTimer = useRef();
   // const video = (() => {
   //   const param = useParams().videoId;
 
@@ -48,6 +49,7 @@ export default () => {
       setShrinkNavbar("false");
       setFooterVisible(true);
       setVisible(true);
+      clearTimeout(getVideoInfoTimer.current);
     };
   }, [setShrinkNavbar, setFooterVisible, setVisible]);
 
@@ -94,6 +96,15 @@ export default () => {
           opts={opts}
           id={video.id + "player"}
           containerClassName='IframeContainer'
+          onReady={(event) => {
+            getVideoInfoTimer.current = setTimeout(() => {
+              document.title = `AF | ${event.target.getVideoData().title}`;
+            }, 2500);
+          }}
+          onPlay={(event) => {
+            clearTimeout(getVideoInfoTimer.current);
+            document.title = `AF | ${event.target.getVideoData().title}`;
+          }}
         />
       </VideoAndChatContainer>
     </>
