@@ -112,22 +112,32 @@ export default ({ title, commitUrl, showInfo, children }) => {
 
       // "Added something todate.\\Removed anoher tomorrow but toeday.\\Changed that one thing you told me to change.\\Add nabbar to that.\\Dont dio that but asd."
       res.commit.message.split("\n").map((sentence) => {
-        if (sentence.toLowerCase().includes("add") || sentence.toLowerCase().includes("fixed")) {
+        const sentArray = sentence.toLowerCase().split(" ");
+        if (
+          sentArray.includes("added") ||
+          sentArray.includes("add") ||
+          sentArray.includes("fix") ||
+          sentArray.includes("fixed")
+        ) {
           additions.push(sentence);
-          // return <List.Add key={sentence}>{sentence}</List.Add>;
         } else if (
-          sentence.toLowerCase().includes("remove") ||
-          sentence.toLowerCase().includes("delete")
+          sentArray.includes("removed") ||
+          sentArray.includes("remove") ||
+          sentArray.includes("deleted") ||
+          sentArray.includes("delete")
         ) {
           deletions.push(sentence);
-          // return <List.Remove key={sentence}>{sentence}</List.Remove>;
         } else if (
-          sentence.toLowerCase().includes("change") ||
-          sentence.toLowerCase().includes("refactor") ||
-          sentence.toLowerCase().includes("moved")
+          sentArray.includes("changed") ||
+          sentArray.includes("change") ||
+          sentArray.includes("refactored") ||
+          sentArray.includes("refactor") ||
+          sentArray.includes("moved") ||
+          sentArray.includes("move") ||
+          sentArray.includes("renamed") ||
+          sentArray.includes("rename")
         ) {
           changes.push(sentence);
-          // return <List.Change key={sentence}>{sentence}</List.Change>;
         } else {
           rest.push(sentence);
         }
