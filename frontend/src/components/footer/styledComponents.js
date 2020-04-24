@@ -12,7 +12,7 @@ export const StyledFooterContainer = styled.div`
   width: ${({ enableTwitter, location }) =>
     enableTwitter && (location === "/feed" || location === "/feed/")
       ? "calc(85vw - (25px + 10px))"
-      : "100vw"};
+      : "100%"};
 
   ul {
     display: flex;
