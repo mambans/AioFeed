@@ -287,7 +287,7 @@ export default () => {
     const Height = 920;
     const LeftPosition = (window.screen.width - Width) / 2;
     const TopPosition = (window.screen.height - Height) / 2;
-    const settings = `height=${Height},width=${Width},top=${TopPosition},left=${LeftPosition},scrollbars=yes,resizable`;
+    const settings = `height=${Height},width=${Width},top=${TopPosition},left=${LeftPosition},scrollbars,resizable,status,location,toolbar,`;
 
     await axios(axiosConfig("post"))
       .then((res) => {
