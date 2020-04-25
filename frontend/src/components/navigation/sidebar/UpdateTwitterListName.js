@@ -89,7 +89,7 @@ export default ({ style }) => {
             <Button
               type='submit'
               variant='secondary'
-              style={{ padding: "0.3rem 0.5rem", marginLeft: "10px" }}>
+              style={{ padding: "0.3rem 0.5rem", marginLeft: "10px", minWidth: "53px" }}>
               Add
             </Button>
           </div>
