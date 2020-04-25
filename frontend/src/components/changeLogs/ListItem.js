@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import styled from "styled-components";
 import { MdAddCircleOutline, MdRemoveCircleOutline } from "react-icons/md";
 import { FaExchangeAlt } from "react-icons/fa";
@@ -99,6 +99,22 @@ const List = {
 export default ({ name, body, published_at, showInfo, children }) => {
   const [info, setInfo] = useState({ loading: false, data: null });
   const [showFullMessage, setShowFullMessage] = useState(false);
+  const additionsKeywords = useMemo(() => ["added", "add", "fix", "fixed"], []);
+  const deletionsKeywords = useMemo(() => ["removed", "remove", "deleted", "delete"], []);
+  const changesKeywords = useMemo(
+    () => [
+      "changed",
+      "change",
+      "refactored",
+      "refactor",
+      "moved",
+      "move",
+      "renamed",
+      "rename",
+      "changes",
+    ],
+    []
+  );
 
   const handleClick = useCallback(() => {
     setInfo({ loading: true });
@@ -111,36 +127,17 @@ export default ({ name, body, published_at, showInfo, children }) => {
       let changes = [];
       let rest = [];
 
-      body.split("\n").map((sentence) => {
+      // console.log(body.split(/(?:\r\n|\. )/g));
+      body.split(/(?:\r\n|\. )/g).map((sentence) => {
         const sentArray = sentence.toLowerCase().split(" ");
-        if (
-          sentArray.includes("added") ||
-          sentArray.includes("add") ||
-          sentArray.includes("fix") ||
-          sentArray.includes("fixed")
-        ) {
-          additions.push(sentence);
-        } else if (
-          sentArray.includes("removed") ||
-          sentArray.includes("remove") ||
-          sentArray.includes("deleted") ||
-          sentArray.includes("delete")
-        ) {
-          deletions.push(sentence);
-        } else if (
-          sentArray.includes("changed") ||
-          sentArray.includes("change") ||
-          sentArray.includes("refactored") ||
-          sentArray.includes("refactor") ||
-          sentArray.includes("moved") ||
-          sentArray.includes("move") ||
-          sentArray.includes("renamed") ||
-          sentArray.includes("rename") ||
-          sentArray.includes("changes")
-        ) {
-          changes.push(sentence);
+        if (sentArray.some((word) => additionsKeywords.includes(word))) {
+          if (sentence.length > 0) additions.push(sentence);
+        } else if (sentArray.some((word) => deletionsKeywords.includes(word))) {
+          if (sentence.length > 0) deletions.push(sentence);
+        } else if (sentArray.some((word) => changesKeywords.includes(word))) {
+          if (sentence.length > 0) changes.push(sentence);
         } else {
-          rest.push(sentence);
+          if (sentence.length > 0) rest.push(sentence);
         }
 
         return "";
@@ -157,7 +154,7 @@ export default ({ name, body, published_at, showInfo, children }) => {
       });
     }
     // });
-  }, [body, published_at]);
+  }, [body, published_at, additionsKeywords, deletionsKeywords, changesKeywords]);
 
   useEffect(() => {
     if (showInfo) {
