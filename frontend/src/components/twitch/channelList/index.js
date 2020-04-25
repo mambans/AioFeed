@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { throttle } from "lodash";
+import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import { MdFormatListBulleted } from "react-icons/md";
 
 import {
@@ -16,8 +15,6 @@ import GetFollowedChannels from "../GetFollowedChannels";
 import { CSSTransition } from "react-transition-group";
 
 export default () => {
-  // eslint-disable-next-line no-unused-vars
-  const navigate = useNavigate();
   const [channels, setChannels] = useState();
   const [listIsOpen, setListIsOpen] = useState();
 
@@ -32,10 +29,8 @@ export default () => {
         value,
         onChange: (event) => {
           setValue(event.target.value);
-          if (event.target.value && event.target.value.length >= 2) {
-          }
           if (listIsOpen && event.target.value === "") {
-            setListIsOpen(false);
+            // setListIsOpen(false);
           } else if (!listIsOpen && event.target.value) {
             setListIsOpen(true);
           }
@@ -63,29 +58,21 @@ export default () => {
     };
   };
 
-  const fetchFollowedChannels = useMemo(
-    () =>
-      throttle(
-        () => {
-          GetFollowedChannels().then(async (res) => {
-            if (res) {
-              channelObjectList(res).then(async (res) => {
-                await AddVideoExtraData(res, false).then(async (res) => {
-                  setChannels(res.data);
-                });
-              });
-            }
+  const fetchFollowedChannels = useCallback(() => {
+    GetFollowedChannels().then(async (res) => {
+      if (res) {
+        channelObjectList(res).then(async (res) => {
+          await AddVideoExtraData(res, false).then(async (res) => {
+            setChannels(res.data);
           });
-        },
-        60000,
-        { leading: true, trailing: false }
-      ),
-    []
-  );
+        });
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const input = showValue();
-    if (!channels && (listIsOpen || (input && input.length >= 2))) {
+    if (!channels && (listIsOpen || (input && input.length >= 1))) {
       fetchFollowedChannels();
     }
   }, [showValue, listIsOpen, fetchFollowedChannels, channels]);
@@ -93,7 +80,6 @@ export default () => {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     resetChannel();
-    // navigate(`/${channel}/channel/`);
     window.open(`/${channel}/channel/`);
   };
 
@@ -117,7 +103,14 @@ export default () => {
           }}
           size={42}
         />
-        <CSSTransition in={listIsOpen} timeout={250} classNames='fade-250ms' unmountOnExit>
+        <CSSTransition
+          in={listIsOpen}
+          timeout={250}
+          classNames='fade-250ms'
+          onExited={() => {
+            setChannels();
+          }}
+          unmountOnExit>
           <GameListUlContainer>
             {channels ? (
               <>
