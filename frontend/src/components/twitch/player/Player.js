@@ -64,6 +64,7 @@ export default () => {
   const [hideChat, setHideChat] = useState(false);
   const [showControlls, setShowControlls] = useState();
   const [latestVod, setLatestVod] = useState();
+  const [showUIControlls, setShowUIControlls] = useState();
 
   const volumeEventOverlayRef = useRef();
   const twitchPlayer = useRef();
@@ -178,6 +179,8 @@ export default () => {
 
   const OnlineEvents = useCallback(() => {
     console.log("Stream is Online");
+    twitchPlayer.current.showPlayerControls(false);
+
     document.title = `AF | ${channelName} Live`;
     setTimeout(() => {
       if (!channelInfo) fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
@@ -200,6 +203,8 @@ export default () => {
 
   const offlineEvents = useCallback(() => {
     console.log("Stream is Offline");
+    twitchPlayer.current.showPlayerControls(true);
+    setShowUIControlls(false);
 
     clearInterval(viewersTimer.current);
     clearInterval(channelinfoTimer.current);
@@ -316,6 +321,7 @@ export default () => {
           visible={visible}
           setLatestVod={setLatestVod}
           latestVod={latestVod}
+          showUIControlls={showUIControlls}
         />
       </CSSTransition>
 
@@ -335,6 +341,7 @@ export default () => {
               timeout={1000}
               classNames='fade-controllUI-1s'>
               <VolumeEventOverlay
+                show={showUIControlls}
                 ref={volumeEventOverlayRef}
                 type='live'
                 id='controls'
@@ -537,6 +544,7 @@ export default () => {
                 type='live'
                 OpenedDate={OpenedDate}
                 setActiveQuality={setActiveQuality}
+                setShowUIControlls={setShowUIControlls}
               />
             )}
           </div>

@@ -10,6 +10,7 @@ export default ({
   OpenedDate,
   setIsPaused,
   setActiveQuality,
+  setShowUIControlls,
 }) => {
   // eslint-disable-next-line
   const unmute = useMemo(
@@ -126,6 +127,8 @@ export default ({
 
     const onPlaying = () => {
       if (TwitchPlayer) {
+        setShowUIControlls(true);
+        TwitchPlayer.showPlayerControls(false);
         const defaultQuality = TwitchPlayer.getQuality();
         setVolumeMuted(TwitchPlayer.getMuted());
         setVolumeText(TwitchPlayer.getVolume() * 100);
@@ -189,6 +192,7 @@ export default ({
     OpenedDate,
     setIsPaused,
     setActiveQuality,
+    setShowUIControlls,
   ]);
 
   return null;

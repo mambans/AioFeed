@@ -143,6 +143,7 @@ export const VolumeEventOverlay = styled.div`
   height: 100%;
   bottom: ${({ type }) => (type === "live" ? "unset" : "70px")};
   cursor: ${({ showcursor }) => (showcursor ? "auto" : "none")};
+  display: ${({ show }) => (show ? "block" : "none")};
 
   a, p {
     text-shadow: 0 0 2px black;

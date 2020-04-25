@@ -9,6 +9,7 @@ import { MdArrowBack } from "react-icons/md";
 import { PlayerNavbar, NavigateBack } from "./StyledComponents";
 import Util from "../../../util/Util";
 import { Button } from "react-bootstrap";
+import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 
 export default ({
   type,
@@ -21,6 +22,7 @@ export default ({
   visible,
   setLatestVod,
   latestVod,
+  showUIControlls,
 }) => {
   const navigate = useNavigate();
 
@@ -76,6 +78,13 @@ export default ({
         <MdAccountCircle size={26} />
         {channelName || (channelInfo && channelInfo.display_name)}'s channel page
       </Button>
+      {channelInfo && !showUIControlls && (
+        <FollowUnfollowBtn
+          channel={channelName || (channelInfo && channelInfo.display_name)}
+          id={channelInfo && channelInfo._id}
+          style={{ opacity: "1" }}
+        />
+      )}
 
       {latestVod ? (
         <>
