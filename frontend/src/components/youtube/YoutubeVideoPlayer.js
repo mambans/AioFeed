@@ -1,9 +1,8 @@
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import YouTube from "react-youtube";
 import { MdVerticalAlignBottom } from "react-icons/md";
 import React, { useContext, useEffect, useState, useRef } from "react";
-// import queryString from "query-string";
 
 import NavigationContext from "./../navigation/NavigationContext";
 import { VideoAndChatContainer, ShowNavbarBtn } from "./../twitch/player/StyledComponents";
@@ -17,26 +16,19 @@ const StyledYoutubeIframe = styled(YouTube)`
 
 export default () => {
   const [video, setVideo] = useState({});
-  const param = useParams().videoId;
+  const param = useParams();
+  const location = useLocation();
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const getVideoInfoTimer = useRef();
-  // const video = (() => {
-  //   const param = useParams().videoId;
-
-  //   if (param.includes("&t=")) {
-  //     return { id: param.split("&t=")[0], startTime: param.split("&t=")[1].replace("s", "") };
-  //   } else {
-  //     return { id: param };
-  //   }
-  // })();
 
   useEffect(() => {
-    if (param.includes("&t=")) {
-      setVideo({ id: param.split("&t=")[0], startTime: param.split("&t=")[1].replace("s", "") });
-    } else {
-      setVideo({ id: param });
-    }
-  }, [param]);
+    // if (param.includes("&t=")) {
+    //   setVideo({ id: param.split("&t=")[0], startTime: param.split("&t=")[1].replace("s", "") });
+    // } else {
+    //   setVideo({ id: param });
+    // }
+    setVideo({ id: param.videoId, startTime: location.search.replace(/[?t=]|s/g, "") });
+  }, [location.search, param.videoId]);
 
   useEffect(() => {
     document.documentElement.style.overflow = "hidden";
@@ -60,7 +52,7 @@ export default () => {
       autoplay: 1,
       controls: 1,
       origin: "https://aiofeed.com/youtube",
-      start: video.startTime || 0,
+      start: video.startTime,
       frameborder: "0",
       fs: 1,
     },
