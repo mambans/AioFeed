@@ -24,7 +24,7 @@ import GameSearchBar from "./GameSearchBar";
 import GetTopClips from "./GetTopClips";
 import GetTopStreams from "./GetTopStreams";
 import GetTopVideos from "./GetTopVideos";
-import LoadingBoxs from "./../LoadingBoxs";
+import LoadingBoxes from "./../LoadingBoxes";
 import SortButton from "./../channelPage/SortButton";
 import StreamEle from "./../live/StreamElement";
 import ClipElement from "./../channelPage/ClipElement";
@@ -266,7 +266,7 @@ export default () => {
       ) : (
         <TopStreamsContainer>
           <>
-            <LoadingBoxs
+            <LoadingBoxes
               amount={Math.floor(((document.documentElement.clientWidth - 150) / 350) * 1.5)}
               load={!topData || topData.length <= 0}
             />

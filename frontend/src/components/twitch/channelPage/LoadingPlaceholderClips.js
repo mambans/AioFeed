@@ -1,7 +1,7 @@
 import React from "react";
 
 import { SubFeedContainer } from "./../../sharedStyledComponents";
-import LoadingBoxs from "./../LoadingBoxs";
+import LoadingBoxes from "./../LoadingBoxes";
 import { SubFeedHeader } from "./StyledComponents";
 
 export default ({ numberOfVideos }) => {
@@ -16,7 +16,7 @@ export default ({ numberOfVideos }) => {
 
       <SubFeedContainer
         style={{ justifyContent: "center", minHeight: "310px", paddingBottom: "0" }}>
-        <LoadingBoxs amount={numberOfVideos} type='Clips' />
+        <LoadingBoxes amount={numberOfVideos} type='Clips' />
       </SubFeedContainer>
     </>
   );

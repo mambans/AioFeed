@@ -7,7 +7,7 @@ import getFollowedOnlineStreams from "./GetFollowedStreams";
 import NotificationsContext from "./../../notifications/NotificationsContext";
 import Util from "../../../util/Util";
 import Header from "./Header";
-import LoadingBoxs from "./../LoadingBoxs";
+import LoadingBoxes from "./../LoadingBoxes";
 import AccountContext from "./../../account/AccountContext";
 import FeedsContext from "./../../feed/FeedsContext";
 import VodsContext from "./../vods/VodsContext";
@@ -304,7 +304,7 @@ export default ({ children, centerContainerRef }) => {
         />
         <LoadingSidebar />
         <Container>
-          <LoadingBoxs
+          <LoadingBoxes
             amount={
               centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 0.8) : 4
             }

@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect } from "react";
 
 import { SubFeedContainer } from "./../sharedStyledComponents";
 import YoutubeVideoElement from "./YoutubeVideoElement";
-import LoadingBoxs from "./../twitch/LoadingBoxs";
+import LoadingBoxes from "./../twitch/LoadingBoxes";
 import { StyledLoadmore } from "./../twitch/StyledComponents";
 
 export default (data) => {
@@ -25,7 +25,7 @@ export default (data) => {
     return "";
   } else if (!initiated || !videos || videos.length < 1) {
     return (
-      <LoadingBoxs
+      <LoadingBoxes
         amount={centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 1.5) : 11}
         type='Vods'
       />
@@ -34,7 +34,7 @@ export default (data) => {
     return (
       <>
         <SubFeedContainer>
-          <TransitionGroup className='twitch-vods' component={null}>
+          <TransitionGroup className='youtube' component={null}>
             {videos.slice(0, vodAmounts).map((video) => {
               return (
                 <CSSTransition

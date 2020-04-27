@@ -69,33 +69,31 @@ export default ({
           width: `${numberOfVideos * 350}px`,
           margin: "auto",
         }}>
-        {
-          <TransitionGroup className='twitch-vods' component={null}>
-            {items && !items.error ? (
-              items.map((item) => {
-                return (
-                  <CSSTransition key={item.id} timeout={750} classNames='fade-750ms' unmountOnExit>
-                    {feedName === "Vods" ? (
-                      <VodElement data={item} transition='fade-750ms' vodBtnDisabled={true} />
-                    ) : (
-                      <ClipElement
-                        data={item}
-                        user_name={channelInfo && channelInfo.name}
-                        transition='fade-750ms'
-                      />
-                    )}
-                  </CSSTransition>
-                );
-              })
-            ) : (
-              <Alert
-                variant='info'
-                style={{ width: "15%", minWidth: "250px", margin: "auto", textAlign: "center" }}>
-                <b>{items.error}</b>
-              </Alert>
-            )}
+        {items && !items.error ? (
+          <TransitionGroup component={null}>
+            {items.map((item) => {
+              return (
+                <CSSTransition key={item.id} timeout={750} className='fade-750ms' unmountOnExit>
+                  {feedName === "Vods" ? (
+                    <VodElement data={item} transition='fade-750ms' vodBtnDisabled={true} />
+                  ) : (
+                    <ClipElement
+                      data={item}
+                      user_name={channelInfo && channelInfo.name}
+                      transition='fade-750ms'
+                    />
+                  )}
+                </CSSTransition>
+              );
+            })}
           </TransitionGroup>
-        }
+        ) : (
+          <Alert
+            variant='info'
+            style={{ width: "15%", minWidth: "250px", margin: "auto", textAlign: "center" }}>
+            <b>{items.error}</b>
+          </Alert>
+        )}
       </SubFeedContainer>
       {items && !items.error && (
         <StyledLoadmore

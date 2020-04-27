@@ -11,7 +11,7 @@ import Header from "./Header";
 import { StyledLoadmore } from "./../StyledComponents";
 import AccountContext from "./../../account/AccountContext";
 import VodsContext from "./VodsContext";
-import LoadingBoxs from "./../LoadingBoxs";
+import LoadingBoxes from "./../LoadingBoxes";
 import FeedsContext from "../../feed/FeedsContext";
 import { AddCookie } from "../../../util/Utils";
 
@@ -247,7 +247,7 @@ export default ({ enableTwitter, centerContainerRef }) => {
     return (
       <>
         <Header refresh={refresh} refreshing={refreshing} vods={vods} ref={VodHeaderRef} />
-        <LoadingBoxs
+        <LoadingBoxes
           amount={centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 1.5) : 9}
           type='Vods'
         />
