@@ -15,7 +15,7 @@ import LoadingBoxes from "./../LoadingBoxes";
 import FeedsContext from "../../feed/FeedsContext";
 import { AddCookie } from "../../../util/Utils";
 
-export default ({ enableTwitter, centerContainerRef }) => {
+export default ({ centerContainerRef }) => {
   const { vods, setVods } = useContext(VodsContext);
   const {
     authKey,
@@ -32,11 +32,6 @@ export default ({ enableTwitter, centerContainerRef }) => {
   const loadmoreRef = useRef();
   const resetVodAmountsTimer = useRef();
   const VodHeaderRef = useRef();
-
-  // const [numberOfVideos, setNumberOfVideos] = useState(
-  //   centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 2) : 10
-  // );
-
   const [numberOfVideos, setNumberOfVideos] = useState(
     centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 2) : 14
   );
@@ -47,31 +42,6 @@ export default ({ enableTwitter, centerContainerRef }) => {
       setNumberOfVideos(Math.floor((centerContainerRef.clientWidth / 350) * 2));
     }
   }, [centerContainerRef]);
-
-  // const recalcWidth = useMemo(
-  //   () =>
-  //     debounce(
-  //       () => {
-  //         setNumberOfVideos(
-  //           centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 2) : 10
-  //         );
-  //         setVodAmounts(
-  //           centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 2) : 10
-  //         );
-  //       },
-  //       100,
-  //       { leading: true, trailing: false }
-  //     ),
-  //   [centerContainerRef]
-  // );
-
-  // useEffect(() => {
-  //   window.addEventListener("resize", recalcWidth);
-
-  //   return () => {
-  //     window.removeEventListener("resize", recalcWidth);
-  //   };
-  // }, [recalcWidth]);
 
   //eslint-disable-next-line
   const observer = useMemo(
@@ -242,7 +212,7 @@ export default ({ enableTwitter, centerContainerRef }) => {
       </>
     );
   }
-  // if (vods === undefined || !vods || !vods.data) {
+
   if (!vods || !vods.data) {
     return (
       <>

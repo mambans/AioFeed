@@ -118,8 +118,6 @@ export default ({ name, body, published_at, showInfo, children }) => {
 
   const handleClick = useCallback(() => {
     setInfo({ loading: true });
-    // FetchRepoTagInfo(name).then((res) => {
-    //   console.log("handleClick -> res", res);
 
     if (body) {
       let additions = [];
@@ -153,7 +151,6 @@ export default ({ name, body, published_at, showInfo, children }) => {
         rest: rest,
       });
     }
-    // });
   }, [body, published_at, additionsKeywords, deletionsKeywords, changesKeywords]);
 
   useEffect(() => {

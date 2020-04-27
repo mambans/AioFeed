@@ -143,10 +143,7 @@ export default () => {
 
           {enableTwitchVods && (
             <Container>
-              <TwitchVods
-                enableTwitter={enableTwitter}
-                centerContainerRef={centerContainerRef.current}
-              />
+              <TwitchVods centerContainerRef={centerContainerRef.current} />
             </Container>
           )}
         </VodsProvider>
