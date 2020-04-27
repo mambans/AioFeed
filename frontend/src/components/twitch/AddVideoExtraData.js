@@ -19,9 +19,7 @@ const getGameDetails = async (items) => {
     return !cachedGameInfo.data.find((cachedGame) => cachedGame.id === game);
   });
 
-
-
-  if (cachedGameInfo.expire < new Date().getTime() || unCachedGameDetails.length >= 1 ) {
+  if (cachedGameInfo.expire < new Date().getTime() || unCachedGameDetails.length >= 1) {
     return await axios
       .get(`https://api.twitch.tv/helix/games`, {
         params: {
@@ -142,7 +140,7 @@ export default async (items, fetchGameInfo = true) => {
             return game.id === stream.game_id;
           }).box_art_url)
         : (stream.game_img =
-            stream.game_name !== "" && `${process.env.PUBLIC_URL}/images/placeholder.jpg`);
+            stream.game_name === "" ? "" : `${process.env.PUBLIC_URL}/images/placeholder.jpg`);
 
       return undefined;
     });
