@@ -16,6 +16,19 @@ import {
 import Util from "../../../util/Util";
 
 export default ({ ...data }) => {
+  const { user_name } = data;
+  const {
+    broadcaster_name,
+    broadcaster_id,
+    id,
+    thumbnail_url,
+    view_count,
+    title,
+    profile_img_url,
+    game_name,
+    game_img,
+    created_at,
+  } = data.data;
   const imgRef = useRef();
 
   return (
@@ -23,15 +36,13 @@ export default ({ ...data }) => {
       <ImageContainer ref={imgRef}>
         <a
           // href={data.data.embed_url}
-          href={`https://www.twitch.tv/${data.user_name || data.data.broadcaster_name}/clip/${
-            data.data.id
-          }`}>
-          <img src={data.data.thumbnail_url} alt='' />
+          href={`https://www.twitch.tv/${user_name || broadcaster_name}/clip/${id}`}>
+          <img src={thumbnail_url} alt='' />
         </a>
         <VodVideoInfo>
           <p className={"vodDuration"} title='duration'></p>
           <p className={"view_count"} title='views'>
-            {Util.formatViewerNumbers(data.data.view_count)}
+            {Util.formatViewerNumbers(view_count)}
             <FaRegEye
               size={10}
               style={{
@@ -45,7 +56,7 @@ export default ({ ...data }) => {
           </p>
         </VodVideoInfo>
       </ImageContainer>
-      {data.data.title.length > 50 ? (
+      {title.length > 50 ? (
         <OverlayTrigger
           key={"bottom"}
           placement={"bottom"}
@@ -56,47 +67,43 @@ export default ({ ...data }) => {
               style={{
                 width: "320px",
               }}>
-              {data.data.title}
+              {title}
             </Tooltip>
           }>
-          <VideoTitle to={`/${data.user_name || data.data.broadcaster_name}/clip/${data.data.id}`}>
-            {Util.truncate(data.data.title, 70)}
+          <VideoTitle to={`/${user_name || broadcaster_name}/clip/${id}`}>
+            {Util.truncate(title, 70)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
-        <VideoTitle to={`/${data.user_name || data.data.broadcaster_name}/clip/${data.data.id}`}>
-          {data.data.title}
-        </VideoTitle>
+        <VideoTitle to={`/${user_name || broadcaster_name}/clip/${id}`}>{title}</VideoTitle>
       )}
 
       <div style={{ width: "336px" }}>
         <ChannelContainer>
           <Link
             to={{
-              pathname: `/${data.data.broadcaster_name.toLowerCase()}/channel`,
+              pathname: `/${broadcaster_name.toLowerCase()}/channel`,
               state: {
-                p_id: data.data.broadcaster_id,
+                p_id: broadcaster_id,
               },
             }}
             style={{ gridRow: 1, paddingRight: "5px" }}>
-            <img src={data.data.profile_img_url} alt='' className={"profileImg"} />
+            <img src={profile_img_url} alt='' className={"profileImg"} />
           </Link>
-          <Link to={`/${data.data.broadcaster_name.toLowerCase()}/channel`} className='channelName'>
-            {data.data.broadcaster_name}
+          <Link to={`/${broadcaster_name.toLowerCase()}/channel`} className='channelName'>
+            {broadcaster_name}
           </Link>
         </ChannelContainer>
         <GameContainer>
-          <a
-            className={"gameImg"}
-            href={"https://www.twitch.tv/directory/category/" + data.data.game_name}>
+          <a className={"gameImg"} href={"https://www.twitch.tv/directory/category/" + game_name}>
             <img
-              src={data.data.game_img.replace("{width}", 130).replace("{height}", 173)}
+              src={game_img.replace("{width}", 130).replace("{height}", 173)}
               alt=''
               className={"gameImg"}
             />
           </a>
-          <Link className={"gameName"} to={"/category/" + data.data.game_name}>
-            {data.data.game_name}
+          <Link className={"gameName"} to={"/category/" + game_name}>
+            {game_name}
           </Link>
           <Moment
             className='viewers'
@@ -106,7 +113,7 @@ export default ({ ...data }) => {
               justifySelf: "right",
             }}
             fromNow>
-            {data.data.created_at}
+            {created_at}
           </Moment>
         </GameContainer>
       </div>
