@@ -40,14 +40,14 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
 
   async function followStream(user_id) {
     await axios(axiosConfig("put", user_id))
-      .then(() => {
-        console.log(`Followed: ${channelName}`);
+      .then((res) => {
+        console.log(`Followed: ${res.data.channel.display_name}`);
         if (refreshStreams) refreshStreams();
       })
       .catch(() => {
         reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
-          await axios(axiosConfig("put", user_id, access_token)).then(() => {
-            console.log(`Followed: ${channelName}`);
+          await axios(axiosConfig("put", user_id, access_token)).then((res) => {
+            console.log(`Followed: ${res.data.channel.display_name}`);
             if (refreshStreams) refreshStreams();
           });
         });
@@ -64,7 +64,7 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
             Accept: "application/vnd.twitchtv.v5+json",
           },
         })
-        .then((res) => {
+        .then(() => {
           setFollowing(true);
         })
         .catch((error) => {
@@ -93,7 +93,7 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
     return (
       <UnfollowBtn
         className='StreamFollowBtn'
-        title={`Unfollow ${channelName}`}
+        title={`Unfollow ${channelName || id}`}
         size={size || 30}
         style={{ ...style }}
         onClick={() => {
@@ -106,7 +106,7 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
     return (
       <FollowBtn
         className='StreamFollowBtn'
-        title={`Follow ${channelName}`}
+        title={`Follow ${channelName || id}`}
         size={size || 30}
         style={{ ...style }}
         onClick={() => {
