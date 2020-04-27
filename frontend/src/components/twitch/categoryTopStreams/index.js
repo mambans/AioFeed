@@ -34,7 +34,7 @@ import Util from "./../../../util/Util";
 export default () => {
   const { category } = useParams();
   const { p_videoType } = useLocation().state || {};
-  const [topData, setTopData] = useState();
+  const [topData, setTopData] = useState([]);
   const [videoType, setVideoType] = useState(p_videoType || "Streams");
   const [typeListOpen, setTypeListOpen] = useState();
   const [loadmoreLoaded, setLoadmoreLoaded] = useState(true);
@@ -94,7 +94,7 @@ export default () => {
 
       switch (videoType) {
         case "Streams":
-          GetTopStreams(category, oldTopData.current)
+          GetTopStreams(category, shouldLoadMore && oldTopData.current)
             .then((res) => {
               fetchVideosDataHandler(res, shouldLoadMore);
             })
@@ -136,7 +136,7 @@ export default () => {
             });
           break;
         default:
-          GetTopStreams(category, oldTopData.current)
+          GetTopStreams(category, shouldLoadMore && oldTopData.current)
             .then((res) => {
               fetchVideosDataHandler(res, shouldLoadMore);
             })
@@ -168,7 +168,7 @@ export default () => {
 
   useEffect(() => {
     setRefreshing(true);
-    setTopData();
+    setTopData([]);
     fetchVideos();
   }, [fetchVideos]);
 
@@ -265,22 +265,31 @@ export default () => {
         </Alert>
       ) : (
         <TopStreamsContainer>
-          {topData ? (
-            <>
-              <TransitionGroup className='twitch-top-live' component={null}>
-                {topData.map((stream) => {
-                  return (
-                    <CSSTransition
-                      // in={true}
-                      key={stream.id}
-                      timeout={750}
-                      classNames='fade-750ms'
-                      unmountOnExit>
-                      {videoElementTypeComp(stream)}
-                    </CSSTransition>
-                  );
-                })}
-              </TransitionGroup>
+          <>
+            <LoadingBoxs
+              amount={Math.floor(((document.documentElement.clientWidth - 150) / 350) * 1.5)}
+              load={!topData || topData.length <= 0}
+            />
+
+            <TransitionGroup className='twitch-top-live' component={null}>
+              {topData.map((stream) => {
+                return (
+                  <CSSTransition
+                    // in={true}
+                    key={stream.id}
+                    timeout={{
+                      appear: 500,
+                      enter: 500,
+                      exit: 0,
+                    }}
+                    classNames='fade-500ms'
+                    unmountOnExit>
+                    {videoElementTypeComp(stream)}
+                  </CSSTransition>
+                );
+              })}
+            </TransitionGroup>
+            {topData && topData.length > 0 && (
               <StyledLoadmore ref={loadmoreRef}>
                 <div />
                 <div
@@ -304,12 +313,8 @@ export default () => {
                 </div>
                 <div />
               </StyledLoadmore>
-            </>
-          ) : (
-            <LoadingBoxs
-              amount={Math.floor(((document.documentElement.clientWidth - 150) / 350) * 1.5)}
-            />
-          )}
+            )}
+          </>
         </TopStreamsContainer>
       )}
     </>

@@ -23,6 +23,27 @@
   opacity: 0;
   transition: opacity 750ms;
 }
+.fade-500ms-enter {
+  opacity: 0;
+  transition: opacity 500ms;
+}
+
+.fade-500ms-enter-active {
+  opacity: 1;
+  transition: opacity 500ms;
+}
+
+.fade-500ms-exit {
+  opacity: 1;
+}
+
+.fade-500ms-exit-active {
+  opacity: 0;
+}
+
+.fade-500ms-exit-done {
+  opacity: 0;
+}
 
 .fade-250ms-enter {
   opacity: 0;
