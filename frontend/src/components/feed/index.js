@@ -16,6 +16,11 @@ import Youtube from "./../youtube";
 import YoutubeDataHandler from "./../youtube/Datahandler";
 import YoutubeHeader from "./../youtube/Header";
 import NoFeedsEnable from "./NoFeedsEnabled";
+import Sidebar from "../twitch/sidebar";
+import Header from "../twitch/live/Header";
+import { HideSidebarButton } from "../twitch/sidebar/StyledComponents";
+import { AddCookie } from "../../util/Utils";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const CenterContainer = styled.div`
   display: flex;
@@ -23,10 +28,12 @@ const CenterContainer = styled.div`
   flex-flow: column;
   margin-top: 25px;
   /* margin-left: ${({ marginLeft }) => marginLeft + "px"}; */
-  margin-left: ${({ enableTwitter }) =>
-    enableTwitter
+  margin-left: ${({ enableTwitter, enableTwitch, showTwitchSidebar }) =>
+    (!enableTwitter && !enableTwitch) || !showTwitchSidebar
+      ? "auto"
+      : enableTwitter
       ? (window.innerWidth -
-          (275 +
+          ((enableTwitch ? 275 : 0) +
             (enableTwitter
               ? window.innerWidth <= 1920
                 ? window.innerWidth * 0.2
@@ -36,35 +43,51 @@ const CenterContainer = styled.div`
               : 0) +
             25 +
             (enableTwitter
-              ? 350 * Math.floor((window.innerWidth - (275 + window.innerWidth * 0.2 + 25)) / 350)
-              : 350 * Math.floor((window.innerWidth - (275 + 150)) / 350)))) /
+              ? 350 *
+                Math.floor(
+                  (window.innerWidth - ((enableTwitch ? 275 : 0) + window.innerWidth * 0.2 + 25)) /
+                    350
+                )
+              : 350 * Math.floor((window.innerWidth - ((enableTwitch ? 275 : 0) + 150)) / 350)))) /
           2 +
-        275
+        (enableTwitch ? 275 : 0) +
+        "px"
       : (window.innerWidth -
-          (275 +
+          ((enableTwitch ? 275 : 0) +
             (enableTwitter
-              ? 350 * Math.floor((window.innerWidth - (275 + window.innerWidth * 0.2 + 25)) / 350)
-              : 350 * Math.floor((window.innerWidth - (275 + 150)) / 350)))) /
+              ? 350 *
+                Math.floor(
+                  (window.innerWidth - ((enableTwitch ? 275 : 0) + window.innerWidth * 0.2 + 25)) /
+                    350
+                )
+              : 350 * Math.floor((window.innerWidth - ((enableTwitch ? 275 : 0) + 150)) / 350)))) /
           2 +
-        275 -
-        50}px;
-  /* width: ${({ width }) => width + "px"} !important; */
-  width: ${({ enableTwitter }) =>
+        (enableTwitch ? 275 : 0) -
+        50 +
+        "px"};
+  margin-right: ${({ enableTwitter, enableTwitch, showTwitchSidebar }) =>
+    (!enableTwitter && !enableTwitch) || !showTwitchSidebar ? "auto" : "unset"};
+  width: ${({ enableTwitter, enableTwitch }) =>
     enableTwitter
-      ? 350 * Math.floor((window.innerWidth - (275 + window.innerWidth * 0.2 + 25)) / 350)
-      : 350 * Math.floor((window.innerWidth - (275 + 150)) / 350)}px !important;
+      ? 350 *
+        Math.floor(
+          (window.innerWidth - ((enableTwitch ? 275 : 0) + window.innerWidth * 0.2 + 25)) / 350
+        )
+      : 350 *
+        Math.floor((window.innerWidth - ((enableTwitch ? 275 : 0) + 150)) / 350)}px !important;
   transition: width 750ms, margin 750ms;
 `;
 
-// const TwitchContainer = styled.div`
-//   display: flex;
-//   flex-wrap: wrap;
-//   width: 100%;
-// `;
-
 export default () => {
   document.title = "AioFeed | Feed";
-  const { enableTwitch, enableYoutube, enableTwitchVods, enableTwitter } = useContext(FeedsContext);
+  const {
+    enableTwitch,
+    enableYoutube,
+    enableTwitchVods,
+    enableTwitter,
+    showTwitchSidebar,
+    setShowTwitchSidebar,
+  } = useContext(FeedsContext);
   const { username } = useContext(AccountContext);
   // eslint-disable-next-line no-unused-vars
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -82,16 +105,11 @@ export default () => {
         () => {
           setScreenWidth(window.innerWidth);
         },
-        50,
+        33,
         { leading: true, trailing: false }
       ),
     []
   );
-
-  // const asd = () => {
-  //   console.log("asd");
-  //   setScreenWidth(window.innerWidth);
-  // };
 
   useEffect(() => {
     window.addEventListener("resize", setScreenWidthToCalcAlignments);
@@ -100,10 +118,6 @@ export default () => {
       window.removeEventListener("resize", setScreenWidthToCalcAlignments);
     };
   }, [setScreenWidthToCalcAlignments]);
-
-  // useEffect(() => {
-  //
-  // }, [screenWidth]);
 
   if (!username) {
     return (
@@ -120,34 +134,88 @@ export default () => {
       <CenterContainer
         ref={centerContainerRef}
         enableTwitter={enableTwitter}
-        // screenWidth={screenWidth}
+        enableTwitch={enableTwitch}
+        showTwitchSidebar={showTwitchSidebar}
         id='CenterContainer'>
         <NoFeedsEnable />
         <Twitter />
         <VodsProvider>
-          {enableTwitch && (
-            <Handler centerContainerRef={centerContainerRef.current}>
+          <CSSTransition
+            in={enableTwitch}
+            classNames='fade-750ms'
+            timeout={750}
+            unmountOnExit
+            appear>
+            <Handler>
               {(data) => (
-                <CSSTransition
-                  in={enableTwitch}
-                  timeout={750}
-                  classNames='fade-750ms'
-                  unmountOnExit>
-                  {/* <TwitchContainer> */}
-                  <TwitchLive data={data} />
-                  {/* </TwitchContainer> */}
-                </CSSTransition>
+                <>
+                  <CSSTransition
+                    in={enableTwitch}
+                    timeout={750}
+                    classNames='fade-750ms'
+                    unmountOnExit>
+                    <Header data={data} refresh={data.refresh} />
+                  </CSSTransition>
+                  <CSSTransition
+                    in={enableTwitch}
+                    timeout={750}
+                    classNames='fade-750ms'
+                    appear
+                    unmountOnExit>
+                    <TwitchLive data={data} centerContainerRef={centerContainerRef.current} />
+                  </CSSTransition>
+
+                  <OverlayTrigger
+                    key={"bottom"}
+                    placement={"right"}
+                    delay={{ show: 500, hide: 0 }}
+                    overlay={
+                      <Tooltip id={`tooltip-${"right"}`}>{`${
+                        showTwitchSidebar ? "Hide" : "Show"
+                      } sidebar`}</Tooltip>
+                    }>
+                    <HideSidebarButton
+                      show={showTwitchSidebar}
+                      onClick={() => {
+                        AddCookie("Twitch_SidebarEnabled", !showTwitchSidebar);
+                        setShowTwitchSidebar(!showTwitchSidebar);
+                      }}>
+                      Hide
+                    </HideSidebarButton>
+                  </OverlayTrigger>
+
+                  <CSSTransition
+                    in={enableTwitch && showTwitchSidebar}
+                    timeout={750}
+                    classNames='twitchSidebar'
+                    appear
+                    unmountOnExit>
+                    <Sidebar
+                      setShowTwitchSidebar={setShowTwitchSidebar}
+                      loaded={data.loaded}
+                      onlineStreams={data.liveStreams}
+                      newlyAdded={data.newlyAddedStreams}
+                      REFRESH_RATE={data.REFRESH_RATE}
+                    />
+                  </CSSTransition>
+                </>
               )}
             </Handler>
-          )}
+          </CSSTransition>
 
-          {enableTwitchVods && (
+          <CSSTransition in={enableTwitchVods} classNames='fade-750ms' timeout={750} unmountOnExit>
             <Container>
               <TwitchVods centerContainerRef={centerContainerRef.current} />
             </Container>
-          )}
+          </CSSTransition>
         </VodsProvider>
-        {enableYoutube && (
+
+        <CSSTransition
+          in={enableYoutube}
+          timeout={750}
+          classNames='fade-750ms'
+          unmountOnExit
+          appear>
           <Container>
             <YoutubeDataHandler>
               {(data) => (
@@ -158,7 +226,9 @@ export default () => {
                     requestError={data.requestError}
                     followedChannels={data.followedChannels}
                   />
+
                   {data.error && <ErrorHandler data={data.error}></ErrorHandler>}
+
                   <Youtube
                     centerContainerRef={centerContainerRef.current}
                     requestError={data.requestError}
@@ -169,7 +239,7 @@ export default () => {
               )}
             </YoutubeDataHandler>
           </Container>
-        )}
+        </CSSTransition>
       </CenterContainer>
     );
   }

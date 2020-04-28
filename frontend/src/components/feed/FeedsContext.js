@@ -9,6 +9,10 @@ export const FeedsProvider = ({ children }) => {
     Util.getCookie("Twitch-access_token") && Util.getCookie("Twitch_FeedEnabled")
   );
 
+  const [showTwitchSidebar, setShowTwitchSidebar] = useState(
+    Util.getCookie("Twitch-access_token") && Util.getCookie("Twitch_SidebarEnabled")
+  );
+
   const [enableTwitter, setEnableTwitter] = useState(Util.getCookie("Twitter_FeedEnabled"));
 
   const [twitterListName, setTwitterListName] = useState(Util.getCookie("Twitter-Listname"));
@@ -52,6 +56,8 @@ export const FeedsProvider = ({ children }) => {
         setTwitterListName: setTwitterListName,
         isEnabledOfflineNotifications: isEnabledOfflineNotifications,
         setIsEnabledOfflineNotifications: setIsEnabledOfflineNotifications,
+        showTwitchSidebar: showTwitchSidebar,
+        setShowTwitchSidebar: setShowTwitchSidebar,
       }}>
       {children}
     </FeedsContext.Provider>

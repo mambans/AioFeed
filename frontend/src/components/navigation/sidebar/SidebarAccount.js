@@ -51,6 +51,8 @@ export default () => {
     setEnableTwitch,
     enableTwitchVods,
     setEnableTwitchVods,
+    showTwitchSidebar,
+    setShowTwitchSidebar,
     enableYoutube,
     setEnableYoutube,
     twitchVideoHoverEnable,
@@ -256,6 +258,23 @@ export default () => {
           width={40}
           height={20}
         />
+        <ToggleSwitch
+          setEnable={(value) => {
+            setShowTwitchSidebar(value);
+            AddCookie("Twitch_SidebarEnabled", value);
+          }}
+          enabled={showTwitchSidebar}
+          label='Twitch sidebar'
+          tokenExists={twitchToken}
+          tooltip={
+            twitchToken
+              ? (showTwitchSidebar ? "Hide" : "Show") + `Twitch Sidebar`
+              : `Need to connect/authenticate with a Twitch account first.`
+          }
+          width={40}
+          height={20}
+        />
+
         <ToggleSwitch
           setEnable={(value) => {
             setIsEnabledOfflineNotifications(value);

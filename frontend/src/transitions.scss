@@ -1,4 +1,13 @@
 //fade 1s
+.fade-750ms-appear {
+  opacity: 0;
+  transition: opacity 750ms;
+}
+.fade-750ms-appear-active {
+  opacity: 1;
+  transition: opacity 750ms;
+}
+
 .fade-750ms-enter {
   opacity: 0;
   transition: opacity 750ms;
@@ -23,6 +32,7 @@
   opacity: 0;
   transition: opacity 750ms;
 }
+
 .fade-500ms-enter {
   opacity: 0;
   transition: opacity 500ms;
@@ -42,6 +52,28 @@
 }
 
 .fade-500ms-exit-done {
+  opacity: 0;
+}
+
+.NoFeedsEnabled-Fade-enter {
+  opacity: 0;
+  transition: opacity 1000ms;
+}
+
+.NoFeedsEnabled-Fade-enter-active {
+  opacity: 1;
+  transition: opacity 1000ms;
+}
+
+.NoFeedsEnabled-Fade-exit {
+  opacity: 1;
+}
+
+.NoFeedsEnabled-Fade-exit-active {
+  opacity: 0;
+}
+
+.NoFeedsEnabled-Fade-exit-done {
   opacity: 0;
 }
 
@@ -119,6 +151,15 @@
 }
 
 //New Streams/Vods
+.videoFadeSlide-appear {
+  opacity: 0;
+  transition: opacity 750ms;
+}
+.videoFadeSlide-appear-active {
+  opacity: 1;
+  transition: opacity 750ms;
+}
+
 .videoFadeSlide-enter {
   opacity: 0;
   width: 0px !important;
@@ -139,6 +180,11 @@
   margin-left: 7px !important;
   transition: opacity 750ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
     left 750ms;
+}
+
+.videoFadeSlide-enter-done {
+  opacity: 1;
+  transition: opacity 750ms;
 }
 
 .videoFadeSlide-exit {
@@ -343,4 +389,56 @@
 .twitter-slide-appear-active {
   right: 25px !important;
   transition: opacity 500ms, right 750ms;
+}
+
+//fade 1s
+.twitchSidebar-appear {
+  opacity: 0;
+  left: -275px !important;
+  transition: opacity 500ms, left 750ms;
+}
+.twitchSidebar-appear-active {
+  opacity: 1;
+  left: 0 !important;
+  transition: opacity 500ms, left 750ms;
+}
+.twitchSidebar-appear-done {
+  opacity: 1;
+  left: 0 !important;
+  transition: opacity 500ms, left 750ms;
+}
+
+.twitchSidebar-enter {
+  opacity: 0;
+  left: -275px !important;
+  transition: opacity 500ms, left 750ms;
+}
+.twitchSidebar-enter-done {
+  opacity: 1;
+  left: 0 !important;
+  transition: opacity 500ms, left 750ms;
+}
+
+.twitchSidebar-enter-active {
+  opacity: 1;
+  left: 0 !important;
+  transition: opacity 500ms, left 750ms;
+}
+
+.twitchSidebar-exit {
+  opacity: 1;
+  left: 0 !important;
+  transition: opacity 500ms, left 750ms;
+}
+
+.twitchSidebar-exit-active {
+  opacity: 0;
+  left: -275px !important;
+  transition: opacity 500ms, left 750ms;
+}
+
+.twitchSidebar-exit-done {
+  opacity: 0;
+  left: -275px !important;
+  transition: opacity 500ms, left 750ms;
 }

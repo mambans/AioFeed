@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { MdFormatIndentDecrease } from "react-icons/md";
 import { pulse } from "./../StyledComponents";
 
 export const SidebarTitlePopup = styled.div`
@@ -38,9 +39,8 @@ export const SidebarTitlePopup = styled.div`
 export const Styledsidebar = styled.div`
   width: 275px !important;
   background: var(--sidebarBackground);
-  top: 104px;
+  top: 92px;
   position: fixed;
-  margin-top: -12px;
   border-radius: 10px 10px 0 0;
   overflow: auto;
   scrollbar-color: #232526 transparent !important;
@@ -183,5 +183,23 @@ export const LoadingSidebarItems = styled.div`
     margin: 4px 0;
     border-radius: 9px;
     width: ${({ gameWidth }) => gameWidth};
+  }
+`;
+
+export const HideSidebarButton = styled(MdFormatIndentDecrease).attrs({ size: 25.5 })`
+  position: fixed;
+  height: 50.5px;
+  transition: opacity 500ms, transform 350ms;
+  color: #ffffff;
+  background: none;
+  opacity: 0.3;
+  transform: ${({ show }) => (show ? "unset" : "rotateY(180deg)")};
+  cursor: pointer;
+  left: 0;
+  top: 92px;
+  z-index: 3;
+
+  &:hover {
+    opacity: 1;
   }
 `;

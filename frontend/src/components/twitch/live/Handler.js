@@ -6,19 +6,15 @@ import GetFollowedChannels from "./../GetFollowedChannels";
 import getFollowedOnlineStreams from "./GetFollowedStreams";
 import NotificationsContext from "./../../notifications/NotificationsContext";
 import Util from "../../../util/Util";
-import Header from "./Header";
-import LoadingBoxes from "./../LoadingBoxes";
 import AccountContext from "./../../account/AccountContext";
 import FeedsContext from "./../../feed/FeedsContext";
 import VodsContext from "./../vods/VodsContext";
 import FetchSingelChannelVods from "./../vods/FetchSingelChannelVods";
-import { Container } from "../StyledComponents";
-import LoadingSidebar from "../sidebar/LoadingSidebar";
 import { AddCookie } from "../../../util/Utils";
 
 const REFRESH_RATE = 25; // seconds
 
-export default ({ children, centerContainerRef }) => {
+export default ({ children }) => {
   const addNotification = useContext(NotificationsContext).addNotification;
   const { autoRefreshEnabled, twitchToken } = useContext(AccountContext);
   const { setVods } = useContext(VodsContext);
@@ -291,28 +287,6 @@ export default ({ children, centerContainerRef }) => {
     };
   }, []);
 
-  if (!loadingStates.loaded) {
-    return (
-      <>
-        <Header
-          data={{
-            refreshing: loadingStates.refreshing,
-            refreshTimer: refreshTimer,
-            followedChannels: followedChannels.current,
-          }}
-          refresh={refresh}
-        />
-        <LoadingSidebar />
-        <Container>
-          <LoadingBoxes
-            amount={
-              centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 0.8) : 4
-            }
-          />
-        </Container>
-      </>
-    );
-  }
   if (!twitchToken) {
     return (
       <ErrorHandler
@@ -325,6 +299,7 @@ export default ({ children, centerContainerRef }) => {
   } else {
     return children({
       refreshing: loadingStates.refreshing,
+      loaded: loadingStates.loaded,
       refreshTimer: refreshTimer,
       followedChannels: followedChannels.current,
       error: loadingStates.error,
