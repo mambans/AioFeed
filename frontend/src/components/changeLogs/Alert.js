@@ -1,21 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
-import Util from "../../util/Util";
-import { AddCookie } from "../../util/Utils";
 import { Alert } from "react-bootstrap";
+
+import { AddCookie, getCookie } from "../../util/Utils";
 
 const StyledAlert = styled(Alert)`
   text-align: center;
 `;
 
 export default ({ AlertName }) => {
-  const [show, setShow] = useState(!Util.getCookie(AlertName));
+  const [show, setShow] = useState(false);
 
   const handleClose = () => {
     setShow(false);
     AddCookie(AlertName, true);
   };
+
+  useEffect(() => {
+    setShow(!getCookie(AlertName));
+  }, [AlertName]);
 
   if (show) {
     return (

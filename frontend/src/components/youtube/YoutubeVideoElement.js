@@ -6,10 +6,24 @@ import { Link } from "react-router-dom";
 
 import VideoHoverIframe from "./VideoHoverIframe";
 import styles from "./Youtube.module.scss";
-import Util from "../../util/Util";
+import { truncate } from "../../util/Utils";
 
 import { VideoContainer, VideoTitleHref, ImageContainer } from "./../sharedStyledComponents";
 import FeedsContext from "../feed/FeedsContext";
+
+const videoImageUrls = (urls) => {
+  if (urls.maxres) {
+    return urls.maxres.url;
+  } else if (urls.standard) {
+    return urls.standard.url;
+  } else if (urls.high) {
+    return urls.high.url;
+  } else if (urls.medium) {
+    return urls.medium.url;
+  } else {
+    return `${process.env.PUBLIC_URL}/images/placeholder.jpg`;
+  }
+};
 
 const HOVER_DELAY = 1000;
 
@@ -66,7 +80,7 @@ export default (data) => {
           className={styles.img}
           // href={`https://www.youtube.com/watch?v=` + data.video.contentDetails.upload.videoId}
           to={`/youtube/` + data.video.contentDetails.upload.videoId}>
-          <img src={Util.videoImageUrls(data.video.snippet.thumbnails)} alt={styles.thumbnail} />
+          <img src={videoImageUrls(data.video.snippet.thumbnails)} alt={styles.thumbnail} />
         </Link>
         <p className={styles.duration}>{data.video.duration}</p>
         {/* {data.video.df === "liveYoutube" ? (
@@ -93,7 +107,7 @@ export default (data) => {
         }>
         <VideoTitleHref
           href={`https://www.youtube.com/watch?v=` + data.video.contentDetails.upload.videoId}>
-          {Util.truncate(data.video.snippet.title, 60)}
+          {truncate(data.video.snippet.title, 60)}
         </VideoTitleHref>
       </OverlayTrigger>
       <Moment className={styles.date} fromNow>

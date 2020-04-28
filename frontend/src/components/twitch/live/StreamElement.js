@@ -19,9 +19,10 @@ import {
 import { ChannelNameDiv } from "./../StyledComponents";
 import FeedsContext from "./../../feed/FeedsContext";
 import StreamHoverIframe from "../StreamHoverIframe.js";
-import Util from "../../../util/Util";
+import { truncate } from "../../../util/Utils";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 import VodsFollowUnfollowBtn from "./../vods/VodsFollowUnfollowBtn";
+import { formatViewerNumbers } from "./../TwitchUtils";
 
 const HOVER_DELAY = 500; // 1000
 
@@ -148,7 +149,7 @@ function StreamEle(data_p) {
                 p_viewers: data.viewers,
               },
             }}>
-            {Util.truncate(data.title, 60)}
+            {truncate(data.title, 60)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
@@ -234,7 +235,7 @@ function StreamEle(data_p) {
             </>
           )}
           <p title='Viewers' className='viewers'>
-            {Util.formatViewerNumbers(data.viewer_count)}
+            {formatViewerNumbers(data.viewer_count)}
             <FaRegEye size={14} />
           </p>
         </GameContainer>

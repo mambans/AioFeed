@@ -4,10 +4,9 @@ import axios from "axios";
 import styled from "styled-components";
 
 import useInput from "./../../../hooks/useInput";
-import Util from "../../../util/Util";
 import FeedsContext from "../../feed/FeedsContext";
 import AccountContext from "../../account/AccountContext";
-import { RemoveCookie, AddCookie } from "../../../util/Utils";
+import { RemoveCookie, AddCookie, getCookie } from "../../../util/Utils";
 
 const StyledForm = styled(Form)`
   input {
@@ -24,9 +23,7 @@ const StyledForm = styled(Form)`
 export default ({ style }) => {
   const { enableTwitter, setTwitterListName } = useContext(FeedsContext);
   const { username } = useContext(AccountContext);
-  const { value: listName, bind: bindListName } = useInput(
-    Util.getCookie("Twitter-Listname") || ""
-  );
+  const { value: listName, bind: bindListName } = useInput(getCookie("Twitter-Listname") || "");
 
   const addList = async () => {
     AddCookie("Twitter-Listname", listName);
@@ -60,7 +57,7 @@ export default ({ style }) => {
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    if (listName !== Util.getCookie("Twitter-Listname")) {
+    if (listName !== getCookie("Twitter-Listname")) {
       addList();
     }
   };

@@ -7,7 +7,7 @@ import { MdVideocam } from "react-icons/md";
 import { MdArrowBack } from "react-icons/md";
 
 import { PlayerNavbar, NavigateBack } from "./StyledComponents";
-import Util from "../../../util/Util";
+import { getCookie } from "../../../util/Utils";
 import { Button } from "react-bootstrap";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 
@@ -43,7 +43,7 @@ export default ({
               type: "archive",
             },
             headers: {
-              Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+              Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
               "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
             },
           })

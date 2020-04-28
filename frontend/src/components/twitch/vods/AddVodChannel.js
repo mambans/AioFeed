@@ -1,9 +1,9 @@
 import axios from "axios";
-import Util from "../../../util/Util";
+import { getLocalstorage } from "../../../util/Utils";
 
 export default async ({ channel, username, authKey }) => {
   try {
-    const existingChannels = [channel.toLowerCase(), ...Util.getLocalstorage("VodChannels")];
+    const existingChannels = [channel.toLowerCase(), ...getLocalstorage("VodChannels")];
     // const existingChannels = [channel.toLowerCase(), ...channels];
     const newChannels = [
       ...new Set(

@@ -1,6 +1,7 @@
 import axios from "axios";
 
-import Util from "./../../../util/Util";
+import { durationToDate } from "./../TwitchUtils";
+import { getCookie } from "./../../../util/Utils";
 import AddVideoExtraData from "./../AddVideoExtraData";
 import SortAndAddExpire from "./SortAndAddExpire";
 
@@ -10,7 +11,7 @@ export default async (channelId, setVods) => {
   const addVodEndTime = async (followedStreamVods) => {
     return followedStreamVods.map((stream) => {
       if (stream.type === "archive") {
-        stream.endDate = Util.durationToDate(stream.duration, stream.created_at);
+        stream.endDate = durationToDate(stream.duration, stream.created_at);
       } else {
         stream.endDate = new Date(stream.created_at);
       }
@@ -29,7 +30,7 @@ export default async (channelId, setVods) => {
       type: "all",
     },
     headers: {
-      Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+      Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
       "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
     },
   };

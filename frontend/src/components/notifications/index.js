@@ -12,7 +12,7 @@ import { UnseenNotifcationCount } from "./../notifications/styledComponent";
 import NotificationsContext from "./../notifications/NotificationsContext";
 import NavigationContext from "./../navigation/NavigationContext";
 import styles from "./Notifications.module.scss";
-import Util from "../../util/Util";
+import { truncate } from "../../util/Utils";
 
 export default () => {
   const [show, setShow] = useState(false);
@@ -107,7 +107,7 @@ export default () => {
                     </Link>
                     {item.status === "Live" && (
                       <Link to={`/${item.user_name.toLowerCase()}/channel`} className='title'>
-                        {Util.truncate(item.title, 50)}
+                        {truncate(item.title, 50)}
                       </Link>
                     )}
                     <div className='date'>

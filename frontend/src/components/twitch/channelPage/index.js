@@ -11,7 +11,8 @@ import LoadingPlaceholderBanner from "./LoadingPlaceholderBanner";
 import LoadingPlaceholderClips from "./LoadingPlaceholderClips";
 import LoadingPlaceholderVods from "./LoadingPlaceholderVods";
 import SubFeed from "./SubFeed";
-import Util from "./../../../util/Util";
+import { formatViewerNumbers, durationToDate } from "./../TwitchUtils";
+import { getCookie } from "./../../../util/Utils";
 import {
   ChannelContainer,
   Banner,
@@ -66,7 +67,7 @@ export default () => {
           login: channelName,
         },
         headers: {
-          Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+          Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })
@@ -99,7 +100,7 @@ export default () => {
             after: pagination || null,
           },
           headers: {
-            Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+            Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         })
@@ -115,7 +116,7 @@ export default () => {
           if (pagination) {
             const finallVideos = videos.data.map((stream) => {
               if (stream.type === "archive") {
-                stream.endDate = Util.durationToDate(stream.duration, stream.published_at);
+                stream.endDate = durationToDate(stream.duration, stream.published_at);
               } else {
                 stream.endDate = new Date(stream.published_at);
               }
@@ -140,7 +141,7 @@ export default () => {
           } else {
             const finallVideos = await videos.data.map((stream) => {
               if (stream.type === "archive") {
-                stream.endDate = Util.durationToDate(stream.duration, stream.published_at);
+                stream.endDate = durationToDate(stream.duration, stream.published_at);
               } else {
                 stream.endDate = new Date(stream.published_at);
               }
@@ -179,7 +180,7 @@ export default () => {
             ended_at: sortClipsBy && new Date().toISOString(),
           },
           headers: {
-            Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+            Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
           },
         })
@@ -426,7 +427,7 @@ export default () => {
                             },
                           }}>
                           <div id='LiveDetails'>
-                            <span>Viewers: {Util.formatViewerNumbers(viewers)}</span>
+                            <span>Viewers: {formatViewerNumbers(viewers)}</span>
                             <span>Uptime: {<Moment durationFromNow>{uptime}</Moment>}</span>
                           </div>
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import Util from "./../../../util/Util";
+import { getCookie } from "./../../../util/Utils";
 
 /**
  * Fetch and Set uptime state from a Live stream.
@@ -18,7 +18,7 @@ export default async (twitchPlayer, setUptime, uptimeTimer) => {
       first: 1,
     },
     headers: {
-      Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+      Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
       "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
     },
   };

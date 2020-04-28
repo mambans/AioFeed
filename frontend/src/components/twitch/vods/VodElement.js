@@ -16,9 +16,10 @@ import {
   ChannelContainer,
   StyledVideoElementAlert,
 } from "./../../sharedStyledComponents";
-import Util from "../../../util/Util";
+import { getCookie, truncate } from "../../../util/Utils";
 import { VodLiveIndicator, VodType, VodPreview, VodDates } from "./StyledComponents";
 import VodsFollowUnfollowBtn from "./VodsFollowUnfollowBtn";
+import { formatViewerNumbers, formatTwitchVodsDuration } from "./../TwitchUtils";
 
 export default ({ data, vodBtnDisabled }) => {
   const [previewAvailable, setPreviewAvailable] = useState({});
@@ -33,7 +34,7 @@ export default ({ data, vodBtnDisabled }) => {
           await axios
             .get(`https://api.twitch.tv/kraken/videos/${data.id}`, {
               headers: {
-                Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+                Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
                 "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
                 Accept: "application/vnd.twitchtv.v5+json",
               },
@@ -115,11 +116,11 @@ export default ({ data, vodBtnDisabled }) => {
             {data.thumbnail_url === "" ? (
               <Moment durationFromNow>{data.created_at}</Moment>
             ) : (
-              Util.formatTwitchVodsDuration(data.duration)
+              formatTwitchVodsDuration(data.duration)
             )}
           </p>
           <p className={"view_count"} title='views'>
-            {Util.formatViewerNumbers(data.view_count)}
+            {formatViewerNumbers(data.view_count)}
             <FaRegEye
               size={10}
               style={{
@@ -159,7 +160,7 @@ export default ({ data, vodBtnDisabled }) => {
                 p_title: data.title,
               },
             }}>
-            {Util.truncate(data.title, 70)}
+            {truncate(data.title, 70)}
             {/* {data.data.title} */}
           </VideoTitle>
         </OverlayTrigger>

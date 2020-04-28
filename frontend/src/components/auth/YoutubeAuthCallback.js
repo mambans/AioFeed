@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import axios from "axios";
 
-import Util from "../../util/Util";
+import { getCookie, AddCookie } from "../../util/Utils";
 import ErrorHandler from "./../error";
 import AccountContext from "./../account/AccountContext";
 import NavigationContext from "./../navigation/NavigationContext";
 import LoadingIndicator from "../LoadingIndicator";
-import { AddCookie } from "../../util/Utils";
 
 function getParameterByName(name, url) {
   if (!url) url = window.location.href;
@@ -45,7 +44,7 @@ export default () => {
           `https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
           {
             headers: {
-              Authorization: "Bearer " + Util.getCookie("Youtube-access_token"),
+              Authorization: "Bearer " + getCookie("Youtube-access_token"),
               Accept: "application/json",
             },
           }
@@ -85,7 +84,7 @@ export default () => {
     (async () => {
       const url = new URL(window.location.href);
       try {
-        if (url.hash.split("#")[1].split("&")[0].slice(6) === Util.getCookie("Youtube-myState")) {
+        if (url.hash.split("#")[1].split("&")[0].slice(6) === getCookie("Youtube-myState")) {
           await getAccessToken()
             .then((res) => {
               console.log("successfully authenticated to Youtube.");

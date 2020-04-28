@@ -5,12 +5,11 @@ import ErrorHandler from "../../error";
 import GetFollowedChannels from "./../GetFollowedChannels";
 import getFollowedOnlineStreams from "./GetFollowedStreams";
 import NotificationsContext from "./../../notifications/NotificationsContext";
-import Util from "../../../util/Util";
 import AccountContext from "./../../account/AccountContext";
 import FeedsContext from "./../../feed/FeedsContext";
 import VodsContext from "./../vods/VodsContext";
 import FetchSingelChannelVods from "./../vods/FetchSingelChannelVods";
-import { AddCookie } from "../../../util/Utils";
+import { AddCookie, getCookie, getLocalstorage, truncate } from "../../../util/Utils";
 
 const REFRESH_RATE = 25; // seconds
 
@@ -82,7 +81,7 @@ export default ({ children }) => {
           isEnabledOfflineNotifications &&
           status === "offline" &&
           enableTwitchVods &&
-          Util.getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
+          getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
         ) {
           let notification = new Notification(`${stream.user_name} Offline`, {
             body: "",
@@ -100,7 +99,7 @@ export default ({ children }) => {
                 type: "archive",
               },
               headers: {
-                Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+                Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
                 "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
               },
             })
@@ -119,7 +118,7 @@ export default ({ children }) => {
           return notification;
         } else if (status === "online") {
           let notification = new Notification(`${stream.user_name} Live`, {
-            body: `${Util.truncate(stream.title, 60)}\n${stream.game_name}`,
+            body: `${truncate(stream.title, 60)}\n${stream.game_name}`,
             icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
             badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
             silent: false,
@@ -178,7 +177,7 @@ export default ({ children }) => {
 
                 if (
                   enableTwitchVods &&
-                  Util.getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
+                  getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
                 ) {
                   setTimeout(async () => {
                     console.log("Fetching", stream.user_name, "live vod");
@@ -216,7 +215,7 @@ export default ({ children }) => {
 
                 if (
                   enableTwitchVods &&
-                  Util.getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
+                  getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
                 ) {
                   setTimeout(async () => {
                     console.log("Fetching", stream.user_name, "offline vod");

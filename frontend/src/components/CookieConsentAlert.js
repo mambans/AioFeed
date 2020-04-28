@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Button } from "react-bootstrap";
-import Util from "../util/Util";
-import { AddCookie } from "../util/Utils";
+import { AddCookie, getCookie } from "../util/Utils";
 
 const Container = styled.div`
   position: fixed;
@@ -18,7 +17,7 @@ const Container = styled.div`
 `;
 
 export default () => {
-  const [accepted, setAccepted] = useState(Util.getCookie("cookieConsentAccepted"));
+  const [accepted, setAccepted] = useState(getCookie("cookieConsentAccepted"));
 
   if (!accepted) {
     return (

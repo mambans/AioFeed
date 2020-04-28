@@ -8,7 +8,7 @@ import React, { useState, useContext, useRef, useEffect } from "react";
 import AccountContext from "./../../account/AccountContext";
 import { VodAddRemoveButton } from "./../../sharedStyledComponents";
 import AddVodChannel from "./AddVodChannel";
-import Util from "../../../util/Util";
+import { getLocalstorage } from "../../../util/Utils";
 
 /**
  * @param {String} channel - channel name
@@ -18,7 +18,7 @@ import Util from "../../../util/Util";
 
 export default ({ channel, loweropacity, marginright }) => {
   // const { channels, setChannels } = useContext(VodsContext);
-  const channels = Util.getLocalstorage("VodChannels");
+  const channels = getLocalstorage("VodChannels");
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
   const [vodEnabled, setVodEnabled] = useState(channels.includes(channel.toLowerCase()));
@@ -26,9 +26,7 @@ export default ({ channel, loweropacity, marginright }) => {
 
   async function removeChannel(channel) {
     try {
-      const index = (channels || Util.getLocalstorage("VodChannels")).indexOf(
-        channel.toLowerCase()
-      );
+      const index = (channels || getLocalstorage("VodChannels")).indexOf(channel.toLowerCase());
       const existingChannels = [...channels];
       existingChannels.splice(index, 1);
       // setChannels(existingChannels);

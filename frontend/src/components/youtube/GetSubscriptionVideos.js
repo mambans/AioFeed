@@ -2,7 +2,7 @@ import axios from "axios";
 import { reverse, sortBy } from "lodash";
 
 import GetVideoInfo from "./GetVideoInfo";
-import Util from "./../../util/Util";
+import { getCookie, getLocalstorage } from "./../../util/Utils";
 
 const filterVideos = async (response) => {
   if (response && response.items && response.items.length > 0) {
@@ -53,7 +53,7 @@ const fetchSubscriptionVideos = async (videosCACHE, channel) => {
         },
         headers: {
           "If-None-Match": cachedChannelObj.channel.etag,
-          Authorization: `Bearer ${Util.getCookie("Youtube-access_token")}`,
+          Authorization: `Bearer ${getCookie("Youtube-access_token")}`,
           Accept: "application/json",
         },
       })
@@ -76,7 +76,7 @@ const fetchSubscriptionVideos = async (videosCACHE, channel) => {
           key: process.env.REACT_APP_YOUTUBE_API_KEY,
         },
         headers: {
-          Authorization: `Bearer ${Util.getCookie("Youtube-access_token")}`,
+          Authorization: `Bearer ${getCookie("Youtube-access_token")}`,
           Accept: "application/json",
         },
       })
@@ -100,7 +100,7 @@ export default async (followedChannels) => {
   let error = null;
 
   try {
-    const videosCACHE = Util.getLocalstorage("YoutubeChannelsObj") || [];
+    const videosCACHE = getLocalstorage("YoutubeChannelsObj") || [];
 
     const channelWithVideos = await Promise.all(
       followedChannels.map(async (channel) => {

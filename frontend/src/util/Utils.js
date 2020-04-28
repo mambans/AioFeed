@@ -6,3 +6,48 @@ export const RemoveCookie = (cookieName) => {
 export const AddCookie = (cookieName, value) => {
   document.cookie = `${cookieName}=${value}; path=/; SameSite=Lax`;
 };
+
+export const getCookie = (cname) => {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(";");
+  for (var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) === " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) === 0) {
+      // console.log(`Cookie ${cname}: ${c.substring(name.length, c.length)}`);
+      if (c.substring(name.length, c.length) === "null") {
+        return null;
+      } else if (c.substring(name.length, c.length) === "false") {
+        return false;
+      } else if (c.substring(name.length, c.length) === "true") {
+        return true;
+      }
+
+      return c.substring(name.length, c.length);
+    }
+  }
+  return null;
+};
+
+export const getLocalstorage = (name) => {
+  const item = localStorage.getItem(name);
+  try {
+    const itemParsed = JSON.parse(item);
+
+    if (itemParsed === "null") {
+      return null;
+    } else {
+      return itemParsed;
+    }
+  } catch (error) {
+    return item;
+  }
+};
+
+export const truncate = (input, max) => {
+  if (input.length > max) return input.substring(0, max) + "..";
+  else return input;
+};

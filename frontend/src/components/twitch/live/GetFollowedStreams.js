@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import AddVideoExtraData from "./../AddVideoExtraData";
-import Util from "../../../util/Util";
+import { getCookie } from "../../../util/Utils";
 
 const fetchAllOnlineStreams = async (followedChannelsIds) => {
   return await axios
@@ -11,7 +11,7 @@ const fetchAllOnlineStreams = async (followedChannelsIds) => {
         first: 100,
       },
       headers: {
-        Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+        Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
         "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
       },
     })

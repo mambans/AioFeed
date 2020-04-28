@@ -9,7 +9,8 @@ import Tooltip from "react-bootstrap/Tooltip";
 import styled from "styled-components";
 
 import { SidebarTitlePopup, StyledsidebarItem } from "./StyledComponents";
-import Util from "../../../util/Util";
+import { truncate } from "../../../util/Utils";
+import { formatViewerNumbers } from "./../TwitchUtils";
 
 const StyledNewHighlight = styled.div`
   position: absolute;
@@ -85,10 +86,10 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
           className={"sidebarUser"}
           // href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}
         >
-          {Util.truncate(stream.user_name, 16)}
+          {truncate(stream.user_name, 16)}
         </div>
         <p className={"sidebarViewers"}>
-          {Util.formatViewerNumbers(stream.viewer_count)}
+          {formatViewerNumbers(stream.viewer_count)}
           <FaRegEye
             size={10}
             style={{
@@ -121,7 +122,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
               className={"sidebarGame"}
               // href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}
             >
-              <p>{Util.truncate(stream.game_name, 15)}</p>
+              <p>{truncate(stream.game_name, 15)}</p>
             </div>
           )}
           <div className={"sidebarDuration"}>

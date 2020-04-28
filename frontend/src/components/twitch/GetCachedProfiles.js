@@ -1,7 +1,7 @@
-import Util from "../../util/Util";
+import { getLocalstorage } from "../../util/Utils";
 
 export default () => {
-  const profiles = Util.getLocalstorage("TwitchProfiles") || {};
+  const profiles = getLocalstorage("TwitchProfiles") || {};
 
   if (!profiles.expireDate || new Date(profiles.expireDate).getTime() < new Date().getTime()) {
     return {

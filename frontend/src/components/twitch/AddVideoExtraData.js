@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import Util from "./../../util/Util";
+import { getCookie, getLocalstorage } from "./../../util/Utils";
 import GetCachedProfiles from "./GetCachedProfiles";
 
 const getGameDetails = async (items) => {
@@ -13,7 +13,7 @@ const getGameDetails = async (items) => {
     ),
   ];
 
-  const cachedGameInfo = Util.getLocalstorage("Twitch_game_details") || { data: [] };
+  const cachedGameInfo = getLocalstorage("Twitch_game_details") || { data: [] };
 
   const unCachedGameDetails = games.filter((game) => {
     return !cachedGameInfo.data.find((cachedGame) => cachedGame.id === game);
@@ -26,7 +26,7 @@ const getGameDetails = async (items) => {
           id: cachedGameInfo.expire < new Date().getTime() ? games : unCachedGameDetails,
         },
         headers: {
-          Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+          Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })
@@ -83,7 +83,7 @@ export default async (items, fetchGameInfo = true) => {
           id: noCachedProfileArrayIds,
         },
         headers: {
-          Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+          Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })

@@ -1,7 +1,8 @@
 import axios from "axios";
 
 import GetFollowedChannels from "./../GetFollowedChannels";
-import Util from "../../../util/Util";
+import { durationToDate } from "./../TwitchUtils";
+import { getCookie, getLocalstorage } from "../../../util/Utils";
 import reauthenticate from "./../reauthenticate";
 import AddVideoExtraData from "../AddVideoExtraData";
 import FetchMonitoredVodChannelsList from "./FetchMonitoredVodChannelsList";
@@ -32,7 +33,7 @@ const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) =
           first: 100,
         },
         headers: {
-          Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+          Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })
@@ -54,7 +55,7 @@ const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) =
 const addVodEndTime = async (followedStreamVods) => {
   followedStreamVods.map((stream) => {
     if (stream.type === "archive") {
-      stream.endDate = Util.durationToDate(stream.duration, stream.created_at);
+      stream.endDate = durationToDate(stream.duration, stream.created_at);
     } else {
       stream.endDate = new Date(stream.created_at);
     }
@@ -62,7 +63,7 @@ const addVodEndTime = async (followedStreamVods) => {
   });
 };
 
-const axiosConfig = (method, channel, access_token = Util.getCookie("Twitch-access_token")) => {
+const axiosConfig = (method, channel, access_token = getCookie("Twitch-access_token")) => {
   return {
     method: method,
     url: `https://api.twitch.tv/helix/videos?`,
@@ -127,11 +128,7 @@ export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchTok
   try {
     const OnlyVodsAfterDate = new Date();
     OnlyVodsAfterDate.setDate(new Date().getDate() - thresholdDate);
-    if (
-      !Util.getLocalstorage(`Vods`) ||
-      Util.getLocalstorage(`Vods`).expire <= new Date() ||
-      forceRun
-    ) {
+    if (!getLocalstorage(`Vods`) || getLocalstorage(`Vods`).expire <= new Date() || forceRun) {
       try {
         const followedChannels = await GetFollowedChannels();
 
@@ -173,16 +170,16 @@ export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchTok
         };
       } catch (error) {
         return {
-          data: Util.getLocalstorage("Vods"),
+          data: getLocalstorage("Vods"),
           error: error,
         };
       }
     }
-    return { data: Util.getLocalstorage("Vods") };
+    return { data: getLocalstorage("Vods") };
   } catch (error) {
     console.error("message: ", error.message);
     return {
-      data: Util.getLocalstorage("Vods"),
+      data: getLocalstorage("Vods"),
       error: error,
     };
   }

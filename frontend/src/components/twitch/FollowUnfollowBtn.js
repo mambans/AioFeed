@@ -4,13 +4,13 @@ import React, { useEffect, useState, useContext } from "react";
 import { FollowBtn, UnfollowBtn } from "./StyledComponents";
 import AccountContext from "./../account/AccountContext";
 import reauthenticate from "./reauthenticate";
-import Util from "./../../util/Util";
+import { getCookie } from "./../../util/Utils";
 
 export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshStreams }) => {
   const [following, setFollowing] = useState(alreadyFollowedStatus || false);
   const { setTwitchToken, setRefreshToken, twitchUserId } = useContext(AccountContext);
 
-  const axiosConfig = (method, user_id, access_token = Util.getCookie("Twitch-access_token")) => {
+  const axiosConfig = (method, user_id, access_token = getCookie("Twitch-access_token")) => {
     return {
       method: method,
       url: `https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${user_id}`,
@@ -59,7 +59,7 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
       await axios
         .get(`https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${id}`, {
           headers: {
-            Authorization: `OAuth ${Util.getCookie("Twitch-access_token")}`,
+            Authorization: `OAuth ${getCookie("Twitch-access_token")}`,
             "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
             Accept: "application/vnd.twitchtv.v5+json",
           },

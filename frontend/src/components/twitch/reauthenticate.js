@@ -1,5 +1,5 @@
 import axios from "axios";
-import Util from "./../../util/Util";
+import { getCookie } from "./../../util/Utils";
 import { AddCookie } from "../../util/Utils";
 
 export default async (setTwitchToken, setRefreshToken) => {
@@ -8,7 +8,7 @@ export default async (setTwitchToken, setRefreshToken) => {
   return await axios
     .post(
       `https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=${encodeURI(
-        Util.getCookie(`Twitch-refresh_token`)
+        getCookie(`Twitch-refresh_token`)
       )}&client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&client_secret=${
         process.env.REACT_APP_TWITCH_SECRET
       }&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`

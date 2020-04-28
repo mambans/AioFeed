@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Spinner } from "react-bootstrap";
 import uniqid from "uniqid";
 
-import Util from "../../util/Util";
 import ErrorHandler from "./../error";
 import { AddCookie } from "../../util/Utils";
+import LoadingIndicator from "../LoadingIndicator";
 
 function TwitchAuth() {
   const [error, setError] = useState();
@@ -37,11 +36,7 @@ function TwitchAuth() {
   if (error) {
     return <ErrorHandler data={error}></ErrorHandler>;
   } else {
-    return (
-      <Spinner animation='border' role='status' style={Util.loadingSpinner}>
-        <span className='sr-only'>Loading...</span>
-      </Spinner>
-    );
+    return <LoadingIndicator height={150} width={150} />;
   }
 }
 

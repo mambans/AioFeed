@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import Util from "./../../../util/Util";
+import { getCookie } from "./../../../util/Utils";
 
 /**
  * @param {String} channelId - Channel id of Twitch channel to fetch info from.
@@ -10,7 +10,7 @@ export default async (channelId, setChannelInfo) => {
   return await axios
     .get(`https://api.twitch.tv/kraken/channels/${channelId}`, {
       headers: {
-        Authorization: `OAuth ${Util.getCookie("Twitch-access_token")}`,
+        Authorization: `OAuth ${getCookie("Twitch-access_token")}`,
         "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         Accept: "application/vnd.twitchtv.v5+json",
       },

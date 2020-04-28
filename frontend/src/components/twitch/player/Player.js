@@ -20,7 +20,7 @@ import fetchUptime from "./fetchUptime";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 import NavigationContext from "./../../navigation/NavigationContext";
 import PlayerEvents from "./PlayerEvents";
-import Util from "./../../../util/Util";
+import { getCookie } from "./../../../util/Utils";
 import VolumeSlider from "./VolumeSlider";
 import {
   ButtonShowQualities,
@@ -37,9 +37,9 @@ import {
   CreateClipButton,
   ShowNavbarBtn,
 } from "./StyledComponents";
-
 import PlayerNavbar from "./PlayerNavbar";
 import setFavion from "../../setFavion";
+import { formatViewerNumbers } from "./../TwitchUtils";
 
 export default () => {
   const { p_uptime, p_viewers, p_title, p_game, p_channelInfos } = useLocation().state || {};
@@ -276,7 +276,7 @@ export default () => {
     }
   }, [handleMouseOut]);
 
-  const axiosConfig = (method, access_token = Util.getCookie("Twitch-access_token")) => {
+  const axiosConfig = (method, access_token = getCookie("Twitch-access_token")) => {
     return {
       method: method,
       url: `https://api.twitch.tv/helix/clips?broadcaster_id=${channelInfo._id}`,
@@ -381,7 +381,7 @@ export default () => {
                     </Link>
                   </>
 
-                  {viewers && <p id='viewers'> Viewers: {Util.formatViewerNumbers(viewers)} </p>}
+                  {viewers && <p id='viewers'> Viewers: {formatViewerNumbers(viewers)} </p>}
                   {uptime ? (
                     <p id='uptime'>
                       Uptime <Moment durationFromNow>{uptime}</Moment>

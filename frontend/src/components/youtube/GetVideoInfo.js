@@ -1,15 +1,14 @@
 import axios from "axios";
 import moment from "moment";
-import Util from "../../util/Util";
+import { getLocalstorage } from "../../util/Utils";
 
 export default async (flattedVideosArray) => {
   const videosArray = [...flattedVideosArray];
   const detailsCached =
-    Util.getLocalstorage("YT-VideoDetails") && Util.getLocalstorage("YT-VideoDetails").data
-      ? // Util.getLocalstorage("YT-VideoDetails").expire <= new Date()
-        Util.getLocalstorage("YT-VideoDetails")
+    getLocalstorage("YT-VideoDetails") && getLocalstorage("YT-VideoDetails").data
+      ? // getLocalstorage("YT-VideoDetails").expire <= new Date()
+        getLocalstorage("YT-VideoDetails")
       : { data: [], expire: new Date().setDate(new Date().getDate() + 3) };
-
 
   const comparer = (otherArray) => {
     return function (current) {
@@ -48,7 +47,6 @@ export default async (flattedVideosArray) => {
           return aLLDetails;
         })
     : detailsCached.data;
-
 
   const allVideos = videosArray.map((video) => {
     video.duration = moment

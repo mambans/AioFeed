@@ -5,7 +5,7 @@ import axios from "axios";
 import { remove } from "lodash";
 
 // import UnfollowStream from "./UnfollowStream";
-import Util from "./../../../util/Util";
+import { getCookie } from "./../../../util/Utils";
 import { UnfollowButton } from "./../../sharedStyledComponents";
 
 const UnfollowChannel = async (subId) => {
@@ -16,7 +16,7 @@ const UnfollowChannel = async (subId) => {
         key: process.env.REACT_APP_YOUTUBE_API_KEY,
       },
       headers: {
-        Authorization: "Bearer " + Util.getCookie("Youtube-access_token"),
+        Authorization: "Bearer " + getCookie("Youtube-access_token"),
         Accept: "application/json",
       },
     })
@@ -124,7 +124,7 @@ const ChannelListElement = (data) => {
         {channel.snippet.title}
       </a>
       <UnfollowButton
-        disabled={Util.getCookie("Youtube-readonly")}
+        disabled={getCookie("Youtube-readonly")}
         data-tip={"Unfollow " + channel.snippet.title}
         variant='link'
         onClick={async () => {

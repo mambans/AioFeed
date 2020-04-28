@@ -1,23 +1,23 @@
 import React, { useState } from "react";
 
-import Util from "./../../util/Util";
+import { getCookie } from "./../../util/Utils";
 
 const AccountContext = React.createContext();
 
 export const AccountProvider = ({ children }) => {
-  const [username, setUsername] = useState(Util.getCookie(`AioFeed_AccountName`));
-  const [profileImage, setProfileImage] = useState(Util.getCookie(`AioFeed_AccountProfileImg`));
-  const [authKey, setAuthKey] = useState(Util.getCookie(`AioFeed_AuthKey`));
-  const [twitchToken, setTwitchToken] = useState(Util.getCookie(`Twitch-access_token`));
-  const [refreshToken, setRefreshToken] = useState(Util.getCookie(`Twitch-refresh_token`));
-  const [twitchUserId, setTwitchUserId] = useState(Util.getCookie(`Twitch-userId`));
-  const [twitchUsername, setTwitchUsername] = useState(Util.getCookie(`Twitch-username`));
-  const [twitchProfileImg, setTwitchProfileImg] = useState(Util.getCookie(`Twitch-profileImg`));
-  const [youtubeToken, setYoutubeToken] = useState(Util.getCookie(`Youtube-access_token`));
-  const [youtubeUsername, setYoutubeUsername] = useState(Util.getCookie(`YoutubeUsername`));
-  const [youtubeProfileImg, setYoutubeProfileImg] = useState(Util.getCookie(`YoutubeProfileImg`));
+  const [username, setUsername] = useState(getCookie(`AioFeed_AccountName`));
+  const [profileImage, setProfileImage] = useState(getCookie(`AioFeed_AccountProfileImg`));
+  const [authKey, setAuthKey] = useState(getCookie(`AioFeed_AuthKey`));
+  const [twitchToken, setTwitchToken] = useState(getCookie(`Twitch-access_token`));
+  const [refreshToken, setRefreshToken] = useState(getCookie(`Twitch-refresh_token`));
+  const [twitchUserId, setTwitchUserId] = useState(getCookie(`Twitch-userId`));
+  const [twitchUsername, setTwitchUsername] = useState(getCookie(`Twitch-username`));
+  const [twitchProfileImg, setTwitchProfileImg] = useState(getCookie(`Twitch-profileImg`));
+  const [youtubeToken, setYoutubeToken] = useState(getCookie(`Youtube-access_token`));
+  const [youtubeUsername, setYoutubeUsername] = useState(getCookie(`YoutubeUsername`));
+  const [youtubeProfileImg, setYoutubeProfileImg] = useState(getCookie(`YoutubeProfileImg`));
   const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(
-    Util.getCookie(`Twitch_AutoRefresh`) || false
+    getCookie(`Twitch_AutoRefresh`) || false
   );
 
   return (

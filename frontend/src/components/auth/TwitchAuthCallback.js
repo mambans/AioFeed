@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState, useCallback, useContext } from "react";
 
-import Util from "../../util/Util";
+import { getCookie } from "../../util/Utils";
 import ErrorHandler from "./../error";
 import AccountContext from "./../account/AccountContext";
 import NavigationContext from "./../navigation/NavigationContext";
@@ -85,7 +85,7 @@ function TwitchAuthCallback() {
       try {
         const url = new URL(window.location.href);
         if (url.pathname === "/auth/twitch/callback") {
-          if (url.searchParams.get("state") === Util.getCookie("Twitch-myState")) {
+          if (url.searchParams.get("state") === getCookie("Twitch-myState")) {
             await getAccessToken(url)
               .then((res) => {
                 console.log("successfully authenticated to Twitch.");

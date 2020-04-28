@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import Util from "../../util/Util";
+import { getCookie } from "../../util/Utils";
 
 const fetchNextPageOfFollowers = async (PagePagination, followedchannels, twitchUserId) => {
   const nextPage = await axios
@@ -11,7 +11,7 @@ const fetchNextPageOfFollowers = async (PagePagination, followedchannels, twitch
         after: PagePagination,
       },
       headers: {
-        Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+        Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
         "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
       },
     })
@@ -33,11 +33,11 @@ export default async () => {
     const followedchannels = await axios
       .get(`https://api.twitch.tv/helix/users/follows?`, {
         params: {
-          from_id: Util.getCookie("Twitch-userId"),
+          from_id: getCookie("Twitch-userId"),
           first: 100,
         },
         headers: {
-          Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+          Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
           "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
         },
       })
@@ -50,7 +50,7 @@ export default async () => {
       await fetchNextPageOfFollowers(
         followedchannels.data.pagination.cursor,
         followedchannels,
-        Util.getCookie("Twitch-userId")
+        getCookie("Twitch-userId")
       );
     }
 

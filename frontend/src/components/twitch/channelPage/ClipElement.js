@@ -13,7 +13,8 @@ import {
   ChannelContainer,
   VodVideoInfo,
 } from "./../../sharedStyledComponents";
-import Util from "../../../util/Util";
+import { truncate } from "../../../util/Utils";
+import { formatViewerNumbers } from "./../TwitchUtils";
 
 export default ({ ...data }) => {
   const { user_name } = data;
@@ -42,7 +43,7 @@ export default ({ ...data }) => {
         <VodVideoInfo>
           <p className={"vodDuration"} title='duration'></p>
           <p className={"view_count"} title='views'>
-            {Util.formatViewerNumbers(view_count)}
+            {formatViewerNumbers(view_count)}
             <FaRegEye
               size={10}
               style={{
@@ -71,7 +72,7 @@ export default ({ ...data }) => {
             </Tooltip>
           }>
           <VideoTitle to={`/${user_name || broadcaster_name}/clip/${id}`}>
-            {Util.truncate(title, 70)}
+            {truncate(title, 70)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (

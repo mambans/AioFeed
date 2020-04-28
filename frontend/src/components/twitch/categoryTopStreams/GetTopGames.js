@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import Util from "./../../../util/Util";
+import { getCookie } from "./../../../util/Utils";
 
 export default async () => {
   const topGames = await axios
@@ -9,7 +9,7 @@ export default async () => {
         first: 100,
       },
       headers: {
-        Authorization: `Bearer ${Util.getCookie("Twitch-access_token")}`,
+        Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
         "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
       },
     })

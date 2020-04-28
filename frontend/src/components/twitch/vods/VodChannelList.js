@@ -7,12 +7,12 @@ import VodChannelListElement from "./VodChannelListElement";
 import useInput from "./../../../hooks/useInput";
 // import VodsContext from "./VodsContext";
 import AddVodChannel from "./AddVodChannel";
-import Util from "../../../util/Util";
+import { getLocalstorage } from "../../../util/Utils";
 
 export default () => {
   const { authKey, username } = useContext(AccountContext);
   // const { channels, setChannels } = useContext(VodsContext);
-  const channels = Util.getLocalstorage("VodChannels") || [];
+  const channels = getLocalstorage("VodChannels") || [];
   const [validated, setValidated] = useState(false);
   const { value: channel, bind: bindchannel, reset: resetchannel } = useInput("");
 

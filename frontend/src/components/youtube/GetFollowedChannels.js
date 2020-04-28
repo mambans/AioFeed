@@ -1,5 +1,5 @@
 import axios from "axios";
-import Util from "../../util/Util";
+import { getCookie } from "../../util/Utils";
 
 const fetchNextPgeOfSubscriptions = async (previousPage, totalResults, prevpPageItems) => {
   const nextPage = await axios
@@ -13,7 +13,7 @@ const fetchNextPgeOfSubscriptions = async (previousPage, totalResults, prevpPage
         pageToken: previousPage.data.nextPageToken,
       },
       headers: {
-        Authorization: "Bearer " + Util.getCookie("Youtube-access_token"),
+        Authorization: "Bearer " + getCookie("Youtube-access_token"),
         Accept: "application/json",
       },
     })
@@ -46,7 +46,7 @@ async function getFollowedChannels() {
             key: process.env.REACT_APP_YOUTUBE_API_KEY,
           },
           headers: {
-            Authorization: "Bearer " + Util.getCookie("Youtube-access_token"),
+            Authorization: "Bearer " + getCookie("Youtube-access_token"),
             Accept: "application/json",
           },
         })

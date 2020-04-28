@@ -10,7 +10,6 @@ import uniqid from "uniqid";
 import Themeselector from "./../../themes/Themeselector";
 import ToggleSwitch from "./ToggleSwitch";
 import UpdateProfileImg from "./UpdateProfileImg";
-import Util from "../../../util/Util";
 import {
   StyledProfileImg,
   StyledConnectTwitch,
@@ -27,7 +26,7 @@ import DeleteAccountButton from "./DeleteAccountButton";
 import FeedsContext from "./../../feed/FeedsContext";
 import UpdateTwitterListName from "./UpdateTwitterListName";
 import ClearAllAccountCookiesStates from "./ClearAllAccountCookiesStates";
-import { RemoveCookie, AddCookie } from "../../../util/Utils";
+import { RemoveCookie, AddCookie, getCookie } from "../../../util/Utils";
 
 export default () => {
   const {
@@ -98,7 +97,7 @@ export default () => {
       .post(
         `https://id.twitch.tv/oauth2/revoke?client_id=${
           process.env.REACT_APP_TWITCH_CLIENT_ID
-        }&token=${Util.getCookie("Twitch-access_token")}`
+        }&token=${getCookie("Twitch-access_token")}`
       )
       .catch((er) => {
         console.error(er);
@@ -185,7 +184,7 @@ export default () => {
           {username}
         </h1>
         <p style={{ textAlign: "center" }} title='Email'>
-          {Util.getCookie("AioFeed_AccountEmail")}
+          {getCookie("AioFeed_AccountEmail")}
         </p>
         <ToggleSwitch
           setEnable={(value) => {

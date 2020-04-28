@@ -11,14 +11,13 @@ import "./Navigation.scss";
 import Sidebar from "./sidebar";
 import ChangeLogs from "../changeLogs";
 import styles from "../changeLogs/ChangeLogs.module.scss";
-import Util from "../../util/Util";
-import { AddCookie } from "../../util/Utils";
+import { AddCookie, getCookie } from "../../util/Utils";
 
 export default (prop) => {
   const NewAlertName = `GlobalAlert-NewAlertName`;
   AddCookie(NewAlertName, true);
   const { visible, shrinkNavbar } = useContext(NavigationContext);
-  const [show, setShow] = useState(!Util.getCookie(NewAlertName));
+  const [show, setShow] = useState(!getCookie(NewAlertName));
 
   const handleClose = () => {
     setShow(false);
