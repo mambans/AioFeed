@@ -1,94 +1,25 @@
 import { CSSTransition } from "react-transition-group";
 import { debounce } from "lodash";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import React, { useState, useEffect, useContext, useMemo, useRef } from "react";
-import styled from "styled-components";
 
-import { Container } from "../twitch/StyledComponents";
+import { AddCookie } from "../../util/Utils";
+import { Container, CenterContainer } from "../twitch/StyledComponents";
+import { HideSidebarButton } from "../twitch/sidebar/StyledComponents";
 import { VodsProvider } from "./../twitch/vods/VodsContext";
 import AccountContext from "./../account/AccountContext";
 import ErrorHandler from "./../error";
 import FeedsContext from "./FeedsContext";
 import Handler from "../twitch/live/Handler";
+import Header from "../twitch/live/Header";
+import NoFeedsEnable from "./NoFeedsEnabled";
+import Sidebar from "../twitch/sidebar";
 import TwitchLive from "../twitch/live";
 import TwitchVods from "../twitch/vods";
 import Twitter from "../twitter";
 import Youtube from "./../youtube";
 import YoutubeDataHandler from "./../youtube/Datahandler";
 import YoutubeHeader from "./../youtube/Header";
-import NoFeedsEnable from "./NoFeedsEnabled";
-import Sidebar from "../twitch/sidebar";
-import Header from "../twitch/live/Header";
-import { HideSidebarButton } from "../twitch/sidebar/StyledComponents";
-import { AddCookie } from "../../util/Utils";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-
-const CenterContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-flow: column;
-  margin-top: 25px;
-  /* margin-left: ${({ marginLeft }) => marginLeft + "px"}; */
-  margin-left: ${({ enableTwitter, enableTwitch, showTwitchSidebar }) =>
-    !enableTwitter && (!enableTwitch || !showTwitchSidebar)
-      ? "auto"
-      : enableTwitter
-      ? (window.innerWidth -
-          ((enableTwitch && showTwitchSidebar ? 275 : 0) +
-            (enableTwitter
-              ? window.innerWidth <= 1920
-                ? window.innerWidth * 0.2
-                : window.innerWidth <= 2560
-                ? window.innerWidth * 0.2
-                : window.innerWidth * 0.15
-              : 0) +
-            25 +
-            (enableTwitter
-              ? 350 *
-                Math.floor(
-                  (window.innerWidth -
-                    ((enableTwitch && showTwitchSidebar ? 275 : 0) +
-                      window.innerWidth * 0.2 +
-                      25)) /
-                    350
-                )
-              : 350 *
-                Math.floor(
-                  (window.innerWidth - ((enableTwitch && showTwitchSidebar ? 275 : 0) + 150)) / 350
-                )))) /
-          2 +
-        (enableTwitch && showTwitchSidebar ? 275 : 0) +
-        "px"
-      : (window.innerWidth -
-          ((enableTwitch && showTwitchSidebar ? 275 : 0) +
-            (enableTwitter
-              ? 350 *
-                Math.floor(
-                  (window.innerWidth -
-                    ((enableTwitch && showTwitchSidebar ? 275 : 0) +
-                      window.innerWidth * 0.2 +
-                      25)) /
-                    350
-                )
-              : 350 *
-                Math.floor(
-                  (window.innerWidth - ((enableTwitch && showTwitchSidebar ? 275 : 0) + 150)) / 350
-                )))) /
-          2 +
-        (enableTwitch && showTwitchSidebar ? 275 : 0) -
-        50 +
-        "px"};
-  margin-right: ${({ enableTwitter, enableTwitch, showTwitchSidebar }) =>
-    !enableTwitter && (!enableTwitch || !showTwitchSidebar) ? "auto" : "unset"};
-  width: ${({ enableTwitter, enableTwitch }) =>
-    enableTwitter
-      ? 350 *
-        Math.floor(
-          (window.innerWidth - ((enableTwitch ? 275 : 0) + window.innerWidth * 0.2 + 25)) / 350
-        )
-      : 350 *
-        Math.floor((window.innerWidth - ((enableTwitch ? 275 : 0) + 150)) / 350)}px !important;
-  transition: width 750ms, margin 750ms;
-`;
 
 export default () => {
   document.title = "AioFeed | Feed";

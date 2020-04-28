@@ -265,3 +265,72 @@ export const Container = styled.div`
   min-height: 400px;
   /* min-height: 475px; */
 `;
+
+
+export const CenterContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-flow: column;
+  margin-top: 25px;
+  /* margin-left: ${({ marginLeft }) => marginLeft + "px"}; */
+  margin-left: ${({ enableTwitter, enableTwitch, showTwitchSidebar }) =>
+    !enableTwitter && (!enableTwitch || !showTwitchSidebar)
+      ? "auto"
+      : enableTwitter
+      ? (window.innerWidth -
+          ((enableTwitch && showTwitchSidebar ? 275 : 0) +
+            (enableTwitter
+              ? window.innerWidth <= 1920
+                ? window.innerWidth * 0.2
+                : window.innerWidth <= 2560
+                ? window.innerWidth * 0.2
+                : window.innerWidth * 0.15
+              : 0) +
+            25 +
+            (enableTwitter
+              ? 350 *
+                Math.floor(
+                  (window.innerWidth -
+                    ((enableTwitch && showTwitchSidebar ? 275 : 0) +
+                      window.innerWidth * 0.2 +
+                      25)) /
+                    350
+                )
+              : 350 *
+                Math.floor(
+                  (window.innerWidth - ((enableTwitch && showTwitchSidebar ? 275 : 0) + 150)) / 350
+                )))) /
+          2 +
+        (enableTwitch && showTwitchSidebar ? 275 : 0) +
+        "px"
+      : (window.innerWidth -
+          ((enableTwitch && showTwitchSidebar ? 275 : 0) +
+            (enableTwitter
+              ? 350 *
+                Math.floor(
+                  (window.innerWidth -
+                    ((enableTwitch && showTwitchSidebar ? 275 : 0) +
+                      window.innerWidth * 0.2 +
+                      25)) /
+                    350
+                )
+              : 350 *
+                Math.floor(
+                  (window.innerWidth - ((enableTwitch && showTwitchSidebar ? 275 : 0) + 150)) / 350
+                )))) /
+          2 +
+        (enableTwitch && showTwitchSidebar ? 275 : 0) -
+        50 +
+        "px"};
+  margin-right: ${({ enableTwitter, enableTwitch, showTwitchSidebar }) =>
+    !enableTwitter && (!enableTwitch || !showTwitchSidebar) ? "auto" : "unset"};
+  width: ${({ enableTwitter, enableTwitch }) =>
+    enableTwitter
+      ? 350 *
+        Math.floor(
+          (window.innerWidth - ((enableTwitch ? 275 : 0) + window.innerWidth * 0.2 + 25)) / 350
+        )
+      : 350 *
+        Math.floor((window.innerWidth - ((enableTwitch ? 275 : 0) + 150)) / 350)}px !important;
+  transition: width 750ms, margin 750ms;
+`;
