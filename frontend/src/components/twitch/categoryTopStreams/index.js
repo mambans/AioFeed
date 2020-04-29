@@ -4,7 +4,6 @@ import { FaTwitch } from "react-icons/fa";
 import { MdLiveTv } from "react-icons/md";
 import { MdMovieCreation } from "react-icons/md";
 import { MdRefresh } from "react-icons/md";
-// import { MdVideocam } from "react-icons/md";
 import { Spinner } from "react-bootstrap";
 import { useParams, useLocation } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
@@ -173,150 +172,153 @@ export default () => {
   }, [fetchVideos]);
 
   return (
-    <>
-      <HeaderContainer>
-        <div
-          style={{
-            width: "675px",
-            minWidth: "675px",
-            alignItems: "end",
-            display: "flex",
-          }}>
-          <RefreshButton onClick={refresh}>
-            {refreshing ? (
-              <div className='SpinnerWrapper'>
-                <Spinner
-                  animation='border'
-                  role='status'
-                  variant='light'
-                  style={Util.loadingSpinnerSmall}></Spinner>
-              </div>
-            ) : (
-              <MdRefresh size={34} />
-            )}
-          </RefreshButton>
-        </div>
-        <HeaderTitle style={{ marginLeft: "10px" }}>
-          <FaTwitch size={32} style={{ color: "#6f166f" }} />
-          Top {videoType}
-        </HeaderTitle>
-        <TopDataSortButtonsContainer>
-          <GameSearchBar gameName={category} videoType={videoType} />
-          <div>
-            <TypeButton
-              title={`Fetch top ${videoType}`}
-              disabled={category ? false : true}
-              onClick={() => {
-                setTypeListOpen(!typeListOpen);
-              }}>
-              <FaRegFileVideo size={20} />
-              {videoType}
-            </TypeButton>
+    <CSSTransition in={true} classNames='fade-750ms' appear>
+      <>
+        <HeaderContainer>
+          <div
+            style={{
+              width: "675px",
+              minWidth: "675px",
+              alignItems: "end",
+              display: "flex",
+            }}>
+            <RefreshButton onClick={refresh}>
+              {refreshing ? (
+                <div className='SpinnerWrapper'>
+                  <Spinner
+                    animation='border'
+                    role='status'
+                    variant='light'
+                    style={Util.loadingSpinnerSmall}></Spinner>
+                </div>
+              ) : (
+                <MdRefresh size={34} />
+              )}
+            </RefreshButton>
+          </div>
+          <HeaderTitle style={{ marginLeft: "10px" }}>
+            <FaTwitch size={32} style={{ color: "#6f166f" }} />
+            Top {videoType}
+          </HeaderTitle>
+          <TopDataSortButtonsContainer>
+            <GameSearchBar gameName={category} videoType={videoType} />
+            <div>
+              <TypeButton
+                title={`Fetch top ${videoType}`}
+                disabled={category ? false : true}
+                onClick={() => {
+                  setTypeListOpen(!typeListOpen);
+                }}>
+                <FaRegFileVideo size={20} />
+                {videoType}
+              </TypeButton>
 
-            {typeListOpen && (
-              <TypeListUlContainer>
-                <li
-                  onClick={() => {
-                    videoTypeBtnOnClick("Streams");
-                  }}>
-                  <MdLiveTv size={24} />
-                  Streams
-                </li>
-                <li
-                  onClick={() => {
-                    videoTypeBtnOnClick("Clips");
-                    setSortBy("Views");
-                  }}>
-                  <MdMovieCreation size={24} />
-                  Clips
-                </li>
-                {/* <li
+              {typeListOpen && (
+                <TypeListUlContainer>
+                  <li
+                    onClick={() => {
+                      videoTypeBtnOnClick("Streams");
+                    }}>
+                    <MdLiveTv size={24} />
+                    Streams
+                  </li>
+                  <li
+                    onClick={() => {
+                      videoTypeBtnOnClick("Clips");
+                      setSortBy("Views");
+                    }}>
+                    <MdMovieCreation size={24} />
+                    Clips
+                  </li>
+                  {/* <li
                   onClick={() => {
                     videoTypeBtnOnClick("Videos");
                   }}>
                   <MdVideocam size={24} />
                   Videos
                 </li> */}
-              </TypeListUlContainer>
-            )}
-          </div>
+                </TypeListUlContainer>
+              )}
+            </div>
 
-          {videoType === "Videos" ? (
-            <SortButton sortBy={sortBy} setSortBy={setSortBy} setData={setTopData} />
-          ) : videoType === "Clips" ? (
-            <ClipsSortButton
-              sortBy={sortByTime}
-              setSortBy={setSortByTime}
-              setData={setTopData}
-              resetOldData={() => {
-                oldTopData.current = null;
-              }}
-            />
-          ) : null}
-        </TopDataSortButtonsContainer>
-      </HeaderContainer>
-      {error ? (
-        <Alert
-          variant='warning'
-          style={{ textAlign: "center", width: "25%", margin: "auto" }}
-          dismissible
-          onClose={() => setError(null)}>
-          <Alert.Heading>{error}</Alert.Heading>
-        </Alert>
-      ) : (
-        <TopStreamsContainer>
-          <>
-            <LoadingBoxes
-              amount={Math.floor(((document.documentElement.clientWidth - 150) / 350) * 1.5)}
-              load={!topData || topData.length <= 0}
-            />
+            {videoType === "Videos" ? (
+              <SortButton sortBy={sortBy} setSortBy={setSortBy} setData={setTopData} />
+            ) : videoType === "Clips" ? (
+              <ClipsSortButton
+                sortBy={sortByTime}
+                setSortBy={setSortByTime}
+                setData={setTopData}
+                resetOldData={() => {
+                  oldTopData.current = null;
+                }}
+              />
+            ) : null}
+          </TopDataSortButtonsContainer>
+        </HeaderContainer>
 
-            <TransitionGroup className='twitch-top-live' component={null}>
-              {topData.map((stream) => {
-                return (
-                  <CSSTransition
-                    // in={true}
-                    key={stream.id}
-                    timeout={{
-                      appear: 500,
-                      enter: 500,
-                      exit: 0,
-                    }}
-                    classNames='fade-500ms'
-                    unmountOnExit>
-                    {videoElementTypeComp(stream)}
-                  </CSSTransition>
-                );
-              })}
-            </TransitionGroup>
-            {topData && topData.length > 0 && (
-              <StyledLoadmore ref={loadmoreRef}>
-                <div />
-                <div
-                  id='Button'
-                  onClick={() => {
-                    fetchVideos(true);
-                  }}>
-                  {!loadmoreLoaded ? (
-                    <>
-                      Loading..
-                      <Spinner
-                        animation='border'
-                        role='status'
-                        variant='light'
-                        style={{ ...Util.loadingSpinnerSmall, marginLeft: "10px" }}
-                      />
-                    </>
-                  ) : (
-                    "Load more"
-                  )}
-                </div>
-                <div />
-              </StyledLoadmore>
-            )}
-          </>
-        </TopStreamsContainer>
-      )}
-    </>
+        {error ? (
+          <Alert
+            variant='warning'
+            style={{ textAlign: "center", width: "25%", margin: "auto" }}
+            dismissible
+            onClose={() => setError(null)}>
+            <Alert.Heading>{error}</Alert.Heading>
+          </Alert>
+        ) : (
+          <TopStreamsContainer>
+            <>
+              <LoadingBoxes
+                amount={Math.floor(((document.documentElement.clientWidth - 150) / 350) * 1.5)}
+                load={!topData || topData.length <= 0}
+              />
+
+              <TransitionGroup className='twitch-top-live' component={null}>
+                {topData.map((stream) => {
+                  return (
+                    <CSSTransition
+                      // in={true}
+                      key={stream.id}
+                      timeout={{
+                        appear: 500,
+                        enter: 500,
+                        exit: 0,
+                      }}
+                      classNames='fade-500ms'
+                      unmountOnExit>
+                      {videoElementTypeComp(stream)}
+                    </CSSTransition>
+                  );
+                })}
+              </TransitionGroup>
+              {topData && topData.length > 0 && (
+                <StyledLoadmore ref={loadmoreRef}>
+                  <div />
+                  <div
+                    id='Button'
+                    onClick={() => {
+                      fetchVideos(true);
+                    }}>
+                    {!loadmoreLoaded ? (
+                      <>
+                        Loading..
+                        <Spinner
+                          animation='border'
+                          role='status'
+                          variant='light'
+                          style={{ ...Util.loadingSpinnerSmall, marginLeft: "10px" }}
+                        />
+                      </>
+                    ) : (
+                      "Load more"
+                    )}
+                  </div>
+                  <div />
+                </StyledLoadmore>
+              )}
+            </>
+          </TopStreamsContainer>
+        )}
+      </>
+    </CSSTransition>
   );
 };
