@@ -17,6 +17,7 @@ import {
 } from "./../sharedStyledComponents";
 import RenderFollowedChannelList from "./channelList/RenderFollowedChannelList";
 import { HeaderLeftSubcontainer } from "./../twitch/StyledComponents";
+import ReAuthenticateButton from "../navigation/sidebar/ReAuthenticateButton";
 
 const SubFeedError = (props) => {
   const { error } = props;
@@ -41,12 +42,20 @@ const SubFeedError = (props) => {
     }
 
     return (
-      <Alert
-        key={error.errors[0].reason}
-        className={styles.requestError}
-        variant={alertVariant || "warning"}>
-        {alertError}
-      </Alert>
+      <>
+        <Alert
+          key={error.errors[0].reason}
+          className={styles.requestError}
+          variant={alertVariant || "warning"}>
+          {alertError}
+          {error.code === 401 && (
+            <ReAuthenticateButton
+              serviceName={"Youtube"}
+              style={{ marginLeft: "15px", display: "inline-block" }}
+            />
+          )}
+        </Alert>
+      </>
     );
   } else {
     return "";

@@ -36,23 +36,19 @@ async function getFollowedChannels() {
       !localStorage.getItem(`YT-followedChannels`) ||
       JSON.parse(localStorage.getItem(`YT-followedChannels`)).casheExpire <= new Date().getTime()
     ) {
-      const previousPage = await axios
-        .get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {
-          params: {
-            maxResults: 50,
-            mine: true,
-            part: "snippet",
-            order: "relevance",
-            key: process.env.REACT_APP_YOUTUBE_API_KEY,
-          },
-          headers: {
-            Authorization: "Bearer " + getCookie("Youtube-access_token"),
-            Accept: "application/json",
-          },
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      const previousPage = await axios.get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {
+        params: {
+          maxResults: 50,
+          mine: true,
+          part: "snippet",
+          order: "relevance",
+          key: process.env.REACT_APP_YOUTUBE_API_KEY,
+        },
+        headers: {
+          Authorization: "Bearer " + getCookie("Youtube-access_token"),
+          Accept: "application/json",
+        },
+      });
 
       const totalResults = previousPage.data.pageInfo.totalResults - 1;
 
@@ -82,7 +78,7 @@ async function getFollowedChannels() {
     }
   } catch (error) {
     console.error(error.message);
-    if (localStorage.getItem("followedChannels")) {
+    if (localStorage.getItem("YT-followedChannels")) {
       return JSON.parse(localStorage.getItem("YT-followedChannels")).data;
     } else {
       return error;
