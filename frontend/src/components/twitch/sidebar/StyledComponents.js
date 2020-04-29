@@ -193,9 +193,9 @@ export const HideSidebarButton = styled(MdFormatIndentDecrease).attrs({ size: 25
   color: #ffffff;
   background: none;
   opacity: 0.3;
-  transform: ${({ show }) => (show ? "unset" : "rotateY(180deg)")};
+  transform: ${({ show }) => (show === "true" ? "unset" : "rotateY(180deg)")};
   cursor: pointer;
-  left: 0;
+  left: 3px;
   top: 92px;
   z-index: 3;
 
