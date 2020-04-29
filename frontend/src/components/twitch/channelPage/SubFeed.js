@@ -75,13 +75,9 @@ export default ({
               return (
                 <CSSTransition key={item.id} timeout={750} className='fade-750ms' unmountOnExit>
                   {feedName === "Vods" ? (
-                    <VodElement data={item} transition='fade-750ms' vodBtnDisabled={true} />
+                    <VodElement data={item} vodBtnDisabled={true} />
                   ) : (
-                    <ClipElement
-                      data={item}
-                      user_name={channelInfo && channelInfo.name}
-                      transition='fade-750ms'
-                    />
+                    <ClipElement data={item} user_name={channelInfo && channelInfo.name} />
                   )}
                 </CSSTransition>
               );

@@ -22,7 +22,7 @@ export default ({ sortBy, setSortBy, setData }) => {
               <li
                 key={option}
                 onClick={() => {
-                  setData([]);
+                  setData();
                   setSortBy(option);
                   setOpen(false);
                 }}>

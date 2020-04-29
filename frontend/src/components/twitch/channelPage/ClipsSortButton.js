@@ -35,7 +35,7 @@ export default ({ sortBy, setSortBy, setData, resetOldData }) => {
                 key={option}
                 onClick={() => {
                   if (option !== sortBy && option !== "" + sortBy) {
-                    setData([]);
+                    setData();
                     if (resetOldData) resetOldData();
                     setSortBy(option === "null" ? null : option);
                     setOpen(false);
