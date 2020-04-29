@@ -55,18 +55,10 @@ export default () => {
 
   useEffect(() => {
     setVisible(false);
+    window.addEventListener("scroll", setVisibleNavbar);
+    window.addEventListener("wheel", setVisibleNavbar);
     document.documentElement.setAttribute("homepage", "true");
     window.scrollTo(0, 0);
-
-    return () => {
-      document.documentElement.removeAttribute("homepage");
-    };
-  }, [setVisible]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", setVisibleNavbar);
-
-    window.addEventListener("wheel", setVisibleNavbar);
 
     if (!inactiveTimer.current) {
       inactiveTimer.current = setInterval(() => {
@@ -77,7 +69,9 @@ export default () => {
     return () => {
       window.removeEventListener("scroll", setVisibleNavbar);
       window.removeEventListener("wheel", setVisibleNavbar);
+      document.documentElement.removeAttribute("homepage");
       clearInterval(inactiveTimer.current);
+      setVisible(true);
     };
   }, [setVisible, setVisibleNavbar]);
 
