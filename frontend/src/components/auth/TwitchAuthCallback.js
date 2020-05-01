@@ -20,14 +20,9 @@ function TwitchAuthCallback() {
       const authCode = url.searchParams.get("code");
 
       const requestAccessToken = await axios
-        .post(
-          `https://id.twitch.tv/oauth2/token
-?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}
-&client_secret=${process.env.REACT_APP_TWITCH_SECRET}
-&code=${authCode}
-&grant_type=authorization_code
-&redirect_uri=https://aiofeed.com/auth/twitch/callback`
-        )
+        .put("https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/rerequest/twitch", {
+          authCode: authCode,
+        })
         .catch((error) => {
           console.log(error);
         });

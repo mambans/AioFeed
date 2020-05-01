@@ -206,3 +206,43 @@ Resources:
                 Required: true
             - method.request.querystring.data:
                 Required: true
+  ReAuthenticateTwitch:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Re-authenticate Twitch user to Twitch with refresh token (returns access & refresh tokens)."
+      Handler: reAuthenticateTwitch/handler.handler
+      Runtime: nodejs10.x
+      CodeUri: "."
+      Environment:
+        Variables:
+          TWITCH_CLIENT_SECRET: "TWITCH_CLIENT_SECRET"
+          TWITCH_CLIENT_ID: "TWITCH_CLIENT_ID"
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /reauth/twitch
+            Method: put
+          RequestParameters:
+            - method.request.querystring.refresh_token:
+                Required: true
+  RequestTwitchTokens:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Re-authenticate Twitch user to Twitch with authorization code (returns access & refresh tokens)."
+      Handler: requestTwitchTokens/handler.handler
+      Runtime: nodejs10.x
+      CodeUri: "."
+      Environment:
+        Variables:
+          TWITCH_CLIENT_SECRET: "TWITCH_CLIENT_SECRET"
+          TWITCH_CLIENT_ID: "TWITCH_CLIENT_ID"
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /rerequest/twitch
+            Method: put
+          RequestParameters:
+            - method.request.querystring.authCode:
+                Required: true

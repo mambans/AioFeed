@@ -9,7 +9,7 @@ Globals:
 Resources:
   Create:
     Properties:
-      CodeUri: s3://aiofeed-backend/c147e8753b1126fc74600b16041aad6a
+      CodeUri: s3://aiofeed-backend/adfdf685298c9933f88225d748c28deb
       Description: Create an AioFeed account with tokens and monitored vod channels
         default to null and empty array.
       Environment:
@@ -38,7 +38,7 @@ Resources:
     Type: AWS::Serverless::Function
   DeleteAccount:
     Properties:
-      CodeUri: s3://aiofeed-backend/c147e8753b1126fc74600b16041aad6a
+      CodeUri: s3://aiofeed-backend/adfdf685298c9933f88225d748c28deb
       Description: Delete an account
       Environment:
         Variables:
@@ -64,7 +64,7 @@ Resources:
     Type: AWS::Serverless::Function
   FetchMonitoredChannels:
     Properties:
-      CodeUri: s3://aiofeed-backend/c147e8753b1126fc74600b16041aad6a
+      CodeUri: s3://aiofeed-backend/adfdf685298c9933f88225d748c28deb
       Description: Fetch monitored vod channels list.
       Environment:
         Variables:
@@ -90,7 +90,7 @@ Resources:
     Type: AWS::Serverless::Function
   Login:
     Properties:
-      CodeUri: s3://aiofeed-backend/c147e8753b1126fc74600b16041aad6a
+      CodeUri: s3://aiofeed-backend/adfdf685298c9933f88225d748c28deb
       Description: Login with AioFeed account and return account info, tokens and
         monitored vod channels.
       Environment:
@@ -115,9 +115,51 @@ Resources:
             Ref: UserLogins
       Runtime: nodejs10.x
     Type: AWS::Serverless::Function
+  ReAuthenticateTwitch:
+    Properties:
+      CodeUri: s3://aiofeed-backend/adfdf685298c9933f88225d748c28deb
+      Description: Re-authenticate Twitch user with Twitch (returns access & refresh
+        tokens).
+      Environment:
+        Variables:
+          TWITCH_CLIENT_ID: TWITCH_CLIENT_ID
+          TWITCH_CLIENT_SECRET: TWITCH_CLIENT_SECRET
+      Events:
+        Http:
+          Properties:
+            Method: put
+            Path: /reauth/twitch
+          RequestParameters:
+          - method.request.querystring.refresh_token:
+              Required: true
+          Type: Api
+      Handler: reAuthenticateTwitch/handler.handler
+      Runtime: nodejs10.x
+    Type: AWS::Serverless::Function
+  RequestTwitchTokens:
+    Properties:
+      CodeUri: s3://aiofeed-backend/adfdf685298c9933f88225d748c28deb
+      Description: Re-authenticate Twitch user with Twitch (returns access & refresh
+        tokens).
+      Environment:
+        Variables:
+          TWITCH_CLIENT_ID: TWITCH_CLIENT_ID
+          TWITCH_CLIENT_SECRET: TWITCH_CLIENT_SECRET
+      Events:
+        Http:
+          Properties:
+            Method: put
+            Path: /rerequest/twitch
+          RequestParameters:
+          - method.request.querystring.authCode:
+              Required: true
+          Type: Api
+      Handler: requestTwitchTokens/handler.handler
+      Runtime: nodejs10.x
+    Type: AWS::Serverless::Function
   Update:
     Properties:
-      CodeUri: s3://aiofeed-backend/c147e8753b1126fc74600b16041aad6a
+      CodeUri: s3://aiofeed-backend/adfdf685298c9933f88225d748c28deb
       Description: Update a specific column mentioned as a param.
       Environment:
         Variables:
@@ -145,7 +187,7 @@ Resources:
     Type: AWS::Serverless::Function
   UpdateMonitoredChannels:
     Properties:
-      CodeUri: s3://aiofeed-backend/c147e8753b1126fc74600b16041aad6a
+      CodeUri: s3://aiofeed-backend/adfdf685298c9933f88225d748c28deb
       Description: Update monitored vod channels list.
       Environment:
         Variables:
@@ -173,7 +215,7 @@ Resources:
     Type: AWS::Serverless::Function
   UpdatePreferences:
     Properties:
-      CodeUri: s3://aiofeed-backend/c147e8753b1126fc74600b16041aad6a
+      CodeUri: s3://aiofeed-backend/adfdf685298c9933f88225d748c28deb
       Description: Update preferences for mentioned data name/type.
       Environment:
         Variables:

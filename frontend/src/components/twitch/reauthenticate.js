@@ -6,13 +6,9 @@ export default async (setTwitchToken, setRefreshToken) => {
   console.log("---Re-authenticating with Twitch.---");
 
   return await axios
-    .post(
-      `https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=${encodeURI(
-        getCookie(`Twitch-refresh_token`)
-      )}&client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&client_secret=${
-        process.env.REACT_APP_TWITCH_SECRET
-      }&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`
-    )
+    .put("https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/reauth/twitch", {
+      refresh_token: getCookie(`Twitch-refresh_token`),
+    })
     .then(async (res) => {
       AddCookie("Twitch-access_token", res.data.access_token);
       AddCookie("Twitch-refresh_token", res.data.refresh_token);
