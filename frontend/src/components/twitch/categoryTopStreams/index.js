@@ -172,7 +172,7 @@ export default () => {
   }, [fetchVideos]);
 
   return (
-    <CSSTransition in={true} classNames='fade-750ms' appear>
+    <CSSTransition in={true} timeout={750} classNames='fade-750ms' appear>
       <>
         <HeaderContainer>
           <div

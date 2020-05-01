@@ -13,7 +13,6 @@ export const NotificationsProvider = ({ children }) => {
 
   const addNotification = useCallback(
     async (noti, status) => {
-      console.log("addNotification");
       await new Promise((resolve, reject) => {
         try {
           const newNotifications = [...unseenNotifications];

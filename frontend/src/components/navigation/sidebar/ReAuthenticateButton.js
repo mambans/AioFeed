@@ -38,7 +38,6 @@ const authenticatePopup = async (winName, domain, urlParam) => {
 };
 
 export default ({ disconnect, serviceName, style }) => {
-  console.log("serviceName", serviceName);
   const {
     twitchUsername,
     twitchProfileImg,

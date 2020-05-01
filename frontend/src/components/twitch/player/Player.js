@@ -136,19 +136,6 @@ export default () => {
   }, [channelInfo, channelName, p_title, videoId]);
 
   useEffect(() => {
-    if (videoId && !channelName) {
-      const timer = setTimeout(async () => {
-        if (twitchPlayer.current)
-          await fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
-      }, 5000);
-
-      return () => {
-        clearTimeout(timer);
-      };
-    }
-  }, [videoId, channelName, p_title]);
-
-  useEffect(() => {
     const uptTimer = uptimeTimer.current;
     document.documentElement.style.overflow = "hidden";
     setShrinkNavbar("true");
@@ -177,11 +164,23 @@ export default () => {
     };
   }, [setShrinkNavbar, setFooterVisible, setVisible, channelName, videoId]);
 
+  useEffect(() => {
+    if (videoId && !channelName) {
+      const timer = setTimeout(async () => {
+        if (twitchPlayer.current)
+          await fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
+      }, 5000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [videoId, channelName, p_title]);
+
   const OnlineEvents = useCallback(() => {
     console.log("Stream is Online");
+    document.title = `AF | ${channelName} Live`;
     twitchPlayer.current.showPlayerControls(false);
 
-    document.title = `AF | ${channelName} Live`;
     setTimeout(() => {
       if (!channelInfo) fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
       if (!uptime) fetchUptime(twitchPlayer, setUptime, uptimeTimer);

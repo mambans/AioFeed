@@ -76,7 +76,7 @@ export const StyledsidebarItem = styled.div`
   font-size: 0.9rem;
   position: relative;
   height: 62px;
-  box-shadow: -275px 0 1px 1px var(--twitchSidebarItemAnimationColor);
+  box-shadow: -276px 0 1px 1px var(--twitchSidebarItemAnimationColor);
 
   &:hover {
     box-shadow: 0 0 1px 1px var(--twitchSidebarItemAnimationColor);
