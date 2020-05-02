@@ -45,6 +45,7 @@ export default () => {
   const { p_uptime, p_viewers, p_title, p_game, p_channelInfos } = useLocation().state || {};
   const channelName = useParams().channelName || undefined;
   const videoId = useParams().videoId || undefined;
+  const time = useLocation().search.replace("?t=", "").replace("?time=", "");
 
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const { setTwitchToken, setRefreshToken } = useContext(AccountContext);
@@ -150,6 +151,7 @@ export default () => {
       channel: channelName && !videoId ? channelName : null,
       video: videoId || null,
       muted: false,
+      time: time.length >= 1 ? time : null,
     });
 
     return () => {
