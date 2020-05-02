@@ -164,7 +164,7 @@ export default () => {
       clearInterval(viewersTimer.current);
       clearInterval(uptTimer);
     };
-  }, [setShrinkNavbar, setFooterVisible, setVisible, channelName, videoId]);
+  }, [setShrinkNavbar, setFooterVisible, setVisible, channelName, videoId, time]);
 
   useEffect(() => {
     if (videoId && !channelName) {
