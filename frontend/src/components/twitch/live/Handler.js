@@ -326,14 +326,14 @@ export default ({ children }) => {
         setLoadingStates({ refreshing: false, error: error, loaded: true });
       }
     })();
+  }, [refresh, autoRefreshEnabled]);
 
-    // const refreshTimer = timer.current;
-
+  useEffect(() => {
     return () => {
       console.log("Unmounting");
       clearInterval(timer.current);
     };
-  }, [refresh, autoRefreshEnabled]);
+  }, []);
 
   if (!twitchToken) {
     return (
