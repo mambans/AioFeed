@@ -12,8 +12,8 @@ export default async (setTwitchToken, setRefreshToken) => {
     .then(async (res) => {
       AddCookie("Twitch-access_token", res.data.access_token);
       AddCookie("Twitch-refresh_token", res.data.refresh_token);
-      setTwitchToken(res.data.access_token);
-      setRefreshToken(res.data.refresh_token);
+      if (setTwitchToken) setTwitchToken(res.data.access_token);
+      if (setRefreshToken) setRefreshToken(res.data.refresh_token);
       console.log("Successfully re-authenticated to Twitch.");
 
       return res.data.access_token;

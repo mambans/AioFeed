@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { getCookie } from "./../../../util/Utils";
+import validateToken from "../validateToken";
 
 /**
  * Fetch and Set uptime state from a Live stream.
@@ -23,22 +24,24 @@ export default async (twitchPlayer, setUptime, uptimeTimer) => {
     },
   };
 
-  await axios(axiosConfig)
-    .then((res) => {
-      if (res.data.data[0] && res.data.data[0].started_at) {
-        setUptime(res.data.data[0].started_at);
-      } else {
-        uptimeTimer.current = setInterval(async () => {
-          await axios(axiosConfig).then((res) => {
-            if (res.data.data[0] && res.data.data[0].started_at) {
-              setUptime(res.data.data[0].started_at);
-              clearInterval(uptimeTimer.current);
-            }
-          });
-        }, 1000 * 30);
-      }
-    })
-    .catch((error) => {
-      console.log("Uptime stream: error", error);
-    });
+  await validateToken().then(async () => {
+    await axios(axiosConfig)
+      .then((res) => {
+        if (res.data.data[0] && res.data.data[0].started_at) {
+          setUptime(res.data.data[0].started_at);
+        } else {
+          uptimeTimer.current = setInterval(async () => {
+            await axios(axiosConfig).then((res) => {
+              if (res.data.data[0] && res.data.data[0].started_at) {
+                setUptime(res.data.data[0].started_at);
+                clearInterval(uptimeTimer.current);
+              }
+            });
+          }, 1000 * 30);
+        }
+      })
+      .catch((error) => {
+        console.log("Uptime stream: error", error);
+      });
+  });
 };

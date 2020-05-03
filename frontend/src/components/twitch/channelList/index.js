@@ -13,6 +13,7 @@ import ChannelListElement from "../channelList/ChannelListElement";
 import AddVideoExtraData from "../AddVideoExtraData";
 import GetFollowedChannels from "../GetFollowedChannels";
 import { CSSTransition } from "react-transition-group";
+import validateToken from "../validateToken";
 
 export default () => {
   const [channels, setChannels] = useState();
@@ -58,15 +59,17 @@ export default () => {
     };
   };
 
-  const fetchFollowedChannels = useCallback(() => {
-    GetFollowedChannels().then(async (res) => {
-      if (res) {
-        channelObjectList(res).then(async (res) => {
-          await AddVideoExtraData(res, false).then(async (res) => {
-            setChannels(res.data);
+  const fetchFollowedChannels = useCallback(async () => {
+    await validateToken().then(() => {
+      GetFollowedChannels().then(async (res) => {
+        if (res) {
+          channelObjectList(res).then(async (res) => {
+            await AddVideoExtraData(res, false).then(async (res) => {
+              setChannels(res.data);
+            });
           });
-        });
-      }
+        }
+      });
     });
   }, []);
 

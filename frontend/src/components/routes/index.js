@@ -51,7 +51,7 @@ export default () => {
                   <Route path='game/:category' element={<TopStreams />} />
                   <Route path='top/:category' element={<TopStreams />} />
 
-                  <Route path='video/:videoId' element={<Player />} />
+                  <Route path='videos/:videoId' element={<Player />} />
                   <Route path='vod/:videoId' element={<Player />} />
                   <Route path=':channelName/*' element={<TwitchChannelRoutes />} />
                   {/* <Route path='/:channelName' element={<Player />} />

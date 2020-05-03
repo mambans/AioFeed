@@ -97,7 +97,7 @@ export default ({
             style={{ marginRight: "10px" }}
             className='linkWithIcon'
             to={{
-              pathname: `/${latestVod.user_name}/video/${latestVod.id}`,
+              pathname: `/${latestVod.user_name}/videos/${latestVod.id}`,
               state: {
                 p_title: latestVod.title,
                 p_channel: latestVod.user_name,

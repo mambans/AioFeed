@@ -36,7 +36,7 @@ export const GameListUlContainer = styled.ul`
   position: absolute;
   background: linear-gradient(rgba(0, 0, 0, 0.4) 0%, var(--popupListsBackground) 15%) !important;
   box-shadow: var(--refreshButtonShadow);
-  width: 275px;
+  width: 310px;
   scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0) !important;
   scrollbar-width: thin !important;
 
@@ -138,21 +138,22 @@ export const SearchGameForm = styled.form`
   box-shadow: var(--refreshButtonShadow);
   border-radius: 5px;
   transition: width 250ms, min-width 250ms, margin-left 250ms;
-  width: ${({ open }) => (open ? "275px" : "125px")};
-  min-width: ${({ open }) => (open ? "275px" : "125px")};
+  width: ${({ open }) => (open ? "310px" : "125px")};
+  min-width: ${({ open }) => (open ? "310px" : "125px")};
   margin-left: ${({ open }) => (open ? "0px" : "150px")};
   z-index: 4;
 
   li {
     button.VodButton,
-    svg.StreamFollowBtn {
+    svg.StreamFollowBtn,
+    button.StreamUpdateNoitificationsButton {
       opacity: 1;
     }
   }
 
   &:focus-within {
-    width: 275px;
-    min-width: 275px;
+    width: 310px;
+    min-width: 310px;
     margin-left: 0px;
   }
 

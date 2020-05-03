@@ -51,6 +51,8 @@ export default () => {
     setEnableTwitter,
     isEnabledOfflineNotifications,
     setIsEnabledOfflineNotifications,
+    isEnabledUpdateNotifications,
+    setIsEnabledUpdateNotifications,
   } = useContext(FeedsContext);
   const [showAddImage, setShowAddImage] = useState(false);
 
@@ -252,6 +254,23 @@ export default () => {
             twitchToken
               ? (isEnabledOfflineNotifications ? "Disable" : "Enable") +
                 `notifications for when streams go offline`
+              : `Need to connect/authenticate with a Twitch account first.`
+          }
+          width={40}
+          height={20}
+        />
+        <ToggleSwitch
+          setEnable={(value) => {
+            setIsEnabledUpdateNotifications(value);
+            AddCookie("Twitch_update_notifications", value);
+          }}
+          enabled={isEnabledUpdateNotifications}
+          label='Twitch update notifications'
+          tokenExists={twitchToken}
+          tooltip={
+            twitchToken
+              ? (isEnabledUpdateNotifications ? "Disable" : "Enable") +
+                `notifications for when streams title or game changes`
               : `Need to connect/authenticate with a Twitch account first.`
           }
           width={40}

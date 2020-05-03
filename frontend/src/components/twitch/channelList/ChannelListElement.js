@@ -4,6 +4,7 @@ import React from "react";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 import VodsFollowUnfollowBtn from "../vods/VodsFollowUnfollowBtn";
 import { ChannelListLi } from "./StyledComponents";
+import AddUpdateNotificationsButton from "./../AddUpdateNotificationsButton";
 
 export default ({ data }) => {
   return (
@@ -23,9 +24,9 @@ export default ({ data }) => {
         )}
         {data.user_name}
       </Link>
-      <div>
+      <div className='ButtonContianer'>
         <VodsFollowUnfollowBtn channel={data.user_name} />
-
+        <AddUpdateNotificationsButton channel={data.user_name} />
         <FollowUnfollowBtn
           style={{ marginLeft: "5px", padding: "0" }}
           size={22}

@@ -36,6 +36,9 @@ export const FeedsProvider = ({ children }) => {
   const [isEnabledOfflineNotifications, setIsEnabledOfflineNotifications] = useState(
     getCookie("Twitch_offline_notifications")
   );
+  const [isEnabledUpdateNotifications, setIsEnabledUpdateNotifications] = useState(
+    getCookie("Twitch_update_notifications")
+  );
 
   return (
     <FeedsContext.Provider
@@ -58,6 +61,8 @@ export const FeedsProvider = ({ children }) => {
         setIsEnabledOfflineNotifications: setIsEnabledOfflineNotifications,
         showTwitchSidebar: showTwitchSidebar,
         setShowTwitchSidebar: setShowTwitchSidebar,
+        isEnabledUpdateNotifications: isEnabledUpdateNotifications,
+        setIsEnabledUpdateNotifications: setIsEnabledUpdateNotifications,
       }}>
       {children}
     </FeedsContext.Provider>

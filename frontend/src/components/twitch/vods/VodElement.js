@@ -20,6 +20,7 @@ import { getCookie, truncate } from "../../../util/Utils";
 import { VodLiveIndicator, VodType, VodPreview, VodDates } from "./StyledComponents";
 import VodsFollowUnfollowBtn from "./VodsFollowUnfollowBtn";
 import { formatViewerNumbers, formatTwitchVodsDuration } from "./../TwitchUtils";
+import validateToken from "../validateToken";
 
 export default ({ data, vodBtnDisabled }) => {
   const [previewAvailable, setPreviewAvailable] = useState({});
@@ -31,32 +32,34 @@ export default ({ data, vodBtnDisabled }) => {
     if (!previewAvailable.data) {
       hoverTimeoutRef.current = setTimeout(
         async () => {
-          await axios
-            .get(`https://api.twitch.tv/kraken/videos/${data.id}`, {
-              headers: {
-                Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-                "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-                Accept: "application/vnd.twitchtv.v5+json",
-              },
-            })
-            .then((res) => {
-              if (res.data.status === "recording") {
-                setPreviewAvailable({
-                  status: "recording",
-                  error: "Stream is live - no preview yet",
-                });
-              } else {
-                if (data.thumbnail_url === "") data.thumbnail_url = res.data.preview.template;
-                setPreviewAvailable({
-                  data: res.data.animated_preview_url,
-                });
-              }
-              setShowPreview(true);
-            })
-            .catch((error) => {
-              setPreviewAvailable({ error: "Preview failed" });
-              console.error(error);
-            });
+          await validateToken().then(async () => {
+            await axios
+              .get(`https://api.twitch.tv/kraken/videos/${data.id}`, {
+                headers: {
+                  Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
+                  "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+                  Accept: "application/vnd.twitchtv.v5+json",
+                },
+              })
+              .then((res) => {
+                if (res.data.status === "recording") {
+                  setPreviewAvailable({
+                    status: "recording",
+                    error: "Stream is live - no preview yet",
+                  });
+                } else {
+                  if (data.thumbnail_url === "") data.thumbnail_url = res.data.preview.template;
+                  setPreviewAvailable({
+                    data: res.data.animated_preview_url,
+                  });
+                }
+                setShowPreview(true);
+              })
+              .catch((error) => {
+                setPreviewAvailable({ error: "Preview failed" });
+                console.error(error);
+              });
+          });
         },
         previewAvailable.error ? 5000 : 1500
       );
@@ -155,7 +158,7 @@ export default ({ data, vodBtnDisabled }) => {
           }>
           <VideoTitle
             to={{
-              pathname: `/${data.user_name}/video/${data.id}`,
+              pathname: `/${data.user_name}/videos/${data.id}`,
               state: {
                 p_title: data.title,
               },
@@ -167,7 +170,7 @@ export default ({ data, vodBtnDisabled }) => {
       ) : (
         <VideoTitle
           to={{
-            pathname: `/${data.user_name}/video/${data.id}`,
+            pathname: `/${data.user_name}/videos/${data.id}`,
             state: {
               p_title: data.title,
             },

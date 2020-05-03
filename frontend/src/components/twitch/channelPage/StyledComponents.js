@@ -176,7 +176,8 @@ export const Name = styled.div`
       padding: 0 10px;
     }
 
-    .StreamFollowBtn {
+    .StreamFollowBtn,
+    .StreamUpdateNoitificationsButton {
       opacity: 1;
     }
   }

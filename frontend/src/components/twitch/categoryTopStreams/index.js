@@ -29,6 +29,7 @@ import StreamEle from "./../live/StreamElement";
 import ClipElement from "./../channelPage/ClipElement";
 import VodElement from "./../vods/VodElement";
 import Util from "./../../../util/Util";
+import validateToken from "../validateToken";
 
 export default () => {
   const { category } = useParams();
@@ -162,13 +163,17 @@ export default () => {
   const refresh = useCallback(() => {
     setRefreshing(true);
     oldTopData.current = null;
-    fetchVideos();
+    validateToken().then(() => {
+      fetchVideos();
+    });
   }, [fetchVideos]);
 
   useEffect(() => {
     setRefreshing(true);
     setTopData([]);
-    fetchVideos();
+    validateToken().then(() => {
+      fetchVideos();
+    });
   }, [fetchVideos]);
 
   return (

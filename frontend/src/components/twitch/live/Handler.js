@@ -10,6 +10,7 @@ import FeedsContext from "./../../feed/FeedsContext";
 import VodsContext from "./../vods/VodsContext";
 import FetchSingelChannelVods from "./../vods/FetchSingelChannelVods";
 import { AddCookie, getCookie, getLocalstorage, truncate } from "../../../util/Utils";
+import validateToken from "../validateToken";
 
 const REFRESH_RATE = 25; // seconds
 
@@ -17,7 +18,11 @@ export default ({ children }) => {
   const addNotification = useContext(NotificationsContext).addNotification;
   const { autoRefreshEnabled, twitchToken } = useContext(AccountContext);
   const { setVods } = useContext(VodsContext);
-  const { enableTwitchVods, isEnabledOfflineNotifications } = useContext(FeedsContext);
+  const {
+    enableTwitchVods,
+    isEnabledOfflineNotifications,
+    isEnabledUpdateNotifications,
+  } = useContext(FeedsContext);
   const [refreshTimer, setRefreshTimer] = useState(20);
   const [loadingStates, setLoadingStates] = useState({
     refreshing: false,
@@ -74,68 +79,75 @@ export default ({ children }) => {
     }
   };
 
-  const addSystemNotification = useCallback(
-    async (status, stream) => {
-      if (Notification.permission === "granted") {
-        if (
-          isEnabledOfflineNotifications &&
-          status === "offline" &&
-          enableTwitchVods &&
-          getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
-        ) {
-          let notification = new Notification(`${stream.user_name} Offline`, {
-            body: "",
+  const addSystemNotification = useCallback(async (status, stream, changedObj) => {
+    if (Notification.permission === "granted") {
+      if (status === "offline") {
+        let notification = new Notification(`${stream.user_name} Offline`, {
+          body: "",
 
-            icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-            badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-            silent: true,
+          icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+          badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+          silent: true,
+        });
+
+        const vodId = await axios
+          .get(`https://api.twitch.tv/helix/videos?`, {
+            params: {
+              user_id: stream.user_id,
+              first: 1,
+              type: "archive",
+            },
+            headers: {
+              Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
+              "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+            },
+          })
+          .then((res) => {
+            return res.data.data[0];
+          })
+          .catch((error) => {
+            console.error(error);
           });
 
-          const vodId = await axios
-            .get(`https://api.twitch.tv/helix/videos?`, {
-              params: {
-                user_id: stream.user_id,
-                first: 1,
-                type: "archive",
-              },
-              headers: {
-                Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-                "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-              },
-            })
-            .then((res) => {
-              return res.data.data[0];
-            })
-            .catch((error) => {
-              console.error(error);
-            });
+        notification.onclick = async function (event) {
+          event.preventDefault(); // prevent the browser from focusing the Notification's tab
+          await markStreamAsSeen();
+          window.open("https://www.twitch.tv/videos/" + vodId.id, "_blank");
+        };
+        return notification;
+      } else if (status === "online") {
+        let notification = new Notification(`${stream.user_name} Live`, {
+          body: `${truncate(stream.title, 60)}\n${stream.game_name}`,
+          icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+          badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+          silent: false,
+        });
 
-          notification.onclick = async function (event) {
-            event.preventDefault(); // prevent the browser from focusing the Notification's tab
-            await markStreamAsSeen();
-            window.open("https://www.twitch.tv/videos/" + vodId.id, "_blank");
-          };
-          return notification;
-        } else if (status === "online") {
-          let notification = new Notification(`${stream.user_name} Live`, {
-            body: `${truncate(stream.title, 60)}\n${stream.game_name}`,
-            icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-            badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-            silent: false,
-          });
+        notification.onclick = async function (event) {
+          event.preventDefault(); // prevent the browser from focusing the Notification's tab
+          await markStreamAsSeen();
+          window.open("https://aiofeed.com/" + stream.user_name.toLowerCase(), "_blank");
+        };
 
-          notification.onclick = async function (event) {
-            event.preventDefault(); // prevent the browser from focusing the Notification's tab
-            await markStreamAsSeen();
-            window.open("https://aiofeed.com/" + stream.user_name.toLowerCase(), "_blank");
-          };
+        return notification;
+      } else if (status === "updated") {
+        let notification = new Notification(`${stream.user_name} ${changedObj.valueKey} updated`, {
+          body: `+ ${truncate(changedObj.newValue, 60)}\n- ${truncate(changedObj.oldValue, 60)}`,
+          icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+          badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+          silent: false,
+        });
 
-          return notification;
-        }
+        notification.onclick = async function (event) {
+          event.preventDefault(); // prevent the browser from focusing the Notification's tab
+          await markStreamAsSeen();
+          window.open("https://aiofeed.com/" + stream.user_name.toLowerCase(), "_blank");
+        };
+
+        return notification;
       }
-    },
-    [enableTwitchVods, isEnabledOfflineNotifications]
-  );
+    }
+  }, []);
 
   const refresh = useCallback(
     async (disableNotifications) => {
@@ -145,7 +157,10 @@ export default ({ children }) => {
       });
       try {
         // followedChannels.current = await getFollowedChannels(parseInt(twitchUserId));
-        followedChannels.current = await GetFollowedChannels();
+        // followedChannels.current = await GetFollowedChannels();
+        followedChannels.current = await validateToken().then((res) => {
+          return GetFollowedChannels();
+        });
 
         if (followedChannels.current && followedChannels.current[0]) {
           AddCookie("Twitch-username", followedChannels.current[0].from_name);
@@ -164,23 +179,19 @@ export default ({ children }) => {
 
           if (!disableNotifications) {
             liveStreams.current.forEach((stream) => {
-              let isStreamLive = oldLiveStreams.current.find(
+              const alreadyLive = oldLiveStreams.current.find(
                 ({ user_name }) => user_name === stream.user_name
               );
 
-              if (!isStreamLive) {
+              if (!alreadyLive) {
                 addSystemNotification("online", stream);
-
                 addNotification(stream, "Live");
-
-                // console.log(`${stream.user_name} went online - array: `, channels);
 
                 if (
                   enableTwitchVods &&
                   getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
                 ) {
                   setTimeout(async () => {
-                    console.log("Fetching", stream.user_name, "live vod");
                     await FetchSingelChannelVods(stream.user_id, setVods);
                   }, 30000);
                 }
@@ -198,30 +209,63 @@ export default ({ children }) => {
                   document.title = `(${1}) ${title}`;
                 }
                 // }
+              } else if (
+                isEnabledUpdateNotifications &&
+                getLocalstorage("UpdateNotificationsChannels") &&
+                getLocalstorage("UpdateNotificationsChannels").includes(
+                  stream.user_name.toLowerCase()
+                )
+              ) {
+                const oldStreamData = oldLiveStreams.current.find((old_stream) => {
+                  return old_stream.user_name === stream.user_name;
+                });
+
+                if (oldStreamData && stream) {
+                  if (
+                    oldStreamData.game_name !== stream.game_name &&
+                    oldStreamData.title !== stream.title
+                  ) {
+                    addSystemNotification("updated", stream, {
+                      valueKey: "Title & Game",
+                      newValue: `${truncate(stream.title, 40)} in ${stream.game_name}`,
+                      oldValue: `${truncate(oldStreamData.title, 40)} in ${
+                        oldStreamData.game_name
+                      }`,
+                    });
+                  } else if (oldStreamData.game_name !== stream.game_name) {
+                    addSystemNotification("updated", stream, {
+                      valueKey: "Game",
+                      newValue: stream.game_name,
+                      oldValue: oldStreamData.game_name,
+                    });
+                  } else if (oldStreamData.title !== stream.title) {
+                    addSystemNotification("updated", stream, {
+                      valueKey: "Title",
+                      newValue: stream.title,
+                      oldValue: oldStreamData.title,
+                    });
+                  }
+                }
               }
             });
 
             oldLiveStreams.current.forEach((stream) => {
-              let isStreamLive = liveStreams.current.find(
+              const isStreamLive = liveStreams.current.find(
                 ({ user_name }) => user_name === stream.user_name
               );
-              if (!isStreamLive) {
-                // console.log(stream.user_name, "went Offline.");
+              if (
+                !isStreamLive &&
+                isEnabledOfflineNotifications &&
+                enableTwitchVods &&
+                getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
+              ) {
                 addSystemNotification("offline", stream);
-
                 addNotification(stream, "Offline");
 
-                // console.log(`${stream.user_name} went offline - array: `, channels);
-
-                if (
-                  enableTwitchVods &&
-                  getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
-                ) {
-                  setTimeout(async () => {
-                    console.log("Fetching", stream.user_name, "offline vod");
-                    await FetchSingelChannelVods(stream.user_id, setVods);
-                  }, 0);
-                }
+                setTimeout(async () => {
+                  console.log("Fetching", stream.user_name, "offline vod");
+                  await FetchSingelChannelVods(stream.user_id, setVods);
+                }, 0);
               }
             });
           }
@@ -242,7 +286,14 @@ export default ({ children }) => {
         });
       }
     },
-    [addNotification, addSystemNotification, enableTwitchVods, setVods]
+    [
+      addNotification,
+      addSystemNotification,
+      enableTwitchVods,
+      setVods,
+      isEnabledUpdateNotifications,
+      isEnabledOfflineNotifications,
+    ]
   );
 
   useEffect(() => {
@@ -275,16 +326,14 @@ export default ({ children }) => {
         setLoadingStates({ refreshing: false, error: error, loaded: true });
       }
     })();
-  }, [refresh, autoRefreshEnabled]);
 
-  useEffect(() => {
-    const refreshTimer = timer.current;
+    // const refreshTimer = timer.current;
 
     return () => {
       console.log("Unmounting");
-      clearInterval(refreshTimer);
+      clearInterval(timer.current);
     };
-  }, []);
+  }, [refresh, autoRefreshEnabled]);
 
   if (!twitchToken) {
     return (

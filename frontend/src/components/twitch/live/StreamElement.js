@@ -23,6 +23,7 @@ import { truncate } from "../../../util/Utils";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 import VodsFollowUnfollowBtn from "./../vods/VodsFollowUnfollowBtn";
 import { formatViewerNumbers } from "./../TwitchUtils";
+import AddUpdateNotificationsButton from "../AddUpdateNotificationsButton";
 
 const HOVER_DELAY = 500; // 1000
 
@@ -198,7 +199,8 @@ function StreamEle(data_p) {
           </ChannelNameDiv>
           {(location.pathname === "/feed/" || location.pathname === "/feed") && (
             <div style={{ display: "flex", gridRow: "1", justifyContent: "right" }}>
-              <VodsFollowUnfollowBtn channel={data.user_name} marginright='7px;' />
+              <VodsFollowUnfollowBtn channel={data.user_name} marginright='5px;' />
+              <AddUpdateNotificationsButton channel={data.user_name} marginright='5px;' />
               <FollowUnfollowBtn
                 style={{
                   gridRow: "1",

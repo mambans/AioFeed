@@ -40,6 +40,7 @@ import {
 import PlayerNavbar from "./PlayerNavbar";
 import setFavion from "../../setFavion";
 import { formatViewerNumbers } from "./../TwitchUtils";
+import validateToken from "../validateToken";
 
 export default () => {
   const { p_uptime, p_viewers, p_title, p_game, p_channelInfos } = useLocation().state || {};
@@ -152,6 +153,7 @@ export default () => {
       video: videoId || null,
       muted: false,
       time: time.length >= 1 ? time : null,
+      allowfullscreen: true,
     });
 
     return () => {
@@ -294,18 +296,19 @@ export default () => {
     const LeftPosition = (window.screen.width - Width) / 2;
     const TopPosition = (window.screen.height - Height) / 2;
     const settings = `height=${Height},width=${Width},top=${TopPosition},left=${LeftPosition},scrollbars,resizable,status,location,toolbar,`;
-
-    await axios(axiosConfig("post"))
-      .then((res) => {
-        window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
-      })
-      .catch(() => {
-        reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
-          await axios(axiosConfig("post", access_token)).then((res) => {
-            window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
+    await validateToken().then(async () => {
+      await axios(axiosConfig("post"))
+        .then((res) => {
+          window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
+        })
+        .catch(() => {
+          reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
+            await axios(axiosConfig("post", access_token)).then((res) => {
+              window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
+            });
           });
         });
-      });
+    });
   };
 
   return (

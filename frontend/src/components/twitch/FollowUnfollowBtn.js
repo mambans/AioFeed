@@ -5,6 +5,7 @@ import { FollowBtn, UnfollowBtn } from "./StyledComponents";
 import AccountContext from "./../account/AccountContext";
 import reauthenticate from "./reauthenticate";
 import { getCookie } from "./../../util/Utils";
+import validateToken from "./validateToken";
 
 export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshStreams }) => {
   const [following, setFollowing] = useState(alreadyFollowedStatus || false);
@@ -23,62 +24,68 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
   };
 
   const UnfollowStream = async (user_id) => {
-    await axios(axiosConfig("delete", user_id))
-      .then(() => {
-        console.log(`Unfollowed: ${channelName}`);
-        if (refreshStreams) refreshStreams();
-      })
-      .catch(() => {
-        reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
-          await axios(axiosConfig("delete", user_id, access_token)).then(() => {
-            console.log(`Unfollowed: ${channelName}`);
-            if (refreshStreams) refreshStreams();
+    await validateToken().then(async () => {
+      await axios(axiosConfig("delete", user_id))
+        .then(() => {
+          console.log(`Unfollowed: ${channelName}`);
+          if (refreshStreams) refreshStreams();
+        })
+        .catch(() => {
+          reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
+            await axios(axiosConfig("delete", user_id, access_token)).then(() => {
+              console.log(`Unfollowed: ${channelName}`);
+              if (refreshStreams) refreshStreams();
+            });
           });
         });
-      });
+    });
   };
 
   async function followStream(user_id) {
-    await axios(axiosConfig("put", user_id))
-      .then((res) => {
-        console.log(`Followed: ${res.data.channel.display_name}`);
-        if (refreshStreams) refreshStreams();
-      })
-      .catch(() => {
-        reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
-          await axios(axiosConfig("put", user_id, access_token)).then((res) => {
-            console.log(`Followed: ${res.data.channel.display_name}`);
-            if (refreshStreams) refreshStreams();
+    await validateToken().then(async () => {
+      await axios(axiosConfig("put", user_id))
+        .then((res) => {
+          console.log(`Followed: ${res.data.channel.display_name}`);
+          if (refreshStreams) refreshStreams();
+        })
+        .catch(() => {
+          reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
+            await axios(axiosConfig("put", user_id, access_token)).then((res) => {
+              console.log(`Followed: ${res.data.channel.display_name}`);
+              if (refreshStreams) refreshStreams();
+            });
           });
         });
-      });
+    });
   }
 
   useEffect(() => {
     const checkFollowing = async () => {
-      await axios
-        .get(`https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${id}`, {
-          headers: {
-            Authorization: `OAuth ${getCookie("Twitch-access_token")}`,
-            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-            Accept: "application/vnd.twitchtv.v5+json",
-          },
-        })
-        .then(() => {
-          setFollowing(true);
-        })
-        .catch((error) => {
-          if (
-            error.response &&
-            error.response.status === 404 &&
-            error.response.statusText === "Not Found"
-          ) {
-            console.log(`Not following ${channelName}`);
-            setFollowing(false);
-          } else {
-            console.error(error);
-          }
-        });
+      await validateToken().then(async () => {
+        await axios
+          .get(`https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${id}`, {
+            headers: {
+              Authorization: `OAuth ${getCookie("Twitch-access_token")}`,
+              "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+              Accept: "application/vnd.twitchtv.v5+json",
+            },
+          })
+          .then(() => {
+            setFollowing(true);
+          })
+          .catch((error) => {
+            if (
+              error.response &&
+              error.response.status === 404 &&
+              error.response.statusText === "Not Found"
+            ) {
+              console.log(`Not following ${channelName}`);
+              setFollowing(false);
+            } else {
+              console.error(error);
+            }
+          });
+      });
     };
 
     if (!alreadyFollowedStatus) {

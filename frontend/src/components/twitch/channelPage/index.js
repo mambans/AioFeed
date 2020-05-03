@@ -30,6 +30,8 @@ import AddVideoExtraData from "../AddVideoExtraData";
 import fetchUptime from "./../player/fetchUptime";
 import fetchAndSetChannelInfo from "./../player/fetchAndSetChannelInfo";
 import setFavion from "../../setFavion";
+import validateToken from "../validateToken";
+import AddUpdateNotificationsButton from "../AddUpdateNotificationsButton";
 
 export default () => {
   const { channelName } = useParams();
@@ -84,137 +86,141 @@ export default () => {
 
   const fetchChannelVods = useCallback(
     async (pagination) => {
-      if (pagination) {
-        setVodsLoadmoreLoaded(false);
-      } else {
-        previosVodPage.current = null;
-      }
+      await validateToken().then(async () => {
+        if (pagination) {
+          setVodsLoadmoreLoaded(false);
+        } else {
+          previosVodPage.current = null;
+        }
 
-      await axios
-        .get(`https://api.twitch.tv/helix/videos?`, {
-          params: {
-            user_id: channelId,
-            first: numberOfVideos,
-            sort: sortVodsBy && sortVodsBy.toLowerCase(),
-            type: "all",
-            after: pagination || null,
-          },
-          headers: {
-            Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-          },
-        })
-        .then(async (res) => {
-          if (res.data.data.length === 0) {
-            setVods({ error: "No vods available" });
-            return "";
-          }
-          vodPagination.current = res.data.pagination.cursor;
+        await axios
+          .get(`https://api.twitch.tv/helix/videos?`, {
+            params: {
+              user_id: channelId,
+              first: numberOfVideos,
+              sort: sortVodsBy && sortVodsBy.toLowerCase(),
+              type: "all",
+              after: pagination || null,
+            },
+            headers: {
+              Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
+              "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+            },
+          })
+          .then(async (res) => {
+            if (res.data.data.length === 0) {
+              setVods({ error: "No vods available" });
+              return "";
+            }
+            vodPagination.current = res.data.pagination.cursor;
 
-          const videos = await AddVideoExtraData(res, false);
+            const videos = await AddVideoExtraData(res, false);
 
-          if (pagination) {
-            const finallVideos = videos.data.map((stream) => {
-              if (stream.type === "archive") {
-                stream.endDate = durationToDate(stream.duration, stream.published_at);
-              } else {
-                stream.endDate = new Date(stream.published_at);
-              }
-              return stream;
-            });
+            if (pagination) {
+              const finallVideos = videos.data.map((stream) => {
+                if (stream.type === "archive") {
+                  stream.endDate = durationToDate(stream.duration, stream.published_at);
+                } else {
+                  stream.endDate = new Date(stream.published_at);
+                }
+                return stream;
+              });
 
-            const allVods = previosVodPage.current.concat(finallVideos);
-            previosVodPage.current = allVods;
+              const allVods = previosVodPage.current.concat(finallVideos);
+              previosVodPage.current = allVods;
 
-            setVodsLoadmoreLoaded(true);
-            setVods(allVods);
+              setVodsLoadmoreLoaded(true);
+              setVods(allVods);
 
-            setTimeout(() => {
-              if (loadmoreVodsRef.current) {
-                loadmoreVodsRef.current.scrollIntoView({
-                  behavior: "smooth",
-                  block: "end",
-                  inline: "nearest",
-                });
-              }
-            }, 0);
-          } else {
-            const finallVideos = await videos.data.map((stream) => {
-              if (stream.type === "archive") {
-                stream.endDate = durationToDate(stream.duration, stream.published_at);
-              } else {
-                stream.endDate = new Date(stream.published_at);
-              }
-              return stream;
-            });
+              setTimeout(() => {
+                if (loadmoreVodsRef.current) {
+                  loadmoreVodsRef.current.scrollIntoView({
+                    behavior: "smooth",
+                    block: "end",
+                    inline: "nearest",
+                  });
+                }
+              }, 0);
+            } else {
+              const finallVideos = await videos.data.map((stream) => {
+                if (stream.type === "archive") {
+                  stream.endDate = durationToDate(stream.duration, stream.published_at);
+                } else {
+                  stream.endDate = new Date(stream.published_at);
+                }
+                return stream;
+              });
 
-            previosVodPage.current = finallVideos;
+              previosVodPage.current = finallVideos;
 
-            setVods(finallVideos);
-          }
-        })
-        .catch((e) => {
-          console.error(e);
-        });
+              setVods(finallVideos);
+            }
+          })
+          .catch((e) => {
+            console.error(e);
+          });
+      });
     },
     [numberOfVideos, sortVodsBy, channelId]
   );
 
   const fetchClips = useCallback(
     async (pagination) => {
-      if (pagination) {
-        setClipsLoadmoreLoaded(false);
-      } else {
-        previosClipsPage.current = null;
-      }
+      await validateToken().then(async () => {
+        if (pagination) {
+          setClipsLoadmoreLoaded(false);
+        } else {
+          previosClipsPage.current = null;
+        }
 
-      await axios
-        .get(`https://api.twitch.tv/helix/clips`, {
-          params: {
-            broadcaster_id: channelId,
-            first: numberOfVideos,
-            after: pagination || null,
-            started_at:
-              sortClipsBy &&
-              new Date(new Date().setDate(new Date().getDate() - sortClipsBy)).toISOString(),
-            ended_at: sortClipsBy && new Date().toISOString(),
-          },
-          headers: {
-            Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-          },
-        })
-        .then(async (res) => {
-          if (res.data.data.length === 0) {
-            setClips({ error: "No clips available" });
-            return "";
-          }
-          clipPagination.current = res.data.pagination.cursor;
-          const finallClips = await AddVideoExtraData(res);
+        await axios
+          .get(`https://api.twitch.tv/helix/clips`, {
+            params: {
+              broadcaster_id: channelId,
+              first: numberOfVideos,
+              after: pagination || null,
+              started_at:
+                sortClipsBy &&
+                new Date(new Date().setDate(new Date().getDate() - sortClipsBy)).toISOString(),
+              ended_at: sortClipsBy && new Date().toISOString(),
+            },
+            headers: {
+              Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
+              "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+            },
+          })
+          .then(async (res) => {
+            if (res.data.data.length === 0) {
+              setClips({ error: "No clips available" });
+              return "";
+            }
+            clipPagination.current = res.data.pagination.cursor;
+            const finallClips = await AddVideoExtraData(res);
 
-          if (pagination) {
-            const allClips = previosClipsPage.current.concat(finallClips.data);
-            previosClipsPage.current = allClips;
-            setClipsLoadmoreLoaded(true);
-            setClips(allClips);
+            if (pagination) {
+              const allClips = previosClipsPage.current.concat(finallClips.data);
+              previosClipsPage.current = allClips;
+              setClipsLoadmoreLoaded(true);
+              setClips(allClips);
 
-            setTimeout(() => {
-              if (loadmoreClipsRef.current) {
-                loadmoreClipsRef.current.scrollIntoView({
-                  behavior: "smooth",
-                  block: "end",
-                  inline: "nearest",
-                });
-              }
-            }, 0);
-          } else {
-            previosClipsPage.current = finallClips.data;
-            setClips(finallClips.data);
-          }
-        })
-        .catch((error) => {
-          console.error("fetchClips: ", error);
-        });
+              setTimeout(() => {
+                if (loadmoreClipsRef.current) {
+                  loadmoreClipsRef.current.scrollIntoView({
+                    behavior: "smooth",
+                    block: "end",
+                    inline: "nearest",
+                  });
+                }
+              }, 0);
+            } else {
+              previosClipsPage.current = finallClips.data;
+              setClips(finallClips.data);
+            }
+          })
+          .catch((error) => {
+            console.error("fetchClips: ", error);
+          });
+      });
     },
     [numberOfVideos, sortClipsBy, channelId]
   );
@@ -229,7 +235,10 @@ export default () => {
 
   useEffect(() => {
     (async () => {
-      if (!channelId) await getIdFromName();
+      if (!channelId)
+        await validateToken().then(async () => {
+          await getIdFromName();
+        });
       if (!channelInfo && channelId && channelId !== "Not Found") getChannelInfo();
     })();
 
@@ -459,7 +468,10 @@ export default () => {
                         />
                       )}
                       {channelInfo && (
-                        <FollowUnfollowBtn channelName={channelName} id={channelInfo._id} />
+                        <>
+                          <FollowUnfollowBtn channelName={channelName} id={channelInfo._id} />
+                          <AddUpdateNotificationsButton channel={channelName} size={30} />
+                        </>
                       )}
                     </div>
                     <p id='title'>{channelInfo.status}</p>

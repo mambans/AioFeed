@@ -26,11 +26,10 @@ export default ({ channel, loweropacity, marginright }) => {
 
   async function removeChannel(channel) {
     try {
-      const index = (channels || getLocalstorage("VodChannels")).indexOf(channel.toLowerCase());
-      const existingChannels = [...channels];
-      existingChannels.splice(index, 1);
-      // setChannels(existingChannels);
-      localStorage.setItem("VodChannels", JSON.stringify(existingChannels));
+      const vodChannels = new Set(channels || getLocalstorage("VodChannels") || []);
+
+      vodChannels.delete(channel.toLowerCase());
+      localStorage.setItem("VodChannels", JSON.stringify(Array.from(vodChannels)));
 
       await axios
         .put(
@@ -38,7 +37,7 @@ export default ({ channel, loweropacity, marginright }) => {
           {
             username: username,
             authkey: authKey,
-            channels: existingChannels,
+            channels: Array.from(vodChannels),
           }
         )
         .catch((err) => {
