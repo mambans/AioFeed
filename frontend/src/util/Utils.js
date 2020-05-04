@@ -50,6 +50,6 @@ export const getLocalstorage = (name) => {
 };
 
 export const truncate = (input, max) => {
-  if (input.length > max) return input.substring(0, max) + "..";
+  if (input && input.length > max) return input.substring(0, max) + "..";
   else return input;
 };
