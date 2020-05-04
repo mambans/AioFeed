@@ -123,6 +123,7 @@ export default () => {
                     fontSize: "0.9rem",
                     fontWeight: "bold",
                     margin: "9px 0",
+                    color: "var(--VideoContainerLinks)",
                   }}>{`Total: ${channels.length}`}</p>
 
                 {channels

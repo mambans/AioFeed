@@ -298,6 +298,7 @@ export const StyledConnectContainer = styled.div`
   /* grid-template-columns: 80% 20%; */
   /* grid-template-rows: 50px; */
   grid-template-columns: min-content;
+  color: white;
 
   button {
     min-width: 200px;

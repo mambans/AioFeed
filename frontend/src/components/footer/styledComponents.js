@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const StyledFooterContainer = styled.div`
   display: flex;
-  background-color: hsla(0, 0%, 0%, 0.5);
+  background-color: var(--footerBackground);
   padding: 15px;
   text-align: center;
   box-shadow: var(--footerShadow);
@@ -13,6 +13,7 @@ export const StyledFooterContainer = styled.div`
     enableTwitter && (location === "/feed" || location === "/feed/")
       ? "calc(85vw - (25px + 10px))"
       : "100%"};
+  color: var(--VideoContainerLinks);
 
   ul {
     display: flex;
@@ -82,4 +83,5 @@ export const StyledCenterBottomText = styled.p`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--VideoContainerLinks);
 `;

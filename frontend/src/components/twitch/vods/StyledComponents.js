@@ -96,7 +96,7 @@ export const VodDates = styled.div`
   height: 100%;
   justify-content: right;
   justify-self: right;
-  mix-blend-mode: screen;
+  /* mix-blend-mode: screen; */
 
   p {
     margin: 0;

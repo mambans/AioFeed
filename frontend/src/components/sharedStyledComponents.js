@@ -99,7 +99,7 @@ export const VideoContainer = styled.div`
   margin-bottom: 15px;
   position: relative;
 
-  box-shadow: rgba(0, 0, 0, 0.4) 4px 4px 8px;
+  box-shadow: var(--videoBoxShadow);
   border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.05);
 
@@ -161,7 +161,7 @@ export const ChannelContainer = styled.div`
     grid-row: 1;
     width: max-content;
     transition: color 250ms;
-    mix-blend-mode: screen;
+    /* mix-blend-mode: screen; */
   }
 
   &:hover {
@@ -186,7 +186,7 @@ export const GameContainer = styled.div`
   align-items: center;
   min-height: 34px;
   transition: color 250ms;
-  mix-blend-mode: screen;
+  /* mix-blend-mode: screen; */
 
   .gameImg {
     width: 26px;
@@ -241,7 +241,7 @@ export const VideoTitle = styled(Link)`
   height: 45px;
   line-height: 1.2;
   padding: 0;
-  mix-blend-mode: screen;
+  /* mix-blend-mode: screen; */
 
   &:hover {
     color: var(--videoTitleHover);
@@ -260,7 +260,7 @@ export const VideoTitleHref = styled.a`
   height: 45px;
   line-height: 1.2;
   padding: 0;
-  mix-blend-mode: screen;
+  /* mix-blend-mode: screen; */
 
   &:hover {
     color: var(--videoTitleHover);

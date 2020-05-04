@@ -6,9 +6,11 @@ import React, { useContext } from "react";
 import { Container, LoadingPlaceholder } from "./StyledComponents";
 import FeedsContext from "../feed/FeedsContext";
 import UpdateTwitterListName from "../navigation/sidebar/UpdateTwitterListName";
+import ThemeContext from "./../themes/ThemeContext";
 
 export default () => {
   const { twitterListName, enableTwitter } = useContext(FeedsContext);
+  const { activeTheme } = useContext(ThemeContext);
 
   return (
     <CSSTransition
@@ -16,6 +18,7 @@ export default () => {
       timeout={750}
       classNames='twitter-slide'
       unmountOnExit
+      key={twitterListName + activeTheme.name}
       appear={true}>
       {/* <Container width={width ? `${width}px` : "15vw"} key={twitterListName}> */}
       <Container key={twitterListName}>
@@ -25,7 +28,7 @@ export default () => {
             id={twitterListName}
             placeholder={<LoadingPlaceholder />}
             autoHeight={true}
-            theme={"dark"}
+            theme={activeTheme.type}
             noScrollbar={true}
             noHeader={true}
             noFooter={true}

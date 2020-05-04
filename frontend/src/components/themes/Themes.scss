@@ -47,6 +47,9 @@ html[data-theme="original"] {
 
   --footerMargin: 100px;
   --themeSelectorBackgroundColor: white;
+  --videoBoxShadow: rgba(0, 0, 0, 0.4) 4px 4px 8px;
+  --twitterBackground: #1010108c;
+  --footerBackground: hsla(0, 0%, 0%, 0.5);
 }
 
 html[data-theme="christmas"] {
@@ -106,9 +109,11 @@ html[data-theme="simple dark"] {
   --backgroundColor: #101010;
   --scrollbarColors: #1c1f22 rgb(5, 8, 10);
 
-  --navigationbarBackground: #1a1a1ae3;
-  --sidebarBackground: #1a1a1ae3;
+  --navigationbarBackground: #2e2e2e45;
+  --sidebarBackground: #2e2e2e45;
   --navTextColor: rgba(255, 255, 255 0.7);
+  --videoBoxShadow: rgba(63, 63, 63, 0.4) 4px 4px 8px;
+  --twitterBackground: #3d3d3d44;
 }
 
 html[data-theme="light"] {
@@ -126,7 +131,7 @@ html[data-theme="light"] {
   --VideoContainerViewers: rgb(0, 0, 0);
   --footerLinkColor: rgb(0, 0, 0);
   --footerLinkHoverColor: #bd3d0a;
-  --footerShadow: 0 0 100px 0 black;
+  --footerShadow: none;
   --navLogoTextColor: rgb(10, 10, 10);
   --navTextColor: rgb(10, 10, 10);
   --navTextHoverColor: rgb(75, 75, 75);
@@ -161,4 +166,8 @@ html[data-theme="light"] {
   --footerMargin: 100px;
   --twitchSidebarBorderAnimationColor: black;
   --themeSelectorBackgroundColor: #d1d0d0;
+  --footerBackground: #00000021;
+
+  --videoTitle: rgb(15, 15, 15);
+  --twitterBackground: #ffffff;
 }
