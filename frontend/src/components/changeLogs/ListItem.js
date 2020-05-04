@@ -112,6 +112,7 @@ export default ({ name, body, published_at, showInfo, children }) => {
       "renamed",
       "rename",
       "changes",
+      "improved",
     ],
     []
   );
