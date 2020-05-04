@@ -45,7 +45,7 @@ AioFeed auto refreshes the live Twitch feed every 25sec with live Notifications.
 
 - Auto refresh streams and their stats incl. viewers, games, title, thumbnail (For when Site stays Open or Pinned.) (Can be disabled)
 - Adjust volume with scroll wheel and mute with scroll click.
-- Notifications require website to be opened.
+- Streams title/game update notifications for selected channels.
 - Switch chat sides
 - Seperate Live follows and Vod follows to be able to only fetch vods from selected channels and instead of all.
 - Bigger live video & smaller chat.
@@ -59,6 +59,7 @@ AioFeed auto refreshes the live Twitch feed every 25sec with live Notifications.
 - Load more vods without leaving the main/feed page.
 
 * Small/normal delay ~1 sec (with no ads?)
+  (Notifications require website to be opened.)
 
 ### Youtube
 
