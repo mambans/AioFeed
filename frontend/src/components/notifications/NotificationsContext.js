@@ -12,7 +12,7 @@ export const NotificationsProvider = ({ children }) => {
   );
 
   const addNotification = useCallback(
-    async (noti, status) => {
+    async (noti, status, nameSuffix, text) => {
       await new Promise((resolve, reject) => {
         try {
           const newNotifications = [...unseenNotifications];
@@ -23,11 +23,13 @@ export const NotificationsProvider = ({ children }) => {
           noti.date = new Date();
           noti.key = uniqid(noti.id, new Date().getTime()) + status;
           noti.status = status;
+          noti.nameSuffix = nameSuffix;
+          noti.text = text;
 
           existingNotifications.unshift(noti);
 
-          if (existingNotifications && existingNotifications.length > 50)
-            existingNotifications.splice(49);
+          if (existingNotifications && existingNotifications.length > 101)
+            existingNotifications.splice(100);
 
           resolve({ notifications: existingNotifications, newNotifications });
         } catch (e) {

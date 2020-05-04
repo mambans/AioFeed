@@ -185,7 +185,7 @@ export default ({ children }) => {
 
               if (!alreadyLive) {
                 addSystemNotification("online", stream);
-                addNotification(stream, "Live");
+                addNotification(stream, "Live", "went Live");
 
                 if (
                   enableTwitchVods &&
@@ -232,18 +232,39 @@ export default ({ children }) => {
                         oldStreamData.game_name
                       }`,
                     });
+                    addNotification(
+                      stream,
+                      "Updated",
+                      "Title & Game updated",
+                      `+ ${truncate(stream.title, 40)} in ${stream.game_name}\n- ${truncate(
+                        oldStreamData.title,
+                        40
+                      )} in ${oldStreamData.game_name}`
+                    );
                   } else if (oldStreamData.game_name !== stream.game_name) {
                     addSystemNotification("updated", stream, {
                       valueKey: "Game",
                       newValue: stream.game_name,
                       oldValue: oldStreamData.game_name,
                     });
+                    addNotification(
+                      stream,
+                      "Updated",
+                      "Game updated",
+                      `+ ${stream.game_name}\n- ${oldStreamData.game_name}`
+                    );
                   } else if (oldStreamData.title !== stream.title) {
                     addSystemNotification("updated", stream, {
                       valueKey: "Title",
                       newValue: stream.title,
                       oldValue: oldStreamData.title,
                     });
+                    addNotification(
+                      stream,
+                      "Updated",
+                      "Title updated",
+                      `+ ${stream.title}\n- ${oldStreamData.title}`
+                    );
                   }
                 }
               }
@@ -260,7 +281,7 @@ export default ({ children }) => {
                 getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
               ) {
                 addSystemNotification("offline", stream);
-                addNotification(stream, "Offline");
+                addNotification(stream, "Offline", "went Offline");
 
                 setTimeout(async () => {
                   console.log("Fetching", stream.user_name, "offline vod");
