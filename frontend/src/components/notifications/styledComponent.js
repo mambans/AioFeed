@@ -26,7 +26,7 @@ export const Notification = styled.li`
   min-height: 80px !important;
   height: 80px !important;
   grid-template-columns: 15% 85%;
-  opacity: ${({ type }) => (type === "Offline" ? 0.2 : type === "Updated" ? 0.75 : 1)};
+  opacity: ${({ type }) => (type === "Offline" ? 0.35 : type === "Updated" ? 0.75 : 1)};
   margin: 7px 0;
   transition: background 250ms, border 250ms, opacity 250ms;
   padding-left: 2px;
