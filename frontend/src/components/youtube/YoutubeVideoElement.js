@@ -110,14 +110,14 @@ export default (data) => {
           {truncate(data.video.snippet.title, 60)}
         </VideoTitleHref>
       </OverlayTrigger>
-      <Moment className={styles.date} fromNow>
-        {data.video.snippet.publishedAt}
-      </Moment>
       <p className={styles.channel}>
         <a href={`https://www.youtube.com/channel/` + data.video.snippet.channelId}>
           {data.video.snippet.channelTitle}
         </a>
       </p>
+      <Moment className={styles.date} fromNow>
+        {data.video.snippet.publishedAt}
+      </Moment>
     </VideoContainer>
   );
 };

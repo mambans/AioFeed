@@ -1,12 +1,13 @@
 .date {
   grid-area: info;
   color: var(--VideoContainerLinks);
+  justify-self: end;
+  padding-right: 10px;
 }
 
 .channel {
   grid-area: info;
-  justify-self: end;
-  padding-right: 15px;
+  justify-self: start;
 
   a {
     color: var(--VideoContainerLinks);
