@@ -274,6 +274,9 @@ export default ({ children }) => {
               const isStreamLive = liveStreams.current.find(
                 ({ user_name }) => user_name === stream.user_name
               );
+
+              addNotification(stream, "Offline", "went Offline");
+
               if (
                 !isStreamLive &&
                 isEnabledOfflineNotifications &&
@@ -281,7 +284,6 @@ export default ({ children }) => {
                 getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
               ) {
                 addSystemNotification("offline", stream);
-                addNotification(stream, "Offline", "went Offline");
 
                 setTimeout(async () => {
                   console.log("Fetching", stream.user_name, "offline vod");
