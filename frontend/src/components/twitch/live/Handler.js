@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
-import axios from "axios";
 
 import ErrorHandler from "../../error";
 import GetFollowedChannels from "./../GetFollowedChannels";
@@ -9,13 +8,14 @@ import AccountContext from "./../../account/AccountContext";
 import FeedsContext from "./../../feed/FeedsContext";
 import VodsContext from "./../vods/VodsContext";
 import FetchSingelChannelVods from "./../vods/FetchSingelChannelVods";
-import { AddCookie, getCookie, getLocalstorage, truncate } from "../../../util/Utils";
+import { AddCookie, getLocalstorage, truncate } from "../../../util/Utils";
 import validateToken from "../validateToken";
+import addSystemNotification from "./addSystemNotification";
 
 const REFRESH_RATE = 25; // seconds
 
 export default ({ children }) => {
-  const addNotification = useContext(NotificationsContext).addNotification;
+  const { addNotification, setUnseenNotifications } = useContext(NotificationsContext);
   const { autoRefreshEnabled, twitchToken } = useContext(AccountContext);
   const { setVods } = useContext(VodsContext);
   const {
@@ -59,98 +59,8 @@ export default ({ children }) => {
     newlyAddedStreams.current = [];
   }
 
-  const markStreamAsSeen = async (streamName) => {
-    const unSeenStreams = [...newlyAddedStreams.current];
-
-    const index = unSeenStreams.indexOf(streamName);
-
-    if (index !== -1) {
-      const newUnSeenStreams = unSeenStreams.splice(index, 1);
-
-      newlyAddedStreams.current = newUnSeenStreams;
-
-      if (document.title.length > 15 && newUnSeenStreams.length > 0) {
-        const title = document.title.substring(4);
-        const count = parseInt(document.title.substring(1, 2)) - 1;
-        document.title = `(${count}) ${title}`;
-      } else if (newUnSeenStreams.length === 0 && document.title !== "AioFeed | Feed") {
-        document.title = "AioFeed | Feed";
-      }
-    }
-  };
-
-  const addSystemNotification = useCallback(async (status, stream, changedObj) => {
-    if (Notification.permission === "granted") {
-      if (status === "offline") {
-        let notification = new Notification(`${stream.user_name} Offline`, {
-          body: "",
-
-          icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-          badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-          silent: true,
-        });
-
-        const vodId = await axios
-          .get(`https://api.twitch.tv/helix/videos?`, {
-            params: {
-              user_id: stream.user_id,
-              first: 1,
-              type: "archive",
-            },
-            headers: {
-              Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-              "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-            },
-          })
-          .then((res) => {
-            return res.data.data[0];
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-
-        notification.onclick = async function (event) {
-          event.preventDefault(); // prevent the browser from focusing the Notification's tab
-          await markStreamAsSeen();
-          window.open("https://www.twitch.tv/videos/" + vodId.id, "_blank");
-        };
-        return notification;
-      } else if (status === "online") {
-        let notification = new Notification(`${stream.user_name} Live`, {
-          body: `${truncate(stream.title, 60)}\n${stream.game_name}`,
-          icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-          badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-          silent: false,
-        });
-
-        notification.onclick = async function (event) {
-          event.preventDefault(); // prevent the browser from focusing the Notification's tab
-          await markStreamAsSeen();
-          window.open("https://aiofeed.com/" + stream.user_name.toLowerCase(), "_blank");
-        };
-
-        return notification;
-      } else if (status === "updated") {
-        let notification = new Notification(`${stream.user_name} ${changedObj.valueKey} updated`, {
-          body: `+ ${truncate(changedObj.newValue, 60)}\n- ${truncate(changedObj.oldValue, 60)}`,
-          icon: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-          badge: stream.profile_img_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-          silent: false,
-        });
-
-        notification.onclick = async function (event) {
-          event.preventDefault(); // prevent the browser from focusing the Notification's tab
-          await markStreamAsSeen();
-          window.open("https://aiofeed.com/" + stream.user_name.toLowerCase(), "_blank");
-        };
-
-        return notification;
-      }
-    }
-  }, []);
-
   const refresh = useCallback(
-    async (disableNotifications) => {
+    async (disableNotifications = false) => {
       // console.log("refreshing");
       setLoadingStates(({ loaded }) => {
         return { refreshing: true, error: null, loaded: loaded };
@@ -178,62 +88,123 @@ export default ({ children }) => {
           });
 
           if (!disableNotifications) {
-            liveStreams.current.forEach((stream) => {
-              const alreadyLive = oldLiveStreams.current.find(
-                ({ user_name }) => user_name === stream.user_name
-              );
+            new Promise((resolve, reject) => {
+              const newLive = liveStreams.current.filter((stream) => {
+                return !oldLiveStreams.current.find(
+                  ({ user_name }) => stream.user_name === user_name
+                );
+              });
 
-              if (!alreadyLive) {
-                addSystemNotification("online", stream);
-                addNotification(stream, "Live", "went Live");
+              if (newLive.length <= 0) reject("No LIVE streams");
+              resolve(newLive);
+            })
+              .then((res) => {
+                addNotification(res, "Live", "went Live");
 
-                if (
-                  enableTwitchVods &&
-                  getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
-                ) {
-                  setTimeout(async () => {
-                    await FetchSingelChannelVods(stream.user_id, setVods);
-                  }, 30000);
-                }
-
-                newlyAddedStreams.current.push(stream.user_name);
-                stream.newlyAdded = true;
-
-                // if (document.visibilityState !== "visible") {
                 if (document.title.length > 15) {
                   const title = document.title.substring(4);
-                  const count = parseInt(document.title.substring(1, 2)) + 1;
+                  const count = parseInt(document.title.substring(1, 2)) + res.length;
                   document.title = `(${count}) ${title}`;
                 } else {
                   const title = document.title;
                   document.title = `(${1}) ${title}`;
                 }
-                // }
-              } else if (
-                isEnabledUpdateNotifications &&
-                getLocalstorage("UpdateNotificationsChannels") &&
-                getLocalstorage("UpdateNotificationsChannels").includes(
-                  stream.user_name.toLowerCase()
-                )
-              ) {
-                const oldStreamData = oldLiveStreams.current.find((old_stream) => {
-                  return old_stream.user_name === stream.user_name;
+
+                res.map((stream) => {
+                  newlyAddedStreams.current.push(stream.user_name);
+                  stream.newlyAdded = true;
+
+                  addSystemNotification({
+                    status: "online",
+                    stream: stream,
+                    newlyAddedStreams: newlyAddedStreams,
+                    setUnseenNotifications: setUnseenNotifications,
+                  });
+
+                  if (
+                    enableTwitchVods &&
+                    getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
+                  ) {
+                    setTimeout(async () => {
+                      await FetchSingelChannelVods(stream.user_id, setVods);
+                    }, 30000);
+                  }
+                  return "";
+                });
+              })
+              .catch((e) => {});
+
+            new Promise((resolve, reject) => {
+              const newOffline = oldLiveStreams.current.filter((stream) => {
+                return !liveStreams.current.find(({ user_name }) => stream.user_name === user_name);
+              });
+
+              if (newOffline.length <= 0) reject("No Offline streams");
+              resolve(newOffline);
+            })
+              .then((res) => {
+                addNotification(res, "Offline", "went Offline");
+
+                res.map((stream) => {
+                  if (
+                    isEnabledOfflineNotifications &&
+                    getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
+                  )
+                    addSystemNotification({
+                      status: "offline",
+                      stream: stream,
+                      newlyAddedStreams: newlyAddedStreams,
+                      setUnseenNotifications: setUnseenNotifications,
+                    });
+
+                  if (
+                    enableTwitchVods &&
+                    getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
+                  ) {
+                    setTimeout(async () => {
+                      console.log("Fetching", stream.user_name, "offline vod");
+                      await FetchSingelChannelVods(stream.user_id, setVods);
+                    }, 0);
+                  }
+                  return "";
+                });
+              })
+              .catch((e) => {});
+
+            if (isEnabledUpdateNotifications) {
+              new Promise((resolve, reject) => {
+                const restStreams = liveStreams.current.filter((stream) => {
+                  return oldLiveStreams.current.find(
+                    (old_stream) => stream.user_name === old_stream.user_name
+                  );
                 });
 
-                if (oldStreamData && stream) {
+                resolve(restStreams);
+              }).then((res) => {
+                res.map(async (stream) => {
+                  const oldStreamData = oldLiveStreams.current.find((old_stream) => {
+                    return old_stream.user_name === stream.user_name;
+                  });
+
                   if (
                     oldStreamData.game_name !== stream.game_name &&
                     oldStreamData.title !== stream.title
                   ) {
-                    addSystemNotification("updated", stream, {
-                      valueKey: "Title & Game",
-                      newValue: `${truncate(stream.title, 40)} in ${stream.game_name}`,
-                      oldValue: `${truncate(oldStreamData.title, 40)} in ${
-                        oldStreamData.game_name
-                      }`,
+                    addSystemNotification({
+                      status: "updated",
+                      stream: stream,
+                      changedObj: {
+                        valueKey: "Title & Game",
+                        newValue: `${truncate(stream.title, 40)} in ${stream.game_name}`,
+                        oldValue: `${truncate(oldStreamData.title, 40)} in ${
+                          oldStreamData.game_name
+                        }`,
+                      },
+                      newlyAddedStreams: newlyAddedStreams,
+                      setUnseenNotifications: setUnseenNotifications,
                     });
-                    addNotification(
-                      stream,
+                    await addNotification(
+                      [stream],
                       "Updated",
                       "Title & Game updated",
                       `+ ${truncate(stream.title, 40)} in ${stream.game_name}\n- ${truncate(
@@ -242,55 +213,45 @@ export default ({ children }) => {
                       )} in ${oldStreamData.game_name}`
                     );
                   } else if (oldStreamData.game_name !== stream.game_name) {
-                    addSystemNotification("updated", stream, {
-                      valueKey: "Game",
-                      newValue: stream.game_name,
-                      oldValue: oldStreamData.game_name,
+                    addSystemNotification({
+                      status: "updated",
+                      stream: stream,
+                      changedObj: {
+                        valueKey: "Game",
+                        newValue: stream.game_name,
+                        oldValue: oldStreamData.game_name,
+                      },
+                      newlyAddedStreams: newlyAddedStreams,
+                      setUnseenNotifications: setUnseenNotifications,
                     });
-                    addNotification(
-                      stream,
+                    await addNotification(
+                      [stream],
                       "Updated",
                       "Game updated",
                       `+ ${stream.game_name}\n- ${oldStreamData.game_name}`
                     );
                   } else if (oldStreamData.title !== stream.title) {
-                    addSystemNotification("updated", stream, {
-                      valueKey: "Title",
-                      newValue: stream.title,
-                      oldValue: oldStreamData.title,
+                    addSystemNotification({
+                      status: "updated",
+                      stream: stream,
+                      changedObj: {
+                        valueKey: "Title",
+                        newValue: stream.title,
+                        oldValue: oldStreamData.title,
+                      },
+                      newlyAddedStreams: newlyAddedStreams,
+                      setUnseenNotifications: setUnseenNotifications,
                     });
-                    addNotification(
-                      stream,
+                    await addNotification(
+                      [stream],
                       "Updated",
                       "Title updated",
                       `+ ${stream.title}\n- ${oldStreamData.title}`
                     );
                   }
-                }
-              }
-            });
-
-            oldLiveStreams.current.forEach((stream) => {
-              const isStreamLive = liveStreams.current.find(
-                ({ user_name }) => user_name === stream.user_name
-              );
-
-              addNotification(stream, "Offline", "went Offline");
-
-              if (
-                !isStreamLive &&
-                isEnabledOfflineNotifications &&
-                enableTwitchVods &&
-                getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
-              ) {
-                addSystemNotification("offline", stream);
-
-                setTimeout(async () => {
-                  console.log("Fetching", stream.user_name, "offline vod");
-                  await FetchSingelChannelVods(stream.user_id, setVods);
-                }, 0);
-              }
-            });
+                });
+              });
+            }
           }
         } else if (streams.status === 201) {
           // setError(streams.error);
@@ -311,11 +272,11 @@ export default ({ children }) => {
     },
     [
       addNotification,
-      addSystemNotification,
       enableTwitchVods,
       setVods,
       isEnabledUpdateNotifications,
       isEnabledOfflineNotifications,
+      setUnseenNotifications,
     ]
   );
 

@@ -13,20 +13,27 @@ export const NotificationsProvider = ({ children }) => {
 
   const addNotification = useCallback(
     async (noti, status, nameSuffix, text) => {
-      await new Promise((resolve, reject) => {
+      await new Promise(async (resolve, reject) => {
         try {
-          const newNotifications = [...unseenNotifications];
+          const oldNotifications = [...unseenNotifications];
+          const usernames = noti.map((stream) => {
+            return stream.user_name;
+          });
 
-          newNotifications.push(noti);
-
+          const newNotifications = oldNotifications.concat(usernames);
           const existingNotifications = [...notifications];
-          noti.date = new Date();
-          noti.key = uniqid(noti.id, new Date().getTime()) + status;
-          noti.status = status;
-          noti.nameSuffix = nameSuffix;
-          noti.text = text;
 
-          existingNotifications.unshift(noti);
+          await noti.map((n) => {
+            n.date = new Date();
+            n.key = uniqid(n.id, new Date().getTime()) + status;
+            n.status = status;
+            n.nameSuffix = nameSuffix;
+            n.text = text;
+
+            existingNotifications.unshift(n);
+
+            return "";
+          });
 
           if (existingNotifications && existingNotifications.length > 101)
             existingNotifications.splice(100);
@@ -37,8 +44,10 @@ export const NotificationsProvider = ({ children }) => {
           reject(e);
         }
       }).then((res) => {
-        setUnseenNotifications(res.newNotifications);
-        setNotifications(res.notifications);
+        setTimeout(() => {
+          setUnseenNotifications(res.newNotifications);
+          setNotifications(res.notifications);
+        }, 800);
       });
     },
     [notifications, setNotifications, setUnseenNotifications, unseenNotifications]
