@@ -5,7 +5,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { StyledToggleButton } from "./StyledComponent";
 import { AddCookie } from "../../../util/Utils";
 
-export default ({ setEnable, enabled, label, tokenExists, tooltip, icon, buttonsPerRow }) => {
+export default ({ setEnable, enabled, label, tokenExists, tooltip, icon, buttonsperrow }) => {
   const [checked, setChecked] = useState(enabled || false);
 
   function handleChange() {
@@ -24,7 +24,7 @@ export default ({ setEnable, enabled, label, tokenExists, tooltip, icon, buttons
         onClick={handleChange}
         disabled={!tokenExists}
         variant='dark'
-        buttonsPerRow={buttonsPerRow}
+        buttonsperrow={buttonsperrow}
         enabled={checked.toString()}>
         {icon}
       </StyledToggleButton>

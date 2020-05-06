@@ -230,7 +230,7 @@ export default () => {
         <UpdateTwitterListName />
         <br />
         <ToggleButtonsContainerHeader>Settings</ToggleButtonsContainerHeader>
-        <ToggleButtonsContainer buttonsPerRow={3}>
+        <ToggleButtonsContainer buttonsperrow={3}>
           <ToggleButton
             setEnable={(value) => {
               setAutoRefreshEnabled(value);

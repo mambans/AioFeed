@@ -497,8 +497,8 @@ export const StyledToggleButton = styled(Button)`
   background: #434950;
   flex-grow: 1;
 
-  flex-basis: ${({ buttonsPerRow }) =>
-    buttonsPerRow ? `calc((100% - (20px * ${buttonsPerRow})) / ${buttonsPerRow})` : "auto"};
+  flex-basis: ${({ buttonsperrow }) =>
+    buttonsperrow ? `calc((100% - (20px * ${buttonsperrow})) / ${buttonsperrow})` : "auto"};
 /* align-items: center; */
   align-self: center;
   display: flex;
@@ -523,10 +523,10 @@ export const StyledToggleButtonsContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-export const ToggleButtonsContainer = ({ children, buttonsPerRow }) => {
+export const ToggleButtonsContainer = ({ children, buttonsperrow }) => {
   const childrens = React.Children.map(children, (child) => {
     return React.cloneElement(child, {
-      buttonsPerRow: buttonsPerRow,
+      buttonsperrow: buttonsperrow,
     });
   });
 
