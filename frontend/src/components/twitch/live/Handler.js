@@ -187,67 +187,74 @@ export default ({ children }) => {
                   });
 
                   if (
-                    oldStreamData.game_name !== stream.game_name &&
-                    oldStreamData.title !== stream.title
+                    getLocalstorage("UpdateNotificationsChannels") &&
+                    getLocalstorage("UpdateNotificationsChannels").includes(
+                      stream.user_name.toLowerCase()
+                    )
                   ) {
-                    addSystemNotification({
-                      status: "updated",
-                      stream: stream,
-                      changedObj: {
-                        valueKey: "Title & Game",
-                        newValue: `${truncate(stream.title, 40)} in ${stream.game_name}`,
-                        oldValue: `${truncate(oldStreamData.title, 40)} in ${
-                          oldStreamData.game_name
-                        }`,
-                      },
-                      newlyAddedStreams: newlyAddedStreams,
-                      setUnseenNotifications: setUnseenNotifications,
-                    });
-                    await addNotification(
-                      [stream],
-                      "Updated",
-                      "Title & Game updated",
-                      `+ ${truncate(stream.title, 40)} in ${stream.game_name}\n- ${truncate(
-                        oldStreamData.title,
-                        40
-                      )} in ${oldStreamData.game_name}`
-                    );
-                  } else if (oldStreamData.game_name !== stream.game_name) {
-                    addSystemNotification({
-                      status: "updated",
-                      stream: stream,
-                      changedObj: {
-                        valueKey: "Game",
-                        newValue: stream.game_name,
-                        oldValue: oldStreamData.game_name,
-                      },
-                      newlyAddedStreams: newlyAddedStreams,
-                      setUnseenNotifications: setUnseenNotifications,
-                    });
-                    await addNotification(
-                      [stream],
-                      "Updated",
-                      "Game updated",
-                      `+ ${stream.game_name}\n- ${oldStreamData.game_name}`
-                    );
-                  } else if (oldStreamData.title !== stream.title) {
-                    addSystemNotification({
-                      status: "updated",
-                      stream: stream,
-                      changedObj: {
-                        valueKey: "Title",
-                        newValue: stream.title,
-                        oldValue: oldStreamData.title,
-                      },
-                      newlyAddedStreams: newlyAddedStreams,
-                      setUnseenNotifications: setUnseenNotifications,
-                    });
-                    await addNotification(
-                      [stream],
-                      "Updated",
-                      "Title updated",
-                      `+ ${stream.title}\n- ${oldStreamData.title}`
-                    );
+                    if (
+                      oldStreamData.game_name !== stream.game_name &&
+                      oldStreamData.title !== stream.title
+                    ) {
+                      addSystemNotification({
+                        status: "updated",
+                        stream: stream,
+                        changedObj: {
+                          valueKey: "Title & Game",
+                          newValue: `${truncate(stream.title, 40)} in ${stream.game_name}`,
+                          oldValue: `${truncate(oldStreamData.title, 40)} in ${
+                            oldStreamData.game_name
+                          }`,
+                        },
+                        newlyAddedStreams: newlyAddedStreams,
+                        setUnseenNotifications: setUnseenNotifications,
+                      });
+                      await addNotification(
+                        [stream],
+                        "Updated",
+                        "Title & Game updated",
+                        `+ ${truncate(stream.title, 40)} in ${stream.game_name}\n- ${truncate(
+                          oldStreamData.title,
+                          40
+                        )} in ${oldStreamData.game_name}`
+                      );
+                    } else if (oldStreamData.game_name !== stream.game_name) {
+                      addSystemNotification({
+                        status: "updated",
+                        stream: stream,
+                        changedObj: {
+                          valueKey: "Game",
+                          newValue: stream.game_name,
+                          oldValue: oldStreamData.game_name,
+                        },
+                        newlyAddedStreams: newlyAddedStreams,
+                        setUnseenNotifications: setUnseenNotifications,
+                      });
+                      await addNotification(
+                        [stream],
+                        "Updated",
+                        "Game updated",
+                        `+ ${stream.game_name}\n- ${oldStreamData.game_name}`
+                      );
+                    } else if (oldStreamData.title !== stream.title) {
+                      addSystemNotification({
+                        status: "updated",
+                        stream: stream,
+                        changedObj: {
+                          valueKey: "Title",
+                          newValue: stream.title,
+                          oldValue: oldStreamData.title,
+                        },
+                        newlyAddedStreams: newlyAddedStreams,
+                        setUnseenNotifications: setUnseenNotifications,
+                      });
+                      await addNotification(
+                        [stream],
+                        "Updated",
+                        "Title updated",
+                        `+ ${stream.title}\n- ${oldStreamData.title}`
+                      );
+                    }
                   }
                 });
               });
