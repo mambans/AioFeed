@@ -9,8 +9,10 @@ import AccountContext from "../../account/AccountContext";
 import { RemoveCookie, AddCookie, getCookie } from "../../../util/Utils";
 
 const StyledForm = styled(Form)`
+  margin: 10px 10px 0 10px;
+
   input {
-    color: rgb(150, 150, 150);
+    color: rgb(200, 200, 200);
     background-color: transparent;
     border: none;
     padding: 0.1875rem 0.75rem;
