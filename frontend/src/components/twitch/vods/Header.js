@@ -25,7 +25,7 @@ export default React.forwardRef((props, ref) => {
       <HeaderLeftSubcontainer>
         <RefreshButton
           onClick={() => {
-            refresh();
+            refresh(true);
           }}>
           {refreshing ? (
             <div className='SpinnerWrapper'>
