@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import { Form, Button } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
@@ -486,4 +487,56 @@ export const ProfileImgContainer = styled.div`
   /* max-width: calc(100% - 20px); */
   width: 100%;
   max-height: calc(380px / 16 * 9);
+`;
+
+export const StyledToggleButton = styled(Button)`
+  opacity: ${({ enabled }) => (enabled === "true" ? 1 : 0.25)};
+  margin: 10px;
+  border: none !important;
+  box-shadow: none !important;
+  background: #434950;
+  flex-grow: 1;
+
+  flex-basis: ${({ buttonsPerRow }) =>
+    buttonsPerRow ? `calc((100% - (20px * ${buttonsPerRow})) / ${buttonsPerRow})` : "auto"};
+/* align-items: center; */
+  align-self: center;
+  display: flex;
+  justify-content: center;
+
+  &:focus {
+    background: #343a40;
+    box-shadow: unset;
+  }
+
+  &:hover {
+    /* box-shadow: 0 0 0 0.1rem ${({ enabled }) => (enabled === "true" ? "green" : "yellow")}; */
+    /* background:${({ enabled }) => (enabled === "true" ? "rgb(150, 0 ,0)" : "rgb(0, 150, 0)")}; */
+    background:${({ enabled }) =>
+      enabled === "true" ? "rgba(0, 150, 0, 0.5)" : "rgba(150, 0 ,0, 0.5)"};
+  }
+`;
+
+export const StyledToggleButtonsContainer = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+`;
+
+export const ToggleButtonsContainer = ({ children, buttonsPerRow }) => {
+  const childrens = React.Children.map(children, (child) => {
+    return React.cloneElement(child, {
+      buttonsPerRow: buttonsPerRow,
+    });
+  });
+
+  return <StyledToggleButtonsContainer>{childrens}</StyledToggleButtonsContainer>;
+};
+
+export const ToggleButtonsContainerHeader = styled.h5`
+  margin-bottom: 0.2rem;
+  padding-bottom: 0.3rem;
+  text-align: center;
+  border-bottom: thin solid rgb(50, 50, 50);
+  color: rgb(200, 200, 200);
 `;
