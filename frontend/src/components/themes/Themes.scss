@@ -97,8 +97,15 @@ html[data-theme="clean"] {
   --scrollbarColors: #1c1f22 rgb(5, 8, 10);
 }
 
-html[data-theme="clean dark"] {
-  --backgroundImg: url("/images/clean_dark.png");
+html[data-theme="clean"] {
+  --backgroundImg: url("/images/clean.png");
+  --navigationbarBackground: #1f2326;
+  --sidebarBackground: #1c1f22;
+  --scrollbarColors: #1c1f22 rgb(5, 8, 10);
+}
+
+html[data-theme="stone"] {
+  --backgroundImg: url("/images/stone.jpg");
   --navigationbarBackground: #121415a8;
   --sidebarBackground: #121415a8;
   --scrollbarColors: #1c1f22 rgb(5, 8, 10);
