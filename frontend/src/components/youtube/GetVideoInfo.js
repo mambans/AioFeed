@@ -8,7 +8,7 @@ export default async (flattedVideosArray) => {
     getLocalstorage("YT-VideoDetails") && getLocalstorage("YT-VideoDetails").data
       ? // getLocalstorage("YT-VideoDetails").expire <= new Date()
         getLocalstorage("YT-VideoDetails")
-      : { data: [], expire: new Date().setDate(new Date().getDate() + 3) };
+      : { data: [], expire: new Date().setDate(new Date().getDate() + 7) };
 
   const comparer = (otherArray) => {
     return function (current) {

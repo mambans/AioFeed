@@ -37,7 +37,7 @@ const getGameDetails = async (items) => {
             data: cachedGameInfo.data.concat(res.data.data),
             expire:
               cachedGameInfo.expire < new Date().getTime()
-                ? new Date().setDate(new Date().getDate() + 3)
+                ? new Date().setDate(new Date().getDate() + 7)
                 : cachedGameInfo.expire,
           })
         );
