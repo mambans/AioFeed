@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import uniqid from "uniqid";
 import useSyncedLocalState from "./../../hooks/useSyncedLocalState";
+import { getLocalstorage } from "../../util/Utils";
 
 const NotificationsContext = React.createContext();
 
@@ -12,45 +13,42 @@ export const NotificationsProvider = ({ children }) => {
   );
 
   const addNotification = useCallback(
-    async (noti, status, nameSuffix, text) => {
-      await new Promise(async (resolve, reject) => {
+    (noti) => {
+      new Promise(async (resolve, reject) => {
         try {
-          const oldNotifications = [...unseenNotifications];
-          const usernames = noti.map((stream) => {
+          // const oldUnseenNotifications = [...unseenNotifications];
+          const oldUnseenNotifications = [...getLocalstorage("Unseen-notifications")];
+          const toAddUnseenUsernames = noti.map((stream) => {
             return stream.user_name;
           });
+          const newUnseenNotifications = [...oldUnseenNotifications, ...toAddUnseenUsernames];
 
-          const newNotifications = oldNotifications.concat(usernames);
-          const existingNotifications = [...notifications];
-
-          await noti.map((n) => {
+          // const existingNotifications = [...notifications];
+          const existingNotifications = [...getLocalstorage("notifications")];
+          const newNotificationsWithAddedProps = await noti.map((n) => {
             n.date = new Date();
-            n.key = uniqid(n.id, new Date().getTime()) + status;
-            n.status = status;
-            n.nameSuffix = nameSuffix;
-            n.text = text;
-
-            existingNotifications.unshift(n);
-
-            return "";
+            n.key = uniqid(n.id, new Date().getTime()) + n.status;
+            return n;
           });
 
-          if (existingNotifications && existingNotifications.length > 101)
-            existingNotifications.splice(100);
+          const finalNotifications = [
+            ...newNotificationsWithAddedProps,
+            ...existingNotifications,
+          ].splice(0, 100);
 
-          resolve({ notifications: existingNotifications, newNotifications });
+          resolve({ notifications: finalNotifications, newUnseenNotifications });
         } catch (e) {
           console.log("addNotification error", e);
           reject(e);
         }
       }).then((res) => {
         setTimeout(() => {
-          setUnseenNotifications(res.newNotifications);
+          setUnseenNotifications(res.newUnseenNotifications);
           setNotifications(res.notifications);
         }, 800);
       });
     },
-    [notifications, setNotifications, setUnseenNotifications, unseenNotifications]
+    [setNotifications, setUnseenNotifications]
   );
 
   const clearUnseenNotifications = useCallback(() => {

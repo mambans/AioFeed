@@ -85,7 +85,7 @@ export default () => {
           {notifications &&
             notifications.map((item) => {
               return (
-                <Notification key={item.key} type={item.status}>
+                <Notification key={item.key} status={item.status}>
                   <Link
                     to={`/${item.user_name.toLowerCase()}/channel`}
                     className='profileImg'
@@ -94,10 +94,10 @@ export default () => {
                   </Link>
                   <div className='textContainer'>
                     <Link to={`/${item.user_name.toLowerCase()}/channel`} className='name'>
-                      <b>{item.user_name}</b> {item.nameSuffix}
+                      <b>{item.user_name}</b> {item.status}
                     </Link>
                     <Link to={`/${item.user_name.toLowerCase()}/channel`} className='title'>
-                      {item.status === "Updated"
+                      {item.status && item.status.includes("updated")
                         ? item.text.split("\n").map((line) => {
                             return (
                               <p className='UpdateText' key={line}>
@@ -107,7 +107,7 @@ export default () => {
                           })
                         : truncate(item.title, 30)}
                     </Link>
-                    <Date date={item.date} type={item.status} />
+                    <Date date={item.date} status={item.status} />
                   </div>
                 </Notification>
               );

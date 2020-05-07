@@ -26,7 +26,7 @@ export const Notification = styled.li`
   min-height: 80px !important;
   height: 80px !important;
   grid-template-columns: 15% 85%;
-  opacity: ${({ type }) => (type === "Offline" ? 0.35 : type === "Updated" ? 0.75 : 1)};
+  opacity: ${({ status }) => (status === "Offline" ? 0.35 : status.includes("updated") ? 0.75 : 1)};
   margin: 7px 0;
   transition: background 250ms, border 250ms, opacity 250ms;
   padding-left: 2px;
@@ -110,7 +110,7 @@ export const UnseenNotifcationCount = styled.div`
 `;
 
 const StyledDate = styled.div`
-  color: ${({ type }) => (type === "Offline" ? "#ffffff" : "#838181")};
+  color: ${({ status }) => (status === "Offline" ? "#ffffff" : "#838181")};
   font-size: 0.85rem;
   text-align: right;
   margin: 0;
@@ -140,8 +140,8 @@ const StyledDate = styled.div`
   }
 `;
 
-export const Date = ({ date, type }) => (
-  <StyledDate type={type}>
+export const Date = ({ date, status }) => (
+  <StyledDate status={status}>
     <div>
       <Moment fromNow id='timeago'>
         {date}

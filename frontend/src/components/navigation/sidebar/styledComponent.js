@@ -505,7 +505,7 @@ export const StyledToggleButton = styled(Button)`
   justify-content: center;
 
   &:focus {
-    background: #343a40;
+    background: #434950;
     box-shadow: unset;
   }
 
