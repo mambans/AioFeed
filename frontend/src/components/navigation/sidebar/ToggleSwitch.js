@@ -6,7 +6,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import { StyledToggleSwitch } from "./StyledComponent";
 import { AddCookie } from "../../../util/Utils";
 
-export default ({ setEnable, enabled, label, tokenExists, tooltip, height, width }) => {
+export default ({ setEnable, enabled, label, tokenExists, tooltip, height, width, icon }) => {
   const [checked, setChecked] = useState(enabled || false);
 
   function handleChange(checked) {
@@ -29,6 +29,7 @@ export default ({ setEnable, enabled, label, tokenExists, tooltip, height, width
           onChange={handleChange}
           checked={(tokenExists && checked) || false}
         />
+        {icon}
         <span>{label}</span>
       </StyledToggleSwitch>
     </OverlayTrigger>
