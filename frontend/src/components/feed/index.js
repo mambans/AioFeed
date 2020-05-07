@@ -118,7 +118,7 @@ export default () => {
                       } sidebar`}</Tooltip>
                     }>
                     <HideSidebarButton
-                      show={showTwitchSidebar.toString()}
+                      show={String(showTwitchSidebar)}
                       onClick={() => {
                         AddCookie("Twitch_SidebarEnabled", !showTwitchSidebar);
                         setShowTwitchSidebar(!showTwitchSidebar);
