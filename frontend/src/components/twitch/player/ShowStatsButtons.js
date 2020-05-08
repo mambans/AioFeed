@@ -52,19 +52,15 @@ export default ({ TwitchPlayer }) => {
         onClick={() => {
           if (!showPlaybackStats) {
             document.querySelector("#controls").style.opacity = 1;
-          } else {
-            document.querySelector("#controls").style.removeProperty("opacity");
-          }
-          setShowPlaybackStats(!showPlaybackStats);
-          setPlaybackStats(TwitchPlayer.getPlaybackStats());
-
-          if (PlayersatsTimer.current) {
-            clearInterval(PlayersatsTimer.current);
-          } else {
             PlayersatsTimer.current = setInterval(() => {
               setPlaybackStats(TwitchPlayer.getPlaybackStats());
             }, 1500);
+          } else {
+            document.querySelector("#controls").style.removeProperty("opacity");
+            clearInterval(PlayersatsTimer.current);
           }
+          setShowPlaybackStats(!showPlaybackStats);
+          setPlaybackStats(TwitchPlayer.getPlaybackStats());
         }}
       />
     </>
