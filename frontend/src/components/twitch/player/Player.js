@@ -1,8 +1,6 @@
 import { CSSTransition } from "react-transition-group";
 import { useParams, useLocation, Link } from "react-router-dom";
-import { MdSettings } from "react-icons/md";
-import { FaPlay } from "react-icons/fa";
-import { FaPause } from "react-icons/fa";
+
 import { MdVerticalAlignBottom } from "react-icons/md";
 import { MdFullscreen } from "react-icons/md";
 import { MdFullscreenExit } from "react-icons/md";
@@ -23,17 +21,11 @@ import PlayerEvents from "./PlayerEvents";
 import { getCookie } from "./../../../util/Utils";
 import VolumeSlider from "./VolumeSlider";
 import {
-  ButtonShowQualities,
-  ButtonShowStats,
   InfoDisplay,
-  PlaybackStats,
-  QualitiesList,
   StyledChat,
   ToggleSwitchChatSide,
   VideoAndChatContainer,
   VolumeEventOverlay,
-  HideChatButton,
-  OpenChatButton,
   CreateClipButton,
   ShowNavbarBtn,
 } from "./StyledComponents";
@@ -41,6 +33,10 @@ import PlayerNavbar from "./PlayerNavbar";
 import setFavion from "../../setFavion";
 import { formatViewerNumbers } from "./../TwitchUtils";
 import validateToken from "../validateToken";
+import PlayPauseButton from "./PlayPauseButton";
+import ShowStatsButtons from "./ShowStatsButtons";
+import ShowSetQualityButtons from "./ShowSetQualityButtons";
+import OpenCloseChat from "./OpenCloseChat";
 
 export default () => {
   const { p_uptime, p_viewers, p_title, p_game, p_channelInfos } = useLocation().state || {};
@@ -52,17 +48,9 @@ export default () => {
   const { setTwitchToken, setRefreshToken } = useContext(AccountContext);
 
   const [switched, setSwitched] = useState(false);
-  const [volumeText, setVolumeText] = useState(0);
-  const [volumeMuted, setVolumeMuted] = useState(true);
-  const [isPaused, setIsPaused] = useState(false);
   const [channelInfo, setChannelInfo] = useState(p_channelInfos);
   const [uptime, setUptime] = useState(p_uptime);
   const [viewers, setViewers] = useState(p_viewers);
-  const [showPlaybackStats, setShowPlaybackStats] = useState();
-  const [playbackStats, setPlaybackStats] = useState();
-  const [showQualities, setShowQualities] = useState();
-  const [qualities, setQualities] = useState();
-  const [activeQuality, setActiveQuality] = useState();
   const [hideChat, setHideChat] = useState(false);
   const [showControlls, setShowControlls] = useState();
   const [latestVod, setLatestVod] = useState();
@@ -70,38 +58,11 @@ export default () => {
 
   const volumeEventOverlayRef = useRef();
   const twitchPlayer = useRef();
-  const PlayersatsTimer = useRef();
   const channelinfoTimer = useRef();
   const viewersTimer = useRef();
   const uptimeTimer = useRef();
   const OpenedDate = useRef(new Date().getTime());
   const fadeTimer = useRef();
-
-  const PausePlay = () => {
-    if (twitchPlayer.current.isPaused()) {
-      twitchPlayer.current.play();
-      setIsPaused(false);
-    } else {
-      twitchPlayer.current.pause();
-      setIsPaused(true);
-    }
-  };
-
-  const latencyColorValue = (name, value) => {
-    if (name === "hlsLatencyBroadcaster" || name === "hlsLatencyEncoder") {
-      if (value >= 10) {
-        return "#f00";
-      } else if (value >= 5) {
-        return "#f66329";
-      } else if (value >= 2.5) {
-        return "#f6b029";
-      } else {
-        return "#4cf629";
-      }
-    } else {
-      return "unset";
-    }
-  };
 
   const toggleFullscreen2 = (TwitchPlayer) => {
     const isFullScreen = TwitchPlayer.getFullscreen();
@@ -161,7 +122,6 @@ export default () => {
       setShrinkNavbar("false");
       setFooterVisible(true);
       setVisible(true);
-      clearInterval(PlayersatsTimer.current);
       clearInterval(channelinfoTimer.current);
       clearInterval(viewersTimer.current);
       clearInterval(uptTimer);
@@ -394,92 +354,22 @@ export default () => {
                     <p id='uptime'>Offline</p>
                   )}
                 </InfoDisplay>
-                {isPaused ? (
-                  <FaPlay id='PausePlay' size={30} onClick={PausePlay} />
-                ) : (
-                  <FaPause id='PausePlay' size={30} onClick={PausePlay} />
-                )}
-                <VolumeSlider
-                  volume={volumeText}
-                  setVolumeText={setVolumeText}
-                  TwitchPlayer={twitchPlayer.current}
-                  volumeMuted={volumeMuted}
-                  setVolumeMuted={setVolumeMuted}
-                  // onChange={Function}
-                  // onChangeComplete={Function}
-                />
-                {showPlaybackStats && playbackStats && (
-                  <PlaybackStats>
-                    {Object.keys(playbackStats).map((statName) => {
-                      return (
-                        <div key={statName}>
-                          <span>{`${statName}: `}</span>
-                          <span
-                            style={{
-                              color: latencyColorValue(statName, playbackStats[statName]),
-                            }}>
-                            {playbackStats[statName]}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </PlaybackStats>
-                )}
-                <ButtonShowStats
-                  title='Show video stats'
-                  onClick={() => {
-                    if (!showPlaybackStats) {
-                      document.querySelector("#controls").style.opacity = 1;
-                    } else {
-                      document.querySelector("#controls").style.removeProperty("opacity");
-                    }
-                    setShowPlaybackStats(!showPlaybackStats);
-                    setPlaybackStats(twitchPlayer.current.getPlaybackStats());
 
-                    if (PlayersatsTimer.current) {
-                      clearInterval(PlayersatsTimer.current);
-                    } else {
-                      PlayersatsTimer.current = setInterval(() => {
-                        setPlaybackStats(twitchPlayer.current.getPlaybackStats());
-                      }, 1500);
-                    }
-                  }}
+                <PlayPauseButton
+                  TwitchPlayer={twitchPlayer.current}
+                  volumeEventOverlayRef={volumeEventOverlayRef.current}
                 />
+                <VolumeSlider
+                  OpenedDate={OpenedDate}
+                  volumeEventOverlayRef={volumeEventOverlayRef.current}
+                  TwitchPlayer={twitchPlayer.current}
+                />
+                <ShowStatsButtons TwitchPlayer={twitchPlayer.current} />
+                <ShowSetQualityButtons TwitchPlayer={twitchPlayer.current} />
 
                 {channelInfo && (
                   <CreateClipButton title='Create clip' onClick={CreateAndOpenClip} />
                 )}
-
-                {showQualities && qualities && (
-                  <QualitiesList>
-                    {qualities.map((quality) => {
-                      return (
-                        <li
-                          key={quality.name}
-                          onClick={() => {
-                            twitchPlayer.current.setQuality(quality.group);
-                            setActiveQuality(quality);
-                            setShowQualities(false);
-                          }}>
-                          {quality.name}
-                        </li>
-                      );
-                    })}
-                  </QualitiesList>
-                )}
-                <ButtonShowQualities
-                  id='showQualities'
-                  title='Show qualities'
-                  onClick={() => {
-                    setShowQualities(!showQualities);
-                    setQualities(twitchPlayer.current.getQualities());
-                  }}>
-                  {/* <Icon icon={ic_settings} size={26}></Icon> */}
-                  <MdSettings size={24} />
-                  {activeQuality
-                    ? activeQuality.name
-                    : twitchPlayer.current && twitchPlayer.current.getQuality().name}
-                </ButtonShowQualities>
 
                 {true ? (
                   <MdFullscreen
@@ -517,37 +407,20 @@ export default () => {
                     setSwitched(!switched);
                   }}
                 />
-                {hideChat ? (
-                  <OpenChatButton
-                    title='Open chat'
-                    hidechat={hideChat.toString()}
-                    switched={switched.toString()}
-                    onClick={() => {
-                      setHideChat(!hideChat);
-                    }}
-                  />
-                ) : (
-                  <HideChatButton
-                    title='Hide chat'
-                    hidechat={hideChat.toString()}
-                    switched={switched.toString()}
-                    onClick={() => {
-                      setHideChat(!hideChat);
-                    }}
-                  />
-                )}
+
+                <OpenCloseChat
+                  hideChat={hideChat}
+                  switched={switched}
+                  onClick={() => {
+                    setHideChat(!hideChat);
+                  }}
+                />
               </VolumeEventOverlay>
             </CSSTransition>
             {twitchPlayer.current && (
               <PlayerEvents
-                volumeEventOverlayRef={volumeEventOverlayRef}
-                setVolumeText={setVolumeText}
-                setVolumeMuted={setVolumeMuted}
                 TwitchPlayer={twitchPlayer.current}
-                setIsPaused={setIsPaused}
                 type='live'
-                OpenedDate={OpenedDate}
-                setActiveQuality={setActiveQuality}
                 setShowUIControlls={setShowUIControlls}
               />
             )}

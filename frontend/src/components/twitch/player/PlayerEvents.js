@@ -1,112 +1,10 @@
-import { useEffect, useMemo } from "react";
-import { debounce } from "lodash";
+import { useEffect } from "react";
 
-export default ({
-  volumeEventOverlayRef,
-  setVolumeText,
-  setVolumeMuted,
-  TwitchPlayer,
-  type,
-  OpenedDate,
-  setIsPaused,
-  setActiveQuality,
-  setShowUIControlls,
-}) => {
-  // eslint-disable-next-line
-  const unmute = useMemo(
-    () =>
-      debounce(
-        () => {
-          if (TwitchPlayer.getMuted()) {
-            TwitchPlayer.setMuted(false);
-            setVolumeMuted(false);
-          }
-        },
-        3000,
-        { leading: true, trailing: false }
-      ),
-    [TwitchPlayer, setVolumeMuted]
-  );
-
+export default ({ TwitchPlayer, type, setShowUIControlls }) => {
   useEffect(() => {
-    const volumeEventOverlayRefElement = volumeEventOverlayRef.current;
-
-    const mouseEvents = (e) => {
-      switch (e.button) {
-        case 1:
-          TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
-          setVolumeMuted(!TwitchPlayer.getMuted());
-          break;
-
-        case 0:
-          if (TwitchPlayer.isPaused()) {
-            TwitchPlayer.play();
-            setIsPaused(false);
-          } else if (new Date().getTime() - OpenedDate.current <= 15000) {
-            TwitchPlayer.setMuted(false);
-            setVolumeMuted(false);
-            setVolumeText(TwitchPlayer.getVolume() * 100);
-          }
-          break;
-        default:
-          break;
-      }
-    };
-
-    const changeVolume = (operator, amount) => {
-      // unmute();
-
-      const newVolume = Math.min(
-        Math.max(
-          operator === "increase"
-            ? TwitchPlayer.getVolume() + amount
-            : TwitchPlayer.getVolume() - amount,
-          0
-        ),
-        1
-      );
-
-      TwitchPlayer.setVolume(newVolume);
-      setVolumeText(newVolume * 100);
-    };
-
-    const scrollChangeVolumeEvent = (e) => {
-      if ((e.wheelDelta && e.wheelDelta > 0) || e.deltaY < 0) {
-        changeVolume("increase", 0.01);
-      } else {
-        changeVolume("decrease", 0.01);
-      }
-    };
-
-    const keyboardEvents = (e) => {
-      switch (e.key) {
-        case " ":
-        case "Space":
-          if (!TwitchPlayer.isPaused()) {
-            TwitchPlayer.pause();
-            setIsPaused(true);
-          } else {
-            TwitchPlayer.play();
-            setIsPaused(false);
-          }
-          break;
-        case "f":
-        case "F":
-          toggleFullscreen2();
-          break;
-        case "m":
-        case "M":
-          TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
-          setVolumeMuted(!TwitchPlayer.getMuted());
-          break;
-        case "ArrowDown":
-          changeVolume("decrease", 0.05);
-          break;
-        case "ArrowUp":
-          changeVolume("increase", 0.05);
-          break;
-        default:
-          break;
+    const fullscreenKeyEvent = (e) => {
+      if (e.key === "f" || e.key === "F") {
+        toggleFullscreen2();
       }
     };
 
@@ -125,18 +23,10 @@ export default ({
     //   }
     // };
 
-    const onPlaying = () => {
+    const hideTwitchUIShowCustomUI = () => {
       if (TwitchPlayer) {
         setShowUIControlls(true);
         TwitchPlayer.showPlayerControls(false);
-        const defaultQuality = TwitchPlayer.getQuality();
-        setVolumeMuted(TwitchPlayer.getMuted());
-        setVolumeText(TwitchPlayer.getVolume() * 100);
-        setActiveQuality(
-          TwitchPlayer.getQualities().find((quality) => {
-            return quality.group === defaultQuality;
-          })
-        );
       }
     };
 
@@ -164,36 +54,20 @@ export default ({
 
     const twitchPlayerEventListeners = () => {
       if (type === "live") TwitchPlayer.showPlayerControls(false);
-      if (volumeEventOverlayRefElement) {
-        volumeEventOverlayRefElement.addEventListener("wheel", scrollChangeVolumeEvent);
-        volumeEventOverlayRefElement.addEventListener("mousedown", mouseEvents);
-      }
-      document.body.addEventListener("keydown", keyboardEvents);
+      document.body.addEventListener("keydown", fullscreenKeyEvent);
       // document.body.addEventListener("dblclick", toggleFullscreen);
     };
 
     TwitchPlayer.addEventListener(window.Twitch.Player.READY, twitchPlayerEventListeners);
-    TwitchPlayer.addEventListener(window.Twitch.Player.PLAYING, onPlaying);
+    TwitchPlayer.addEventListener(window.Twitch.Player.PLAYING, hideTwitchUIShowCustomUI);
 
     return () => {
-      volumeEventOverlayRefElement.removeEventListener("wheel", scrollChangeVolumeEvent);
-      volumeEventOverlayRefElement.removeEventListener("mousedown", mouseEvents);
-      document.body.removeEventListener("keydown", keyboardEvents);
+      document.body.removeEventListener("keydown", fullscreenKeyEvent);
       TwitchPlayer.removeEventListener(window.Twitch.Player.READY, twitchPlayerEventListeners);
-      TwitchPlayer.removeEventListener(window.Twitch.Player.PLAYING, onPlaying);
+      TwitchPlayer.removeEventListener(window.Twitch.Player.PLAYING, hideTwitchUIShowCustomUI);
       // document.body.removeEventListener("dblclick", toggleFullscreen);
     };
-  }, [
-    volumeEventOverlayRef,
-    setVolumeMuted,
-    setVolumeText,
-    TwitchPlayer,
-    type,
-    OpenedDate,
-    setIsPaused,
-    setActiveQuality,
-    setShowUIControlls,
-  ]);
+  }, [TwitchPlayer, type, setShowUIControlls]);
 
   return null;
 };
