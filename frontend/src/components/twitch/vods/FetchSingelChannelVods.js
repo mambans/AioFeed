@@ -13,7 +13,7 @@ export default async (channelId, setVods) => {
       if (stream.type === "archive") {
         stream.endDate = durationToDate(stream.duration, stream.created_at);
       } else {
-        stream.endDate = new Date(stream.created_at);
+        stream.endDate = new Date(stream.created_at).getTime();
       }
       return stream;
     });

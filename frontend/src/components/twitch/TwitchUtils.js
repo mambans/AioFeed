@@ -39,10 +39,7 @@ export const durationToDate = (duration, vodCreateDate) => {
   const durationMs = asd.reduce(function (s, v) {
     return s + (v || 0);
   }, 0);
-
-  const time = new Date(vodCreateDate);
-
-  return new Date(time.setTime(time.getTime() + durationMs));
+  return new Date(vodCreateDate).getTime() + durationMs;
 };
 
 export const formatViewerNumbers = (viewers) => {

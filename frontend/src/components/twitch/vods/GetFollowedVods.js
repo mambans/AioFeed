@@ -58,7 +58,7 @@ const addVodEndTime = async (followedStreamVods) => {
     if (stream.type === "archive") {
       stream.endDate = durationToDate(stream.duration, stream.created_at);
     } else {
-      stream.endDate = new Date(stream.created_at);
+      stream.endDate = new Date(stream.created_at).getTime();
     }
     return "";
   });
@@ -123,13 +123,10 @@ const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRe
 };
 
 export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchToken) => {
-  const thresholdDate = 1; // Number of months
   const vodExpire = 3; // Number of days
 
   try {
-    const OnlyVodsAfterDate = new Date();
-    OnlyVodsAfterDate.setDate(new Date().getDate() - thresholdDate);
-    if (!getLocalstorage(`Vods`) || getLocalstorage(`Vods`).expire <= new Date() || forceRun) {
+    if (!getLocalstorage(`Vods`) || getLocalstorage(`Vods`).expire <= Date.now() || forceRun) {
       try {
         const followedChannels = await validateToken().then(async () => {
           return await GetFollowedChannels();

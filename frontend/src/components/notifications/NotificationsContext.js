@@ -27,7 +27,7 @@ export const NotificationsProvider = ({ children }) => {
           const existingNotifications = [...getLocalstorage("notifications")];
           const newNotificationsWithAddedProps = await noti.map((n) => {
             n.date = new Date();
-            n.key = uniqid(n.id, new Date().getTime()) + n.status;
+            n.key = uniqid(n.id, Date.now()) + n.status;
             return n;
           });
 

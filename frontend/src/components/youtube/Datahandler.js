@@ -31,7 +31,8 @@ export default ({ children }) => {
           setRequestError();
         }
 
-        setIsLoaded(new Date());
+        setIsLoaded(Date.now());
+
         videos.current.forEach((video) => {
           const videoExists = oldVideos.current.find((old_video) => {
             return old_video.contentDetails.upload.videoId === video.contentDetails.upload.videoId;
@@ -41,7 +42,7 @@ export default ({ children }) => {
           return "";
         });
       } catch (error) {
-        setIsLoaded(new Date());
+        setIsLoaded(Date.now());
         setError(error);
       }
     }
@@ -56,9 +57,9 @@ export default ({ children }) => {
 
         refresh();
 
-        setInitiated(new Date());
+        setInitiated(Date.now());
       } catch (error) {
-        setInitiated(new Date());
+        setInitiated(Date.now());
         setError(error);
       }
     })();

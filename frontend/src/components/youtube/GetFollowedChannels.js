@@ -61,13 +61,11 @@ async function getFollowedChannels() {
         );
       }
 
-      let currentTime = new Date();
-
       localStorage.setItem(
         `YT-followedChannels`,
         JSON.stringify({
           data: allSubscriptions,
-          casheExpire: currentTime.setHours(currentTime.getHours() + 12),
+          casheExpire: Date.now() + 12 * 60 * 60 * 1000,
         })
       );
 

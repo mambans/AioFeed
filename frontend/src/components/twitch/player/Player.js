@@ -61,7 +61,7 @@ export default () => {
   const channelinfoTimer = useRef();
   const viewersTimer = useRef();
   const uptimeTimer = useRef();
-  const OpenedDate = useRef(new Date().getTime());
+  const OpenedDate = useRef(Date.now());
   const fadeTimer = useRef();
 
   const toggleFullscreen2 = (TwitchPlayer) => {

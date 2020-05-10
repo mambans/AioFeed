@@ -226,7 +226,7 @@ export default ({ data, vodBtnDisabled }) => {
               }}>
               {`${moment(data.created_at).format("dd HH:mm")} → ${
                 data.thumbnail_url === ""
-                  ? moment(new Date()).format("dd HH:mm")
+                  ? moment(Date.now()).format("dd HH:mm")
                   : moment(data.endDate).format("dd HH:mm")
               }`}
             </p>

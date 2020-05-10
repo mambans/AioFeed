@@ -29,7 +29,7 @@ export default ({ data, refresh }) => {
           ) : autoRefreshEnabled ? (
             <CountdownCircleTimer
               key={refreshTimer}
-              startDuration={parseFloat(((refreshTimer - new Date().getTime()) / 1000).toFixed(0))}
+              startDuration={parseFloat(((refreshTimer - Date.now()) / 1000).toFixed(0))}
               duration={25}
             />
           ) : (

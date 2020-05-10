@@ -121,7 +121,7 @@ export default () => {
                 if (stream.type === "archive") {
                   stream.endDate = durationToDate(stream.duration, stream.published_at);
                 } else {
-                  stream.endDate = new Date(stream.published_at);
+                  stream.endDate = new Date(stream.published_at).getTime();
                 }
                 return stream;
               });
@@ -146,7 +146,7 @@ export default () => {
                 if (stream.type === "archive") {
                   stream.endDate = durationToDate(stream.duration, stream.published_at);
                 } else {
-                  stream.endDate = new Date(stream.published_at);
+                  stream.endDate = new Date(stream.published_at).getTime();
                 }
                 return stream;
               });

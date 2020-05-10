@@ -10,7 +10,7 @@ export default (followedStreamVods, vodExpire, oldLoaded, oldExpire) => {
   });
   const sortedLiveVods = sortBy(
     liveVods,
-    (stream) => new Date().getTime() - new Date(stream.created_at).getTime()
+    (stream) => Date.now() - new Date(stream.created_at).getTime()
   );
   const sortedCompletedVods = reverse(
     sortBy(completedVods, (stream) => new Date(stream.endDate).getTime())
@@ -18,8 +18,8 @@ export default (followedStreamVods, vodExpire, oldLoaded, oldExpire) => {
 
   const Vods = {
     data: sortedLiveVods.concat(sortedCompletedVods),
-    expire: oldExpire || new Date().setHours(new Date().getHours() + vodExpire),
-    loaded: oldLoaded || new Date(),
+    expire: oldExpire || Date.now() + vodExpire * 24 * 60 * 60 * 1000,
+    loaded: oldLoaded || Date.now(),
   };
 
   return Vods;

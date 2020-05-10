@@ -11,7 +11,7 @@ export default async () => {
         },
       })
       .then((res) => {
-        const expireDate = new Date(new Date().setTime(new Date().getTime() + 60000));
+        const expireDate = new Date(Date.now() + 60000);
         AddCookie("Twitch_token_validated", true, expireDate);
         return res.data;
       })

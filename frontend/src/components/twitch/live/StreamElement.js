@@ -115,9 +115,7 @@ function StreamEle(data_p) {
             }
             src={
               // data.thumbnail_url.replace("{width}", 1280).replace("{height}", 720) +
-              data.thumbnail_url.replace("{width}", 858).replace("{height}", 480) +
-              `#` +
-              new Date().getTime()
+              data.thumbnail_url.replace("{width}", 858).replace("{height}", 480) + `#` + Date.now()
             }
           />
         </Link>
