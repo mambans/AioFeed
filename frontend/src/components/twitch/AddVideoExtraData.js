@@ -140,7 +140,7 @@ export default async (items, fetchGameInfo = true) => {
             return game.id === stream.game_id;
           }).box_art_url)
         : (stream.game_img =
-            stream.game_name === "" ? "" : `${process.env.PUBLIC_URL}/images/placeholder.jpg`);
+            stream.game_name === "" ? "" : `${process.env.PUBLIC_URL}/images/placeholder.webp`);
 
       return undefined;
     });

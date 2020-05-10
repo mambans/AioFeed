@@ -80,7 +80,7 @@ export default () => {
               src={
                 profileImage !== null
                   ? profileImage
-                  : `${process.env.PUBLIC_URL}/images/placeholder.jpg`
+                  : `${process.env.PUBLIC_URL}/images/placeholder.webp`
               }
               alt=''
             />

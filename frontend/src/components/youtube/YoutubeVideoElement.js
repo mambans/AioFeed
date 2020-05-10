@@ -21,7 +21,7 @@ const videoImageUrls = (urls) => {
   } else if (urls.medium) {
     return urls.medium.url;
   } else {
-    return `${process.env.PUBLIC_URL}/images/placeholder.jpg`;
+    return `${process.env.PUBLIC_URL}/images/placeholder.webp`;
   }
 };
 
@@ -82,7 +82,7 @@ export default (data) => {
           to={`/youtube/` + data.video.contentDetails.upload.videoId}>
           <img src={videoImageUrls(data.video.snippet.thumbnails)} alt={styles.thumbnail} />
         </Link>
-        <p className={styles.duration}>{data.video.duration}</p>
+        {data.video.duration && <p className={styles.duration}>{data.video.duration}</p>}
         {/* {data.video.df === "liveYoutube" ? (
           <Moment className={styles.duration} durationFromNow>
             {data.video.duration}

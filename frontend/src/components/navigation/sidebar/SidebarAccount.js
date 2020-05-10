@@ -156,7 +156,7 @@ export default () => {
             />
           )}
           <StyledProfileImg
-            src={profileImage || `${process.env.PUBLIC_URL}/images/placeholder.jpg`}
+            src={profileImage || `${process.env.PUBLIC_URL}/images/placeholder.webp`}
             alt=''
           />
         </ProfileImgContainer>

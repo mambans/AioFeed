@@ -20,7 +20,7 @@ export default ({ data }) => {
         {data.profile_img_url ? (
           <img src={data.profile_img_url} alt=''></img>
         ) : (
-          <img src={`${process.env.PUBLIC_URL}/images/placeholder.jpg`} alt=''></img>
+          <img src={`${process.env.PUBLIC_URL}/images/placeholder.webp`} alt=''></img>
         )}
         {data.user_name}
       </Link>
