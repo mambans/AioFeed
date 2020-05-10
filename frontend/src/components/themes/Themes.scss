@@ -3,7 +3,7 @@ $videoTitle: rgb(240, 240, 240);
 
 html,
 html[data-theme="original"] {
-  --backgroundImg: url("/images/woodCoffe-blur4.0.jpg");
+  --backgroundImg: url("/images/woodCoffe-blur4.0.webp");
   --backgroundImgSize: cover;
   --backgroundImgRepeat: no-repeat;
   --VideoContainerLinks: rgb(175, 175, 175);
@@ -53,7 +53,7 @@ html[data-theme="original"] {
 }
 
 html[data-theme="christmas"] {
-  --backgroundImg: url("/images/wood-christmas5-blur.jpg");
+  --backgroundImg: url("/images/wood-christmas-blured.webp");
   --VideoContainerLinks: rgb(151, 151, 151);
   --VideoContainerLinksHover: rgb(255, 255, 255);
   --VideoContainerViewers: rgb(255, 255, 255);
@@ -84,7 +84,7 @@ html[data-theme="christmas"] {
 }
 
 html[data-theme="new year's eve"] {
-  --backgroundImg: url("/images/new years eve33.jpg");
+  --backgroundImg: url("/images/new years eve33.webp");
   --footerShadow: 0 0 50px 0 #242424;
   --refreshButtonHoverBackground: #000000b2;
   --scrollbarColors: rgb(18, 36, 58) rgb(5, 8, 10);
@@ -97,15 +97,8 @@ html[data-theme="clean"] {
   --scrollbarColors: #1c1f22 rgb(5, 8, 10);
 }
 
-html[data-theme="clean"] {
-  --backgroundImg: url("/images/clean.png");
-  --navigationbarBackground: #1f2326;
-  --sidebarBackground: #1c1f22;
-  --scrollbarColors: #1c1f22 rgb(5, 8, 10);
-}
-
 html[data-theme="stone"] {
-  --backgroundImg: url("/images/stone.jpg");
+  --backgroundImg: url("/images/stone.webp");
   --navigationbarBackground: #121415a8;
   --sidebarBackground: #121415a8;
   --scrollbarColors: #1c1f22 rgb(5, 8, 10);
