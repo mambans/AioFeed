@@ -39,8 +39,8 @@ export default () => {
                 <b>ioFeed</b>
               </h1>
               <p>
-                View Twitch/Youtube feeds and Twitter list feed and get notified about Twitch
-                Livestreams.
+                View Twitch & Youtube feeds and Twitter list in one page, with Twitch
+                (live/offline/update) notifications.
               </p>
             </div>
           </LogoText>
