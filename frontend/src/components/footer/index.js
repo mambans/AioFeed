@@ -17,12 +17,15 @@ import {
 
 export default () => {
   const { footerVisible, setRenderModal, setShowSidebar } = useContext(NavigationContext);
-  const { enableTwitter } = useContext(FeedsContext);
+  const { enableTwitter, showTwitchSidebar } = useContext(FeedsContext);
   const location = useLocation();
 
   return (
     footerVisible && (
-      <StyledFooterContainer enableTwitter={enableTwitter} location={location.pathname}>
+      <StyledFooterContainer
+        enableTwitter={enableTwitter}
+        showTwitchSidebar={showTwitchSidebar}
+        location={location.pathname}>
         <div>
           <ul>
             <li>

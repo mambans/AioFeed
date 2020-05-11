@@ -9,11 +9,19 @@ export const StyledFooterContainer = styled.div`
   margin-top: var(--footerMargin);
   border-top: 2px solid #53463f;
   max-height: 200px;
-  width: ${({ enableTwitter, location }) =>
-    enableTwitter && (location === "/feed" || location === "/feed/")
-      ? "calc(85vw - (25px + 10px))"
+  width: ${({ enableTwitter, showTwitchSidebar, location }) =>
+    location === "/feed" || location === "/feed/"
+      ? `calc(100% - (( ${enableTwitter ? "15vw + 25px + 10px" : "0px"})))`
       : "100%"};
+  /* width: ${({ enableTwitter, showTwitchSidebar, location }) =>
+    location === "/feed" || location === "/feed/"
+      ? `calc(100% - (( ${enableTwitter ? "15vw + 25px + 10px" : "0px"}) + ${
+          showTwitchSidebar ? "275px" : "0px"
+        }))`
+      : "100%"}; */
   color: var(--VideoContainerLinks);
+  /* margin-left: ${({ showTwitchSidebar }) => (showTwitchSidebar ? "275px" : "unset")}; */
+  transition: width 750ms, margin 750ms;
 
   ul {
     display: flex;
