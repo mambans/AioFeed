@@ -92,24 +92,31 @@ export default (data) => {
         )}
         {streamType(data.video.df)} */}
       </ImageContainer>
-      <OverlayTrigger
-        key={"bottom"}
-        placement={"bottom"}
-        delay={{ show: 250, hide: 0 }}
-        overlay={
-          <Tooltip
-            id={`tooltip-${"bottom"}`}
-            style={{
-              width: "336px",
-            }}>
-            {data.video.snippet.title}
-          </Tooltip>
-        }>
+      {data.video.snippet.title.length >= 50 ? (
+        <OverlayTrigger
+          key={"bottom"}
+          placement={"bottom"}
+          delay={{ show: 250, hide: 0 }}
+          overlay={
+            <Tooltip
+              id={`tooltip-${"bottom"}`}
+              style={{
+                width: "336px",
+              }}>
+              {data.video.snippet.title}
+            </Tooltip>
+          }>
+          <VideoTitleHref
+            href={`https://www.youtube.com/watch?v=` + data.video.contentDetails.upload.videoId}>
+            {truncate(data.video.snippet.title, 50)}
+          </VideoTitleHref>
+        </OverlayTrigger>
+      ) : (
         <VideoTitleHref
           href={`https://www.youtube.com/watch?v=` + data.video.contentDetails.upload.videoId}>
-          {truncate(data.video.snippet.title, 60)}
+          data.video.snippet.titl}
         </VideoTitleHref>
-      </OverlayTrigger>
+      )}
       <p className={styles.channel}>
         <a href={`https://www.youtube.com/channel/` + data.video.snippet.channelId}>
           {data.video.snippet.channelTitle}
