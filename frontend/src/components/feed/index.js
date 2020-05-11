@@ -164,6 +164,8 @@ export default () => {
               {(data) => (
                 <>
                   <YoutubeHeader
+                    videos={data.videos}
+                    setVideos={data.setVideos}
                     refresh={data.refresh}
                     isLoaded={data.isLoaded}
                     requestError={data.requestError}
@@ -176,7 +178,6 @@ export default () => {
                     centerContainerRef={centerContainerRef.current}
                     requestError={data.requestError}
                     videos={data.videos}
-                    initiated={data.initiated}
                   />
                 </>
               )}

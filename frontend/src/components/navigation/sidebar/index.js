@@ -47,9 +47,9 @@ export default () => {
           setTwitchUsername(event.data.username);
           setTwitchProfileImg(event.data.profileImg);
         } else if (event.data.service === "youtube") {
-          setYoutubeToken(event.data.token);
-          setYoutubeUsername(event.data.username);
-          setYoutubeProfileImg(event.data.profileImg);
+          if (event.data.token) setYoutubeToken(event.data.token);
+          if (event.data.username) setYoutubeUsername(event.data.username);
+          if (event.data.profileImg) setYoutubeProfileImg(event.data.profileImg);
         }
       }
     }

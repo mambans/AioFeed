@@ -41,7 +41,7 @@ const fetchSubscriptionVideos = async (videosCACHE, channel) => {
   // console.log("fetchSubscriptionVideos -> cachedChannelObj", cachedChannelObj);
 
   if (cachedChannelObj) {
-    console.log(":::video cache exists!:::");
+    // console.log(":::video cache exists!:::");
     res = await axios
       .get(`https://www.googleapis.com/youtube/v3/activities?`, {
         params: {
@@ -61,11 +61,11 @@ const fetchSubscriptionVideos = async (videosCACHE, channel) => {
         return result.data;
       })
       .catch(function (e) {
+        // e.response.data.error.code === 403}
         error = e;
         return cachedChannelObj;
       });
   } else {
-    console.log("---Video request sent!---");
     res = await axios
       .get(`https://www.googleapis.com/youtube/v3/activities?`, {
         params: {
@@ -84,11 +84,15 @@ const fetchSubscriptionVideos = async (videosCACHE, channel) => {
         return result.data;
       })
       .catch(function (e) {
+        // e.response.data.error.code === 403
         error = e;
       });
   }
 
-  return { res: error && error.response.status === 401 ? cachedChannelObj : res, error };
+  return {
+    res,
+    error,
+  };
 };
 
 export default async (followedChannels) => {
@@ -106,14 +110,12 @@ export default async (followedChannels) => {
       followedChannels.map(async (channel) => {
         return await fetchSubscriptionVideos(videosCACHE, channel).then(async (result) => {
           error = result.error;
-
           const items = await filterVideos(result.res);
 
           return { channel: channel, items: items };
         });
       })
     );
-
     localStorage.setItem("YoutubeChannelsObj", JSON.stringify(channelWithVideos));
 
     const videoOnlyArray = await Promise.all(

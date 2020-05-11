@@ -19,6 +19,7 @@ const decryptData = async (data, secretString) => {
 };
 
 const login = async ({ username, password }) => {
+  console.log("username", username);
   const res = await client
     .query({
       TableName: process.env.USERNAME_TABLE,
@@ -36,7 +37,7 @@ const login = async ({ username, password }) => {
     const valid = await compare(password, res.Items[0].Password);
 
     if (valid) {
-      const key = uniqid(`${res.Items[0].Username}-AuthKey:`);
+      const key = uniqid(`${res.Items[0].Username}AuthKey`);
 
       const data = await client
         .update({
@@ -54,6 +55,11 @@ const login = async ({ username, password }) => {
       const decryptedData = {
         Attributes: {
           ...data.Attributes,
+          YoutubeAccessToken: await decryptData(data.Attributes.YoutubeAccessToken, "AccessToken"),
+          YoutubeRefreshToken: await decryptData(
+            data.Attributes.YoutubeRefreshToken,
+            "RefreshToken"
+          ),
           TwitchPreferences: data.Attributes.TwitchPreferences
             ? {
                 ...data.Attributes.TwitchPreferences,

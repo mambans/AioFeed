@@ -32,11 +32,8 @@ const fetchNextPgeOfSubscriptions = async (previousPage, totalResults, prevpPage
 
 async function getFollowedChannels() {
   try {
-    if (
-      !localStorage.getItem(`YT-followedChannels`) ||
-      JSON.parse(localStorage.getItem(`YT-followedChannels`)).casheExpire <= new Date().getTime()
-    ) {
-      const previousPage = await axios.get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {
+    try {
+      const page = await axios.get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {
         params: {
           maxResults: 50,
           mine: true,
@@ -50,15 +47,11 @@ async function getFollowedChannels() {
         },
       });
 
-      const totalResults = previousPage.data.pageInfo.totalResults - 1;
+      const totalResults = page.data.pageInfo.totalResults - 1;
 
-      let allSubscriptions = previousPage.data.items;
-      if (previousPage.data.items.length < totalResults) {
-        allSubscriptions = await fetchNextPgeOfSubscriptions(
-          previousPage,
-          totalResults,
-          previousPage.data.items
-        );
+      let allSubscriptions = page.data.items;
+      if (page.data.items.length < totalResults) {
+        allSubscriptions = await fetchNextPgeOfSubscriptions(page, totalResults, page.data.items);
       }
 
       localStorage.setItem(
@@ -70,7 +63,7 @@ async function getFollowedChannels() {
       );
 
       return allSubscriptions;
-    } else {
+    } catch (error) {
       console.log("Youtube: Followed-channels cache used.");
       return JSON.parse(localStorage.getItem("YT-followedChannels")).data;
     }

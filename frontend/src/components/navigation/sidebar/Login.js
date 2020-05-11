@@ -72,8 +72,8 @@ export default () => {
             // AddCookie("Youtube-Twitch_FeedEnabled", parseBolean(res.TwitchPreferences.enabled));
           }
 
+          AddCookie("Youtube-access_token", res.YoutubeAccessToken);
           if (res.YoutubePreferences && Object.keys(res.YoutubePreferences).length !== 0) {
-            AddCookie("Youtube-access_token", res.YoutubePreferences.Token);
             AddCookie("YoutubeUsername", res.YoutubePreferences.Username);
             AddCookie("YoutubeProfileImg", res.YoutubePreferences.Profile);
           }

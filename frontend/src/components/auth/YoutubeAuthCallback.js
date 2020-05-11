@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 import { getCookie, AddCookie } from "../../util/Utils";
 import ErrorHandler from "./../error";
@@ -7,100 +8,118 @@ import AccountContext from "./../account/AccountContext";
 import NavigationContext from "./../navigation/NavigationContext";
 import LoadingIndicator from "../LoadingIndicator";
 
-function getParameterByName(name, url) {
-  if (!url) url = window.location.href;
-  name = name.replace(/[[\]]/g, "\\$&");
-  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-    results = regex.exec(url);
-  if (!results) return null;
-  if (!results[2]) return "";
-  return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-
 export default () => {
   const { setVisible, setFooterVisible } = useContext(NavigationContext);
   const [error, setError] = useState();
-  const { username } = useContext(AccountContext);
+  const { username, authKey } = useContext(AccountContext);
+  const location = useLocation();
 
   const getAccessToken = useCallback(async () => {
-    const url = new URL(window.location.href);
+    AddCookie(
+      "Youtube-readonly",
+      location.search
+        .split("&")
+        .find((part) => {
+          return part.includes("scope");
+        })
+        .includes(".readonly")
+    );
 
-    const accessToken = getParameterByName("access_token");
-    const accessTokenExpireParam = getParameterByName("expires_in");
+    const codeFromUrl = location.search
+      .split("&")
+      .find((part) => {
+        return part.includes("code");
+      })
+      .replace("code=", "");
 
-    const validateToken = await axios
-      .post(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${accessToken}`)
-      .catch((error) => {
-        console.log(error);
+    const tokens = await axios
+      .post(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/youtube/token`, {
+        code: codeFromUrl,
+        username: getCookie("AioFeed_AccountName"),
+        authkey: authKey,
+      })
+      .then(async (res) => {
+        AddCookie("Youtube-access_token", res.data.access_token);
+        AddCookie("Youtube-access_token_expire", res.data.expires_in);
+        AddCookie("Youtube-refresh_token", res.data.refresh_token);
+
+        return { access_token: res.data.access_token, refresh_token: res.data.refresh_token };
+      })
+      .catch((e) => {
+        console.error(e);
       });
 
-    if (validateToken.data.aud === process.env.REACT_APP_YOUTUBE_CLIENT_ID) {
-      AddCookie("Youtube-access_token", accessToken);
-      AddCookie("Youtube-access_token_expire", accessTokenExpireParam);
-      AddCookie("Youtube-readonly", url.hash.includes(".readonly"));
-
-      const MyYoutube = await axios
-        .get(
-          `https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
-          {
-            headers: {
-              Authorization: "Bearer " + getCookie("Youtube-access_token"),
-              Accept: "application/json",
-            },
-          }
-        )
-        .then((res) => {
-          AddCookie("YoutubeUsername", res.data.items[0].snippet.title);
-          AddCookie("YoutubeProfileImg", res.data.items[0].snippet.thumbnails.default.url);
-
-          return {
-            Username: res.data.items[0].snippet.title,
-            ProfileImg: res.data.items[0].snippet.thumbnails.default.url,
-          };
-        });
-
-      await axios
-        .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
-          username: username,
-          columnName: "YoutubePreferences",
-          columnValue: {
-            Username: MyYoutube.Username,
-            Profile: MyYoutube.ProfileImg,
-            Token: accessToken,
+    const MyYoutube = await axios
+      .get(
+        `https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+        {
+          headers: {
+            Authorization: "Bearer " + tokens.access_token,
+            Accept: "application/json",
           },
-        })
-        .catch((e) => {
-          console.error(e);
-        });
+        }
+      )
+      .then((res) => {
+        AddCookie("YoutubeUsername", res.data.items[0].snippet.title);
+        AddCookie("YoutubeProfileImg", res.data.items[0].snippet.thumbnails.default.url);
 
-      return { token: accessToken, ...MyYoutube };
-    }
-  }, [username]);
+        return {
+          Username: res.data.items[0].snippet.title,
+          ProfileImg: res.data.items[0].snippet.thumbnails.default.url,
+        };
+      });
+
+    await axios
+      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+        username: username,
+        columnName: "YoutubePreferences",
+        columnValue: {
+          Username: MyYoutube.Username,
+          Profile: MyYoutube.ProfileImg,
+          Token: tokens.access_token,
+          Refresh_token: tokens.refresh_token,
+        },
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
+    return { access_token: tokens.access_token, refresh_token: tokens.refresh_token, ...MyYoutube };
+  }, [username, location.search, authKey]);
 
   useEffect(() => {
     setVisible(false);
     setFooterVisible(false);
-
     (async () => {
-      const url = new URL(window.location.href);
       try {
-        if (url.hash.split("#")[1].split("&")[0].slice(6) === getCookie("Youtube-myState")) {
+        const state = location.search
+          .split("&")
+          .find((part) => {
+            return part.includes("state");
+          })
+          .replace("?state=", "");
+
+        if (state === getCookie("Youtube-myState")) {
           await getAccessToken()
             .then((res) => {
+              console.log("res", res);
               console.log("successfully authenticated to Youtube.");
               window.opener.postMessage(
                 {
                   service: "youtube",
-                  token: res.token,
+                  token: res.access_token,
+                  refreshtoken: res.refresh_token,
                   username: res.Username,
                   profileImg: res.ProfileImg,
                 },
                 "*"
               );
 
-              setTimeout(() => {
-                window.close();
-              }, 1);
+              if (res.access_token) {
+                setTimeout(() => {
+                  window.close();
+                }, 1);
+              }
             })
             .catch((error) => {
               setError(error);
@@ -112,7 +131,7 @@ export default () => {
         setError(error);
       }
     })();
-  }, [getAccessToken, setVisible, setFooterVisible]);
+  }, [getAccessToken, setVisible, setFooterVisible, location.search]);
 
   if (error) {
     return <ErrorHandler data={error}></ErrorHandler>;

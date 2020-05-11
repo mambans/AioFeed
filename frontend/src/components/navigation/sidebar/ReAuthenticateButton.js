@@ -121,7 +121,7 @@ export default ({ disconnect, serviceName, style }) => {
               authenticatePopup(
                 `Connect Youtube`,
                 "Youtube",
-                `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube`,
+                `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/youtube/callback&response_type=code&scope=https://www.googleapis.com/auth/youtube&access_type=offline&prompt=consent`,
                 setEnableYoutube
               );
             }}>
@@ -142,7 +142,7 @@ export default ({ disconnect, serviceName, style }) => {
                 authenticatePopup(
                   `Connect Youtube`,
                   "Youtube",
-                  `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/youtube/callback&response_type=token&scope=https://www.googleapis.com/auth/youtube`,
+                  `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/youtube/callback&response_type=code&scope=https://www.googleapis.com/auth/youtube&access_type=offline&prompt=consent`,
                   setEnableYoutube
                 );
               }}>

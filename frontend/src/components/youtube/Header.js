@@ -1,23 +1,16 @@
-import { MdFormatListBulleted } from "react-icons/md";
 import { MdRefresh } from "react-icons/md";
 import { Spinner } from "react-bootstrap";
 import { FaYoutube } from "react-icons/fa";
 import Alert from "react-bootstrap/Alert";
 import Moment from "react-moment";
-import Popup from "reactjs-popup";
 import React from "react";
 
 import styles from "./Youtube.module.scss";
 import Util from "../../util/Util";
-import {
-  RefreshButton,
-  HeaderTitle,
-  HeaderContainer,
-  ButtonList,
-} from "./../sharedStyledComponents";
-import RenderFollowedChannelList from "./channelList/RenderFollowedChannelList";
+import { RefreshButton, HeaderTitle, HeaderContainer } from "./../sharedStyledComponents";
 import { HeaderLeftSubcontainer } from "./../twitch/StyledComponents";
 import ReAuthenticateButton from "../navigation/sidebar/ReAuthenticateButton";
+import ChannelList from "./channelList";
 
 const SubFeedError = (props) => {
   const { error } = props;
@@ -63,14 +56,15 @@ const SubFeedError = (props) => {
 };
 
 export default (data) => {
+  const { refresh, requestError, followedChannels, videos, isLoaded, setVideos } = data;
   return (
     <HeaderContainer>
       <HeaderLeftSubcontainer>
         <RefreshButton
-          onClick={data.refresh}
+          onClick={refresh}
           // disabled={data.requestError && data.requestError.code === 403 ? true : false}
         >
-          {!data.isLoaded ? (
+          {!isLoaded ? (
             <div className='SpinnerWrapper'>
               <Spinner animation='border' role='status' style={Util.loadingSpinnerSmall}></Spinner>
             </div>
@@ -79,43 +73,16 @@ export default (data) => {
           )}
         </RefreshButton>
 
-        <Moment key={data.isLoaded || new Date()} className={styles.lastRefresh} fromNow>
-          {data.isLoaded || new Date()}
+        <Moment key={isLoaded || Date.now()} className={styles.lastRefresh} fromNow>
+          {isLoaded || Date.now()}
         </Moment>
       </HeaderLeftSubcontainer>
-      <SubFeedError error={data.requestError}></SubFeedError>
+      <SubFeedError error={requestError}></SubFeedError>
       <HeaderTitle>
         <FaYoutube size={32} style={{ color: "#a80000" }} />
         Youtube
       </HeaderTitle>
-      <Popup
-        placeholder='""'
-        arrow={false}
-        trigger={
-          <div
-            style={{
-              width: "50px",
-              minWidth: "50px",
-              marginLeft: "250px",
-              justifyContent: "right",
-              display: "flex",
-            }}>
-            <ButtonList>
-              <MdFormatListBulleted
-                size={22}
-                style={{
-                  height: "22px",
-                  alignItems: "center",
-                  display: "flex",
-                }}
-              />
-            </ButtonList>
-          </div>
-        }
-        position='left top'
-        className='popupModal'>
-        <RenderFollowedChannelList followedChannels={data.followedChannels} />
-      </Popup>
+      <ChannelList followedChannels={followedChannels} videos={videos} setVideos={setVideos} />
     </HeaderContainer>
   );
 };

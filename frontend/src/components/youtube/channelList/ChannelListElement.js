@@ -1,104 +1,22 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import { MdDelete } from "react-icons/md";
-import Alert from "react-bootstrap/Alert";
-import axios from "axios";
-import { remove } from "lodash";
+import styled from "styled-components";
 
-// import UnfollowStream from "./UnfollowStream";
 import { getCookie } from "./../../../util/Utils";
 import { UnfollowButton } from "./../../sharedStyledComponents";
+import UnfollowChannel from "./unFollowChannel";
 
-const UnfollowChannel = async (subId) => {
-  const response = await axios
-    .delete(`https://www.googleapis.com/youtube/v3/subscriptions`, {
-      params: {
-        id: subId,
-        key: process.env.REACT_APP_YOUTUBE_API_KEY,
-      },
-      headers: {
-        Authorization: "Bearer " + getCookie("Youtube-access_token"),
-        Accept: "application/json",
-      },
-    })
-    .then((res) => {
-      const followedChannels = JSON.parse(localStorage.getItem(`YT-followedChannels`));
+const ChannelListLi = styled.li`
+  position: relative;
+  height: 42px;
+  border-bottom: thin solid #1e1616;
+`;
 
-      remove(followedChannels.data, function (channel) {
-        return channel.id === subId;
-      });
-
-      // setFollowedChannels(followedChannels.data);
-
-      localStorage.setItem(
-        `YT-followedChannels`,
-        JSON.stringify({
-          data: followedChannels.data,
-          casheExpire: followedChannels.casheExpire,
-        })
-      );
-
-      return res;
-    });
-
-  return response;
-};
-
-const ChannelListElement = (data) => {
-  const { channel } = data;
-  const [unfollowResponse, setUnfollowResponse] = useState(null);
-  const refUnfollowAlert = useRef();
-
-  function UnfollowAlert(user) {
-    let alertText;
-    if (unfollowResponse) {
-      let alertType = "warning";
-      if (unfollowResponse.includes("Failed")) {
-        alertType = "warning";
-        alertText = "Failed to Unfollow.";
-      } else if (unfollowResponse.includes("Success")) {
-        alertType = "success";
-        alertText = "Successfully Unfollowed";
-      }
-      clearTimeout(refUnfollowAlert.current);
-      refUnfollowAlert.current = setTimeout(() => {
-        setUnfollowResponse(null);
-      }, 6000);
-      return (
-        <Alert
-          variant={alertType}
-          style={{
-            width: "200px",
-            position: "absolute",
-            // zIndex: "2",
-            margin: "0",
-            padding: "5px",
-            borderRadius: "3px",
-          }}
-          className='unfollowResponseAlert'>
-          <Alert.Heading
-            style={{
-              fontSize: "16px",
-              textAlign: "center",
-              marginBottom: "0",
-            }}>
-            {alertText}
-          </Alert.Heading>
-        </Alert>
-      );
-    } else {
-      return "";
-    }
-  }
-
-  useEffect(() => {
-    return () => {
-      clearTimeout(refUnfollowAlert.current);
-    };
-  }, []);
+export default (data) => {
+  const { channel, setChannels, videos, setVideos } = data;
 
   return (
-    <li key={channel.snippet.resourceId.ChanelId}>
-      <UnfollowAlert user={channel.snippet.title}></UnfollowAlert>
+    <ChannelListLi key={channel.snippet.resourceId.channelId}>
       <a href={`https://www.youtube.com/channel/${channel.snippet.resourceId.channelId}`}>
         {channel.snippet.thumbnails.default.url ? (
           <img
@@ -128,19 +46,16 @@ const ChannelListElement = (data) => {
         data-tip={"Unfollow " + channel.snippet.title}
         variant='link'
         onClick={async () => {
-          await UnfollowChannel(channel.id)
-            .then((res) => {
-              setUnfollowResponse("Success");
-            })
-            .catch((error) => {
-              setUnfollowResponse(null);
-              setUnfollowResponse("Failed");
-            });
+          await UnfollowChannel({
+            subscriptionId: channel.id,
+            channelId: channel.snippet.resourceId.channelId,
+            setChannels: setChannels,
+            videos: videos,
+            setVideos: setVideos,
+          });
         }}>
         <MdDelete size={18} />
       </UnfollowButton>
-    </li>
+    </ChannelListLi>
   );
 };
-
-export default ChannelListElement;

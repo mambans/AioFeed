@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { MdFormatListBulleted } from "react-icons/md";
+import { CSSTransition } from "react-transition-group";
 
 import {
   GameListUlContainer,
@@ -12,12 +12,12 @@ import StyledLoadingList from "./../categoryTopStreams/LoadingList";
 import ChannelListElement from "../channelList/ChannelListElement";
 import AddVideoExtraData from "../AddVideoExtraData";
 import GetFollowedChannels from "../GetFollowedChannels";
-import { CSSTransition } from "react-transition-group";
 import validateToken from "../validateToken";
 
 export default () => {
   const [channels, setChannels] = useState();
   const [listIsOpen, setListIsOpen] = useState();
+  const inputRef = useRef();
 
   const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue);
@@ -40,11 +40,27 @@ export default () => {
       showValue: () => {
         return value;
       },
+      returnChannel: () => {
+        const foundChannel = channels.find((p_channel) => {
+          return p_channel.user_name.toLowerCase().includes(value.toLowerCase());
+        });
+        if (foundChannel) {
+          return foundChannel.user_name;
+        } else {
+          return value;
+        }
+      },
     };
   };
 
   //eslint-disable-next-line
-  const { value: channel, bind: bindChannel, reset: resetChannel, showValue } = useInput("");
+  const {
+    value: channel,
+    bind: bindChannel,
+    reset: resetChannel,
+    showValue,
+    returnChannel,
+  } = useInput("");
 
   const channelObjectList = async (channelsList) => {
     return {
@@ -80,23 +96,35 @@ export default () => {
     }
   }, [showValue, listIsOpen, fetchFollowedChannels, channels]);
 
+  useEffect(() => {
+    const inputField = inputRef.current;
+    inputField.addEventListener("focus", () => {
+      setListIsOpen(true);
+    });
+
+    return () => {
+      inputField.removeEventListener("focus", () => {
+        setListIsOpen(true);
+      });
+    };
+  }, []);
+
   const handleSubmit = (evt) => {
     evt.preventDefault();
     resetChannel();
-    window.open(`/${channel}/channel/`);
+    window.open(`/${returnChannel()}/channel/`);
   };
 
   return (
     <>
       <SearchGameForm onSubmit={handleSubmit} open={listIsOpen}>
-        <input type='text' placeholder={"..."} {...bindChannel}></input>
+        <input ref={inputRef} type='text' placeholder={"..."} {...bindChannel}></input>
         {channel && (
-          <Link
+          <SearchSubmitBtn
             to={{
-              pathname: `/${channel.toLowerCase()}/channel/`,
-            }}>
-            <SearchSubmitBtn />
-          </Link>
+              pathname: `/${channel}/channel/`,
+            }}
+          />
         )}
         <MdFormatListBulleted
           id='ToggleListBtn'
@@ -138,7 +166,7 @@ export default () => {
                   })}
               </>
             ) : (
-              <StyledLoadingList amount={12} />
+              <StyledLoadingList amount={11} />
             )}
           </GameListUlContainer>
         </CSSTransition>

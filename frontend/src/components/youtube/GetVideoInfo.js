@@ -10,7 +10,6 @@ export default async (flattedVideosArray) => {
         getLocalstorage("YT-VideoDetails")
       : { data: [], expire: Date.now() + 7 * 24 * 60 * 60 * 1000 };
 
-
   const comparer = (otherArray) => {
     return function (current) {
       return (
@@ -21,41 +20,54 @@ export default async (flattedVideosArray) => {
     };
   };
 
-  const noVideoDetails =
+  const videosWithNoExtraDetails =
     detailsCached && detailsCached.data.length >= 1
       ? videosArray.filter(comparer(detailsCached.data))
       : videosArray;
 
-  const noVideoDetailsIDS = noVideoDetails.map((video) => video.contentDetails.upload.videoId);
+  const noVideoDetailsIDS = videosWithNoExtraDetails.map(
+    (video) => video.contentDetails.upload.videoId
+  );
 
-  const newVideosDetails = noVideoDetails
-    ? await axios
-        .get(
-          `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${noVideoDetailsIDS}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`
-        )
-        .then((res) => {
-          console.log(
-            `Fetched VideoDeails for {${res.data.items.length}} videos..`,
-            res.data.items
-          );
+  const newVideosDetails =
+    videosWithNoExtraDetails &&
+    videosWithNoExtraDetails.length >= 1 &&
+    noVideoDetailsIDS &&
+    noVideoDetailsIDS.length >= 1
+      ? await axios
+          .get(
+            `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${noVideoDetailsIDS}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`
+          )
+          .then((res) => {
+            console.log(
+              `Fetched VideoDeails for {${res.data.items.length}} videos..`,
+              res.data.items
+            );
 
-          const aLLDetails = {
-            data: detailsCached.data.concat(res.data.items),
-            expire: detailsCached.expire,
-          };
-          localStorage.setItem("YT-VideoDetails", JSON.stringify(aLLDetails));
+            const aLLDetails = {
+              data: detailsCached.data.concat(res.data.items),
+              expire: detailsCached.expire,
+            };
 
-          return aLLDetails;
-        })
-    : detailsCached.data;
+            localStorage.setItem("YT-VideoDetails", JSON.stringify(aLLDetails));
+
+            return aLLDetails;
+          })
+          .catch((e) => {
+            return null;
+          })
+      : detailsCached;
 
   const allVideos = videosArray.map((video) => {
-    video.duration = moment
-      .duration(
-        newVideosDetails.data.find((detail) => detail.id === video.contentDetails.upload.videoId)
-          .contentDetails.duration
-      )
-      .format("hh:mm:ss");
+    video.duration = newVideosDetails
+      ? moment
+          .duration(
+            newVideosDetails.data.find(
+              (detail) => detail.id === video.contentDetails.upload.videoId
+            ).contentDetails.duration
+          )
+          .format("hh:mm:ss")
+      : "";
     return video;
   });
 

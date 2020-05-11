@@ -34,8 +34,6 @@ const create = async ({ username, email, password }) => {
         Username: username,
         Email: email,
         Password: hashedPassword,
-        TwitchToken: "null",
-        YoutubeToken: "null",
         MonitoredChannels: [],
         ProfileImg: "null",
         AuthKey: key,

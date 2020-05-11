@@ -4,16 +4,17 @@ import ErrorHandler from "../error";
 import getFollowedChannels from "./GetFollowedChannels";
 import GetSubscriptionVideos from "./GetSubscriptionVideos";
 import AccountContext from "../account/AccountContext";
+import validateToken from "./validateToken";
 
 export default ({ children }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [initiated, setInitiated] = useState(false);
   const [error, setError] = useState(null);
   const [requestError, setRequestError] = useState();
   const followedChannels = useRef();
-  const videos = useRef(null);
+  // const videos = useRef(null);
+  const [videos, setVideos] = useState([]);
   const oldVideos = useRef(null);
-  const { youtubeToken } = useContext(AccountContext);
+  const { youtubeToken, authKey } = useContext(AccountContext);
 
   const refresh = useCallback(async () => {
     async function fetchData() {
@@ -22,8 +23,7 @@ export default ({ children }) => {
         followedChannels.current = await getFollowedChannels();
 
         const SubscriptionData = await GetSubscriptionVideos(followedChannels.current);
-        oldVideos.current = videos.current || SubscriptionData.data;
-        videos.current = SubscriptionData.data;
+        setVideos(SubscriptionData.data);
 
         if (SubscriptionData.error) {
           setRequestError(SubscriptionData.error.response.data.error);
@@ -32,34 +32,36 @@ export default ({ children }) => {
         }
 
         setIsLoaded(Date.now());
-
-        videos.current.forEach((video) => {
-          const videoExists = oldVideos.current.find((old_video) => {
-            return old_video.contentDetails.upload.videoId === video.contentDetails.upload.videoId;
-          });
-
-          if (!videoExists) console.log("New video Notification.");
-          return "";
-        });
       } catch (error) {
         setIsLoaded(Date.now());
         setError(error);
       }
     }
+    await validateToken({ authKey }).then(async (res) => {
+      await fetchData();
+    });
+  }, [authKey, setVideos]);
 
-    fetchData();
-  }, []);
+  useEffect(() => {
+    if (oldVideos.current && videos) {
+      videos.forEach((video) => {
+        const videoExists = oldVideos.current.find((old_video) => {
+          return old_video.contentDetails.upload.videoId === video.contentDetails.upload.videoId;
+        });
+
+        if (!videoExists) console.log("New video Notification.");
+        return "";
+      });
+    }
+
+    if (videos.length >= 1) oldVideos.current = videos;
+  }, [videos]);
 
   useEffect(() => {
     (async () => {
       try {
-        setInitiated(false);
-
         refresh();
-
-        setInitiated(Date.now());
       } catch (error) {
-        setInitiated(Date.now());
         setError(error);
       }
     })();
@@ -76,9 +78,9 @@ export default ({ children }) => {
   } else {
     return children({
       isLoaded,
-      initiated,
       error,
-      videos: videos.current,
+      videos: videos,
+      setVideos: setVideos,
       followedChannels: followedChannels.current,
       refresh,
       requestError,

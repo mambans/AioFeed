@@ -4,9 +4,9 @@ export const RemoveCookie = (cookieName) => {
 };
 
 export const AddCookie = (cookieName, value, expire_date) => {
-  document.cookie = `${cookieName}=${value}; path=/; ${
-    expire_date ? `expires=${expire_date}` : null
-  } SameSite=Lax`;
+  document.cookie = `${cookieName}=${value}; ${
+    expire_date ? `expires=${expire_date};` : ""
+  } path=/;  SameSite=Lax`;
 };
 
 export const getCookie = (cname) => {

@@ -8,6 +8,7 @@ const util = require("util");
 const compare = util.promisify(bcrypt.compare);
 
 const deleteAccount = async ({ username, password, authKey }) => {
+  console.log("deleteAccount -> username", username);
   const res = await client
     .query({
       TableName: process.env.USERNAME_TABLE,

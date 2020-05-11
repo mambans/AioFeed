@@ -7,8 +7,7 @@ import LoadingBoxes from "./../twitch/LoadingBoxes";
 import { StyledLoadmore } from "./../twitch/StyledComponents";
 
 export default (data) => {
-  const { requestError, videos, initiated, centerContainerRef } = data;
-  const transition = useRef("fade-750ms");
+  const { requestError, videos, centerContainerRef } = data;
   const [numberOfVideos, setNumberOfVideos] = useState(
     centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 2) : 14
   );
@@ -23,7 +22,7 @@ export default (data) => {
 
   if (requestError && requestError.code === 401 && !videos) {
     return "";
-  } else if (!initiated || !videos || videos.length < 1) {
+  } else if (!videos || videos.length < 1) {
     return (
       <LoadingBoxes
         amount={centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 1.5) : 11}
@@ -39,14 +38,10 @@ export default (data) => {
               return (
                 <CSSTransition
                   timeout={1000}
-                  classNames={transition.current}
+                  classNames='videoFadeSlide'
                   key={video.contentDetails.upload.videoId}
                   unmountOnExit>
-                  <YoutubeVideoElement
-                    id={video.contentDetails.upload.videoId}
-                    video={video}
-                    transition={transition.current}
-                  />
+                  <YoutubeVideoElement id={video.contentDetails.upload.videoId} video={video} />
                 </CSSTransition>
               );
             })}

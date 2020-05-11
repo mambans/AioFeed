@@ -213,10 +213,6 @@ Resources:
       Handler: reAuthenticateTwitch/handler.handler
       Runtime: nodejs10.x
       CodeUri: "."
-      Environment:
-        Variables:
-          TWITCH_CLIENT_SECRET: "TWITCH_CLIENT_SECRET"
-          TWITCH_CLIENT_ID: "TWITCH_CLIENT_ID"
       Events:
         Http:
           Type: Api
@@ -233,10 +229,6 @@ Resources:
       Handler: requestTwitchTokens/handler.handler
       Runtime: nodejs10.x
       CodeUri: "."
-      Environment:
-        Variables:
-          TWITCH_CLIENT_SECRET: "TWITCH_CLIENT_SECRET"
-          TWITCH_CLIENT_ID: "TWITCH_CLIENT_ID"
       Events:
         Http:
           Type: Api
@@ -246,3 +238,82 @@ Resources:
           RequestParameters:
             - method.request.querystring.authCode:
                 Required: true
+  MakeTwitchWebhookSubsciption:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Make/initiate a Twitch webhook subsciption"
+      Handler: MakeTwitchWebhookSubsciption/handler.handler
+      Runtime: nodejs10.x
+      CodeUri: "."
+      Environment:
+        Variables:
+          APPINFO_TABLE: !Ref AppInfo
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AppInfo
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /twitch/webhook
+            Method: post
+          RequestParameters:
+            - method.request.querystring.topic:
+                Required: true
+  TwitchWebhookCallbackConfirm:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Receive Twitch webhooks and confirm req."
+      Handler: TwitchWebhookCallbackConfirm/handler.handler
+      Runtime: nodejs10.x
+      CodeUri: "."
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /twitch/webhook/callback
+            Method: get
+  TwitchWebhookCallback:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Receive Twitch webhooks notifications."
+      Handler: TwitchWebhookCallback/handler.handler
+      Runtime: nodejs10.x
+      CodeUri: "."
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /twitch/webhook/callback
+            Method: post
+  AppInfo:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: Name
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Name
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+  YoutubeFetchTokens:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Exchange an authorization code for an access and refresh token"
+      Handler: YoutubeFetchTokens/handler.handler
+      Runtime: nodejs10.x
+      CodeUri: "."
+      Environment:
+        Variables:
+          USERNAME_TABLE: !Ref UserLogins
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserLogins
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /youtube/token
+            Method: post

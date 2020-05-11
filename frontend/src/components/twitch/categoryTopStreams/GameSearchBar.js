@@ -7,6 +7,7 @@ import {
   SearchGameForm,
   StyledShowAllButton,
   BackdropChannelList,
+  SearchSubmitBtn,
 } from "./styledComponents";
 import { throttle } from "lodash";
 import { MdFormatListBulleted } from "react-icons/md";
@@ -40,15 +41,31 @@ export default (props) => {
       showValue: () => {
         return value;
       },
+      returnFirstMatchedGame: () => {
+        const foundGame = topGames.find((games) => {
+          return games.name.toLowerCase().includes(value.toLowerCase());
+        });
+        if (foundGame) {
+          return foundGame.name;
+        } else {
+          return value;
+        }
+      },
     };
   };
 
-  //eslint-disable-next-line
-  const { value: game, bind: bindGame, reset: resetGame, showValue } = useInput("");
+  const {
+    value: game,
+    bind: bindGame,
+    //eslint-disable-next-line
+    reset: resetGame,
+    showValue,
+    returnFirstMatchedGame,
+  } = useInput("");
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    navigate("/category/" + game);
+    navigate("/category/" + returnFirstMatchedGame());
     // resetGame();
   };
 
@@ -80,6 +97,13 @@ export default (props) => {
           type='text'
           placeholder={(gameName !== "" && gameName !== undefined ? gameName : "All") + "..."}
           {...bindGame}></input>
+        {game && (
+          <SearchSubmitBtn
+            to={{
+              pathname: `/category/${game}`,
+            }}
+          />
+        )}
         <MdFormatListBulleted
           id='ToggleListBtn'
           onClick={() => {

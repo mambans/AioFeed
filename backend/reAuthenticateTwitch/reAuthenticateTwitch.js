@@ -11,6 +11,9 @@ const reAuthenticateTwitch = async ({ refresh_token }) => {
     )
     .then(async (res) => {
       return res.data;
+    })
+    .catch((e) => {
+      console.log("reAuthenticateTwitch -> e", e);
     });
 };
 

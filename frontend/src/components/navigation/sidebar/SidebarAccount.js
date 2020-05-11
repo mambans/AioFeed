@@ -128,6 +128,15 @@ export default () => {
       .catch((e) => {
         console.error(e);
       });
+
+    // await axios.post(
+    //   `https://oauth2.googleapis.com/revoke?token=${getCookie("Youtube-access_token")}`,
+    //   {
+    //     headers: {
+    //       "Content-type": "application/x-www-form-urlencoded",
+    //     },
+    //   }
+    // );
   }
 
   return (

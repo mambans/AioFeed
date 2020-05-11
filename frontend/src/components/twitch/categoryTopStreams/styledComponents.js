@@ -1,6 +1,8 @@
-import styled, { keyframes } from "styled-components";
 import { Button } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import React from "react";
+import styled, { keyframes } from "styled-components";
 
 export const StyledGameListElement = styled.li`
   justify-content: unset;
@@ -55,7 +57,7 @@ export const GameListUlContainer = styled.ul`
     align-items: center;
     border-bottom: thin solid #1e1616;
     padding: 5px 0;
-    min-height: 43px;
+    /* min-height: 43px; */
   }
 
   a {
@@ -124,12 +126,16 @@ export const pulseLight = keyframes`
 `;
 
 export const StyledLoadingListElement = styled.li`
+  height: 42px;
+
   div {
     height: 15px;
     width: 100%;
     border-radius: 8px;
     background: #36393fd1;
     animation: ${pulseLight} 2s linear infinite;
+    /* padding: 5px 0px;
+    min-height: 42px; */
   }
 `;
 
@@ -140,7 +146,7 @@ export const SearchGameForm = styled.form`
   transition: width 250ms, min-width 250ms, margin-left 250ms;
   width: ${({ open }) => (open ? "310px" : "125px")};
   min-width: ${({ open }) => (open ? "310px" : "125px")};
-  margin-left: ${({ open }) => (open ? "0px" : "150px")};
+  margin-left: ${({ open }) => (open ? "0px" : "185px")};
   z-index: 4;
 
   li {
@@ -252,12 +258,43 @@ export const TopStreamsContainer = styled.div`
   }
 `;
 
-export const SearchSubmitBtn = styled(FaSearch).attrs({ size: 20 })`
-  margin-left: -20px;
+const SearchSubmitIcon = styled(FaSearch).attrs({ size: 20 })``;
+
+const SearchSubmitA = styled.a`
+  position: absolute;
   cursor: pointer;
   color: rgb(240, 240, 240);
+  display: flex;
+  margin-left: calc(310px - 72px);
+  margin-top: -29px;
+  z-index: 5;
 
   &:hover {
     color: rgb(255, 255, 255);
   }
 `;
+
+const SearchSubmitLink = styled(Link)`
+  position: absolute;
+  cursor: pointer;
+  color: rgb(240, 240, 240);
+  display: flex;
+  margin-left: calc(310px - 72px);
+  margin-top: -29px;
+  z-index: 5;
+
+  &:hover {
+    color: rgb(255, 255, 255);
+  }
+`;
+
+export const SearchSubmitBtn = ({ href, to }) =>
+  href ? (
+    <SearchSubmitA href={href}>
+      <SearchSubmitIcon />
+    </SearchSubmitA>
+  ) : (
+    <SearchSubmitLink to={to}>
+      <SearchSubmitIcon />
+    </SearchSubmitLink>
+  );

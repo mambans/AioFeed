@@ -43,6 +43,9 @@ export const VodType = styled.div`
 `;
 
 export const VodChannelListLi = styled.li`
+  min-height: 43px;
+  border-bottom: thin solid #1e1616;
+
   button {
     opacity: 1;
   }

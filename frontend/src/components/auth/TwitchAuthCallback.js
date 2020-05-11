@@ -98,9 +98,11 @@ function TwitchAuthCallback() {
                   "*"
                 );
 
-                setTimeout(() => {
-                  window.close();
-                }, 1);
+                if (res.token) {
+                  setTimeout(() => {
+                    window.close();
+                  }, 1);
+                }
               })
               .catch((error) => {
                 console.log("getAccessToken() failed");
