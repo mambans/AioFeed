@@ -7,10 +7,11 @@ import NotificationsContext from "./../../notifications/NotificationsContext";
 import AccountContext from "./../../account/AccountContext";
 import FeedsContext from "./../../feed/FeedsContext";
 import VodsContext from "./../vods/VodsContext";
-import FetchSingelChannelVods from "./../vods/FetchSingelChannelVods";
-import { AddCookie, getLocalstorage, truncate } from "../../../util/Utils";
+import { AddCookie } from "../../../util/Utils";
 import validateToken from "../validateToken";
-import addSystemNotification from "./addSystemNotification";
+import LiveStreamsPromise from "./LiveStreamsPromise";
+import OfflineStreamsPromise from "./OfflineStreamsPromise";
+import UpdatedStreamsPromise from "./UpdatedStreamsPromise";
 
 const REFRESH_RATE = 25; // seconds
 
@@ -89,204 +90,32 @@ export default ({ children }) => {
 
           if (!disableNotifications) {
             await Promise.all([
-              new Promise((resolve, reject) => {
-                const newLive = liveStreams.current.filter((stream) => {
-                  return !oldLiveStreams.current.find(
-                    ({ user_name }) => stream.user_name === user_name
-                  );
-                });
+              await LiveStreamsPromise({
+                liveStreams,
+                oldLiveStreams,
+                newlyAddedStreams,
+                setVods,
+                enableTwitchVods,
+                setUnseenNotifications,
+              }),
 
-                if (newLive.length <= 0) reject("No new LIVE streams");
-                resolve(newLive);
-              })
-                .then((res) => {
-                  if (document.title.length > 15) {
-                    const title = document.title.substring(4);
-                    const count = parseInt(document.title.substring(1, 2)) + res.length;
-                    document.title = `(${count}) ${title}`;
-                  } else {
-                    const title = document.title;
-                    document.title = `(${1}) ${title}`;
-                  }
+              await OfflineStreamsPromise({
+                oldLiveStreams,
+                liveStreams,
+                isEnabledOfflineNotifications,
+                newlyAddedStreams,
+                setUnseenNotifications,
+                enableTwitchVods,
+                setVods,
+              }),
 
-                  res.map((stream) => {
-                    newlyAddedStreams.current.push(stream.user_name);
-                    stream.newlyAdded = true;
-                    stream.status = "Live";
-
-                    addSystemNotification({
-                      status: "online",
-                      stream: stream,
-                      newlyAddedStreams: newlyAddedStreams,
-                      setUnseenNotifications: setUnseenNotifications,
-                    });
-
-                    if (
-                      enableTwitchVods &&
-                      getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
-                    ) {
-                      setTimeout(async () => {
-                        await FetchSingelChannelVods(stream.user_id, setVods);
-                      }, 30000);
-                    }
-                    return "";
-                  });
-                  return res;
-                })
-                .catch((e) => {
-                  return [];
-                }),
-
-              new Promise((resolve, reject) => {
-                const newOffline = oldLiveStreams.current.filter((stream) => {
-                  return !liveStreams.current.find(
-                    ({ user_name }) => stream.user_name === user_name
-                  );
-                });
-
-                if (newOffline.length <= 0) reject("No new Offline streams");
-                resolve(newOffline);
-              })
-                .then((res) => {
-                  res.map((stream) => {
-                    stream.status = "Offline";
-                    if (
-                      isEnabledOfflineNotifications &&
-                      getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
-                    )
-                      addSystemNotification({
-                        status: "offline",
-                        stream: stream,
-                        newlyAddedStreams: newlyAddedStreams,
-                        setUnseenNotifications: setUnseenNotifications,
-                      });
-
-                    if (
-                      enableTwitchVods &&
-                      getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
-                    ) {
-                      setTimeout(async () => {
-                        console.log("Fetching", stream.user_name, "offline vod");
-                        await FetchSingelChannelVods(stream.user_id, setVods);
-                      }, 0);
-                    }
-                    return "";
-                  });
-
-                  return res;
-                })
-                .catch((e) => {
-                  return [];
-                }),
-
-              new Promise((resolve, reject) => {
-                if (!isEnabledUpdateNotifications)
-                  reject("Stream 'update' notifications are disabled.");
-                const restStreams = liveStreams.current.filter((stream) => {
-                  return oldLiveStreams.current.find(
-                    (old_stream) => stream.user_name === old_stream.user_name
-                  );
-                });
-
-                resolve(restStreams);
-              })
-                .then((res) => {
-                  if (getLocalstorage("UpdateNotificationsChannels")) {
-                    const existingStreams = res.filter((stream) => {
-                      return oldLiveStreams.current.find((old_stream) => {
-                        return old_stream.user_name === stream.user_name;
-                      });
-                    });
-
-                    const UpdateEnabledStreams = existingStreams.filter((stream) => {
-                      return getLocalstorage("UpdateNotificationsChannels").includes(
-                        stream.user_name.toLowerCase()
-                      );
-                    });
-
-                    const newTitleAndGameStreams = UpdateEnabledStreams.filter((stream) => {
-                      const oldStreamData = oldLiveStreams.current.find((old_stream) => {
-                        return old_stream.user_name === stream.user_name;
-                      });
-
-                      if (
-                        oldStreamData.game_name !== stream.game_name &&
-                        oldStreamData.title !== stream.title
-                      ) {
-                        addSystemNotification({
-                          status: "updated",
-                          stream: stream,
-                          changedObj: {
-                            valueKey: "Title & Game",
-                            newValue: `${truncate(stream.title, 40)} in ${stream.game_name}`,
-                            oldValue: `${truncate(oldStreamData.title, 40)} in ${
-                              oldStreamData.game_name
-                            }`,
-                          },
-                          newlyAddedStreams: newlyAddedStreams,
-                          setUnseenNotifications: setUnseenNotifications,
-                        });
-                        stream.status = "Title & Game updated";
-                        stream.text = `+ ${truncate(stream.title, 40)} in ${
-                          stream.game_name
-                        }\n- ${truncate(oldStreamData.title, 40)} in ${oldStreamData.game_name}`;
-                        return stream;
-                      }
-                      return null;
-                    });
-
-                    const newGameStreams = UpdateEnabledStreams.filter((stream) => {
-                      const oldStreamData = oldLiveStreams.current.find((old_stream) => {
-                        return old_stream.user_name === stream.user_name;
-                      });
-
-                      if (oldStreamData.game_name !== stream.game_name) {
-                        addSystemNotification({
-                          status: "updated",
-                          stream: stream,
-                          changedObj: {
-                            valueKey: "Game",
-                            newValue: stream.game_name,
-                            oldValue: oldStreamData.game_name,
-                          },
-                          newlyAddedStreams: newlyAddedStreams,
-                          setUnseenNotifications: setUnseenNotifications,
-                        });
-                        stream.status = "Game updated";
-                        stream.text = `+ ${stream.game_name}\n- ${oldStreamData.game_name}`;
-                        return stream;
-                      }
-                      return null;
-                    });
-
-                    const newTitleStreams = UpdateEnabledStreams.filter((stream) => {
-                      const oldStreamData = oldLiveStreams.current.find((old_stream) => {
-                        return old_stream.user_name === stream.user_name;
-                      });
-
-                      if (oldStreamData.title !== stream.title) {
-                        addSystemNotification({
-                          status: "updated",
-                          stream: stream,
-                          changedObj: {
-                            valueKey: "Title",
-                            newValue: stream.title,
-                            oldValue: oldStreamData.title,
-                          },
-                          newlyAddedStreams: newlyAddedStreams,
-                          setUnseenNotifications: setUnseenNotifications,
-                        });
-                        stream.status = "Title updated";
-                        stream.text = `+ ${stream.title}\n- ${oldStreamData.title}`;
-                        return stream;
-                      }
-                      return null;
-                    });
-
-                    return [newTitleAndGameStreams, newGameStreams, newTitleStreams];
-                  }
-                })
-                .catch((e) => {}),
+              await UpdatedStreamsPromise({
+                oldLiveStreams,
+                liveStreams,
+                newlyAddedStreams,
+                setUnseenNotifications,
+                isEnabledUpdateNotifications,
+              }),
             ]).then((res) => {
               const flattenedArray = res.flat(3);
               addNotification(flattenedArray);
