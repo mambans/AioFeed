@@ -100,7 +100,7 @@ export default ({ TwitchPlayer, OpenedDate, volumeEventOverlayRef }) => {
         case "m":
         case "M":
           TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
-          // setVolumeMuted(!TwitchPlayer.getMuted());
+          setVolumeMuted(!TwitchPlayer.getMuted());
           break;
         case "ArrowDown":
           changeVolume("decrease", 0.05);
