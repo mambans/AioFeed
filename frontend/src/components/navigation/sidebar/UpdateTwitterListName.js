@@ -36,6 +36,7 @@ export default ({ style }) => {
         username: username,
         columnValue: listName,
         columnName: "TwitterListId",
+        authkey: getCookie(`AioFeed_AuthKey`),
       })
       .catch((e) => {
         console.error(e);
@@ -50,6 +51,7 @@ export default ({ style }) => {
         username: username,
         columnValue: "null",
         columnName: "TwitterListId",
+        authkey: getCookie(`AioFeed_AuthKey`),
       })
       .catch((e) => {
         console.error(e);

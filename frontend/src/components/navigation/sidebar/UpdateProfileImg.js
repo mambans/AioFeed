@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import AccountContext from "./../../account/AccountContext";
 import useInput from "./../../../hooks/useInput";
 import { ProfileImgInput } from "./StyledComponent";
-import { AddCookie } from "../../../util/Utils";
+import { AddCookie, getCookie } from "../../../util/Utils";
 
 export default ({ close }) => {
   const { username, setProfileImage } = useContext(AccountContext);
@@ -18,6 +18,7 @@ export default ({ close }) => {
         username: username,
         columnValue: image,
         columnName: "ProfileImg",
+        authkey: getCookie(`AioFeed_AuthKey`),
       })
       .then(() => {
         close();

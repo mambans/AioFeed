@@ -2,7 +2,7 @@
 
 const create = require("./create");
 
-const handler = async (event) => {
+exports.handler = async (event) => {
   try {
     const { username, email, password } = JSON.parse(event.body);
 
@@ -21,7 +21,7 @@ const handler = async (event) => {
         statusCode: 200,
         body: JSON.stringify(res.data),
         headers: {
-          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Origin": "https://aiofeed.com",
         },
       };
     }
@@ -29,11 +29,9 @@ const handler = async (event) => {
     return {
       statusCode: e.statusCode,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "https://aiofeed.com",
       },
       body: JSON.stringify(e),
     };
   }
 };
-
-exports.handler = handler;

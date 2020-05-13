@@ -94,14 +94,14 @@ export default ({ children }) => {
                 liveStreams,
                 oldLiveStreams,
                 newlyAddedStreams,
-                setVods,
-                enableTwitchVods,
                 setUnseenNotifications,
+                enableTwitchVods,
+                setVods,
               }),
 
               await OfflineStreamsPromise({
-                oldLiveStreams,
                 liveStreams,
+                oldLiveStreams,
                 isEnabledOfflineNotifications,
                 newlyAddedStreams,
                 setUnseenNotifications,
@@ -110,8 +110,8 @@ export default ({ children }) => {
               }),
 
               await UpdatedStreamsPromise({
-                oldLiveStreams,
                 liveStreams,
+                oldLiveStreams,
                 newlyAddedStreams,
                 setUnseenNotifications,
                 isEnabledUpdateNotifications,

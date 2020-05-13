@@ -41,7 +41,6 @@ export default () => {
       .then(async (res) => {
         AddCookie("Youtube-access_token", res.data.access_token);
         AddCookie("Youtube-access_token_expire", res.data.expires_in);
-        AddCookie("Youtube-refresh_token", res.data.refresh_token);
 
         return { access_token: res.data.access_token, refresh_token: res.data.refresh_token };
       })
@@ -76,9 +75,8 @@ export default () => {
         columnValue: {
           Username: MyYoutube.Username,
           Profile: MyYoutube.ProfileImg,
-          Token: tokens.access_token,
-          Refresh_token: tokens.refresh_token,
         },
+        authkey: getCookie(`AioFeed_AuthKey`),
       })
       .catch((e) => {
         console.error(e);

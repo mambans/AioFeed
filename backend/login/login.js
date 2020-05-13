@@ -18,7 +18,7 @@ const decryptData = async (data, secretString) => {
   return null;
 };
 
-const login = async ({ username, password }) => {
+module.exports = async ({ username, password }) => {
   console.log("username", username);
   const res = await client
     .query({
@@ -103,5 +103,3 @@ const login = async ({ username, password }) => {
     };
   }
 };
-
-module.exports = login;

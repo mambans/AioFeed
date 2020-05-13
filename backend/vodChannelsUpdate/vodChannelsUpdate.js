@@ -1,11 +1,9 @@
 "use strict";
 
 const DynamoDB = require("aws-sdk/clients/dynamodb");
-
 const client = new DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
 
-const monitoredChannelsUpdate = async ({ username, channels, authkey }) => {
-  // Key: { Username: username },
+module.exports = async ({ username, channels, authkey }) => {
   const res = await client
     .update({
       TableName: process.env.USERNAME_TABLE,
@@ -21,14 +19,5 @@ const monitoredChannelsUpdate = async ({ username, channels, authkey }) => {
 
   if (authkey === res.Attributes.AuthKey) {
     return res;
-  } else {
-    return false;
   }
-
-  // console.log(res);
-  // return {
-  //   statusCode: 200,
-  //   body: "Account successfully created.",
-  // };
 };
-module.exports = monitoredChannelsUpdate;

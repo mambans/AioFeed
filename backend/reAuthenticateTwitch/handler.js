@@ -2,7 +2,7 @@
 
 const reAuthenticateTwitch = require("./reAuthenticateTwitch");
 
-const handler = async (event) => {
+exports.handler = async (event) => {
   try {
     const { refresh_token } = JSON.parse(event.body);
 
@@ -16,7 +16,7 @@ const handler = async (event) => {
       statusCode: 200,
       body: JSON.stringify(res),
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "https://aiofeed.com",
       },
     };
   } catch (e) {
@@ -24,11 +24,9 @@ const handler = async (event) => {
     return {
       statusCode: 422,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "https://aiofeed.com",
       },
       // body: JSON.stringify(res.data),
     };
   }
 };
-
-exports.handler = handler;

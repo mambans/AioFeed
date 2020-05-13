@@ -448,6 +448,7 @@ export const ShowNavbarBtn = styled(Button)`
   margin: 4px;
   cursor: pointer;
   opacity: 0.4;
+  right: ${({ type }) => (type === "video" ? "10px" : "unset")};
   transition: opacity 200ms, transform 200ms;
 
   &:hover {

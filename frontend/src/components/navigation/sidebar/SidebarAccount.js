@@ -1,19 +1,17 @@
 import { Button } from "react-bootstrap";
 import { GoSignOut } from "react-icons/go";
-import axios from "axios";
 import React, { useContext, useState } from "react";
 import { FaTwitch } from "react-icons/fa";
 import { MdVideocam } from "react-icons/md";
 import { FaYoutube } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
-
 import { FiSidebar } from "react-icons/fi";
 import { MdAutorenew } from "react-icons/md";
 import { TiFlash } from "react-icons/ti";
 import { AiOutlineDisconnect } from "react-icons/ai";
 import { FaRegWindowRestore } from "react-icons/fa";
 
-import { RemoveCookie, AddCookie, getCookie } from "../../../util/Utils";
+import { AddCookie, getCookie } from "../../../util/Utils";
 import AccountContext from "./../../account/AccountContext";
 import ClearAllAccountCookiesStates from "./ClearAllAccountCookiesStates";
 import DeleteAccountButton from "./DeleteAccountButton";
@@ -23,6 +21,8 @@ import Themeselector from "./../../themes/Themeselector";
 import ToggleButton from "./ToggleButton";
 import UpdateProfileImg from "./UpdateProfileImg";
 import UpdateTwitterListName from "./UpdateTwitterListName";
+import disconnectYoutube from "./../../youtube/disconnectYoutube";
+import disconnectTwitch from "./../../twitch/disconnectTwitch";
 import {
   StyledProfileImg,
   StyledLogoutContiner,
@@ -70,73 +70,6 @@ export default () => {
 
   function logout() {
     ClearAllAccountCookiesStates(setUsername);
-  }
-
-  async function disconnectTwitch() {
-    await axios
-      .post(
-        `https://id.twitch.tv/oauth2/revoke?client_id=${
-          process.env.REACT_APP_TWITCH_CLIENT_ID
-        }&token=${getCookie("Twitch-access_token")}`
-      )
-      .catch((er) => {
-        console.error(er);
-      });
-
-    await axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
-        username: username,
-        columnName: "TwitchPreferences",
-        columnValue: {},
-      })
-      .then(() => {
-        RemoveCookie("Twitch-access_token");
-        RemoveCookie("Twitch-refresh_token");
-        RemoveCookie("Twitch-userId");
-        RemoveCookie("Twitch-username");
-        RemoveCookie("Twitch-profileImg");
-        RemoveCookie("TwitchVods_FeedEnabled");
-        RemoveCookie("Twitch-myState");
-        RemoveCookie("Twitch_AutoRefresh");
-
-        setTwitchToken();
-        setEnableTwitch(false);
-        console.log(`Successfully disconnected from Twitch`);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  }
-
-  async function disconnectYoutube() {
-    await axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
-        username: username,
-        columnName: "YoutubePreferences",
-        columnValue: {},
-      })
-      .then(() => {
-        RemoveCookie("Youtube-access_token");
-        RemoveCookie("YoutubeUsername");
-        RemoveCookie("YoutubeProfileImg");
-        RemoveCookie("Youtube_FeedEnabled");
-
-        setYoutubeToken();
-        setEnableYoutube(false);
-        console.log(`Successfully disconnected from Youtube`);
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-
-    // await axios.post(
-    //   `https://oauth2.googleapis.com/revoke?token=${getCookie("Youtube-access_token")}`,
-    //   {
-    //     headers: {
-    //       "Content-type": "application/x-www-form-urlencoded",
-    //     },
-    //   }
-    // );
   }
 
   return (
@@ -345,8 +278,14 @@ export default () => {
         </ToggleButtonsContainer>
         <br />
 
-        <ReAuthenticateButton disconnect={disconnectTwitch} serviceName={"Twitch"} />
-        <ReAuthenticateButton disconnect={disconnectYoutube} serviceName={"Youtube"} />
+        <ReAuthenticateButton
+          disconnect={() => disconnectTwitch({ setTwitchToken, setEnableTwitch })}
+          serviceName={"Twitch"}
+        />
+        <ReAuthenticateButton
+          disconnect={() => disconnectYoutube({ setYoutubeToken, setEnableYoutube })}
+          serviceName={"Youtube"}
+        />
         <Themeselector />
       </div>
       <StyledLogoutContiner>

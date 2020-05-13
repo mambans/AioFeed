@@ -429,6 +429,7 @@ export default () => {
             <div id='chat'>
               <ShowNavbarBtn
                 variant='dark'
+                type='live'
                 onClick={() => {
                   setVisible(!visible);
                 }}>
@@ -462,6 +463,7 @@ export default () => {
           }}>
           <ShowNavbarBtn
             variant='dark'
+            type='video'
             onClick={() => {
               setVisible(!visible);
             }}>

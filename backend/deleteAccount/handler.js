@@ -2,7 +2,7 @@
 
 const deleteAccount = require("./deleteAccount");
 
-const handler = async (event) => {
+exports.handler = async (event) => {
   try {
     const { username, password, authKey } = JSON.parse(event.body);
     if (!username) throw { statusCode: 422, message: "Username is required" };
@@ -15,7 +15,7 @@ const handler = async (event) => {
     return {
       statusCode: res.statusCode,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "https://aiofeed.com",
       },
       body: JSON.stringify(res.data),
     };
@@ -23,11 +23,9 @@ const handler = async (event) => {
     return {
       statusCode: 401,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "https://aiofeed.com",
       },
       body: JSON.stringify(e),
     };
   }
 };
-
-exports.handler = handler;

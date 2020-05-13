@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const reAuthenticateTwitch = async ({ refresh_token }) => {
+module.exports = async ({ refresh_token }) => {
   return await axios
     .post(
       `https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=${encodeURI(
@@ -16,5 +16,3 @@ const reAuthenticateTwitch = async ({ refresh_token }) => {
       console.log("reAuthenticateTwitch -> e", e);
     });
 };
-
-module.exports = reAuthenticateTwitch;

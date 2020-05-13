@@ -4,7 +4,7 @@ Globals:
     Cors:
       AllowHeaders: '''*'''
       AllowMethods: '''*'''
-      AllowOrigin: '''*'''
+      AllowOrigin: '''https://aiofeed.com'''
     EndpointConfiguration: REGIONAL
 Resources:
   AppInfo:
@@ -21,7 +21,7 @@ Resources:
     Type: AWS::DynamoDB::Table
   Create:
     Properties:
-      CodeUri: s3://aiofeed-backend/9c9d00844019c0cc695cdd17f62c84e1
+      CodeUri: s3://aiofeed-backend/d94b9eaba862f06bc1f5f1a2a5e22322
       Description: Create an AioFeed account with tokens and monitored vod channels
         default to null and empty array.
       Environment:
@@ -50,7 +50,7 @@ Resources:
     Type: AWS::Serverless::Function
   DeleteAccount:
     Properties:
-      CodeUri: s3://aiofeed-backend/9c9d00844019c0cc695cdd17f62c84e1
+      CodeUri: s3://aiofeed-backend/d94b9eaba862f06bc1f5f1a2a5e22322
       Description: Delete an account
       Environment:
         Variables:
@@ -60,11 +60,13 @@ Resources:
         Http:
           Properties:
             Method: delete
-            Path: /account/delete
+            Path: /account
             RequestParameters:
             - method.request.querystring.username:
                 Required: true
             - method.request.querystring.password:
+                Required: true
+            - method.request.querystring.authkey:
                 Required: true
           Type: Api
       Handler: deleteAccount/handler.handler
@@ -74,10 +76,10 @@ Resources:
             Ref: UserLogins
       Runtime: nodejs10.x
     Type: AWS::Serverless::Function
-  FetchMonitoredChannels:
+  DeleteTwitchData:
     Properties:
-      CodeUri: s3://aiofeed-backend/9c9d00844019c0cc695cdd17f62c84e1
-      Description: Fetch monitored vod channels list.
+      CodeUri: s3://aiofeed-backend/d94b9eaba862f06bc1f5f1a2a5e22322
+      Description: Deletes all Twitch data associated with the account.
       Environment:
         Variables:
           USERNAME_TABLE:
@@ -85,24 +87,50 @@ Resources:
       Events:
         Http:
           Properties:
-            Method: get
-            Path: /monitored-channels/fetch
-            RequestParameters:
-            - method.request.querystring.username:
-                Required: true
-            - method.request.querystring.authkey:
-                Required: true
+            Method: delete
+            Path: /twitch/token
+          RequestParameters:
+          - method.request.querystring.authkey:
+              Required: true
+          - method.request.querystring.username:
+              Required: true
           Type: Api
-      Handler: monitoredChannelsFetch/handler.handler
+      Handler: DeleteTwitchData/handler.handler
       Policies:
-      - DynamoDBReadPolicy:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: UserLogins
+      Runtime: nodejs10.x
+    Type: AWS::Serverless::Function
+  DeleteYotubeData:
+    Properties:
+      CodeUri: s3://aiofeed-backend/d94b9eaba862f06bc1f5f1a2a5e22322
+      Description: Delete all Youtube data associated with the account.
+      Environment:
+        Variables:
+          USERNAME_TABLE:
+            Ref: UserLogins
+      Events:
+        Http:
+          Properties:
+            Method: delete
+            Path: /youtube/token
+          RequestParameters:
+          - method.request.querystring.authkey:
+              Required: true
+          - method.request.querystring.username:
+              Required: true
+          Type: Api
+      Handler: DeleteYoutubeData/handler.handler
+      Policies:
+      - DynamoDBCrudPolicy:
           TableName:
             Ref: UserLogins
       Runtime: nodejs10.x
     Type: AWS::Serverless::Function
   Login:
     Properties:
-      CodeUri: s3://aiofeed-backend/9c9d00844019c0cc695cdd17f62c84e1
+      CodeUri: s3://aiofeed-backend/d94b9eaba862f06bc1f5f1a2a5e22322
       Description: Login with AioFeed account and return account info, tokens and
         monitored vod channels.
       Environment:
@@ -129,7 +157,7 @@ Resources:
     Type: AWS::Serverless::Function
   MakeTwitchWebhookSubsciption:
     Properties:
-      CodeUri: s3://aiofeed-backend/9c9d00844019c0cc695cdd17f62c84e1
+      CodeUri: s3://aiofeed-backend/d94b9eaba862f06bc1f5f1a2a5e22322
       Description: Make/initiate a Twitch webhook subsciption
       Environment:
         Variables:
@@ -153,7 +181,7 @@ Resources:
     Type: AWS::Serverless::Function
   ReAuthenticateTwitch:
     Properties:
-      CodeUri: s3://aiofeed-backend/9c9d00844019c0cc695cdd17f62c84e1
+      CodeUri: s3://aiofeed-backend/d94b9eaba862f06bc1f5f1a2a5e22322
       Description: Re-authenticate Twitch user to Twitch with refresh token (returns
         access & refresh tokens).
       Events:
@@ -170,7 +198,7 @@ Resources:
     Type: AWS::Serverless::Function
   RequestTwitchTokens:
     Properties:
-      CodeUri: s3://aiofeed-backend/9c9d00844019c0cc695cdd17f62c84e1
+      CodeUri: s3://aiofeed-backend/d94b9eaba862f06bc1f5f1a2a5e22322
       Description: Re-authenticate Twitch user to Twitch with authorization code (returns
         access & refresh tokens).
       Events:
@@ -187,7 +215,7 @@ Resources:
     Type: AWS::Serverless::Function
   TwitchWebhookCallback:
     Properties:
-      CodeUri: s3://aiofeed-backend/9c9d00844019c0cc695cdd17f62c84e1
+      CodeUri: s3://aiofeed-backend/d94b9eaba862f06bc1f5f1a2a5e22322
       Description: Receive Twitch webhooks notifications.
       Events:
         Http:
@@ -200,7 +228,7 @@ Resources:
     Type: AWS::Serverless::Function
   TwitchWebhookCallbackConfirm:
     Properties:
-      CodeUri: s3://aiofeed-backend/9c9d00844019c0cc695cdd17f62c84e1
+      CodeUri: s3://aiofeed-backend/d94b9eaba862f06bc1f5f1a2a5e22322
       Description: Receive Twitch webhooks and confirm req.
       Events:
         Http:
@@ -213,7 +241,7 @@ Resources:
     Type: AWS::Serverless::Function
   Update:
     Properties:
-      CodeUri: s3://aiofeed-backend/9c9d00844019c0cc695cdd17f62c84e1
+      CodeUri: s3://aiofeed-backend/d94b9eaba862f06bc1f5f1a2a5e22322
       Description: Update a specific column mentioned as a param.
       Environment:
         Variables:
@@ -231,64 +259,10 @@ Resources:
               Required: true
           - method.request.querystring.columnName:
               Required: true
-          Type: Api
-      Handler: update/handler.handler
-      Policies:
-      - DynamoDBCrudPolicy:
-          TableName:
-            Ref: UserLogins
-      Runtime: nodejs10.x
-    Type: AWS::Serverless::Function
-  UpdateMonitoredChannels:
-    Properties:
-      CodeUri: s3://aiofeed-backend/9c9d00844019c0cc695cdd17f62c84e1
-      Description: Update monitored vod channels list.
-      Environment:
-        Variables:
-          USERNAME_TABLE:
-            Ref: UserLogins
-      Events:
-        Http:
-          Properties:
-            Method: put
-            Path: /monitored-channels/update
-          RequestParameters:
-          - method.request.querystring.username:
-              Required: true
-          - method.request.querystring.channels:
-              Required: true
           - method.request.querystring.authkey:
               Required: true
           Type: Api
-      Handler: monitoredChannelsUpdate/handler.handler
-      Policies:
-      - DynamoDBCrudPolicy:
-          TableName:
-            Ref: UserLogins
-      Runtime: nodejs10.x
-    Type: AWS::Serverless::Function
-  UpdatePreferences:
-    Properties:
-      CodeUri: s3://aiofeed-backend/9c9d00844019c0cc695cdd17f62c84e1
-      Description: Update preferences for mentioned data name/type.
-      Environment:
-        Variables:
-          USERNAME_TABLE:
-            Ref: UserLogins
-      Events:
-        Http:
-          Properties:
-            Method: put
-            Path: /account/preferences
-          RequestParameters:
-          - method.request.querystring.username:
-              Required: true
-          - method.request.querystring.dataName:
-              Required: true
-          - method.request.querystring.data:
-              Required: true
-          Type: Api
-      Handler: updateStoredPreferences/handler.handler
+      Handler: update/handler.handler
       Policies:
       - DynamoDBCrudPolicy:
           TableName:
@@ -307,9 +281,63 @@ Resources:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
     Type: AWS::DynamoDB::Table
+  VodChannelsFetch:
+    Properties:
+      CodeUri: s3://aiofeed-backend/d94b9eaba862f06bc1f5f1a2a5e22322
+      Description: Fetch monitored vod channels list.
+      Environment:
+        Variables:
+          USERNAME_TABLE:
+            Ref: UserLogins
+      Events:
+        Http:
+          Properties:
+            Method: get
+            Path: /vodchannels
+            RequestParameters:
+            - method.request.querystring.username:
+                Required: true
+            - method.request.querystring.authkey:
+                Required: true
+          Type: Api
+      Handler: vodChannelsFetch/handler.handler
+      Policies:
+      - DynamoDBReadPolicy:
+          TableName:
+            Ref: UserLogins
+      Runtime: nodejs10.x
+    Type: AWS::Serverless::Function
+  VodChannelsUpdate:
+    Properties:
+      CodeUri: s3://aiofeed-backend/d94b9eaba862f06bc1f5f1a2a5e22322
+      Description: Update monitored vod channels list.
+      Environment:
+        Variables:
+          USERNAME_TABLE:
+            Ref: UserLogins
+      Events:
+        Http:
+          Properties:
+            Method: put
+            Path: /vodchannels
+          RequestParameters:
+          - method.request.querystring.username:
+              Required: true
+          - method.request.querystring.channels:
+              Required: true
+          - method.request.querystring.authkey:
+              Required: true
+          Type: Api
+      Handler: vodChannelsUpdate/handler.handler
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: UserLogins
+      Runtime: nodejs10.x
+    Type: AWS::Serverless::Function
   YoutubeFetchTokens:
     Properties:
-      CodeUri: s3://aiofeed-backend/9c9d00844019c0cc695cdd17f62c84e1
+      CodeUri: s3://aiofeed-backend/d94b9eaba862f06bc1f5f1a2a5e22322
       Description: Exchange an authorization code for an access and refresh token
       Environment:
         Variables:
@@ -320,6 +348,12 @@ Resources:
           Properties:
             Method: post
             Path: /youtube/token
+          RequestParameters:
+          - method.request.querystring.authCode: null
+          - method.request.querystring.username:
+              Required: true
+          - method.request.querystring.authkey:
+              Required: true
           Type: Api
       Handler: YoutubeFetchTokens/handler.handler
       Policies:

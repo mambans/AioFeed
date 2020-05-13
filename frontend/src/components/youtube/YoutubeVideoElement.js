@@ -114,7 +114,7 @@ export default (data) => {
       ) : (
         <VideoTitleHref
           href={`https://www.youtube.com/watch?v=` + data.video.contentDetails.upload.videoId}>
-          data.video.snippet.titl}
+          {data.video.snippet.title}
         </VideoTitleHref>
       )}
       <p className={styles.channel}>

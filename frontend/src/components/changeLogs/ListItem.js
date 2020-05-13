@@ -38,6 +38,8 @@ const List = {
     font-size: 0.95rem;
     svg {
       margin-right: 10px;
+      min-width: 16px;
+      min-height: 16px;
     }
     p {
       margin: 0;
@@ -113,6 +115,9 @@ export default ({ name, body, published_at, showInfo, children }) => {
       "rename",
       "changes",
       "improved",
+      "increased",
+      "fixed/added",
+      "added/fixed",
     ],
     []
   );

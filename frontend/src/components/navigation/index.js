@@ -68,6 +68,12 @@ export default (prop) => {
                 <FaGithub size={24} style={{ marginRight: "0.75rem" }} />
                 Changelog
               </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to='/legality#Conditions'>
+                Conditions of Use
+              </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to='/legality#Privacy'>
+                Privacy Notice
+              </NavDropdown.Item>
             </NavDropdown>
             <Modal
               show={show}

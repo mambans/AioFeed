@@ -80,7 +80,7 @@ export default () => {
             <Nav.Link as={NavLink} to='/legality#Privacy'>
               Privacy Notice
             </Nav.Link>
-            © 2020 Sweden, Robin Persson. No rights reserved.
+            © 2020 Sweden, Robin Persson.
           </StyledCenterBottomText>
         </div>
         <div>

@@ -59,6 +59,7 @@ function TwitchAuthCallback() {
                   AutoRefresh: autoRefreshEnabled,
                   enabled: enableTwitch,
                 },
+                authkey: getCookie(`AioFeed_AuthKey`),
               })
               .catch((e) => {
                 console.error(e);

@@ -32,14 +32,11 @@ export default ({ channel, loweropacity, marginright }) => {
       localStorage.setItem("VodChannels", JSON.stringify(Array.from(vodChannels)));
 
       await axios
-        .put(
-          `https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/update`,
-          {
-            username: username,
-            authkey: authKey,
-            channels: Array.from(vodChannels),
-          }
-        )
+        .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/vodchannels`, {
+          username: username,
+          authkey: authKey,
+          channels: Array.from(vodChannels),
+        })
         .catch((err) => {
           console.error(err);
         });

@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 const util = require("util");
 const compare = util.promisify(bcrypt.compare);
 
-const deleteAccount = async ({ username, password, authKey }) => {
+module.exports = async ({ username, password, authKey }) => {
   console.log("deleteAccount -> username", username);
   const res = await client
     .query({
@@ -57,5 +57,3 @@ const deleteAccount = async ({ username, password, authKey }) => {
     };
   }
 };
-
-module.exports = deleteAccount;

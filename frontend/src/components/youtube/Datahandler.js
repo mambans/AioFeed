@@ -17,9 +17,8 @@ export default ({ children }) => {
   const { youtubeToken, authKey } = useContext(AccountContext);
 
   const refresh = useCallback(async () => {
-    async function fetchData() {
+    const fetchData = async () => {
       try {
-        setIsLoaded(false);
         followedChannels.current = await getFollowedChannels();
 
         const SubscriptionData = await GetSubscriptionVideos(followedChannels.current);
@@ -36,9 +35,10 @@ export default ({ children }) => {
         setIsLoaded(Date.now());
         setError(error);
       }
-    }
-    await validateToken({ authKey }).then(async (res) => {
-      await fetchData();
+    };
+    setIsLoaded(false);
+    await validateToken({ authKey }).then((res) => {
+      fetchData();
     });
   }, [authKey, setVideos]);
 

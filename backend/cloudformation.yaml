@@ -11,7 +11,8 @@ Globals:
       AllowHeaders: "'*'"
       # For example, "'X-Forwarded-For'". Checkout [HTTP Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers) for more details on the value
 
-      AllowOrigin: "'*'"
+      AllowOrigin: "'https://aiofeed.com'"
+      # AllowOrigin: "'*'"
       # For example, "'www.example.com'". Checkout [HTTP Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin) for more details on this value.
       # MaxAge: Optional. String containing the number of seconds to cache CORS Preflight request.
       # # For example, "'600'" will cache request for 600 seconds. Checkout [HTTP Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age) for more details on this value
@@ -106,11 +107,13 @@ Resources:
                 Required: true
             - method.request.querystring.columnName:
                 Required: true
-  UpdateMonitoredChannels:
+            - method.request.querystring.authkey:
+                Required: true
+  VodChannelsUpdate:
     Type: AWS::Serverless::Function
     Properties:
       Description: "Update monitored vod channels list."
-      Handler: monitoredChannelsUpdate/handler.handler
+      Handler: vodChannelsUpdate/handler.handler
       Runtime: nodejs10.x
       CodeUri: "."
       Environment:
@@ -123,7 +126,7 @@ Resources:
         Http:
           Type: Api
           Properties:
-            Path: /monitored-channels/update
+            Path: /vodchannels
             Method: put
           RequestParameters:
             - method.request.querystring.username:
@@ -132,11 +135,11 @@ Resources:
                 Required: true
             - method.request.querystring.authkey:
                 Required: true
-  FetchMonitoredChannels:
+  VodChannelsFetch:
     Type: AWS::Serverless::Function
     Properties:
       Description: "Fetch monitored vod channels list."
-      Handler: monitoredChannelsFetch/handler.handler
+      Handler: vodChannelsFetch/handler.handler
       Runtime: nodejs10.x
       CodeUri: "."
       Environment:
@@ -149,7 +152,7 @@ Resources:
         Http:
           Type: Api
           Properties:
-            Path: /monitored-channels/fetch
+            Path: /vodchannels
             Method: get
             RequestParameters:
               - method.request.querystring.username:
@@ -173,39 +176,15 @@ Resources:
         Http:
           Type: Api
           Properties:
-            Path: /account/delete
+            Path: /account
             Method: delete
             RequestParameters:
               - method.request.querystring.username:
                   Required: true
               - method.request.querystring.password:
                   Required: true
-  UpdatePreferences:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: "Update preferences for mentioned data name/type."
-      Handler: updateStoredPreferences/handler.handler
-      Runtime: nodejs10.x
-      CodeUri: "."
-      Environment:
-        Variables:
-          USERNAME_TABLE: !Ref UserLogins
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref UserLogins
-      Events:
-        Http:
-          Type: Api
-          Properties:
-            Path: /account/preferences
-            Method: put
-          RequestParameters:
-            - method.request.querystring.username:
-                Required: true
-            - method.request.querystring.dataName:
-                Required: true
-            - method.request.querystring.data:
-                Required: true
+              - method.request.querystring.authkey:
+                  Required: true
   ReAuthenticateTwitch:
     Type: AWS::Serverless::Function
     Properties:
@@ -317,3 +296,57 @@ Resources:
           Properties:
             Path: /youtube/token
             Method: post
+          RequestParameters:
+            - method.request.querystring.authCode:
+            - method.request.querystring.username:
+                Required: true
+            - method.request.querystring.authkey:
+                Required: true
+  DeleteYotubeData:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Delete all Youtube data associated with the account."
+      Handler: DeleteYoutubeData/handler.handler
+      Runtime: nodejs10.x
+      CodeUri: "."
+      Environment:
+        Variables:
+          USERNAME_TABLE: !Ref UserLogins
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserLogins
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /youtube/token
+            Method: delete
+          RequestParameters:
+            - method.request.querystring.authkey:
+                Required: true
+            - method.request.querystring.username:
+                Required: true
+  DeleteTwitchData:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Deletes all Twitch data associated with the account."
+      Handler: DeleteTwitchData/handler.handler
+      Runtime: nodejs10.x
+      CodeUri: "."
+      Environment:
+        Variables:
+          USERNAME_TABLE: !Ref UserLogins
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserLogins
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /twitch/token
+            Method: delete
+          RequestParameters:
+            - method.request.querystring.authkey:
+                Required: true
+            - method.request.querystring.username:
+                Required: true

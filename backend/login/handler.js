@@ -2,7 +2,7 @@
 
 const login = require("./login");
 
-const handler = async (event) => {
+exports.handler = async (event) => {
   try {
     const { username, password } = JSON.parse(event.body);
     if (!username) throw { statusCode: 422, message: "Username is required" };
@@ -13,7 +13,7 @@ const handler = async (event) => {
     return {
       statusCode: result.statusCode,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "https://aiofeed.com",
       },
       body: JSON.stringify(result.data),
     };
@@ -21,11 +21,9 @@ const handler = async (event) => {
     return {
       statusCode: e.statusCode,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "https://aiofeed.com",
       },
       body: JSON.stringify(e),
     };
   }
 };
-
-exports.handler = handler;

@@ -1,8 +1,8 @@
 "use strict";
 
-const monitoredChannelsUpdate = require("./monitoredChannelsUpdate");
+const vodChannelsUpdate = require("./vodChannelsUpdate");
 
-const handler = async event => {
+exports.handler = async (event) => {
   try {
     const { username, channels, authkey } = JSON.parse(event.body);
 
@@ -10,11 +10,11 @@ const handler = async event => {
     if (!authkey) throw new Error("`authkey` is required");
     if (!channels) throw new Error("`Channels` is required");
 
-    const res = await monitoredChannelsUpdate({
+    const res = await vodChannelsUpdate({
       username,
       channels,
       authkey,
-    }).catch(e => {
+    }).catch((e) => {
       console.log(e);
     });
 
@@ -22,7 +22,7 @@ const handler = async event => {
       statusCode: 200,
       body: JSON.stringify(res.Attributes.MonitoredChannels),
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "https://aiofeed.com",
       },
     };
   } catch (e) {
@@ -30,11 +30,9 @@ const handler = async event => {
     return {
       statusCode: 422,
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": "https://aiofeed.com",
       },
       // body: JSON.stringify(res.data),
     };
   }
 };
-
-exports.handler = handler;

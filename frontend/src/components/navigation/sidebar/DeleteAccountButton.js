@@ -34,7 +34,7 @@ export default () => {
       setValidated(true);
 
       await axios
-        .delete(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/delete`, {
+        .delete(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account`, {
           data: { username: account, password: password, authKey: authKey },
         })
         .then((res) => {

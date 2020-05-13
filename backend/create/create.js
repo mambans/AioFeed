@@ -8,7 +8,7 @@ const util = require("util");
 const hash = util.promisify(bcrypt.hash);
 var uniqid = require("uniqid");
 
-const create = async ({ username, email, password }) => {
+module.exports = async ({ username, email, password }) => {
   // const userExist = await client
   //   .query({
   //     TableName: process.env.USERNAME_TABLE,
@@ -53,4 +53,3 @@ const create = async ({ username, email, password }) => {
     },
   };
 };
-module.exports = create;

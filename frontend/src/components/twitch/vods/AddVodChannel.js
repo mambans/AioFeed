@@ -10,14 +10,11 @@ export default async ({ channel, username, authKey }) => {
     localStorage.setItem("VodChannels", JSON.stringify(newChannels));
 
     await axios
-      .put(
-        `https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/monitored-channels/update`,
-        {
-          username: username,
-          authkey: authKey,
-          channels: newChannels,
-        }
-      )
+      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/vodchannels`, {
+        username: username,
+        authkey: authKey,
+        channels: newChannels,
+      })
       .catch((error) => {
         console.error(error);
       });
