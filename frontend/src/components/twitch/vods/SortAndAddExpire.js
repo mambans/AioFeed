@@ -1,6 +1,6 @@
 import { sortBy, reverse } from "lodash";
 
-export default async (followedStreamVods, vodExpire, oldLoaded, oldExpire) => {
+export default (followedStreamVods, vodExpire, oldLoaded, oldExpire) => {
   const liveVods = followedStreamVods.filter((vod) => {
     return vod.thumbnail_url === "";
   });

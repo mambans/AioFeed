@@ -160,10 +160,9 @@ export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchTok
 
         await addVodEndTime(videos.data);
 
-        const followedOrderedStreamVods = await SortAndAddExpire(videos.data, vodExpire);
+        const followedOrderedStreamVods = SortAndAddExpire(videos.data, vodExpire);
 
         localStorage.setItem(`Vods`, JSON.stringify(followedOrderedStreamVods));
-
         return {
           data: followedOrderedStreamVods,
           vodError: vodChannels.error,
@@ -175,6 +174,7 @@ export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchTok
         };
       }
     }
+
     return { data: getLocalstorage("Vods") };
   } catch (error) {
     console.error("message: ", error.message);
