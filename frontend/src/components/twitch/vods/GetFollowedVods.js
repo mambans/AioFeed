@@ -123,7 +123,7 @@ const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRe
 };
 
 export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchToken) => {
-  const vodExpire = 3; // Number of days
+  const vodExpire = 3; // Number of hours
 
   try {
     if (!getLocalstorage(`Vods`) || getLocalstorage(`Vods`).expire <= Date.now() || forceRun) {

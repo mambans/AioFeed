@@ -1,6 +1,6 @@
 import { sortBy, reverse } from "lodash";
 
-export default (followedStreamVods, vodExpire, oldLoaded, oldExpire) => {
+export default async (followedStreamVods, vodExpire, oldLoaded, oldExpire) => {
   const liveVods = followedStreamVods.filter((vod) => {
     return vod.thumbnail_url === "";
   });
@@ -18,7 +18,7 @@ export default (followedStreamVods, vodExpire, oldLoaded, oldExpire) => {
 
   const Vods = {
     data: sortedLiveVods.concat(sortedCompletedVods),
-    expire: oldExpire || Date.now() + vodExpire * 24 * 60 * 60 * 1000,
+    expire: oldExpire || Date.now() + vodExpire * 60 * 60 * 1000,
     loaded: oldLoaded || Date.now(),
   };
 
