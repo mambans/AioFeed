@@ -24,6 +24,7 @@ import {
   Chat,
   StyledLiveInfoContainer,
   BlurredBannerImage,
+  VideoChatButton,
 } from "./StyledComponents";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 import AddVideoExtraData from "../AddVideoExtraData";
@@ -115,17 +116,16 @@ export default () => {
             vodPagination.current = res.data.pagination.cursor;
 
             const videos = await AddVideoExtraData(res, false);
+            const finallVideos = await videos.data.map((stream) => {
+              if (stream.type === "archive") {
+                stream.endDate = durationToDate(stream.duration, stream.published_at);
+              } else {
+                stream.endDate = new Date(stream.published_at).getTime();
+              }
+              return stream;
+            });
 
             if (pagination) {
-              const finallVideos = videos.data.map((stream) => {
-                if (stream.type === "archive") {
-                  stream.endDate = durationToDate(stream.duration, stream.published_at);
-                } else {
-                  stream.endDate = new Date(stream.published_at).getTime();
-                }
-                return stream;
-              });
-
               const allVods = previosVodPage.current.concat(finallVideos);
               previosVodPage.current = allVods;
 
@@ -142,15 +142,6 @@ export default () => {
                 }
               }, 0);
             } else {
-              const finallVideos = await videos.data.map((stream) => {
-                if (stream.type === "archive") {
-                  stream.endDate = durationToDate(stream.duration, stream.published_at);
-                } else {
-                  stream.endDate = new Date(stream.published_at).getTime();
-                }
-                return stream;
-              });
-
               previosVodPage.current = finallVideos;
 
               setVods(finallVideos);
@@ -375,46 +366,46 @@ export default () => {
             />
           )}
           {videoOpen ? (
-            <FaWindowClose
+            <VideoChatButton
               title='Close video'
-              className='svgButton'
               id='closeVideo'
-              size={20}
               onClick={() => {
                 setVideoOpen(!videoOpen);
-              }}
-            />
+              }}>
+              <FaWindowClose size={20} />
+              Close player
+            </VideoChatButton>
           ) : (
-            <MdLiveTv
+            <VideoChatButton
               title='Open video'
-              className='svgButton'
               id='openVideo'
-              size={30}
               onClick={() => {
                 setVideoOpen(!videoOpen);
-              }}
-            />
+              }}>
+              <MdLiveTv size={30} />
+              Open player
+            </VideoChatButton>
           )}
           {chatOpen ? (
-            <FaWindowClose
+            <VideoChatButton
               title='Close chat'
-              className='svgButton'
               id='closeChat'
-              size={20}
               onClick={() => {
                 setChatOpen(!chatOpen);
-              }}
-            />
+              }}>
+              Close player
+              <FaWindowClose size={20} />
+            </VideoChatButton>
           ) : (
-            <MdChat
+            <VideoChatButton
               title='Open chat'
-              className='svgButton'
               id='openChat'
-              size={20}
               onClick={() => {
                 setChatOpen(!chatOpen);
-              }}
-            />
+              }}>
+              Open player
+              <MdChat size={30} />
+            </VideoChatButton>
           )}
           {channelInfo ? (
             <Banner>

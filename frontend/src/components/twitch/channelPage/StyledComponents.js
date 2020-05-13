@@ -1,3 +1,4 @@
+import React from "react";
 import styled, { keyframes } from "styled-components";
 import { Button } from "react-bootstrap";
 import { MdVideocam } from "react-icons/md";
@@ -6,40 +7,6 @@ import { Link } from "react-router-dom";
 export const ChannelContainer = styled.div`
   min-height: 100vh;
   min-width: 100%;
-
-  svg.svgButton {
-    position: absolute;
-    z-index: 2;
-    cursor: pointer;
-    opacity: 0.5;
-    transition: color 250ms, opacity 250ms;
-    background: rgba(0, 0, 0, 0.8);
-    border-radius: 5px;
-
-    &:hover {
-      opacity: 1;
-    }
-
-    &#closeChat {
-      right: 534px;
-      color: #b50000;
-    }
-
-    &#openChat {
-      right: 5px;
-      color: #ffffff;
-    }
-
-    &#closeVideo {
-      left: 534px;
-      color: #b50000;
-    }
-
-    &#openVideo {
-      left: 5px;
-      color: #ffffff;
-    }
-  }
 `;
 
 export const Banner = styled.div`
@@ -335,3 +302,63 @@ export const BlurredBannerImage = styled.div`
     width: 40%;
   }
 `;
+
+const StyledVideoChatButton = styled(Button).attrs({ variant: "dark-outline" })`
+  position: absolute;
+  z-index: 2;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: color 250ms, opacity 250ms;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-top: 5px;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &#closeChat {
+    right: 534px;
+    color: #b50000;
+
+    svg {
+      margin-left: 7px;
+    }
+  }
+
+  &#openChat {
+    right: 5px;
+    color: #ffffff;
+
+    svg {
+      margin-left: 7px;
+    }
+  }
+
+  &#closeVideo {
+    left: 534px;
+    color: #b50000;
+
+    svg {
+      margin-right: 7px;
+    }
+  }
+
+  &#openVideo {
+    left: 5px;
+    color: #ffffff;
+
+    svg {
+      margin-right: 7px;
+    }
+  }
+`;
+
+export const VideoChatButton = ({ id, onClick, children }) => (
+  <StyledVideoChatButton id={id} onClick={onClick}>
+    {children}
+  </StyledVideoChatButton>
+);
