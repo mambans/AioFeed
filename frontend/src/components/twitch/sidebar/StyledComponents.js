@@ -66,7 +66,8 @@ export const SidebarHeader = styled.p`
 
 export const StyledsidebarItem = styled.div`
   display: grid;
-  grid-template-areas: "profile user  viewers" "profile row2 row2";
+  /* grid-template-areas: "profile user  viewers" "profile row2 row2"; */
+  grid-template-areas: "profile user  user" "profile row2 row2";
   grid-template-columns: 18% 56% 26%;
   grid-template-rows: 50% 50%;
   padding: 8px 5px 8px 10px;
@@ -113,9 +114,11 @@ export const StyledsidebarItem = styled.div`
   .sidebarUser {
     color: var(--VideoContainerLinks);
     font-weight: bold;
-    overflow: hidden;
     margin-right: 8px;
     font-size: 1.05em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .sidebarViewers {
@@ -124,17 +127,12 @@ export const StyledsidebarItem = styled.div`
     justify-content: space-between;
     font-size: 1.05em;
     align-items: center;
+    min-width: 70px;
+    margin-left: 5px;
 
     i {
       justify-content: right !important;
     }
-  }
-
-  .rowTwo {
-    display: grid;
-    grid-area: row2;
-    grid-template-columns: auto 33%;
-    padding-top: 0px;
   }
 
   .sidebarDuration {
@@ -143,6 +141,8 @@ export const StyledsidebarItem = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    min-width: 70px;
+    margin-left: 5px;
 
     i {
       justify-content: right;
@@ -201,5 +201,34 @@ export const HideSidebarButton = styled(MdFormatIndentDecrease).attrs({ size: 25
 
   &:hover {
     opacity: 1;
+  }
+`;
+
+export const FirstRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  grid-area: user;
+
+  svg {
+    color: rgb(120, 120, 120);
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+  }
+`;
+
+export const SecondRow = styled.div`
+  grid-area: row2;
+  padding-top: 0px;
+  display: flex;
+  justify-content: space-between;
+  /* display: grid; */
+  /* grid-template-columns: auto 33%; */
+
+  svg {
+    color: rgb(120, 120, 120);
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
   }
 `;

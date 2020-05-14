@@ -8,7 +8,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import Tooltip from "react-bootstrap/Tooltip";
 import styled from "styled-components";
 
-import { SidebarTitlePopup, StyledsidebarItem } from "./StyledComponents";
+import { SidebarTitlePopup, StyledsidebarItem, FirstRow, SecondRow } from "./StyledComponents";
 import { truncate } from "../../../util/Utils";
 import { formatViewerNumbers } from "./../TwitchUtils";
 
@@ -82,25 +82,19 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
             }
             alt={"thumbnail"}></img>
         </div>
-        <div
-          className={"sidebarUser"}
-          // href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}
-        >
-          {truncate(stream.user_name, 16)}
-        </div>
-        <p className={"sidebarViewers"}>
-          {formatViewerNumbers(stream.viewer_count)}
-          <FaRegEye
-            size={10}
-            style={{
-              color: "rgb(120, 120, 120)",
-              // paddingLeft: "5px",
-              display: "flex",
-              alignItems: "center",
-            }}
-          />
-        </p>
-        <div className={"rowTwo"}>
+        <FirstRow>
+          <div
+            className={"sidebarUser"}
+            // href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}
+          >
+            {truncate(stream.user_name, 16)}
+          </div>
+          <p className={"sidebarViewers"}>
+            {formatViewerNumbers(stream.viewer_count)}
+            <FaRegEye size={10} />
+          </p>
+        </FirstRow>
+        <SecondRow>
           {stream.game_name.length > 15 ? (
             <OverlayTrigger
               key={"bottom"}
@@ -127,16 +121,9 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
           )}
           <div className={"sidebarDuration"}>
             <Moment durationFromNow>{stream.started_at}</Moment>
-            <FaRegClock
-              size={9}
-              style={{
-                color: "rgb(120, 120, 120)",
-                display: "flex",
-                alignItems: "center",
-              }}
-            />
+            <FaRegClock size={9} />
           </div>
-        </div>
+        </SecondRow>
       </StyledsidebarItem>
       <CSSTransition
         in={showTitle}
