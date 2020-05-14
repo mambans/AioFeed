@@ -48,6 +48,7 @@ export default ({ data }, centerContainerRef) => {
                           await data.refresh();
                         }}
                         REFRESH_RATE={data.REFRESH_RATE}
+                        refreshAfterUnfollowTimer={data.refreshAfterUnfollowTimer}
                       />
                     </CSSTransition>
                   );

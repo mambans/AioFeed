@@ -7,7 +7,15 @@ import reauthenticate from "./reauthenticate";
 import { getCookie } from "./../../util/Utils";
 import validateToken from "./validateToken";
 
-export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshStreams }) => {
+export default ({
+  channelName,
+  id,
+  alreadyFollowedStatus,
+  size,
+  style,
+  refreshStreams,
+  refreshAfterUnfollowTimer,
+}) => {
   const [following, setFollowing] = useState(alreadyFollowedStatus || false);
   const { setTwitchToken, setRefreshToken, twitchUserId } = useContext(AccountContext);
 
@@ -28,13 +36,23 @@ export default ({ channelName, id, alreadyFollowedStatus, size, style, refreshSt
       await axios(axiosConfig("delete", user_id))
         .then(() => {
           console.log(`Unfollowed: ${channelName}`);
-          if (refreshStreams) refreshStreams();
+          if (refreshStreams) {
+            clearTimeout(refreshAfterUnfollowTimer.current);
+            refreshAfterUnfollowTimer.current = setTimeout(() => {
+              refreshStreams();
+            }, 3000);
+          }
         })
         .catch(() => {
           reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
             await axios(axiosConfig("delete", user_id, access_token)).then(() => {
               console.log(`Unfollowed: ${channelName}`);
-              if (refreshStreams) refreshStreams();
+              if (refreshStreams) {
+                clearTimeout(refreshAfterUnfollowTimer.current);
+                refreshAfterUnfollowTimer.current = setTimeout(() => {
+                  refreshStreams();
+                }, 3000);
+              }
             });
           });
         });

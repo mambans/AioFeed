@@ -35,6 +35,7 @@ export default ({ children }) => {
   const oldLiveStreams = useRef([]);
   const newlyAddedStreams = useRef([]);
   const timer = useRef();
+  const refreshAfterUnfollowTimer = useRef();
 
   const windowFocusHandler = useCallback(() => {
     document.title = "AioFeed | Feed";
@@ -209,6 +210,7 @@ export default ({ children }) => {
       newlyAddedStreams: newlyAddedStreams.current,
       REFRESH_RATE: REFRESH_RATE,
       autoRefreshEnabled: autoRefreshEnabled,
+      refreshAfterUnfollowTimer: refreshAfterUnfollowTimer,
     });
   }
 };

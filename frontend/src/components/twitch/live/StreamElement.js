@@ -48,7 +48,7 @@ function NewHighlightNoti({ newlyAddedStreams, user_name }) {
 
 function StreamEle(data_p) {
   const location = useLocation();
-  const { data, newlyAddedStreams, refresh } = data_p;
+  const { data, newlyAddedStreams, refresh, refreshAfterUnfollowTimer } = data_p;
   const [isHovered, setIsHovered] = useState(false);
   const { twitchVideoHoverEnable } = useContext(FeedsContext);
 
@@ -212,6 +212,7 @@ function StreamEle(data_p) {
                 id={data.user_id}
                 alreadyFollowedStatus={true}
                 refreshStreams={refresh}
+                refreshAfterUnfollowTimer={refreshAfterUnfollowTimer}
               />
             </div>
           )}
