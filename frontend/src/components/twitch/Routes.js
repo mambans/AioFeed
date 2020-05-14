@@ -19,6 +19,7 @@ export default () => {
       {/* <Route path='videos' element={<Navigate to={`/${currentRoute}/channel`} replace />} /> */}
       {/* <Route path='videos' element={<ChannelPage />} /> */}
       {/* <Route path='clips' element={<ChannelPage />} /> */}
+      <Route path='videos/all' to={`/${currentRoute}/channel`} replace />
       <Route path='videos/:videoId' element={<Player />} />
       <Route path='vod/:videoId' element={<Player />} />
       <Route path='clip/:videoId' element={<PlayerClip />} />
