@@ -154,7 +154,7 @@ export default () => {
   );
 
   const videoTypeBtnOnClick = (type) => {
-    setTopData();
+    setTopData([]);
     oldTopData.current = null;
     setVideoType(type);
     setTypeListOpen(false);

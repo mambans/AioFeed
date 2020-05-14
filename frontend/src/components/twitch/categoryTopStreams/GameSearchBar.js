@@ -66,6 +66,7 @@ export default (props) => {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     navigate("/category/" + returnFirstMatchedGame());
+    setListIsOpen(false);
     // resetGame();
   };
 
