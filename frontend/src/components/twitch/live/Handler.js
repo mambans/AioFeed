@@ -8,7 +8,6 @@ import AccountContext from "./../../account/AccountContext";
 import FeedsContext from "./../../feed/FeedsContext";
 import VodsContext from "./../vods/VodsContext";
 import { AddCookie } from "../../../util/Utils";
-import validateToken from "../validateToken";
 import LiveStreamsPromise from "./LiveStreamsPromise";
 import OfflineStreamsPromise from "./OfflineStreamsPromise";
 import UpdatedStreamsPromise from "./UpdatedStreamsPromise";
@@ -70,9 +69,7 @@ export default ({ children }) => {
       try {
         // followedChannels.current = await getFollowedChannels(parseInt(twitchUserId));
         // followedChannels.current = await GetFollowedChannels();
-        followedChannels.current = await validateToken().then((res) => {
-          return GetFollowedChannels();
-        });
+        followedChannels.current = await GetFollowedChannels();
 
         if (followedChannels.current && followedChannels.current[0]) {
           AddCookie("Twitch-username", followedChannels.current[0].from_name);

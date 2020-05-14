@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { getCookie } from "../../util/Utils";
+import validateToken from "./validateToken";
 
 const fetchNextPageOfFollowers = async ({
   total,
@@ -42,21 +43,23 @@ const fetchNextPageOfFollowers = async ({
 
 export default async () => {
   try {
-    const followedchannels = await axios
-      .get(`https://api.twitch.tv/helix/users/follows?`, {
-        params: {
-          from_id: getCookie("Twitch-userId"),
-          first: 100,
-        },
-        headers: {
-          Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-        },
-      })
-      .catch((error) => {
-        console.error(error.message);
-        return error;
-      });
+    const followedchannels = await validateToken().then(async () => {
+      return await axios
+        .get(`https://api.twitch.tv/helix/users/follows?`, {
+          params: {
+            from_id: getCookie("Twitch-userId"),
+            first: 100,
+          },
+          headers: {
+            Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
+            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+          },
+        })
+        .catch((error) => {
+          console.error(error.message);
+          return error;
+        });
+    });
 
     const channels = await fetchNextPageOfFollowers({
       total: followedchannels.data.total,

@@ -12,7 +12,6 @@ import StyledLoadingList from "./../categoryTopStreams/LoadingList";
 import ChannelListElement from "../channelList/ChannelListElement";
 import AddVideoExtraData from "../AddVideoExtraData";
 import GetFollowedChannels from "../GetFollowedChannels";
-import validateToken from "../validateToken";
 
 export default () => {
   const [channels, setChannels] = useState();
@@ -63,29 +62,31 @@ export default () => {
   } = useInput("");
 
   const channelObjectList = async (channelsList) => {
-    return {
-      data: {
-        data: await channelsList.map((channel) => {
-          return {
-            user_id: channel.to_id || channel.user_id,
-            user_name: channel.to_name || channel.user_name,
-          };
-        }),
-      },
-    };
+    try {
+      return {
+        data: {
+          data: await channelsList.map((channel) => {
+            return {
+              user_id: channel.to_id || channel.user_id,
+              user_name: channel.to_name || channel.user_name,
+            };
+          }),
+        },
+      };
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   const fetchFollowedChannels = useCallback(async () => {
-    await validateToken().then(() => {
-      GetFollowedChannels().then(async (res) => {
-        if (res) {
-          channelObjectList(res).then(async (res) => {
-            await AddVideoExtraData(res, false).then(async (res) => {
-              setChannels(res.data);
-            });
+    await GetFollowedChannels().then(async (res) => {
+      if (res) {
+        channelObjectList(res).then(async (res) => {
+          await AddVideoExtraData(res, false).then(async (res) => {
+            setChannels(res.data);
           });
-        }
-      });
+        });
+      }
     });
   }, []);
 

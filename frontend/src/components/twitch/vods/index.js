@@ -14,7 +14,6 @@ import VodsContext from "./VodsContext";
 import LoadingBoxes from "./../LoadingBoxes";
 import FeedsContext from "../../feed/FeedsContext";
 import { AddCookie } from "../../../util/Utils";
-import validateToken from "../validateToken";
 
 export default ({ centerContainerRef }) => {
   const { vods, setVods } = useContext(VodsContext);
@@ -95,24 +94,22 @@ export default ({ centerContainerRef }) => {
   const refresh = useCallback(
     async (forceRefresh) => {
       setRefreshing(true);
-      await validateToken().then(async () => {
-        await getFollowedVods(forceRefresh, authKey, username, setRefreshToken, setTwitchToken)
-          .then((data) => {
-            if (data.error) {
-              setError(data.error);
-            } else if (data.vodError) {
-              setVodError(data.vodError);
-            }
-            setVods(data.data);
-
-            setRefreshing(false);
-          })
-          .catch((data) => {
+      await getFollowedVods(forceRefresh, authKey, username, setRefreshToken, setTwitchToken)
+        .then((data) => {
+          if (data.error) {
             setError(data.error);
+          } else if (data.vodError) {
+            setVodError(data.vodError);
+          }
+          setVods(data.data);
 
-            setVods(data.data);
-          });
-      });
+          setRefreshing(false);
+        })
+        .catch((data) => {
+          setError(data.error);
+
+          setVods(data.data);
+        });
     },
     [authKey, username, setTwitchToken, setRefreshToken, setVods]
   );
@@ -145,27 +142,25 @@ export default ({ centerContainerRef }) => {
 
     (async () => {
       setRefreshing(true);
-      await validateToken().then(async () => {
-        await getFollowedVods(false, authKey, username, setRefreshToken, setTwitchToken)
-          .then((data) => {
-            if (data.error) {
-              setError(data.error);
-            } else if (data.vodError) {
-              setVodError(data.vodError);
-            }
-
-            setVods(data.data);
-            setRefreshing(false);
-
-            // Enable for "load more" vods on Scroll
-            // if (loadmoreRef.current) observer.observe(loadmoreRef.current);
-          })
-          .catch((data) => {
+      await getFollowedVods(false, authKey, username, setRefreshToken, setTwitchToken)
+        .then((data) => {
+          if (data.error) {
             setError(data.error);
+          } else if (data.vodError) {
+            setVodError(data.vodError);
+          }
 
-            setVods(data.data);
-          });
-      });
+          setVods(data.data);
+          setRefreshing(false);
+
+          // Enable for "load more" vods on Scroll
+          // if (loadmoreRef.current) observer.observe(loadmoreRef.current);
+        })
+        .catch((data) => {
+          setError(data.error);
+
+          setVods(data.data);
+        });
     })();
     window.addEventListener("focus", windowFocusHandler);
     window.addEventListener("blur", windowBlurHandler);

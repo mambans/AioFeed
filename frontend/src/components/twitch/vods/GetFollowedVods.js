@@ -7,7 +7,6 @@ import reauthenticate from "./../reauthenticate";
 import AddVideoExtraData from "../AddVideoExtraData";
 import FetchMonitoredVodChannelsList from "./FetchMonitoredVodChannelsList";
 import SortAndAddExpire from "./SortAndAddExpire";
-import validateToken from "../validateToken";
 
 const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) => {
   const vodChannelsWithoutFollow = [];
@@ -128,9 +127,7 @@ export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchTok
   try {
     if (!getLocalstorage(`Vods`) || getLocalstorage(`Vods`).expire <= Date.now() || forceRun) {
       try {
-        const followedChannels = await validateToken().then(async () => {
-          return await GetFollowedChannels();
-        });
+        const followedChannels = await GetFollowedChannels();
 
         const FollowedChannelVods = await FetchMonitoredVodChannelsList(Username, AuthKey);
         if (FollowedChannelVods.length === 0) {
