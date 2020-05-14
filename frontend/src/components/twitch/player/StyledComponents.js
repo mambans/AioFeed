@@ -300,14 +300,17 @@ export const InfoDisplay = styled.div`
 
   #game {
     grid-area: game;
+    width: max-content;
   }
 
   #viewers {
     grid-area: viewers;
+    width: max-content;
   }
 
   #uptime {
     grid-area: uptime;
+    width: max-content;
   }
 
   .twitchRedirect {
