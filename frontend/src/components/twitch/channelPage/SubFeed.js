@@ -35,7 +35,7 @@ export default ({
         () => {
           setNumberOfVideos(Math.floor(document.documentElement.clientWidth / 350));
         },
-        100,
+        20,
         { leading: true, trailing: false }
       ),
     []

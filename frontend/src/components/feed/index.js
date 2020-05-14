@@ -48,7 +48,7 @@ export default () => {
         () => {
           setScreenWidth(window.innerWidth);
         },
-        33,
+        20,
         { leading: true, trailing: false }
       ),
     []
