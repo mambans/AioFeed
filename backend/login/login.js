@@ -5,7 +5,7 @@ const client = new DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
 
 const bcrypt = require("bcrypt");
 const util = require("util");
-const uniqid = require("uniqid");
+const { v4: uuidv4 } = require("uuid");
 const compare = util.promisify(bcrypt.compare);
 const AES = require("crypto-js/aes");
 const enc = require("crypto-js/enc-utf8");
@@ -37,7 +37,7 @@ module.exports = async ({ username, password }) => {
     const valid = await compare(password, res.Items[0].Password);
 
     if (valid) {
-      const key = uniqid(`${res.Items[0].Username}AuthKey`);
+      const key = uuidv4();
 
       const data = await client
         .update({

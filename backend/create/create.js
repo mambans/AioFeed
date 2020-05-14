@@ -6,7 +6,7 @@ const client = new DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
 const bcrypt = require("bcrypt");
 const util = require("util");
 const hash = util.promisify(bcrypt.hash);
-var uniqid = require("uniqid");
+const { v4: uuidv4 } = require("uuid");
 
 module.exports = async ({ username, email, password }) => {
   // const userExist = await client
@@ -25,7 +25,7 @@ module.exports = async ({ username, email, password }) => {
   // if (userExist.Items.length === 0 && userExist.Count === 0) {
   const hashedPassword = await hash(password, 10);
 
-  const key = uniqid(`${username}-AuthKey:`);
+  const key = uuidv4();
 
   const res = await client
     .put({
