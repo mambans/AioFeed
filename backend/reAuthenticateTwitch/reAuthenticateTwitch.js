@@ -1,7 +1,19 @@
+const DynamoDB = require("aws-sdk/clients/dynamodb");
+const client = new DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
 const axios = require("axios");
+const AES = require("crypto-js/aes");
 
-module.exports = async ({ refresh_token }) => {
-  return await axios
+module.exports = async ({ refresh_token, username, authkey }) => {
+  const AccountInfo = await client
+    .get({
+      TableName: process.env.USERNAME_TABLE,
+      Key: { Username: username },
+    })
+    .promise();
+
+  if (authkey !== AccountInfo.Item.AuthKey) throw new Error("Invalid AuthKey");
+
+  const res = await axios
     .post(
       `https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=${encodeURI(
         refresh_token
@@ -15,4 +27,29 @@ module.exports = async ({ refresh_token }) => {
     .catch((e) => {
       console.log("reAuthenticateTwitch -> e", e);
     });
+
+  const encrypted_AccessToken = await AES.encrypt(res.access_token, "TwitchPreferences").toString();
+  const encrypted_RefreshToken = await AES.encrypt(
+    res.refresh_token,
+    "TwitchPreferences"
+  ).toString();
+
+  await client
+    .update({
+      TableName: process.env.USERNAME_TABLE,
+      Key: { Username: AccountInfo.Item.Username },
+      UpdateExpression: `set #Preferences.#AccessToken = :Access_token, #Preferences.#RefreshToken = :Refresh_token`,
+      ExpressionAttributeNames: {
+        "#Preferences": "TwitchPreferences",
+        "#AccessToken": "Token",
+        "#RefreshToken": "Refresh_token",
+      },
+      ExpressionAttributeValues: {
+        ":Access_token": encrypted_AccessToken,
+        ":Refresh_token": encrypted_RefreshToken,
+      },
+    })
+    .promise();
+
+  return res;
 };

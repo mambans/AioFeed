@@ -8,6 +8,8 @@ export default async (setTwitchToken, setRefreshToken) => {
   return await axios
     .put("https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/reauth/twitch", {
       refresh_token: getCookie(`Twitch-refresh_token`),
+      username: getCookie(`AioFeed_AccountName`),
+      authkey: getCookie(`AioFeed_AuthKey`),
     })
     .then(async (res) => {
       AddCookie("Twitch-access_token", res.data.access_token);
