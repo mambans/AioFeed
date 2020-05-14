@@ -67,7 +67,7 @@ export default async ({
           return old_stream.user_name === stream.user_name;
         });
 
-        if (oldStreamData.game_name !== stream.game_name) {
+        if (oldStreamData.game_name !== stream.game_name && oldStreamData.title === stream.title) {
           addSystemNotification({
             status: "updated",
             stream: stream,
@@ -91,7 +91,7 @@ export default async ({
           return old_stream.user_name === stream.user_name;
         });
 
-        if (oldStreamData.title !== stream.title) {
+        if (oldStreamData.title !== stream.title && oldStreamData.game_name === stream.game_name) {
           addSystemNotification({
             status: "updated",
             stream: stream,
