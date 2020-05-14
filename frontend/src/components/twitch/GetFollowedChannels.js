@@ -30,7 +30,8 @@ const fetchNextPageOfFollowers = async ({
     if (channels.length < total) {
       return await fetchNextPageOfFollowers({
         total: total,
-        twitchUserId: nextPage.data.pagination.cursor,
+        twitchUserId: twitchUserId,
+        PagePagination: nextPage.data.pagination.cursor,
         followedchannels: channels,
       });
     }
