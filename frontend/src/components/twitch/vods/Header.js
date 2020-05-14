@@ -21,7 +21,7 @@ export default React.forwardRef((props, ref) => {
   const { refresh, refreshing, vods, vodError } = props;
 
   return (
-    <HeaderContainer ref={ref}>
+    <HeaderContainer ref={ref} id='TwitchVodsHeader'>
       <HeaderLeftSubcontainer>
         <RefreshButton
           onClick={() => {

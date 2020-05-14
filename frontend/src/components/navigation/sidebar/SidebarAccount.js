@@ -118,6 +118,7 @@ export default () => {
             enabled={enableTwitch}
             label='Twitch'
             tokenExists={twitchToken}
+            scrollIntoView={true}
             tooltip={
               twitchToken
                 ? (enableTwitch ? "Disable " : "Enable ") + ` Twitch feed`
@@ -146,6 +147,7 @@ export default () => {
             enabled={enableYoutube}
             label='Youtube'
             tokenExists={youtubeToken}
+            scrollIntoView={true}
             tooltip={
               youtubeToken
                 ? (enableYoutube ? "Disable " : "Enable ") + ` Twitch feed`
@@ -161,6 +163,7 @@ export default () => {
             enabled={enableTwitchVods}
             label='TwitchVods'
             tokenExists={twitchToken}
+            scrollIntoView={true}
             tooltip={
               twitchToken
                 ? (enableTwitchVods ? "Disable " : "Enable ") + ` Twitch feed`

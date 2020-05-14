@@ -11,10 +11,10 @@ import Util from "../../../util/Util";
 
 export default ({ data, refresh }) => {
   // eslint-disable-next-line no-unused-vars
-  const { refreshing, autoRefreshEnabled, refreshTimer, followedChannels } = data;
+  const { refreshing, autoRefreshEnabled, refreshTimer } = data;
 
   return (
-    <HeaderContainerTwitchLive>
+    <HeaderContainerTwitchLive id='TwitchHeader'>
       <HeaderLeftSubcontainer>
         <RefreshButton onClick={refresh}>
           {refreshing ? (

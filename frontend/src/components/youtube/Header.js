@@ -58,7 +58,7 @@ const SubFeedError = (props) => {
 export default (data) => {
   const { refresh, requestError, followedChannels, videos, isLoaded, setVideos } = data;
   return (
-    <HeaderContainer>
+    <HeaderContainer id='YoutubeHeader'>
       <HeaderLeftSubcontainer>
         <RefreshButton
           onClick={refresh}
