@@ -3,21 +3,43 @@ import axios from "axios";
 import AddVideoExtraData from "./../AddVideoExtraData";
 import { getCookie } from "../../../util/Utils";
 
+function chunk(array, size) {
+  const chunked_arr = [];
+  let index = 0;
+  while (index < array.length) {
+    chunked_arr.push(array.slice(index, size + index));
+    index += size;
+  }
+  return chunked_arr;
+}
+
 const fetchAllOnlineStreams = async (followedChannelsIds) => {
-  return await axios
-    .get(`https://api.twitch.tv/helix/streams`, {
-      params: {
-        user_id: followedChannelsIds,
-        first: 100,
-      },
-      headers: {
-        Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-        "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-      },
+  const channelsInChunks = chunk(followedChannelsIds, 100);
+  const allOnlineStreams = await Promise.all(
+    channelsInChunks.map(async (channelsChunk) => {
+      return await axios
+        .get(`https://api.twitch.tv/helix/streams`, {
+          params: {
+            user_id: channelsChunk,
+            first: 100,
+          },
+          headers: {
+            Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
+            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+          },
+        })
+        .then((res) => {
+          return res.data.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     })
-    .catch((error) => {
-      console.log(error);
-    });
+  ).then((res) => {
+    return res.flat(1);
+  });
+
+  return allOnlineStreams;
 };
 
 async function getFollowedOnlineStreams(followedchannels) {
@@ -30,7 +52,9 @@ async function getFollowedOnlineStreams(followedchannels) {
     });
 
     // Get all Live-streams from followed channels.
-    const LiveFollowedStreams = await fetchAllOnlineStreams(followedChannelsIds);
+    const LiveFollowedStreams = {
+      data: { data: await fetchAllOnlineStreams(followedChannelsIds) },
+    };
 
     try {
       if (LiveFollowedStreams.data.data.length > 0) {

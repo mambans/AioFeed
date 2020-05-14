@@ -2,30 +2,41 @@ import axios from "axios";
 
 import { getCookie } from "../../util/Utils";
 
-const fetchNextPageOfFollowers = async (PagePagination, followedchannels, twitchUserId) => {
-  const nextPage = await axios
-    .get(`https://api.twitch.tv/helix/users/follows?`, {
-      params: {
-        from_id: twitchUserId,
-        first: 100,
-        after: PagePagination,
-      },
-      headers: {
-        Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-        "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-      },
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+const fetchNextPageOfFollowers = async ({
+  total,
+  PagePagination,
+  followedchannels,
+  twitchUserId,
+}) => {
+  if (total > followedchannels.length) {
+    const nextPage = await axios
+      .get(`https://api.twitch.tv/helix/users/follows?`, {
+        params: {
+          from_id: twitchUserId,
+          first: 100,
+          after: PagePagination,
+        },
+        headers: {
+          Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
+          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
+        },
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
-  nextPage.data.data.forEach((channel) => {
-    followedchannels.data.data.push(channel);
-  });
+    const channels = followedchannels.concat(nextPage.data.data);
 
-  if (followedchannels.data.data.length < followedchannels.data.total) {
-    await fetchNextPageOfFollowers(nextPage.data.pagination.cursor, followedchannels);
+    if (channels.length < total) {
+      return await fetchNextPageOfFollowers({
+        total: total,
+        twitchUserId: nextPage.data.pagination.cursor,
+        followedchannels: channels,
+      });
+    }
+    return channels;
   }
+  return followedchannels;
 };
 
 export default async () => {
@@ -46,15 +57,14 @@ export default async () => {
         return error;
       });
 
-    if (followedchannels.total > followedchannels.data.length) {
-      await fetchNextPageOfFollowers(
-        followedchannels.data.pagination.cursor,
-        followedchannels,
-        getCookie("Twitch-userId")
-      );
-    }
+    const channels = await fetchNextPageOfFollowers({
+      total: followedchannels.data.total,
+      PagePagination: followedchannels.data.pagination.cursor,
+      followedchannels: followedchannels.data.data,
+      twitchUserId: getCookie("Twitch-userId"),
+    });
 
-    return followedchannels.data.data;
+    return channels;
   } catch (error) {
     console.error(error.message);
     return error;
