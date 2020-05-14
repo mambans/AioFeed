@@ -19,11 +19,18 @@ const getGameDetails = async (items) => {
     return !cachedGameInfo.data.find((cachedGame) => cachedGame.id === game);
   });
 
-  if (cachedGameInfo.expire < Date.now() || unCachedGameDetails.length >= 1) {
+  const GamesToFetch = cachedGameInfo.expire < Date.now() ? games : unCachedGameDetails;
+
+  if (
+    cachedGameInfo.expire < Date.now() &&
+    Array.isArray(GamesToFetch) &&
+    GamesToFetch.length >= 1 &&
+    GamesToFetch[0] !== undefined
+  ) {
     return await axios
       .get(`https://api.twitch.tv/helix/games`, {
         params: {
-          id: cachedGameInfo.expire < Date.now() ? games : unCachedGameDetails,
+          id: GamesToFetch,
         },
         headers: {
           Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
