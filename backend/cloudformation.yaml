@@ -18,6 +18,9 @@ Globals:
       # # For example, "'600'" will cache request for 600 seconds. Checkout [HTTP Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age) for more details on this value
       # AllowCredentials: true
       # Header is omitted when false. Checkout [HTTP Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials) for more details on this value.
+  Function:
+    Runtime: nodejs10.x
+    CodeUri: "."
 Resources:
   UserLogins:
     Type: AWS::DynamoDB::Table
@@ -36,8 +39,6 @@ Resources:
     Properties:
       Description: "Login with AioFeed account and return account info, tokens and monitored vod channels."
       Handler: login/handler.handler
-      Runtime: nodejs10.x
-      CodeUri: "."
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
@@ -60,8 +61,6 @@ Resources:
     Properties:
       Description: "Create an AioFeed account with tokens and monitored vod channels default to null and empty array."
       Handler: create/handler.handler
-      Runtime: nodejs10.x
-      CodeUri: "."
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
@@ -86,8 +85,6 @@ Resources:
     Properties:
       Description: "Update a specific column mentioned as a param."
       Handler: update/handler.handler
-      Runtime: nodejs10.x
-      CodeUri: "."
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
@@ -114,8 +111,6 @@ Resources:
     Properties:
       Description: "Update monitored vod channels list."
       Handler: vodChannelsUpdate/handler.handler
-      Runtime: nodejs10.x
-      CodeUri: "."
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
@@ -140,8 +135,6 @@ Resources:
     Properties:
       Description: "Fetch monitored vod channels list."
       Handler: vodChannelsFetch/handler.handler
-      Runtime: nodejs10.x
-      CodeUri: "."
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
@@ -164,8 +157,6 @@ Resources:
     Properties:
       Description: "Delete an account"
       Handler: deleteAccount/handler.handler
-      Runtime: nodejs10.x
-      CodeUri: "."
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
@@ -190,8 +181,6 @@ Resources:
     Properties:
       Description: "Re-authenticate Twitch user to Twitch with refresh token (returns access & refresh tokens)."
       Handler: reAuthenticateTwitch/handler.handler
-      Runtime: nodejs10.x
-      CodeUri: "."
       Events:
         Http:
           Type: Api
@@ -206,8 +195,6 @@ Resources:
     Properties:
       Description: "Re-authenticate Twitch user to Twitch with authorization code (returns access & refresh tokens)."
       Handler: requestTwitchTokens/handler.handler
-      Runtime: nodejs10.x
-      CodeUri: "."
       Events:
         Http:
           Type: Api
@@ -222,8 +209,6 @@ Resources:
     Properties:
       Description: "Make/initiate a Twitch webhook subsciption"
       Handler: MakeTwitchWebhookSubsciption/handler.handler
-      Runtime: nodejs10.x
-      CodeUri: "."
       Environment:
         Variables:
           APPINFO_TABLE: !Ref AppInfo
@@ -244,8 +229,6 @@ Resources:
     Properties:
       Description: "Receive Twitch webhooks and confirm req."
       Handler: TwitchWebhookCallbackConfirm/handler.handler
-      Runtime: nodejs10.x
-      CodeUri: "."
       Events:
         Http:
           Type: Api
@@ -257,8 +240,6 @@ Resources:
     Properties:
       Description: "Receive Twitch webhooks notifications."
       Handler: TwitchWebhookCallback/handler.handler
-      Runtime: nodejs10.x
-      CodeUri: "."
       Events:
         Http:
           Type: Api
@@ -282,8 +263,6 @@ Resources:
     Properties:
       Description: "Exchange an authorization code for an access and refresh token"
       Handler: YoutubeFetchTokens/handler.handler
-      Runtime: nodejs10.x
-      CodeUri: "."
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
@@ -307,8 +286,6 @@ Resources:
     Properties:
       Description: "Delete all Youtube data associated with the account."
       Handler: DeleteYoutubeData/handler.handler
-      Runtime: nodejs10.x
-      CodeUri: "."
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
@@ -331,8 +308,6 @@ Resources:
     Properties:
       Description: "Deletes all Twitch data associated with the account."
       Handler: DeleteTwitchData/handler.handler
-      Runtime: nodejs10.x
-      CodeUri: "."
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
