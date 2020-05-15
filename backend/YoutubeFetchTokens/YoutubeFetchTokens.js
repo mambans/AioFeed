@@ -70,8 +70,6 @@ module.exports = async ({ code, authkey, username }) => {
         "YoutubePreferences"
       ).toString(enc);
 
-      console.log("decryptedRefreshToken: ", decryptedRefreshToken);
-
       return await axios
         .post("https://oauth2.googleapis.com/token", {
           client_id: process.env.YOUTUBE_CLIENT_ID,
@@ -80,7 +78,6 @@ module.exports = async ({ code, authkey, username }) => {
           grant_type: "refresh_token",
         })
         .then(async (res) => {
-          console.log("123123: ", res);
           const encrypted_AccessToken = await AES.encrypt(
             res.data.access_token,
             "YoutubePreferences"
