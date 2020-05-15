@@ -16,7 +16,7 @@ module.exports = async ({ code, authkey, username }) => {
     .promise();
 
   if (authkey !== AccountInfo.Item.AuthKey) throw new Error("Invalid AuthKey");
-  if (code === "undefined" && !AccountInfo.Item.YoutubeRefreshToken) {
+  if (code === "undefined" && !AccountInfo.Item.YoutubePreferences.Refresh_token) {
     throw new Error(
       "Invalid request, no refresh token found in database. Require an code={authorizationCode} as param for the first authtication."
     );
@@ -46,10 +46,11 @@ module.exports = async ({ code, authkey, username }) => {
             .update({
               TableName: process.env.USERNAME_TABLE,
               Key: { Username: AccountInfo.Item.Username },
-              UpdateExpression: `set #AccessToken = :Access_token, #RefreshToken = :Refresh_token`,
+              UpdateExpression: `set #Preferences.#AccessToken = :Access_token, #Preferences.#RefreshToken = :Refresh_token`,
               ExpressionAttributeNames: {
-                "#AccessToken": "YoutubeAccessToken",
-                "#RefreshToken": "YoutubeRefreshToken",
+                "#Preferences": "YoutubePreferences",
+                "#AccessToken": "Token",
+                "#RefreshToken": "Refresh_token",
               },
               ExpressionAttributeValues: {
                 ":Access_token": encrypted_AccessToken,
@@ -57,7 +58,6 @@ module.exports = async ({ code, authkey, username }) => {
               },
             })
             .promise();
-          // ConditionExpression: `AuthKey = ${authkey}`,
 
           return res.data;
         })
@@ -66,7 +66,7 @@ module.exports = async ({ code, authkey, username }) => {
         });
     } else {
       const decryptedRefreshToken = await AES.decrypt(
-        AccountInfo.Item.YoutubeRefreshToken,
+        AccountInfo.Item.YoutubePreferences.Refresh_token,
         "RefreshToken"
       ).toString(enc);
 
@@ -86,10 +86,11 @@ module.exports = async ({ code, authkey, username }) => {
           await client
             .update({
               TableName: process.env.USERNAME_TABLE,
-              Key: { Username: username },
-              UpdateExpression: `set #AccessToken = :Access_token`,
+              Key: { Username: AccountInfo.Item.Username },
+              UpdateExpression: `set #Preferences.#AccessToken = :Access_token`,
               ExpressionAttributeNames: {
-                "#AccessToken": "YoutubeAccessToken",
+                "#Preferences": "YoutubePreferences",
+                "#AccessToken": "Token",
               },
               ExpressionAttributeValues: {
                 ":Access_token": encrypted_AccessToken,

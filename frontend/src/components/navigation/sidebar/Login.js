@@ -76,6 +76,7 @@ export default () => {
           if (res.YoutubePreferences && Object.keys(res.YoutubePreferences).length !== 0) {
             AddCookie("YoutubeUsername", res.YoutubePreferences.Username);
             AddCookie("YoutubeProfileImg", res.YoutubePreferences.Profile);
+            AddCookie("Youtube-access_token", res.YoutubePreferences.Token);
           }
 
           setTimeout(() => {

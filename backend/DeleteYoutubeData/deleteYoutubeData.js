@@ -18,10 +18,8 @@ module.exports = async ({ authkey, username }) => {
       .update({
         TableName: process.env.USERNAME_TABLE,
         Key: { Username: AccountInfo.Item.Username },
-        UpdateExpression: `REMOVE #AccessToken , #RefreshToken, #Preferences`,
+        UpdateExpression: `REMOVE #Preferences`,
         ExpressionAttributeNames: {
-          "#AccessToken": "YoutubeAccessToken",
-          "#RefreshToken": "YoutubeRefreshToken",
           "#Preferences": "YoutubePreferences",
         },
       })

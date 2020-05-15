@@ -75,6 +75,8 @@ export default () => {
         columnValue: {
           Username: MyYoutube.Username,
           Profile: MyYoutube.ProfileImg,
+          Token: tokens.access_token,
+          Refresh_token: tokens.refresh_token,
         },
         authkey: getCookie(`AioFeed_AuthKey`),
       })
