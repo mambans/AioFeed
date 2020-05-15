@@ -9,6 +9,7 @@ import AccountContext from "./../../account/AccountContext";
 import { VodAddRemoveButton } from "./../../sharedStyledComponents";
 import AddVodChannel from "./AddVodChannel";
 import { getLocalstorage } from "../../../util/Utils";
+import VodsContext from "./VodsContext";
 
 /**
  * @param {String} channel - channel name
@@ -19,6 +20,7 @@ import { getLocalstorage } from "../../../util/Utils";
 export default ({ channel, loweropacity, marginright }) => {
   // const { channels, setChannels } = useContext(VodsContext);
   const channels = getLocalstorage("VodChannels");
+  const { vods, setVods } = useContext(VodsContext);
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
   const [vodEnabled, setVodEnabled] = useState(channels.includes(channel.toLowerCase()));
@@ -30,6 +32,17 @@ export default ({ channel, loweropacity, marginright }) => {
 
       vodChannels.delete(channel.toLowerCase());
       localStorage.setItem("VodChannels", JSON.stringify(Array.from(vodChannels)));
+
+      const existingVodVideos = vods;
+      const newVodVideos = {
+        ...existingVodVideos,
+        data: existingVodVideos.data.filter((video) => {
+          return video.user_name.toLowerCase() !== channel.toLowerCase();
+        }),
+      };
+
+      localStorage.setItem("Vods", JSON.stringify(newVodVideos));
+      setVods(newVodVideos);
 
       await axios
         .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/vodchannels`, {
