@@ -130,6 +130,30 @@ Resources:
                 Required: true
             - method.request.querystring.authkey:
                 Required: true
+  UpdateNotisChannelsUpdate:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: "Update channel list (channels with updated title/game notifications enabled.)."
+      Handler: updateNotisChannelsUpdate/handler.handler
+      Environment:
+        Variables:
+          USERNAME_TABLE: !Ref UserLogins
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserLogins
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /updatechannels
+            Method: put
+          RequestParameters:
+            - method.request.querystring.username:
+                Required: true
+            - method.request.querystring.channels:
+                Required: true
+            - method.request.querystring.authkey:
+                Required: true
   VodChannelsFetch:
     Type: AWS::Serverless::Function
     Properties:

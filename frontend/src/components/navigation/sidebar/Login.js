@@ -59,6 +59,10 @@ export default () => {
           AddCookie("AioFeed_AccountEmail", res.Email);
           AddCookie("Twitter-Listname", res.TwitterListId);
           localStorage.setItem("VodChannels", JSON.stringify(res.MonitoredChannels));
+          localStorage.setItem(
+            "UpdateNotificationsChannels",
+            JSON.stringify(res.UpdateNotisChannels)
+          );
 
           if (res.TwitchPreferences && Object.keys(res.TwitchPreferences).length !== 0) {
             AddCookie("Twitch-access_token", res.TwitchPreferences.Token);
@@ -72,7 +76,6 @@ export default () => {
             // AddCookie("Youtube-Twitch_FeedEnabled", parseBolean(res.TwitchPreferences.enabled));
           }
 
-          AddCookie("Youtube-access_token", res.YoutubeAccessToken);
           if (res.YoutubePreferences && Object.keys(res.YoutubePreferences).length !== 0) {
             AddCookie("YoutubeUsername", res.YoutubePreferences.Username);
             AddCookie("YoutubeProfileImg", res.YoutubePreferences.Profile);

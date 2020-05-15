@@ -1,7 +1,7 @@
 import { TiFlashOutline } from "react-icons/ti";
 import { TiFlash } from "react-icons/ti";
 import { IoIosFlashOff } from "react-icons/io";
-// import axios from "axios";
+import axios from "axios";
 import React, { useState, useContext, useRef, useEffect } from "react";
 
 import AccountContext from "./../account/AccountContext";
@@ -30,6 +30,15 @@ export default ({ channel, loweropacity, marginright, size = 24 }) => {
       channelss.delete(channel.toLowerCase());
 
       localStorage.setItem("UpdateNotificationsChannels", JSON.stringify(Array.from(channelss)));
+      await axios
+        .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/updatechannels`, {
+          username: username,
+          authkey: authKey,
+          channels: Array.from(channelss),
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     } catch (e) {
       console.log(e.message);
     }
@@ -39,9 +48,18 @@ export default ({ channel, loweropacity, marginright, size = 24 }) => {
     try {
       const existing = new Set(getLocalstorage("UpdateNotificationsChannels") || []);
 
-      const newChannelkssss = Array.from(existing.add(channel.toLowerCase()));
+      const newChannels = Array.from(existing.add(channel.toLowerCase()));
 
-      localStorage.setItem("UpdateNotificationsChannels", JSON.stringify(newChannelkssss));
+      localStorage.setItem("UpdateNotificationsChannels", JSON.stringify(newChannels));
+      await axios
+        .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/updatechannels`, {
+          username: username,
+          authkey: authKey,
+          channels: newChannels,
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     } catch (error) {
       console.log("error", error);
     }
