@@ -51,6 +51,7 @@ export default () => {
         }}>
         <ShowNavbarBtn
           variant='dark'
+          type='video'
           onClick={() => {
             setVisible(!visible);
           }}>
