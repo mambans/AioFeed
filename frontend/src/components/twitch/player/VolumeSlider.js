@@ -9,7 +9,7 @@ import Slider from "react-rangeslider";
 import { StyledVolumeSlider } from "./StyledComponents";
 import "react-rangeslider/lib/index.css";
 
-export default ({ TwitchPlayer, OpenedDate, volumeEventOverlayRef }) => {
+export default ({ TwitchPlayer, OpenedDate, volumeEventOverlayRef, setShowControlls }) => {
   const [volumeText, setVolumeText] = useState(0);
   const [volumeMuted, setVolumeMuted] = useState(true);
 
@@ -65,6 +65,7 @@ export default ({ TwitchPlayer, OpenedDate, volumeEventOverlayRef }) => {
         1
       );
 
+      setShowControlls(true);
       TwitchPlayer.setVolume(newVolume);
       setVolumeText(newVolume * 100);
     };
@@ -149,7 +150,7 @@ export default ({ TwitchPlayer, OpenedDate, volumeEventOverlayRef }) => {
       document.body.removeEventListener("mousedown", mouseEvents);
       document.body.removeEventListener("keydown", keyboardEvents);
     };
-  }, [OpenedDate, TwitchPlayer, volumeEventOverlayRef]);
+  }, [OpenedDate, TwitchPlayer, volumeEventOverlayRef, setShowControlls]);
 
   return (
     <StyledVolumeSlider volumeMuted={volumeMuted}>

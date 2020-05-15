@@ -363,6 +363,7 @@ export default () => {
                   OpenedDate={OpenedDate}
                   volumeEventOverlayRef={volumeEventOverlayRef.current}
                   TwitchPlayer={twitchPlayer.current}
+                  setShowControlls={setShowControlls}
                 />
                 <ShowStatsButtons TwitchPlayer={twitchPlayer.current} />
                 <ShowSetQualityButtons TwitchPlayer={twitchPlayer.current} />
