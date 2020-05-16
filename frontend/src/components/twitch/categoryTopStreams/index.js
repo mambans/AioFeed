@@ -187,7 +187,7 @@ export default () => {
               alignItems: "end",
               display: "flex",
             }}>
-            <RefreshButton onClick={refresh}>
+            <RefreshButton disabled={refreshing} onClick={refresh}>
               {refreshing ? (
                 <div className='SpinnerWrapper'>
                   <Spinner

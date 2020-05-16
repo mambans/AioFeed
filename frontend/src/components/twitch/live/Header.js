@@ -16,7 +16,7 @@ export default ({ data, refresh }) => {
   return (
     <HeaderContainerTwitchLive id='TwitchHeader'>
       <HeaderLeftSubcontainer>
-        <RefreshButton onClick={refresh}>
+        <RefreshButton disabled={refreshing} onClick={refresh}>
           {refreshing ? (
             <div className='SpinnerWrapper'>
               <Spinner

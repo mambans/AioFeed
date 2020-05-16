@@ -24,6 +24,7 @@ export default React.forwardRef((props, ref) => {
     <HeaderContainer ref={ref} id='TwitchVodsHeader'>
       <HeaderLeftSubcontainer>
         <RefreshButton
+          disabled={refreshing}
           onClick={() => {
             refresh(true);
           }}>

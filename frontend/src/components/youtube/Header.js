@@ -60,10 +60,7 @@ export default (data) => {
   return (
     <HeaderContainer id='YoutubeHeader'>
       <HeaderLeftSubcontainer>
-        <RefreshButton
-          onClick={refresh}
-          // disabled={data.requestError && data.requestError.code === 403 ? true : false}
-        >
+        <RefreshButton disabled={!isLoaded} onClick={refresh}>
           {!isLoaded ? (
             <div className='SpinnerWrapper'>
               <Spinner animation='border' role='status' style={Util.loadingSpinnerSmall}></Spinner>
