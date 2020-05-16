@@ -33,7 +33,7 @@ export default (props) => {
           setValue(event.target.value);
           if (listIsOpen && event.target.value === "") {
             setListIsOpen(false);
-          } else if (!listIsOpen && event.target.value.length >= 2) {
+          } else if (!listIsOpen && event.target.value.length >= 1) {
             setListIsOpen(true);
           }
         },
@@ -98,7 +98,7 @@ export default (props) => {
           type='text'
           placeholder={(gameName !== "" && gameName !== undefined ? gameName : "All") + "..."}
           {...bindGame}></input>
-        {game && (
+        {game && listIsOpen && (
           <SearchSubmitBtn
             to={{
               pathname: `/category/${game}`,
