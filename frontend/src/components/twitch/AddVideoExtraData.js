@@ -18,13 +18,14 @@ const getGameDetails = async (items) => {
     return !cachedGameInfo.data.find((cachedGame) => cachedGame.id === game);
   });
 
-  const GamesToFetch = cachedGameInfo.expire < Date.now() ? games : unCachedGameDetails;
+  const GamesToFetch =
+    cachedGameInfo.expire && cachedGameInfo.expire < Date.now() ? games : unCachedGameDetails;
 
   if (
-    cachedGameInfo.expire < Date.now() &&
+    (!cachedGameInfo.expire || cachedGameInfo.expire < Date.now()) &&
     Array.isArray(GamesToFetch) &&
     GamesToFetch.length >= 1 &&
-    GamesToFetch[0] !== undefined
+    GamesToFetch[0] !== undefinedq
   ) {
     return API.getGames({
       params: {
