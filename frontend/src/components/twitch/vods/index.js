@@ -13,18 +13,13 @@ import AccountContext from "./../../account/AccountContext";
 import VodsContext from "./VodsContext";
 import LoadingBoxes from "./../LoadingBoxes";
 import FeedsContext from "../../feed/FeedsContext";
-import { AddCookie } from "../../../util/Utils";
+import { AddCookie, getCookie } from "../../../util/Utils";
 
 export default ({ centerContainerRef }) => {
   const { vods, setVods } = useContext(VodsContext);
-  const {
-    authKey,
-    username,
-    twitchUserId,
-    setTwitchToken,
-    setRefreshToken,
-    twitchToken,
-  } = useContext(AccountContext);
+  const { authKey, username, twitchUserId, setTwitchToken, setRefreshToken } = useContext(
+    AccountContext
+  );
   const { setEnableTwitchVods } = useContext(FeedsContext);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -183,7 +178,7 @@ export default ({ centerContainerRef }) => {
     setVods,
   ]);
 
-  if (!twitchToken) {
+  if (!getCookie(`Twitch-access_token`)) {
     return (
       <ErrorHandler
         data={{

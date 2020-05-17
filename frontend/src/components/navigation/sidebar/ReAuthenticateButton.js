@@ -12,7 +12,7 @@ import {
 } from "./StyledComponent";
 import AccountContext from "./../../account/AccountContext";
 import FeedsContext from "./../../feed/FeedsContext";
-import { AddCookie } from "../../../util/Utils";
+import { AddCookie, getCookie } from "../../../util/Utils";
 
 const authenticatePopup = async (winName, domain, urlParam) => {
   async function generateOrginState() {
@@ -41,7 +41,6 @@ export default ({ disconnect, serviceName, style }) => {
   const {
     twitchUsername,
     twitchProfileImg,
-    twitchToken,
     youtubeToken,
     youtubeUsername,
     youtubeProfileImg,
@@ -50,7 +49,7 @@ export default ({ disconnect, serviceName, style }) => {
   const { setEnableTwitch, setEnableYoutube } = useContext(FeedsContext);
 
   if (serviceName === "Twitch") {
-    if (!twitchToken) {
+    if (!getCookie(`Twitch-access_token`)) {
       return (
         <StyledConnectContainer>
           <StyledConnectTwitch

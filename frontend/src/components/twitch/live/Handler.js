@@ -7,7 +7,7 @@ import NotificationsContext from "./../../notifications/NotificationsContext";
 import AccountContext from "./../../account/AccountContext";
 import FeedsContext from "./../../feed/FeedsContext";
 import VodsContext from "./../vods/VodsContext";
-import { AddCookie } from "../../../util/Utils";
+import { AddCookie, getCookie } from "../../../util/Utils";
 import LiveStreamsPromise from "./LiveStreamsPromise";
 import OfflineStreamsPromise from "./OfflineStreamsPromise";
 import UpdatedStreamsPromise from "./UpdatedStreamsPromise";
@@ -16,7 +16,7 @@ const REFRESH_RATE = 25; // seconds
 
 export default ({ children }) => {
   const { addNotification, setUnseenNotifications } = useContext(NotificationsContext);
-  const { autoRefreshEnabled, twitchToken } = useContext(AccountContext);
+  const { autoRefreshEnabled } = useContext(AccountContext);
   const { setVods } = useContext(VodsContext);
   const {
     enableTwitchVods,
@@ -185,7 +185,7 @@ export default ({ children }) => {
     };
   }, []);
 
-  if (!twitchToken) {
+  if (!getCookie(`Twitch-access_token`)) {
     return (
       <ErrorHandler
         data={{

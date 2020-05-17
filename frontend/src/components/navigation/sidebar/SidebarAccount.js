@@ -40,7 +40,6 @@ export default () => {
     profileImage,
     setTwitchToken,
     setYoutubeToken,
-    twitchToken,
     youtubeToken,
     autoRefreshEnabled,
     setAutoRefreshEnabled,
@@ -117,10 +116,10 @@ export default () => {
             }}
             enabled={enableTwitch}
             label='Twitch'
-            tokenExists={twitchToken}
+            tokenExists={getCookie(`Twitch-access_token`)}
             scrollIntoView={true}
             tooltip={
-              twitchToken
+              getCookie(`Twitch-access_token`)
                 ? (enableTwitch ? "Disable " : "Enable ") + ` Twitch feed`
                 : `Need to connect/authenticate with a Twitch account first.`
             }
@@ -162,10 +161,10 @@ export default () => {
             }}
             enabled={enableTwitchVods}
             label='TwitchVods'
-            tokenExists={twitchToken}
+            tokenExists={getCookie(`Twitch-access_token`)}
             scrollIntoView={true}
             tooltip={
-              twitchToken
+              getCookie(`Twitch-access_token`)
                 ? (enableTwitchVods ? "Disable " : "Enable ") + ` Twitch feed`
                 : `Need to connect/authenticate with a Twitch account first.`
             }
@@ -183,9 +182,9 @@ export default () => {
             }}
             enabled={autoRefreshEnabled}
             label='Twitch auto-refresh (25s)'
-            tokenExists={twitchToken}
+            tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
-              twitchToken
+              getCookie(`Twitch-access_token`)
                 ? (autoRefreshEnabled ? "Disable " : "Enable ") + `Twitch auto refresh`
                 : `Need to connect/authenticate with a Twitch account first.`
             }
@@ -198,9 +197,9 @@ export default () => {
             }}
             enabled={showTwitchSidebar}
             label='Twitch sidebar'
-            tokenExists={twitchToken}
+            tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
-              twitchToken
+              getCookie(`Twitch-access_token`)
                 ? (showTwitchSidebar ? "Hide " : "Show ") + `Twitch Sidebar`
                 : `Need to connect/authenticate with a Twitch account first.`
             }
@@ -213,9 +212,9 @@ export default () => {
             }}
             enabled={isEnabledUpdateNotifications}
             label='Twitch update notifications'
-            tokenExists={twitchToken}
+            tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
-              twitchToken
+              getCookie(`Twitch-access_token`)
                 ? (isEnabledUpdateNotifications ? "Disable " : "Enable ") +
                   `notifications for when streams title or game changes`
                 : `Need to connect/authenticate with a Twitch account first.`
@@ -229,9 +228,9 @@ export default () => {
             }}
             enabled={isEnabledOfflineNotifications}
             label='Twitch offline notifications'
-            tokenExists={twitchToken}
+            tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
-              twitchToken
+              getCookie(`Twitch-access_token`)
                 ? (isEnabledOfflineNotifications ? "Disable " : "Enable ") +
                   `notifications for when streams go offline`
                 : `Need to connect/authenticate with a Twitch account first.`
@@ -245,9 +244,9 @@ export default () => {
             }}
             enabled={twitchVideoHoverEnable}
             label='Twitch hover-video'
-            tokenExists={twitchToken}
+            tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
-              twitchToken
+              getCookie(`Twitch-access_token`)
                 ? (twitchVideoHoverEnable ? "Disable " : "Enable ") + `video on hover`
                 : `Need to connect/authenticate with a Youtube account first.`
             }
