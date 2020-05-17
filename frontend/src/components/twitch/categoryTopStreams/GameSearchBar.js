@@ -31,9 +31,7 @@ export default (props) => {
         value,
         onChange: (event) => {
           setValue(event.target.value);
-          if (listIsOpen && event.target.value === "") {
-            setListIsOpen(false);
-          } else if (!listIsOpen && event.target.value.length >= 1) {
+          if (!listIsOpen && event.target.value.length >= 1) {
             setListIsOpen(true);
           }
         },
