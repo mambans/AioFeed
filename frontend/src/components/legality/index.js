@@ -83,6 +83,7 @@ export default () => {
             </ul>
           </li>
         </ul>
+        <p>The Youtube permisison "manage account" is used to be able to unfollow channels.</p>
         <p>
           If you have any question you can contact{" "}
           <EmailButtonAsLink
