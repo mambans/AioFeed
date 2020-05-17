@@ -197,9 +197,7 @@ export default ({ data, vodBtnDisabled }) => {
             className={"channelName"}>
             {data.user_name}
           </Link>
-          {vodBtnDisabled ? null : (
-            <VodsFollowUnfollowBtn channel={data.user_name} loweropacity='0.5' />
-          )}
+          {!vodBtnDisabled && <VodsFollowUnfollowBtn channel={data.user_name} loweropacity='0.5' />}
         </div>
         <VodDates>
           <div>

@@ -24,7 +24,5 @@ module.exports = async ({ authkey, username }) => {
         },
       })
       .promise();
-
-    return res.data;
   }
 };
