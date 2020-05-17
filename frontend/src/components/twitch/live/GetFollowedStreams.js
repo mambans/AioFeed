@@ -1,7 +1,5 @@
-import axios from "axios";
-
 import AddVideoExtraData from "./../AddVideoExtraData";
-import { getCookie } from "../../../util/Utils";
+import API from "../API";
 
 function chunk(array, size) {
   const chunked_arr = [];
@@ -17,17 +15,12 @@ const fetchAllOnlineStreams = async (followedChannelsIds) => {
   const channelsInChunks = chunk(followedChannelsIds, 100);
   const allOnlineStreams = await Promise.all(
     channelsInChunks.map(async (channelsChunk) => {
-      return await axios
-        .get(`https://api.twitch.tv/helix/streams`, {
-          params: {
-            user_id: channelsChunk,
-            first: 100,
-          },
-          headers: {
-            Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-          },
-        })
+      return API.getStreams({
+        params: {
+          user_id: channelsChunk,
+          first: 100,
+        },
+      })
         .then((res) => {
           return res.data.data;
         })

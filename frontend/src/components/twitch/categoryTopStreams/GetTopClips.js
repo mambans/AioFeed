@@ -1,7 +1,5 @@
-import axios from "axios";
-
-import { getCookie } from "./../../../util/Utils";
 import AddVideoExtraData from "../AddVideoExtraData";
+import API from "../API";
 
 /**
  * Fetch Clips
@@ -19,44 +17,32 @@ export default async (category, sortByTime, page) => {
     Math.floor((document.documentElement.clientHeight - (65 + 60)) / 351);
 
   if (category && category !== "undefined") {
-    game = await axios
-      .get(`https://api.twitch.tv/helix/games`, {
-        params: {
-          name: category,
-        },
-        headers: {
-          Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-        },
-      })
-      .then((res) => {
-        return res.data.data[0];
-      });
+    game = await API.getGames({
+      params: {
+        name: category,
+      },
+    }).then((res) => {
+      return res.data.data[0];
+    });
   } else {
     game = { id: null };
   }
   try {
-    const topClips = await axios
-      .get(`https://api.twitch.tv/helix/clips`, {
-        params: {
-          first: nrStreams,
-          game_id: game.id,
-          after: page ? page.pagination.cursor : null,
-          started_at:
-            sortByTime &&
-            new Date(new Date().setDate(new Date().getDate() - sortByTime)).toISOString(),
-          ended_at: sortByTime && new Date().toISOString(),
-        },
-        headers: {
-          Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-        },
-      })
-      .catch((e) => {
-        console.error(e.message);
-        error = e;
-        return e;
-      });
+    const topClips = await API.getClips({
+      params: {
+        first: nrStreams,
+        game_id: game.id,
+        after: page ? page.pagination.cursor : null,
+        started_at:
+          sortByTime &&
+          new Date(new Date().setDate(new Date().getDate() - sortByTime)).toISOString(),
+        ended_at: sortByTime && new Date().toISOString(),
+      },
+    }).catch((e) => {
+      console.error(e.message);
+      error = e;
+      return e;
+    });
 
     const finallClips = await AddVideoExtraData(topClips);
 

@@ -1,24 +1,19 @@
 import { CSSTransition } from "react-transition-group";
+import { throttle } from "lodash";
 import { useParams, useLocation, Link } from "react-router-dom";
+import Moment from "react-moment";
+import React, { useContext, useEffect, useState, useRef, useCallback } from "react";
 
 import { MdVerticalAlignBottom } from "react-icons/md";
 import { MdFullscreen } from "react-icons/md";
 import { MdFullscreenExit } from "react-icons/md";
 import { FaTwitch } from "react-icons/fa";
 
-import axios from "axios";
-import Moment from "react-moment";
-import React, { useContext, useEffect, useState, useRef, useCallback } from "react";
-import { throttle } from "lodash";
-
-import reauthenticate from "./../reauthenticate";
-import AccountContext from "../../account/AccountContext";
 import fetchAndSetChannelInfo from "./fetchAndSetChannelInfo";
 import fetchUptime from "./fetchUptime";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 import NavigationContext from "./../../navigation/NavigationContext";
 import PlayerEvents from "./PlayerEvents";
-import { getCookie } from "./../../../util/Utils";
 import VolumeSlider from "./VolumeSlider";
 import {
   InfoDisplay,
@@ -37,6 +32,7 @@ import PlayPauseButton from "./PlayPauseButton";
 import ShowStatsButtons from "./ShowStatsButtons";
 import ShowSetQualityButtons from "./ShowSetQualityButtons";
 import OpenCloseChat from "./OpenCloseChat";
+import API from "../API";
 
 export default () => {
   const { p_uptime, p_viewers, p_title, p_game, p_channelInfos } = useLocation().state || {};
@@ -45,8 +41,6 @@ export default () => {
   const time = useLocation().search.replace("?t=", "").replace("?time=", "");
 
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
-  const { setTwitchToken, setRefreshToken } = useContext(AccountContext);
-
   const [switched, setSwitched] = useState(false);
   const [channelInfo, setChannelInfo] = useState(p_channelInfos);
   const [uptime, setUptime] = useState(p_uptime);
@@ -239,17 +233,6 @@ export default () => {
     }
   }, [handleMouseOut]);
 
-  const axiosConfig = (method, access_token = getCookie("Twitch-access_token")) => {
-    return {
-      method: method,
-      url: `https://api.twitch.tv/helix/clips?broadcaster_id=${channelInfo._id}`,
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-      },
-    };
-  };
-
   const CreateAndOpenClip = async () => {
     const Width = window.screen.width * 0.6;
     const Height = 920;
@@ -257,16 +240,12 @@ export default () => {
     const TopPosition = (window.screen.height - Height) / 2;
     const settings = `height=${Height},width=${Width},top=${TopPosition},left=${LeftPosition},scrollbars,resizable,status,location,toolbar,`;
     await validateToken().then(async () => {
-      await axios(axiosConfig("post"))
+      await API.postClip({ params: { broadcaster_id: channelInfo._id } })
         .then((res) => {
           window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
         })
-        .catch(() => {
-          reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
-            await axios(axiosConfig("post", access_token)).then((res) => {
-              window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
-            });
-          });
+        .catch((er) => {
+          console.error("CreateAndOpenClip -> er", er);
         });
     });
   };

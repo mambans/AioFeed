@@ -1,7 +1,6 @@
-import axios from "axios";
-
-import { getCookie, getLocalstorage } from "./../../util/Utils";
+import { getLocalstorage } from "./../../util/Utils";
 import GetCachedProfiles from "./GetCachedProfiles";
+import API from "./API";
 
 const getGameDetails = async (items) => {
   // Removes game id duplicates before sending game request.
@@ -27,16 +26,11 @@ const getGameDetails = async (items) => {
     GamesToFetch.length >= 1 &&
     GamesToFetch[0] !== undefined
   ) {
-    return await axios
-      .get(`https://api.twitch.tv/helix/games`, {
-        params: {
-          id: GamesToFetch,
-        },
-        headers: {
-          Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-        },
-      })
+    return API.getGames({
+      params: {
+        id: GamesToFetch,
+      },
+    })
       .then((res) => {
         localStorage.setItem(
           "Twitch_game_details",
@@ -84,19 +78,13 @@ export default async (items, fetchGameInfo = true) => {
   let newProfileImgUrls;
 
   if (noCachedProfileArrayIds.length > 0) {
-    newProfileImgUrls = await axios
-      .get(`https://api.twitch.tv/helix/users?`, {
-        params: {
-          id: noCachedProfileArrayIds,
-        },
-        headers: {
-          Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-        },
-      })
-      .catch((e) => {
-        console.log("newProfileImgUrls: ", e);
-      });
+    newProfileImgUrls = await API.getUser({
+      params: {
+        id: noCachedProfileArrayIds,
+      },
+    }).catch((e) => {
+      console.log("newProfileImgUrls: ", e);
+    });
   }
 
   Promise.all(

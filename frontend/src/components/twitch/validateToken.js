@@ -4,7 +4,9 @@ import reauthenticate from "./reauthenticate";
 
 export default async () => {
   if (!getCookie("Twitch_token_validated")) {
-    await axios
+    const expireDate = new Date(Date.now() + 5000);
+    AddCookie("Twitch_token_validated", true, expireDate);
+    return await axios
       .get("https://id.twitch.tv/oauth2/validate", {
         headers: {
           Authorization: `OAuth ${getCookie("Twitch-access_token")}`,
@@ -13,7 +15,14 @@ export default async () => {
       .then((res) => {
         const expireDate = new Date(Date.now() + 60000);
         AddCookie("Twitch_token_validated", true, expireDate);
-        return res.data;
+        if (
+          res.data.client_id === process.env.REACT_APP_TWITCH_CLIENT_ID &&
+          res.data.login === getCookie("Twitch-username").toLocaleLowerCase()
+        ) {
+          return res.data;
+        }
+        console.warn("Token details DID NOT match.");
+        return reauthenticate();
       })
       .catch((error) => {
         // console.error("error", error.response.statusText);

@@ -1,7 +1,5 @@
-import axios from "axios";
-
-import { getCookie } from "./../../../util/Utils";
 import validateToken from "../validateToken";
+import API from "../API";
 
 /**
  * Fetch and Set uptime state from a Live stream.
@@ -11,27 +9,24 @@ import validateToken from "../validateToken";
  * @async
  */
 export default async (twitchPlayer, setUptime, uptimeTimer) => {
-  const axiosConfig = {
-    method: "get",
-    url: `https://api.twitch.tv/helix/streams`,
-    params: {
-      user_id: twitchPlayer.current.getChannelId(),
-      first: 1,
-    },
-    headers: {
-      Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-      "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-    },
-  };
-
   await validateToken().then(async () => {
-    await axios(axiosConfig)
+    await API.getStreams({
+      params: {
+        user_id: twitchPlayer.current.getChannelId(),
+        first: 1,
+      },
+    })
       .then((res) => {
         if (res.data.data[0] && res.data.data[0].started_at) {
           setUptime(res.data.data[0].started_at);
         } else {
           uptimeTimer.current = setInterval(async () => {
-            await axios(axiosConfig).then((res) => {
+            await API.getStreams({
+              params: {
+                user_id: twitchPlayer.current.getChannelId(),
+                first: 1,
+              },
+            }).then((res) => {
               if (res.data.data[0] && res.data.data[0].started_at) {
                 setUptime(res.data.data[0].started_at);
                 clearInterval(uptimeTimer.current);

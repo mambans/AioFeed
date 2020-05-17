@@ -2,7 +2,6 @@ import { MdChat } from "react-icons/md";
 import { FaWindowClose } from "react-icons/fa";
 import { MdLiveTv } from "react-icons/md";
 import { useParams, useLocation, Link } from "react-router-dom";
-import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useCallback, useState, useRef } from "react";
 import Moment from "react-moment";
@@ -12,7 +11,6 @@ import LoadingPlaceholderClips from "./LoadingPlaceholderClips";
 import LoadingPlaceholderVods from "./LoadingPlaceholderVods";
 import SubFeed from "./SubFeed";
 import { formatViewerNumbers, durationToDate } from "./../TwitchUtils";
-import { getCookie } from "./../../../util/Utils";
 import {
   ChannelContainer,
   Banner,
@@ -33,6 +31,7 @@ import fetchAndSetChannelInfo from "./../player/fetchAndSetChannelInfo";
 import setFavion from "../../setFavion";
 import validateToken from "../validateToken";
 import AddUpdateNotificationsButton from "../AddUpdateNotificationsButton";
+import API from "./../API";
 
 export default () => {
   const { channelName } = useParams();
@@ -64,24 +63,17 @@ export default () => {
   const uptimeTimer = useRef();
 
   const getIdFromName = useCallback(async () => {
-    await axios
-      .get(`https://api.twitch.tv/helix/users`, {
-        params: {
-          login: channelName,
-        },
-        headers: {
-          Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-        },
-      })
+    await API.getUser({
+      params: {
+        login: channelName,
+      },
+      throwError: false,
+    })
       .then((res) => {
         setChannelId(res.data.data[0].id);
       })
       .catch((error) => {
-        console.error(error);
-        // if (error.message === `can't access property "id", res.data.data[0] is undefined`) {
         setChannelId("Not Found");
-        // }
       });
   }, [channelName]);
 
@@ -94,20 +86,15 @@ export default () => {
           previosVodPage.current = null;
         }
 
-        await axios
-          .get(`https://api.twitch.tv/helix/videos?`, {
-            params: {
-              user_id: channelId,
-              first: numberOfVideos,
-              sort: sortVodsBy && sortVodsBy.toLowerCase(),
-              type: "all",
-              after: pagination || null,
-            },
-            headers: {
-              Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-              "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-            },
-          })
+        await API.getVideos({
+          params: {
+            user_id: channelId,
+            first: numberOfVideos,
+            sort: sortVodsBy && sortVodsBy.toLowerCase(),
+            type: "all",
+            after: pagination || null,
+          },
+        })
           .then(async (res) => {
             if (res.data.data.length === 0) {
               setVods({ error: "No vods available" });
@@ -164,22 +151,17 @@ export default () => {
           previosClipsPage.current = null;
         }
 
-        await axios
-          .get(`https://api.twitch.tv/helix/clips`, {
-            params: {
-              broadcaster_id: channelId,
-              first: numberOfVideos,
-              after: pagination || null,
-              started_at:
-                sortClipsBy &&
-                new Date(new Date().setDate(new Date().getDate() - sortClipsBy)).toISOString(),
-              ended_at: sortClipsBy && new Date().toISOString(),
-            },
-            headers: {
-              Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-              "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-            },
-          })
+        await API.getClips({
+          params: {
+            broadcaster_id: channelId,
+            first: numberOfVideos,
+            after: pagination || null,
+            started_at:
+              sortClipsBy &&
+              new Date(new Date().setDate(new Date().getDate() - sortClipsBy)).toISOString(),
+            ended_at: sortClipsBy && new Date().toISOString(),
+          },
+        })
           .then(async (res) => {
             if (res.data.data.length === 0) {
               setClips({ error: "No clips available" });

@@ -1,11 +1,9 @@
-import axios from "axios";
 import React, { useEffect, useState, useContext } from "react";
 
 import { FollowBtn, UnfollowBtn } from "./StyledComponents";
 import AccountContext from "./../account/AccountContext";
-import reauthenticate from "./reauthenticate";
-import { getCookie } from "./../../util/Utils";
 import validateToken from "./validateToken";
+import API from "./API";
 
 export default ({
   channelName,
@@ -17,23 +15,16 @@ export default ({
   refreshAfterUnfollowTimer,
 }) => {
   const [following, setFollowing] = useState(alreadyFollowedStatus || false);
-  const { setTwitchToken, setRefreshToken, twitchUserId } = useContext(AccountContext);
+  const { twitchUserId } = useContext(AccountContext);
 
-  const axiosConfig = (method, user_id, access_token = getCookie("Twitch-access_token")) => {
-    return {
-      method: method,
-      url: `https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${user_id}`,
-      headers: {
-        Authorization: `OAuth ${access_token}`,
-        "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-        Accept: "application/vnd.twitchtv.v5+json",
-      },
-    };
-  };
-
-  const UnfollowStream = async (user_id) => {
+  const UnfollowStream = async () => {
     await validateToken().then(async () => {
-      await axios(axiosConfig("delete", user_id))
+      await API.deleteFollow({
+        params: {
+          myId: twitchUserId,
+          id: id,
+        },
+      })
         .then(() => {
           console.log(`Unfollowed: ${channelName}`);
           if (refreshStreams) {
@@ -43,36 +34,21 @@ export default ({
             }, 3000);
           }
         })
-        .catch(() => {
-          reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
-            await axios(axiosConfig("delete", user_id, access_token)).then(() => {
-              console.log(`Unfollowed: ${channelName}`);
-              if (refreshStreams) {
-                clearTimeout(refreshAfterUnfollowTimer.current);
-                refreshAfterUnfollowTimer.current = setTimeout(() => {
-                  refreshStreams();
-                }, 3000);
-              }
-            });
-          });
+        .catch((er) => {
+          console.error("UnfollowStream -> er", er);
         });
     });
   };
 
-  async function followStream(user_id) {
+  async function followStream() {
     await validateToken().then(async () => {
-      await axios(axiosConfig("put", user_id))
+      await API.addFollow({ params: { myId: twitchUserId, id: id } })
         .then((res) => {
           console.log(`Followed: ${res.data.channel.display_name}`);
           if (refreshStreams) refreshStreams();
         })
-        .catch(() => {
-          reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
-            await axios(axiosConfig("put", user_id, access_token)).then((res) => {
-              console.log(`Followed: ${res.data.channel.display_name}`);
-              if (refreshStreams) refreshStreams();
-            });
-          });
+        .catch((er) => {
+          console.error("followStream -> er", er);
         });
     });
   }
@@ -80,14 +56,7 @@ export default ({
   useEffect(() => {
     const checkFollowing = async () => {
       await validateToken().then(async () => {
-        await axios
-          .get(`https://api.twitch.tv/kraken/users/${twitchUserId}/follows/channels/${id}`, {
-            headers: {
-              Authorization: `OAuth ${getCookie("Twitch-access_token")}`,
-              "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-              Accept: "application/vnd.twitchtv.v5+json",
-            },
-          })
+        await API.checkFollow({ params: { myId: twitchUserId, id: id } })
           .then(() => {
             setFollowing(true);
           })
@@ -123,7 +92,7 @@ export default ({
         style={{ ...style }}
         onClick={() => {
           setFollowing(false);
-          UnfollowStream(id);
+          UnfollowStream();
         }}
       />
     );
@@ -136,7 +105,7 @@ export default ({
         style={{ ...style }}
         onClick={() => {
           setFollowing(true);
-          followStream(id);
+          followStream();
         }}
       />
     );

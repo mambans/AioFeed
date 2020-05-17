@@ -1,5 +1,4 @@
 import { FaRegEye } from "react-icons/fa";
-import axios from "axios";
 import moment from "moment";
 import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
@@ -16,11 +15,12 @@ import {
   ChannelContainer,
   StyledVideoElementAlert,
 } from "./../../sharedStyledComponents";
-import { getCookie, truncate } from "../../../util/Utils";
+import { truncate } from "../../../util/Utils";
 import { VodLiveIndicator, VodType, VodPreview, VodDates } from "./StyledComponents";
 import VodsFollowUnfollowBtn from "./VodsFollowUnfollowBtn";
 import { formatViewerNumbers, formatTwitchVodsDuration } from "./../TwitchUtils";
 import validateToken from "../validateToken";
+import API from "../API";
 
 export default ({ data, vodBtnDisabled }) => {
   const [previewAvailable, setPreviewAvailable] = useState({});
@@ -33,14 +33,11 @@ export default ({ data, vodBtnDisabled }) => {
       hoverTimeoutRef.current = setTimeout(
         async () => {
           await validateToken().then(async () => {
-            await axios
-              .get(`https://api.twitch.tv/kraken/videos/${data.id}`, {
-                headers: {
-                  Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-                  "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-                  Accept: "application/vnd.twitchtv.v5+json",
-                },
-              })
+            await API.krakenGetVideo({
+              params: {
+                id: data.id,
+              },
+            })
               .then((res) => {
                 if (res.data.status === "recording") {
                   setPreviewAvailable({

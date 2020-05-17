@@ -1,12 +1,11 @@
-import axios from "axios";
-
 import GetFollowedChannels from "./../GetFollowedChannels";
 import { durationToDate } from "./../TwitchUtils";
-import { getCookie, getLocalstorage } from "../../../util/Utils";
+import { getLocalstorage } from "../../../util/Utils";
 import reauthenticate from "./../reauthenticate";
 import AddVideoExtraData from "../AddVideoExtraData";
 import FetchMonitoredVodChannelsList from "./FetchMonitoredVodChannelsList";
 import SortAndAddExpire from "./SortAndAddExpire";
+import API from "../API";
 
 const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) => {
   const vodChannelsWithoutFollow = [];
@@ -26,17 +25,12 @@ const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) =
   });
 
   if (vodChannelsWithoutFollow.length > 0) {
-    await axios
-      .get(`https://api.twitch.tv/helix/users`, {
-        params: {
-          login: vodChannelsWithoutFollow,
-          first: 100,
-        },
-        headers: {
-          Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-        },
-      })
+    await API.getUser({
+      params: {
+        login: vodChannelsWithoutFollow,
+        first: 100,
+      },
+    })
       .then((res) => {
         res.data.data.map((channel) => {
           vodChannels.push(channel.id);
@@ -63,30 +57,20 @@ const addVodEndTime = async (followedStreamVods) => {
   });
 };
 
-const axiosConfig = (method, channel, access_token = getCookie("Twitch-access_token")) => {
-  return {
-    method: method,
-    url: `https://api.twitch.tv/helix/videos?`,
-    params: {
-      user_id: channel,
-      period: "month",
-      first: 5,
-      // type: "archive",
-      type: "all",
-    },
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-      "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-    },
-  };
-};
-
 const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRefreshToken) => {
   let followedStreamVods = [];
 
   const PromiseAllVods = await Promise.all(
     vodChannels.map(async (channel) => {
-      followedStreamVods = await axios(axiosConfig("get", channel)).then((response) => {
+      followedStreamVods = await API.getVideos({
+        params: {
+          user_id: channel,
+          period: "month",
+          first: 5,
+          // type: "archive",
+          type: "all",
+        },
+      }).then((response) => {
         return response.data.data;
       });
 
@@ -108,7 +92,15 @@ const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRe
 
       return await Promise.all(
         channelsIdsUnfetchedVods.map(async (channel) => {
-          return await axios(axiosConfig("get", channel, access_token)).then((response) => {
+          return await API.getVideos({
+            params: {
+              user_id: channel,
+              period: "month",
+              first: 5,
+              // type: "archive",
+              type: "all",
+            },
+          }).then((response) => {
             return response.data.data;
           });
         })

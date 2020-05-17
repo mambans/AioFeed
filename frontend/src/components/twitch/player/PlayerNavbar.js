@@ -1,15 +1,14 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MdAccountCircle } from "react-icons/md";
-import axios from "axios";
 import { FaTwitch } from "react-icons/fa";
 import { MdVideocam } from "react-icons/md";
 import { MdArrowBack } from "react-icons/md";
 
 import { PlayerNavbar, NavigateBack } from "./StyledComponents";
-import { getCookie } from "../../../util/Utils";
 import { Button } from "react-bootstrap";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
+import API from "../API";
 
 export default ({
   type,
@@ -35,18 +34,13 @@ export default ({
         !latestVod &&
         visible
       ) {
-        await axios
-          .get(`https://api.twitch.tv/helix/videos?`, {
-            params: {
-              user_id: twitchPlayer.current && twitchPlayer.current.getChannelId(),
-              first: 1,
-              type: "archive",
-            },
-            headers: {
-              Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-              "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-            },
-          })
+        await API.getVideos({
+          params: {
+            user_id: twitchPlayer.current && twitchPlayer.current.getChannelId(),
+            first: 1,
+            type: "archive",
+          },
+        })
           .then((res) => {
             setLatestVod(res.data.data[0]);
           })

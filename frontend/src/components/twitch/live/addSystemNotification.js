@@ -1,6 +1,5 @@
-import axios from "axios";
-
-import { getCookie, truncate } from "../../../util/Utils";
+import { truncate } from "../../../util/Utils";
+import API from "../API";
 
 const markStreamAsSeen = async (streamName, newlyAddedStreams, setUnseenNotifications) => {
   new Promise(async (resolve, reject) => {
@@ -46,18 +45,13 @@ export default async ({
         silent: true,
       });
 
-      const vodId = await axios
-        .get(`https://api.twitch.tv/helix/videos?`, {
-          params: {
-            user_id: stream.user_id,
-            first: 1,
-            type: "archive",
-          },
-          headers: {
-            Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-          },
-        })
+      const vodId = await API.getVideos({
+        params: {
+          user_id: stream.user_id,
+          first: 1,
+          type: "archive",
+        },
+      })
         .then((res) => {
           return res.data.data[0];
         })

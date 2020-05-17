@@ -1,9 +1,7 @@
-import axios from "axios";
-
 import { durationToDate } from "./../TwitchUtils";
-import { getCookie } from "./../../../util/Utils";
 import AddVideoExtraData from "./../AddVideoExtraData";
 import SortAndAddExpire from "./SortAndAddExpire";
+import API from "../API";
 
 export default async (channelId, setVods) => {
   const vodExpire = 3; // Number of days
@@ -19,9 +17,7 @@ export default async (channelId, setVods) => {
     });
   };
 
-  const axiosConfig = {
-    method: "get",
-    url: `https://api.twitch.tv/helix/videos?`,
+  await API.getVideos({
     params: {
       user_id: channelId,
       period: "month",
@@ -29,13 +25,7 @@ export default async (channelId, setVods) => {
       // type: "archive",
       type: "all",
     },
-    headers: {
-      Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-      "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-    },
-  };
-
-  await axios(axiosConfig).then(async (res) => {
+  }).then(async (res) => {
     const newVodWithProfile = await AddVideoExtraData(res);
     const newVodWithEndtime = await addVodEndTime(newVodWithProfile.data);
 

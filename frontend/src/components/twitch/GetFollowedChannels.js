@@ -1,7 +1,6 @@
-import axios from "axios";
-
 import { getCookie } from "../../util/Utils";
 import validateToken from "./validateToken";
+import API from "./API";
 
 const fetchNextPageOfFollowers = async ({
   total,
@@ -10,21 +9,15 @@ const fetchNextPageOfFollowers = async ({
   twitchUserId,
 }) => {
   if (total > followedchannels.length) {
-    const nextPage = await axios
-      .get(`https://api.twitch.tv/helix/users/follows?`, {
-        params: {
-          from_id: twitchUserId,
-          first: 100,
-          after: PagePagination,
-        },
-        headers: {
-          Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-          "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-        },
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const nextPage = await API.getFollowedChannels({
+      params: {
+        from_id: twitchUserId,
+        first: 100,
+        after: PagePagination,
+      },
+    }).catch((error) => {
+      console.log(error);
+    });
 
     const channels = followedchannels.concat(nextPage.data.data);
 
@@ -44,21 +37,15 @@ const fetchNextPageOfFollowers = async ({
 export default async () => {
   try {
     const followedchannels = await validateToken().then(async () => {
-      return await axios
-        .get(`https://api.twitch.tv/helix/users/follows?`, {
-          params: {
-            from_id: getCookie("Twitch-userId"),
-            first: 100,
-          },
-          headers: {
-            Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-            "Client-ID": process.env.REACT_APP_TWITCH_CLIENT_ID,
-          },
-        })
-        .catch((error) => {
-          console.error(error.message);
-          return error;
-        });
+      return await API.getFollowedChannels({
+        params: {
+          from_id: getCookie("Twitch-userId"),
+          first: 100,
+        },
+      }).catch((error) => {
+        console.error(error.message);
+        return error;
+      });
     });
 
     const channels = await fetchNextPageOfFollowers({
