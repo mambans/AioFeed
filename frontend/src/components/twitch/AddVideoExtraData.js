@@ -25,7 +25,7 @@ const getGameDetails = async (items) => {
     (!cachedGameInfo.expire || cachedGameInfo.expire < Date.now()) &&
     Array.isArray(GamesToFetch) &&
     GamesToFetch.length >= 1 &&
-    GamesToFetch[0] !== undefinedq
+    GamesToFetch[0] !== undefined
   ) {
     return API.getGames({
       params: {
