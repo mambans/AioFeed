@@ -164,22 +164,22 @@
   opacity: 0;
   width: 0px !important;
   max-width: 0px !important;
-  left: -336px;
+  transform: translate3d(-336px, 0, 0);
   margin-right: 0px !important;
   margin-left: 0px !important;
   transition: opacity 750ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
-    left 750ms;
+    transform 750ms;
 }
 
 .videoFadeSlide-enter-active {
   opacity: 1;
   width: 336px !important;
   max-width: 336px !important;
-  left: 0;
+  transform: translate3d(0, 0, 0);
   margin-right: 7px !important;
   margin-left: 7px !important;
   transition: opacity 750ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
-    left 750ms;
+    transform 750ms;
 }
 
 .videoFadeSlide-enter-done {
@@ -191,40 +191,54 @@
   opacity: 1;
   width: 336px !important;
   max-width: 336px !important;
-  left: 0;
+  transform: translate3d(0, 0, 0);
   margin-right: 7px !important;
   margin-left: 7px !important;
   transition: opacity 750ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
-    left 750ms;
+    transform 750ms;
 }
 
 .videoFadeSlide-exit-active {
   opacity: 0;
   width: 0px !important;
   max-width: 0px !important;
-  left: -336px;
+  transform: translate3d(-336px, 0, 0);
   margin-right: 0px !important;
   margin-left: 0px !important;
   transition: opacity 750ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
-    left 750ms;
+    transform 750ms;
 }
 
 .NavSidebarBackdropFade-enter {
   opacity: 0;
+  transform: translate3d(0, 0, 0);
 }
 
 .NavSidebarBackdropFade-enter-active {
   opacity: 1;
-  transition: opacity 500ms;
+  transform: translate3d(-400px, 0, 0);
+  transition: transform 500ms, opacity 500ms;
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  @media screen and (max-width: 1920px) {
+    transform: translate3d(-300px, 0, 0);
+  }
 }
 
 .NavSidebarBackdropFade-exit {
   opacity: 1;
+  transform: translate3d(-400px, 0, 0);
+
+  @media screen and (max-width: 1920px) {
+    transform: translate3d(-300px, 0, 0);
+  }
 }
 
 .NavSidebarBackdropFade-exit-active {
   opacity: 0;
-  transition: opacity 500ms;
+  transform: translate3d(0, 0, 0);
+  transition: transform 500ms, opacity 500ms;
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 //fade 0.2s for RoutesFades.
@@ -249,136 +263,133 @@
 //NavSidebarSlideRight 1s
 .NavSidebarSlideRight-enter {
   opacity: 0;
-  //max-width: 0px;
-  right: -400px;
-  transition: opacity 300ms, right 500ms;
+  transform: translate3d(400px, 0, 0);
+  transition: opacity 300ms, transform 500ms;
   transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   @media screen and (max-width: 1920px) {
-    right: -300px;
+    transform: translate3d(300px, 0, 0);
   }
 }
 
 .NavSidebarSlideRight-enter-active {
   opacity: 1;
-  right: 0;
-  transition: opacity 300ms, right 500ms;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 300ms, transform 500ms;
   transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .NavSidebarSlideRight-exit {
   opacity: 1;
-  right: 0;
-  transition: opacity 300ms, right 500ms;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 300ms, transform 500ms;
   transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .NavSidebarSlideRight-exit-active {
   opacity: 0;
-  right: -400px;
-  transition: opacity 300ms, right 500ms;
+  transform: translate3d(400px, 0, 0);
+  transition: opacity 300ms, transform 500ms;
   transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   @media screen and (max-width: 1920px) {
-    right: -300px;
+    transform: translate3d(300px, 0, 0);
   }
 }
-
-.NavSidebarSlideRight-enter-done {
-  right: 0;
-}
-
-//sidebarVideoFade 1s
+// .NavSidebarSlideRight-enter-done {
+//   right: 0;
+//   // transform: translate3d(0,0,0);
+// }
 .sidebarVideoFade-1s-enter {
   opacity: 0;
-  top: 62px;
+  transform: translate3d(0, -62px, 0);
   height: 0px;
-  transition: opacity 1000ms, top 1000ms, height 1000ms;
+  transition: opacity 1000ms, transform 1000ms, height 1000ms;
 }
 
 .sidebarVideoFade-1s-enter-active {
   opacity: 1;
-  top: 0;
+  transform: translate3d(0, 0, 0);
   height: 62px;
-  transition: opacity 1000ms, top 1000ms, height 1000ms;
+  transition: opacity 1000ms, transform 1000ms, height 1000ms;
 }
 
 .sidebarVideoFade-1s-exit {
   opacity: 1;
-  //top: 0;
+  transform: translate3d(0, 0, 0);
   height: 62px;
-  transition: opacity 1000ms, top 1000ms, height 1000ms;
+  transition: opacity 1000ms, transform 1000ms, height 1000ms;
 }
 
 .sidebarVideoFade-1s-exit-active {
   opacity: 0;
-  //top: 62px;
+  transform: translate3d(0, -62px, 0);
   height: 0px;
-  transition: opacity 1000ms, top 1000ms, height 1000ms;
+  transition: opacity 1000ms, transform 1000ms, height 1000ms;
 }
 
 .sidebarTitlePopup-enter {
   opacity: 0;
-  left: 0;
+  transform: translate3d(0, 0, 0);
   transition: opacity 350ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
-    left 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
+    transform 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
 }
 
 .sidebarTitlePopup-enter-active {
   opacity: 1;
-  left: 275px;
+  transform: translate3d(275px, 0, 0);
   transition: opacity 350ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
-    left 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
+    transform 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
 }
 
 .sidebarTitlePopup-exit {
   opacity: 1;
-  left: 275px;
+  transform: translate3d(275px, 0, 0);
   transition: opacity 350ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
-    left 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
+    transform 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
 }
 
 .sidebarTitlePopup-exit-active {
   opacity: 0;
-  left: 0;
+  transform: translate3d(0, 0, 0);
   transition: opacity 350ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
-    left 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
+    transform 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
 }
 
 .sidebarTitlePopup-enter-done {
-  left: 275px;
+  transform: translate3d(275px, 0, 0);
   opacity: 1;
   transition: opacity 350ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
-    left 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
+    transform 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
 }
 
 //Twitter
 .twitter-slide-enter {
   opacity: 0;
-  right: -15vw !important;
-  transition: opacity 375ms, right 750ms;
+  transform: translate3d(15vw, 0, 0);
+  transition: opacity 375ms, transform 750ms;
 
   @media screen and (max-width: 3420px) {
-    right: -20vw;
+    transform: translate3d(20vw, 0, 0);
   }
 }
 
 .twitter-slide-enter-active {
   opacity: 1;
-  right: 25px !important;
-  transition: opacity 375ms, right 750ms;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 375ms, transform 750ms;
 }
 
 .twitter-slide-exit {
   opacity: 1;
-  right: 25px !important;
-  transition: opacity 375ms, right 750ms;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 375ms, transform 750ms;
 }
 
 .twitter-slide-exit-active {
   opacity: 0;
-  right: -15vw !important;
-  transition: opacity 375ms, right 750ms;
+  transform: translate3d(15vw, 0, 0);
+  transition: opacity 375ms, transform 750ms;
 
   @media screen and (max-width: 3420px) {
     right: -20vw;
@@ -386,13 +397,13 @@
 }
 
 .twitter-slide-enter-done {
-  right: 25px !important;
-  transition: opacity 375ms, right 750ms;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 375ms, transform 750ms;
 }
 
 .twitter-slide-appear-active {
-  right: 25px !important;
-  transition: opacity 500ms, right 750ms;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 375ms, transform 750ms;
 }
 
 //fade 1s

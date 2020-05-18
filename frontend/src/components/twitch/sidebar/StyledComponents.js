@@ -7,9 +7,9 @@ export const SidebarTitlePopup = styled.div`
   height: 62px;
   position: fixed;
   background: var(--sidebarBackground);
-  z-index: 5;
-  /* transition: ease-in-out 1s; */
+  /* z-index: 5; */
   z-index: -1;
+  left: 0;
 
   span {
     padding: 8px 0;

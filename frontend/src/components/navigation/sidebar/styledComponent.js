@@ -20,6 +20,7 @@ export const StyledNavSidebar = styled.div`
   overflow-y: scroll;
   scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0) !important;
   scrollbar-width: thin;
+  right: 0;
 
   @media screen and (max-width: 1920px) {
     width: 300px;
@@ -28,7 +29,7 @@ export const StyledNavSidebar = styled.div`
 
 export const StyledNavSidebarBackdrop = styled.div`
   background: rgba(0, 0, 0, 0.1);
-  width: calc(100vw - 400px);
+  width: calc(100vw);
   position: fixed;
   left: 0;
   height: 100vh;
