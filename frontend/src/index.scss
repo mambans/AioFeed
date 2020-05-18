@@ -49,3 +49,7 @@ html.theme-transition *:after {
   transition-delay: 0 !important;
   transition: all 750ms !important;
 }
+
+.tooltip {
+  max-width: 500px;
+}
