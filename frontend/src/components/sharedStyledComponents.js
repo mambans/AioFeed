@@ -73,7 +73,7 @@ export const HeaderContainer = styled.div`
   width: 100%;
   min-width: 100%;
   margin-bottom: 10px;
-  margin-top: 25px;
+  /* margin-top: 25px; */
   height: 50.5px;
   width: 100%;
 `;
@@ -81,7 +81,7 @@ export const HeaderContainer = styled.div`
 export const SubFeedContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  padding-bottom: 50px;
+  /* padding-bottom: 50px; */
   min-height: 400px;
   max-width: 100%;
 `;
