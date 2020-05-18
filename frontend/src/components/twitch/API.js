@@ -3,10 +3,18 @@ import { getCookie } from "../../util/Utils";
 
 const CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;
 const BASE_URL = "https://api.twitch.tv/helix";
-// eslint-disable-next-line no-unused-vars
 const BASE_URL_KRAKEN = "https://api.twitch.tv/kraken";
 
 export default {
+  getMe: async ({ accessToken = getCookie("Twitch-access_token") }) => {
+    return await axios.get(`${BASE_URL}/users`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Client-ID": CLIENT_ID,
+      },
+    });
+  },
+
   getStreams: async ({ params }) => {
     return await axios.get(`${BASE_URL}/streams`, {
       params: params,
@@ -56,15 +64,6 @@ export default {
     });
   },
 
-  getMe: async ({ accessToken = getCookie("Twitch-access_token") }) => {
-    return await axios.get(`${BASE_URL}/users`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Client-ID": CLIENT_ID,
-      },
-    });
-  },
-
   getFollowedChannels: async ({ params }) => {
     return await axios.get(`${BASE_URL}/users/follows`, {
       params: params,
@@ -99,7 +98,7 @@ export default {
     return await axios.get(`${BASE_URL_KRAKEN}/videos/${params.id}`, {
       params: params,
       headers: {
-        Authorization: `OAuth ${getCookie("Twitch-access_token")}`,
+        Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
         "Client-ID": CLIENT_ID,
         Accept: "application/vnd.twitchtv.v5+json",
       },
