@@ -1,10 +1,25 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+import { CSSTransition } from "react-transition-group";
+import styled from "styled-components";
 
-import { ThemeSelector } from "./styledComponents";
+import { ThemeSelector, ThemeSelectorUl } from "./styledComponents";
 import ThemeContext from "./ThemeContext";
 import useSyncedLocalState from "./../../hooks/useSyncedLocalState";
 
-export default () => {
+const Arrow = styled.i`
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  background: transparent;
+  border-color: var(--textColor1Hover);
+  transform: ${({ open }) => (open ? "rotate(45deg)" : "rotate(-45deg)")};
+  transition: transform 350ms;
+  grid-column: 2;
+  width: 3px;
+`;
+
+export default ({ style }) => {
   const { themesArray, setActiveContextTheme } = useContext(ThemeContext);
   const [activeTheme, setActiveTheme] = useSyncedLocalState("activeTheme", {
     name: "default",
@@ -14,6 +29,7 @@ export default () => {
     endMonth: 0,
     endDate: 0,
   });
+  const [open, setOpen] = useState(false);
 
   const activateTheme = (theme) => {
     document.documentElement.classList.add("theme-transition");
@@ -50,28 +66,42 @@ export default () => {
   };
 
   return (
-    <>
-      <ThemeSelector>
-        <label>
-          <b>Choose Theme:</b>
-          <select defaultValue={activeTheme.name} className='custom-select custom-select-sm'>
+    <ThemeSelector open={open} style={style}>
+      <button
+        id='active'
+        // onBlur={() => {
+        //   setOpen(false);
+        // }}
+        onClick={() => {
+          setOpen(!open);
+        }}>
+        <span id='prefix'>Theme:</span>
+        <Arrow open={open} />
+        <span id='ActiveThemeName'>
+          {activeTheme.name.charAt(0).toUpperCase() + activeTheme.name.slice(1)}
+        </span>
+      </button>
+      <div style={{ overflow: "hidden" }}>
+        <CSSTransition in={open} timeout={500} classNames='themeSelector' unmountOnExit>
+          <ThemeSelectorUl>
             {themesArray.map((theme) => {
               return (
-                <option
+                <li
                   key={theme.name}
                   value={theme.name}
                   onClick={() => {
                     setActiveTheme(theme);
                     activateTheme(theme);
                     if (theme.type !== activeTheme.type) setActiveContextTheme(theme);
+                    setOpen(false);
                   }}>
                   {theme.name.charAt(0).toUpperCase() + theme.name.slice(1)}
-                </option>
+                </li>
               );
             })}
-          </select>
-        </label>
-      </ThemeSelector>
-    </>
+          </ThemeSelectorUl>
+        </CSSTransition>
+      </div>
+    </ThemeSelector>
   );
 };

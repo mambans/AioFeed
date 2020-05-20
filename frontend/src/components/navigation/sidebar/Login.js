@@ -8,6 +8,7 @@ import NavigationContext from "./../NavigationContext";
 import LoadingIndicator from "./../../LoadingIndicator";
 import useInput from "./../../../hooks/useInput";
 import { AddCookie } from "../../../util/Utils";
+import Themeselector from "../../themes/Themeselector";
 
 export default () => {
   document.title = "AioFeed | Login";
@@ -141,6 +142,7 @@ export default () => {
           </Button>
         </div>
       </StyledCreateForm>
+      <Themeselector style={{ marginTop: "20px" }} />
       {validated && <LoadingIndicator height={150} width={150} />}
     </>
   );
