@@ -6,7 +6,7 @@ export const SidebarTitlePopup = styled.div`
   width: 325px;
   height: 62px;
   position: fixed;
-  background: var(--sidebarBackground);
+  background: var(--navigationbarBackground);
   /* z-index: 5; */
   z-index: -1;
   left: 0;
@@ -38,7 +38,7 @@ export const SidebarTitlePopup = styled.div`
 
 export const Styledsidebar = styled.div`
   width: 275px !important;
-  background: var(--sidebarBackground);
+  background: var(--navigationbarBackground);
   top: 92px;
   position: fixed;
   border-radius: 10px 10px 0 0;
@@ -54,7 +54,7 @@ export const Styledsidebar = styled.div`
 export const SidebarHeader = styled.p`
   font-size: 1.1rem;
   font-weight: bold;
-  color: var(--subFeedHeaderColor);
+  color: var(--textColor2);
   padding: 8px 5px 8px 10px;
   border-bottom: 2px solid #2f2f2f;
   height: 50.5px;
@@ -71,16 +71,16 @@ export const StyledsidebarItem = styled.div`
   grid-template-columns: 18% 56% 26%;
   grid-template-rows: 50% 50%;
   padding: 8px 5px 8px 10px;
-  border-bottom: 1px solid var(--twitchSidebarItemBorderColor);
+  border-bottom: 1px solid #3d3d3d;
   transition: ease-in-out 1s,
     box-shadow ${({ duration }) => (duration ? 1 : 2)}s cubic-bezier(0.07, 0.81, 0.13, 0.9);
   font-size: 0.9rem;
   position: relative;
   height: 62px;
-  box-shadow: -276px 0 1px 1px var(--twitchSidebarItemAnimationColor);
+  box-shadow: -276px 0 1px 1px #aaaaaa;
 
   &:hover {
-    box-shadow: 0 0 1px 1px var(--twitchSidebarItemAnimationColor);
+    box-shadow: 0 0 1px 1px #aaaaaa;
   }
 
   a {
@@ -108,11 +108,11 @@ export const StyledsidebarItem = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: var(--VideoContainerLinks);
+    color: var(--textColor2);
   }
 
   .sidebarUser {
-    color: var(--VideoContainerLinks);
+    color: var(--textColor2);
     font-weight: bold;
     margin-right: 8px;
     font-size: 1.05em;
@@ -122,7 +122,7 @@ export const StyledsidebarItem = styled.div`
   }
 
   .sidebarViewers {
-    color: var(--VideoContainerViewers);
+    color: var(--textColor1);
     display: flex;
     justify-content: space-between;
     font-size: 1.05em;
@@ -136,7 +136,7 @@ export const StyledsidebarItem = styled.div`
   }
 
   .sidebarDuration {
-    color: rgb(150, 150, 150);
+    color: var(--textColor2);
     font-weight: bold;
     display: flex;
     justify-content: space-between;

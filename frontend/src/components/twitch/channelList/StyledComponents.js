@@ -7,7 +7,7 @@ export const ChannelListLi = styled.li`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: var(--VideoContainerLinksHover);
+    color: var(--textColor2Hover);
 
     img {
       width: 30px;

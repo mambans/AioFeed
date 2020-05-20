@@ -98,7 +98,7 @@ export const Notification = styled.li`
 `;
 
 export const UnseenNotifcationCount = styled.div`
-  background-color: var(--unseenNotifcationCountBackground);
+  background-color: rgb(170, 0, 0);
   height: 24px;
   width: 24px;
   border-radius: 50%;

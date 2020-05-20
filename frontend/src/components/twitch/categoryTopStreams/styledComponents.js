@@ -36,7 +36,7 @@ export const GameListUlContainer = styled.ul`
   padding-left: 0.75rem;
   margin: 0;
   position: absolute;
-  background: linear-gradient(rgba(0, 0, 0, 0.4) 0%, var(--popupListsBackground) 15%) !important;
+  background: var(--popupListsBackground) !important;
   box-shadow: var(--refreshButtonShadow);
   width: 310px;
   scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0) !important;
@@ -85,7 +85,7 @@ export const TypeListUlContainer = styled.ul`
   padding-left: 0.75rem;
   margin: 0;
   position: absolute;
-  background: linear-gradient(rgba(0, 0, 0, 0.4) 0%, var(--popupListsBackground) 15%) !important;
+  background: var(--popupListsBackground) !important;
   box-shadow: var(--refreshButtonShadow);
   width: 150px;
   scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0) !important;

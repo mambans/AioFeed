@@ -63,7 +63,7 @@ export const StyledCountdownCircle = styled.div`
     line-height: 24px;
     width: 24px;
     height: 24px;
-    color: rgb(255, 255, 255);
+    /* color: rgb(255, 255, 255); */
     font-size: 13px;
     display: flex;
     justify-content: center;
@@ -83,7 +83,7 @@ export const StyledCountdownCircle = styled.div`
     stroke-dashoffset: 0px;
     stroke-linecap: round;
     stroke-width: 3px;
-    stroke: white;
+    stroke: var(--refreshButtonColor);
     fill: none;
     animation: ${countdown} 25s linear 1 forwards;
     /* animation: ${countdown} ${({ delay }) => delay || 25}s linear 1 forwards; */
@@ -142,12 +142,11 @@ export const StyledLoadingBox = styled.div`
   }
 
   div#title {
-
-    color: var(--videoTitle);
+    color:var(--textColor1);
     margin-top: 15px;
     margin-bottom: 5px;
     grid-area: title;
-    font-size: 1.05 rem;
+    font-size: 1.1rem;
     max-width: 336px;
     overflow: hidden;
     height: 45px;
@@ -155,8 +154,11 @@ export const StyledLoadingBox = styled.div`
 
     div {
       animation: ${pulse} 2s linear infinite;
-      width: 200px;
-      height: 20px;
+      width: 260px;
+      height: 24px;
+      margin-top: 5px;
+      border-radius: 12px;
+      transform: translate3d(0, 0, 0);
     }
   }
 
@@ -230,7 +232,7 @@ export const ChannelNameDiv = styled.div`
 
   .channelName {
     padding: 0 5px;
-    color: var(--VideoContainerLinks);
+    color: var(--textColor2);
     font-size: 1rem !important;
     display: flex;
     align-items: center;
@@ -265,7 +267,6 @@ export const Container = styled.div`
   min-height: 400px;
   /* min-height: 475px; */
 `;
-
 
 export const CenterContainer = styled.div`
   display: flex;

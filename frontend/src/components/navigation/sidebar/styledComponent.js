@@ -7,7 +7,7 @@ import { MdFormatIndentDecrease } from "react-icons/md";
 import { FaWindowClose } from "react-icons/fa";
 
 export const StyledNavSidebar = styled.div`
-  color: var(--navSidebarColor);
+  color: var(--textColor1);
   position: fixed;
   top: 65px;
   /* right: 0; */

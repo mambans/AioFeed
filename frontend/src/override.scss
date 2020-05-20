@@ -33,7 +33,7 @@
 }
 
 .popup-content {
-  background: linear-gradient(rgba(0, 0, 0, 0.4) 0%, var(--popupListsBackground) 15%) !important;
+  background: var(--popupListsBackground) !important;
   border-radius: 0 0 10px 10px !important;
   width: 300px !important;
   min-width: min-content !important;
@@ -62,7 +62,7 @@
       color: white;
 
       &:hover {
-        color: var(--VideoContainerLinksHover);
+        color: var(--textColor2Hover);
       }
     }
 

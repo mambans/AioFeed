@@ -3,17 +3,17 @@ import styled from "styled-components";
 export const Container = styled.div`
   max-width: 800px;
   margin: auto;
-  color: var(--videoTitle);
+  color: var(--textColor1);
 
   a {
     color: white;
     text-decoration: underline;
-    color: var(--videoTitle);
+    color: var(--textColor1);
   }
 
   h2 {
     text-align: center;
-    color: var(--videoTitle);
+    color: var(--textColor1);
   }
 
   div {

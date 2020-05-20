@@ -18,7 +18,7 @@ const StyledNewHighlight = styled.div`
   height: 62px;
   width: 4px;
   border-radius: 2px;
-  background: var(--newStreamBackgroundColor);
+  background: var(--newHighlightColor);
 `;
 
 const NewHighlight = ({ newlyAdded, stream }) => {

@@ -1,6 +1,6 @@
 .date {
   grid-area: info;
-  color: var(--VideoContainerLinks);
+  color: var(--textColor2);
   justify-self: end;
   padding-right: 10px;
 }
@@ -10,7 +10,7 @@
   justify-self: start;
 
   a {
-    color: var(--VideoContainerLinks);
+    color: var(--textColor2);
   }
 }
 
@@ -48,7 +48,7 @@
 .lastRefresh {
   position: relative;
   left: 10%;
-  color: var(--VideoContainerLinks);
+  color: var(--textColor2);
 }
 
 .requestError {
@@ -68,7 +68,7 @@
 
 .container_header {
   text-align: center;
-  color: var(--subFeedHeaderColor);
+  color: var(--textColor2);
   margin: auto;
   letter-spacing: 1px;
 

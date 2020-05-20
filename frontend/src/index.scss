@@ -24,7 +24,7 @@ body {
   background-position-y: center;
   background-size: var(--backgroundImgSize);
   background-repeat: var(--backgroundImgRepeat);
-  color: var(--BodyGeneralTextColor);
+  color: var(--textColor1);
   background-image: var(--backgroundImg);
 }
 
@@ -39,7 +39,7 @@ a:hover {
 
 :root {
   scrollbar-color: var(--scrollbarColors) !important;
-  scrollbar-width: var(--scrollbarWidth);
+  scrollbar-width: thin !important;
 }
 
 html.theme-transition,

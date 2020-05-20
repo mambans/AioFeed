@@ -53,7 +53,7 @@ export const ButtonList = styled(Button).attrs({ variant: "outline-secondary" })
 
 export const HeaderTitle = styled.h4`
   text-align: center;
-  color: var(--subFeedHeaderColor);
+  color: var(--textColor2);
   margin: auto;
   letter-spacing: 1px;
   width: 100%;
@@ -101,7 +101,7 @@ export const VideoContainer = styled.div`
 
   box-shadow: var(--videoBoxShadow);
   border-radius: 10px;
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--videoContainerBackgroundColor);
 
   a {
     .channelContainer {
@@ -132,11 +132,11 @@ export const VideoContainer = styled.div`
     }
 
     .game {
-      color: var(--VideoContainerLinks);
+      color: var(--textColor2);
     }
 
     &:hover {
-      color: var(--VideoContainerLinksHover);
+      color: var(--textColor2Hover);
     }
   }
 `;
@@ -157,7 +157,7 @@ export const ChannelContainer = styled.div`
   .channelName {
     padding: 0 5px;
     font-weight: bold;
-    color: var(--VideoContainerLinks);
+    color: var(--textColor2);
     grid-row: 1;
     width: max-content;
     transition: color 250ms;
@@ -207,11 +207,11 @@ export const GameContainer = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     transition: color 250ms;
-    color: var(--VideoContainerLinks);
+    color: var(--textColor2);
   }
 
   .viewers {
-    color: var(--VideoContainerViewers);
+    color: var(--textColor1);
     position: relative;
     display: flex;
     justify-content: flex-end;
@@ -231,7 +231,7 @@ export const GameContainer = styled.div`
 `;
 
 export const VideoTitle = styled(Link)`
-  color: var(--videoTitle);
+  color: var(--textColor1);
   margin-top: 15px;
   margin-bottom: 5px;
   grid-area: title;
@@ -244,13 +244,13 @@ export const VideoTitle = styled(Link)`
   /* mix-blend-mode: screen; */
 
   &:hover {
-    color: var(--videoTitleHover);
+    color: var(--textColor1Hover);
     mix-blend-mode: unset;
   }
 `;
 
 export const VideoTitleHref = styled.a`
-  color: var(--videoTitle);
+  color: var(--textColor1);
   margin-top: 15px;
   margin-bottom: 5px;
   grid-area: title;
@@ -263,7 +263,7 @@ export const VideoTitleHref = styled.a`
   /* mix-blend-mode: screen; */
 
   &:hover {
-    color: var(--videoTitleHover);
+    color: var(--textColor1Hover);
     mix-blend-mode: unset;
   }
 `;

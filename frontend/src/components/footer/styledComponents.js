@@ -6,7 +6,7 @@ export const StyledFooterContainer = styled.div`
   padding: 15px;
   text-align: center;
   box-shadow: var(--footerShadow);
-  margin-top: var(--footerMargin);
+  margin-top: 100px;
   border-top: 2px solid #53463f;
   max-height: 200px;
   width: ${({ enableTwitter, showTwitchSidebar, location }) =>
@@ -19,7 +19,7 @@ export const StyledFooterContainer = styled.div`
           showTwitchSidebar ? "275px" : "0px"
         }))`
       : "100%"}; */
-  color: var(--VideoContainerLinks);
+  color: var(--textColor2);
   /* margin-left: ${({ showTwitchSidebar }) => (showTwitchSidebar ? "275px" : "unset")}; */
   transition: width 750ms, margin 750ms;
 
@@ -45,10 +45,11 @@ export const StyledFooterContainer = styled.div`
     align-items: center;
 
     font-size: 16px !important;
-    color: var(--footerLinkColor);
+    color: var(--textColor2);
+    transition: color 200ms;
 
     &:hover {
-      color: var(--footerLinkHoverColor);
+      color: var(--textColor2Hover);
     }
   }
 
@@ -91,5 +92,5 @@ export const StyledCenterBottomText = styled.p`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--VideoContainerLinks);
+  color: var(--textColor2);
 `;

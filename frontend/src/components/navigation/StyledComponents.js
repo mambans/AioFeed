@@ -37,4 +37,5 @@ export const StyledLoginButton = styled.p`
   margin-bottom: 0;
   font-size: 1.15rem;
   margin-right: 15px;
+  color: var(--textColor1);
 `;

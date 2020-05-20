@@ -54,7 +54,7 @@ export const VodChannelListLi = styled.li`
 export const LastRefreshText = styled(Moment).attrs({ fromNow: true, interval: 60000 })`
   position: relative;
   left: 10%;
-  color: var(--VideoContainerLinks);
+  color: var(--textColor2);
 `;
 
 const AnimateVodPreview = keyframes`
@@ -91,7 +91,7 @@ export const VodPreview = styled.div`
 
 export const VodDates = styled.div`
   /* grid-area: info; */
-  color: var(--VideoContainerLinks);
+  color: var(--textColor2);
   font-size: 0.95rem;
   grid-column: 3;
   align-items: center;
