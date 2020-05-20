@@ -3,9 +3,9 @@ import { getCookie, AddCookie } from "../../util/Utils";
 import reauthenticate from "./reauthenticate";
 
 export default async () => {
-  if (!getCookie("Twitch_token_validated")) {
+  if (!getCookie("Twitch_token_validated") || getCookie("Twitch_token_validated") < Date.now()) {
     const expireDate = new Date(Date.now() + 5000);
-    AddCookie("Twitch_token_validated", true, expireDate);
+    AddCookie("Twitch_token_validated", expireDate.getTime(), expireDate);
     return await axios
       .get("https://id.twitch.tv/oauth2/validate", {
         headers: {
@@ -14,7 +14,7 @@ export default async () => {
       })
       .then((res) => {
         const expireDate = new Date(Date.now() + 60000);
-        AddCookie("Twitch_token_validated", true, expireDate);
+        AddCookie("Twitch_token_validated", expireDate.getTime(), expireDate);
         if (
           res.data.client_id === process.env.REACT_APP_TWITCH_CLIENT_ID &&
           res.data.login === getCookie("Twitch-username").toLocaleLowerCase()
