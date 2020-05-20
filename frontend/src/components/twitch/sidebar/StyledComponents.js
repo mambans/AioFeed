@@ -166,12 +166,14 @@ export const LoadingSidebarItems = styled.div`
     height: 36px;
     border-radius: 50%;
     animation: ${pulse} 2s linear infinite;
+    transform: translate3d(0, 0, 0);
     align-self: center;
   }
 
   .Channel {
     grid-area: channel;
     animation: ${pulse} 2s linear infinite;
+    transform: translate3d(0, 0, 0);
     margin: 4px 0;
     border-radius: 9px;
     width: ${({ channelWidth }) => channelWidth};
@@ -180,6 +182,7 @@ export const LoadingSidebarItems = styled.div`
   .Game {
     grid-area: game;
     animation: ${pulse} 2s linear infinite;
+    transform: translate3d(0, 0, 0);
     margin: 4px 0;
     border-radius: 9px;
     width: ${({ gameWidth }) => gameWidth};

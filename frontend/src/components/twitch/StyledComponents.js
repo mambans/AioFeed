@@ -134,6 +134,7 @@ export const StyledLoadingBox = styled.div`
     border-radius: 10px;
     background: #121415d1;
     animation: ${pulse} 2s linear infinite;
+    transform: translate3d(0, 0, 0);
   }
 
   div div {
@@ -173,6 +174,7 @@ export const StyledLoadingBox = styled.div`
       height: ${({ type }) => (type === "Clips" ? "25px" : "20px")};
       /* margin: 7px 0; */
       margin: ${({ type }) => (type === "Clips" ? "0" : "7px 0")};
+      transform: translate3d(0, 0, 0);
     }
 
     #game {
@@ -181,6 +183,7 @@ export const StyledLoadingBox = styled.div`
       height: 20px;
       margin: 21px 0 0 0;
       display: ${({ type }) => (type === "Clips" ? "none" : "block")};
+      transform: translate3d(0, 0, 0);
     }
   }
 `;
@@ -192,6 +195,7 @@ export const StyledLoadingList = styled.ul`
     border-radius: 8px;
     background: #36393fd1;
     animation: ${pulseLight} 2s linear infinite;
+    transform: translate3d(0, 0, 0);
   }
 `;
 

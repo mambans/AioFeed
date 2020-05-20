@@ -134,6 +134,7 @@ export const StyledLoadingListElement = styled.li`
     border-radius: 8px;
     background: #36393fd1;
     animation: ${pulseLight} 2s linear infinite;
+    transform: translate3d(0, 0, 0);
     /* padding: 5px 0px;
     min-height: 42px; */
   }

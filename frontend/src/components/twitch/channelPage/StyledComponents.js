@@ -120,6 +120,7 @@ export const Name = styled.div`
       margin-right: 20px;
       margin-left: -70px;
       animation: ${pulse} 4s linear infinite;
+      transform: translate3d(0, 0, 0);
     }
 
     #PlaceholderSmallText {
@@ -129,6 +130,7 @@ export const Name = styled.div`
       width: 100px;
       border-radius: 10px;
       animation: ${pulse} 4s linear infinite;
+      transform: translate3d(0, 0, 0);
     }
   }
 

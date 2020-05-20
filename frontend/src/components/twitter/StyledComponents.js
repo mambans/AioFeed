@@ -33,6 +33,7 @@ export const LoadingImageBox = styled.div`
     height: calc(15vw / 1.777);
     border-radius: 20px;
     animation: ${pulse} 2s linear infinite;
+    transform: translate3d(0, 0, 0);
 
     @media screen and (max-width: 2560px) {
       height: calc(20vw / 1.777);
@@ -49,6 +50,7 @@ export const LoadingContainer = styled.div`
     margin-bottom: 25px;
     width: 25%;
     animation: ${pulse} 2s linear infinite;
+    transform: translate3d(0, 0, 0);
   }
 
   .text {
@@ -57,6 +59,7 @@ export const LoadingContainer = styled.div`
       border-radius: 6px;
       margin: 10px 0;
       animation: ${pulse} 2s linear infinite;
+      transform: translate3d(0, 0, 0);
 
       :last-of-type {
         width: 45%;
