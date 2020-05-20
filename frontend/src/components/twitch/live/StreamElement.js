@@ -25,7 +25,7 @@ import VodsFollowUnfollowBtn from "./../vods/VodsFollowUnfollowBtn";
 import { formatViewerNumbers } from "./../TwitchUtils";
 import AddUpdateNotificationsButton from "../AddUpdateNotificationsButton";
 
-const HOVER_DELAY = 500; // 1000
+const HOVER_DELAY = 100;
 
 function NewHighlightNoti({ newlyAddedStreams, user_name }) {
   if (newlyAddedStreams && newlyAddedStreams.includes(user_name.toLowerCase())) {
@@ -46,7 +46,7 @@ function NewHighlightNoti({ newlyAddedStreams, user_name }) {
   return "";
 }
 
-function StreamEle(data_p) {
+export default (data_p) => {
   const location = useLocation();
   const { data, newlyAddedStreams, refresh, refreshAfterUnfollowTimer } = data_p;
   const [isHovered, setIsHovered] = useState(false);
@@ -56,18 +56,18 @@ function StreamEle(data_p) {
   const ref = useRef();
   const refChannel = useRef();
 
-  const handleMouseOver = () => {
-    streamHoverTimer.current = setTimeout(function () {
-      setIsHovered(true);
-    }, HOVER_DELAY);
-  };
-
-  const handleMouseOut = () => {
-    clearTimeout(streamHoverTimer.current);
-    setIsHovered(false);
-  };
-
   useEffect(() => {
+    const handleMouseOver = () => {
+      streamHoverTimer.current = setTimeout(function () {
+        setIsHovered(true);
+      }, HOVER_DELAY);
+    };
+
+    const handleMouseOut = () => {
+      clearTimeout(streamHoverTimer.current);
+      setIsHovered(false);
+    };
+
     if (ref.current && twitchVideoHoverEnable) {
       const refEle = ref.current;
       refEle.addEventListener("mouseenter", handleMouseOver);
@@ -78,7 +78,7 @@ function StreamEle(data_p) {
         refEle.removeEventListener("mouseleave", handleMouseOut);
       };
     }
-  }, [twitchVideoHoverEnable]);
+  }, [twitchVideoHoverEnable, data.user_name]);
 
   return (
     <VideoContainer key={data.id}>
@@ -86,12 +86,7 @@ function StreamEle(data_p) {
         <NewHighlightNoti
           newlyAddedStreams={newlyAddedStreams}
           user_name={data.user_name}></NewHighlightNoti>
-        {isHovered && (
-          <StreamHoverIframe
-            id={data.id}
-            data={data}
-            setIsHovered={setIsHovered}></StreamHoverIframe>
-        )}
+        {isHovered && <StreamHoverIframe id={data.id} data={data} setIsHovered={setIsHovered} />}
         <Link
           to={{
             pathname: "/" + data.user_name.toLowerCase(),
@@ -243,6 +238,4 @@ function StreamEle(data_p) {
       </div>
     </VideoContainer>
   );
-}
-
-export default StreamEle;
+};

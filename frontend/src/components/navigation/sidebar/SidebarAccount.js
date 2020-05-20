@@ -247,7 +247,7 @@ export default () => {
             tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
               getCookie(`Twitch-access_token`)
-                ? (twitchVideoHoverEnable ? "Disable " : "Enable ") + `video on hover`
+                ? (twitchVideoHoverEnable ? "Disable " : "Enable ") + `live video preview on hover`
                 : `Need to connect/authenticate with a Youtube account first.`
             }
             icon={
