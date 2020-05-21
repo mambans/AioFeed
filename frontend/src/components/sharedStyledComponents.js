@@ -287,7 +287,7 @@ export const ImageContainer = styled.div`
     margin-left: 129.5px;
     margin-top: 57px;
     border-width: 0.5em;
-    transition: opacity 300ms 700ms;
+    transition: opacity 200ms 0ms;
     opacity: 0;
   }
 
@@ -306,6 +306,7 @@ export const ImageContainer = styled.div`
       12px 0 50px -4px rgba(0, 0, 0, 0.8), -12px 0 50px -4px rgba(0, 0, 0, 0.8);
 
     .loadingSpinner {
+      transition-delay: 800ms;
       opacity: 0.5;
     }
 
