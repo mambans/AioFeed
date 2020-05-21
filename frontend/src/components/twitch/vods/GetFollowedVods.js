@@ -117,9 +117,9 @@ export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchTok
   const vodExpire = 3; // Number of hours
 
   try {
-    if (!getLocalstorage(`Vods`) || getLocalstorage(`Vods`).expire <= Date.now() || forceRun) {
+    if (forceRun || !getLocalstorage(`Vods`) || getLocalstorage(`Vods`).expire <= Date.now()) {
       try {
-        const followedChannels = await GetFollowedChannels();
+        const followedChannels = await GetFollowedChannels(true);
 
         const FollowedChannelVods = await FetchMonitoredVodChannelsList(Username, AuthKey);
         if (FollowedChannelVods.length === 0) {

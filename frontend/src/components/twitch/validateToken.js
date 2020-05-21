@@ -2,8 +2,12 @@ import axios from "axios";
 import { getCookie, AddCookie } from "../../util/Utils";
 import reauthenticate from "./reauthenticate";
 
-export default async () => {
-  if (!getCookie("Twitch_token_validated") || getCookie("Twitch_token_validated") < Date.now()) {
+export default async (forceRun = false) => {
+  if (
+    forceRun ||
+    !getCookie("Twitch_token_validated") ||
+    getCookie("Twitch_token_validated") < Date.now()
+  ) {
     const expireDate = new Date(Date.now() + 5000);
     AddCookie("Twitch_token_validated", expireDate.getTime(), expireDate);
     return await axios

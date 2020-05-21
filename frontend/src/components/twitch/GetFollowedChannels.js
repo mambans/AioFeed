@@ -34,9 +34,9 @@ const fetchNextPageOfFollowers = async ({
   return followedchannels;
 };
 
-export default async () => {
+export default async (forceRun = false) => {
   try {
-    const followedchannels = await validateToken().then(async () => {
+    const followedchannels = await validateToken(forceRun).then(async () => {
       return await API.getFollowedChannels({
         params: {
           from_id: getCookie("Twitch-userId"),
