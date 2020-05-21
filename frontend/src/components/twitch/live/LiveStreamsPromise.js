@@ -29,7 +29,7 @@ export default async ({
     res.map((stream) => {
       newlyAddedStreams.current.push(stream.user_name);
       stream.newlyAdded = true;
-      stream.status = "Live";
+      stream.notiStatus = "Live";
       addSystemNotification({
         status: "online",
         stream: stream,

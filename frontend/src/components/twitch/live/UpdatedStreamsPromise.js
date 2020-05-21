@@ -52,7 +52,7 @@ export default async ({
             newlyAddedStreams: newlyAddedStreams,
             setUnseenNotifications: setUnseenNotifications,
           });
-          stream.status = "Title & Game updated";
+          stream.notiStatus = "Title & Game updated";
           stream.text = `+ ${truncate(stream.title, 40)} in ${stream.game_name}\n- ${truncate(
             oldStreamData.title,
             40
@@ -79,7 +79,7 @@ export default async ({
             newlyAddedStreams: newlyAddedStreams,
             setUnseenNotifications: setUnseenNotifications,
           });
-          stream.status = "Game updated";
+          stream.notiStatus = "Game updated";
           stream.text = `+ ${stream.game_name}\n- ${oldStreamData.game_name}`;
           return stream;
         }
@@ -103,7 +103,7 @@ export default async ({
             newlyAddedStreams: newlyAddedStreams,
             setUnseenNotifications: setUnseenNotifications,
           });
-          stream.status = "Title updated";
+          stream.notiStatus = "Title updated";
           stream.text = `+ ${stream.title}\n- ${oldStreamData.title}`;
           return stream;
         }

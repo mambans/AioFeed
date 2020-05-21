@@ -85,19 +85,23 @@ export default () => {
           {notifications &&
             notifications.map((item) => {
               return (
-                <Notification key={item.key} status={item.status}>
+                <Notification key={item.key} status={item.notiStatus}>
                   <Link
-                    to={`/${item.user_name.toLowerCase()}/channel`}
+                    to={`/${(item.user_name || item.display_name).toLowerCase()}/channel`}
                     className='profileImg'
                     alt=''>
-                    <img src={item.profile_img_url} alt=''></img>
+                    <img src={item.profile_img_url || item.logo} alt=''></img>
                   </Link>
                   <div className='textContainer'>
-                    <Link to={`/${item.user_name.toLowerCase()}/channel`} className='name'>
-                      <b>{item.user_name}</b> {item.status}
+                    <Link
+                      to={`/${(item.user_name || item.display_name).toLowerCase()}/channel`}
+                      className='name'>
+                      <b>{item.user_name || item.display_name}</b> {item.notiStatus}
                     </Link>
-                    <Link to={`/${item.user_name.toLowerCase()}/channel`} className='title'>
-                      {item.status && item.status.includes("updated")
+                    <Link
+                      to={`/${(item.user_name || item.display_name).toLowerCase()}/channel`}
+                      className='title'>
+                      {item.notiStatus.includes("updated") && item.text
                         ? item.text.split("\n").map((line) => {
                             return (
                               <p className='UpdateText' key={line}>
@@ -105,9 +109,9 @@ export default () => {
                               </p>
                             );
                           })
-                        : truncate(item.title, 30)}
+                        : truncate(item.title || item.status, 30)}
                     </Link>
-                    <Date date={item.date} status={item.status} />
+                    <Date date={item.date} status={item.notiStatus} />
                   </div>
                 </Notification>
               );

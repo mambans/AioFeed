@@ -33,6 +33,8 @@ import ShowStatsButtons from "./ShowStatsButtons";
 import ShowSetQualityButtons from "./ShowSetQualityButtons";
 import OpenCloseChat from "./OpenCloseChat";
 import API from "../API";
+import addSystemNotification from "../live/addSystemNotification";
+import NotificationsContext from "../../notifications/NotificationsContext";
 
 export default () => {
   const { p_uptime, p_viewers, p_title, p_game, p_channelInfos } = useLocation().state || {};
@@ -42,6 +44,8 @@ export default () => {
 
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const [switched, setSwitched] = useState(false);
+  const { addNotification } = useContext(NotificationsContext);
+
   const [channelInfo, setChannelInfo] = useState(p_channelInfos);
   const [uptime, setUptime] = useState(p_uptime);
   const [viewers, setViewers] = useState(p_viewers);
@@ -134,13 +138,31 @@ export default () => {
     }
   }, [videoId, channelName, p_title]);
 
+  const addNoti = useCallback(
+    ({ type }) => {
+      if (channelInfo && type === "Live") {
+        addSystemNotification({
+          status: "online",
+          stream: channelInfo,
+        });
+
+        addNotification([{ ...channelInfo, notiStatus: type }]);
+      }
+    },
+    [channelInfo, addNotification]
+  );
+
   const OnlineEvents = useCallback(() => {
     console.log("Stream is Online");
     document.title = `AF | ${channelName} Live`;
     twitchPlayer.current.showPlayerControls(false);
 
+    addNoti({ type: "Live" });
+
     setTimeout(() => {
-      if (!channelInfo) fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
+      if (!channelInfo) {
+        fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
+      }
       if (!uptime) fetchUptime(twitchPlayer, setUptime, uptimeTimer);
       setViewers(twitchPlayer.current.getViewers());
     }, 5000);
@@ -156,7 +178,7 @@ export default () => {
         fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
       }, 1000 * 60 * 5);
     }
-  }, [channelInfo, uptime, channelName]);
+  }, [channelInfo, uptime, channelName, addNoti]);
 
   const offlineEvents = useCallback(() => {
     console.log("Stream is Offline");

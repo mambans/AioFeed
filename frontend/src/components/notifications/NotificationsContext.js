@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import uniqid from "uniqid";
 import useSyncedLocalState from "./../../hooks/useSyncedLocalState";
 import { getLocalstorage } from "../../util/Utils";
 
@@ -13,21 +12,23 @@ export const NotificationsProvider = ({ children }) => {
   );
 
   const addNotification = useCallback(
-    (noti) => {
+    (notis) => {
       new Promise(async (resolve, reject) => {
         try {
           // const oldUnseenNotifications = [...unseenNotifications];
           const oldUnseenNotifications = [...getLocalstorage("Unseen-notifications")];
-          const toAddUnseenUsernames = noti.map((stream) => {
+          const existingNotifications = getLocalstorage("notifications")
+            ? [...getLocalstorage("notifications")]
+            : [];
+          const toAddUnseenUsernames = notis.map((stream) => {
             return stream.user_name;
           });
           const newUnseenNotifications = [...oldUnseenNotifications, ...toAddUnseenUsernames];
 
           // const existingNotifications = [...notifications];
-          const existingNotifications = [...getLocalstorage("notifications")];
-          const newNotificationsWithAddedProps = await noti.map((n) => {
+          const newNotificationsWithAddedProps = await notis.map((n) => {
             n.date = new Date();
-            n.key = uniqid(n.id, Date.now()) + n.status;
+            n.key = (n.id || n._id) + Date.now() + n.notiStatus;
             return n;
           });
 

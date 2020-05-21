@@ -22,7 +22,7 @@ export default async ({
     });
 
     res.map((stream) => {
-      stream.status = "Offline";
+      stream.notiStatus = "Offline";
       if (
         isEnabledOfflineNotifications &&
         getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
