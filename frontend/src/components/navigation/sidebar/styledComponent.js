@@ -491,7 +491,7 @@ export const ProfileImgContainer = styled.div`
 `;
 
 export const StyledToggleButton = styled(Button)`
-  opacity: ${({ enabled }) => (enabled === "true" ? 1 : 0.25)};
+  opacity: ${({ enabled }) => (enabled === "true" ? 1 : 0.35)};
   margin: 10px;
   border: none !important;
   box-shadow: none !important;
@@ -504,6 +504,10 @@ export const StyledToggleButton = styled(Button)`
   align-self: center;
   display: flex;
   justify-content: center;
+
+  &[disabled] {
+    opacity: 0.15;
+  }
 
   &:focus {
     background: #434950;
