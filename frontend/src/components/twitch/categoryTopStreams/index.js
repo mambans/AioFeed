@@ -7,7 +7,7 @@ import { MdRefresh } from "react-icons/md";
 import { Spinner } from "react-bootstrap";
 import { useParams, useLocation } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback, useRef, useContext } from "react";
 
 import { RefreshButton, HeaderTitle } from "./../../sharedStyledComponents";
 import { StyledLoadmore } from "./../StyledComponents";
@@ -30,6 +30,8 @@ import ClipElement from "./../channelPage/ClipElement";
 import VodElement from "./../vods/VodElement";
 import Util from "./../../../util/Util";
 import validateToken from "../validateToken";
+import { getCookie } from "../../../util/Utils";
+import AccountContext from "../../account/AccountContext";
 
 export default () => {
   const { category } = useParams();
@@ -42,6 +44,8 @@ export default () => {
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState("Views");
   const [sortByTime, setSortByTime] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const { twitchToken } = useContext(AccountContext);
 
   const oldTopData = useRef();
   const loadmoreRef = useRef();
@@ -176,8 +180,24 @@ export default () => {
     });
   }, [fetchVideos]);
 
-  return (
-    <CSSTransition in={true} timeout={750} classNames='fade-750ms' appear>
+  return !getCookie("Twitch-access_token") ? (
+    error && (
+      <Alert
+        variant='warning'
+        style={{ textAlign: "center", width: "25%", margin: "auto", marginTop: "50px" }}
+        dismissible
+        onClose={() => setError(null)}>
+        <Alert.Heading>Need to connect to Twitch</Alert.Heading>
+        <hr />
+        <p>No Twitch access token found.</p>
+      </Alert>
+    )
+  ) : (
+    <CSSTransition
+      in={getCookie("Twitch-access_token")}
+      timeout={750}
+      classNames='fade-750ms'
+      appear>
       <>
         <HeaderContainer>
           <div
