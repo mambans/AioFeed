@@ -181,7 +181,7 @@ export const ChannelContainer = styled.div`
 
 export const GameContainer = styled.div`
   display: grid;
-  grid-template-columns: 10% 50% 40%;
+  grid-template-columns: 10% auto;
   width: 336px;
   align-items: center;
   min-height: 34px;
@@ -208,6 +208,7 @@ export const GameContainer = styled.div`
     text-overflow: ellipsis;
     transition: color 250ms;
     color: var(--textColor2);
+    /* width: max-content; */
   }
 
   .viewers {
