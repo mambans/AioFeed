@@ -26,6 +26,7 @@ export const ThemeProvider = ({ children }) => {
       endDate: 0,
     },
     { name: "original", type: "dark", startMonth: 0, startDate: 0, endMonth: 0, endDate: 0 },
+    { name: "neon", type: "dark", startMonth: 0, startDate: 0, endMonth: 0, endDate: 0 },
     { name: "stone", type: "dark", startMonth: 0, startDate: 0, endMonth: 0, endDate: 0 },
     { name: "light", type: "light", startMonth: 0, startDate: 0, endMonth: 0, endDate: 0 },
     { name: "simple dark", type: "dark", startMonth: 0, startDate: 0, endMonth: 0, endDate: 0 },
