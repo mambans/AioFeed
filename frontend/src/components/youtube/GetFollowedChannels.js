@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getCookie } from "../../util/Utils";
+import { getCookie, getLocalstorage } from "../../util/Utils";
 
 const fetchNextPgeOfSubscriptions = async (previousPage, totalResults, prevpPageItems) => {
   const nextPage = await axios
@@ -65,15 +65,17 @@ async function getFollowedChannels() {
       return allSubscriptions;
     } catch (error) {
       console.log("Youtube: Followed-channels cache used.");
-      return JSON.parse(localStorage.getItem("YT-followedChannels")).data;
+      if (getLocalstorage("YT-followedChannels")) {
+        return getLocalstorage("YT-followedChannels").data;
+      }
+      return [];
     }
   } catch (error) {
     console.error(error.message);
-    if (localStorage.getItem("YT-followedChannels")) {
-      return JSON.parse(localStorage.getItem("YT-followedChannels")).data;
-    } else {
-      return error;
+    if (getLocalstorage("YT-followedChannels")) {
+      return getLocalstorage("YT-followedChannels").data;
     }
+    return error;
   }
 }
 

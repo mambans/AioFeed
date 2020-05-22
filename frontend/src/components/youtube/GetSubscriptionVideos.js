@@ -104,7 +104,7 @@ export default async (followedChannels) => {
   let error = null;
 
   try {
-    const videosCACHE = getLocalstorage("YoutubeChannelsObj") || [];
+    const videosCACHE = getLocalstorage("YT-ChannelsObj") || [];
 
     const channelWithVideos = await Promise.all(
       followedChannels.map(async (channel) => {
@@ -116,7 +116,7 @@ export default async (followedChannels) => {
         });
       })
     );
-    localStorage.setItem("YoutubeChannelsObj", JSON.stringify(channelWithVideos));
+    localStorage.setItem("YT-ChannelsObj", JSON.stringify(channelWithVideos));
 
     const videoOnlyArray = await Promise.all(
       channelWithVideos.map((channel) => (Array.isArray(channel.items) ? channel.items : null))

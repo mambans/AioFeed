@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 import axios from "axios";
-import { getCookie } from "./../../../util/Utils";
+import { getCookie, getLocalstorage } from "./../../../util/Utils";
 
 /* eslint-enable no-unused-vars */
 
 export default async ({ subscriptionId, channelId, setChannels, videos, setVideos }) => {
-  const followedChannels = JSON.parse(localStorage.getItem(`YT-followedChannels`)) || [];
+  const followedChannels = getLocalstorage(`YT-followedChannels`) || [];
   const newFollowedChannels = followedChannels.data.filter(function (channel) {
     return channel.id !== subscriptionId;
   });

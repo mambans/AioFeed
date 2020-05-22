@@ -10,10 +10,11 @@ import {
 } from "./../../twitch/categoryTopStreams/styledComponents";
 import StyledLoadingList from "./../../twitch/categoryTopStreams/LoadingList";
 import ChannelListElement from "./ChannelListElement";
+import { getLocalstorage } from "../../../util/Utils";
 
 export default (data) => {
   const [channels, setChannels] = useState(
-    JSON.parse(localStorage.getItem(`YT-followedChannels`)).data || []
+    getLocalstorage(`YT-followedChannels`) ? getLocalstorage(`YT-followedChannels`).data : []
   );
   const [listIsOpen, setListIsOpen] = useState();
   const inputRef = useRef();
