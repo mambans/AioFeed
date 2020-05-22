@@ -212,7 +212,7 @@ export const GameContainer = styled.div`
   }
 
   .viewers {
-    color: var(--textColor1);
+    color: var(--textColor2);
     position: relative;
     display: flex;
     justify-content: flex-end;

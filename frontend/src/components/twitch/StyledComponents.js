@@ -29,7 +29,8 @@ export const StyledLoadmore = styled.div`
     cursor: pointer;
     margin: 0;
     font-weight: bold;
-    color: #a4a4a4;
+    /* color: #a4a4a4; */
+    color: var(--textColor2);
     /* text-shadow: 0px 0px 5px black; */
     padding: 0px 15px;
     transition: all 200ms;

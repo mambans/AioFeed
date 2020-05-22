@@ -109,7 +109,7 @@ export default ({ ...data }) => {
           <Moment
             className='viewers'
             style={{
-              color: "var(--VideoContainerLinks)",
+              // color: "var(--VideoContainerLinks)",
               gridColumn: 3,
               justifySelf: "right",
             }}

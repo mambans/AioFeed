@@ -122,7 +122,8 @@ export const StyledsidebarItem = styled.div`
   }
 
   .sidebarViewers {
-    color: var(--textColor1);
+    color: var(--textColor2);
+    font-weight: bold;
     display: flex;
     justify-content: space-between;
     font-size: 1.05em;
