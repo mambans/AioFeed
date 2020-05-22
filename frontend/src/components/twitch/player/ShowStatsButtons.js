@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { ButtonShowStats, PlaybackStats } from "./StyledComponents";
 
 export default ({ TwitchPlayer }) => {
@@ -22,11 +22,38 @@ export default ({ TwitchPlayer }) => {
     }
   };
 
+  const ToggleShowStats = useCallback(() => {
+    if (!showPlaybackStats) {
+      document.querySelector("#controls").style.opacity = 1;
+      PlayersatsTimer.current = setInterval(() => {
+        setPlaybackStats(TwitchPlayer.getPlaybackStats());
+      }, 1500);
+    } else {
+      document.querySelector("#controls").style.removeProperty("opacity");
+      clearInterval(PlayersatsTimer.current);
+    }
+    setShowPlaybackStats(!showPlaybackStats);
+    setPlaybackStats(TwitchPlayer.getPlaybackStats());
+  }, [TwitchPlayer, showPlaybackStats]);
+
   useEffect(() => {
+    const keyboardEvents = (e) => {
+      switch (e.key) {
+        case "s":
+        case "S":
+          ToggleShowStats();
+          break;
+        default:
+          break;
+      }
+    };
+    document.body.addEventListener("keydown", keyboardEvents);
+
     return () => {
       clearInterval(PlayersatsTimer.current);
+      document.body.removeEventListener("keydown", keyboardEvents);
     };
-  }, []);
+  }, [ToggleShowStats]);
 
   return (
     <>
@@ -47,22 +74,7 @@ export default ({ TwitchPlayer }) => {
           })}
         </PlaybackStats>
       )}
-      <ButtonShowStats
-        title='Show video stats'
-        onClick={() => {
-          if (!showPlaybackStats) {
-            document.querySelector("#controls").style.opacity = 1;
-            PlayersatsTimer.current = setInterval(() => {
-              setPlaybackStats(TwitchPlayer.getPlaybackStats());
-            }, 1500);
-          } else {
-            document.querySelector("#controls").style.removeProperty("opacity");
-            clearInterval(PlayersatsTimer.current);
-          }
-          setShowPlaybackStats(!showPlaybackStats);
-          setPlaybackStats(TwitchPlayer.getPlaybackStats());
-        }}
-      />
+      <ButtonShowStats title='Show video stats (s)' onClick={ToggleShowStats} />
     </>
   );
 };

@@ -41,7 +41,7 @@ export default ({ TwitchPlayer, OpenedDate, volumeEventOverlayRef, setShowContro
       IconVolume = MdVolumeMute;
     }
 
-    return <IconVolume {...attrs} />;
+    return <IconVolume {...attrs} title={volumeMuted ? "Unmute (m)" : "Mute (m)"} />;
   };
 
   const handleChange = (value) => {

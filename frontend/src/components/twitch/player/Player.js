@@ -21,20 +21,18 @@ import {
   ToggleSwitchChatSide,
   VideoAndChatContainer,
   VolumeEventOverlay,
-  CreateClipButton,
   ShowNavbarBtn,
 } from "./StyledComponents";
 import PlayerNavbar from "./PlayerNavbar";
 import setFavion from "../../setFavion";
 import { formatViewerNumbers } from "./../TwitchUtils";
-import validateToken from "../validateToken";
 import PlayPauseButton from "./PlayPauseButton";
 import ShowStatsButtons from "./ShowStatsButtons";
 import ShowSetQualityButtons from "./ShowSetQualityButtons";
 import OpenCloseChat from "./OpenCloseChat";
-import API from "../API";
 import addSystemNotification from "../live/addSystemNotification";
 import NotificationsContext from "../../notifications/NotificationsContext";
+import ClipButton from "./ClipButton";
 
 export default () => {
   const { p_uptime, p_viewers, p_title, p_game, p_channelInfos } = useLocation().state || {};
@@ -255,23 +253,6 @@ export default () => {
     }
   }, [handleMouseOut]);
 
-  const CreateAndOpenClip = async () => {
-    const Width = window.screen.width * 0.6;
-    const Height = 920;
-    const LeftPosition = (window.screen.width - Width) / 2;
-    const TopPosition = (window.screen.height - Height) / 2;
-    const settings = `height=${Height},width=${Width},top=${TopPosition},left=${LeftPosition},scrollbars,resizable,status,location,toolbar,`;
-    await validateToken().then(async () => {
-      await API.postClip({ params: { broadcaster_id: channelInfo._id } })
-        .then((res) => {
-          window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
-        })
-        .catch((er) => {
-          console.error("CreateAndOpenClip -> er", er);
-        });
-    });
-  };
-
   return (
     <>
       <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
@@ -369,9 +350,7 @@ export default () => {
                 <ShowStatsButtons TwitchPlayer={twitchPlayer.current} />
                 <ShowSetQualityButtons TwitchPlayer={twitchPlayer.current} />
 
-                {channelInfo && (
-                  <CreateClipButton title='Create clip' onClick={CreateAndOpenClip} />
-                )}
+                {channelInfo && <ClipButton channelInfo={channelInfo} />}
 
                 {true ? (
                   <MdFullscreen

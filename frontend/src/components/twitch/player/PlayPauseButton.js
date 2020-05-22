@@ -64,8 +64,8 @@ export default ({ TwitchPlayer, volumeEventOverlayRef }) => {
   }, [TwitchPlayer, volumeEventOverlayRef]);
 
   if (isPaused) {
-    return <FaPlay id='PausePlay' size={30} onClick={PausePlay} />;
+    return <FaPlay id='PausePlay' size={30} onClick={PausePlay} title={"Play (space)"} />;
   } else {
-    return <FaPause id='PausePlay' size={30} onClick={PausePlay} />;
+    return <FaPause id='PausePlay' size={30} onClick={PausePlay} title={"Pause (space)"} />;
   }
 };
