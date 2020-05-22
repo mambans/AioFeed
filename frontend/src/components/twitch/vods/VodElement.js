@@ -58,7 +58,7 @@ export default ({ data, vodBtnDisabled }) => {
               });
           });
         },
-        previewAvailable.error ? 5000 : 1500
+        previewAvailable.error ? 5000 : 1000
       );
     } else {
       hoverTimeoutRef.current = setTimeout(() => {
