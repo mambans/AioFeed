@@ -4,6 +4,7 @@ html[data-theme="wood"] {
   --backgroundColor: hsl(21, 93%, 5%);
   --backgroundImgSize: cover;
   --backgroundImgRepeat: no-repeat;
+  --sidebarsBackgroundColor: rgba(5, 10, 15, 0.5);
 
   --textColor1: rgb(245, 245, 245);
   --textColor1Hover: #ffffff;
@@ -35,13 +36,15 @@ html[data-theme="wood"] {
 
 html[data-theme="christmas"] {
   --backgroundImg: url("/images/wood-christmas-blured.webp");
-  --backgroundColor: rgb(58, 7, 7);
+  --backgroundColor: rgb(230, 230, 230);
   --textColor2: rgb(160, 160, 160);
   --textColor2Hover: rgb(255, 255, 255);
   --greyInfo: rgb(255, 255, 255);
   --navTextColor: rgba(255, 255, 255, 0.5);
 
   --navigationbarBackground: rgba(0, 0, 0, 0.75);
+  --sidebarsBackgroundColor: rgba(5, 10, 15, 0.75);
+
   --popupListsBackground: linear-gradient(rgba(0, 0, 0, 0.4) 0%, #000000d8 15%);
   --refreshButtonBackground: #0000007a;
   --refreshButtonBorder: none;
@@ -80,7 +83,8 @@ html[data-theme="simple dark"] {
   --backgroundColor: #101010;
   --scrollbarColors: #1c1f22 rgb(5, 8, 10);
 
-  --navigationbarBackground: #2e2e2e45;
+  // --navigationbarBackground: #2e2e2e45;
+  --navigationbarBackground: rgba(24, 24, 24, 0.94);
   --navTextColor: rgba(255, 255, 255 0.7);
   --videoBoxShadow: rgba(63, 63, 63, 0.1) 4px 4px 8px;
   --twitterBackground: #3d3d3d44;
@@ -96,6 +100,7 @@ html[data-theme="light"] {
   --textColor1Hover: rgb(24, 24, 24);
   --textColor2: rgb(32, 32, 32);
   --textColor2Hover: #464646;
+  --sidebarsBackgroundColor: hsla(0, 0%, 100%, 0.88);
 
   --videoContainerBackgroundColor: rgba(0, 0, 0, 0);
 
@@ -128,6 +133,7 @@ html[data-theme="neon"] {
   --textColor1Hover: #ffffff;
   --textColor2: #9ca2b7;
   --textColor2Hover: rgb(220, 227, 255);
+  --sidebarsBackgroundColor: rgba(8, 13, 17, 0.3);
 
   --videoBoxShadow: rgba(5, 5, 5, 0.1) 4px 4px 8px;
 

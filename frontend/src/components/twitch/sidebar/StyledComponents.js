@@ -38,7 +38,7 @@ export const SidebarTitlePopup = styled.div`
 
 export const Styledsidebar = styled.div`
   width: 275px !important;
-  background: var(--navigationbarBackground);
+  background: var(--sidebarsBackgroundColor);
   top: 92px;
   position: fixed;
   border-radius: 10px 10px 0 0;
