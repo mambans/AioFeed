@@ -38,6 +38,7 @@ Notes
 **/.psd
 **/IMPORTANT
 *-copy*
+*.psd
 
 .gitignore
 
