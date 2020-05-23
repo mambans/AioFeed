@@ -16,6 +16,7 @@ export const ThemeProvider = ({ children }) => {
 
   const themesArray = [
     { name: "default", type: "dark", startMonth: 0, startDate: 0, endMonth: 0, endDate: 0 },
+    { name: "neon", type: "dark", startMonth: 0, startDate: 0, endMonth: 0, endDate: 0 },
     {
       name: "clean",
       type: "dark",
@@ -25,7 +26,6 @@ export const ThemeProvider = ({ children }) => {
       endMonth: 0,
       endDate: 0,
     },
-    { name: "neon", type: "dark", startMonth: 0, startDate: 0, endMonth: 0, endDate: 0 },
     { name: "wood", type: "dark", startMonth: 0, startDate: 0, endMonth: 0, endDate: 0 },
     { name: "stone", type: "dark", startMonth: 0, startDate: 0, endMonth: 0, endDate: 0 },
     { name: "light", type: "light", startMonth: 0, startDate: 0, endMonth: 0, endDate: 0 },

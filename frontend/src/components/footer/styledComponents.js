@@ -5,7 +5,6 @@ export const StyledFooterContainer = styled.div`
   background-color: var(--footerBackground);
   padding: 15px;
   text-align: center;
-  box-shadow: var(--footerShadow);
   margin-top: 100px;
   border-top: 2px solid #53463f;
   max-height: 200px;
