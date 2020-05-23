@@ -1,6 +1,7 @@
 html,
-html[data-theme="original"] {
+html[data-theme="wood"] {
   --backgroundImg: url("/images/woodCoffe-blur4.0.webp");
+  --backgroundColor: hsl(21, 93%, 5%);
   --backgroundImgSize: cover;
   --backgroundImgRepeat: no-repeat;
 
@@ -35,6 +36,7 @@ html[data-theme="original"] {
 
 html[data-theme="christmas"] {
   --backgroundImg: url("/images/wood-christmas-blured.webp");
+  --backgroundColor: rgb(58, 7, 7);
   --textColor2: rgb(160, 160, 160);
   --textColor2Hover: rgb(255, 255, 255);
   --footerShadow: 0 0 20px 0 #141414;
@@ -55,6 +57,7 @@ html[data-theme="christmas"] {
 
 html[data-theme="new year's eve"] {
   --backgroundImg: url("/images/new years eve33.webp");
+  --backgroundColor: rgb(7, 38, 58);
   --footerShadow: 0 0 50px 0 #242424;
   --refreshButtonHoverBackground: #000000b2;
   --scrollbarColors: rgb(18, 36, 58) rgb(5, 8, 10);
@@ -62,18 +65,21 @@ html[data-theme="new year's eve"] {
 
 html[data-theme="clean"] {
   --backgroundImg: url("/images/clean.png");
+  --backgroundColor: rgb(37, 37, 37);
   --navigationbarBackground: #1c1f22;
   --scrollbarColors: #3d3d3d var(--navigationbarBackground);
 }
 
 html[data-theme="stone"] {
   --backgroundImg: url("/images/stone.webp");
+  --backgroundColor: rgb(15, 15, 15);
   --navigationbarBackground: #121415a8;
   --scrollbarColors: #1c1f22 rgb(5, 8, 10);
 }
 
 html[data-theme="simple dark"] {
   --backgroundImg: none;
+  --backgroundColor: rgb(8, 8, 8);
   --backgroundColor: #101010;
   --scrollbarColors: #1c1f22 rgb(5, 8, 10);
 
@@ -85,9 +91,9 @@ html[data-theme="simple dark"] {
 
 html[data-theme="light"] {
   --backgroundImg: none;
+  --backgroundColor: #f1f1f1;
   --backgroundImgSize: unset;
   --backgroundImgRepeat: unset;
-  --backgroundColor: #f1f1f1;
 
   --textColor1: rgb(10, 10, 10);
   --textColor1Hover: rgb(24, 24, 24);
@@ -119,7 +125,7 @@ html[data-theme="light"] {
 }
 
 html[data-theme="neon"] {
-  --backgroundImg: none;
+  --backgroundImg: url("/images/clean_neon.png");
   --backgroundColor: #1c1f28;
 
   --textColor1: rgb(245, 245, 245);
