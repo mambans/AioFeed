@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MdAccountCircle } from "react-icons/md";
 import { FaTwitch } from "react-icons/fa";
@@ -19,11 +19,10 @@ export default ({
   twitchPlayer,
   setVisible,
   visible,
-  setLatestVod,
-  latestVod,
   showUIControlls,
 }) => {
   const navigate = useNavigate();
+  const [latestVod, setLatestVod] = useState();
 
   useEffect(() => {
     (async () => {
@@ -36,7 +35,7 @@ export default ({
       ) {
         await API.getVideos({
           params: {
-            user_id: twitchPlayer.current && twitchPlayer.current.getChannelId(),
+            user_id: twitchPlayer.current.getChannelId(),
             first: 1,
             type: "archive",
           },
@@ -79,39 +78,48 @@ export default ({
           style={{ opacity: "1" }}
         />
       )}
-
-      {latestVod ? (
-        <>
-          <Button
-            variant='dark'
-            as={Link}
-            onClick={() => {
-              setVisible(false);
-            }}
-            style={{ marginRight: "10px" }}
-            className='linkWithIcon'
-            to={{
-              pathname: `/${latestVod.user_name}/videos/${latestVod.id}`,
-              state: {
-                p_title: latestVod.title,
-                p_channel: latestVod.user_name,
-              },
-            }}>
-            <MdVideocam size={26} />
-            Latest Vod
-          </Button>
-          <a
-            className='linkWithIcon'
-            href={latestVod.url}
-            alt=''
-            title='Open vod on Twitch'
-            style={{ margin: "0" }}>
-            <FaTwitch size={26} />
-          </a>
-        </>
-      ) : (
-        <div style={{ width: "174.75px" }}></div>
-      )}
+      <Button
+        disabled={!latestVod}
+        variant='dark'
+        as={Link}
+        onClick={() => {
+          setVisible(false);
+        }}
+        to={
+          latestVod
+            ? {
+                pathname: `/${latestVod.user_name}/videos/${latestVod.id}`,
+                state: {
+                  p_title: latestVod.title,
+                  p_channel: latestVod.user_name,
+                },
+              }
+            : {
+                pathname: `https://twitch.tv/${
+                  channelInfo ? channelInfo.display_name : channelName
+                }/videos`,
+              }
+        }
+        style={{
+          marginRight: "10px",
+        }}
+        className='linkWithIcon'>
+        <MdVideocam size={26} />
+        Latest Vod
+      </Button>
+      <a
+        disabled={!latestVod}
+        className='linkWithIcon'
+        href={
+          latestVod
+            ? latestVod.url
+            : `https://twitch.tv/${channelInfo ? channelInfo.display_name : channelName}/videos`
+        }
+        alt=''
+        title='Open vod on Twitch'
+        style={{ margin: "0" }}>
+        <FaTwitch size={26} />
+      </a>
     </PlayerNavbar>
   );
 };

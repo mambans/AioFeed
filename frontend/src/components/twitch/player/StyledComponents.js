@@ -84,7 +84,7 @@ export const PlayerNavbar = styled.div`
 
   button,
   a.btn {
-    margin: 2px 25px;
+    margin: 2px 20px;
     transition: background-color 200ms, border-color 200ms, color 200ms, box-shadow 200ms;
     padding: 0px 6px;
 
@@ -93,7 +93,7 @@ export const PlayerNavbar = styled.div`
     box-shadow: 3px 3px 2px #161515d4;
     color: var(--navTextColor);
 
-    &:hover {
+    &:hover:not([disabled]) {
       box-shadow: 4px 4px 2px #161515ed;
       color: #fff;
       background-color: #23272b;
@@ -124,7 +124,7 @@ export const PlayerNavbar = styled.div`
     }
   }
 
-  .linkWithIcon {
+  .linkWithIcon:not([disabled]) {
     svg {
       color: #720072;
     }
@@ -132,6 +132,11 @@ export const PlayerNavbar = styled.div`
     &:hover svg {
       color: #ae02ae;
     }
+  }
+
+  .linkWithIcon[disabled] {
+    opacity: 0.3;
+    pointer-events: none;
   }
 `;
 

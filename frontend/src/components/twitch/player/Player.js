@@ -49,7 +49,6 @@ export default () => {
   const [viewers, setViewers] = useState(p_viewers);
   const [hideChat, setHideChat] = useState(false);
   const [showControlls, setShowControlls] = useState();
-  const [latestVod, setLatestVod] = useState();
   const [showUIControlls, setShowUIControlls] = useState();
 
   const volumeEventOverlayRef = useRef();
@@ -265,8 +264,6 @@ export default () => {
           twitchPlayer={twitchPlayer}
           setVisible={setVisible}
           visible={visible}
-          setLatestVod={setLatestVod}
-          latestVod={latestVod}
           showUIControlls={showUIControlls}
         />
       </CSSTransition>
