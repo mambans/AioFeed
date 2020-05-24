@@ -10,8 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.2",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^3.0.8",
     "crypto-js": "^4.0.0",
-    "uuid": "^8.0.0"
+    "uuid": "^8.1.0"
   }
 }
