@@ -406,7 +406,7 @@ export default () => {
               />
             )}
           </div>
-          {!hideChat && (
+          {!hideChat ? (
             <div id='chat'>
               <ShowNavbarBtn
                 variant='dark'
@@ -432,6 +432,23 @@ export default () => {
                 src={`https://www.twitch.tv/embed/${channelName}/chat?darkpopout`}
               />
             </div>
+          ) : (
+            <ShowNavbarBtn
+              variant='dark'
+              type='video'
+              onClick={() => {
+                setVisible(!visible);
+              }}>
+              <MdVerticalAlignBottom
+                style={{
+                  transform: visible ? "rotateX(180deg)" : "unset",
+                  right: "10px",
+                }}
+                size={30}
+                title='Show navbar'
+              />
+              Nav
+            </ShowNavbarBtn>
           )}
         </VideoAndChatContainer>
       ) : videoId ? (
