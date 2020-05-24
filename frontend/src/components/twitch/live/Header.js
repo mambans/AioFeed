@@ -39,7 +39,7 @@ export default ({ data, refresh }) => {
       </HeaderLeftSubcontainer>
       <HeaderTitle>
         <FaTwitch size={32} style={{ color: "#6f166f" }} />
-        Twitch Live
+        Twitch <span id='live-indicator'>Live</span>
       </HeaderTitle>
       <ChannelSearchList />
     </HeaderContainerTwitchLive>

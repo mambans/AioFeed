@@ -62,6 +62,14 @@ export const HeaderTitle = styled.h4`
   svg {
     margin: 0 10px;
   }
+
+  span#live-indicator {
+    background: rgb(218, 40, 48);
+    font-weight: bold;
+    border-radius: 5px;
+    font-size: 0.9em;
+    padding: 0px 3px;
+  }
 `;
 
 export const HeaderContainer = styled.div`
