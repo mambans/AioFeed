@@ -21,7 +21,7 @@ export default async (themesArray) => {
     document.documentElement.classList.add("theme-transition");
     document.documentElement.setAttribute(
       "data-theme",
-      startTheme ? startTheme.name : defaultTheme.name || "original"
+      startTheme ? startTheme.name : defaultTheme.name || "default"
     );
     window.setTimeout(function () {
       document.documentElement.classList.remove("theme-transition");

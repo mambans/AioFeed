@@ -1,4 +1,5 @@
 html,
+html[data-theme="default"],
 html[data-theme="wood"] {
   --backgroundImg: url("/images/woodCoffe-blur4.0.webp");
   --backgroundColor: hsl(21, 93%, 5%);

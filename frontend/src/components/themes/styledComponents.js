@@ -69,6 +69,7 @@ export const ThemeSelectorUl = styled.ul`
   margin: auto;
   border-radius: 0 0 10px 10px;
   position: relative;
+  font-weight: bold;
 
   li {
     padding: 5px 0 5px 10px;

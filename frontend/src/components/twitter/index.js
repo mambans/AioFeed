@@ -18,7 +18,7 @@ export default () => {
       timeout={750}
       classNames='twitter-slide'
       unmountOnExit
-      key={twitterListName + activeTheme.name}
+      key={twitterListName + activeTheme.type}
       appear={true}>
       {/* <Container width={width ? `${width}px` : "15vw"} key={twitterListName}> */}
       <Container key={twitterListName}>
