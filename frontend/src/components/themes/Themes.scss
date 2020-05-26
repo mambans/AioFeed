@@ -15,6 +15,7 @@ html[data-theme="wood"] {
   --videoContainerBackgroundColor: rgba(0, 0, 0, 0.03);
 
   --navTextColor: rgba(255, 255, 255, 0.5);
+  --navTextColorActive: rgba(255, 255, 255, 1);
   --navigationbarBackground: #050a0fc7;
   --newHighlightColor: #ffffff;
 
@@ -67,7 +68,7 @@ html[data-theme="new year's eve"] {
 html[data-theme="clean"] {
   --backgroundImg: url("/images/clean.png");
   --backgroundColor: rgb(37, 37, 37);
-  --navigationbarBackground: #1c1f22;
+  --navigationbarBackground: #1c1f22f0;
   --scrollbarColors: #3d3d3d var(--navigationbarBackground);
 }
 
@@ -130,7 +131,7 @@ html[data-theme="neon"] {
   --backgroundImg: url("/images/clean_neon.png");
   --backgroundColor: #1c1f28;
 
-  --textColor1: rgb(245, 245, 245);
+  --textColor1: #b2b7cc;
   --textColor1Hover: #ffffff;
   --textColor2: #9ca2b7;
   --textColor2Hover: rgb(220, 227, 255);

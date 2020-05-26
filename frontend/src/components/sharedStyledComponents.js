@@ -250,6 +250,7 @@ export const VideoTitle = styled(Link)`
   height: 45px;
   line-height: 1.2;
   padding: 0;
+  transition: color 200ms;
   /* mix-blend-mode: screen; */
 
   &:hover {
@@ -269,6 +270,7 @@ export const VideoTitleHref = styled.a`
   height: 45px;
   line-height: 1.2;
   padding: 0;
+  transition: color 200ms;
   /* mix-blend-mode: screen; */
 
   &:hover {
