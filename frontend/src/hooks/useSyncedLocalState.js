@@ -10,9 +10,9 @@ export default (key, defaultValue) => {
   const [value, setValue] = useState(() => {
     const storedValue = localStorage.getItem(key);
     try {
-      return storedValue === null ? defaultValue : JSON.parse(storedValue);
+      return storedValue ? JSON.parse(storedValue) : defaultValue;
     } catch (error) {
-      return storedValue === null ? defaultValue : storedValue;
+      return storedValue || defaultValue;
     }
   });
 
