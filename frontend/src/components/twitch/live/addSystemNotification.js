@@ -37,7 +37,6 @@ export default async ({ status, stream, body, newlyAddedStreams, setUnseenNotifi
         : `https://aiofeed.com/${
             stream.user_name.toLowerCase() || stream.display_name.toLowerCase()
           }`;
-    console.log("url", url);
     let notification = new Notification(`${stream.user_name || stream.display_name} ${status}`, {
       icon:
         stream.profile_img_url ||

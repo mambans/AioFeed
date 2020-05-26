@@ -139,7 +139,7 @@ export default () => {
     ({ type }) => {
       if (channelInfo && type === "Live") {
         addSystemNotification({
-          status: "online",
+          status: "Live",
           stream: channelInfo,
         });
 
