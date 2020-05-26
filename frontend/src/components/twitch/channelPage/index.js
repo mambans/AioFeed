@@ -212,7 +212,11 @@ export default () => {
         await validateToken().then(async () => {
           await getIdFromName();
         });
-      if (!channelInfo && channelId && channelId !== "Not Found") getChannelInfo();
+      if (!channelInfo && channelId && channelId !== "Not Found") {
+        await validateToken().then(async () => {
+          await getChannelInfo();
+        });
+      }
     })();
 
     return () => {
