@@ -42,13 +42,12 @@ export default async ({
 
         if (oldStreamData.game_name !== stream.game_name && oldStreamData.title !== stream.title) {
           addSystemNotification({
-            status: "updated",
+            status: "Title & Game updated",
             stream: stream,
-            changedObj: {
-              valueKey: "Title & Game",
-              newValue: `${truncate(stream.title, 40)} in ${stream.game_name}`,
-              oldValue: `${truncate(oldStreamData.title, 40)} in ${oldStreamData.game_name}`,
-            },
+            body: `+ ${truncate(stream.title, 40)} in ${stream.game_name}\n- ${truncate(
+              oldStreamData.title,
+              40
+            )} in ${oldStreamData.game_name}`,
             newlyAddedStreams: newlyAddedStreams,
             setUnseenNotifications: setUnseenNotifications,
           });
@@ -69,13 +68,9 @@ export default async ({
 
         if (oldStreamData.game_name !== stream.game_name && oldStreamData.title === stream.title) {
           addSystemNotification({
-            status: "updated",
+            status: "Game updated",
             stream: stream,
-            changedObj: {
-              valueKey: "Game",
-              newValue: stream.game_name,
-              oldValue: oldStreamData.game_name,
-            },
+            body: `+ ${truncate(stream.game_name, 40)}\n- ${truncate(oldStreamData.game_name, 40)}`,
             newlyAddedStreams: newlyAddedStreams,
             setUnseenNotifications: setUnseenNotifications,
           });
@@ -93,13 +88,9 @@ export default async ({
 
         if (oldStreamData.title !== stream.title && oldStreamData.game_name === stream.game_name) {
           addSystemNotification({
-            status: "updated",
+            status: "Title updated",
             stream: stream,
-            changedObj: {
-              valueKey: "Title",
-              newValue: stream.title,
-              oldValue: oldStreamData.title,
-            },
+            body: `+ ${truncate(stream.title, 40)}\n- ${truncate(oldStreamData.title, 40)}`,
             newlyAddedStreams: newlyAddedStreams,
             setUnseenNotifications: setUnseenNotifications,
           });

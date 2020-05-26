@@ -19,6 +19,7 @@ export const VideoAndChatContainer = styled.div`
       : switchedChatState === "hide"
       ? "video"
       : '"video chat"'};
+  color: var(--navTextColorActive);
 
   &:hover #switchSides {
     opacity: 0.6;

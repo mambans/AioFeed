@@ -31,8 +31,9 @@ export default async ({
       stream.newlyAdded = true;
       stream.notiStatus = "Live";
       addSystemNotification({
-        status: "online",
+        status: "Live",
         stream: stream,
+        body: `${stream.title || stream.status}\n${stream.game_name || stream.game}`,
         newlyAddedStreams: newlyAddedStreams,
         setUnseenNotifications: setUnseenNotifications,
       });

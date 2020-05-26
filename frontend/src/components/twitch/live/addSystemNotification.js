@@ -1,6 +1,3 @@
-import { truncate } from "../../../util/Utils";
-import API from "../API";
-
 const markStreamAsSeen = async (streamName, newlyAddedStreams, setUnseenNotifications) => {
   new Promise(async (resolve, reject) => {
     if (setUnseenNotifications) {
@@ -30,113 +27,39 @@ const markStreamAsSeen = async (streamName, newlyAddedStreams, setUnseenNotifica
   });
 };
 
-export default async ({
-  status,
-  stream,
-  changedObj,
-  newlyAddedStreams,
-  setUnseenNotifications,
-}) => {
+export default async ({ status, stream, body, newlyAddedStreams, setUnseenNotifications }) => {
   if (Notification.permission === "granted") {
-    if (status === "offline") {
-      let notification = new Notification(`${stream.user_name || stream.display_name} Offline`, {
-        body: "",
+    const url =
+      status === "Offline"
+        ? `https://aiofeed.com/${
+            stream.user_name.toLowerCase() || stream.display_name.toLowerCase()
+          }/channel`
+        : `https://aiofeed.com/${
+            stream.user_name.toLowerCase() || stream.display_name.toLowerCase()
+          }`;
+    console.log("url", url);
+    let notification = new Notification(`${stream.user_name || stream.display_name} ${status}`, {
+      icon:
+        stream.profile_img_url ||
+        stream.logo ||
+        `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+      badge:
+        stream.profile_img_url ||
+        stream.logo ||
+        `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+      body,
+    });
 
-        icon:
-          stream.profile_img_url ||
-          stream.logo ||
-          `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-        badge:
-          stream.profile_img_url ||
-          stream.logo ||
-          `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-        silent: true,
-      });
-
-      const vodId = await API.getVideos({
-        params: {
-          user_id: stream.user_id,
-          first: 1,
-          type: "archive",
-        },
-      })
-        .then((res) => {
-          return res.data.data[0];
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-      notification.onclick = async function (event) {
-        event.preventDefault(); // prevent the browser from focusing the Notification's tab
-        await markStreamAsSeen(
-          stream.user_name || stream.display_name,
-          newlyAddedStreams,
-          setUnseenNotifications
-        );
-
-        window.open("https://www.twitch.tv/videos/" + vodId.id, "_blank");
-      };
-      return notification;
-    } else if (status === "online") {
-      let notification = new Notification(`${stream.user_name || stream.display_name} Live`, {
-        body: `${truncate(stream.title || stream.status, 60)}\n${stream.game_name || stream.game}`,
-        icon:
-          stream.profile_img_url ||
-          stream.logo ||
-          `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-        badge:
-          stream.profile_img_url ||
-          stream.logo ||
-          `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-        silent: false,
-      });
-
-      notification.onclick = async function (event) {
-        event.preventDefault(); // prevent the browser from focusing the Notification's tab
-        await markStreamAsSeen(
-          stream.user_name || stream.display_name,
-          newlyAddedStreams,
-          setUnseenNotifications
-        );
-        window.open(
-          "https://aiofeed.com/" + stream.user_name.toLowerCase() ||
-            stream.display_name.toLowerCase(),
-          "_blank"
-        );
-      };
-
-      return notification;
-    } else if (status === "updated") {
-      let notification = new Notification(
-        `${stream.user_name || stream.display_name} ${changedObj.valueKey} updated`,
-        {
-          body: `+ ${truncate(changedObj.newValue, 60)}\n- ${truncate(changedObj.oldValue, 60)}`,
-          icon:
-            stream.profile_img_url ||
-            stream.logo ||
-            `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-          badge:
-            stream.profile_img_url ||
-            stream.logo ||
-            `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-          silent: false,
-        }
+    notification.onclick = async function (event) {
+      event.preventDefault(); // prevent the browser from focusing the Notification's tab
+      await markStreamAsSeen(
+        stream.user_name || stream.display_name,
+        newlyAddedStreams,
+        setUnseenNotifications
       );
+      window.open(url, "_blank");
+    };
 
-      notification.onclick = async function (event) {
-        event.preventDefault(); // prevent the browser from focusing the Notification's tab
-        await markStreamAsSeen(
-          stream.user_name || stream.display_name,
-          newlyAddedStreams,
-          setUnseenNotifications
-        );
-        window.open(
-          "https://aiofeed.com/" + stream.user_name || stream.display_name.toLowerCase(),
-          "_blank"
-        );
-      };
-
-      return notification;
-    }
+    return notification;
   }
 };

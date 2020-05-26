@@ -28,10 +28,11 @@ export default async ({
         getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
       )
         addSystemNotification({
-          status: "offline",
+          status: "Offline",
           stream: stream,
           newlyAddedStreams: newlyAddedStreams,
           setUnseenNotifications: setUnseenNotifications,
+          body: "",
         });
 
       if (
