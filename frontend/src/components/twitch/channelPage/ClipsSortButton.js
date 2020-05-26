@@ -18,7 +18,7 @@ export default ({ sortBy, setSortBy, setData, resetOldData }) => {
   };
 
   return (
-    <div>
+    <div style={{ marginLeft: "0px" }}>
       <SortButton
         title={`Fetch clips from the last ${SortOptionsNames[sortBy || "null"]}`}
         onClick={() => {

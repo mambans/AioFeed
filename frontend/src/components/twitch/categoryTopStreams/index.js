@@ -94,6 +94,7 @@ export default () => {
 
   const fetchVideos = useCallback(
     (shouldLoadMore) => {
+      setError(null);
       if (shouldLoadMore) setLoadmoreLoaded(false);
 
       switch (videoType) {
