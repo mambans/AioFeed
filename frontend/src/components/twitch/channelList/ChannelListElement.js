@@ -6,9 +6,9 @@ import VodsFollowUnfollowBtn from "../vods/VodsFollowUnfollowBtn";
 import { ChannelListLi } from "./StyledComponents";
 import AddUpdateNotificationsButton from "./../AddUpdateNotificationsButton";
 
-export default ({ data }) => {
+export default ({ data, selected }) => {
   return (
-    <ChannelListLi key={data.user_id}>
+    <ChannelListLi key={data.user_id} className={selected ? "selected" : ""} selected={selected}>
       <Link
         to={{
           pathname: `/${data.user_name.toLowerCase()}/channel/`,

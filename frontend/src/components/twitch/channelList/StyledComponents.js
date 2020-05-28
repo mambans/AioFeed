@@ -7,7 +7,8 @@ export const ChannelListLi = styled.li`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: var(--textColor2Hover);
+    color: ${({ selected }) => (selected ? "#ffffff" : "inherit")};
+    font-weight: ${({ selected }) => (selected ? "bold" : "unset")};
 
     img {
       width: 30px;
