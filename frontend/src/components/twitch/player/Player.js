@@ -173,7 +173,7 @@ export default () => {
     if (!channelinfoTimer.current) {
       channelinfoTimer.current = setInterval(() => {
         fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
-      }, 1000 * 60 * 5);
+      }, 1000 * 60 * 2.5);
     }
   }, [channelInfo, uptime, channelName, addNoti]);
 
@@ -191,7 +191,7 @@ export default () => {
       fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
       channelinfoTimer.current = setInterval(() => {
         fetchAndSetChannelInfo(twitchPlayer.current.getChannelId(), setChannelInfo);
-      }, 1000 * 60 * 15);
+      }, 1000 * 60 * 10);
     }
   }, [channelName, videoId]);
 
