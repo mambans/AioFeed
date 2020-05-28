@@ -31,7 +31,8 @@ export const StyledShowAllButton = styled.li`
 `;
 
 export const GameListUlContainer = styled.ul`
-  color: white;
+  transform: translate3d(0, 0, 0);
+  color: rgb(230, 230, 230);
   list-style: none;
   padding-left: 0.75rem;
   margin: 0;
@@ -57,11 +58,14 @@ export const GameListUlContainer = styled.ul`
     align-items: center;
     border-bottom: thin solid #1e1616;
     padding: 5px 0;
+    transform: translate3d(0, 0, 0);
+
     /* min-height: 43px; */
   }
 
   a {
-    color: rgb(230, 230, 230);
+    transform: translate3d(0, 0, 0);
+    transition: color 50ms, font-weight 50ms;
 
     &:hover {
       color: #ffffff;

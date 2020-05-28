@@ -80,7 +80,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
                   Date.now()
                 : `${process.env.PUBLIC_URL}/android-chrome-512x512.png`
             }
-            alt={"thumbnail"}></img>
+            alt=''></img>
         </div>
         <FirstRow>
           <div

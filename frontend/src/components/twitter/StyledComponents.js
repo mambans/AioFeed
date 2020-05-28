@@ -12,7 +12,7 @@ export const Container = styled.div`
   top: 90px;
   /* background: var(--twitterBackground); */
   background: var(--sidebarsBackgroundColor);
-  border-radius: 20px;
+  border-radius: 10px;
 
   @media screen and (max-width: 2560px) {
     width: 20vw;

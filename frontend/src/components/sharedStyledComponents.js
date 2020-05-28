@@ -64,7 +64,7 @@ export const HeaderTitle = styled.h4`
   }
 
   span#live-indicator {
-    background: rgb(218, 40, 48);
+    background: rgb(202, 35, 43);
     font-weight: bold;
     border-radius: 5px;
     font-size: 0.9em;
