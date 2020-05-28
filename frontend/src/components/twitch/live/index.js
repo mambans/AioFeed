@@ -29,8 +29,8 @@ export default ({ data }, centerContainerRef) => {
               </Alert>
             )
           ) : (
-            <>
-              <TransitionGroup component={Container}>
+            <Container>
+              <TransitionGroup component={null}>
                 {data.liveStreams.map((stream) => {
                   return (
                     <CSSTransition
@@ -68,7 +68,7 @@ export default ({ data }, centerContainerRef) => {
                   <Alert.Heading>No streams online at the momment</Alert.Heading>
                 </Alert>
               )}
-            </>
+            </Container>
           )}
         </>
       ) : (
