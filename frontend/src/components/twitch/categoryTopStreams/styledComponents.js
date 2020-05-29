@@ -20,6 +20,8 @@ export const StyledGameListElement = styled.li`
     overflow: hidden;
     text-overflow: ellipsis;
     width: 262px;
+    color: ${({ selected }) => (selected ? "#ffffff" : "inherit")};
+    font-weight: ${({ selected }) => (selected ? "bold" : "unset")};
   }
 `;
 
@@ -66,6 +68,7 @@ export const GameListUlContainer = styled.ul`
   a {
     transform: translate3d(0, 0, 0);
     transition: color 50ms, font-weight 50ms;
+    color: inherit;
 
     &:hover {
       color: #ffffff;

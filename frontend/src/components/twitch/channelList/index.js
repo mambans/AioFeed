@@ -59,10 +59,10 @@ const sortInputFirst = (input, data) => {
 };
 
 export default () => {
-  const [channels, setChannels] = useState();
   const [filteredChannels, setFilteredChannels] = useState();
   const [listIsOpen, setListIsOpen] = useState();
   const [cursor, setCursor] = useState(0);
+  const channels = useRef();
   const inputRef = useRef();
   const ulListRef = useRef();
 
@@ -80,7 +80,7 @@ export default () => {
             setCursor(0);
             setValue(event.target.value);
             if (listIsOpen && event.target.value && event.target.value !== "") {
-              const filtered = channels.filter((channel) => {
+              const filtered = channels.current.filter((channel) => {
                 return channel.user_name
                   .toLowerCase()
                   .includes((event.target.value || value).toLowerCase());
@@ -92,7 +92,7 @@ export default () => {
                 setFilteredChannels(filtered);
               }
             } else if (listIsOpen && !event.target.value) {
-              setFilteredChannels(channels);
+              setFilteredChannels(channels.current);
             } else if (!listIsOpen && event.target.value) {
               setListIsOpen(true);
             }
@@ -150,7 +150,7 @@ export default () => {
       if (res) {
         channelObjectList(res).then(async (res) => {
           await AddVideoExtraData(res, false).then(async (res) => {
-            setChannels(res.data);
+            channels.current = res.data;
             setFilteredChannels(res.data);
           });
         });
@@ -163,12 +163,12 @@ export default () => {
       if (filteredChannels && filteredChannels.length >= 1) {
         if (e.key === "ArrowDown") {
           e.preventDefault();
-          setCursor((cursor) => Math.min(Math.max(++cursor, 0), filteredChannels.length - 1));
+          setCursor((cursor) => Math.min(Math.max(cursor + 1, 0), filteredChannels.length - 1));
           scrollToIfNeeded(ulListRef.current, document.querySelector(".selected"), "Down");
           manualSet(filteredChannels[cursor + 1].user_name);
         } else if (e.key === "ArrowUp") {
           e.preventDefault();
-          setCursor((cursor) => Math.min(Math.max(--cursor, 0), filteredChannels.length - 1));
+          setCursor((cursor) => Math.min(Math.max(cursor - 1, 0), filteredChannels.length - 1));
           scrollToIfNeeded(ulListRef.current, document.querySelector(".selected"), "Up");
           manualSet(filteredChannels[cursor - 1].user_name);
         }
@@ -180,7 +180,7 @@ export default () => {
 
   useEffect(() => {
     const input = showValue();
-    if (!channels && (listIsOpen || (input && input.length >= 1))) {
+    if (!channels.current && (listIsOpen || (input && input.length >= 1))) {
       fetchFollowedChannels();
     }
   }, [showValue, listIsOpen, fetchFollowedChannels, channels]);
@@ -199,9 +199,9 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    if (channels) {
+    if (channels.current) {
       return () => {
-        setFilteredChannels(channels || []);
+        setFilteredChannels(channels.current || []);
       };
     }
   }, [channels]);
@@ -238,7 +238,7 @@ export default () => {
           timeout={250}
           classNames='fade-250ms'
           onExited={() => {
-            setChannels();
+            channels.current = null;
             setCursor(0);
           }}
           unmountOnExit>

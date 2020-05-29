@@ -195,7 +195,7 @@ export default () => {
     )
   ) : (
     <CSSTransition
-      in={getCookie("Twitch-access_token")}
+      in={typeof getCookie("Twitch-access_token") === "string"}
       timeout={750}
       classNames='fade-750ms'
       appear>
