@@ -55,19 +55,20 @@ export default ({ TwitchPlayer, OpenedDate, volumeEventOverlayRef, setShowContro
 
   useEffect(() => {
     const changeVolume = (operator, amount) => {
-      const newVolume = Math.min(
-        Math.max(
-          operator === "increase"
-            ? TwitchPlayer.getVolume() + amount
-            : TwitchPlayer.getVolume() - amount,
-          0
-        ),
-        1
-      );
-
       setShowControlls(true);
-      TwitchPlayer.setVolume(newVolume);
-      setVolumeText(newVolume * 100);
+      setVolumeText((volumeText) => {
+        const newVolume = Math.min(
+          Math.max(
+            operator === "increase" ? volumeText / 100 + amount : volumeText / 100 - amount,
+            0.01
+          ),
+          1
+        );
+
+        setShowControlls(true);
+        TwitchPlayer.setVolume(newVolume);
+        return newVolume * 100;
+      });
     };
     const scrollChangeVolumeEvent = (e) => {
       if ((e.wheelDelta && e.wheelDelta > 0) || e.deltaY < 0) {

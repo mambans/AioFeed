@@ -4,7 +4,7 @@ import { CreateClipButton } from "./StyledComponents";
 import API from "../API";
 import validateToken from "../validateToken";
 
-const CreateAndOpenClip = async ({ channelInfo }) => {
+const CreateAndOpenClip = async ({ streamInfo }) => {
   const Width = window.screen.width * 0.6;
   const Height = 920;
   const LeftPosition = (window.screen.width - Width) / 2;
@@ -12,7 +12,7 @@ const CreateAndOpenClip = async ({ channelInfo }) => {
   const settings = `height=${Height},width=${Width},top=${TopPosition},left=${LeftPosition},scrollbars,resizable,status,location,toolbar,`;
 
   await validateToken().then(async () => {
-    await API.postClip({ params: { broadcaster_id: channelInfo._id } })
+    await API.postClip({ params: { broadcaster_id: streamInfo.user_id } })
       .then((res) => {
         window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
       })
@@ -22,19 +22,19 @@ const CreateAndOpenClip = async ({ channelInfo }) => {
   });
 };
 
-export default ({ channelInfo }) => {
+export default ({ streamInfo }) => {
   const keyboardEvents = useCallback(
     (e) => {
       switch (e.key) {
         case "c":
         case "C":
-          CreateAndOpenClip({ channelInfo });
+          CreateAndOpenClip({ streamInfo });
           break;
         default:
           break;
       }
     },
-    [channelInfo]
+    [streamInfo]
   );
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default ({ channelInfo }) => {
     <CreateClipButton
       title='Create clip (c)'
       onClick={() => {
-        CreateAndOpenClip({ channelInfo });
+        CreateAndOpenClip({ streamInfo });
       }}
     />
   );

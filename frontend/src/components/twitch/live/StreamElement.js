@@ -114,7 +114,7 @@ export default (data_p) => {
             }
           />
         </Link>
-        <Moment className={"duration"} durationFromNow>
+        <Moment interval={1} className={"duration"} durationFromNow>
           {data.started_at}
         </Moment>
         {/* {streamType(data.data.type)} */}

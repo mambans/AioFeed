@@ -427,7 +427,6 @@ export const OpenChatButton = styled(MdChat).attrs({ size: 26, color: "white" })
   bottom: 100px;
   opacity: 0.5;
   cursor: pointer;
-  right: 10px;
   right: ${({ switched }) => (switched === "true" ? "unset" : "10px")};
   left: ${({ switched }) => (switched === "true" ? "10px" : "unset")};
   background: rgba(0, 0, 0, 0.25) none repeat scroll 0% 0%;

@@ -28,7 +28,7 @@ export default (data) => (
     <HoverIframe
       // url={`https://player.twitch.tv/?channel=${data.data.user_name}&muted=true`}
       // url={`https://player.twitch.tv/?twitch5=1&channel=${data.data.user_name}&autoplay=true&muted=false&!controls`}
-      src={`https://player.twitch.tv/?twitch5=1&channel=${data.data.user_name}&autoplay=true&muted=false&!controls`}
+      src={`https://player.twitch.tv/?channel=${data.data.user_name}&autoplay=true&muted=false&!controls`}
       title={data.data.user_name + "-iframe"}
       theme='dark'
       id={data.data.id + "-iframe"}

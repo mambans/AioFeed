@@ -10,17 +10,7 @@ import { Button } from "react-bootstrap";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 import API from "../API";
 
-export default ({
-  type,
-  channelName,
-  channelInfo,
-  viewers,
-  uptime,
-  twitchPlayer,
-  setVisible,
-  visible,
-  showUIControlls,
-}) => {
+export default ({ type, channelName, streamInfo, twitchPlayer, setVisible, visible }) => {
   const navigate = useNavigate();
   const [latestVod, setLatestVod] = useState();
 
@@ -60,21 +50,19 @@ export default ({
         variant='dark'
         as={Link}
         to={{
-          pathname: `/${channelName || (channelInfo && channelInfo.display_name)}/channel`,
+          pathname: `/${channelName || (streamInfo && streamInfo.user_name)}/channel`,
           state: {
-            p_channelInfos: channelInfo,
-            p_viewers: viewers,
-            p_uptime: uptime,
+            p_channelInfos: streamInfo,
             p_id: twitchPlayer.current ? twitchPlayer.current.getChannelId() : null,
           },
         }}>
         <MdAccountCircle size={26} />
-        {channelName || (channelInfo && channelInfo.display_name)}'s channel page
+        {channelName || (streamInfo && streamInfo.user_name)}'s channel page
       </Button>
-      {channelInfo && !showUIControlls && (
+      {streamInfo && (
         <FollowUnfollowBtn
-          channel={channelName || (channelInfo && channelInfo.display_name)}
-          id={channelInfo && channelInfo._id}
+          channel={channelName || (streamInfo && streamInfo.user_name)}
+          id={streamInfo && streamInfo.user_id}
           style={{ opacity: "1" }}
         />
       )}
@@ -96,7 +84,7 @@ export default ({
               }
             : {
                 pathname: `https://twitch.tv/${
-                  channelInfo ? channelInfo.display_name : channelName
+                  streamInfo ? streamInfo.user_name : channelName
                 }/videos`,
               }
         }
@@ -113,7 +101,7 @@ export default ({
         href={
           latestVod
             ? latestVod.url
-            : `https://twitch.tv/${channelInfo ? channelInfo.display_name : channelName}/videos`
+            : `https://twitch.tv/${streamInfo ? streamInfo.user_name : channelName}/videos`
         }
         alt=''
         title='Open vod on Twitch'

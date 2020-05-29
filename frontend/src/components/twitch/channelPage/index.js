@@ -26,8 +26,8 @@ import {
 } from "./StyledComponents";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 import AddVideoExtraData from "../AddVideoExtraData";
-import fetchUptime from "./../player/fetchUptime";
-import fetchAndSetChannelInfo from "./../player/fetchAndSetChannelInfo";
+import fetchStreamInfo from "./../player/fetchStreamInfo";
+import fetchChannelInfo from "./../player/fetchChannelInfo";
 import setFavion from "../../setFavion";
 import validateToken from "../validateToken";
 import AddUpdateNotificationsButton from "../AddUpdateNotificationsButton";
@@ -35,8 +35,9 @@ import API from "./../API";
 
 export default () => {
   const { channelName } = useParams();
-  const { p_channelInfos, p_uptime, p_viewers, p_id, p_logo } = useLocation().state || {};
+  const { p_channelInfos, p_id, p_logo } = useLocation().state || {};
   const [channelInfo, setChannelInfo] = useState(p_channelInfos);
+  const [streamInfo, setStreamInfo] = useState(p_channelInfos);
   const numberOfVideos = Math.floor(document.documentElement.clientWidth / 350);
 
   const [vods, setVods] = useState();
@@ -47,8 +48,6 @@ export default () => {
   const [sortClipsBy, setSortClipsBy] = useState(null);
   const [channelId, setChannelId] = useState(p_id);
   const [isLive, setIsLive] = useState();
-  const [viewers, setViewers] = useState(p_viewers);
-  const [uptime, setUptime] = useState(p_uptime);
   const [videoOpen, setVideoOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
 
@@ -59,8 +58,6 @@ export default () => {
   const loadmoreVodsRef = useRef();
   const loadmoreClipsRef = useRef();
   const twitchPlayer = useRef();
-  const viewersTimer = useRef();
-  const uptimeTimer = useRef();
 
   const getIdFromName = useCallback(async () => {
     await API.getUser({
@@ -199,7 +196,10 @@ export default () => {
   );
 
   const getChannelInfo = useCallback(async () => {
-    if (!channelInfo) await fetchAndSetChannelInfo(channelId, setChannelInfo);
+    if (!channelInfo) {
+      const res = await fetchChannelInfo(channelId, true);
+      setChannelInfo(res);
+    }
   }, [channelInfo, channelId]);
 
   useEffect(() => {
@@ -218,36 +218,26 @@ export default () => {
         });
       }
     })();
-
-    return () => {
-      clearInterval(viewersTimer.current);
-    };
   }, [channelInfo, getChannelInfo, getIdFromName, channelId]);
 
-  const OnlineEvents = useCallback(() => {
+  const OnlineEvents = useCallback(async () => {
     console.log("Stream is Online");
     document.title = `AF | ${channelName}'s Channel (Live)`;
 
-    setIsLive(true);
-
-    setViewers(twitchPlayer.current.getViewers());
-    if (!uptime) {
-      setTimeout(() => {
-        fetchUptime(twitchPlayer, setUptime, uptimeTimer);
-      }, 5000);
+    try {
+      const streamInfo = await fetchStreamInfo(twitchPlayer);
+      if (streamInfo) {
+        setStreamInfo(streamInfo);
+        setIsLive(true);
+      }
+    } catch (error) {
+      console.log("OnlineEvents -> error", error);
     }
-
-    if (!viewersTimer.current) {
-      viewersTimer.current = setInterval(() => {
-        setViewers(twitchPlayer.current.getViewers());
-      }, 1000 * 60 * 2);
-    }
-  }, [uptime, channelName]);
+  }, [channelName]);
 
   const offlineEvents = () => {
     console.log("Stream is Offline");
     setIsLive(false);
-    clearInterval(viewersTimer.current);
   };
 
   useEffect(() => {
@@ -292,25 +282,12 @@ export default () => {
   useEffect(() => {
     if (channelInfo) {
       setFavion(channelInfo.logo);
-      // document.documentElement.style.setProperty(
-      //   "--backgroundImg",
-      //   `url(${channelInfo.profile_banner})`
-      // );
     }
 
     return () => {
       setFavion();
     };
   }, [channelInfo]);
-
-  useEffect(() => {
-    const uptTimer = uptimeTimer.current;
-
-    return () => {
-      clearTimeout(uptTimer);
-      clearInterval(viewersTimer.current);
-    };
-  }, []);
 
   if (channelId === "Not Found") {
     return (
@@ -402,19 +379,22 @@ export default () => {
 
                   <div id='HeaderChannelInfo'>
                     <div id='ChannelName'>
-                      {isLive && (
+                      {isLive && streamInfo && (
                         <StyledLiveInfoContainer
                           to={{
                             pathname: `/${channelName}`,
                             state: {
-                              p_channelInfos: channelInfo,
-                              p_viewers: viewers,
-                              p_uptime: uptime,
+                              p_channelInfos: streamInfo,
                             },
                           }}>
                           <div id='LiveDetails'>
-                            <span>Viewers: {formatViewerNumbers(viewers)}</span>
-                            <span>Uptime: {<Moment durationFromNow>{uptime}</Moment>}</span>
+                            <span>Viewers: {formatViewerNumbers(streamInfo.viewer_count)}</span>
+                            <span>
+                              Uptime:{" "}
+                              <Moment interval={1} durationFromNow>
+                                {streamInfo.started_at}
+                              </Moment>
+                            </span>
                           </div>
 
                           <LiveIndicator style={{ padding: "0 15px" }}>
@@ -427,9 +407,7 @@ export default () => {
                         to={{
                           pathname: `/${channelName}`,
                           state: {
-                            p_channelInfos: channelInfo,
-                            p_viewers: viewers,
-                            p_uptime: uptime,
+                            p_channelInfos: streamInfo,
                           },
                         }}
                         id='ChannelLiveLink'>

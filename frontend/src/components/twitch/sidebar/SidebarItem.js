@@ -120,7 +120,9 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
             </div>
           )}
           <div className={"sidebarDuration"}>
-            <Moment durationFromNow>{stream.started_at}</Moment>
+            <Moment interval={1} durationFromNow>
+              {stream.started_at}
+            </Moment>
             <FaRegClock size={9} />
           </div>
         </SecondRow>

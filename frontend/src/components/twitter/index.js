@@ -20,7 +20,6 @@ export default () => {
       unmountOnExit
       key={twitterListName + activeTheme.type}
       appear={true}>
-      {/* <Container width={width ? `${width}px` : "15vw"} key={twitterListName}> */}
       <Container key={twitterListName}>
         {twitterListName ? (
           <TwitterTimelineEmbed
