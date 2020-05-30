@@ -16,7 +16,6 @@ export default async (channelId, format) => {
             user_name: res.data.display_name,
             title: res.data.status,
             user_id: res.data._id,
-            viewer_count: res.data.views,
             game_name: res.data.game,
           };
           return data;
