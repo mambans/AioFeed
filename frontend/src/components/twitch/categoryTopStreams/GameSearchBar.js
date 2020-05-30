@@ -13,51 +13,7 @@ import { throttle } from "lodash";
 import { MdFormatListBulleted } from "react-icons/md";
 import StyledLoadingList from "./LoadingList";
 import { CSSTransition } from "react-transition-group";
-
-const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
-  const parentRect = parentDiv.getBoundingClientRect();
-  const childRect = childDiv.getBoundingClientRect();
-
-  const scrollDown =
-    childRect.bottom + 20.5 >= parentRect.bottom || childRect.top + 20.5 >= parentRect.bottom;
-  const scrollUp =
-    childRect.top - 20.5 <= parentRect.top || childRect.bottom - 20.5 <= parentRect.top;
-
-  if (scrollDown || scrollUp) {
-    childDiv.scrollIntoView({ block: "nearest", inline: "nearest" });
-    parentDiv.scrollBy({
-      top: direction === "Down" && scrollDown ? +41 : direction === "Up" && scrollUp ? -41 : 0,
-      behavior: "smooth",
-    });
-  }
-};
-
-const sortAlphaByProp = (a, b) => {
-  var gameA = a.name.toLowerCase();
-  var gameB = b.name.toLowerCase();
-  return gameA.localeCompare(gameB);
-};
-
-const sortInputFirst = (input, data) => {
-  let caseSensitive = [];
-  let caseInsensitive = [];
-  let others = [];
-
-  data.forEach((element) => {
-    if (element.name.slice(0, input.length) === input) {
-      caseSensitive.push(element);
-    } else if (element.name.slice(0, input.length).toLowerCase() === input.toLowerCase()) {
-      caseInsensitive.push(element);
-    } else {
-      others.push(element);
-    }
-  });
-
-  caseSensitive.sort(sortAlphaByProp);
-  caseInsensitive.sort(sortAlphaByProp);
-  others.sort(sortAlphaByProp);
-  return [...caseSensitive, ...caseInsensitive, ...others];
-};
+import { scrollToIfNeeded, sortInputFirst } from "../channelList";
 
 export default (props) => {
   const { gameName, videoType } = props;
@@ -160,7 +116,7 @@ export default (props) => {
 
   const handleArrowKey = (e) => {
     try {
-      if (filteredGames && filteredGames.length >= 1) {
+      if (filteredGames && filteredGames.length > 1) {
         if (e.key === "ArrowDown") {
           e.preventDefault();
           setCursor((cursor) => Math.min(Math.max(cursor + 1, 0), filteredGames.length - 1));

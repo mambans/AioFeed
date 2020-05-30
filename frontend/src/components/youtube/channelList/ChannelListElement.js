@@ -10,13 +10,21 @@ const ChannelListLi = styled.li`
   position: relative;
   height: 42px;
   border-bottom: thin solid #1e1616;
+
+  a {
+    color: ${({ selected }) => (selected ? "#ffffff" : "inherit")};
+    font-weight: ${({ selected }) => (selected ? "bold" : "unset")};
+  }
 `;
 
 export default (data) => {
-  const { channel, setChannels, videos, setVideos } = data;
+  const { channel, setNewChannels, videos, setVideos, selected } = data;
 
   return (
-    <ChannelListLi key={channel.snippet.resourceId.channelId}>
+    <ChannelListLi
+      key={channel.snippet.resourceId.channelId}
+      className={selected ? "selected" : ""}
+      selected={selected}>
       <a href={`https://www.youtube.com/channel/${channel.snippet.resourceId.channelId}`}>
         {channel.snippet.thumbnails.default.url ? (
           <img
@@ -43,13 +51,13 @@ export default (data) => {
       </a>
       <UnfollowButton
         disabled={getCookie("Youtube-readonly")}
-        data-tip={"Unfollow " + channel.snippet.title}
+        title={"Unfollow " + channel.snippet.title}
         variant='link'
         onClick={async () => {
           await UnfollowChannel({
             subscriptionId: channel.id,
             channelId: channel.snippet.resourceId.channelId,
-            setChannels: setChannels,
+            setChannels: setNewChannels,
             videos: videos,
             setVideos: setVideos,
           });

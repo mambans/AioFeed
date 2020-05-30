@@ -13,7 +13,7 @@ import ChannelListElement from "../channelList/ChannelListElement";
 import AddVideoExtraData from "../AddVideoExtraData";
 import GetFollowedChannels from "../GetFollowedChannels";
 
-const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
+export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
   const parentRect = parentDiv.getBoundingClientRect();
   const childRect = childDiv.getBoundingClientRect();
 
@@ -32,20 +32,23 @@ const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
 };
 
 const sortAlphaByProp = (a, b) => {
-  var channelA = a.user_name.toLowerCase();
-  var channelB = b.user_name.toLowerCase();
+  var channelA = (a.user_name || a.name).toLowerCase();
+  var channelB = (b.user_name || b.name).toLowerCase();
   return channelA.localeCompare(channelB);
 };
 
-const sortInputFirst = (input, data) => {
+export const sortInputFirst = (input, data) => {
   let caseSensitive = [];
   let caseInsensitive = [];
   let others = [];
 
   data.forEach((element) => {
-    if (element.user_name.slice(0, input.length) === input) {
+    if ((element.user_name || element.name).slice(0, input.length) === input) {
       caseSensitive.push(element);
-    } else if (element.user_name.slice(0, input.length).toLowerCase() === input.toLowerCase()) {
+    } else if (
+      (element.user_name || element.name).slice(0, input.length).toLowerCase() ===
+      input.toLowerCase()
+    ) {
       caseInsensitive.push(element);
     } else {
       others.push(element);
@@ -160,7 +163,7 @@ export default () => {
 
   const handleArrowKey = (e) => {
     try {
-      if (filteredChannels && filteredChannels.length >= 1) {
+      if (filteredChannels && filteredChannels.length > 1) {
         if (e.key === "ArrowDown") {
           e.preventDefault();
           setCursor((cursor) => Math.min(Math.max(cursor + 1, 0), filteredChannels.length - 1));
