@@ -6,6 +6,8 @@ import React, { useContext, useEffect, useState, useRef, useCallback } from "rea
 
 import { MdVerticalAlignBottom } from "react-icons/md";
 import { FaTwitch } from "react-icons/fa";
+import { MdFullscreen } from "react-icons/md";
+import { MdFullscreenExit } from "react-icons/md";
 
 import fetchStreamInfo from "./fetchStreamInfo";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
@@ -47,12 +49,15 @@ export default () => {
   const [showUIControlls, setShowUIControlls] = useState();
   const [hideChat, setHideChat] = useState(false);
   const [switched, setSwitched] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState();
 
-  const volumeEventOverlayRef = useRef();
+  const PlayerUIControlls = useRef();
   const twitchPlayer = useRef();
   const OpenedDate = useRef(Date.now());
   const fadeTimer = useRef();
   const refreshStreamInfoTimer = useRef();
+  const videoElementRef = useRef();
+  const hideChatDelay = useRef();
 
   useEffect(() => {
     if (channelName && !videoId && !streamInfo) {
@@ -208,6 +213,44 @@ export default () => {
     setShowControlls(false);
   }, []);
 
+  function toggleFullScreen(e) {
+    const video = videoElementRef.current;
+    if (
+      (document.fullScreenElement !== undefined && document.fullScreenElement === null) ||
+      (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) ||
+      (document.mozFullScreen !== undefined && !document.mozFullScreen) ||
+      (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)
+    ) {
+      if (hideChatDelay.current) clearTimeout(hideChatDelay.current);
+      hideChatDelay.current = setTimeout(() => {
+        setHideChat(true);
+      }, 5000);
+      setIsFullscreen(true);
+      if (video.requestFullScreen) {
+        video.requestFullScreen();
+      } else if (video.mozRequestFullScreen) {
+        video.mozRequestFullScreen();
+      } else if (video.webkitRequestFullScreen) {
+        video.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+      } else if (video.msRequestFullscreen) {
+        video.msRequestFullscreen();
+      }
+    } else {
+      if (hideChatDelay.current) clearTimeout(hideChatDelay.current);
+      setHideChat(false);
+      setIsFullscreen(false);
+      if (document.cancelFullScreen) {
+        document.cancelFullScreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.webkitCancelFullScreen) {
+        document.webkitCancelFullScreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+    }
+  }
+
   useEffect(() => {
     const showAndResetTimer = throttle(
       () => {
@@ -222,13 +265,26 @@ export default () => {
       { leading: true, trailing: false }
     );
 
-    const refEle = volumeEventOverlayRef.current;
+    const keyboardEvents = (e) => {
+      switch (e.key) {
+        case "f":
+        case "F":
+          toggleFullScreen();
+          break;
+        default:
+          break;
+      }
+    };
+
+    const refEle = PlayerUIControlls.current;
     if (refEle) {
       refEle.addEventListener("mouseleave", handleMouseOut);
       document.addEventListener("mousemove", showAndResetTimer);
       document.addEventListener("mousedown", showAndResetTimer);
       document.body.addEventListener("keydown", showAndResetTimer);
       document.addEventListener("touchmove", showAndResetTimer);
+      refEle.addEventListener("dblclick", toggleFullScreen);
+      document.body.addEventListener("keydown", keyboardEvents);
 
       return () => {
         refEle.removeEventListener("mouseleave", handleMouseOut);
@@ -236,6 +292,8 @@ export default () => {
         document.removeEventListener("mousedown", showAndResetTimer);
         document.body.removeEventListener("keydown", showAndResetTimer);
         document.removeEventListener("touchmove", showAndResetTimer);
+        refEle.removeEventListener("dblclick", toggleFullScreen);
+        document.body.removeEventListener("keydown", keyboardEvents);
         clearTimeout(fadeTimer.current);
       };
     }
@@ -262,7 +320,7 @@ export default () => {
           }}
           switchedChatState={switched.toString()}
           hidechat={hideChat.toString()}>
-          <div id='twitch-embed'>
+          <div id='twitch-embed' ref={videoElementRef}>
             <CSSTransition
               in={showControlls}
               key={"controllsUI"}
@@ -270,7 +328,7 @@ export default () => {
               classNames='fade-controllUI-1s'>
               <VolumeEventOverlay
                 show={showUIControlls}
-                ref={volumeEventOverlayRef}
+                ref={PlayerUIControlls}
                 type='live'
                 id='controls'
                 hidechat={hideChat.toString()}
@@ -323,11 +381,11 @@ export default () => {
 
                 <PlayPauseButton
                   TwitchPlayer={twitchPlayer.current}
-                  volumeEventOverlayRef={volumeEventOverlayRef.current}
+                  PlayerUIControlls={PlayerUIControlls.current}
                 />
                 <VolumeSlider
                   OpenedDate={OpenedDate}
-                  volumeEventOverlayRef={volumeEventOverlayRef.current}
+                  PlayerUIControlls={PlayerUIControlls.current}
                   TwitchPlayer={twitchPlayer.current}
                   setShowControlls={setShowControlls}
                 />
@@ -336,22 +394,52 @@ export default () => {
 
                 {streamInfo && <ClipButton streamInfo={streamInfo} />}
 
-                <ToggleSwitchChatSide
-                  title='Switch chat side'
-                  id='switchSides'
-                  switched={switched.toString()}
-                  onClick={() => {
-                    setSwitched(!switched);
-                  }}
-                />
+                {!isFullscreen ? (
+                  <MdFullscreen
+                    size={34}
+                    style={{
+                      position: "absolute",
+                      right: "12px",
+                      bottom: "12px",
+                      cursor: "pointer",
+                    }}
+                    onClick={toggleFullScreen}
+                    title='Fullsceen (f)'
+                  />
+                ) : (
+                  <MdFullscreenExit
+                    size={34}
+                    style={{
+                      position: "absolute",
+                      right: "12px",
+                      bottom: "12px",
+                      cursor: "pointer",
+                    }}
+                    onClick={toggleFullScreen}
+                    title='Fullsceen (f)'
+                  />
+                )}
 
-                <OpenCloseChat
-                  hideChat={hideChat}
-                  switched={switched}
-                  onClick={() => {
-                    setHideChat(!hideChat);
-                  }}
-                />
+                {!isFullscreen && (
+                  <>
+                    <ToggleSwitchChatSide
+                      title='Switch chat side'
+                      id='switchSides'
+                      switched={switched.toString()}
+                      onClick={() => {
+                        setSwitched(!switched);
+                      }}
+                    />
+
+                    <OpenCloseChat
+                      hideChat={hideChat}
+                      switched={switched}
+                      onClick={() => {
+                        setHideChat(!hideChat);
+                      }}
+                    />
+                  </>
+                )}
               </VolumeEventOverlay>
             </CSSTransition>
             {!showUIControlls && (
