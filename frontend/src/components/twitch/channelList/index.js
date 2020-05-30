@@ -220,7 +220,7 @@ export default () => {
   return (
     <>
       <SearchGameForm onSubmit={handleSubmit} open={listIsOpen} onKeyDown={handleArrowKey}>
-        <input ref={inputRef} type='text' placeholder={"..."} {...bindChannel} spellcheck='false' />
+        <input ref={inputRef} type='text' placeholder={"..."} {...bindChannel} spellCheck='false' />
         {channel && (
           <SearchSubmitBtn
             to={{

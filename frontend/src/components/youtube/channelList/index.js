@@ -173,7 +173,12 @@ export default (data) => {
   return (
     <>
       <SearchGameForm onSubmit={handleSubmit} open={listIsOpen} onKeyDown={handleArrowKey}>
-        <input ref={inputRef} type='text' placeholder={"..."} {...bindChannel}></input>
+        <input
+          ref={inputRef}
+          type='text'
+          spellCheck='false'
+          placeholder={"..."}
+          {...bindChannel}></input>
         {channel && (
           <SearchSubmitBtn href={`https://www.youtube.com/channel/${returnChannelId()}`} />
         )}

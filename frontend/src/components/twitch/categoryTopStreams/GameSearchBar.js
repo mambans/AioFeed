@@ -170,6 +170,7 @@ export default (props) => {
         <input
           ref={inputRef}
           type='text'
+          spellCheck='false'
           placeholder={(gameName !== "" && gameName !== undefined ? gameName : "All") + "..."}
           {...bindGame}></input>
         {game && listIsOpen && (
