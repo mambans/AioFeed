@@ -79,6 +79,22 @@ export default () => {
         enableTwitter={enableTwitter}
         enableTwitch={enableTwitch}
         showTwitchSidebar={showTwitchSidebar}
+        twitterWidth={
+          enableTwitter ? window.innerWidth * (window.innerWidth <= 2560 ? 0.2 : 0.15) : 0
+        }
+        twitchSidebarWidth={enableTwitch && showTwitchSidebar ? 275 : 0}
+        centerWidth={
+          350 *
+          Math.floor(
+            (window.innerWidth -
+              ((enableTwitch && showTwitchSidebar ? 275 : 0) +
+                (enableTwitter
+                  ? window.innerWidth * (window.innerWidth <= 2560 ? 0.2 : 0.15)
+                  : 150) +
+                25)) /
+              350
+          )
+        }
         id='CenterContainer'>
         <NoFeedsEnable />
         <Twitter />
