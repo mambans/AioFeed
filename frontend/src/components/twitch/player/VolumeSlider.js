@@ -9,7 +9,7 @@ import Slider from "react-rangeslider";
 import { StyledVolumeSlider } from "./StyledComponents";
 import "react-rangeslider/lib/index.css";
 
-export default ({ TwitchPlayer, OpenedDate, volumeEventOverlayRef, setShowControlls }) => {
+export default ({ TwitchPlayer, OpenedDate, PlayerUIControlls, setShowControlls }) => {
   const [volumeText, setVolumeText] = useState(0);
   const [volumeMuted, setVolumeMuted] = useState(true);
 
@@ -119,13 +119,13 @@ export default ({ TwitchPlayer, OpenedDate, volumeEventOverlayRef, setShowContro
       document.body.addEventListener("mousedown", mouseEvents);
       document.body.addEventListener("keydown", keyboardEvents);
 
-      if (volumeEventOverlayRef) {
-        volumeEventOverlayRef.addEventListener("mousedown", mouseEvents);
-        volumeEventOverlayRef.addEventListener("wheel", scrollChangeVolumeEvent);
+      if (PlayerUIControlls) {
+        PlayerUIControlls.addEventListener("mousedown", mouseEvents);
+        PlayerUIControlls.addEventListener("wheel", scrollChangeVolumeEvent);
 
         return () => {
-          volumeEventOverlayRef.removeEventListener("mousedown", mouseEvents);
-          volumeEventOverlayRef.removeEventListener("wheel", scrollChangeVolumeEvent);
+          PlayerUIControlls.removeEventListener("mousedown", mouseEvents);
+          PlayerUIControlls.removeEventListener("wheel", scrollChangeVolumeEvent);
         };
       }
     };
@@ -151,7 +151,7 @@ export default ({ TwitchPlayer, OpenedDate, volumeEventOverlayRef, setShowContro
       document.body.removeEventListener("mousedown", mouseEvents);
       document.body.removeEventListener("keydown", keyboardEvents);
     };
-  }, [OpenedDate, TwitchPlayer, volumeEventOverlayRef, setShowControlls]);
+  }, [OpenedDate, TwitchPlayer, PlayerUIControlls, setShowControlls]);
 
   return (
     <StyledVolumeSlider volumeMuted={volumeMuted}>

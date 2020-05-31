@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaPlay } from "react-icons/fa";
 import { FaPause } from "react-icons/fa";
 
-export default ({ TwitchPlayer, volumeEventOverlayRef }) => {
+export default ({ TwitchPlayer, PlayerUIControlls }) => {
   const [isPaused, setIsPaused] = useState(false);
 
   const PausePlay = () => {
@@ -43,10 +43,10 @@ export default ({ TwitchPlayer, volumeEventOverlayRef }) => {
 
     const addEventListeners = () => {
       document.body.addEventListener("keydown", keyboardEvents);
-      if (volumeEventOverlayRef) {
-        volumeEventOverlayRef.addEventListener("mousedown", mouseEvents);
+      if (PlayerUIControlls) {
+        PlayerUIControlls.addEventListener("mousedown", mouseEvents);
         return () => {
-          volumeEventOverlayRef.removeEventListener("mousedown", mouseEvents);
+          PlayerUIControlls.removeEventListener("mousedown", mouseEvents);
         };
       }
     };
@@ -61,7 +61,7 @@ export default ({ TwitchPlayer, volumeEventOverlayRef }) => {
     return () => {
       document.body.removeEventListener("keydown", keyboardEvents);
     };
-  }, [TwitchPlayer, volumeEventOverlayRef]);
+  }, [TwitchPlayer, PlayerUIControlls]);
 
   if (isPaused) {
     return <FaPlay id='PausePlay' size={30} onClick={PausePlay} title={"Play (space)"} />;
