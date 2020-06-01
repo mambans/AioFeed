@@ -7,15 +7,16 @@ const getGameDetails = async (items) => {
   const games = [
     ...new Set(
       items.data.data.map((channel) => {
-        return channel.game_id;
+        return channel && channel.game_id;
       })
     ),
   ];
 
   const cachedGameInfo = getLocalstorage("Twitch_game_details") || { data: [] };
 
+  const cachedFilteredGames = cachedGameInfo.data.filter((game) => game);
   const unCachedGameDetails = games.filter((game) => {
-    return !cachedGameInfo.data.find((cachedGame) => cachedGame.id === game);
+    return !cachedFilteredGames.find((cachedGame) => cachedGame.id === game);
   });
 
   const GamesToFetch =
@@ -25,7 +26,7 @@ const getGameDetails = async (items) => {
     (!cachedGameInfo.expire || cachedGameInfo.expire < Date.now()) &&
     Array.isArray(GamesToFetch) &&
     GamesToFetch.length >= 1 &&
-    GamesToFetch[0] !== undefined
+    !GamesToFetch[0]
   ) {
     return API.getGames({
       params: {
@@ -33,10 +34,11 @@ const getGameDetails = async (items) => {
       },
     })
       .then((res) => {
+        const filteredOutNulls = res.data.data.filter((game) => game);
         localStorage.setItem(
           "Twitch_game_details",
           JSON.stringify({
-            data: cachedGameInfo.data.concat(res.data.data),
+            data: cachedFilteredGames.concat(filteredOutNulls),
             expire:
               cachedGameInfo.expire < Date.now()
                 ? Date.now() + 7 * 24 * 60 * 60 * 1000
@@ -44,14 +46,14 @@ const getGameDetails = async (items) => {
           })
         );
 
-        return cachedGameInfo.data.concat(res.data.data);
+        return cachedFilteredGames.concat(filteredOutNulls);
       })
       .catch((error) => {
         console.log(error);
-        return cachedGameInfo.data;
+        return cachedFilteredGames;
       });
   } else {
-    return cachedGameInfo.data;
+    return cachedFilteredGames;
   }
 };
 

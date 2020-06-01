@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getLocalstorage } from "../../../util/Utils";
 
 export default async (username, authKey) => {
   return await axios
@@ -12,9 +13,10 @@ export default async (username, authKey) => {
       if (res.data && res.data !== "") {
         return res.data;
       }
-      return [];
+      return getLocalstorage("VodChannels") || [];
     })
     .catch((err) => {
       console.error(err);
+      return getLocalstorage("VodChannels") || [];
     });
 };

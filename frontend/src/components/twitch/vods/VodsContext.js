@@ -11,7 +11,9 @@ export const VodsProvider = ({ children }) => {
 
   useEffect(() => {
     (async () => {
-      const fetchedChannels = await FetchMonitoredVodChannelsList(username, authKey);
+      const fetchedChannels = await FetchMonitoredVodChannelsList(username, authKey).then((res) => {
+        return res.filter((channel) => channel);
+      });
       console.log("useEffect-fetchedChannels", fetchedChannels);
       setChannels(fetchedChannels);
       localStorage.setItem("VodChannels", JSON.stringify(fetchedChannels));

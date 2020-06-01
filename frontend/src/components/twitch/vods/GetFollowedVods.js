@@ -121,8 +121,8 @@ export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchTok
       try {
         const followedChannels = await GetFollowedChannels(true);
 
-        const FollowedChannelVods = await FetchMonitoredVodChannelsList(Username, AuthKey);
-        if (FollowedChannelVods.length === 0) {
+        const followedVodEnabledChannels = await FetchMonitoredVodChannelsList(Username, AuthKey);
+        if (!followedVodEnabledChannels || followedVodEnabledChannels.length === 0) {
           return {
             error: {
               data: {
@@ -133,7 +133,10 @@ export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchTok
           };
         }
 
-        const vodChannels = await monitoredChannelNameToId(followedChannels, FollowedChannelVods);
+        const vodChannels = await monitoredChannelNameToId(
+          followedChannels,
+          followedVodEnabledChannels
+        );
 
         const followedStreamVods = await fetchVodsFromMonitoredChannels(
           vodChannels.data,
