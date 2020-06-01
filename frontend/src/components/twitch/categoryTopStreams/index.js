@@ -230,7 +230,7 @@ export default () => {
             <GameSearchBar gameName={category} videoType={videoType} />
             <div>
               <TypeButton
-                title={`Fetch top ${videoType}`}
+                title={category ? `Fetch top ${videoType}` : "Select a game/category first"}
                 disabled={category ? false : true}
                 onClick={() => {
                   setTypeListOpen(!typeListOpen);
