@@ -116,6 +116,7 @@ export default () => {
         addSystemNotification({
           status: "Live",
           stream: stream,
+          body: `${stream.title}\n${stream.game_name}`,
         });
 
         addNotification([{ ...stream, notiStatus: type }]);
@@ -140,31 +141,26 @@ export default () => {
             user_id: LIVEStreamInfo.user_id,
             currentStreamObj: streamWithGame,
           });
-          if (streamInfo === null) {
-            addNoti({ type: "Live", stream: streamWithGameAndProfile });
-          }
           setStreamInfo(streamWithGameAndProfile);
-          if (!streamInfo && streamWithGameAndProfile) {
-            setFavion(streamWithGameAndProfile.profile_img_url);
-          }
+          return streamWithGameAndProfile;
         } else {
           const streamWithGameAndProfile = await fetchChannelInfo(
             twitchPlayer.current.getChannelId(),
             true
           );
-          if (streamInfo === null) {
-            addNoti({ type: "Live", stream: streamWithGameAndProfile });
-          }
           setStreamInfo(streamWithGameAndProfile);
-          if (!streamInfo && streamWithGameAndProfile) {
-            setFavion(streamWithGameAndProfile.profile_img_url);
-          }
+          return streamWithGameAndProfile;
         }
       }
     };
 
     try {
-      SetStreamInfoAndPushNotis();
+      SetStreamInfoAndPushNotis().then((res) => {
+        setFavion(res.profile_img_url);
+        if (streamInfo === null) {
+          addNoti({ type: "Live", stream: res });
+        }
+      });
 
       if (!refreshStreamInfoTimer.current) {
         refreshStreamInfoTimer.current = setInterval(async () => {
