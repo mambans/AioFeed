@@ -9,9 +9,8 @@ import ChannelSearchList from "./../channelList";
 import CountdownCircleTimer from "./CountdownCircleTimer";
 import Util from "../../../util/Util";
 
-export default ({ data, refresh }) => {
-  // eslint-disable-next-line no-unused-vars
-  const { refreshing, autoRefreshEnabled, refreshTimer } = data;
+export default ({ data }) => {
+  const { refreshing, autoRefreshEnabled, refreshTimer, refresh } = data;
 
   return (
     <HeaderContainerTwitchLive id='TwitchHeader'>

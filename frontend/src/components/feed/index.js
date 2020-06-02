@@ -113,7 +113,7 @@ export default () => {
                     timeout={750}
                     classNames='fade-750ms'
                     unmountOnExit>
-                    <Header data={data} refresh={data.refresh} />
+                    <Header data={data} />
                   </CSSTransition>
                   <CSSTransition
                     in={enableTwitch}
