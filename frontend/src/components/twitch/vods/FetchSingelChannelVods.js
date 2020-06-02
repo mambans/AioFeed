@@ -26,7 +26,7 @@ export default async (channelId, setVods) => {
       type: "all",
     },
   }).then(async (res) => {
-    const newVodWithProfile = await AddVideoExtraData(res);
+    const newVodWithProfile = await AddVideoExtraData({ items: res.data });
     const newVodWithEndtime = await addVodEndTime(newVodWithProfile.data);
 
     setVods((vods) => {

@@ -145,7 +145,7 @@ export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchTok
         );
 
         const videos = await AddVideoExtraData({
-          data: {
+          items: {
             data: followedStreamVods,
           },
         });

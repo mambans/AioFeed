@@ -35,9 +35,12 @@ export default async (category, sortBy, page) => {
       return e;
     });
 
-    await AddVideoExtraData(topVideos, false);
+    const finallTopVideos = await AddVideoExtraData({
+      items: topVideos.data,
+      fetchGameInfo: false,
+    });
 
-    return { topData: topVideos.data, error };
+    return { topData: finallTopVideos, error };
   } catch (e) {
     console.error(e);
   }

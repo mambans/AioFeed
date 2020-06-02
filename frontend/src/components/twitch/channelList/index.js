@@ -152,7 +152,7 @@ export default () => {
     await GetFollowedChannels().then(async (res) => {
       if (res) {
         channelObjectList(res).then(async (res) => {
-          await AddVideoExtraData(res, false).then(async (res) => {
+          await AddVideoExtraData({ items: res.data, fetchGameInfo: false }).then(async (res) => {
             channels.current = res.data;
             setFilteredChannels(res.data);
           });

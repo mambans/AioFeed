@@ -35,7 +35,7 @@ const fetchAllOnlineStreams = async (followedChannelsIds) => {
   return allOnlineStreams;
 };
 
-async function getFollowedOnlineStreams(followedchannels) {
+export default async function getFollowedOnlineStreams(followedchannels, disableNotifications) {
   let error;
 
   try {
@@ -51,22 +51,28 @@ async function getFollowedOnlineStreams(followedchannels) {
 
     try {
       if (LiveFollowedStreams.data.data.length > 0) {
-        await AddVideoExtraData(LiveFollowedStreams);
+        const finallStreams = await AddVideoExtraData({
+          items: LiveFollowedStreams.data,
+          forceNewProfiles: disableNotifications,
+        });
+        return {
+          data: finallStreams.data,
+          status: 200,
+          error: error,
+        };
       }
+      return {
+        data: [],
+        status: 200,
+        error: error,
+      };
     } catch (e) {
       console.error(e);
       error = e;
       return { error: error, status: 201 };
     }
-    return {
-      data: LiveFollowedStreams.data.data,
-      status: 200,
-      error: error,
-    };
   } catch (error) {
     console.error(error.message);
     return error;
   }
 }
-
-export default getFollowedOnlineStreams;

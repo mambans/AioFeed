@@ -74,7 +74,10 @@ export default ({ children }) => {
         if (followedChannels.current && followedChannels.current[0]) {
           AddCookie("Twitch-username", followedChannels.current[0].from_name);
         }
-        const streams = await getFollowedOnlineStreams(followedChannels.current);
+        const streams = await getFollowedOnlineStreams(
+          followedChannels.current,
+          disableNotifications
+        );
 
         if (streams.status === 200) {
           // setError(null);
@@ -86,7 +89,10 @@ export default ({ children }) => {
             loaded: true,
           });
 
-          if (!disableNotifications) {
+          if (
+            !disableNotifications &&
+            (liveStreams.current.length >= 1 || oldLiveStreams.current.length >= 1)
+          ) {
             await Promise.all([
               await LiveStreamsPromise({
                 liveStreams,

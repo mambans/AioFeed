@@ -99,7 +99,7 @@ export default () => {
             }
             vodPagination.current = res.data.pagination.cursor;
 
-            const videos = await AddVideoExtraData(res, false);
+            const videos = await AddVideoExtraData({ items: res.data, fetchGameInfo: false });
             const finallVideos = await videos.data.map((stream) => {
               if (stream.type === "archive") {
                 stream.endDate = durationToDate(stream.duration, stream.published_at);
@@ -165,7 +165,7 @@ export default () => {
               return "";
             }
             clipPagination.current = res.data.pagination.cursor;
-            const finallClips = await AddVideoExtraData(res);
+            const finallClips = await AddVideoExtraData({ items: res.data });
 
             if (pagination) {
               const allClips = previosClipsPage.current.concat(finallClips.data);

@@ -44,7 +44,7 @@ export default async (category, sortByTime, page) => {
       return e;
     });
 
-    const finallClips = await AddVideoExtraData(topClips);
+    const finallClips = await AddVideoExtraData({ items: topClips.data });
 
     return { topData: finallClips, error };
   } catch (e) {

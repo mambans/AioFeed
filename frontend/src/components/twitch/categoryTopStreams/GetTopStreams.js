@@ -32,7 +32,7 @@ export default async (category, page) => {
       return e;
     });
 
-    const finallData = await AddVideoExtraData(topStreams);
+    const finallData = await AddVideoExtraData({ items: topStreams.data });
 
     return { topData: finallData, error };
   } catch (e) {
