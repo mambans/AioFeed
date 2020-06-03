@@ -386,7 +386,7 @@ export default () => {
                         />
                       </div>
                       <p id='title'>{streamInfo.title || p_title}</p>
-                      <Link id='game' to={`/category/${streamInfo.game || p_game}`}>
+                      <Link id='game' to={`/category/${streamInfo.game_name || p_game}`}>
                         Playing {streamInfo.game_name || p_game}
                       </Link>
                     </>
