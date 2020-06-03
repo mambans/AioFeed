@@ -64,8 +64,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
       ref={ref}
       to={"/" + stream.user_name.toLowerCase()}
       style={{ display: "flex", flexDirection: "column" }}>
-      {/* <div className={styles.sidebarItems} key={data.stream.id}> */}
-      <StyledsidebarItem key={stream.id} duration={shows}>
+      <StyledsidebarItem key={stream.user_id} duration={shows}>
         <NewHighlight newlyAdded={newlyAdded} stream={stream}></NewHighlight>
 
         <div
@@ -129,7 +128,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
       </StyledsidebarItem>
       <CSSTransition
         in={showTitle}
-        key={stream.id + stream.title}
+        key={stream.user_id + stream.title}
         timeout={1000}
         classNames='sidebarTitlePopup'
         unmountOnExit>

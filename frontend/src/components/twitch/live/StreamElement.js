@@ -81,12 +81,14 @@ export default (data_p) => {
   }, [twitchVideoHoverEnable, data.user_name]);
 
   return (
-    <VideoContainer key={data.id}>
-      <ImageContainer id={data.id} ref={ref} style={{ marginTop: "5px" }}>
+    <VideoContainer key={data.user_id}>
+      <ImageContainer id={data.user_id} ref={ref} style={{ marginTop: "5px" }}>
         <NewHighlightNoti
           newlyAddedStreams={newlyAddedStreams}
           user_name={data.user_name}></NewHighlightNoti>
-        {isHovered && <StreamHoverIframe id={data.id} data={data} setIsHovered={setIsHovered} />}
+        {isHovered && (
+          <StreamHoverIframe id={data.user_id} data={data} setIsHovered={setIsHovered} />
+        )}
         <Link
           to={{
             pathname: "/" + data.user_name.toLowerCase(),
@@ -110,7 +112,11 @@ export default (data_p) => {
             }
             src={
               // data.thumbnail_url.replace("{width}", 1280).replace("{height}", 720) +
-              data.thumbnail_url.replace("{width}", 858).replace("{height}", 480) + `#` + Date.now()
+              data.thumbnail_url
+                ? data.thumbnail_url.replace("{width}", 858).replace("{height}", 480) +
+                  `#` +
+                  Date.now()
+                : `${process.env.PUBLIC_URL}/images/placeholder.webp`
             }
           />
         </Link>
@@ -215,21 +221,22 @@ export default (data_p) => {
 
         <GameContainer>
           {data.game_img && (
-            <>
-              <a
+            <a
+              className={"gameImg"}
+              href={"https://www.twitch.tv/directory/category/" + data.game_name}>
+              <img
+                src={data.game_img.replace("{width}", 130).replace("{height}", 173)}
+                alt=''
                 className={"gameImg"}
-                href={"https://www.twitch.tv/directory/category/" + data.game_name}>
-                <img
-                  src={data.game_img.replace("{width}", 130).replace("{height}", 173)}
-                  alt=''
-                  className={"gameImg"}
-                />
-              </a>
-              <Link className={"gameName"} to={"/category/" + data.game_name}>
-                {data.game_name}
-              </Link>
-            </>
+              />
+            </a>
           )}
+          {data.game_name && (
+            <Link className={"gameName"} to={"/category/" + data.game_name}>
+              {data.game_name}
+            </Link>
+          )}
+
           <p title='Viewers' className='viewers'>
             {formatViewerNumbers(data.viewer_count)}
             <FaRegEye size={14} />

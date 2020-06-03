@@ -34,6 +34,7 @@ import ClipButton from "./ClipButton";
 import addGameName from "./addGameName";
 import addProfileImg from "./addProfileImg";
 import fetchChannelInfo from "./fetchChannelInfo";
+import { getLocalstorage } from "../../../util/Utils";
 
 export default () => {
   const { p_title, p_game, p_channelInfos } = useLocation().state || {};
@@ -159,6 +160,16 @@ export default () => {
         setFavion(res.profile_img_url);
         if (streamInfo === null) {
           addNoti({ type: "Live", stream: res });
+
+          const streams = getLocalstorage("newLiveStreamsFromPlayer") || { data: [] };
+          const newStreams = [...streams.data.filter((item) => item), res];
+          const filteredStreams = newStreams.filter(
+            (item, index, self) => index === self.findIndex((t) => t.user_id === item.user_id)
+          );
+          localStorage.setItem(
+            "newLiveStreamsFromPlayer",
+            JSON.stringify({ data: filteredStreams, updated: Date.now() })
+          );
         }
       });
 
@@ -176,12 +187,28 @@ export default () => {
     };
   }, [streamInfo, channelName, addNoti]);
 
+  const removeFromStreamNotisFromPlayer = useCallback(() => {
+    const streams = getLocalstorage("newLiveStreamsFromPlayer") || {
+      data: [],
+    };
+    if (streams.data.length >= 1) {
+      const newStreams = streams.data.filter(
+        (item) => item.user_name.toLowerCase() !== channelName.toLowerCase()
+      );
+      localStorage.setItem(
+        "newLiveStreamsFromPlayer",
+        JSON.stringify({ data: newStreams, updated: Date.now() })
+      );
+    }
+  }, [channelName]);
+
   const offlineEvents = useCallback(async () => {
     console.log("Stream is Offline");
     setShowUIControlls(false);
     clearInterval(refreshStreamInfoTimer.current);
     setStreamInfo(null);
-  }, []);
+    removeFromStreamNotisFromPlayer();
+  }, [removeFromStreamNotisFromPlayer]);
 
   const playingEvents = useCallback(() => {
     console.log("playingEvents");
@@ -281,6 +308,7 @@ export default () => {
       document.addEventListener("touchmove", showAndResetTimer);
       refEle.addEventListener("dblclick", toggleFullScreen);
       document.body.addEventListener("keydown", keyboardEvents);
+      window.addEventListener("unload", removeFromStreamNotisFromPlayer);
 
       return () => {
         refEle.removeEventListener("mouseleave", handleMouseOut);
@@ -290,10 +318,12 @@ export default () => {
         document.removeEventListener("touchmove", showAndResetTimer);
         refEle.removeEventListener("dblclick", toggleFullScreen);
         document.body.removeEventListener("keydown", keyboardEvents);
+        window.removeEventListener("unload", removeFromStreamNotisFromPlayer);
         clearTimeout(fadeTimer.current);
+        removeFromStreamNotisFromPlayer();
       };
     }
-  }, [handleMouseOut]);
+  }, [handleMouseOut, removeFromStreamNotisFromPlayer]);
 
   return (
     <>

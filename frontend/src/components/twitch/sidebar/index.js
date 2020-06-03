@@ -35,12 +35,12 @@ export default (data) => {
             {onlineStreams.map((stream) => {
               return (
                 <CSSTransition
-                  key={stream.id}
+                  key={stream.user_id}
                   timeout={1000}
                   classNames='sidebarVideoFade-1s'
                   unmountOnExit>
                   <SidebarItem
-                    key={stream.id}
+                    key={stream.user_id}
                     stream={stream}
                     newlyAdded={newlyAdded}
                     shows={shows}

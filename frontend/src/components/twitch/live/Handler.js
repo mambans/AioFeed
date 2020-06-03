@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
+import _ from "lodash";
 
 import ErrorHandler from "../../error";
 import GetFollowedChannels from "./../GetFollowedChannels";
@@ -7,7 +8,7 @@ import NotificationsContext from "./../../notifications/NotificationsContext";
 import AccountContext from "./../../account/AccountContext";
 import FeedsContext from "./../../feed/FeedsContext";
 import VodsContext from "./../vods/VodsContext";
-import { AddCookie, getCookie } from "../../../util/Utils";
+import { AddCookie, getCookie, getLocalstorage } from "../../../util/Utils";
 import LiveStreamsPromise from "./LiveStreamsPromise";
 import OfflineStreamsPromise from "./OfflineStreamsPromise";
 import UpdatedStreamsPromise from "./UpdatedStreamsPromise";
@@ -36,30 +37,6 @@ export default ({ children }) => {
   const timer = useRef();
   const refreshAfterUnfollowTimer = useRef();
 
-  const windowFocusHandler = useCallback(() => {
-    document.title = "AioFeed | Feed";
-    resetNewlyAddedStreams();
-  }, []);
-
-  const windowBlurHandler = useCallback(() => {
-    if (document.title !== "AioFeed | Feed") document.title = "AioFeed | Feed";
-    resetNewlyAddedStreams();
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("focus", windowFocusHandler);
-    window.addEventListener("blur", windowBlurHandler);
-
-    return () => {
-      window.removeEventListener("focus", windowFocusHandler);
-      window.removeEventListener("blur", windowBlurHandler);
-    };
-  }, [windowBlurHandler, windowFocusHandler]);
-
-  function resetNewlyAddedStreams() {
-    newlyAddedStreams.current = [];
-  }
-
   const refresh = useCallback(
     async (disableNotifications = false) => {
       // console.log("refreshing");
@@ -81,8 +58,15 @@ export default ({ children }) => {
 
         if (streams.status === 200) {
           // setError(null);
+          const localStreams = getLocalstorage("newLiveStreamsFromPlayer") || {
+            data: [],
+            updated: Date.now(),
+          };
+          const newLiveStreams = [...streams.data, ...localStreams.data];
+          const filteredLiveStreams = _.uniqBy(newLiveStreams, "user_id");
+
           oldLiveStreams.current = liveStreams.current;
-          liveStreams.current = streams.data;
+          liveStreams.current = filteredLiveStreams;
           setLoadingStates({
             refreshing: false,
             error: null,
@@ -153,6 +137,38 @@ export default ({ children }) => {
   );
 
   useEffect(() => {
+    const windowFocusHandler = () => {
+      document.title = "AioFeed | Feed";
+      resetNewlyAddedStreams();
+    };
+
+    const windowBlurHandler = () => {
+      if (document.title !== "AioFeed | Feed") document.title = "AioFeed | Feed";
+      resetNewlyAddedStreams();
+    };
+
+    const listener = (e) => {
+      if (e.storageArea === localStorage && e.key === "newLiveStreamsFromPlayer") {
+        refresh(false);
+      }
+    };
+
+    window.addEventListener("focus", windowFocusHandler);
+    window.addEventListener("blur", windowBlurHandler);
+    window.addEventListener("storage", listener);
+
+    return () => {
+      window.removeEventListener("focus", windowFocusHandler);
+      window.removeEventListener("blur", windowBlurHandler);
+      window.removeEventListener("storage", listener);
+    };
+  }, [refresh]);
+
+  function resetNewlyAddedStreams() {
+    newlyAddedStreams.current = [];
+  }
+
+  useEffect(() => {
     (async () => {
       try {
         const timeNow = new Date();
@@ -188,6 +204,10 @@ export default ({ children }) => {
     return () => {
       console.log("Unmounting");
       clearInterval(timer.current);
+      localStorage.setItem(
+        "newLiveStreamsFromPlayer",
+        JSON.stringify({ data: [], updated: Date.now() })
+      );
     };
   }, []);
 

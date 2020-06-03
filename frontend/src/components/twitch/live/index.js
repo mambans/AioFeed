@@ -34,7 +34,7 @@ export default ({ data }, centerContainerRef) => {
                 {data.liveStreams.map((stream) => {
                   return (
                     <CSSTransition
-                      key={stream.id}
+                      key={stream.user_id}
                       timeout={750}
                       classNames='videoFadeSlide'
                       unmountOnExit

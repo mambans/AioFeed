@@ -13,9 +13,9 @@ export default async ({
 }) => {
   try {
     const res = await new Promise((resolve, reject) => {
-      const newOffline = oldLiveStreams.current.filter((stream) => {
-        return !liveStreams.current.find(({ user_name }) => stream.user_name === user_name);
-      });
+      const newOffline = oldLiveStreams.current.filter(
+        (stream) => !liveStreams.current.find(({ user_name }) => stream.user_name === user_name)
+      );
 
       if (newOffline.length <= 0) reject("No new Offline streams");
       resolve(newOffline);
