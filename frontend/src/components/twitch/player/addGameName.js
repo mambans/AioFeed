@@ -27,7 +27,7 @@ export default async ({ streamInfo, newStreamInfo }) => {
         );
       }
 
-      return { ...newStreamInfo, game_name: gameInfo.name };
+      return { ...newStreamInfo, game_name: gameInfo && gameInfo.name };
     }
     return newStreamInfo;
   } catch (error) {
