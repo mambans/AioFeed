@@ -35,6 +35,7 @@ import addGameName from "./addGameName";
 import addProfileImg from "./addProfileImg";
 import fetchChannelInfo from "./fetchChannelInfo";
 import { getLocalstorage } from "../../../util/Utils";
+import ContextMenu from "./ContextMenu";
 
 export default () => {
   const { p_title, p_game, p_channelInfos } = useLocation().state || {};
@@ -361,6 +362,31 @@ export default () => {
                 id='controls'
                 hidechat={String(hideChat)}
                 showcursor={showControlls}>
+                {twitchPlayer.current && (
+                  <ContextMenu
+                    PlayerUIControlls={PlayerUIControlls.current}
+                    type='live'
+                    hidechat={String(hideChat)}
+                    TwitchPlayer={twitchPlayer.current}
+                    children={
+                      <>
+                        <li
+                          onClick={() => {
+                            setHideChat(!hideChat);
+                          }}>
+                          {hideChat ? "Show chat" : "Hide chat"}
+                        </li>
+
+                        <li
+                          onClick={() => {
+                            setSwitched(!switched);
+                          }}>
+                          Switch chat side
+                        </li>
+                      </>
+                    }
+                  />
+                )}
                 {streamInfo && (
                   <InfoDisplay>
                     <>
