@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { MdHighQuality } from "react-icons/md";
 
 const HEIGHT = 250;
 const WIDTH = 225;
@@ -7,15 +8,14 @@ const WIDTH = 225;
 const Container = styled.div`
   position: absolute;
   width: ${WIDTH}px;
-  height: ${HEIGHT}px;
-  background: rgba(0, 0, 10, 0.85);
-  border-radius: 10px;
+  min-height: ${HEIGHT}px;
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 3px;
   left: ${({ left }) => left + "px"};
   top: ${({ top }) => top + "px"};
-  padding: 10px 15px;
+  padding: 0px 10px;
   font-weight: bold;
-  color: rgb(200, 200, 200);
-  border: thin solid #373737;
+  color: rgb(225, 225, 225);
 
   ul {
     list-style: none;
@@ -24,11 +24,19 @@ const Container = styled.div`
 
     li {
       cursor: pointer;
-      margin: 5px 0;
+      margin: 10px 0;
       transition: color 250ms;
+      font-size: 1rem;
 
-      &:hover {
+      svg {
+        margin-right: 5px;
+        color: inherit;
+      }
+
+      &:hover,
+      &:hover svg {
         color: #ffffff;
+        opacity: 1;
       }
     }
   }
@@ -90,7 +98,8 @@ export default ({ PlayerUIControlls, type, hidechat, TwitchPlayer, children }) =
                 console.log("QUALITY");
                 TwitchPlayer.setQuality("chunked");
               }}>
-              Max quality
+              <MdHighQuality size={24} />
+              {"Max quality (Source)"}
             </li>
             {children}
           </ul>

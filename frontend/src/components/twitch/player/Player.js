@@ -7,7 +7,9 @@ import React, { useContext, useEffect, useState, useRef, useCallback } from "rea
 import { MdVerticalAlignBottom } from "react-icons/md";
 import { FaTwitch } from "react-icons/fa";
 import { MdFullscreen } from "react-icons/md";
+import { MdCompareArrows } from "react-icons/md";
 import { MdFullscreenExit } from "react-icons/md";
+import { MdChat } from "react-icons/md";
 
 import fetchStreamInfo from "./fetchStreamInfo";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
@@ -374,6 +376,7 @@ export default () => {
                           onClick={() => {
                             setHideChat(!hideChat);
                           }}>
+                          <MdChat size={24} />
                           {hideChat ? "Show chat" : "Hide chat"}
                         </li>
 
@@ -381,6 +384,7 @@ export default () => {
                           onClick={() => {
                             setSwitched(!switched);
                           }}>
+                          <MdCompareArrows size={24} />
                           Switch chat side
                         </li>
                       </>
