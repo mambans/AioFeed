@@ -137,5 +137,5 @@ export default async ({ items, fetchGameInfo = true, forceNewProfiles = false })
     }
     return res;
   });
-  return { data: finallData };
+  return { ...originalArray, data: finallData };
 };
