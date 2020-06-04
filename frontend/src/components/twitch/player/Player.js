@@ -49,6 +49,7 @@ export default () => {
   const [showControlls, setShowControlls] = useState();
   const [showUIControlls, setShowUIControlls] = useState();
   const [hideChat, setHideChat] = useState(false);
+  const hideChatSaved = useRef(false);
   const [switched, setSwitched] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState();
 
@@ -117,7 +118,7 @@ export default () => {
         addSystemNotification({
           status: "Live",
           stream: stream,
-          body: `${stream.title}\n${stream.game_name}`,
+          body: `${stream.title}\n${stream.game_name || ""}`,
         });
 
         addNotification([{ ...stream, notiStatus: type }]);
@@ -237,6 +238,7 @@ export default () => {
   }, []);
 
   function toggleFullScreen(e) {
+    e.preventDefault();
     const video = videoElementRef.current;
     if (
       (document.fullScreenElement !== undefined && document.fullScreenElement === null) ||
@@ -260,7 +262,7 @@ export default () => {
       }
     } else {
       if (hideChatDelay.current) clearTimeout(hideChatDelay.current);
-      setHideChat(false);
+      setHideChat(hideChatSaved.current);
       setIsFullscreen(false);
       if (document.cancelFullScreen) {
         document.cancelFullScreen();
@@ -344,8 +346,8 @@ export default () => {
             height: visible ? "calc(100vh - 85px)" : "100vh",
             top: visible ? "85px" : "0",
           }}
-          switchedChatState={switched.toString()}
-          hidechat={hideChat.toString()}>
+          switchedChatState={String(switched)}
+          hidechat={String(hideChat)}>
           <div id='twitch-embed' ref={videoElementRef}>
             <CSSTransition
               in={showControlls}
@@ -357,7 +359,7 @@ export default () => {
                 ref={PlayerUIControlls}
                 type='live'
                 id='controls'
-                hidechat={hideChat.toString()}
+                hidechat={String(hideChat)}
                 showcursor={showControlls}>
                 {streamInfo && (
                   <InfoDisplay>
@@ -386,9 +388,11 @@ export default () => {
                         />
                       </div>
                       <p id='title'>{streamInfo.title || p_title}</p>
-                      <Link id='game' to={`/category/${streamInfo.game_name || p_game}`}>
-                        Playing {streamInfo.game_name || p_game}
-                      </Link>
+                      {streamInfo.game_name && (
+                        <Link id='game' to={`/category/${streamInfo.game_name || p_game}`}>
+                          Playing {streamInfo.game_name || p_game}
+                        </Link>
+                      )}
                     </>
 
                     {streamInfo.viewer_count && (
@@ -451,7 +455,7 @@ export default () => {
                     <ToggleSwitchChatSide
                       title='Switch chat side'
                       id='switchSides'
-                      switched={switched.toString()}
+                      switched={String(switched)}
                       onClick={() => {
                         setSwitched(!switched);
                       }}
@@ -461,7 +465,11 @@ export default () => {
                       hideChat={hideChat}
                       switched={switched}
                       onClick={() => {
-                        setHideChat(!hideChat);
+                        setHideChat((current) => {
+                          const newValue = !current;
+                          hideChatSaved.current = newValue;
+                          return newValue;
+                        });
                       }}
                     />
                   </>
@@ -473,7 +481,7 @@ export default () => {
                 <ToggleSwitchChatSide
                   title='Switch chat side'
                   id='switchSides'
-                  switched={switched.toString()}
+                  switched={String(switched)}
                   onClick={() => {
                     setSwitched(!switched);
                   }}
@@ -487,7 +495,11 @@ export default () => {
                   hideChat={hideChat}
                   switched={switched}
                   onClick={() => {
-                    setHideChat(!hideChat);
+                    setHideChat((current) => {
+                      const newValue = !current;
+                      hideChatSaved.current = newValue;
+                      return newValue;
+                    });
                   }}
                   style={{
                     right: switched ? "unset" : hideChat ? "10px" : "calc(9vw + 10px)",
