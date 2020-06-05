@@ -162,7 +162,11 @@ export default () => {
     try {
       SetStreamInfoAndPushNotis().then((res) => {
         setFavion(res.profile_img_url);
-        if (streamInfo === null) {
+        if (
+          streamInfo === null &&
+          res &&
+          !res.broadcaster_software.toLowerCase().includes("rerun")
+        ) {
           addNoti({ type: "Live", stream: res });
 
           const streams = getLocalstorage("newLiveStreamsFromPlayer") || { data: [] };
