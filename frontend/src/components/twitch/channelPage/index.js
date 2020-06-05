@@ -93,8 +93,13 @@ export default () => {
           },
         })
           .then(async (res) => {
-            if (res.data.data.length === 0) {
+            if (res.data.data.length === 0 && (!vods || !Array.isArray(vods) || vods.length < 1)) {
               setVods({ error: "No vods available" });
+              return "";
+            }
+
+            if (res.data.data.length === 0 && (vods || Array.isArray(vods) || vods.length > 1)) {
+              setVodsLoadmoreLoaded(true);
               return "";
             }
             vodPagination.current = res.data.pagination.cursor;
@@ -136,7 +141,7 @@ export default () => {
           });
       });
     },
-    [numberOfVideos, sortVodsBy, channelId]
+    [numberOfVideos, sortVodsBy, channelId, vods]
   );
 
   const fetchClips = useCallback(
@@ -160,8 +165,16 @@ export default () => {
           },
         })
           .then(async (res) => {
-            if (res.data.data.length === 0) {
+            if (
+              res.data.data.length === 0 &&
+              (!clips || !Array.isArray(clips) || clips.length < 1)
+            ) {
               setClips({ error: "No clips available" });
+              return "";
+            }
+
+            if (res.data.data.length === 0 && (clips || Array.isArray(clips) || clips.length > 1)) {
+              setClipsLoadmoreLoaded(true);
               return "";
             }
             clipPagination.current = res.data.pagination.cursor;
@@ -192,7 +205,7 @@ export default () => {
           });
       });
     },
-    [numberOfVideos, sortClipsBy, channelId]
+    [numberOfVideos, sortClipsBy, channelId, clips]
   );
 
   const getChannelInfo = useCallback(async () => {

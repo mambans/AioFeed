@@ -63,7 +63,7 @@ export default ({
         <h3>{feedName}</h3>
       </SubFeedHeader>
 
-      {items && !items.error ? (
+      {items && Array.isArray(items) ? (
         <TransitionGroup
           className='videos'
           style={{
@@ -86,19 +86,22 @@ export default ({
           })}
         </TransitionGroup>
       ) : (
-        <SubFeedContainer
-          style={{
-            minHeight: feedName === "Vods" ? "310px" : "310px",
-            paddingBottom: "0",
-            width: `${numberOfVideos * 350}px`,
-            margin: "auto",
-          }}>
-          <Alert
-            variant='info'
-            style={{ width: "15%", minWidth: "250px", margin: "auto", textAlign: "center" }}>
-            <b>{items.error}</b>
-          </Alert>
-        </SubFeedContainer>
+        items &&
+        items.error && (
+          <SubFeedContainer
+            style={{
+              minHeight: feedName === "Vods" ? "310px" : "310px",
+              paddingBottom: "0",
+              width: `${numberOfVideos * 350}px`,
+              margin: "auto",
+            }}>
+            <Alert
+              variant='info'
+              style={{ width: "15%", minWidth: "250px", margin: "auto", textAlign: "center" }}>
+              <b>{items.error}</b>
+            </Alert>
+          </SubFeedContainer>
+        )
       )}
       {items && !items.error && (
         <StyledLoadmore
