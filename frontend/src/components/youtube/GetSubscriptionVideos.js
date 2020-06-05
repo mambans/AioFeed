@@ -19,7 +19,7 @@ const filterVideos = async (response) => {
 
 const fetchSubscriptionVideos = async (videosCACHE, channel) => {
   const currentDate = new Date();
-  const DATE_THRESHOLD = new Date(currentDate.setDate(currentDate.getDate() - 5));
+  const DATE_THRESHOLD = new Date(currentDate.setDate(currentDate.getDate() - 7));
 
   let error = null;
   let res = null;
@@ -47,7 +47,7 @@ const fetchSubscriptionVideos = async (videosCACHE, channel) => {
         params: {
           part: "snippet,contentDetails",
           channelId: channel.snippet.resourceId.channelId,
-          maxResults: 7,
+          maxResults: 10,
           publishedAfter: DATE_THRESHOLD.toISOString(),
           key: process.env.REACT_APP_YOUTUBE_API_KEY,
         },
