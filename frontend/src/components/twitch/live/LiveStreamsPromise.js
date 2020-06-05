@@ -11,9 +11,16 @@ export default async ({
   setUnseenNotifications,
 }) => {
   try {
+    const localStreams = getLocalstorage("newLiveStreamsFromPlayer") || {
+      data: [],
+    };
+
     const res = await new Promise((resolve, reject) => {
       const newLive = liveStreams.current.filter((stream) => {
-        return !oldLiveStreams.current.find(({ user_name }) => stream.user_name === user_name);
+        return (
+          !oldLiveStreams.current.find(({ user_id }) => stream.user_id === user_id) &&
+          !localStreams.data.find(({ user_id }) => stream.user_id === user_id)
+        );
       });
       if (newLive.length <= 0) reject("No new LIVE streams");
       resolve(newLive);

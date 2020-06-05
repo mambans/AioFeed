@@ -149,7 +149,7 @@ export default ({ children }) => {
 
     const listener = (e) => {
       if (e.storageArea === localStorage && e.key === "newLiveStreamsFromPlayer") {
-        refresh(false);
+        refresh();
       }
     };
 
