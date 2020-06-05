@@ -7,7 +7,7 @@ import { Container } from "../StyledComponents";
 import Util from "../../../util/Util";
 import LoadingBoxes from "../LoadingBoxes";
 
-export default ({ data }, centerContainerRef) => {
+export default ({ data, videoElementsAmount }) => {
   const [show, setShow] = useState(true);
 
   return (
@@ -73,13 +73,7 @@ export default ({ data }, centerContainerRef) => {
         </>
       ) : (
         <Container>
-          <LoadingBoxes
-            amount={
-              centerContainerRef && centerContainerRef.clientWidth
-                ? Math.floor((centerContainerRef.clientWidth / 350) * 0.8)
-                : 4
-            }
-          />
+          <LoadingBoxes amount={videoElementsAmount || 4} />
         </Container>
       )}
     </>

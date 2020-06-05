@@ -2,6 +2,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import React, { useState, useEffect, useRef, useCallback, useMemo, useContext } from "react";
 import { throttle } from "lodash";
 import { Button } from "react-bootstrap";
+import { GrPowerReset } from "react-icons/gr";
 
 import ErrorHandler from "../../error";
 import getFollowedVods from "./GetFollowedVods";
@@ -15,7 +16,7 @@ import LoadingBoxes from "./../LoadingBoxes";
 import FeedsContext from "../../feed/FeedsContext";
 import { AddCookie, getCookie } from "../../../util/Utils";
 
-export default ({ centerContainerRef }) => {
+export default ({ videoElementsAmount }) => {
   const { vods, setVods } = useContext(VodsContext);
   const { authKey, username, twitchUserId, setTwitchToken, setRefreshToken } = useContext(
     AccountContext
@@ -26,17 +27,13 @@ export default ({ centerContainerRef }) => {
   const [vodError, setVodError] = useState(null);
   const loadmoreRef = useRef();
   const resetVodAmountsTimer = useRef();
+  const resetTransitionTimer = useRef();
   const VodHeaderRef = useRef();
-  const [numberOfVideos, setNumberOfVideos] = useState(
-    centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 2) : 14
-  );
-  const [vodAmounts, setVodAmounts] = useState(numberOfVideos);
-
-  useEffect(() => {
-    if (centerContainerRef) {
-      setNumberOfVideos(Math.floor((centerContainerRef.clientWidth / 350) * 2));
-    }
-  }, [centerContainerRef]);
+  const [vodAmounts, setVodAmounts] = useState({
+    amount: videoElementsAmount || 14,
+    timeout: 750,
+    transitionGroup: "videos",
+  });
 
   //eslint-disable-next-line
   const observer = useMemo(
@@ -51,7 +48,7 @@ export default ({ centerContainerRef }) => {
             throttle(
               function (e) {
                 if (entries[0].isIntersecting === true) {
-                  setVodAmounts((currVodAmounts) => currVodAmounts + numberOfVideos / 2);
+                  setVodAmounts((currVodAmounts) => currVodAmounts + videoElementsAmount / 2);
                   setTimeout(() => {
                     if (loadmoreRef.current) {
                       loadmoreRef.current.scrollIntoView({
@@ -72,7 +69,7 @@ export default ({ centerContainerRef }) => {
                       });
                     }
 
-                    setVodAmounts(numberOfVideos);
+                    setVodAmounts(videoElementsAmount);
                   }, 60000);
                 }
               },
@@ -83,7 +80,7 @@ export default ({ centerContainerRef }) => {
         },
         { threshold: 1 }
       ),
-    [numberOfVideos]
+    [videoElementsAmount]
   );
 
   const refresh = useCallback(
@@ -124,12 +121,12 @@ export default ({ centerContainerRef }) => {
       //   });
       //   setVodAmounts(nrStreams);
       // }
-      if (vodAmounts > numberOfVideos) {
+      if (vodAmounts.amount > videoElementsAmount) {
         window.scrollTo(0, 0);
-        setVodAmounts(numberOfVideos);
+        setVodAmounts(videoElementsAmount);
       }
     }, 350000);
-  }, [numberOfVideos, vodAmounts]);
+  }, [vodAmounts, videoElementsAmount]);
 
   useEffect(() => {
     //eslint-disable-next-line
@@ -212,10 +209,7 @@ export default ({ centerContainerRef }) => {
     return (
       <>
         <Header refresh={refresh} refreshing={refreshing} vods={vods} ref={VodHeaderRef} />
-        <LoadingBoxes
-          amount={centerContainerRef ? Math.floor((centerContainerRef.clientWidth / 350) * 1.5) : 9}
-          type='Vods'
-        />
+        <LoadingBoxes amount={videoElementsAmount || 14} type='Vods' />
       </>
     );
   } else {
@@ -228,27 +222,49 @@ export default ({ centerContainerRef }) => {
           ref={VodHeaderRef}
           vodError={vodError}
         />
-        <SubFeedContainer>
-          <TransitionGroup className='twitch-vods' component={null}>
-            {vods.data.slice(0, vodAmounts).map((vod) => {
-              return (
-                <CSSTransition
-                  key={vod.id + vod.duration}
-                  timeout={750}
-                  classNames={vod.transition || "fade-750ms"}
-                  unmountOnExit>
-                  <VodElement data={vod} />
-                </CSSTransition>
-              );
-            })}
-          </TransitionGroup>
-        </SubFeedContainer>
+        <TransitionGroup
+          className={vodAmounts.transitionGroup || "videos"}
+          component={SubFeedContainer}>
+          {vods.data.slice(0, vodAmounts.amount).map((vod) => {
+            return (
+              <CSSTransition
+                key={vod.id + vod.duration}
+                timeout={vodAmounts.timeout}
+                classNames={vod.transition || "fade-750ms"}
+                unmountOnExit>
+                <VodElement data={vod} />
+              </CSSTransition>
+            );
+          })}
+        </TransitionGroup>
         <StyledLoadmore ref={loadmoreRef}>
           <div />
           <div
             id='Button'
             onClick={() => {
-              setVodAmounts(vodAmounts + numberOfVideos);
+              if (vodAmounts.amount >= vods.data.length) {
+                setVodAmounts({
+                  amount: videoElementsAmount,
+                  timeout: 0,
+                  transitionGroup: "instant-disappear",
+                });
+
+                clearTimeout(resetTransitionTimer.current);
+                resetTransitionTimer.current = setTimeout(() => {
+                  setVodAmounts({
+                    amount: videoElementsAmount,
+                    timeout: 750,
+                    transitionGroup: "videos",
+                  });
+                }, 750);
+              } else {
+                setVodAmounts((curr) => ({
+                  amount: curr.amount + videoElementsAmount,
+                  timeout: 750,
+                  transitionGroup: "videos",
+                }));
+              }
+
               setTimeout(() => {
                 if (loadmoreRef.current) {
                   loadmoreRef.current.scrollIntoView({
@@ -260,9 +276,29 @@ export default ({ centerContainerRef }) => {
               }, 0);
               clearTimeout(resetVodAmountsTimer.current);
             }}>
-            Show more
+            {vodAmounts.amount >= vods.data.length ? "Show less (reset)" : "Show more"}
           </div>
           <div />
+          <GrPowerReset
+            size={20}
+            title='Show less (reset)'
+            id='reset'
+            onClick={() => {
+              setVodAmounts({
+                amount: videoElementsAmount,
+                timeout: 0,
+                transitionGroup: "instant-disappear",
+              });
+              clearTimeout(resetTransitionTimer.current);
+              resetTransitionTimer.current = setTimeout(() => {
+                setVodAmounts({
+                  amount: videoElementsAmount,
+                  timeout: 750,
+                  transitionGroup: "videos",
+                });
+              }, 750);
+            }}
+          />
         </StyledLoadmore>
       </>
     );

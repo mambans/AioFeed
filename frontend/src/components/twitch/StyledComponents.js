@@ -14,7 +14,7 @@ export const HeaderContainerTwitchLive = styled.div`
 export const StyledLoadmore = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: auto min-content auto;
+  grid-template-columns: auto min-content auto min-content;
   align-items: center;
   max-width: 100%;
   padding-bottom: 10px;
@@ -33,11 +33,32 @@ export const StyledLoadmore = styled.div`
     color: var(--textColor2);
     /* text-shadow: 0px 0px 5px black; */
     padding: 0px 15px;
-    transition: all 200ms;
+    transition: color 200ms, padding 200ms;
 
     &:hover {
       color: white;
       padding: 0px 25px;
+    }
+  }
+
+  #reset {
+    cursor: pointer;
+    color: var(--textColor2);
+    margin-left: 5px;
+    transition: color 200ms, margin 200ms, stroke 200ms;
+
+    path {
+      transition: stroke 200ms;
+      stroke: var(--textColor2);
+    }
+
+    &:hover {
+      color: white;
+      margin-left: 10px;
+
+      path {
+        stroke: white;
+      }
     }
   }
 `;

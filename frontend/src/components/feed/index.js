@@ -1,7 +1,7 @@
 import { CSSTransition } from "react-transition-group";
 import { debounce } from "lodash";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import React, { useState, useEffect, useContext, useMemo, useRef } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 
 import { AddCookie } from "../../util/Utils";
 import { Container, CenterContainer } from "../twitch/StyledComponents";
@@ -32,9 +32,20 @@ export default () => {
     setShowTwitchSidebar,
   } = useContext(FeedsContext);
   const { username } = useContext(AccountContext);
-  // eslint-disable-next-line no-unused-vars
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const centerContainerRef = useRef();
+
+  const calcVideoElementsAmount = useCallback(
+    () =>
+      Math.floor(
+        (window.innerWidth -
+          ((enableTwitch && showTwitchSidebar ? 275 : 0) +
+            (enableTwitter ? window.innerWidth * (window.innerWidth <= 2560 ? 0.2 : 0.15) : 150) +
+            25)) /
+          350
+      ) * 2,
+    [enableTwitch, showTwitchSidebar, enableTwitter]
+  );
+
+  const [videoElementsAmount, setVideoElementsAmount] = useState(calcVideoElementsAmount());
 
   useEffect(() => {
     Notification.requestPermission().then(function (result) {
@@ -42,25 +53,23 @@ export default () => {
     });
   }, []);
 
-  const setScreenWidthToCalcAlignments = useMemo(
-    () =>
-      debounce(
-        () => {
-          setScreenWidth(window.innerWidth);
-        },
-        20,
-        { leading: true, trailing: false }
-      ),
-    []
-  );
-
   useEffect(() => {
+    const setScreenWidthToCalcAlignments = debounce(
+      () => {
+        setVideoElementsAmount(calcVideoElementsAmount());
+      },
+      20,
+      { leading: true, trailing: false }
+    );
+
+    setVideoElementsAmount(calcVideoElementsAmount());
+
     window.addEventListener("resize", setScreenWidthToCalcAlignments);
 
     return () => {
       window.removeEventListener("resize", setScreenWidthToCalcAlignments);
     };
-  }, [setScreenWidthToCalcAlignments]);
+  }, [calcVideoElementsAmount]);
 
   if (!username) {
     return (
@@ -75,7 +84,6 @@ export default () => {
   } else {
     return (
       <CenterContainer
-        ref={centerContainerRef}
         enableTwitter={enableTwitter}
         enableTwitch={enableTwitch}
         showTwitchSidebar={showTwitchSidebar}
@@ -121,7 +129,7 @@ export default () => {
                     classNames='fade-750ms'
                     appear
                     unmountOnExit>
-                    <TwitchLive data={data} centerContainerRef={centerContainerRef.current} />
+                    <TwitchLive data={data} videoElementsAmount={videoElementsAmount} />
                   </CSSTransition>
 
                   <OverlayTrigger
@@ -164,7 +172,7 @@ export default () => {
 
           <CSSTransition in={enableTwitchVods} classNames='fade-750ms' timeout={750} unmountOnExit>
             <Container>
-              <TwitchVods centerContainerRef={centerContainerRef.current} />
+              <TwitchVods videoElementsAmount={videoElementsAmount} />
             </Container>
           </CSSTransition>
         </VodsProvider>
@@ -191,9 +199,9 @@ export default () => {
                   {data.error && <ErrorHandler data={data.error}></ErrorHandler>}
 
                   <Youtube
-                    centerContainerRef={centerContainerRef.current}
                     requestError={data.requestError}
                     videos={data.videos}
+                    videoElementsAmount={videoElementsAmount}
                   />
                 </>
               )}

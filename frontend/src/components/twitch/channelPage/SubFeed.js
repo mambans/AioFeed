@@ -62,35 +62,44 @@ export default ({
         )}
         <h3>{feedName}</h3>
       </SubFeedHeader>
-      <SubFeedContainer
-        style={{
-          minHeight: feedName === "Vods" ? "310px" : "310px",
-          paddingBottom: "0",
-          width: `${numberOfVideos * 350}px`,
-          margin: "auto",
-        }}>
-        {items && !items.error ? (
-          <TransitionGroup component={null}>
-            {items.map((item) => {
-              return (
-                <CSSTransition key={item.id} timeout={750} className='fade-750ms' unmountOnExit>
-                  {feedName === "Vods" ? (
-                    <VodElement data={item} vodBtnDisabled={true} />
-                  ) : (
-                    <ClipElement data={item} user_name={channelInfo && channelInfo.name} />
-                  )}
-                </CSSTransition>
-              );
-            })}
-          </TransitionGroup>
-        ) : (
+
+      {items && !items.error ? (
+        <TransitionGroup
+          className='videos'
+          style={{
+            minHeight: feedName === "Vods" ? "310px" : "310px",
+            paddingBottom: "0",
+            width: `${numberOfVideos * 350}px`,
+            margin: "auto",
+          }}
+          component={SubFeedContainer}>
+          {items.map((item) => {
+            return (
+              <CSSTransition key={item.id} timeout={750} className='fade-750ms' unmountOnExit>
+                {feedName === "Vods" ? (
+                  <VodElement data={item} vodBtnDisabled={true} />
+                ) : (
+                  <ClipElement data={item} user_name={channelInfo && channelInfo.name} />
+                )}
+              </CSSTransition>
+            );
+          })}
+        </TransitionGroup>
+      ) : (
+        <SubFeedContainer
+          style={{
+            minHeight: feedName === "Vods" ? "310px" : "310px",
+            paddingBottom: "0",
+            width: `${numberOfVideos * 350}px`,
+            margin: "auto",
+          }}>
           <Alert
             variant='info'
             style={{ width: "15%", minWidth: "250px", margin: "auto", textAlign: "center" }}>
             <b>{items.error}</b>
           </Alert>
-        )}
-      </SubFeedContainer>
+        </SubFeedContainer>
+      )}
       {items && !items.error && (
         <StyledLoadmore
           ref={loadmoreRef}
