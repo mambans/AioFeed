@@ -228,7 +228,8 @@ export default ({ videoElementsAmount }) => {
           {vods.data.slice(0, vodAmounts.amount).map((vod) => {
             return (
               <CSSTransition
-                key={vod.id + vod.duration}
+                key={vod.id}
+                // key={vod.id + vod.duration}
                 timeout={vodAmounts.timeout}
                 classNames={vod.transition || "fade-750ms"}
                 unmountOnExit>
