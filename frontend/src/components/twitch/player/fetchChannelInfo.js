@@ -11,6 +11,11 @@ export default async (channelId, format) => {
     return await API.krakenGetChannelInfo({ params: { id: channelId } })
       .then((res) => {
         if (format) {
+          const localstorageGameInfo = getLocalstorage("Twitch_game_details")
+            ? getLocalstorage("Twitch_game_details").data.find(
+                (game) => game.name.toLowerCase() === res.data.game.toLowerCase()
+              )
+            : null;
           const data = {
             ...res.data,
             profile_img_url: res.data.logo,
@@ -20,11 +25,7 @@ export default async (channelId, format) => {
             game_name: res.data.game,
             started_at: Date.now() - 1000,
             viewers: 0,
-            game_img: getLocalstorage("Twitch_game_details")
-              ? getLocalstorage("Twitch_game_details").data.find(
-                  (game) => game.name.toLowerCase() === res.data.game.toLowerCase()
-                ).box_art_url
-              : null,
+            game_img: localstorageGameInfo && localstorageGameInfo.box_art_url,
           };
           return data;
         }
