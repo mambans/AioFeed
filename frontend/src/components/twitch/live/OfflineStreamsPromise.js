@@ -40,7 +40,6 @@ export default async ({
         getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
       ) {
         setTimeout(async () => {
-          console.log("Fetching", stream.user_name, "offline vod");
           await FetchSingelChannelVods(stream.user_id, setVods);
         }, 0);
       }
