@@ -56,6 +56,15 @@ export default (props) => {
             } else if (listIsOpen && !event.target.value) {
               if (topGames.current && topGames.current.data) {
                 setFilteredGames(topGames.current.data);
+                setTimeout(() => {
+                  if (
+                    endOfListRef.current &&
+                    topGames.current.data.length >= 1 &&
+                    topGames.current.pagination.cursor
+                  ) {
+                    observer.observe(endOfListRef.current);
+                  }
+                }, 0);
               } else {
                 setFilteredGames([]);
               }
@@ -63,7 +72,7 @@ export default (props) => {
               setListIsOpen(true);
             }
           } catch (error) {
-            console.log("useInput -> error", error);
+            console.error(error);
           }
         },
       },
@@ -203,7 +212,7 @@ export default (props) => {
         }
       }
     } catch (error) {
-      console.log("handleArrowKey -> error", error);
+      console.error(error);
     }
   };
 
