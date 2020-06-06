@@ -22,9 +22,11 @@ export default (props) => {
   const [listIsOpen, setListIsOpen] = useState();
   const [filteredGames, setFilteredGames] = useState();
   const [cursor, setCursor] = useState(0);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   const ulListRef = useRef();
   const inputRef = useRef();
+  const endOfListRef = useRef();
 
   const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue);
@@ -40,7 +42,7 @@ export default (props) => {
             setCursor(0);
             setValue(event.target.value);
             if (listIsOpen && event.target.value && event.target.value !== "") {
-              const filtered = topGames.current.filter((game) => {
+              const filtered = topGames.current.data.filter((game) => {
                 return game.name
                   .toLowerCase()
                   .includes((event.target.value || value).toLowerCase());
@@ -52,17 +54,17 @@ export default (props) => {
                 setFilteredGames(filtered);
               }
             } else if (listIsOpen && !event.target.value) {
-              setFilteredGames(topGames.current);
+              if (topGames.current && topGames.current.data) {
+                setFilteredGames(topGames.current.data);
+              } else {
+                setFilteredGames([]);
+              }
             } else if (!listIsOpen && event.target.value) {
               setListIsOpen(true);
             }
           } catch (error) {
             console.log("useInput -> error", error);
           }
-
-          // if (!listIsOpen && event.target.value.length >= 1) {
-          //   setListIsOpen(true);
-          // }
         },
       },
       showValue: () => {
@@ -81,6 +83,70 @@ export default (props) => {
       manualSet: setValue,
     };
   };
+
+  const observer = useMemo(
+    () =>
+      new IntersectionObserver(
+        function (entries) {
+          if (ulListRef.current) {
+            ulListRef.current.addEventListener(
+              "wheel",
+              throttle(
+                function (e) {
+                  if (
+                    entries[0].isIntersecting === true &&
+                    topGames.current &&
+                    topGames.current.data.length <= 450
+                  ) {
+                    // console.log("INTERSECTING");
+                    setLoadingMore(true);
+                    GetTopGames(topGames.current.pagination.cursor)
+                      .then((res) => {
+                        if (res.data && res.data.length >= 1) {
+                          const items = [...topGames.current.data, ...res.data];
+                          const uniqueItems = items.filter((item, index, self) => {
+                            return (
+                              self.findIndex((t) => t.id === item.id && t.name === item.name) ===
+                              index
+                            );
+                          });
+
+                          topGames.current = {
+                            data: uniqueItems,
+                            pagination: res.pagination,
+                          };
+
+                          setFilteredGames((curr) => {
+                            const items = [...curr, ...res.data];
+                            const uniqueItems = items.filter((item, index, self) => {
+                              return (
+                                self.findIndex((t) => t.id === item.id && t.name === item.name) ===
+                                index
+                              );
+                            });
+
+                            return uniqueItems;
+                          });
+                          setLoadingMore(false);
+                        }
+                      })
+                      .catch((e) => {
+                        console.error("e", e);
+                        setLoadingMore(false);
+                      });
+                  }
+                  return false;
+                },
+                5000,
+                { trailing: false, leading: true }
+              )
+            );
+          }
+        },
+        { threshold: 0 }
+      ),
+    []
+  );
 
   const {
     value: game,
@@ -105,13 +171,16 @@ export default (props) => {
         () => {
           GetTopGames().then((res) => {
             topGames.current = res;
-            setFilteredGames(res);
+            setFilteredGames(res.data);
+            if (endOfListRef.current && res.data && res.data.length >= 1 && res.pagination.cursor) {
+              observer.observe(endOfListRef.current);
+            }
           });
         },
         5000,
         { leading: true, trailing: false }
       ),
-    []
+    [observer]
   );
 
   const handleArrowKey = (e) => {
@@ -139,6 +208,7 @@ export default (props) => {
   };
 
   useEffect(() => {
+    const endOfListRefEle = endOfListRef.current;
     const inputField = inputRef.current;
     inputField.addEventListener("focus", () => {
       setListIsOpen(true);
@@ -147,20 +217,24 @@ export default (props) => {
     return () => {
       inputField.removeEventListener("focus", () => {
         setListIsOpen(true);
+        if (endOfListRefEle) observer.unobserve(endOfListRefEle);
       });
     };
-  }, []);
+  }, [observer]);
 
   useEffect(() => {
     const input = showValue();
-    if (!topGames.current && (listIsOpen || (input && input !== "" && input.length > 1))) {
+    if (
+      (!topGames.current || !topGames.current.data) &&
+      (listIsOpen || (input && input !== "" && input.length > 1))
+    ) {
       fetchTopGamesOnce();
     }
-  }, [showValue, listIsOpen, fetchTopGamesOnce, topGames]);
+  }, [showValue, listIsOpen, fetchTopGamesOnce, topGames, observer]);
 
   useEffect(() => {
     return () => {
-      setFilteredGames(topGames.current || []);
+      setFilteredGames((topGames.current && topGames.current.data) || []);
     };
   }, [topGames]);
 
@@ -203,32 +277,37 @@ export default (props) => {
             </StyledShowAllButton>
 
             {filteredGames ? (
-              filteredGames.map((game, index) => {
-                // console.log("game", game);
-                return (
-                  <StyledGameListElement
-                    key={game.id}
-                    selected={index === cursor}
-                    className={index === cursor ? "selected" : ""}>
-                    <Link
-                      onClick={() => {
-                        setListIsOpen(false);
-                      }}
-                      to={{
-                        pathname: "/category/" + game.name,
-                        state: {
-                          p_videoType: videoType,
-                        },
-                      }}>
-                      <img
-                        src={game.box_art_url.replace("{width}", 300).replace("{height}", 300)}
-                        alt=''
-                      />
-                      {game.name}
-                    </Link>
-                  </StyledGameListElement>
-                );
-              })
+              <>
+                {filteredGames.map((game, index) => {
+                  return (
+                    <StyledGameListElement
+                      key={game.id}
+                      selected={index === cursor}
+                      className={index === cursor ? "selected" : ""}>
+                      <Link
+                        onClick={() => {
+                          setListIsOpen(false);
+                        }}
+                        to={{
+                          pathname: "/category/" + game.name,
+                          state: {
+                            p_videoType: videoType,
+                          },
+                        }}>
+                        <img
+                          src={game.box_art_url.replace("{width}", 300).replace("{height}", 300)}
+                          alt=''
+                        />
+                        {game.name}
+                      </Link>
+                    </StyledGameListElement>
+                  );
+                })}
+                {loadingMore && <StyledLoadingList amount={3} />}
+                {(!game || game === "") && (
+                  <div ref={endOfListRef} style={{ width: "100%", height: "5px" }} />
+                )}
+              </>
             ) : (
               <StyledLoadingList amount={12} />
             )}
