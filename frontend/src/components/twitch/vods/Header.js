@@ -5,6 +5,8 @@ import { MdVideocam } from "react-icons/md";
 import Alert from "react-bootstrap/Alert";
 import Popup from "reactjs-popup";
 import React from "react";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
 import { HeaderLeftSubcontainer } from "./../StyledComponents";
 import {
@@ -67,6 +69,7 @@ export default React.forwardRef((props, ref) => {
         <MdVideocam size={32} style={{ color: "#6f166f" }} />
         Twitch vods
       </HeaderTitle>
+
       <Popup
         placeholder='Channel name..'
         arrow={false}
@@ -79,16 +82,26 @@ export default React.forwardRef((props, ref) => {
               justifyContent: "right",
               display: "flex",
             }}>
-            <ButtonList variant='outline-secondary'>
-              <MdFormatListBulleted
-                size={22}
-                style={{
-                  height: "22px",
-                  alignItems: "center",
-                  display: "flex",
-                }}
-              />
-            </ButtonList>
+            <OverlayTrigger
+              key={"left"}
+              placement={"left"}
+              delay={{ show: 1000, hide: 0 }}
+              overlay={
+                <Tooltip id={`tooltip-${"left"}`}>
+                  Add/remove Twitch channels to fetch vods from
+                </Tooltip>
+              }>
+              <ButtonList variant='outline-secondary'>
+                <MdFormatListBulleted
+                  size={22}
+                  style={{
+                    height: "22px",
+                    alignItems: "center",
+                    display: "flex",
+                  }}
+                />
+              </ButtonList>
+            </OverlayTrigger>
           </div>
         }
         position='left top'
