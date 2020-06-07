@@ -56,7 +56,7 @@ html[data-theme="christmas"] {
 
   --popupListsBackground: linear-gradient(rgba(0, 0, 0, 0.4) 0%, #000000d8 15%);
   --refreshButtonBackground: #0000007a;
-  --refreshButtonBorder: none;
+  --refreshButtonBorder: thin solid transparent;
   --refreshButtonColor: #a8a8a8;
   --refreshButtonHoverBackground: #333435;
   --refreshButtonHoverColor: #ffffff;
