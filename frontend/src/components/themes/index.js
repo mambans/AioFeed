@@ -1,28 +1,13 @@
 import { getLocalstorage } from "../../util/Utils";
 
+import { findSeasonOrDefaultTheme } from "./ThemeContext";
+
 export default async (themesArray) => {
-  const currentMonth = new Date().getMonth() + 1;
-  const currentDate = new Date().getDate();
-
   if (!getLocalstorage("activeTheme") || getLocalstorage("activeTheme").name === "default") {
-    const startTheme = await themesArray.find((theme) => {
-      return (
-        theme.startMonth <= currentMonth &&
-        theme.endMonth >= currentMonth &&
-        theme.startDate <= currentDate &&
-        theme.endDate >= currentDate
-      );
-    });
-
-    const defaultTheme = themesArray.find((theme) => {
-      return theme.default;
-    });
+    const activatingTheme = findSeasonOrDefaultTheme(themesArray);
 
     document.documentElement.classList.add("theme-transition");
-    document.documentElement.setAttribute(
-      "data-theme",
-      startTheme ? startTheme.name : defaultTheme.name || "default"
-    );
+    document.documentElement.setAttribute("data-theme", activatingTheme.name || "default");
     window.setTimeout(function () {
       document.documentElement.classList.remove("theme-transition");
     }, 1000);

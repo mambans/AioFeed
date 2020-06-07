@@ -1,23 +1,9 @@
 import React, { useContext, useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import styled from "styled-components";
 
-import { ThemeSelector, ThemeSelectorUl } from "./styledComponents";
-import ThemeContext from "./ThemeContext";
+import { ThemeSelector, ThemeSelectorUl, ThemeItem, Arrow } from "./styledComponents";
+import ThemeContext, { findSeasonOrDefaultTheme } from "./ThemeContext";
 import useSyncedLocalState from "./../../hooks/useSyncedLocalState";
-
-const Arrow = styled.i`
-  border: solid black;
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  padding: 3px;
-  background: transparent;
-  border-color: var(--textColor1Hover);
-  transform: ${({ open }) => (open ? "rotate(45deg)" : "rotate(-45deg)")};
-  transition: transform 350ms;
-  grid-column: 2;
-  width: 3px;
-`;
 
 export default ({ style }) => {
   const { themesArray, setActiveContextTheme } = useContext(ThemeContext);
@@ -36,26 +22,8 @@ export default ({ style }) => {
     document.body.classList.add("theme-transition");
 
     if (theme.name === "default") {
-      const currentMonth = new Date().getMonth() + 1;
-      const currentDate = new Date().getDate();
-
-      const startTheme = themesArray.find((themes) => {
-        return (
-          themes.startMonth <= currentMonth &&
-          themes.endMonth >= currentMonth &&
-          themes.startDate <= currentDate &&
-          themes.endDate >= currentDate
-        );
-      });
-
-      document.documentElement.setAttribute(
-        "data-theme",
-        startTheme
-          ? startTheme.name
-          : themesArray.find((themes) => {
-              return themes.default;
-            }).name
-      );
+      const activatingTheme = findSeasonOrDefaultTheme(themesArray);
+      document.documentElement.setAttribute("data-theme", activatingTheme.name || "default");
     } else {
       document.documentElement.setAttribute("data-theme", theme.name);
     }
@@ -86,9 +54,17 @@ export default ({ style }) => {
           <ThemeSelectorUl>
             {themesArray.map((theme) => {
               return (
-                <li
+                <ThemeItem
                   key={theme.name}
                   value={theme.name}
+                  image={
+                    theme.image
+                      ? typeof theme.image === "function"
+                        ? `${process.env.PUBLIC_URL}/images/${theme.image(themesArray).image}`
+                        : `${process.env.PUBLIC_URL}/images/${theme.image}`
+                      : "none"
+                  }
+                  backgroundColor={theme.backgroundColor ? theme.backgroundColor : "unset"}
                   onClick={() => {
                     setActiveTheme(theme);
                     activateTheme(theme);
@@ -96,7 +72,7 @@ export default ({ style }) => {
                     setOpen(false);
                   }}>
                   {theme.name.charAt(0).toUpperCase() + theme.name.slice(1)}
-                </li>
+                </ThemeItem>
               );
             })}
           </ThemeSelectorUl>

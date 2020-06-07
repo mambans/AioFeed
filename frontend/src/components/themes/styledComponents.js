@@ -9,18 +9,19 @@ export const ThemeSelector = styled.div`
     margin: 0;
     display: flex;
     align-items: center;
-    height: 2rem;
+    height: 2.2rem;
     font-weight: bold;
     display: flex;
     justify-content: center;
     cursor: pointer;
     /* border-radius: 10px; */
-    transition: border-radius 250ms, background 250ms;
+    transition: border-radius 250ms, background 250ms, background-color 250ms, background-image 250ms;
     border-radius: ${({ open }) => (open ? "10px 10px 0 0 " : "10px")};
     width: 100%;
     border: none;
     outline: 0;
-    color:var(--textColor1);
+    /* color:var(--textColor1); */
+    color: rgb(200, 200, 203);
     display: grid;
     /* grid-template-columns: 0% 100%; */
     grid-template-columns: 18% 4% 78%;
@@ -47,7 +48,8 @@ export const ThemeSelector = styled.div`
 
     &:hover {
       background: ${({ open }) => (open ? "transparent" : "rgba(0,0,0,0.1)")};
-      color:var(--textColor1Hover);
+      /* color:var(--textColor1Hover); */
+      color: rgb(255, 255, 255);
     }
 
     span#prefix {
@@ -70,14 +72,37 @@ export const ThemeSelectorUl = styled.ul`
   border-radius: 0 0 10px 10px;
   position: relative;
   font-weight: bold;
+`;
 
-  li {
-    padding: 5px 0 5px 10px;
-    cursor: pointer;
-    color: var(--textColor2);
+export const Arrow = styled.i`
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  background: transparent;
+  border-color: var(--textColor1Hover);
+  transform: ${({ open }) => (open ? "rotate(45deg)" : "rotate(-45deg)")};
+  transition: transform 350ms;
+  grid-column: 2;
+  width: 3px;
+`;
 
-    &:hover {
-      color: var(--textColor1Hover);
-    }
+export const ThemeItem = styled.li`
+  background-image: ${({ image }) => `url(${image})`};
+  background-color: ${({ backgroundColor }) => backgroundColor};
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position-y: center;
+  text-shadow: 1px 1px 1px black;
+
+  padding: 7px 0 7px 10px;
+  cursor: pointer;
+  /* color: var(--textColor1); */
+  color: rgb(200, 200, 203);
+
+  &:hover {
+    /* color: var(--textColor1Hover); */
+    color: rgb(255, 255, 255);
+    text-shadow: 2px 2px 2px black;
   }
 `;
