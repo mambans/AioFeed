@@ -68,9 +68,7 @@ export default () => {
     if (channelName && !videoId && !streamInfo) {
       document.title = `AF | ${channelName} player`;
     } else if (videoId) {
-      document.title = `AF | ${channelName || (streamInfo && streamInfo.user_name)} - ${
-        p_title || videoId
-      }`;
+      document.title = `AF | ${channelName || ""} - ${p_title || videoId}`;
     }
   }, [streamInfo, channelName, p_title, videoId]);
 
