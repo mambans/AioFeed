@@ -130,7 +130,7 @@ export default () => {
 
   const OnlineEvents = useCallback(async () => {
     console.log("Stream is Online");
-    document.title = `AF | ${channelName} Live`;
+    document.title = `AF | ${channelName} LIVE`;
 
     const SetStreamInfoAndPushNotis = async () => {
       if (twitchPlayer.current) {
@@ -281,20 +281,20 @@ export default () => {
     }
   }
 
+  const showAndResetTimer = throttle(
+    () => {
+      setShowControlls(true);
+      clearTimeout(fadeTimer.current);
+
+      fadeTimer.current = setTimeout(() => {
+        setShowControlls(false);
+      }, 2000);
+    },
+    250,
+    { leading: true, trailing: false }
+  );
+
   useEffect(() => {
-    const showAndResetTimer = throttle(
-      () => {
-        setShowControlls(true);
-        clearTimeout(fadeTimer.current);
-
-        fadeTimer.current = setTimeout(() => {
-          setShowControlls(false);
-        }, 2000);
-      },
-      250,
-      { leading: true, trailing: false }
-    );
-
     const keyboardEvents = (e) => {
       switch (e.key) {
         case "f":
@@ -330,7 +330,7 @@ export default () => {
         removeFromStreamNotisFromPlayer();
       };
     }
-  }, [handleMouseOut, removeFromStreamNotisFromPlayer]);
+  }, [handleMouseOut, removeFromStreamNotisFromPlayer, showAndResetTimer]);
 
   return (
     <>
@@ -372,6 +372,7 @@ export default () => {
                     type='live'
                     hidechat={String(hideChat)}
                     TwitchPlayer={twitchPlayer.current}
+                    showAndResetTimer={showAndResetTimer}
                     children={
                       <>
                         <li

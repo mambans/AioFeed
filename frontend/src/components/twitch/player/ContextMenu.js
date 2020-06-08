@@ -51,12 +51,20 @@ const BackDrop = styled.div`
   position: absolute;
 `;
 
-export default ({ PlayerUIControlls, type, hidechat, TwitchPlayer, children }) => {
+export default ({
+  PlayerUIControlls,
+  type,
+  hidechat,
+  TwitchPlayer,
+  showAndResetTimer,
+  children,
+}) => {
   const [show, setShow] = useState();
 
   useEffect(() => {
     const toggleShowHide = (e) => {
       e.preventDefault();
+      showAndResetTimer();
       const boundary = PlayerUIControlls.getBoundingClientRect();
       const mouseX = e.clientX - boundary.left;
       const mouseY = e.clientY;
@@ -76,7 +84,7 @@ export default ({ PlayerUIControlls, type, hidechat, TwitchPlayer, children }) =
         PlayerUIControlls.removeEventListener("contextmenu", toggleShowHide);
       };
     }
-  }, [setShow, PlayerUIControlls]);
+  }, [setShow, PlayerUIControlls, showAndResetTimer]);
 
   if (show && show.show) {
     return (
