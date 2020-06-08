@@ -58,14 +58,12 @@ export const sortInputFirst = (input, data) => {
 };
 
 export default (data) => {
+  const [filteredChannels, setFilteredChannels] = useState();
+  const [listIsOpen, setListIsOpen] = useState();
+  const [cursor, setCursor] = useState(0);
   const channels = useRef(
     getLocalstorage(`YT-followedChannels`) ? getLocalstorage(`YT-followedChannels`).data : []
   );
-  const [listIsOpen, setListIsOpen] = useState();
-  const [filteredChannels, setFilteredChannels] = useState(
-    getLocalstorage(`YT-followedChannels`) ? getLocalstorage(`YT-followedChannels`).data : []
-  );
-  const [cursor, setCursor] = useState(0);
   const inputRef = useRef();
   const ulListRef = useRef();
 
@@ -87,8 +85,8 @@ export default (data) => {
                 .includes((event.target.value || value).toLowerCase());
             });
             if (filtered.length > 1) {
-              const asd = sortInputFirst(event.target.value || value, filtered);
-              setFilteredChannels(asd);
+              const sorted = sortInputFirst(event.target.value || value, filtered);
+              setFilteredChannels(sorted);
             } else {
               setFilteredChannels(filtered);
             }
@@ -200,42 +198,36 @@ export default (data) => {
           }}
           unmountOnExit>
           <GameListUlContainer ref={ulListRef}>
-            <p
-              style={{
-                textAlign: "center",
-                fontSize: "0.9rem",
-                fontWeight: "bold",
-                margin: "9px 0",
-                color: "var(--VideoContainerLinks)",
-              }}>{`Total: ${setFilteredChannels.length}`}</p>
-            {/* <TransitionGroup component={null}> */}
             {filteredChannels ? (
-              filteredChannels.map((channel, index) => {
-                return (
-                  // <CSSTransition
-                  //   key={channel.snippet.resourceId.channelId}
-                  //   timeout={0}
-                  //   classNames={"yt-ChannellistItem"}
-                  //   // classNames="yt-ChannellistItem"
-                  //   unmountOnExit>
-                  <ChannelListElement
-                    key={channel.snippet.resourceId.channelId}
-                    channel={channel}
-                    setNewChannels={(newChannels) => {
-                      channels.current = newChannels;
-                      setFilteredChannels(newChannels);
-                    }}
-                    videos={data.videos}
-                    setVideos={data.setVideos}
-                    selected={index === cursor}
-                  />
-                  // {/* </CSSTransition> */}
-                );
-              })
+              <>
+                <p
+                  style={{
+                    textAlign: "center",
+                    fontSize: "0.9rem",
+                    fontWeight: "bold",
+                    margin: "9px 0",
+                    color: "var(--VideoContainerLinks)",
+                  }}>{`Total: ${filteredChannels.length}`}</p>
+
+                {filteredChannels.map((channel, index) => {
+                  return (
+                    <ChannelListElement
+                      key={channel.snippet.title}
+                      channel={channel}
+                      setNewChannels={(newChannels) => {
+                        channels.current = newChannels;
+                        setFilteredChannels(newChannels);
+                      }}
+                      videos={data.videos}
+                      setVideos={data.setVideos}
+                      selected={index === cursor}
+                    />
+                  );
+                })}
+              </>
             ) : (
               <StyledLoadingList amount={12} />
             )}
-            {/* </TransitionGroup> */}
           </GameListUlContainer>
         </CSSTransition>
       </SearchGameForm>

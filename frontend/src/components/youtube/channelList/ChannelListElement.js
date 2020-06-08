@@ -22,7 +22,7 @@ export default (data) => {
 
   return (
     <ChannelListLi
-      key={channel.snippet.resourceId.channelId}
+      key={channel.snippet.title}
       className={selected ? "selected" : ""}
       selected={selected}>
       <a href={`https://www.youtube.com/channel/${channel.snippet.resourceId.channelId}`}>
