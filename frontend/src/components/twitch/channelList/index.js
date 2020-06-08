@@ -89,8 +89,8 @@ export default () => {
                   .includes((event.target.value || value).toLowerCase());
               });
               if (filtered.length > 1) {
-                const asd = sortInputFirst(event.target.value || value, filtered);
-                setFilteredChannels(asd);
+                const sorted = sortInputFirst(event.target.value || value, filtered);
+                setFilteredChannels(sorted);
               } else {
                 setFilteredChannels(filtered);
               }

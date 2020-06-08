@@ -39,7 +39,7 @@ export default () => {
                 <b>ioFeed</b>
               </h1>
               <p>
-                View Twitch & Youtube feeds and Twitter list in one page, with Twitch
+                View Twitch & Youtube feeds and a Twitter list in one page, with Twitch
                 (live/offline/update) notifications.
               </p>
             </div>

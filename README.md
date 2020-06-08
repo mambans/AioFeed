@@ -2,11 +2,11 @@
 
 <img src="https://github.com/mambans/AioFeed/blob/master/frontend/public/android-chrome-192x192.png" alt="Logo" width="300"/>
 
-My personal project **AioFeed**, is a site that combines feeds from different sites such as Twitch.tv, Youtube.com and Twitter List into one page. And features for that I personally thought was missing from Twitch.tv.
+My personal project **AioFeed**, is a site that combines feeds from different sites such as Twitch.tv, Youtube.com and a Twitter List into one page. And some features I personally thought was missing from Twitch.tv.
 
 ## Account
 
-AioFeed stores the AioFeed account Username, email, **hashed** password in database and encrypted Youtube and Twitch access tokens so you don't need to reconnected on each session, tokens can still have expired until next login.
+AioFeed stores the AioFeed account Username, email, **hashed** password in database and encrypted Youtube and Twitch access tokens so you don't need to reconnected on each session, token's auto refreshes in the client when needed, so stored tokens can still expire until next auto refresh in the client.
 It also stores profile image url, vod channel list (twitch channels to fetch vods from).
 
 ## Pages
@@ -43,9 +43,9 @@ AioFeed auto refreshes the live Twitch feed every 25sec with live Notifications.
 
 #### Added features I personally thought was missing from Twitch
 
-- Auto refresh streams and their stats incl. viewers, games, title, thumbnail (For when Site stays Open or Pinned.) (Can be disabled)
+- Auto refresh streams and their stats incl. viewers, games, title, thumbnail (For when /feed page stays open) (Can be disabled).
 - Adjust volume with scroll wheel and mute with scroll click.
-- Streams title/game update notifications for selected channels.
+- Streams title/game updated notifications for selected channels.
 - Switch chat sides
 - Seperate Live follows and Vod follows to be able to only fetch vods from selected channels and instead of all.
 - Bigger live video & smaller chat.
@@ -58,13 +58,13 @@ AioFeed auto refreshes the live Twitch feed every 25sec with live Notifications.
 - Removing reruns from live feed.
 - Load more vods without leaving the main/feed page.
 
-* Small/normal delay ~1 sec (with no ads?)
+* Small/normal delay ~1 sec.
   (Notifications require website to be opened.)
 
 ### Youtube
 
-Youtube feed shows the 7 latest uploaded video from each followed/subscribed channel in the past 3 days. Doesn't auto refresh, can be manually refreshed from a button.
+Youtube feed shows the 10 latest uploaded video from each followed/subscribed channel in the past 7 days. Doesn't auto refresh, can be manually refreshed from a button.
 
 Hovering a video displays an iframe of the video.
 
-This feed is pretty limited because of quite low quota/request limit.
+(This feed is pretty limited because of quite low quota/request limit.)
