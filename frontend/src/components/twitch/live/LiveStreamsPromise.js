@@ -49,7 +49,7 @@ export default async ({
         getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
       ) {
         setTimeout(async () => {
-          await FetchSingelChannelVods(stream.user_id, setVods);
+          await FetchSingelChannelVods(stream.user_id, setVods, "live");
         }, 30000);
       }
       return "";

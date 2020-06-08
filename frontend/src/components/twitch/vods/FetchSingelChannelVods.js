@@ -2,8 +2,9 @@ import { durationToDate } from "./../TwitchUtils";
 import AddVideoExtraData from "./../AddVideoExtraData";
 import SortAndAddExpire from "./SortAndAddExpire";
 import API from "../API";
+import { getLocalstorage } from "../../../util/Utils";
 
-export default async (channelId, setVods) => {
+export default async (channelId, setVods, status) => {
   const vodExpire = 3; // Number of days
 
   const addVodEndTime = async (followedStreamVods) => {
@@ -28,6 +29,17 @@ export default async (channelId, setVods) => {
   }).then(async (res) => {
     const newVodWithProfile = await AddVideoExtraData({ items: res.data });
     const newVodWithEndtime = await addVodEndTime(newVodWithProfile.data);
+
+    if (status === "offline") {
+      const streams = getLocalstorage("newLiveStreamsFromPlayer") || { data: [] };
+      const newStreams = streams.data.filter(
+        (item) => item.user_name.toLowerCase() !== res.data.data[0].user_name.toLowerCase()
+      );
+      localStorage.setItem(
+        "newLiveStreamsFromPlayer",
+        JSON.stringify({ data: newStreams, updated: Date.now() })
+      );
+    }
 
     setVods((vods) => {
       const existingVods = [...vods.data];
