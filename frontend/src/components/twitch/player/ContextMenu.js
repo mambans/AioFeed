@@ -119,14 +119,14 @@ export default ({
             <li
               onClick={() => {
                 setChatState({
-                  videoWidth: window.innerWidth * 0.91,
+                  chatWidth: window.innerWidth * 0.09,
                   switchChatSide: false,
                   hideChat: false,
                 });
                 localStorage.setItem(
                   "TwitchChatState",
                   JSON.stringify({
-                    videoWidth: window.innerWidth * 0.91,
+                    chatWidth: window.innerWidth * 0.09,
                     switchChatSide: false,
                     hideChat: false,
                   })

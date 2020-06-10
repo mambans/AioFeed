@@ -24,8 +24,8 @@ export const VideoAndChatContainer = styled.div`
       : '"video devider chat"'};
   color: var(--navTextColorActive);
   cursor: ${({ resizeActive }) => (resizeActive ? "w-resize" : "unset")};
-  grid-template-columns: ${({ videowidth, hidechat, switched }) =>
-    `${hidechat ? "100vw" : switched ? `auto 5px ${videowidth}px` : `${videowidth}px 5px auto`} `};
+  grid-template-columns: ${({ chatwidth, hidechat, switched }) =>
+    `${hidechat ? "100vw" : switched ? `${chatwidth}px 5px auto` : `auto 5px ${chatwidth}px`} `};
 
   &:hover #switchSides {
     opacity: 0.6;
@@ -142,8 +142,12 @@ export const PlayerNavbar = styled.div`
 
 export const VolumeEventOverlay = styled.div`
   position: absolute;
-  width: ${({ type, hidechat, videowidth }) =>
-    hidechat === "true" ? "100vw" : type === "live" ? `${videowidth}px` : "100vw"};
+  width: ${({ type, hidechat, chatwidth }) =>
+    hidechat === "true"
+      ? "100vw"
+      : type === "live"
+      ? `${window.innerWidth - chatwidth}px`
+      : "100vw"};
   height: 100%;
   bottom: ${({ type }) => (type === "live" ? "unset" : "70px")};
   cursor: ${({ showcursor }) => (showcursor ? "auto" : "none")};
@@ -494,7 +498,8 @@ export const ResizeDevider = styled.div`
 
 export const ChatOverlay = styled.div`
   height: 100%;
-  width: ${({ videowidth }) => `calc(100vw - ${videowidth}px)`};
+  /* width: ${({ videowidth }) => `calc(100vw - ${videowidth}px)`}; */
+  width: ${({ chatwidth }) => chatwidth}px;
   position: absolute;
   transform: translate3d(0, 0, 0);
   grid-area: chat;

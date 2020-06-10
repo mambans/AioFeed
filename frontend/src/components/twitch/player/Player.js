@@ -56,13 +56,13 @@ export default () => {
   const [chatState, setChatState] = useState(
     getLocalstorage("TwitchChatState")
       ? {
-          videoWidth: window.innerWidth * 0.91,
+          chatwidth: window.innerWidth * 0.09,
           switchChatSide: false,
           hideChat: false,
           ...getLocalstorage("TwitchChatState"),
         }
       : {
-          videoWidth: window.innerWidth * 0.91,
+          chatwidth: window.innerWidth * 0.09,
           switchChatSide: false,
           hideChat: false,
         }
@@ -362,20 +362,17 @@ export default () => {
         const mouseX = e.clientX;
 
         const newWidth = chatState.switchChatSide
-          ? Math.min(
-              Math.max(Math.max(parseInt(window.innerWidth - mouseX)), 10),
-              window.innerWidth - 10
-            )
-          : Math.min(Math.max(Math.max(parseInt(mouseX)), 10), window.innerWidth - 10);
+          ? Math.min(Math.max(parseInt(mouseX), 10), window.innerWidth - 250)
+          : Math.min(Math.max(parseInt(window.innerWidth - mouseX), 10), window.innerWidth - 250);
 
         setChatState((curr) => {
-          return { ...curr, videoWidth: newWidth };
+          return { ...curr, chatwidth: newWidth };
         });
         // clearTimeout(locatorageWidthTimer.current);
         // locatorageWidthTimer.current = setTimeout(() => {
         localStorage.setItem(
           "TwitchChatState",
-          JSON.stringify({ ...chatState, videoWidth: newWidth })
+          JSON.stringify({ ...chatState, chatwidth: newWidth })
         );
         // localStorage.setItem("TwitchVideoWidth", { newWidth: newWidth });
         // }, 5000);
@@ -404,7 +401,7 @@ export default () => {
         <VideoAndChatContainer
           onMouseUp={handleResizeMouseUp}
           onMouseMove={resize}
-          videowidth={chatState.videoWidth}
+          chatwidth={chatState.chatwidth || window.innerWidth * 0.09}
           resizeActive={resizeActive}
           switched={chatState.switchChatSide}
           style={{
@@ -426,7 +423,7 @@ export default () => {
                 id='controls'
                 hidechat={String(chatState.hideChat)}
                 showcursor={showControlls}
-                videowidth={chatState.videoWidth}>
+                chatwidth={chatState.chatwidth || window.innerWidth * 0.09}>
                 {twitchPlayer.current && (
                   <ContextMenu
                     PlayerUIControlls={PlayerUIControlls.current}
@@ -666,17 +663,14 @@ export default () => {
             <ResizeDevider
               onMouseDown={handleResizeMouseDown}
               resizeActive={resizeActive}
-              videowidth={chatState.videoWidth}>
+              chatwidth={chatState.chatwidth}>
               <div />
             </ResizeDevider>
           )}
           {!chatState.hideChat ? (
             <>
               {resizeActive && (
-                <ChatOverlay
-                  switched={chatState.switchChatSide}
-                  videowidth={chatState.videoWidth}
-                />
+                <ChatOverlay switched={chatState.switchChatSide} chatwidth={chatState.chatwidth} />
               )}
               <div id='chat'>
                 <ShowNavbarBtn
