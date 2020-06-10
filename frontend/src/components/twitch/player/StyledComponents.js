@@ -470,7 +470,7 @@ export const ResizeDevider = styled.div`
   cursor: w-resize;
   grid-area: devider;
   transition: background 500ms;
-  background: ${({ resizeActive }) => (resizeActive ? "rgb(40,40,40)" : "unset")};
+  background: ${({ resizeActive }) => (resizeActive ? "rgb(40,40,40)" : "#121314")};
   display: flex;
   transform: translate3d(0,0,0);
 
