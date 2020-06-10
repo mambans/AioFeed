@@ -19,8 +19,6 @@ export const VideoAndChatContainer = styled.div`
       ? '"video"'
       : switchedChatState === "true"
       ? '"chat devider video"'
-      : switchedChatState === "hide"
-      ? '"video"'
       : '"video devider chat"'};
   color: var(--navTextColorActive);
   cursor: ${({ resizeActive }) => (resizeActive ? "w-resize" : "unset")};
@@ -480,7 +478,7 @@ export const ResizeDevider = styled.div`
 
   > div {
     transition: opacity 500ms, height 250ms;
-    opacity: ${({ resizeActive }) => (resizeActive ? 1 : 0.2)};
+    opacity: ${({ resizeActive }) => (resizeActive ? 1 : 0.4)};
     background: #ffffff;
     width: 1px;
     margin: auto;
