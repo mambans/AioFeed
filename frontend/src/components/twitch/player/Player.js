@@ -619,11 +619,11 @@ export default () => {
                       ? "unset"
                       : chatState.hideChat
                       ? "10px"
-                      : "calc(9vw + 10px)",
+                      : `calc(${chatState.chatwidth}px + 10px)`,
                     left: chatState.switchChatSide
                       ? chatState.hideChat
                         ? "10px"
-                        : "calc(9vw + 10px)"
+                        : `calc(${chatState.chatwidth}px + 10px)`
                       : "unset",
                   }}
                 />
@@ -648,11 +648,11 @@ export default () => {
                       ? "unset"
                       : chatState.hideChat
                       ? "10px"
-                      : "calc(9vw + 10px)",
+                      : `calc(${chatState.chatwidth}px + 10px)`,
                     left: chatState.switchChatSide
                       ? chatState.hideChat
                         ? "10px"
-                        : "calc(9vw + 10px)"
+                        : `calc(${chatState.chatwidth}px + 10px)`
                       : "unset",
                   }}
                 />
