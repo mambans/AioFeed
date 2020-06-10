@@ -13,20 +13,25 @@ export const VideoAndChatContainer = styled.div`
   top: 50px;
   transition: top 300ms, height 300ms;
   display: grid;
-  grid-template-areas: ${({ switchedChatState }) =>
-    switchedChatState === "true"
-      ? '"chat video"'
+  transform: translate3d(0, 0, 0);
+  grid-template-areas: ${({ switchedChatState, hidechat }) =>
+    hidechat
+      ? '"video"'
+      : switchedChatState === "true"
+      ? '"chat devider video"'
       : switchedChatState === "hide"
-      ? "video"
-      : '"video chat"'};
+      ? '"video"'
+      : '"video devider chat"'};
   color: var(--navTextColorActive);
+  cursor: ${({ resizeActive }) => (resizeActive ? "w-resize" : "unset")};
+  grid-template-columns: ${({ videowidth, hidechat, switched }) =>
+    `${hidechat ? "100vw" : switched ? `auto 5px ${videowidth}px` : `${videowidth}px 5px auto`} `};
 
   &:hover #switchSides {
     opacity: 0.6;
   }
 
   div#twitch-embed {
-    width: ${({ hidechat }) => (hidechat === "true" ? "100vw" : "91vw")};
     grid-area: video;
   }
 
@@ -43,9 +48,7 @@ export const VideoAndChatContainer = styled.div`
 export const StyledChat = styled.iframe`
   height: 100%;
   border: none;
-  /* right: 0;
-  position: fixed; */
-  width: ${({ width }) => width || "9vw"};
+  width: 100%;
 `;
 
 export const StyledVideo = styled.iframe`
@@ -58,14 +61,12 @@ export const ToggleSwitchChatSide = styled(MdCompareArrows).attrs({ size: 30 })`
   z-index: 1;
   cursor: pointer;
   transition: opacity 300ms;
-  /* opacity: 0; */
   bottom: 60px;
-  /* margin-left: ${({ switched }) => (switched === "true" ? "10px" : "calc(91vw - 40px)")}; */
   right: ${({ switched }) => (switched === "true" ? "unset" : "10px")};
   left: ${({ switched }) => (switched === "true" ? "10px" : "unset")};
   background: rgba(0, 0, 0, 0.25) none repeat scroll 0% 0%;
-border-radius: 5px;
-box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
 
   &:hover {
     opacity: 1 !important;
@@ -74,9 +75,7 @@ box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
 
 export const PlayerNavbar = styled.div`
   height: 35px;
-  /* background: var(--navigationbarBacklinkWithIconground); */
   background: #0000005c;
-  /* text-align: center; */
   display: flex;
   justify-content: center;
   align-content: center;
@@ -143,33 +142,33 @@ export const PlayerNavbar = styled.div`
 
 export const VolumeEventOverlay = styled.div`
   position: absolute;
-  width: ${({ type, hidechat }) =>
-    hidechat === "true" ? "99vw" : type === "live" ? "90vw" : "100vw"};
-  /* width: ${({ hideChat }) => (hideChat === "true" ? "99vw" : "90vw")}; */
+  width: ${({ type, hidechat, videowidth }) =>
+    hidechat === "true" ? "100vw" : type === "live" ? `${videowidth}px` : "100vw"};
   height: 100%;
   bottom: ${({ type }) => (type === "live" ? "unset" : "70px")};
   cursor: ${({ showcursor }) => (showcursor ? "auto" : "none")};
   display: ${({ show }) => (show ? "block" : "none")};
 
-  a, p {
+  a,
+  p {
     text-shadow: 0 0 2px black;
   }
 
   #PausePlay {
-  color: #f4f4f49c;
-  cursor: pointer;
-  position: absolute;
-  bottom: 10px;
-  transition: color 150ms;
-  margin: 5px 10px;
+    color: #f4f4f49c;
+    cursor: pointer;
+    position: absolute;
+    bottom: 10px;
+    transition: color 150ms;
+    margin: 5px 10px;
 
     &:hover {
       color: #ffffff;
     }
-
   }
 
-  svg, p#showQualities {
+  svg,
+  p#showQualities {
     opacity: 0.7;
     transition: opacity 300ms;
 
@@ -219,7 +218,6 @@ export const StyledVolumeSlider = styled.div`
   }
 
   .rangeslider {
-    /* background: #6b6b6b; */
     background-color: ${({ volumeMuted }) => (volumeMuted ? "#841010a1" : "#6b6b6b")};
     margin: 9px 0;
     width: calc(100% - 30px);
@@ -414,7 +412,6 @@ export const HideChatButton = styled(FaWindowClose).attrs({ size: 26, color: "re
   bottom: 100px;
   opacity: 0.5;
   cursor: pointer;
-  right: 10px;
   right: ${({ switched }) => (switched === "true" ? "unset" : "10px")};
   left: ${({ switched }) => (switched === "true" ? "10px" : "unset")};
   background: rgba(0, 0, 0, 0.25) none repeat scroll 0% 0%;
@@ -436,7 +433,6 @@ export const OpenChatButton = styled(MdChat).attrs({ size: 26, color: "white" })
 
 export const CreateClipButton = styled(MdMovieCreation).attrs({ size: 24, color: "white" })`
   position: absolute;
-  /* right: 45px; */
   left: 360px;
   bottom: 12px;
   opacity: 0.7;
@@ -467,4 +463,39 @@ export const ShowNavbarBtn = styled(Button)`
 export const NavigateBack = styled(Button)`
   left: 0;
   position: absolute;
+`;
+
+export const ResizeDevider = styled.div`
+  height: 100%;
+  cursor: w-resize;
+  grid-area: devider;
+  transition: background 500ms;
+  background: ${({ resizeActive }) => (resizeActive ? "rgb(40,40,40)" : "unset")};
+  display: flex;
+  transform: translate3d(0,0,0);
+
+  > div {
+    transition: opacity 500ms, height 250ms;
+    opacity: ${({ resizeActive }) => (resizeActive ? 1 : 0.2)};
+    background: #ffffff;
+    width: 1px;
+    margin: auto;
+    /* height: ${({ resizeActive, videowidth }) =>
+      resizeActive ? `${(videowidth / 1.777777777777778).toFixed(0)}px` || "25%" : "5%"}; */
+    height: ${({ resizeActive }) => (resizeActive ? "40%" : "10%")};
+  }
+
+  &:hover > div {
+    transition: opacity 250ms, height 500ms;
+    opacity: 1;
+    height: 40%;
+  }
+`;
+
+export const ChatOverlay = styled.div`
+  height: 100%;
+  width: ${({ videowidth }) => `calc(100vw - ${videowidth}px)`};
+  position: absolute;
+  transform: translate3d(0, 0, 0);
+  grid-area: chat;
 `;

@@ -22,6 +22,8 @@ import {
   VideoAndChatContainer,
   VolumeEventOverlay,
   ShowNavbarBtn,
+  ResizeDevider,
+  ChatOverlay,
 } from "./StyledComponents";
 import PlayerNavbar from "./PlayerNavbar";
 import setFavion from "../../setFavion";
@@ -55,6 +57,8 @@ export default () => {
   const hideChatSaved = useRef(false);
   const [switched, setSwitched] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState();
+  const [videowidth, setVideowidth] = useState(window.innerWidth * 0.91);
+  const [resizeActive, setResizeActive] = useState(false);
 
   const PlayerUIControlls = useRef();
   const twitchPlayer = useRef();
@@ -332,6 +336,37 @@ export default () => {
     }
   }, [handleMouseOut, removeFromStreamNotisFromPlayer, showAndResetTimer]);
 
+  const handleResizeMouseDown = () => {
+    setResizeActive(true);
+  };
+
+  const handleResizeMouseUp = (e) => {
+    setResizeActive(false);
+  };
+
+  const resize = useCallback(
+    // throttle(
+    (e) => {
+      if (resizeActive) {
+        const mouseX = e.clientX;
+        if (switched) {
+          setVideowidth(
+            Math.min(
+              Math.max(Math.max(parseInt(window.innerWidth - mouseX)), 10),
+              window.innerWidth - 10
+            )
+          );
+        } else {
+          setVideowidth(Math.min(Math.max(Math.max(parseInt(mouseX)), 10), window.innerWidth - 10));
+        }
+      }
+    },
+    // 100,
+    //   { trailing: false, leading: true }
+    // ),
+    [resizeActive, switched]
+  );
+
   return (
     <>
       <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
@@ -347,15 +382,21 @@ export default () => {
 
       {channelName && !videoId ? (
         <VideoAndChatContainer
+          onMouseUp={handleResizeMouseUp}
+          onMouseMove={resize}
+          videowidth={videowidth}
+          resizeActive={resizeActive}
+          switched={switched}
           style={{
             height: visible ? "calc(100vh - 85px)" : "100vh",
             top: visible ? "85px" : "0",
           }}
           switchedChatState={String(switched)}
-          hidechat={String(hideChat)}>
+          hidechat={hideChat}>
           <div id='twitch-embed' ref={videoElementRef}>
             <CSSTransition
-              in={showControlls}
+              // in={showControlls}
+              in={false}
               key={"controllsUI"}
               timeout={1000}
               classNames='fade-controllUI-1s'>
@@ -365,7 +406,8 @@ export default () => {
                 type='live'
                 id='controls'
                 hidechat={String(hideChat)}
-                showcursor={showControlls}>
+                showcursor={showControlls}
+                videowidth={videowidth}>
                 {twitchPlayer.current && (
                   <ContextMenu
                     PlayerUIControlls={PlayerUIControlls.current}
@@ -542,32 +584,44 @@ export default () => {
               </>
             )}
           </div>
+          {!hideChat && (
+            <ResizeDevider
+              onMouseDown={handleResizeMouseDown}
+              resizeActive={resizeActive}
+              videowidth={videowidth}>
+              <div />
+            </ResizeDevider>
+          )}
           {!hideChat ? (
-            <div id='chat'>
-              <ShowNavbarBtn
-                variant='dark'
-                type='live'
-                onClick={() => {
-                  setVisible(!visible);
-                }}>
-                <MdVerticalAlignBottom
-                  style={{
-                    transform: visible ? "rotateX(180deg)" : "unset",
-                    right: "10px",
-                  }}
-                  size={30}
-                  title='Show navbar'
+            <>
+              {/* {true && <ChatOverlay switched={switched} videowidth={videowidth} />} */}
+              {resizeActive && <ChatOverlay switched={switched} videowidth={videowidth} />}
+              <div id='chat'>
+                <ShowNavbarBtn
+                  variant='dark'
+                  type='live'
+                  onClick={() => {
+                    setVisible(!visible);
+                  }}>
+                  <MdVerticalAlignBottom
+                    style={{
+                      transform: visible ? "rotateX(180deg)" : "unset",
+                      right: "10px",
+                    }}
+                    size={30}
+                    title='Show navbar'
+                  />
+                  Nav
+                </ShowNavbarBtn>
+                <StyledChat
+                  frameborder='0'
+                  scrolling='yes'
+                  theme='dark'
+                  id={channelName + "-chat"}
+                  src={`https://www.twitch.tv/embed/${channelName}/chat?darkpopout`}
                 />
-                Nav
-              </ShowNavbarBtn>
-              <StyledChat
-                frameborder='0'
-                scrolling='yes'
-                theme='dark'
-                id={channelName + "-chat"}
-                src={`https://www.twitch.tv/embed/${channelName}/chat?darkpopout`}
-              />
-            </div>
+              </div>
+            </>
           ) : (
             <ShowNavbarBtn
               variant='dark'
