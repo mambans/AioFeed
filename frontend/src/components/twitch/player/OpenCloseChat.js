@@ -7,8 +7,8 @@ export default ({ hideChat, switched, onClick, style }) => {
     return (
       <OpenChatButton
         title='Open chat'
-        hidechat={hideChat.toString()}
-        switched={switched.toString()}
+        hidechat={String(hideChat)}
+        switched={String(switched)}
         onClick={onClick}
         style={style}
       />
@@ -17,8 +17,8 @@ export default ({ hideChat, switched, onClick, style }) => {
     return (
       <HideChatButton
         title='Hide chat'
-        hidechat={hideChat.toString()}
-        switched={switched.toString()}
+        hidechat={String(hideChat)}
+        switched={String(switched)}
         onClick={onClick}
         style={style}
       />

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { MdHighQuality } from "react-icons/md";
+import { GrRefresh } from "react-icons/gr";
 
-const HEIGHT = 250;
-const WIDTH = 225;
+const HEIGHT = 275;
+const WIDTH = 250;
 
 const Container = styled.div`
   position: absolute;
@@ -31,6 +32,11 @@ const Container = styled.div`
       svg {
         margin-right: 5px;
         color: inherit;
+        stroke: rgb(225, 225, 225);
+
+        path {
+          stroke: rgb(225, 225, 225);
+        }
       }
 
       &:hover,
@@ -57,6 +63,7 @@ export default ({
   hidechat,
   TwitchPlayer,
   showAndResetTimer,
+  setChatState,
   children,
 }) => {
   const [show, setShow] = useState();
@@ -103,13 +110,31 @@ export default ({
             }}>
             <li
               onClick={() => {
-                console.log("QUALITY");
                 TwitchPlayer.setQuality("chunked");
               }}>
               <MdHighQuality size={24} />
               {"Max quality (Source)"}
             </li>
             {children}
+            <li
+              onClick={() => {
+                setChatState({
+                  videoWidth: window.innerWidth * 0.91,
+                  switchChatSide: false,
+                  hideChat: false,
+                });
+                localStorage.setItem(
+                  "TwitchChatState",
+                  JSON.stringify({
+                    videoWidth: window.innerWidth * 0.91,
+                    switchChatSide: false,
+                    hideChat: false,
+                  })
+                );
+              }}>
+              <GrRefresh size={24} />
+              {"Reset video/chat settings"}
+            </li>
           </ul>
         </Container>
       </>

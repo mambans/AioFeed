@@ -53,11 +53,23 @@ export default () => {
   const [streamInfo, setStreamInfo] = useState(p_channelInfos);
   const [showControlls, setShowControlls] = useState();
   const [showUIControlls, setShowUIControlls] = useState();
-  const [hideChat, setHideChat] = useState(false);
+  const [chatState, setChatState] = useState(
+    getLocalstorage("TwitchChatState")
+      ? {
+          videoWidth: window.innerWidth * 0.91,
+          switchChatSide: false,
+          hideChat: false,
+          ...getLocalstorage("TwitchChatState"),
+        }
+      : {
+          videoWidth: window.innerWidth * 0.91,
+          switchChatSide: false,
+          hideChat: false,
+        }
+  );
+
   const hideChatSaved = useRef(false);
-  const [switched, setSwitched] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState();
-  const [videowidth, setVideowidth] = useState(window.innerWidth * 0.91);
   const [resizeActive, setResizeActive] = useState(false);
 
   const PlayerUIControlls = useRef();
@@ -67,6 +79,7 @@ export default () => {
   const refreshStreamInfoTimer = useRef();
   const videoElementRef = useRef();
   const hideChatDelay = useRef();
+  // const locatorageWidthTimer = useRef();
 
   useEffect(() => {
     if (channelName && !videoId && !streamInfo) {
@@ -257,13 +270,11 @@ export default () => {
     ) {
       if (hideChatDelay.current) clearTimeout(hideChatDelay.current);
       hideChatDelay.current = setTimeout(() => {
-        setHideChat(true);
+        setChatState((curr) => ({ ...curr, hideChat: true }));
       }, 5000);
       setIsFullscreen(true);
       if (video.requestFullScreen) {
         video.requestFullScreen();
-      } else if (video.mozRequestFullScreen) {
-        video.mozRequestFullScreen();
       } else if (video.webkitRequestFullScreen) {
         video.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
       } else if (video.msRequestFullscreen) {
@@ -271,7 +282,7 @@ export default () => {
       }
     } else {
       if (hideChatDelay.current) clearTimeout(hideChatDelay.current);
-      setHideChat(hideChatSaved.current);
+      setChatState((curr) => ({ ...curr, hideChat: hideChatSaved.current }));
       setIsFullscreen(false);
       if (document.cancelFullScreen) {
         document.cancelFullScreen();
@@ -349,22 +360,31 @@ export default () => {
     (e) => {
       if (resizeActive) {
         const mouseX = e.clientX;
-        if (switched) {
-          setVideowidth(
-            Math.min(
+
+        const newWidth = chatState.switchChatSide
+          ? Math.min(
               Math.max(Math.max(parseInt(window.innerWidth - mouseX)), 10),
               window.innerWidth - 10
             )
-          );
-        } else {
-          setVideowidth(Math.min(Math.max(Math.max(parseInt(mouseX)), 10), window.innerWidth - 10));
-        }
+          : Math.min(Math.max(Math.max(parseInt(mouseX)), 10), window.innerWidth - 10);
+
+        setChatState((curr) => {
+          return { ...curr, videoWidth: newWidth };
+        });
+        // clearTimeout(locatorageWidthTimer.current);
+        // locatorageWidthTimer.current = setTimeout(() => {
+        localStorage.setItem(
+          "TwitchChatState",
+          JSON.stringify({ ...chatState, videoWidth: newWidth })
+        );
+        // localStorage.setItem("TwitchVideoWidth", { newWidth: newWidth });
+        // }, 5000);
       }
     },
     // 100,
     //   { trailing: false, leading: true }
     // ),
-    [resizeActive, switched]
+    [resizeActive, chatState]
   );
 
   return (
@@ -384,19 +404,18 @@ export default () => {
         <VideoAndChatContainer
           onMouseUp={handleResizeMouseUp}
           onMouseMove={resize}
-          videowidth={videowidth}
+          videowidth={chatState.videoWidth}
           resizeActive={resizeActive}
-          switched={switched}
+          switched={chatState.switchChatSide}
           style={{
             height: visible ? "calc(100vh - 85px)" : "100vh",
             top: visible ? "85px" : "0",
           }}
-          switchedChatState={String(switched)}
-          hidechat={hideChat}>
+          switchedChatState={String(chatState.switchChatSide)}
+          hidechat={chatState.hideChat}>
           <div id='twitch-embed' ref={videoElementRef}>
             <CSSTransition
-              // in={showControlls}
-              in={false}
+              in={showControlls}
               key={"controllsUI"}
               timeout={1000}
               classNames='fade-controllUI-1s'>
@@ -405,29 +424,40 @@ export default () => {
                 ref={PlayerUIControlls}
                 type='live'
                 id='controls'
-                hidechat={String(hideChat)}
+                hidechat={String(chatState.hideChat)}
                 showcursor={showControlls}
-                videowidth={videowidth}>
+                videowidth={chatState.videoWidth}>
                 {twitchPlayer.current && (
                   <ContextMenu
                     PlayerUIControlls={PlayerUIControlls.current}
                     type='live'
-                    hidechat={String(hideChat)}
+                    hidechat={String(chatState.hideChat)}
                     TwitchPlayer={twitchPlayer.current}
                     showAndResetTimer={showAndResetTimer}
+                    setChatState={setChatState}
                     children={
                       <>
                         <li
                           onClick={() => {
-                            setHideChat(!hideChat);
+                            setChatState((curr) => ({ ...curr, hideChat: !curr.hideChat }));
                           }}>
                           <MdChat size={24} />
-                          {hideChat ? "Show chat" : "Hide chat"}
+                          {chatState.hideChat ? "Show chat" : "Hide chat"}
                         </li>
 
                         <li
                           onClick={() => {
-                            setSwitched(!switched);
+                            localStorage.setItem(
+                              "TwitchChatState",
+                              JSON.stringify({
+                                ...chatState,
+                                switchChatSide: !chatState.switchChatSide,
+                              })
+                            );
+                            setChatState((curr) => ({
+                              ...curr,
+                              switchChatSide: !chatState.switchChatSide,
+                            }));
                           }}>
                           <MdCompareArrows size={24} />
                           Switch chat side
@@ -530,20 +560,37 @@ export default () => {
                     <ToggleSwitchChatSide
                       title='Switch chat side'
                       id='switchSides'
-                      switched={String(switched)}
+                      switched={String(chatState.switchChatSide)}
                       onClick={() => {
-                        setSwitched(!switched);
+                        localStorage.setItem(
+                          "TwitchChatState",
+                          JSON.stringify({
+                            ...chatState,
+                            switchChatSide: !chatState.switchChatSide,
+                          })
+                        );
+                        setChatState((curr) => ({
+                          ...curr,
+                          switchChatSide: !chatState.switchChatSide,
+                        }));
                       }}
                     />
 
                     <OpenCloseChat
-                      hideChat={hideChat}
-                      switched={switched}
+                      chatState={chatState}
+                      hideChat={chatState.hideChat}
+                      switched={chatState.switchChatSide}
                       onClick={() => {
-                        setHideChat((current) => {
-                          const newValue = !current;
+                        setChatState((current) => {
+                          const newValue = !current.hideChat;
                           hideChatSaved.current = newValue;
-                          return newValue;
+
+                          localStorage.setItem(
+                            "TwitchChatState",
+                            JSON.stringify({ ...current, hideChat: newValue })
+                          );
+
+                          return { ...current, hideChat: newValue };
                         });
                       }}
                     />
@@ -556,46 +603,81 @@ export default () => {
                 <ToggleSwitchChatSide
                   title='Switch chat side'
                   id='switchSides'
-                  switched={String(switched)}
+                  switched={String(chatState.switchChatSide)}
                   onClick={() => {
-                    setSwitched(!switched);
+                    localStorage.setItem(
+                      "TwitchChatState",
+                      JSON.stringify({
+                        ...chatState,
+                        switchChatSide: !chatState.switchChatSide,
+                      })
+                    );
+                    setChatState((curr) => ({
+                      ...curr,
+                      switchChatSide: !chatState.switchChatSide,
+                    }));
                   }}
                   style={{
-                    right: switched ? "unset" : hideChat ? "10px" : "calc(9vw + 10px)",
-                    left: switched ? (hideChat ? "10px" : "calc(9vw + 10px)") : "unset",
+                    right: chatState.switchChatSide
+                      ? "unset"
+                      : chatState.hideChat
+                      ? "10px"
+                      : "calc(9vw + 10px)",
+                    left: chatState.switchChatSide
+                      ? chatState.hideChat
+                        ? "10px"
+                        : "calc(9vw + 10px)"
+                      : "unset",
                   }}
                 />
 
                 <OpenCloseChat
-                  hideChat={hideChat}
-                  switched={switched}
+                  chatState={chatState}
+                  hideChat={chatState.hideChat}
+                  switched={chatState.switchChatSide}
                   onClick={() => {
-                    setHideChat((current) => {
-                      const newValue = !current;
+                    setChatState((current) => {
+                      const newValue = !current.hideChat;
                       hideChatSaved.current = newValue;
-                      return newValue;
+                      localStorage.setItem(
+                        "TwitchChatState",
+                        JSON.stringify({ ...current, hideChat: newValue })
+                      );
+                      return { ...current, hideChat: newValue };
                     });
                   }}
                   style={{
-                    right: switched ? "unset" : hideChat ? "10px" : "calc(9vw + 10px)",
-                    left: switched ? (hideChat ? "10px" : "calc(9vw + 10px)") : "unset",
+                    right: chatState.switchChatSide
+                      ? "unset"
+                      : chatState.hideChat
+                      ? "10px"
+                      : "calc(9vw + 10px)",
+                    left: chatState.switchChatSide
+                      ? chatState.hideChat
+                        ? "10px"
+                        : "calc(9vw + 10px)"
+                      : "unset",
                   }}
                 />
               </>
             )}
           </div>
-          {!hideChat && (
+          {!chatState.hideChat && (
             <ResizeDevider
               onMouseDown={handleResizeMouseDown}
               resizeActive={resizeActive}
-              videowidth={videowidth}>
+              videowidth={chatState.videoWidth}>
               <div />
             </ResizeDevider>
           )}
-          {!hideChat ? (
+          {!chatState.hideChat ? (
             <>
-              {/* {true && <ChatOverlay switched={switched} videowidth={videowidth} />} */}
-              {resizeActive && <ChatOverlay switched={switched} videowidth={videowidth} />}
+              {resizeActive && (
+                <ChatOverlay
+                  switched={chatState.switchChatSide}
+                  videowidth={chatState.videoWidth}
+                />
+              )}
               <div id='chat'>
                 <ShowNavbarBtn
                   variant='dark'
