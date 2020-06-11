@@ -105,6 +105,7 @@ export default () => {
       muted: false,
       time: time.length >= 1 ? time : null,
       allowfullscreen: true,
+      parent: ["aiofeed.com"],
     });
 
     return () => {
@@ -275,6 +276,8 @@ export default () => {
       setIsFullscreen(true);
       if (video.requestFullScreen) {
         video.requestFullScreen();
+      } else if (video.mozRequestFullScreen) {
+        video.mozRequestFullScreen();
       } else if (video.webkitRequestFullScreen) {
         video.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
       } else if (video.msRequestFullscreen) {
@@ -314,7 +317,7 @@ export default () => {
       switch (e.key) {
         case "f":
         case "F":
-          toggleFullScreen();
+          toggleFullScreen(e);
           break;
         default:
           break;
@@ -694,7 +697,7 @@ export default () => {
                   scrolling='yes'
                   theme='dark'
                   id={channelName + "-chat"}
-                  src={`https://www.twitch.tv/embed/${channelName}/chat?darkpopout`}
+                  src={`https://www.twitch.tv/embed/${channelName}/chat?darkpopout&parent=aiofeed.com`}
                 />
               </div>
             </>

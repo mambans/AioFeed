@@ -66,7 +66,7 @@ export default () => {
           Navbar
         </ShowNavbarBtn>
         <StyledVideo
-          src={`https://clips.twitch.tv/embed?clip=${videoId}`}
+          src={`https://clips.twitch.tv/embed?clip=${videoId}&parent=aiofeed.com`}
           height='100%'
           width='100%'
           frameborder='0'
