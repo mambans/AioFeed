@@ -67,7 +67,9 @@ export default async ({ items, fetchGameInfo = true, forceNewProfiles = false })
     return !Object.keys(TwitchProfiles).some((id) => id === (user.user_id || user.broadcaster_id));
   });
 
-  const noCachedProfileArrayIds = Object.values(noCachedProfileArrayObject).map((user) => {
+  const noCachedProfileArrayIds = Object.values(
+    forceNewProfiles ? originalArray.data : noCachedProfileArrayObject
+  ).map((user) => {
     return user.user_id || user.broadcaster_id;
   });
 
@@ -85,10 +87,13 @@ export default async ({ items, fetchGameInfo = true, forceNewProfiles = false })
 
   const finallData = await Promise.all(
     await originalArray.data.map(async (user) => {
-      if (!TwitchProfiles[user.user_id || user.broadcaster_id]) {
-        user.profile_img_url = newProfileImgUrls.data.data.find((p_user) => {
+      if (forceNewProfiles || !TwitchProfiles[user.user_id || user.broadcaster_id]) {
+        const foundProfile = newProfileImgUrls.data.data.find((p_user) => {
           return p_user.id === (user.user_id || user.broadcaster_id);
-        }).profile_image_url;
+        });
+        user.profile_img_url = foundProfile
+          ? foundProfile.profile_image_url
+          : TwitchProfiles[user.user_id || user.broadcaster_id] || "";
       } else {
         user.profile_img_url = TwitchProfiles[user.user_id || user.broadcaster_id];
       }
