@@ -2,7 +2,23 @@ import React, { useState, useEffect, useRef } from "react";
 import { FaRegEye } from "react-icons/fa";
 import { formatViewerNumbers } from "../TwitchUtils";
 
-export default ({ viewers = 0, className, id, disabeIcon = false, disabePrefix = false }) => {
+/**
+ * @param {Number} viewers - Viewcount of the stream
+ * @param {String} [className] - ClassName's
+ * @param {String} [id] - Id's
+ * @param {Boolean} [disabeIcon = false] - Disable "eye" Icon
+ * @param {Boolean} [disabePrefix = false] - Disable prefix "Viewers:"
+ * @param {Boolean} [formatViewcount = true] - Enable formating of viewers >= 10000 to 10k, 14345 oy 14k
+ * @returns {Element} <p></p> with viewCount
+ */
+export default ({
+  viewers = 0,
+  className,
+  id,
+  disabeIcon = false,
+  disabePrefix = false,
+  formatViewcount = true,
+}) => {
   const previousNumber = useRef(0);
   const [number, setNumber] = useState(previousNumber.current || viewers || 0);
   const animationTimer = useRef();
@@ -65,7 +81,7 @@ export default ({ viewers = 0, className, id, disabeIcon = false, disabePrefix =
 
   return (
     <p title='Viewers' className={className} id={id}>
-      {!disabePrefix && "Viewers:"} {formatViewerNumbers(number)}
+      {!disabePrefix && "Viewers:"} {formatViewcount ? formatViewerNumbers(number) : number}
       {!disabeIcon && <FaRegEye size={14} />}
     </p>
   );
