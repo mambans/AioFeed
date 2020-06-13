@@ -25,6 +25,7 @@ export default async ({
       stream.notiStatus = "Offline";
       if (
         isEnabledOfflineNotifications &&
+        getLocalstorage("VodChannels") &&
         getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
       )
         addSystemNotification({
@@ -37,6 +38,7 @@ export default async ({
 
       if (
         enableTwitchVods &&
+        getLocalstorage("VodChannels") &&
         getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
       ) {
         setTimeout(async () => {
