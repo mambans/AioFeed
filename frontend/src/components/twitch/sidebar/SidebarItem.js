@@ -73,9 +73,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
           <img
             src={
               stream.profile_img_url
-                ? stream.profile_img_url.replace("{width}", 640).replace("{height}", 360) +
-                  `#` +
-                  Date.now()
+                ? stream.profile_img_url.replace("{width}", 640).replace("{height}", 360)
                 : `${process.env.PUBLIC_URL}/android-chrome-512x512.png`
             }
             alt=''></img>
