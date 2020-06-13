@@ -122,11 +122,6 @@ export default ({ TwitchPlayer, OpenedDate, PlayerUIControlls, setShowControlls 
       if (PlayerUIControlls) {
         PlayerUIControlls.addEventListener("mousedown", mouseEvents);
         PlayerUIControlls.addEventListener("wheel", scrollChangeVolumeEvent);
-
-        return () => {
-          PlayerUIControlls.removeEventListener("mousedown", mouseEvents);
-          PlayerUIControlls.removeEventListener("wheel", scrollChangeVolumeEvent);
-        };
       }
     };
 
@@ -144,6 +139,10 @@ export default ({ TwitchPlayer, OpenedDate, PlayerUIControlls, setShowControlls 
       return () => {
         TwitchPlayer.removeEventListener(window.Twitch.Player.READY, addEventListeners);
         TwitchPlayer.removeEventListener(window.Twitch.Player.PLAYING, OnPlayingEventListeners);
+        if (PlayerUIControlls) {
+          PlayerUIControlls.removeEventListener("mousedown", mouseEvents);
+          PlayerUIControlls.removeEventListener("wheel", scrollChangeVolumeEvent);
+        }
       };
     }
 
