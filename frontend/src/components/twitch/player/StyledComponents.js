@@ -25,6 +25,9 @@ export const VideoAndChatContainer = styled.div`
   cursor: ${({ resizeActive }) => (resizeActive ? "w-resize" : "unset")};
   grid-template-columns: ${({ chatwidth, hidechat, switched }) =>
     `${hidechat ? "100vw" : switched ? `${chatwidth}px 5px auto` : `auto 5px ${chatwidth}px`} `};
+  background: linear-gradient(217deg, rgba(45, 45, 45, 0.8), rgba(10, 10, 10, 0.7) 70.71%),
+    linear-gradient(127deg, rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.7) 70.71%),
+    linear-gradient(336deg, rgba(30, 30, 30, 0.8), rgba(0, 0, 0, 0.7) 70.71%);
 
   &:hover #switchSides {
     opacity: 0.6;
