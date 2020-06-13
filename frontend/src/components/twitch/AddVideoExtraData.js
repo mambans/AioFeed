@@ -62,7 +62,7 @@ const getGameDetails = async (items) => {
  */
 export default async ({ items, fetchGameInfo = true, forceNewProfiles = false }) => {
   const originalArray = items;
-  const TwitchProfiles = GetCachedProfiles(forceNewProfiles);
+  const TwitchProfiles = GetCachedProfiles();
   const noCachedProfileArrayObject = await originalArray.data.filter((user) => {
     return !Object.keys(TwitchProfiles).some((id) => id === (user.user_id || user.broadcaster_id));
   });
@@ -73,29 +73,36 @@ export default async ({ items, fetchGameInfo = true, forceNewProfiles = false })
     return user.user_id || user.broadcaster_id;
   });
 
-  let newProfileImgUrls;
-
-  if (noCachedProfileArrayIds.length > 0) {
-    newProfileImgUrls = await API.getUser({
-      params: {
-        id: noCachedProfileArrayIds,
-      },
-    }).catch((e) => {
-      console.log("newProfileImgUrls: ", e);
-    });
-  }
+  const newProfileImgUrls =
+    noCachedProfileArrayIds.length > 0
+      ? await API.getUser({
+          params: {
+            id: noCachedProfileArrayIds,
+          },
+        }).catch((e) => {
+          console.error("newProfileImgUrls: ", e);
+        })
+      : null;
 
   const finallData = await Promise.all(
     await originalArray.data.map(async (user) => {
-      if (forceNewProfiles || !TwitchProfiles[user.user_id || user.broadcaster_id]) {
+      if (
+        forceNewProfiles ||
+        (!TwitchProfiles[user.user_id || user.broadcaster_id] &&
+          newProfileImgUrls &&
+          newProfileImgUrls.data.data.length > 0)
+      ) {
         const foundProfile = newProfileImgUrls.data.data.find((p_user) => {
           return p_user.id === (user.user_id || user.broadcaster_id);
         });
         user.profile_img_url = foundProfile
           ? foundProfile.profile_image_url
-          : TwitchProfiles[user.user_id || user.broadcaster_id] || "";
+          : TwitchProfiles[user.user_id || user.broadcaster_id] ||
+            `${process.env.PUBLIC_URL}/images/placeholder.webp`;
       } else {
-        user.profile_img_url = TwitchProfiles[user.user_id || user.broadcaster_id];
+        user.profile_img_url =
+          TwitchProfiles[user.user_id || user.broadcaster_id] ||
+          `${process.env.PUBLIC_URL}/images/placeholder.webp`;
       }
       return user;
     })
