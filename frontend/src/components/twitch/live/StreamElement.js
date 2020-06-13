@@ -1,4 +1,3 @@
-import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { FiAlertCircle } from "react-icons/fi";
 import { FaTwitch } from "react-icons/fa";
@@ -22,8 +21,8 @@ import StreamHoverIframe from "../StreamHoverIframe.js";
 import { truncate } from "../../../util/Utils";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 import VodsFollowUnfollowBtn from "./../vods/VodsFollowUnfollowBtn";
-import { formatViewerNumbers } from "./../TwitchUtils";
 import AddUpdateNotificationsButton from "../AddUpdateNotificationsButton";
+import AnimatedViewCount from "./AnimatedViewCount";
 
 const HOVER_DELAY = 100;
 
@@ -237,10 +236,11 @@ export default (data_p) => {
             </Link>
           )}
 
-          <p title='Viewers' className='viewers'>
-            {formatViewerNumbers(data.viewer_count)}
-            <FaRegEye size={14} />
-          </p>
+          <AnimatedViewCount
+            viewers={data.viewer_count}
+            className={"viewers"}
+            disabePrefix={true}
+          />
         </GameContainer>
       </div>
     </VideoContainer>

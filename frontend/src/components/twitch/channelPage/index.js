@@ -10,7 +10,7 @@ import LoadingPlaceholderBanner from "./LoadingPlaceholderBanner";
 import LoadingPlaceholderClips from "./LoadingPlaceholderClips";
 import LoadingPlaceholderVods from "./LoadingPlaceholderVods";
 import SubFeed from "./SubFeed";
-import { formatViewerNumbers, durationToDate } from "./../TwitchUtils";
+import { durationToDate } from "./../TwitchUtils";
 import {
   ChannelContainer,
   Banner,
@@ -32,6 +32,7 @@ import setFavion from "../../setFavion";
 import validateToken from "../validateToken";
 import AddUpdateNotificationsButton from "../AddUpdateNotificationsButton";
 import API from "./../API";
+import AnimatedViewCount from "../live/AnimatedViewCount";
 
 export default () => {
   const { channelName } = useParams();
@@ -401,7 +402,10 @@ export default () => {
                             },
                           }}>
                           <div id='LiveDetails'>
-                            <span>Viewers: {formatViewerNumbers(streamInfo.viewer_count)}</span>
+                            <AnimatedViewCount
+                              viewers={streamInfo.viewer_count}
+                              prefix={"Viewers:"}
+                            />
                             <span>
                               Uptime:{" "}
                               <Moment interval={1} durationFromNow>

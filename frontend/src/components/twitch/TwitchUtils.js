@@ -45,11 +45,12 @@ export const durationToDate = (duration, vodCreateDate) => {
 export const formatViewerNumbers = (viewers) => {
   if (!viewers) {
     return viewers;
+  } else if (viewers.toString().length < 5) {
+    return viewers;
   } else if (viewers.toString().length === 7) {
     return (viewers / 1000000).toString().substring(0, 5) + "m";
   } else if (viewers.toString().length >= 5) {
     return viewers.toString().substring(0, viewers.toString().length - 3) + "k";
-  } else {
-    return viewers;
   }
+  return viewers;
 };

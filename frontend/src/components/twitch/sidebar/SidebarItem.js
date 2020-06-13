@@ -1,6 +1,5 @@
 import { CSSTransition } from "react-transition-group";
 import { FaRegClock } from "react-icons/fa";
-import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
@@ -10,7 +9,7 @@ import styled from "styled-components";
 
 import { SidebarTitlePopup, StyledsidebarItem, FirstRow, SecondRow } from "./StyledComponents";
 import { truncate } from "../../../util/Utils";
-import { formatViewerNumbers } from "./../TwitchUtils";
+import AnimatedViewCount from "../live/AnimatedViewCount";
 
 const StyledNewHighlight = styled.div`
   position: absolute;
@@ -88,10 +87,12 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
           >
             {truncate(stream.user_name, 16)}
           </div>
-          <p className={"sidebarViewers"}>
-            {formatViewerNumbers(stream.viewer_count)}
-            <FaRegEye size={10} />
-          </p>
+
+          <AnimatedViewCount
+            className={"sidebarViewers"}
+            viewers={stream.viewer_count}
+            disabePrefix={true}
+          />
         </FirstRow>
         <SecondRow>
           {stream.game_name.length > 15 ? (
