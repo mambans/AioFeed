@@ -48,6 +48,7 @@ export default ({ TwitchPlayer }) => {
       <ButtonShowQualities
         id='showQualities'
         title='Show qualities'
+        disabled={!TwitchPlayer}
         onClick={() => {
           setShowQualities(!showQualities);
           setQualities(TwitchPlayer.getQualities());

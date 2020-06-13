@@ -24,6 +24,7 @@ export default ({ TwitchPlayer }) => {
 
   const ToggleShowStats = useCallback(() => {
     if (!showPlaybackStats) {
+      if (PlayersatsTimer.current) clearInterval(PlayersatsTimer.current);
       document.querySelector("#controls").style.opacity = 1;
       PlayersatsTimer.current = setInterval(() => {
         setPlaybackStats(TwitchPlayer.getPlaybackStats());
@@ -47,13 +48,13 @@ export default ({ TwitchPlayer }) => {
           break;
       }
     };
-    document.body.addEventListener("keydown", keyboardEvents);
+    if (TwitchPlayer) document.body.addEventListener("keydown", keyboardEvents);
 
     return () => {
       clearInterval(PlayersatsTimer.current);
       document.body.removeEventListener("keydown", keyboardEvents);
     };
-  }, [ToggleShowStats]);
+  }, [ToggleShowStats, TwitchPlayer]);
 
   return (
     <>
@@ -74,7 +75,11 @@ export default ({ TwitchPlayer }) => {
           })}
         </PlaybackStats>
       )}
-      <ButtonShowStats title='Show video stats (s)' onClick={ToggleShowStats} />
+      <ButtonShowStats
+        disabled={!TwitchPlayer}
+        title='Show video stats (s)'
+        onClick={ToggleShowStats}
+      />
     </>
   );
 };

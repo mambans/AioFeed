@@ -5,6 +5,7 @@ import { FaWindowClose } from "react-icons/fa";
 import { MdChat } from "react-icons/md";
 import { MdMovieCreation } from "react-icons/md";
 import { Button } from "react-bootstrap";
+import { GrRefresh } from "react-icons/gr";
 
 export const VideoAndChatContainer = styled.div`
   position: fixed;
@@ -159,8 +160,6 @@ export const VolumeEventOverlay = styled.div`
   #PausePlay {
     color: #f4f4f49c;
     cursor: pointer;
-    position: absolute;
-    bottom: 10px;
     transition: color 150ms;
     margin: 5px 10px;
 
@@ -183,9 +182,6 @@ export const VolumeEventOverlay = styled.div`
 export const StyledVolumeSlider = styled.div`
   width: 230px;
   text-align: center;
-  bottom: 10px;
-  position: absolute;
-  left: 50px;
   display: grid;
   grid-template-areas: "spacer text" "slider slider";
   grid-template-columns: 60px auto;
@@ -326,11 +322,8 @@ export const InfoDisplay = styled.div`
 
 // export const ButtonShowStats = styled(Icon).attrs({ icon: infoCircle, size: 26 })`
 export const ButtonShowStats = styled(FaInfoCircle).attrs({ size: 24 })`
-  position: absolute;
-  bottom: 12px;
   margin: 0;
   font-weight: bold;
-  left: 315px;
   font-size: 1.1rem;
   cursor: pointer;
   margin: 5px 10px;
@@ -345,11 +338,8 @@ export const ButtonShowStats = styled(FaInfoCircle).attrs({ size: 24 })`
 `;
 
 export const ButtonShowQualities = styled.p`
-  position: absolute;
-  bottom: 12px;
   margin: 0;
   font-weight: bold;
-  left: 400px;
   font-size: 1.1rem;
   cursor: pointer;
   margin: 5px 10px;
@@ -434,9 +424,6 @@ export const OpenChatButton = styled(MdChat).attrs({ size: 26, color: "white" })
 `;
 
 export const CreateClipButton = styled(MdMovieCreation).attrs({ size: 24, color: "white" })`
-  position: absolute;
-  left: 360px;
-  bottom: 12px;
   opacity: 0.7;
   cursor: pointer;
   margin: 5px 10px;
@@ -501,4 +488,47 @@ export const ChatOverlay = styled.div`
   position: absolute;
   transform: translate3d(0, 0, 0);
   grid-area: chat;
+`;
+
+export const ResetVideoButton = styled(GrRefresh).attrs({ size: 24 })`
+  margin: 0;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin: 5px 10px;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.25) none repeat scroll 0% 0%;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
+
+  path {
+    stroke: var(--navTextColorActive);
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+
+  svg {
+    margin-right: 7px;
+  }
+`;
+
+export const SmallButtonContainer = styled.div`
+  display: flex;
+  position: absolute;
+  bottom: 10px;
+  align-items: end;
+
+  *[disabled] {
+    opacity: 0.2;
+    pointer-events: none;
+
+    &:hover {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+  }
 `;

@@ -64,8 +64,24 @@ export default ({ TwitchPlayer, PlayerUIControlls }) => {
   }, [TwitchPlayer, PlayerUIControlls]);
 
   if (isPaused) {
-    return <FaPlay id='PausePlay' size={30} onClick={PausePlay} title={"Play (space)"} />;
+    return (
+      <FaPlay
+        disabled={!TwitchPlayer}
+        id='PausePlay'
+        size={30}
+        onClick={PausePlay}
+        title={"Play (space)"}
+      />
+    );
   } else {
-    return <FaPause id='PausePlay' size={30} onClick={PausePlay} title={"Pause (space)"} />;
+    return (
+      <FaPause
+        disabled={!TwitchPlayer}
+        id='PausePlay'
+        size={30}
+        onClick={PausePlay}
+        title={"Pause (space)"}
+      />
+    );
   }
 };

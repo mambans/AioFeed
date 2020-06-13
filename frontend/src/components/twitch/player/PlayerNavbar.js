@@ -16,16 +16,10 @@ export default ({ type, channelName, streamInfo, twitchPlayer, setVisible, visib
 
   useEffect(() => {
     (async () => {
-      if (
-        type === "live" &&
-        twitchPlayer.current &&
-        twitchPlayer.current.getChannelId() &&
-        !latestVod &&
-        visible
-      ) {
+      if (type === "live" && twitchPlayer && twitchPlayer.getChannelId() && !latestVod && visible) {
         await API.getVideos({
           params: {
-            user_id: twitchPlayer.current.getChannelId(),
+            user_id: twitchPlayer.getChannelId(),
             first: 1,
             type: "archive",
           },
@@ -53,7 +47,7 @@ export default ({ type, channelName, streamInfo, twitchPlayer, setVisible, visib
           pathname: `/${channelName || (streamInfo && streamInfo.user_name)}/channel`,
           state: {
             p_channelInfos: streamInfo,
-            p_id: twitchPlayer.current ? twitchPlayer.current.getChannelId() : null,
+            p_id: twitchPlayer ? twitchPlayer.getChannelId() : null,
           },
         }}>
         <MdAccountCircle size={26} />

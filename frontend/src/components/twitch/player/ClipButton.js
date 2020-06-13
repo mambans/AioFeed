@@ -38,16 +38,17 @@ export default ({ streamInfo }) => {
   );
 
   useEffect(() => {
-    document.body.addEventListener("keydown", keyboardEvents);
+    if (streamInfo) document.body.addEventListener("keydown", keyboardEvents);
 
     return () => {
       document.body.removeEventListener("keydown", keyboardEvents);
     };
-  }, [keyboardEvents]);
+  }, [keyboardEvents, streamInfo]);
 
   return (
     <CreateClipButton
       title='Create clip (c)'
+      disabled={!streamInfo}
       onClick={() => {
         CreateAndOpenClip({ streamInfo });
       }}

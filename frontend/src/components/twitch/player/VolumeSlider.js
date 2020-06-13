@@ -154,7 +154,7 @@ export default ({ TwitchPlayer, OpenedDate, PlayerUIControlls, setShowControlls 
   }, [OpenedDate, TwitchPlayer, PlayerUIControlls, setShowControlls]);
 
   return (
-    <StyledVolumeSlider volumeMuted={volumeMuted}>
+    <StyledVolumeSlider volumeMuted={volumeMuted} disabled={!TwitchPlayer}>
       <h3 className='value'>{volumeText && volumeText.toFixed(0)}</h3>
 
       <div id='BottomRow'>
