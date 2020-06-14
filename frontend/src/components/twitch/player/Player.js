@@ -3,6 +3,7 @@ import { throttle } from "lodash";
 import { useParams, useLocation, Link } from "react-router-dom";
 import Moment from "react-moment";
 import React, { useContext, useEffect, useState, useRef, useCallback } from "react";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 import { MdVerticalAlignBottom } from "react-icons/md";
 import { FaTwitch } from "react-icons/fa";
@@ -10,6 +11,7 @@ import { MdFullscreen } from "react-icons/md";
 import { MdCompareArrows } from "react-icons/md";
 import { MdFullscreenExit } from "react-icons/md";
 import { MdChat } from "react-icons/md";
+import { MdAccountBox } from "react-icons/md";
 
 import fetchStreamInfo from "./fetchStreamInfo";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
@@ -26,6 +28,8 @@ import {
   ChatOverlay,
   ResetVideoButton,
   SmallButtonContainer,
+  ChannelButton,
+  ChannelIconLink,
 } from "./StyledComponents";
 import PlayerNavbar from "./PlayerNavbar";
 import setFavion from "../../setFavion";
@@ -497,6 +501,21 @@ export default () => {
                           channelName={streamInfo.user_name || channelName}
                           id={streamInfo.user_id || twitchVideoPlayer.getChannelId()}
                         />
+                        <OverlayTrigger
+                          key={"right"}
+                          placement={"right"}
+                          delay={{ show: 500, hide: 0 }}
+                          overlay={
+                            <Tooltip
+                              id={`tooltip-${"right"}`}>{`${"Go to channel page incl. videos and clips"}`}</Tooltip>
+                          }>
+                          <ChannelIconLink
+                            to={{
+                              pathname: `channel`,
+                            }}>
+                            <MdAccountBox size={30} />
+                          </ChannelIconLink>
+                        </OverlayTrigger>
                       </div>
                       <p id='title'>{streamInfo.title || p_title}</p>
                       {streamInfo.game_name && (
@@ -636,36 +655,41 @@ export default () => {
             </CSSTransition>
             {!showUIControlls && (
               <>
-                <ToggleSwitchChatSide
-                  title='Switch chat side'
-                  id='switchSides'
-                  switched={String(chatState.switchChatSide)}
-                  onClick={() => {
-                    localStorage.setItem(
-                      "TwitchChatState",
-                      JSON.stringify({
-                        ...chatState,
+                <OverlayTrigger
+                  key={"left"}
+                  placement={"left"}
+                  delay={{ show: 500, hide: 0 }}
+                  overlay={<Tooltip id={`tooltip-${"left"}`}>{`${"Switch chat side"}`}</Tooltip>}>
+                  <ToggleSwitchChatSide
+                    id='switchSides'
+                    switched={String(chatState.switchChatSide)}
+                    onClick={() => {
+                      localStorage.setItem(
+                        "TwitchChatState",
+                        JSON.stringify({
+                          ...chatState,
+                          switchChatSide: !chatState.switchChatSide,
+                        })
+                      );
+                      setChatState((curr) => ({
+                        ...curr,
                         switchChatSide: !chatState.switchChatSide,
-                      })
-                    );
-                    setChatState((curr) => ({
-                      ...curr,
-                      switchChatSide: !chatState.switchChatSide,
-                    }));
-                  }}
-                  style={{
-                    right: chatState.switchChatSide
-                      ? "unset"
-                      : chatState.hideChat
-                      ? "10px"
-                      : `calc(${chatState.chatwidth}px + 10px)`,
-                    left: chatState.switchChatSide
-                      ? chatState.hideChat
+                      }));
+                    }}
+                    style={{
+                      right: chatState.switchChatSide
+                        ? "unset"
+                        : chatState.hideChat
                         ? "10px"
-                        : `calc(${chatState.chatwidth}px + 10px)`
-                      : "unset",
-                  }}
-                />
+                        : `calc(${chatState.chatwidth}px + 10px)`,
+                      left: chatState.switchChatSide
+                        ? chatState.hideChat
+                          ? "10px"
+                          : `calc(${chatState.chatwidth}px + 10px)`
+                        : "unset",
+                    }}
+                  />
+                </OverlayTrigger>
 
                 <OpenCloseChat
                   chatState={chatState}
@@ -695,6 +719,23 @@ export default () => {
                       : "unset",
                   }}
                 />
+                <OverlayTrigger
+                  key={"right"}
+                  placement={"right"}
+                  delay={{ show: 500, hide: 0 }}
+                  overlay={
+                    <Tooltip
+                      id={`tooltip-${"right"}`}>{`${"Go to channel page inc. videos and clips"}`}</Tooltip>
+                  }>
+                  <ChannelButton
+                    variant='dark'
+                    as={Link}
+                    to={{
+                      pathname: `channel`,
+                    }}>
+                    Channel Page
+                  </ChannelButton>
+                </OverlayTrigger>
               </>
             )}
           </div>

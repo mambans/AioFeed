@@ -3,6 +3,7 @@ import { TiFlash } from "react-icons/ti";
 import { IoIosFlashOff } from "react-icons/io";
 import axios from "axios";
 import React, { useState, useContext, useRef, useEffect } from "react";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 import AccountContext from "./../account/AccountContext";
 import { VodAddRemoveButton } from "./../sharedStyledComponents";
@@ -87,36 +88,43 @@ export default ({ channel, loweropacity, marginright, size = 24 }) => {
   }, []);
 
   return (
-    <VodAddRemoveButton
-      className='StreamUpdateNoitificationsButton'
-      marginright={marginright}
-      ref={vodButton}
-      loweropacity={loweropacity}
-      title={
-        updateNotificationEnabled
-          ? `Disable ${channel} stream title/game update notification.`
-          : `Enable ${channel} stream title/game update notification`
-      }
-      vodenabled={updateNotificationEnabled.toString()}
-      variant='link'
-      onClick={() => {
-        if (updateNotificationEnabled) {
-          removeChannel(channel);
-          setUpdateNotificationEnabled(false);
-        } else {
-          addChannel({ channel, username, authKey });
-          setUpdateNotificationEnabled(true);
-        }
-      }}>
-      {updateNotificationEnabled ? (
-        isHovered ? (
-          <IoIosFlashOff size={size} color='red' />
+    <OverlayTrigger
+      key={"bottom"}
+      placement={"bottom"}
+      delay={{ show: 500, hide: 0 }}
+      overlay={
+        <Tooltip id={`tooltip-${"bottom"}`}>
+          {updateNotificationEnabled
+            ? `Disable ${channel} stream title/game update notification.`
+            : `Enable ${channel} stream title/game update notification`}
+        </Tooltip>
+      }>
+      <VodAddRemoveButton
+        className='StreamUpdateNoitificationsButton'
+        marginright={marginright}
+        ref={vodButton}
+        loweropacity={loweropacity}
+        vodenabled={updateNotificationEnabled.toString()}
+        variant='link'
+        onClick={() => {
+          if (updateNotificationEnabled) {
+            removeChannel(channel);
+            setUpdateNotificationEnabled(false);
+          } else {
+            addChannel({ channel, username, authKey });
+            setUpdateNotificationEnabled(true);
+          }
+        }}>
+        {updateNotificationEnabled ? (
+          isHovered ? (
+            <IoIosFlashOff size={size} color='red' />
+          ) : (
+            <TiFlash size={size} color='green' />
+          )
         ) : (
-          <TiFlash size={size} color='green' />
-        )
-      ) : (
-        <TiFlashOutline size={size} />
-      )}
-    </VodAddRemoveButton>
+          <TiFlashOutline size={size} />
+        )}
+      </VodAddRemoveButton>
+    </OverlayTrigger>
   );
 };

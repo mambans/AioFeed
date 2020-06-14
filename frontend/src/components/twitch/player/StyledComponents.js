@@ -4,8 +4,9 @@ import { MdCompareArrows } from "react-icons/md";
 import { FaWindowClose } from "react-icons/fa";
 import { MdChat } from "react-icons/md";
 import { MdMovieCreation } from "react-icons/md";
-import { Button } from "react-bootstrap";
+import { Button, Nav } from "react-bootstrap";
 import { GrRefresh } from "react-icons/gr";
+import { NavLink } from "react-router-dom";
 
 export const VideoAndChatContainer = styled.div`
   position: fixed;
@@ -533,5 +534,47 @@ export const SmallButtonContainer = styled.div`
       opacity: 0.3;
       pointer-events: none;
     }
+  }
+`;
+
+export const ChannelButton = styled(Button)`
+  position: absolute;
+  color: rgb(240, 240, 240);
+  top: 115px;
+  padding: 5px 10px;
+  background: #313131b8;
+  margin: 35px;
+  border-radius: 5px;
+  transition: color 200ms, background 200ms;
+  opacity: 0.5;
+
+  &:hover {
+    color: rgb(255, 255, 255);
+    background: #3c3c3cb8;
+    opacity: 1;
+  }
+`;
+
+export const ChannelIconLink = styled(Nav.Link).attrs({ as: NavLink })`
+  color: rgb(240, 240, 240);
+  margin-right: 10px;
+  border-radius: 5px;
+  transition: color 200ms, background 200ms;
+  font-size: 1rem;
+  font-weight: normal;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  padding: 0;
+  opacity: 0.7;
+
+  svg {
+    margin-right: 5px;
+  }
+
+  &:hover {
+    color: rgb(255, 255, 255);
+    opacity: 1;
+    text-decoration: none !important;
   }
 `;

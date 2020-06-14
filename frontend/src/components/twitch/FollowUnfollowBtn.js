@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 import { FollowBtn, UnfollowBtn } from "./StyledComponents";
 import AccountContext from "./../account/AccountContext";
@@ -83,31 +84,37 @@ export default ({
     // }
   }, [channelName, twitchUserId, id, alreadyFollowedStatus]);
 
-  if (following) {
-    return (
-      <UnfollowBtn
-        className='StreamFollowBtn'
-        title={`Unfollow ${channelName || id}`}
-        size={size || 30}
-        style={{ ...style }}
-        onClick={() => {
-          setFollowing(false);
-          UnfollowStream();
-        }}
-      />
-    );
-  } else {
-    return (
-      <FollowBtn
-        className='StreamFollowBtn'
-        title={`Follow ${channelName || id}`}
-        size={size || 30}
-        style={{ ...style }}
-        onClick={() => {
-          setFollowing(true);
-          followStream();
-        }}
-      />
-    );
-  }
+  return (
+    <OverlayTrigger
+      key={"bottom"}
+      placement={"bottom"}
+      delay={{ show: 500, hide: 0 }}
+      overlay={
+        <Tooltip id={`tooltip-${"bottom"}`}>{`${
+          following ? `Unfollow ${channelName || id}` : `Follow ${channelName || id}`
+        }`}</Tooltip>
+      }>
+      {following ? (
+        <UnfollowBtn
+          className='StreamFollowBtn'
+          size={size || 30}
+          style={{ ...style }}
+          onClick={() => {
+            setFollowing(false);
+            UnfollowStream();
+          }}
+        />
+      ) : (
+        <FollowBtn
+          className='StreamFollowBtn'
+          size={size || 30}
+          style={{ ...style }}
+          onClick={() => {
+            setFollowing(true);
+            followStream();
+          }}
+        />
+      )}
+    </OverlayTrigger>
+  );
 };

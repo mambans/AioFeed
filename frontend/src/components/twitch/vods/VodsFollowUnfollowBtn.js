@@ -3,6 +3,7 @@ import { MdVideocam } from "react-icons/md";
 import { MdVideocamOff } from "react-icons/md";
 import axios from "axios";
 import React, { useState, useContext, useRef, useEffect } from "react";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 // import VodsContext from "./VodsContext";
 import AccountContext from "./../../account/AccountContext";
@@ -80,32 +81,41 @@ export default ({ channel, loweropacity, marginright }) => {
   }, []);
 
   return (
-    <VodAddRemoveButton
-      className='VodButton'
-      marginright={marginright}
-      ref={vodButton}
-      loweropacity={loweropacity}
-      title={vodEnabled ? `Disable ${channel} vods` : `Enable ${channel} vods`}
-      vodenabled={vodEnabled.toString()}
-      variant='link'
-      onClick={() => {
-        if (vodEnabled) {
-          removeChannel(channel);
-          setVodEnabled(false);
-        } else {
-          AddVodChannel({ channel, username, authKey });
-          setVodEnabled(true);
-        }
-      }}>
-      {vodEnabled ? (
-        isHovered ? (
-          <MdVideocamOff size={24} color='red' />
+    <OverlayTrigger
+      key={"bottom"}
+      placement={"bottom"}
+      delay={{ show: 500, hide: 0 }}
+      overlay={
+        <Tooltip id={`tooltip-${"bottom"}`}>
+          {vodEnabled ? `Disable ${channel} vods` : `Enable ${channel} vods`}
+        </Tooltip>
+      }>
+      <VodAddRemoveButton
+        className='VodButton'
+        marginright={marginright}
+        ref={vodButton}
+        loweropacity={loweropacity}
+        vodenabled={vodEnabled.toString()}
+        variant='link'
+        onClick={() => {
+          if (vodEnabled) {
+            removeChannel(channel);
+            setVodEnabled(false);
+          } else {
+            AddVodChannel({ channel, username, authKey });
+            setVodEnabled(true);
+          }
+        }}>
+        {vodEnabled ? (
+          isHovered ? (
+            <MdVideocamOff size={24} color='red' />
+          ) : (
+            <MdVideocam size={24} color='green' />
+          )
         ) : (
-          <MdVideocam size={24} color='green' />
-        )
-      ) : (
-        <MdVideoCall size={24} />
-      )}
-    </VodAddRemoveButton>
+          <MdVideoCall size={24} />
+        )}
+      </VodAddRemoveButton>
+    </OverlayTrigger>
   );
 };
