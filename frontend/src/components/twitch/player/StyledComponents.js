@@ -448,8 +448,17 @@ export const ShowNavbarBtn = styled(Button)`
   right: ${({ type }) => (type === "video" ? "10px" : "unset")};
   transition: opacity 200ms, transform 200ms;
 
+  &::after {
+    content: "";
+    transition: all 200ms;
+  }
+
   &:hover {
     opacity: 1;
+
+    ::after {
+      content: "Nav";
+    }
   }
 `;
 
@@ -541,10 +550,10 @@ export const SmallButtonContainer = styled.div`
 export const ChannelButton = styled(Button)`
   position: absolute;
   color: rgb(240, 240, 240);
-  top: 115px;
+  /* top: 115px; */
   padding: 5px 10px;
   background: #313131b8;
-  margin: 35px;
+  margin: 15px 0 0 250px;
   border-radius: 5px;
   transition: color 200ms, background 200ms;
   opacity: 0.5;
