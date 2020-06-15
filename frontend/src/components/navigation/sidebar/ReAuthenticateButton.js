@@ -51,7 +51,7 @@ export default ({ disconnect, serviceName, style }) => {
   if (serviceName === "Twitch") {
     if (!getCookie(`Twitch-access_token`)) {
       return (
-        <StyledConnectContainer>
+        <StyledConnectContainer style={{ ...style }}>
           <StyledConnectTwitch
             id='connect'
             title='Authenticate/Connect'
@@ -70,7 +70,7 @@ export default ({ disconnect, serviceName, style }) => {
       );
     } else {
       return (
-        <StyledConnectContainer>
+        <StyledConnectContainer style={{ ...style }}>
           <div className='username' id='Twitch'>
             <div
               title='Re-authenticate'
