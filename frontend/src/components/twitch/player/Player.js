@@ -43,9 +43,13 @@ import ClipButton from "./ClipButton";
 import addGameName from "./addGameName";
 import addProfileImg from "./addProfileImg";
 import fetchChannelInfo from "./fetchChannelInfo";
-import { getLocalstorage } from "../../../util/Utils";
+import { getLocalstorage, getCookie } from "../../../util/Utils";
 import ContextMenu from "./ContextMenu";
 import AnimatedViewCount from "../live/AnimatedViewCount";
+import ReAuthenticateButton from "../../navigation/sidebar/ReAuthenticateButton";
+import AccountContext from "../../account/AccountContext";
+import FeedsContext from "../../feed/FeedsContext";
+import disconnectTwitch from "../disconnectTwitch";
 
 export default () => {
   const { p_title, p_game, p_channelInfos } = useLocation().state || {};
@@ -55,6 +59,8 @@ export default () => {
 
   const { addNotification } = useContext(NotificationsContext);
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
+  const { setTwitchToken, twitchToken } = useContext(AccountContext);
+  const { setEnableTwitch } = useContext(FeedsContext);
 
   const [streamInfo, setStreamInfo] = useState(p_channelInfos);
   const [showControlls, setShowControlls] = useState();
@@ -85,6 +91,7 @@ export default () => {
   const refreshStreamInfoTimer = useRef();
   const videoElementRef = useRef();
   const hideChatDelay = useRef();
+  const isLive = useRef();
   // const locatorageWidthTimer = useRef();
 
   useEffect(() => {
@@ -154,72 +161,6 @@ export default () => {
     [addNotification]
   );
 
-  const OnlineEvents = useCallback(async () => {
-    console.log("Stream is Online");
-    document.title = `AF | ${channelName} LIVE`;
-
-    const SetStreamInfoAndPushNotis = async () => {
-      if (twitchVideoPlayer) {
-        const LIVEStreamInfo = await fetchStreamInfo(twitchVideoPlayer);
-        if (LIVEStreamInfo) {
-          const streamWithGame = await addGameName({
-            streamInfo,
-            newStreamInfo: LIVEStreamInfo,
-          });
-          const streamWithGameAndProfile = await addProfileImg({
-            user_id: LIVEStreamInfo.user_id,
-            currentStreamObj: streamWithGame,
-          });
-          setStreamInfo(streamWithGameAndProfile);
-          return streamWithGameAndProfile;
-        } else {
-          const streamWithGameAndProfile = await fetchChannelInfo(
-            twitchVideoPlayer.getChannelId(),
-            true
-          );
-          setStreamInfo(streamWithGameAndProfile);
-          return streamWithGameAndProfile;
-        }
-      }
-    };
-
-    try {
-      SetStreamInfoAndPushNotis().then((res) => {
-        setFavion(res.profile_img_url);
-        if (
-          streamInfo === null &&
-          res &&
-          res.broadcaster_software &&
-          !res.broadcaster_software.toLowerCase().includes("rerun")
-        ) {
-          addNoti({ type: "Live", stream: res });
-
-          const streams = getLocalstorage("newLiveStreamsFromPlayer") || { data: [] };
-          const newStreams = [...streams.data.filter((item) => item), res];
-          const filteredStreams = newStreams.filter(
-            (item, index, self) => index === self.findIndex((t) => t.user_id === item.user_id)
-          );
-          localStorage.setItem(
-            "newLiveStreamsFromPlayer",
-            JSON.stringify({ data: filteredStreams, updated: Date.now() })
-          );
-        }
-      });
-
-      if (!refreshStreamInfoTimer.current) {
-        refreshStreamInfoTimer.current = setInterval(async () => {
-          SetStreamInfoAndPushNotis();
-        }, 1000 * 60 * 2);
-      }
-    } catch (error) {
-      console.log("OnlineEvents -> error", error);
-    }
-
-    return () => {
-      setFavion();
-    };
-  }, [streamInfo, channelName, addNoti, twitchVideoPlayer]);
-
   const removeFromStreamNotisFromPlayer = useCallback(() => {
     const streams = getLocalstorage("newLiveStreamsFromPlayer") || {
       data: [],
@@ -237,11 +178,84 @@ export default () => {
 
   const offlineEvents = useCallback(async () => {
     console.log("Stream is Offline");
+    isLive.current = false;
     setShowUIControlls(false);
     clearInterval(refreshStreamInfoTimer.current);
     setStreamInfo(null);
     removeFromStreamNotisFromPlayer();
   }, [removeFromStreamNotisFromPlayer]);
+
+  const GetAndSetStreamInfo = useCallback(async () => {
+    if (twitchVideoPlayer) {
+      const LIVEStreamInfo = await fetchStreamInfo(twitchVideoPlayer);
+      if (LIVEStreamInfo) {
+        const streamWithGame = await addGameName({
+          streamInfo,
+          newStreamInfo: LIVEStreamInfo,
+        });
+        const streamWithGameAndProfile = await addProfileImg({
+          user_id: LIVEStreamInfo.user_id,
+          currentStreamObj: streamWithGame,
+        });
+        setStreamInfo(streamWithGameAndProfile);
+
+        return streamWithGameAndProfile;
+      } else {
+        const streamWithGameAndProfile = await fetchChannelInfo(
+          twitchVideoPlayer.getChannelId(),
+          true
+        );
+        setStreamInfo(streamWithGameAndProfile);
+        return streamWithGameAndProfile;
+      }
+    }
+  }, [twitchVideoPlayer, streamInfo]);
+
+  const onlineEvents = useCallback(async () => {
+    console.log("Stream is Online");
+    isLive.current = true;
+    document.title = `AF | ${channelName} -LIVE`;
+
+    try {
+      if (getCookie("Twitch-access_token")) {
+        GetAndSetStreamInfo().then((res) => {
+          setFavion(res.profile_img_url);
+          if (
+            streamInfo === null &&
+            res &&
+            res.broadcaster_software &&
+            !res.broadcaster_software.toLowerCase().includes("rerun")
+          ) {
+            addNoti({ type: "Live", stream: res });
+
+            const streams = getLocalstorage("newLiveStreamsFromPlayer") || { data: [] };
+            const newStreams = [...streams.data.filter((item) => item), res];
+            const filteredStreams = newStreams.filter(
+              (item, index, self) => index === self.findIndex((t) => t.user_id === item.user_id)
+            );
+            localStorage.setItem(
+              "newLiveStreamsFromPlayer",
+              JSON.stringify({
+                data: filteredStreams,
+                updated: Date.now(),
+              })
+            );
+          }
+          if (!refreshStreamInfoTimer.current) {
+            refreshStreamInfoTimer.current = setInterval(async () => {
+              GetAndSetStreamInfo();
+            }, 1000 * 60 * 1);
+          }
+        });
+      }
+    } catch (error) {
+      console.log("onlineEvents -> error", error);
+    }
+
+    return () => {
+      setFavion();
+    };
+  }, [streamInfo, channelName, addNoti, GetAndSetStreamInfo]);
 
   const playingEvents = useCallback(() => {
     console.log("playingEvents");
@@ -252,18 +266,32 @@ export default () => {
 
   useEffect(() => {
     if (twitchVideoPlayer) {
-      twitchVideoPlayer.addEventListener(window.Twitch.Player.ONLINE, OnlineEvents);
+      twitchVideoPlayer.addEventListener(window.Twitch.Player.ONLINE, onlineEvents);
       twitchVideoPlayer.addEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
       twitchVideoPlayer.addEventListener(window.Twitch.Player.PLAYING, playingEvents);
     }
     return () => {
       if (twitchVideoPlayer) {
-        twitchVideoPlayer.removeEventListener(window.Twitch.Player.ONLINE, OnlineEvents);
+        twitchVideoPlayer.removeEventListener(window.Twitch.Player.ONLINE, onlineEvents);
         twitchVideoPlayer.removeEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
         twitchVideoPlayer.removeEventListener(window.Twitch.Player.PLAYING, playingEvents);
       }
     };
-  }, [OnlineEvents, offlineEvents, playingEvents, twitchVideoPlayer]);
+  }, [onlineEvents, offlineEvents, playingEvents, twitchVideoPlayer]);
+
+  useEffect(() => {
+    (async () => {
+      if (isLive.current && !streamInfo && channelName && twitchToken) {
+        await GetAndSetStreamInfo().then(() => {
+          if (!refreshStreamInfoTimer.current) {
+            refreshStreamInfoTimer.current = setInterval(async () => {
+              GetAndSetStreamInfo();
+            }, 1000 * 60 * 1);
+          }
+        });
+      }
+    })();
+  }, [channelName, twitchToken, streamInfo, GetAndSetStreamInfo]);
 
   const handleMouseOut = useCallback(() => {
     clearTimeout(fadeTimer.current);
@@ -476,7 +504,7 @@ export default () => {
                     }
                   />
                 )}
-                {streamInfo && (
+                {streamInfo ? (
                   <InfoDisplay>
                     <>
                       <img src={streamInfo.profile_img_url} alt='' />
@@ -541,6 +569,14 @@ export default () => {
                       </p>
                     )}
                   </InfoDisplay>
+                ) : (
+                  !getCookie("Twitch-access_token") && (
+                    <ReAuthenticateButton
+                      disconnect={() => disconnectTwitch({ setTwitchToken, setEnableTwitch })}
+                      serviceName={"Twitch"}
+                      style={{ margin: "20px" }}
+                    />
+                  )
                 )}
 
                 <SmallButtonContainer>

@@ -3,7 +3,7 @@ import { FaWindowClose } from "react-icons/fa";
 import { MdLiveTv } from "react-icons/md";
 import { useParams, useLocation, Link } from "react-router-dom";
 import moment from "moment";
-import React, { useEffect, useCallback, useState, useRef } from "react";
+import React, { useEffect, useCallback, useState, useRef, useContext } from "react";
 import Moment from "react-moment";
 
 import LoadingPlaceholderBanner from "./LoadingPlaceholderBanner";
@@ -33,6 +33,11 @@ import validateToken from "../validateToken";
 import AddUpdateNotificationsButton from "../AddUpdateNotificationsButton";
 import API from "./../API";
 import AnimatedViewCount from "../live/AnimatedViewCount";
+import { getCookie } from "../../../util/Utils";
+import disconnectTwitch from "../disconnectTwitch";
+import AccountContext from "../../account/AccountContext";
+import FeedsContext from "../../feed/FeedsContext";
+import ReAuthenticateButton from "../../navigation/sidebar/ReAuthenticateButton";
 
 export default () => {
   const { channelName } = useParams();
@@ -40,6 +45,8 @@ export default () => {
   const [channelInfo, setChannelInfo] = useState(p_channelInfos);
   const [streamInfo, setStreamInfo] = useState(p_channelInfos);
   const numberOfVideos = Math.floor(document.documentElement.clientWidth / 350);
+  const { setTwitchToken, twitchToken } = useContext(AccountContext);
+  const { setEnableTwitch } = useContext(FeedsContext);
 
   const [vods, setVods] = useState();
   const [clips, setClips] = useState();
@@ -222,27 +229,31 @@ export default () => {
 
   useEffect(() => {
     (async () => {
-      if (!channelId)
-        await validateToken().then(async () => {
-          await getIdFromName();
-        });
-      if (!channelInfo && channelId && channelId !== "Not Found") {
-        await validateToken().then(async () => {
-          await getChannelInfo();
-        });
+      if (twitchToken) {
+        if (!channelId)
+          await validateToken().then(async () => {
+            await getIdFromName();
+          });
+        if (!channelInfo && channelId && channelId !== "Not Found") {
+          await validateToken().then(async () => {
+            await getChannelInfo();
+          });
+        }
       }
     })();
-  }, [channelInfo, getChannelInfo, getIdFromName, channelId]);
+  }, [channelInfo, getChannelInfo, getIdFromName, channelId, twitchToken]);
 
   const OnlineEvents = useCallback(async () => {
     console.log("Stream is Online");
     document.title = `AF | ${channelName}'s Channel (Live)`;
 
     try {
-      const streamInfo = await fetchStreamInfo(twitchPlayer);
-      if (streamInfo) {
-        setStreamInfo(streamInfo);
-        setIsLive(true);
+      if (twitchPlayer.current) {
+        const streamInfo = await fetchStreamInfo(twitchPlayer.current);
+        if (streamInfo) {
+          setStreamInfo(streamInfo);
+          setIsLive(true);
+        }
       }
     } catch (error) {
       console.log("OnlineEvents -> error", error);
@@ -256,54 +267,55 @@ export default () => {
 
   useEffect(() => {
     try {
-      if (!twitchPlayer.current) {
-        twitchPlayer.current = new window.Twitch.Player("twitch-embed", {
-          width: `${300 * 1.777777777777778}px`,
-          height: "300px",
-          theme: "dark",
-          layout: "video",
-          channel: channelName,
-          muted: true,
-        });
-      }
+      if (twitchToken) {
+        if (!twitchPlayer.current) {
+          twitchPlayer.current = new window.Twitch.Player("twitch-embed", {
+            width: `${300 * 1.777777777777778}px`,
+            height: "300px",
+            theme: "dark",
+            layout: "video",
+            channel: channelName,
+            muted: true,
+          });
+        }
 
-      if (twitchPlayer.current) {
-        twitchPlayer.current.addEventListener(window.Twitch.Player.ONLINE, OnlineEvents);
-        twitchPlayer.current.addEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
-      }
+        if (twitchPlayer.current) {
+          twitchPlayer.current.addEventListener(window.Twitch.Player.ONLINE, OnlineEvents);
+          twitchPlayer.current.addEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
+        }
 
-      return () => {
-        twitchPlayer.current.removeEventListener(window.Twitch.Player.ONLINE, OnlineEvents);
-        twitchPlayer.current.removeEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
-      };
+        return () => {
+          twitchPlayer.current.removeEventListener(window.Twitch.Player.ONLINE, OnlineEvents);
+          twitchPlayer.current.removeEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
+        };
+      }
     } catch (error) {
       console.log("error", error);
     }
-  }, [channelName, OnlineEvents]);
+  }, [channelName, OnlineEvents, twitchToken]);
 
   useEffect(() => {
-    if (channelId && !vods && channelId !== "Not Found") {
+    if (twitchToken && channelId && !vods && channelId !== "Not Found") {
       fetchChannelVods();
     }
-  }, [fetchChannelVods, vods, channelId]);
+  }, [fetchChannelVods, vods, channelId, twitchToken]);
 
   useEffect(() => {
-    if (channelId && !clips && channelId !== "Not Found") {
+    if (twitchToken && channelId && !clips && channelId !== "Not Found") {
       fetchClips();
     }
-  }, [fetchClips, clips, channelId]);
+  }, [fetchClips, clips, channelId, twitchToken]);
 
   useEffect(() => {
-    if (channelInfo) {
+    if (twitchToken && channelInfo) {
       setFavion(channelInfo.logo);
     }
-
     return () => {
       setFavion();
     };
-  }, [channelInfo]);
+  }, [channelInfo, twitchToken]);
 
-  if (channelId === "Not Found") {
+  if (channelId === "Not Found" || !getCookie("Twitch-access_token")) {
     return (
       <ChannelContainer>
         <Banner>
@@ -314,10 +326,21 @@ export default () => {
                 <div id='ChannelName'>
                   <p id='ChannelLiveLink'>
                     <img id='profileIcon' alt='' src={"asd"} />
-                    {channelName}
+                    {!getCookie("Twitch-access_token")
+                      ? "Can't fetch channel info, no access token found."
+                      : channelName}
                   </p>
                 </div>
-                <p id='title'>Channel Not Found!</p>
+                <p id='title'>
+                  {!getCookie("Twitch-access_token")
+                    ? "You need to connect with your Twitch account."
+                    : "Channel Not Found!"}
+                </p>
+                <ReAuthenticateButton
+                  disconnect={() => disconnectTwitch({ setTwitchToken, setEnableTwitch })}
+                  serviceName={"Twitch"}
+                  style={{ margin: "20px", justifyContent: "center" }}
+                />
               </div>
             </Name>
           </BannerInfoOverlay>
