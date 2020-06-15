@@ -62,11 +62,7 @@ export default ({
             setFollowing(true);
           })
           .catch((error) => {
-            if (
-              error.response &&
-              error.response.status === 404 &&
-              error.response.statusText === "Not Found"
-            ) {
+            if (error.response && error.response.data.message === "Follow not found") {
               console.log(`Not following ${channelName}`);
               setFollowing(false);
             } else {
