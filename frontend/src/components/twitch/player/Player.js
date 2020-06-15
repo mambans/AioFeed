@@ -136,7 +136,11 @@ export default () => {
     if (videoId && !channelName) {
       const timer = setTimeout(async () => {
         if (twitchVideoPlayer) {
-          const streamInfo = await fetchStreamInfo(twitchVideoPlayer);
+          const streamInfo = await fetchStreamInfo(
+            twitchVideoPlayer && twitchVideoPlayer.getChannelId()
+              ? { user_id: twitchVideoPlayer.getChannelId() }
+              : { user_login: channelName }
+          );
           if (streamInfo.length) setStreamInfo(streamInfo);
         }
       }, 5000);
@@ -187,7 +191,11 @@ export default () => {
 
   const GetAndSetStreamInfo = useCallback(async () => {
     if (twitchVideoPlayer) {
-      const LIVEStreamInfo = await fetchStreamInfo(twitchVideoPlayer);
+      const LIVEStreamInfo = await fetchStreamInfo(
+        twitchVideoPlayer && twitchVideoPlayer.getChannelId()
+          ? { user_id: twitchVideoPlayer.getChannelId() }
+          : { user_login: channelName }
+      );
       if (LIVEStreamInfo) {
         const streamWithGame = await addGameName({
           streamInfo,
@@ -209,7 +217,7 @@ export default () => {
         return streamWithGameAndProfile;
       }
     }
-  }, [twitchVideoPlayer, streamInfo]);
+  }, [twitchVideoPlayer, streamInfo, channelName]);
 
   const onlineEvents = useCallback(async () => {
     console.log("Stream is Online");

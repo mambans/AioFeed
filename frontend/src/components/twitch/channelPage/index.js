@@ -249,7 +249,11 @@ export default () => {
 
     try {
       if (twitchPlayer.current) {
-        const streamInfo = await fetchStreamInfo(twitchPlayer.current);
+        const streamInfo = await fetchStreamInfo(
+          twitchPlayer.current && twitchPlayer.current.getChannelId()
+            ? { user_id: twitchPlayer.current.getChannelId() }
+            : { user_login: channelName }
+        );
         if (streamInfo) {
           setStreamInfo(streamInfo);
           setIsLive(true);
