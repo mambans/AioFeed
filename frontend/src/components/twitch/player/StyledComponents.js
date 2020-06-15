@@ -521,10 +521,11 @@ export const ResetVideoButton = styled(GrRefresh).attrs({ size: 24 })`
 `;
 
 export const SmallButtonContainer = styled.div`
-  display: flex;
+  align-items: end;
+  display: grid;
+  grid-auto-flow: column;
   position: absolute;
   bottom: 10px;
-  align-items: end;
 
   *[disabled] {
     opacity: 0.2;
