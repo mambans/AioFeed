@@ -68,21 +68,23 @@ export default () => {
         };
       });
 
-    await axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
-        username: username,
-        columnName: "YoutubePreferences",
-        columnValue: {
-          Username: MyYoutube.Username,
-          Profile: MyYoutube.ProfileImg,
-          Token: tokens.access_token,
-          Refresh_token: tokens.refresh_token,
-        },
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+    if (username) {
+      await axios
+        .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+          username: username,
+          columnName: "YoutubePreferences",
+          columnValue: {
+            Username: MyYoutube.Username,
+            Profile: MyYoutube.ProfileImg,
+            Token: tokens.access_token,
+            Refresh_token: tokens.refresh_token,
+          },
+          authkey: getCookie(`AioFeed_AuthKey`),
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    }
 
     return { access_token: tokens.access_token, refresh_token: tokens.refresh_token, ...MyYoutube };
   }, [username, location.search, authKey]);

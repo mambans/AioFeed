@@ -40,24 +40,26 @@ function TwitchAuthCallback() {
           AddCookie("Twitch-username", res.data.data[0].login);
           AddCookie("Twitch-profileImg", res.data.data[0].profile_image_url);
 
-          await axios
-            .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
-              username: username,
-              columnName: "TwitchPreferences",
-              columnValue: {
-                Username: res.data.data[0].login,
-                Id: res.data.data[0].id,
-                Profile: res.data.data[0].profile_image_url,
-                Token: accessToken,
-                Refresh_token: refreshToken,
-                AutoRefresh: autoRefreshEnabled,
-                enabled: enableTwitch,
-              },
-              authkey: getCookie(`AioFeed_AuthKey`),
-            })
-            .catch((e) => {
-              console.error(e);
-            });
+          if (username) {
+            await axios
+              .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+                username: username,
+                columnName: "TwitchPreferences",
+                columnValue: {
+                  Username: res.data.data[0].login,
+                  Id: res.data.data[0].id,
+                  Profile: res.data.data[0].profile_image_url,
+                  Token: accessToken,
+                  Refresh_token: refreshToken,
+                  AutoRefresh: autoRefreshEnabled,
+                  enabled: enableTwitch,
+                },
+                authkey: getCookie(`AioFeed_AuthKey`),
+              })
+              .catch((e) => {
+                console.error(e);
+              });
+          }
 
           return {
             Username: res.data.data[0].login,
