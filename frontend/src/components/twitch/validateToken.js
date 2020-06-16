@@ -38,6 +38,8 @@ export default async (forceRun = false) => {
     }
 
     return true;
+  } else if (getCookie(`Twitch-refresh_token`)) {
+    return reauthenticate();
   }
   return false;
 };
