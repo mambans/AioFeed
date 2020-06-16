@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { MdFormatIndentDecrease } from "react-icons/md";
-import { pulse } from "./../StyledComponents";
+import styled from 'styled-components';
+import { MdFormatIndentDecrease } from 'react-icons/md';
+import { pulse } from './../StyledComponents';
 
 export const SidebarTitlePopup = styled.div`
   width: 325px;
@@ -144,6 +144,9 @@ export const StyledsidebarItem = styled.div`
     align-items: center;
     min-width: 70px;
     margin-left: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     i {
       justify-content: right;
@@ -197,7 +200,7 @@ export const HideSidebarButton = styled(MdFormatIndentDecrease).attrs({ size: 25
   color: #ffffff;
   background: none;
   opacity: 0.3;
-  transform: ${({ show }) => (show === "true" ? "unset" : "rotateY(180deg)")};
+  transform: ${({ show }) => (show === 'true' ? 'unset' : 'rotateY(180deg)')};
   cursor: pointer;
   left: 3px;
   top: 92px;
