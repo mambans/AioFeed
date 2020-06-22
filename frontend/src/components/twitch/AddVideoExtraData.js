@@ -1,6 +1,6 @@
-import { getLocalstorage } from "./../../util/Utils";
-import GetCachedProfiles from "./GetCachedProfiles";
-import API from "./API";
+import { getLocalstorage } from './../../util/Utils';
+import GetCachedProfiles from './GetCachedProfiles';
+import API from './API';
 
 const getGameDetails = async (items) => {
   // Removes game id duplicates before sending game request.
@@ -8,11 +8,11 @@ const getGameDetails = async (items) => {
     ...new Set(
       items.map((channel) => {
         return channel && channel.game_id;
-      })
+      }),
     ),
   ];
 
-  const cachedGameInfo = getLocalstorage("Twitch_game_details") || { data: [] };
+  const cachedGameInfo = getLocalstorage('Twitch_game_details') || { data: [] };
   const cachedFilteredGames = cachedGameInfo.data.filter((game) => game);
   const unCachedGameDetails = games.filter((game) => {
     return !cachedFilteredGames.find((cachedGame) => cachedGame.id === game);
@@ -23,21 +23,21 @@ const getGameDetails = async (items) => {
 
   if (GamesToFetch && Array.isArray(GamesToFetch) && GamesToFetch.length >= 1) {
     return API.getGames({
-      params: {
-        id: GamesToFetch,
+      params : {
+        id : GamesToFetch,
       },
     })
       .then((res) => {
         const filteredOutNulls = res.data.data.filter((game) => game);
         localStorage.setItem(
-          "Twitch_game_details",
+          'Twitch_game_details',
           JSON.stringify({
-            data: cachedFilteredGames.concat(filteredOutNulls),
-            expire:
+            data   : cachedFilteredGames.concat(filteredOutNulls),
+            expire :
               cachedGameInfo.expire < Date.now()
                 ? Date.now() + 7 * 24 * 60 * 60 * 1000
                 : cachedGameInfo.expire,
-          })
+          }),
         );
         return cachedFilteredGames.concat(filteredOutNulls);
       })
@@ -68,7 +68,7 @@ export default async ({ items, fetchGameInfo = true, forceNewProfiles = false })
   });
 
   const noCachedProfileArrayIds = Object.values(
-    forceNewProfiles ? originalArray.data : noCachedProfileArrayObject
+    forceNewProfiles ? originalArray.data : noCachedProfileArrayObject,
   ).map((user) => {
     return user.user_id || user.broadcaster_id;
   });
@@ -76,11 +76,11 @@ export default async ({ items, fetchGameInfo = true, forceNewProfiles = false })
   const newProfileImgUrls =
     noCachedProfileArrayIds.length > 0
       ? await API.getUser({
-          params: {
-            id: noCachedProfileArrayIds,
+          params : {
+            id : noCachedProfileArrayIds,
           },
         }).catch((e) => {
-          console.error("newProfileImgUrls: ", e);
+          console.error('newProfileImgUrls: ', e);
         })
       : null;
 
@@ -105,15 +105,15 @@ export default async ({ items, fetchGameInfo = true, forceNewProfiles = false })
           `${process.env.PUBLIC_URL}/images/placeholder.webp`;
       }
       return user;
-    })
+    }),
   ).then(async (res) => {
     const newProfiles = res.reduce(
       // eslint-disable-next-line no-sequences
       (obj, item) => ((obj[item.user_id || item.broadcaster_id] = item.profile_img_url), obj),
-      {}
+      {},
     );
-    const FinallTwitchProfilesObj = { ...newProfiles, ...TwitchProfiles };
-    localStorage.setItem("TwitchProfiles", JSON.stringify(FinallTwitchProfilesObj));
+    const FinallTwitchProfilesObj = { ...TwitchProfiles, ...newProfiles };
+    localStorage.setItem('TwitchProfiles', JSON.stringify(FinallTwitchProfilesObj));
 
     if (fetchGameInfo) {
       const gameNames = await getGameDetails(originalArray.data);
@@ -124,7 +124,7 @@ export default async ({ items, fetchGameInfo = true, forceNewProfiles = false })
           const foundGame = gameNames.find((game) => {
             return game.id === stream.game_id;
           });
-          stream.game_name = foundGame ? foundGame.name : "";
+          stream.game_name = foundGame ? foundGame.name : '';
           return stream;
         });
 
@@ -137,9 +137,7 @@ export default async ({ items, fetchGameInfo = true, forceNewProfiles = false })
           });
           stream.game_img = foundGame
             ? foundGame.box_art_url
-            : stream.game_name === ""
-            ? ""
-            : `${process.env.PUBLIC_URL}/images/placeholder.webp`;
+            : stream.game_name === '' ? '' : `${process.env.PUBLIC_URL}/images/placeholder.webp`;
 
           return stream;
         });
