@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
+import React, { useState } from 'react';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
-import { StyledToggleButton } from "./StyledComponent";
-import { AddCookie } from "../../../util/Utils";
+import { StyledToggleButton } from './StyledComponent';
+import { AddCookie } from '../../../util/Utils';
 
 export default ({
   setEnable,
@@ -15,7 +15,7 @@ export default ({
   buttonsperrow,
   scrollIntoView,
 }) => {
-  const [checked, setChecked] = useState(enabled || false);
+  const [ checked, setChecked ] = useState(enabled || false);
 
   function handleChange() {
     setEnable(!checked);
@@ -25,17 +25,18 @@ export default ({
     if (scrollIntoView && !checked === true) {
       window.setTimeout(() => {
         const element = document.getElementById(`${label}Header`);
-        element.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+        element &&
+          element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
       }, 100);
     }
   }
 
   return (
     <OverlayTrigger
-      key={"bottom"}
-      placement={"bottom"}
+      key={'bottom'}
+      placement={'bottom'}
       delay={{ show: 200, hide: 0 }}
-      overlay={<Tooltip id={`tooltip-${"bottom"}`}>{tooltip}</Tooltip>}>
+      overlay={<Tooltip id={`tooltip-${'bottom'}`}>{tooltip}</Tooltip>}>
       <StyledToggleButton
         onClick={handleChange}
         disabled={!tokenExists}
