@@ -1,20 +1,32 @@
-import axios from "axios";
-import moment from "moment";
-import { getLocalstorage } from "../../util/Utils";
+import axios from 'axios';
+import moment from 'moment';
+import { getLocalstorage, getCookie } from '../../util/Utils';
+
+function chunk(array, size) {
+  const chunked_arr = [];
+  let index = 0;
+  while (index < array.length) {
+    chunked_arr.push(array.slice(index, size + index));
+    index += size;
+  }
+  return chunked_arr;
+}
 
 export default async (flattedVideosArray) => {
   const videosArray = [...flattedVideosArray];
   const detailsCached =
-    getLocalstorage("YT-VideoDetails") && getLocalstorage("YT-VideoDetails").data
+    getLocalstorage('YT-VideoDetails') &&
+    getLocalstorage('YT-VideoDetails').data &&
+    getLocalstorage('YT-VideoDetails').expire >= Date.now()
       ? // getLocalstorage("YT-VideoDetails").expire <= new Date()
-        getLocalstorage("YT-VideoDetails")
+        getLocalstorage('YT-VideoDetails')
       : { data: [], expire: Date.now() + 7 * 24 * 60 * 60 * 1000 };
 
   const comparer = (otherArray) => {
     return function (current) {
       return (
         otherArray.filter(function (other) {
-          return other.id === current.contentDetails.upload.videoId;
+          return other?.id === current.contentDetails.upload.videoId;
         }).length === 0
       );
     };
@@ -26,7 +38,7 @@ export default async (flattedVideosArray) => {
       : videosArray;
 
   const noVideoDetailsIDS = videosWithNoExtraDetails.map(
-    (video) => video.contentDetails.upload.videoId
+    (video) => video.contentDetails.upload.videoId,
   );
 
   const newVideosDetails =
@@ -34,28 +46,35 @@ export default async (flattedVideosArray) => {
     videosWithNoExtraDetails.length >= 1 &&
     noVideoDetailsIDS &&
     noVideoDetailsIDS.length >= 1
-      ? await axios
-          .get(
-            `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${noVideoDetailsIDS}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`
-          )
-          .then((res) => {
-            console.log(
-              `Fetched VideoDeails for {${res.data.items.length}} videos..`,
-              res.data.items
-            );
+      ? await Promise.all(
+          chunk(noVideoDetailsIDS, 50).map(async (chunk) => {
+            return await axios
+              .get(
+                `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${chunk}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+                {
+                  headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${getCookie('Youtube-access_token')}`,
+                  },
+                },
+              )
+              .then((res) => res.data.items)
+              .catch((e) => {
+                return null;
+              });
+          }),
+        ).then((res) => {
+          const flattenArray = res.flat(1);
 
-            const aLLDetails = {
-              data: detailsCached.data.concat(res.data.items),
-              expire: detailsCached.expire,
-            };
+          const aLLDetails = {
+            data: [...detailsCached.data, ...flattenArray],
+            expire: detailsCached.expire,
+          };
 
-            localStorage.setItem("YT-VideoDetails", JSON.stringify(aLLDetails));
+          localStorage.setItem('YT-VideoDetails', JSON.stringify(aLLDetails));
 
-            return aLLDetails;
-          })
-          .catch((e) => {
-            return null;
-          })
+          return aLLDetails;
+        })
       : detailsCached;
 
   const allVideos = videosArray.map((video) => {
@@ -63,11 +82,11 @@ export default async (flattedVideosArray) => {
       ? moment
           .duration(
             newVideosDetails.data.find(
-              (detail) => detail.id === video.contentDetails.upload.videoId
-            ).contentDetails.duration
+              (detail) => detail?.id === video?.contentDetails.upload.videoId,
+            )?.contentDetails.duration,
           )
-          .format("hh:mm:ss")
-      : "";
+          .format('hh:mm:ss')
+      : '';
     return video;
   });
 
