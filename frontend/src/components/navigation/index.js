@@ -1,17 +1,18 @@
-import React, { useContext, useState } from "react";
-import { Navbar, NavDropdown, Nav, Container, Button } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
-import { CSSTransition } from "react-transition-group";
-import { FaGithub } from "react-icons/fa";
-import Modal from "react-bootstrap/Modal";
+import React, { useContext, useState } from 'react';
+import { Navbar, NavDropdown, Nav, Container, Button } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
+import { CSSTransition } from 'react-transition-group';
+import { FaGithub } from 'react-icons/fa';
+import Modal from 'react-bootstrap/Modal';
 
-import RenderNotifications from "./../notifications";
-import NavigationContext from "./NavigationContext";
-import "./Navigation.scss";
-import Sidebar from "./sidebar";
-import ChangeLogs from "../changeLogs";
-import styles from "../changeLogs/ChangeLogs.module.scss";
-import { AddCookie, getCookie } from "../../util/Utils";
+import RenderNotifications from './../notifications';
+import NavigationContext from './NavigationContext';
+import './Navigation.scss';
+import Sidebar from './sidebar';
+import ChangeLogs from '../changeLogs';
+import styles from '../changeLogs/ChangeLogs.module.scss';
+import { AddCookie, getCookie } from '../../util/Utils';
+import GameSearchBar from '../twitch/categoryTopStreams/GameSearchBar';
 
 export default (prop) => {
   const NewAlertName = `GlobalAlert-NewAlertName`;
@@ -26,12 +27,13 @@ export default (prop) => {
   return (
     <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
       <Navbar
-        mode={prop.fixed ? "fixed" : "unset"}
+        mode={prop.fixed ? 'fixed' : 'unset'}
         collapseOnSelect
         expand='lg'
         bg='dark'
         variant='dark'
-        shrink={shrinkNavbar}>
+        shrink={shrinkNavbar}
+      >
         <Nav.Link as={NavLink} to='/' className='logo-link'>
           <img
             src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}
@@ -48,15 +50,22 @@ export default (prop) => {
               <Nav.Link as={NavLink} to='/feed/' activeClassName='active'>
                 Feed
               </Nav.Link>
-              <Nav.Link as={NavLink} to='/category/' activeClassName='active'>
-                Top streams
-              </Nav.Link>
+              <GameSearchBar
+                direction='right'
+                showButton={false}
+                style={{ background: 'none', boxShadow: 'none' }}
+                inputFontSize='1.15rem'
+                fixedPlaceholder='Top streams'
+                inputStyle={{ textOverflow: 'unset' }}
+                compressedWidth='150px'
+                alwaysFetchNew={true}
+              />
             </Nav>
           </Container>
-          <Nav style={{ justifyContent: "right" }}>
+          <Nav style={{ justifyContent: 'right', alignItems: 'center' }}>
             <NavDropdown title='Other' id='collasible-nav-dropdown'>
               <NavDropdown.Item href='https://github.com/mambans/AioFeed'>
-                <FaGithub size={24} style={{ marginRight: "0.75rem" }} />
+                <FaGithub size={24} style={{ marginRight: '0.75rem' }} />
                 AioFeed-Github
               </NavDropdown.Item>
 
@@ -64,8 +73,9 @@ export default (prop) => {
                 as={Button}
                 onClick={() => {
                   setShow(!show);
-                }}>
-                <FaGithub size={24} style={{ marginRight: "0.75rem" }} />
+                }}
+              >
+                <FaGithub size={24} style={{ marginRight: '0.75rem' }} />
                 Changelog
               </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to='/legality#Conditions'>
@@ -79,7 +89,8 @@ export default (prop) => {
               show={show}
               onHide={handleClose}
               dialogClassName={styles.modal}
-              backdropClassName={styles.modalBackdrop}>
+              backdropClassName={styles.modalBackdrop}
+            >
               <ChangeLogs handleClose={handleClose} NewAlertName={NewAlertName} />
             </Modal>
             <Sidebar />

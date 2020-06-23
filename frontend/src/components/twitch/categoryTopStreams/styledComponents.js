@@ -1,8 +1,8 @@
-import { Button } from "react-bootstrap";
-import { FaSearch } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import React from "react";
-import styled, { keyframes } from "styled-components";
+import { Button } from 'react-bootstrap';
+import { FaSearch } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import React from 'react';
+import styled, { keyframes } from 'styled-components';
 
 export const StyledGameListElement = styled.li`
   justify-content: unset;
@@ -20,8 +20,8 @@ export const StyledGameListElement = styled.li`
     overflow: hidden;
     text-overflow: ellipsis;
     width: 262px;
-    color: ${({ selected }) => (selected ? "#ffffff" : "inherit")};
-    font-weight: ${({ selected }) => (selected ? "bold" : "unset")};
+    color: ${({ selected }) => (selected ? '#ffffff' : 'inherit')};
+    font-weight: ${({ selected }) => (selected ? 'bold' : 'unset')};
   }
 `;
 
@@ -151,11 +151,27 @@ export const SearchGameForm = styled.form`
   background: var(--refreshButtonBackground);
   box-shadow: var(--refreshButtonShadow);
   border-radius: 5px;
-  transition: width 250ms, min-width 250ms, margin-left 250ms;
-  width: ${({ open }) => (open ? "310px" : "125px")};
-  min-width: ${({ open }) => (open ? "310px" : "125px")};
-  margin-left: ${({ open }) => (open ? "0px" : "185px")};
+  transition: width 250ms, min-width 250ms, margin-left 250ms, margin-right 250ms;
+  width: ${({ open, compressedWidth }) => (open ? '310px' : compressedWidth || '125px')};
+  min-width: ${({ open, compressedWidth }) => (open ? '310px' : compressedWidth || '125px')};
+  margin-left: ${({ open, direction, compressedWidth }) =>
+    direction === 'left'
+      ? open
+        ? '0px'
+        : compressedWidth
+        ? `calc(310px - ${compressedWidth})`
+        : '185px'
+      : 0};
+  margin-right: ${({ open, direction, compressedWidth }) =>
+    direction === 'right'
+      ? open
+        ? '0px'
+        : compressedWidth
+        ? `calc(310px - ${compressedWidth})`
+        : '185px'
+      : 0};
   z-index: 4;
+  height: max-content;
 
   li {
     button.VodButton,
@@ -178,9 +194,15 @@ export const SearchGameForm = styled.form`
     border: none;
     border-radius: 5px;
     text-overflow: ellipsis;
-    width: calc(100% - (26px + 1.5rem));
+    width: ${({ showButton }) => (showButton ? 'calc(100% - (26px + 1.5rem))' : '100%')};
     position: relative;
     z-index: 5;
+    font-size: ${({ inputFontSize }) => inputFontSize};
+    transition: color 250ms;
+
+    &:hover {
+      color: var(--textColor1Hover);
+    }
   }
 
   svg#ToggleListBtn {
@@ -198,13 +220,13 @@ export const SearchGameForm = styled.form`
   }
 `;
 
-export const TypeButton = styled(Button).attrs({ variant: "dark" })`
+export const TypeButton = styled(Button).attrs({ variant: 'dark' })`
   width: 150px;
   background-color: rgba(20, 23, 25, 0.5);
   display: grid;
   grid-template-columns: 35% auto;
   text-align: unset;
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 
   &:hover,
   &:active,

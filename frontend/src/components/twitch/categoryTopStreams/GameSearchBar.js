@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import GetTopGames from "./GetTopGames";
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import GetTopGames from './GetTopGames';
 import {
   StyledGameListElement,
   GameListUlContainer,
@@ -8,15 +8,26 @@ import {
   StyledShowAllButton,
   BackdropChannelList,
   SearchSubmitBtn,
-} from "./styledComponents";
-import { throttle } from "lodash";
-import { MdFormatListBulleted } from "react-icons/md";
-import StyledLoadingList from "./LoadingList";
-import { CSSTransition } from "react-transition-group";
-import { scrollToIfNeeded, sortInputFirst } from "../channelList";
+} from './styledComponents';
+import { throttle } from 'lodash';
+import { MdFormatListBulleted } from 'react-icons/md';
+import StyledLoadingList from './LoadingList';
+import { CSSTransition } from 'react-transition-group';
+import { scrollToIfNeeded, sortInputFirst } from '../channelList';
 
 export default (props) => {
-  const { gameName, videoType } = props;
+  const {
+    gameName,
+    videoType,
+    style,
+    direction = 'left',
+    showButton = true,
+    fixedPlaceholder,
+    inputFontSize = 'inherit',
+    inputStyle = {},
+    compressedWidth = '125px',
+    alwaysFetchNew = false,
+  } = props;
   const navigate = useNavigate();
   const topGames = useRef();
   const [listIsOpen, setListIsOpen] = useState();
@@ -34,14 +45,14 @@ export default (props) => {
     return {
       value,
       setValue,
-      reset: () => setValue(""),
+      reset: () => setValue(''),
       bind: {
         value,
         onChange: (event) => {
           try {
             setCursor(0);
             setValue(event.target.value);
-            if (listIsOpen && event.target.value && event.target.value !== "") {
+            if (listIsOpen && event.target.value && event.target.value !== '') {
               const filtered = topGames.current.data.filter((game) => {
                 return game.name
                   .toLowerCase()
@@ -99,15 +110,14 @@ export default (props) => {
         function (entries) {
           if (ulListRef.current) {
             ulListRef.current.addEventListener(
-              "wheel",
+              'wheel',
               throttle(
-                function (e) {
+                function () {
                   if (
                     entries[0].isIntersecting === true &&
                     topGames.current &&
                     topGames.current.data.length <= 450
                   ) {
-                    // console.log("INTERSECTING");
                     setLoadingMore(true);
                     GetTopGames(topGames.current.pagination.cursor)
                       .then((res) => {
@@ -140,21 +150,21 @@ export default (props) => {
                         }
                       })
                       .catch((e) => {
-                        console.error("e", e);
+                        console.error('e', e);
                         setLoadingMore(false);
                       });
                   }
                   return false;
                 },
                 5000,
-                { trailing: false, leading: true }
-              )
+                { trailing: false, leading: true },
+              ),
             );
           }
         },
-        { threshold: 0 }
+        { threshold: 0 },
       ),
-    []
+    [],
   );
 
   const {
@@ -165,11 +175,12 @@ export default (props) => {
     showValue,
     returnFirstMatchedGame,
     manualSet,
-  } = useInput("");
+  } = useInput('');
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    navigate("/category/" + returnFirstMatchedGame());
+    navigate('/category/' + returnFirstMatchedGame());
+    manualSet(returnFirstMatchedGame());
     setListIsOpen(false);
     // resetGame();
   };
@@ -187,27 +198,27 @@ export default (props) => {
           });
         },
         5000,
-        { leading: true, trailing: false }
+        { leading: true, trailing: false },
       ),
-    [observer]
+    [observer],
   );
 
   const handleArrowKey = (e) => {
     try {
       if (filteredGames && filteredGames.length > 1) {
-        if (e.key === "ArrowDown") {
+        if (e.key === 'ArrowDown') {
           e.preventDefault();
           setCursor((cursor) => Math.min(Math.max(cursor + 1, 0), filteredGames.length - 1));
-          scrollToIfNeeded(ulListRef.current, document.querySelector(".selected"), "Down");
+          scrollToIfNeeded(ulListRef.current, document.querySelector('.selected'), 'Down');
           manualSet(
-            filteredGames[Math.min(Math.max(cursor + 1, 0), filteredGames.length - 1)].name
+            filteredGames[Math.min(Math.max(cursor + 1, 0), filteredGames.length - 1)].name,
           );
-        } else if (e.key === "ArrowUp") {
+        } else if (e.key === 'ArrowUp') {
           e.preventDefault();
           setCursor((cursor) => Math.min(Math.max(cursor - 1, 0), filteredGames.length - 1));
-          scrollToIfNeeded(ulListRef.current, document.querySelector(".selected"), "Up");
+          scrollToIfNeeded(ulListRef.current, document.querySelector('.selected'), 'Up');
           manualSet(
-            filteredGames[Math.min(Math.max(cursor - 1, 0), filteredGames.length - 1)].name
+            filteredGames[Math.min(Math.max(cursor - 1, 0), filteredGames.length - 1)].name,
           );
         }
       }
@@ -219,12 +230,12 @@ export default (props) => {
   useEffect(() => {
     const endOfListRefEle = endOfListRef.current;
     const inputField = inputRef.current;
-    inputField.addEventListener("focus", () => {
+    inputField.addEventListener('focus', () => {
       setListIsOpen(true);
     });
 
     return () => {
-      inputField.removeEventListener("focus", () => {
+      inputField.removeEventListener('focus', () => {
         setListIsOpen(true);
         if (endOfListRefEle) observer.unobserve(endOfListRefEle);
       });
@@ -234,12 +245,12 @@ export default (props) => {
   useEffect(() => {
     const input = showValue();
     if (
-      (!topGames.current || !topGames.current.data) &&
-      (listIsOpen || (input && input !== "" && input.length > 1))
+      (alwaysFetchNew || !topGames.current || !topGames.current.data) &&
+      (listIsOpen || (input && input !== '' && input.length > 1))
     ) {
       fetchTopGamesOnce();
     }
-  }, [showValue, listIsOpen, fetchTopGamesOnce, topGames, observer]);
+  }, [showValue, listIsOpen, fetchTopGamesOnce, topGames, observer, alwaysFetchNew]);
 
   useEffect(() => {
     return () => {
@@ -249,13 +260,26 @@ export default (props) => {
 
   return (
     <>
-      <SearchGameForm onSubmit={handleSubmit} open={listIsOpen} onKeyDown={handleArrowKey}>
+      <SearchGameForm
+        onSubmit={handleSubmit}
+        open={listIsOpen}
+        onKeyDown={handleArrowKey}
+        style={{ ...style }}
+        direction={direction}
+        showButton={showButton}
+        inputFontSize={inputFontSize}
+        compressedWidth={compressedWidth}
+      >
         <input
           ref={inputRef}
           type='text'
           spellCheck='false'
-          placeholder={(gameName !== "" && gameName !== undefined ? gameName : "All") + "..."}
-          {...bindGame}></input>
+          style={{ ...inputStyle }}
+          placeholder={
+            fixedPlaceholder || `${gameName !== '' && gameName !== undefined ? gameName : 'All'}...`
+          }
+          {...bindGame}
+        ></input>
         {game && listIsOpen && (
           <SearchSubmitBtn
             to={{
@@ -263,13 +287,15 @@ export default (props) => {
             }}
           />
         )}
-        <MdFormatListBulleted
-          id='ToggleListBtn'
-          onClick={() => {
-            setListIsOpen(!listIsOpen);
-          }}
-          size={42}
-        />
+        {showButton && (
+          <MdFormatListBulleted
+            id='ToggleListBtn'
+            onClick={() => {
+              setListIsOpen(!listIsOpen);
+            }}
+            size={42}
+          />
+        )}
         <CSSTransition
           in={listIsOpen}
           timeout={250}
@@ -279,10 +305,11 @@ export default (props) => {
             // setTopGames();
             setCursor(0);
           }}
-          unmountOnExit>
+          unmountOnExit
+        >
           <GameListUlContainer ref={ulListRef}>
             <StyledShowAllButton key='showAll'>
-              <Link to={"/category/"}>Show all</Link>
+              <Link to={'/category/'}>Show all</Link>
             </StyledShowAllButton>
 
             {filteredGames ? (
@@ -292,19 +319,21 @@ export default (props) => {
                     <StyledGameListElement
                       key={game.id}
                       selected={index === cursor}
-                      className={index === cursor ? "selected" : ""}>
+                      className={index === cursor ? 'selected' : ''}
+                    >
                       <Link
                         onClick={() => {
                           setListIsOpen(false);
                         }}
                         to={{
-                          pathname: "/category/" + game.name,
+                          pathname: '/category/' + game.name,
                           state: {
                             p_videoType: videoType,
                           },
-                        }}>
+                        }}
+                      >
                         <img
-                          src={game.box_art_url.replace("{width}", 300).replace("{height}", 300)}
+                          src={game.box_art_url.replace('{width}', 300).replace('{height}', 300)}
                           alt=''
                         />
                         {game.name}
@@ -313,8 +342,8 @@ export default (props) => {
                   );
                 })}
                 {loadingMore && <StyledLoadingList amount={3} />}
-                {(!game || game === "") && (
-                  <div ref={endOfListRef} style={{ width: "100%", height: "5px" }} />
+                {(!game || game === '') && (
+                  <div ref={endOfListRef} style={{ width: '100%', height: '5px' }} />
                 )}
               </>
             ) : (
