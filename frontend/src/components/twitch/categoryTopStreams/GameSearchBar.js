@@ -286,13 +286,12 @@ export default (props) => {
           placeholder={`${gameName !== '' && gameName !== undefined ? gameName : 'Game'}..`}
           {...bindGame}
         ></input>
-        {game && listIsOpen && (
-          <SearchSubmitBtn
-            to={{
-              pathname: `/category/${game}`,
-            }}
-          />
-        )}
+        <SearchSubmitBtn
+          disabled={!game}
+          to={{
+            pathname: `/category/${game}`,
+          }}
+        />
         {showButton && (
           <MdFormatListBulleted
             id='ToggleListBtn'

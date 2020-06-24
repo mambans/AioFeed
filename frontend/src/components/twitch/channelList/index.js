@@ -63,7 +63,7 @@ export const sortInputFirst = (input, data) => {
   return [...caseSensitive, ...caseInsensitive, ...others];
 };
 
-export default ({ showButton = true, style = {}, inputStyle = {} }) => {
+export default ({ showButton = true, style = {}, inputStyle = {}, placeholder = 'Channel..' }) => {
   const [filteredChannels, setFilteredChannels] = useState();
   const [listIsOpen, setListIsOpen] = useState();
   const [cursor, setCursor] = useState(0);
@@ -257,17 +257,16 @@ export default ({ showButton = true, style = {}, inputStyle = {} }) => {
           style={{ ...inputStyle }}
           ref={inputRef}
           type='text'
-          placeholder={channelName || 'Channel...'}
+          placeholder={`${channelName || placeholder}`}
           {...bindChannel}
           spellCheck='false'
         />
-        {channel && (
-          <SearchSubmitBtn
-            to={{
-              pathname: `/${channel}/channel/`,
-            }}
-          />
-        )}
+        <SearchSubmitBtn
+          disabled={!channel}
+          to={{
+            pathname: `/${channel}/channel/`,
+          }}
+        />
         {showButton && (
           <MdFormatListBulleted
             id='ToggleListBtn'

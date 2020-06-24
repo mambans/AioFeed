@@ -154,8 +154,10 @@ export const SearchGameForm = styled.form`
   transition: width 250ms, min-width 250ms, margin-left 250ms, margin-right 250ms;
   width: ${({ open }) => (open ? '310px' : '125px')};
   min-width: ${({ open }) => (open ? '310px' : '125px')};
-  margin-left: ${({ open, direction }) => (direction === 'left' ? (open ? '0px' : '185px') : 0)};
-  margin-right: ${({ open, direction }) => (direction === 'right' ? (open ? '0px' : '185px') : 0)};
+  margin-left: ${({ open, direction = 'left' }) =>
+    direction === 'left' ? (open ? '0px' : '185px') : 0};
+  margin-right: ${({ open, direction = 'left' }) =>
+    direction === 'right' ? (open ? '0px' : '185px') : 0};
   z-index: 4;
   height: max-content;
 
@@ -187,7 +189,8 @@ export const SearchGameForm = styled.form`
   }
 
   input {
-    padding: 0.5rem ${({ text, open }) => (text && open ? '25px' : '0.5rem')} 0.5rem 0.5rem;
+    /* padding: 0.5rem ${({ text, open }) => (text && open ? '25px' : '0.5rem')} 0.5rem 0.5rem; */
+    padding: 0.5rem 0.5rem 0.5rem 27px;
     color: var(--refreshButtonColor);
     background: transparent;
     border: none;
@@ -197,7 +200,7 @@ export const SearchGameForm = styled.form`
     position: relative;
     z-index: 5;
     font-size: ${({ inputFontSize }) => inputFontSize};
-    transition: color 250ms,;
+    transition: color 250ms;
     /* text-align: ${({ open }) => (open ? 'start' : 'center')}; */
 
     &:hover {
@@ -296,16 +299,20 @@ export const TopStreamsContainer = styled.div`
   }
 `;
 
-const SearchSubmitIcon = styled(FaSearch).attrs({ size: 20 })``;
+const SearchSubmitIcon = styled(FaSearch).attrs({ size: 16 })``;
 
 const SearchSubmitA = styled.a`
   position: absolute;
   cursor: pointer;
   color: rgb(240, 240, 240);
   display: flex;
-  margin-left: calc(310px - 72px);
-  margin-top: -29px;
+  /* margin-left: calc(310px - 72px); */
+  margin-left: 0;
+  padding-left: 5px;
+  transform: translateY(-27px);
   z-index: 5;
+  pointer-events: ${({ disabled }) => (disabled ? 'none' : 'unset')};
+  opacity: ${({ disabled }) => (disabled ? '0.3' : '1')};
 
   &:hover {
     color: rgb(255, 255, 255);
@@ -317,22 +324,27 @@ const SearchSubmitLink = styled(Link)`
   cursor: pointer;
   color: rgb(240, 240, 240);
   display: flex;
-  margin-left: calc(310px - 72px);
-  margin-top: -29px;
+  /* margin-left: calc(310px - 72px); */
+  margin-left: 0;
+  padding-left: 5px;
+  transform: translateY(-27px);
   z-index: 5;
+  pointer-events: ${({ disabled }) => (disabled ? 'none' : 'unset')};
+  opacity: ${({ disabled }) => (disabled ? '0.3' : '1')};
+  transition: opacity 500ms;
 
   &:hover {
     color: rgb(255, 255, 255);
   }
 `;
 
-export const SearchSubmitBtn = ({ href, to }) =>
+export const SearchSubmitBtn = ({ href, to, disabled }) =>
   href ? (
-    <SearchSubmitA href={href}>
+    <SearchSubmitA href={href} disabled={disabled}>
       <SearchSubmitIcon />
     </SearchSubmitA>
   ) : (
-    <SearchSubmitLink to={to}>
+    <SearchSubmitLink to={to} disabled={disabled}>
       <SearchSubmitIcon />
     </SearchSubmitLink>
   );

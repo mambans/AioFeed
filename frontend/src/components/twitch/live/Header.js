@@ -1,13 +1,13 @@
-import { FaTwitch } from "react-icons/fa";
-import { MdRefresh } from "react-icons/md";
-import { Spinner } from "react-bootstrap";
-import React from "react";
+import { FaTwitch } from 'react-icons/fa';
+import { MdRefresh } from 'react-icons/md';
+import { Spinner } from 'react-bootstrap';
+import React from 'react';
 
-import { HeaderContainerTwitchLive, HeaderLeftSubcontainer } from "./../StyledComponents";
-import { RefreshButton, HeaderTitle } from "./../../sharedStyledComponents";
-import ChannelSearchList from "./../channelList";
-import CountdownCircleTimer from "./CountdownCircleTimer";
-import Util from "../../../util/Util";
+import { HeaderContainerTwitchLive, HeaderLeftSubcontainer } from './../StyledComponents';
+import { RefreshButton, HeaderTitle } from './../../sharedStyledComponents';
+import ChannelSearchList from './../channelList';
+import CountdownCircleTimer from './CountdownCircleTimer';
+import Util from '../../../util/Util';
 
 export default ({ data }) => {
   const { refreshing, autoRefreshEnabled, refreshTimer, refresh } = data;
@@ -37,10 +37,10 @@ export default ({ data }) => {
         </RefreshButton>
       </HeaderLeftSubcontainer>
       <HeaderTitle>
-        <FaTwitch size={32} style={{ color: "#6f166f" }} />
+        <FaTwitch size={32} style={{ color: '#6f166f' }} />
         Twitch <span id='live-indicator'>Live</span>
       </HeaderTitle>
-      <ChannelSearchList />
+      <ChannelSearchList placeholder='...' />
     </HeaderContainerTwitchLive>
   );
 };

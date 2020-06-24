@@ -81,7 +81,6 @@ export default (prop) => {
             showButton={false}
             style={{ background: 'none', boxShadow: 'none', margin: '0 10px' }}
             inputStyle={{ textOverflow: 'unset' }}
-            placeholder='channel..'
           />
           <NavDropdown title='Other' id='collasible-nav-dropdown'>
             <NavDropdown.Item href='https://github.com/mambans/AioFeed'>
