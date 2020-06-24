@@ -22,11 +22,10 @@ export default (props) => {
     style,
     direction = 'left',
     showButton = true,
-    fixedPlaceholder,
     inputFontSize = 'inherit',
     inputStyle = {},
-    compressedWidth = '125px',
     alwaysFetchNew = false,
+    openInNewTab = false,
   } = props;
   const navigate = useNavigate();
   const topGames = useRef();
@@ -34,6 +33,7 @@ export default (props) => {
   const [filteredGames, setFilteredGames] = useState();
   const [cursor, setCursor] = useState(0);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(true);
 
   const ulListRef = useRef();
   const inputRef = useRef();
@@ -53,25 +53,25 @@ export default (props) => {
             setCursor(0);
             setValue(event.target.value);
             if (listIsOpen && event.target.value && event.target.value !== '') {
-              const filtered = topGames.current.data.filter((game) => {
+              const filtered = topGames.current?.data.filter((game) => {
                 return game.name
                   .toLowerCase()
                   .includes((event.target.value || value).toLowerCase());
               });
-              if (filtered.length > 1) {
+              if (filtered?.length > 1) {
                 const asd = sortInputFirst(event.target.value || value, filtered);
                 setFilteredGames(asd);
               } else {
                 setFilteredGames(filtered);
               }
             } else if (listIsOpen && !event.target.value) {
-              if (topGames.current && topGames.current.data) {
-                setFilteredGames(topGames.current.data);
+              if (topGames.current?.data) {
+                setFilteredGames(topGames.current?.data);
                 setTimeout(() => {
                   if (
                     endOfListRef.current &&
-                    topGames.current.data.length >= 1 &&
-                    topGames.current.pagination.cursor
+                    topGames.current?.data.length >= 1 &&
+                    topGames.current?.pagination.cursor
                   ) {
                     observer.observe(endOfListRef.current);
                   }
@@ -113,16 +113,12 @@ export default (props) => {
               'wheel',
               throttle(
                 function () {
-                  if (
-                    entries[0].isIntersecting === true &&
-                    topGames.current &&
-                    topGames.current.data.length <= 450
-                  ) {
+                  if (entries[0].isIntersecting === true && topGames.current?.data.length <= 450) {
                     setLoadingMore(true);
-                    GetTopGames(topGames.current.pagination.cursor)
+                    GetTopGames(topGames.current?.pagination.cursor)
                       .then((res) => {
                         if (res.data && res.data.length >= 1) {
-                          const items = [...topGames.current.data, ...res.data];
+                          const items = [...topGames.current?.data, ...res.data];
                           const uniqueItems = items.filter((item, index, self) => {
                             return (
                               self.findIndex((t) => t.id === item.id && t.name === item.name) ===
@@ -179,25 +175,37 @@ export default (props) => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    navigate('/category/' + returnFirstMatchedGame());
+    openInNewTab
+      ? window.open(`/category/${returnFirstMatchedGame()}`)
+      : navigate(`/category/${returnFirstMatchedGame()}`);
     manualSet(returnFirstMatchedGame());
     setListIsOpen(false);
-    // resetGame();
+    if (openInNewTab) {
+      resetGame();
+      inputRef.current.blur();
+    }
   };
 
   const fetchTopGamesOnce = useMemo(
     () =>
       throttle(
         () => {
-          GetTopGames().then((res) => {
-            topGames.current = res;
-            setFilteredGames(res.data);
-            if (endOfListRef.current && res.data && res.data.length >= 1 && res.pagination.cursor) {
-              observer.observe(endOfListRef.current);
-            }
-          });
+          GetTopGames()
+            .then((res) => {
+              topGames.current = res;
+              setFilteredGames(res.data);
+
+              if (endOfListRef.current && res.data?.length >= 1 && res.pagination.cursor) {
+                observer.observe(endOfListRef.current);
+              } else {
+                if (!topGames.current) setShowDropdown(false);
+              }
+            })
+            .catch(() => {
+              if (!topGames.current) setShowDropdown(false);
+            });
         },
-        5000,
+        20000,
         { leading: true, trailing: false },
       ),
     [observer],
@@ -205,20 +213,20 @@ export default (props) => {
 
   const handleArrowKey = (e) => {
     try {
-      if (filteredGames && filteredGames.length > 1) {
+      if (filteredGames?.length > 1) {
         if (e.key === 'ArrowDown') {
           e.preventDefault();
           setCursor((cursor) => Math.min(Math.max(cursor + 1, 0), filteredGames.length - 1));
           scrollToIfNeeded(ulListRef.current, document.querySelector('.selected'), 'Down');
           manualSet(
-            filteredGames[Math.min(Math.max(cursor + 1, 0), filteredGames.length - 1)].name,
+            filteredGames[Math.min(Math.max(cursor + 1, 0), filteredGames?.length - 1)].name,
           );
         } else if (e.key === 'ArrowUp') {
           e.preventDefault();
           setCursor((cursor) => Math.min(Math.max(cursor - 1, 0), filteredGames.length - 1));
           scrollToIfNeeded(ulListRef.current, document.querySelector('.selected'), 'Up');
           manualSet(
-            filteredGames[Math.min(Math.max(cursor - 1, 0), filteredGames.length - 1)].name,
+            filteredGames[Math.min(Math.max(cursor - 1, 0), filteredGames?.length - 1)].name,
           );
         }
       }
@@ -245,7 +253,7 @@ export default (props) => {
   useEffect(() => {
     const input = showValue();
     if (
-      (alwaysFetchNew || !topGames.current || !topGames.current.data) &&
+      (alwaysFetchNew || !topGames.current?.data) &&
       (listIsOpen || (input && input !== '' && input.length > 1))
     ) {
       fetchTopGamesOnce();
@@ -254,7 +262,7 @@ export default (props) => {
 
   useEffect(() => {
     return () => {
-      setFilteredGames((topGames.current && topGames.current.data) || []);
+      setFilteredGames(topGames.current?.data || []);
     };
   }, [topGames]);
 
@@ -268,16 +276,14 @@ export default (props) => {
         direction={direction}
         showButton={showButton}
         inputFontSize={inputFontSize}
-        compressedWidth={compressedWidth}
+        text={game}
       >
         <input
           ref={inputRef}
           type='text'
           spellCheck='false'
           style={{ ...inputStyle }}
-          placeholder={
-            fixedPlaceholder || `${gameName !== '' && gameName !== undefined ? gameName : 'All'}...`
-          }
+          placeholder={`${gameName !== '' && gameName !== undefined ? gameName : 'Game'}..`}
           {...bindGame}
         ></input>
         {game && listIsOpen && (
@@ -297,7 +303,7 @@ export default (props) => {
           />
         )}
         <CSSTransition
-          in={listIsOpen}
+          in={showDropdown && listIsOpen}
           timeout={250}
           classNames='fade-250ms'
           onExited={() => {
@@ -351,15 +357,15 @@ export default (props) => {
             )}
           </GameListUlContainer>
         </CSSTransition>
-        {listIsOpen && (
-          <BackdropChannelList
-            id='BackdropChannelList'
-            onClick={() => {
-              setListIsOpen(!listIsOpen);
-            }}
-          />
-        )}
       </SearchGameForm>
+      {listIsOpen && (
+        <BackdropChannelList
+          id='BackdropChannelList'
+          onClick={() => {
+            setListIsOpen(!listIsOpen);
+          }}
+        />
+      )}
     </>
   );
 };

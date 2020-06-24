@@ -1,21 +1,21 @@
-import React, { useEffect, useState, useContext } from "react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import React, { useEffect, useState, useContext } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import { FollowBtn, UnfollowBtn } from "./StyledComponents";
-import AccountContext from "./../account/AccountContext";
-import validateToken from "./validateToken";
-import API from "./API";
+import { FollowBtn, UnfollowBtn } from './StyledComponents';
+import AccountContext from './../account/AccountContext';
+import validateToken from './validateToken';
+import API from './API';
 
 export default ({
   channelName,
   id,
-  alreadyFollowedStatus,
   size,
   style,
   refreshStreams,
   refreshAfterUnfollowTimer,
+  followingStatus = null,
 }) => {
-  const [following, setFollowing] = useState(alreadyFollowedStatus || false);
+  const [following, setFollowing] = useState(followingStatus || false);
   const { twitchUserId } = useContext(AccountContext);
 
   const UnfollowStream = async () => {
@@ -36,20 +36,25 @@ export default ({
           }
         })
         .catch((er) => {
-          console.error("UnfollowStream -> er", er);
+          console.error('UnfollowStream -> er', er);
         });
     });
   };
 
   async function followStream() {
     await validateToken().then(async () => {
-      await API.addFollow({ params: { myId: twitchUserId, id: id } })
+      await API.addFollow({
+        params: {
+          myId: twitchUserId,
+          id: id || (await API.getUser({ params: { login: channelName } })).data.data[0].id,
+        },
+      })
         .then((res) => {
           console.log(`Followed: ${res.data.channel.display_name}`);
           if (refreshStreams) refreshStreams();
         })
         .catch((er) => {
-          console.error("followStream -> er", er);
+          console.error('followStream -> er', er);
         });
     });
   }
@@ -62,7 +67,7 @@ export default ({
             setFollowing(true);
           })
           .catch((error) => {
-            if (error.response && error.response.data.message === "Follow not found") {
+            if (error.response?.data.message === 'Follow not found') {
               console.log(`Not following ${channelName}`);
               setFollowing(false);
             } else {
@@ -72,24 +77,22 @@ export default ({
       });
     };
 
-    if (!alreadyFollowedStatus) {
+    if (followingStatus === null) {
       checkFollowing();
     }
-    // else {
-    //   setFollowing(alreadyFollowedStatus);
-    // }
-  }, [channelName, twitchUserId, id, alreadyFollowedStatus]);
+  }, [channelName, twitchUserId, id, followingStatus]);
 
   return (
     <OverlayTrigger
-      key={"bottom"}
-      placement={"bottom"}
+      key={'bottom'}
+      placement={'bottom'}
       delay={{ show: 500, hide: 0 }}
       overlay={
-        <Tooltip id={`tooltip-${"bottom"}`}>{`${
+        <Tooltip id={`tooltip-${'bottom'}`}>{`${
           following ? `Unfollow ${channelName || id}` : `Follow ${channelName || id}`
         }`}</Tooltip>
-      }>
+      }
+    >
       {following ? (
         <UnfollowBtn
           className='StreamFollowBtn'

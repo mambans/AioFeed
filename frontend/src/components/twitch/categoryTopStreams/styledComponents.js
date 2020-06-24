@@ -152,24 +152,10 @@ export const SearchGameForm = styled.form`
   box-shadow: var(--refreshButtonShadow);
   border-radius: 5px;
   transition: width 250ms, min-width 250ms, margin-left 250ms, margin-right 250ms;
-  width: ${({ open, compressedWidth }) => (open ? '310px' : compressedWidth || '125px')};
-  min-width: ${({ open, compressedWidth }) => (open ? '310px' : compressedWidth || '125px')};
-  margin-left: ${({ open, direction, compressedWidth }) =>
-    direction === 'left'
-      ? open
-        ? '0px'
-        : compressedWidth
-        ? `calc(310px - ${compressedWidth})`
-        : '185px'
-      : 0};
-  margin-right: ${({ open, direction, compressedWidth }) =>
-    direction === 'right'
-      ? open
-        ? '0px'
-        : compressedWidth
-        ? `calc(310px - ${compressedWidth})`
-        : '185px'
-      : 0};
+  width: ${({ open }) => (open ? '310px' : '125px')};
+  min-width: ${({ open }) => (open ? '310px' : '125px')};
+  margin-left: ${({ open, direction }) => (direction === 'left' ? (open ? '0px' : '185px') : 0)};
+  margin-right: ${({ open, direction }) => (direction === 'right' ? (open ? '0px' : '185px') : 0)};
   z-index: 4;
   height: max-content;
 
@@ -181,6 +167,16 @@ export const SearchGameForm = styled.form`
     }
   }
 
+  &:after {
+    content: '';
+    width: ${({ open }) => (open ? '100%' : '0')};
+    height: ${({ open }) => (open ? '1px' : '0')};
+    background: rgb(150, 150, 150);
+    transition: width 500ms, height 500ms;
+    display: block;
+    margin: auto;
+  }
+
   &:focus-within {
     width: 310px;
     min-width: 310px;
@@ -188,7 +184,7 @@ export const SearchGameForm = styled.form`
   }
 
   input {
-    padding: 0.5rem 25px 0.5rem 0.75rem;
+    padding: 0.5rem ${({ text, open }) => (text && open ? '25px' : '0.5rem')} 0.5rem 0.5rem;
     color: var(--refreshButtonColor);
     background: transparent;
     border: none;
@@ -199,6 +195,7 @@ export const SearchGameForm = styled.form`
     z-index: 5;
     font-size: ${({ inputFontSize }) => inputFontSize};
     transition: color 250ms;
+    /* text-align: ${({ open }) => (open ? 'start' : 'center')}; */
 
     &:hover {
       color: var(--textColor1Hover);
@@ -216,6 +213,13 @@ export const SearchGameForm = styled.form`
 
     &:hover {
       color: #ffffff;
+    }
+  }
+
+  &:hover {
+    &:after {
+      height: 1px;
+      width: 100%;
     }
   }
 `;
