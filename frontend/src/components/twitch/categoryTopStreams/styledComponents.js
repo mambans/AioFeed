@@ -169,12 +169,15 @@ export const SearchGameForm = styled.form`
 
   &:after {
     content: '';
-    width: ${({ open }) => (open ? '100%' : '0')};
-    height: ${({ open }) => (open ? '1px' : '0')};
+    width: ${({ open }) => (open ? '310px' : '0')};
+    /* height: ${({ open }) => (open ? '1px' : '0')}; */
+    height: 1px;
     background: rgb(150, 150, 150);
-    transition: width 500ms, height 500ms;
+    transition: width 500ms, height 500ms, transform 500ms;
     display: block;
     margin: auto;
+    position: absolute;
+    transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(calc(125px / 2))')} ;
   }
 
   &:focus-within {
@@ -194,7 +197,7 @@ export const SearchGameForm = styled.form`
     position: relative;
     z-index: 5;
     font-size: ${({ inputFontSize }) => inputFontSize};
-    transition: color 250ms;
+    transition: color 250ms,;
     /* text-align: ${({ open }) => (open ? 'start' : 'center')}; */
 
     &:hover {
@@ -218,8 +221,9 @@ export const SearchGameForm = styled.form`
 
   &:hover {
     &:after {
-      height: 1px;
-      width: 100%;
+      /* height: 1px; */
+      width: ${({ open }) => (open ? '310px' : '125px')};
+      transform: translateX(0);
     }
   }
 `;
