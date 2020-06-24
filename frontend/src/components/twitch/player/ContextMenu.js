@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { MdHighQuality } from "react-icons/md";
-import { GrRefresh } from "react-icons/gr";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { MdHighQuality } from 'react-icons/md';
+import { GrRefresh } from 'react-icons/gr';
 
 const HEIGHT = 275;
 const WIDTH = 250;
@@ -12,8 +12,8 @@ const Container = styled.div`
   min-height: ${HEIGHT}px;
   background: rgba(0, 0, 0, 0.75);
   border-radius: 3px;
-  left: ${({ left }) => left + "px"};
-  top: ${({ top }) => top + "px"};
+  left: ${({ left }) => left + 'px'};
+  top: ${({ top }) => top + 'px'};
   padding: 0px 10px;
   font-weight: bold;
   color: rgb(225, 225, 225);
@@ -51,7 +51,7 @@ const Container = styled.div`
 const BackDrop = styled.div`
   background: rgba(0, 0, 0, 0);
   width: ${({ type, hidechat }) =>
-    hidechat === "true" ? "99vw" : type === "live" ? "90vw" : "100vw"};
+    hidechat === 'true' ? '99vw' : type === 'live' ? '90vw' : '100vw'};
   height: 100%;
   bottom: 0px;
   position: absolute;
@@ -65,6 +65,7 @@ export default ({
   showAndResetTimer,
   setChatState,
   children,
+  DEFAULT_CHAT_WIDTH,
 }) => {
   const [show, setShow] = useState();
 
@@ -86,9 +87,9 @@ export default ({
     };
 
     if (PlayerUIControlls) {
-      PlayerUIControlls.addEventListener("contextmenu", toggleShowHide);
+      PlayerUIControlls.addEventListener('contextmenu', toggleShowHide);
       return () => {
-        PlayerUIControlls.removeEventListener("contextmenu", toggleShowHide);
+        PlayerUIControlls.removeEventListener('contextmenu', toggleShowHide);
       };
     }
   }, [setShow, PlayerUIControlls, showAndResetTimer]);
@@ -107,33 +108,36 @@ export default ({
           <ul
             onClick={() => {
               setShow(false);
-            }}>
+            }}
+          >
             <li
               onClick={() => {
-                TwitchPlayer.setQuality("chunked");
-              }}>
+                TwitchPlayer.setQuality('chunked');
+              }}
+            >
               <MdHighQuality size={24} />
-              {"Max quality (Source)"}
+              {'Max quality (Source)'}
             </li>
             {children}
             <li
               onClick={() => {
                 setChatState({
-                  chatWidth: window.innerWidth * 0.09,
+                  chatWidth: DEFAULT_CHAT_WIDTH,
                   switchChatSide: false,
                   hideChat: false,
                 });
                 localStorage.setItem(
-                  "TwitchChatState",
+                  'TwitchChatState',
                   JSON.stringify({
-                    chatWidth: window.innerWidth * 0.09,
+                    chatWidth: DEFAULT_CHAT_WIDTH,
                     switchChatSide: false,
                     hideChat: false,
-                  })
+                  }),
                 );
-              }}>
+              }}
+            >
               <GrRefresh size={24} />
-              {"Reset video/chat settings"}
+              {'Reset video/chat positions'}
             </li>
           </ul>
         </Container>
