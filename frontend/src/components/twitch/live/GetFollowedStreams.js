@@ -1,5 +1,5 @@
-import AddVideoExtraData from "./../AddVideoExtraData";
-import API from "../API";
+import AddVideoExtraData from './../AddVideoExtraData';
+import API from '../API';
 
 function chunk(array, size) {
   const chunked_arr = [];
@@ -35,13 +35,17 @@ const fetchAllOnlineStreams = async (followedChannelsIds) => {
   return allOnlineStreams;
 };
 
-export default async function getFollowedOnlineStreams(followedchannels, disableNotifications) {
+export default async function getFollowedOnlineStreams({
+  followedchannels,
+  disableNotifications,
+  fetchExtraData = true,
+}) {
   let error;
 
   try {
     // Make an array of all followed channels id's for easier/less API reuqests.
     const followedChannelsIds = await followedchannels.map((channel) => {
-      return channel.to_id;
+      return channel.to_id || channel.user_id;
     });
 
     // Get all Live-streams from followed channels.
@@ -51,10 +55,13 @@ export default async function getFollowedOnlineStreams(followedchannels, disable
 
     try {
       if (LiveFollowedStreams.data.data.length > 0) {
-        const finallStreams = await AddVideoExtraData({
-          items: LiveFollowedStreams.data,
-          forceNewProfiles: disableNotifications,
-        });
+        const finallStreams = fetchExtraData
+          ? await AddVideoExtraData({
+              items: LiveFollowedStreams.data,
+              forceNewProfiles: disableNotifications,
+            })
+          : LiveFollowedStreams.data;
+
         return {
           data: finallStreams.data,
           status: 200,

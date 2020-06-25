@@ -1,17 +1,17 @@
-import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
-import _ from "lodash";
+import React, { useEffect, useState, useRef, useCallback, useContext } from 'react';
+import _ from 'lodash';
 
-import ErrorHandler from "../../error";
-import GetFollowedChannels from "./../GetFollowedChannels";
-import getFollowedOnlineStreams from "./GetFollowedStreams";
-import NotificationsContext from "./../../notifications/NotificationsContext";
-import AccountContext from "./../../account/AccountContext";
-import FeedsContext from "./../../feed/FeedsContext";
-import VodsContext from "./../vods/VodsContext";
-import { AddCookie, getCookie, getLocalstorage } from "../../../util/Utils";
-import LiveStreamsPromise from "./LiveStreamsPromise";
-import OfflineStreamsPromise from "./OfflineStreamsPromise";
-import UpdatedStreamsPromise from "./UpdatedStreamsPromise";
+import ErrorHandler from '../../error';
+import GetFollowedChannels from './../GetFollowedChannels';
+import getFollowedOnlineStreams from './GetFollowedStreams';
+import NotificationsContext from './../../notifications/NotificationsContext';
+import AccountContext from './../../account/AccountContext';
+import FeedsContext from './../../feed/FeedsContext';
+import VodsContext from './../vods/VodsContext';
+import { AddCookie, getCookie, getLocalstorage } from '../../../util/Utils';
+import LiveStreamsPromise from './LiveStreamsPromise';
+import OfflineStreamsPromise from './OfflineStreamsPromise';
+import UpdatedStreamsPromise from './UpdatedStreamsPromise';
 
 const REFRESH_RATE = 25; // seconds
 
@@ -49,21 +49,21 @@ export default ({ children }) => {
         followedChannels.current = await GetFollowedChannels();
 
         if (followedChannels.current && followedChannels.current[0]) {
-          AddCookie("Twitch-username", followedChannels.current[0].from_name);
+          AddCookie('Twitch-username', followedChannels.current[0].from_name);
         }
-        const streams = await getFollowedOnlineStreams(
-          followedChannels.current,
-          disableNotifications
-        );
+        const streams = await getFollowedOnlineStreams({
+          followedchannels: followedChannels.current,
+          disableNotifications: disableNotifications,
+        });
 
         if (streams.status === 200) {
           // setError(null);
-          const localStreams = getLocalstorage("newLiveStreamsFromPlayer") || {
+          const localStreams = getLocalstorage('newLiveStreamsFromPlayer') || {
             data: [],
             updated: Date.now(),
           };
           const newLiveStreams = [...streams.data, ...localStreams.data];
-          const filteredLiveStreams = _.uniqBy(newLiveStreams, "user_id");
+          const filteredLiveStreams = _.uniqBy(newLiveStreams, 'user_id');
 
           oldLiveStreams.current = liveStreams.current;
           liveStreams.current = filteredLiveStreams;
@@ -133,34 +133,34 @@ export default ({ children }) => {
       isEnabledUpdateNotifications,
       isEnabledOfflineNotifications,
       setUnseenNotifications,
-    ]
+    ],
   );
 
   useEffect(() => {
     const windowFocusHandler = () => {
-      document.title = "AioFeed | Feed";
+      document.title = 'AioFeed | Feed';
       resetNewlyAddedStreams();
     };
 
     const windowBlurHandler = () => {
-      if (document.title !== "AioFeed | Feed") document.title = "AioFeed | Feed";
+      if (document.title !== 'AioFeed | Feed') document.title = 'AioFeed | Feed';
       resetNewlyAddedStreams();
     };
 
     const listener = (e) => {
-      if (e.storageArea === localStorage && e.key === "newLiveStreamsFromPlayer") {
+      if (e.storageArea === localStorage && e.key === 'newLiveStreamsFromPlayer') {
         refresh();
       }
     };
 
-    window.addEventListener("focus", windowFocusHandler);
-    window.addEventListener("blur", windowBlurHandler);
-    window.addEventListener("storage", listener);
+    window.addEventListener('focus', windowFocusHandler);
+    window.addEventListener('blur', windowBlurHandler);
+    window.addEventListener('storage', listener);
 
     return () => {
-      window.removeEventListener("focus", windowFocusHandler);
-      window.removeEventListener("blur", windowBlurHandler);
-      window.removeEventListener("storage", listener);
+      window.removeEventListener('focus', windowFocusHandler);
+      window.removeEventListener('blur', windowBlurHandler);
+      window.removeEventListener('storage', listener);
     };
   }, [refresh]);
 
@@ -181,7 +181,7 @@ export default ({ children }) => {
         }
 
         if (autoRefreshEnabled && !timer.current) {
-          console.log("---SetInterval Twitch live timer.---");
+          console.log('---SetInterval Twitch live timer.---');
           timer.current = setInterval(() => {
             const timeNow = new Date();
             setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
@@ -202,11 +202,11 @@ export default ({ children }) => {
 
   useEffect(() => {
     return () => {
-      console.log("Unmounting");
+      console.log('Unmounting');
       clearInterval(timer.current);
       localStorage.setItem(
-        "newLiveStreamsFromPlayer",
-        JSON.stringify({ data: [], updated: Date.now() })
+        'newLiveStreamsFromPlayer',
+        JSON.stringify({ data: [], updated: Date.now() }),
       );
     };
   }, []);
@@ -215,8 +215,8 @@ export default ({ children }) => {
     return (
       <ErrorHandler
         data={{
-          title: "Not authenticated/connected with Twitch.",
-          message: "No access token for Twitch available.",
+          title: 'Not authenticated/connected with Twitch.',
+          message: 'No access token for Twitch available.',
         }}
       />
     );

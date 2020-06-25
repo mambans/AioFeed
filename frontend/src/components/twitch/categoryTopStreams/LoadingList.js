@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react';
 
-import { StyledLoadingListElement } from "./styledComponents";
+import { StyledLoadingListElement } from './styledComponents';
 
-export default (props) => {
-  const array = Array.apply(null, Array(props.amount)).map(function (x, i) {
+export default ({ amount, style = {} }) => {
+  const array = Array.apply(null, Array(amount)).map(function (x, i) {
     return i;
   });
 
   return array.map((item, index) => {
     return (
-      <StyledLoadingListElement key={index}>
+      <StyledLoadingListElement key={index} style={{ ...style }}>
         <div style={{ width: `${Math.floor(Math.random() * 80)}%` }}></div>
       </StyledLoadingListElement>
     );

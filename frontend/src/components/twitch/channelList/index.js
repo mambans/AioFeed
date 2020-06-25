@@ -14,6 +14,7 @@ import StyledLoadingList from './../categoryTopStreams/LoadingList';
 import ChannelListElement from '../channelList/ChannelListElement';
 import AddVideoExtraData from '../AddVideoExtraData';
 import GetFollowedChannels from '../GetFollowedChannels';
+import getFollowedOnlineStreams from '../live/GetFollowedStreams';
 
 export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
   const parentRect = parentDiv.getBoundingClientRect();
@@ -116,7 +117,7 @@ export default ({ showButton = true, style = {}, inputStyle = {}, placeholder = 
           return p_channel.user_name.toLowerCase().includes(value.toLowerCase());
         });
         if (foundChannel) {
-          return foundChannel.user_name;
+          return `${foundChannel.user_name}${!foundChannel.live ? '/channel' : ''}`;
         } else {
           return value;
         }
@@ -162,8 +163,29 @@ export default ({ showButton = true, style = {}, inputStyle = {}, placeholder = 
                 .then(async (res) => {
                   await AddVideoExtraData({ items: res?.data, fetchGameInfo: false })
                     .then(async (res) => {
-                      channels.current = res?.data;
-                      setFilteredChannels(res?.data);
+                      const liveStreams = await getFollowedOnlineStreams({
+                        followedchannels: res?.data,
+                        fetchExtraData: false,
+                      }).then((res) => res.data);
+
+                      channels.current = res?.data.map((item) => {
+                        return {
+                          ...item,
+                          live: liveStreams?.find(
+                            (stream) => item.user_id === stream.user_id && stream?.type === 'live'
+                          ),
+                        };
+                      });
+                      setFilteredChannels(
+                        res?.data.map((item) => {
+                          return {
+                            ...item,
+                            live: liveStreams?.find(
+                              (stream) => item.user_id === stream.user_id && stream?.type === 'live'
+                            ),
+                          };
+                        })
+                      );
                     })
                     .catch((e) => {
                       if (!channels.current) setShowDropdown(false);
@@ -181,9 +203,9 @@ export default ({ showButton = true, style = {}, inputStyle = {}, placeholder = 
             });
         },
         5000,
-        { trailing: false, leading: true },
+        { trailing: false, leading: true }
       ),
-    [],
+    []
   );
 
   const handleArrowKey = (e) => {
@@ -211,7 +233,7 @@ export default ({ showButton = true, style = {}, inputStyle = {}, placeholder = 
     if (!channels.current && (listIsOpen || input?.length >= 1)) {
       fetchFollowedChannels();
     }
-  }, [showValue, listIsOpen, fetchFollowedChannels, channels]);
+  }, [showValue, listIsOpen, fetchFollowedChannels]);
 
   useEffect(() => {
     const inputField = inputRef.current;
@@ -232,12 +254,12 @@ export default ({ showButton = true, style = {}, inputStyle = {}, placeholder = 
         setFilteredChannels(channels.current || []);
       };
     }
-  }, [channels]);
+  }, []);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
     resetChannel();
-    window.open(`/${returnChannel()}/channel/`);
+    window.open(`/${returnChannel()}`);
     setListIsOpen(false);
     inputRef.current.blur();
   };
@@ -287,7 +309,7 @@ export default ({ showButton = true, style = {}, inputStyle = {}, placeholder = 
           }}
           unmountOnExit
         >
-          <GameListUlContainer ref={ulListRef}>
+          <GameListUlContainer ref={ulListRef} style={{ paddingLeft: '0' }}>
             {filteredChannels?.length === 0 ? (
               <ChannelListElement
                 key={channel}
@@ -333,7 +355,7 @@ export default ({ showButton = true, style = {}, inputStyle = {}, placeholder = 
                 })}
               </>
             ) : (
-              <StyledLoadingList amount={11} />
+              <StyledLoadingList amount={11} style={{ paddingLeft: '10px' }} />
             )}
           </GameListUlContainer>
         </CSSTransition>
