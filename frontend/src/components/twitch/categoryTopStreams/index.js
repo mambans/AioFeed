@@ -1,64 +1,61 @@
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { FaRegFileVideo } from "react-icons/fa";
-import { FaTwitch } from "react-icons/fa";
-import { MdLiveTv } from "react-icons/md";
-import { MdMovieCreation } from "react-icons/md";
-import { MdRefresh } from "react-icons/md";
-import { Spinner } from "react-bootstrap";
-import { useParams, useLocation } from "react-router-dom";
-import Alert from "react-bootstrap/Alert";
-import React, { useEffect, useState, useCallback, useRef, useContext } from "react";
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { FaRegFileVideo } from 'react-icons/fa';
+import { FaTwitch } from 'react-icons/fa';
+import { MdLiveTv } from 'react-icons/md';
+import { MdMovieCreation } from 'react-icons/md';
+import { MdRefresh } from 'react-icons/md';
+import { Spinner } from 'react-bootstrap';
+import { useParams, useLocation } from 'react-router-dom';
+import Alert from 'react-bootstrap/Alert';
+import React, { useEffect, useState, useCallback, useRef, useContext } from 'react';
 
-import { RefreshButton, HeaderTitle } from "./../../sharedStyledComponents";
-import { StyledLoadmore } from "./../StyledComponents";
+import { RefreshButton, HeaderTitle, LoadMore } from './../../sharedStyledComponents';
 import {
   TypeListUlContainer,
   TypeButton,
   TopDataSortButtonsContainer,
   HeaderContainer,
   TopStreamsContainer,
-} from "./styledComponents";
-import ClipsSortButton from "./../channelPage/ClipsSortButton";
-import GameSearchBar from "./GameSearchBar";
-import GetTopClips from "./GetTopClips";
-import GetTopStreams from "./GetTopStreams";
-import GetTopVideos from "./GetTopVideos";
-import LoadingBoxes from "./../LoadingBoxes";
-import SortButton from "./../channelPage/SortButton";
-import StreamEle from "./../live/StreamElement";
-import ClipElement from "./../channelPage/ClipElement";
-import VodElement from "./../vods/VodElement";
-import Util from "./../../../util/Util";
-import validateToken from "../validateToken";
-import { getCookie } from "../../../util/Utils";
-import AccountContext from "../../account/AccountContext";
+} from './styledComponents';
+import ClipsSortButton from './../channelPage/ClipsSortButton';
+import GameSearchBar from './GameSearchBar';
+import GetTopClips from './GetTopClips';
+import GetTopStreams from './GetTopStreams';
+import GetTopVideos from './GetTopVideos';
+import LoadingBoxes from './../LoadingBoxes';
+import SortButton from './../channelPage/SortButton';
+import StreamEle from './../live/StreamElement';
+import ClipElement from './../channelPage/ClipElement';
+import VodElement from './../vods/VodElement';
+import Util from './../../../util/Util';
+import validateToken from '../validateToken';
+import { getCookie } from '../../../util/Utils';
+import AccountContext from '../../account/AccountContext';
 
 export default () => {
   const { category } = useParams();
   const { p_videoType } = useLocation().state || {};
   const [topData, setTopData] = useState([]);
-  const [videoType, setVideoType] = useState(p_videoType || "Streams");
+  const [videoType, setVideoType] = useState(p_videoType || 'Streams');
   const [typeListOpen, setTypeListOpen] = useState();
   const [loadmoreLoaded, setLoadmoreLoaded] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
-  const [sortBy, setSortBy] = useState("Views");
+  const [sortBy, setSortBy] = useState('Views');
   const [sortByTime, setSortByTime] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const { twitchToken } = useContext(AccountContext);
-
   const oldTopData = useRef();
-  const loadmoreRef = useRef();
 
-  document.title = `AF | ${category || "All"} - Top ${videoType}`;
+  document.title = `AF | ${category || 'All'} - Top ${videoType}`;
 
   const videoElementTypeComp = (data) => {
     switch (videoType) {
-      case "Streams":
+      case 'Streams':
         return <StreamEle data={data} />;
-      case "Clips":
+      case 'Clips':
         return <ClipElement data={data} />;
-      case "Videos":
+      case 'Videos':
         return <VodElement data={data} />;
       default:
         return <StreamEle data={data} />;
@@ -75,16 +72,6 @@ export default () => {
 
       setLoadmoreLoaded(true);
       setTopData(allTopData);
-
-      setTimeout(() => {
-        if (loadmoreRef.current) {
-          loadmoreRef.current.scrollIntoView({
-            behavior: "smooth",
-            block: "end",
-            inline: "nearest",
-          });
-        }
-      }, 0);
     } else {
       oldTopData.current = res.topData;
       setTopData(res.topData.data);
@@ -98,42 +85,42 @@ export default () => {
       if (shouldLoadMore) setLoadmoreLoaded(false);
 
       switch (videoType) {
-        case "Streams":
+        case 'Streams':
           GetTopStreams(category, shouldLoadMore && oldTopData.current)
             .then((res) => {
               fetchVideosDataHandler(res, shouldLoadMore);
             })
             .catch((e) => {
-              if ((e.message = "game is undefined")) {
-                setError("Invalid game name");
+              if ((e.message = 'game is undefined')) {
+                setError('Invalid game name');
               } else {
                 setError(e.message);
               }
               setRefreshing(false);
             });
           break;
-        case "Clips":
+        case 'Clips':
           GetTopClips(category, sortByTime, oldTopData.current)
             .then((res) => {
               fetchVideosDataHandler(res, shouldLoadMore);
             })
             .catch((e) => {
-              if ((e.message = "game is undefined")) {
-                setError("Invalid game name");
+              if ((e.message = 'game is undefined')) {
+                setError('Invalid game name');
               } else {
                 setError(e.message);
               }
               setRefreshing(false);
             });
           break;
-        case "Videos":
+        case 'Videos':
           GetTopVideos(category, sortBy, oldTopData.current)
             .then((res) => {
               fetchVideosDataHandler(res, shouldLoadMore);
             })
             .catch((e) => {
-              if ((e.message = "game is undefined")) {
-                setError("Invalid game name");
+              if ((e.message = 'game is undefined')) {
+                setError('Invalid game name');
               } else {
                 setError(e.message);
               }
@@ -146,8 +133,8 @@ export default () => {
               fetchVideosDataHandler(res, shouldLoadMore);
             })
             .catch((e) => {
-              if ((e.message = "game is undefined")) {
-                setError("Invalid game name");
+              if ((e.message = 'game is undefined')) {
+                setError('Invalid game name');
               } else {
                 setError(e.message);
               }
@@ -155,7 +142,7 @@ export default () => {
             });
       }
     },
-    [category, sortBy, sortByTime, videoType]
+    [category, sortBy, sortByTime, videoType],
   );
 
   const videoTypeBtnOnClick = (type) => {
@@ -181,13 +168,14 @@ export default () => {
     });
   }, [fetchVideos]);
 
-  return !getCookie("Twitch-access_token") ? (
+  return !getCookie('Twitch-access_token') ? (
     error && (
       <Alert
         variant='warning'
-        style={{ textAlign: "center", width: "25%", margin: "auto", marginTop: "50px" }}
+        style={{ textAlign: 'center', width: '25%', margin: 'auto', marginTop: '50px' }}
         dismissible
-        onClose={() => setError(null)}>
+        onClose={() => setError(null)}
+      >
         <Alert.Heading>Need to connect to Twitch</Alert.Heading>
         <hr />
         <p>No Twitch access token found.</p>
@@ -195,19 +183,21 @@ export default () => {
     )
   ) : (
     <CSSTransition
-      in={typeof getCookie("Twitch-access_token") === "string"}
+      in={typeof getCookie('Twitch-access_token') === 'string'}
       timeout={750}
       classNames='fade-750ms'
-      appear>
+      appear
+    >
       <>
         <HeaderContainer>
           <div
             style={{
-              width: "675px",
-              minWidth: "675px",
-              alignItems: "end",
-              display: "flex",
-            }}>
+              width: '675px',
+              minWidth: '675px',
+              alignItems: 'end',
+              display: 'flex',
+            }}
+          >
             <RefreshButton disabled={refreshing} onClick={refresh}>
               {refreshing ? (
                 <div className='SpinnerWrapper'>
@@ -215,26 +205,28 @@ export default () => {
                     animation='border'
                     role='status'
                     variant='light'
-                    style={Util.loadingSpinnerSmall}></Spinner>
+                    style={Util.loadingSpinnerSmall}
+                  ></Spinner>
                 </div>
               ) : (
                 <MdRefresh size={34} />
               )}
             </RefreshButton>
           </div>
-          <HeaderTitle style={{ marginLeft: "10px" }}>
-            <FaTwitch size={32} style={{ color: "#6f166f" }} />
+          <HeaderTitle style={{ marginLeft: '10px' }}>
+            <FaTwitch size={32} style={{ color: '#6f166f' }} />
             Top {videoType}
           </HeaderTitle>
           <TopDataSortButtonsContainer>
             <GameSearchBar gameName={category} videoType={videoType} />
             <div>
               <TypeButton
-                title={category ? `Fetch top ${videoType}` : "Select a game/category first"}
+                title={category ? `Fetch top ${videoType}` : 'Select a game/category first'}
                 disabled={category ? false : true}
                 onClick={() => {
                   setTypeListOpen(!typeListOpen);
-                }}>
+                }}
+              >
                 <FaRegFileVideo size={20} />
                 {videoType}
               </TypeButton>
@@ -243,16 +235,18 @@ export default () => {
                 <TypeListUlContainer>
                   <li
                     onClick={() => {
-                      videoTypeBtnOnClick("Streams");
-                    }}>
+                      videoTypeBtnOnClick('Streams');
+                    }}
+                  >
                     <MdLiveTv size={24} />
                     Streams
                   </li>
                   <li
                     onClick={() => {
-                      videoTypeBtnOnClick("Clips");
-                      setSortBy("Views");
-                    }}>
+                      videoTypeBtnOnClick('Clips');
+                      setSortBy('Views');
+                    }}
+                  >
                     <MdMovieCreation size={24} />
                     Clips
                   </li>
@@ -267,9 +261,9 @@ export default () => {
               )}
             </div>
 
-            {videoType === "Videos" ? (
+            {videoType === 'Videos' ? (
               <SortButton sortBy={sortBy} setSortBy={setSortBy} setData={setTopData} />
-            ) : videoType === "Clips" ? (
+            ) : videoType === 'Clips' ? (
               <ClipsSortButton
                 sortBy={sortByTime}
                 setSortBy={setSortByTime}
@@ -285,9 +279,10 @@ export default () => {
         {error ? (
           <Alert
             variant='warning'
-            style={{ textAlign: "center", width: "25%", margin: "auto" }}
+            style={{ textAlign: 'center', width: '25%', margin: 'auto' }}
             dismissible
-            onClose={() => setError(null)}>
+            onClose={() => setError(null)}
+          >
             <Alert.Heading>{error}</Alert.Heading>
           </Alert>
         ) : (
@@ -302,7 +297,6 @@ export default () => {
                 {topData.map((stream) => {
                   return (
                     <CSSTransition
-                      // in={true}
                       key={stream.id}
                       timeout={{
                         appear: 500,
@@ -310,37 +304,22 @@ export default () => {
                         exit: 0,
                       }}
                       classNames='fade-500ms'
-                      unmountOnExit>
+                      unmountOnExit
+                    >
                       {videoElementTypeComp(stream)}
                     </CSSTransition>
                   );
                 })}
               </TransitionGroup>
-              {topData && topData.length > 0 && (
-                <StyledLoadmore ref={loadmoreRef}>
-                  <div />
-                  <div
-                    id='Button'
-                    onClick={() => {
-                      fetchVideos(true);
-                    }}>
-                    {!loadmoreLoaded ? (
-                      <>
-                        Loading..
-                        <Spinner
-                          animation='border'
-                          role='status'
-                          variant='light'
-                          style={{ ...Util.loadingSpinnerSmall, marginLeft: "10px" }}
-                        />
-                      </>
-                    ) : (
-                      "Load more"
-                    )}
-                  </div>
-                  <div />
-                </StyledLoadmore>
-              )}
+
+              <LoadMore
+                text='Load more'
+                show={topData && topData.length > 0}
+                onClick={() => {
+                  fetchVideos(true);
+                }}
+                loaded={loadmoreLoaded}
+              />
             </>
           </TopStreamsContainer>
         )}

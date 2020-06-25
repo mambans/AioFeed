@@ -1,8 +1,13 @@
-import styled from "styled-components";
-import { Button, Alert } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Button, Alert, Spinner } from 'react-bootstrap';
+import { GrPowerReset } from 'react-icons/gr';
+import { Link } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
+import styled from 'styled-components';
 
-export const RefreshButton = styled(Button).attrs({ variant: "outline-secondary" })`
+import { StyledLoadmore } from './twitch/StyledComponents';
+import Util from './../util/Util';
+
+export const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
   color: var(--refreshButtonColor);
   background: var(--refreshButtonBackground);
   box-shadow: var(--refreshButtonShadow);
@@ -22,7 +27,7 @@ export const RefreshButton = styled(Button).attrs({ variant: "outline-secondary"
     align-items: center;
   }
 
-  div[aria-label="Countdown timer"] {
+  div[aria-label='Countdown timer'] {
     margin: 5px auto !important ;
   }
 
@@ -33,7 +38,7 @@ export const RefreshButton = styled(Button).attrs({ variant: "outline-secondary"
   }
 `;
 
-export const ButtonList = styled(Button).attrs({ variant: "outline-secondary" })`
+export const ButtonList = styled(Button).attrs({ variant: 'outline-secondary' })`
   display: flex;
   position: relative;
   color: var(--refreshButtonColor);
@@ -97,9 +102,9 @@ export const SubFeedContainer = styled.div`
 export const VideoContainer = styled.div`
   display: grid;
   grid-template-areas:
-    "video video"
-    "title title"
-    "info info";
+    'video video'
+    'title title'
+    'info info';
 
   width: 336px;
   margin: 7px;
@@ -348,7 +353,7 @@ export const ImageContainer = styled.div`
   }
 `;
 
-export const UnfollowButton = styled(Button).attrs({ variant: "link" })`
+export const UnfollowButton = styled(Button).attrs({ variant: 'link' })`
   color: rgba(109, 2, 2, 0.801);
   grid-row: 1;
   justify-self: right;
@@ -361,18 +366,18 @@ export const UnfollowButton = styled(Button).attrs({ variant: "link" })`
   }
 `;
 
-export const VodAddRemoveButton = styled(Button).attrs({ variant: "link" })`
+export const VodAddRemoveButton = styled(Button).attrs({ variant: 'link' })`
   color: rgb(200, 200, 200);
   grid-row: 1;
   justify-self: right;
   padding: 0px;
   opacity: ${({ loweropacity }) => loweropacity || 1};
-  margin-right: ${({ marginright }) => marginright || "unset"};
+  margin-right: ${({ marginright }) => marginright || 'unset'};
   opacity: 0;
   transition: opacity 250ms;
 
   &:hover {
-    color: ${({ vodenabled }) => (vodenabled === "true" ? "rgb(225, 000, 000)" : "#14ae14")};
+    color: ${({ vodenabled }) => (vodenabled === 'true' ? 'rgb(225, 000, 000)' : '#14ae14')};
     opacity: 1;
   }
 `;
@@ -450,3 +455,80 @@ export const StyledVideoElementAlert = styled(Alert)`
   transition: opacity 250ms;
   opacity: 0;
 `;
+
+export const LoadMore = ({
+  style = {},
+  onClick,
+  loaded,
+  text = 'Load more',
+  resetFunc,
+  show = true,
+}) => {
+  const thisEleRef = useRef();
+  const observer = useRef(
+    new IntersectionObserver(
+      function (entries) {
+        if (entries[0].isIntersecting === false) {
+          // setTimeout(() => {
+          if (thisEleRef.current) {
+            thisEleRef.current.scrollIntoView({
+              behavior: 'smooth',
+              block: 'end',
+              inline: 'nearest',
+            });
+            observer.current.unobserve(thisEleRef.current);
+          }
+          // }, 0);
+        }
+      },
+      { threshold: 0.8 },
+    ),
+  );
+
+  useEffect(() => {
+    if (show) {
+      const thisEle = thisEleRef.current;
+      const observerRef = observer.curren;
+      return () => {
+        return observerRef?.unobserve(thisEle);
+      };
+    }
+  }, [show]);
+
+  const onClickFunc = () => {
+    observer.current.observe(thisEleRef.current);
+    onClick();
+  };
+  if (show) {
+    return (
+      <StyledLoadmore
+        ref={thisEleRef}
+        style={{
+          ...style,
+        }}
+      >
+        <div />
+        <div id='Button' onClick={onClickFunc}>
+          {!loaded ? (
+            <>
+              Loading..
+              <Spinner
+                animation='border'
+                role='status'
+                variant='light'
+                style={{ ...Util.loadingSpinnerSmall, marginLeft: '10px' }}
+              />
+            </>
+          ) : (
+            text
+          )}
+        </div>
+        <div />
+        {resetFunc && (
+          <GrPowerReset size={20} title='Show less (reset)' id='reset' onClick={resetFunc} />
+        )}
+      </StyledLoadmore>
+    );
+  }
+  return null;
+};
