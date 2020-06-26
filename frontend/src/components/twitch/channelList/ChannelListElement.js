@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useRef, useEffect } from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import FollowUnfollowBtn from './../FollowUnfollowBtn';
 import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
 import { ChannelListLi } from './StyledComponents';
 import AddUpdateNotificationsButton from './../AddUpdateNotificationsButton';
 import API from '../API';
+import LiveIndicator from './LiveIndicator';
+import AddVideoExtraData from '../AddVideoExtraData';
 
 export default ({
   data,
@@ -25,17 +26,23 @@ export default ({
     } else if (searchInput) {
       timer.current = setTimeout(async () => {
         const data = await API.getUser({ params: { login: searchInput } }).then(
-          (res) => res?.data?.data[0],
+          (res) => res?.data?.data[0]
         );
 
         const liveInfo = await API.getStreams({ params: { user_login: searchInput } }).then(
-          (res) => res?.data?.data[0],
+          (res) => res?.data?.data[0]
         );
+
+        const finalLiveInfo = await AddVideoExtraData({
+          items: { data: [liveInfo] },
+          fetchGameInfo: true,
+        }).then((res) => res?.data[0]);
 
         if (data) {
           setChannel({
             user_name: data.display_name,
             user_id: data.id,
+            ...finalLiveInfo,
             profile_img_url: data.profile_image_url,
             live: liveInfo && liveInfo?.type === 'live',
           });
@@ -71,23 +78,7 @@ export default ({
       >
         {channel?.profile_img_url ? (
           channel.live ? (
-            <OverlayTrigger
-              key={'left'}
-              placement={'left'}
-              delay={{ show: 250, hide: 0 }}
-              overlay={
-                <Tooltip
-                  style={{
-                    fontWeight: 'bold',
-                  }}
-                  id={`tooltip-${'left'}`}
-                >
-                  Live
-                </Tooltip>
-              }
-            >
-              <img src={channel?.profile_img_url} alt='' />
-            </OverlayTrigger>
+            <LiveIndicator channel={channel} />
           ) : (
             <img src={channel?.profile_img_url} alt='' />
           )

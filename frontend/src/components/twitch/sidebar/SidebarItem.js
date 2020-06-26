@@ -1,15 +1,16 @@
-import { CSSTransition } from "react-transition-group";
-import { FaRegClock } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import Moment from "react-moment";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import Tooltip from "react-bootstrap/Tooltip";
-import styled from "styled-components";
+import { CSSTransition } from 'react-transition-group';
+import { FaRegClock } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import Moment from 'react-moment';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import Tooltip from 'react-bootstrap/Tooltip';
+import styled from 'styled-components';
 
-import { SidebarTitlePopup, StyledsidebarItem, FirstRow, SecondRow } from "./StyledComponents";
-import { truncate } from "../../../util/Utils";
-import AnimatedViewCount from "../live/AnimatedViewCount";
+import { SidebarTitlePopup, StyledsidebarItem, FirstRow, SecondRow } from './StyledComponents';
+import { truncate } from '../../../util/Utils';
+import AnimatedViewCount from '../live/AnimatedViewCount';
+import LiveInfoPopup from '../channelList/LiveInfoPopup';
 
 const StyledNewHighlight = styled.div`
   position: absolute;
@@ -24,7 +25,7 @@ const NewHighlight = ({ newlyAdded, stream }) => {
   if (newlyAdded.includes(stream.user_name)) {
     return <StyledNewHighlight />;
   } else {
-    return "";
+    return '';
   }
 };
 
@@ -48,12 +49,12 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
 
   useEffect(() => {
     const refEle = ref.current;
-    refEle.addEventListener("mouseenter", handleMouseOver);
-    refEle.addEventListener("mouseleave", handleMouseOut);
+    refEle.addEventListener('mouseenter', handleMouseOver);
+    refEle.addEventListener('mouseleave', handleMouseOut);
 
     return () => {
-      refEle.removeEventListener("mouseenter", handleMouseOver);
-      refEle.removeEventListener("mouseleave", handleMouseOut);
+      refEle.removeEventListener('mouseenter', handleMouseOver);
+      refEle.removeEventListener('mouseleave', handleMouseOut);
       clearTimeout(timerRef.current);
     };
   }, [handleMouseOut, handleMouseOver]);
@@ -61,33 +62,35 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
   return (
     <Link
       ref={ref}
-      to={"/" + stream.user_name.toLowerCase()}
-      style={{ display: "flex", flexDirection: "column" }}>
+      to={'/' + stream.user_name.toLowerCase()}
+      style={{ display: 'flex', flexDirection: 'column' }}
+    >
       <StyledsidebarItem key={stream.user_id} duration={shows}>
         <NewHighlight newlyAdded={newlyAdded} stream={stream}></NewHighlight>
 
         <div
-          className={"profileImage"}
+          className={'profileImage'}
           // href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}
         >
           <img
             src={
               stream.profile_img_url
-                ? stream.profile_img_url.replace("{width}", 640).replace("{height}", 360)
+                ? stream.profile_img_url.replace('{width}', 640).replace('{height}', 360)
                 : `${process.env.PUBLIC_URL}/android-chrome-512x512.png`
             }
-            alt=''></img>
+            alt=''
+          ></img>
         </div>
         <FirstRow>
           <div
-            className={"sidebarUser"}
+            className={'sidebarUser'}
             // href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}
           >
             {truncate(stream.user_name, 16)}
           </div>
 
           <AnimatedViewCount
-            className={"sidebarViewers"}
+            className={'sidebarViewers'}
             viewers={stream.viewer_count}
             disabePrefix={true}
           />
@@ -95,29 +98,31 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
         <SecondRow>
           {stream.game_name.length > 15 ? (
             <OverlayTrigger
-              key={"bottom"}
-              placement={"bottom"}
+              key={'bottom'}
+              placement={'bottom'}
               delay={{ show: 500, hide: 0 }}
               overlay={
                 <Tooltip
-                  id={`tooltip-${"bottom"}`}
+                  id={`tooltip-${'bottom'}`}
                   style={{
-                    width: "275px",
-                  }}>
+                    width: '275px',
+                  }}
+                >
                   {stream.game_name}
                 </Tooltip>
-              }>
-              <p className={"sidebarGame"}>{stream.game_name}</p>
+              }
+            >
+              <p className={'sidebarGame'}>{stream.game_name}</p>
             </OverlayTrigger>
           ) : (
             <div
-              className={"sidebarGame"}
+              className={'sidebarGame'}
               // href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}
             >
               <p>{truncate(stream.game_name, 15)}</p>
             </div>
           )}
-          <div className={"sidebarDuration"}>
+          <div className={'sidebarDuration'}>
             <Moment interval={1} durationFromNow>
               {stream.started_at}
             </Moment>
@@ -130,10 +135,12 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
         key={stream.user_id + stream.title}
         timeout={1000}
         classNames='sidebarTitlePopup'
-        unmountOnExit>
+        unmountOnExit
+      >
         <SidebarTitlePopup>
           <div className='borderTop'></div>
-          <span>{stream.title}</span>
+          <LiveInfoPopup channel={stream} />
+          {/* <span>{stream.title}</span> */}
           <div className='borderBottom'></div>
         </SidebarTitlePopup>
       </CSSTransition>

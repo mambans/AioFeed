@@ -38,7 +38,8 @@ const fetchAllOnlineStreams = async (followedChannelsIds) => {
 export default async function getFollowedOnlineStreams({
   followedchannels,
   disableNotifications,
-  fetchExtraData = true,
+  fetchGameInfo = true,
+  fetchProfiles = true,
 }) {
   let error;
 
@@ -55,12 +56,15 @@ export default async function getFollowedOnlineStreams({
 
     try {
       if (LiveFollowedStreams.data.data.length > 0) {
-        const finallStreams = fetchExtraData
-          ? await AddVideoExtraData({
-              items: LiveFollowedStreams.data,
-              forceNewProfiles: disableNotifications,
-            })
-          : LiveFollowedStreams.data;
+        const finallStreams =
+          fetchGameInfo || fetchProfiles
+            ? await AddVideoExtraData({
+                items: LiveFollowedStreams.data,
+                forceNewProfiles: disableNotifications,
+                fetchGameInfo,
+                fetchProfiles,
+              })
+            : LiveFollowedStreams.data;
 
         return {
           data: finallStreams.data,

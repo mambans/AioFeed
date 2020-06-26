@@ -165,24 +165,31 @@ export default ({ showButton = true, style = {}, inputStyle = {}, placeholder = 
                     .then(async (res) => {
                       const liveStreams = await getFollowedOnlineStreams({
                         followedchannels: res?.data,
-                        fetchExtraData: false,
+                        fetchGameInfo: true,
+                        fetchProfiles: false,
                       }).then((res) => res.data);
 
                       channels.current = res?.data.map((item) => {
+                        const found = liveStreams?.find(
+                          (stream) => item.user_id === stream.user_id
+                        );
                         return {
                           ...item,
-                          live: liveStreams?.find(
-                            (stream) => item.user_id === stream.user_id && stream?.type === 'live'
-                          ),
+                          ...found,
+                          profile_img_url: item.profile_img_url,
+                          live: found?.type === 'live',
                         };
                       });
                       setFilteredChannels(
                         res?.data.map((item) => {
+                          const found = liveStreams?.find(
+                            (stream) => item.user_id === stream.user_id
+                          );
                           return {
                             ...item,
-                            live: liveStreams?.find(
-                              (stream) => item.user_id === stream.user_id && stream?.type === 'live'
-                            ),
+                            ...found,
+                            profile_img_url: item.profile_img_url,
+                            live: found?.type === 'live',
                           };
                         })
                       );

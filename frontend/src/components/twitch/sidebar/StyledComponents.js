@@ -3,15 +3,15 @@ import { MdFormatIndentDecrease } from 'react-icons/md';
 import { pulse } from './../StyledComponents';
 
 export const SidebarTitlePopup = styled.div`
-  width: 325px;
-  height: 62px;
+  /* width: 325px; */
+  /* height: 62px; */
   position: fixed;
   background: var(--navigationbarBackground);
   /* z-index: 5; */
   z-index: -1;
   left: 0;
 
-  span {
+  /* span {
     padding: 8px 0;
     width: inherit;
     height: inherit;
@@ -33,7 +33,7 @@ export const SidebarTitlePopup = styled.div`
     div {
       width: 320px;
     }
-  }
+  } */
 `;
 
 export const Styledsidebar = styled.div`
@@ -67,7 +67,7 @@ export const SidebarHeader = styled.p`
 export const StyledsidebarItem = styled.div`
   display: grid;
   /* grid-template-areas: "profile user  viewers" "profile row2 row2"; */
-  grid-template-areas: "profile user  user" "profile row2 row2";
+  grid-template-areas: 'profile user  user' 'profile row2 row2';
   grid-template-columns: 18% 56% 26%;
   grid-template-rows: 50% 50%;
   padding: 8px 5px 8px 10px;
@@ -156,7 +156,7 @@ export const StyledsidebarItem = styled.div`
 
 export const LoadingSidebarItems = styled.div`
   display: grid;
-  grid-template-areas: "profile channel" "profile game";
+  grid-template-areas: 'profile channel' 'profile game';
   grid-template-columns: 18% auto;
   grid-template-rows: 50% 50%;
   padding: 8px 5px 8px 10px;
