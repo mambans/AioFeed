@@ -7,7 +7,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Tooltip from 'react-bootstrap/Tooltip';
 import styled from 'styled-components';
 
-import { SidebarTitlePopup, StyledsidebarItem, FirstRow, SecondRow } from './StyledComponents';
+import { SidebarInfoPopup, StyledsidebarItem, FirstRow, SecondRow } from './StyledComponents';
 import { truncate } from '../../../util/Utils';
 import AnimatedViewCount from '../live/AnimatedViewCount';
 import LiveInfoPopup from '../channelList/LiveInfoPopup';
@@ -29,7 +29,7 @@ const NewHighlight = ({ newlyAdded, stream }) => {
   }
 };
 
-const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
+const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) => {
   const [showTitle, setShowTitle] = useState();
   const ref = useRef();
   const timerRef = useRef();
@@ -45,7 +45,11 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
   const handleMouseOut = useCallback(() => {
     clearTimeout(timerRef.current);
     setShowTitle(false);
-  }, []);
+    clearTimeout(resetShowsTimer.current);
+    resetShowsTimer.current = setTimeout(() => {
+      setShows(false);
+    }, 5000);
+  }, [setShows, resetShowsTimer]);
 
   useEffect(() => {
     const refEle = ref.current;
@@ -134,15 +138,15 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows }) => {
         in={showTitle}
         key={stream.user_id + stream.title}
         timeout={1000}
-        classNames='sidebarTitlePopup'
+        classNames='sidebarInfoPopup'
         unmountOnExit
       >
-        <SidebarTitlePopup>
+        <SidebarInfoPopup>
           <div className='borderTop'></div>
           <LiveInfoPopup channel={stream} />
           {/* <span>{stream.title}</span> */}
           <div className='borderBottom'></div>
-        </SidebarTitlePopup>
+        </SidebarInfoPopup>
       </CSSTransition>
     </Link>
   );

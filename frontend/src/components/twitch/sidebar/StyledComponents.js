@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { MdFormatIndentDecrease } from 'react-icons/md';
 import { pulse } from './../StyledComponents';
 
-export const SidebarTitlePopup = styled.div`
+export const SidebarInfoPopup = styled.div`
   /* width: 325px; */
   /* height: 62px; */
   position: fixed;

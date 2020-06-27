@@ -1,33 +1,18 @@
-import React, { useRef, useCallback, useEffect, useState } from "react";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
+import React, { useRef, useCallback, useEffect, useState } from 'react';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-import SidebarItem from "./SidebarItem";
-import { Styledsidebar, SidebarHeader } from "./StyledComponents";
-import LoadingSidebar from "./LoadingSidebar";
+import SidebarItem from './SidebarItem';
+import { Styledsidebar, SidebarHeader } from './StyledComponents';
+import LoadingSidebar from './LoadingSidebar';
 
 export default (data) => {
   const { onlineStreams, newlyAdded, loaded } = data;
   const [shows, setShows] = useState();
-  const sidebarRef = useRef();
-
-  const handleMouseOut = useCallback(() => {
-    setShows(false);
-  }, []);
-
-  useEffect(() => {
-    if (sidebarRef.current) {
-      const refEle = sidebarRef.current;
-      refEle.addEventListener("mouseleave", handleMouseOut);
-
-      return () => {
-        refEle.removeEventListener("mouseleave", handleMouseOut);
-      };
-    }
-  }, [handleMouseOut]);
+  const resetShowsTimer = useRef();
 
   if (loaded) {
     return (
-      <Styledsidebar id='twitchSidebar' ref={sidebarRef}>
+      <Styledsidebar id='twitchSidebar'>
         <SidebarHeader>Twitch Live</SidebarHeader>
 
         {onlineStreams.length > 0 ? (
@@ -38,13 +23,15 @@ export default (data) => {
                   key={stream.user_id}
                   timeout={1000}
                   classNames='sidebarVideoFade-1s'
-                  unmountOnExit>
+                  unmountOnExit
+                >
                   <SidebarItem
                     key={stream.user_id}
                     stream={stream}
                     newlyAdded={newlyAdded}
                     shows={shows}
                     setShows={setShows}
+                    resetShowsTimer={resetShowsTimer}
                   />
                 </CSSTransition>
               );
@@ -53,12 +40,13 @@ export default (data) => {
         ) : (
           <div
             style={{
-              height: "62px",
-              padding: "8px 5px 8px 10px",
-              fontSize: "1rem",
-              textAlign: "center",
-              fontWeight: "bold",
-            }}>
+              height: '62px',
+              padding: '8px 5px 8px 10px',
+              fontSize: '1rem',
+              textAlign: 'center',
+              fontWeight: 'bold',
+            }}
+          >
             <p>None Live</p>
           </div>
         )}
