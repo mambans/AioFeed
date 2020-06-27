@@ -7,12 +7,13 @@ import API from './API';
  * @async
  * @returns
  */
-export default async ({ items, forceNewProfiles }) => {
+export default async ({ items, forceNewProfiles, previousStreams }) => {
   const originalArray = items;
   const TwitchProfiles = GetCachedProfiles();
   const noCachedProfileArrayObject = await originalArray.data.filter((user) => {
-    return !Object.keys(TwitchProfiles).some(
-      (id) => id === (user?.user_id || user?.broadcaster_id)
+    return (
+      !Object.keys(TwitchProfiles).some((id) => id === (user?.user_id || user?.broadcaster_id)) ||
+      !previousStreams?.find((stream) => user?.user_id === stream?.user_id)
     );
   });
 
@@ -34,15 +35,10 @@ export default async ({ items, forceNewProfiles }) => {
       : null;
 
   const finallData = originalArray.data.map((user) => {
-    if (
-      forceNewProfiles ||
-      (!TwitchProfiles[user.user_id || user.broadcaster_id] &&
-        newProfileImgUrls &&
-        newProfileImgUrls.data.data.length > 0)
-    ) {
-      const foundProfile = newProfileImgUrls.data.data.find((p_user) => {
-        return p_user.id === (user.user_id || user.broadcaster_id);
-      });
+    const foundProfile = newProfileImgUrls?.data.data.find(
+      (p_user) => p_user.id === (user.user_id || user.broadcaster_id)
+    );
+    if (foundProfile) {
       user.profile_img_url = foundProfile
         ? foundProfile.profile_image_url
         : TwitchProfiles[user.user_id || user.broadcaster_id] ||

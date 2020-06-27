@@ -18,9 +18,12 @@ export default async ({
   fetchGameInfo = true,
   fetchProfiles = true,
   forceNewProfiles = false,
+  previousStreams,
 }) => {
   const originalArray = items;
-  const Profiles = fetchProfiles ? await fetchProfileImages({ items, forceNewProfiles }) : [];
+  const Profiles = fetchProfiles
+    ? await fetchProfileImages({ items, forceNewProfiles, previousStreams })
+    : [];
   const GameInfo = fetchGameInfo ? await fetchGameName({ items }) : [];
 
   const finallData = originalArray.data.map((channel) => {

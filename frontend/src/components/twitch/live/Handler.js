@@ -54,6 +54,7 @@ export default ({ children }) => {
         const streams = await getFollowedOnlineStreams({
           followedchannels: followedChannels.current,
           disableNotifications: disableNotifications,
+          previousStreams: oldLiveStreams.current,
         });
 
         if (streams.status === 200) {
@@ -133,7 +134,7 @@ export default ({ children }) => {
       isEnabledUpdateNotifications,
       isEnabledOfflineNotifications,
       setUnseenNotifications,
-    ],
+    ]
   );
 
   useEffect(() => {
@@ -206,7 +207,7 @@ export default ({ children }) => {
       clearInterval(timer.current);
       localStorage.setItem(
         'newLiveStreamsFromPlayer',
-        JSON.stringify({ data: [], updated: Date.now() }),
+        JSON.stringify({ data: [], updated: Date.now() })
       );
     };
   }, []);

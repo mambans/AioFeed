@@ -40,6 +40,7 @@ export default async function getFollowedOnlineStreams({
   disableNotifications,
   fetchGameInfo = true,
   fetchProfiles = true,
+  previousStreams,
 }) {
   let error;
 
@@ -63,6 +64,7 @@ export default async function getFollowedOnlineStreams({
                 forceNewProfiles: disableNotifications,
                 fetchGameInfo,
                 fetchProfiles,
+                previousStreams,
               })
             : LiveFollowedStreams.data;
 
