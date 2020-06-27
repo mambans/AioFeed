@@ -11,13 +11,15 @@ export default async ({ items, forceNewProfiles }) => {
   const originalArray = items;
   const TwitchProfiles = GetCachedProfiles();
   const noCachedProfileArrayObject = await originalArray.data.filter((user) => {
-    return !Object.keys(TwitchProfiles).some((id) => id === (user.user_id || user.broadcaster_id));
+    return !Object.keys(TwitchProfiles).some(
+      (id) => id === (user?.user_id || user?.broadcaster_id)
+    );
   });
 
   const noCachedProfileArrayIds = Object.values(
     forceNewProfiles ? originalArray.data : noCachedProfileArrayObject
   ).map((user) => {
-    return user.user_id || user.broadcaster_id;
+    return user?.user_id || user?.broadcaster_id;
   });
 
   const newProfileImgUrls =

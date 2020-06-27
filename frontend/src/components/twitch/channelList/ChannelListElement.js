@@ -33,10 +33,12 @@ export default ({
           (res) => res?.data?.data[0]
         );
 
-        const finalLiveInfo = await AddVideoExtraData({
-          items: { data: [liveInfo] },
-          fetchGameInfo: true,
-        }).then((res) => res?.data[0]);
+        const finalLiveInfo = liveInfo
+          ? await AddVideoExtraData({
+              items: { data: [liveInfo] },
+              fetchGameInfo: true,
+            }).then((res) => res?.data[0])
+          : {};
 
         if (data) {
           setChannel({
