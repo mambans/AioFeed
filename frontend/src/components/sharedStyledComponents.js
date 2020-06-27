@@ -338,7 +338,6 @@ export const ImageContainer = styled.div`
   .duration {
     position: relative;
     width: max-content;
-    background: #2222228c;
     padding-right: 5px;
     font-size: 0.9rem;
     padding-left: 5px;
@@ -481,8 +480,8 @@ export const LoadMore = ({
           // }, 0);
         }
       },
-      { threshold: 0.8 },
-    ),
+      { threshold: 0.8 }
+    )
   );
 
   useEffect(() => {

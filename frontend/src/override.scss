@@ -20,7 +20,7 @@
 }
 
 .dropdown-item {
-  color: #fff;
+  color: #ffffff;
   transition: all 0.1s ease-in-out;
 }
 
@@ -83,7 +83,7 @@
     padding: 5px;
   }
 
-  input[type="text"] {
+  input[type='text'] {
     color: white;
     border: none;
     border-bottom: 1px solid white;
@@ -91,7 +91,7 @@
     background: transparent;
   }
 
-  input[type="submit"] {
+  input[type='submit'] {
     border-radius: 5px;
     border: thin solid #484848;
     background-color: #035879;
@@ -148,7 +148,7 @@
   scrollbar-width: thin !important;
 }
 
-div[aria-label="Countdown timer"] {
+div[aria-label='Countdown timer'] {
   font-size: 13px;
 
   & > div {

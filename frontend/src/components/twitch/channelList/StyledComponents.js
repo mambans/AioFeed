@@ -2,7 +2,7 @@ import styled, { keyframes, css } from 'styled-components';
 
 const pulse = keyframes`
   0% {
-    box-shadow: 0 0 5px 5px rgba(255, 0, 0, 0.25);;
+    box-shadow: 0 0 5px 9px rgba(255, 0, 0, 0.25);;
   }
 
   60% {
@@ -10,7 +10,7 @@ const pulse = keyframes`
   }
 
   100% {
-    box-shadow: 0 0 5px 5px rgba(255, 0, 0, 0.25);;
+    box-shadow: 0 0 5px 9px rgba(255, 0, 0, 0.25);;
   }
 `;
 

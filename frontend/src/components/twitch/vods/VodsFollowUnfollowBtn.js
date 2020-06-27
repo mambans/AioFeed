@@ -1,16 +1,15 @@
-import { MdVideoCall } from "react-icons/md";
-import { MdVideocam } from "react-icons/md";
-import { MdVideocamOff } from "react-icons/md";
-import axios from "axios";
-import React, { useState, useContext, useRef, useEffect } from "react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { MdVideoCall } from 'react-icons/md';
+import { MdVideocam } from 'react-icons/md';
+import { MdVideocamOff } from 'react-icons/md';
+import axios from 'axios';
+import React, { useState, useContext, useRef, useEffect } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-// import VodsContext from "./VodsContext";
-import AccountContext from "./../../account/AccountContext";
-import { VodAddRemoveButton } from "./../../sharedStyledComponents";
-import AddVodChannel from "./AddVodChannel";
-import { getLocalstorage } from "../../../util/Utils";
-import VodsContext from "./VodsContext";
+import AccountContext from './../../account/AccountContext';
+import { VodAddRemoveButton } from './../../sharedStyledComponents';
+import AddVodChannel from './AddVodChannel';
+import { getLocalstorage } from '../../../util/Utils';
+import VodsContext from './VodsContext';
 
 /**
  * @param {String} channel - channel name
@@ -19,9 +18,8 @@ import VodsContext from "./VodsContext";
  */
 
 export default ({ channel, loweropacity, marginright }) => {
-  // const { channels, setChannels } = useContext(VodsContext);
-  const channels = getLocalstorage("VodChannels");
-  const { vods, setVods } = useContext(VodsContext);
+  const channels = getLocalstorage('VodChannels');
+  const { vods, setVods } = useContext(VodsContext) || {};
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
   const [vodEnabled, setVodEnabled] = useState(channels.includes(channel.toLowerCase()));
@@ -29,10 +27,10 @@ export default ({ channel, loweropacity, marginright }) => {
 
   async function removeChannel(channel) {
     try {
-      const vodChannels = new Set(channels || getLocalstorage("VodChannels") || []);
+      const vodChannels = new Set(channels || getLocalstorage('VodChannels') || []);
 
       vodChannels.delete(channel.toLowerCase());
-      localStorage.setItem("VodChannels", JSON.stringify(Array.from(vodChannels)));
+      localStorage.setItem('VodChannels', JSON.stringify(Array.from(vodChannels)));
 
       const existingVodVideos = vods;
       const newVodVideos = {
@@ -42,7 +40,7 @@ export default ({ channel, loweropacity, marginright }) => {
         }),
       };
 
-      localStorage.setItem("Vods", JSON.stringify(newVodVideos));
+      localStorage.setItem('Vods', JSON.stringify(newVodVideos));
       setVods(newVodVideos);
 
       await axios
@@ -70,26 +68,27 @@ export default ({ channel, loweropacity, marginright }) => {
 
     if (vodButton.current) {
       const refEle = vodButton.current;
-      refEle.addEventListener("mouseenter", handleMouseOver);
-      refEle.addEventListener("mouseleave", handleMouseOut);
+      refEle.addEventListener('mouseenter', handleMouseOver);
+      refEle.addEventListener('mouseleave', handleMouseOut);
 
       return () => {
-        refEle.removeEventListener("mouseenter", handleMouseOver);
-        refEle.removeEventListener("mouseleave", handleMouseOut);
+        refEle.removeEventListener('mouseenter', handleMouseOver);
+        refEle.removeEventListener('mouseleave', handleMouseOut);
       };
     }
   }, []);
 
   return (
     <OverlayTrigger
-      key={"bottom"}
-      placement={"bottom"}
+      key={'bottom'}
+      placement={'bottom'}
       delay={{ show: 500, hide: 0 }}
       overlay={
-        <Tooltip id={`tooltip-${"bottom"}`}>
+        <Tooltip id={`tooltip-${'bottom'}`}>
           {vodEnabled ? `Disable ${channel} vods` : `Enable ${channel} vods`}
         </Tooltip>
-      }>
+      }
+    >
       <VodAddRemoveButton
         className='VodButton'
         marginright={marginright}
@@ -105,7 +104,8 @@ export default ({ channel, loweropacity, marginright }) => {
             AddVodChannel({ channel, username, authKey });
             setVodEnabled(true);
           }
-        }}>
+        }}
+      >
         {vodEnabled ? (
           isHovered ? (
             <MdVideocamOff size={24} color='red' />

@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import SidebarItem from './SidebarItem';
