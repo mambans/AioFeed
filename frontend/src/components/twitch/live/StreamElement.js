@@ -239,17 +239,19 @@ export default (data_p) => {
               />
             </a>
           )}
-          {data.game_name && (
-            <Link className={'gameName'} to={'/category/' + data.game_name}>
-              {data.game_name}
-            </Link>
-          )}
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            {data.game_name && (
+              <Link className={'gameName'} to={'/category/' + data.game_name}>
+                {data.game_name}
+              </Link>
+            )}
 
-          <AnimatedViewCount
-            viewers={data.viewer_count}
-            className={'viewers'}
-            disabePrefix={true}
-          />
+            <AnimatedViewCount
+              viewers={data.viewer_count}
+              className={'viewers'}
+              disabePrefix={true}
+            />
+          </div>
         </GameContainer>
       </div>
     </VideoContainer>

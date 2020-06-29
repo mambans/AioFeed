@@ -1,6 +1,35 @@
-import React, { useState, useEffect, useRef } from "react";
-import { FaRegEye } from "react-icons/fa";
-import { formatViewerNumbers } from "../TwitchUtils";
+import React, { useState, useEffect, useRef } from 'react';
+import { FaRegEye } from 'react-icons/fa';
+import { formatViewerNumbers } from '../TwitchUtils';
+import styled from 'styled-components';
+
+const ViewcountContainer = styled.div`
+  p {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    width: 100%;
+    justify-content: end;
+  }
+
+  #formated {
+    display: flex;
+  }
+
+  #unformated {
+    display: none;
+  }
+
+  &:hover {
+    #formated {
+      display: none;
+    }
+
+    #unformated {
+      display: flex;
+    }
+  }
+`;
 
 /**
  * @param {Number} viewers - Viewcount of the stream
@@ -24,65 +53,83 @@ export default ({
   const animationTimer = useRef();
 
   useEffect(() => {
-    const differrence = viewers - previousNumber.current;
-    const incrementAmount = (curr) => {
-      if (Math.abs(viewers - curr) <= 15) {
-        return 1;
-      } else if (Math.abs(viewers - curr) <= 30) {
-        return 2;
-      } else if (Math.abs(viewers - curr) <= 50) {
-        return 3;
-      } else if (Math.abs(viewers - curr) <= 150) {
-        return 6;
-      } else if (Math.abs(viewers - curr) <= 250) {
-        return 9;
-      } else if (Math.abs(viewers - curr) <= 750) {
-        return 37;
-      } else if (Math.abs(viewers - curr) <= 1500) {
-        return 37;
+    const animationStepAmount = Math.max(Math.round((viewers - previousNumber.current) / 1000), 1);
+
+    const step = (curr) => {
+      const curDif = Math.abs(curr - viewers);
+      const dec = viewers - curr < 0;
+
+      if (curDif <= 0) {
+        clearInterval(animationTimer.current);
+        previousNumber.current = viewers;
+        return viewers;
+      } else if (curDif === 10) {
+        clearInterval(animationTimer.current);
+        animationTimer.current = setInterval(() => setNumber(step), 250);
+        return dec ? curr - 1 : curr + 1;
+      } else if (curDif === 25) {
+        clearInterval(animationTimer.current);
+        animationTimer.current = setInterval(() => setNumber(step), 125);
+        return dec ? curr - 1 : curr + 1;
+      } else if (curDif === 50) {
+        clearInterval(animationTimer.current);
+        animationTimer.current = setInterval(() => setNumber(step), 50);
+        return dec ? curr - 1 : curr + 1;
+      } else if (curDif === 100) {
+        clearInterval(animationTimer.current);
+        animationTimer.current = setInterval(() => setNumber(step), 20);
+        return dec ? curr - 1 : curr + 1;
       }
-      return 173;
+
+      return dec ? curr - 1 : curr + 1;
     };
 
-    if (differrence === 0) {
-      if (animationTimer.current) clearInterval(animationTimer.current);
-      setNumber(viewers);
-    } else {
-      animationTimer.current = setInterval(() => {
-        // requestAnimationFrame(() => {
-        setNumber((curr) => {
-          if (differrence > 0) {
-            if (curr >= viewers) {
-              if (animationTimer.current) clearInterval(animationTimer.current);
-              previousNumber.current = curr;
-              return curr;
-            }
-            return curr + incrementAmount(curr);
-          } else if (differrence < 0) {
-            if (curr <= viewers) {
-              if (animationTimer.current) clearInterval(animationTimer.current);
-              previousNumber.current = curr;
-              return curr;
-            }
-            return curr - incrementAmount(curr);
+    const animate = () => {
+      setNumber((curr) => {
+        const dif = viewers - curr;
+
+        if (curr === viewers) {
+          previousNumber.current = viewers;
+          return viewers;
+        }
+
+        if (dif > 0) {
+          if (viewers - curr <= 100) {
+            animationTimer.current = setInterval(() => setNumber(step), 20);
+            return curr + animationStepAmount;
           }
-          if (animationTimer.current) clearInterval(animationTimer.current);
-          previousNumber.current = curr;
-          return curr;
-        });
-        // });
-      }, 75);
-    }
+
+          requestAnimationFrame(animate);
+          return curr + animationStepAmount;
+        } else if (dif < 0) {
+          if (curr - viewers <= 100) {
+            animationTimer.current = setInterval(() => setNumber(step), 20);
+            return curr - animationStepAmount;
+          }
+
+          requestAnimationFrame(animate);
+          return curr - animationStepAmount;
+        }
+      });
+    };
+
+    requestAnimationFrame(animate);
 
     return () => {
-      if (animationTimer.current) clearInterval(animationTimer.current);
+      clearTimeout(animationTimer.current);
     };
   }, [viewers]);
 
   return (
-    <p title='Viewers' className={className} id={id}>
-      {!disabePrefix && "Viewers:"} {formatViewcount ? formatViewerNumbers(number) : number}
-      {!disabeIcon && <FaRegEye size={14} />}
-    </p>
+    <ViewcountContainer title='Viewers' className={className} id={id}>
+      <p id='formated'>
+        {!disabePrefix && 'Viewers:'} {formatViewcount ? formatViewerNumbers(number) : number}
+        {!disabeIcon && <FaRegEye size={14} />}
+      </p>
+      <p id='unformated'>
+        {!disabePrefix && 'Viewers:'} {number}
+        {!disabeIcon && <FaRegEye size={14} />}
+      </p>
+    </ViewcountContainer>
   );
 };

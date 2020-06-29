@@ -134,6 +134,10 @@ export const StyledsidebarItem = styled.div`
     i {
       justify-content: right !important;
     }
+
+    p {
+      justify-content: space-between;
+    }
   }
 
   .sidebarDuration {
