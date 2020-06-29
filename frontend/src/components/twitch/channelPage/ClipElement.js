@@ -1,9 +1,9 @@
-import { FaRegEye } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import Moment from "react-moment";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import React, { useRef } from "react";
-import Tooltip from "react-bootstrap/Tooltip";
+import { FaRegEye } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import Moment from 'react-moment';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import React, { useRef } from 'react';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 import {
   VideoContainer,
@@ -12,9 +12,9 @@ import {
   GameContainer,
   ChannelContainer,
   VodVideoInfo,
-} from "./../../sharedStyledComponents";
-import { truncate } from "../../../util/Utils";
-import { formatViewerNumbers } from "./../TwitchUtils";
+} from './../../sharedStyledComponents';
+import { truncate } from '../../../util/Utils';
+import { formatViewerNumbers } from './../TwitchUtils';
 
 export default ({ ...data }) => {
   const { user_name } = data;
@@ -37,21 +37,22 @@ export default ({ ...data }) => {
       <ImageContainer ref={imgRef}>
         <a
           // href={data.data.embed_url}
-          href={`https://www.twitch.tv/${user_name || broadcaster_name}/clip/${id}`}>
+          href={`https://www.twitch.tv/${user_name || broadcaster_name}/clip/${id}`}
+        >
           <img src={thumbnail_url} alt='' />
         </a>
         <VodVideoInfo>
-          <p className={"vodDuration"} title='duration'></p>
-          <p className={"view_count"} title='views'>
+          <p className={'vodDuration'} title='duration'></p>
+          <p className={'view_count'} title='views'>
             {formatViewerNumbers(view_count)}
             <FaRegEye
               size={10}
               style={{
-                color: "rgb(200, 200, 200)",
-                marginLeft: "5px",
-                marginTop: "3px",
-                display: "flex",
-                alignItems: "center",
+                color: 'rgb(200, 200, 200)',
+                marginLeft: '5px',
+                marginTop: '3px',
+                display: 'flex',
+                alignItems: 'center',
               }}
             />
           </p>
@@ -59,18 +60,20 @@ export default ({ ...data }) => {
       </ImageContainer>
       {title.length > 50 ? (
         <OverlayTrigger
-          key={"bottom"}
-          placement={"bottom"}
+          key={'bottom'}
+          placement={'bottom'}
           delay={{ show: 250, hide: 0 }}
           overlay={
             <Tooltip
-              id={`tooltip-${"bottom"}`}
+              id={`tooltip-${'bottom'}`}
               style={{
-                width: "320px",
-              }}>
+                width: '320px',
+              }}
+            >
               {title}
             </Tooltip>
-          }>
+          }
+        >
           <VideoTitle to={`/${user_name || broadcaster_name}/clip/${id}`}>
             {truncate(title, 70)}
           </VideoTitle>
@@ -79,7 +82,7 @@ export default ({ ...data }) => {
         <VideoTitle to={`/${user_name || broadcaster_name}/clip/${id}`}>{title}</VideoTitle>
       )}
 
-      <div style={{ width: "336px" }}>
+      <div style={{ width: '336px' }}>
         <ChannelContainer>
           <Link
             to={{
@@ -88,22 +91,23 @@ export default ({ ...data }) => {
                 p_id: broadcaster_id,
               },
             }}
-            style={{ gridRow: 1, paddingRight: "5px" }}>
-            <img src={profile_img_url} alt='' className={"profileImg"} />
+            style={{ gridRow: 1, paddingRight: '5px' }}
+          >
+            <img src={profile_img_url} alt='' className={'profileImg'} />
           </Link>
           <Link to={`/${broadcaster_name.toLowerCase()}/channel`} className='channelName'>
             {broadcaster_name}
           </Link>
         </ChannelContainer>
         <GameContainer>
-          <a className={"gameImg"} href={"https://www.twitch.tv/directory/category/" + game_name}>
+          <a className={'gameImg'} href={'https://www.twitch.tv/directory/category/' + game_name}>
             <img
-              src={game_img.replace("{width}", 130).replace("{height}", 173)}
+              src={game_img.replace('{width}', 130).replace('{height}', 173)}
               alt=''
-              className={"gameImg"}
+              className={'gameImg'}
             />
           </a>
-          <Link className={"gameName"} to={"/category/" + game_name}>
+          <Link className={'gameName'} to={'/category/' + game_name}>
             {game_name}
           </Link>
           <Moment
@@ -111,9 +115,10 @@ export default ({ ...data }) => {
             style={{
               // color: "var(--VideoContainerLinks)",
               gridColumn: 3,
-              justifySelf: "right",
+              justifySelf: 'right',
             }}
-            fromNow>
+            fromNow
+          >
             {created_at}
           </Moment>
         </GameContainer>

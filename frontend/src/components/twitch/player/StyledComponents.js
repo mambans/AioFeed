@@ -1,12 +1,12 @@
-import styled from "styled-components";
-import { FaInfoCircle } from "react-icons/fa";
-import { MdCompareArrows } from "react-icons/md";
-import { FaWindowClose } from "react-icons/fa";
-import { MdChat } from "react-icons/md";
-import { MdMovieCreation } from "react-icons/md";
-import { Button, Nav } from "react-bootstrap";
-import { GrRefresh } from "react-icons/gr";
-import { NavLink } from "react-router-dom";
+import styled from 'styled-components';
+import { FaInfoCircle } from 'react-icons/fa';
+import { MdCompareArrows } from 'react-icons/md';
+import { FaWindowClose } from 'react-icons/fa';
+import { MdChat } from 'react-icons/md';
+import { MdMovieCreation } from 'react-icons/md';
+import { Button, Nav } from 'react-bootstrap';
+import { GrRefresh } from 'react-icons/gr';
+import { NavLink } from 'react-router-dom';
 
 export const VideoAndChatContainer = styled.div`
   position: fixed;
@@ -19,13 +19,13 @@ export const VideoAndChatContainer = styled.div`
   grid-template-areas: ${({ switchedChatState, hidechat }) =>
     hidechat
       ? '"video"'
-      : switchedChatState === "true"
+      : switchedChatState === 'true'
       ? '"chat devider video"'
       : '"video devider chat"'};
   color: var(--navTextColorActive);
-  cursor: ${({ resizeActive }) => (resizeActive ? "w-resize" : "unset")};
+  cursor: ${({ resizeActive }) => (resizeActive ? 'w-resize' : 'unset')};
   grid-template-columns: ${({ chatwidth, hidechat, switched }) =>
-    `${hidechat ? "100vw" : switched ? `${chatwidth}px 5px auto` : `auto 5px ${chatwidth}px`} `};
+    `${hidechat ? '100vw' : switched ? `${chatwidth}px 5px auto` : `auto 5px ${chatwidth}px`} `};
   background: linear-gradient(217deg, rgba(45, 45, 45, 0.8), rgba(10, 10, 10, 0.7) 70.71%),
     linear-gradient(127deg, rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.7) 70.71%),
     linear-gradient(336deg, rgba(30, 30, 30, 0.8), rgba(0, 0, 0, 0.7) 70.71%);
@@ -55,7 +55,7 @@ export const StyledChat = styled.iframe`
 `;
 
 export const StyledVideo = styled.iframe`
-  width: ${({ width }) => width || "91vw"};
+  width: ${({ width }) => width || '91vw'};
   border: none;
 `;
 
@@ -65,8 +65,8 @@ export const ToggleSwitchChatSide = styled(MdCompareArrows).attrs({ size: 30 })`
   cursor: pointer;
   transition: opacity 300ms;
   bottom: 60px;
-  right: ${({ switched }) => (switched === "true" ? "unset" : "10px")};
-  left: ${({ switched }) => (switched === "true" ? "10px" : "unset")};
+  right: ${({ switched }) => (switched === 'true' ? 'unset' : '10px')};
+  left: ${({ switched }) => (switched === 'true' ? '10px' : 'unset')};
   background: rgba(0, 0, 0, 0.25) none repeat scroll 0% 0%;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
@@ -146,15 +146,15 @@ export const PlayerNavbar = styled.div`
 export const VolumeEventOverlay = styled.div`
   position: absolute;
   width: ${({ type, hidechat, chatwidth }) =>
-    hidechat === "true"
-      ? "100vw"
-      : type === "live"
+    hidechat === 'true'
+      ? '100vw'
+      : type === 'live'
       ? `${window.innerWidth - chatwidth}px`
-      : "100vw"};
+      : '100vw'};
   height: 100%;
-  bottom: ${({ type }) => (type === "live" ? "unset" : "70px")};
-  cursor: ${({ showcursor }) => (showcursor ? "auto" : "none")};
-  display: ${({ show }) => (show ? "block" : "none")};
+  bottom: ${({ type }) => (type === 'live' ? 'unset' : '70px')};
+  cursor: ${({ showcursor }) => (showcursor ? 'auto' : 'none')};
+  display: ${({ show }) => (show ? 'block' : 'none')};
 
   a,
   p {
@@ -187,7 +187,7 @@ export const StyledVolumeSlider = styled.div`
   width: 230px;
   text-align: center;
   display: grid;
-  grid-template-areas: "spacer text" "slider slider";
+  grid-template-areas: 'spacer text' 'slider slider';
   grid-template-columns: 60px auto;
   margin: 5px 10px;
 
@@ -220,7 +220,7 @@ export const StyledVolumeSlider = styled.div`
   }
 
   .rangeslider {
-    background-color: ${({ volumeMuted }) => (volumeMuted ? "#841010a1" : "#6b6b6b")};
+    background-color: ${({ volumeMuted }) => (volumeMuted ? '#841010a1' : '#6b6b6b')};
     margin: 9px 0;
     width: calc(100% - 30px);
     cursor: pointer;
@@ -228,52 +228,23 @@ export const StyledVolumeSlider = styled.div`
 
   .rangeslider-horizontal .rangeslider__fill {
     /* background-color: #42b38e; */
-    background-color: ${({ volumeMuted }) => (volumeMuted ? "#bd0202" : "#42b38e")};
+    background-color: ${({ volumeMuted }) => (volumeMuted ? '#bd0202' : '#42b38e')};
     border-radius: 6px;
   }
 `;
 
-// export const PausePlay = styled(props => (props.ispaused === "true" ? FaPlay : FaPause)).attrs({
-// export const PausePlay = styled(props => (props.ispaused === "true" ? FaPlay : FaPause)).attrs({
-//   size: 30,
-// })`
-//   color: #f4f4f49c;
-//   cursor: pointer;
-//   position: absolute;
-//   bottom: 10px;
-//   transition: color 150ms;
-//   margin: 5px 10px;
-
-//   &:hover {
-//     color: #ffffff;
-//   }
-// `;
-
-// export const PausePlayOverlay = styled(props => (props.ispaused === "true" ? FaPlay : FaPause)).attrs({
-//   size: 70,
-// })`
-//   color: white;
-//   cursor: pointer;
-//   position: absolute;
-//   width: 100%;
-//   height: 100%;
-//   justify-content: center;
-//   display: flex !important;
-//   align-items: center;
-//   background: rgba(0, 0, 0, 0.5);
-// `;
-
 export const InfoDisplay = styled.div`
   display: grid;
-  grid-template-areas: "logo name" "logo title" "logo game" "logo viewers" "logo uptime";
+  grid-template-areas: 'logo name' 'logo title' 'logo game' 'logo viewers' 'logo uptime';
   grid-template-columns: 75px auto;
   /* width: 400px; */
   max-width: 500px;
   background: #00000080;
-  padding: 15px 15px 5px 15px;
+  padding: 10px 10px 5px;
   border-radius: 10px;
-  box-shadow: 5px 5px 10px #0000009c;
+  box-shadow: 0px 0px 9px 3px #0000009c;
   position: absolute;
+  margin: 5px;
 
   p {
     margin: 0;
@@ -403,31 +374,31 @@ export const PlaybackStats = styled.div`
 //   hideChat === "true" ? MdCompareArrows : FaWindowClose
 // ).attrs({ size: 26, color: "red" })`
 
-export const HideChatButton = styled(FaWindowClose).attrs({ size: 26, color: "red" })`
+export const HideChatButton = styled(FaWindowClose).attrs({ size: 26, color: 'red' })`
   position: absolute;
   bottom: 100px;
   opacity: 0.5;
   cursor: pointer;
-  right: ${({ switched }) => (switched === "true" ? "unset" : "10px")};
-  left: ${({ switched }) => (switched === "true" ? "10px" : "unset")};
+  right: ${({ switched }) => (switched === 'true' ? 'unset' : '10px')};
+  left: ${({ switched }) => (switched === 'true' ? '10px' : 'unset')};
   background: rgba(0, 0, 0, 0.25) none repeat scroll 0% 0%;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
 `;
 
-export const OpenChatButton = styled(MdChat).attrs({ size: 26, color: "white" })`
+export const OpenChatButton = styled(MdChat).attrs({ size: 26, color: 'white' })`
   position: absolute;
   bottom: 100px;
   opacity: 0.5;
   cursor: pointer;
-  right: ${({ switched }) => (switched === "true" ? "unset" : "10px")};
-  left: ${({ switched }) => (switched === "true" ? "10px" : "unset")};
+  right: ${({ switched }) => (switched === 'true' ? 'unset' : '10px')};
+  left: ${({ switched }) => (switched === 'true' ? '10px' : 'unset')};
   background: rgba(0, 0, 0, 0.25) none repeat scroll 0% 0%;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
 `;
 
-export const CreateClipButton = styled(MdMovieCreation).attrs({ size: 24, color: "white" })`
+export const CreateClipButton = styled(MdMovieCreation).attrs({ size: 24, color: 'white' })`
   opacity: 0.7;
   cursor: pointer;
   margin: 5px 10px;
@@ -445,11 +416,11 @@ export const ShowNavbarBtn = styled(Button)`
   margin: 4px;
   cursor: pointer;
   opacity: 0.4;
-  right: ${({ type }) => (type === "video" ? "10px" : "unset")};
+  right: ${({ type }) => (type === 'video' ? '10px' : 'unset')};
   transition: opacity 200ms, transform 200ms;
 
   &::after {
-    content: "";
+    content: '';
     transition: all 200ms;
   }
 
@@ -457,7 +428,7 @@ export const ShowNavbarBtn = styled(Button)`
     opacity: 1;
 
     ::after {
-      content: "Nav";
+      content: 'Nav';
     }
   }
 `;
@@ -472,7 +443,7 @@ export const ResizeDevider = styled.div`
   cursor: w-resize;
   grid-area: devider;
   transition: background 500ms;
-  background: ${({ resizeActive }) => (resizeActive ? "rgb(40,40,40)" : "#121314")};
+  background: ${({ resizeActive }) => (resizeActive ? 'rgb(40,40,40)' : '#121314')};
   display: flex;
   transform: translate3d(0,0,0);
 
@@ -483,8 +454,8 @@ export const ResizeDevider = styled.div`
     width: 1px;
     margin: auto;
     /* height: ${({ resizeActive, videowidth }) =>
-      resizeActive ? `${(videowidth / 1.777777777777778).toFixed(0)}px` || "25%" : "5%"}; */
-    height: ${({ resizeActive }) => (resizeActive ? "40%" : "10%")};
+      resizeActive ? `${(videowidth / 1.777777777777778).toFixed(0)}px` || '25%' : '5%'}; */
+    height: ${({ resizeActive }) => (resizeActive ? '40%' : '10%')};
   }
 
   &:hover > div {

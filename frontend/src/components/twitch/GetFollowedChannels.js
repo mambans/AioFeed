@@ -1,6 +1,6 @@
-import { getCookie } from "../../util/Utils";
-import validateToken from "./validateToken";
-import API from "./API";
+import { getCookie } from '../../util/Utils';
+import API from './API';
+import validateToken from './validateToken';
 
 const fetchNextPageOfFollowers = async ({
   total,
@@ -39,7 +39,7 @@ export default async (forceRun = false) => {
     const followedchannels = await validateToken(forceRun).then(async () => {
       return await API.getFollowedChannels({
         params: {
-          from_id: getCookie("Twitch-userId"),
+          from_id: getCookie('Twitch-userId'),
           first: 100,
         },
       }).catch((error) => {
@@ -49,10 +49,10 @@ export default async (forceRun = false) => {
     });
 
     const channels = await fetchNextPageOfFollowers({
-      total: followedchannels.data.total,
-      PagePagination: followedchannels.data.pagination.cursor,
-      followedchannels: followedchannels.data.data,
-      twitchUserId: getCookie("Twitch-userId"),
+      total: followedchannels?.data?.total,
+      PagePagination: followedchannels?.data?.pagination.cursor,
+      followedchannels: followedchannels?.data?.data,
+      twitchUserId: getCookie('Twitch-userId'),
     });
 
     return channels;

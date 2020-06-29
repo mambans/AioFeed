@@ -1,11 +1,11 @@
-import GetFollowedChannels from "./../GetFollowedChannels";
-import { durationToDate } from "./../TwitchUtils";
-import { getLocalstorage } from "../../../util/Utils";
-import reauthenticate from "./../reauthenticate";
-import AddVideoExtraData from "../AddVideoExtraData";
-import FetchMonitoredVodChannelsList from "./FetchMonitoredVodChannelsList";
-import SortAndAddExpire from "./SortAndAddExpire";
-import API from "../API";
+import { durationToDate } from './../TwitchUtils';
+import { getLocalstorage } from '../../../util/Utils';
+import AddVideoExtraData from '../AddVideoExtraData';
+import API from '../API';
+import FetchMonitoredVodChannelsList from './FetchMonitoredVodChannelsList';
+import GetFollowedChannels from './../GetFollowedChannels';
+import reauthenticate from './../reauthenticate';
+import SortAndAddExpire from './SortAndAddExpire';
 
 const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) => {
   const vodChannelsWithoutFollow = [];
@@ -48,12 +48,12 @@ const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) =
 
 const addVodEndTime = async (followedStreamVods) => {
   followedStreamVods.map((stream) => {
-    if (stream.type === "archive") {
+    if (stream.type === 'archive') {
       stream.endDate = durationToDate(stream.duration, stream.created_at);
     } else {
       stream.endDate = new Date(stream.created_at).getTime();
     }
-    return "";
+    return '';
   });
 };
 
@@ -65,10 +65,10 @@ const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRe
       followedStreamVods = await API.getVideos({
         params: {
           user_id: channel,
-          period: "month",
+          period: 'month',
           first: 5,
           // type: "archive",
-          type: "all",
+          type: 'all',
         },
       }).then((response) => {
         return response.data.data;
@@ -95,10 +95,10 @@ const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRe
           return await API.getVideos({
             params: {
               user_id: channel,
-              period: "month",
+              period: 'month',
               first: 5,
               // type: "archive",
-              type: "all",
+              type: 'all',
             },
           }).then((response) => {
             return response.data.data;
@@ -126,8 +126,8 @@ export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchTok
           return {
             error: {
               data: {
-                title: "No monitored vod channels.",
-                message: "You have not added any Twitch channels to fetch vods from yet.",
+                title: 'No monitored vod channels.',
+                message: 'You have not added any Twitch channels to fetch vods from yet.',
               },
             },
           };
@@ -161,17 +161,17 @@ export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchTok
         };
       } catch (error) {
         return {
-          data: getLocalstorage("Vods"),
+          data: getLocalstorage('Vods'),
           error: error,
         };
       }
     }
 
-    return { data: getLocalstorage("Vods") };
+    return { data: getLocalstorage('Vods') };
   } catch (error) {
-    console.error("message: ", error.message);
+    console.error('message: ', error.message);
     return {
-      data: getLocalstorage("Vods"),
+      data: getLocalstorage('Vods'),
       error: error,
     };
   }

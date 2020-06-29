@@ -1,6 +1,6 @@
-import styled, { keyframes } from "styled-components";
-import { MdFavorite } from "react-icons/md";
-import { MdFavoriteBorder } from "react-icons/md";
+import styled, { keyframes } from 'styled-components';
+import { MdFavorite } from 'react-icons/md';
+import { MdFavoriteBorder } from 'react-icons/md';
 
 export const HeaderContainerTwitchLive = styled.div`
   border-bottom: var(--subFeedHeaderBorder);
@@ -143,7 +143,7 @@ export const StyledLoadingBox = styled.div`
   margin: 7px;
   max-height: 336px;
   margin-bottom: 15px;
-  /* height: ${({ type }) => (type === "Vods" || type === "Clips" ? "unset" : "334px")}; */
+  /* height: ${({ type }) => (type === 'Vods' || type === 'Clips' ? 'unset' : '334px')}; */
   height: unset;
 
   transition: all 1s linear;
@@ -186,16 +186,16 @@ export const StyledLoadingBox = styled.div`
   }
 
   #details {
-    height: ${({ type }) => (type === "Vods" ? "65px" : type === "Clips" ? "25px" : "75px")};
+    height: ${({ type }) => (type === 'Vods' ? '65px' : type === 'Clips' ? '25px' : '75px')};
     /* height: 65px; */
 
     #channel {
       animation: ${pulse} 2s linear infinite;
       width: 100px;
       /* height: 20px; */
-      height: ${({ type }) => (type === "Clips" ? "25px" : "20px")};
+      height: ${({ type }) => (type === 'Clips' ? '25px' : '20px')};
       /* margin: 7px 0; */
-      margin: ${({ type }) => (type === "Clips" ? "0" : "7px 0")};
+      margin: ${({ type }) => (type === 'Clips' ? '0' : '7px 0')};
       transform: translate3d(0, 0, 0);
     }
 
@@ -204,7 +204,7 @@ export const StyledLoadingBox = styled.div`
       width: 125px;
       height: 20px;
       margin: 21px 0 0 0;
-      display: ${({ type }) => (type === "Clips" ? "none" : "block")};
+      display: ${({ type }) => (type === 'Clips' ? 'none' : 'block')};
       transform: translate3d(0, 0, 0);
     }
   }
@@ -300,7 +300,7 @@ export const CenterContainer = styled.div`
   flex-flow: column;
   margin-top: 25px;
   transition: width 750ms, margin 750ms;
-  /* margin-left: ${({ marginLeft }) => marginLeft + "px"}; */
+  /* margin-left: ${({ marginLeft }) => marginLeft + 'px'}; */
 
   margin-left: ${({
     enableTwitter,
@@ -311,15 +311,15 @@ export const CenterContainer = styled.div`
     twitchSidebarWidth,
   }) =>
     !enableTwitter && (!enableTwitch || !showTwitchSidebar)
-      ? "auto"
+      ? 'auto'
       : (window.innerWidth - (twitchSidebarWidth + twitterWidth + centerWidth + 50)) /
           // (enableTwitter ? twitterWidth + 25 + centerWidth : centerWidth + 50))) /
           // : 350 * Math.floor((window.innerWidth - (twitchSidebarWidth + 150)) / 350) + 50))) /
           2 +
         twitchSidebarWidth +
-        "px"};
+        'px'};
   margin-right: ${({ enableTwitter, enableTwitch, showTwitchSidebar }) =>
-    !enableTwitter && (!enableTwitch || !showTwitchSidebar) ? "auto" : "unset"};
+    !enableTwitter && (!enableTwitch || !showTwitchSidebar) ? 'auto' : 'unset'};
   width: ${({ centerWidth }) => centerWidth}px !important;
 
 `;

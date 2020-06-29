@@ -1,19 +1,19 @@
-import { FaGithub } from "react-icons/fa";
-import { FaHome } from "react-icons/fa";
-import { MdAccountCircle } from "react-icons/md";
-import { MdEmail } from "react-icons/md";
-import { MdRssFeed } from "react-icons/md";
-import { Nav } from "react-bootstrap";
-import { NavLink, useLocation } from "react-router-dom";
-import React, { useContext } from "react";
+import { FaGithub } from 'react-icons/fa';
+import { FaHome } from 'react-icons/fa';
+import { MdAccountCircle } from 'react-icons/md';
+import { MdEmail } from 'react-icons/md';
+import { MdRssFeed } from 'react-icons/md';
+import { Nav } from 'react-bootstrap';
+import { NavLink, useLocation } from 'react-router-dom';
+import React, { useContext } from 'react';
 
-import NavigationContext from "./../navigation/NavigationContext";
-import FeedsContext from "./../feed/FeedsContext";
+import NavigationContext from './../navigation/NavigationContext';
+import FeedsContext from './../feed/FeedsContext';
 import {
   StyledFooterContainer,
   StyledCenterBottomText,
   StyledButtonLinks,
-} from "./styledComponents";
+} from './styledComponents';
 
 export default () => {
   const { footerVisible, setRenderModal, setShowSidebar } = useContext(NavigationContext);
@@ -25,24 +25,25 @@ export default () => {
       <StyledFooterContainer
         enableTwitter={enableTwitter}
         showTwitchSidebar={showTwitchSidebar}
-        location={location.pathname}>
+        location={location.pathname}
+      >
         <div>
           <ul>
             <li>
               <Nav.Link as={NavLink} to='/'>
-                <FaHome size={20} style={{ marginRight: "0.75rem" }} />
+                <FaHome size={20} style={{ marginRight: '0.75rem' }} />
                 Home
               </Nav.Link>
             </li>
             <li>
               <Nav.Link as={NavLink} to='/feed'>
-                <MdRssFeed size={20} style={{ marginRight: "0.75rem" }} />
+                <MdRssFeed size={20} style={{ marginRight: '0.75rem' }} />
                 Feed
               </Nav.Link>
             </li>
             <li>
               <Nav.Link as={NavLink} to='/category'>
-                <MdRssFeed size={20} style={{ marginRight: "0.75rem" }} />
+                <MdRssFeed size={20} style={{ marginRight: '0.75rem' }} />
                 Top streams
               </Nav.Link>
             </li>
@@ -50,10 +51,11 @@ export default () => {
               <div
                 className='button'
                 onClick={() => {
-                  setRenderModal("account");
+                  setRenderModal('account');
                   setShowSidebar(true);
-                }}>
-                <MdAccountCircle size={20} style={{ marginRight: "0.75rem" }} />
+                }}
+              >
+                <MdAccountCircle size={20} style={{ marginRight: '0.75rem' }} />
                 Account
               </div>
             </li>
@@ -61,18 +63,19 @@ export default () => {
               <div
                 className='button'
                 onClick={() => {
-                  setRenderModal("create");
+                  setRenderModal('create');
                   setShowSidebar(true);
-                }}>
-                <MdAccountCircle size={20} style={{ marginRight: "0.75rem" }} />
+                }}
+              >
+                <MdAccountCircle size={20} style={{ marginRight: '0.75rem' }} />
                 Create account
               </div>
             </li>
           </ul>
         </div>
-        <div style={{ flexDirection: "column", width: "50%" }}>
-          <p>Test text</p>
-          <p>Test text</p>
+        <div style={{ flexDirection: 'column', width: '50%' }}>
+          <p></p>
+          <p></p>
           <StyledCenterBottomText>
             <Nav.Link as={NavLink} to='/legality#Conditions'>
               Conditions of Use
@@ -87,16 +90,17 @@ export default () => {
           <ul>
             <li>
               <a href='https://github.com/mambans/AioFeed'>
-                <FaGithub size={20} style={{ marginRight: "0.75rem" }} />
+                <FaGithub size={20} style={{ marginRight: '0.75rem' }} />
                 Github-AioFeed
               </a>
             </li>
             <li>
               <StyledButtonLinks
                 onClick={() => {
-                  window.open("mailto:perssons1996@gmail.com?subject=subject&body=body");
-                }}>
-                <MdEmail size={20} style={{ marginRight: "0.75rem" }} />
+                  window.open('mailto:perssons1996@gmail.com?subject=subject&body=body');
+                }}
+              >
+                <MdEmail size={20} style={{ marginRight: '0.75rem' }} />
                 Email
               </StyledButtonLinks>
             </li>

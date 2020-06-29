@@ -1,17 +1,17 @@
-import { Form, Button } from "react-bootstrap";
-import axios from "axios";
-import React, { useState, useContext } from "react";
+import { Form, Button } from 'react-bootstrap';
+import axios from 'axios';
+import React, { useState, useContext } from 'react';
 
-import { StyledCreateFormTitle, StyledCreateForm } from "./StyledComponent";
-import AccountContext from "./../../account/AccountContext";
-import NavigationContext from "./../NavigationContext";
-import LoadingIndicator from "./../../LoadingIndicator";
-import useInput from "./../../../hooks/useInput";
-import { AddCookie } from "../../../util/Utils";
-import Themeselector from "../../themes/Themeselector";
+import { AddCookie } from '../../../util/Utils';
+import { StyledCreateFormTitle, StyledCreateForm } from './StyledComponent';
+import AccountContext from './../../account/AccountContext';
+import LoadingIndicator from './../../LoadingIndicator';
+import NavigationContext from './../NavigationContext';
+import Themeselector from '../../themes/Themeselector';
+import useInput from './../../../hooks/useInput';
 
 export default () => {
-  document.title = "AioFeed | Login";
+  document.title = 'AioFeed | Login';
   const [validated, setValidated] = useState(false);
   const [validatedUsername, setValidatedUsername] = useState(true);
   const [validatedPassword, setValidatedPassword] = useState(true);
@@ -19,8 +19,8 @@ export default () => {
   const { setUsername } = useContext(AccountContext);
 
   // eslint-disable-next-line no-unused-vars
-  const { value: username, bind: bindUsername, reset: resetUsername } = useInput("");
-  const { value: password, bind: bindPassword, reset: resetPassword } = useInput("");
+  const { value: username, bind: bindUsername, reset: resetUsername } = useInput('');
+  const { value: password, bind: bindPassword, reset: resetPassword } = useInput('');
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -38,7 +38,7 @@ export default () => {
   };
 
   function parseBolean(value) {
-    if (value === "null" || !value) {
+    if (value === 'null' || !value) {
       return null;
     } else {
       return value;
@@ -54,33 +54,33 @@ export default () => {
       .then((result) => {
         const res = result.data.Attributes;
         if (result.status === 200 && res) {
-          AddCookie("AioFeed_AccountName", res.Username);
-          AddCookie("AioFeed_AccountProfileImg", res.ProfileImg);
-          AddCookie("AioFeed_AuthKey", res.AuthKey);
-          AddCookie("AioFeed_AccountEmail", res.Email);
-          AddCookie("Twitter-Listname", res.TwitterListId);
-          localStorage.setItem("VodChannels", JSON.stringify(res.MonitoredChannels));
+          AddCookie('AioFeed_AccountName', res.Username);
+          AddCookie('AioFeed_AccountProfileImg', res.ProfileImg);
+          AddCookie('AioFeed_AuthKey', res.AuthKey);
+          AddCookie('AioFeed_AccountEmail', res.Email);
+          AddCookie('Twitter-Listname', res.TwitterListId);
+          localStorage.setItem('VodChannels', JSON.stringify(res.MonitoredChannels));
           localStorage.setItem(
-            "UpdateNotificationsChannels",
+            'UpdateNotificationsChannels',
             JSON.stringify(res.UpdateNotisChannels)
           );
 
           if (res.TwitchPreferences && Object.keys(res.TwitchPreferences).length !== 0) {
-            AddCookie("Twitch-access_token", res.TwitchPreferences.Token);
-            AddCookie("Twitch-refresh_token", res.TwitchPreferences.Refresh_token);
+            AddCookie('Twitch-access_token', res.TwitchPreferences.Token);
+            AddCookie('Twitch-refresh_token', res.TwitchPreferences.Refresh_token);
 
-            AddCookie("Twitch-userId", res.TwitchPreferences.Id);
-            AddCookie("Twitch-username", res.TwitchPreferences.Username);
-            AddCookie("Twitch-profileImg", res.TwitchPreferences.Profile);
-            AddCookie("Twitch_AutoRefresh", parseBolean(res.TwitchPreferences.AutoRefresh));
+            AddCookie('Twitch-userId', res.TwitchPreferences.Id);
+            AddCookie('Twitch-username', res.TwitchPreferences.Username);
+            AddCookie('Twitch-profileImg', res.TwitchPreferences.Profile);
+            AddCookie('Twitch_AutoRefresh', parseBolean(res.TwitchPreferences.AutoRefresh));
 
             // AddCookie("Youtube-Twitch_FeedEnabled", parseBolean(res.TwitchPreferences.enabled));
           }
 
           if (res.YoutubePreferences && Object.keys(res.YoutubePreferences).length !== 0) {
-            AddCookie("YoutubeUsername", res.YoutubePreferences.Username);
-            AddCookie("YoutubeProfileImg", res.YoutubePreferences.Profile);
-            AddCookie("Youtube-access_token", res.YoutubePreferences.Token);
+            AddCookie('YoutubeUsername', res.YoutubePreferences.Username);
+            AddCookie('YoutubeProfileImg', res.YoutubePreferences.Profile);
+            AddCookie('Youtube-access_token', res.YoutubePreferences.Token);
           }
 
           setTimeout(() => {
@@ -92,10 +92,10 @@ export default () => {
       })
       .catch((e) => {
         setValidated(false);
-        if (e.response.data.message === "Invalid Password") {
+        if (e?.response?.data?.message === 'Invalid Password') {
           resetPassword();
           setValidatedPassword(false);
-        } else if (e.response.data.message === "Invalid Username") {
+        } else if (e?.response?.data?.message === 'Invalid Username') {
           setValidatedUsername(false);
         }
       });
@@ -130,19 +130,20 @@ export default () => {
           />
           <Form.Control.Feedback type='invalid'>Invalid Password</Form.Control.Feedback>
         </Form.Group>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button variant='primary' type='submit' disabled={(!username && !password) || validated}>
             Login
           </Button>
           <Button
             onClick={() => {
-              setRenderModal("create");
-            }}>
+              setRenderModal('create');
+            }}
+          >
             Create Account
           </Button>
         </div>
       </StyledCreateForm>
-      <Themeselector style={{ marginTop: "20px" }} />
+      <Themeselector style={{ marginTop: '20px' }} />
       {validated && <LoadingIndicator height={150} width={150} />}
     </>
   );

@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState, useCallback, useContext } from "react";
+import React, { useEffect, useRef, useState, useCallback, useContext } from 'react';
 
-import ErrorHandler from "../error";
-import getFollowedChannels from "./GetFollowedChannels";
-import GetSubscriptionVideos from "./GetSubscriptionVideos";
-import AccountContext from "../account/AccountContext";
-import validateToken from "./validateToken";
+import AccountContext from '../account/AccountContext';
+import ErrorHandler from '../error';
+import getFollowedChannels from './GetFollowedChannels';
+import GetSubscriptionVideos from './GetSubscriptionVideos';
+import validateToken from './validateToken';
 
 export default ({ children }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -37,7 +37,7 @@ export default ({ children }) => {
       }
     };
     setIsLoaded(false);
-    await validateToken({ authKey }).then((res) => {
+    await validateToken({ authKey }).then(() => {
       fetchData();
     });
   }, [authKey, setVideos]);
@@ -49,8 +49,8 @@ export default ({ children }) => {
           return old_video.contentDetails.upload.videoId === video.contentDetails.upload.videoId;
         });
 
-        if (!videoExists) console.log("New video Notification.");
-        return "";
+        if (!videoExists) console.log('New video Notification.');
+        return '';
       });
     }
 
@@ -72,8 +72,9 @@ export default ({ children }) => {
       <ErrorHandler
         data={{
           title: "Couldn't load Youtube feed",
-          message: "You are not connected with your Youtube account to AioFeed",
-        }}></ErrorHandler>
+          message: 'You are not connected with your Youtube account to AioFeed',
+        }}
+      />
     );
   } else {
     return children({
