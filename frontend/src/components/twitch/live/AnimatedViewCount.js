@@ -59,7 +59,7 @@ export default ({
       const curDif = Math.abs(curr - viewers);
       const dec = viewers - curr < 0;
 
-      if (curDif <= 0) {
+      if (curDif <= 0 || curr === viewers) {
         clearInterval(animationTimer.current);
         previousNumber.current = viewers;
         return viewers;
@@ -89,12 +89,12 @@ export default ({
         const dif = viewers - curr;
 
         if (curr === viewers) {
+          clearInterval(animationTimer.current);
           previousNumber.current = viewers;
           return viewers;
-        }
-
-        if (dif > 0) {
+        } else if (dif > 0) {
           if (viewers - curr <= 100) {
+            clearInterval(animationTimer.current);
             animationTimer.current = setInterval(() => setNumber(step), 20);
             return curr + animationStepAmount;
           }
@@ -103,6 +103,7 @@ export default ({
           return curr + animationStepAmount;
         } else if (dif < 0) {
           if (curr - viewers <= 100) {
+            clearInterval(animationTimer.current);
             animationTimer.current = setInterval(() => setNumber(step), 20);
             return curr - animationStepAmount;
           }
@@ -110,9 +111,12 @@ export default ({
           requestAnimationFrame(animate);
           return curr - animationStepAmount;
         }
+        previousNumber.current = viewers;
+        return viewers;
       });
     };
 
+    clearInterval(animationTimer.current);
     requestAnimationFrame(animate);
 
     return () => {
