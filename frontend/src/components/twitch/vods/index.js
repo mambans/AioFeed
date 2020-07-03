@@ -16,7 +16,7 @@ import { AddCookie, getCookie } from '../../../util/Utils';
 export default ({ videoElementsAmount }) => {
   const { vods, setVods } = useContext(VodsContext);
   const { authKey, username, twitchUserId, setTwitchToken, setRefreshToken } = useContext(
-    AccountContext,
+    AccountContext
   );
   const { setEnableTwitchVods } = useContext(FeedsContext);
   const [error, setError] = useState(null);
@@ -26,7 +26,7 @@ export default ({ videoElementsAmount }) => {
   const resetTransitionTimer = useRef();
   const VodHeaderRef = useRef();
   const [vodAmounts, setVodAmounts] = useState({
-    amount: videoElementsAmount || 14,
+    amount: videoElementsAmount,
     timeout: 750,
     transitionGroup: 'videos',
   });
@@ -51,7 +51,7 @@ export default ({ videoElementsAmount }) => {
           setVods(data.data);
         });
     },
-    [authKey, username, setTwitchToken, setRefreshToken, setVods],
+    [authKey, username, setTwitchToken, setRefreshToken, setVods]
   );
 
   const windowFocusHandler = useCallback(async () => {
@@ -107,6 +107,14 @@ export default ({ videoElementsAmount }) => {
     setVods,
   ]);
 
+  useEffect(() => {
+    setVodAmounts({
+      amount: videoElementsAmount,
+      timeout: 750,
+      transitionGroup: 'videos',
+    });
+  }, [videoElementsAmount]);
+
   if (!getCookie(`Twitch-access_token`)) {
     return (
       <ErrorHandler
@@ -144,7 +152,7 @@ export default ({ videoElementsAmount }) => {
     return (
       <>
         <Header refresh={refresh} refreshing={refreshing} vods={vods} ref={VodHeaderRef} />
-        <LoadingBoxes amount={videoElementsAmount || 14} type='Vods' />
+        <LoadingBoxes amount={videoElementsAmount} type='Vods' />
       </>
     );
   } else {

@@ -1,23 +1,30 @@
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 import { SubFeedContainer, LoadMore } from './../sharedStyledComponents';
 import YoutubeVideoElement from './YoutubeVideoElement';
 import LoadingBoxes from './../twitch/LoadingBoxes';
 
-export default (data) => {
-  const { requestError, videos, videoElementsAmount } = data;
+export default ({ requestError, videos, videoElementsAmount }) => {
   const [vodAmounts, setVodAmounts] = useState({
-    amount: videoElementsAmount || 14,
+    amount: videoElementsAmount,
     timeout: 750,
     transitionGroup: 'videos',
   });
   const resetTransitionTimer = useRef();
 
+  useEffect(() => {
+    setVodAmounts({
+      amount: videoElementsAmount,
+      timeout: 750,
+      transitionGroup: 'videos',
+    });
+  }, [videoElementsAmount]);
+
   if (requestError && requestError.code === 401 && !videos) {
     return '';
   } else if (!videos || videos.length < 1) {
-    return <LoadingBoxes amount={videoElementsAmount || 14} type='Vods' />;
+    return <LoadingBoxes amount={videoElementsAmount} type='Vods' />;
   } else {
     return (
       <>

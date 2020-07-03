@@ -1,28 +1,27 @@
-import { CSSTransition } from "react-transition-group";
-import { debounce } from "lodash";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import { CSSTransition } from 'react-transition-group';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 
-import { AddCookie } from "../../util/Utils";
-import { Container, CenterContainer } from "../twitch/StyledComponents";
-import { HideSidebarButton } from "../twitch/sidebar/StyledComponents";
-import { VodsProvider } from "./../twitch/vods/VodsContext";
-import AccountContext from "./../account/AccountContext";
-import ErrorHandler from "./../error";
-import FeedsContext from "./FeedsContext";
-import Handler from "../twitch/live/Handler";
-import Header from "../twitch/live/Header";
-import NoFeedsEnable from "./NoFeedsEnabled";
-import Sidebar from "../twitch/sidebar";
-import TwitchLive from "../twitch/live";
-import TwitchVods from "../twitch/vods";
-import Twitter from "../twitter";
-import Youtube from "./../youtube";
-import YoutubeDataHandler from "./../youtube/Datahandler";
-import YoutubeHeader from "./../youtube/Header";
+import { AddCookie } from '../../util/Utils';
+import { Container, CenterContainer } from '../twitch/StyledComponents';
+import { HideSidebarButton } from '../twitch/sidebar/StyledComponents';
+import { VodsProvider } from './../twitch/vods/VodsContext';
+import AccountContext from './../account/AccountContext';
+import ErrorHandler from './../error';
+import FeedsContext from './FeedsContext';
+import Handler from '../twitch/live/Handler';
+import Header from '../twitch/live/Header';
+import NoFeedsEnable from './NoFeedsEnabled';
+import Sidebar from '../twitch/sidebar';
+import TwitchLive from '../twitch/live';
+import TwitchVods from '../twitch/vods';
+import Twitter from '../twitter';
+import Youtube from './../youtube';
+import YoutubeDataHandler from './../youtube/Datahandler';
+import YoutubeHeader from './../youtube/Header';
 
 export default () => {
-  document.title = "AioFeed | Feed";
+  document.title = 'AioFeed | Feed';
   const {
     enableTwitch,
     enableYoutube,
@@ -49,25 +48,21 @@ export default () => {
 
   useEffect(() => {
     Notification.requestPermission().then(function (result) {
-      console.log("Notifications: ", result);
+      console.log('Notifications: ', result);
     });
   }, []);
 
   useEffect(() => {
-    const setScreenWidthToCalcAlignments = debounce(
-      () => {
-        setVideoElementsAmount(calcVideoElementsAmount());
-      },
-      20,
-      { leading: true, trailing: false }
-    );
+    const setScreenWidthToCalcAlignments = () => {
+      setVideoElementsAmount(calcVideoElementsAmount());
+    };
 
     setVideoElementsAmount(calcVideoElementsAmount());
 
-    window.addEventListener("resize", setScreenWidthToCalcAlignments);
+    window.addEventListener('resize', setScreenWidthToCalcAlignments);
 
     return () => {
-      window.removeEventListener("resize", setScreenWidthToCalcAlignments);
+      window.removeEventListener('resize', setScreenWidthToCalcAlignments);
     };
   }, [calcVideoElementsAmount]);
 
@@ -76,9 +71,10 @@ export default () => {
       <>
         <ErrorHandler
           data={{
-            title: "Please login",
-            message: "You are not logged with your AioFeed account.",
-          }}></ErrorHandler>
+            title: 'Please login',
+            message: 'You are not logged with your AioFeed account.',
+          }}
+        ></ErrorHandler>
       </>
     );
   } else {
@@ -103,7 +99,8 @@ export default () => {
               350
           )
         }
-        id='CenterContainer'>
+        id='CenterContainer'
+      >
         <NoFeedsEnable />
         <Twitter />
         <VodsProvider>
@@ -112,7 +109,8 @@ export default () => {
             classNames='fade-750ms'
             timeout={750}
             unmountOnExit
-            appear>
+            appear
+          >
             <Handler>
               {(data) => (
                 <>
@@ -120,7 +118,8 @@ export default () => {
                     in={enableTwitch}
                     timeout={750}
                     classNames='fade-750ms'
-                    unmountOnExit>
+                    unmountOnExit
+                  >
                     <Header data={data} />
                   </CSSTransition>
                   <CSSTransition
@@ -128,25 +127,28 @@ export default () => {
                     timeout={750}
                     classNames='fade-750ms'
                     appear
-                    unmountOnExit>
+                    unmountOnExit
+                  >
                     <TwitchLive data={data} videoElementsAmount={videoElementsAmount} />
                   </CSSTransition>
 
                   <OverlayTrigger
-                    key={"bottom"}
-                    placement={"right"}
+                    key={'bottom'}
+                    placement={'right'}
                     delay={{ show: 500, hide: 0 }}
                     overlay={
-                      <Tooltip id={`tooltip-${"right"}`}>{`${
-                        showTwitchSidebar ? "Hide" : "Show"
+                      <Tooltip id={`tooltip-${'right'}`}>{`${
+                        showTwitchSidebar ? 'Hide' : 'Show'
                       } sidebar`}</Tooltip>
-                    }>
+                    }
+                  >
                     <HideSidebarButton
                       show={String(showTwitchSidebar)}
                       onClick={() => {
-                        AddCookie("Twitch_SidebarEnabled", !showTwitchSidebar);
+                        AddCookie('Twitch_SidebarEnabled', !showTwitchSidebar);
                         setShowTwitchSidebar(!showTwitchSidebar);
-                      }}>
+                      }}
+                    >
                       Hide
                     </HideSidebarButton>
                   </OverlayTrigger>
@@ -156,7 +158,8 @@ export default () => {
                     timeout={750}
                     classNames='twitchSidebar'
                     appear
-                    unmountOnExit>
+                    unmountOnExit
+                  >
                     <Sidebar
                       setShowTwitchSidebar={setShowTwitchSidebar}
                       loaded={data.loaded}
@@ -182,7 +185,8 @@ export default () => {
           timeout={750}
           classNames='fade-750ms'
           unmountOnExit
-          appear>
+          appear
+        >
           <Container>
             <YoutubeDataHandler>
               {(data) => (
