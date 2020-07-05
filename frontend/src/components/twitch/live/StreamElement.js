@@ -239,11 +239,20 @@ export default (data_p) => {
               />
             </a>
           )}
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            {data.game_name && (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              overflow: 'hidden',
+              gridColumn: '2',
+            }}
+          >
+            {data.game_name ? (
               <Link className={'gameName'} to={'/category/' + data.game_name}>
                 {data.game_name}
               </Link>
+            ) : (
+              <div />
             )}
 
             <AnimatedViewCount
