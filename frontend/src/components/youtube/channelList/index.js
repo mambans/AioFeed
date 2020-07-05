@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
-import { MdFormatListBulleted } from "react-icons/md";
-import { CSSTransition } from "react-transition-group";
+import React, { useState, useEffect, useRef } from 'react';
+import { MdFormatListBulleted } from 'react-icons/md';
+import { CSSTransition } from 'react-transition-group';
 
 import {
   GameListUlContainer,
   SearchGameForm,
   SearchSubmitBtn,
   BackdropChannelList,
-} from "./../../twitch/categoryTopStreams/styledComponents";
-import StyledLoadingList from "./../../twitch/categoryTopStreams/LoadingList";
-import ChannelListElement from "./ChannelListElement";
-import { getLocalstorage } from "../../../util/Utils";
+} from './../../twitch/categoryTopStreams/styledComponents';
+import StyledLoadingList from './../../twitch/categoryTopStreams/LoadingList';
+import ChannelListElement from './ChannelListElement';
+import { getLocalstorage } from '../../../util/Utils';
 
 export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
   const parentRect = parentDiv.getBoundingClientRect();
@@ -22,10 +22,10 @@ export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
     childRect.top - 20.5 <= parentRect.top || childRect.bottom - 20.5 <= parentRect.top;
 
   if (scrollDown || scrollUp) {
-    childDiv.scrollIntoView({ block: "nearest", inline: "nearest" });
+    childDiv.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     parentDiv.scrollBy({
-      top: direction === "Down" && scrollDown ? +41 : direction === "Up" && scrollUp ? -41 : 0,
-      behavior: "smooth",
+      top: direction === 'Down' && scrollDown ? +41 : direction === 'Up' && scrollUp ? -41 : 0,
+      behavior: 'smooth',
     });
   }
 };
@@ -73,12 +73,12 @@ export default (data) => {
     return {
       value,
       setValue,
-      reset: () => setValue(""),
+      reset: () => setValue(''),
       bind: {
         value,
         onChange: (event) => {
           setValue(event.target.value);
-          if (listIsOpen && event.target.value && event.target.value !== "") {
+          if (listIsOpen && event.target.value && event.target.value !== '') {
             const filtered = channels.current.filter((channel) => {
               return channel.snippet.title
                 .toLowerCase()
@@ -98,12 +98,11 @@ export default (data) => {
         },
       },
       returnChannelId: () => {
-        const foundChannel = filteredChannels.find((p_channel) => {
+        const foundChannel = filteredChannels?.find((p_channel) => {
           return p_channel.snippet.title.toLowerCase().includes(value.toLowerCase());
         });
-        if (foundChannel) {
-          return foundChannel.snippet.resourceId.channelId;
-        }
+
+        return foundChannel && foundChannel.snippet.resourceId.channelId;
       },
       manualSet: setValue,
     };
@@ -116,25 +115,25 @@ export default (data) => {
     reset: resetChannel,
     returnChannelId,
     manualSet,
-  } = useInput("");
+  } = useInput('');
 
   const handleArrowKey = (e) => {
     try {
       if (filteredChannels && filteredChannels.length > 1) {
-        if (e.key === "ArrowDown") {
+        if (e.key === 'ArrowDown') {
           e.preventDefault();
           setCursor((cursor) => Math.min(Math.max(cursor + 1, 0), filteredChannels.length - 1));
-          scrollToIfNeeded(ulListRef.current, document.querySelector(".selected"), "Down");
+          scrollToIfNeeded(ulListRef.current, document.querySelector('.selected'), 'Down');
           manualSet(filteredChannels[cursor + 1].snippet.title);
-        } else if (e.key === "ArrowUp") {
+        } else if (e.key === 'ArrowUp') {
           e.preventDefault();
           setCursor((cursor) => Math.min(Math.max(cursor - 1, 0), filteredChannels.length - 1));
-          scrollToIfNeeded(ulListRef.current, document.querySelector(".selected"), "Up");
+          scrollToIfNeeded(ulListRef.current, document.querySelector('.selected'), 'Up');
           manualSet(filteredChannels[cursor - 1].snippet.title);
         }
       }
     } catch (error) {
-      console.log("handleArrowKey -> error", error);
+      console.log('handleArrowKey -> error', error);
     }
   };
 
@@ -146,12 +145,12 @@ export default (data) => {
 
   useEffect(() => {
     const inputField = inputRef.current;
-    inputField.addEventListener("focus", () => {
+    inputField.addEventListener('focus', () => {
       setListIsOpen(true);
     });
 
     return () => {
-      inputField.removeEventListener("focus", () => {
+      inputField.removeEventListener('focus', () => {
         setListIsOpen(true);
       });
     };
@@ -170,16 +169,18 @@ export default (data) => {
 
   return (
     <>
-      <SearchGameForm onSubmit={handleSubmit} open={listIsOpen} onKeyDown={handleArrowKey}>
-        <input
-          ref={inputRef}
-          type='text'
-          spellCheck='false'
-          placeholder={"..."}
-          {...bindChannel}></input>
-        {channel && (
-          <SearchSubmitBtn href={`https://www.youtube.com/channel/${returnChannelId()}`} />
-        )}
+      <SearchGameForm
+        onSubmit={handleSubmit}
+        open={listIsOpen}
+        onKeyDown={handleArrowKey}
+        direction={'left'}
+        showButton={true}
+      >
+        <input ref={inputRef} type='text' spellCheck='false' placeholder={'...'} {...bindChannel} />
+        <SearchSubmitBtn
+          disabled={!channel}
+          href={`https://www.youtube.com/channel/${returnChannelId()}`}
+        />
         <MdFormatListBulleted
           id='ToggleListBtn'
           onClick={() => {
@@ -188,7 +189,6 @@ export default (data) => {
           }}
           size={42}
         />
-
         <CSSTransition
           in={listIsOpen}
           timeout={250}
@@ -196,18 +196,20 @@ export default (data) => {
           onExited={() => {
             setCursor(0);
           }}
-          unmountOnExit>
+          unmountOnExit
+        >
           <GameListUlContainer ref={ulListRef}>
             {filteredChannels ? (
               <>
                 <p
                   style={{
-                    textAlign: "center",
-                    fontSize: "0.9rem",
-                    fontWeight: "bold",
-                    margin: "9px 0",
-                    color: "var(--VideoContainerLinks)",
-                  }}>{`Total: ${filteredChannels.length}`}</p>
+                    textAlign: 'center',
+                    fontSize: '0.9rem',
+                    fontWeight: 'bold',
+                    margin: '9px 0',
+                    color: 'var(--VideoContainerLinks)',
+                  }}
+                >{`Total: ${filteredChannels.length}`}</p>
 
                 {filteredChannels.map((channel, index) => {
                   return (
