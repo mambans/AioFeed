@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components";
-import { pulse } from "../twitch/StyledComponents";
+import React from 'react';
+import styled from 'styled-components';
+import { pulse } from '../twitch/StyledComponents';
 
 export const Container = styled.div`
-  /* width: ${({ width }) => width + "px" || "15vw"}; */
+  /* width: ${({ width }) => width + 'px' || '15vw'}; */
   /* width: ${({ width }) => width}; */
   width: 15vw;
   height: 92vh;
@@ -12,7 +12,7 @@ export const Container = styled.div`
   top: 90px;
   /* background: var(--twitterBackground); */
   background: var(--sidebarsBackgroundColor);
-  border-radius: 10px;
+  border-radius: 10px 10px 2px 2px;
 
   @media screen and (max-width: 2560px) {
     width: 20vw;
