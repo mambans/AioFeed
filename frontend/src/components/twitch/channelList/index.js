@@ -64,7 +64,13 @@ export const sortInputFirst = (input, data) => {
   return [...caseSensitive, ...caseInsensitive, ...others];
 };
 
-export default ({ showButton = true, style = {}, inputStyle = {}, placeholder = 'Channel..' }) => {
+export default ({
+  showButton = true,
+  style = {},
+  inputStyle = {},
+  placeholder = 'Channel..',
+  position,
+}) => {
   const [filteredChannels, setFilteredChannels] = useState();
   const [listIsOpen, setListIsOpen] = useState();
   const [cursor, setCursor] = useState(0);
@@ -316,7 +322,7 @@ export default ({ showButton = true, style = {}, inputStyle = {}, placeholder = 
           }}
           unmountOnExit
         >
-          <GameListUlContainer ref={ulListRef} style={{ paddingLeft: '0' }}>
+          <GameListUlContainer ref={ulListRef} style={{ paddingLeft: '0' }} position={position}>
             {filteredChannels?.length === 0 ? (
               <ChannelListElement
                 key={channel}
