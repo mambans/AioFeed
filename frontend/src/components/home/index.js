@@ -1,31 +1,14 @@
-import React, { useContext, useEffect, useRef, useCallback } from "react";
+import React, { useEffect } from 'react';
 
-import "./Home.scss";
-import { BlurOverlay, TopBlurOverlay, LogoText, WelcomeContainer } from "./StyledComponents";
-import NavigationContext from "./../navigation/NavigationContext";
-
-const INACTIVE_TIMER = 120; // seconds
+import './Home.scss';
+import { BlurOverlay, LogoText, WelcomeContainer } from './StyledComponents';
 
 export default () => {
-  document.title = "AioFeed";
-  const { setVisible, visible } = useContext(NavigationContext);
-  const inactiveTimer = useRef();
-  const topNavbarBlur = useRef();
+  document.title = 'AioFeed';
 
   const Logos = () => {
     return (
       <>
-        {!visible && (
-          <TopBlurOverlay
-            ref={topNavbarBlur}
-            onMouseEnter={() => {
-              setVisible(true);
-            }}
-            onMouseLeave={() => {
-              setVisible(false);
-            }}
-          />
-        )}
         <BlurOverlay />
         <WelcomeContainer>
           <LogoText>
@@ -49,31 +32,14 @@ export default () => {
     );
   };
 
-  const setVisibleNavbar = useCallback(() => {
-    setVisible(true);
-  }, [setVisible]);
-
   useEffect(() => {
-    setVisible(false);
-    window.addEventListener("scroll", setVisibleNavbar);
-    window.addEventListener("wheel", setVisibleNavbar);
-    document.documentElement.setAttribute("homepage", "true");
+    document.documentElement.setAttribute('homepage', 'true');
     window.scrollTo(0, 0);
 
-    if (!inactiveTimer.current) {
-      inactiveTimer.current = setInterval(() => {
-        setVisible(false);
-      }, 1000 * INACTIVE_TIMER);
-    }
-
     return () => {
-      window.removeEventListener("scroll", setVisibleNavbar);
-      window.removeEventListener("wheel", setVisibleNavbar);
-      document.documentElement.removeAttribute("homepage");
-      clearInterval(inactiveTimer.current);
-      setVisible(true);
+      document.documentElement.removeAttribute('homepage');
     };
-  }, [setVisible, setVisibleNavbar]);
+  }, []);
 
   return <Logos></Logos>;
 };
