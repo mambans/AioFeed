@@ -1,12 +1,12 @@
-import { useParams, useLocation } from "react-router-dom";
-import styled from "styled-components";
-import YouTube from "react-youtube";
-import { MdVerticalAlignBottom } from "react-icons/md";
-import React, { useContext, useEffect, useState, useRef } from "react";
+import { useParams, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
+import YouTube from 'react-youtube';
+import { MdVerticalAlignBottom } from 'react-icons/md';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 
-import NavigationContext from "./../navigation/NavigationContext";
-import { VideoAndChatContainer, ShowNavbarBtn } from "./../twitch/player/StyledComponents";
-import PlayerNavbar from "./PlayerNavbar";
+import NavigationContext from './../navigation/NavigationContext';
+import { VideoAndChatContainer, ShowNavbarBtn } from './../twitch/player/StyledComponents';
+import PlayerNavbar from './PlayerNavbar';
 
 const StyledYoutubeIframe = styled(YouTube)`
   border: none;
@@ -27,18 +27,18 @@ export default () => {
     // } else {
     //   setVideo({ id: param });
     // }
-    setVideo({ id: param.videoId, startTime: location.search.replace(/[?t=]|s/g, "") });
+    setVideo({ id: param.videoId, startTime: location.search.replace(/[?t=]|s/g, '') });
   }, [location.search, param.videoId]);
 
   useEffect(() => {
-    document.documentElement.style.overflow = "hidden";
-    setShrinkNavbar("true");
+    document.documentElement.style.overflow = 'hidden';
+    setShrinkNavbar('true');
     setVisible(false);
     setFooterVisible(false);
 
     return () => {
-      document.documentElement.style.overflow = "visible";
-      setShrinkNavbar("false");
+      document.documentElement.style.overflow = 'visible';
+      setShrinkNavbar('false');
       setFooterVisible(true);
       setVisible(true);
       clearTimeout(getVideoInfoTimer.current);
@@ -46,14 +46,14 @@ export default () => {
   }, [setShrinkNavbar, setFooterVisible, setVisible]);
 
   const opts = {
-    height: "100%",
-    width: "100%",
+    height: '100%',
+    width: '100%',
     playerVars: {
       autoplay: 1,
       controls: 1,
-      origin: "https://aiofeed.com/youtube",
+      origin: 'https://aiofeed.com/youtube',
       start: video.startTime,
-      frameborder: "0",
+      frameborder: '0',
       fs: 1,
     },
   };
@@ -63,20 +63,22 @@ export default () => {
       <PlayerNavbar visible={visible} />
       <VideoAndChatContainer
         style={{
-          height: visible ? "calc(100vh - 85px)" : "100vh",
-          top: visible ? "85px" : "0",
-          display: "unset",
-        }}>
+          height: visible ? 'calc(100vh - 70px)' : '100vh',
+          top: visible ? '70px' : '0',
+          display: 'unset',
+        }}
+      >
         <ShowNavbarBtn
           variant='dark'
           onClick={() => {
             setVisible(!visible);
           }}
-          style={{ right: "0" }}>
+          style={{ right: '0' }}
+        >
           <MdVerticalAlignBottom
             style={{
-              transform: visible ? "rotateX(180deg)" : "unset",
-              right: "10px",
+              transform: visible ? 'rotateX(180deg)' : 'unset',
+              right: '10px',
             }}
             size={30}
             title='Show navbar'
@@ -86,7 +88,7 @@ export default () => {
         <StyledYoutubeIframe
           videoId={video.id}
           opts={opts}
-          id={video.id + "player"}
+          id={video.id + 'player'}
           containerClassName='IframeContainer'
           onReady={(event) => {
             getVideoInfoTimer.current = setTimeout(() => {

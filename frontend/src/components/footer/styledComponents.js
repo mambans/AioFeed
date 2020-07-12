@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const StyledFooterContainer = styled.div`
   display: flex;
@@ -9,17 +9,17 @@ export const StyledFooterContainer = styled.div`
   border-top: 2px solid #53463f;
   max-height: 200px;
   width: ${({ enableTwitter, showTwitchSidebar, location }) =>
-    location === "/feed" || location === "/feed/"
-      ? `calc(100% - (( ${enableTwitter ? "15vw + 25px + 10px" : "0px"})))`
-      : "100%"};
+    location === '/feed' || location === '/feed/'
+      ? `calc(100% - (( ${enableTwitter ? '15vw + 25px' : '0px'})))`
+      : '100%'};
   /* width: ${({ enableTwitter, showTwitchSidebar, location }) =>
-    location === "/feed" || location === "/feed/"
-      ? `calc(100% - (( ${enableTwitter ? "15vw + 25px + 10px" : "0px"}) + ${
-          showTwitchSidebar ? "275px" : "0px"
+    location === '/feed' || location === '/feed/'
+      ? `calc(100% - (( ${enableTwitter ? '15vw + 25px + 10px' : '0px'}) + ${
+          showTwitchSidebar ? '275px' : '0px'
         }))`
-      : "100%"}; */
+      : '100%'}; */
   color: var(--textColor2);
-  /* margin-left: ${({ showTwitchSidebar }) => (showTwitchSidebar ? "275px" : "unset")}; */
+  /* margin-left: ${({ showTwitchSidebar }) => (showTwitchSidebar ? '275px' : 'unset')}; */
   transition: width 750ms, margin 750ms;
 
   ul {

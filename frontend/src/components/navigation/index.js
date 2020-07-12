@@ -1,43 +1,34 @@
-import React, { useContext, useState } from 'react';
-import { Navbar, NavDropdown, Nav, Button } from 'react-bootstrap';
+import React, { useContext, useRef } from 'react';
+import { Navbar, Nav } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
-import { FaGithub } from 'react-icons/fa';
-import Modal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
+import { FaAngleRight, FaAngleLeft } from 'react-icons/fa';
 
 import RenderNotifications from './../notifications';
 import NavigationContext from './NavigationContext';
 import './Navigation.scss';
 import Sidebar from './sidebar';
-import ChangeLogs from '../changeLogs';
-import styles from '../changeLogs/ChangeLogs.module.scss';
-import { AddCookie, getCookie } from '../../util/Utils';
 import GameSearchBar from '../twitch/categoryTopStreams/GameSearchBar';
 import ChannelSearchList from './../twitch/channelList/index';
-
-const SIDEDIVSWIDTH = '600px';
+import NavExpandingSides from './NavExpandingSides';
 
 const StyledNavbar = styled(Navbar)`
   display: flex;
   justify-content: space-between;
+  padding-right: 0;
 `;
 
 const StyledNav = styled(Nav)`
   &&& {
     margin: 0 !important;
+    padding: 0 20px;
   }
 `;
 
 export default (prop) => {
-  const NewAlertName = `GlobalAlert-NewAlertName`;
-  AddCookie(NewAlertName, true);
   const { visible, shrinkNavbar } = useContext(NavigationContext);
-  const [show, setShow] = useState(!getCookie(NewAlertName));
-
-  const handleClose = () => {
-    setShow(false);
-  };
+  const leftExpand = useRef();
 
   return (
     <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
@@ -49,8 +40,13 @@ export default (prop) => {
         variant='dark'
         shrink={shrinkNavbar}
       >
-        <div style={{ display: 'flex', height: '100%', width: SIDEDIVSWIDTH }}>
-          <Nav.Link as={NavLink} to='/' className='logo-link'>
+        <NavExpandingSides side='left' ref={leftExpand}>
+          <Nav.Link
+            as={NavLink}
+            to='/'
+            className='logo-link'
+            style={{ display: 'flex', alignItems: 'center', minWidth: '200px', paddingLeft: '0' }}
+          >
             <img
               src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}
               alt='logo'
@@ -58,62 +54,35 @@ export default (prop) => {
             />
             AioFeed
           </Nav.Link>
-          <RenderNotifications />
-        </div>
-        <StyledNav className='mr-auto'>
-          <Nav.Link as={NavLink} to='/home' activeClassName='active'>
-            Home
-          </Nav.Link>
-          <Nav.Link as={NavLink} to='/feed/' activeClassName='active'>
-            Feed
-          </Nav.Link>
-        </StyledNav>
-        <Nav style={{ justifyContent: 'right', alignItems: 'center', width: SIDEDIVSWIDTH }}>
+          <RenderNotifications leftExpandRef={leftExpand} />
+          <StyledNav className='mr-auto'>
+            <Nav.Link as={NavLink} to='/home' activeClassName='active'>
+              Home
+            </Nav.Link>
+            <Nav.Link as={NavLink} to='/feed/' activeClassName='active'>
+              Feed
+            </Nav.Link>
+          </StyledNav>
+          <FaAngleRight id='arrow' size={20} />
+        </NavExpandingSides>
+        <NavExpandingSides side='right'>
+          <FaAngleLeft id='arrow' size={20} />
           <GameSearchBar
+            position='fixed'
             showButton={false}
             style={{ background: 'none', boxShadow: 'none', margin: '0 10px' }}
             inputStyle={{ textOverflow: 'unset' }}
             alwaysFetchNew={true}
             openInNewTab={true}
           />
-
           <ChannelSearchList
+            position='fixed'
             showButton={false}
             style={{ background: 'none', boxShadow: 'none', margin: '0 10px' }}
             inputStyle={{ textOverflow: 'unset' }}
           />
-          <NavDropdown title='Other' id='collasible-nav-dropdown'>
-            <NavDropdown.Item href='https://github.com/mambans/AioFeed'>
-              <FaGithub size={24} style={{ marginRight: '0.75rem' }} />
-              AioFeed-Github
-            </NavDropdown.Item>
-
-            <NavDropdown.Item
-              as={Button}
-              onClick={() => {
-                setShow(!show);
-              }}
-            >
-              <FaGithub size={24} style={{ marginRight: '0.75rem' }} />
-              Changelog
-            </NavDropdown.Item>
-            <NavDropdown.Item as={NavLink} to='/legality#Conditions'>
-              Conditions of Use
-            </NavDropdown.Item>
-            <NavDropdown.Item as={NavLink} to='/legality#Privacy'>
-              Privacy Notice
-            </NavDropdown.Item>
-          </NavDropdown>
-          <Modal
-            show={show}
-            onHide={handleClose}
-            dialogClassName={styles.modal}
-            backdropClassName={styles.modalBackdrop}
-          >
-            <ChangeLogs handleClose={handleClose} NewAlertName={NewAlertName} />
-          </Modal>
           <Sidebar />
-        </Nav>
+        </NavExpandingSides>
       </StyledNavbar>
     </CSSTransition>
   );

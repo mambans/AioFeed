@@ -5,7 +5,8 @@ import { MdEmail } from 'react-icons/md';
 import { MdRssFeed } from 'react-icons/md';
 import { Nav } from 'react-bootstrap';
 import { NavLink, useLocation } from 'react-router-dom';
-import React, { useContext } from 'react';
+import Modal from 'react-bootstrap/Modal';
+import React, { useContext, useState } from 'react';
 
 import NavigationContext from './../navigation/NavigationContext';
 import FeedsContext from './../feed/FeedsContext';
@@ -14,11 +15,21 @@ import {
   StyledCenterBottomText,
   StyledButtonLinks,
 } from './styledComponents';
+import { getCookie, AddCookie } from '../../util/Utils';
+import ChangeLogs from '../changeLogs';
+import styles from '../changeLogs/ChangeLogs.module.scss';
 
 export default () => {
+  const NewAlertName = `GlobalAlert-NewAlertName`;
+  AddCookie(NewAlertName, true);
   const { footerVisible, setRenderModal, setShowSidebar } = useContext(NavigationContext);
   const { enableTwitter, showTwitchSidebar } = useContext(FeedsContext);
   const location = useLocation();
+  const [show, setShow] = useState(!getCookie(NewAlertName));
+
+  const handleClose = () => {
+    setShow(false);
+  };
 
   return (
     footerVisible && (
@@ -97,6 +108,16 @@ export default () => {
             <li>
               <StyledButtonLinks
                 onClick={() => {
+                  setShow(!show);
+                }}
+              >
+                <FaGithub size={20} style={{ marginRight: '0.75rem' }} />
+                Changelog
+              </StyledButtonLinks>
+            </li>
+            <li>
+              <StyledButtonLinks
+                onClick={() => {
                   window.open('mailto:perssons1996@gmail.com?subject=subject&body=body');
                 }}
               >
@@ -106,6 +127,14 @@ export default () => {
             </li>
           </ul>
         </div>
+        <Modal
+          show={show}
+          onHide={handleClose}
+          dialogClassName={styles.modal}
+          backdropClassName={styles.modalBackdrop}
+        >
+          <ChangeLogs handleClose={handleClose} NewAlertName={NewAlertName} />
+        </Modal>
       </StyledFooterContainer>
     )
   );

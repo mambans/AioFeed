@@ -12,7 +12,7 @@ import NavigationContext from './../navigation/NavigationContext';
 import NotificationsContext from './../notifications/NotificationsContext';
 import styles from './Notifications.module.scss';
 
-export default () => {
+export default ({ leftExpandRef }) => {
   const [show, setShow] = useState(false);
   const {
     clearUnseenNotifications,
@@ -24,10 +24,17 @@ export default () => {
 
   const handleClose = () => {
     setShow(false);
+    leftExpandRef.current.style.removeProperty('width');
+    leftExpandRef.current.childNodes[
+      leftExpandRef.current.childNodes.length - 1
+    ].style.removeProperty('opacity');
   };
   const handleShow = () => {
     setShow(true);
     clearUnseenNotifications();
+    leftExpandRef.current.style.width = '100%';
+    leftExpandRef.current.childNodes[leftExpandRef.current.childNodes.length - 1].style.opacity =
+      '0';
   };
 
   return (
@@ -38,7 +45,7 @@ export default () => {
           border: 'none',
           background: 'none',
           boxShadow: 'none',
-          padding: '0',
+          padding: '0 5px',
         }}
         title='Notifications'
       >

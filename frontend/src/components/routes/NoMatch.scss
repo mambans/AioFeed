@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Varela+Round&display=swap");
+@import url('https://fonts.googleapis.com/css?family=Varela+Round&display=swap');
 
 .error-container {
   text-align: center;
@@ -7,7 +7,7 @@
   height: 475px;
   top: calc(50vh - 475px);
   position: relative;
-  font-family: "Varela Round", sans-serif;
+  font-family: 'Varela Round', sans-serif;
 
   div > span {
     display: inline-block;
@@ -41,7 +41,7 @@
 
   span.four:before,
   span.four:after {
-    content: "";
+    content: '';
     display: block;
     position: absolute;
     border-radius: 999px;
@@ -98,7 +98,7 @@
   }
 
   span.zero:before {
-    content: "";
+    content: '';
     display: block;
     position: absolute;
     transform: rotate(45deg);
@@ -127,7 +127,7 @@
   }
 
   span.zero:after {
-    content: "";
+    content: '';
     display: block;
     position: absolute;
     border-radius: 999px;
@@ -151,8 +151,8 @@
     }
 
     span.zero {
-      width: 65px;
-      height: 65px;
+      width: 60px;
+      height: 60px;
 
       &::after {
         width: 30px;

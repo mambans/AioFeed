@@ -2,15 +2,15 @@
 #contentContainer {
   // padding-top: 75px;
   min-height: 100vh;
-  padding-top: 65px;
+  padding-top: 60px;
 }
 
-nav[mode="fixed"] ~ #contentContainer {
-  padding-top: 65px;
+nav[mode='fixed'] ~ #contentContainer {
+  padding-top: 70px;
 }
 
-nav[shrink="true"] ~ #contentContainer {
-  padding-top: 50px;
+nav[shrink='true'] ~ #contentContainer {
+  padding-top: 70px;
 }
 
 // html {

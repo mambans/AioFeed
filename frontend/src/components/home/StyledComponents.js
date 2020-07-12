@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const BlurOverlay = styled.div`
-  height: calc(100vh - 65px);
+  height: calc(100vh - 60px);
   width: 100%;
   position: absolute;
   background: no-repeat center center fixed;
@@ -14,11 +14,11 @@ export const BlurOverlay = styled.div`
   background-size: cover;
   padding: 0 !important;
   filter: blur(5px);
-  top: 65px;
+  top: 60px;
 `;
 
 export const TopBlurOverlay = styled.div`
-  height: 65px;
+  height: 60px;
   width: 100%;
   position: absolute;
   background: no-repeat center center fixed;

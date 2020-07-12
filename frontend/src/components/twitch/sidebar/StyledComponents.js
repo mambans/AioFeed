@@ -45,7 +45,7 @@ export const Styledsidebar = styled.div`
   overflow: auto;
   scrollbar-color: #232526 transparent !important;
   scrollbar-width: thin !important;
-  max-height: calc(100vh - (65px + 50px));
+  max-height: calc(100vh - (60px + 50px));
   padding-bottom: 2px;
   z-index: 2;
   left: 0;

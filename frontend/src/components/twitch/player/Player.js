@@ -79,13 +79,13 @@ export default () => {
           chatwidth: DEFAULT_CHAT_WIDTH,
           switchChatSide: false,
           hideChat: false,
-        },
+        }
   );
 
   const hideChatSaved = useRef(
     getLocalstorage('TwitchChatState')
       ? getLocalstorage('TwitchChatState').hideChat || false
-      : false,
+      : false
   );
   const [isFullscreen, setIsFullscreen] = useState();
   const [resizeActive, setResizeActive] = useState(false);
@@ -126,7 +126,7 @@ export default () => {
         time: time.length >= 1 ? time : null,
         allowfullscreen: true,
         parent: ['aiofeed.com'],
-      }),
+      })
     );
 
     return () => {
@@ -145,7 +145,7 @@ export default () => {
           const streamInfo = await fetchStreamInfo(
             twitchVideoPlayer && twitchVideoPlayer.getChannelId()
               ? { user_id: twitchVideoPlayer.getChannelId() }
-              : { user_login: channelName },
+              : { user_login: channelName }
           );
           if (streamInfo.length) setStreamInfo(streamInfo);
         }
@@ -168,7 +168,7 @@ export default () => {
         addNotification([{ ...stream, notiStatus: type }]);
       }
     },
-    [addNotification],
+    [addNotification]
   );
 
   const removeFromStreamNotisFromPlayer = useCallback(() => {
@@ -177,11 +177,11 @@ export default () => {
     };
     if (streams.data.length >= 1) {
       const newStreams = streams.data.filter(
-        (item) => item.user_name.toLowerCase() !== channelName.toLowerCase(),
+        (item) => item.user_name.toLowerCase() !== channelName.toLowerCase()
       );
       localStorage.setItem(
         'newLiveStreamsFromPlayer',
-        JSON.stringify({ data: newStreams, updated: Date.now() }),
+        JSON.stringify({ data: newStreams, updated: Date.now() })
       );
     }
   }, [channelName]);
@@ -200,7 +200,7 @@ export default () => {
       const LIVEStreamInfo = await fetchStreamInfo(
         twitchVideoPlayer && twitchVideoPlayer.getChannelId()
           ? { user_id: twitchVideoPlayer.getChannelId() }
-          : { user_login: channelName },
+          : { user_login: channelName }
       );
       if (LIVEStreamInfo) {
         const streamWithGame = await addGameName({
@@ -217,7 +217,7 @@ export default () => {
       } else {
         const streamWithGameAndProfile = await fetchChannelInfo(
           twitchVideoPlayer.getChannelId(),
-          true,
+          true
         );
         setStreamInfo(streamWithGameAndProfile);
         return streamWithGameAndProfile;
@@ -245,14 +245,14 @@ export default () => {
             const streams = getLocalstorage('newLiveStreamsFromPlayer') || { data: [] };
             const newStreams = [...streams.data.filter((item) => item), res];
             const filteredStreams = newStreams.filter(
-              (item, index, self) => index === self.findIndex((t) => t.user_id === item.user_id),
+              (item, index, self) => index === self.findIndex((t) => t.user_id === item.user_id)
             );
             localStorage.setItem(
               'newLiveStreamsFromPlayer',
               JSON.stringify({
                 data: filteredStreams,
                 updated: Date.now(),
-              }),
+              })
             );
           }
           if (!refreshStreamInfoTimer.current) {
@@ -361,7 +361,7 @@ export default () => {
       }, 2000);
     },
     250,
-    { leading: true, trailing: false },
+    { leading: true, trailing: false }
   );
 
   useEffect(() => {
@@ -425,11 +425,11 @@ export default () => {
         });
         localStorage.setItem(
           'TwitchChatState',
-          JSON.stringify({ ...chatState, chatwidth: newWidth }),
+          JSON.stringify({ ...chatState, chatwidth: newWidth })
         );
       }
     },
-    [resizeActive, chatState],
+    [resizeActive, chatState]
   );
 
   return (
@@ -453,8 +453,8 @@ export default () => {
           resizeActive={resizeActive}
           switched={chatState.switchChatSide}
           style={{
-            height: visible ? 'calc(100vh - 85px)' : '100vh',
-            top: visible ? '85px' : '0',
+            height: visible ? 'calc(100vh - 70px)' : '100vh',
+            top: visible ? '70px' : '0',
           }}
           switchedChatState={String(chatState.switchChatSide)}
           hidechat={chatState.hideChat}
@@ -502,7 +502,7 @@ export default () => {
                               JSON.stringify({
                                 ...chatState,
                                 switchChatSide: !chatState.switchChatSide,
-                              }),
+                              })
                             );
                             setChatState((curr) => ({
                               ...curr,
@@ -632,7 +632,7 @@ export default () => {
                           time: time.length >= 1 ? time : null,
                           allowfullscreen: true,
                           parent: ['aiofeed.com'],
-                        }),
+                        })
                       );
                     }}
                   />
@@ -676,7 +676,7 @@ export default () => {
                           JSON.stringify({
                             ...chatState,
                             switchChatSide: !chatState.switchChatSide,
-                          }),
+                          })
                         );
                         setChatState((curr) => ({
                           ...curr,
@@ -696,7 +696,7 @@ export default () => {
 
                           localStorage.setItem(
                             'TwitchChatState',
-                            JSON.stringify({ ...current, hideChat: newValue }),
+                            JSON.stringify({ ...current, hideChat: newValue })
                           );
 
                           return { ...current, hideChat: newValue };
@@ -724,7 +724,7 @@ export default () => {
                         JSON.stringify({
                           ...chatState,
                           switchChatSide: !chatState.switchChatSide,
-                        }),
+                        })
                       );
                       setChatState((curr) => ({
                         ...curr,
@@ -756,7 +756,7 @@ export default () => {
                       hideChatSaved.current = newValue;
                       localStorage.setItem(
                         'TwitchChatState',
-                        JSON.stringify({ ...current, hideChat: newValue }),
+                        JSON.stringify({ ...current, hideChat: newValue })
                       );
                       return { ...current, hideChat: newValue };
                     });
@@ -860,8 +860,8 @@ export default () => {
         <VideoAndChatContainer
           id='twitch-embed'
           style={{
-            height: visible ? 'calc(100vh - 85px)' : '100vh',
-            top: visible ? '85px' : '0',
+            height: visible ? 'calc(100vh - 70px)' : '100vh',
+            top: visible ? '70px' : '0',
             display: 'unset',
           }}
         >

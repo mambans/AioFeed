@@ -77,13 +77,21 @@ export const ToggleSwitchChatSide = styled(MdCompareArrows).attrs({ size: 30 })`
 `;
 
 export const PlayerNavbar = styled.div`
-  height: 35px;
   background: #0000005c;
   display: flex;
   justify-content: center;
   align-content: center;
   align-items: center;
   align-self: center;
+
+  top: 10px;
+  position: fixed;
+  width: 450px;
+  left: 50%;
+  margin-left: -225px;
+  height: 50px;
+  border-radius: 25px;
+  z-index: 3;
 
   button,
   a.btn {
@@ -259,8 +267,8 @@ export const InfoDisplay = styled.div`
   }
 
   img {
-    height: 65px;
-    width: 65px;
+    height: 60px;
+    width: 60px;
     border-radius: 50%;
     grid-area: logo;
   }
@@ -434,8 +442,8 @@ export const ShowNavbarBtn = styled(Button)`
 `;
 
 export const NavigateBack = styled(Button)`
-  left: 0;
-  position: absolute;
+  /* left: 0;
+  position: absolute; */
 `;
 
 export const ResizeDevider = styled.div`

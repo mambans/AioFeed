@@ -1,9 +1,10 @@
 .navbar.navbar-expand-lg.navbar-dark.bg-dark {
   //height: 75px;
-  height: 65px;
+  height: 60px;
   width: 100%;
   // background-color: transparent !important;
-  background: var(--navigationbarBackground) !important;
+  // background: var(--navigationbarBackground) !important;
+  background: transparent !important;
 }
 
 a.nav-link {
@@ -12,16 +13,17 @@ a.nav-link {
 
 nav[mode='fixed'].navbar.navbar-expand-lg.navbar-dark.bg-dark {
   position: fixed;
-  top: 0;
-  z-index: 1000;
+  top: 10px;
+  z-index: 2;
 }
 
 nav[shrink='true'].navbar.navbar-expand-lg.navbar-dark.bg-dark {
   height: 50px;
-  padding: 0 30px 0 10px !important;
+  // padding: 0 30px 0 10px !important;
   // background-color: hsla(0, 0%, 0%, 0.7) !important;
   // background-color: transparent !important;
-  background-color: #0000005c !important;
+  // background-color: #0000005c !important;
+  background-color: transparent !important;
   // background: var(--navigationbarBackgroundFixed) !important;
 
   a {
@@ -79,7 +81,7 @@ nav {
 .logo-link.nav-link {
   color: var(--navTextColorActive);
   font-size: 1.3rem;
-  margin-right: 95px;
+  // margin-right: 95px;
 }
 
 #responsive-navbar-nav {

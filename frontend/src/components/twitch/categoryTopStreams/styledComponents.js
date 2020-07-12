@@ -38,7 +38,7 @@ export const GameListUlContainer = styled.ul`
   list-style: none;
   padding-left: 0.75rem;
   margin: 0;
-  position: absolute;
+  position: ${({ position }) => position || 'absolute'};
   background: var(--popupListsBackground) !important;
   box-shadow: var(--refreshButtonShadow);
   width: 310px;
@@ -52,7 +52,7 @@ export const GameListUlContainer = styled.ul`
   overflow-x: scroll;
   overflow-x: hidden;
   border: none !important;
-  z-index: 4;
+  z-index: 5;
 
   li {
     display: flex;
@@ -160,6 +160,7 @@ export const SearchGameForm = styled.form`
     direction === 'right' ? (open ? '0px' : '185px') : 0};
   z-index: 4;
   height: max-content;
+
 
   li {
     button.VodButton,

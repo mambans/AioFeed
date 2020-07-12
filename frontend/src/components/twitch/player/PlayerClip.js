@@ -1,17 +1,17 @@
-import { CSSTransition } from "react-transition-group";
-import { Link } from "react-router-dom";
-import { MdAccountCircle } from "react-icons/md";
-import { MdVerticalAlignBottom } from "react-icons/md";
-import { useParams } from "react-router-dom";
-import React, { useContext, useEffect } from "react";
+import { CSSTransition } from 'react-transition-group';
+import { Link } from 'react-router-dom';
+import { MdAccountCircle } from 'react-icons/md';
+import { MdVerticalAlignBottom } from 'react-icons/md';
+import { useParams } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
 
-import NavigationContext from "./../../navigation/NavigationContext";
+import NavigationContext from './../../navigation/NavigationContext';
 import {
   VideoAndChatContainer,
   StyledVideo,
   PlayerNavbar,
   ShowNavbarBtn,
-} from "./StyledComponents";
+} from './StyledComponents';
 
 export default () => {
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
@@ -19,13 +19,13 @@ export default () => {
   document.title = `${channelName} | Clip -${videoId}`;
 
   useEffect(() => {
-    setShrinkNavbar("true");
+    setShrinkNavbar('true');
     setFooterVisible(false);
-    document.documentElement.style.overflow = "hidden";
+    document.documentElement.style.overflow = 'hidden';
 
     return () => {
-      document.documentElement.style.overflow = "visible";
-      setShrinkNavbar("false");
+      document.documentElement.style.overflow = 'visible';
+      setShrinkNavbar('false');
       setFooterVisible(true);
     };
   }, [setShrinkNavbar, setFooterVisible]);
@@ -45,20 +45,22 @@ export default () => {
       <VideoAndChatContainer
         id='twitch-embed'
         style={{
-          height: visible ? "calc(100vh - 85px)" : "100vh",
-          top: visible ? "85px" : "0",
-          display: "unset",
-        }}>
+          height: visible ? 'calc(100vh - 70px)' : '100vh',
+          top: visible ? '70px' : '0',
+          display: 'unset',
+        }}
+      >
         <ShowNavbarBtn
           variant='dark'
           type='video'
           onClick={() => {
             setVisible(!visible);
-          }}>
+          }}
+        >
           <MdVerticalAlignBottom
             style={{
-              transform: visible ? "rotateX(180deg)" : "unset",
-              right: "10px",
+              transform: visible ? 'rotateX(180deg)' : 'unset',
+              right: '10px',
             }}
             size={30}
             title='Show navbar'

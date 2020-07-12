@@ -1,8 +1,8 @@
-import React from "react";
-import styled, { keyframes } from "styled-components";
-import { Button } from "react-bootstrap";
-import { MdVideocam } from "react-icons/md";
-import { Link } from "react-router-dom";
+import React from 'react';
+import styled, { keyframes } from 'styled-components';
+import { Button } from 'react-bootstrap';
+import { MdVideocam } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 export const ChannelContainer = styled.div`
   min-height: 100vh;
@@ -23,7 +23,7 @@ export const Banner = styled.div`
 export const BannerInfoOverlay = styled.div`
   /* height: 100%; */
   position: absolute;
-  top: 65px;
+  top: 60px;
   width: 100%;
 `;
 
@@ -166,7 +166,7 @@ export const Name = styled.div`
 
 export const SubFeedHeader = styled.div`
   display: grid;
-  grid-template-areas: "sort title gap";
+  grid-template-areas: 'sort title gap';
   grid-template-columns: 20% auto 20%;
   margin: 20px auto 10px auto;
   border-bottom: 1px solid grey;
@@ -178,10 +178,10 @@ export const SubFeedHeader = styled.div`
   }
 `;
 
-export const SortButton = styled(Button).attrs({ variant: "dark" })`
+export const SortButton = styled(Button).attrs({ variant: 'dark' })`
   width: 200px;
   background-color: rgba(20, 23, 25, 0.5);
-  cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 
   &:hover,
   &:active,
@@ -305,7 +305,7 @@ export const BlurredBannerImage = styled.div`
   }
 `;
 
-const StyledVideoChatButton = styled(Button).attrs({ variant: "dark-outline" })`
+const StyledVideoChatButton = styled(Button).attrs({ variant: 'dark-outline' })`
   position: absolute;
   z-index: 2;
   cursor: pointer;

@@ -1,18 +1,18 @@
-import React from "react";
-import styled from "styled-components";
-import { Form, Button } from "react-bootstrap";
-import Alert from "react-bootstrap/Alert";
-import { MdRefresh } from "react-icons/md";
-import { MdFormatIndentDecrease } from "react-icons/md";
-import { FaWindowClose } from "react-icons/fa";
+import React from 'react';
+import styled from 'styled-components';
+import { Form, Button } from 'react-bootstrap';
+import Alert from 'react-bootstrap/Alert';
+import { MdRefresh } from 'react-icons/md';
+import { MdFormatIndentDecrease } from 'react-icons/md';
+import { FaWindowClose } from 'react-icons/fa';
 
 export const StyledNavSidebar = styled.div`
   color: var(--textColor1);
   position: fixed;
-  top: 65px;
+  top: 70px;
   /* right: 0; */
   width: 100px;
-  height: calc(100vh - 65px);
+  height: calc(100vh - 60px);
   background: var(--navigationbarBackground);
   width: 400px;
   border-left: 2px solid #494949;
@@ -33,7 +33,7 @@ export const StyledNavSidebarBackdrop = styled.div`
   position: fixed;
   left: 0;
   height: 100vh;
-  top: 65px;
+  top: 0px;
 `;
 
 export const StyledProfileImg = styled.img`
@@ -131,9 +131,9 @@ export const StyledCreateForm = styled(Form)`
 `;
 
 export const StyledAlert = styled(Alert)`
-  text-align: "center";
-  margin: "auto";
-  opacity: "0.7";
+  text-align: 'center';
+  margin: 'auto';
+  opacity: '0.7';
   padding: 0;
   text-align: center;
 
@@ -142,7 +142,7 @@ export const StyledAlert = styled(Alert)`
   }
 `;
 
-export const ShowAddFormBtn = styled(Button).attrs({ variant: "outline-secondary" })`
+export const ShowAddFormBtn = styled(Button).attrs({ variant: 'outline-secondary' })`
   position: absolute;
   opacity: 0;
   background: #00000073;
@@ -183,7 +183,7 @@ export const StyledSidebarTrigger = styled(MdFormatIndentDecrease).attrs({ size:
   background: #0000003b;
   opacity: 0;
   padding: 2px;
-  transform: ${({ open }) => (open ? "rotateY(180deg)" : "unset")};
+  transform: ${({ open }) => (open ? 'rotateY(180deg)' : 'unset')};
 
   &:hover {
     opacity: 1;
@@ -196,15 +196,15 @@ export const StyledLogoutContiner = styled.div`
   right: 0;
   width: 100%;
   display: grid;
-  grid-template-areas: "page del" "logout del";
+  grid-template-areas: 'page del' 'logout del';
   padding: 5px;
   grid-template-columns: 70% 30%;
   grid-template-rows: 60px;
 
   height: 120px;
 
-  button[label="logout"],
-  a[label="linkAsButton"] {
+  button[label='logout'],
+  a[label='linkAsButton'] {
     /* background-color: #333; */
     width: max-content;
     min-width: 170px;
@@ -226,18 +226,18 @@ export const StyledLogoutContiner = styled.div`
     }
   }
 
-  button[label="logout"] {
+  button[label='logout'] {
     grid-area: logout;
     margin: auto;
   }
 
-  a[label="linkAsButton"] {
+  a[label='linkAsButton'] {
     grid-area: page;
     margin: auto;
   }
 `;
 
-export const DeleteAccountButton = styled(Button).attrs({ variant: "danger" })`
+export const DeleteAccountButton = styled(Button).attrs({ variant: 'danger' })`
   background: hsla(0, 65%, 28%, 1);
   border-radius: 10px;
   width: 52px;
@@ -268,7 +268,7 @@ export const DeleteAccountForm = styled(Form)`
     text-align: center;
   }
 
-  input[type="submit"],
+  input[type='submit'],
   button {
     margin: auto;
     display: flex;
@@ -296,7 +296,7 @@ export const DeleteAccountFooter = styled.div`
 export const StyledConnectContainer = styled.div`
   margin-bottom: 10px;
   display: grid;
-  grid-template-areas: "name disconnect";
+  grid-template-areas: 'name disconnect';
   /* grid-template-columns: 80% 20%; */
   /* grid-template-rows: 50px; */
   grid-template-columns: min-content;
@@ -429,7 +429,7 @@ export const ProfileImgInput = styled.form`
     width: inherit;
   }
 
-  input[type="text"] {
+  input[type='text'] {
     color: white;
     border: none;
     border-bottom: 1px solid white;
@@ -440,7 +440,7 @@ export const ProfileImgInput = styled.form`
     margin: 10px 0;
   }
 
-  input[type="submit"] {
+  input[type='submit'] {
     border-radius: 5px;
     border: thin solid #484848;
     background-color: #035879;
@@ -477,7 +477,7 @@ export const ProfileImgInput = styled.form`
 
 export const StyledAccAlert = styled(Alert)`
   text-align: center;
-  opacity: "0.7";
+  opacity: '0.7';
 
   .close {
     padding: 0 7px 0 0;
@@ -491,7 +491,7 @@ export const ProfileImgContainer = styled.div`
 `;
 
 export const StyledToggleButton = styled(Button)`
-  opacity: ${({ enabled }) => (enabled === "true" ? 1 : 0.35)};
+  opacity: ${({ enabled }) => (enabled === 'true' ? 1 : 0.35)};
   margin: 10px;
   border: none !important;
   box-shadow: none !important;
@@ -499,7 +499,7 @@ export const StyledToggleButton = styled(Button)`
   flex-grow: 1;
 
   flex-basis: ${({ buttonsperrow }) =>
-    buttonsperrow ? `calc((100% - (20px * ${buttonsperrow})) / ${buttonsperrow})` : "auto"};
+    buttonsperrow ? `calc((100% - (20px * ${buttonsperrow})) / ${buttonsperrow})` : 'auto'};
 /* align-items: center; */
   align-self: center;
   display: flex;
@@ -515,10 +515,10 @@ export const StyledToggleButton = styled(Button)`
   }
 
   &:hover {
-    /* box-shadow: 0 0 0 0.1rem ${({ enabled }) => (enabled === "true" ? "green" : "yellow")}; */
-    /* background:${({ enabled }) => (enabled === "true" ? "rgb(150, 0 ,0)" : "rgb(0, 150, 0)")}; */
+    /* box-shadow: 0 0 0 0.1rem ${({ enabled }) => (enabled === 'true' ? 'green' : 'yellow')}; */
+    /* background:${({ enabled }) => (enabled === 'true' ? 'rgb(150, 0 ,0)' : 'rgb(0, 150, 0)')}; */
     background:${({ enabled }) =>
-      enabled === "true" ? "rgba(0, 150, 0, 0.5)" : "rgba(150, 0 ,0, 0.5)"};
+      enabled === 'true' ? 'rgba(0, 150, 0, 0.5)' : 'rgba(150, 0 ,0, 0.5)'};
   }
 `;
 

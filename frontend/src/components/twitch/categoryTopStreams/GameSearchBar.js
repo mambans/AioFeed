@@ -26,6 +26,7 @@ export default (props) => {
     inputStyle = {},
     alwaysFetchNew = false,
     openInNewTab = false,
+    position,
   } = props;
   const navigate = useNavigate();
   const topGames = useRef();
@@ -153,14 +154,14 @@ export default (props) => {
                   return false;
                 },
                 5000,
-                { trailing: false, leading: true },
-              ),
+                { trailing: false, leading: true }
+              )
             );
           }
         },
-        { threshold: 0 },
+        { threshold: 0 }
       ),
-    [],
+    []
   );
 
   const {
@@ -206,9 +207,9 @@ export default (props) => {
             });
         },
         20000,
-        { leading: true, trailing: false },
+        { leading: true, trailing: false }
       ),
-    [observer],
+    [observer]
   );
 
   const handleArrowKey = (e) => {
@@ -219,14 +220,14 @@ export default (props) => {
           setCursor((cursor) => Math.min(Math.max(cursor + 1, 0), filteredGames.length - 1));
           scrollToIfNeeded(ulListRef.current, document.querySelector('.selected'), 'Down');
           manualSet(
-            filteredGames[Math.min(Math.max(cursor + 1, 0), filteredGames?.length - 1)].name,
+            filteredGames[Math.min(Math.max(cursor + 1, 0), filteredGames?.length - 1)].name
           );
         } else if (e.key === 'ArrowUp') {
           e.preventDefault();
           setCursor((cursor) => Math.min(Math.max(cursor - 1, 0), filteredGames.length - 1));
           scrollToIfNeeded(ulListRef.current, document.querySelector('.selected'), 'Up');
           manualSet(
-            filteredGames[Math.min(Math.max(cursor - 1, 0), filteredGames?.length - 1)].name,
+            filteredGames[Math.min(Math.max(cursor - 1, 0), filteredGames?.length - 1)].name
           );
         }
       }
@@ -312,7 +313,7 @@ export default (props) => {
           }}
           unmountOnExit
         >
-          <GameListUlContainer ref={ulListRef}>
+          <GameListUlContainer ref={ulListRef} position={position}>
             <StyledShowAllButton key='showAll'>
               <Link to={'/category/'}>Show all</Link>
             </StyledShowAllButton>
