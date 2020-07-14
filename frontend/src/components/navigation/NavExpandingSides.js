@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const NavExpandingSidesContainer = styled(Nav)`
   min-width: 400px;
   align-items: center;
-  justify-content: ${({ side }) => (side === 'right' ? 'end' : 'start')};
+  justify-content: ${({ side }) => (side === 'right' ? 'flex-end' : 'start')};
   z-index: 5;
 `;
 

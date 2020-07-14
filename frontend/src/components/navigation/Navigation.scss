@@ -55,9 +55,9 @@ nav {
     height: 100%;
 
     .logo {
-      padding: 7px 10px;
+      margin: 0 10px;
       width: unset;
-      height: 100%;
+      height: calc(100% - 14px);
     }
   }
 }
