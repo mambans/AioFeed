@@ -53,8 +53,10 @@ export default ({
   const animationTimer = useRef();
 
   useEffect(() => {
-    const animationStepAmount = Math.max(Math.round((viewers - previousNumber.current) / 1000), 1);
-
+    const animationStepAmount = Math.max(
+      Math.abs(Math.round((viewers - previousNumber.current) / 750)),
+      1
+    );
     const step = (curr) => {
       const curDif = Math.abs(curr - viewers);
       const dec = viewers - curr < 0;
@@ -96,20 +98,28 @@ export default ({
           if (viewers - curr <= 100) {
             clearInterval(animationTimer.current);
             animationTimer.current = setInterval(() => setNumber(step), 20);
-            return curr + animationStepAmount;
+            const newNumber = curr + animationStepAmount;
+            previousNumber.current = newNumber;
+            return newNumber;
           }
 
           requestAnimationFrame(animate);
-          return curr + animationStepAmount;
+          const newNumber = curr + animationStepAmount;
+          previousNumber.current = newNumber;
+          return newNumber;
         } else if (dif < 0) {
           if (curr - viewers <= 100) {
             clearInterval(animationTimer.current);
             animationTimer.current = setInterval(() => setNumber(step), 20);
-            return curr - animationStepAmount;
+            const newNumber = curr - animationStepAmount;
+            previousNumber.current = newNumber;
+            return newNumber;
           }
 
           requestAnimationFrame(animate);
-          return curr - animationStepAmount;
+          const newNumber = curr - animationStepAmount;
+          previousNumber.current = newNumber;
+          return newNumber;
         }
         previousNumber.current = viewers;
         return viewers;
