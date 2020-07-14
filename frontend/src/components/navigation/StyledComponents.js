@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const StyledNavSidebarTrigger = styled.div`
   align-items: center;
@@ -8,6 +8,7 @@ export const StyledNavSidebarTrigger = styled.div`
   height: inherit;
   display: flex;
   justify-content: center;
+  margin-right: 10px;
 
   &:hover {
     svg {
