@@ -44,20 +44,20 @@ export default ({ children }) => {
         return { refreshing: true, error: null, loaded: loaded };
       });
       try {
-        // followedChannels.current = await getFollowedChannels(parseInt(twitchUserId));
-        // followedChannels.current = await GetFollowedChannels();
         followedChannels.current = await GetFollowedChannels();
 
         if (followedChannels.current && followedChannels.current[0]) {
           AddCookie('Twitch-username', followedChannels.current[0].from_name);
         }
-        const streams = await getFollowedOnlineStreams({
-          followedchannels: followedChannels.current,
-          disableNotifications: disableNotifications,
-          previousStreams: oldLiveStreams.current,
-        });
+        const streams =
+          Array.isArray(followedChannels.current) &&
+          (await getFollowedOnlineStreams({
+            followedchannels: followedChannels.current,
+            disableNotifications: disableNotifications,
+            previousStreams: oldLiveStreams.current,
+          }));
 
-        if (streams.status === 200) {
+        if (streams?.status === 200) {
           // setError(null);
           const localStreams = getLocalstorage('newLiveStreamsFromPlayer') || {
             data: [],
@@ -110,7 +110,7 @@ export default ({ children }) => {
               addNotification(flattenedArray);
             });
           }
-        } else if (streams.status === 201) {
+        } else if (streams?.status === 201) {
           // setError(streams.error);
           setLoadingStates({
             refreshing: false,

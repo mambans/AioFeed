@@ -8,7 +8,7 @@ const fetchNextPageOfFollowers = async ({
   followedchannels,
   twitchUserId,
 }) => {
-  if (followedchannels.length < total && PagePagination) {
+  if (followedchannels?.length < total && PagePagination) {
     const nextPage = await API.getFollowedChannels({
       params: {
         from_id: twitchUserId,
