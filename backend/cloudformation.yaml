@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: "2010-09-09"
+AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Globals:
   Api:
@@ -20,7 +20,7 @@ Globals:
       # Header is omitted when false. Checkout [HTTP Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials) for more details on this value.
   Function:
     Runtime: nodejs10.x
-    CodeUri: "."
+    CodeUri: '.'
 Resources:
   UserLogins:
     Type: AWS::DynamoDB::Table
@@ -37,7 +37,7 @@ Resources:
   Login:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Login with AioFeed account and return account info, tokens and monitored vod channels."
+      Description: 'Login with AioFeed account and return account info, tokens and monitored vod channels.'
       Handler: login/handler.handler
       Environment:
         Variables:
@@ -59,7 +59,7 @@ Resources:
   Create:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Create an AioFeed account with tokens and monitored vod channels default to null and empty array."
+      Description: 'Create an AioFeed account with tokens and monitored vod channels default to null and empty array.'
       Handler: create/handler.handler
       Environment:
         Variables:
@@ -83,7 +83,7 @@ Resources:
   Update:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Update a specific column mentioned as a param."
+      Description: 'Update a specific column mentioned as a param.'
       Handler: update/handler.handler
       Environment:
         Variables:
@@ -109,7 +109,7 @@ Resources:
   VodChannelsUpdate:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Update monitored vod channels list."
+      Description: 'Update monitored vod channels list.'
       Handler: vodChannelsUpdate/handler.handler
       Environment:
         Variables:
@@ -133,7 +133,7 @@ Resources:
   UpdateNotisChannelsUpdate:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Update channel list (channels with updated title/game notifications enabled.)."
+      Description: 'Update channel list (channels with updated title/game notifications enabled.).'
       Handler: updateNotisChannelsUpdate/handler.handler
       Environment:
         Variables:
@@ -157,7 +157,7 @@ Resources:
   VodChannelsFetch:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Fetch monitored vod channels list."
+      Description: 'Fetch monitored vod channels list.'
       Handler: vodChannelsFetch/handler.handler
       Environment:
         Variables:
@@ -179,7 +179,7 @@ Resources:
   DeleteAccount:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Delete an account"
+      Description: 'Delete an account'
       Handler: deleteAccount/handler.handler
       Environment:
         Variables:
@@ -203,7 +203,7 @@ Resources:
   ReAuthenticateTwitch:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Re-authenticate Twitch user to Twitch with refresh token (returns access & refresh tokens)."
+      Description: 'Re-authenticate Twitch user to Twitch with refresh token (returns access & refresh tokens).'
       Handler: reAuthenticateTwitch/handler.handler
       Environment:
         Variables:
@@ -227,7 +227,7 @@ Resources:
   RequestTwitchTokens:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Re-authenticate Twitch user to Twitch with authorization code (returns access & refresh tokens)."
+      Description: 'Re-authenticate Twitch user to Twitch with authorization code (returns access & refresh tokens).'
       Handler: requestTwitchTokens/handler.handler
       Events:
         Http:
@@ -241,7 +241,7 @@ Resources:
   MakeTwitchWebhookSubsciption:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Make/initiate a Twitch webhook subsciption"
+      Description: 'Make/initiate a Twitch webhook subsciption'
       Handler: MakeTwitchWebhookSubsciption/handler.handler
       Environment:
         Variables:
@@ -261,7 +261,7 @@ Resources:
   TwitchWebhookCallbackConfirm:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Receive Twitch webhooks and confirm req."
+      Description: 'Receive Twitch webhooks and confirm req.'
       Handler: TwitchWebhookCallbackConfirm/handler.handler
       Events:
         Http:
@@ -272,7 +272,7 @@ Resources:
   TwitchWebhookCallback:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Receive Twitch webhooks notifications."
+      Description: 'Receive Twitch webhooks notifications.'
       Handler: TwitchWebhookCallback/handler.handler
       Events:
         Http:
@@ -295,7 +295,7 @@ Resources:
   YoutubeFetchTokens:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Exchange an authorization code for an access and refresh token"
+      Description: 'Exchange an authorization code for an access and refresh token'
       Handler: YoutubeFetchTokens/handler.handler
       Environment:
         Variables:
@@ -318,7 +318,7 @@ Resources:
   DeleteYotubeData:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Delete all Youtube data associated with the account."
+      Description: 'Delete all Youtube data associated with the account.'
       Handler: DeleteYoutubeData/handler.handler
       Environment:
         Variables:
@@ -340,7 +340,7 @@ Resources:
   DeleteTwitchData:
     Type: AWS::Serverless::Function
     Properties:
-      Description: "Deletes all Twitch data associated with the account."
+      Description: 'Deletes all Twitch data associated with the account.'
       Handler: DeleteTwitchData/handler.handler
       Environment:
         Variables:
