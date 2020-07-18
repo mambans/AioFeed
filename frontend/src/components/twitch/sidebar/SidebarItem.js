@@ -130,7 +130,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
             <Moment interval={1} durationFromNow>
               {stream.started_at}
             </Moment>
-            <FaRegClock size={9} />
+            <FaRegClock size={12} />
           </div>
         </SecondRow>
       </StyledsidebarItem>

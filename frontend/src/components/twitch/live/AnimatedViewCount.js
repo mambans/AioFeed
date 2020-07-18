@@ -138,11 +138,11 @@ export default ({
     <ViewcountContainer title='Viewers' className={className} id={id}>
       <p id='formated'>
         {!disabePrefix && 'Viewers:'} {formatViewcount ? formatViewerNumbers(number) : number}
-        {!disabeIcon && <FaRegEye size={14} />}
+        {!disabeIcon && <FaRegEye size={12} />}
       </p>
       <p id='unformated'>
         {!disabePrefix && 'Viewers:'} {number}
-        {!disabeIcon && <FaRegEye size={14} />}
+        {!disabeIcon && <FaRegEye size={12} />}
       </p>
     </ViewcountContainer>
   );

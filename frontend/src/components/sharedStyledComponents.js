@@ -236,8 +236,7 @@ export const GameContainer = styled.div`
 
     svg {
       color: rgb(200, 200, 200);
-      padding-left: 5px;
-      padding-top: 3px;
+      margin-left: 5px;
       display: flex;
       align-items: center;
     }
