@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getCookie, AddCookie } from '../../util/Utils';
 import autoReauthenticate from './autoReauthenticate';
 
-export default async ({ authKey }) => {
+export default async ({ authKey = getCookie(`AioFeed_AuthKey`) }) => {
   const expireDate = new Date(Date.now() + 20000);
   const access_token = getCookie('Youtube-access_token');
 
