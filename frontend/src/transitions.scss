@@ -222,7 +222,7 @@
   transform: translate3d(-336px, 0, 0);
   margin-right: 0px !important;
   margin-left: 0px !important;
-  transition: opacity 750ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
+  transition: opacity 500ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
     transform 750ms;
 }
 
@@ -233,13 +233,13 @@
   transform: translate3d(0, 0, 0);
   margin-right: 7px !important;
   margin-left: 7px !important;
-  transition: opacity 750ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
+  transition: opacity 500ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
     transform 750ms;
 }
 
 .videoFadeSlide-enter-done {
   opacity: 1;
-  transition: opacity 750ms;
+  transition: opacity 500ms;
 }
 
 .videoFadeSlide-exit {
@@ -249,8 +249,8 @@
   transform: translate3d(0, 0, 0);
   margin-right: 7px !important;
   margin-left: 7px !important;
-  transition: opacity 750ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
-    transform 750ms;
+  transition: opacity 500ms ease 250ms, margin-left 750ms, width 750ms, margin-right 750ms,
+    max-width 750ms, transform 750ms;
 }
 
 .videoFadeSlide-exit-active {
@@ -260,8 +260,8 @@
   transform: translate3d(-336px, 0, 0);
   margin-right: 0px !important;
   margin-left: 0px !important;
-  transition: opacity 750ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
-    transform 750ms;
+  transition: opacity 500ms ease 250ms, margin-left 750ms, width 750ms, margin-right 750ms,
+    max-width 750ms, transform 750ms;
 }
 
 .NavSidebarBackdropFade-enter {
