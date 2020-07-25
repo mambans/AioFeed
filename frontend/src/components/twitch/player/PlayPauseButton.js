@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { FaPlay } from "react-icons/fa";
-import { FaPause } from "react-icons/fa";
+import React, { useState } from 'react';
+import { FaPlay } from 'react-icons/fa';
+import { FaPause } from 'react-icons/fa';
+import useEventListener from '../../../hooks/useEventListener';
 
 export default ({ TwitchPlayer, PlayerUIControlls }) => {
   const [isPaused, setIsPaused] = useState(false);
 
-  const PausePlay = () => {
+  useEventListener('keydown', keyboardEvents, window, window.Twitch.Player.READY);
+  useEventListener('mousedown', mouseEvents, PlayerUIControlls, window.Twitch.Player.READY);
+
+  function PausePlay() {
     if (TwitchPlayer.isPaused()) {
       TwitchPlayer.play();
       setIsPaused(false);
@@ -13,55 +17,32 @@ export default ({ TwitchPlayer, PlayerUIControlls }) => {
       TwitchPlayer.pause();
       setIsPaused(true);
     }
-  };
+  }
 
-  useEffect(() => {
-    const mouseEvents = (e) => {
-      switch (e.button) {
-        case 0:
-          if (TwitchPlayer.isPaused()) {
-            TwitchPlayer.play();
-            setIsPaused(false);
-          }
-          break;
-        default:
-          break;
-      }
-    };
-
-    const keyboardEvents = (e) => {
-      if (e.key === " " || e.key === "Space") {
-        if (!TwitchPlayer.isPaused()) {
-          TwitchPlayer.pause();
-          setIsPaused(true);
-        } else {
+  function mouseEvents(e) {
+    switch (e.button) {
+      case 0:
+        if (TwitchPlayer.isPaused()) {
           TwitchPlayer.play();
           setIsPaused(false);
         }
-      }
-    };
-
-    const addEventListeners = () => {
-      document.body.addEventListener("keydown", keyboardEvents);
-      if (PlayerUIControlls) {
-        PlayerUIControlls.addEventListener("mousedown", mouseEvents);
-        return () => {
-          PlayerUIControlls.removeEventListener("mousedown", mouseEvents);
-        };
-      }
-    };
-
-    if (TwitchPlayer) {
-      TwitchPlayer.addEventListener(window.Twitch.Player.READY, addEventListeners);
-      return () => {
-        TwitchPlayer.removeEventListener(window.Twitch.Player.READY, addEventListeners);
-      };
+        break;
+      default:
+        break;
     }
+  }
 
-    return () => {
-      document.body.removeEventListener("keydown", keyboardEvents);
-    };
-  }, [TwitchPlayer, PlayerUIControlls]);
+  function keyboardEvents(e) {
+    if (e.key === ' ' || e.key === 'Space') {
+      if (!TwitchPlayer.isPaused()) {
+        TwitchPlayer.pause();
+        setIsPaused(true);
+      } else {
+        TwitchPlayer.play();
+        setIsPaused(false);
+      }
+    }
+  }
 
   if (isPaused) {
     return (
@@ -70,7 +51,7 @@ export default ({ TwitchPlayer, PlayerUIControlls }) => {
         id='PausePlay'
         size={30}
         onClick={PausePlay}
-        title={"Play (space)"}
+        title={'Play (space)'}
       />
     );
   } else {
@@ -80,7 +61,7 @@ export default ({ TwitchPlayer, PlayerUIControlls }) => {
         id='PausePlay'
         size={30}
         onClick={PausePlay}
-        title={"Pause (space)"}
+        title={'Pause (space)'}
       />
     );
   }

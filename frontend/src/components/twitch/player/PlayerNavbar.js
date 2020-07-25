@@ -9,84 +9,83 @@ import { Button } from 'react-bootstrap';
 import FollowUnfollowBtn from './../FollowUnfollowBtn';
 import API from '../API';
 
-export default ({ type, channelName, streamInfo, twitchVideoPlayer, setVisible, visible }) => {
-  const [latestVod, setLatestVod] = useState();
+export default ({ channelName, streamInfo, twitchVideoPlayer, setVisible, visible }) => {
+  const [channelInfo, setChannelInfo] = useState(streamInfo);
 
   useEffect(() => {
     (async () => {
       if (
-        type === 'live' &&
-        twitchVideoPlayer &&
-        twitchVideoPlayer.getChannelId() &&
-        !latestVod &&
+        (twitchVideoPlayer?.getChannelId()?.length > 1 ||
+          twitchVideoPlayer?.getVideo()?.length > 1) &&
+        !channelInfo?.id &&
+        !channelInfo?.user_name &&
         visible
       ) {
         await API.getVideos({
           params: {
-            user_id: twitchVideoPlayer.getChannelId(),
+            user_id: twitchVideoPlayer?.getChannelId(),
+            id: twitchVideoPlayer?.getVideo(),
             first: 1,
             type: 'archive',
           },
         })
           .then((res) => {
-            setLatestVod(res.data.data[0]);
+            if (res.data.data[0]) setChannelInfo(res.data.data[0]);
+            document.title = `AF | ${res.data.data[0].user_name || ''} - ${
+              twitchVideoPlayer?.getVideo() || ''
+            }`;
           })
           .catch((error) => {
             console.error(error);
           });
       }
     })();
-  }, [twitchVideoPlayer, visible, type, latestVod, setLatestVod]);
+  }, [twitchVideoPlayer, visible, channelInfo, setChannelInfo]);
 
   return (
     <PlayerNavbar>
-      {/* <NavigateBack onClick={() => navigate(-1)} variant='dark' title='Go back'>
-        <MdArrowBack size={25} />
-        Go back
-      </NavigateBack> */}
       <Button
-        title={`${channelName || (streamInfo && streamInfo.user_name)}'s channel page`}
+        disabled={!channelName && !channelInfo?.user_name}
+        title={`${channelName || channelInfo?.user_name}'s channel page`}
         variant='dark'
+        className='linkWithIcon'
         as={Link}
         to={{
-          pathname: `/${channelName || (streamInfo && streamInfo.user_name)}/channel`,
+          pathname: `/${channelName || channelInfo?.user_name}/channel`,
           state: {
-            p_channelInfos: streamInfo,
-            p_id: twitchVideoPlayer ? twitchVideoPlayer.getChannelId() : null,
+            p_channelInfos: channelInfo,
+            p_id: twitchVideoPlayer?.getChannelId(),
           },
         }}
       >
         <MdAccountCircle size={26} />
-        {/* {channelName || (streamInfo && streamInfo.user_name)}'s channel page */}
         Channel page
       </Button>
-      {streamInfo && (
+      {channelInfo && (
         <FollowUnfollowBtn
-          channel={channelName || (streamInfo && streamInfo.user_name)}
-          id={streamInfo && streamInfo.user_id}
+          channel={channelName || channelInfo?.user_name}
+          id={channelInfo?.user_id}
           style={{ opacity: '1' }}
         />
       )}
       <Button
-        disabled={!latestVod}
+        disabled={!channelInfo}
         variant='dark'
         as={Link}
         onClick={() => {
           setVisible(false);
         }}
         to={
-          latestVod
+          channelInfo
             ? {
-                pathname: `/${latestVod.user_name}/videos/${latestVod.id}`,
+                pathname: `/${channelInfo.user_name}/videos/${channelInfo.id}`,
                 state: {
-                  p_title: latestVod.title,
-                  p_channel: latestVod.user_name,
+                  p_title: channelInfo.title,
+                  p_channel: channelInfo.user_name,
                 },
               }
             : {
-                pathname: `https://twitch.tv/${
-                  streamInfo ? streamInfo.user_name : channelName
-                }/videos`,
+                pathname: `https://twitch.tv/${channelInfo?.user_name || channelName}/videos`,
               }
         }
         style={{
@@ -98,12 +97,12 @@ export default ({ type, channelName, streamInfo, twitchVideoPlayer, setVisible, 
         Latest Vod
       </Button>
       <a
-        disabled={!latestVod}
+        disabled={!channelInfo}
         className='linkWithIcon'
         href={
-          latestVod
-            ? latestVod.url
-            : `https://twitch.tv/${streamInfo ? streamInfo.user_name : channelName}/videos`
+          channelInfo
+            ? channelInfo.url
+            : `https://twitch.tv/${channelInfo?.user_name || channelName}/videos`
         }
         alt=''
         title='Open vod on Twitch'

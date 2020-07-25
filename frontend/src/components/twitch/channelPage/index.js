@@ -38,6 +38,7 @@ import disconnectTwitch from '../disconnectTwitch';
 import AccountContext from '../../account/AccountContext';
 import FeedsContext from '../../feed/FeedsContext';
 import ReAuthenticateButton from '../../navigation/sidebar/ReAuthenticateButton';
+import useEventListener from '../../../hooks/useEventListener';
 
 export default () => {
   const { channelName } = useParams();
@@ -64,6 +65,9 @@ export default () => {
   const previosClipsPage = useRef();
   const clipPagination = useRef();
   const twitchPlayer = useRef();
+
+  useEventListener(window.Twitch.Player.ONLINE, onlineEvents, twitchPlayer.current);
+  useEventListener(window.Twitch.Player.OFFLINE, offlineEvents, twitchPlayer.current);
 
   const getIdFromName = useCallback(async () => {
     await API.getUser({
@@ -136,7 +140,7 @@ export default () => {
           });
       });
     },
-    [numberOfVideos, sortVodsBy, channelId, vods],
+    [numberOfVideos, sortVodsBy, channelId, vods]
   );
 
   const fetchClips = useCallback(
@@ -190,7 +194,7 @@ export default () => {
           });
       });
     },
-    [numberOfVideos, sortClipsBy, channelId, clips],
+    [numberOfVideos, sortClipsBy, channelId, clips]
   );
 
   const getChannelInfo = useCallback(async () => {
@@ -220,7 +224,7 @@ export default () => {
     })();
   }, [channelInfo, getChannelInfo, getIdFromName, channelId, twitchToken]);
 
-  const OnlineEvents = useCallback(async () => {
+  async function onlineEvents() {
     console.log('Stream is Online');
     document.title = `AF | ${channelName}'s Channel (Live)`;
 
@@ -229,7 +233,7 @@ export default () => {
         const streamInfo = await fetchStreamInfo(
           twitchPlayer.current && twitchPlayer.current.getChannelId()
             ? { user_id: twitchPlayer.current.getChannelId() }
-            : { user_login: channelName },
+            : { user_login: channelName }
         );
         if (streamInfo) {
           setStreamInfo(streamInfo);
@@ -237,43 +241,27 @@ export default () => {
         }
       }
     } catch (error) {
-      console.log('OnlineEvents -> error', error);
+      console.log('onlineEvents -> error', error);
     }
-  }, [channelName]);
+  }
 
-  const offlineEvents = () => {
+  function offlineEvents() {
     console.log('Stream is Offline');
     setIsLive(false);
-  };
+  }
 
   useEffect(() => {
-    try {
-      if (twitchToken) {
-        if (!twitchPlayer.current) {
-          twitchPlayer.current = new window.Twitch.Player('twitch-embed', {
-            width: `${300 * 1.777777777777778}px`,
-            height: '300px',
-            theme: 'dark',
-            layout: 'video',
-            channel: channelName,
-            muted: true,
-          });
-        }
-
-        if (twitchPlayer.current) {
-          twitchPlayer.current.addEventListener(window.Twitch.Player.ONLINE, OnlineEvents);
-          twitchPlayer.current.addEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
-        }
-
-        return () => {
-          twitchPlayer.current.removeEventListener(window.Twitch.Player.ONLINE, OnlineEvents);
-          twitchPlayer.current.removeEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
-        };
-      }
-    } catch (error) {
-      console.log('error', error);
+    if (twitchToken && !twitchPlayer.current) {
+      twitchPlayer.current = new window.Twitch.Player('twitch-embed', {
+        width: `${300 * 1.777777777777778}px`,
+        height: '300px',
+        theme: 'dark',
+        layout: 'video',
+        channel: channelName,
+        muted: true,
+      });
     }
-  }, [channelName, OnlineEvents, twitchToken]);
+  }, [channelName, twitchToken]);
 
   useEffect(() => {
     if (twitchToken && channelId && !vods && channelId !== 'Not Found') {

@@ -12,6 +12,7 @@ import { AddCookie, getCookie, getLocalstorage } from '../../../util/Utils';
 import LiveStreamsPromise from './LiveStreamsPromise';
 import OfflineStreamsPromise from './OfflineStreamsPromise';
 import UpdatedStreamsPromise from './UpdatedStreamsPromise';
+import useEventListener from '../../../hooks/useEventListener';
 
 const REFRESH_RATE = 25; // seconds
 
@@ -36,6 +37,10 @@ export default ({ children }) => {
   const newlyAddedStreams = useRef([]);
   const timer = useRef();
   const refreshAfterUnfollowTimer = useRef();
+
+  useEventListener('focus', windowFocusHandler);
+  useEventListener('blur', windowBlurHandler);
+  useEventListener('storage', listener);
 
   const refresh = useCallback(
     async (disableNotifications = false) => {
@@ -137,33 +142,21 @@ export default ({ children }) => {
     ]
   );
 
-  useEffect(() => {
-    const windowFocusHandler = () => {
-      document.title = 'AioFeed | Feed';
-      resetNewlyAddedStreams();
-    };
+  function windowFocusHandler() {
+    document.title = 'AioFeed | Feed';
+    resetNewlyAddedStreams();
+  }
 
-    const windowBlurHandler = () => {
-      if (document.title !== 'AioFeed | Feed') document.title = 'AioFeed | Feed';
-      resetNewlyAddedStreams();
-    };
+  function windowBlurHandler() {
+    if (document.title !== 'AioFeed | Feed') document.title = 'AioFeed | Feed';
+    resetNewlyAddedStreams();
+  }
 
-    const listener = (e) => {
-      if (e.storageArea === localStorage && e.key === 'newLiveStreamsFromPlayer') {
-        refresh();
-      }
-    };
-
-    window.addEventListener('focus', windowFocusHandler);
-    window.addEventListener('blur', windowBlurHandler);
-    window.addEventListener('storage', listener);
-
-    return () => {
-      window.removeEventListener('focus', windowFocusHandler);
-      window.removeEventListener('blur', windowBlurHandler);
-      window.removeEventListener('storage', listener);
-    };
-  }, [refresh]);
+  function listener(e) {
+    if (e.storageArea === localStorage && e.key === 'newLiveStreamsFromPlayer') {
+      refresh();
+    }
+  }
 
   function resetNewlyAddedStreams() {
     newlyAddedStreams.current = [];

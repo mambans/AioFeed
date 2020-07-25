@@ -11,6 +11,8 @@ import {
 import StyledLoadingList from './../../twitch/categoryTopStreams/LoadingList';
 import ChannelListElement from './ChannelListElement';
 import { getLocalstorage } from '../../../util/Utils';
+// import useEventListener from '../../../hooks/useEventListener';
+import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 
 export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
   const parentRect = parentDiv.getBoundingClientRect();
@@ -66,6 +68,29 @@ export default (data) => {
   );
   const inputRef = useRef();
   const ulListRef = useRef();
+
+  useLockBodyScroll(listIsOpen);
+
+  // useEventListener(
+  //   'focus',
+  //   () => {
+  //     setListIsOpen(true);
+  //   },
+  //   inputRef.current
+  // );
+
+  useEffect(() => {
+    const inputField = inputRef.current;
+    inputField.addEventListener('focus', () => {
+      setListIsOpen(true);
+    });
+
+    return () => {
+      inputField.removeEventListener('focus', () => {
+        setListIsOpen(true);
+      });
+    };
+  }, []);
 
   const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue);
@@ -142,19 +167,6 @@ export default (data) => {
     resetChannel();
     window.open(`https://www.youtube.com/channel/${returnChannelId()}`);
   };
-
-  useEffect(() => {
-    const inputField = inputRef.current;
-    inputField.addEventListener('focus', () => {
-      setListIsOpen(true);
-    });
-
-    return () => {
-      inputField.removeEventListener('focus', () => {
-        setListIsOpen(true);
-      });
-    };
-  }, []);
 
   useEffect(() => {
     if (listIsOpen || !channels.current) {

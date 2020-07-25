@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { MdHighQuality } from 'react-icons/md';
 import { GrRefresh } from 'react-icons/gr';
+import useEventListener from '../../../hooks/useEventListener';
 
 const HEIGHT = 275;
 const WIDTH = 250;
@@ -68,31 +69,22 @@ export default ({
   DEFAULT_CHAT_WIDTH,
 }) => {
   const [show, setShow] = useState();
+  useEventListener('contextmenu', toggleShowHide, PlayerUIControlls);
 
-  useEffect(() => {
-    const toggleShowHide = (e) => {
-      e.preventDefault();
-      showAndResetTimer();
-      const boundary = PlayerUIControlls.getBoundingClientRect();
-      const mouseX = e.clientX - boundary.left;
-      const mouseY = e.clientY;
+  function toggleShowHide(e) {
+    e.preventDefault();
+    showAndResetTimer();
+    const boundary = PlayerUIControlls.getBoundingClientRect();
+    const mouseX = e.clientX - boundary.left;
+    const mouseY = e.clientY;
 
-      setShow({
-        show: true,
-        x: mouseX + WIDTH > boundary.width ? mouseX - (mouseX + WIDTH - boundary.width) : mouseX,
-        y:
-          mouseY + HEIGHT > boundary.bottom ? mouseY - (mouseY + HEIGHT - boundary.bottom) : mouseY,
-      });
-      return false;
-    };
-
-    if (PlayerUIControlls) {
-      PlayerUIControlls.addEventListener('contextmenu', toggleShowHide);
-      return () => {
-        PlayerUIControlls.removeEventListener('contextmenu', toggleShowHide);
-      };
-    }
-  }, [setShow, PlayerUIControlls, showAndResetTimer]);
+    setShow({
+      show: true,
+      x: mouseX + WIDTH > boundary.width ? mouseX - (mouseX + WIDTH - boundary.width) : mouseX,
+      y: mouseY + HEIGHT > boundary.bottom ? mouseY - (mouseY + HEIGHT - boundary.bottom) : mouseY,
+    });
+    return false;
+  }
 
   if (show && show.show) {
     return (
@@ -132,7 +124,7 @@ export default ({
                     chatWidth: DEFAULT_CHAT_WIDTH,
                     switchChatSide: false,
                     hideChat: false,
-                  }),
+                  })
                 );
               }}
             >

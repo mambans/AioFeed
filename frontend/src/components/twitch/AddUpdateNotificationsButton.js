@@ -1,13 +1,14 @@
-import { TiFlashOutline } from "react-icons/ti";
-import { TiFlash } from "react-icons/ti";
-import { IoIosFlashOff } from "react-icons/io";
-import axios from "axios";
-import React, { useState, useContext, useRef, useEffect } from "react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { TiFlashOutline } from 'react-icons/ti';
+import { TiFlash } from 'react-icons/ti';
+import { IoIosFlashOff } from 'react-icons/io';
+import axios from 'axios';
+import React, { useState, useContext, useRef } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import AccountContext from "./../account/AccountContext";
-import { VodAddRemoveButton } from "./../sharedStyledComponents";
-import { getLocalstorage } from "../../util/Utils";
+import AccountContext from './../account/AccountContext';
+import { VodAddRemoveButton } from './../sharedStyledComponents';
+import { getLocalstorage } from '../../util/Utils';
+import useEventListener from '../../hooks/useEventListener';
 
 /**
  * @param {String} channel - channel name
@@ -17,7 +18,7 @@ import { getLocalstorage } from "../../util/Utils";
  */
 
 export default ({ channel, loweropacity, marginright, size = 24 }) => {
-  const channels = getLocalstorage("UpdateNotificationsChannels") || [];
+  const channels = getLocalstorage('UpdateNotificationsChannels') || [];
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
   const [updateNotificationEnabled, setUpdateNotificationEnabled] = useState(
@@ -25,12 +26,15 @@ export default ({ channel, loweropacity, marginright, size = 24 }) => {
   );
   const vodButton = useRef();
 
+  useEventListener('mouseenter', handleMouseOver, vodButton.current);
+  useEventListener('mouseleave', handleMouseOut, vodButton.current);
+
   async function removeChannel(channel) {
     try {
-      const channelss = new Set(getLocalstorage("UpdateNotificationsChannels") || []);
+      const channelss = new Set(getLocalstorage('UpdateNotificationsChannels') || []);
       channelss.delete(channel.toLowerCase());
 
-      localStorage.setItem("UpdateNotificationsChannels", JSON.stringify(Array.from(channelss)));
+      localStorage.setItem('UpdateNotificationsChannels', JSON.stringify(Array.from(channelss)));
       await axios
         .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/updatechannels`, {
           username: username,
@@ -47,11 +51,11 @@ export default ({ channel, loweropacity, marginright, size = 24 }) => {
 
   async function addChannel() {
     try {
-      const existing = new Set(getLocalstorage("UpdateNotificationsChannels") || []);
+      const existing = new Set(getLocalstorage('UpdateNotificationsChannels') || []);
 
       const newChannels = Array.from(existing.add(channel.toLowerCase()));
 
-      localStorage.setItem("UpdateNotificationsChannels", JSON.stringify(newChannels));
+      localStorage.setItem('UpdateNotificationsChannels', JSON.stringify(newChannels));
       await axios
         .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/updatechannels`, {
           username: username,
@@ -62,43 +66,31 @@ export default ({ channel, loweropacity, marginright, size = 24 }) => {
           console.error(error);
         });
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
     }
   }
 
-  useEffect(() => {
-    const handleMouseOver = () => {
-      setIsHovered(true);
-    };
+  function handleMouseOver() {
+    setIsHovered(true);
+  }
 
-    const handleMouseOut = () => {
-      setIsHovered(null);
-    };
-
-    if (vodButton.current) {
-      const refEle = vodButton.current;
-      refEle.addEventListener("mouseenter", handleMouseOver);
-      refEle.addEventListener("mouseleave", handleMouseOut);
-
-      return () => {
-        refEle.removeEventListener("mouseenter", handleMouseOver);
-        refEle.removeEventListener("mouseleave", handleMouseOut);
-      };
-    }
-  }, []);
+  function handleMouseOut() {
+    setIsHovered(null);
+  }
 
   return (
     <OverlayTrigger
-      key={"bottom"}
-      placement={"bottom"}
+      key={'bottom'}
+      placement={'bottom'}
       delay={{ show: 500, hide: 0 }}
       overlay={
-        <Tooltip id={`tooltip-${"bottom"}`}>
+        <Tooltip id={`tooltip-${'bottom'}`}>
           {updateNotificationEnabled
             ? `Disable ${channel} stream title/game update notification.`
             : `Enable ${channel} stream title/game update notification`}
         </Tooltip>
-      }>
+      }
+    >
       <VodAddRemoveButton
         className='StreamUpdateNoitificationsButton'
         marginright={marginright}
@@ -114,7 +106,8 @@ export default ({ channel, loweropacity, marginright, size = 24 }) => {
             addChannel({ channel, username, authKey });
             setUpdateNotificationEnabled(true);
           }
-        }}>
+        }}
+      >
         {updateNotificationEnabled ? (
           isHovered ? (
             <IoIosFlashOff size={size} color='red' />

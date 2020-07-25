@@ -16,7 +16,7 @@ import {
 export default () => {
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const { videoId, channelName } = useParams();
-  document.title = `${channelName} | Clip -${videoId}`;
+  document.title = `AF | ${channelName} - ${videoId}`;
 
   useEffect(() => {
     setShrinkNavbar('true');
@@ -34,12 +34,10 @@ export default () => {
     <>
       <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
         <PlayerNavbar>
-          {channelName && (
-            <Link to={`/${channelName}/channel`}>
-              <MdAccountCircle size={20} />
-              {channelName}'s channel page
-            </Link>
-          )}
+          <Link to={`/${channelName}/channel`} className='linkWithIcon' disabled={!channelName}>
+            <MdAccountCircle size={26} />
+            Channel page
+          </Link>
         </PlayerNavbar>
       </CSSTransition>
       <VideoAndChatContainer

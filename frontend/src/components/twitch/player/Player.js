@@ -50,6 +50,7 @@ import ReAuthenticateButton from '../../navigation/sidebar/ReAuthenticateButton'
 import AccountContext from '../../account/AccountContext';
 import FeedsContext from '../../feed/FeedsContext';
 import disconnectTwitch from '../disconnectTwitch';
+import useEventListener from '../../../hooks/useEventListener';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.1, 175);
 
@@ -100,6 +101,30 @@ export default () => {
   const isLive = useRef();
   // const locatorageWidthTimer = useRef();
 
+  useEventListener(window.Twitch.Player.ONLINE, onlineEvents, twitchVideoPlayer);
+  useEventListener(window.Twitch.Player.OFFLINE, offlineEvents, twitchVideoPlayer);
+  useEventListener(window.Twitch.Player.PLAYING, playingEvents, twitchVideoPlayer);
+
+  useEventListener('mouseleave', handleMouseOut, PlayerUIControlls.current);
+  useEventListener('dblclick', toggleFullScreen, PlayerUIControlls.current);
+  useEventListener('keydown', keyboardEvents);
+  useEventListener('unload', removeFromStreamNotisFromPlayer);
+
+  const showAndResetTimer = throttle(
+    () => {
+      setShowControlls(true);
+      clearTimeout(fadeTimer.current);
+
+      fadeTimer.current = setTimeout(() => {
+        setShowControlls(false);
+      }, 2000);
+    },
+    150,
+    { leading: true, trailing: false }
+  );
+
+  useEventListener(['mousemove', 'mousedown', 'touchmove'], showAndResetTimer);
+
   useEffect(() => {
     if (channelName && !videoId && !streamInfo) {
       document.title = `AF | ${channelName} player`;
@@ -139,6 +164,12 @@ export default () => {
   }, [setShrinkNavbar, setFooterVisible, setVisible, channelName, videoId, time]);
 
   useEffect(() => {
+    return () => {
+      clearTimeout(fadeTimer.current);
+    };
+  }, []);
+
+  useEffect(() => {
     if (videoId && !channelName) {
       const timer = setTimeout(async () => {
         if (twitchVideoPlayer) {
@@ -147,7 +178,7 @@ export default () => {
               ? { user_id: twitchVideoPlayer.getChannelId() }
               : { user_login: channelName }
           );
-          if (streamInfo.length) setStreamInfo(streamInfo);
+          if (streamInfo) setStreamInfo(streamInfo);
         }
       }, 5000);
       return () => {
@@ -171,7 +202,7 @@ export default () => {
     [addNotification]
   );
 
-  const removeFromStreamNotisFromPlayer = useCallback(() => {
+  function removeFromStreamNotisFromPlayer() {
     const streams = getLocalstorage('newLiveStreamsFromPlayer') || {
       data: [],
     };
@@ -184,16 +215,16 @@ export default () => {
         JSON.stringify({ data: newStreams, updated: Date.now() })
       );
     }
-  }, [channelName]);
+  }
 
-  const offlineEvents = useCallback(async () => {
+  function offlineEvents() {
     console.log('Stream is Offline');
     isLive.current = false;
     setShowUIControlls(false);
     clearInterval(refreshStreamInfoTimer.current);
     setStreamInfo(null);
     removeFromStreamNotisFromPlayer();
-  }, [removeFromStreamNotisFromPlayer]);
+  }
 
   const GetAndSetStreamInfo = useCallback(async () => {
     if (twitchVideoPlayer) {
@@ -225,14 +256,14 @@ export default () => {
     }
   }, [twitchVideoPlayer, streamInfo, channelName]);
 
-  const onlineEvents = useCallback(async () => {
+  async function onlineEvents() {
     console.log('Stream is Online');
     isLive.current = true;
     document.title = `AF | ${channelName} -LIVE`;
 
     try {
       if (getCookie('Twitch-access_token')) {
-        GetAndSetStreamInfo().then((res) => {
+        await GetAndSetStreamInfo().then((res) => {
           setFavion(res.profile_img_url);
           if (
             streamInfo === null &&
@@ -269,29 +300,14 @@ export default () => {
     return () => {
       setFavion();
     };
-  }, [streamInfo, channelName, addNoti, GetAndSetStreamInfo]);
+  }
 
-  const playingEvents = useCallback(() => {
+  function playingEvents() {
     console.log('playingEvents');
     if (twitchVideoPlayer) {
       setShowUIControlls(true);
     }
-  }, [twitchVideoPlayer]);
-
-  useEffect(() => {
-    if (twitchVideoPlayer) {
-      twitchVideoPlayer.addEventListener(window.Twitch.Player.ONLINE, onlineEvents);
-      twitchVideoPlayer.addEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
-      twitchVideoPlayer.addEventListener(window.Twitch.Player.PLAYING, playingEvents);
-    }
-    return () => {
-      if (twitchVideoPlayer) {
-        twitchVideoPlayer.removeEventListener(window.Twitch.Player.ONLINE, onlineEvents);
-        twitchVideoPlayer.removeEventListener(window.Twitch.Player.OFFLINE, offlineEvents);
-        twitchVideoPlayer.removeEventListener(window.Twitch.Player.PLAYING, playingEvents);
-      }
-    };
-  }, [onlineEvents, offlineEvents, playingEvents, twitchVideoPlayer]);
+  }
 
   useEffect(() => {
     (async () => {
@@ -305,12 +321,16 @@ export default () => {
         });
       }
     })();
+
+    return () => {
+      clearInterval(refreshStreamInfoTimer.current);
+    };
   }, [channelName, twitchToken, streamInfo, GetAndSetStreamInfo]);
 
-  const handleMouseOut = useCallback(() => {
+  function handleMouseOut() {
     clearTimeout(fadeTimer.current);
     setShowControlls(false);
-  }, []);
+  }
 
   function toggleFullScreen(e) {
     e.preventDefault();
@@ -351,56 +371,16 @@ export default () => {
     }
   }
 
-  const showAndResetTimer = throttle(
-    () => {
-      setShowControlls(true);
-      clearTimeout(fadeTimer.current);
-
-      fadeTimer.current = setTimeout(() => {
-        setShowControlls(false);
-      }, 2000);
-    },
-    250,
-    { leading: true, trailing: false }
-  );
-
-  useEffect(() => {
-    const keyboardEvents = (e) => {
-      switch (e.key) {
-        case 'f':
-        case 'F':
-          toggleFullScreen(e);
-          break;
-        default:
-          break;
-      }
-    };
-
-    const refEle = PlayerUIControlls.current;
-    if (refEle) {
-      refEle.addEventListener('mouseleave', handleMouseOut);
-      document.addEventListener('mousemove', showAndResetTimer);
-      document.addEventListener('mousedown', showAndResetTimer);
-      document.body.addEventListener('keydown', showAndResetTimer);
-      document.addEventListener('touchmove', showAndResetTimer);
-      refEle.addEventListener('dblclick', toggleFullScreen);
-      document.body.addEventListener('keydown', keyboardEvents);
-      window.addEventListener('unload', removeFromStreamNotisFromPlayer);
-
-      return () => {
-        refEle.removeEventListener('mouseleave', handleMouseOut);
-        document.removeEventListener('mousemove', showAndResetTimer);
-        document.removeEventListener('mousedown', showAndResetTimer);
-        document.body.removeEventListener('keydown', showAndResetTimer);
-        document.removeEventListener('touchmove', showAndResetTimer);
-        refEle.removeEventListener('dblclick', toggleFullScreen);
-        document.body.removeEventListener('keydown', keyboardEvents);
-        window.removeEventListener('unload', removeFromStreamNotisFromPlayer);
-        clearTimeout(fadeTimer.current);
-        removeFromStreamNotisFromPlayer();
-      };
+  function keyboardEvents(e) {
+    switch (e.key) {
+      case 'f':
+      case 'F':
+        toggleFullScreen(e);
+        break;
+      default:
+        break;
     }
-  }, [handleMouseOut, removeFromStreamNotisFromPlayer, showAndResetTimer]);
+  }
 
   const handleResizeMouseDown = () => {
     setResizeActive(true);
@@ -437,7 +417,6 @@ export default () => {
       <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
         <PlayerNavbar
           channelName={channelName}
-          type={videoId ? 'vod' : 'live'}
           streamInfo={streamInfo}
           twitchVideoPlayer={twitchVideoPlayer}
           setVisible={setVisible}
@@ -475,7 +454,7 @@ export default () => {
                 showcursor={showControlls}
                 chatwidth={chatState.chatwidth || DEFAULT_CHAT_WIDTH}
               >
-                {twitchVideoPlayer && (
+                {Boolean(twitchVideoPlayer) && (
                   <ContextMenu
                     DEFAULT_CHAT_WIDTH={DEFAULT_CHAT_WIDTH}
                     PlayerUIControlls={PlayerUIControlls.current}
@@ -526,7 +505,7 @@ export default () => {
                           to={{
                             pathname: `channel`,
                             state: {
-                              p_id: streamInfo && streamInfo.user_id,
+                              p_id: streamInfo.user_id,
                             },
                           }}
                         >
@@ -597,46 +576,49 @@ export default () => {
                   )
                 )}
 
-                <SmallButtonContainer>
-                  <PlayPauseButton
-                    TwitchPlayer={twitchVideoPlayer}
-                    PlayerUIControlls={PlayerUIControlls.current}
-                  />
-                  <VolumeSlider
-                    OpenedDate={OpenedDate}
-                    PlayerUIControlls={PlayerUIControlls.current}
-                    TwitchPlayer={twitchVideoPlayer}
-                    setShowControlls={setShowControlls}
-                  />
-                  <ShowStatsButtons TwitchPlayer={twitchVideoPlayer} />
-                  <ShowSetQualityButtons TwitchPlayer={twitchVideoPlayer} />
-                  <ClipButton streamInfo={streamInfo} />
-                  <ResetVideoButton
-                    title={'Refresh video'}
-                    style={{
-                      pointerEvents: !twitchVideoPlayer ? 'none' : 'unset',
-                      opacity: !twitchVideoPlayer ? '0.2' : '0.7',
-                    }}
-                    onClick={() => {
-                      console.log('Refreshing Twitch video');
-                      videoElementRef.current.removeChild(document.querySelector('iframe'));
-                      setTwitchVideoPlayer(
-                        new window.Twitch.Player('twitch-embed', {
-                          width: '100%',
-                          height: '100%',
-                          theme: 'dark',
-                          layout: 'video',
-                          channel: channelName && !videoId ? channelName : null,
-                          video: videoId || null,
-                          muted: false,
-                          time: time.length >= 1 ? time : null,
-                          allowfullscreen: true,
-                          parent: ['aiofeed.com'],
-                        })
-                      );
-                    }}
-                  />
-                </SmallButtonContainer>
+                {Boolean(twitchVideoPlayer) && (
+                  <SmallButtonContainer>
+                    <PlayPauseButton
+                      TwitchPlayer={twitchVideoPlayer}
+                      PlayerUIControlls={PlayerUIControlls.current}
+                    />
+                    <VolumeSlider
+                      OpenedDate={OpenedDate}
+                      PlayerUIControlls={PlayerUIControlls.current}
+                      TwitchPlayer={twitchVideoPlayer}
+                      setShowControlls={setShowControlls}
+                      showAndResetTimer={showAndResetTimer}
+                    />
+                    <ShowStatsButtons TwitchPlayer={twitchVideoPlayer} />
+                    <ShowSetQualityButtons TwitchPlayer={twitchVideoPlayer} />
+                    <ClipButton streamInfo={streamInfo} />
+                    <ResetVideoButton
+                      title={'Refresh video'}
+                      style={{
+                        pointerEvents: !twitchVideoPlayer ? 'none' : 'unset',
+                        opacity: !twitchVideoPlayer ? '0.2' : '0.7',
+                      }}
+                      onClick={() => {
+                        console.log('Refreshing Twitch video');
+                        videoElementRef.current.removeChild(document.querySelector('iframe'));
+                        setTwitchVideoPlayer(
+                          new window.Twitch.Player('twitch-embed', {
+                            width: '100%',
+                            height: '100%',
+                            theme: 'dark',
+                            layout: 'video',
+                            channel: channelName && !videoId ? channelName : null,
+                            video: videoId || null,
+                            muted: false,
+                            time: time.length >= 1 ? time : null,
+                            allowfullscreen: true,
+                            parent: ['aiofeed.com'],
+                          })
+                        );
+                      }}
+                    />
+                  </SmallButtonContainer>
+                )}
 
                 {!isFullscreen ? (
                   <MdFullscreen

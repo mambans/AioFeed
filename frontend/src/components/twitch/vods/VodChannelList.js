@@ -1,20 +1,22 @@
-import { Form, Button } from "react-bootstrap";
-import React, { useState, useContext } from "react";
+import { Form, Button } from 'react-bootstrap';
+import React, { useState, useContext } from 'react';
 
-import AccountContext from "./../../account/AccountContext";
-import LoadingList from "./../LoadingList";
-import VodChannelListElement from "./VodChannelListElement";
-import useInput from "./../../../hooks/useInput";
+import AccountContext from './../../account/AccountContext';
+import LoadingList from './../LoadingList';
+import VodChannelListElement from './VodChannelListElement';
+import useInput from './../../../hooks/useInput';
 // import VodsContext from "./VodsContext";
-import AddVodChannel from "./AddVodChannel";
-import { getLocalstorage } from "../../../util/Utils";
+import AddVodChannel from './AddVodChannel';
+import { getLocalstorage } from '../../../util/Utils';
+import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 
 export default () => {
   const { authKey, username } = useContext(AccountContext);
   // const { channels, setChannels } = useContext(VodsContext);
-  const channels = getLocalstorage("VodChannels") || [];
+  const channels = getLocalstorage('VodChannels') || [];
   const [validated, setValidated] = useState(false);
-  const { value: channel, bind: bindchannel, reset: resetchannel } = useInput("");
+  const { value: channel, bind: bindchannel, reset: resetchannel } = useInput('');
+  useLockBodyScroll(true);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -35,7 +37,7 @@ export default () => {
     <>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Form.Group controlId='formGroupChannel'>
-          <Form.Label style={{ width: "100%", textAlign: "center" }}>
+          <Form.Label style={{ width: '100%', textAlign: 'center' }}>
             Add channel:
             <Form.Text className='text-muted'>Twitch channel to fetch vods from.</Form.Text>
             <Form.Control
@@ -44,10 +46,10 @@ export default () => {
               required
               {...bindchannel}
               isInvalid={!channel}
-              style={{ marginTop: "5px" }}
+              style={{ marginTop: '5px' }}
             />
           </Form.Label>
-          <Button type='submit' variant='primary' style={{ width: "100%", padding: "5px" }}>
+          <Button type='submit' variant='primary' style={{ width: '100%', padding: '5px' }}>
             Add
           </Button>
         </Form.Group>

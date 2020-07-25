@@ -1,24 +1,41 @@
-import { FaVolumeMute } from "react-icons/fa";
-import { FaVolumeUp } from "react-icons/fa";
-import { MdVolumeDown } from "react-icons/md";
-import { MdVolumeMute } from "react-icons/md";
-import { MdVolumeUp } from "react-icons/md";
-import React, { useState, useEffect } from "react";
-import Slider from "react-rangeslider";
+import { FaVolumeMute } from 'react-icons/fa';
+import { FaVolumeUp } from 'react-icons/fa';
+import { MdVolumeDown } from 'react-icons/md';
+import { MdVolumeMute } from 'react-icons/md';
+import { MdVolumeUp } from 'react-icons/md';
+import React, { useState } from 'react';
+import Slider from 'react-rangeslider';
 
-import { StyledVolumeSlider } from "./StyledComponents";
-import "react-rangeslider/lib/index.css";
+import { StyledVolumeSlider } from './StyledComponents';
+import 'react-rangeslider/lib/index.css';
+import useEventListener from '../../../hooks/useEventListener';
 
-export default ({ TwitchPlayer, OpenedDate, PlayerUIControlls, setShowControlls }) => {
+export default ({
+  TwitchPlayer,
+  OpenedDate,
+  PlayerUIControlls,
+  setShowControlls,
+  showAndResetTimer,
+}) => {
   const [volumeText, setVolumeText] = useState(0);
   const [volumeMuted, setVolumeMuted] = useState(true);
 
+  useEventListener('keydown', keyboardEvents, window, window.Twitch.Player.READY);
+  useEventListener('wheel', scrollChangeVolumeEvent, PlayerUIControlls, window.Twitch.Player.READY);
+  useEventListener('mousedown', mouseEvents, PlayerUIControlls, window.Twitch.Player.READY);
+  useEventListener(
+    window.Twitch.Player.PLAYING,
+    OnPlayingEventListeners,
+    TwitchPlayer,
+    TwitchPlayer
+  );
+
   const volumeIcon = () => {
     const attrs = {
-      id: "icon",
+      id: 'icon',
       size: 30,
       style: {
-        color: volumeMuted ? "#bd0202" : "inherit",
+        color: volumeMuted ? '#bd0202' : 'inherit',
       },
       onClick: () => {
         TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
@@ -41,7 +58,7 @@ export default ({ TwitchPlayer, OpenedDate, PlayerUIControlls, setShowControlls 
       IconVolume = MdVolumeMute;
     }
 
-    return <IconVolume {...attrs} title={volumeMuted ? "Unmute (m)" : "Mute (m)"} />;
+    return <IconVolume {...attrs} title={volumeMuted ? 'Unmute (m)' : 'Mute (m)'} />;
   };
 
   const handleChange = (value) => {
@@ -53,104 +70,70 @@ export default ({ TwitchPlayer, OpenedDate, PlayerUIControlls, setShowControlls 
     TwitchPlayer.setVolume(value / 100);
   };
 
-  useEffect(() => {
-    const changeVolume = (operator, amount) => {
-      setShowControlls(true);
-      setVolumeText((volumeText) => {
-        const newVolume = Math.min(
-          Math.max(
-            operator === "increase" ? volumeText / 100 + amount : volumeText / 100 - amount,
-            0.01
-          ),
-          1
-        );
-
-        setShowControlls(true);
-        TwitchPlayer.setVolume(newVolume);
-        return newVolume * 100;
-      });
-    };
-    const scrollChangeVolumeEvent = (e) => {
-      if ((e.wheelDelta && e.wheelDelta > 0) || e.deltaY < 0) {
-        changeVolume("increase", 0.01);
-      } else {
-        changeVolume("decrease", 0.01);
-      }
-    };
-
-    const mouseEvents = (e) => {
-      switch (e.button) {
-        case 1:
-          TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
-          setVolumeMuted(!TwitchPlayer.getMuted());
-          break;
-
-        case 0:
-          if (!TwitchPlayer.isPaused() && Date.now() - OpenedDate.current <= 15000) {
-            TwitchPlayer.setMuted(false);
-            setVolumeMuted(false);
-            setVolumeText(TwitchPlayer.getVolume() * 100);
-          }
-          break;
-        default:
-          break;
-      }
-    };
-
-    const keyboardEvents = (e) => {
-      switch (e.key) {
-        case "m":
-        case "M":
-          TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
-          setVolumeMuted(!TwitchPlayer.getMuted());
-          break;
-        case "ArrowDown":
-          changeVolume("decrease", 0.05);
-          break;
-        case "ArrowUp":
-          changeVolume("increase", 0.05);
-          break;
-        default:
-          break;
-      }
-    };
-
-    const addEventListeners = () => {
-      document.body.addEventListener("mousedown", mouseEvents);
-      document.body.addEventListener("keydown", keyboardEvents);
-
-      if (PlayerUIControlls) {
-        PlayerUIControlls.addEventListener("mousedown", mouseEvents);
-        PlayerUIControlls.addEventListener("wheel", scrollChangeVolumeEvent);
-      }
-    };
-
-    const OnPlayingEventListeners = () => {
-      if (TwitchPlayer) {
-        setVolumeMuted(TwitchPlayer.getMuted());
-        setVolumeText(TwitchPlayer.getVolume() * 100);
-      }
-    };
-
-    if (TwitchPlayer) {
-      TwitchPlayer.addEventListener(window.Twitch.Player.READY, addEventListeners);
-      TwitchPlayer.addEventListener(window.Twitch.Player.PLAYING, OnPlayingEventListeners);
-
-      return () => {
-        TwitchPlayer.removeEventListener(window.Twitch.Player.READY, addEventListeners);
-        TwitchPlayer.removeEventListener(window.Twitch.Player.PLAYING, OnPlayingEventListeners);
-        if (PlayerUIControlls) {
-          PlayerUIControlls.removeEventListener("mousedown", mouseEvents);
-          PlayerUIControlls.removeEventListener("wheel", scrollChangeVolumeEvent);
+  function mouseEvents(e) {
+    switch (e.button) {
+      case 1:
+        TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
+        setVolumeMuted(!TwitchPlayer.getMuted());
+        break;
+      case 0:
+        if (!TwitchPlayer.isPaused() && Date.now() - OpenedDate.current <= 15000) {
+          TwitchPlayer.setMuted(false);
+          setVolumeMuted(false);
+          setVolumeText(TwitchPlayer.getVolume() * 100);
         }
-      };
+        break;
+      default:
+        break;
     }
+  }
 
-    return () => {
-      document.body.removeEventListener("mousedown", mouseEvents);
-      document.body.removeEventListener("keydown", keyboardEvents);
-    };
-  }, [OpenedDate, TwitchPlayer, PlayerUIControlls, setShowControlls]);
+  function keyboardEvents(e) {
+    showAndResetTimer();
+    switch (e.key) {
+      case 'm':
+      case 'M':
+        TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
+        setVolumeMuted(!TwitchPlayer.getMuted());
+        break;
+      case 'ArrowDown':
+        changeVolume('decrease', 0.05);
+        break;
+      case 'ArrowUp':
+        changeVolume('increase', 0.05);
+        break;
+      default:
+        break;
+    }
+  }
+  function changeVolume(operator, amount) {
+    setShowControlls(true);
+    setVolumeText((volumeText) => {
+      const newVolume = Math.min(
+        Math.max(
+          operator === 'increase' ? volumeText / 100 + amount : volumeText / 100 - amount,
+          0.01
+        ),
+        1
+      );
+
+      setShowControlls(true);
+      TwitchPlayer.setVolume(newVolume);
+      return newVolume * 100;
+    });
+  }
+  function scrollChangeVolumeEvent(e) {
+    if ((e.wheelDelta && e.wheelDelta > 0) || e.deltaY < 0) {
+      changeVolume('increase', 0.01);
+    } else {
+      changeVolume('decrease', 0.01);
+    }
+  }
+
+  function OnPlayingEventListeners() {
+    setVolumeMuted(TwitchPlayer?.getMuted());
+    setVolumeText(TwitchPlayer?.getVolume() * 100);
+  }
 
   return (
     <StyledVolumeSlider volumeMuted={volumeMuted} disabled={!TwitchPlayer}>

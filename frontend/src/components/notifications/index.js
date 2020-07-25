@@ -1,25 +1,18 @@
-import { Link } from 'react-router-dom';
 import { MdNotifications } from 'react-icons/md';
 import { MdNotificationsNone } from 'react-icons/md';
 import Modal from 'react-bootstrap/Modal';
 import React, { useState, useContext } from 'react';
 
 import { ButtonList } from './../sharedStyledComponents';
-import { Notification, Date, NotificationListContainer } from './styledComponent';
-import { truncate } from '../../util/Utils';
 import { UnseenNotifcationCount } from './../notifications/styledComponent';
 import NavigationContext from './../navigation/NavigationContext';
 import NotificationsContext from './../notifications/NotificationsContext';
 import styles from './Notifications.module.scss';
+import NotificationsList from './NotificationsList';
 
 export default ({ leftExpandRef }) => {
   const [show, setShow] = useState(false);
-  const {
-    clearUnseenNotifications,
-    unseenNotifications,
-    clearNotifications,
-    notifications,
-  } = useContext(NotificationsContext);
+  const { clearUnseenNotifications, unseenNotifications } = useContext(NotificationsContext);
   const { shrinkNavbar } = useContext(NavigationContext);
 
   const handleClose = () => {
@@ -75,7 +68,6 @@ export default ({ leftExpandRef }) => {
           />
         )}
       </ButtonList>
-
       <Modal
         show={show}
         onHide={handleClose}
@@ -83,42 +75,7 @@ export default ({ leftExpandRef }) => {
         backdropClassName={styles.modalBackdrop}
         style={{ minWidth: 'unset', maxWidth: 'unset' }}
       >
-        <NotificationListContainer>
-          <li
-            id='clear'
-            onClick={() => {
-              clearNotifications();
-            }}
-          >
-            Clear all ({notifications?.length || 0})
-          </li>
-          {notifications?.map((item) => {
-            return (
-              <Notification key={item.key} status={item.notiStatus}>
-                <Link to={`/${item.user_name.toLowerCase()}/channel`} className='profileImg' alt=''>
-                  <img src={item.profile_img_url} alt=''></img>
-                </Link>
-                <div className='textContainer'>
-                  <Link to={`/${item.user_name.toLowerCase()}/channel`} className='name'>
-                    <b>{item.user_name}</b> {item.notiStatus}
-                  </Link>
-                  <Link to={`/${item.user_name.toLowerCase()}/channel`} className='title'>
-                    {(item.notiStatus.includes('updated') &&
-                      item?.text?.split('\n').map((line) => {
-                        return (
-                          <p className='UpdateText' key={line}>
-                            {line}
-                          </p>
-                        );
-                      })) ||
-                      truncate(item.title, 30)}
-                  </Link>
-                  <Date date={item.date} status={item.notiStatus} />
-                </div>
-              </Notification>
-            );
-          })}
-        </NotificationListContainer>
+        <NotificationsList />
       </Modal>
     </>
   );

@@ -1,16 +1,16 @@
-import axios from "axios";
-import { getCookie } from "../../util/Utils";
+import axios from 'axios';
+import { getCookie } from '../../util/Utils';
 
 const CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;
-const BASE_URL = "https://api.twitch.tv/helix";
-const BASE_URL_KRAKEN = "https://api.twitch.tv/kraken";
+const BASE_URL = 'https://api.twitch.tv/helix';
+const BASE_URL_KRAKEN = 'https://api.twitch.tv/kraken';
 
 export default {
-  getMe: async ({ accessToken = getCookie("Twitch-access_token") }) => {
+  getMe: async ({ accessToken = getCookie('Twitch-access_token') }) => {
     return await axios.get(`${BASE_URL}/users`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Client-ID": CLIENT_ID,
+        'Client-ID': CLIENT_ID,
       },
     });
   },
@@ -19,8 +19,8 @@ export default {
     return await axios.get(`${BASE_URL}/streams`, {
       params: params,
       headers: {
-        Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${getCookie('Twitch-access_token')}`,
+        'Client-ID': CLIENT_ID,
       },
     });
   },
@@ -29,8 +29,8 @@ export default {
     return await axios.get(`${BASE_URL}/videos`, {
       params: params,
       headers: {
-        Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${getCookie('Twitch-access_token')}`,
+        'Client-ID': CLIENT_ID,
       },
     });
   },
@@ -39,8 +39,8 @@ export default {
     return await axios.get(`${BASE_URL}/clips`, {
       params: params,
       headers: {
-        Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${getCookie('Twitch-access_token')}`,
+        'Client-ID': CLIENT_ID,
       },
     });
   },
@@ -48,8 +48,8 @@ export default {
   postClip: async ({ params }) => {
     return await axios.post(`${BASE_URL}/clips`, params, {
       headers: {
-        Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${getCookie('Twitch-access_token')}`,
+        'Client-ID': CLIENT_ID,
       },
     });
   },
@@ -58,8 +58,18 @@ export default {
     return await axios.get(`${BASE_URL}/users`, {
       params: params,
       headers: {
-        Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${getCookie('Twitch-access_token')}`,
+        'Client-ID': CLIENT_ID,
+      },
+    });
+  },
+
+  getSearchChannels: async ({ params, query, throwError = true }) => {
+    return await axios.get(`${BASE_URL}/search/channels?query=${encodeURI(query)}`, {
+      params: params,
+      headers: {
+        Authorization: `Bearer ${getCookie('Twitch-access_token')}`,
+        'Client-ID': CLIENT_ID,
       },
     });
   },
@@ -68,8 +78,8 @@ export default {
     return await axios.get(`${BASE_URL}/users/follows`, {
       params: params,
       headers: {
-        Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${getCookie('Twitch-access_token')}`,
+        'Client-ID': CLIENT_ID,
       },
     });
   },
@@ -78,8 +88,18 @@ export default {
     return await axios.get(`${BASE_URL}/games`, {
       params: params,
       headers: {
-        Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${getCookie('Twitch-access_token')}`,
+        'Client-ID': CLIENT_ID,
+      },
+    });
+  },
+
+  getSearchGames: async ({ params, query, throwError = true }) => {
+    return await axios.get(`${BASE_URL}/search/categories?query=${encodeURI(query)}`, {
+      params: params,
+      headers: {
+        Authorization: `Bearer ${getCookie('Twitch-access_token')}`,
+        'Client-ID': CLIENT_ID,
       },
     });
   },
@@ -88,8 +108,8 @@ export default {
     return await axios.get(`${BASE_URL}/games/top`, {
       params: params,
       headers: {
-        Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-        "Client-ID": CLIENT_ID,
+        Authorization: `Bearer ${getCookie('Twitch-access_token')}`,
+        'Client-ID': CLIENT_ID,
       },
     });
   },
@@ -98,9 +118,9 @@ export default {
     return await axios.get(`${BASE_URL_KRAKEN}/videos/${params.id}`, {
       params: params,
       headers: {
-        Authorization: `Bearer ${getCookie("Twitch-access_token")}`,
-        "Client-ID": CLIENT_ID,
-        Accept: "application/vnd.twitchtv.v5+json",
+        Authorization: `Bearer ${getCookie('Twitch-access_token')}`,
+        'Client-ID': CLIENT_ID,
+        Accept: 'application/vnd.twitchtv.v5+json',
       },
     });
   },
@@ -109,9 +129,9 @@ export default {
     return await axios.get(`${BASE_URL_KRAKEN}/channels/${params.id}`, {
       params: params,
       headers: {
-        Authorization: `OAuth ${getCookie("Twitch-access_token")}`,
-        "Client-ID": CLIENT_ID,
-        Accept: "application/vnd.twitchtv.v5+json",
+        Authorization: `OAuth ${getCookie('Twitch-access_token')}`,
+        'Client-ID': CLIENT_ID,
+        Accept: 'application/vnd.twitchtv.v5+json',
       },
     });
   },
@@ -122,9 +142,9 @@ export default {
       {
         params: params,
         headers: {
-          Authorization: `OAuth ${getCookie("Twitch-access_token")}`,
-          "Client-ID": CLIENT_ID,
-          Accept: "application/vnd.twitchtv.v5+json",
+          Authorization: `OAuth ${getCookie('Twitch-access_token')}`,
+          'Client-ID': CLIENT_ID,
+          Accept: 'application/vnd.twitchtv.v5+json',
         },
       }
     );
@@ -136,9 +156,9 @@ export default {
       {
         params: params,
         headers: {
-          Authorization: `OAuth ${getCookie("Twitch-access_token")}`,
-          "Client-ID": CLIENT_ID,
-          Accept: "application/vnd.twitchtv.v5+json",
+          Authorization: `OAuth ${getCookie('Twitch-access_token')}`,
+          'Client-ID': CLIENT_ID,
+          Accept: 'application/vnd.twitchtv.v5+json',
         },
       }
     );
@@ -151,9 +171,9 @@ export default {
       {
         params: params,
         headers: {
-          Authorization: `OAuth ${getCookie("Twitch-access_token")}`,
-          "Client-ID": CLIENT_ID,
-          Accept: "application/vnd.twitchtv.v5+json",
+          Authorization: `OAuth ${getCookie('Twitch-access_token')}`,
+          'Client-ID': CLIENT_ID,
+          Accept: 'application/vnd.twitchtv.v5+json',
         },
       }
     );

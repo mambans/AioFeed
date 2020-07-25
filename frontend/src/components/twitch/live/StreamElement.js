@@ -4,7 +4,7 @@ import { FaTwitch } from 'react-icons/fa';
 
 import Moment from 'react-moment';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import React, { useRef, useState, useEffect, useContext } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { useLocation } from 'react-router-dom';
 
@@ -18,11 +18,12 @@ import {
 import { ChannelNameDiv } from './../StyledComponents';
 import FeedsContext from './../../feed/FeedsContext';
 import StreamHoverIframe from '../StreamHoverIframe.js';
-import { truncate } from '../../../util/Utils';
+import { truncate } from '../../../util/Utils'  ;
 import FollowUnfollowBtn from './../FollowUnfollowBtn';
 import VodsFollowUnfollowBtn from './../vods/VodsFollowUnfollowBtn';
 import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import AnimatedViewCount from './AnimatedViewCount';
+import useEventListener from '../../../hooks/useEventListener';
 
 const HOVER_DELAY = 100;
 
@@ -55,29 +56,29 @@ export default (data_p) => {
   const ref = useRef();
   const refChannel = useRef();
 
-  useEffect(() => {
-    const handleMouseOver = () => {
-      streamHoverTimer.current = setTimeout(function () {
-        setIsHovered(true);
-      }, HOVER_DELAY);
-    };
+  useEventListener(
+    'mouseenter',
+    handleMouseOver,
+    ref.current,
+    ref.current && twitchVideoHoverEnable
+  );
+  useEventListener(
+    'mouseleave',
+    handleMouseOut,
+    ref.current,
+    ref.current && twitchVideoHoverEnable
+  );
 
-    const handleMouseOut = () => {
-      clearTimeout(streamHoverTimer.current);
-      setIsHovered(false);
-    };
+  function handleMouseOver() {
+    streamHoverTimer.current = setTimeout(function () {
+      setIsHovered(true);
+    }, HOVER_DELAY);
+  }
 
-    if (ref.current && twitchVideoHoverEnable) {
-      const refEle = ref.current;
-      refEle.addEventListener('mouseenter', handleMouseOver);
-      refEle.addEventListener('mouseleave', handleMouseOut);
-
-      return () => {
-        refEle.removeEventListener('mouseenter', handleMouseOver);
-        refEle.removeEventListener('mouseleave', handleMouseOut);
-      };
-    }
-  }, [twitchVideoHoverEnable, data.user_name]);
+  function handleMouseOut() {
+    clearTimeout(streamHoverTimer.current);
+    setIsHovered(false);
+  }
 
   return (
     <VideoContainer key={data.user_id}>
@@ -102,6 +103,7 @@ export default (data_p) => {
                 data.user_name.toLowerCase()
               }> */}
           <img
+            id={`${data.user_name}-${Date.now()}`}
             alt=''
             style={
               newlyAddedStreams && newlyAddedStreams.includes(data.user_name)

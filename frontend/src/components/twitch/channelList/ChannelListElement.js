@@ -49,7 +49,7 @@ export default ({
             live: liveInfo && liveInfo?.type === 'live',
           });
         }
-      }, 1500);
+      }, 1000);
     }
 
     return () => {
@@ -63,7 +63,7 @@ export default ({
       className={selected ? 'selected' : ''}
       selected={selected}
       searchInput={searchInput}
-      live={channel?.live}
+      live={channel?.live || (channel?.is_live && channel?.started_at !== '')}
       style={{ ...style }}
     >
       <Link
@@ -78,14 +78,13 @@ export default ({
           },
         }}
       >
-        {channel?.profile_img_url ? (
-          channel.live ? (
-            <LiveIndicator channel={channel} />
-          ) : (
-            <img src={channel?.profile_img_url} alt='' />
-          )
+        {channel?.live || (channel?.is_live && channel?.started_at !== '') ? (
+          <LiveIndicator channel={channel} />
         ) : (
-          <img src={`${process.env.PUBLIC_URL}/images/placeholder.webp`} alt='' />
+          <img
+            src={channel?.profile_img_url || `${process.env.PUBLIC_URL}/images/placeholder.webp`}
+            alt=''
+          />
         )}
         {channel?.user_name || `${searchInput}..`}
       </Link>

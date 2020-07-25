@@ -1,42 +1,30 @@
-import React, { useEffect, useCallback, useRef } from "react";
-import YouTube from "react-youtube";
+import React, { useRef } from 'react';
+import YouTube from 'react-youtube';
 
-import styles from "./Youtube.module.scss";
+import styles from './Youtube.module.scss';
+import useEventListener from '../../hooks/useEventListener';
 
 export default (data) => {
   const ref = useRef();
   const videoHoverOutTimer = useRef();
+  data.setIsHovered(true);
 
-  const handleMouseOver = useCallback(() => {
+  useEventListener('mousenter', handleMouseOver, ref.current);
+  useEventListener('mouseleave', handleMouseOut, ref.current);
+
+  function handleMouseOver() {
     clearTimeout(videoHoverOutTimer.current);
     data.setIsHovered(true);
-  }, [data]);
+  }
 
-  const handleMouseOut = useCallback(
-    (event) => {
-      data.setIsHovered(false);
-      videoHoverOutTimer.current = setTimeout(() => {
-        event.target.src = "about:blank";
-        document.getElementById(`${data.data.contentDetails.upload.videoId}-iframe`).src =
-          "about:blank";
-      }, 200);
-    },
-    [data]
-  );
-
-  useEffect(() => {
-    data.setIsHovered(true);
-    if (ref.current) {
-      const refEle = ref.current;
-      ref.current.addEventListener("mousenter", handleMouseOver);
-      ref.current.addEventListener("mouseleave", handleMouseOut);
-
-      return () => {
-        refEle.removeEventListener("mousenter", handleMouseOver);
-        refEle.removeEventListener("mouseleave", handleMouseOut);
-      };
-    }
-  }, [data, handleMouseOut, handleMouseOver]);
+  function handleMouseOut(event) {
+    data.setIsHovered(false);
+    videoHoverOutTimer.current = setTimeout(() => {
+      event.target.src = 'about:blank';
+      document.getElementById(`${data.data.contentDetails.upload.videoId}-iframe`).src =
+        'about:blank';
+    }, 200);
+  }
 
   const opts = {
     height: 189,
@@ -44,7 +32,7 @@ export default (data) => {
     playerVars: {
       autoplay: 1,
       controls: 1,
-      origin: "https://aiofeed.com/feed",
+      origin: 'https://aiofeed.com/feed',
       start: 10,
       fs: 0,
     },
@@ -54,7 +42,7 @@ export default (data) => {
     <YouTube
       videoId={data.data.contentDetails.upload.videoId}
       opts={opts}
-      id={data.data.contentDetails.upload.videoId + "-iframe"}
+      id={data.data.contentDetails.upload.videoId + '-iframe'}
       className={styles.VideoHoverIframe}
     />
   );

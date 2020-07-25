@@ -3,7 +3,7 @@ import { FaRegClock } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import Tooltip from 'react-bootstrap/Tooltip';
 import styled from 'styled-components';
 
@@ -11,6 +11,7 @@ import { SidebarInfoPopup, StyledsidebarItem, FirstRow, SecondRow } from './Styl
 import { truncate } from '../../../util/Utils';
 import AnimatedViewCount from '../live/AnimatedViewCount';
 import LiveInfoPopup from '../channelList/LiveInfoPopup';
+import useEventListener from '../../../hooks/useEventListener';
 
 const StyledNewHighlight = styled.div`
   position: absolute;
@@ -34,34 +35,25 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
   const ref = useRef();
   const timerRef = useRef();
 
-  const handleMouseOver = useCallback(() => {
+  useEventListener('mouseenter', handleMouseOver, ref.current);
+  useEventListener('mouseleave', handleMouseOut, ref.current);
+
+  function handleMouseOver() {
     setShowTitle(shows);
     timerRef.current = setTimeout(() => {
       setShowTitle(true);
       setShows(true);
     }, 1000);
-  }, [setShows, shows]);
+  }
 
-  const handleMouseOut = useCallback(() => {
+  function handleMouseOut() {
     clearTimeout(timerRef.current);
     setShowTitle(false);
     clearTimeout(resetShowsTimer.current);
     resetShowsTimer.current = setTimeout(() => {
       setShows(false);
     }, 5000);
-  }, [setShows, resetShowsTimer]);
-
-  useEffect(() => {
-    const refEle = ref.current;
-    refEle.addEventListener('mouseenter', handleMouseOver);
-    refEle.addEventListener('mouseleave', handleMouseOut);
-
-    return () => {
-      refEle.removeEventListener('mouseenter', handleMouseOver);
-      refEle.removeEventListener('mouseleave', handleMouseOut);
-      clearTimeout(timerRef.current);
-    };
-  }, [handleMouseOut, handleMouseOver]);
+  }
 
   return (
     <Link

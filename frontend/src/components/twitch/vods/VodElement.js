@@ -1,11 +1,11 @@
-import { FaRegEye } from "react-icons/fa";
-import moment from "moment";
-import Moment from "react-moment";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import React, { useEffect, useRef, useCallback, useState } from "react";
-import Tooltip from "react-bootstrap/Tooltip";
-import { Link } from "react-router-dom";
-import { Spinner } from "react-bootstrap";
+import { FaRegEye } from 'react-icons/fa';
+import moment from 'moment';
+import Moment from 'react-moment';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import React, { useRef, useState } from 'react';
+import Tooltip from 'react-bootstrap/Tooltip';
+import { Link } from 'react-router-dom';
+import { Spinner } from 'react-bootstrap';
 
 import {
   VideoContainer,
@@ -14,13 +14,14 @@ import {
   VodVideoInfo,
   ChannelContainer,
   StyledVideoElementAlert,
-} from "./../../sharedStyledComponents";
-import { truncate } from "../../../util/Utils";
-import { VodLiveIndicator, VodType, VodPreview, VodDates } from "./StyledComponents";
-import VodsFollowUnfollowBtn from "./VodsFollowUnfollowBtn";
-import { formatViewerNumbers, formatTwitchVodsDuration } from "./../TwitchUtils";
-import validateToken from "../validateToken";
-import API from "../API";
+} from './../../sharedStyledComponents';
+import { truncate } from '../../../util/Utils';
+import { VodLiveIndicator, VodType, VodPreview, VodDates } from './StyledComponents';
+import VodsFollowUnfollowBtn from './VodsFollowUnfollowBtn';
+import { formatViewerNumbers, formatTwitchVodsDuration } from './../TwitchUtils';
+import validateToken from '../validateToken';
+import API from '../API';
+import useEventListener from '../../../hooks/useEventListener';
 
 export default ({ data, vodBtnDisabled }) => {
   const [previewAvailable, setPreviewAvailable] = useState({});
@@ -28,7 +29,10 @@ export default ({ data, vodBtnDisabled }) => {
   const imgRef = useRef();
   const hoverTimeoutRef = useRef();
 
-  const handleMouseOver = useCallback(async () => {
+  useEventListener('mouseenter', handleMouseOver, imgRef.current);
+  useEventListener('mouseleave', handleMouseOut, imgRef.current);
+
+  async function handleMouseOver() {
     if (!previewAvailable.data) {
       hoverTimeoutRef.current = setTimeout(
         async () => {
@@ -39,13 +43,13 @@ export default ({ data, vodBtnDisabled }) => {
               },
             })
               .then((res) => {
-                if (res.data.status === "recording") {
+                if (res.data.status === 'recording') {
                   setPreviewAvailable({
-                    status: "recording",
-                    error: "Stream is live - no preview yet",
+                    status: 'recording',
+                    error: 'Stream is live - no preview yet',
                   });
                 } else {
-                  if (data.thumbnail_url === "") data.thumbnail_url = res.data.preview.template;
+                  if (data.thumbnail_url === '') data.thumbnail_url = res.data.preview.template;
                   setPreviewAvailable({
                     data: res.data.animated_preview_url,
                   });
@@ -53,7 +57,7 @@ export default ({ data, vodBtnDisabled }) => {
                 setShowPreview(true);
               })
               .catch((error) => {
-                setPreviewAvailable({ error: "Preview failed" });
+                setPreviewAvailable({ error: 'Preview failed' });
                 console.error(error);
               });
           });
@@ -65,23 +69,12 @@ export default ({ data, vodBtnDisabled }) => {
         setShowPreview(true);
       }, 250);
     }
-  }, [data.id, previewAvailable.error, previewAvailable.data, data.thumbnail_url]);
+  }
 
-  const handleMouseOut = useCallback(() => {
+  function handleMouseOut() {
     clearTimeout(hoverTimeoutRef.current);
     setShowPreview(false);
-  }, []);
-
-  useEffect(() => {
-    const refEle = imgRef.current;
-    refEle.addEventListener("mouseenter", handleMouseOver);
-    refEle.addEventListener("mouseleave", handleMouseOut);
-
-    return () => {
-      refEle.removeEventListener("mouseenter", handleMouseOver);
-      refEle.removeEventListener("mouseleave", handleMouseOut);
-    };
-  }, [handleMouseOut, handleMouseOver]);
+  }
 
   return (
     <VideoContainer>
@@ -91,7 +84,7 @@ export default ({ data, vodBtnDisabled }) => {
             {previewAvailable.error}
           </StyledVideoElementAlert>
         )}
-        {data.thumbnail_url === "" && (
+        {data.thumbnail_url === '' && (
           <VodLiveIndicator to={`/${data.user_name}`}>Live</VodLiveIndicator>
         )}
         <a href={data.url}>
@@ -104,36 +97,36 @@ export default ({ data, vodBtnDisabled }) => {
           <img
             src={
               data.thumbnail_url
-                ? data.thumbnail_url.replace("%{width}", 640).replace("%{height}", 360)
-                : "https://vod-secure.twitch.tv/_404/404_processing_320x180.png"
+                ? data.thumbnail_url.replace('%{width}', 640).replace('%{height}', 360)
+                : 'https://vod-secure.twitch.tv/_404/404_processing_320x180.png'
             }
             alt=''
           />
         </a>
 
         <VodVideoInfo>
-          <p className={"vodDuration"} title='duration'>
-            {data.thumbnail_url === "" ? (
+          <p className={'vodDuration'} title='duration'>
+            {data.thumbnail_url === '' ? (
               <Moment durationFromNow>{data.created_at}</Moment>
             ) : (
               formatTwitchVodsDuration(data.duration)
             )}
           </p>
-          <p className={"view_count"} title='views'>
+          <p className={'view_count'} title='views'>
             {formatViewerNumbers(data.view_count)}
             <FaRegEye
               size={10}
               style={{
-                color: "rgb(200, 200, 200)",
-                marginLeft: "5px",
-                marginTop: "3px",
-                display: "flex",
-                alignItems: "center",
+                color: 'rgb(200, 200, 200)',
+                marginLeft: '5px',
+                marginTop: '3px',
+                display: 'flex',
+                alignItems: 'center',
               }}
             />
           </p>
         </VodVideoInfo>
-        {data.type !== "archive" && (
+        {data.type !== 'archive' && (
           <VodType>
             <span>{data.type}</span>
           </VodType>
@@ -141,25 +134,28 @@ export default ({ data, vodBtnDisabled }) => {
       </ImageContainer>
       {data.title.length > 50 ? (
         <OverlayTrigger
-          key={"bottom"}
-          placement={"bottom"}
+          key={'bottom'}
+          placement={'bottom'}
           delay={{ show: 250, hide: 0 }}
           overlay={
             <Tooltip
-              id={`tooltip-${"bottom"}`}
+              id={`tooltip-${'bottom'}`}
               style={{
-                width: "320px",
-              }}>
+                width: '320px',
+              }}
+            >
               {data.title}
             </Tooltip>
-          }>
+          }
+        >
           <VideoTitle
             to={{
               pathname: `/${data.user_name}/videos/${data.id}`,
               state: {
                 p_title: data.title,
               },
-            }}>
+            }}
+          >
             {truncate(data.title, 70)}
             {/* {data.data.title} */}
           </VideoTitle>
@@ -171,7 +167,8 @@ export default ({ data, vodBtnDisabled }) => {
             state: {
               p_title: data.title,
             },
-          }}>
+          }}
+        >
           {data.title}
         </VideoTitle>
       )}
@@ -183,10 +180,11 @@ export default ({ data, vodBtnDisabled }) => {
               p_id: data.user_id,
             },
           }}
-          style={{ gridRow: 1, paddingRight: "5px" }}>
-          <img src={data.profile_img_url} alt='' className={"profileImg"} />
+          style={{ gridRow: 1, paddingRight: '5px' }}
+        >
+          <img src={data.profile_img_url} alt='' className={'profileImg'} />
         </Link>
-        <div style={{ display: "flex" }}>
+        <div style={{ display: 'flex' }}>
           <Link
             to={{
               pathname: `/${data.user_name.toLowerCase()}/channel`,
@@ -194,7 +192,8 @@ export default ({ data, vodBtnDisabled }) => {
                 p_id: data.user_id,
               },
             }}
-            className={"channelName"}>
+            className={'channelName'}
+          >
             {data.user_name}
           </Link>
           {!vodBtnDisabled && <VodsFollowUnfollowBtn channel={data.user_name} loweropacity='0.5' />}
@@ -204,25 +203,27 @@ export default ({ data, vodBtnDisabled }) => {
             <Moment
               interval={300000}
               durationFromNow
-              className={"date"}
-              id={"timeago"}
+              className={'date'}
+              id={'timeago'}
               style={{
                 gridColumn: 2,
-                justifySelf: "right",
-              }}>
-              {data.thumbnail_url === "" ? data.created_at : data.endDate}
+                justifySelf: 'right',
+              }}
+            >
+              {data.thumbnail_url === '' ? data.created_at : data.endDate}
             </Moment>
             <p
-              id={"time"}
+              id={'time'}
               className='viewers'
               style={{
                 gridColumn: 2,
-                justifySelf: "right",
-              }}>
-              {`${moment(data.created_at).format("dd HH:mm")} → ${
-                data.thumbnail_url === ""
-                  ? moment(Date.now()).format("dd HH:mm")
-                  : moment(data.endDate).format("dd HH:mm")
+                justifySelf: 'right',
+              }}
+            >
+              {`${moment(data.created_at).format('dd HH:mm')} → ${
+                data.thumbnail_url === ''
+                  ? moment(Date.now()).format('dd HH:mm')
+                  : moment(data.endDate).format('dd HH:mm')
               }`}
             </p>
           </div>

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import React, { useEffect, useRef, useState, useCallback, useContext } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import Tooltip from 'react-bootstrap/Tooltip';
 
 import { truncate } from '../../util/Utils';
@@ -9,6 +9,7 @@ import { VideoContainer, VideoTitleHref, ImageContainer } from './../sharedStyle
 import FeedsContext from '../feed/FeedsContext';
 import styles from './Youtube.module.scss';
 import VideoHoverIframe from './VideoHoverIframe';
+import useEventListener from '../../hooks/useEventListener';
 
 const videoImageUrls = (urls) => {
   if (urls.maxres) {
@@ -32,6 +33,9 @@ export default (data) => {
   const [isHovered, setIsHovered] = useState(false);
   const ref = useRef();
 
+  useEventListener('mouseenter', handleMouseOver, ref.current, youtubeVideoHoverEnable);
+  useEventListener('mouseleave', handleMouseOut, ref.current, youtubeVideoHoverEnable);
+
   // function streamType(type) {
   //   if (type === "liveYoutube") {
   //     return <div className={styles.liveDot} />;
@@ -40,30 +44,17 @@ export default (data) => {
   //   }
   // }
 
-  const handleMouseOver = () => {
+  function handleMouseOver() {
     streamHoverTimer.current = setTimeout(function () {
       setIsHovered(true);
     }, HOVER_DELAY);
-  };
+  }
 
-  const handleMouseOut = useCallback(() => {
+  function handleMouseOut() {
     clearTimeout(streamHoverTimer.current);
     setIsHovered(false);
     document.getElementById(data.video.contentDetails.upload.videoId).src = 'about:blank';
-  }, [data.video.contentDetails.upload.videoId]);
-
-  useEffect(() => {
-    if (ref.current && youtubeVideoHoverEnable) {
-      const refEle = ref.current;
-      ref.current.addEventListener('mouseenter', handleMouseOver);
-      ref.current.addEventListener('mouseleave', handleMouseOut);
-
-      return () => {
-        refEle.removeEventListener('mouseenter', handleMouseOver);
-        refEle.removeEventListener('mouseleave', handleMouseOut);
-      };
-    }
-  }, [handleMouseOut, youtubeVideoHoverEnable]);
+  }
 
   return (
     <VideoContainer key={data.video.contentDetails.upload.videoId}>

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { getCookie } from "./../../util/Utils";
+import { getCookie } from './../../util/Utils';
 
 const AccountContext = React.createContext();
 
@@ -47,7 +47,8 @@ export const AccountProvider = ({ children }) => {
         setYoutubeUsername: setYoutubeUsername,
         youtubeProfileImg: youtubeProfileImg,
         setYoutubeProfileImg: setYoutubeProfileImg,
-      }}>
+      }}
+    >
       {children}
     </AccountContext.Provider>
   );

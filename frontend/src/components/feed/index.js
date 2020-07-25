@@ -19,6 +19,7 @@ import Twitter from '../twitter';
 import Youtube from './../youtube';
 import YoutubeDataHandler from './../youtube/Datahandler';
 import YoutubeHeader from './../youtube/Header';
+import useEventListener from '../../hooks/useEventListener';
 
 export default () => {
   document.title = 'AioFeed | Feed';
@@ -31,6 +32,10 @@ export default () => {
     setShowTwitchSidebar,
   } = useContext(FeedsContext);
   const { username } = useContext(AccountContext);
+
+  useEventListener('resize', () => {
+    setVideoElementsAmount(calcVideoElementsAmount());
+  });
 
   const calcVideoElementsAmount = useCallback(
     () =>
@@ -51,20 +56,6 @@ export default () => {
       console.log('Notifications: ', result);
     });
   }, []);
-
-  useEffect(() => {
-    const setScreenWidthToCalcAlignments = () => {
-      setVideoElementsAmount(calcVideoElementsAmount());
-    };
-
-    setVideoElementsAmount(calcVideoElementsAmount());
-
-    window.addEventListener('resize', setScreenWidthToCalcAlignments);
-
-    return () => {
-      window.removeEventListener('resize', setScreenWidthToCalcAlignments);
-    };
-  }, [calcVideoElementsAmount]);
 
   if (!username) {
     return (

@@ -12,6 +12,7 @@ import VodsContext from './VodsContext';
 import LoadingBoxes from './../LoadingBoxes';
 import FeedsContext from '../../feed/FeedsContext';
 import { AddCookie, getCookie } from '../../../util/Utils';
+import useEventListener from '../../../hooks/useEventListener';
 
 export default ({ videoElementsAmount }) => {
   const { vods, setVods } = useContext(VodsContext);
@@ -30,6 +31,9 @@ export default ({ videoElementsAmount }) => {
     timeout: 750,
     transitionGroup: 'videos',
   });
+
+  useEventListener('focus', windowFocusHandler);
+  useEventListener('blur', windowBlurHandler);
 
   const refresh = useCallback(
     async (forceRefresh) => {
@@ -54,19 +58,19 @@ export default ({ videoElementsAmount }) => {
     [authKey, username, setTwitchToken, setRefreshToken, setVods]
   );
 
-  const windowFocusHandler = useCallback(async () => {
+  async function windowFocusHandler() {
     clearTimeout(resetVodAmountsTimer.current);
     refresh(false);
-  }, [refresh]);
+  }
 
-  const windowBlurHandler = useCallback(() => {
+  function windowBlurHandler() {
     resetVodAmountsTimer.current = setTimeout(() => {
       if (vodAmounts.amount > videoElementsAmount) {
         window.scrollTo(0, 0);
         setVodAmounts(videoElementsAmount);
       }
     }, 350000);
-  }, [vodAmounts, videoElementsAmount]);
+  }
 
   useEffect(() => {
     (async () => {
@@ -88,24 +92,11 @@ export default ({ videoElementsAmount }) => {
           setVods(data.data);
         });
     })();
-    window.addEventListener('focus', windowFocusHandler);
-    window.addEventListener('blur', windowBlurHandler);
 
     return () => {
-      window.removeEventListener('blur', windowBlurHandler);
-      window.removeEventListener('focus', windowFocusHandler);
       clearTimeout(resetVodAmountsTimer.current);
     };
-  }, [
-    windowBlurHandler,
-    windowFocusHandler,
-    authKey,
-    username,
-    twitchUserId,
-    setTwitchToken,
-    setRefreshToken,
-    setVods,
-  ]);
+  }, [authKey, username, twitchUserId, setTwitchToken, setRefreshToken, setVods]);
 
   useEffect(() => {
     setVodAmounts({

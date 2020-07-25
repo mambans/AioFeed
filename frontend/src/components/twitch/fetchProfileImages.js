@@ -20,18 +20,15 @@ function chunk(array, size) {
 export default async ({ items, forceNewProfiles, previousStreams }) => {
   const originalArray = items;
   const TwitchProfiles = GetCachedProfiles();
-  const noCachedProfileArrayObject = await originalArray.data.filter((user) => {
-    return (
+  const noCachedProfileArrayObject = await originalArray.data.filter(
+    (user) =>
       !Object.keys(TwitchProfiles).some((id) => id === (user?.user_id || user?.broadcaster_id)) ||
       (previousStreams && !previousStreams?.find((stream) => user?.user_id === stream?.user_id))
-    );
-  });
+  );
 
   const noCachedProfileArrayIds = Object.values(
     forceNewProfiles ? originalArray.data : noCachedProfileArrayObject
-  ).map((user) => {
-    return user?.user_id || user?.broadcaster_id;
-  });
+  ).map((user) => user?.user_id || user?.broadcaster_id);
 
   const chunkedNoCachedProfileArrayIds =
     noCachedProfileArrayIds?.length > 0 ? chunk(noCachedProfileArrayIds, 100) : null;
@@ -40,30 +37,27 @@ export default async ({ items, forceNewProfiles, previousStreams }) => {
     chunkedNoCachedProfileArrayIds &&
     (await Promise.all(
       chunkedNoCachedProfileArrayIds.map(async (channelsChunk) => {
-        return await API.getUser({
-          params: {
-            id: channelsChunk,
-          },
-        })
-          .then((res) => {
-            return res.data.data;
+        return (
+          channelsChunk?.length >= 1 &&
+          (await API.getUser({
+            params: {
+              id: channelsChunk,
+            },
           })
-          .catch((e) => {
-            console.error('newProfileImgUrls: ', e);
-          });
+            .then((res) => res.data.data)
+            .catch((e) => console.error('newProfileImgUrls: ', e)))
+        );
       })
-    ).then((res) => {
-      return res.flat(1);
-    }));
+    ).then((res) => res.flat(1)));
 
   const finallData = await originalArray.data.map((user) => {
     const foundProfile = newProfileImgUrls?.find(
-      (p_user) => p_user.id === (user.user_id || user.broadcaster_id)
+      (p_user) => p_user?.id === (user?.user_id || user?.broadcaster_id)
     );
 
     user.profile_img_url =
       foundProfile?.profile_image_url ||
-      TwitchProfiles[user.user_id || user.broadcaster_id] ||
+      TwitchProfiles[user?.user_id || user?.broadcaster_id] ||
       `${process.env.PUBLIC_URL}/images/placeholder.webp`;
 
     return user;

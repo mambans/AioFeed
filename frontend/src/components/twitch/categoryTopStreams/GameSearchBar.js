@@ -14,6 +14,9 @@ import { MdFormatListBulleted } from 'react-icons/md';
 import StyledLoadingList from './LoadingList';
 import { CSSTransition } from 'react-transition-group';
 import { scrollToIfNeeded, sortInputFirst } from '../channelList';
+import API from '../API';
+// import useEventListener from '../../../hooks/useEventListener';
+import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 
 export default (props) => {
   const {
@@ -39,6 +42,30 @@ export default (props) => {
   const ulListRef = useRef();
   const inputRef = useRef();
   const endOfListRef = useRef();
+  const searchTimer = useRef();
+
+  useLockBodyScroll(listIsOpen);
+
+  // useEventListener(
+  //   'focus',
+  //   () => {
+  //     setListIsOpen(true);
+  //   },
+  //   inputRef.current
+  // );
+
+  useEffect(() => {
+    const inputField = inputRef.current;
+    inputField.addEventListener('focus', () => {
+      setListIsOpen(true);
+    });
+
+    return () => {
+      inputField.removeEventListener('focus', () => {
+        setListIsOpen(true);
+      });
+    };
+  }, []);
 
   const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue);
@@ -52,20 +79,36 @@ export default (props) => {
         onChange: (event) => {
           try {
             setCursor(0);
-            setValue(event.target.value);
-            if (listIsOpen && event.target.value && event.target.value !== '') {
+            setValue(event.target?.value);
+            if (listIsOpen && event.target?.value && event.target?.value !== '') {
               const filtered = topGames.current?.data.filter((game) => {
                 return game.name
                   .toLowerCase()
-                  .includes((event.target.value || value).toLowerCase());
+                  .includes((event.target?.value || value).toLowerCase());
               });
-              if (filtered?.length > 1) {
-                const asd = sortInputFirst(event.target.value || value, filtered);
-                setFilteredGames(asd);
-              } else {
-                setFilteredGames(filtered);
-              }
-            } else if (listIsOpen && !event.target.value) {
+
+              const sortedList =
+                filtered?.length > 1
+                  ? sortInputFirst(event.target?.value || value, filtered)
+                  : filtered || [];
+              setFilteredGames(sortedList);
+
+              clearTimeout(searchTimer.current);
+              searchTimer.current = setTimeout(async () => {
+                await API.getSearchGames({
+                  query: event.target?.value || value,
+                  params: { first: 20 },
+                }).then((res) => {
+                  // const searchResult = res.data.data.map((item) => ({
+                  //   ...item,
+                  //   user_id: item.id,
+                  //   user_name: item.display_name,
+                  // }));
+                  const searchResult = res.data.data;
+                  setFilteredGames([...sortedList, ...searchResult]);
+                });
+              }, 500);
+            } else if (listIsOpen && !event.target?.value) {
               if (topGames.current?.data) {
                 setFilteredGames(topGames.current?.data);
                 setTimeout(() => {
@@ -80,7 +123,7 @@ export default (props) => {
               } else {
                 setFilteredGames([]);
               }
-            } else if (!listIsOpen && event.target.value) {
+            } else if (!listIsOpen && event.target?.value) {
               setListIsOpen(true);
             }
           } catch (error) {
@@ -237,21 +280,6 @@ export default (props) => {
   };
 
   useEffect(() => {
-    const endOfListRefEle = endOfListRef.current;
-    const inputField = inputRef.current;
-    inputField.addEventListener('focus', () => {
-      setListIsOpen(true);
-    });
-
-    return () => {
-      inputField.removeEventListener('focus', () => {
-        setListIsOpen(true);
-        if (endOfListRefEle) observer.unobserve(endOfListRefEle);
-      });
-    };
-  }, [observer]);
-
-  useEffect(() => {
     const input = showValue();
     if (
       (alwaysFetchNew || !topGames.current?.data) &&
@@ -318,9 +346,9 @@ export default (props) => {
               <Link to={'/category/'}>Show all</Link>
             </StyledShowAllButton>
 
-            {filteredGames ? (
+            {Array.isArray(filteredGames) ? (
               <>
-                {filteredGames.map((game, index) => {
+                {filteredGames?.map((game, index) => {
                   return (
                     <StyledGameListElement
                       key={game.id}
@@ -363,6 +391,8 @@ export default (props) => {
           id='BackdropChannelList'
           onClick={() => {
             setListIsOpen(!listIsOpen);
+            // setFilteredGames(topGames.current);
+            resetGame();
           }}
         />
       )}

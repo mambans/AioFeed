@@ -1,0 +1,13 @@
+body[popup-open='true'] {
+  overflow: hidden;
+  width: calc(100% - 8px);
+  padding-right: 0 !important;
+
+  .navbar.navbar-expand-lg.navbar-dark.bg-dark {
+    width: calc(100% - 8px);
+  }
+
+  #twitter {
+    right: calc(25px + 8px);
+  }
+}

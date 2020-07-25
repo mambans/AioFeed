@@ -15,6 +15,9 @@ import ChannelListElement from '../channelList/ChannelListElement';
 import AddVideoExtraData from '../AddVideoExtraData';
 import GetFollowedChannels from '../GetFollowedChannels';
 import getFollowedOnlineStreams from '../live/GetFollowedStreams';
+import API from '../API';
+// import useEventListener from '../../../hooks/useEventListener';
+import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 
 export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
   const parentRect = parentDiv.getBoundingClientRect();
@@ -78,7 +81,32 @@ export default ({
   const channels = useRef();
   const inputRef = useRef();
   const ulListRef = useRef();
+  const searchTimer = useRef();
   const channelName = useParams()?.channelName;
+
+  useLockBodyScroll(listIsOpen);
+
+  // useEventListener(
+  //   'focus',
+  //   () => {
+  //     console.log('handleFocus -> handleFocus');
+  //     setListIsOpen(true);
+  //   },
+  //   inputRef.current
+  // );
+
+  useEffect(() => {
+    const inputField = inputRef.current;
+    inputField.addEventListener('focus', () => {
+      setListIsOpen(true);
+    });
+
+    return () => {
+      inputField.removeEventListener('focus', () => {
+        setListIsOpen(true);
+      });
+    };
+  }, []);
 
   const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue);
@@ -99,12 +127,34 @@ export default ({
                   .toLowerCase()
                   .includes((event.target.value || value).toLowerCase());
               });
-              if (filtered?.length > 1) {
-                const sorted = sortInputFirst(event.target.value || value, filtered);
-                setFilteredChannels(sorted);
-              } else {
-                setFilteredChannels(filtered);
-              }
+
+              const sortedList =
+                filtered?.length > 1
+                  ? sortInputFirst(event.target?.value || value, filtered)
+                  : filtered;
+              setFilteredChannels(sortedList);
+
+              clearTimeout(searchTimer.current);
+              searchTimer.current = setTimeout(async () => {
+                await API.getSearchChannels({
+                  query: event.target?.value || value,
+                  params: { first: 20 },
+                }).then((res) => {
+                  const searchResult = res.data.data.map((item) => ({
+                    ...item,
+                    user_id: item.id,
+                    user_name: item.display_name,
+                  }));
+
+                  AddVideoExtraData({
+                    items: { data: searchResult },
+                    fetchGameInfo: true,
+                    fetchProfiles: true,
+                  }).then((res) => {
+                    setFilteredChannels([...sortedList, ...res?.data]);
+                  });
+                });
+              }, 500);
             } else if (listIsOpen && !event.target.value) {
               setFilteredChannels(channels.current);
             } else if (!listIsOpen && event.target.value) {
@@ -249,19 +299,6 @@ export default ({
   }, [showValue, listIsOpen, fetchFollowedChannels]);
 
   useEffect(() => {
-    const inputField = inputRef.current;
-    inputField.addEventListener('focus', () => {
-      setListIsOpen(true);
-    });
-
-    return () => {
-      inputField.removeEventListener('focus', () => {
-        setListIsOpen(true);
-      });
-    };
-  }, []);
-
-  useEffect(() => {
     if (channels.current) {
       return () => {
         setFilteredChannels(channels.current || []);
@@ -323,6 +360,17 @@ export default ({
           unmountOnExit
         >
           <GameListUlContainer ref={ulListRef} style={{ paddingLeft: '0' }} position={position}>
+            <p
+              style={{
+                textAlign: 'center',
+                fontSize: '0.9rem',
+                fontWeight: 'bold',
+                margin: '9px 0',
+                color: 'var(--VideoContainerLinks)',
+              }}
+            >{`Total: ${
+              filteredChannels?.length === 0 ? '...' : filteredChannels?.length || '...'
+            }`}</p>
             {filteredChannels?.length === 0 ? (
               <ChannelListElement
                 key={channel}
@@ -332,16 +380,7 @@ export default ({
               />
             ) : filteredChannels ? (
               <>
-                <p
-                  style={{
-                    textAlign: 'center',
-                    fontSize: '0.9rem',
-                    fontWeight: 'bold',
-                    margin: '9px 0',
-                    color: 'var(--VideoContainerLinks)',
-                  }}
-                >{`Total: ${filteredChannels.length}`}</p>
-                {channel &&
+                {/* {channel &&
                   channel !== '' &&
                   !filteredChannels?.find((item) => item.user_name === channel) && (
                     <ChannelListElement
@@ -356,7 +395,7 @@ export default ({
                         marginTop: '10px',
                       }}
                     />
-                  )}
+                  )} */}
                 {filteredChannels.map((channel, index) => {
                   return (
                     <ChannelListElement
@@ -379,6 +418,7 @@ export default ({
           onClick={() => {
             resetChannel();
             setListIsOpen(!listIsOpen);
+            setFilteredChannels(channels.current);
           }}
         />
       )}

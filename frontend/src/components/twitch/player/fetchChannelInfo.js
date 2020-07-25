@@ -1,6 +1,6 @@
-import API from "../API";
-import validateToken from "../validateToken";
-import { getLocalstorage } from "../../../util/Utils";
+import API from '../API';
+import validateToken from '../validateToken';
+import { getLocalstorage } from '../../../util/Utils';
 
 /**
  * @param {String} channelId - Channel id of Twitch channel to fetch info from.
@@ -12,8 +12,8 @@ export default async (channelId, format) => {
       .then((res) => {
         if (res) {
           if (format) {
-            const localstorageGameInfo = getLocalstorage("Twitch_game_details")
-              ? getLocalstorage("Twitch_game_details").data.find(
+            const localstorageGameInfo = getLocalstorage('Twitch_game_details')
+              ? getLocalstorage('Twitch_game_details').data.find(
                   (game) => game.name.toLowerCase() === res.data.game.toLowerCase()
                 )
               : null;
@@ -34,7 +34,7 @@ export default async (channelId, format) => {
         }
       })
       .catch((error) => {
-        console.error("fetchChannelInfo: ", error);
+        console.error('fetchChannelInfo: ', error);
       });
   });
 };

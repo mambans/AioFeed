@@ -1,30 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { MdSettings } from "react-icons/md";
+import React, { useState } from 'react';
+import { MdSettings } from 'react-icons/md';
 
-import { ButtonShowQualities, QualitiesList } from "./StyledComponents";
+import { ButtonShowQualities, QualitiesList } from './StyledComponents';
+import useEventListener from '../../../hooks/useEventListener';
 
 export default ({ TwitchPlayer }) => {
   const [showQualities, setShowQualities] = useState();
   const [qualities, setQualities] = useState();
   const [activeQuality, setActiveQuality] = useState();
 
-  useEffect(() => {
-    const onPlaying = () => {
-      const defaultQuality = TwitchPlayer.getQuality();
-      setActiveQuality(
-        TwitchPlayer.getQualities().find((quality) => {
-          return quality.group === defaultQuality;
-        })
-      );
-    };
-    if (TwitchPlayer) {
-      TwitchPlayer.addEventListener(window.Twitch.Player.PLAYING, onPlaying);
+  useEventListener(window.Twitch.Player.PLAYING, onPlaying, TwitchPlayer);
 
-      return () => {
-        TwitchPlayer.removeEventListener(window.Twitch.Player.PLAYING, onPlaying);
-      };
-    }
-  });
+  function onPlaying() {
+    const defaultQuality = TwitchPlayer.getQuality();
+    setActiveQuality(
+      TwitchPlayer.getQualities().find((quality) => {
+        return quality.group === defaultQuality;
+      })
+    );
+  }
 
   return (
     <>
@@ -38,7 +32,8 @@ export default ({ TwitchPlayer }) => {
                   TwitchPlayer.setQuality(quality.group);
                   setActiveQuality(quality);
                   setShowQualities(false);
-                }}>
+                }}
+              >
                 {quality.name}
               </li>
             );
@@ -52,7 +47,8 @@ export default ({ TwitchPlayer }) => {
         onClick={() => {
           setShowQualities(!showQualities);
           setQualities(TwitchPlayer.getQualities());
-        }}>
+        }}
+      >
         <MdSettings size={24} />
         {activeQuality ? activeQuality.name : TwitchPlayer && TwitchPlayer.getQuality().name}
       </ButtonShowQualities>

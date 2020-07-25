@@ -1,60 +1,63 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { ButtonShowStats, PlaybackStats } from "./StyledComponents";
+import React, { useState, useRef, useEffect } from 'react';
+import { ButtonShowStats, PlaybackStats } from './StyledComponents';
+import useEventListener from '../../../hooks/useEventListener';
 
 export default ({ TwitchPlayer }) => {
   const [showPlaybackStats, setShowPlaybackStats] = useState();
   const [playbackStats, setPlaybackStats] = useState();
   const PlayersatsTimer = useRef();
 
+  useEventListener('keydown', keyboardEvents, window, TwitchPlayer);
+
   const latencyColorValue = (name, value) => {
-    if (name === "hlsLatencyBroadcaster" || name === "hlsLatencyEncoder") {
+    if (name === 'hlsLatencyBroadcaster' || name === 'hlsLatencyEncoder') {
       if (value >= 10) {
-        return "#f00";
+        return '#f00';
       } else if (value >= 5) {
-        return "#f66329";
+        return '#f66329';
       } else if (value >= 2.5) {
-        return "#f6b029";
+        return '#f6b029';
       } else {
-        return "#4cf629";
+        return '#4cf629';
       }
     } else {
-      return "unset";
+      return 'unset';
     }
   };
 
-  const ToggleShowStats = useCallback(() => {
+  const ToggleShowStats = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
     if (!showPlaybackStats) {
       if (PlayersatsTimer.current) clearInterval(PlayersatsTimer.current);
-      document.querySelector("#controls").style.opacity = 1;
+      document.querySelector('#controls').style.opacity = 1;
       PlayersatsTimer.current = setInterval(() => {
         setPlaybackStats(TwitchPlayer.getPlaybackStats());
-      }, 1500);
+      }, 750);
     } else {
-      document.querySelector("#controls").style.removeProperty("opacity");
+      document.querySelector('#controls').style.removeProperty('opacity');
       clearInterval(PlayersatsTimer.current);
     }
     setShowPlaybackStats(!showPlaybackStats);
     setPlaybackStats(TwitchPlayer.getPlaybackStats());
-  }, [TwitchPlayer, showPlaybackStats]);
+  };
+
+  function keyboardEvents(e) {
+    switch (e.key) {
+      case 's':
+      case 'S':
+        ToggleShowStats();
+        break;
+      default:
+        break;
+    }
+  }
 
   useEffect(() => {
-    const keyboardEvents = (e) => {
-      switch (e.key) {
-        case "s":
-        case "S":
-          ToggleShowStats();
-          break;
-        default:
-          break;
-      }
-    };
-    if (TwitchPlayer) document.body.addEventListener("keydown", keyboardEvents);
-
     return () => {
       clearInterval(PlayersatsTimer.current);
-      document.body.removeEventListener("keydown", keyboardEvents);
     };
-  }, [ToggleShowStats, TwitchPlayer]);
+  }, []);
 
   return (
     <>
@@ -67,7 +70,8 @@ export default ({ TwitchPlayer }) => {
                 <span
                   style={{
                     color: latencyColorValue(statName, playbackStats[statName]),
-                  }}>
+                  }}
+                >
                   {playbackStats[statName]}
                 </span>
               </div>

@@ -1,5 +1,5 @@
-@import "~bootstrap/scss/bootstrap.scss";
-@import "./override.scss";
+@import '~bootstrap/scss/bootstrap.scss';
+@import './override.scss';
 
 html {
   background: #070711;
@@ -10,13 +10,13 @@ html {
 body {
   min-height: 100vh;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
-    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-attachment: fixed;
   padding: 0 !important;
-  overflow-y: scroll !important;
+  // overflow-y: scroll !important;
 
   background-color: var(--backgroundColor);
   object-fit: cover;
@@ -29,7 +29,7 @@ body {
 }
 
 code {
-  font-family: "Fira Code", monospace, source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  font-family: 'Fira Code', monospace, source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 

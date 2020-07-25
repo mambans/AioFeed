@@ -1,8 +1,9 @@
-import React, { useEffect, useCallback } from "react";
+import React from 'react';
 
-import { CreateClipButton } from "./StyledComponents";
-import API from "../API";
-import validateToken from "../validateToken";
+import { CreateClipButton } from './StyledComponents';
+import API from '../API';
+import validateToken from '../validateToken';
+import useEventListener from '../../../hooks/useEventListener';
 
 const CreateAndOpenClip = async ({ streamInfo }) => {
   const Width = window.screen.width * 0.6;
@@ -17,33 +18,24 @@ const CreateAndOpenClip = async ({ streamInfo }) => {
         window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
       })
       .catch((er) => {
-        console.error("CreateAndOpenClip -> er", er);
+        console.error('CreateAndOpenClip -> er', er);
       });
   });
 };
 
 export default ({ streamInfo }) => {
-  const keyboardEvents = useCallback(
-    (e) => {
-      switch (e.key) {
-        case "c":
-        case "C":
-          CreateAndOpenClip({ streamInfo });
-          break;
-        default:
-          break;
-      }
-    },
-    [streamInfo]
-  );
+  useEventListener('keydown', keyboardEvents, window, streamInfo);
 
-  useEffect(() => {
-    if (streamInfo) document.body.addEventListener("keydown", keyboardEvents);
-
-    return () => {
-      document.body.removeEventListener("keydown", keyboardEvents);
-    };
-  }, [keyboardEvents, streamInfo]);
+  function keyboardEvents(e) {
+    switch (e.key) {
+      case 'c':
+      case 'C':
+        CreateAndOpenClip({ streamInfo });
+        break;
+      default:
+        break;
+    }
+  }
 
   return (
     <CreateClipButton

@@ -30,8 +30,7 @@ const NavExpandingSides = styled.div`
   }
 
   &:hover,
-  &:focus,
-  &:focus-within {
+  &:focus {
     width: 100%;
 
     #arrow {

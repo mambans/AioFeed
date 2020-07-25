@@ -2,7 +2,7 @@ import { MdVideoCall } from 'react-icons/md';
 import { MdVideocam } from 'react-icons/md';
 import { MdVideocamOff } from 'react-icons/md';
 import axios from 'axios';
-import React, { useState, useContext, useRef, useEffect } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import AccountContext from './../../account/AccountContext';
@@ -10,6 +10,7 @@ import { VodAddRemoveButton } from './../../sharedStyledComponents';
 import AddVodChannel from './AddVodChannel';
 import { getLocalstorage } from '../../../util/Utils';
 import VodsContext from './VodsContext';
+import useEventListener from '../../../hooks/useEventListener';
 
 /**
  * @param {String} channel - channel name
@@ -24,6 +25,17 @@ export default ({ channel, loweropacity, marginright }) => {
   const [isHovered, setIsHovered] = useState();
   const [vodEnabled, setVodEnabled] = useState(channels.includes(channel.toLowerCase()));
   const vodButton = useRef();
+
+  useEventListener('mouseenter', handleMouseOver, vodButton.current);
+  useEventListener('mouseleave', handleMouseOut, vodButton.current);
+
+  function handleMouseOver() {
+    setIsHovered(true);
+  }
+
+  function handleMouseOut() {
+    setIsHovered(null);
+  }
 
   async function removeChannel(channel) {
     try {
@@ -56,27 +68,6 @@ export default ({ channel, loweropacity, marginright }) => {
       console.log(e.message);
     }
   }
-
-  useEffect(() => {
-    const handleMouseOver = () => {
-      setIsHovered(true);
-    };
-
-    const handleMouseOut = () => {
-      setIsHovered(null);
-    };
-
-    if (vodButton.current) {
-      const refEle = vodButton.current;
-      refEle.addEventListener('mouseenter', handleMouseOver);
-      refEle.addEventListener('mouseleave', handleMouseOut);
-
-      return () => {
-        refEle.removeEventListener('mouseenter', handleMouseOver);
-        refEle.removeEventListener('mouseleave', handleMouseOut);
-      };
-    }
-  }, []);
 
   return (
     <OverlayTrigger

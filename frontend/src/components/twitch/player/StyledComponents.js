@@ -420,24 +420,30 @@ export const ShowNavbarBtn = styled(Button)`
   align-items: center;
   position: absolute;
   z-index: 1;
-  padding: 4px;
+  padding: 5px;
   margin: 4px;
   cursor: pointer;
   opacity: 0.4;
   right: ${({ type }) => (type === 'video' ? '10px' : 'unset')};
-  transition: opacity 200ms, transform 200ms;
+  transition: opacity 250ms, transform 250ms, width 250ms;
+  overflow: hidden;
+  width: 40px;
+  border: none;
+  transform: translate3d(0, 0, 0);
+
+  svg {
+    min-width: 30px;
+    margin-right: 5px;
+  }
 
   &::after {
-    content: '';
+    content: 'Nav';
     transition: all 200ms;
   }
 
   &:hover {
     opacity: 1;
-
-    ::after {
-      content: 'Nav';
-    }
+    width: 80px;
   }
 `;
 
