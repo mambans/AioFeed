@@ -142,7 +142,7 @@ export default () => {
             });
       }
     },
-    [category, sortBy, sortByTime, videoType],
+    [category, sortBy, sortByTime, videoType]
   );
 
   const videoTypeBtnOnClick = (type) => {
@@ -215,7 +215,7 @@ export default () => {
           </div>
           <HeaderTitle style={{ marginLeft: '10px' }}>
             <FaTwitch size={32} style={{ color: '#6f166f' }} />
-            Top {videoType}
+            {category || 'Top'} - {videoType}
           </HeaderTitle>
           <TopDataSortButtonsContainer>
             <GameSearchBar gameName={category} videoType={videoType} />
