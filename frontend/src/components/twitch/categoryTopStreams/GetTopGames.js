@@ -1,4 +1,4 @@
-import API from "../API";
+import API from '../API';
 
 export default async (cursor) => {
   const topGames = await API.getTopGames({
@@ -7,8 +7,8 @@ export default async (cursor) => {
       after: cursor || null,
     },
   }).catch((error) => {
-    console.log(error);
+    console.log('er: ', error);
   });
-  if (topGames && topGames.data) return topGames.data;
+  if (topGames?.data) return topGames.data;
   return { data: [] };
 };

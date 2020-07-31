@@ -22,11 +22,11 @@ export default async ({
 }) => {
   const originalArray = items;
   const Profiles = fetchProfiles
-    ? await fetchProfileImages({ items, forceNewProfiles, previousStreams })
+    ? await fetchProfileImages({ items, forceNewProfiles, previousStreams }).catch((e) => [])
     : [];
   const GameInfo = fetchGameInfo ? await fetchGameName({ items }) : [];
 
-  const finallData = originalArray.data.map((channel) => {
+  const finallData = originalArray?.data?.map((channel) => {
     const foundGameInfo = GameInfo?.find((item) => item.user_id === channel.user_id);
     const foundProfile = Profiles?.find((item) => item.user_id === channel.user_id);
 

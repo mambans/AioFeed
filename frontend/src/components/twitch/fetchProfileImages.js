@@ -20,15 +20,17 @@ function chunk(array, size) {
 export default async ({ items, forceNewProfiles, previousStreams }) => {
   const originalArray = items;
   const TwitchProfiles = GetCachedProfiles();
-  const noCachedProfileArrayObject = await originalArray.data.filter(
+  const noCachedProfileArrayObject = await originalArray?.data?.filter(
     (user) =>
       !Object.keys(TwitchProfiles).some((id) => id === (user?.user_id || user?.broadcaster_id)) ||
       (previousStreams && !previousStreams?.find((stream) => user?.user_id === stream?.user_id))
   );
 
-  const noCachedProfileArrayIds = Object.values(
-    forceNewProfiles ? originalArray.data : noCachedProfileArrayObject
-  ).map((user) => user?.user_id || user?.broadcaster_id);
+  const noCachedProfileArrayIds =
+    (originalArray?.data || noCachedProfileArrayObject) &&
+    Object.values(forceNewProfiles ? originalArray?.data : noCachedProfileArrayObject).map(
+      (user) => user?.user_id || user?.broadcaster_id
+    );
 
   const chunkedNoCachedProfileArrayIds =
     noCachedProfileArrayIds?.length > 0 ? chunk(noCachedProfileArrayIds, 100) : null;
@@ -50,7 +52,7 @@ export default async ({ items, forceNewProfiles, previousStreams }) => {
       })
     ).then((res) => res.flat(1)));
 
-  const finallData = await originalArray.data.map((user) => {
+  const finallData = await originalArray?.data?.map((user) => {
     const foundProfile = newProfileImgUrls?.find(
       (p_user) => p_user?.id === (user?.user_id || user?.broadcaster_id)
     );
