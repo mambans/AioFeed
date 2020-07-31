@@ -1,13 +1,13 @@
-import axios from "axios";
-import { getLocalstorage } from "../../../util/Utils";
+import axios from 'axios';
+import { getLocalstorage } from '../../../util/Utils';
 
 export default async ({ channel, username, authKey }) => {
   try {
-    const existingChannels = new Set(getLocalstorage("VodChannels") || []);
+    const existingChannels = new Set(getLocalstorage('VodChannels') || []);
 
-    const newChannels = Array.from(existingChannels.add(channel.toLowerCase()));
+    const newChannels = [...existingChannels.add(channel.toLowerCase())];
 
-    localStorage.setItem("VodChannels", JSON.stringify(newChannels));
+    localStorage.setItem('VodChannels', JSON.stringify(newChannels));
 
     await axios
       .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/vodchannels`, {
