@@ -1,6 +1,6 @@
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Alert } from 'react-bootstrap';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { debounce } from 'lodash';
 
 import { SubFeedContainer, LoadMore } from './../../sharedStyledComponents';
@@ -9,6 +9,7 @@ import ClipsSortButton from './ClipsSortButton';
 import SortButton from './SortButton';
 import ClipElement from './ClipElement';
 import VodElement from '../vods/VodElement';
+import useEventListener from '../../../hooks/useEventListener';
 
 export default ({
   feedName,
@@ -22,9 +23,8 @@ export default ({
   channelInfo,
 }) => {
   const [numberOfVideos, setNumberOfVideos] = useState(
-    Math.floor(document.documentElement.clientWidth / 350),
+    Math.floor(document.documentElement.clientWidth / 350)
   );
-  // const numberOfVideos = Math.floor(document.documentElement.clientWidth / 350);
 
   const recalcWidth = useMemo(
     () =>
@@ -33,18 +33,12 @@ export default ({
           setNumberOfVideos(Math.floor(document.documentElement.clientWidth / 350));
         },
         20,
-        { leading: true, trailing: false },
+        { leading: true, trailing: false }
       ),
-    [],
+    []
   );
 
-  useEffect(() => {
-    window.addEventListener('resize', recalcWidth);
-
-    return () => {
-      window.removeEventListener('resize', recalcWidth);
-    };
-  }, [recalcWidth]);
+  useEventListener('resize', recalcWidth);
 
   return (
     <>
@@ -72,17 +66,15 @@ export default ({
           }}
           component={SubFeedContainer}
         >
-          {items.map((item) => {
-            return (
-              <CSSTransition key={item.id} timeout={750} className='fade-750ms' unmountOnExit>
-                {feedName === 'Vods' ? (
-                  <VodElement data={item} vodBtnDisabled={true} />
-                ) : (
-                  <ClipElement data={item} user_name={channelInfo && channelInfo.name} />
-                )}
-              </CSSTransition>
-            );
-          })}
+          {items.map((item) => (
+            <CSSTransition key={item.id} timeout={750} className='fade-750ms' unmountOnExit>
+              {feedName === 'Vods' ? (
+                <VodElement data={item} vodBtnDisabled={true} />
+              ) : (
+                <ClipElement data={item} user_name={channelInfo && channelInfo.name} />
+              )}
+            </CSSTransition>
+          ))}
         </TransitionGroup>
       ) : (
         items &&
