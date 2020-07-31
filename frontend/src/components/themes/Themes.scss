@@ -18,7 +18,10 @@ html[data-theme='wood'] {
   --navigationbarBackground: #050a0fc7;
   --newHighlightColor: #ffffff;
 
-  --popupListsBackground: linear-gradient(rgba(0, 0, 0, 0.4) 0%, #000000d8 15%);
+  --popupListsBackground: linear-gradient(
+    rgba(0, 0, 0, 0.4) 0%,
+    var(--navigationbarBackground) 15%
+  );
   --subFeedHeaderBorder: 2px solid #bebebe29;
 
   --refreshButtonBackground: #00000026;
@@ -27,7 +30,7 @@ html[data-theme='wood'] {
   --refreshButtonHoverBackground: #00000067;
   --refreshButtonHoverColor: #ffffff;
   --refreshButtonHoverBorder: 1px solid #00000026;
-  --refreshButtonShadow: 4px 4px 5px 0px #000c;
+  --refreshButtonShadow: 2px 2px 5px 0px rgba(12, 12, 12, 0.75);
   --scrollbarColors: rgb(51, 51, 51) #14181bca;
 
   --videoBoxShadow: rgba(0, 0, 0, 0.1) 4px 4px 8px;
@@ -60,7 +63,6 @@ html[data-theme='christmas'] {
   --refreshButtonColor: #dddbdb;
   --refreshButtonHoverBackground: #333435;
   --refreshButtonHoverColor: #ffffff;
-  --refreshButtonShadow: 4px 4px 5px 0px #000c;
   --scrollbarColors: rgb(240, 240, 240) rgb(43, 31, 31);
   --subFeedHeaderBorder: 2px solid #80808029;
 }
@@ -118,7 +120,6 @@ html[data-theme='light'] {
   --refreshButtonHoverBackground: rgb(255, 255, 255);
   --refreshButtonHoverColor: #1d1d1d;
   --refreshButtonHoverBorder: 1px solid rgb(255, 255, 255);
-  --refreshButtonShadow: 4px 4px 5px 0px #000c;
   --scrollbarColors: rgb(41, 41, 41) rgb(255, 255, 255);
 
   --subFeedHeaderBorder: 2px solid #29292988;
@@ -142,4 +143,17 @@ html[data-theme='matt blue'] {
   --navigationbarBackground: #080d11e1;
 
   --scrollbarColors: #454b61 #1c1f28;
+}
+
+html[data-theme='headphones'] {
+  --backgroundImg: url('/images/headphones3.jpg');
+  --backgroundColor: #200920;
+
+  --navigationbarBackground: rgba(20, 13, 34, 0.89);
+  --popupListsBackground: linear-gradient(
+    rgba(0, 0, 0, 0.4) 0%,
+    var(--navigationbarBackground) 15%
+  );
+
+  --scrollbarColors: #4d2c7e black;
 }

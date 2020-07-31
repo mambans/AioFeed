@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import useSyncedLocalState from "./../../hooks/useSyncedLocalState";
+import useSyncedLocalState from './../../hooks/useSyncedLocalState';
 
 const ThemeContext = React.createContext();
 
@@ -8,101 +8,71 @@ export const findSeasonOrDefaultTheme = (allThemes) => {
   const currentMonth = new Date().getMonth() + 1;
   const currentDate = new Date().getDate();
 
-  const startTheme = allThemes.find((themes) => {
-    return (
-      themes.startMonth <= currentMonth &&
-      themes.endMonth >= currentMonth &&
-      themes.startDate <= currentDate &&
-      themes.endDate >= currentDate
-    );
-  });
+  const startTheme = allThemes.find(
+    (themes) =>
+      themes?.startMonth <= currentMonth &&
+      themes?.endMonth >= currentMonth &&
+      themes?.startDate <= currentDate &&
+      themes?.endDate >= currentDate
+  );
 
-  const defaultTheme = allThemes.find((themes) => {
-    return themes.default;
-  });
+  const defaultTheme = allThemes.find((themes) => themes.default);
 
   return startTheme || defaultTheme || {};
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [activeTheme, setActiveTheme] = useSyncedLocalState("activeTheme", {
-    name: "default",
-    type: "dark",
-    startMonth: 0,
-    startDate: 0,
-    endMonth: 0,
-    endDate: 0,
+  const [activeTheme, setActiveTheme] = useSyncedLocalState('activeTheme', {
+    name: 'default',
+    type: 'dark',
   });
 
   const themesArray = [
     {
-      name: "default",
-      type: "dark",
+      name: 'default',
+      type: 'dark',
       image: findSeasonOrDefaultTheme,
-      startMonth: 0,
-      startDate: 0,
-      endMonth: 0,
-      endDate: 0,
     },
     {
-      name: "matt blue",
-      type: "dark",
-      image: "matt_blue.png",
-      startMonth: 0,
-      startDate: 0,
-      endMonth: 0,
-      endDate: 0,
+      name: 'matt blue',
+      type: 'dark',
+      image: 'matt_blue.png',
     },
     {
-      name: "clean",
-      type: "dark",
-      image: "clean.png",
+      name: 'clean',
+      type: 'dark',
+      image: 'clean.png',
       default: true,
-      startMonth: 0,
-      startDate: 0,
-      endMonth: 0,
-      endDate: 0,
     },
     {
-      name: "wood",
-      type: "dark",
-      image: "wood.webp",
-      startMonth: 0,
-      startDate: 0,
-      endMonth: 0,
-      endDate: 0,
+      name: 'wood',
+      type: 'dark',
+      image: 'wood.webp',
     },
     {
-      name: "stone",
-      type: "dark",
-      image: "stone.webp",
-      startMonth: 0,
-      startDate: 0,
-      endMonth: 0,
-      endDate: 0,
+      name: 'headphones',
+      type: 'dark',
+      image: 'headphones3.jpg',
     },
     {
-      name: "light",
-      type: "light",
-      backgroundColor: "white",
-      startMonth: 0,
-      startDate: 0,
-      endMonth: 0,
-      endDate: 0,
+      name: 'stone',
+      type: 'dark',
+      image: 'stone.webp',
     },
     {
-      name: "simple dark",
-      type: "dark",
-      backgroundColor: "black",
-      startMonth: 0,
-      startDate: 0,
-      endMonth: 0,
-      endDate: 0,
+      name: 'light',
+      type: 'light',
+      backgroundColor: 'white',
     },
     {
-      name: "christmas",
-      type: "dark",
-      image: "christmas.webp",
+      name: 'simple dark',
+      type: 'dark',
+      backgroundColor: 'black',
+    },
+    {
+      name: 'christmas',
+      type: 'dark',
+      image: 'christmas.webp',
       startMonth: 12,
       startDate: 1,
       endMonth: 12,
@@ -110,8 +80,8 @@ export const ThemeProvider = ({ children }) => {
     },
     {
       name: "new year's eve",
-      type: "dark",
-      image: "new_years_eve.webp",
+      type: 'dark',
+      image: 'new_years_eve.webp',
       startMonth: 1,
       startDate: 1,
       endMonth: 1,
@@ -125,7 +95,8 @@ export const ThemeProvider = ({ children }) => {
         themesArray,
         activeTheme: activeTheme,
         setActiveContextTheme: setActiveTheme,
-      }}>
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );

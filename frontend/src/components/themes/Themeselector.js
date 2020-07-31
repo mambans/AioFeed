@@ -9,11 +9,7 @@ export default ({ style }) => {
   const { themesArray, setActiveContextTheme } = useContext(ThemeContext);
   const [activeTheme, setActiveTheme] = useSyncedLocalState("activeTheme", {
     name: "default",
-    type: "dark",
-    startMonth: 0,
-    startDate: 0,
-    endMonth: 0,
-    endDate: 0,
+    type: "dark"
   });
   const [open, setOpen] = useState(false);
 
