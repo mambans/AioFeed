@@ -72,7 +72,6 @@ export default (prop) => {
             showButton={false}
             style={{ background: 'none', boxShadow: 'none', margin: '0 10px' }}
             inputStyle={{ textOverflow: 'unset' }}
-            alwaysFetchNew={true}
             openInNewTab={true}
           />
           <ChannelSearchList

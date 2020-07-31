@@ -1,0 +1,44 @@
+export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
+  const parentRect = parentDiv.getBoundingClientRect();
+  const childRect = childDiv.getBoundingClientRect();
+
+  const scrollDown =
+    childRect.bottom + 20.5 >= parentRect.bottom || childRect.top + 20.5 >= parentRect.bottom;
+  const scrollUp =
+    childRect.top - 20.5 <= parentRect.top || childRect.bottom - 20.5 <= parentRect.top;
+
+  if (scrollDown || scrollUp) {
+    childDiv.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    parentDiv.scrollBy({
+      top: direction === 'Down' && scrollDown ? +41 : direction === 'Up' && scrollUp ? -41 : 0,
+      behavior: 'smooth',
+    });
+  }
+};
+
+export default (e, list, cursor, setCursor, setChannel, ulListRef) => {
+  try {
+    if (list?.length > 1) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setCursor((cursor) => ({
+          position: Math.min(Math.max(cursor.position + 1, 0), list?.length - 1),
+          used: true,
+        }));
+        setChannel(list[Math.min(Math.max(cursor.position + 1, 0))].user_name);
+        scrollToIfNeeded(ulListRef, document.querySelector('.selected'), 'Down');
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setCursor((cursor) => ({
+          position: Math.min(Math.max(cursor.position - 1, 0), list?.length - 1),
+          used: true,
+        }));
+
+        setChannel(list[Math.min(Math.max(cursor.position - 1, 0))].user_name);
+        scrollToIfNeeded(ulListRef, document.querySelector('.selected'), 'Up');
+      }
+    }
+  } catch (error) {
+    console.log('handleArrowKey -> error', error);
+  }
+};
