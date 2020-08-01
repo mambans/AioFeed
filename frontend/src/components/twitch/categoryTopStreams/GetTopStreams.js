@@ -1,5 +1,5 @@
-import AddVideoExtraData from "../AddVideoExtraData";
-import API from "../API";
+import AddVideoExtraData from '../AddVideoExtraData';
+import API from '../API';
 
 export default async (category, page) => {
   let game;
@@ -8,7 +8,7 @@ export default async (category, page) => {
     Math.floor((document.documentElement.clientWidth - 150) / 350) *
     Math.floor((document.documentElement.clientHeight - (65 + 60)) / 351);
 
-  if (category && category !== "undefined") {
+  if (category && category !== 'undefined') {
     game = await API.getGames({
       params: {
         name: category,
@@ -32,7 +32,7 @@ export default async (category, page) => {
       return e;
     });
 
-    const finallData = await AddVideoExtraData({ items: topStreams.data });
+    const finallData = await AddVideoExtraData({ items: topStreams.data, saveNewProfiles: false });
 
     return { topData: finallData, error };
   } catch (e) {

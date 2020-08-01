@@ -1,5 +1,5 @@
-import AddVideoExtraData from "../AddVideoExtraData";
-import API from "../API";
+import AddVideoExtraData from '../AddVideoExtraData';
+import API from '../API';
 
 /**
  * Fetch Clips
@@ -16,7 +16,7 @@ export default async (category, sortByTime, page) => {
     Math.floor((document.documentElement.clientWidth - 150) / 350) *
     Math.floor((document.documentElement.clientHeight - (65 + 60)) / 351);
 
-  if (category && category !== "undefined") {
+  if (category && category !== 'undefined') {
     game = await API.getGames({
       params: {
         name: category,
@@ -44,7 +44,7 @@ export default async (category, sortByTime, page) => {
       return e;
     });
 
-    const finallClips = await AddVideoExtraData({ items: topClips.data });
+    const finallClips = await AddVideoExtraData({ items: topClips.data, saveNewProfiles: false });
 
     return { topData: finallClips, error };
   } catch (e) {

@@ -18,11 +18,17 @@ export default async ({
   fetchGameInfo = true,
   fetchProfiles = true,
   forceNewProfiles = false,
+  saveNewProfiles,
   previousStreams,
 }) => {
   const originalArray = items;
   const Profiles = fetchProfiles
-    ? await fetchProfileImages({ items, forceNewProfiles, previousStreams }).catch((e) => [])
+    ? await fetchProfileImages({
+        items,
+        forceNewProfiles,
+        previousStreams,
+        saveNewProfiles,
+      }).catch((e) => [])
     : [];
   const GameInfo = fetchGameInfo ? await fetchGameName({ items }) : [];
 

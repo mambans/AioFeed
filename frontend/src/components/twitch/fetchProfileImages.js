@@ -17,7 +17,7 @@ function chunk(array, size) {
  * @async
  * @returns
  */
-export default async ({ items, forceNewProfiles, previousStreams }) => {
+export default async ({ items, forceNewProfiles, previousStreams, saveNewProfiles = true }) => {
   const originalArray = items;
   const TwitchProfiles = GetCachedProfiles();
   const noCachedProfileArrayObject = await originalArray?.data?.filter(
@@ -84,8 +84,10 @@ export default async ({ items, forceNewProfiles, previousStreams }) => {
     {}
   );
 
-  const FinallTwitchProfilesObj = { ...TwitchProfiles, ...newProfiles };
-  localStorage.setItem('TwitchProfiles', JSON.stringify(FinallTwitchProfilesObj));
+  if (saveNewProfiles) {
+    const FinallTwitchProfilesObj = { ...TwitchProfiles, ...newProfiles };
+    localStorage.setItem('TwitchProfiles', JSON.stringify(FinallTwitchProfilesObj));
+  }
 
   return finallData;
 };

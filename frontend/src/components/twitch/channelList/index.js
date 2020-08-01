@@ -10,16 +10,16 @@ import {
   SearchSubmitBtn,
   BackdropChannelList,
 } from './../categoryTopStreams/styledComponents';
-import StyledLoadingList from './../categoryTopStreams/LoadingList';
-import ChannelListElement from '../channelList/ChannelListElement';
 import AddVideoExtraData from '../AddVideoExtraData';
+import API from '../API';
+import ChannelListElement from '../channelList/ChannelListElement';
 import GetFollowedChannels from '../GetFollowedChannels';
 import getFollowedOnlineStreams from '../live/GetFollowedStreams';
-import API from '../API';
-import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
-import InifinityScroll from './InifinityScroll';
 import handleArrowNavigation from './handleArrowNavigation';
+import InifinityScroll from './InifinityScroll';
 import sortByInput from './sortByInput';
+import StyledLoadingList from './../categoryTopStreams/LoadingList';
+import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 
 const removeDuplicates = (items) =>
   items.filter((item, index, self) => {
@@ -82,6 +82,7 @@ export default ({
                       items: { data: searchResult },
                       fetchGameInfo: true,
                       fetchProfiles: true,
+                      saveNewProfiles: false,
                     }).then((finalChannels) => {
                       setSearchResults({
                         data: finalChannels?.data,
@@ -148,7 +149,7 @@ export default ({
     () =>
       throttle(
         async () => {
-          await GetFollowedChannels().then(async (res) => {
+          GetFollowedChannels().then(async (res) => {
             channelListToObject(res).then(async (res) => {
               await AddVideoExtraData({ items: res?.data, fetchGameInfo: false }).then(
                 async (res) => {
@@ -197,9 +198,9 @@ export default ({
     }
   };
 
-  const handleArrowKey = (e) =>
+  const handleArrowKey = (event) =>
     handleArrowNavigation(
-      e,
+      event,
       filteredInputMatched?.data,
       cursor,
       setCursor,
@@ -225,6 +226,7 @@ export default ({
             items: { data: searchResult },
             fetchGameInfo: true,
             fetchProfiles: true,
+            saveNewProfiles: false,
           }).then((finallChannels) => {
             setSearchResults((curr) => ({
               data: [...(curr?.data || []), ...(finallChannels?.data || [])],
@@ -270,15 +272,15 @@ export default ({
         direction={'left'}
       >
         <input
-          style={{ ...inputStyle }}
           ref={inputRef}
+          style={{ ...inputStyle }}
           type='text'
+          spellCheck='false'
           placeholder={`${channelName || placeholder}`}
-          {...bindChannel}
           onFocus={() => {
             setListIsOpen(true);
           }}
-          spellCheck='false'
+          {...bindChannel}
         />
         <SearchSubmitBtn
           disabled={!channel}
