@@ -2,17 +2,15 @@
 
 <img src="https://github.com/mambans/AioFeed/blob/master/frontend/public/android-chrome-192x192.png" alt="Logo" width="300"/>
 
-My personal project **AioFeed**, is a site that combines feeds from different sites such as Twitch.tv, Youtube.com and a Twitter List into one page. And some features I personally thought was missing from Twitch.tv.
-
-## Account
-
-AioFeed stores the AioFeed account Username, email, **hashed** password in database and encrypted Youtube and Twitch access tokens so you don't need to reconnected on each session, token's auto refreshes in the client when needed, so stored tokens can still expire until next auto refresh in the client.
-It also stores profile image url, vod channel list (twitch channels to fetch vods from).
+My personal project **AioFeed**, is a site that combines feeds from different sites such as [Twitch](https://twitch.tv), [Youtube](https://youtube.com) and a Twitter List into one page. With some features I personally thought was missing from [Twitch](https://twitch.tv).tv.
 
 ## Pages
 
-- Feed
+- Feeds
 - Twitch top streams/clips (all/category)
+- Twitch player
+- Twitch channel page
+- Youtube player
 
 ## Feeds
 
@@ -29,7 +27,7 @@ Twitter feed from a public Twitter list, not the home feed. (No Twitter authenti
 
 ### Twitch
 
-AioFeed auto refreshes the live Twitch feed every 25sec with live Notifications. AioFeed also shows most recent vods from specific Twitch channels you have enabled/selected vods for in AioFeed. Auto refreches vods every 3 hours, can be manually refreshed from a button.
+AioFeed auto refreshes the Twitch live feed every 25sec with notifications. AioFeed also shows most recent vods from specific Twitch channels you have enabled/selected vods for in AioFeed. Auto refreches vods every 3 hours, can be manually refreshed from a button.
 
 #### Features
 
@@ -64,8 +62,39 @@ AioFeed auto refreshes the live Twitch feed every 25sec with live Notifications.
 
 ### Youtube
 
-Youtube feed shows the 10 latest uploaded video from each followed/subscribed channel in the past 7 days. Doesn't auto refresh, can be manually refreshed from a button.
+Youtube feed fetches the 10 latest uploaded video from each followed/subscribed channel in the past 7 days. Doesn't auto refresh, can be manually refreshed from a button.
 
 Hovering a video displays an iframe of the video.
 
-(This feed is pretty limited because of quite low quota/request limit.)
+_(This feed is pretty limited because of quite low quota/request limit.)_
+
+## Account & Data
+
+AioFeed stores/saves the following data for easier auto-reauthentication:
+
+- **AioFeed**
+
+  - username
+  - email
+  - _hashed_ password
+  - profile image url
+
+- **Twitch**
+
+  - user id
+  - username
+  - Profile image url
+  - _encrypted_ Access token
+  - _encrypted_ Refresh token
+  - Vod-channels list
+  - Update-notifications list (notifications for update title/game)
+
+- **Youtube**
+
+  - username
+  - profile image url
+  - _encrypted_ access token
+  - _encrypted_ refresh token
+
+- **Twitter**
+  - List id
