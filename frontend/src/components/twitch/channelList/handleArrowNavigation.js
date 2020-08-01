@@ -16,25 +16,27 @@ export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
   }
 };
 
-export default (e, list, cursor, setCursor, setChannel, ulListRef) => {
+export default (e, list, cursor, setCursor, setValue, ulListRef) => {
   try {
     if (list?.length > 1) {
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        setCursor((cursor) => ({
-          position: Math.min(Math.max(cursor.position + 1, 0), list?.length - 1),
+        const cursorPosition = Math.min(Math.max(cursor.position + 1, 0));
+        setCursor(() => ({
+          position: cursorPosition,
           used: true,
         }));
-        setChannel(list[Math.min(Math.max(cursor.position + 1, 0))].user_name);
+        setValue(list[cursorPosition].user_name || list[cursorPosition].name);
         scrollToIfNeeded(ulListRef, document.querySelector('.selected'), 'Down');
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
-        setCursor((cursor) => ({
-          position: Math.min(Math.max(cursor.position - 1, 0), list?.length - 1),
+        const cursorPosition = Math.min(Math.max(cursor.position - 1, 0));
+        setCursor(() => ({
+          position: cursorPosition,
           used: true,
         }));
 
-        setChannel(list[Math.min(Math.max(cursor.position - 1, 0))].user_name);
+        setValue(list[cursorPosition].user_name || list[cursorPosition].name);
         scrollToIfNeeded(ulListRef, document.querySelector('.selected'), 'Up');
       }
     }

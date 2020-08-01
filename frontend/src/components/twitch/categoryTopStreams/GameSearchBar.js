@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
 import GetTopGames from './GetTopGames';
 import {
   StyledGameListElement,
@@ -9,15 +10,15 @@ import {
   BackdropChannelList,
   SearchSubmitBtn,
 } from './styledComponents';
-import { throttle } from 'lodash';
-import { MdFormatListBulleted } from 'react-icons/md';
-import StyledLoadingList from './LoadingList';
 import { CSSTransition } from 'react-transition-group';
-import handleArrowNavigation from '../channelList/handleArrowNavigation';
+import { MdFormatListBulleted } from 'react-icons/md';
+import { throttle } from 'lodash';
 import API from '../API';
-import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
+import handleArrowNavigation from '../channelList/handleArrowNavigation';
 import InifinityScroll from '../channelList/InifinityScroll';
 import sortByInput from '../channelList/sortByInput';
+import StyledLoadingList from './LoadingList';
+import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 
 const removeDuplicates = (items) =>
   items.filter((item, index, self) => {
@@ -146,9 +147,9 @@ export default (props) => {
     []
   );
 
-  const handleArrowKey = (e) =>
+  const handleArrowKey = (event) =>
     handleArrowNavigation(
-      e,
+      event,
       filteredInputMatched?.data,
       cursor,
       setCursor,
@@ -156,7 +157,7 @@ export default (props) => {
       ulListRef.current
     );
 
-  const observerFunction = async function (entries) {
+  const observerFunction = async function () {
     if ((searchResults?.nextPage || topGames?.nextPage) && !loadingMore) {
       setLoadingMore(true);
 
@@ -191,7 +192,7 @@ export default (props) => {
     openInNewTab
       ? window.open(`/category/${returnFirstMatchedGame()}`)
       : navigate(`/category/${returnFirstMatchedGame()}`);
-    setGame(returnFirstMatchedGame());
+    // setGame(returnFirstMatchedGame());
     setListIsOpen(false);
     if (openInNewTab) {
       resetGame();
@@ -223,10 +224,10 @@ export default (props) => {
       >
         <input
           ref={inputRef}
+          style={{ ...inputStyle }}
           type='text'
           spellCheck='false'
-          style={{ ...inputStyle }}
-          placeholder={`${gameName !== '' && gameName !== undefined ? gameName : 'Game'}..`}
+          placeholder={`${gameName || 'Game'}..`}
           onFocus={() => {
             setListIsOpen(true);
           }}
