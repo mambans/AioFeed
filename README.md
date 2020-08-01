@@ -2,7 +2,7 @@
 
 <img src="https://github.com/mambans/AioFeed/blob/master/frontend/public/android-chrome-192x192.png" alt="Logo" width="300"/>
 
-My personal project **AioFeed**, is a site that combines feeds from different sites such as [Twitch](https://twitch.tv), [Youtube](https://youtube.com) and a Twitter List into one page. With some features I personally thought was missing from [Twitch](https://twitch.tv).tv.
+My personal project **AioFeed**, is a site that combines feeds from different sites such as [Twitch](https://twitch.tv), [Youtube](https://youtube.com) and a Twitter List into one page. With some features I personally thought was missing from [Twitch](https://twitch.tv).
 
 ## Pages
 
