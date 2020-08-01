@@ -30,6 +30,7 @@ import {
   SmallButtonContainer,
   ChannelButton,
   ChannelIconLink,
+  OfflineOverlay,
 } from './StyledComponents';
 import PlayerNavbar from './PlayerNavbar';
 import setFavion from '../../setFavion';
@@ -438,6 +439,15 @@ export default () => {
           switchedChatState={String(chatState.switchChatSide)}
           hidechat={chatState.hideChat}
         >
+          {streamInfo === null && !showUIControlls && !isLive.current && (
+            <OfflineOverlay
+              type='live'
+              hidechat={String(chatState.hideChat)}
+              chatwidth={chatState.chatwidth || DEFAULT_CHAT_WIDTH}
+            >
+              <Link to='channel'>Offline</Link>
+            </OfflineOverlay>
+          )}
           <div id='twitch-embed' ref={videoElementRef}>
             <CSSTransition
               in={showControlls}
