@@ -118,14 +118,6 @@ export default ({
                   switchChatSide: false,
                   hideChat: false,
                 });
-                localStorage.setItem(
-                  'TwitchChatState',
-                  JSON.stringify({
-                    chatWidth: DEFAULT_CHAT_WIDTH,
-                    switchChatSide: false,
-                    hideChat: false,
-                  })
-                );
               }}
             >
               <GrRefresh size={24} />

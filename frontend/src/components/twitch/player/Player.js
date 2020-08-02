@@ -1,5 +1,5 @@
 import { CSSTransition } from 'react-transition-group';
-import { throttle } from 'lodash';
+import { throttle, debounce } from 'lodash';
 import { useParams, useLocation, Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';
@@ -70,12 +70,12 @@ export default () => {
   const [showControlls, setShowControlls] = useState();
   const [showUIControlls, setShowUIControlls] = useState();
   const [chatState, setChatState] = useState(
-    getLocalstorage('TwitchChatState')
+    getLocalstorage('TwitchChatState')?.[channelName.toLowerCase()] || {}
       ? {
           chatwidth: DEFAULT_CHAT_WIDTH,
           switchChatSide: false,
           hideChat: false,
-          ...getLocalstorage('TwitchChatState'),
+          ...(getLocalstorage('TwitchChatState')?.[channelName.toLowerCase()] || {}),
         }
       : {
           chatwidth: DEFAULT_CHAT_WIDTH,
@@ -85,8 +85,8 @@ export default () => {
   );
 
   const hideChatSaved = useRef(
-    getLocalstorage('TwitchChatState')
-      ? getLocalstorage('TwitchChatState').hideChat || false
+    getLocalstorage('TwitchChatState')?.[channelName.toLowerCase()] || {}
+      ? getLocalstorage('TwitchChatState')?.[channelName.toLowerCase()]?.hideChat || false
       : false
   );
   const [isFullscreen, setIsFullscreen] = useState();
@@ -100,7 +100,6 @@ export default () => {
   const videoElementRef = useRef();
   const hideChatDelay = useRef();
   const isLive = useRef();
-  // const locatorageWidthTimer = useRef();
 
   useEventListener(window.Twitch.Player.ONLINE, onlineEvents, twitchVideoPlayer);
   useEventListener(window.Twitch.Player.OFFLINE, offlineEvents, twitchVideoPlayer);
@@ -392,7 +391,6 @@ export default () => {
   };
 
   const resize = useCallback(
-    // throttle(
     (e) => {
       if (resizeActive) {
         const mouseX = e.clientX;
@@ -404,14 +402,35 @@ export default () => {
         setChatState((curr) => {
           return { ...curr, chatwidth: newWidth };
         });
-        localStorage.setItem(
-          'TwitchChatState',
-          JSON.stringify({ ...chatState, chatwidth: newWidth })
-        );
       }
     },
     [resizeActive, chatState]
   );
+
+  const updateCachedChatState = useCallback(
+    debounce(
+      () => {
+        const localstorageTwitchChatState = getLocalstorage('TwitchChatState') || {};
+
+        localStorage.setItem(
+          'TwitchChatState',
+          JSON.stringify({
+            ...localstorageTwitchChatState,
+            [channelName.toLowerCase()]: chatState,
+          })
+        );
+      },
+      1000,
+      { leading: false, trailing: true }
+    ),
+    [channelName, chatState]
+  );
+
+  useEffect(() => {
+    updateCachedChatState();
+
+    return updateCachedChatState.cancel;
+  }, [chatState, channelName, updateCachedChatState]);
 
   return (
     <>
@@ -486,13 +505,6 @@ export default () => {
 
                         <li
                           onClick={() => {
-                            localStorage.setItem(
-                              'TwitchChatState',
-                              JSON.stringify({
-                                ...chatState,
-                                switchChatSide: !chatState.switchChatSide,
-                              })
-                            );
                             setChatState((curr) => ({
                               ...curr,
                               switchChatSide: !chatState.switchChatSide,
@@ -663,13 +675,6 @@ export default () => {
                       id='switchSides'
                       switched={String(chatState.switchChatSide)}
                       onClick={() => {
-                        localStorage.setItem(
-                          'TwitchChatState',
-                          JSON.stringify({
-                            ...chatState,
-                            switchChatSide: !chatState.switchChatSide,
-                          })
-                        );
                         setChatState((curr) => ({
                           ...curr,
                           switchChatSide: !chatState.switchChatSide,
@@ -685,11 +690,6 @@ export default () => {
                         setChatState((current) => {
                           const newValue = !current.hideChat;
                           hideChatSaved.current = newValue;
-
-                          localStorage.setItem(
-                            'TwitchChatState',
-                            JSON.stringify({ ...current, hideChat: newValue })
-                          );
 
                           return { ...current, hideChat: newValue };
                         });
@@ -711,13 +711,6 @@ export default () => {
                     id='switchSides'
                     switched={String(chatState.switchChatSide)}
                     onClick={() => {
-                      localStorage.setItem(
-                        'TwitchChatState',
-                        JSON.stringify({
-                          ...chatState,
-                          switchChatSide: !chatState.switchChatSide,
-                        })
-                      );
                       setChatState((curr) => ({
                         ...curr,
                         switchChatSide: !chatState.switchChatSide,
@@ -746,10 +739,6 @@ export default () => {
                     setChatState((current) => {
                       const newValue = !current.hideChat;
                       hideChatSaved.current = newValue;
-                      localStorage.setItem(
-                        'TwitchChatState',
-                        JSON.stringify({ ...current, hideChat: newValue })
-                      );
                       return { ...current, hideChat: newValue };
                     });
                   }}
