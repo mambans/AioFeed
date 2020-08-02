@@ -78,7 +78,7 @@ export const HeaderTitle = styled.h4`
 `;
 
 export const HeaderContainer = styled.div`
-  border-bottom: var(--subFeedHeaderBorder);
+  border-bottom: 2px var(--subFeedHeaderBorder);
   display: flex;
   justify-content: space-between;
   align-items: center;

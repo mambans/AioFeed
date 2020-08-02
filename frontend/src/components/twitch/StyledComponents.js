@@ -3,7 +3,7 @@ import { MdFavorite } from 'react-icons/md';
 import { MdFavoriteBorder } from 'react-icons/md';
 
 export const HeaderContainerTwitchLive = styled.div`
-  border-bottom: var(--subFeedHeaderBorder);
+  border-bottom: 2px var(--subFeedHeaderBorder);
   display: flex;
   justify-content: space-between;
   align-items: center;
