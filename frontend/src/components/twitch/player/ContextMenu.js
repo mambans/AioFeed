@@ -67,6 +67,8 @@ export default ({
   setChatState,
   children,
   DEFAULT_CHAT_WIDTH,
+  chatState,
+  channelName,
 }) => {
   const [show, setShow] = useState();
   useEventListener('contextmenu', toggleShowHide, PlayerUIControlls);
@@ -121,7 +123,29 @@ export default ({
               }}
             >
               <GrRefresh size={24} />
-              {'Reset video/chat positions'}
+              {'Reset chat position'}
+            </li>
+            <li
+              onClick={() => {
+                const confirmed = window.confirm('Reset ALL chat positions?');
+                if (confirmed) {
+                  localStorage.setItem(
+                    'TwitchChatState',
+                    JSON.stringify({
+                      [channelName.toLowerCase()]: chatState,
+                    })
+                  );
+
+                  setChatState({
+                    chatWidth: DEFAULT_CHAT_WIDTH,
+                    switchChatSide: false,
+                    hideChat: false,
+                  });
+                }
+              }}
+            >
+              <GrRefresh size={24} />
+              {'Reset ALL chat positions'}
             </li>
           </ul>
         </Container>

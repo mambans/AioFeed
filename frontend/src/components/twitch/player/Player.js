@@ -492,6 +492,8 @@ export default () => {
                     TwitchPlayer={twitchVideoPlayer}
                     showAndResetTimer={showAndResetTimer}
                     setChatState={setChatState}
+                    chatState={chatState}
+                    channelName={channelName}
                     children={
                       <>
                         <li
