@@ -9,7 +9,7 @@ import CookieConsentAlert from '../CookieConsentAlert';
 import Routes from './../routes';
 import SetStartupTheme from '../themes';
 import ThemeContext from './../themes/ThemeContext';
-import useEventListener from '../../hooks/useEventListener';
+import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 
 export default () => {
   return (
@@ -39,7 +39,7 @@ const App = () => {
     setTwitchProfileImg,
   } = useContext(AccountContext);
 
-  useEventListener('message', receiveMessage, window, true, { capture: false });
+  useEventListenerMemo('message', receiveMessage, window, true, { capture: false });
 
   useEffect(() => {
     SetStartupTheme(themesArray);

@@ -11,7 +11,8 @@ import { SidebarInfoPopup, StyledsidebarItem, FirstRow, SecondRow } from './Styl
 import { truncate } from '../../../util/Utils';
 import AnimatedViewCount from '../live/AnimatedViewCount';
 import LiveInfoPopup from '../channelList/LiveInfoPopup';
-import useEventListener from '../../../hooks/useEventListener';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
+import loginNameFormat from './../loginNameFormat';
 
 const StyledNewHighlight = styled.div`
   position: absolute;
@@ -35,8 +36,8 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
   const ref = useRef();
   const timerRef = useRef();
 
-  useEventListener('mouseenter', handleMouseOver, ref.current);
-  useEventListener('mouseleave', handleMouseOut, ref.current);
+  useEventListenerMemo('mouseenter', handleMouseOver, ref.current);
+  useEventListenerMemo('mouseleave', handleMouseOut, ref.current);
 
   function handleMouseOver() {
     setShowTitle(shows);
@@ -70,8 +71,8 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
         >
           <img
             src={
-              stream.profile_img_url
-                ? stream.profile_img_url.replace('{width}', 640).replace('{height}', 360)
+              stream.profile_image_url
+                ? stream.profile_image_url.replace('{width}', 640).replace('{height}', 360)
                 : `${process.env.PUBLIC_URL}/android-chrome-512x512.png`
             }
             alt=''
@@ -82,7 +83,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
             className={'sidebarUser'}
             // href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}
           >
-            {truncate(stream.user_name, 16)}
+            {truncate(loginNameFormat(stream), 16)}
           </div>
 
           <AnimatedViewCount

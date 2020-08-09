@@ -21,7 +21,8 @@ import VodsFollowUnfollowBtn from './VodsFollowUnfollowBtn';
 import { formatViewerNumbers, formatTwitchVodsDuration } from './../TwitchUtils';
 import validateToken from '../validateToken';
 import API from '../API';
-import useEventListener from '../../../hooks/useEventListener';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
+import loginNameFormat from '../loginNameFormat';
 
 export default ({ data, vodBtnDisabled }) => {
   const [previewAvailable, setPreviewAvailable] = useState({});
@@ -29,8 +30,8 @@ export default ({ data, vodBtnDisabled }) => {
   const imgRef = useRef();
   const hoverTimeoutRef = useRef();
 
-  useEventListener('mouseenter', handleMouseOver, imgRef.current);
-  useEventListener('mouseleave', handleMouseOut, imgRef.current);
+  useEventListenerMemo('mouseenter', handleMouseOver, imgRef.current);
+  useEventListenerMemo('mouseleave', handleMouseOut, imgRef.current);
 
   async function handleMouseOver() {
     if (!previewAvailable.data) {
@@ -85,7 +86,7 @@ export default ({ data, vodBtnDisabled }) => {
           </StyledVideoElementAlert>
         )}
         {data.thumbnail_url === '' && (
-          <VodLiveIndicator to={`/${data.user_name}`}>Live</VodLiveIndicator>
+          <VodLiveIndicator to={`/${data.login || data.user_name}`}>Live</VodLiveIndicator>
         )}
         <a href={data.url}>
           {!previewAvailable.error && !previewAvailable.data && (
@@ -150,7 +151,7 @@ export default ({ data, vodBtnDisabled }) => {
         >
           <VideoTitle
             to={{
-              pathname: `/${data.user_name}/videos/${data.id}`,
+              pathname: `/${data.login || data.user_name}/videos/${data.id}`,
               state: {
                 p_title: data.title,
               },
@@ -163,7 +164,7 @@ export default ({ data, vodBtnDisabled }) => {
       ) : (
         <VideoTitle
           to={{
-            pathname: `/${data.user_name}/videos/${data.id}`,
+            pathname: `/${data.login || data.user_name}/videos/${data.id}`,
             state: {
               p_title: data.title,
             },
@@ -175,28 +176,31 @@ export default ({ data, vodBtnDisabled }) => {
       <ChannelContainer>
         <Link
           to={{
-            pathname: `/${data.user_name.toLowerCase()}/channel`,
+            pathname: `/${data.login || data.user_name.toLowerCase()}/channel`,
             state: {
               p_id: data.user_id,
             },
           }}
           style={{ gridRow: 1, paddingRight: '5px' }}
         >
-          <img src={data.profile_img_url} alt='' className={'profileImg'} />
+          <img src={data.profile_image_url} alt='' className={'profileImg'} />
         </Link>
         <div style={{ display: 'flex' }}>
           <Link
             to={{
-              pathname: `/${data.user_name.toLowerCase()}/channel`,
+              pathname: `/${data.login || data.user_name.toLowerCase()}/channel`,
               state: {
                 p_id: data.user_id,
               },
             }}
             className={'channelName'}
           >
-            {data.user_name}
+            {/* {data.user_name} */}
+            {loginNameFormat(data)}
           </Link>
-          {!vodBtnDisabled && <VodsFollowUnfollowBtn channel={data.user_name} loweropacity='0.5' />}
+          {!vodBtnDisabled && (
+            <VodsFollowUnfollowBtn channel={data.login || data.user_name} loweropacity='0.5' />
+          )}
         </div>
         <VodDates>
           <div>

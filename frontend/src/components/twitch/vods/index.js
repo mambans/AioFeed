@@ -12,7 +12,7 @@ import VodsContext from './VodsContext';
 import LoadingBoxes from './../LoadingBoxes';
 import FeedsContext from '../../feed/FeedsContext';
 import { AddCookie, getCookie } from '../../../util/Utils';
-import useEventListener from '../../../hooks/useEventListener';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
 export default ({ videoElementsAmount }) => {
   const { vods, setVods } = useContext(VodsContext);
@@ -32,8 +32,8 @@ export default ({ videoElementsAmount }) => {
     transitionGroup: 'videos',
   });
 
-  useEventListener('focus', windowFocusHandler);
-  useEventListener('blur', windowBlurHandler);
+  useEventListenerMemo('focus', windowFocusHandler);
+  useEventListenerMemo('blur', windowBlurHandler);
 
   const refresh = useCallback(
     async (forceRefresh) => {

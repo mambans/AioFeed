@@ -20,19 +20,27 @@ export default ({
 
   const UnfollowStream = async () => {
     await validateToken().then(async () => {
+      // await API.deleteFollowKRAKEN({
+      //   params: {
+      //     myId: twitchUserId,
+      //     id: id,
+      //   },
+      // })
       await API.deleteFollow({
         params: {
-          myId: twitchUserId,
-          id: id,
+          from_id: twitchUserId,
+          to_id: id,
         },
       })
-        .then(() => {
-          console.log(`Unfollowed: ${channelName}`);
-          if (refreshStreams) {
-            clearTimeout(refreshAfterUnfollowTimer.current);
-            refreshAfterUnfollowTimer.current = setTimeout(() => {
-              refreshStreams();
-            }, 3000);
+        .then((res) => {
+          if (res.status === 204) {
+            console.log(`Unfollowed: ${channelName}`);
+            if (refreshStreams) {
+              clearTimeout(refreshAfterUnfollowTimer.current);
+              refreshAfterUnfollowTimer.current = setTimeout(() => {
+                refreshStreams();
+              }, 3000);
+            }
           }
         })
         .catch((er) => {
@@ -45,13 +53,15 @@ export default ({
     await validateToken().then(async () => {
       await API.addFollow({
         params: {
-          myId: twitchUserId,
-          id: id || (await API.getUser({ params: { login: channelName } })).data.data[0].id,
+          from_id: twitchUserId,
+          to_id: id || (await API.getUser({ params: { login: channelName } })).data.data[0].id,
         },
       })
         .then((res) => {
-          console.log(`Followed: ${res.data.channel.display_name}`);
-          if (refreshStreams) refreshStreams();
+          if (res.status === 204) {
+            console.log(`Followed: ${channelName}`);
+            if (refreshStreams) refreshStreams();
+          }
         })
         .catch((er) => {
           console.error('followStream -> er', er);
@@ -62,9 +72,13 @@ export default ({
   useEffect(() => {
     const checkFollowing = async () => {
       await validateToken().then(async () => {
-        await API.checkFollow({ params: { myId: twitchUserId, id: id } })
-          .then(() => {
-            setFollowing(true);
+        await API.checkFollow({ params: { from_id: twitchUserId, to_id: id } })
+          .then((res) => {
+            if (res.data.data[0]) {
+              setFollowing(true);
+            } else {
+              console.log(`-Not following ${channelName}`);
+            }
           })
           .catch((error) => {
             if (error.response?.data.message === 'Follow not found') {

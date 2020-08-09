@@ -2,15 +2,15 @@ import React, { useRef } from 'react';
 import YouTube from 'react-youtube';
 
 import styles from './Youtube.module.scss';
-import useEventListener from '../../hooks/useEventListener';
+import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 
 export default (data) => {
   const ref = useRef();
   const videoHoverOutTimer = useRef();
   data.setIsHovered(true);
 
-  useEventListener('mousenter', handleMouseOver, ref.current);
-  useEventListener('mouseleave', handleMouseOut, ref.current);
+  useEventListenerMemo('mousenter', handleMouseOver, ref.current);
+  useEventListenerMemo('mouseleave', handleMouseOut, ref.current);
 
   function handleMouseOver() {
     clearTimeout(videoHoverOutTimer.current);

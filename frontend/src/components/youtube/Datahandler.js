@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useCallback, useContext } from 'rea
 
 import AccountContext from '../account/AccountContext';
 import ErrorHandler from '../error';
-import getFollowedChannels from './GetFollowedChannels';
+import getMyFollowedChannels from './getMyFollowedChannels';
 import GetSubscriptionVideos from './GetSubscriptionVideos';
 import validateToken from './validateToken';
 
@@ -19,7 +19,7 @@ export default ({ children }) => {
   const refresh = useCallback(async () => {
     const fetchData = async () => {
       try {
-        followedChannels.current = await getFollowedChannels();
+        followedChannels.current = await getMyFollowedChannels();
 
         const SubscriptionData = await GetSubscriptionVideos(followedChannels.current);
         setVideos(SubscriptionData.data);

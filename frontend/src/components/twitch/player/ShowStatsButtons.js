@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ButtonShowStats, PlaybackStats } from './StyledComponents';
-import useEventListener from '../../../hooks/useEventListener';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
 export default ({ TwitchPlayer }) => {
   const [showPlaybackStats, setShowPlaybackStats] = useState();
   const [playbackStats, setPlaybackStats] = useState();
   const PlayersatsTimer = useRef();
 
-  useEventListener('keydown', keyboardEvents, window, TwitchPlayer);
+  useEventListenerMemo('keydown', keyboardEvents, window, TwitchPlayer);
 
   const latencyColorValue = (name, value) => {
     if (name === 'hlsLatencyBroadcaster' || name === 'hlsLatencyEncoder') {

@@ -9,7 +9,7 @@ import { VideoContainer, VideoTitleHref, ImageContainer } from './../sharedStyle
 import FeedsContext from '../feed/FeedsContext';
 import styles from './Youtube.module.scss';
 import VideoHoverIframe from './VideoHoverIframe';
-import useEventListener from '../../hooks/useEventListener';
+import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 
 const videoImageUrls = (urls) => {
   if (urls.maxres) {
@@ -33,8 +33,8 @@ export default (data) => {
   const [isHovered, setIsHovered] = useState(false);
   const ref = useRef();
 
-  useEventListener('mouseenter', handleMouseOver, ref.current, youtubeVideoHoverEnable);
-  useEventListener('mouseleave', handleMouseOut, ref.current, youtubeVideoHoverEnable);
+  useEventListenerMemo('mouseenter', handleMouseOver, ref.current, youtubeVideoHoverEnable);
+  useEventListenerMemo('mouseleave', handleMouseOut, ref.current, youtubeVideoHoverEnable);
 
   // function streamType(type) {
   //   if (type === "liveYoutube") {

@@ -497,6 +497,7 @@ export const StyledToggleButton = styled(Button)`
   box-shadow: none !important;
   background: #434950;
   flex-grow: 1;
+  max-width: calc(30% - 0.5rem);
 
   flex-basis: ${({ buttonsperrow }) =>
     buttonsperrow ? `calc((100% - (20px * ${buttonsperrow})) / ${buttonsperrow})` : 'auto'};

@@ -38,7 +38,9 @@ import disconnectTwitch from '../disconnectTwitch';
 import AccountContext from '../../account/AccountContext';
 import FeedsContext from '../../feed/FeedsContext';
 import ReAuthenticateButton from '../../navigation/sidebar/ReAuthenticateButton';
-import useEventListener from '../../../hooks/useEventListener';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
+import useQuery from '../../../hooks/useQuery';
+import loginNameFormat from '../loginNameFormat';
 
 export default () => {
   const { channelName } = useParams();
@@ -48,13 +50,20 @@ export default () => {
   const numberOfVideos = Math.floor(document.documentElement.clientWidth / 350);
   const { setTwitchToken, twitchToken } = useContext(AccountContext);
   const { setEnableTwitch } = useContext(FeedsContext);
+  const URLQueries = useQuery();
 
   const [vods, setVods] = useState();
   const [clips, setClips] = useState();
   const [vodsloadmoreLoaded, setVodsLoadmoreLoaded] = useState(true);
   const [clipsloadmoreLoaded, setClipsLoadmoreLoaded] = useState(true);
-  const [sortVodsBy, setSortVodsBy] = useState('Time');
-  const [sortClipsBy, setSortClipsBy] = useState(null);
+  const [sortVodsBy, setSortVodsBy] = useState(
+    URLQueries.get('type')?.toLowerCase() === 'vods'
+      ? URLQueries.get('sort')?.toLowerCase()
+      : 'time'
+  );
+  const [sortClipsBy, setSortClipsBy] = useState(
+    URLQueries.get('type')?.toLowerCase() === 'clips' ? URLQueries.get('within') : null
+  );
   const [channelId, setChannelId] = useState(p_id);
   const [isLive, setIsLive] = useState();
   const [videoOpen, setVideoOpen] = useState(false);
@@ -66,8 +75,8 @@ export default () => {
   const clipPagination = useRef();
   const twitchPlayer = useRef();
 
-  useEventListener(window.Twitch.Player.ONLINE, onlineEvents, twitchPlayer.current);
-  useEventListener(window.Twitch.Player.OFFLINE, offlineEvents, twitchPlayer.current);
+  useEventListenerMemo(window.Twitch.Player.ONLINE, onlineEvents, twitchPlayer.current);
+  useEventListenerMemo(window.Twitch.Player.OFFLINE, offlineEvents, twitchPlayer.current);
 
   const getIdFromName = useCallback(async () => {
     await API.getUser({
@@ -97,7 +106,7 @@ export default () => {
           params: {
             user_id: channelId,
             first: numberOfVideos,
-            sort: sortVodsBy && sortVodsBy.toLowerCase(),
+            sort: sortVodsBy?.toLowerCase(),
             type: 'all',
             after: pagination || null,
           },
@@ -330,7 +339,7 @@ export default () => {
               scrolling='yes'
               theme='dark'
               // id={id + "-chat"}
-              src={`https://www.twitch.tv/embed/${channelName}/chat?darkpopout`}
+              src={`https://www.twitch.tv/embed/${channelName}/chat?darkpopout&parent=aiofeed.com`}
               // style={{ display: chatOpen ? "block" : "none" }}
             />
           )}
@@ -343,7 +352,7 @@ export default () => {
               }}
             >
               <FaWindowClose size={20} />
-              Close player
+              Close video
             </VideoChatButton>
           ) : (
             <VideoChatButton
@@ -354,7 +363,7 @@ export default () => {
               }}
             >
               <MdLiveTv size={30} />
-              Open player
+              Open video
             </VideoChatButton>
           )}
           {chatOpen ? (
@@ -365,7 +374,7 @@ export default () => {
                 setChatOpen(!chatOpen);
               }}
             >
-              Close player
+              Close chat
               <FaWindowClose size={20} />
             </VideoChatButton>
           ) : (
@@ -376,7 +385,7 @@ export default () => {
                 setChatOpen(!chatOpen);
               }}
             >
-              Open player
+              Open chat
               <MdChat size={30} />
             </VideoChatButton>
           )}
@@ -427,7 +436,7 @@ export default () => {
                         id='ChannelLiveLink'
                       >
                         <img id='profileIcon' alt='' src={channelInfo.logo || p_logo} />
-                        {channelInfo.display_name}
+                        {loginNameFormat({ ...channelInfo, login: channelInfo.name })}
                       </Link>
                       {channelInfo.partner && (
                         <img

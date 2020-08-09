@@ -10,7 +10,7 @@ module.exports = async ({ refresh_token, username, authkey }) => {
         refresh_token
       )}&client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${
         process.env.TWITCH_CLIENT_SECRET
-      }&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code`
+      }&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit+user:edit:follows&response_type=code`
     )
     .then(async (res) => {
       return res.data;

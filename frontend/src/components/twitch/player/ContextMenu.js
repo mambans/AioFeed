@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { MdHighQuality } from 'react-icons/md';
 import { GrRefresh } from 'react-icons/gr';
-import useEventListener from '../../../hooks/useEventListener';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
 const HEIGHT = 275;
 const WIDTH = 250;
@@ -71,7 +71,7 @@ export default ({
   channelName,
 }) => {
   const [show, setShow] = useState();
-  useEventListener('contextmenu', toggleShowHide, PlayerUIControlls);
+  useEventListenerMemo('contextmenu', toggleShowHide, PlayerUIControlls);
 
   function toggleShowHide(e) {
     e.preventDefault();

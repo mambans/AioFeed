@@ -182,6 +182,7 @@ export const SortButton = styled(Button).attrs({ variant: 'dark' })`
   width: 200px;
   background-color: rgba(20, 23, 25, 0.5);
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  text-transform: capitalize;
 
   &:hover,
   &:active,
@@ -218,10 +219,21 @@ export const SortDropDownList = styled.ul`
   box-shadow: 0 0.1rem 0 0.2rem rgba(82, 88, 93, 0.5);
   z-index: 3;
 
-  li {
+  li,
+  a {
     padding: 5px;
     cursor: pointer;
     text-align: center;
+    display: block;
+    color: var(--textColor1);
+    transition: color 250ms, opacity 250ms;
+    opacity: 0.8;
+    text-transform: capitalize;
+
+    &:hover {
+      color: var(--textColor1Hover);
+      opacity: 1;
+    }
   }
 `;
 

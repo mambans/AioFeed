@@ -24,7 +24,7 @@ export default () => {
         return (
           <Notification key={item.key} status={item.notiStatus}>
             <Link to={`/${item.user_name.toLowerCase()}/channel`} className='profileImg' alt=''>
-              <img src={item.profile_img_url} alt=''></img>
+              <img src={item.profile_image_url} alt=''></img>
             </Link>
             <div className='textContainer'>
               <Link to={`/${item.user_name.toLowerCase()}/channel`} className='name'>

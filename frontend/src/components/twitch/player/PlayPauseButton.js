@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
 import { FaPause } from 'react-icons/fa';
-import useEventListener from '../../../hooks/useEventListener';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
 export default ({ TwitchPlayer, PlayerUIControlls }) => {
   const [isPaused, setIsPaused] = useState(false);
 
-  useEventListener('keydown', keyboardEvents, window, window.Twitch.Player.READY);
-  useEventListener('mousedown', mouseEvents, PlayerUIControlls, window.Twitch.Player.READY);
+  useEventListenerMemo('keydown', keyboardEvents, window, window.Twitch.Player.READY);
+  useEventListenerMemo('mousedown', mouseEvents, PlayerUIControlls, window.Twitch.Player.READY);
 
   function PausePlay() {
     if (TwitchPlayer.isPaused()) {

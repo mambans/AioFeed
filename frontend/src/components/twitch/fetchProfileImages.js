@@ -57,12 +57,15 @@ export default async ({ items, forceNewProfiles, previousStreams, saveNewProfile
       (p_user) => p_user?.id === (user?.user_id || user?.broadcaster_id)
     );
 
-    user.profile_img_url =
-      foundProfile?.profile_image_url ||
-      TwitchProfiles[user?.user_id || user?.broadcaster_id] ||
-      `${process.env.PUBLIC_URL}/images/placeholder.webp`;
-
-    return user;
+    return {
+      ...user,
+      ...foundProfile,
+      profile_image_url:
+        foundProfile?.profile_image_url ||
+        TwitchProfiles[user?.user_id || user?.broadcaster_id]?.profile_image ||
+        `${process.env.PUBLIC_URL}/images/placeholder.webp`,
+      login: foundProfile?.login || TwitchProfiles[user?.user_id || user?.broadcaster_id]?.login,
+    };
   });
 
   const finallDataRemovedPlaceholderObjs = finallData
@@ -74,12 +77,18 @@ export default async ({ items, forceNewProfiles, previousStreams, saveNewProfile
         return acc;
       }
     }, [])
-    .filter((item) => item.profile_img_url !== `${process.env.PUBLIC_URL}/images/placeholder.webp`);
+    .filter(
+      (item) => item.profile_image_url !== `${process.env.PUBLIC_URL}/images/placeholder.webp`
+    );
 
   const newProfiles = finallDataRemovedPlaceholderObjs.reduce(
     (obj, item) => (
-      // eslint-disable-next-line no-sequences
-      (obj[item?.user_id || item?.broadcaster_id] = item?.profile_img_url), obj
+      (obj[item?.user_id || item?.broadcaster_id] = {
+        profile_image: item?.profile_image_url,
+        login: item?.login,
+        // eslint-disable-next-line no-sequences
+      }),
+      obj
     ),
     {}
   );

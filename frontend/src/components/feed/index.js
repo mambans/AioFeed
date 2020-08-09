@@ -19,7 +19,7 @@ import Twitter from '../twitter';
 import Youtube from './../youtube';
 import YoutubeDataHandler from './../youtube/Datahandler';
 import YoutubeHeader from './../youtube/Header';
-import useEventListener from '../../hooks/useEventListener';
+import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 
 export default () => {
   document.title = 'AioFeed | Feed';
@@ -33,7 +33,7 @@ export default () => {
   } = useContext(FeedsContext);
   const { username } = useContext(AccountContext);
 
-  useEventListener('resize', () => {
+  useEventListenerMemo('resize', () => {
     setVideoElementsAmount(calcVideoElementsAmount());
   });
 

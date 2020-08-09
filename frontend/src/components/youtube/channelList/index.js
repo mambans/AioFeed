@@ -11,7 +11,7 @@ import {
 import StyledLoadingList from './../../twitch/categoryTopStreams/LoadingList';
 import ChannelListElement from './ChannelListElement';
 import { getLocalstorage } from '../../../util/Utils';
-// import useEventListener from '../../../hooks/useEventListener';
+// import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 
 export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
@@ -71,26 +71,13 @@ export default (data) => {
 
   useLockBodyScroll(listIsOpen);
 
-  // useEventListener(
+  // useEventListenerMemo(
   //   'focus',
   //   () => {
   //     setListIsOpen(true);
   //   },
   //   inputRef.current
   // );
-
-  useEffect(() => {
-    const inputField = inputRef.current;
-    inputField.addEventListener('focus', () => {
-      setListIsOpen(true);
-    });
-
-    return () => {
-      inputField.removeEventListener('focus', () => {
-        setListIsOpen(true);
-      });
-    };
-  }, []);
 
   const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue);
@@ -188,7 +175,16 @@ export default (data) => {
         direction={'left'}
         showButton={true}
       >
-        <input ref={inputRef} type='text' spellCheck='false' placeholder={'...'} {...bindChannel} />
+        <input
+          ref={inputRef}
+          type='text'
+          spellCheck='false'
+          placeholder={'...'}
+          {...bindChannel}
+          onFocus={() => {
+            setListIsOpen(true);
+          }}
+        />
         <SearchSubmitBtn
           disabled={!channel}
           href={`https://www.youtube.com/channel/${returnChannelId()}`}

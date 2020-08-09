@@ -93,7 +93,7 @@ export const ThemeProvider = ({ children }) => {
     <ThemeContext.Provider
       value={{
         themesArray,
-        activeTheme: activeTheme,
+        activeTheme,
         setActiveContextTheme: setActiveTheme,
       }}
     >

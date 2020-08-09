@@ -10,7 +10,7 @@ import { VodAddRemoveButton } from './../../sharedStyledComponents';
 import AddVodChannel from './AddVodChannel';
 import { getLocalstorage } from '../../../util/Utils';
 import VodsContext from './VodsContext';
-import useEventListener from '../../../hooks/useEventListener';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
 /**
  * @param {String} channel - channel name
@@ -23,11 +23,11 @@ export default ({ channel, loweropacity, marginright }) => {
   const { vods, setVods } = useContext(VodsContext) || {};
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
-  const [vodEnabled, setVodEnabled] = useState(channels.includes(channel.toLowerCase()));
+  const [vodEnabled, setVodEnabled] = useState(channels.includes(channel?.toLowerCase()));
   const vodButton = useRef();
 
-  useEventListener('mouseenter', handleMouseOver, vodButton.current);
-  useEventListener('mouseleave', handleMouseOut, vodButton.current);
+  useEventListenerMemo('mouseenter', handleMouseOver, vodButton.current);
+  useEventListenerMemo('mouseleave', handleMouseOut, vodButton.current);
 
   function handleMouseOver() {
     setIsHovered(true);
@@ -41,14 +41,14 @@ export default ({ channel, loweropacity, marginright }) => {
     try {
       const vodChannels = new Set(channels || getLocalstorage('VodChannels') || []);
 
-      vodChannels.delete(channel.toLowerCase());
+      vodChannels.delete(channel?.toLowerCase());
       localStorage.setItem('VodChannels', JSON.stringify(Array.from(vodChannels)));
 
       const existingVodVideos = vods;
       const newVodVideos = {
         ...existingVodVideos,
         data: existingVodVideos.data.filter((video) => {
-          return video.user_name.toLowerCase() !== channel.toLowerCase();
+          return video.user_name.toLowerCase() !== channel?.toLowerCase();
         }),
       };
 

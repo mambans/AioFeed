@@ -8,6 +8,7 @@ import { Spinner } from 'react-bootstrap';
 import { useParams, useLocation } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import React, { useEffect, useState, useCallback, useRef, useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 import { RefreshButton, HeaderTitle, LoadMore } from './../../sharedStyledComponents';
 import {
@@ -31,18 +32,24 @@ import Util from './../../../util/Util';
 import validateToken from '../validateToken';
 import { getCookie } from '../../../util/Utils';
 import AccountContext from '../../account/AccountContext';
+import useQuery from '../../../hooks/useQuery';
 
 export default () => {
   const { category } = useParams();
   const { p_videoType } = useLocation().state || {};
   const [topData, setTopData] = useState([]);
-  const [videoType, setVideoType] = useState(p_videoType || 'Streams');
+  const URLQueries = useQuery();
+  const [videoType, setVideoType] = useState(
+    URLQueries.get('type')?.toLowerCase() || p_videoType || 'streams'
+  );
   const [typeListOpen, setTypeListOpen] = useState();
   const [loadmoreLoaded, setLoadmoreLoaded] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState('Views');
-  const [sortByTime, setSortByTime] = useState(null);
+  const [sortByTime, setSortByTime] = useState(
+    parseInt(URLQueries.get('within')?.toLowerCase()) || null
+  );
   // eslint-disable-next-line no-unused-vars
   const { twitchToken } = useContext(AccountContext);
   const oldTopData = useRef();
@@ -51,11 +58,11 @@ export default () => {
 
   const videoElementTypeComp = (data) => {
     switch (videoType) {
-      case 'Streams':
+      case 'streams':
         return <StreamEle data={data} />;
-      case 'Clips':
+      case 'clips':
         return <ClipElement data={data} />;
-      case 'Videos':
+      case 'videos':
         return <VodElement data={data} />;
       default:
         return <StreamEle data={data} />;
@@ -85,7 +92,7 @@ export default () => {
       if (shouldLoadMore) setLoadmoreLoaded(false);
 
       switch (videoType) {
-        case 'Streams':
+        case 'streams':
           GetTopStreams(category, shouldLoadMore && oldTopData.current)
             .then((res) => {
               fetchVideosDataHandler(res, shouldLoadMore);
@@ -99,7 +106,7 @@ export default () => {
               setRefreshing(false);
             });
           break;
-        case 'Clips':
+        case 'clips':
           GetTopClips(category, sortByTime, oldTopData.current)
             .then((res) => {
               fetchVideosDataHandler(res, shouldLoadMore);
@@ -113,7 +120,7 @@ export default () => {
               setRefreshing(false);
             });
           break;
-        case 'Videos':
+        case 'videos':
           GetTopVideos(category, sortBy, oldTopData.current)
             .then((res) => {
               fetchVideosDataHandler(res, shouldLoadMore);
@@ -233,23 +240,26 @@ export default () => {
 
               {typeListOpen && (
                 <TypeListUlContainer>
-                  <li
+                  <Link
+                    to='?type=streams'
                     onClick={() => {
-                      videoTypeBtnOnClick('Streams');
+                      videoTypeBtnOnClick('streams');
                     }}
                   >
                     <MdLiveTv size={24} />
                     Streams
-                  </li>
-                  <li
+                  </Link>
+                  <Link
+                    to='?type=clips'
                     onClick={() => {
-                      videoTypeBtnOnClick('Clips');
+                      videoTypeBtnOnClick('clips');
                       setSortBy('Views');
                     }}
                   >
                     <MdMovieCreation size={24} />
                     Clips
-                  </li>
+                  </Link>
+
                   {/* <li
                   onClick={() => {
                     videoTypeBtnOnClick("Videos");
@@ -261,9 +271,9 @@ export default () => {
               )}
             </div>
 
-            {videoType === 'Videos' ? (
+            {videoType === 'videos' ? (
               <SortButton sortBy={sortBy} setSortBy={setSortBy} setData={setTopData} />
-            ) : videoType === 'Clips' ? (
+            ) : videoType === 'clips' ? (
               <ClipsSortButton
                 sortBy={sortByTime}
                 setSortBy={setSortByTime}
@@ -294,7 +304,7 @@ export default () => {
               />
 
               <TransitionGroup className='twitch-top-live' component={null}>
-                {topData.map((stream) => {
+                {topData?.map((stream) => {
                   return (
                     <CSSTransition
                       key={stream.id}
@@ -314,7 +324,7 @@ export default () => {
 
               <LoadMore
                 text='Load more'
-                show={topData && topData.length > 0}
+                show={topData?.length > 0}
                 onClick={() => {
                   fetchVideos(true);
                 }}

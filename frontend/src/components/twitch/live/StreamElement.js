@@ -18,17 +18,18 @@ import {
 import { ChannelNameDiv } from './../StyledComponents';
 import FeedsContext from './../../feed/FeedsContext';
 import StreamHoverIframe from '../StreamHoverIframe.js';
-import { truncate } from '../../../util/Utils'  ;
+import { truncate } from '../../../util/Utils';
 import FollowUnfollowBtn from './../FollowUnfollowBtn';
 import VodsFollowUnfollowBtn from './../vods/VodsFollowUnfollowBtn';
 import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import AnimatedViewCount from './AnimatedViewCount';
-import useEventListener from '../../../hooks/useEventListener';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
+import loginNameFormat from './../loginNameFormat';
 
 const HOVER_DELAY = 100;
 
-function NewHighlightNoti({ newlyAddedStreams, user_name }) {
-  if (newlyAddedStreams && newlyAddedStreams.includes(user_name.toLowerCase())) {
+function NewHighlightNoti({ newlyAddedStreams, login }) {
+  if (newlyAddedStreams && newlyAddedStreams.includes(login?.toLowerCase())) {
     return (
       <FiAlertCircle
         size={22}
@@ -56,13 +57,13 @@ export default (data_p) => {
   const ref = useRef();
   const refChannel = useRef();
 
-  useEventListener(
+  useEventListenerMemo(
     'mouseenter',
     handleMouseOver,
     ref.current,
     ref.current && twitchVideoHoverEnable
   );
-  useEventListener(
+  useEventListenerMemo(
     'mouseleave',
     handleMouseOut,
     ref.current,
@@ -83,13 +84,13 @@ export default (data_p) => {
   return (
     <VideoContainer key={data.user_id}>
       <ImageContainer id={data.user_id} ref={ref} style={{ marginTop: '5px' }}>
-        <NewHighlightNoti newlyAddedStreams={newlyAddedStreams} user_name={data.user_name} />
+        <NewHighlightNoti newlyAddedStreams={newlyAddedStreams} login={data?.login} />
         {isHovered && (
           <StreamHoverIframe id={data.user_id} data={data} setIsHovered={setIsHovered} />
         )}
         <Link
           to={{
-            pathname: '/' + data.user_name.toLowerCase(),
+            pathname: '/' + data?.login?.toLowerCase() || data.user_name,
             state: {
               p_uptime: data.started_at,
               p_title: data.title,
@@ -103,10 +104,10 @@ export default (data_p) => {
                 data.user_name.toLowerCase()
               }> */}
           <img
-            id={`${data.user_name}-${Date.now()}`}
+            id={`${data?.user_id}-${Date.now()}`}
             alt=''
             style={
-              newlyAddedStreams && newlyAddedStreams.includes(data.user_name)
+              newlyAddedStreams && newlyAddedStreams.includes(data?.login)
                 ? { boxShadow: 'white 0px 0px 3px 2px' }
                 : null
             }
@@ -145,7 +146,7 @@ export default (data_p) => {
         >
           <VideoTitle
             to={{
-              pathname: '/' + data.user_name.toLowerCase(),
+              pathname: '/' + data?.login?.toLowerCase() || data.user_name,
               state: {
                 p_uptime: data.started_at,
                 p_title: data.title,
@@ -160,7 +161,7 @@ export default (data_p) => {
       ) : (
         <VideoTitle
           to={{
-            pathname: '/' + data.user_name.toLowerCase(),
+            pathname: '/' + data?.login?.toLowerCase() || data.user_name,
             state: {
               p_uptime: data.started_at,
               p_title: data.title,
@@ -176,30 +177,30 @@ export default (data_p) => {
         <ChannelContainer ref={refChannel}>
           <Link
             to={{
-              pathname: `/${data.user_name.toLowerCase()}/channel`,
+              pathname: `/${data?.login?.toLowerCase() || data.user_name}/channel`,
               state: {
                 p_id: data.user_id,
               },
             }}
             style={{ gridRow: 1, paddingRight: '5px' }}
           >
-            <img src={data.profile_img_url} alt='' className={'profileImg'} />
+            <img src={data.profile_image_url} alt='' className={'profileImg'} />
           </Link>
           <ChannelNameDiv>
             <Link
               to={{
-                pathname: `/${data.user_name.toLowerCase()}/channel`,
+                pathname: `/${data?.login?.toLowerCase() || data.user_name}/channel`,
                 state: {
                   p_id: data.user_id,
                 },
               }}
               className='channelName'
             >
-              {data.user_name}
+              {loginNameFormat(data)}
             </Link>
             <a
               alt=''
-              href={'https://www.twitch.tv/' + data.user_name.toLowerCase()}
+              href={'https://www.twitch.tv/' + data?.login?.toLowerCase() || data.user_name}
               className='twitchIcon'
             >
               <FaTwitch size={20} />
@@ -207,8 +208,8 @@ export default (data_p) => {
           </ChannelNameDiv>
           {(location.pathname === '/feed/' || location.pathname === '/feed') && (
             <div style={{ display: 'flex', gridRow: '1', justifyContent: 'right' }}>
-              <VodsFollowUnfollowBtn channel={data.user_name} marginright='5px;' />
-              <AddUpdateNotificationsButton channel={data.user_name} marginright='5px;' />
+              <VodsFollowUnfollowBtn channel={data?.login} marginright='5px;' />
+              <AddUpdateNotificationsButton channel={data?.login} marginright='5px;' />
               <FollowUnfollowBtn
                 style={{
                   gridRow: '1',
@@ -218,7 +219,7 @@ export default (data_p) => {
                   height: '100%',
                 }}
                 size={22}
-                channelName={data.user_name}
+                channelName={data?.login}
                 id={data.user_id}
                 followingStatus={true}
                 refreshStreams={refresh}

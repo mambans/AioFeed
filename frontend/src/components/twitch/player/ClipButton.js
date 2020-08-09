@@ -3,7 +3,7 @@ import React from 'react';
 import { CreateClipButton } from './StyledComponents';
 import API from '../API';
 import validateToken from '../validateToken';
-import useEventListener from '../../../hooks/useEventListener';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
 const CreateAndOpenClip = async ({ streamInfo }) => {
   const Width = window.screen.width * 0.6;
@@ -24,7 +24,7 @@ const CreateAndOpenClip = async ({ streamInfo }) => {
 };
 
 export default ({ streamInfo }) => {
-  useEventListener('keydown', keyboardEvents, window, streamInfo);
+  useEventListenerMemo('keydown', keyboardEvents, window, streamInfo);
 
   function keyboardEvents(e) {
     switch (e.key) {

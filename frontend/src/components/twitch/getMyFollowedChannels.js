@@ -1,17 +1,10 @@
-import { getCookie } from '../../util/Utils';
 import API from './API';
 import validateToken from './validateToken';
 
-const fetchNextPageOfFollowers = async ({
-  total,
-  PagePagination,
-  followedchannels,
-  twitchUserId,
-}) => {
+const fetchNextPageOfFollowers = async ({ total, PagePagination, followedchannels }) => {
   if (followedchannels?.length < total && PagePagination) {
-    const nextPage = await API.getFollowedChannels({
+    const nextPage = await API.getMyFollowedChannels({
       params: {
-        from_id: twitchUserId,
         first: 100,
         after: PagePagination,
       },
@@ -24,7 +17,6 @@ const fetchNextPageOfFollowers = async ({
     if (channels.length < total) {
       return await fetchNextPageOfFollowers({
         total: total,
-        twitchUserId: twitchUserId,
         PagePagination: nextPage.data.pagination.cursor,
         followedchannels: channels,
       });
@@ -37,9 +29,8 @@ const fetchNextPageOfFollowers = async ({
 export default async (forceRun = false) => {
   try {
     const followedchannels = await validateToken(forceRun).then(async () => {
-      return await API.getFollowedChannels({
+      return await API.getMyFollowedChannels({
         params: {
-          from_id: getCookie('Twitch-userId'),
           first: 100,
         },
       }).catch((error) => {
@@ -52,7 +43,6 @@ export default async (forceRun = false) => {
       total: followedchannels?.data?.total,
       PagePagination: followedchannels?.data?.pagination.cursor,
       followedchannels: followedchannels?.data?.data,
-      twitchUserId: getCookie('Twitch-userId'),
     });
 
     return channels;

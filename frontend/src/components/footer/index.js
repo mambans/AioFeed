@@ -102,7 +102,7 @@ export default () => {
             <li>
               <a href='https://github.com/mambans/AioFeed'>
                 <FaGithub size={20} style={{ marginRight: '0.75rem' }} />
-                Github-AioFeed
+                AioFeed on Github
               </a>
             </li>
             <li>

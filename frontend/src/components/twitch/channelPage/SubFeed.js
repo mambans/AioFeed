@@ -9,7 +9,7 @@ import ClipsSortButton from './ClipsSortButton';
 import SortButton from './SortButton';
 import ClipElement from './ClipElement';
 import VodElement from '../vods/VodElement';
-import useEventListener from '../../../hooks/useEventListener';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
 export default ({
   feedName,
@@ -38,7 +38,7 @@ export default ({
     []
   );
 
-  useEventListener('resize', recalcWidth);
+  useEventListenerMemo('resize', recalcWidth);
 
   return (
     <>
@@ -47,7 +47,7 @@ export default ({
           width: `${numberOfVideos * 350}px`,
         }}
       >
-        {feedName === 'Vods' ? (
+        {feedName?.toLowerCase() === 'vods' ? (
           <SortButton sortBy={sortBy} setSortBy={setSortBy} setData={setSortData} />
         ) : (
           <ClipsSortButton sortBy={sortBy} setSortBy={setSortBy} setData={setSortData} />

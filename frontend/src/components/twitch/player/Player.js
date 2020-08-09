@@ -51,7 +51,7 @@ import ReAuthenticateButton from '../../navigation/sidebar/ReAuthenticateButton'
 import AccountContext from '../../account/AccountContext';
 import FeedsContext from '../../feed/FeedsContext';
 import disconnectTwitch from '../disconnectTwitch';
-import useEventListener from '../../../hooks/useEventListener';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.1, 175);
 
@@ -70,12 +70,12 @@ export default () => {
   const [showControlls, setShowControlls] = useState();
   const [showUIControlls, setShowUIControlls] = useState();
   const [chatState, setChatState] = useState(
-    getLocalstorage('TwitchChatState')?.[channelName.toLowerCase()] || {}
+    getLocalstorage('TwitchChatState')?.[channelName?.toLowerCase()] || {}
       ? {
           chatwidth: DEFAULT_CHAT_WIDTH,
           switchChatSide: false,
           hideChat: false,
-          ...(getLocalstorage('TwitchChatState')?.[channelName.toLowerCase()] || {}),
+          ...(getLocalstorage('TwitchChatState')?.[channelName?.toLowerCase()] || {}),
         }
       : {
           chatwidth: DEFAULT_CHAT_WIDTH,
@@ -85,8 +85,8 @@ export default () => {
   );
 
   const hideChatSaved = useRef(
-    getLocalstorage('TwitchChatState')?.[channelName.toLowerCase()] || {}
-      ? getLocalstorage('TwitchChatState')?.[channelName.toLowerCase()]?.hideChat || false
+    getLocalstorage('TwitchChatState')?.[channelName?.toLowerCase()] || {}
+      ? getLocalstorage('TwitchChatState')?.[channelName?.toLowerCase()]?.hideChat || false
       : false
   );
   const [isFullscreen, setIsFullscreen] = useState();
@@ -101,14 +101,14 @@ export default () => {
   const hideChatDelay = useRef();
   const isLive = useRef();
 
-  useEventListener(window.Twitch.Player.ONLINE, onlineEvents, twitchVideoPlayer);
-  useEventListener(window.Twitch.Player.OFFLINE, offlineEvents, twitchVideoPlayer);
-  useEventListener(window.Twitch.Player.PLAYING, playingEvents, twitchVideoPlayer);
+  useEventListenerMemo(window.Twitch.Player.ONLINE, onlineEvents, twitchVideoPlayer);
+  useEventListenerMemo(window.Twitch.Player.OFFLINE, offlineEvents, twitchVideoPlayer);
+  useEventListenerMemo(window.Twitch.Player.PLAYING, playingEvents, twitchVideoPlayer);
 
-  useEventListener('mouseleave', handleMouseOut, PlayerUIControlls.current);
-  useEventListener('dblclick', toggleFullScreen, PlayerUIControlls.current);
-  useEventListener('keydown', keyboardEvents);
-  useEventListener('unload', removeFromStreamNotisFromPlayer);
+  useEventListenerMemo('mouseleave', handleMouseOut, PlayerUIControlls.current);
+  useEventListenerMemo('dblclick', toggleFullScreen, PlayerUIControlls.current);
+  useEventListenerMemo('keydown', keyboardEvents);
+  useEventListenerMemo('unload', removeFromStreamNotisFromPlayer);
 
   const showAndResetTimer = throttle(
     () => {
@@ -123,7 +123,7 @@ export default () => {
     { leading: true, trailing: false }
   );
 
-  useEventListener(['mousemove', 'mousedown', 'touchmove'], showAndResetTimer);
+  useEventListenerMemo(['mousemove', 'mousedown', 'touchmove'], showAndResetTimer);
 
   useEffect(() => {
     if (channelName && !videoId && !streamInfo) {
@@ -178,7 +178,7 @@ export default () => {
               ? { user_id: twitchVideoPlayer.getChannelId() }
               : { user_login: channelName }
           );
-          if (streamInfo) setStreamInfo(streamInfo);
+          if (streamInfo) setStreamInfo();
         }
       }, 5000);
       return () => {
@@ -208,7 +208,7 @@ export default () => {
     };
     if (streams.data.length >= 1) {
       const newStreams = streams.data.filter(
-        (item) => item.user_name.toLowerCase() !== channelName.toLowerCase()
+        (item) => item.user_name.toLowerCase() !== channelName?.toLowerCase()
       );
       localStorage.setItem(
         'newLiveStreamsFromPlayer',
@@ -264,12 +264,11 @@ export default () => {
     try {
       if (getCookie('Twitch-access_token')) {
         await GetAndSetStreamInfo().then((res) => {
-          setFavion(res.profile_img_url);
+          setFavion(res?.profile_image_url);
           if (
             streamInfo === null &&
-            res &&
-            res.broadcaster_software &&
-            !res.broadcaster_software.toLowerCase().includes('rerun')
+            res?.broadcaster_software &&
+            !res?.broadcaster_software.toLowerCase().includes('rerun')
           ) {
             addNoti({ type: 'Live', stream: res });
 
@@ -416,7 +415,7 @@ export default () => {
           'TwitchChatState',
           JSON.stringify({
             ...localstorageTwitchChatState,
-            [channelName.toLowerCase()]: chatState,
+            [channelName?.toLowerCase()]: chatState,
           })
         );
       },
@@ -520,10 +519,11 @@ export default () => {
                     }
                   />
                 )}
+
                 {streamInfo ? (
                   <InfoDisplay>
                     <>
-                      <img src={streamInfo.profile_img_url} alt='' />
+                      <img src={streamInfo.profile_image_url} alt='' />
                       <div id='name'>
                         <Link
                           to={{

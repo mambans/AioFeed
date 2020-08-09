@@ -74,6 +74,26 @@ export default {
     });
   },
 
+  getChannel: async ({ params, throwError = true }) => {
+    return await axios.get(`${BASE_URL}/channels`, {
+      params: params,
+      headers: {
+        Authorization: `Bearer ${getCookie('Twitch-access_token')}`,
+        'Client-ID': CLIENT_ID,
+      },
+    });
+  },
+
+  getMyFollowedChannels: async ({ params }) => {
+    return await axios.get(`${BASE_URL}/users/follows`, {
+      params: { ...params, from_id: getCookie('Twitch-userId') },
+      headers: {
+        Authorization: `Bearer ${getCookie('Twitch-access_token')}`,
+        'Client-ID': CLIENT_ID,
+      },
+    });
+  },
+
   getFollowedChannels: async ({ params }) => {
     return await axios.get(`${BASE_URL}/users/follows`, {
       params: params,
@@ -136,44 +156,78 @@ export default {
     });
   },
 
+  // checkFollowKRAKEN: async ({ params }) => {
+  //   return await axios.get(
+  //     `${BASE_URL_KRAKEN}/users/${params.myId}/follows/channels/${params.id}`,
+  //     {
+  //       params: params,
+  //       headers: {
+  //         Authorization: `OAuth ${getCookie('Twitch-access_token')}`,
+  //         'Client-ID': CLIENT_ID,
+  //         Accept: 'application/vnd.twitchtv.v5+json',
+  //       },
+  //     }
+  //   );
+  // },
+  // -X GET 'https://api.twitch.tv/helix/users/follows?to_id=23161357'
   checkFollow: async ({ params }) => {
-    return await axios.get(
-      `${BASE_URL_KRAKEN}/users/${params.myId}/follows/channels/${params.id}`,
-      {
-        params: params,
-        headers: {
-          Authorization: `OAuth ${getCookie('Twitch-access_token')}`,
-          'Client-ID': CLIENT_ID,
-          Accept: 'application/vnd.twitchtv.v5+json',
-        },
-      }
-    );
+    return await axios.get(`${BASE_URL}/users/follows`, {
+      params: params,
+      headers: {
+        Authorization: `Bearer ${getCookie('Twitch-access_token')}`,
+        'Client-ID': CLIENT_ID,
+      },
+    });
   },
 
+  // deleteFollowKRAKEN: async ({ params }) => {
+  //   return await axios.delete(
+  //     `${BASE_URL_KRAKEN}/users/${params.myId}/follows/channels/${params.id}`,
+  //     {
+  //       params: params,
+  //       headers: {
+  //         Authorization: `OAuth ${getCookie('Twitch-access_token')}`,
+  //         'Client-ID': CLIENT_ID,
+  //         Accept: 'application/vnd.twitchtv.v5+json',
+  //       },
+  //     }
+  //   );
+  // },
   deleteFollow: async ({ params }) => {
-    return await axios.delete(
-      `${BASE_URL_KRAKEN}/users/${params.myId}/follows/channels/${params.id}`,
-      {
-        params: params,
-        headers: {
-          Authorization: `OAuth ${getCookie('Twitch-access_token')}`,
-          'Client-ID': CLIENT_ID,
-          Accept: 'application/vnd.twitchtv.v5+json',
-        },
-      }
-    );
+    return await axios.delete(`${BASE_URL}/users/follows`, {
+      params: params,
+      headers: {
+        Authorization: `Bearer ${getCookie('Twitch-access_token')}`,
+        'Content-Type': 'application/json',
+        'Client-ID': CLIENT_ID,
+      },
+    });
   },
 
+  // addFollowKRAKEN: async ({ params }) => {
+  //   return await axios.put(
+  //     `${BASE_URL_KRAKEN}/users/${params.myId}/follows/channels/${params.id}`,
+  //     {},
+  //     {
+  //       params: params,
+  //       headers: {
+  //         Authorization: `OAuth ${getCookie('Twitch-access_token')}`,
+  //         'Client-ID': CLIENT_ID,
+  //         Accept: 'application/vnd.twitchtv.v5+json',
+  //       },
+  //     }
+  //   );
+  // },
   addFollow: async ({ params }) => {
-    return await axios.put(
-      `${BASE_URL_KRAKEN}/users/${params.myId}/follows/channels/${params.id}`,
+    return await axios.post(
+      `${BASE_URL}/users/follows`,
       {},
       {
         params: params,
         headers: {
-          Authorization: `OAuth ${getCookie('Twitch-access_token')}`,
+          Authorization: `Bearer ${getCookie('Twitch-access_token')}`,
+          'Content-Type': 'application/json',
           'Client-ID': CLIENT_ID,
-          Accept: 'application/vnd.twitchtv.v5+json',
         },
       }
     );

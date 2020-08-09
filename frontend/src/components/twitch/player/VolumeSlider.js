@@ -8,7 +8,7 @@ import Slider from 'react-rangeslider';
 
 import { StyledVolumeSlider } from './StyledComponents';
 import 'react-rangeslider/lib/index.css';
-import useEventListener from '../../../hooks/useEventListener';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
 export default ({
   TwitchPlayer,
@@ -20,10 +20,15 @@ export default ({
   const [volumeText, setVolumeText] = useState(0);
   const [volumeMuted, setVolumeMuted] = useState(true);
 
-  useEventListener('keydown', keyboardEvents, window, window.Twitch.Player.READY);
-  useEventListener('wheel', scrollChangeVolumeEvent, PlayerUIControlls, window.Twitch.Player.READY);
-  useEventListener('mousedown', mouseEvents, PlayerUIControlls, window.Twitch.Player.READY);
-  useEventListener(
+  useEventListenerMemo('keydown', keyboardEvents, window, window.Twitch.Player.READY);
+  useEventListenerMemo(
+    'wheel',
+    scrollChangeVolumeEvent,
+    PlayerUIControlls,
+    window.Twitch.Player.READY
+  );
+  useEventListenerMemo('mousedown', mouseEvents, PlayerUIControlls, window.Twitch.Player.READY);
+  useEventListenerMemo(
     window.Twitch.Player.PLAYING,
     OnPlayingEventListeners,
     TwitchPlayer,

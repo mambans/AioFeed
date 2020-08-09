@@ -3,7 +3,7 @@ import { getLocalstorage } from '../../../util/Utils';
 import AddVideoExtraData from '../AddVideoExtraData';
 import API from '../API';
 import FetchMonitoredVodChannelsList from './FetchMonitoredVodChannelsList';
-import GetFollowedChannels from './../GetFollowedChannels';
+import getMyFollowedChannels from './../getMyFollowedChannels';
 import reauthenticate from './../reauthenticate';
 import SortAndAddExpire from './SortAndAddExpire';
 
@@ -119,7 +119,7 @@ export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchTok
   try {
     if (forceRun || !getLocalstorage(`Vods`) || getLocalstorage(`Vods`).expire <= Date.now()) {
       try {
-        const followedChannels = await GetFollowedChannels(true);
+        const followedChannels = await getMyFollowedChannels(true);
 
         const followedVodEnabledChannels = await FetchMonitoredVodChannelsList(Username, AuthKey);
         if (!followedVodEnabledChannels || followedVodEnabledChannels.length === 0) {

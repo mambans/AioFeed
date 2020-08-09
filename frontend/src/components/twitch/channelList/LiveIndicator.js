@@ -42,7 +42,7 @@ export default ({ channel }) => {
       }
     >
       <div>
-        <img src={channel?.profile_img_url} alt='' />
+        <img src={channel?.profile_image_url} alt='' />
         <LiveDot height='100%' width='30px'>
           <circle cx='5' cy='5' r='5' stroke='white' strokeWidth='0' fill='red' />
         </LiveDot>

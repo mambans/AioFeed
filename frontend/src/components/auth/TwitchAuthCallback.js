@@ -1,15 +1,15 @@
-import axios from "axios";
-import React, { useEffect, useState, useCallback, useContext } from "react";
+import axios from 'axios';
+import React, { useEffect, useState, useCallback, useContext } from 'react';
 
-import { getCookie } from "../../util/Utils";
-import ErrorHandler from "./../error";
-import AccountContext from "./../account/AccountContext";
-import NavigationContext from "./../navigation/NavigationContext";
-import LoadingIndicator from "./../LoadingIndicator";
-import FeedsContext from "../feed/FeedsContext";
-import { AddCookie } from "../../util/Utils";
-import validateToken from "../twitch/validateToken";
-import API from "../twitch/API";
+import { getCookie } from '../../util/Utils';
+import ErrorHandler from './../error';
+import AccountContext from './../account/AccountContext';
+import NavigationContext from './../navigation/NavigationContext';
+import LoadingIndicator from './../LoadingIndicator';
+import FeedsContext from '../feed/FeedsContext';
+import { AddCookie } from '../../util/Utils';
+import validateToken from '../twitch/validateToken';
+import API from '../twitch/API';
 
 function TwitchAuthCallback() {
   const [error, setError] = useState();
@@ -19,10 +19,10 @@ function TwitchAuthCallback() {
 
   const getAccessToken = useCallback(
     async (url) => {
-      const authCode = url.searchParams.get("code");
+      const authCode = url.searchParams.get('code');
 
       const requestAccessToken = await axios
-        .put("https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/rerequest/twitch", {
+        .put('https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/rerequest/twitch', {
           authCode: authCode,
         })
         .catch((error) => {
@@ -31,24 +31,24 @@ function TwitchAuthCallback() {
 
       const accessToken = requestAccessToken.data.access_token;
       const refreshToken = requestAccessToken.data.refresh_token;
-      AddCookie("Twitch-access_token", accessToken);
-      AddCookie("Twitch-refresh_token", refreshToken);
+      AddCookie('Twitch-access_token', accessToken);
+      AddCookie('Twitch-refresh_token', refreshToken);
 
       const MyTwitch = await validateToken().then(async () => {
         return API.getMe({ accessToken: accessToken }).then(async (res) => {
-          AddCookie("Twitch-userId", res.data.data[0].id);
-          AddCookie("Twitch-username", res.data.data[0].login);
-          AddCookie("Twitch-profileImg", res.data.data[0].profile_image_url);
+          AddCookie('Twitch-userId', res.data.data[0].id);
+          AddCookie('Twitch-username', res.data.data[0].login);
+          AddCookie('Twitch-profileImg', res.data.data[0].profile_img_url);
 
           if (username) {
             await axios
               .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
                 username: username,
-                columnName: "TwitchPreferences",
+                columnName: 'TwitchPreferences',
                 columnValue: {
                   Username: res.data.data[0].login,
                   Id: res.data.data[0].id,
-                  Profile: res.data.data[0].profile_image_url,
+                  Profile: res.data.data[0].profile_img_url,
                   Token: accessToken,
                   Refresh_token: refreshToken,
                   AutoRefresh: autoRefreshEnabled,
@@ -63,7 +63,7 @@ function TwitchAuthCallback() {
 
           return {
             Username: res.data.data[0].login,
-            ProfileImg: res.data.data[0].profile_image_url,
+            ProfileImg: res.data.data[0].profile_img_url,
           };
         });
       });
@@ -79,20 +79,20 @@ function TwitchAuthCallback() {
     (async function () {
       try {
         const url = new URL(window.location.href);
-        if (url.pathname === "/auth/twitch/callback") {
-          if (url.searchParams.get("state") === getCookie("Twitch-myState")) {
+        if (url.pathname === '/auth/twitch/callback') {
+          if (url.searchParams.get('state') === getCookie('Twitch-myState')) {
             await getAccessToken(url)
               .then((res) => {
-                console.log("successfully authenticated to Twitch.");
+                console.log('successfully authenticated to Twitch.');
                 window.opener.postMessage(
                   {
-                    service: "twitch",
+                    service: 'twitch',
                     token: res.token,
                     refresh_token: res.refresh_token,
                     username: res.Username,
                     profileImg: res.ProfileImg,
                   },
-                  "*"
+                  '*'
                 );
 
                 if (res.token) {
@@ -102,19 +102,19 @@ function TwitchAuthCallback() {
                 }
               })
               .catch((error) => {
-                console.log("getAccessToken() failed");
+                console.log('getAccessToken() failed');
                 setError(error);
               });
           } else {
             setError({
-              title: "Twitch authentication failed.",
+              title: 'Twitch authentication failed.',
               message: "Request didn't come from this website.!",
             });
           }
         } else {
           setError({
-            title: "Twitch authentication failed.",
-            message: "Authenticate to Twitch failed.",
+            title: 'Twitch authentication failed.',
+            message: 'Authenticate to Twitch failed.',
           });
         }
       } catch (error) {

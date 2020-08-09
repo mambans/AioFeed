@@ -12,14 +12,14 @@ export default async (channelId, format) => {
       .then((res) => {
         if (res) {
           if (format) {
-            const localstorageGameInfo = getLocalstorage('Twitch_game_details')
-              ? getLocalstorage('Twitch_game_details').data.find(
-                  (game) => game.name.toLowerCase() === res.data.game.toLowerCase()
-                )
-              : null;
+            const localstorageGameInfo =
+              getLocalstorage('Twitch_game_details')?.data?.find(
+                (game) => game.name.toLowerCase() === res.data.game.toLowerCase()
+              ) || null;
+
             const data = {
               ...res.data,
-              profile_img_url: res.data.logo,
+              profile_image_url: res.data.logo,
               user_name: res.data.display_name,
               title: res.data.status,
               user_id: res.data._id,

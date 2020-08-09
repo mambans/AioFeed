@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useCallback } from "react";
-import uniqid from "uniqid";
+import React, { useEffect, useState, useCallback } from 'react';
+import uniqid from 'uniqid';
 
-import ErrorHandler from "./../error";
-import { AddCookie } from "../../util/Utils";
-import LoadingIndicator from "../LoadingIndicator";
+import ErrorHandler from './../error';
+import { AddCookie } from '../../util/Utils';
+import LoadingIndicator from '../LoadingIndicator';
 
 function TwitchAuth() {
   const [error, setError] = useState();
@@ -14,9 +14,9 @@ function TwitchAuth() {
     }
 
     const orginState = await generateOrginState();
-    AddCookie("Twitch-myState", orginState);
+    AddCookie('Twitch-myState', orginState);
 
-    window.location.href = `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit&response_type=code&state=${orginState}`;
+    window.location.href = `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit+user:edit:follows&response_type=code&state=${orginState}`;
   }, []);
 
   useEffect(() => {
@@ -24,9 +24,9 @@ function TwitchAuth() {
       try {
         const url = new URL(window.location.href);
 
-        url.href === "https://aiofeed.com/auth/twitch"
+        url.href === 'https://aiofeed.com/auth/twitch'
           ? await initiateAuth()
-          : setError({ message: "Visit account page to authenticate with Twitch." });
+          : setError({ message: 'Visit account page to authenticate with Twitch.' });
       } catch (error) {
         setError(error);
       }

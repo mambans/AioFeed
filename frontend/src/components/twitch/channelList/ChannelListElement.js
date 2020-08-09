@@ -8,6 +8,7 @@ import AddUpdateNotificationsButton from './../AddUpdateNotificationsButton';
 import API from '../API';
 import LiveIndicator from './LiveIndicator';
 import AddVideoExtraData from '../AddVideoExtraData';
+import loginNameFormat from '../loginNameFormat';
 
 export default ({
   data,
@@ -45,7 +46,7 @@ export default ({
             user_name: data.display_name,
             user_id: data.id,
             ...finalLiveInfo,
-            profile_img_url: data.profile_image_url,
+            profile_image_url: data.profile_img_url,
             live: liveInfo && liveInfo?.type === 'live',
           });
         }
@@ -62,19 +63,18 @@ export default ({
       key={channel?.user_id || searchInput}
       className={selected ? 'selected' : ''}
       selected={selected}
-      searchInput={searchInput}
       live={channel?.live || (channel?.is_live && channel?.started_at !== '')}
       style={{ ...style }}
     >
       <Link
         to={{
           pathname: `/${
-            `${channel?.user_name}${!channel?.live ? '/channel' : ''}` ||
+            `${channel?.login || channel?.user_name}${!channel?.live ? '/channel' : ''}` ||
             `${searchInput?.toLowerCase()}${!channel?.live ? '/channel' : ''}`
           }`,
           state: {
             p_id: channel?.user_id,
-            p_logo: channel?.profile_img_url,
+            p_logo: channel?.profile_image_url,
           },
         }}
       >
@@ -82,11 +82,11 @@ export default ({
           <LiveIndicator channel={channel} />
         ) : (
           <img
-            src={channel?.profile_img_url || `${process.env.PUBLIC_URL}/images/placeholder.webp`}
+            src={channel?.profile_image_url || `${process.env.PUBLIC_URL}/images/placeholder.webp`}
             alt=''
           />
         )}
-        {channel?.user_name || `${searchInput}..`}
+        {loginNameFormat(channel) || `${searchInput}..`}
       </Link>
       <div className='ButtonContianer'>
         {showVodBtn && <VodsFollowUnfollowBtn channel={channel?.user_name || searchInput} />}

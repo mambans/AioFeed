@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback, useContext } from 'rea
 import _ from 'lodash';
 
 import ErrorHandler from '../../error';
-import GetFollowedChannels from './../GetFollowedChannels';
+import getMyFollowedChannels from './../getMyFollowedChannels';
 import getFollowedOnlineStreams from './GetFollowedStreams';
 import NotificationsContext from './../../notifications/NotificationsContext';
 import AccountContext from './../../account/AccountContext';
@@ -12,7 +12,7 @@ import { AddCookie, getCookie, getLocalstorage } from '../../../util/Utils';
 import LiveStreamsPromise from './LiveStreamsPromise';
 import OfflineStreamsPromise from './OfflineStreamsPromise';
 import UpdatedStreamsPromise from './UpdatedStreamsPromise';
-import useEventListener from '../../../hooks/useEventListener';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
 const REFRESH_RATE = 25; // seconds
 
@@ -38,9 +38,9 @@ export default ({ children }) => {
   const timer = useRef();
   const refreshAfterUnfollowTimer = useRef();
 
-  useEventListener('focus', windowFocusHandler);
-  useEventListener('blur', windowBlurHandler);
-  useEventListener('storage', listener);
+  useEventListenerMemo('focus', windowFocusHandler);
+  useEventListenerMemo('blur', windowBlurHandler);
+  useEventListenerMemo('storage', listener);
 
   const refresh = useCallback(
     async (disableNotifications = false) => {
@@ -49,7 +49,7 @@ export default ({ children }) => {
         return { refreshing: true, error: null, loaded: loaded };
       });
       try {
-        followedChannels.current = await GetFollowedChannels();
+        followedChannels.current = await getMyFollowedChannels();
 
         if (followedChannels.current && followedChannels.current[0]) {
           AddCookie('Twitch-username', followedChannels.current[0].from_name);

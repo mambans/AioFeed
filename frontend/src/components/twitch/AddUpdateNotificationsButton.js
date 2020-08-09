@@ -8,7 +8,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import AccountContext from './../account/AccountContext';
 import { VodAddRemoveButton } from './../sharedStyledComponents';
 import { getLocalstorage } from '../../util/Utils';
-import useEventListener from '../../hooks/useEventListener';
+import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 
 /**
  * @param {String} channel - channel name
@@ -22,17 +22,17 @@ export default ({ channel, loweropacity, marginright, size = 24 }) => {
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
   const [updateNotificationEnabled, setUpdateNotificationEnabled] = useState(
-    channels && channels.includes(channel.toLowerCase())
+    channels && channels.includes(channel?.toLowerCase())
   );
   const vodButton = useRef();
 
-  useEventListener('mouseenter', handleMouseOver, vodButton.current);
-  useEventListener('mouseleave', handleMouseOut, vodButton.current);
+  useEventListenerMemo('mouseenter', handleMouseOver, vodButton.current);
+  useEventListenerMemo('mouseleave', handleMouseOut, vodButton.current);
 
   async function removeChannel(channel) {
     try {
       const channelss = new Set(getLocalstorage('UpdateNotificationsChannels') || []);
-      channelss.delete(channel.toLowerCase());
+      channelss.delete(channel?.toLowerCase());
 
       localStorage.setItem('UpdateNotificationsChannels', JSON.stringify(Array.from(channelss)));
       await axios
@@ -53,7 +53,7 @@ export default ({ channel, loweropacity, marginright, size = 24 }) => {
     try {
       const existing = new Set(getLocalstorage('UpdateNotificationsChannels') || []);
 
-      const newChannels = Array.from(existing.add(channel.toLowerCase()));
+      const newChannels = Array.from(existing.add(channel?.toLowerCase()));
 
       localStorage.setItem('UpdateNotificationsChannels', JSON.stringify(newChannels));
       await axios

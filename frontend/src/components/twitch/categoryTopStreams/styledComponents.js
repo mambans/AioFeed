@@ -107,7 +107,8 @@ export const TypeListUlContainer = styled.ul`
   border: none !important;
   z-index: 3;
 
-  li {
+  li,
+  a {
     display: grid;
     grid-template-columns: 35% auto;
     align-items: center;
@@ -239,6 +240,7 @@ export const TypeButton = styled(Button).attrs({ variant: 'dark' })`
   grid-template-columns: 35% auto;
   text-align: unset;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  text-transform: capitalize;
 
   &:hover,
   &:active,

@@ -1,13 +1,13 @@
-import React, { useCallback } from "react";
-import useSyncedLocalState from "./../../hooks/useSyncedLocalState";
-import { getLocalstorage } from "../../util/Utils";
+import React, { useCallback } from 'react';
+import useSyncedLocalState from './../../hooks/useSyncedLocalState';
+import { getLocalstorage } from '../../util/Utils';
 
 const NotificationsContext = React.createContext();
 
 export const NotificationsProvider = ({ children }) => {
-  const [notifications, setNotifications] = useSyncedLocalState("notifications", []);
+  const [notifications, setNotifications] = useSyncedLocalState('notifications', []);
   const [unseenNotifications, setUnseenNotifications] = useSyncedLocalState(
-    "Unseen-notifications",
+    'Unseen-notifications',
     []
   );
 
@@ -17,8 +17,8 @@ export const NotificationsProvider = ({ children }) => {
         try {
           // const oldUnseenNotifications = unseenNotifications;
           // const existingNotifications = notifications || [];
-          const oldUnseenNotifications = getLocalstorage("Unseen-notifications") || [];
-          const existingNotifications = getLocalstorage("notifications") || [];
+          const oldUnseenNotifications = getLocalstorage('Unseen-notifications') || [];
+          const existingNotifications = getLocalstorage('notifications') || [];
           const toAddUnseenUsernames = notis.map((stream) => {
             return stream.user_name;
           });
@@ -37,7 +37,7 @@ export const NotificationsProvider = ({ children }) => {
 
           resolve({ notifications: finalNotifications, newUnseenNotifications });
         } catch (e) {
-          console.log("addNotification error", e);
+          console.log('addNotification error', e);
           reject(e);
         }
       }).then((res) => {
@@ -62,13 +62,14 @@ export const NotificationsProvider = ({ children }) => {
   return (
     <NotificationsContext.Provider
       value={{
-        notifications: notifications,
-        addNotification: addNotification,
-        clearNotifications: clearNotifications,
-        unseenNotifications: unseenNotifications,
-        setUnseenNotifications: setUnseenNotifications,
+        notifications,
+        addNotification,
+        clearNotifications,
+        unseenNotifications,
+        setUnseenNotifications,
         clearUnseenNotifications,
-      }}>
+      }}
+    >
       {children}
     </NotificationsContext.Provider>
   );

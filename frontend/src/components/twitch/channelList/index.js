@@ -13,7 +13,7 @@ import {
 import AddVideoExtraData from '../AddVideoExtraData';
 import API from '../API';
 import ChannelListElement from '../channelList/ChannelListElement';
-import GetFollowedChannels from '../GetFollowedChannels';
+import getMyFollowedChannels from '../getMyFollowedChannels';
 import getFollowedOnlineStreams from '../live/GetFollowedStreams';
 import handleArrowNavigation from './handleArrowNavigation';
 import InifinityScroll from './InifinityScroll';
@@ -149,29 +149,30 @@ export default ({
     () =>
       throttle(
         async () => {
-          GetFollowedChannels().then(async (res) => {
-            channelListToObject(res).then(async (res) => {
-              await AddVideoExtraData({ items: res?.data, fetchGameInfo: false }).then(
-                async (res) => {
-                  const liveStreams = await getFollowedOnlineStreams({
-                    followedchannels: res?.data,
-                    fetchGameInfo: true,
-                    fetchProfiles: false,
-                  }).then((res) => res.data);
+          getMyFollowedChannels().then(async (channels) => {
+            channelListToObject(channels).then(async (res) => {
+              await AddVideoExtraData({
+                items: res?.data,
+                fetchGameInfo: false,
+                fetchProfiles: true,
+              }).then(async (res) => {
+                const liveStreams = await getFollowedOnlineStreams({
+                  followedchannels: res?.data,
+                  fetchGameInfo: true,
+                  fetchProfiles: false,
+                }).then((res) => res.data);
 
-                  const channels = res?.data?.map((item) => {
-                    const found = liveStreams?.find((stream) => item.user_id === stream.user_id);
-                    return {
-                      ...item,
-                      ...found,
-                      profile_img_url: item.profile_img_url,
-                      live: found?.type === 'live',
-                    };
-                  });
+                const channels = await res?.data?.map((item) => {
+                  const found = liveStreams?.find((stream) => item.user_id === stream.user_id);
+                  return {
+                    ...item,
+                    ...found,
+                    live: found?.type === 'live',
+                  };
+                });
 
-                  setFollowedChannels(channels);
-                }
-              );
+                setFollowedChannels(channels);
+              });
             });
           });
         },

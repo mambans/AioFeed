@@ -33,9 +33,9 @@ export default async (category, sortByTime, page) => {
         first: nrStreams,
         game_id: game.id,
         after: page ? page.pagination.cursor : null,
-        started_at:
-          sortByTime &&
-          new Date(new Date().setDate(new Date().getDate() - sortByTime)).toISOString(),
+        started_at: sortByTime
+          ? new Date(new Date().setDate(new Date().getDate() - sortByTime)).toISOString()
+          : null,
         ended_at: sortByTime && new Date().toISOString(),
       },
     }).catch((e) => {
