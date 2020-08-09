@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
-import styled from "styled-components";
-import { MdAddCircleOutline, MdRemoveCircleOutline } from "react-icons/md";
-import { FaExchangeAlt } from "react-icons/fa";
-import { Button } from "react-bootstrap";
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import styled from 'styled-components';
+import { MdAddCircleOutline, MdRemoveCircleOutline } from 'react-icons/md';
+import { FaExchangeAlt } from 'react-icons/fa';
+import { Button } from 'react-bootstrap';
 
 const AddIcon = styled(MdAddCircleOutline).attrs({ size: 16 })`
   color: green;
@@ -76,9 +76,10 @@ const List = {
   Button: styled(Button)`
     padding: 0.25rem 0.375rem;
   `,
-  Message: styled.p`
+  Message: styled.pre`
     font-size: 0.95rem;
     color: rgb(175, 175, 175);
+    white-space: pre-wrap;
   `,
   Stats: styled.div`
     display: flex;
@@ -101,23 +102,23 @@ const List = {
 export default ({ name, body, published_at, showInfo, children }) => {
   const [info, setInfo] = useState({ loading: false, data: null });
   const [showFullMessage, setShowFullMessage] = useState(false);
-  const additionsKeywords = useMemo(() => ["added", "add", "fix", "fixed"], []);
-  const deletionsKeywords = useMemo(() => ["removed", "remove", "deleted", "delete"], []);
+  const additionsKeywords = useMemo(() => ['added', 'add', 'fix', 'fixed'], []);
+  const deletionsKeywords = useMemo(() => ['removed', 'remove', 'deleted', 'delete'], []);
   const changesKeywords = useMemo(
     () => [
-      "changed",
-      "change",
-      "refactored",
-      "refactor",
-      "moved",
-      "move",
-      "renamed",
-      "rename",
-      "changes",
-      "improved",
-      "increased",
-      "fixed/added",
-      "added/fixed",
+      'changed',
+      'change',
+      'refactored',
+      'refactor',
+      'moved',
+      'move',
+      'renamed',
+      'rename',
+      'changes',
+      'improved',
+      'increased',
+      'fixed/added',
+      'added/fixed',
     ],
     []
   );
@@ -133,7 +134,7 @@ export default ({ name, body, published_at, showInfo, children }) => {
 
       // console.log(body.split(/(?:\r\n|\. )/g));
       body.split(/(?:\r\n|\. )/g).map((sentence) => {
-        const sentArray = sentence.toLowerCase().split(" ");
+        const sentArray = sentence.toLowerCase().split(' ');
         if (sentArray.some((word) => additionsKeywords.includes(word))) {
           if (sentence.length > 0) additions.push(sentence);
         } else if (sentArray.some((word) => deletionsKeywords.includes(word))) {
@@ -144,7 +145,7 @@ export default ({ name, body, published_at, showInfo, children }) => {
           if (sentence.length > 0) rest.push(sentence);
         }
 
-        return "";
+        return '';
       });
 
       setInfo({
@@ -176,8 +177,9 @@ export default ({ name, body, published_at, showInfo, children }) => {
         size='sm'
         variant='dark'
         disabled={info.data}
-        onClick={!info.data ? handleClick : null}>
-        {info.loading ? "Loading" : "Info"}
+        onClick={!info.data ? handleClick : null}
+      >
+        {info.loading ? 'Loading' : 'Info'}
       </List.Button>
       {info.additions && (
         <List.Group>
@@ -211,29 +213,18 @@ export default ({ name, body, published_at, showInfo, children }) => {
         <List.Button
           size='sm'
           variant='dark'
-          onClick={
-            info.data
-              ? () => {
-                  setShowFullMessage(!showFullMessage);
-                }
-              : null
-          }>
+          onClick={() => {
+            if (info.data) setShowFullMessage(!showFullMessage);
+          }}
+        >
           Full message
         </List.Button>
       )}
+      {console.log('info.data', info.data)}
       {info.data && (
         <div>
           {showFullMessage && <List.Message>{info.data}</List.Message>}
           <List.Items>{children}</List.Items>
-          {/* <List.Stats>
-            {Object.keys(info.data.stats).map((key) => {
-              return (
-                <span key={key} id={key}>
-                  {key}:{info.data.stats[key]}
-                </span>
-              );
-            })}
-          </List.Stats> */}
         </div>
       )}
     </List.Container>
