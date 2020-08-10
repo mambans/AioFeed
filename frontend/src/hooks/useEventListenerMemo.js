@@ -1,5 +1,13 @@
 import { useEffect, useMemo } from 'react';
 
+/**
+ * Hook for adding/removing event listeners
+ * @param {String} eventName - the event listener name
+ * @param {Function} handler - the event listener function
+ * @param {Element} [element=window] - the element to add the event to
+ * @param {any} [secondArgument=true] - A second argument (converted to a boolean) if event should be added
+ * @param {Object} [options={}] - the event listener options
+ */
 export default (eventName, handler, element = window, secondArgument = true, options = {}) => {
   const savedHandler = useMemo(() => handler, [handler]);
   const savedEventName = useMemo(() => eventName, [eventName]);
