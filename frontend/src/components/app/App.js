@@ -4,6 +4,7 @@ import { FeedsProvider } from '../feed/FeedsContext';
 import { NavigationProvider } from '../navigation/NavigationContext';
 import { NotificationsProvider } from '../notifications/NotificationsContext';
 import { ThemeProvider } from '../themes/ThemeContext';
+import { FooterProvider } from '../footer/FooterContext';
 import AccountContext, { AccountProvider } from '../account/AccountContext';
 import CookieConsentAlert from '../CookieConsentAlert';
 import Routes from './../routes';
@@ -18,7 +19,9 @@ export default () => {
         <AccountProvider>
           <NotificationsProvider>
             <FeedsProvider>
-              <App />
+              <FooterProvider>
+                <App />
+              </FooterProvider>
             </FeedsProvider>
           </NotificationsProvider>
         </AccountProvider>

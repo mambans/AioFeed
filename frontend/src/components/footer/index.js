@@ -6,7 +6,7 @@ import { MdRssFeed } from 'react-icons/md';
 import { Nav } from 'react-bootstrap';
 import { NavLink, useLocation } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 
 import NavigationContext from './../navigation/NavigationContext';
 import FeedsContext from './../feed/FeedsContext';
@@ -18,6 +18,7 @@ import {
 import { getCookie, AddCookie } from '../../util/Utils';
 import ChangeLogs from '../changeLogs';
 import styles from '../changeLogs/ChangeLogs.module.scss';
+import FooterContext from './FooterContext';
 
 export default () => {
   const NewAlertName = `GlobalAlert-NewAlertName`;
@@ -26,18 +27,31 @@ export default () => {
   const { enableTwitter, showTwitchSidebar } = useContext(FeedsContext);
   const location = useLocation();
   const [show, setShow] = useState(!getCookie(NewAlertName));
+  const ref = useRef();
+  const { setFooterVisibleInViewport } = useContext(FooterContext);
 
   const handleClose = () => {
     setShow(false);
   };
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting === true) {
+          setFooterVisibleInViewport(entries[0].boundingClientRect.height);
+        } else {
+          setFooterVisibleInViewport(false);
+        }
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(ref.current);
+  }, [setFooterVisibleInViewport]);
+
   return (
     footerVisible && (
-      <StyledFooterContainer
-        enableTwitter={enableTwitter}
-        showTwitchSidebar={showTwitchSidebar}
-        location={location.pathname}
-      >
+      <StyledFooterContainer ref={ref}>
         <div>
           <ul>
             <li>

@@ -6,13 +6,16 @@ export const Container = styled.div`
   /* width: ${({ width }) => width + 'px' || '15vw'}; */
   /* width: ${({ width }) => width}; */
   width: 15vw;
-  height: 92vh;
+  height: ${({ footerVisibleInViewport }) =>
+    footerVisibleInViewport ? `calc(92vh - ${footerVisibleInViewport}px)` : '92vh'};
   position: fixed;
   right: 25px;
   top: 90px;
   /* background: var(--twitterBackground); */
   background: var(--sidebarsBackgroundColor);
   border-radius: 10px 10px 2px 2px;
+  transition: height 500ms;
+  overflow: hidden;
 
   @media screen and (max-width: 2560px) {
     width: 20vw;

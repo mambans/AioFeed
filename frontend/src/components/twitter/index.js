@@ -7,10 +7,12 @@ import { Container, LoadingPlaceholder } from './StyledComponents';
 import FeedsContext from '../feed/FeedsContext';
 import UpdateTwitterListName from '../navigation/sidebar/UpdateTwitterListName';
 import ThemeContext from './../themes/ThemeContext';
+import FooterContext from '../footer/FooterContext';
 
 export default () => {
   const { twitterListName, enableTwitter } = useContext(FeedsContext);
   const { activeTheme } = useContext(ThemeContext);
+  const { footerVisibleInViewport } = useContext(FooterContext);
 
   return (
     <CSSTransition
@@ -21,7 +23,11 @@ export default () => {
       key={twitterListName + activeTheme.type}
       appear={true}
     >
-      <Container key={twitterListName} id='twitter'>
+      <Container
+        key={twitterListName}
+        footerVisibleInViewport={footerVisibleInViewport}
+        id='twitter'
+      >
         {twitterListName ? (
           <TwitterTimelineEmbed
             sourceType='list'
