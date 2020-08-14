@@ -2,15 +2,6 @@ import styled, { keyframes } from 'styled-components';
 import { MdFavorite } from 'react-icons/md';
 import { MdFavoriteBorder } from 'react-icons/md';
 
-export const HeaderContainerTwitchLive = styled.div`
-  border-bottom: 2px var(--subFeedHeaderBorder);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 7px;
-  width: 100%;
-`;
-
 export const StyledLoadmore = styled.div`
   width: 100%;
   display: grid;
@@ -19,9 +10,18 @@ export const StyledLoadmore = styled.div`
   max-width: 100%;
   padding-bottom: 10px;
 
+  &:hover {
+    div:not(#Button) {
+      opacity: 1;
+      transition: opacity 200ms;
+    }
+  }
+
   div:not(#Button) {
-    background: rgba(90, 92, 94, 0.67);
+    background: var(--subFeedHeaderBorder);
     height: 1px;
+    opacity: 0.75;
+    transition: opacity 200ms;
   }
 
   div#Button {
@@ -114,13 +114,6 @@ export const StyledCountdownCircle = styled.div`
   }
 
 
-`;
-
-export const HeaderLeftSubcontainer = styled.div`
-  width: 250px;
-  min-width: 250px;
-  align-items: end;
-  display: flex;
 `;
 
 export const pulse = keyframes`
@@ -257,12 +250,7 @@ export const ChannelNameDiv = styled.div`
   width: max-content;
 
   .channelName {
-    padding: 0 5px;
-    color: var(--textColor2);
-    font-size: 1rem !important;
-    display: flex;
-    align-items: center;
-    transition: color 250ms;
+    z-index: 1;
   }
 
   .twitchIcon {
@@ -270,7 +258,8 @@ export const ChannelNameDiv = styled.div`
     color: #710271;
     padding: 0px 10px;
     opacity: 0;
-    transition: opacity 150ms;
+    transition: opacity 250ms, transform 250ms;
+    transform: translateX(-25px);
 
     &:hover {
       color: #af2caf;
@@ -280,6 +269,7 @@ export const ChannelNameDiv = styled.div`
 
   &:hover {
     .twitchIcon {
+      transform: translateX(0px);
       opacity: 1;
     }
   }

@@ -56,13 +56,33 @@ export const ButtonList = styled(Button).attrs({ variant: 'outline-secondary' })
   }
 `;
 
-export const HeaderTitle = styled.h4`
-  text-align: center;
-  color: var(--textColor2);
-  margin: auto;
-  letter-spacing: 1px;
+export const HeaderTitle = styled.div`
   width: 100%;
-  margin: 2px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -5px;
+  min-height: 25px;
+
+  h4,
+  h5 {
+    text-align: center;
+    color: var(--textColor2);
+    margin: auto;
+    letter-spacing: 1px;
+    margin: 2px auto;
+    display: flex;
+    margin: 0 10px;
+    font-size: 1.3rem;
+    transition: margin 500ms, color 500ms;
+    align-items: center;
+    min-width: max-content;
+
+    &:hover {
+      margin: 0 50px;
+      color: var(--textColor1);
+    }
+  }
 
   svg {
     margin: 0 10px;
@@ -74,20 +94,25 @@ export const HeaderTitle = styled.h4`
     border-radius: 5px;
     font-size: 0.9em;
     padding: 0px 3px;
+    margin: 0 5px;
   }
 `;
 
+export const HeaderLines = styled.div`
+  height: 2px;
+  background-color: var(--subFeedHeaderBorder);
+  width: 100%;
+`;
+
+export const HeaderOuterMainContainer = styled.div`
+  width: 100%;
+  margin-bottom: 5px;
+`;
+
 export const HeaderContainer = styled.div`
-  border-bottom: 2px var(--subFeedHeaderBorder);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 7px;
-  width: 100%;
-  min-width: 100%;
-  margin-bottom: 10px;
-  /* margin-top: 25px; */
-  height: 50.5px;
   width: 100%;
 `;
 
@@ -161,6 +186,7 @@ export const ChannelContainer = styled.div`
   margin-bottom: 5px;
   grid-template-columns: min-content;
   width: inherit;
+  overflow: hidden;
 
   .profileImg {
     width: 26px;
@@ -171,25 +197,45 @@ export const ChannelContainer = styled.div`
     padding: 0 5px;
     font-weight: bold;
     color: var(--textColor2);
-    grid-row: 1;
+    /* grid-row: 1; */
     width: max-content;
     transition: color 250ms;
+    align-items: center;
     /* mix-blend-mode: screen; */
   }
 
+  .buttonsContainer {
+    display: flex;
+    grid-row: 1;
+    justify-content: right;
+    transition: transform 350ms;
+    transform: translateX(250px);
+  }
+
   &:hover {
-    button,
-    svg {
-      opacity: 1;
+    .buttonsContainer {
+      transform: translateX(0px);
+
+      button,
+      svg {
+        opacity: 1;
+      }
     }
   }
 
   a {
-    font-size: 1rem !important;
-    height: 100%;
+    /* font-size: 1rem !important;
+    height: 100%; */
     display: flex;
     align-items: center;
   }
+`;
+
+export const HeaderLeftSubcontainer = styled.div`
+  width: 250px;
+  min-width: 250px;
+  align-items: end;
+  display: flex;
 `;
 
 export const GameContainer = styled.div`

@@ -10,13 +10,20 @@ import Alert from 'react-bootstrap/Alert';
 import React, { useEffect, useState, useCallback, useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { RefreshButton, HeaderTitle, LoadMore } from './../../sharedStyledComponents';
+import {
+  RefreshButton,
+  HeaderTitle,
+  LoadMore,
+  HeaderOuterMainContainer,
+  HeaderLines,
+  HeaderContainer,
+} from './../../sharedStyledComponents';
 import {
   TypeListUlContainer,
   TypeButton,
   TopDataSortButtonsContainer,
-  HeaderContainer,
   TopStreamsContainer,
+  Container,
 } from './styledComponents';
 import ClipsSortButton from './../channelPage/ClipsSortButton';
 import GameSearchBar from './GameSearchBar';
@@ -195,96 +202,103 @@ export default () => {
       classNames='fade-750ms'
       appear
     >
-      <>
-        <HeaderContainer>
-          <div
-            style={{
-              width: '675px',
-              minWidth: '675px',
-              alignItems: 'end',
-              display: 'flex',
-            }}
-          >
-            <RefreshButton disabled={refreshing} onClick={refresh}>
-              {refreshing ? (
-                <div className='SpinnerWrapper'>
-                  <Spinner
-                    animation='border'
-                    role='status'
-                    variant='light'
-                    style={Util.loadingSpinnerSmall}
-                  ></Spinner>
-                </div>
-              ) : (
-                <MdRefresh size={34} />
-              )}
-            </RefreshButton>
-          </div>
-          <HeaderTitle style={{ marginLeft: '10px' }}>
-            <FaTwitch size={32} style={{ color: '#6f166f' }} />
-            {category || 'Top'} - {videoType}
-          </HeaderTitle>
-          <TopDataSortButtonsContainer>
-            <GameSearchBar gameName={category} videoType={videoType} />
-            <div>
-              <TypeButton
-                title={category ? `Fetch top ${videoType}` : 'Select a game/category first'}
-                disabled={category ? false : true}
-                onClick={() => {
-                  setTypeListOpen(!typeListOpen);
-                }}
-              >
-                <FaRegFileVideo size={20} />
-                {videoType}
-              </TypeButton>
+      <Container>
+        <HeaderOuterMainContainer>
+          <HeaderContainer style={{ marginTop: '25px' }}>
+            <div
+              style={{
+                width: '675px',
+                minWidth: '675px',
+                alignItems: 'end',
+                display: 'flex',
+              }}
+            >
+              <RefreshButton disabled={refreshing} onClick={refresh}>
+                {refreshing ? (
+                  <div className='SpinnerWrapper'>
+                    <Spinner
+                      animation='border'
+                      role='status'
+                      variant='light'
+                      style={Util.loadingSpinnerSmall}
+                    ></Spinner>
+                  </div>
+                ) : (
+                  <MdRefresh size={34} />
+                )}
+              </RefreshButton>
+            </div>
 
-              {typeListOpen && (
-                <TypeListUlContainer>
-                  <Link
-                    to='?type=streams'
-                    onClick={() => {
-                      videoTypeBtnOnClick('streams');
-                    }}
-                  >
-                    <MdLiveTv size={24} />
-                    Streams
-                  </Link>
-                  <Link
-                    to='?type=clips'
-                    onClick={() => {
-                      videoTypeBtnOnClick('clips');
-                      setSortBy('Views');
-                    }}
-                  >
-                    <MdMovieCreation size={24} />
-                    Clips
-                  </Link>
+            <TopDataSortButtonsContainer>
+              <GameSearchBar gameName={category} videoType={videoType} />
+              <div>
+                <TypeButton
+                  title={category ? `Fetch top ${videoType}` : 'Select a game/category first'}
+                  disabled={category ? false : true}
+                  onClick={() => {
+                    setTypeListOpen(!typeListOpen);
+                  }}
+                >
+                  <FaRegFileVideo size={20} />
+                  {videoType}
+                </TypeButton>
 
-                  {/* <li
+                {typeListOpen && (
+                  <TypeListUlContainer>
+                    <Link
+                      to='?type=streams'
+                      onClick={() => {
+                        videoTypeBtnOnClick('streams');
+                      }}
+                    >
+                      <MdLiveTv size={24} />
+                      Streams
+                    </Link>
+                    <Link
+                      to='?type=clips'
+                      onClick={() => {
+                        videoTypeBtnOnClick('clips');
+                        setSortBy('Views');
+                      }}
+                    >
+                      <MdMovieCreation size={24} />
+                      Clips
+                    </Link>
+
+                    {/* <li
                   onClick={() => {
                     videoTypeBtnOnClick("Videos");
                   }}>
                   <MdVideocam size={24} />
                   Videos
                 </li> */}
-                </TypeListUlContainer>
-              )}
-            </div>
+                  </TypeListUlContainer>
+                )}
+              </div>
 
-            {videoType === 'videos' ? (
-              <SortButton sortBy={sortBy} setSortBy={setSortBy} setData={setTopData} />
-            ) : videoType === 'clips' ? (
-              <ClipsSortButton
-                sortBy={sortByTime}
-                setSortBy={setSortByTime}
-                setData={setTopData}
-                resetOldData={() => {
-                  oldTopData.current = null;
-                }}
-              />
-            ) : null}
-          </TopDataSortButtonsContainer>
-        </HeaderContainer>
+              {videoType === 'videos' ? (
+                <SortButton sortBy={sortBy} setSortBy={setSortBy} setData={setTopData} />
+              ) : videoType === 'clips' ? (
+                <ClipsSortButton
+                  sortBy={sortByTime}
+                  setSortBy={setSortByTime}
+                  setData={setTopData}
+                  resetOldData={() => {
+                    oldTopData.current = null;
+                  }}
+                />
+              ) : null}
+            </TopDataSortButtonsContainer>
+          </HeaderContainer>
+          <HeaderTitle>
+            <HeaderLines />
+            <h5>
+              {category || 'Top'} - {videoType}
+              <FaTwitch size={25} style={{ color: '#6f166f' }} />
+            </h5>
+            <HeaderLines />
+          </HeaderTitle>
+        </HeaderOuterMainContainer>
 
         {error ? (
           <Alert
@@ -299,7 +313,7 @@ export default () => {
           <TopStreamsContainer>
             <>
               <LoadingBoxes
-                amount={Math.floor(((document.documentElement.clientWidth - 150) / 350) * 1.5)}
+                amount={Math.floor(((window.innerWidth - 150) / 350) * 1.5)}
                 load={!topData || topData.length <= 0}
               />
 
@@ -333,7 +347,7 @@ export default () => {
             </>
           </TopStreamsContainer>
         )}
-      </>
+      </Container>
     </CSSTransition>
   );
 };

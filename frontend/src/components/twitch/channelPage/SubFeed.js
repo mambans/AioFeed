@@ -22,15 +22,13 @@ export default ({
   itemsloadmoreLoaded,
   channelInfo,
 }) => {
-  const [numberOfVideos, setNumberOfVideos] = useState(
-    Math.floor(document.documentElement.clientWidth / 350)
-  );
+  const [numberOfVideos, setNumberOfVideos] = useState(Math.floor(window.innerWidth / 350));
 
   const recalcWidth = useMemo(
     () =>
       debounce(
         () => {
-          setNumberOfVideos(Math.floor(document.documentElement.clientWidth / 350));
+          setNumberOfVideos(Math.floor(window.innerWidth / 350));
         },
         20,
         { leading: true, trailing: false }

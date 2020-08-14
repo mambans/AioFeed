@@ -56,7 +56,7 @@ export const SidebarHeader = styled.p`
   font-weight: bold;
   color: var(--textColor2);
   padding: 8px 5px 8px 10px;
-  border-bottom: 2px var(--subFeedHeaderBorder);
+  border-bottom: 2px solid var(--subFeedHeaderBorder);
   height: 50.5px;
   margin-bottom: 0;
   justify-content: center;
@@ -71,7 +71,7 @@ export const StyledsidebarItem = styled.div`
   grid-template-columns: 18% 56% 26%;
   grid-template-rows: 50% 50%;
   padding: 8px 5px 8px 10px;
-  border-bottom: 1px var(--subFeedHeaderBorder);
+  border-bottom: 1px solid var(--subFeedHeaderBorder);
   transition: ease-in-out 1s,
     box-shadow ${({ duration }) => (duration ? 1 : 2)}s cubic-bezier(0.07, 0.81, 0.13, 0.9);
   font-size: 0.9rem;
@@ -164,7 +164,7 @@ export const LoadingSidebarItems = styled.div`
   grid-template-columns: 18% auto;
   grid-template-rows: 50% 50%;
   padding: 8px 5px 8px 10px;
-  border-bottom: 1px var(--subFeedHeaderBorder);
+  border-bottom: 1px solid var(--subFeedHeaderBorder);
   position: relative;
   height: 62px;
 

@@ -5,8 +5,7 @@ export default async (category, page) => {
   let game;
   let error;
   const nrStreams =
-    Math.floor((document.documentElement.clientWidth - 150) / 350) *
-    Math.floor((document.documentElement.clientHeight - (65 + 60)) / 351);
+    Math.floor((window.innerWidth - 150) / 350) * Math.floor((window.innerHeight - 150) / 340);
 
   if (category && category !== 'undefined') {
     game = await API.getGames({

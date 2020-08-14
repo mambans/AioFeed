@@ -260,7 +260,7 @@ export const TopDataSortButtonsContainer = styled.div`
   min-width: 675px;
 
   div {
-    margin: 0 10px;
+    margin-left: 10px;
   }
 
   button {
@@ -268,38 +268,14 @@ export const TopDataSortButtonsContainer = styled.div`
   }
 `;
 
-export const HeaderContainer = styled.div`
-  border-bottom: 2px var(--subFeedHeaderBorder);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 7px;
-  width: 92.1%;
-  margin: auto;
-  margin-top: 25px;
-
-  @media screen and (max-width: 2560px) {
-    width: 82.5% !important;
-  }
-
-  @media screen and (max-width: 1920px) {
-    width: 92% !important;
-  }
-`;
-
 export const TopStreamsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: 92.1%;
+`;
+
+export const Container = styled.div`
+  width: ${(Math.floor((window.innerWidth - 150) / 350) % 350) * 350 + 'px'};
   margin: auto;
-
-  @media screen and (max-width: 2560px) {
-    width: 82.5% !important;
-  }
-
-  @media screen and (max-width: 1920px) {
-    width: 92% !important;
-  }
 `;
 
 const SearchSubmitIcon = styled(FaSearch).attrs({ size: 16 })``;

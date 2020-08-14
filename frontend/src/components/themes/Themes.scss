@@ -22,7 +22,7 @@ html[data-theme='wood'] {
     rgba(0, 0, 0, 0.4) 0%,
     var(--navigationbarBackground) 15%
   );
-  --subFeedHeaderBorder: solid #bebebe29;
+  --subFeedHeaderBorder: #bebebe29;
 
   --refreshButtonBackground: #00000026;
   --refreshButtonBorder: thin solid #2d2d2d;
@@ -64,7 +64,7 @@ html[data-theme='christmas'] {
   --refreshButtonHoverBackground: #333435;
   --refreshButtonHoverColor: #ffffff;
   --scrollbarColors: rgb(240, 240, 240) rgb(43, 31, 31);
-  --subFeedHeaderBorder: solid #80808029;
+  --subFeedHeaderBorder: #80808029;
 }
 
 html[data-theme="new year's eve"] {
@@ -122,7 +122,7 @@ html[data-theme='light'] {
   --refreshButtonHoverBorder: 1px solid rgb(255, 255, 255);
   --scrollbarColors: rgb(41, 41, 41) rgb(255, 255, 255);
 
-  --subFeedHeaderBorder: solid #29292988;
+  --subFeedHeaderBorder: #29292988;
 
   --footerBackground: #00000021;
   --twitterBackground: #ffffff;

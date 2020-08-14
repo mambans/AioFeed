@@ -207,7 +207,7 @@ export default (data_p) => {
             </a>
           </ChannelNameDiv>
           {(location.pathname === '/feed/' || location.pathname === '/feed') && (
-            <div style={{ display: 'flex', gridRow: '1', justifyContent: 'right' }}>
+            <div className='buttonsContainer'>
               <VodsFollowUnfollowBtn channel={data?.login} marginright='5px;' />
               <AddUpdateNotificationsButton channel={data?.login} marginright='5px;' />
               <FollowUnfollowBtn
