@@ -4,12 +4,11 @@ import { MdAccountCircle } from 'react-icons/md';
 import { MdEmail } from 'react-icons/md';
 import { MdRssFeed } from 'react-icons/md';
 import { Nav } from 'react-bootstrap';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import React, { useContext, useState, useEffect, useRef } from 'react';
 
 import NavigationContext from './../navigation/NavigationContext';
-import FeedsContext from './../feed/FeedsContext';
 import {
   StyledFooterContainer,
   StyledCenterBottomText,
@@ -24,8 +23,6 @@ export default () => {
   const NewAlertName = `GlobalAlert-NewAlertName`;
   AddCookie(NewAlertName, true);
   const { footerVisible, setRenderModal, setShowSidebar } = useContext(NavigationContext);
-  const { enableTwitter, showTwitchSidebar } = useContext(FeedsContext);
-  const location = useLocation();
   const [show, setShow] = useState(!getCookie(NewAlertName));
   const ref = useRef();
   const { setFooterVisibleInViewport } = useContext(FooterContext);
