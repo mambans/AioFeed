@@ -42,9 +42,8 @@ export default () => {
       </CSSTransition>
       <VideoAndChatContainer
         id='twitch-embed'
+        visible={visible}
         style={{
-          height: visible ? 'calc(100vh - 70px)' : '100vh',
-          top: visible ? '70px' : '0',
           display: 'unset',
         }}
       >

@@ -11,8 +11,10 @@ import { NavLink } from 'react-router-dom';
 export const VideoAndChatContainer = styled.div`
   position: fixed;
   width: 100vw;
-  height: calc(100vh - 50px);
-  top: 50px;
+  /* height: calc(100vh - 50px); */
+  /* top: 50px; */
+  height: ${({ visible }) => (visible ? 'calc(100vh - 70px)' : '100vh')};
+  top: ${({ visible }) => (visible ? '70px' : '0')};
   transition: top 300ms, height 300ms;
   display: grid;
   transform: translate3d(0, 0, 0);

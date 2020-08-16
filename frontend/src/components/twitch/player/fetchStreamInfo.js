@@ -1,5 +1,5 @@
-import validateToken from "../validateToken";
-import API from "../API";
+import validateToken from '../validateToken';
+import API from '../API';
 
 /**
  * Fetch and Set uptime state from a Live stream.

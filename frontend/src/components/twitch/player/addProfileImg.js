@@ -2,7 +2,7 @@ import GetCachedProfiles from '../GetCachedProfiles';
 import API from '../API';
 
 export default async ({ user_id, currentStreamObj }) => {
-  if (!currentStreamObj || !currentStreamObj.profile_image_url) {
+  if (!currentStreamObj?.profile_image_url || !currentStreamObj?.login) {
     const TwitchProfiles = GetCachedProfiles();
 
     const profile =
@@ -29,7 +29,7 @@ export default async ({ user_id, currentStreamObj }) => {
       );
     }
 
-    return { ...currentStreamObj, profile_image_url: profile.profile_image };
+    return { ...currentStreamObj, profile_image_url: profile.profile_image, login: profile.login };
   }
   return currentStreamObj;
 };

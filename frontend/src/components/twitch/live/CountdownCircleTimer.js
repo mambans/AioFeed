@@ -1,16 +1,14 @@
 import { StyledCountdownCircle } from './../StyledComponents';
 import React, { useState, useEffect } from 'react';
 
-export default ({ startDuration }) => {
-  const [countdown, setCountdown] = useState(25);
+export default ({ startDuration, isLoading, autoRefreshEnabled }) => {
+  const [countdown, setCountdown] = useState(startDuration);
 
   useEffect(() => {
     setCountdown(startDuration);
 
     const timer = setInterval(() => {
-      setCountdown((countdown) => {
-        return --countdown <= 0 ? 0 : countdown;
-      });
+      setCountdown((countdown) => Math.max(0, --countdown));
     }, 1000);
 
     return () => {
@@ -19,8 +17,10 @@ export default ({ startDuration }) => {
   }, [startDuration]);
 
   return (
-    <StyledCountdownCircle>
-      <div id='countdown-number'>{countdown || 0}</div>
+    <StyledCountdownCircle isLoading={isLoading}>
+      {autoRefreshEnabled && startDuration && !isLoading && (
+        <div id='countdown-number'>{countdown || 0}</div>
+      )}
       <svg>
         <circle r='10.8' cx='12' cy='12'></circle>
       </svg>

@@ -3,21 +3,12 @@ import { FaRegFileVideo } from 'react-icons/fa';
 import { FaTwitch } from 'react-icons/fa';
 import { MdLiveTv } from 'react-icons/md';
 import { MdMovieCreation } from 'react-icons/md';
-import { MdRefresh } from 'react-icons/md';
-import { Spinner } from 'react-bootstrap';
 import { useParams, useLocation } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import React, { useEffect, useState, useCallback, useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import {
-  RefreshButton,
-  HeaderTitle,
-  LoadMore,
-  HeaderOuterMainContainer,
-  HeaderLines,
-  HeaderContainer,
-} from './../../sharedStyledComponents';
+import { LoadMore, HeaderContainer } from './../../sharedStyledComponents';
 import {
   TypeListUlContainer,
   TypeButton,
@@ -35,7 +26,6 @@ import SortButton from './../channelPage/SortButton';
 import StreamEle from './../live/StreamElement';
 import ClipElement from './../channelPage/ClipElement';
 import VodElement from './../vods/VodElement';
-import Util from './../../../util/Util';
 import validateToken from '../validateToken';
 import { getCookie } from '../../../util/Utils';
 import AccountContext from '../../account/AccountContext';
@@ -203,32 +193,16 @@ export default () => {
       appear
     >
       <Container>
-        <HeaderOuterMainContainer>
-          <HeaderContainer style={{ marginTop: '25px' }}>
-            <div
-              style={{
-                width: '675px',
-                minWidth: '675px',
-                alignItems: 'end',
-                display: 'flex',
-              }}
-            >
-              <RefreshButton disabled={refreshing} onClick={refresh}>
-                {refreshing ? (
-                  <div className='SpinnerWrapper'>
-                    <Spinner
-                      animation='border'
-                      role='status'
-                      variant='light'
-                      style={Util.loadingSpinnerSmall}
-                    ></Spinner>
-                  </div>
-                ) : (
-                  <MdRefresh size={34} />
-                )}
-              </RefreshButton>
-            </div>
-
+        <HeaderContainer
+          text={
+            <>
+              {category || 'Top'} - {videoType}
+              <FaTwitch size={25} style={{ color: '#6f166f' }} />
+            </>
+          }
+          isLoading={refreshing}
+          refreshFunc={refresh}
+          rightSide={
             <TopDataSortButtonsContainer>
               <GameSearchBar gameName={category} videoType={videoType} />
               <div>
@@ -264,14 +238,6 @@ export default () => {
                       <MdMovieCreation size={24} />
                       Clips
                     </Link>
-
-                    {/* <li
-                  onClick={() => {
-                    videoTypeBtnOnClick("Videos");
-                  }}>
-                  <MdVideocam size={24} />
-                  Videos
-                </li> */}
                   </TypeListUlContainer>
                 )}
               </div>
@@ -289,16 +255,8 @@ export default () => {
                 />
               ) : null}
             </TopDataSortButtonsContainer>
-          </HeaderContainer>
-          <HeaderTitle>
-            <HeaderLines />
-            <h5>
-              {category || 'Top'} - {videoType}
-              <FaTwitch size={25} style={{ color: '#6f166f' }} />
-            </h5>
-            <HeaderLines />
-          </HeaderTitle>
-        </HeaderOuterMainContainer>
+          }
+        ></HeaderContainer>
 
         {error ? (
           <Alert

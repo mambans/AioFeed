@@ -1,20 +1,10 @@
-import { MdRefresh } from 'react-icons/md';
-import { Spinner } from 'react-bootstrap';
 import { FaYoutube } from 'react-icons/fa';
 import Alert from 'react-bootstrap/Alert';
 import Moment from 'react-moment';
 import React from 'react';
 
 import styles from './Youtube.module.scss';
-import Util from '../../util/Util';
-import {
-  RefreshButton,
-  HeaderTitle,
-  HeaderContainer,
-  HeaderLines,
-  HeaderOuterMainContainer,
-  HeaderLeftSubcontainer,
-} from './../sharedStyledComponents';
+import { HeaderContainer } from './../sharedStyledComponents';
 import ReAuthenticateButton from '../navigation/sidebar/ReAuthenticateButton';
 import ChannelList from './channelList';
 
@@ -65,39 +55,27 @@ const SubFeedError = (props) => {
 export default (data) => {
   const { refresh, requestError, followedChannels, videos, isLoaded, setVideos } = data;
   return (
-    <HeaderOuterMainContainer>
-      <HeaderContainer id='YoutubeHeader'>
-        <HeaderLeftSubcontainer>
-          <RefreshButton disabled={!isLoaded} onClick={refresh}>
-            {!isLoaded ? (
-              <div className='SpinnerWrapper'>
-                <Spinner
-                  animation='border'
-                  role='status'
-                  style={Util.loadingSpinnerSmall}
-                ></Spinner>
-              </div>
-            ) : (
-              <MdRefresh size={34} />
-            )}
-          </RefreshButton>
-
+    <HeaderContainer
+      id='YoutubeHeader'
+      text={
+        <>
+          Youtube
+          <FaYoutube size={25} style={{ color: '#a80000' }} />
+        </>
+      }
+      refreshFunc={refresh}
+      isLoading={!isLoaded}
+      leftSide={
+        <>
           <Moment key={isLoaded || Date.now()} className={styles.lastRefresh} fromNow>
             {isLoaded || Date.now()}
           </Moment>
-        </HeaderLeftSubcontainer>
-        <SubFeedError error={requestError}></SubFeedError>
-
+          <SubFeedError error={requestError}></SubFeedError>
+        </>
+      }
+      rightSide={
         <ChannelList followedChannels={followedChannels} videos={videos} setVideos={setVideos} />
-      </HeaderContainer>
-      <HeaderTitle>
-        <HeaderLines />
-        <h5>
-          Youtube
-          <FaYoutube size={25} style={{ color: '#a80000' }} />
-        </h5>
-        <HeaderLines />
-      </HeaderTitle>
-    </HeaderOuterMainContainer>
+      }
+    ></HeaderContainer>
   );
 };

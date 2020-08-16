@@ -6,7 +6,7 @@ import Footer from '../footer';
 import Home from '../home';
 import Legality from '../legality';
 import Navbar from '../navigation';
-import Player from './../twitch/player/Player';
+import VideoPlayer from './../twitch/player/VideoPlayer';
 import style from './Routes.module.scss';
 import TopStreams from '../twitch/categoryTopStreams';
 import TwitchAuth from '../auth/TwitchAuth';
@@ -43,8 +43,8 @@ export default () => {
           <Route path='game/:category' element={<TopStreams />} />
           <Route path='top/:category' element={<TopStreams />} />
 
-          <Route path='videos/:videoId' element={<Player />} />
-          <Route path='vod/:videoId' element={<Player />} />
+          <Route path='videos/:videoId' element={<VideoPlayer />} />
+          <Route path='vod/:videoId' element={<VideoPlayer />} />
           <Route path=':channelName/*' element={<TwitchChannelRoutes />} />
         </Routes>
       </main>

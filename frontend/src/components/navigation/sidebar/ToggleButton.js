@@ -15,7 +15,7 @@ export default ({
   buttonsperrow,
   scrollIntoView,
 }) => {
-  const [ checked, setChecked ] = useState(enabled || false);
+  const [checked, setChecked] = useState(enabled || false);
 
   function handleChange() {
     setEnable(!checked);
@@ -26,7 +26,7 @@ export default ({
       window.setTimeout(() => {
         const element = document.getElementById(`${label}Header`);
         element &&
-          element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+          element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
       }, 100);
     }
   }
@@ -36,13 +36,15 @@ export default ({
       key={'bottom'}
       placement={'bottom'}
       delay={{ show: 200, hide: 0 }}
-      overlay={<Tooltip id={`tooltip-${'bottom'}`}>{tooltip}</Tooltip>}>
+      overlay={<Tooltip id={`tooltip-${'bottom'}`}>{tooltip}</Tooltip>}
+    >
       <StyledToggleButton
         onClick={handleChange}
         disabled={!tokenExists}
         variant='dark'
         buttonsperrow={buttonsperrow}
-        enabled={checked.toString()}>
+        enabled={checked.toString()}
+      >
         {icon}
       </StyledToggleButton>
     </OverlayTrigger>

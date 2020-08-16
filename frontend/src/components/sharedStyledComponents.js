@@ -3,11 +3,13 @@ import { GrPowerReset } from 'react-icons/gr';
 import { Link } from 'react-router-dom';
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { MdRefresh } from 'react-icons/md';
 
 import { StyledLoadmore } from './twitch/StyledComponents';
 import Util from './../util/Util';
+import CountdownCircleTimer from './twitch/live/CountdownCircleTimer';
 
-export const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
+const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
   color: var(--refreshButtonColor);
   background: var(--refreshButtonBackground);
   box-shadow: var(--refreshButtonShadow);
@@ -16,16 +18,21 @@ export const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary'
   left: 6px;
   align-items: center;
   transition-duration: 250ms;
+  /* padding: 1px; */
+  margin-right: 25px;
+  width: 46px;
+  height: 40px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  padding: 0;
 
-  padding: 4px;
-  width: 50px;
-
-  .SpinnerWrapper {
+  /* .SpinnerWrapper {
     height: 34px;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+  } */
 
   div[aria-label='Countdown timer'] {
     margin: 5px auto !important ;
@@ -56,7 +63,7 @@ export const ButtonList = styled(Button).attrs({ variant: 'outline-secondary' })
   }
 `;
 
-export const HeaderTitle = styled.div`
+const HeaderTitle = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -66,6 +73,7 @@ export const HeaderTitle = styled.div`
 
   h4,
   h5 {
+    cursor: pointer;
     text-align: center;
     color: var(--textColor2);
     margin: auto;
@@ -85,7 +93,7 @@ export const HeaderTitle = styled.div`
   }
 
   svg {
-    margin: 0 10px;
+    margin-left: 10px;
   }
 
   span#live-indicator {
@@ -98,23 +106,79 @@ export const HeaderTitle = styled.div`
   }
 `;
 
-export const HeaderLines = styled.div`
+const HeaderLines = styled.div`
   height: 2px;
   background-color: var(--subFeedHeaderBorder);
   width: 100%;
 `;
 
-export const HeaderOuterMainContainer = styled.div`
+const HeaderOuterMainContainer = styled.div`
   width: 100%;
   margin-bottom: 5px;
+  padding-top: 20px;
 `;
 
-export const HeaderContainer = styled.div`
+const HeaderTopContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
 `;
+
+const LeftRightDivs = styled.div`
+  align-items: end;
+  display: flex;
+`;
+
+export const HeaderContainer = (props) => {
+  const {
+    children,
+    text,
+    id,
+    leftSide,
+    rightSide,
+    isLoading,
+    autoRefreshEnabled,
+    refreshFunc,
+    refreshTimer,
+    style = {},
+  } = props;
+  const ref = useRef();
+  console.log();
+
+  const handleOnClick = () => {
+    ref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+  };
+
+  return (
+    <HeaderOuterMainContainer ref={ref} style={style} id={id}>
+      <HeaderTopContainer>
+        <LeftRightDivs>
+          <RefreshButton disabled={isLoading} onClick={refreshFunc}>
+            {autoRefreshEnabled || isLoading ? (
+              <CountdownCircleTimer
+                key={refreshTimer}
+                isLoading={isLoading}
+                autoRefreshEnabled={autoRefreshEnabled}
+                startDuration={Math.max(0, Math.round((refreshTimer - Date.now()) / 1000))}
+              />
+            ) : (
+              <MdRefresh size={32} />
+            )}
+          </RefreshButton>
+          {leftSide}
+        </LeftRightDivs>
+        {children}
+        <LeftRightDivs>{rightSide}</LeftRightDivs>
+      </HeaderTopContainer>
+      <HeaderTitle>
+        <HeaderLines />
+        <h5 onClick={handleOnClick}>{text}</h5>
+        <HeaderLines />
+      </HeaderTitle>
+    </HeaderOuterMainContainer>
+  );
+};
 
 export const SubFeedContainer = styled.div`
   display: flex;
@@ -229,13 +293,6 @@ export const ChannelContainer = styled.div`
     display: flex;
     align-items: center;
   }
-`;
-
-export const HeaderLeftSubcontainer = styled.div`
-  width: 250px;
-  min-width: 250px;
-  align-items: end;
-  display: flex;
 `;
 
 export const GameContainer = styled.div`

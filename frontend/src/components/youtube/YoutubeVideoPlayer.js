@@ -1,12 +1,12 @@
+import { MdVerticalAlignBottom } from 'react-icons/md';
 import { useParams, useLocation } from 'react-router-dom';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import YouTube from 'react-youtube';
-import { MdVerticalAlignBottom } from 'react-icons/md';
-import React, { useContext, useEffect, useState, useRef } from 'react';
 
-import NavigationContext from './../navigation/NavigationContext';
 import { VideoAndChatContainer, ShowNavbarBtn } from './../twitch/player/StyledComponents';
-import PlayerNavbar from './PlayerNavbar';
+import NavigationContext from './../navigation/NavigationContext';
+// import PlayerNavbar from './PlayerNavbar';
 
 const StyledYoutubeIframe = styled(YouTube)`
   border: none;
@@ -16,19 +16,14 @@ const StyledYoutubeIframe = styled(YouTube)`
 
 export default () => {
   const [video, setVideo] = useState({});
-  const param = useParams();
+  const videoId = useParams().videoId;
   const location = useLocation();
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const getVideoInfoTimer = useRef();
 
   useEffect(() => {
-    // if (param.includes("&t=")) {
-    //   setVideo({ id: param.split("&t=")[0], startTime: param.split("&t=")[1].replace("s", "") });
-    // } else {
-    //   setVideo({ id: param });
-    // }
-    setVideo({ id: param.videoId, startTime: location.search.replace(/[?t=]|s/g, '') });
-  }, [location.search, param.videoId]);
+    setVideo({ id: videoId, startTime: location.search.replace(/[?t=]|s/g, '') });
+  }, [location.search, videoId]);
 
   useEffect(() => {
     document.documentElement.style.overflow = 'hidden';
@@ -60,11 +55,10 @@ export default () => {
 
   return (
     <>
-      <PlayerNavbar visible={visible} />
+      {/* <PlayerNavbar visible={visible} /> */}
       <VideoAndChatContainer
+        visible={visible}
         style={{
-          height: visible ? 'calc(100vh - 70px)' : '100vh',
-          top: visible ? '70px' : '0',
           display: 'unset',
         }}
       >
@@ -92,13 +86,15 @@ export default () => {
           containerClassName='IframeContainer'
           onReady={(event) => {
             getVideoInfoTimer.current = setTimeout(() => {
-              document.title = `AF | ${event.target.getVideoData().title}`;
+              document.title = `AF | ${event.target.getVideoData().author} - ${
+                event.target.getVideoData().title
+              }`;
             }, 2500);
           }}
-          onPlay={(event) => {
-            clearTimeout(getVideoInfoTimer.current);
-            document.title = `AF | ${event.target.getVideoData().title}`;
-          }}
+          // onPlay={(event) => {
+          //   // clearTimeout(getVideoInfoTimer.current);
+          //   // document.title = `AF | ${event.target.getVideoData().title}`;
+          // }}
         />
       </VideoAndChatContainer>
     </>

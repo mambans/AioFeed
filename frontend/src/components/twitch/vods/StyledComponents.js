@@ -1,6 +1,6 @@
-import styled, { keyframes } from "styled-components";
-import { Link } from "react-router-dom";
-import Moment from "react-moment";
+import styled, { keyframes } from 'styled-components';
+import { Link } from 'react-router-dom';
+import Moment from 'react-moment';
 
 export const VodLiveIndicator = styled(Link)`
   padding: 5px;
@@ -53,7 +53,6 @@ export const VodChannelListLi = styled.li`
 
 export const LastRefreshText = styled(Moment).attrs({ fromNow: true, interval: 60000 })`
   position: relative;
-  left: 10%;
   color: var(--textColor2);
 `;
 
@@ -115,7 +114,7 @@ export const VodDates = styled.div`
     align-items: center;
 
     &::after {
-      content: "ago";
+      content: 'ago';
       padding-left: 5px;
     }
   }

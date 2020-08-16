@@ -1,6 +1,4 @@
 import { MdFormatListBulleted } from 'react-icons/md';
-import { MdRefresh } from 'react-icons/md';
-import { Spinner } from 'react-bootstrap';
 import { MdVideocam } from 'react-icons/md';
 import Alert from 'react-bootstrap/Alert';
 import Popup from 'reactjs-popup';
@@ -8,45 +6,29 @@ import React from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 
-import {
-  RefreshButton,
-  HeaderTitle,
-  HeaderContainer,
-  ButtonList,
-  HeaderLines,
-  HeaderOuterMainContainer,
-  HeaderLeftSubcontainer,
-} from './../../sharedStyledComponents';
+import { HeaderContainer, ButtonList } from './../../sharedStyledComponents';
 import { LastRefreshText } from './StyledComponents';
-import Util from '../../../util/Util';
 import VodChannelList from './VodChannelList';
 
 export default React.forwardRef((props, ref) => {
   const { refresh, refreshing, vods, vodError } = props;
 
   return (
-    <HeaderOuterMainContainer>
-      <HeaderContainer ref={ref} id='TwitchVodsHeader'>
-        <HeaderLeftSubcontainer>
-          <RefreshButton
-            disabled={refreshing}
-            onClick={() => {
-              refresh(true);
-            }}
-          >
-            {refreshing ? (
-              <div className='SpinnerWrapper'>
-                <Spinner
-                  animation='border'
-                  role='status'
-                  variant='light'
-                  style={Util.loadingSpinnerSmall}
-                />
-              </div>
-            ) : (
-              <MdRefresh size={34} />
-            )}
-          </RefreshButton>
+    <HeaderContainer
+      ref={ref}
+      id='TwitchVodsHeader'
+      refreshFunc={() => {
+        refresh(true);
+      }}
+      isLoading={refreshing}
+      text={
+        <>
+          Twitch vods
+          <MdVideocam size={25} style={{ color: '#6f166f' }} />
+        </>
+      }
+      leftSide={
+        <>
           <LastRefreshText>{(vods && vods.loaded) || new Date()}</LastRefreshText>
           {vodError && (
             <Alert
@@ -70,8 +52,9 @@ export default React.forwardRef((props, ref) => {
               {vodError}
             </Alert>
           )}
-        </HeaderLeftSubcontainer>
-
+        </>
+      }
+      rightSide={
         <Popup
           placeholder='Channel name..'
           arrow={false}
@@ -113,15 +96,7 @@ export default React.forwardRef((props, ref) => {
         >
           <VodChannelList />
         </Popup>
-      </HeaderContainer>
-      <HeaderTitle>
-        <HeaderLines />
-        <h5>
-          Twitch vods
-          <MdVideocam size={25} style={{ color: '#6f166f' }} />
-        </h5>
-        <HeaderLines />
-      </HeaderTitle>
-    </HeaderOuterMainContainer>
+      }
+    ></HeaderContainer>
   );
 });

@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import { MdFavorite } from 'react-icons/md';
 import { MdFavoriteBorder } from 'react-icons/md';
 
@@ -63,6 +63,15 @@ export const StyledLoadmore = styled.div`
   }
 `;
 
+const InfinitSpinnig = keyframes`
+0% {transform: rotate(0deg);}
+100% {transform: rotate(360deg);}
+`;
+
+const spinnigAnimation = () => css`
+  ${InfinitSpinnig} 1s infinite;
+`;
+
 const countdown = keyframes`
     from {
       stroke-dashoffset: 0px;
@@ -72,13 +81,17 @@ const countdown = keyframes`
     }
 `;
 
+const countdownAnimation = () => css`
+  ${countdown} 25s linear 1 forwards;
+`;
+
 export const StyledCountdownCircle = styled.div`
   position: relative;
   margin: auto;
   height: 24px;
   width: 24px;
-  text-align: center;
-  margin: 5px auto !important;
+  /* text-align: center;
+  margin: 5px auto !important; */
 
   div#countdown-number {
     display: inline-block;
@@ -86,7 +99,7 @@ export const StyledCountdownCircle = styled.div`
     width: 24px;
     height: 24px;
     /* color: rgb(255, 255, 255); */
-    font-size: 13px;
+    font-size: 12px;
     display: flex;
     justify-content: center;
   }
@@ -98,22 +111,20 @@ export const StyledCountdownCircle = styled.div`
     width: 24px;
     height: 24px;
     transform: rotateY(-180deg) rotateZ(-90deg);
+    animation: ${({ isLoading }) => isLoading && spinnigAnimation};
   }
 
   svg circle {
-    stroke-dasharray: 67.8px;
+    stroke-dasharray: ${({ isLoading }) => (isLoading ? '47.8px' : '67.8px')};
     stroke-dashoffset: 0px;
     stroke-linecap: round;
     stroke-width: 3px;
     stroke: var(--refreshButtonColor);
     fill: none;
-    animation: ${countdown} 25s linear 1 forwards;
-    /* animation: ${countdown} ${({ delay }) => delay || 25}s linear 1 forwards; */
-    /* animation-delay: ${({ delay }) => delay || 0}s; */
-    animation-delay:  0s;
+    animation: ${({ isLoading }) => !isLoading && countdownAnimation};
+
+    animation-delay: 0s;
   }
-
-
 `;
 
 export const pulse = keyframes`
@@ -288,7 +299,6 @@ export const CenterContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-flow: column;
-  margin-top: 25px;
   transition: width 750ms, margin 750ms;
   /* margin-left: ${({ marginLeft }) => marginLeft + 'px'}; */
 

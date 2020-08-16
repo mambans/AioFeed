@@ -9,52 +9,42 @@ import { Button } from 'react-bootstrap';
 import FollowUnfollowBtn from './../FollowUnfollowBtn';
 import API from '../API';
 
-export default ({ channelName, streamInfo, twitchVideoPlayer, setVisible, visible }) => {
+export default ({ channelName, streamInfo, setVisible, visible }) => {
   const [channelInfo, setChannelInfo] = useState(streamInfo);
 
   useEffect(() => {
     (async () => {
-      if (
-        (twitchVideoPlayer?.getChannelId()?.length > 1 ||
-          twitchVideoPlayer?.getVideo()?.length > 1) &&
-        !channelInfo?.id &&
-        !channelInfo?.user_name &&
-        visible
-      ) {
+      if (streamInfo?.user_id && visible) {
         await API.getVideos({
           params: {
-            user_id: twitchVideoPlayer?.getChannelId(),
-            id: twitchVideoPlayer?.getVideo(),
+            user_id: streamInfo?.user_id,
             first: 1,
             type: 'archive',
           },
         })
           .then((res) => {
             if (res.data.data[0]) setChannelInfo(res.data.data[0]);
-            document.title = `AF | ${res.data.data[0].user_name || ''} - ${
-              twitchVideoPlayer?.getVideo() || ''
-            }`;
           })
           .catch((error) => {
             console.error(error);
           });
       }
     })();
-  }, [twitchVideoPlayer, visible, channelInfo, setChannelInfo]);
+  }, [visible, setChannelInfo, streamInfo]);
 
   return (
     <PlayerNavbar>
       <Button
         disabled={!channelName && !channelInfo?.user_name}
-        title={`${channelName || channelInfo?.user_name}'s channel page`}
+        title={`${channelInfo?.user_name || channelName}'s channel page`}
         variant='dark'
         className='linkWithIcon'
         as={Link}
         to={{
-          pathname: `/${channelName || channelInfo?.user_name}/channel`,
+          pathname: `/${channelInfo?.user_name || channelName}/channel`,
           state: {
             p_channelInfos: channelInfo,
-            p_id: twitchVideoPlayer?.getChannelId(),
+            p_id: channelInfo?.user_id,
           },
         }}
       >
@@ -63,7 +53,7 @@ export default ({ channelName, streamInfo, twitchVideoPlayer, setVisible, visibl
       </Button>
       {channelInfo && (
         <FollowUnfollowBtn
-          channel={channelName || channelInfo?.user_name}
+          channel={channelInfo?.user_name || channelName}
           id={channelInfo?.user_id}
           style={{ opacity: '1' }}
         />
@@ -100,9 +90,7 @@ export default ({ channelName, streamInfo, twitchVideoPlayer, setVisible, visibl
         disabled={!channelInfo}
         className='linkWithIcon'
         href={
-          channelInfo
-            ? channelInfo.url
-            : `https://twitch.tv/${channelInfo?.user_name || channelName}/videos`
+          channelInfo?.url || `https://twitch.tv/${channelInfo?.user_name || channelName}/videos`
         }
         alt=''
         title='Open vod on Twitch'
