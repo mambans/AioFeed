@@ -252,7 +252,7 @@ export const UnfollowBtn = styled(MdFavorite)`
 `;
 
 export const ChannelNameDiv = styled.div`
-  padding: 0 5px;
+  padding-right: 5px;
   font-weight: 700;
   height: 100%;
   grid-row: 1;
@@ -264,7 +264,7 @@ export const ChannelNameDiv = styled.div`
     z-index: 1;
   }
 
-  .twitchIcon {
+  .extaButton {
     grid-row: 1;
     color: #710271;
     padding: 0px 10px;
@@ -279,7 +279,7 @@ export const ChannelNameDiv = styled.div`
   }
 
   &:hover {
-    .twitchIcon {
+    .extaButton {
       transform: translateX(0px);
       opacity: 1;
     }

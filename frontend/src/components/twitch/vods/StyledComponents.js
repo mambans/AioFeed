@@ -108,8 +108,8 @@ export const VodDates = styled.div`
     position: relative;
     display: flex;
     justify-content: flex-end;
-    grid-column: 3;
-    padding-right: 10px;
+    /* grid-column: 3; */
+    /* padding-right: 10px; */
     margin-bottom: 0;
     align-items: center;
 

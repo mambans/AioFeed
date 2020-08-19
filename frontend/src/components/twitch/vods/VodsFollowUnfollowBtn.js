@@ -18,7 +18,7 @@ import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
  * @param {String} [marginright] - overwrite marginright (7px;)
  */
 
-export default ({ channel, loweropacity, marginright }) => {
+export default ({ channel, loweropacity, marginright, className }) => {
   const channels = getLocalstorage('VodChannels');
   const { vods, setVods } = useContext(VodsContext) || {};
   const { authKey, username } = useContext(AccountContext);
@@ -81,7 +81,7 @@ export default ({ channel, loweropacity, marginright }) => {
       }
     >
       <VodAddRemoveButton
-        className='VodButton'
+        className={`VodButton ${className || ''}`}
         marginright={marginright}
         ref={vodButton}
         loweropacity={loweropacity}

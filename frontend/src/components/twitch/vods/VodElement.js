@@ -23,6 +23,7 @@ import validateToken from '../validateToken';
 import API from '../API';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from '../loginNameFormat';
+import { ChannelNameDiv } from '../StyledComponents';
 
 export default ({ data, vodBtnDisabled }) => {
   const [previewAvailable, setPreviewAvailable] = useState({});
@@ -185,7 +186,7 @@ export default ({ data, vodBtnDisabled }) => {
         >
           <img src={data.profile_image_url} alt='' className={'profileImg'} />
         </Link>
-        <div style={{ display: 'flex' }}>
+        <ChannelNameDiv>
           <Link
             to={{
               pathname: `/${data.login || data.user_name.toLowerCase()}/channel`,
@@ -199,9 +200,13 @@ export default ({ data, vodBtnDisabled }) => {
             {loginNameFormat(data)}
           </Link>
           {!vodBtnDisabled && (
-            <VodsFollowUnfollowBtn channel={data.login || data.user_name} loweropacity='0.5' />
+            <VodsFollowUnfollowBtn
+              channel={data.login || data.user_name}
+              loweropacity='0.5'
+              className='extaButton'
+            />
           )}
-        </div>
+        </ChannelNameDiv>
         <VodDates>
           <div>
             <Moment
@@ -209,10 +214,10 @@ export default ({ data, vodBtnDisabled }) => {
               durationFromNow
               className={'date'}
               id={'timeago'}
-              style={{
-                gridColumn: 2,
-                justifySelf: 'right',
-              }}
+              // style={{
+              //   gridColumn: 2,
+              //   justifySelf: 'right',
+              // }}
             >
               {data.thumbnail_url === '' ? data.created_at : data.endDate}
             </Moment>

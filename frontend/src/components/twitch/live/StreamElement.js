@@ -201,7 +201,7 @@ export default (data_p) => {
             <a
               alt=''
               href={'https://www.twitch.tv/' + data?.login?.toLowerCase() || data.user_name}
-              className='twitchIcon'
+              className='extaButton'
             >
               <FaTwitch size={20} />
             </a>

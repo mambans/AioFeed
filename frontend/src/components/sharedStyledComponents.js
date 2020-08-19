@@ -18,6 +18,8 @@ const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
   left: 6px;
   align-items: center;
   transition-duration: 250ms;
+  transition: color 250ms, background-color 250ms, border-color 250ms, box-shadow 250ms,
+    opacity 250ms;
   /* padding: 1px; */
   margin-right: 25px;
   width: 46px;
@@ -144,7 +146,6 @@ export const HeaderContainer = (props) => {
     style = {},
   } = props;
   const ref = useRef();
-  console.log();
 
   const handleOnClick = () => {
     ref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
@@ -261,7 +262,7 @@ export const ChannelContainer = styled.div`
     padding: 0 5px;
     font-weight: bold;
     color: var(--textColor2);
-    /* grid-row: 1; */
+    grid-row: 1;
     width: max-content;
     transition: color 250ms;
     align-items: center;
@@ -475,7 +476,7 @@ export const VodAddRemoveButton = styled(Button).attrs({ variant: 'link' })`
   opacity: ${({ loweropacity }) => loweropacity || 1};
   margin-right: ${({ marginright }) => marginright || 'unset'};
   opacity: 0;
-  transition: opacity 250ms;
+  transition: opacity 250ms, transform 250ms;
 
   &:hover {
     color: ${({ vodenabled }) => (vodenabled === 'true' ? 'rgb(225, 000, 000)' : '#14ae14')};
