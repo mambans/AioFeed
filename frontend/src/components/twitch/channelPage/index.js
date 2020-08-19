@@ -297,8 +297,15 @@ export default () => {
     return (
       <ChannelContainer>
         <Banner>
-          <div id='Banner' alt='' style={{ backgroundColor: 'var(--navigationbarBackground)' }} />
-          <BannerInfoOverlay>
+          {/* <div id='Banner' alt='' style={{ backgroundColor: 'var(--navigationbarBackground)' }} /> */}
+          <BannerInfoOverlay
+            style={{
+              backgroundColor: 'var(--navigationbarBackground)',
+              width: 'calc(100% - 60px)',
+              margin: 'auto',
+              borderRadius: '15px',
+            }}
+          >
             <Name>
               <div id='HeaderChannelInfo' style={{ height: '80%' }}>
                 <div id='ChannelName'>

@@ -7,23 +7,24 @@ import { Link } from 'react-router-dom';
 export const ChannelContainer = styled.div`
   min-height: 100vh;
   min-width: 100%;
+  margin-top: 10px;
 `;
 
 export const Banner = styled.div`
   height: 300px;
   margin-bottom: 20px;
 
-  #Banner {
+  /* #Banner {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
+  } */
 `;
 
 export const BannerInfoOverlay = styled.div`
   /* height: 100%; */
-  position: absolute;
-  top: 60px;
+  /* position: absolute; */
+  /* top: 60px; */
   width: 100%;
 `;
 
@@ -46,15 +47,15 @@ export const Name = styled.div`
   display: grid;
   justify-items: center;
   background-color: #0000;
-  text-shadow: 0px 0px 2px black;
+  text-shadow: 0px 0px 1px black;
 
   #HeaderChannelInfo {
     z-index: 1;
     display: flex;
     flex-flow: column;
     text-align: center;
-    background-color: #00000021;
-    box-shadow: 20px 20px 20px #000000bd;
+    /* background-color: #00000021; */
+    /* box-shadow: 20px 20px 20px #000000bd; */
     border-radius: 15px;
     padding: 10px;
     width: calc(30% - 6px);
@@ -304,17 +305,22 @@ export const BlurredBackgroundImage = styled.div`
 
 export const BlurredBannerImage = styled.div`
   position: absolute;
-  width: 30%;
-  height: 100%;
+  /* width: 30%; */
+  width: calc(100% - 60px);
+  /* height: 100%; */
+  height: inherit;
   filter: blur(3px) brightness(0.75);
   background-image: url(${({ image }) => image});
   background-size: cover;
   border-radius: 15px;
-  margin-top: 15px;
+  /* margin-top: 15px; */
+  background-position: center;
+  box-shadow: 5px 5px 5px black;
+  border: black solid 2px;
 
-  @media screen and (max-width: 1920px) {
+  /* @media screen and (max-width: 1920px) {
     width: 40%;
-  }
+  } */
 `;
 
 const StyledVideoChatButton = styled(Button).attrs({ variant: 'dark-outline' })`
@@ -344,7 +350,7 @@ const StyledVideoChatButton = styled(Button).attrs({ variant: 'dark-outline' })`
   }
 
   &#openChat {
-    right: 5px;
+    right: 35px;
     color: #ffffff;
 
     svg {
@@ -362,7 +368,7 @@ const StyledVideoChatButton = styled(Button).attrs({ variant: 'dark-outline' })`
   }
 
   &#openVideo {
-    left: 5px;
+    left: 35px;
     color: #ffffff;
 
     svg {
