@@ -75,6 +75,7 @@ export default () => {
     switchChatSide: false,
     hideChat: false,
     ...(getLocalstorage('TwitchChatState')?.[channelName?.toLowerCase()] || {}),
+    default: true,
   });
 
   const hideChatSaved = useRef(
@@ -149,20 +150,27 @@ export default () => {
     };
   }, [setShrinkNavbar, setFooterVisible, setVisible, channelName]);
 
-  const addNoti = useCallback(
-    ({ type, stream }) => {
-      if (stream && type === 'Live') {
-        addSystemNotification({
-          status: 'Live',
-          stream: stream,
-          body: `${stream.title}\n${stream.game_name || ''}`,
-        });
+  useEffect(() => {
+    const updateCachedChatState = debounce(
+      () => {
+        const localstorageTwitchChatState = getLocalstorage('TwitchChatState') || {};
 
-        addNotification([{ ...stream, notiStatus: type }]);
-      }
-    },
-    [addNotification]
-  );
+        localStorage.setItem(
+          'TwitchChatState',
+          JSON.stringify({
+            ...localstorageTwitchChatState,
+            [channelName?.toLowerCase()]: chatState,
+          })
+        );
+      },
+      500,
+      { leading: false, trailing: true }
+    );
+
+    if (!chatState?.default) updateCachedChatState();
+
+    return updateCachedChatState.cancel;
+  }, [chatState, channelName]);
 
   function removeFromStreamNotisFromPlayer() {
     const streams = getLocalstorage('newLiveStreamsFromPlayer') || {
@@ -198,7 +206,8 @@ export default () => {
             : { user_login: channelName }
         )),
       };
-      if (LIVEStreamInfo) {
+
+      if (Object.keys(LIVEStreamInfo).length !== 0 && LIVEStreamInfo.constructor === Object) {
         const streamWithGame = await addGameName({
           streamInfo: savedStreamInfo.current,
           newStreamInfo: LIVEStreamInfo,
@@ -223,6 +232,21 @@ export default () => {
       }
     }
   }, [twitchVideoPlayer, channelName]);
+
+  const addNoti = useCallback(
+    ({ type, stream }) => {
+      if (stream && type === 'Live') {
+        addSystemNotification({
+          status: 'Live',
+          stream: stream,
+          body: `${stream.title}\n${stream.game_name || ''}`,
+        });
+
+        addNotification([{ ...stream, notiStatus: type }]);
+      }
+    },
+    [addNotification]
+  );
 
   async function onlineEvents() {
     console.log('Stream is Online');
@@ -271,10 +295,7 @@ export default () => {
   }
 
   function playingEvents() {
-    console.log('playingEvents');
-    if (twitchVideoPlayer) {
-      setShowUIControlls(true);
-    }
+    if (twitchVideoPlayer) setShowUIControlls(true);
   }
 
   function handleMouseOut() {
@@ -322,37 +343,13 @@ export default () => {
           : Math.min(Math.max(parseInt(window.innerWidth - mouseX), 10), window.innerWidth - 250);
 
         setChatState((curr) => {
+          delete curr?.default;
           return { ...curr, chatwidth: newWidth };
         });
       }
     },
     [resizeActive, chatState]
   );
-
-  const updateCachedChatState = useCallback(
-    debounce(
-      () => {
-        const localstorageTwitchChatState = getLocalstorage('TwitchChatState') || {};
-
-        localStorage.setItem(
-          'TwitchChatState',
-          JSON.stringify({
-            ...localstorageTwitchChatState,
-            [channelName?.toLowerCase()]: chatState,
-          })
-        );
-      },
-      1000,
-      { leading: false, trailing: true }
-    ),
-    [channelName, chatState]
-  );
-
-  useEffect(() => {
-    updateCachedChatState();
-
-    return updateCachedChatState.cancel;
-  }, [chatState, channelName, updateCachedChatState]);
 
   return (
     <>
@@ -416,7 +413,10 @@ export default () => {
                     <>
                       <li
                         onClick={() => {
-                          setChatState((curr) => ({ ...curr, hideChat: !curr.hideChat }));
+                          setChatState((curr) => {
+                            delete curr?.default;
+                            return { ...curr, hideChat: !curr.hideChat };
+                          });
                         }}
                       >
                         <MdChat size={24} />
@@ -425,10 +425,13 @@ export default () => {
 
                       <li
                         onClick={() => {
-                          setChatState((curr) => ({
-                            ...curr,
-                            switchChatSide: !chatState.switchChatSide,
-                          }));
+                          setChatState((curr) => {
+                            delete curr?.default;
+                            return {
+                              ...curr,
+                              switchChatSide: !chatState.switchChatSide,
+                            };
+                          });
                         }}
                       >
                         <MdCompareArrows size={24} />
@@ -595,10 +598,13 @@ export default () => {
                     id='switchSides'
                     switched={String(chatState.switchChatSide)}
                     onClick={() => {
-                      setChatState((curr) => ({
-                        ...curr,
-                        switchChatSide: !chatState.switchChatSide,
-                      }));
+                      setChatState((curr) => {
+                        delete curr?.default;
+                        return {
+                          ...curr,
+                          switchChatSide: !chatState.switchChatSide,
+                        };
+                      });
                     }}
                   />
 
@@ -607,11 +613,12 @@ export default () => {
                     hideChat={chatState.hideChat}
                     switched={chatState.switchChatSide}
                     onClick={() => {
-                      setChatState((current) => {
-                        const newValue = !current.hideChat;
+                      setChatState((curr) => {
+                        const newValue = !curr.hideChat;
                         hideChatSaved.current = newValue;
+                        delete curr?.default;
 
-                        return { ...current, hideChat: newValue };
+                        return { ...curr, hideChat: newValue };
                       });
                     }}
                   />
@@ -631,10 +638,13 @@ export default () => {
                   id='switchSides'
                   switched={String(chatState.switchChatSide)}
                   onClick={() => {
-                    setChatState((curr) => ({
-                      ...curr,
-                      switchChatSide: !chatState.switchChatSide,
-                    }));
+                    setChatState((curr) => {
+                      delete curr?.default;
+                      return {
+                        ...curr,
+                        switchChatSide: !chatState.switchChatSide,
+                      };
+                    });
                   }}
                   style={{
                     right: chatState.switchChatSide
@@ -656,10 +666,11 @@ export default () => {
                 hideChat={chatState.hideChat}
                 switched={chatState.switchChatSide}
                 onClick={() => {
-                  setChatState((current) => {
-                    const newValue = !current.hideChat;
+                  setChatState((curr) => {
+                    const newValue = !curr.hideChat;
                     hideChatSaved.current = newValue;
-                    return { ...current, hideChat: newValue };
+                    delete curr?.default;
+                    return { ...curr, hideChat: newValue };
                   });
                 }}
                 style={{

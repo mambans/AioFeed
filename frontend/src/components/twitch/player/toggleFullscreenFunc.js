@@ -16,7 +16,10 @@ export default ({
   ) {
     if (hideChatDelay.current) clearTimeout(hideChatDelay.current);
     hideChatDelay.current = setTimeout(() => {
-      setChatState((curr) => ({ ...curr, hideChat: true }));
+      setChatState((curr) => {
+        delete curr?.default;
+        return { ...curr, hideChat: true };
+      });
     }, 5000);
     setIsFullscreen(true);
     if (video.requestFullScreen) {
@@ -30,7 +33,10 @@ export default ({
     }
   } else {
     if (hideChatDelay.current) clearTimeout(hideChatDelay.current);
-    setChatState((curr) => ({ ...curr, hideChat: hideChatSaved.current }));
+    setChatState((curr) => {
+      delete curr?.default;
+      return { ...curr, hideChat: hideChatSaved.current };
+    });
     setIsFullscreen(false);
     if (document.cancelFullScreen) {
       document.cancelFullScreen();
