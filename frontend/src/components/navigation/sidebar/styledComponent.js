@@ -7,6 +7,10 @@ import { MdFormatIndentDecrease } from 'react-icons/md';
 import { FaWindowClose } from 'react-icons/fa';
 
 export const StyledNavSidebar = styled.div`
+  &&& {
+    scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0);
+  }
+
   color: var(--textColor1);
   position: fixed;
   top: 70px;
@@ -18,7 +22,6 @@ export const StyledNavSidebar = styled.div`
   border-left: 2px solid #494949;
   padding: 10px;
   overflow-y: scroll;
-  scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0) !important;
   scrollbar-width: thin;
   right: 0;
 
@@ -65,21 +68,23 @@ export const StyledConnectTwitch = styled(Button)`
   margin-left: 0;
   /* height: 42px; */
   border-radius: 10px;
-  border: thin solid hsla(268, 77%, 30%, 1) !important;
+  &&& {
+    border: thin solid hsla(268, 77%, 30%, 1);
 
-  &:hover {
-    background-color: hsla(268, 77%, 40%, 1);
-    border: inherit;
-  }
+    &:hover {
+      background-color: hsla(268, 77%, 40%, 1);
+      border: inherit;
+    }
 
-  &:focus {
-    background-color: hsla(268, 77%, 40%, 1) !important;
-    box-shadow: 0 0 0 0.2rem hsla(268, 77%, 50%, 1) !important;
-  }
+    &:focus {
+      background-color: hsla(268, 77%, 40%, 1);
+      box-shadow: 0 0 0 0.2rem hsla(268, 77%, 50%, 1);
+    }
 
-  &:active {
-    background-color: hsla(268, 77%, 55%, 1) !important;
-    border-color: hsla(268, 77%, 65%, 1) !important;
+    &:active {
+      background-color: hsla(268, 77%, 55%, 1);
+      border-color: hsla(268, 77%, 65%, 1);
+    }
   }
 `;
 
@@ -89,26 +94,29 @@ export const StyledConnectYoutube = styled(Button)`
   margin-left: 0;
   height: 42px;
   border-radius: 10px;
-  border: thin solid hsla(0, 65%, 18%, 1) !important;
   display: flex;
 
-  &:hover {
-    background-color: hsla(0, 65%, 28%, 1);
-    border: inherit;
-  }
+  &&& {
+    border: thin solid hsla(0, 65%, 18%, 1);
 
-  &:focus {
-    background-color: hsla(0, 65%, 28%, 1) !important;
-    box-shadow: 0 0 0 0.2rem hsla(0, 65%, 38%, 1) !important;
-  }
+    &:hover {
+      background-color: hsla(0, 65%, 28%, 1);
+      border: inherit;
+    }
 
-  &:active {
-    background-color: hsla(0, 65%, 40%, 1) !important;
-    border-color: hsla(0, 65%, 45%, 1) !important;
-  }
+    &:focus {
+      background-color: hsla(0, 65%, 28%, 1);
+      box-shadow: 0 0 0 0.2rem hsla(0, 65%, 38%, 1);
+    }
 
-  :disabled {
-    background-color: hsla(0, 65%, 18%, 1);
+    &:active {
+      background-color: hsla(0, 65%, 40%, 1);
+      border-color: hsla(0, 65%, 45%, 1);
+    }
+
+    :disabled {
+      background-color: hsla(0, 65%, 18%, 1);
+    }
   }
 `;
 
@@ -170,12 +178,15 @@ export const ShowAddFormBtn = styled(Button).attrs({ variant: 'outline-secondary
 `;
 
 export const StyledSidebarTrigger = styled(MdFormatIndentDecrease).attrs({ size: 32 })`
+  &&& {
+    display: flex;
+  }
+
   position: absolute;
   /* width: 52px;
   height: 80%; */
   /* border: 2px solid #c6c6c6; */
   border-radius: 50%;
-  display: flex !important  ;
   justify-content: center;
   align-items: center;
   transition: opacity 500ms, transform 350ms;
@@ -378,12 +389,15 @@ export const StyledConnectContainer = styled.div`
 `;
 
 export const StyledReconnectIcon = styled(MdRefresh).attrs({ size: 30 })`
+  &&& {
+    display: flex;
+  }
+
   position: absolute;
   width: 42px;
   height: 42px;
   border: 2px solid #292929;
   border-radius: 80%;
-  display: flex !important  ;
   justify-content: center;
   align-items: center;
   transition: opacity 0.5s;
@@ -410,17 +424,18 @@ export const CloseAddFormBtn = styled(FaWindowClose).attrs({ size: 26 })`
 `;
 
 export const ProfileImgInput = styled.form`
+  border-radius: 5px;
+  top: unset;
+  background: #00000087;
+  border: none;
+  box-shadow: 0 5px 10px 3px rgba(0, 0, 0, 0.25);
+
   position: absolute;
-  border-radius: 5px !important;
   width: calc(100% - 20px);
   height: calc(380px / 16 * 9);
-  top: unset !important;
   padding-top: 8px;
 
-  background: #00000087 !important;
-  border: none !important;
-  box-shadow: 0 5px 10px 3px rgba(0, 0, 0, 0.25) !important // top: 1785px !important;
-    form {
+  form {
     padding: 5px;
   }
 
@@ -491,17 +506,20 @@ export const ProfileImgContainer = styled.div`
 `;
 
 export const StyledToggleButton = styled(Button)`
+  /* &&& {
+
+} */
+
   opacity: ${({ enabled }) => (enabled === 'true' ? 1 : 0.35)};
   margin: 10px;
-  border: none !important;
-  box-shadow: none !important;
+  border: none;
+  box-shadow: none;
   background: #434950;
   flex-grow: 1;
   max-width: calc(30% - 0.5rem);
 
   flex-basis: ${({ buttonsperrow }) =>
     buttonsperrow ? `calc((100% - (20px * ${buttonsperrow})) / ${buttonsperrow})` : 'auto'};
-/* align-items: center; */
   align-self: center;
   display: flex;
   justify-content: center;
@@ -518,7 +536,7 @@ export const StyledToggleButton = styled(Button)`
   &:hover {
     /* box-shadow: 0 0 0 0.1rem ${({ enabled }) => (enabled === 'true' ? 'green' : 'yellow')}; */
     /* background:${({ enabled }) => (enabled === 'true' ? 'rgb(150, 0 ,0)' : 'rgb(0, 150, 0)')}; */
-    background:${({ enabled }) =>
+    background: ${({ enabled }) =>
       enabled === 'true' ? 'rgba(0, 150, 0, 0.5)' : 'rgba(150, 0 ,0, 0.5)'};
   }
 `;

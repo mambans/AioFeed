@@ -23,7 +23,7 @@ export default async (category, sortBy, page) => {
       params: {
         first: nrStreams,
         game_id: game.id,
-        sort: sortBy && sortBy.toLowerCase(),
+        sort: sortBy && sortBy?.toLowerCase(),
         type: 'all',
         period: 'all',
         after: page ? page.pagination.cursor : null,

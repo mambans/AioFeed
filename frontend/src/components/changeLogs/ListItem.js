@@ -134,7 +134,7 @@ export default ({ name, body, published_at, showInfo, children }) => {
 
       // console.log(body.split(/(?:\r\n|\. )/g));
       body.split(/(?:\r\n|\. )/g).map((sentence) => {
-        const sentArray = sentence.toLowerCase().split(' ');
+        const sentArray = sentence?.toLowerCase().split(' ');
         if (sentArray.some((word) => additionsKeywords.includes(word))) {
           if (sentence.length > 0) additions.push(sentence);
         } else if (sentArray.some((word) => deletionsKeywords.includes(word))) {
@@ -220,7 +220,6 @@ export default ({ name, body, published_at, showInfo, children }) => {
           Full message
         </List.Button>
       )}
-      {console.log('info.data', info.data)}
       {info.data && (
         <div>
           {showFullMessage && <List.Message>{info.data}</List.Message>}

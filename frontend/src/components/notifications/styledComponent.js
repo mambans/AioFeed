@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import Moment from "react-moment";
-import moment from "moment";
+import React from 'react';
+import styled from 'styled-components';
+import Moment from 'react-moment';
+import moment from 'moment';
 
 export const NotificationListContainer = styled.ul`
   li#clear {
@@ -21,12 +21,15 @@ export const NotificationListContainer = styled.ul`
 `;
 
 export const Notification = styled.li`
-  display: grid !important;
-  grid-template-areas: "img name name" "img title title" "date date date";
-  min-height: 80px !important;
-  height: 80px !important;
+  &&& {
+    display: grid;
+    min-height: 80px;
+    height: 80px;
+  }
+
+  grid-template-areas: 'img name name' 'img title title' 'date date date';
   grid-template-columns: 15% 85%;
-  opacity: ${({ status }) => (status === "Offline" ? 0.35 : status.includes("updated") ? 0.75 : 1)};
+  opacity: ${({ status }) => (status === 'Offline' ? 0.35 : status.includes('updated') ? 0.75 : 1)};
   margin: 7px 0;
   transition: background 250ms, border 250ms, opacity 250ms;
   padding-left: 2px;
@@ -77,7 +80,7 @@ export const Notification = styled.li`
   .name {
     color: rgb(240, 240, 240);
     grid-row: 1;
-    padding-top: ${({ type }) => (type === "Offline" ? "15px" : null)};
+    padding-top: ${({ type }) => (type === 'Offline' ? '15px' : null)};
     padding-left: 3px;
     max-width: 310px;
   }
@@ -111,7 +114,7 @@ export const UnseenNotifcationCount = styled.div`
 `;
 
 const StyledDate = styled.div`
-  color: ${({ status }) => (status === "Offline" ? "#ffffff" : "#838181")};
+  color: ${({ status }) => (status === 'Offline' ? '#ffffff' : '#838181')};
   font-size: 0.85rem;
   text-align: right;
   margin: 0;
@@ -147,7 +150,7 @@ export const Date = ({ date, status }) => (
       <Moment fromNow id='timeago'>
         {date}
       </Moment>
-      <p id='time'>{moment(date).format("MM-DD HH:mm")}</p>
+      <p id='time'>{moment(date).format('MM-DD HH:mm')}</p>
     </div>
   </StyledDate>
 );

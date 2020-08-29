@@ -5,7 +5,7 @@ export default async ({ channel, username, authKey }) => {
   try {
     const existingChannels = new Set(getLocalstorage('VodChannels') || []);
 
-    const newChannels = [...existingChannels.add(channel.toLowerCase())];
+    const newChannels = [...existingChannels.add(channel?.toLowerCase())];
 
     localStorage.setItem('VodChannels', JSON.stringify(newChannels));
 

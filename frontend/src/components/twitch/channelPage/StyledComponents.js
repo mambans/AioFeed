@@ -77,8 +77,10 @@ export const Name = styled.div`
     }
 
     #ChannelLiveLink {
+      &&& {
+        font-size: 2rem;
+      }
       color: white;
-      font-size: 2rem !important;
       padding: 0 10px;
     }
 
@@ -245,10 +247,12 @@ export const LiveIndicator = styled.div`
   animation: ${breathRedColor} 3s linear 1s infinite;
 
   p {
+    &&& {
+      margin-bottom: 0;
+    }
     margin: 0;
     text-align: left;
     padding-left: 5px;
-    margin-bottom: 0 !important;
   }
 `;
 

@@ -16,11 +16,7 @@ export default async (keyValuePair) => {
         first: 1,
       },
     })
-      .then((res) => {
-        return res.data.data[0];
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      .then((res) => res.data?.data[0])
+      .catch((error) => console.log(error));
   });
 };

@@ -90,7 +90,7 @@ export default ({ ...data }) => {
         <ChannelContainer>
           <Link
             to={{
-              pathname: `/${(login || broadcaster_name).toLowerCase()}/channel`,
+              pathname: `/${(login || broadcaster_name)?.toLowerCase()}/channel`,
               state: {
                 p_id: broadcaster_id,
               },
@@ -100,7 +100,7 @@ export default ({ ...data }) => {
             <img src={profile_image_url} alt='' className={'profileImg'} />
           </Link>
           <Link
-            to={`/${(login || broadcaster_name).toLowerCase()}/channel`}
+            to={`/${(login || broadcaster_name)?.toLowerCase()}/channel`}
             className='channelName'
           >
             {loginNameFormat(data.data)}

@@ -12,7 +12,7 @@ const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) =
   let error;
   const vodChannels = await FollowedChannelVods.map((vod) => {
     const channelFollowed = followedChannels.find(
-      (channel) => channel.to_name.toLowerCase() === vod
+      (channel) => channel.to_name?.toLowerCase() === vod
     );
     if (channelFollowed) {
       return channelFollowed.to_id;

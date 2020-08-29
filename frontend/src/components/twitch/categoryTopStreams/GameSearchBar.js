@@ -93,7 +93,7 @@ export default (props) => {
       },
       returnFirstMatchedGame: () => {
         const foundGame = filteredInputMatched?.data?.find((games) => {
-          return games.name.toLowerCase().includes(value.toLowerCase());
+          return games.name?.toLowerCase().includes(value?.toLowerCase());
         });
 
         return foundGame?.name || value;

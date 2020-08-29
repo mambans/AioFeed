@@ -1,6 +1,6 @@
-import addSystemNotification from "./addSystemNotification";
-import FetchSingelChannelVods from "./../vods/FetchSingelChannelVods";
-import { getLocalstorage } from "../../../util/Utils";
+import addSystemNotification from './addSystemNotification';
+import FetchSingelChannelVods from './../vods/FetchSingelChannelVods';
+import { getLocalstorage } from '../../../util/Utils';
 
 export default async ({
   oldLiveStreams,
@@ -17,35 +17,35 @@ export default async ({
         (stream) => !liveStreams.current.find(({ user_name }) => stream.user_name === user_name)
       );
 
-      if (newOffline.length <= 0) reject("No new Offline streams");
+      if (newOffline.length <= 0) reject('No new Offline streams');
       resolve(newOffline);
     });
 
     res.map((stream) => {
-      stream.notiStatus = "Offline";
+      stream.notiStatus = 'Offline';
       if (
         isEnabledOfflineNotifications &&
-        getLocalstorage("VodChannels") &&
-        getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
+        getLocalstorage('VodChannels') &&
+        getLocalstorage('VodChannels').includes(stream.user_name?.toLowerCase())
       )
         addSystemNotification({
-          status: "Offline",
+          status: 'Offline',
           stream: stream,
           newlyAddedStreams: newlyAddedStreams,
           setUnseenNotifications: setUnseenNotifications,
-          body: "",
+          body: '',
         });
 
       if (
         enableTwitchVods &&
-        getLocalstorage("VodChannels") &&
-        getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
+        getLocalstorage('VodChannels') &&
+        getLocalstorage('VodChannels').includes(stream.user_name?.toLowerCase())
       ) {
         setTimeout(async () => {
-          await FetchSingelChannelVods(stream.user_id, setVods, "offline");
+          await FetchSingelChannelVods(stream.user_id, setVods, 'offline');
         }, 0);
       }
-      return "";
+      return '';
     });
 
     return res;

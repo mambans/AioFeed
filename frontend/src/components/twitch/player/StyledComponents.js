@@ -74,7 +74,9 @@ export const ToggleSwitchChatSide = styled(MdCompareArrows).attrs({ size: 30 })`
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
 
   &:hover {
-    opacity: 1 !important;
+    &&& {
+      opacity: 1;
+    }
   }
 `;
 
@@ -116,9 +118,11 @@ export const PlayerNavbar = styled.div`
 
   a,
   p {
+    &&& {
+      font-size: 1rem;
+    }
     color: var(--navTextColor);
     padding: 0;
-    font-size: 1rem !important;
     display: flex;
     transition: color 200ms;
     align-items: center;
@@ -129,11 +133,13 @@ export const PlayerNavbar = styled.div`
     }
 
     svg {
+      &&& {
+        display: flex;
+      }
       transition: color 200ms;
       display: flex;
       align-items: center;
       padding-right: 7px;
-      display: flex !important;
     }
   }
 
@@ -461,7 +467,7 @@ export const ResizeDevider = styled.div`
   transition: background 500ms;
   background: ${({ resizeActive }) => (resizeActive ? 'rgb(40,40,40)' : '#121314')};
   display: flex;
-  transform: translate3d(0,0,0);
+  transform: translate3d(0, 0, 0);
 
   > div {
     transition: opacity 500ms, height 250ms;
@@ -570,9 +576,11 @@ export const ChannelIconLink = styled(Nav.Link).attrs({ as: NavLink })`
   }
 
   &:hover {
+    &&& {
+      text-decoration: none;
+    }
     color: rgb(255, 255, 255);
     opacity: 1;
-    text-decoration: none !important;
   }
 `;
 

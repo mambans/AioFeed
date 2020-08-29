@@ -1,5 +1,5 @@
-import addSystemNotification from "./addSystemNotification";
-import { getLocalstorage, truncate } from "../../../util/Utils";
+import addSystemNotification from './addSystemNotification';
+import { getLocalstorage, truncate } from '../../../util/Utils';
 
 export default async ({
   oldLiveStreams,
@@ -17,12 +17,12 @@ export default async ({
         );
       });
 
-      if (restStreams.length <= 0) reject("No new Updated streams");
+      if (restStreams.length <= 0) reject('No new Updated streams');
 
       resolve(restStreams);
     });
 
-    if (getLocalstorage("UpdateNotificationsChannels")) {
+    if (getLocalstorage('UpdateNotificationsChannels')) {
       const existingStreams = res.filter((stream) => {
         return oldLiveStreams.current.find((old_stream) => {
           return old_stream.user_name === stream.user_name;
@@ -30,8 +30,8 @@ export default async ({
       });
 
       const UpdateEnabledStreams = existingStreams.filter((stream) => {
-        return getLocalstorage("UpdateNotificationsChannels").includes(
-          stream.user_name.toLowerCase()
+        return getLocalstorage('UpdateNotificationsChannels').includes(
+          stream.user_name?.toLowerCase()
         );
       });
 
@@ -42,7 +42,7 @@ export default async ({
 
         if (oldStreamData.game_name !== stream.game_name && oldStreamData.title !== stream.title) {
           addSystemNotification({
-            status: "Title & Game updated",
+            status: 'Title & Game updated',
             stream: stream,
             body: `+ ${truncate(stream.title, 40)} in ${stream.game_name}\n- ${truncate(
               oldStreamData.title,
@@ -51,7 +51,7 @@ export default async ({
             newlyAddedStreams: newlyAddedStreams,
             setUnseenNotifications: setUnseenNotifications,
           });
-          stream.notiStatus = "Title & Game updated";
+          stream.notiStatus = 'Title & Game updated';
           stream.text = `+ ${truncate(stream.title, 40)} in ${stream.game_name}\n- ${truncate(
             oldStreamData.title,
             40
@@ -68,13 +68,13 @@ export default async ({
 
         if (oldStreamData.game_name !== stream.game_name && oldStreamData.title === stream.title) {
           addSystemNotification({
-            status: "Game updated",
+            status: 'Game updated',
             stream: stream,
             body: `+ ${truncate(stream.game_name, 40)}\n- ${truncate(oldStreamData.game_name, 40)}`,
             newlyAddedStreams: newlyAddedStreams,
             setUnseenNotifications: setUnseenNotifications,
           });
-          stream.notiStatus = "Game updated";
+          stream.notiStatus = 'Game updated';
           stream.text = `+ ${stream.game_name}\n- ${oldStreamData.game_name}`;
           return stream;
         }
@@ -88,13 +88,13 @@ export default async ({
 
         if (oldStreamData.title !== stream.title && oldStreamData.game_name === stream.game_name) {
           addSystemNotification({
-            status: "Title updated",
+            status: 'Title updated',
             stream: stream,
             body: `+ ${truncate(stream.title, 40)}\n- ${truncate(oldStreamData.title, 40)}`,
             newlyAddedStreams: newlyAddedStreams,
             setUnseenNotifications: setUnseenNotifications,
           });
-          stream.notiStatus = "Title updated";
+          stream.notiStatus = 'Title updated';
           stream.text = `+ ${stream.title}\n- ${oldStreamData.title}`;
           return stream;
         }

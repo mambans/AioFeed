@@ -14,7 +14,7 @@ export default async (channelId, format) => {
           if (format) {
             const localstorageGameInfo =
               getLocalstorage('Twitch_game_details')?.data?.find(
-                (game) => game.name.toLowerCase() === res.data.game.toLowerCase()
+                (game) => game.name?.toLowerCase() === res.data?.game?.toLowerCase()
               ) || null;
 
             const data = {

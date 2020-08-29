@@ -31,18 +31,18 @@ const markStreamAsSeen = async (streamName, newlyAddedStreams, setUnseenNotifica
 
 export default async ({ status, stream, body, newlyAddedStreams, setUnseenNotifications }) => {
   if (Notification.permission === 'granted') {
-    const url = `https://aiofeed.com/${stream.login.toLowerCase()}${
+    const url = `https://aiofeed.com/${stream.login?.toLowerCase()}${
       status?.toLowerCase() === 'offline' ? '/channel' : ''
     }`;
     let notification = new Notification(`${loginNameFormat(stream)} ${status}`, {
-      icon: stream.profile_image_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-      badge: stream.profile_image_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+      icon: stream?.profile_image_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+      badge: stream?.profile_image_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
       body,
     });
 
     notification.onclick = async function (event) {
       event.preventDefault(); // prevent the browser from focusing the Notification's tab
-      await markStreamAsSeen(stream.login, newlyAddedStreams, setUnseenNotifications);
+      await markStreamAsSeen(stream?.login, newlyAddedStreams, setUnseenNotifications);
       window.open(url, '_blank');
     };
 

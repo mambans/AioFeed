@@ -59,7 +59,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
   return (
     <Link
       ref={ref}
-      to={'/' + stream.user_name.toLowerCase()}
+      to={'/' + stream.user_name?.toLowerCase()}
       style={{ display: 'flex', flexDirection: 'column' }}
     >
       <StyledsidebarItem key={stream.user_id} duration={shows}>
@@ -67,7 +67,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
 
         <div
           className={'profileImage'}
-          // href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}
+          // href={"https://www.twitch.tv/" + data.stream.user_name?.toLowerCase()}
         >
           <img
             src={
@@ -81,7 +81,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
         <FirstRow>
           <div
             className={'sidebarUser'}
-            // href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}
+            // href={"https://www.twitch.tv/" + data.stream.user_name?.toLowerCase()}
           >
             {truncate(loginNameFormat(stream), 16)}
           </div>
@@ -114,7 +114,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
           ) : (
             <div
               className={'sidebarGame'}
-              // href={"https://www.twitch.tv/" + data.stream.user_name.toLowerCase()}
+              // href={"https://www.twitch.tv/" + data.stream.user_name?.toLowerCase()}
             >
               <p>{truncate(stream.game_name, 15)}</p>
             </div>

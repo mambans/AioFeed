@@ -132,7 +132,7 @@ export default ({
                   localStorage.setItem(
                     'TwitchChatState',
                     JSON.stringify({
-                      [channelName.toLowerCase()]: chatState,
+                      [channelName?.toLowerCase()]: chatState,
                     })
                   );
 

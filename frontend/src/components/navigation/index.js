@@ -21,7 +21,7 @@ const StyledNavbar = styled(Navbar)`
 
 const StyledNav = styled(Nav)`
   &&& {
-    margin: 0 !important;
+    margin: 0;
     padding: 0 20px;
   }
 `;

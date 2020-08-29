@@ -33,8 +33,8 @@ export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
 };
 
 const sortAlphaByProp = (a, b) => {
-  var channelA = a.snippet.title.toLowerCase();
-  var channelB = b.snippet.title.toLowerCase();
+  var channelA = a.snippet.title?.toLowerCase();
+  var channelB = b.snippet.title?.toLowerCase();
   return channelA.localeCompare(channelB);
 };
 
@@ -46,7 +46,9 @@ export const sortInputFirst = (input, data) => {
   data.forEach((element) => {
     if (element.snippet.title.slice(0, input.length) === input) {
       caseSensitive.push(element);
-    } else if (element.snippet.title.slice(0, input.length).toLowerCase() === input.toLowerCase()) {
+    } else if (
+      element.snippet.title.slice(0, input.length)?.toLowerCase() === input?.toLowerCase()
+    ) {
       caseInsensitive.push(element);
     } else {
       others.push(element);
@@ -93,8 +95,8 @@ export default (data) => {
           if (listIsOpen && event.target.value && event.target.value !== '') {
             const filtered = channels.current.filter((channel) => {
               return channel.snippet.title
-                .toLowerCase()
-                .includes((event.target.value || value).toLowerCase());
+                ?.toLowerCase()
+                .includes((event.target.value || value)?.toLowerCase());
             });
             if (filtered.length > 1) {
               const sorted = sortInputFirst(event.target.value || value, filtered);
@@ -111,7 +113,7 @@ export default (data) => {
       },
       returnChannelId: () => {
         const foundChannel = filteredChannels?.find((p_channel) => {
-          return p_channel.snippet.title.toLowerCase().includes(value.toLowerCase());
+          return p_channel.snippet.title?.toLowerCase().includes(value?.toLowerCase());
         });
 
         return foundChannel && foundChannel.snippet.resourceId.channelId;

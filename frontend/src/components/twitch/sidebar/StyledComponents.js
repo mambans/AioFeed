@@ -37,14 +37,14 @@ export const SidebarInfoPopup = styled.div`
 `;
 
 export const Styledsidebar = styled.div`
-  width: 275px !important;
+  width: 275px;
+  scrollbar-color: #232526 transparent;
+  scrollbar-width: thin;
   background: var(--sidebarsBackgroundColor);
   top: 92px;
   position: fixed;
   border-radius: 10px 10px 0 0;
   overflow: auto;
-  scrollbar-color: #232526 transparent !important;
-  scrollbar-width: thin !important;
   max-height: calc(100vh - (60px + 50px));
   padding-bottom: 2px;
   z-index: 2;
@@ -130,10 +130,6 @@ export const StyledsidebarItem = styled.div`
     align-items: center;
     min-width: 70px;
     margin-left: 5px;
-
-    i {
-      justify-content: right !important;
-    }
 
     p {
       justify-content: space-between;

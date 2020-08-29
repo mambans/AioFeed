@@ -26,32 +26,37 @@ export const StyledGameListElement = styled.li`
 `;
 
 export const StyledShowAllButton = styled.li`
+  &&& {
+    justify-content: center;
+  }
   cursor: pointer;
-  justify-content: center !important;
   font-weight: bold;
   font-size: 1.1rem;
 `;
 
 export const GameListUlContainer = styled.ul`
+  /* &&& { */
+  background: var(--popupListsBackground);
+  scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0);
+  scrollbar-width: thin;
+  border-radius: 0 0 10px 10px;
+  border: none;
+  /* } */
+
   transform: translate3d(0, 0, 0);
   color: rgb(230, 230, 230);
   list-style: none;
   padding-left: 0.75rem;
   margin: 0;
   position: ${({ position }) => position || 'absolute'};
-  background: var(--popupListsBackground) !important;
   box-shadow: var(--refreshButtonShadow);
   width: 310px;
-  scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0) !important;
-  scrollbar-width: thin !important;
 
-  border-radius: 0 0 10px 10px !important;
   max-height: 485px;
   height: 485px;
   overflow: scroll;
   overflow-x: scroll;
   overflow-x: hidden;
-  border: none !important;
   z-index: 5;
 
   li {
@@ -87,24 +92,24 @@ export const BackdropChannelList = styled.div`
 `;
 
 export const TypeListUlContainer = styled.ul`
+  background: var(--popupListsBackground);
+  scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0);
+  scrollbar-width: thin;
+  border-radius: 0 0 10px 10px;
+  border: none;
+
   color: white;
   list-style: none;
   padding-left: 0.75rem;
   margin: 0;
   position: absolute;
-  background: var(--popupListsBackground) !important;
   box-shadow: var(--refreshButtonShadow);
   width: 150px;
-  scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0) !important;
-  scrollbar-width: thin !important;
 
-  border-radius: 0 0 10px 10px !important;
   /* max-height: 485px;
   height: 485px; */
   overflow: scroll;
-  overflow-x: scroll;
   overflow-x: hidden;
-  border: none !important;
   z-index: 3;
 
   li,
@@ -162,7 +167,6 @@ export const SearchGameForm = styled.form`
   z-index: 4;
   height: max-content;
 
-
   li {
     button.VodButton,
     svg.StreamFollowBtn,
@@ -181,7 +185,7 @@ export const SearchGameForm = styled.form`
     display: block;
     margin: auto;
     position: absolute;
-    transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(calc(125px / 2))')} ;
+    transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(calc(125px / 2))')};
   }
 
   &:focus-within {

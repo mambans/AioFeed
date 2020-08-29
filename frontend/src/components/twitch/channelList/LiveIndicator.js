@@ -21,7 +21,9 @@ export const StyledToolTip = styled(Tooltip)`
   }
 
   .arrow {
-    transform: translate3d(6px, 18px, 0) !important;
+    &&& {
+      transform: translate3d(6px, 18px, 0);
+    }
   }
   .tooltip-inner {
     padding: 0;

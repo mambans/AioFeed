@@ -48,7 +48,7 @@ export default ({ channel, loweropacity, marginright, className }) => {
       const newVodVideos = {
         ...existingVodVideos,
         data: existingVodVideos.data.filter((video) => {
-          return video.user_name.toLowerCase() !== channel?.toLowerCase();
+          return video.user_name?.toLowerCase() !== channel?.toLowerCase();
         }),
       };
 

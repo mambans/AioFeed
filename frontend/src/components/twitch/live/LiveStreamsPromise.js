@@ -1,6 +1,6 @@
-import addSystemNotification from "./addSystemNotification";
-import FetchSingelChannelVods from "./../vods/FetchSingelChannelVods";
-import { getLocalstorage } from "../../../util/Utils";
+import addSystemNotification from './addSystemNotification';
+import FetchSingelChannelVods from './../vods/FetchSingelChannelVods';
+import { getLocalstorage } from '../../../util/Utils';
 
 export default async ({
   liveStreams,
@@ -11,7 +11,7 @@ export default async ({
   setUnseenNotifications,
 }) => {
   try {
-    const localStreams = getLocalstorage("newLiveStreamsFromPlayer") || {
+    const localStreams = getLocalstorage('newLiveStreamsFromPlayer') || {
       data: [],
     };
 
@@ -22,7 +22,7 @@ export default async ({
           !localStreams.data.find(({ user_id }) => stream.user_id === user_id)
         );
       });
-      if (newLive.length <= 0) reject("No new LIVE streams");
+      if (newLive.length <= 0) reject('No new LIVE streams');
       resolve(newLive);
     });
     if (document.title.length > 15) {
@@ -36,9 +36,9 @@ export default async ({
     res.map((stream) => {
       newlyAddedStreams.current.push(stream.user_name);
       stream.newlyAdded = true;
-      stream.notiStatus = "Live";
+      stream.notiStatus = 'Live';
       addSystemNotification({
-        status: "Live",
+        status: 'Live',
         stream: stream,
         body: `${stream.title || stream.status}\n${stream.game_name || stream.game}`,
         newlyAddedStreams: newlyAddedStreams,
@@ -46,13 +46,13 @@ export default async ({
       });
       if (
         enableTwitchVods &&
-        getLocalstorage("VodChannels").includes(stream.user_name.toLowerCase())
+        getLocalstorage('VodChannels').includes(stream.user_name?.toLowerCase())
       ) {
         setTimeout(async () => {
-          await FetchSingelChannelVods(stream.user_id, setVods, "live");
+          await FetchSingelChannelVods(stream.user_id, setVods, 'live');
         }, 30000);
       }
-      return "";
+      return '';
     });
     return res;
   } catch (e) {

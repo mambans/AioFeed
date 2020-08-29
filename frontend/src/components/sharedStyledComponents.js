@@ -37,7 +37,9 @@ const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
   } */
 
   div[aria-label='Countdown timer'] {
-    margin: 5px auto !important ;
+    &&& {
+      margin: 5px auto;
+    }
   }
 
   &:hover {
@@ -227,7 +229,9 @@ export const VideoContainer = styled.div`
         }
       }
       a {
-        font-size: 1rem !important;
+        &&& {
+          font-size: 1rem;
+        }
         height: 100%;
         display: flex;
         align-items: center;
@@ -448,7 +452,7 @@ export const ImageContainer = styled.div`
     height: 24px;
     bottom: 28px;
     left: 4px;
-    border-radius: 12px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     background: #161616b0;
@@ -527,7 +531,7 @@ export const VodVideoInfo = styled.div`
     background: #161616b0;
     margin: 0;
     margin-left: 3px;
-    border-radius: 12px;
+    border-radius: 10px;
     height: 24px;
     display: flex;
     align-items: center;
@@ -541,7 +545,7 @@ export const VodVideoInfo = styled.div`
     background: #161616b0;
     margin: 0;
     margin-right: 3px;
-    border-radius: 12px;
+    border-radius: 10px;
     height: 24px;
     display: flex;
     align-items: center;

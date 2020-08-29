@@ -105,7 +105,7 @@ export default (data_p) => {
               }> */}
           <img
             id={`${data?.user_id}-${Date.now()}`}
-            alt=''
+            alt='thumbnail'
             style={
               newlyAddedStreams && newlyAddedStreams.includes(data?.login)
                 ? { boxShadow: 'white 0px 0px 3px 2px' }

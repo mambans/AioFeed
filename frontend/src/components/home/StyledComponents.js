@@ -1,35 +1,39 @@
 import styled from 'styled-components';
 
 export const BlurOverlay = styled.div`
+  &&& {
+    padding: 0;
+  }
+
   height: calc(100vh + 100px);
   width: 100%;
   position: absolute;
   background: no-repeat center center fixed;
   background-attachment: fixed;
   background-image: none;
-  background-size: auto;
   background-attachment: fixed;
   background-image: var(--backgroundImg);
   object-fit: cover;
   background-size: cover;
-  padding: 0 !important;
   filter: blur(5px);
   top: 0px;
 `;
 
 export const TopBlurOverlay = styled.div`
+  &&& {
+    padding: 0;
+  }
+
   height: 60px;
   width: 100%;
   position: absolute;
   background: no-repeat center center fixed;
   background-attachment: fixed;
   background-image: none;
-  background-size: auto;
   background-attachment: fixed;
   background-image: var(--backgroundImg);
   object-fit: cover;
   background-size: cover;
-  padding: 0 !important;
   filter: blur(5px);
   top: 0;
   z-index: 1000;

@@ -177,7 +177,7 @@ export default ({ data, vodBtnDisabled }) => {
       <ChannelContainer>
         <Link
           to={{
-            pathname: `/${data.login || data.user_name.toLowerCase()}/channel`,
+            pathname: `/${data.login || data.user_name?.toLowerCase()}/channel`,
             state: {
               p_id: data.user_id,
             },
@@ -189,7 +189,7 @@ export default ({ data, vodBtnDisabled }) => {
         <ChannelNameDiv>
           <Link
             to={{
-              pathname: `/${data.login || data.user_name.toLowerCase()}/channel`,
+              pathname: `/${data.login || data.user_name?.toLowerCase()}/channel`,
               state: {
                 p_id: data.user_id,
               },

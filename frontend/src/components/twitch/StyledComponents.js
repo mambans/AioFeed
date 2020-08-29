@@ -90,8 +90,7 @@ export const StyledCountdownCircle = styled.div`
   margin: auto;
   height: 24px;
   width: 24px;
-  /* text-align: center;
-  margin: 5px auto !important; */
+  /* text-align: center;*/
 
   div#countdown-number {
     display: inline-block;
@@ -296,6 +295,10 @@ export const Container = styled.div`
 `;
 
 export const CenterContainer = styled.div`
+  &&& {
+    width: ${({ centerWidth }) => centerWidth}px;
+  }
+
   display: flex;
   justify-content: center;
   flex-flow: column;
@@ -318,5 +321,4 @@ export const CenterContainer = styled.div`
         'px'};
   margin-right: ${({ enableTwitter, enableTwitch, showTwitchSidebar }) =>
     !enableTwitter && (!enableTwitch || !showTwitchSidebar) ? 'auto' : 'unset'};
-  width: ${({ centerWidth }) => centerWidth}px !important;
 `;

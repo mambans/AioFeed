@@ -178,7 +178,7 @@ export default () => {
     };
     if (streams.data.length >= 1) {
       const newStreams = streams.data.filter(
-        (item) => item.user_name.toLowerCase() !== channelName?.toLowerCase()
+        (item) => item.user_name?.toLowerCase() !== channelName?.toLowerCase()
       );
       localStorage.setItem(
         'newLiveStreamsFromPlayer',
@@ -266,7 +266,7 @@ export default () => {
           if (
             streamInfo === null &&
             res?.broadcaster_software &&
-            !res?.broadcaster_software.toLowerCase().includes('rerun')
+            !res?.broadcaster_software?.toLowerCase().includes('rerun')
           ) {
             addNoti({ type: 'Live', stream: res });
 

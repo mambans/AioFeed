@@ -30,11 +30,12 @@ export const StyledFooterContainer = styled.div`
   a,
   button,
   div.button {
+    &&& {
+      font-size: 16px;
+    }
     cursor: pointer;
     display: flex;
     align-items: center;
-
-    font-size: 16px !important;
     color: var(--textColor2);
     transition: color 200ms;
 

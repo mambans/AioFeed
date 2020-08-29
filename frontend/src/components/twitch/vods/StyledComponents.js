@@ -3,23 +3,25 @@ import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 
 export const VodLiveIndicator = styled(Link)`
+  &&& {
+    display: flex;
+  }
+  width: 48px;
+  height: 24px;
+  transform: scale(1);
   padding: 5px;
   font-size: 0.8rem;
   position: absolute;
   background: #d10303;
   color: white;
-  border-radius: 12px;
+  border-radius: 10px;
   font-weight: bold;
-  width: 48px !important;
-  height: 24px !important;
-  display: flex !important;
   align-items: center;
   border: 1px solid #f00;
   justify-content: center;
   margin: 3px;
   opacity: 0.8;
   transition: opacity 150ms, color 150ms;
-  transform: scale(1) !important;
 
   &:hover {
     opacity: 1;
