@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-const DynamoDB = require("aws-sdk/clients/dynamodb");
-const client = new DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
-const AES = require("crypto-js/aes");
+const DynamoDB = require('aws-sdk/clients/dynamodb');
+const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
+const AES = require('crypto-js/aes');
 
 module.exports = async ({ username, columnValue, columnName, authkey }) => {
   const AccountInfo = await client
@@ -12,7 +12,7 @@ module.exports = async ({ username, columnValue, columnName, authkey }) => {
     })
     .promise();
 
-  if (authkey !== AccountInfo.Item.AuthKey) throw new Error("Invalid AuthKey");
+  if (authkey !== AccountInfo.Item.AuthKey) throw new Error('Invalid AuthKey');
   if (authkey === AccountInfo.Item.AuthKey) {
     const valueData = await (async () => {
       if (columnValue && columnValue.Token) {
@@ -27,8 +27,8 @@ module.exports = async ({ username, columnValue, columnName, authkey }) => {
           return { ...columnValue, Token: encrypted_Token, Refresh_token: Hached_Refresh_token };
         }
         return { ...columnValue, Token: encrypted_Token };
-      } else if (columnValue && typeof columnValue === "object") {
-        return { ...columnValue };
+      } else if (columnValue && typeof columnValue === 'object') {
+        return columnValue;
       } else {
         return columnValue;
       }
@@ -39,9 +39,9 @@ module.exports = async ({ username, columnValue, columnName, authkey }) => {
         TableName: process.env.USERNAME_TABLE,
         Key: { Username: username },
         UpdateExpression: `set #column = :columnValue`,
-        ExpressionAttributeNames: { "#column": columnName },
+        ExpressionAttributeNames: { '#column': columnName },
         ExpressionAttributeValues: {
-          ":columnValue": valueData,
+          ':columnValue': valueData,
         },
       })
       .promise();
