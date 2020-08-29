@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { getCookie } from './../../util/Utils';
+import { getCookie, getLocalstorage } from './../../util/Utils';
 
 const FeedsContext = React.createContext();
 
@@ -15,7 +15,7 @@ export const FeedsProvider = ({ children }) => {
 
   const [enableTwitter, setEnableTwitter] = useState(getCookie('Twitter_FeedEnabled'));
 
-  const [twitterListName, setTwitterListName] = useState(getCookie('Twitter-Listname'));
+  const [twitterLists, setTwitterLists] = useState(getLocalstorage('Twitter-Lists'));
 
   const [enableYoutube, setEnableYoutube] = useState(
     getCookie(`Youtube-access_token`) && getCookie('Youtube_FeedEnabled')
@@ -55,14 +55,14 @@ export const FeedsProvider = ({ children }) => {
         setYoutubeVideoHoverEnable,
         setEnableTwitter,
         enableTwitter,
-        twitterListName,
-        setTwitterListName,
         isEnabledOfflineNotifications,
         setIsEnabledOfflineNotifications,
         showTwitchSidebar,
         setShowTwitchSidebar,
         isEnabledUpdateNotifications,
         setIsEnabledUpdateNotifications,
+        twitterLists,
+        setTwitterLists,
       }}
     >
       {children}

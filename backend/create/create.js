@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
-const DynamoDB = require("aws-sdk/clients/dynamodb");
-const client = new DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
+const DynamoDB = require('aws-sdk/clients/dynamodb');
+const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
-const bcrypt = require("bcrypt");
-const util = require("util");
+const bcrypt = require('bcrypt');
+const util = require('util');
 const hash = util.promisify(bcrypt.hash);
-const { v4: uuidv4 } = require("uuid");
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = async ({ username, email, password }) => {
   // const userExist = await client
@@ -35,13 +35,13 @@ module.exports = async ({ username, email, password }) => {
         Email: email,
         Password: hashedPassword,
         MonitoredChannels: [],
-        ProfileImg: "null",
+        ProfileImg: 'null',
         AuthKey: key,
-        TwitterListId: "null",
+        TwitterLists: [],
       },
-      ConditionExpression: "attribute_not_exists(Username) AND attribute_not_exists(Email)",
-      ReturnItemCollectionMetrics: "SIZE",
-      ReturnValues: "ALL_OLD",
+      ConditionExpression: 'attribute_not_exists(Username) AND attribute_not_exists(Email)',
+      ReturnItemCollectionMetrics: 'SIZE',
+      ReturnValues: 'ALL_OLD',
     })
     .promise();
 

@@ -142,7 +142,7 @@ export const pulseLight = keyframes`
 
 export const StyledLoadingBox = styled.div`
   display: grid;
-  grid-template-areas: "video video" "title title" "info info";
+  grid-template-areas: 'video video' 'title title' 'info info';
   width: 336px;
   margin: 7px;
   max-height: 336px;
@@ -169,7 +169,7 @@ export const StyledLoadingBox = styled.div`
   }
 
   div#title {
-    color:var(--textColor1);
+    color: var(--textColor1);
     margin-top: 15px;
     margin-bottom: 5px;
     grid-area: title;
@@ -184,7 +184,7 @@ export const StyledLoadingBox = styled.div`
       width: 260px;
       height: 24px;
       margin-top: 5px;
-      border-radius: 12px;
+      border-radius: 10px;
       transform: translate3d(0, 0, 0);
     }
   }
@@ -309,17 +309,14 @@ export const CenterContainer = styled.div`
     twitterWidth,
     centerWidth,
     twitchSidebarWidth,
+    winWidth,
   }) =>
     !enableTwitter && (!enableTwitch || !showTwitchSidebar)
       ? 'auto'
-      : (window.innerWidth - (twitchSidebarWidth + twitterWidth + centerWidth + 50)) /
-          // (enableTwitter ? twitterWidth + 25 + centerWidth : centerWidth + 50))) /
-          // : 350 * Math.floor((window.innerWidth - (twitchSidebarWidth + 150)) / 350) + 50))) /
-          2 +
+      : (winWidth - (twitchSidebarWidth + twitterWidth + centerWidth)) / 2 +
         twitchSidebarWidth +
         'px'};
   margin-right: ${({ enableTwitter, enableTwitch, showTwitchSidebar }) =>
     !enableTwitter && (!enableTwitch || !showTwitchSidebar) ? 'auto' : 'unset'};
   width: ${({ centerWidth }) => centerWidth}px !important;
-
 `;

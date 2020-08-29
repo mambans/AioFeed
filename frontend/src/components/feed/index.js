@@ -30,23 +30,28 @@ export default () => {
     enableTwitter,
     showTwitchSidebar,
     setShowTwitchSidebar,
+    twitterLists,
   } = useContext(FeedsContext);
   const { username } = useContext(AccountContext);
+  const NrLists = twitterLists?.length;
+  const [winWidth, setWinWidth] = useState(document.documentElement.clientWidth);
 
   useEventListenerMemo('resize', () => {
+    setWinWidth(document.documentElement.clientWidth);
     setVideoElementsAmount(calcVideoElementsAmount());
   });
 
   const calcVideoElementsAmount = useCallback(
     () =>
       Math.floor(
-        (window.innerWidth -
+        (winWidth -
           ((enableTwitch && showTwitchSidebar ? 275 : 0) +
-            (enableTwitter ? window.innerWidth * (window.innerWidth <= 2560 ? 0.2 : 0.15) : 150) +
+            (enableTwitter ? winWidth * (winWidth <= 2560 ? 0.2 : 0.14) : 150) +
             25)) /
           350
       ) * 2,
-    [enableTwitch, showTwitchSidebar, enableTwitter]
+
+    [enableTwitch, showTwitchSidebar, enableTwitter, winWidth]
   );
 
   const [videoElementsAmount, setVideoElementsAmount] = useState(calcVideoElementsAmount());
@@ -71,22 +76,24 @@ export default () => {
   } else {
     return (
       <CenterContainer
+        winWidth={winWidth}
         enableTwitter={enableTwitter}
         enableTwitch={enableTwitch}
         showTwitchSidebar={showTwitchSidebar}
         twitterWidth={
-          enableTwitter ? window.innerWidth * (window.innerWidth <= 2560 ? 0.2 : 0.15) : 0
+          enableTwitter
+            ? winWidth * (winWidth <= 2560 ? 0.2 * NrLists : 0.14 * NrLists) + NrLists * 20
+            : 0
         }
         twitchSidebarWidth={enableTwitch && showTwitchSidebar ? 275 : 0}
         centerWidth={
           350 *
           Math.floor(
-            (window.innerWidth -
+            (winWidth -
               ((enableTwitch && showTwitchSidebar ? 275 : 0) +
                 (enableTwitter
-                  ? window.innerWidth * (window.innerWidth <= 2560 ? 0.2 : 0.15)
-                  : 150) +
-                25)) /
+                  ? winWidth * (winWidth <= 2560 ? 0.2 * NrLists : 0.14 * NrLists) + NrLists * 20
+                  : 150))) /
               350
           )
         }

@@ -20,9 +20,10 @@ import ReAuthenticateButton from './ReAuthenticateButton';
 import Themeselector from './../../themes/Themeselector';
 import ToggleButton from './ToggleButton';
 import UpdateProfileImg from './UpdateProfileImg';
-import UpdateTwitterListName from './UpdateTwitterListName';
+import UpdateTwitterLists from './UpdateTwitterLists';
 import disconnectYoutube from './../../youtube/disconnectYoutube';
 import disconnectTwitch from './../../twitch/disconnectTwitch';
+import TwitterForms from './TwitterForms';
 import {
   StyledProfileImg,
   StyledLogoutContiner,
@@ -137,7 +138,6 @@ export default () => {
             tokenExists={true}
             tooltip={(enableTwitter ? 'Disable ' : 'Enable ') + ` Twitter feed`}
             icon={<FaTwitter size={24} color='rgb(29, 161, 242)' />}
-            // tokenExists={twitterListName}
           />
           <ToggleButton
             setEnable={(value) => {
@@ -172,7 +172,8 @@ export default () => {
             icon={<MdVideocam size={24} color='rgb(169, 112, 255)' />}
           />
         </ToggleButtonsContainer>
-        <UpdateTwitterListName />
+        <TwitterForms />
+        <UpdateTwitterLists style={{ opacity: '0.5', transition: 'opacity 250ms' }} />
         <br />
         <ToggleButtonsContainerHeader>Settings</ToggleButtonsContainerHeader>
         <ToggleButtonsContainer buttonsperrow={3}>
