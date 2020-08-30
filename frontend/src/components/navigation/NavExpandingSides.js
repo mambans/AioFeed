@@ -20,7 +20,7 @@ const NavExpandingSides = styled.div`
   height: inherit;
   overflow: hidden;
   display: flex;
-  justify-content: ${({ side }) => (side === 'right' ? 'end' : 'start')};
+  justify-content: ${({ side }) => (side === 'right' ? 'flex-end' : 'flex-start')};
   align-items: center;
   position: relative;
 
