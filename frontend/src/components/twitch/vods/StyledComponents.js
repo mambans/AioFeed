@@ -100,6 +100,7 @@ export const VodDates = styled.div`
   height: 100%;
   justify-content: right;
   justify-self: right;
+  white-space: nowrap;
   /* mix-blend-mode: screen; */
 
   p {
