@@ -3,12 +3,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import React, { useContext } from 'react';
 
-import {
-  Container,
-  LoadingPlaceholder,
-  MainContainer,
-  NoListsAlertContainer,
-} from './StyledComponents';
+import { Container, LoadingPlaceholder, MainContainer } from './StyledComponents';
 import FeedsContext from '../feed/FeedsContext';
 import UpdateTwitterLists from '../navigation/sidebar/UpdateTwitterLists';
 import ThemeContext from './../themes/ThemeContext';
@@ -39,11 +34,7 @@ export default () => {
           {twitterLists?.map((id) => {
             return (
               <CSSTransition classNames='twitterList' key={id} timeout={750} unmountOnExit>
-                <Container
-                  key={id}
-                  footerVisibleInViewport={footerVisibleInViewport}
-                  otherFeedsEnabled={enableTwitch || enableYoutube || enableTwitchVods}
-                >
+                <Container key={id} footerVisibleInViewport={footerVisibleInViewport}>
                   <TwitterTimelineEmbed
                     sourceType='list'
                     id={id}
@@ -66,14 +57,14 @@ export default () => {
         </TransitionGroup>
 
         {!Boolean(twitterLists?.length) && (
-          <NoListsAlertContainer>
+          <Container key={'No feed'} footerVisibleInViewport={footerVisibleInViewport}>
             <Alert variant='info' style={{ textAlign: 'center' }}>
               <Alert.Heading>No Twitter list ID entered</Alert.Heading>
               <hr />
               Please enter a public twitter list id below.
             </Alert>
             <UpdateTwitterLists style={{ padding: '10px' }} />
-          </NoListsAlertContainer>
+          </Container>
         )}
       </MainContainer>
     </CSSTransition>

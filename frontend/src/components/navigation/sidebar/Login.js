@@ -58,7 +58,7 @@ export default () => {
           AddCookie('AioFeed_AccountProfileImg', res.ProfileImg);
           AddCookie('AioFeed_AuthKey', res.AuthKey);
           AddCookie('AioFeed_AccountEmail', res.Email);
-          localStorage.setItem('Twitter-Listname', JSON.stringify(res.TwitterLists));
+          localStorage.setItem('Twitter-Lists', JSON.stringify(res.TwitterLists));
           localStorage.setItem('VodChannels', JSON.stringify(res.MonitoredChannels));
           localStorage.setItem(
             'UpdateNotificationsChannels',

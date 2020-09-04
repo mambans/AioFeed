@@ -39,8 +39,6 @@ export const MainContainer = styled.div`
   display: flex;
 `;
 
-export const NoListsAlertContainer = styled.div``;
-
 export const LoadingTextBox = styled.div`
   width: 100%;
   height: 250px;

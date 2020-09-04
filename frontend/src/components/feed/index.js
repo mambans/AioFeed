@@ -33,7 +33,7 @@ export default () => {
     twitterLists,
   } = useContext(FeedsContext);
   const { username } = useContext(AccountContext);
-  const NrLists = twitterLists?.length;
+  const NrLists = twitterLists?.length || 1;
   const [winWidth, setWinWidth] = useState(document.documentElement.clientWidth);
 
   useEventListenerMemo('resize', () => {
