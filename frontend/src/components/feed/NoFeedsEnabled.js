@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Alert } from "react-bootstrap";
-import { CSSTransition } from "react-transition-group";
-import Util from "../../util/Util";
-import FeedsContext from "./FeedsContext";
+import React, { useContext, useEffect, useState } from 'react';
+import { CSSTransition } from 'react-transition-group';
+import FeedsContext from './FeedsContext';
+import AlertHandler from './../alert';
 
 export default () => {
   const { enableTwitch, enableYoutube, enableTwitchVods, enableTwitter } = useContext(FeedsContext);
@@ -30,12 +29,13 @@ export default () => {
       in={noFeeds}
       timeout={{ appear: 1000, enter: 1000, exit: 0 }}
       classNames='NoFeedsEnabled-Fade'
-      unmountOnExit>
-      <Alert variant='info' style={Util.feedAlertWarning}>
-        <Alert.Heading>No feeds are enabled</Alert.Heading>
-        <hr />
-        Please enable some feeds in navigation sidebar.
-      </Alert>
+      unmountOnExit
+    >
+      <AlertHandler
+        type='info'
+        title='No feeds enabled'
+        message='Enable feeds in the navigation sidebar on the right.'
+      />
     </CSSTransition>
   );
 };

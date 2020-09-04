@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback, useContext } from 'react';
 import _ from 'lodash';
 
-import ErrorHandler from '../../error';
+import AlertHandler from '../../alert';
 import getMyFollowedChannels from './../getMyFollowedChannels';
 import getFollowedOnlineStreams from './GetFollowedStreams';
 import NotificationsContext from './../../notifications/NotificationsContext';
@@ -207,27 +207,24 @@ export default ({ children }) => {
 
   if (!getCookie(`Twitch-access_token`)) {
     return (
-      <ErrorHandler
-        data={{
-          title: 'Not authenticated/connected with Twitch.',
-          message: 'No access token for Twitch available.',
-        }}
+      <AlertHandler
+        title='Not authenticated/connected with Twitch.'
+        message='No access token for Twitch available.'
       />
     );
-  } else {
-    return children({
-      refreshing: loadingStates.refreshing,
-      loaded: loadingStates.loaded,
-      refreshTimer: refreshTimer,
-      followedChannels: followedChannels.current,
-      error: loadingStates.error,
-      liveStreams: liveStreams.current || [],
-      resetNewlyAddedStreams: resetNewlyAddedStreams,
-      refresh: refresh,
-      newlyAddedStreams: newlyAddedStreams.current,
-      REFRESH_RATE: REFRESH_RATE,
-      autoRefreshEnabled: autoRefreshEnabled,
-      refreshAfterUnfollowTimer: refreshAfterUnfollowTimer,
-    });
   }
+  return children({
+    refreshing: loadingStates.refreshing,
+    loaded: loadingStates.loaded,
+    refreshTimer: refreshTimer,
+    followedChannels: followedChannels.current,
+    error: loadingStates.error,
+    liveStreams: liveStreams.current || [],
+    resetNewlyAddedStreams: resetNewlyAddedStreams,
+    refresh: refresh,
+    newlyAddedStreams: newlyAddedStreams.current,
+    REFRESH_RATE: REFRESH_RATE,
+    autoRefreshEnabled: autoRefreshEnabled,
+    refreshAfterUnfollowTimer: refreshAfterUnfollowTimer,
+  });
 };

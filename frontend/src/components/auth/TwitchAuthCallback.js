@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 
 import { getCookie } from '../../util/Utils';
-import ErrorHandler from './../error';
+import AlertHandler from './../alert';
 import AccountContext from './../account/AccountContext';
 import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from './../LoadingIndicator';
@@ -38,7 +38,7 @@ function TwitchAuthCallback() {
         return API.getMe({ accessToken: accessToken }).then(async (res) => {
           AddCookie('Twitch-userId', res.data.data[0].id);
           AddCookie('Twitch-username', res.data.data[0].login);
-          AddCookie('Twitch-profileImg', res.data.data[0].profile_img_url);
+          AddCookie('Twitch-profileImg', res.data.data[0].profile_image_url);
 
           if (username) {
             await axios
@@ -48,7 +48,7 @@ function TwitchAuthCallback() {
                 columnValue: {
                   Username: res.data.data[0].login,
                   Id: res.data.data[0].id,
-                  Profile: res.data.data[0].profile_img_url,
+                  Profile: res.data.data[0].profile_image_url,
                   Token: accessToken,
                   Refresh_token: refreshToken,
                   AutoRefresh: autoRefreshEnabled,
@@ -63,7 +63,7 @@ function TwitchAuthCallback() {
 
           return {
             Username: res.data.data[0].login,
-            ProfileImg: res.data.data[0].profile_img_url,
+            ProfileImg: res.data.data[0].profile_image_url,
           };
         });
       });
@@ -123,11 +123,8 @@ function TwitchAuthCallback() {
     })();
   }, [getAccessToken, setVisible, setFooterVisible]);
 
-  if (error) {
-    return <ErrorHandler data={error}></ErrorHandler>;
-  } else {
-    return <LoadingIndicator height={150} width={150} />;
-  }
+  if (error) return <AlertHandler data={error} />;
+  return <LoadingIndicator height={150} width={150} />;
 }
 
 export default TwitchAuthCallback;

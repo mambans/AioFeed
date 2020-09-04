@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import uniqid from 'uniqid';
 
-import ErrorHandler from './../error';
+import AlertHandler from './../alert';
 import { AddCookie } from '../../util/Utils';
 import LoadingIndicator from '../LoadingIndicator';
 
@@ -33,11 +33,8 @@ function TwitchAuth() {
     })();
   }, [initiateAuth]);
 
-  if (error) {
-    return <ErrorHandler data={error}></ErrorHandler>;
-  } else {
-    return <LoadingIndicator height={150} width={150} />;
-  }
+  if (error) return <AlertHandler data={error} />;
+  return <LoadingIndicator height={150} width={150} />;
 }
 
 export default TwitchAuth;

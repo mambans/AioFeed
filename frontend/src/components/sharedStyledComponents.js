@@ -638,3 +638,11 @@ export const LoadMore = ({
   }
   return null;
 };
+
+export const StyledAlert = styled(Alert)`
+  text-align: center;
+  width: 86%;
+  margin: auto;
+  margin-top: 50px;
+  opacity: 0.7;
+`;

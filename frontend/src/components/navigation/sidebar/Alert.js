@@ -1,7 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from 'react';
+import Alert from 'react-bootstrap/Alert';
+import styled from 'styled-components';
 
-import { StyledAccAlert } from "./StyledComponent";
-import NavigationContext from "../NavigationContext";
+import NavigationContext from '../NavigationContext';
+
+const StyledAccAlert = styled(Alert)`
+  text-align: center;
+  opacity: '0.7';
+
+  .close {
+    padding: 0 7px 0 0;
+  }
+`;
 
 export default () => {
   const { alert, setAlert } = useContext(NavigationContext);

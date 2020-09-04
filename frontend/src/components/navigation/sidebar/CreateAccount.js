@@ -1,18 +1,18 @@
-import axios from "axios";
-import React, { useState, useContext } from "react";
-import { Form, Button } from "react-bootstrap";
-import Alert from "react-bootstrap/Alert";
+import axios from 'axios';
+import React, { useState, useContext } from 'react';
+import { Form, Button } from 'react-bootstrap';
 
-import { StyledCreateFormTitle, StyledCreateForm, StyledAlert } from "./StyledComponent";
-import NavigationContext from "./../NavigationContext";
-import AccountContext from "./../../account/AccountContext";
-import LoadingIndicator from "./../../LoadingIndicator";
-import useInput from "./../../../hooks/useInput";
-import ALert from "./Alert";
-import { AddCookie } from "../../../util/Utils";
+import { StyledCreateFormTitle, StyledCreateForm } from './StyledComponent';
+import NavigationContext from './../NavigationContext';
+import AccountContext from './../../account/AccountContext';
+import LoadingIndicator from './../../LoadingIndicator';
+import useInput from './../../../hooks/useInput';
+import ALert from './Alert';
+import { AddCookie } from '../../../util/Utils';
+import AlertHandler from './../../alert';
 
 export default () => {
-  document.title = "AioFeed | Create Account";
+  document.title = 'AioFeed | Create Account';
   const [error, setError] = useState(null);
   const { setAlert, setRenderModal } = useContext(NavigationContext);
   const [validated, setValidated] = useState(false);
@@ -23,9 +23,9 @@ export default () => {
     return re.test(email);
   };
 
-  const { value: userName, bind: bindUserName, reset: resetUserName } = useInput("");
-  const { value: email, bind: bindEmail, reset: resetEmail } = useInput("");
-  const { value: password, bind: bindPassword, reset: resetPassword } = useInput("");
+  const { value: userName, bind: bindUserName, reset: resetUserName } = useInput('');
+  const { value: email, bind: bindEmail, reset: resetEmail } = useInput('');
+  const { value: password, bind: bindPassword, reset: resetPassword } = useInput('');
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -51,9 +51,9 @@ export default () => {
           password: password,
         })
         .then((res) => {
-          AddCookie("AioFeed_AccountName", res.data.Username);
-          AddCookie("AioFeed_AccountEmail", res.data.Email);
-          AddCookie("AioFeed_AuthKey", res.data.AuthKey);
+          AddCookie('AioFeed_AccountName', res.data.Username);
+          AddCookie('AioFeed_AccountEmail', res.data.Email);
+          AddCookie('AioFeed_AuthKey', res.data.AuthKey);
 
           setAuthKey(res.data.AuthKey);
           setUsername(res.data.Username);
@@ -64,10 +64,10 @@ export default () => {
         })
         .catch((error) => {
           console.error(error.response);
-          if (error.response.data.code === "ConditionalCheckFailedException") {
+          if (error.response.data.code === 'ConditionalCheckFailedException') {
             setAlert({
               message: `Username is already taken`,
-              variant: "warning",
+              variant: 'warning',
             });
           }
           // setError({
@@ -83,14 +83,14 @@ export default () => {
   return (
     <>
       <ALert />
+      <AlertHandler
+        show={error}
+        type='warning'
+        title={error.title}
+        message={error.message}
+        onClose={() => setError(null)}
+      />
 
-      {error && (
-        <StyledAlert variant='warning' dismissible onClose={() => setError(null)}>
-          <Alert.Heading>{error.title}</Alert.Heading>
-          <hr />
-          {error.message.toString()}
-        </StyledAlert>
-      )}
       <StyledCreateFormTitle>
         <h3>Create</h3>
         <p>Create a AioFeed account.</p>
@@ -130,14 +130,15 @@ export default () => {
           />
           <Form.Control.Feedback type='invalid'>Please enter a password.</Form.Control.Feedback>
         </Form.Group>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button variant='primary' type='submit'>
             Create
           </Button>
           <Button
             onClick={() => {
-              setRenderModal("login");
-            }}>
+              setRenderModal('login');
+            }}
+          >
             Login
           </Button>
         </div>

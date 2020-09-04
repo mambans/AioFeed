@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback, useContext } from 'react';
 
 import AccountContext from '../account/AccountContext';
-import ErrorHandler from '../error';
+import AlertHandler from '../alert';
 import getMyFollowedChannels from './getMyFollowedChannels';
 import GetSubscriptionVideos from './GetSubscriptionVideos';
 import validateToken from './validateToken';
@@ -69,22 +69,19 @@ export default ({ children }) => {
 
   if (!youtubeToken) {
     return (
-      <ErrorHandler
-        data={{
-          title: "Couldn't load Youtube feed",
-          message: 'You are not connected with your Youtube account to AioFeed',
-        }}
+      <AlertHandler
+        title="Couldn't load Youtube feed"
+        message='You are not connected with your Youtube account to AioFeed'
       />
     );
-  } else {
-    return children({
-      isLoaded,
-      error,
-      videos: videos,
-      setVideos: setVideos,
-      followedChannels: followedChannels.current,
-      refresh,
-      requestError,
-    });
   }
+  return children({
+    isLoaded,
+    error,
+    videos: videos,
+    setVideos: setVideos,
+    followedChannels: followedChannels.current,
+    refresh,
+    requestError,
+  });
 };

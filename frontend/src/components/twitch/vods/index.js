@@ -2,7 +2,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import React, { useState, useEffect, useRef, useCallback, useContext } from 'react';
 import { Button } from 'react-bootstrap';
 
-import ErrorHandler from '../../error';
+import AlertHandler from '../../alert';
 import getFollowedVods from './GetFollowedVods';
 import VodElement from './VodElement';
 import { SubFeedContainer, LoadMore } from './../../sharedStyledComponents';
@@ -108,18 +108,24 @@ export default ({ videoElementsAmount }) => {
 
   if (!getCookie(`Twitch-access_token`)) {
     return (
-      <ErrorHandler
-        data={{
-          title: 'Not authenticated/connected with Twitch.',
-          message: 'No access token for twitch availible.',
-        }}
-      ></ErrorHandler>
+      <AlertHandler
+        title='Not authenticated/connected with Twitch.'
+        message='No access token for twitch availible.'
+      />
     );
-  } else if (error) {
-    return (
-      <>
-        <Header refresh={refresh} refreshing={refreshing} vods={vods} ref={VodHeaderRef} />
-        <ErrorHandler
+  }
+
+  return (
+    <>
+      <Header
+        refresh={refresh}
+        refreshing={refreshing}
+        vods={vods}
+        ref={VodHeaderRef}
+        vodError={vodError}
+      />
+      {error ? (
+        <AlertHandler
           data={error}
           style={{ marginTop: '-150px' }}
           element={
@@ -134,57 +140,63 @@ export default ({ videoElementsAmount }) => {
               Disable vods
             </Button>
           }
-        ></ErrorHandler>
-      </>
-    );
-  }
-
-  if (!vods || !vods.data) {
-    return (
-      <>
-        <Header refresh={refresh} refreshing={refreshing} vods={vods} ref={VodHeaderRef} />
-        <LoadingBoxes amount={videoElementsAmount} type='Vods' />
-      </>
-    );
-  } else {
-    return (
-      <>
-        <Header
-          refresh={refresh}
-          refreshing={refreshing}
-          vods={vods}
-          ref={VodHeaderRef}
-          vodError={vodError}
         />
-        <TransitionGroup
-          className={vodAmounts.transitionGroup || 'videos'}
-          component={SubFeedContainer}
-        >
-          {vods.data.slice(0, vodAmounts.amount).map((vod) => {
-            return (
-              <CSSTransition
-                key={vod.id}
-                // key={vod.id + vod.duration}
-                timeout={vodAmounts.timeout}
-                classNames={vod.transition || 'fade-750ms'}
-                unmountOnExit
-              >
-                <VodElement data={vod} />
-              </CSSTransition>
-            );
-          })}
-        </TransitionGroup>
-        <LoadMore
-          loaded={true}
-          text={vodAmounts.amount >= vods.data.length ? 'Show less (reset)' : 'Show more'}
-          onClick={() => {
-            if (vodAmounts.amount >= vods.data.length) {
+      ) : !vods || !vods.data ? (
+        <LoadingBoxes amount={videoElementsAmount} type='Vods' />
+      ) : (
+        <>
+          <TransitionGroup
+            className={vodAmounts.transitionGroup || 'videos'}
+            component={SubFeedContainer}
+          >
+            {vods.data.slice(0, vodAmounts.amount).map((vod) => {
+              return (
+                <CSSTransition
+                  key={vod.id}
+                  // key={vod.id + vod.duration}
+                  timeout={vodAmounts.timeout}
+                  classNames={vod.transition || 'fade-750ms'}
+                  unmountOnExit
+                >
+                  <VodElement data={vod} />
+                </CSSTransition>
+              );
+            })}
+          </TransitionGroup>
+          <LoadMore
+            loaded={true}
+            text={vodAmounts.amount >= vods.data.length ? 'Show less (reset)' : 'Show more'}
+            onClick={() => {
+              if (vodAmounts.amount >= vods.data.length) {
+                setVodAmounts({
+                  amount: videoElementsAmount,
+                  timeout: 0,
+                  transitionGroup: 'instant-disappear',
+                });
+
+                clearTimeout(resetTransitionTimer.current);
+                resetTransitionTimer.current = setTimeout(() => {
+                  setVodAmounts({
+                    amount: videoElementsAmount,
+                    timeout: 750,
+                    transitionGroup: 'videos',
+                  });
+                }, 750);
+              } else {
+                setVodAmounts((curr) => ({
+                  amount: curr.amount + videoElementsAmount,
+                  timeout: 750,
+                  transitionGroup: 'videos',
+                }));
+              }
+              clearTimeout(resetVodAmountsTimer.current);
+            }}
+            resetFunc={() => {
               setVodAmounts({
                 amount: videoElementsAmount,
                 timeout: 0,
                 transitionGroup: 'instant-disappear',
               });
-
               clearTimeout(resetTransitionTimer.current);
               resetTransitionTimer.current = setTimeout(() => {
                 setVodAmounts({
@@ -193,32 +205,10 @@ export default ({ videoElementsAmount }) => {
                   transitionGroup: 'videos',
                 });
               }, 750);
-            } else {
-              setVodAmounts((curr) => ({
-                amount: curr.amount + videoElementsAmount,
-                timeout: 750,
-                transitionGroup: 'videos',
-              }));
-            }
-            clearTimeout(resetVodAmountsTimer.current);
-          }}
-          resetFunc={() => {
-            setVodAmounts({
-              amount: videoElementsAmount,
-              timeout: 0,
-              transitionGroup: 'instant-disappear',
-            });
-            clearTimeout(resetTransitionTimer.current);
-            resetTransitionTimer.current = setTimeout(() => {
-              setVodAmounts({
-                amount: videoElementsAmount,
-                timeout: 750,
-                transitionGroup: 'videos',
-              });
-            }, 750);
-          }}
-        />
-      </>
-    );
-  }
+            }}
+          />
+        </>
+      )}
+    </>
+  );
 };

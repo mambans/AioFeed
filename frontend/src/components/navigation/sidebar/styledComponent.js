@@ -1,10 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Form, Button } from 'react-bootstrap';
-import Alert from 'react-bootstrap/Alert';
 import { MdRefresh } from 'react-icons/md';
 import { MdFormatIndentDecrease } from 'react-icons/md';
 import { FaWindowClose } from 'react-icons/fa';
+import styled from 'styled-components';
 
 export const StyledNavSidebar = styled.div`
   &&& {
@@ -136,18 +135,6 @@ export const StyledCreateForm = styled(Form)`
   /* width: 280px; */
   margin: auto;
   margin-top: 25px;
-`;
-
-export const StyledAlert = styled(Alert)`
-  text-align: 'center';
-  margin: 'auto';
-  opacity: '0.7';
-  padding: 0;
-  text-align: center;
-
-  .close {
-    padding: 0 7px 0 0;
-  }
 `;
 
 export const ShowAddFormBtn = styled(Button).attrs({ variant: 'outline-secondary' })`
@@ -487,15 +474,6 @@ export const ProfileImgInput = styled.form`
     li p {
       margin: 0;
     }
-  }
-`;
-
-export const StyledAccAlert = styled(Alert)`
-  text-align: center;
-  opacity: '0.7';
-
-  .close {
-    padding: 0 7px 0 0;
   }
 `;
 

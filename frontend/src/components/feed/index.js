@@ -7,7 +7,7 @@ import { Container, CenterContainer } from '../twitch/StyledComponents';
 import { HideSidebarButton } from '../twitch/sidebar/StyledComponents';
 import { VodsProvider } from './../twitch/vods/VodsContext';
 import AccountContext from './../account/AccountContext';
-import ErrorHandler from './../error';
+import AlertHandler from './../alert';
 import FeedsContext from './FeedsContext';
 import Handler from '../twitch/live/Handler';
 import Header from '../twitch/live/Header';
@@ -64,153 +64,136 @@ export default () => {
 
   if (!username) {
     return (
-      <>
-        <ErrorHandler
-          data={{
-            title: 'Please login',
-            message: 'You are not logged with your AioFeed account.',
-          }}
-        ></ErrorHandler>
-      </>
-    );
-  } else {
-    return (
-      <CenterContainer
-        winWidth={winWidth}
-        enableTwitter={enableTwitter}
-        enableTwitch={enableTwitch}
-        showTwitchSidebar={showTwitchSidebar}
-        twitterWidth={
-          enableTwitter
-            ? winWidth * (winWidth <= 2560 ? 0.2 * NrLists : 0.14 * NrLists) + NrLists * 20
-            : 0
-        }
-        twitchSidebarWidth={enableTwitch && showTwitchSidebar ? 275 : 0}
-        centerWidth={
-          350 *
-          Math.floor(
-            (winWidth -
-              ((enableTwitch && showTwitchSidebar ? 275 : 0) +
-                (enableTwitter
-                  ? winWidth * (winWidth <= 2560 ? 0.2 * NrLists : 0.14 * NrLists) + NrLists * 20
-                  : 150))) /
-              350
-          )
-        }
-        id='CenterContainer'
-      >
-        <NoFeedsEnable />
-        <Twitter />
-        <VodsProvider>
-          <CSSTransition
-            in={enableTwitch}
-            classNames='fade-750ms'
-            timeout={750}
-            unmountOnExit
-            appear
-          >
-            <Handler>
-              {(data) => (
-                <>
-                  <CSSTransition
-                    in={enableTwitch}
-                    timeout={750}
-                    classNames='fade-750ms'
-                    unmountOnExit
-                  >
-                    <Header data={data} />
-                  </CSSTransition>
-                  <CSSTransition
-                    in={enableTwitch}
-                    timeout={750}
-                    classNames='fade-750ms'
-                    appear
-                    unmountOnExit
-                  >
-                    <TwitchLive data={data} videoElementsAmount={videoElementsAmount} />
-                  </CSSTransition>
-
-                  <OverlayTrigger
-                    key={'bottom'}
-                    placement={'right'}
-                    delay={{ show: 500, hide: 0 }}
-                    overlay={
-                      <Tooltip id={`tooltip-${'right'}`}>{`${
-                        showTwitchSidebar ? 'Hide' : 'Show'
-                      } sidebar`}</Tooltip>
-                    }
-                  >
-                    <HideSidebarButton
-                      show={String(showTwitchSidebar)}
-                      onClick={() => {
-                        AddCookie('Twitch_SidebarEnabled', !showTwitchSidebar);
-                        setShowTwitchSidebar(!showTwitchSidebar);
-                      }}
-                    >
-                      Hide
-                    </HideSidebarButton>
-                  </OverlayTrigger>
-
-                  <CSSTransition
-                    in={enableTwitch && showTwitchSidebar}
-                    timeout={750}
-                    classNames='twitchSidebar'
-                    appear
-                    unmountOnExit
-                  >
-                    <Sidebar
-                      setShowTwitchSidebar={setShowTwitchSidebar}
-                      loaded={data.loaded}
-                      onlineStreams={data.liveStreams}
-                      newlyAdded={data.newlyAddedStreams}
-                      REFRESH_RATE={data.REFRESH_RATE}
-                    />
-                  </CSSTransition>
-                </>
-              )}
-            </Handler>
-          </CSSTransition>
-
-          <CSSTransition in={enableTwitchVods} classNames='fade-750ms' timeout={750} unmountOnExit>
-            <Container>
-              <TwitchVods videoElementsAmount={videoElementsAmount} />
-            </Container>
-          </CSSTransition>
-        </VodsProvider>
-
-        <CSSTransition
-          in={enableYoutube}
-          timeout={750}
-          classNames='fade-750ms'
-          unmountOnExit
-          appear
-        >
-          <Container>
-            <YoutubeDataHandler>
-              {(data) => (
-                <>
-                  <YoutubeHeader
-                    videos={data.videos}
-                    setVideos={data.setVideos}
-                    refresh={data.refresh}
-                    isLoaded={data.isLoaded}
-                    requestError={data.requestError}
-                    followedChannels={data.followedChannels}
-                  />
-
-                  {data.error && <ErrorHandler data={data.error}></ErrorHandler>}
-
-                  <Youtube
-                    requestError={data.requestError}
-                    videos={data.videos}
-                    videoElementsAmount={videoElementsAmount}
-                  />
-                </>
-              )}
-            </YoutubeDataHandler>
-          </Container>
-        </CSSTransition>
-      </CenterContainer>
+      <AlertHandler
+        title='Login to continue'
+        message='You are not logged with your AioFeed account.'
+      />
     );
   }
+  return (
+    <CenterContainer
+      winWidth={winWidth}
+      enableTwitter={enableTwitter}
+      enableTwitch={enableTwitch}
+      showTwitchSidebar={showTwitchSidebar}
+      twitterWidth={
+        enableTwitter
+          ? winWidth * (winWidth <= 2560 ? 0.2 * NrLists : 0.14 * NrLists) + NrLists * 20
+          : 0
+      }
+      twitchSidebarWidth={enableTwitch && showTwitchSidebar ? 275 : 0}
+      centerWidth={
+        350 *
+        Math.floor(
+          (winWidth -
+            ((enableTwitch && showTwitchSidebar ? 275 : 0) +
+              (enableTwitter
+                ? winWidth * (winWidth <= 2560 ? 0.2 * NrLists : 0.14 * NrLists) + NrLists * 20
+                : 150))) /
+            350
+        )
+      }
+      id='CenterContainer'
+    >
+      <NoFeedsEnable />
+      <Twitter />
+      <VodsProvider>
+        <CSSTransition in={enableTwitch} classNames='fade-750ms' timeout={750} unmountOnExit appear>
+          <Handler>
+            {(data) => (
+              <>
+                <CSSTransition
+                  in={enableTwitch}
+                  timeout={750}
+                  classNames='fade-750ms'
+                  unmountOnExit
+                >
+                  <Header data={data} />
+                </CSSTransition>
+                <CSSTransition
+                  in={enableTwitch}
+                  timeout={750}
+                  classNames='fade-750ms'
+                  appear
+                  unmountOnExit
+                >
+                  <TwitchLive data={data} videoElementsAmount={videoElementsAmount} />
+                </CSSTransition>
+
+                <OverlayTrigger
+                  key={'bottom'}
+                  placement={'right'}
+                  delay={{ show: 500, hide: 0 }}
+                  overlay={
+                    <Tooltip id={`tooltip-${'right'}`}>{`${
+                      showTwitchSidebar ? 'Hide' : 'Show'
+                    } sidebar`}</Tooltip>
+                  }
+                >
+                  <HideSidebarButton
+                    show={String(showTwitchSidebar)}
+                    onClick={() => {
+                      AddCookie('Twitch_SidebarEnabled', !showTwitchSidebar);
+                      setShowTwitchSidebar(!showTwitchSidebar);
+                    }}
+                  >
+                    Hide
+                  </HideSidebarButton>
+                </OverlayTrigger>
+
+                <CSSTransition
+                  in={enableTwitch && showTwitchSidebar}
+                  timeout={750}
+                  classNames='twitchSidebar'
+                  appear
+                  unmountOnExit
+                >
+                  <Sidebar
+                    setShowTwitchSidebar={setShowTwitchSidebar}
+                    loaded={data.loaded}
+                    onlineStreams={data.liveStreams}
+                    newlyAdded={data.newlyAddedStreams}
+                    REFRESH_RATE={data.REFRESH_RATE}
+                  />
+                </CSSTransition>
+              </>
+            )}
+          </Handler>
+        </CSSTransition>
+
+        <CSSTransition in={enableTwitchVods} classNames='fade-750ms' timeout={750} unmountOnExit>
+          <Container>
+            <TwitchVods videoElementsAmount={videoElementsAmount} />
+          </Container>
+        </CSSTransition>
+      </VodsProvider>
+
+      <CSSTransition in={enableYoutube} timeout={750} classNames='fade-750ms' unmountOnExit appear>
+        <Container>
+          <YoutubeDataHandler>
+            {(data) => (
+              <>
+                <YoutubeHeader
+                  videos={data.videos}
+                  setVideos={data.setVideos}
+                  refresh={data.refresh}
+                  isLoaded={data.isLoaded}
+                  requestError={data.requestError}
+                  followedChannels={data.followedChannels}
+                />
+
+                {data.error && <AlertHandler data={data.error}></AlertHandler>}
+
+                <Youtube
+                  requestError={data.requestError}
+                  videos={data.videos}
+                  videoElementsAmount={videoElementsAmount}
+                />
+              </>
+            )}
+          </YoutubeDataHandler>
+        </Container>
+      </CSSTransition>
+    </CenterContainer>
+  );
 };
