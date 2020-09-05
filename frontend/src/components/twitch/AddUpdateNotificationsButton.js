@@ -18,11 +18,11 @@ import useEventListenerMemo from '../../hooks/useEventListenerMemo';
  */
 
 export default ({ channel, loweropacity, marginright, size = 24 }) => {
-  const channels = getLocalstorage('UpdateNotificationsChannels') || [];
+  const channels = getLocalstorage('ChannelsUpdateNotifs') || [];
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
   const [updateNotificationEnabled, setUpdateNotificationEnabled] = useState(
-    channels && channels.includes(channel?.toLowerCase())
+    channels?.includes(channel?.toLowerCase())
   );
   const vodButton = useRef();
 
@@ -31,10 +31,10 @@ export default ({ channel, loweropacity, marginright, size = 24 }) => {
 
   async function removeChannel(channel) {
     try {
-      const channelss = new Set(getLocalstorage('UpdateNotificationsChannels') || []);
+      const channelss = new Set(getLocalstorage('ChannelsUpdateNotifs') || []);
       channelss.delete(channel?.toLowerCase());
 
-      localStorage.setItem('UpdateNotificationsChannels', JSON.stringify(Array.from(channelss)));
+      localStorage.setItem('ChannelsUpdateNotifs', JSON.stringify(Array.from(channelss)));
       await axios
         .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/updatechannels`, {
           username: username,
@@ -51,11 +51,11 @@ export default ({ channel, loweropacity, marginright, size = 24 }) => {
 
   async function addChannel() {
     try {
-      const existing = new Set(getLocalstorage('UpdateNotificationsChannels') || []);
+      const existing = new Set(getLocalstorage('ChannelsUpdateNotifs') || []);
 
       const newChannels = Array.from(existing.add(channel?.toLowerCase()));
 
-      localStorage.setItem('UpdateNotificationsChannels', JSON.stringify(newChannels));
+      localStorage.setItem('ChannelsUpdateNotifs', JSON.stringify(newChannels));
       await axios
         .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/updatechannels`, {
           username: username,

@@ -58,12 +58,6 @@ export default () => {
           AddCookie('AioFeed_AccountProfileImg', res.ProfileImg);
           AddCookie('AioFeed_AuthKey', res.AuthKey);
           AddCookie('AioFeed_AccountEmail', res.Email);
-          localStorage.setItem('Twitter-Lists', JSON.stringify(res.TwitterLists));
-          localStorage.setItem('VodChannels', JSON.stringify(res.MonitoredChannels));
-          localStorage.setItem(
-            'UpdateNotificationsChannels',
-            JSON.stringify(res.UpdateNotisChannels)
-          );
 
           if (res.TwitchPreferences && Object.keys(res.TwitchPreferences).length !== 0) {
             AddCookie('Twitch-access_token', res.TwitchPreferences.Token);
@@ -73,8 +67,24 @@ export default () => {
             AddCookie('Twitch-username', res.TwitchPreferences.Username);
             AddCookie('Twitch-profileImg', res.TwitchPreferences.Profile);
             AddCookie('Twitch_AutoRefresh', parseBolean(res.TwitchPreferences.AutoRefresh));
+            AddCookie('Twitch_FeedEnabled', parseBolean(res.TwitchPreferences.Enabled));
+            localStorage.setItem(
+              'Twitch-ChannelsUpdateNotifs',
+              JSON.stringify(res.TwitchPreferences.ChannelsUpdateNotifs)
+            );
+          }
 
-            // AddCookie("Youtube-Twitch_FeedEnabled", parseBolean(res.TwitchPreferences.enabled));
+          if (res.TwitchVodsPreferences && Object.keys(res.TwitchVodsPreferences).length !== 0) {
+            AddCookie('TwitchVods_FeedEnabled', res.TwitchVodsPreferences.Enabled);
+            localStorage.setItem(
+              'TwitchVods-Channels',
+              JSON.stringify(res.TwitchVodsPreferences.Channels)
+            );
+          }
+
+          if (res.TwitterPreferences && Object.keys(res.TwitterPreferences).length !== 0) {
+            AddCookie('Twitter_FeedEnabled', res.TwitterPreferences.Enabled);
+            localStorage.setItem('Twitter-Lists', JSON.stringify(res.TwitterPreferences.Lists));
           }
 
           if (res.YoutubePreferences && Object.keys(res.YoutubePreferences).length !== 0) {
@@ -85,9 +95,9 @@ export default () => {
 
           setTimeout(() => {
             setUsername(res.Username);
-          }, 0);
+          }, 100);
         } else {
-          console.log(res);
+          console.log(result);
         }
       })
       .catch((e) => {

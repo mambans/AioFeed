@@ -106,6 +106,32 @@ Resources:
                 Required: true
             - method.request.querystring.authkey:
                 Required: true
+  SoftUpdate:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Update a specific column mentioned as a param but merge it with its current value.'
+      Handler: softUpdate/handler.handler
+      Environment:
+        Variables:
+          USERNAME_TABLE: !Ref UserLogins
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserLogins
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /account/soft-update
+            Method: put
+          RequestParameters:
+            - method.request.querystring.username:
+                Required: true
+            - method.request.querystring.columnValue:
+                Required: true
+            - method.request.querystring.columnName:
+                Required: true
+            - method.request.querystring.authkey:
+                Required: true
   VodChannelsUpdate:
     Type: AWS::Serverless::Function
     Properties:

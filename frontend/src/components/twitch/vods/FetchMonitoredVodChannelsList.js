@@ -1,5 +1,5 @@
-import axios from "axios";
-import { getLocalstorage } from "../../../util/Utils";
+import axios from 'axios';
+import { getLocalstorage } from '../../../util/Utils';
 
 export default async (username, authKey) => {
   return await axios
@@ -10,13 +10,12 @@ export default async (username, authKey) => {
       },
     })
     .then((res) => {
-      if (res.data && res.data !== "") {
-        return res.data;
-      }
-      return getLocalstorage("VodChannels") || [];
+      if (res?.data !== '') return res.data;
+
+      return getLocalstorage('TwitchVods-Channels') || [];
     })
     .catch((err) => {
       console.error(err);
-      return getLocalstorage("VodChannels") || [];
+      return getLocalstorage('TwitchVods-Channels') || [];
     });
 };

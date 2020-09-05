@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-const DynamoDB = require("aws-sdk/clients/dynamodb");
-const client = new DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
+const DynamoDB = require('aws-sdk/clients/dynamodb');
+const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
 module.exports = async ({ username, authkey }) => {
   const res = await client
@@ -12,6 +12,6 @@ module.exports = async ({ username, authkey }) => {
     .promise();
 
   if (authkey === res.Item.AuthKey) {
-    return res.Item.MonitoredChannels;
+    return res.Item.TwitchVodsPreferences.Channels;
   }
 };

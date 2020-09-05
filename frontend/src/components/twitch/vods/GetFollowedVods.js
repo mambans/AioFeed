@@ -87,7 +87,7 @@ const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRe
       ];
 
       const channelsIdsUnfetchedVods = await vodChannels.filter((channel) => {
-        return !channelFetchedVods.includes(channel);
+        return !channelFetchedVods?.includes(channel);
       });
 
       return await Promise.all(

@@ -31,7 +31,7 @@ export default () => {
                 <b>{item.user_name}</b> {item.notiStatus}
               </Link>
               <Link to={`/${item.user_name?.toLowerCase()}/channel`} className='title'>
-                {(item.notiStatus.includes('updated') &&
+                {(item.notiStatus?.includes('updated') &&
                   item?.text?.split('\n').map((line) => {
                     return (
                       <p className='UpdateText' key={line}>

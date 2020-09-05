@@ -22,7 +22,7 @@ export default async ({
       resolve(restStreams);
     });
 
-    if (getLocalstorage('UpdateNotificationsChannels')) {
+    if (getLocalstorage('ChannelsUpdateNotifs')) {
       const existingStreams = res.filter((stream) => {
         return oldLiveStreams.current.find((old_stream) => {
           return old_stream.user_name === stream.user_name;
@@ -30,9 +30,7 @@ export default async ({
       });
 
       const UpdateEnabledStreams = existingStreams.filter((stream) => {
-        return getLocalstorage('UpdateNotificationsChannels').includes(
-          stream.user_name?.toLowerCase()
-        );
+        return getLocalstorage('ChannelsUpdateNotifs')?.includes(stream.user_name?.toLowerCase());
       });
 
       const newTitleAndGameStreams = UpdateEnabledStreams.filter((stream) => {

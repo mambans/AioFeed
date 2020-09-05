@@ -46,7 +46,7 @@ export default async ({
       });
       if (
         enableTwitchVods &&
-        getLocalstorage('VodChannels').includes(stream.user_name?.toLowerCase())
+        getLocalstorage('TwitchVods-Channels')?.includes(stream.user_name?.toLowerCase())
       ) {
         setTimeout(async () => {
           await FetchSingelChannelVods(stream.user_id, setVods, 'live');

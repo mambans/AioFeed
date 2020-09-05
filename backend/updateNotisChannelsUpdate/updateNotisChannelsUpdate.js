@@ -1,19 +1,19 @@
-"use strict";
+'use strict';
 
-const DynamoDB = require("aws-sdk/clients/dynamodb");
-const client = new DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
+const DynamoDB = require('aws-sdk/clients/dynamodb');
+const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
 module.exports = async ({ username, channels, authkey }) => {
   const res = await client
     .update({
       TableName: process.env.USERNAME_TABLE,
       Key: { Username: username },
-      UpdateExpression: `set #channels = :channels`,
-      ExpressionAttributeNames: { "#channels": "UpdateNotisChannels" },
+      UpdateExpression: `set #Preferences.ChannelsUpdateNotifs = :channels`,
+      ExpressionAttributeNames: { '#Preferences': 'TwitchPreferences' },
       ExpressionAttributeValues: {
-        ":channels": channels,
+        ':channels': channels,
       },
-      ReturnValues: "ALL_NEW",
+      ReturnValues: 'ALL_NEW',
     })
     .promise();
 

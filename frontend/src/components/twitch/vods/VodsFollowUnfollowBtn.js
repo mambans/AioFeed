@@ -19,7 +19,7 @@ import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
  */
 
 export default ({ channel, loweropacity, marginright, className }) => {
-  const channels = getLocalstorage('VodChannels');
+  const channels = getLocalstorage('TwitchVods-Channels');
   const { vods, setVods } = useContext(VodsContext) || {};
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
@@ -39,10 +39,10 @@ export default ({ channel, loweropacity, marginright, className }) => {
 
   async function removeChannel(channel) {
     try {
-      const vodChannels = new Set(channels || getLocalstorage('VodChannels') || []);
+      const vodChannels = new Set(channels || getLocalstorage('TwitchVods-Channels') || []);
 
       vodChannels.delete(channel?.toLowerCase());
-      localStorage.setItem('VodChannels', JSON.stringify(Array.from(vodChannels)));
+      localStorage.setItem('TwitchVods-Channels', JSON.stringify(Array.from(vodChannels)));
 
       const existingVodVideos = vods;
       const newVodVideos = {

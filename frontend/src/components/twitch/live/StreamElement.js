@@ -29,7 +29,7 @@ import loginNameFormat from './../loginNameFormat';
 const HOVER_DELAY = 100;
 
 function NewHighlightNoti({ newlyAddedStreams, login }) {
-  if (newlyAddedStreams && newlyAddedStreams.includes(login?.toLowerCase())) {
+  if (newlyAddedStreams?.includes(login?.toLowerCase())) {
     return (
       <FiAlertCircle
         size={22}
@@ -107,7 +107,7 @@ export default (data_p) => {
             id={`${data?.user_id}-${Date.now()}`}
             alt='thumbnail'
             style={
-              newlyAddedStreams && newlyAddedStreams.includes(data?.login)
+              newlyAddedStreams?.includes(data?.login)
                 ? { boxShadow: 'white 0px 0px 3px 2px' }
                 : null
             }

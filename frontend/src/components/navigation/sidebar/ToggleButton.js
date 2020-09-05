@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 
 import { StyledToggleButton } from './StyledComponent';
-import { AddCookie } from '../../../util/Utils';
+import { AddCookie, getCookie } from '../../../util/Utils';
+import axios from 'axios';
 
 export default ({
   setEnable,
@@ -16,11 +17,26 @@ export default ({
   scrollIntoView,
 }) => {
   const [checked, setChecked] = useState(enabled || false);
+  const timeout = useRef();
 
   function handleChange() {
     setEnable(!checked);
     setChecked(!checked);
     AddCookie(`${label}_FeedEnabled`, !checked);
+
+    clearTimeout(timeout.current);
+    timeout.current = setTimeout(async () => {
+      await axios
+        .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/soft-update`, {
+          username: getCookie(`AioFeed_AccountName`),
+          columnValue: { Enabled: !checked },
+          columnName: `${label}Preferences`,
+          authkey: getCookie(`AioFeed_AuthKey`),
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    }, 2500);
 
     if (scrollIntoView && !checked === true) {
       window.setTimeout(() => {

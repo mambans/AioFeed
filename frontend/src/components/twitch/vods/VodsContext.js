@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
-import FetchMonitoredVodChannelsList from "./FetchMonitoredVodChannelsList";
-import AccountContext from "../../account/AccountContext";
+import React, { useState, useEffect, useContext } from 'react';
+import FetchMonitoredVodChannelsList from './FetchMonitoredVodChannelsList';
+import AccountContext from '../../account/AccountContext';
 
 const VodsContext = React.createContext();
 
@@ -14,9 +14,9 @@ export const VodsProvider = ({ children }) => {
       const fetchedChannels = await FetchMonitoredVodChannelsList(username, authKey).then((res) => {
         return res.filter((channel) => channel);
       });
-      console.log("useEffect-fetchedChannels", fetchedChannels);
+      console.log('useEffect-fetchedChannels', fetchedChannels);
       setChannels(fetchedChannels);
-      localStorage.setItem("VodChannels", JSON.stringify(fetchedChannels));
+      localStorage.setItem('TwitchVods-Channels', JSON.stringify(fetchedChannels));
     })();
   }, [username, authKey]);
 
@@ -27,7 +27,8 @@ export const VodsProvider = ({ children }) => {
         setVods: setVods,
         channels: channels,
         setChannels: setChannels,
-      }}>
+      }}
+    >
       {children}
     </VodsContext.Provider>
   );

@@ -25,8 +25,7 @@ export default async ({
       stream.notiStatus = 'Offline';
       if (
         isEnabledOfflineNotifications &&
-        getLocalstorage('VodChannels') &&
-        getLocalstorage('VodChannels').includes(stream.user_name?.toLowerCase())
+        getLocalstorage('TwitchVods-Channels')?.includes(stream.user_name?.toLowerCase())
       )
         addSystemNotification({
           status: 'Offline',
@@ -38,8 +37,7 @@ export default async ({
 
       if (
         enableTwitchVods &&
-        getLocalstorage('VodChannels') &&
-        getLocalstorage('VodChannels').includes(stream.user_name?.toLowerCase())
+        getLocalstorage('TwitchVods-Channels')?.includes(stream.user_name?.toLowerCase())
       ) {
         setTimeout(async () => {
           await FetchSingelChannelVods(stream.user_id, setVods, 'offline');

@@ -8,7 +8,7 @@ const PREDefinedDayOptions = [0, 3, 7, 14, 30, 90, 180, 365];
 
 const convertDays = (nrOfDays) => {
   if (!nrOfDays) return 'lifetime';
-  if (!PREDefinedDayOptions.includes(nrOfDays))
+  if (!PREDefinedDayOptions?.includes(nrOfDays))
     return nrOfDays + ` Day${nrOfDays === 1 ? '' : 's'}`;
 
   const rawWeeks = Math.round(Math.min(nrOfDays / 7, 4));

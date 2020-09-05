@@ -65,10 +65,10 @@ export default ({ style, id, index }) => {
     setTwitterLists(newArray);
 
     await axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
+      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/soft-update`, {
         username: username,
-        columnValue: newArray,
-        columnName: 'TwitterLists',
+        columnValue: { Lists: newArray },
+        columnName: 'TwitterPreferences',
         authkey: getCookie(`AioFeed_AuthKey`),
       })
       .catch((e) => {
@@ -89,8 +89,8 @@ export default ({ style, id, index }) => {
     await axios
       .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
         username: username,
-        columnValue: newArray,
-        columnName: 'TwitterLists',
+        columnValue: { Lists: newArray },
+        columnName: 'TwitterPreferences',
         authkey: getCookie(`AioFeed_AuthKey`),
       })
       .catch((e) => {

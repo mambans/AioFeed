@@ -6,17 +6,21 @@ export default (setMainState) => {
   RemoveCookie('AioFeed_AccountProfileImg');
   RemoveCookie('AioFeed_AuthKey');
 
-  RemoveCookie('Twitter-Listname');
-  localStorage.removeItem('Twitter-Lists');
-
   RemoveCookie('Twitch-access_token');
   RemoveCookie('Twitch-refresh_token');
   RemoveCookie('Twitch-userId');
   RemoveCookie('Twitch-username');
   RemoveCookie('Twitch-profileImg');
-  RemoveCookie('TwitchVods_FeedEnabled');
+  RemoveCookie('Twitch_AutoRefresh');
   RemoveCookie('Twitch_FeedEnabled');
   RemoveCookie('Twitch-myState');
+  localStorage.removeItem('Twitch-ChannelsUpdateNotifs');
+
+  RemoveCookie('TwitchVods_FeedEnabled');
+  localStorage.removeItem('TwitchVods-Channels');
+
+  RemoveCookie('Twitter_FeedEnabled');
+  localStorage.removeItem('Twitter-Lists');
 
   RemoveCookie('Youtube-access_token');
   RemoveCookie('YoutubeUsername');

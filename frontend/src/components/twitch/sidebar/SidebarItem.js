@@ -24,7 +24,7 @@ const StyledNewHighlight = styled.div`
 `;
 
 const NewHighlight = ({ newlyAdded, stream }) => {
-  if (newlyAdded.includes(stream.user_name)) {
+  if (newlyAdded?.includes(stream.user_name)) {
     return <StyledNewHighlight />;
   } else {
     return '';
