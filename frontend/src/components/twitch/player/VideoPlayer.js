@@ -11,7 +11,7 @@ import API from '../API';
 export default () => {
   const channelName = useParams()?.channelName;
   const videoId = useParams()?.videoId;
-  const time = useLocation().search.replace('?t=', '').replace('?time=', '');
+  const time = useLocation().search?.replace(/[?t=]|/g, '') || null;
 
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
 
@@ -32,7 +32,7 @@ export default () => {
         layout: 'video',
         video: videoId || null,
         muted: false,
-        time: time.length >= 1 ? time : null,
+        time: time,
         allowfullscreen: true,
         parent: ['aiofeed.com'],
       })
@@ -61,7 +61,7 @@ export default () => {
           window.history.pushState(
             {},
             `AF | ${videoDetails?.user_name || ''} - ${videoDetails?.title || videoId}`,
-            `/${videoDetails?.user_name}/videos/${videoId}`
+            `/${videoDetails?.user_name}/videos/${videoId}${time ? `?t=${time}` : null}`
           );
         }
         setVideoInfo(videoDetails);
@@ -69,7 +69,7 @@ export default () => {
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [videoId, channelName, twitchVideoPlayer]);
+  }, [videoId, channelName, twitchVideoPlayer, time]);
 
   return (
     <>
