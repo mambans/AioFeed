@@ -1,6 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 
 const HoverIframe = styled.iframe`
   border: none;
@@ -23,33 +23,36 @@ const IframeContainer = styled.div`
   }
 `;
 
-export default (data) => (
+export default ({ data }) => (
   <IframeContainer>
     <HoverIframe
       // url={`https://player.twitch.tv/?channel=${data.data.user_name}&muted=true`}
       // url={`https://player.twitch.tv/?twitch5=1&channel=${data.data.user_name}&autoplay=true&muted=false&!controls`}
-      src={`https://player.twitch.tv/?channel=${data.data.user_name}&parent=aiofeed.com&autoplay=true&muted=false&!controls`}
-      title={data.data.user_name + "-iframe"}
+      src={`https://player.twitch.tv/?channel=${
+        data?.login?.toLowerCase() || data.user_name
+      }&parent=aiofeed.com&autoplay=true&muted=false&!controls`}
+      title={(data?.login?.toLowerCase() || data.user_name) + '-iframe'}
       theme='dark'
-      id={data.data.id + "-iframe"}
+      id={data.id + '-iframe'}
       width='336px'
       height='189px'
       // display='inline'
       position='absolute'
-      loading={"Loading.."}
+      loading={'Loading..'}
       allowFullScreen={true}
       frameBorder='0'
     />
     <Link
-      to={`/${data.data.user_name}`}
+      to={`/${data?.login?.toLowerCase() || data.user_name}`}
       alt=''
       style={{
-        position: "absolute",
-        height: "189px",
-        width: "336px",
-        zIndex: "10",
-        padding: "0",
-      }}>
+        position: 'absolute',
+        height: '189px',
+        width: '336px',
+        zIndex: '10',
+        padding: '0',
+      }}
+    >
       ""
     </Link>
   </IframeContainer>
