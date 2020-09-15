@@ -61,7 +61,7 @@ export default () => {
           window.history.pushState(
             {},
             `AF | ${videoDetails?.user_name || ''} - ${videoDetails?.title || videoId}`,
-            `/${videoDetails?.user_name}/videos/${videoId}${time ? `?t=${time}` : null}`
+            `/${videoDetails?.user_name}/videos/${videoId}${time ? `?t=${time}` : ''}`
           );
         }
         setVideoInfo(videoDetails);

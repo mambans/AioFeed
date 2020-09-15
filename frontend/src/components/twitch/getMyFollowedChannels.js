@@ -14,7 +14,7 @@ const fetchNextPageOfFollowers = async ({ total, PagePagination, followedchannel
 
     const channels = [...followedchannels, ...nextPage.data.data];
 
-    if (channels.length < total) {
+    if (channels?.length < total) {
       return await fetchNextPageOfFollowers({
         total: total,
         PagePagination: nextPage.data.pagination.cursor,

@@ -11,29 +11,29 @@ export default async ({
   try {
     const res = await new Promise((resolve, reject) => {
       if (!isEnabledUpdateNotifications) reject("Stream 'update' notifications are disabled.");
-      const restStreams = liveStreams.current.filter((stream) => {
+      const restStreams = liveStreams.current?.filter((stream) => {
         return oldLiveStreams.current.find(
           (old_stream) => stream.user_name === old_stream.user_name
         );
       });
 
-      if (restStreams.length <= 0) reject('No new Updated streams');
+      if (restStreams?.length <= 0) reject('No new Updated streams');
 
       resolve(restStreams);
     });
 
     if (getLocalstorage('ChannelsUpdateNotifs')) {
-      const existingStreams = res.filter((stream) => {
+      const existingStreams = res?.filter((stream) => {
         return oldLiveStreams.current.find((old_stream) => {
           return old_stream.user_name === stream.user_name;
         });
       });
 
-      const UpdateEnabledStreams = existingStreams.filter((stream) => {
+      const updateEnabledStreams = existingStreams?.filter((stream) => {
         return getLocalstorage('ChannelsUpdateNotifs')?.includes(stream.user_name?.toLowerCase());
       });
 
-      const newTitleAndGameStreams = UpdateEnabledStreams.filter((stream) => {
+      const newTitleAndGameStreams = updateEnabledStreams?.filter((stream) => {
         const oldStreamData = oldLiveStreams.current.find((old_stream) => {
           return old_stream.user_name === stream.user_name;
         });
@@ -59,7 +59,7 @@ export default async ({
         return null;
       });
 
-      const newGameStreams = UpdateEnabledStreams.filter((stream) => {
+      const newGameStreams = updateEnabledStreams.filter((stream) => {
         const oldStreamData = oldLiveStreams.current.find((old_stream) => {
           return old_stream.user_name === stream.user_name;
         });
@@ -79,7 +79,7 @@ export default async ({
         return null;
       });
 
-      const newTitleStreams = UpdateEnabledStreams.filter((stream) => {
+      const newTitleStreams = updateEnabledStreams.filter((stream) => {
         const oldStreamData = oldLiveStreams.current.find((old_stream) => {
           return old_stream.user_name === stream.user_name;
         });

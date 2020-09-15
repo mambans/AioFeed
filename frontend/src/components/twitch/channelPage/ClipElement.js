@@ -60,7 +60,7 @@ export default ({ ...data }) => {
           </p>
         </VodVideoInfo>
       </ImageContainer>
-      {title.length > 50 ? (
+      {title?.length > 50 ? (
         <OverlayTrigger
           key={'bottom'}
           placement={'bottom'}
@@ -72,17 +72,17 @@ export default ({ ...data }) => {
                 width: '320px',
               }}
             >
-              {title}
+              {title || ''}
             </Tooltip>
           }
         >
           <VideoTitle to={`/${login || user_name || broadcaster_name}/clip/${id}`}>
-            {truncate(title, 70)}
+            {truncate(title || '', 70)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
         <VideoTitle to={`/${login || user_name || broadcaster_name}/clip/${id}`}>
-          {title}
+          {title || ''}
         </VideoTitle>
       )}
 
@@ -109,7 +109,7 @@ export default ({ ...data }) => {
         <GameContainer>
           <a className={'gameImg'} href={'https://www.twitch.tv/directory/category/' + game_name}>
             <img
-              src={game_img.replace('{width}', 130).replace('{height}', 173)}
+              src={game_img?.replace('{width}', 130)?.replace('{height}', 173)}
               alt=''
               className={'gameImg'}
             />

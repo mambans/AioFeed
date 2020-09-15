@@ -22,7 +22,7 @@ export default async (category, page) => {
     const topStreams = await API.getStreams({
       params: {
         first: nrStreams,
-        game_id: game.id,
+        game_id: game?.id,
         after: page ? page.pagination.cursor : null,
       },
     }).catch((e) => {

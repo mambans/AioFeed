@@ -71,9 +71,8 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
         >
           <img
             src={
-              stream.profile_image_url
-                ? stream.profile_image_url.replace('{width}', 640).replace('{height}', 360)
-                : `${process.env.PUBLIC_URL}/android-chrome-512x512.png`
+              stream.profile_image_url?.replace('{width}', 640)?.replace('{height}', 360) ||
+              `${process.env.PUBLIC_URL}/android-chrome-512x512.png`
             }
             alt=''
           ></img>
@@ -93,7 +92,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
           />
         </FirstRow>
         <SecondRow>
-          {stream.game_name.length > 15 ? (
+          {stream.game_name?.length > 15 ? (
             <OverlayTrigger
               key={'bottom'}
               placement={'bottom'}
@@ -112,10 +111,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
               <p className={'sidebarGame'}>{stream.game_name}</p>
             </OverlayTrigger>
           ) : (
-            <div
-              className={'sidebarGame'}
-              // href={"https://www.twitch.tv/" + data.stream.user_name?.toLowerCase()}
-            >
+            <div className={'sidebarGame'}>
               <p>{truncate(stream.game_name, 15)}</p>
             </div>
           )}

@@ -65,7 +65,7 @@ export default ({ channel }) => {
         <div>
           <img
             id='game'
-            src={channel?.game_img?.replace('{width}', 130).replace('{height}', 173)}
+            src={channel?.game_img?.replace('{width}', 130)?.replace('{height}', 173)}
             alt=''
           />
           {channel?.game_name}
@@ -73,7 +73,7 @@ export default ({ channel }) => {
       </div>
       <img
         src={
-          channel?.thumbnail_url?.replace('{width}', 1280).replace('{height}', 720) +
+          channel?.thumbnail_url?.replace('{width}', 1280)?.replace('{height}', 720) +
           `#` +
           Date.now()
         }

@@ -81,7 +81,7 @@ export default ({ children }) => {
 
           if (
             !disableNotifications &&
-            (liveStreams.current.length >= 1 || oldLiveStreams.current.length >= 1)
+            (liveStreams.current?.length >= 1 || oldLiveStreams.current?.length >= 1)
           ) {
             await Promise.all([
               await LiveStreamsPromise({

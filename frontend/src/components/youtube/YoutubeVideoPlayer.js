@@ -22,7 +22,7 @@ export default () => {
   const getVideoInfoTimer = useRef();
 
   useEffect(() => {
-    setVideo({ id: videoId, startTime: location.search.replace(/[?t=]|s/g, '') });
+    setVideo({ id: videoId, startTime: location.search?.replace(/[?t=]|s/g, '') });
   }, [location.search, videoId]);
 
   useEffect(() => {

@@ -15,7 +15,7 @@ export default (data) => {
       <Styledsidebar id='twitchSidebar'>
         <SidebarHeader>Twitch Live</SidebarHeader>
 
-        {onlineStreams.length > 0 ? (
+        {onlineStreams?.length > 0 ? (
           <TransitionGroup className='sidebar' component={null}>
             {onlineStreams.map((stream) => {
               return (

@@ -112,12 +112,15 @@ export default () => {
           },
         })
           .then(async (res) => {
-            if (res.data.data.length === 0 && (!vods || !Array.isArray(vods) || vods.length < 1)) {
+            if (
+              res.data.data?.length === 0 &&
+              (!vods || !Array.isArray(vods) || vods?.length < 1)
+            ) {
               setVods({ error: 'No vods available' });
               return '';
             }
 
-            if (res.data.data.length === 0 && (vods || Array.isArray(vods) || vods.length > 1)) {
+            if (res.data.data?.length === 0 && (vods || Array.isArray(vods) || vods?.length > 1)) {
               setVodsLoadmoreLoaded(true);
               return '';
             }
@@ -174,14 +177,17 @@ export default () => {
         })
           .then(async (res) => {
             if (
-              res.data.data.length === 0 &&
-              (!clips || !Array.isArray(clips) || clips.length < 1)
+              res.data.data?.length === 0 &&
+              (!clips || !Array.isArray(clips) || clips?.length < 1)
             ) {
               setClips({ error: 'No clips available' });
               return '';
             }
 
-            if (res.data.data.length === 0 && (clips || Array.isArray(clips) || clips.length > 1)) {
+            if (
+              res.data.data?.length === 0 &&
+              (clips || Array.isArray(clips) || clips?.length > 1)
+            ) {
               setClipsLoadmoreLoaded(true);
               return '';
             }

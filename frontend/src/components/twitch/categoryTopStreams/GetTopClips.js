@@ -30,7 +30,7 @@ export default async (category, sortByTime, page) => {
     const topClips = await API.getClips({
       params: {
         first: nrStreams,
-        game_id: game.id,
+        game_id: game?.id,
         after: page ? page.pagination.cursor : null,
         started_at: sortByTime
           ? new Date(new Date().setDate(new Date().getDate() - sortByTime)).toISOString()

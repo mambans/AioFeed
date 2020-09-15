@@ -6,7 +6,7 @@ const getGameDetails = async (items) => {
   const games = [
     ...new Set(
       items.map((channel) => {
-        return channel && channel.game_id;
+        return channel?.game_id;
       })
     ),
   ];
@@ -14,7 +14,7 @@ const getGameDetails = async (items) => {
   const cachedGameInfo = getLocalstorage('Twitch_game_details') || { data: [] };
   const cachedFilteredGames = cachedGameInfo.data.filter((game) => game);
   const unCachedGameDetails = games.filter((game) => {
-    return !cachedFilteredGames.find((cachedGame) => cachedGame.id === game);
+    return !cachedFilteredGames?.find((cachedGame) => cachedGame.id === game);
   });
 
   const GamesToFetch = cachedGameInfo?.expire < Date.now() ? games : unCachedGameDetails;
@@ -43,9 +43,8 @@ const getGameDetails = async (items) => {
         console.log(error);
         return cachedFilteredGames;
       });
-  } else {
-    return cachedFilteredGames;
   }
+  return cachedFilteredGames;
 };
 
 /**
@@ -60,7 +59,7 @@ export default async ({ items }) => {
 
   const objWithGameName = await originalArray.data.map((stream) => {
     const foundGame = gameNames.find((game) => {
-      return game.id === stream.game_id;
+      return game?.id === stream?.game_id;
     });
     stream.game_name = foundGame ? foundGame.name : '';
     return stream;
@@ -68,7 +67,7 @@ export default async ({ items }) => {
 
   const finallObj = await objWithGameName.map((stream) => {
     const foundGame = gameNames.find((game) => {
-      return game.id === stream.game_id;
+      return game?.id === stream?.game_id;
     });
     stream.game_img = foundGame
       ? foundGame.box_art_url

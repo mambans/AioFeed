@@ -19,11 +19,11 @@ const markStreamAsSeen = async (streamName, newlyAddedStreams, setUnseenNotifica
   }).then((res) => {
     newlyAddedStreams.current = res;
 
-    if (document.title.length > 15 && res.length > 0) {
+    if (document.title?.length > 15 && res?.length > 0) {
       const title = document.title.substring(4);
       const count = parseInt(document.title.substring(1, 2)) - 1;
       document.title = `(${count}) ${title}`;
-    } else if (res.length === 0 && document.title !== 'AioFeed | Feed') {
+    } else if (res?.length === 0 && document.title !== 'AioFeed | Feed') {
       document.title = 'AioFeed | Feed';
     }
   });

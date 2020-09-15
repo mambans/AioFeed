@@ -113,13 +113,12 @@ export default (data_p) => {
             }
             src={
               // data.thumbnail_url.replace("{width}", 1280).replace("{height}", 720) +
-              data.thumbnail_url
-                ? data.thumbnail_url.replace('{width}', 858).replace('{height}', 480) +
-                  `#` +
-                  Date.now() +
-                  `?` +
-                  Date.now()
-                : `${process.env.PUBLIC_URL}/images/placeholder.webp`
+
+              data.thumbnail_url?.replace('{width}', 858)?.replace('{height}', 480) +
+                `#` +
+                Date.now() +
+                `?` +
+                Date.now() || `${process.env.PUBLIC_URL}/images/placeholder.webp`
             }
           />
         </Link>
@@ -128,7 +127,7 @@ export default (data_p) => {
         </Moment>
         {/* {streamType(data.data.type)} */}
       </ImageContainer>
-      {data.title.length > 50 ? (
+      {data.title?.length > 50 ? (
         <OverlayTrigger
           key={'bottom'}
           placement={'bottom'}
@@ -140,7 +139,7 @@ export default (data_p) => {
                 width: '336px',
               }}
             >
-              {data.title}
+              {data.title || ''}
             </Tooltip>
           }
         >
@@ -155,7 +154,7 @@ export default (data_p) => {
               },
             }}
           >
-            {truncate(data.title, 60)}
+            {truncate(data.title || '', 60)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
@@ -170,7 +169,7 @@ export default (data_p) => {
             },
           }}
         >
-          {data.title}
+          {data.title || ''}
         </VideoTitle>
       )}
       <div>
@@ -236,7 +235,7 @@ export default (data_p) => {
               href={'https://www.twitch.tv/directory/category/' + data.game_name}
             >
               <img
-                src={data.game_img.replace('{width}', 130).replace('{height}', 173)}
+                src={data.game_img?.replace('{width}', 130)?.replace('{height}', 173)}
                 alt=''
                 className={'gameImg'}
               />

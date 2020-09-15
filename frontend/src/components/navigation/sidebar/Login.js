@@ -59,7 +59,7 @@ export default () => {
           AddCookie('AioFeed_AuthKey', res.AuthKey);
           AddCookie('AioFeed_AccountEmail', res.Email);
 
-          if (res.TwitchPreferences && Object.keys(res.TwitchPreferences).length !== 0) {
+          if (res.TwitchPreferences && Object.keys(res.TwitchPreferences).length >= 1) {
             AddCookie('Twitch-access_token', res.TwitchPreferences.Token);
             AddCookie('Twitch-refresh_token', res.TwitchPreferences.Refresh_token);
 
@@ -74,7 +74,7 @@ export default () => {
             );
           }
 
-          if (res.TwitchVodsPreferences && Object.keys(res.TwitchVodsPreferences).length !== 0) {
+          if (res.TwitchVodsPreferences && Object.keys(res.TwitchVodsPreferences).length >= 1) {
             AddCookie('TwitchVods_FeedEnabled', res.TwitchVodsPreferences.Enabled);
             localStorage.setItem(
               'TwitchVods-Channels',
@@ -82,12 +82,12 @@ export default () => {
             );
           }
 
-          if (res.TwitterPreferences && Object.keys(res.TwitterPreferences).length !== 0) {
+          if (res.TwitterPreferences && Object.keys(res.TwitterPreferences).length >= 1) {
             AddCookie('Twitter_FeedEnabled', res.TwitterPreferences.Enabled);
             localStorage.setItem('Twitter-Lists', JSON.stringify(res.TwitterPreferences.Lists));
           }
 
-          if (res.YoutubePreferences && Object.keys(res.YoutubePreferences).length !== 0) {
+          if (res.YoutubePreferences && Object.keys(res.YoutubePreferences).length >= 1) {
             AddCookie('YoutubeUsername', res.YoutubePreferences.Username);
             AddCookie('YoutubeProfileImg', res.YoutubePreferences.Profile);
             AddCookie('Youtube-access_token', res.YoutubePreferences.Token);

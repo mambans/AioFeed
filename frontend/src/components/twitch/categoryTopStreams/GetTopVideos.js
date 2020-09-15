@@ -22,7 +22,7 @@ export default async (category, sortBy, page) => {
     const topVideos = await API.getVideos({
       params: {
         first: nrStreams,
-        game_id: game.id,
+        game_id: game?.id,
         sort: sortBy && sortBy?.toLowerCase(),
         type: 'all',
         period: 'all',

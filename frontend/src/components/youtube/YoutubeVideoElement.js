@@ -84,7 +84,7 @@ export default (data) => {
         )}
         {streamType(data.video.df)} */}
       </ImageContainer>
-      {data.video.snippet.title.length >= 50 ? (
+      {data.video.snippet.title?.length >= 50 ? (
         <OverlayTrigger
           key={'bottom'}
           placement={'bottom'}

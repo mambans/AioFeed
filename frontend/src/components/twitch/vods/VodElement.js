@@ -98,9 +98,8 @@ export default ({ data, vodBtnDisabled }) => {
           )}
           <img
             src={
-              data.thumbnail_url
-                ? data.thumbnail_url.replace('%{width}', 640).replace('%{height}', 360)
-                : 'https://vod-secure.twitch.tv/_404/404_processing_320x180.png'
+              data.thumbnail_url?.replace('%{width}', 640)?.replace('%{height}', 360) ||
+              'https://vod-secure.twitch.tv/_404/404_processing_320x180.png'
             }
             alt=''
           />
@@ -134,7 +133,7 @@ export default ({ data, vodBtnDisabled }) => {
           </VodType>
         )}
       </ImageContainer>
-      {data.title.length > 50 ? (
+      {data.title?.length > 50 ? (
         <OverlayTrigger
           key={'bottom'}
           placement={'bottom'}
@@ -146,7 +145,7 @@ export default ({ data, vodBtnDisabled }) => {
                 width: '320px',
               }}
             >
-              {data.title}
+              {data.title || ''}
             </Tooltip>
           }
         >
@@ -158,7 +157,7 @@ export default ({ data, vodBtnDisabled }) => {
               },
             }}
           >
-            {truncate(data.title, 70)}
+            {truncate(data.title || '', 70)}
             {/* {data.data.title} */}
           </VideoTitle>
         </OverlayTrigger>
@@ -171,7 +170,7 @@ export default ({ data, vodBtnDisabled }) => {
             },
           }}
         >
-          {data.title}
+          {data.title || ''}
         </VideoTitle>
       )}
       <ChannelContainer>

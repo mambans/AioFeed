@@ -265,7 +265,7 @@ export default (props) => {
               <Link to={'/category/'}>Show all</Link>
             </StyledShowAllButton>
 
-            {filteredInputMatched?.data.length >= 1 ? (
+            {filteredInputMatched?.data?.length >= 1 ? (
               <>
                 {filteredInputMatched?.data?.map((game, index) => {
                   return (
@@ -286,7 +286,7 @@ export default (props) => {
                         }}
                       >
                         <img
-                          src={game?.box_art_url?.replace('{width}', 300).replace('{height}', 300)}
+                          src={game?.box_art_url?.replace('{width}', 300)?.replace('{height}', 300)}
                           alt=''
                         />
                         {game?.name}

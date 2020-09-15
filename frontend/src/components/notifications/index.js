@@ -19,14 +19,14 @@ export default ({ leftExpandRef }) => {
     setShow(false);
     leftExpandRef.current.style.removeProperty('width');
     leftExpandRef.current.childNodes[
-      leftExpandRef.current.childNodes.length - 1
+      leftExpandRef.current.childNodes?.length - 1
     ].style.removeProperty('opacity');
   };
   const handleShow = () => {
     setShow(true);
     clearUnseenNotifications();
     leftExpandRef.current.style.width = '100%';
-    leftExpandRef.current.childNodes[leftExpandRef.current.childNodes.length - 1].style.opacity =
+    leftExpandRef.current.childNodes[leftExpandRef.current.childNodes?.length - 1].style.opacity =
       '0';
   };
 
