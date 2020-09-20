@@ -13,7 +13,6 @@ export const StyledNavSidebar = styled.div`
   color: var(--textColor1);
   position: fixed;
   top: 70px;
-  /* right: 0; */
   width: 100px;
   height: calc(100vh - 60px);
   background: var(--navigationbarBackground);
@@ -39,8 +38,6 @@ export const StyledNavSidebarBackdrop = styled.div`
 `;
 
 export const StyledProfileImg = styled.img`
-  /* max-width: calc(100% - 20px);
-  max-height: calc(380px / 16 * 9); */
   width: 100%;
   display: flex;
   margin: auto;
@@ -48,7 +45,6 @@ export const StyledProfileImg = styled.img`
 
 export const StyledToggleSwitch = styled.label`
   display: flex;
-  /* height: 40px; */
   align-items: center;
   cursor: pointer;
   width: max-content;
@@ -63,9 +59,7 @@ export const StyledToggleSwitch = styled.label`
 
 export const StyledConnectTwitch = styled(Button)`
   background-color: hsla(268, 77%, 30%, 1);
-  /* width: max-content; */
   margin-left: 0;
-  /* height: 42px; */
   border-radius: 10px;
   &&& {
     border: thin solid hsla(268, 77%, 30%, 1);
@@ -132,7 +126,6 @@ export const StyledCreateFormTitle = styled.div`
 `;
 
 export const StyledCreateForm = styled(Form)`
-  /* width: 280px; */
   margin: auto;
   margin-top: 25px;
 `;
@@ -170,9 +163,6 @@ export const StyledSidebarTrigger = styled(MdFormatIndentDecrease).attrs({ size:
   }
 
   position: absolute;
-  /* width: 52px;
-  height: 80%; */
-  /* border: 2px solid #c6c6c6; */
   border-radius: 50%;
   justify-content: center;
   align-items: center;
@@ -189,8 +179,6 @@ export const StyledSidebarTrigger = styled(MdFormatIndentDecrease).attrs({ size:
 `;
 
 export const StyledLogoutContiner = styled.div`
-  /* bottom: 5px; */
-  /* position: absolute; */
   right: 0;
   width: 100%;
   display: grid;
@@ -198,40 +186,29 @@ export const StyledLogoutContiner = styled.div`
   padding: 5px;
   grid-template-columns: 70% 30%;
   grid-template-rows: 60px;
-
   height: 120px;
 
-  button[label='logout'],
-  a[label='linkAsButton'] {
-    /* background-color: #333; */
+  button[label='logout'] {
+    background-color: #26292b;
+    grid-area: logout;
+    margin: auto;
     width: max-content;
     min-width: 170px;
-    /* height: 42.5px; */
     border: thin solid #313131;
     border-radius: 10px;
 
     &:hover {
-      background-color: lighten(#8a1f1f, 10%);
+      background-color: #434950;
     }
 
     &:focus {
-      box-shadow: 0 0 0 0.2rem lighten(#5c1313, 20%);
+      box-shadow: 0 0 0 0.2rem #434950;
     }
 
     &:active {
-      background-color: lighten(#791313, 25%);
-      border-color: lighten(#581010, 35%);
+      background-color: #434950;
+      border-color: #434950;
     }
-  }
-
-  button[label='logout'] {
-    grid-area: logout;
-    margin: auto;
-  }
-
-  a[label='linkAsButton'] {
-    grid-area: page;
-    margin: auto;
   }
 `;
 
@@ -286,7 +263,6 @@ export const DeleteAccountForm = styled(Form)`
 `;
 
 export const DeleteAccountFooter = styled.div`
-  /* margin-top: 60px; */
   position: absolute;
   bottom: 0;
 `;
@@ -295,8 +271,6 @@ export const StyledConnectContainer = styled.div`
   margin-bottom: 10px;
   display: grid;
   grid-template-areas: 'name disconnect';
-  /* grid-template-columns: 80% 20%; */
-  /* grid-template-rows: 50px; */
   grid-template-columns: min-content;
   color: white;
 
@@ -346,8 +320,6 @@ export const StyledConnectContainer = styled.div`
 
     p {
       margin: 0;
-      /* height: 100%; */
-      /* width: 100%; */
       align-items: center;
       display: flex;
       justify-content: center;
@@ -478,16 +450,11 @@ export const ProfileImgInput = styled.form`
 `;
 
 export const ProfileImgContainer = styled.div`
-  /* max-width: calc(100% - 20px); */
   width: 100%;
   max-height: calc(380px / 16 * 9);
 `;
 
 export const StyledToggleButton = styled(Button)`
-  /* &&& {
-
-} */
-
   opacity: ${({ enabled }) => (enabled === 'true' ? 1 : 0.35)};
   margin: 10px;
   border: none;
@@ -511,9 +478,12 @@ export const StyledToggleButton = styled(Button)`
     box-shadow: unset;
   }
 
+  .smallIcon {
+    margin-left: 5px;
+    transform: translateY(-3px);
+  }
+
   &:hover {
-    /* box-shadow: 0 0 0 0.1rem ${({ enabled }) => (enabled === 'true' ? 'green' : 'yellow')}; */
-    /* background:${({ enabled }) => (enabled === 'true' ? 'rgb(150, 0 ,0)' : 'rgb(0, 150, 0)')}; */
     background: ${({ enabled }) =>
       enabled === 'true' ? 'rgba(0, 150, 0, 0.5)' : 'rgba(150, 0 ,0, 0.5)'};
   }

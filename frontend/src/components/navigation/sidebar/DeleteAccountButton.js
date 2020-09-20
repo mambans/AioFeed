@@ -1,17 +1,17 @@
-import { Form, Button } from "react-bootstrap";
-import { MdDelete } from "react-icons/md";
-import Modal from "react-bootstrap/Modal";
-import React, { useState, useContext } from "react";
-import axios from "axios";
+import { Form, Button } from 'react-bootstrap';
+import { MdDelete } from 'react-icons/md';
+import Modal from 'react-bootstrap/Modal';
+import React, { useState, useContext } from 'react';
+import axios from 'axios';
 
-import { DeleteAccountForm, DeleteAccountButton } from "./StyledComponent";
-import AccountContext from "./../../account/AccountContext";
-import styles from "./Sidebar.module.scss";
-import useInput from "./../../../hooks/useInput";
-import NavigationContext from "../NavigationContext";
-import Alert from "./Alert";
-import ClearAllAccountCookiesStates from "./ClearAllAccountCookiesStates";
-import LoadingIndicator from "./../../LoadingIndicator";
+import { DeleteAccountForm, DeleteAccountButton } from './StyledComponent';
+import AccountContext from './../../account/AccountContext';
+import styles from './Sidebar.module.scss';
+import useInput from './../../../hooks/useInput';
+import NavigationContext from '../NavigationContext';
+import Alert from './Alert';
+import ClearAllAccountCookiesStates from './ClearAllAccountCookiesStates';
+import LoadingIndicator from './../../LoadingIndicator';
 
 export default () => {
   const { username, setUsername, authKey } = useContext(AccountContext);
@@ -30,7 +30,6 @@ export default () => {
   const deleteAccount = async (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === true && account === username) {
-      // console.log("Deleted account " + account);
       setValidated(true);
 
       await axios
@@ -40,18 +39,18 @@ export default () => {
         .then((res) => {
           ClearAllAccountCookiesStates(setUsername);
 
-          setRenderModal("create");
+          setRenderModal('create');
           setAlert({
             bold: res.data.Attributes.Username,
             message: ` account deleted`,
-            variant: "success",
+            variant: 'success',
           });
         })
         .catch((err) => {
           console.error(err);
           setAlert({
             message: err.response.data.message,
-            variant: "warning",
+            variant: 'warning',
           });
           setValidated(false);
           resetPassword();
@@ -59,7 +58,7 @@ export default () => {
     } else {
       event.preventDefault();
       event.stopPropagation();
-      console.log(account + " is Invalid Username");
+      console.log(account + ' is Invalid Username');
     }
   };
 
@@ -70,8 +69,8 @@ export default () => {
   };
 
   // eslint-disable-next-line no-unused-vars
-  const { value: account, bind: bindAccount, reset: resetAccount } = useInput("");
-  const { value: password, bind: bindPassword, reset: resetPassword } = useInput("");
+  const { value: account, bind: bindAccount, reset: resetAccount } = useInput('');
+  const { value: password, bind: bindPassword, reset: resetPassword } = useInput('');
 
   return (
     <>
@@ -83,7 +82,8 @@ export default () => {
         show={show}
         onHide={handleClose}
         dialogClassName={styles.modal}
-        backdropClassName={styles.modalBackdrop}>
+        backdropClassName={styles.modalBackdrop}
+      >
         <h2>Delete Account</h2>
         <div>
           <h4>Enter account name and password to delete</h4>

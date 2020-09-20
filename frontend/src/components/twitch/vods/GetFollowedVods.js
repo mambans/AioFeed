@@ -67,7 +67,6 @@ const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRe
           user_id: channel,
           period: 'month',
           first: 5,
-          // type: "archive",
           type: 'all',
         },
       }).then((response) => {
@@ -97,7 +96,6 @@ const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRe
               user_id: channel,
               period: 'month',
               first: 5,
-              // type: "archive",
               type: 'all',
             },
           }).then((response) => {

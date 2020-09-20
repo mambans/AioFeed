@@ -29,9 +29,7 @@ export const StyledLoadmore = styled.div`
     cursor: pointer;
     margin: 0;
     font-weight: bold;
-    /* color: #a4a4a4; */
     color: var(--textColor2);
-    /* text-shadow: 0px 0px 5px black; */
     padding: 0px 15px;
     transition: color 200ms, padding 200ms;
 
@@ -90,14 +88,12 @@ export const StyledCountdownCircle = styled.div`
   margin: auto;
   height: 24px;
   width: 24px;
-  /* text-align: center;*/
 
   div#countdown-number {
     display: inline-block;
     line-height: 24px;
     width: 24px;
     height: 24px;
-    /* color: rgb(255, 255, 255); */
     font-size: 12px;
     display: flex;
     justify-content: center;
@@ -127,7 +123,6 @@ export const StyledCountdownCircle = styled.div`
 `;
 
 export const pulse = keyframes`
-  /* 0% {background: #131416d1;} */
   0% {background: #121415d1;}
   40% {background: #1d1e23d1;}
   100% {background: #121415d1;}
@@ -146,7 +141,6 @@ export const StyledLoadingBox = styled.div`
   margin: 7px;
   max-height: 336px;
   margin-bottom: 15px;
-  /* height: ${({ type }) => (type === 'Vods' || type === 'Clips' ? 'unset' : '334px')}; */
   height: unset;
 
   transition: all 1s linear;
@@ -190,14 +184,11 @@ export const StyledLoadingBox = styled.div`
 
   #details {
     height: ${({ type }) => (type === 'Vods' ? '65px' : type === 'Clips' ? '25px' : '75px')};
-    /* height: 65px; */
 
     #channel {
       animation: ${pulse} 2s linear infinite;
       width: 100px;
-      /* height: 20px; */
       height: ${({ type }) => (type === 'Clips' ? '25px' : '20px')};
-      /* margin: 7px 0; */
       margin: ${({ type }) => (type === 'Clips' ? '0' : '7px 0')};
       transform: translate3d(0, 0, 0);
     }
@@ -291,19 +282,18 @@ export const Container = styled.div`
   margin-top: 0;
   padding-bottom: 50px;
   min-height: 400px;
-  /* min-height: 475px; */
 `;
 
 export const CenterContainer = styled.div`
   &&& {
     width: ${({ centerWidth }) => centerWidth}px;
+    max-width: 100%;
   }
 
   display: flex;
   justify-content: center;
   flex-flow: column;
   transition: width 750ms, margin 750ms;
-  /* margin-left: ${({ marginLeft }) => marginLeft + 'px'}; */
 
   margin-left: ${({
     enableTwitter,

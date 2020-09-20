@@ -24,6 +24,7 @@ export default ({ children }) => {
     enableTwitchVods,
     isEnabledOfflineNotifications,
     isEnabledUpdateNotifications,
+    enableForceRefreshThumbnail,
   } = useContext(FeedsContext);
   const [refreshTimer, setRefreshTimer] = useState(20);
   const [loadingStates, setLoadingStates] = useState({
@@ -31,6 +32,7 @@ export default ({ children }) => {
     error: null,
     loaded: false,
   });
+  const [thumbnailRefresh, setThumbnailRefresh] = useState();
   const followedChannels = useRef([]);
   const liveStreams = useRef();
   const oldLiveStreams = useRef([]);
@@ -43,8 +45,7 @@ export default ({ children }) => {
   useEventListenerMemo('storage', listener);
 
   const refresh = useCallback(
-    async (disableNotifications = false) => {
-      // console.log("refreshing");
+    async ({ disableNotifications = false, forceRefreshThumbnails = false } = {}) => {
       setLoadingStates(({ loaded }) => {
         return { refreshing: true, error: null, loaded: loaded };
       });
@@ -63,7 +64,6 @@ export default ({ children }) => {
           }));
 
         if (streams?.status === 200) {
-          // setError(null);
           const localStreams = getLocalstorage('newLiveStreamsFromPlayer') || {
             data: [],
             updated: Date.now(),
@@ -78,6 +78,9 @@ export default ({ children }) => {
             error: null,
             loaded: true,
           });
+          if (forceRefreshThumbnails && enableForceRefreshThumbnail) {
+            setThumbnailRefresh(Date.now());
+          }
 
           if (
             !disableNotifications &&
@@ -116,7 +119,6 @@ export default ({ children }) => {
             });
           }
         } else if (streams?.status === 201) {
-          // setError(streams.error);
           setLoadingStates({
             refreshing: false,
             error: streams.error,
@@ -124,7 +126,6 @@ export default ({ children }) => {
           });
         }
       } catch (error) {
-        // setError(error);
         setLoadingStates({
           refreshing: false,
           error: error,
@@ -139,12 +140,14 @@ export default ({ children }) => {
       isEnabledUpdateNotifications,
       isEnabledOfflineNotifications,
       setUnseenNotifications,
+      enableForceRefreshThumbnail,
     ]
   );
 
   function windowFocusHandler() {
     document.title = 'AioFeed | Feed';
     resetNewlyAddedStreams();
+    if (enableForceRefreshThumbnail) setThumbnailRefresh(Date.now());
   }
 
   function windowBlurHandler() {
@@ -170,8 +173,7 @@ export default ({ children }) => {
           if (autoRefreshEnabled) {
             setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
           }
-          await refresh(true);
-          // setIsLoaded(true);
+          await refresh({ disableNotifications: true });
         }
 
         if (autoRefreshEnabled && !timer.current) {
@@ -184,11 +186,9 @@ export default ({ children }) => {
         } else if (!autoRefreshEnabled && timer.current) {
           clearInterval(timer.current);
           timer.current = null;
-          // setIsLoaded(true);
           setLoadingStates({ refreshing: false, loaded: true, error: null });
         }
       } catch (error) {
-        // setError(error);
         setLoadingStates({ refreshing: false, error: error, loaded: true });
       }
     })();
@@ -216,15 +216,16 @@ export default ({ children }) => {
   return children({
     refreshing: loadingStates.refreshing,
     loaded: loadingStates.loaded,
-    refreshTimer: refreshTimer,
+    refreshTimer,
     followedChannels: followedChannels.current,
     error: loadingStates.error,
     liveStreams: liveStreams.current || [],
-    resetNewlyAddedStreams: resetNewlyAddedStreams,
-    refresh: refresh,
+    resetNewlyAddedStreams,
+    refresh,
     newlyAddedStreams: newlyAddedStreams.current,
-    REFRESH_RATE: REFRESH_RATE,
-    autoRefreshEnabled: autoRefreshEnabled,
-    refreshAfterUnfollowTimer: refreshAfterUnfollowTimer,
+    REFRESH_RATE,
+    autoRefreshEnabled,
+    refreshAfterUnfollowTimer,
+    thumbnailRefresh,
   });
 };

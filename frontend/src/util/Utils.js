@@ -5,26 +5,25 @@ export const RemoveCookie = (cookieName) => {
 
 export const AddCookie = (cookieName, value, expire_date) => {
   document.cookie = `${cookieName}=${value}; ${
-    expire_date ? `expires=${expire_date};` : ""
+    expire_date ? `expires=${expire_date};` : ''
   } path=/;  SameSite=Lax`;
 };
 
 export const getCookie = (cname) => {
-  var name = cname + "=";
+  var name = cname + '=';
   var decodedCookie = decodeURIComponent(document.cookie);
-  var ca = decodedCookie.split(";");
+  var ca = decodedCookie.split(';');
   for (var i = 0; i < ca.length; i++) {
     var c = ca[i];
-    while (c.charAt(0) === " ") {
+    while (c.charAt(0) === ' ') {
       c = c.substring(1);
     }
     if (c.indexOf(name) === 0) {
-      // console.log(`Cookie ${cname}: ${c.substring(name.length, c.length)}`);
-      if (c.substring(name.length, c.length) === "null") {
+      if (c.substring(name.length, c.length) === 'null') {
         return null;
-      } else if (c.substring(name.length, c.length) === "false") {
+      } else if (c.substring(name.length, c.length) === 'false') {
         return false;
-      } else if (c.substring(name.length, c.length) === "true") {
+      } else if (c.substring(name.length, c.length) === 'true') {
         return true;
       }
 
@@ -39,7 +38,7 @@ export const getLocalstorage = (name) => {
   try {
     const itemParsed = JSON.parse(item);
 
-    if (itemParsed === "null") {
+    if (itemParsed === 'null') {
       return null;
     } else {
       return itemParsed;
@@ -50,6 +49,6 @@ export const getLocalstorage = (name) => {
 };
 
 export const truncate = (input, max) => {
-  if (input && input.length > max) return input.substring(0, max) + "..";
+  if (input && input.length > max) return input.substring(0, max) + '..';
   else return input;
 };

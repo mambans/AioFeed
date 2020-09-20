@@ -39,7 +39,6 @@ export default React.forwardRef((props, ref) => {
                 margin: '0',
                 position: 'absolute',
                 marginLeft: '250px',
-                //color: #ffc51c,
                 backgroundColor: 'transparent',
                 border: 'none',
                 borderBottom: '1px solid',

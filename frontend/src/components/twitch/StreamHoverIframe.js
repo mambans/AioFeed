@@ -26,8 +26,6 @@ const IframeContainer = styled.div`
 export default ({ data }) => (
   <IframeContainer>
     <HoverIframe
-      // url={`https://player.twitch.tv/?channel=${data.data.user_name}&muted=true`}
-      // url={`https://player.twitch.tv/?twitch5=1&channel=${data.data.user_name}&autoplay=true&muted=false&!controls`}
       src={`https://player.twitch.tv/?channel=${
         data?.login?.toLowerCase() || data.user_name
       }&parent=aiofeed.com&autoplay=true&muted=false&!controls`}
@@ -36,7 +34,6 @@ export default ({ data }) => (
       id={data.id + '-iframe'}
       width='336px'
       height='189px'
-      // display='inline'
       position='absolute'
       loading={'Loading..'}
       allowFullScreen={true}

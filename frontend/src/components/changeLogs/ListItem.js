@@ -132,7 +132,6 @@ export default ({ name, body, published_at, showInfo, children }) => {
       let changes = [];
       let rest = [];
 
-      // console.log(body.split(/(?:\r\n|\. )/g));
       body.split(/(?:\r\n|\. )/g).map((sentence) => {
         const sentArray = sentence?.toLowerCase().split(' ');
         if (sentArray.some((word) => additionsKeywords.includes(word))) {

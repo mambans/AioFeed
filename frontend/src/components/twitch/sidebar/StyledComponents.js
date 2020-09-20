@@ -3,37 +3,10 @@ import { MdFormatIndentDecrease } from 'react-icons/md';
 import { pulse } from './../StyledComponents';
 
 export const SidebarInfoPopup = styled.div`
-  /* width: 325px; */
-  /* height: 62px; */
   position: fixed;
   background: var(--navigationbarBackground);
-  /* z-index: 5; */
   z-index: -1;
   left: 0;
-
-  /* span {
-    padding: 8px 0;
-    width: inherit;
-    height: inherit;
-    display: block;
-    line-height: 25px;
-    color: rgb(200, 200, 200);
-    font-size: 0.92rem;
-    overflow: hidden;
-  }
-
-  div {
-    height: 1px;
-    background: #aaaaaa;
-    width: 0px;
-    transition: width 1s cubic-bezier(0.32, 0.5, 0.17, 0.6);
-  }
-
-  &:hover {
-    div {
-      width: 320px;
-    }
-  } */
 `;
 
 export const Styledsidebar = styled.div`
@@ -66,7 +39,6 @@ export const SidebarHeader = styled.p`
 
 export const StyledsidebarItem = styled.div`
   display: grid;
-  /* grid-template-areas: "profile user  viewers" "profile row2 row2"; */
   grid-template-areas: 'profile user  user' 'profile row2 row2';
   grid-template-columns: 18% 56% 26%;
   grid-template-rows: 50% 50%;
@@ -229,8 +201,6 @@ export const SecondRow = styled.div`
   padding-top: 0px;
   display: flex;
   justify-content: space-between;
-  /* display: grid; */
-  /* grid-template-columns: auto 33%; */
 
   svg {
     color: rgb(120, 120, 120);

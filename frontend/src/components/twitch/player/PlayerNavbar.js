@@ -41,7 +41,7 @@ export default ({ channelName, streamInfo, setVisible, visible }) => {
         className='linkWithIcon'
         as={Link}
         to={{
-          pathname: `/${channelInfo?.user_name || channelName}/channel`,
+          pathname: `/${channelInfo?.user_name || channelName}/page`,
           state: {
             p_channelInfos: channelInfo,
             p_id: channelInfo?.user_id,

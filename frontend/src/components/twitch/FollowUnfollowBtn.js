@@ -20,12 +20,6 @@ export default ({
 
   const UnfollowStream = async () => {
     await validateToken().then(async () => {
-      // await API.deleteFollowKRAKEN({
-      //   params: {
-      //     myId: twitchUserId,
-      //     id: id,
-      //   },
-      // })
       await API.deleteFollow({
         params: {
           from_id: twitchUserId,

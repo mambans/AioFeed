@@ -49,10 +49,9 @@ function NewHighlightNoti({ newlyAddedStreams, login }) {
 
 export default (data_p) => {
   const location = useLocation();
-  const { data, newlyAddedStreams, refresh, refreshAfterUnfollowTimer } = data_p;
+  const { data, newlyAddedStreams, refresh, refreshAfterUnfollowTimer, thumbnailRefresh } = data_p;
   const [isHovered, setIsHovered] = useState(false);
   const { twitchVideoHoverEnable } = useContext(FeedsContext);
-
   const streamHoverTimer = useRef();
   const ref = useRef();
   const refChannel = useRef();
@@ -99,11 +98,8 @@ export default (data_p) => {
             },
           }}
         >
-          {/* href={
-                "https://player.twitch.tv/?volume=0.1&!muted&channel=" +
-                data.user_name.toLowerCase()
-              }> */}
           <img
+            key={thumbnailRefresh}
             id={`${data?.user_id}-${Date.now()}`}
             alt='thumbnail'
             style={
@@ -112,8 +108,6 @@ export default (data_p) => {
                 : null
             }
             src={
-              // data.thumbnail_url.replace("{width}", 1280).replace("{height}", 720) +
-
               data.thumbnail_url?.replace('{width}', 858)?.replace('{height}', 480) +
                 `#` +
                 Date.now() +
@@ -125,7 +119,6 @@ export default (data_p) => {
         <Moment interval={1} className={'duration'} durationFromNow>
           {data.started_at}
         </Moment>
-        {/* {streamType(data.data.type)} */}
       </ImageContainer>
       {data.title?.length > 50 ? (
         <OverlayTrigger
@@ -176,7 +169,7 @@ export default (data_p) => {
         <ChannelContainer ref={refChannel}>
           <Link
             to={{
-              pathname: `/${data?.login?.toLowerCase() || data.user_name}/channel`,
+              pathname: `/${data?.login?.toLowerCase() || data.user_name}/page`,
               state: {
                 p_id: data.user_id,
               },
@@ -188,7 +181,7 @@ export default (data_p) => {
           <ChannelNameDiv>
             <Link
               to={{
-                pathname: `/${data?.login?.toLowerCase() || data.user_name}/channel`,
+                pathname: `/${data?.login?.toLowerCase() || data.user_name}/page`,
                 state: {
                   p_id: data.user_id,
                 },

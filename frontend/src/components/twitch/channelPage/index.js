@@ -1,8 +1,7 @@
 import { MdChat } from 'react-icons/md';
-import { FaWindowClose } from 'react-icons/fa';
+import { FaWindowClose, FaRegClock } from 'react-icons/fa';
 import { MdLiveTv } from 'react-icons/md';
 import { useParams, useLocation, Link } from 'react-router-dom';
-import moment from 'moment';
 import React, { useEffect, useCallback, useState, useRef, useContext } from 'react';
 import Moment from 'react-moment';
 
@@ -16,13 +15,15 @@ import {
   Banner,
   Name,
   BannerInfoOverlay,
-  LiveIndicator,
-  LiveIndicatorIcon,
   VideoPlayer,
   Chat,
   StyledLiveInfoContainer,
   BlurredBannerImage,
   VideoChatButton,
+  ProfileImage,
+  NameAndButtons,
+  ButtonRow,
+  FullDescriptioon,
 } from './StyledComponents';
 import FollowUnfollowBtn from './../FollowUnfollowBtn';
 import AddVideoExtraData from '../AddVideoExtraData';
@@ -303,7 +304,6 @@ export default () => {
     return (
       <ChannelContainer>
         <Banner>
-          {/* <div id='Banner' alt='' style={{ backgroundColor: 'var(--navigationbarBackground)' }} /> */}
           <BannerInfoOverlay
             style={{
               backgroundColor: 'var(--navigationbarBackground)',
@@ -315,8 +315,10 @@ export default () => {
             <Name>
               <div id='HeaderChannelInfo' style={{ height: '80%' }}>
                 <div id='ChannelName'>
-                  <p id='ChannelLiveLink'>
-                    <img id='profileIcon' alt='' src={'asd'} />
+                  <p className='ChannelLiveLink'>
+                    <ProfileImage>
+                      <img alt='' src='' />
+                    </ProfileImage>
                     {!getCookie('Twitch-access_token')
                       ? "Can't fetch channel info, no access token found."
                       : channelName}
@@ -343,7 +345,6 @@ export default () => {
   } else {
     return (
       <>
-        {/* {channelInfo && <BlurredBackgroundImage image={channelInfo.profile_banner} />} */}
         <ChannelContainer>
           <VideoPlayer id='twitch-embed' style={{ display: videoOpen ? 'block' : 'none' }} />
           {chatOpen && (
@@ -351,9 +352,7 @@ export default () => {
               frameborder='0'
               scrolling='yes'
               theme='dark'
-              // id={id + "-chat"}
               src={`https://www.twitch.tv/embed/${channelName}/chat?darkpopout&parent=aiofeed.com`}
-              // style={{ display: chatOpen ? "block" : "none" }}
             />
           )}
           {videoOpen ? (
@@ -404,14 +403,13 @@ export default () => {
           )}
           {channelInfo ? (
             <Banner>
-              {/* <img id='Banner' alt='' src={channelInfo.profile_banner} /> */}
               <BannerInfoOverlay>
                 <Name>
                   {channelInfo && <BlurredBannerImage image={channelInfo.profile_banner} />}
 
                   <div id='HeaderChannelInfo'>
                     <div id='ChannelName'>
-                      {isLive && streamInfo && (
+                      {Boolean(isLive && streamInfo) && (
                         <StyledLiveInfoContainer
                           to={{
                             pathname: `/${channelName}`,
@@ -422,21 +420,16 @@ export default () => {
                         >
                           <div id='LiveDetails'>
                             <AnimatedViewCount
+                              disabePrefix={true}
                               viewers={streamInfo.viewer_count}
-                              prefix={'Viewers:'}
                             />
                             <span>
-                              Uptime:{' '}
                               <Moment interval={1} durationFromNow>
                                 {streamInfo.started_at}
                               </Moment>
+                              <FaRegClock size={12} />
                             </span>
                           </div>
-
-                          <LiveIndicator style={{ padding: '0 15px' }}>
-                            <LiveIndicatorIcon />
-                            <p>Live</p>
-                          </LiveIndicator>
                         </StyledLiveInfoContainer>
                       )}
                       <Link
@@ -446,38 +439,69 @@ export default () => {
                             p_channelInfos: streamInfo,
                           },
                         }}
-                        id='ChannelLiveLink'
+                        className='ChannelLiveLink'
                       >
-                        <img id='profileIcon' alt='' src={channelInfo.logo || p_logo} />
-                        {loginNameFormat({ ...channelInfo, login: channelInfo.name })}
+                        <ProfileImage live={Boolean(isLive && streamInfo)}>
+                          <img alt='' src={channelInfo.logo || p_logo} />
+                          {Boolean(isLive && streamInfo) && <div id='live'>Live</div>}
+                        </ProfileImage>
                       </Link>
-                      {channelInfo.partner && (
-                        <img
-                          id='partnered'
-                          title='Partnered'
-                          alt=''
-                          src={`${process.env.PUBLIC_URL}/partnered.png`}
-                        />
-                      )}
-                      {channelInfo && (
-                        <>
-                          <FollowUnfollowBtn channelName={channelName} id={channelInfo._id} />
-                          <AddUpdateNotificationsButton channel={channelName} size={30} />
-                        </>
-                      )}
+                      <NameAndButtons>
+                        <div className='buttonsContainer'>
+                          {channelInfo.partner && (
+                            <img
+                              id='partnered'
+                              title='Partnered'
+                              alt=''
+                              src={`${process.env.PUBLIC_URL}/partnered.png`}
+                            />
+                          )}
+                          {channelInfo && (
+                            <>
+                              <FollowUnfollowBtn channelName={channelName} id={channelInfo._id} />
+                              <AddUpdateNotificationsButton channel={channelName} size={30} />
+                            </>
+                          )}
+                        </div>
+                        <Link
+                          to={{
+                            pathname: `/${channelName}`,
+                            state: {
+                              p_channelInfos: streamInfo,
+                            },
+                          }}
+                          id='name'
+                        >
+                          {loginNameFormat({ ...channelInfo, login: channelInfo.name })}
+                        </Link>
+                      </NameAndButtons>
                     </div>
-                    <p id='title'>{channelInfo.status}</p>
-                    <Link to={`/category/${channelInfo.game}`} id='game'>
-                      {channelInfo.game}
+                    <Link
+                      id='title'
+                      to={{
+                        pathname: `/${channelName}`,
+                        state: {
+                          p_channelInfos: streamInfo || channelInfo,
+                        },
+                      }}
+                      className='ChannelLiveLink'
+                    >
+                      {channelInfo.status}
                     </Link>
-                    <p id='desc'>{channelInfo.description}</p>
-                    <div id='followViews'>
-                      <p>Followers: {channelInfo.followers}</p>
-                      <p>Views: {channelInfo.views}</p>
-                    </div>
-                    <p id='updated'>
-                      Updated: {moment(channelInfo.updated_at).format('YYYY/MM/DD HH:mm')}
-                    </p>
+                    <span>
+                      {Boolean(isLive && streamInfo) ? 'Playing ' : 'Played '}
+                      <Link to={`/category/${channelInfo.game}`} id='game'>
+                        {channelInfo.game}
+                      </Link>
+                    </span>
+
+                    <ButtonRow>
+                      <FullDescriptioon>{channelInfo.description}</FullDescriptioon>
+                      <div id='stats'>
+                        <p>{channelInfo.followers} followers</p>
+                        <p>{channelInfo.views} views</p>
+                      </div>
+                    </ButtonRow>
                   </div>
                 </Name>
               </BannerInfoOverlay>

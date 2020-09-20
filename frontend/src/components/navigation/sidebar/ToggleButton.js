@@ -15,6 +15,7 @@ export default ({
   icon,
   buttonsperrow,
   scrollIntoView,
+  smallerIcons,
 }) => {
   const [checked, setChecked] = useState(enabled || false);
   const timeout = useRef();
@@ -52,7 +53,11 @@ export default ({
       key={'bottom'}
       placement={'bottom'}
       delay={{ show: 200, hide: 0 }}
-      overlay={<Tooltip id={`tooltip-${'bottom'}`}>{tooltip}</Tooltip>}
+      overlay={
+        <Tooltip style={{ whiteSpace: 'pre-wrap' }} id={`tooltip-${'bottom'}`}>
+          {tooltip}
+        </Tooltip>
+      }
     >
       <StyledToggleButton
         onClick={handleChange}
@@ -62,6 +67,9 @@ export default ({
         enabled={checked.toString()}
       >
         {icon}
+        {React.Children.map(smallerIcons, (icon) =>
+          React.isValidElement(icon) ? React.cloneElement(icon, { className: 'smallIcon' }) : icon
+        )}
       </StyledToggleButton>
     </OverlayTrigger>
   );

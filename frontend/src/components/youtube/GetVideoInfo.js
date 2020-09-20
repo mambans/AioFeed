@@ -18,8 +18,7 @@ export default async (flattedVideosArray) => {
     getLocalstorage('YT-VideoDetails') &&
     getLocalstorage('YT-VideoDetails').data &&
     getLocalstorage('YT-VideoDetails').expire >= Date.now()
-      ? // getLocalstorage("YT-VideoDetails").expire <= new Date()
-        getLocalstorage('YT-VideoDetails')
+      ? getLocalstorage('YT-VideoDetails')
       : { data: [], expire: Date.now() + 7 * 24 * 60 * 60 * 1000 };
 
   const comparer = (otherArray) => {
@@ -38,7 +37,7 @@ export default async (flattedVideosArray) => {
       : videosArray;
 
   const noVideoDetailsIDS = videosWithNoExtraDetails.map(
-    (video) => video.contentDetails.upload.videoId,
+    (video) => video.contentDetails.upload.videoId
   );
 
   const newVideosDetails =
@@ -56,13 +55,13 @@ export default async (flattedVideosArray) => {
                     Accept: 'application/json',
                     Authorization: `Bearer ${getCookie('Youtube-access_token')}`,
                   },
-                },
+                }
               )
               .then((res) => res.data.items)
               .catch((e) => {
                 return null;
               });
-          }),
+          })
         ).then((res) => {
           const flattenArray = res.flat(1);
 
@@ -82,8 +81,8 @@ export default async (flattedVideosArray) => {
       ? moment
           .duration(
             newVideosDetails.data.find(
-              (detail) => detail?.id === video?.contentDetails.upload.videoId,
-            )?.contentDetails.duration,
+              (detail) => detail?.id === video?.contentDetails.upload.videoId
+            )?.contentDetails.duration
           )
           .format('hh:mm:ss')
       : '';

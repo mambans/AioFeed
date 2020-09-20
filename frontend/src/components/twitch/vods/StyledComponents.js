@@ -73,25 +73,13 @@ export const VodPreview = styled.div`
   animation-fill-mode: forwards;
   object-fit: cover;
   background-size: cover;
-  /* opacity: 0; */
-
   width: 336px;
   height: 189px;
   background-image: ${({ previewAvailable }) => `url(${previewAvailable})`};
   border-radius: 10px;
-
-  /* display: none; */
-  /* opacity: 0; */
-
-  /* animation: AnimateVodPreview 5s; */
-  /* animation-delay: 0.5s; */
-  /* image-rendering: optimizequality; */
-  /* image-rendering: crisp-edges; */
-  /* image-rendering: optimizespeed; */
 `;
 
 export const VodDates = styled.div`
-  /* grid-area: info; */
   color: var(--textColor2);
   font-size: 0.95rem;
   grid-column: 3;
@@ -101,7 +89,6 @@ export const VodDates = styled.div`
   justify-content: right;
   justify-self: right;
   white-space: nowrap;
-  /* mix-blend-mode: screen; */
 
   p {
     margin: 0;
@@ -111,8 +98,6 @@ export const VodDates = styled.div`
     position: relative;
     display: flex;
     justify-content: flex-end;
-    /* grid-column: 3; */
-    /* padding-right: 10px; */
     margin-bottom: 0;
     align-items: center;
 

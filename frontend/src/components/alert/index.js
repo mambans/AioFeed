@@ -13,6 +13,8 @@ export default (data) => {
     element = null,
     type = 'warning',
     show: manualShow = true,
+    hideMessage,
+    dismissible = true,
   } = data?.data || data;
   const [show, setShow] = useState(Boolean(title || message));
 
@@ -20,16 +22,17 @@ export default (data) => {
     return (
       <StyledAlert
         variant={type}
-        dismissible
+        dismissible={Boolean(onClose || dismissible)}
         onClose={() => {
-          onClose();
+          onClose && onClose();
           setShow(false);
         }}
         style={style}
       >
         <Alert.Heading>{title?.toString() || 'Oh-oh! Something bad happened.'}</Alert.Heading>
-        <hr />
-        {message?.toString() || 'An unexpected error occured. Try refreshing the page.'}
+        {!hideMessage && <hr />}
+        {!hideMessage &&
+          (message?.toString() || 'An unexpected error occured. Try refreshing the page.')}
         {element}
         {children}
       </StyledAlert>

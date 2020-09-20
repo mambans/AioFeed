@@ -70,10 +70,6 @@ export default () => {
               variant: 'warning',
             });
           }
-          // setError({
-          //   title: error.response.data,
-          //   message: error.response.status,
-          // });
         });
     } catch (e) {
       console.error(e);

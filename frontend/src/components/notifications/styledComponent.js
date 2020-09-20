@@ -87,7 +87,6 @@ export const Notification = styled.li`
 
   .title {
     color: #c1c1c1;
-    /* grid-area: title; */
     grid-row: 2;
   }
 
@@ -106,7 +105,6 @@ export const UnseenNotifcationCount = styled.div`
   width: 24px;
   border-radius: 50%;
   position: absolute;
-  /* top: -7px; */
   top: 5px;
   left: 20px;
   line-height: 24px;

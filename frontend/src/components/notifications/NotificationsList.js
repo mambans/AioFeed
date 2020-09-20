@@ -23,14 +23,14 @@ export default () => {
       {notifications?.map((item) => {
         return (
           <Notification key={item.key} status={item.notiStatus}>
-            <Link to={`/${item.user_name?.toLowerCase()}/channel`} className='profileImg' alt=''>
+            <Link to={`/${item.user_name?.toLowerCase()}/page`} className='profileImg' alt=''>
               <img src={item.profile_image_url} alt=''></img>
             </Link>
             <div className='textContainer'>
-              <Link to={`/${item.user_name?.toLowerCase()}/channel`} className='name'>
+              <Link to={`/${item.user_name?.toLowerCase()}/page`} className='name'>
                 <b>{item.user_name}</b> {item.notiStatus}
               </Link>
-              <Link to={`/${item.user_name?.toLowerCase()}/channel`} className='title'>
+              <Link to={`/${item.user_name?.toLowerCase()}/page`} className='title'>
                 {(item.notiStatus?.includes('updated') &&
                   item?.text?.split('\n').map((line) => {
                     return (

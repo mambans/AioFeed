@@ -15,8 +15,6 @@ export const NotificationsProvider = ({ children }) => {
     (notis) => {
       new Promise(async (resolve, reject) => {
         try {
-          // const oldUnseenNotifications = unseenNotifications;
-          // const existingNotifications = notifications || [];
           const oldUnseenNotifications = getLocalstorage('Unseen-notifications') || [];
           const existingNotifications = getLocalstorage('notifications') || [];
           const toAddUnseenUsernames = notis.map((stream) => {

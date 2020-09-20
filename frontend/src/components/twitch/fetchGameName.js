@@ -3,26 +3,26 @@ import API from './API';
 
 const getGameDetails = async (items) => {
   // Removes game id duplicates before sending game request.
-  const games = [
+  const gamesNonDuplicates = [
     ...new Set(
       items.map((channel) => {
         return channel?.game_id;
       })
     ),
-  ];
+  ].filter((game) => game);
 
   const cachedGameInfo = getLocalstorage('Twitch_game_details') || { data: [] };
-  const cachedFilteredGames = cachedGameInfo.data.filter((game) => game);
-  const unCachedGameDetails = games.filter((game) => {
-    return !cachedFilteredGames?.find((cachedGame) => cachedGame.id === game);
+  const filteredCachedGames = cachedGameInfo.data.filter((game) => game);
+  const unCachedGameDetails = gamesNonDuplicates.filter((game) => {
+    return !filteredCachedGames?.find((cachedGame) => cachedGame.id === game);
   });
 
-  const GamesToFetch = cachedGameInfo?.expire < Date.now() ? games : unCachedGameDetails;
+  const games = cachedGameInfo?.expire < Date.now() ? gamesNonDuplicates : unCachedGameDetails;
 
-  if (GamesToFetch?.length >= 1) {
+  if (Array.isArray(games) && games?.length >= 1) {
     return API.getGames({
       params: {
-        id: GamesToFetch,
+        id: games,
       },
     })
       .then((res) => {
@@ -30,21 +30,21 @@ const getGameDetails = async (items) => {
         localStorage.setItem(
           'Twitch_game_details',
           JSON.stringify({
-            data: [...cachedFilteredGames, ...filteredOutNulls],
+            data: [...filteredCachedGames, ...filteredOutNulls],
             expire:
               cachedGameInfo?.expire < Date.now()
                 ? Date.now() + 7 * 24 * 60 * 60 * 1000
                 : cachedGameInfo.expire,
           })
         );
-        return [...cachedFilteredGames, ...filteredOutNulls];
+        return [...filteredCachedGames, ...filteredOutNulls];
       })
       .catch((error) => {
         console.log(error);
-        return cachedFilteredGames;
+        return filteredCachedGames;
       });
   }
-  return cachedFilteredGames;
+  return filteredCachedGames;
 };
 
 /**

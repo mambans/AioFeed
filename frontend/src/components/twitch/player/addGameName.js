@@ -11,13 +11,14 @@ export default async ({ streamInfo, newStreamInfo }) => {
 
       const gameInfo =
         foundCachedGame ||
-        (await API.getGames({
-          params: {
-            id: newStreamInfo?.game_id,
-          },
-        }).then((res) => res.data.data[0]));
+        (newStreamInfo?.game_id &&
+          (await API.getGames({
+            params: {
+              id: newStreamInfo?.game_id,
+            },
+          }).then((res) => res.data.data[0])));
 
-      if (!foundCachedGame) {
+      if (!foundCachedGame && gameInfo) {
         localStorage.setItem(
           'Twitch_game_details',
           JSON.stringify({

@@ -36,8 +36,13 @@ export const FeedsProvider = ({ children }) => {
   const [isEnabledOfflineNotifications, setIsEnabledOfflineNotifications] = useState(
     getCookie('Twitch_offline_notifications')
   );
+
   const [isEnabledUpdateNotifications, setIsEnabledUpdateNotifications] = useState(
     getCookie('Twitch_update_notifications')
+  );
+
+  const [enableForceRefreshThumbnail, setEnableForceRefreshThumbnail] = useState(
+    getCookie('Twitch_thumbnail_refresh')
   );
 
   return (
@@ -63,6 +68,8 @@ export const FeedsProvider = ({ children }) => {
         setIsEnabledUpdateNotifications,
         twitterLists,
         setTwitterLists,
+        enableForceRefreshThumbnail,
+        setEnableForceRefreshThumbnail,
       }}
     >
       {children}

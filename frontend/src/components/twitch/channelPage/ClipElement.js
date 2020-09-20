@@ -37,10 +37,7 @@ export default ({ ...data }) => {
   return (
     <VideoContainer>
       <ImageContainer ref={imgRef}>
-        <a
-          // href={data.data.embed_url}
-          href={`https://www.twitch.tv/${login || user_name || broadcaster_name}/clip/${id}`}
-        >
+        <a href={`https://www.twitch.tv/${login || user_name || broadcaster_name}/clip/${id}`}>
           <img src={thumbnail_url} alt='' />
         </a>
         <VodVideoInfo>
@@ -90,7 +87,7 @@ export default ({ ...data }) => {
         <ChannelContainer>
           <Link
             to={{
-              pathname: `/${(login || broadcaster_name)?.toLowerCase()}/channel`,
+              pathname: `/${(login || broadcaster_name)?.toLowerCase()}/page`,
               state: {
                 p_id: broadcaster_id,
               },
@@ -99,10 +96,7 @@ export default ({ ...data }) => {
           >
             <img src={profile_image_url} alt='' className={'profileImg'} />
           </Link>
-          <Link
-            to={`/${(login || broadcaster_name)?.toLowerCase()}/channel`}
-            className='channelName'
-          >
+          <Link to={`/${(login || broadcaster_name)?.toLowerCase()}/page`} className='channelName'>
             {loginNameFormat(data.data)}
           </Link>
         </ChannelContainer>
@@ -120,7 +114,6 @@ export default ({ ...data }) => {
           <Moment
             className='viewers'
             style={{
-              // color: "var(--VideoContainerLinks)",
               gridColumn: 3,
               justifySelf: 'right',
             }}

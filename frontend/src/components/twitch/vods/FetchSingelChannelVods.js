@@ -23,7 +23,6 @@ export default async (channelId, setVods, status) => {
       user_id: channelId,
       period: 'month',
       first: 1,
-      // type: "archive",
       type: 'all',
     },
   }).then(async (res) => {

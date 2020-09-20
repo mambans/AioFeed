@@ -1,15 +1,13 @@
 import { Button } from 'react-bootstrap';
 import { GoSignOut } from 'react-icons/go';
 import React, { useContext, useState } from 'react';
-import { FaTwitch } from 'react-icons/fa';
-import { MdVideocam } from 'react-icons/md';
-import { FaYoutube } from 'react-icons/fa';
-import { FaTwitter } from 'react-icons/fa';
+import { MdVideocam, MdAutorenew } from 'react-icons/md';
+import { FaTwitch, FaYoutube, FaTwitter, FaRegWindowRestore } from 'react-icons/fa';
 import { FiSidebar } from 'react-icons/fi';
-import { MdAutorenew } from 'react-icons/md';
+import { BsFillImageFill } from 'react-icons/bs';
 import { TiFlash } from 'react-icons/ti';
+import { HiRefresh } from 'react-icons/hi';
 import { AiOutlineDisconnect } from 'react-icons/ai';
-import { FaRegWindowRestore } from 'react-icons/fa';
 
 import { AddCookie, getCookie } from '../../../util/Utils';
 import AccountContext from './../../account/AccountContext';
@@ -65,6 +63,8 @@ export default () => {
     setIsEnabledOfflineNotifications,
     isEnabledUpdateNotifications,
     setIsEnabledUpdateNotifications,
+    enableForceRefreshThumbnail,
+    setEnableForceRefreshThumbnail,
   } = useContext(FeedsContext);
   const [showAddImage, setShowAddImage] = useState(false);
 
@@ -241,6 +241,23 @@ export default () => {
           />
           <ToggleButton
             setEnable={(value) => {
+              setEnableForceRefreshThumbnail(value);
+              AddCookie('Twitch_thumbnail_refresh', value);
+            }}
+            enabled={enableForceRefreshThumbnail}
+            label='Twitch force refresh thumbnails'
+            tokenExists={getCookie(`Twitch-access_token`)}
+            tooltip={
+              getCookie(`Twitch-access_token`)
+                ? (enableForceRefreshThumbnail ? 'Disable ' : 'Enable ') +
+                  `force refresh thumbnails. \n(When problems with thumbnails not refreshing)`
+                : `Need to connect/authenticate with a Youtube account first.`
+            }
+            icon={<BsFillImageFill size={18} color='rgb(169, 112, 255)' />}
+            smallerIcons={<HiRefresh size={14} color='#ffffff' />}
+          />
+          <ToggleButton
+            setEnable={(value) => {
               setTwitchVideoHoverEnable(value);
               AddCookie('TwitchVideoHoverEnabled', value);
             }}
@@ -252,12 +269,8 @@ export default () => {
                 ? (twitchVideoHoverEnable ? 'Disable ' : 'Enable ') + `live video preview on hover`
                 : `Need to connect/authenticate with a Youtube account first.`
             }
-            icon={
-              <>
-                <FaRegWindowRestore size={18} />
-                <FaTwitch style={{ marginLeft: '5px' }} size={14} color='rgb(169, 112, 255)' />
-              </>
-            }
+            icon={<FaRegWindowRestore size={18} />}
+            smallerIcons={<FaTwitch size={14} color='rgb(169, 112, 255)' />}
           />
           <ToggleButton
             setEnable={(value) => {
@@ -272,12 +285,8 @@ export default () => {
                 ? (youtubeVideoHoverEnable ? 'Disable ' : 'Enable ') + `video on hover`
                 : `Need to connect/authenticate with a Youtube account first.`
             }
-            icon={
-              <>
-                <FaRegWindowRestore size={18} />
-                <FaYoutube style={{ marginLeft: '5px' }} size={14} color='rgb(255, 0, 0)' />
-              </>
-            }
+            icon={<FaRegWindowRestore size={18} />}
+            smallerIcons={<FaYoutube size={14} color='rgb(255, 0, 0)' />}
           />
         </ToggleButtonsContainer>
         <br />

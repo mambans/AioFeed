@@ -11,7 +11,6 @@ import {
 import StyledLoadingList from './../../twitch/categoryTopStreams/LoadingList';
 import ChannelListElement from './ChannelListElement';
 import { getLocalstorage } from '../../../util/Utils';
-// import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 
 export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
@@ -72,14 +71,6 @@ export default (data) => {
   const ulListRef = useRef();
 
   useLockBodyScroll(listIsOpen);
-
-  // useEventListenerMemo(
-  //   'focus',
-  //   () => {
-  //     setListIsOpen(true);
-  //   },
-  //   inputRef.current
-  // );
 
   const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue);

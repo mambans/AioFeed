@@ -14,7 +14,6 @@ import { getCookie } from '../../../util/Utils';
 
 const StyledForm = styled(Form)`
   margin: 10px;
-  /* transition: opacity 250ms; */
 
   &:hover,
   &:focus-within,

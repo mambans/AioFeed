@@ -1,7 +1,6 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { Button } from 'react-bootstrap';
-import { MdVideocam } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
 export const ChannelContainer = styled.div`
@@ -13,18 +12,9 @@ export const ChannelContainer = styled.div`
 export const Banner = styled.div`
   height: 300px;
   margin-bottom: 20px;
-
-  /* #Banner {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  } */
 `;
 
 export const BannerInfoOverlay = styled.div`
-  /* height: 100%; */
-  /* position: absolute; */
-  /* top: 60px; */
   width: 100%;
 `;
 
@@ -50,12 +40,11 @@ export const Name = styled.div`
   text-shadow: 0px 0px 1px black;
 
   #HeaderChannelInfo {
+    position: relative;
     z-index: 1;
     display: flex;
     flex-flow: column;
     text-align: center;
-    /* background-color: #00000021; */
-    /* box-shadow: 20px 20px 20px #000000bd; */
     border-radius: 15px;
     padding: 10px;
     width: calc(30% - 6px);
@@ -76,7 +65,7 @@ export const Name = styled.div`
       mix-blend-mode: screen;
     }
 
-    #ChannelLiveLink {
+    .ChannelLiveLink {
       &&& {
         font-size: 2rem;
       }
@@ -86,6 +75,7 @@ export const Name = styled.div`
 
     #title {
       font-size: 1.1rem;
+      margin: 0 auto;
     }
 
     #game {
@@ -93,6 +83,7 @@ export const Name = styled.div`
       margin-bottom: 0.6rem;
       font-size: inherit;
       padding: 0;
+      margin: 0 auto 10px;
 
       &:hover {
         text-decoration: underline;
@@ -100,7 +91,6 @@ export const Name = styled.div`
     }
 
     #desc,
-    #updated,
     #game,
     #followViews {
       color: #ffffff;
@@ -127,7 +117,6 @@ export const Name = styled.div`
     }
 
     #PlaceholderSmallText {
-      /* background-color: #adadadcf; */
       height: 24px;
       margin-bottom: 1rem;
       width: 100px;
@@ -154,16 +143,14 @@ export const Name = styled.div`
     }
   }
 
-  #profileIcon {
-    padding: 0 10px;
-  }
-
-  img {
-    height: 50px;
-  }
-
   #partnered {
     height: 25px;
+  }
+
+  &:hover {
+    #lastUpdate {
+      opacity: 1;
+    }
   }
 `;
 
@@ -198,23 +185,10 @@ export const SortButton = styled(Button).attrs({ variant: 'dark' })`
   }
 `;
 
-const breathRedColor = keyframes`
-    0% {
-      color: #ff0000;
-    }
-    50% {
-      color: #8a0000;
-    }
-    100% {
-      color: #ff0000;
-    }
-  `;
-
 export const SortDropDownList = styled.ul`
   position: absolute;
   padding: 10px;
   list-style: none;
-  /* margin-top: 42px; */
   background-color: rgba(20, 23, 25, 0.9);
   border-radius: 0 0 5px 5px;
   width: 200px;
@@ -240,26 +214,6 @@ export const SortDropDownList = styled.ul`
   }
 `;
 
-export const LiveIndicator = styled.div`
-  color: red;
-  /* margin-left: -55px;
-  padding-right: 15px; */
-  animation: ${breathRedColor} 3s linear 1s infinite;
-
-  p {
-    &&& {
-      margin-bottom: 0;
-    }
-    margin: 0;
-    text-align: left;
-    padding-left: 5px;
-  }
-`;
-
-export const LiveIndicatorIcon = styled(MdVideocam).attrs({ size: 30 })`
-  /* position: absolute; */
-`;
-
 export const VideoPlayer = styled.div`
   height: 300px;
   width: calc(300px * 1.777777777777778);
@@ -278,11 +232,12 @@ export const Chat = styled.iframe`
 
 export const StyledLiveInfoContainer = styled(Link)`
   align-items: center;
-  width: 200px;
   display: flex;
-  margin-left: -200px;
   justify-content: center;
   color: white;
+  position: absolute;
+  width: 100px;
+  transform: translateX(-150px);
 
   &:hover {
     color: white;
@@ -293,8 +248,8 @@ export const StyledLiveInfoContainer = styled(Link)`
     flex-direction: column;
   }
 
-  @media screen and (max-width: 1920px) {
-    margin-right: calc(40% - 250px);
+  svg {
+    margin-left: 5px;
   }
 `;
 
@@ -309,22 +264,15 @@ export const BlurredBackgroundImage = styled.div`
 
 export const BlurredBannerImage = styled.div`
   position: absolute;
-  /* width: 30%; */
   width: calc(100% - 60px);
-  /* height: 100%; */
   height: inherit;
   filter: blur(3px) brightness(0.75);
   background-image: url(${({ image }) => image});
   background-size: cover;
   border-radius: 15px;
-  /* margin-top: 15px; */
   background-position: center;
   box-shadow: 5px 5px 5px black;
   border: black solid 2px;
-
-  /* @media screen and (max-width: 1920px) {
-    width: 40%;
-  } */
 `;
 
 const StyledVideoChatButton = styled(Button).attrs({ variant: 'dark-outline' })`
@@ -386,3 +334,101 @@ export const VideoChatButton = ({ id, onClick, children }) => (
     {children}
   </StyledVideoChatButton>
 );
+
+const breathRedColor = keyframes`
+    0% {
+      background-color: #ff0000;
+    }
+    50% {
+      background-color: #8a0000;
+    }
+    100% {
+      background-color: #ff0000;
+    }
+  `;
+
+const breathPurpleBlueColor = keyframes`
+    0% {
+      border-color: #7309cb;
+    }
+    50% {
+      border-color: #1585b1;
+    }
+    100% {
+      border-color: #7309cb;
+    }
+  `;
+
+const PurpleBreathAnimation = () => css`
+  ${breathPurpleBlueColor} 10s linear 1s infinite;
+`;
+
+export const ProfileImage = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+
+  img {
+    margin: 0 10px;
+    border-radius: 50%;
+    border: 5px solid ${({ live }) => (live ? '#8b00ff' : 'transparent')};
+    height: 80px;
+    animation: ${({ live }) => (live ? PurpleBreathAnimation : 'unset')};
+
+    &::after {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  div#live {
+    color: white;
+    background: red;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    position: absolute;
+    width: 55%;
+    transform: translateY(-6px);
+    animation: ${breathRedColor} 3s linear 1s infinite;
+  }
+`;
+
+export const NameAndButtons = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  a#name {
+    color: white;
+    padding: 0 10px;
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+
+  div.buttonsContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+`;
+
+export const ButtonRow = styled.div`
+  color: #ffffff;
+  bottom: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
+  #stats {
+    display: flex;
+    justify-content: center;
+    opacity: 0.7;
+  }
+
+  p {
+    margin: 0 10px;
+  }
+`;
+
+export const FullDescriptioon = styled.p``;

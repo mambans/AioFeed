@@ -3,16 +3,9 @@ import styled from 'styled-components';
 import { pulse } from '../twitch/StyledComponents';
 
 export const Container = styled.div`
-  /* width: ${({ width }) => width + 'px' || '15vw'}; */
-  /* width: ${({ width }) => width}; */
   width: 14vw;
   height: ${({ footerVisibleInViewport }) =>
     footerVisibleInViewport ? `calc(92vh - ${footerVisibleInViewport}px)` : '92vh'};
-  /* position: fixed;  */
-  /* right: ${({ otherFeedsEnabled }) =>
-    otherFeedsEnabled ? '25px' : 'calc(50% - (15vw / 2))'}; */
-  /* top: 90px; */
-  /* background: var(--twitterBackground); */
   background: var(--sidebarsBackgroundColor);
   border-radius: 10px 10px 2px 2px;
   transition: height 500ms;
@@ -21,8 +14,6 @@ export const Container = styled.div`
 
   @media screen and (max-width: 2560px) {
     width: 20vw;
-    /* right: ${({ otherFeedsEnabled }) =>
-      otherFeedsEnabled ? '25px' : 'calc(50% - (20vw / 2))'}; */
   }
 `;
 
@@ -33,8 +24,8 @@ export const MainContainer = styled.div`
   top: 90px;
   height: ${({ footerVisibleInViewport }) =>
     footerVisibleInViewport ? `calc(92vh - ${footerVisibleInViewport}px)` : '92vh'};
-  right: ${({ otherFeedsEnabled }) => (otherFeedsEnabled ? '10px' : '50%')};
-  transform: ${({ otherFeedsEnabled }) => (otherFeedsEnabled ? 'unset' : 'translateX(50%)')};
+  right: ${({ center }) => (center ? '50%' : '10px')};
+  transform: ${({ center }) => (center ? 'translateX(50%)' : 'unset')};
 
   display: flex;
 `;

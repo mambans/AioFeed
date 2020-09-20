@@ -110,7 +110,7 @@ export default ({
           return p_channel.user_name?.toLowerCase().includes(value?.toLowerCase());
         });
 
-        if (foundChannel) return `${foundChannel.user_name}${!foundChannel.live ? '/channel' : ''}`;
+        if (foundChannel) return `${foundChannel.user_name}${!foundChannel.live ? '/page' : ''}`;
 
         return value;
       },
@@ -286,7 +286,7 @@ export default ({
         <SearchSubmitBtn
           disabled={!channel}
           to={{
-            pathname: `/${channel}/channel/`,
+            pathname: `/${channel}/page/`,
           }}
         />
         {showButton && (

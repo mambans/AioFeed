@@ -10,7 +10,6 @@ export const StyledFooterContainer = styled.div`
   max-height: 200px;
   width: 100%;
   color: var(--textColor2);
-  /* margin-left: ${({ showTwitchSidebar }) => (showTwitchSidebar ? '275px' : 'unset')}; */
   transition: width 750ms, margin 750ms;
 
   ul {

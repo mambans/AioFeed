@@ -65,10 +65,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
       <StyledsidebarItem key={stream.user_id} duration={shows}>
         <NewHighlight newlyAdded={newlyAdded} stream={stream}></NewHighlight>
 
-        <div
-          className={'profileImage'}
-          // href={"https://www.twitch.tv/" + data.stream.user_name?.toLowerCase()}
-        >
+        <div className={'profileImage'}>
           <img
             src={
               stream.profile_image_url?.replace('{width}', 640)?.replace('{height}', 360) ||
@@ -78,12 +75,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
           ></img>
         </div>
         <FirstRow>
-          <div
-            className={'sidebarUser'}
-            // href={"https://www.twitch.tv/" + data.stream.user_name?.toLowerCase()}
-          >
-            {truncate(loginNameFormat(stream), 16)}
-          </div>
+          <div className={'sidebarUser'}>{truncate(loginNameFormat(stream), 16)}</div>
 
           <AnimatedViewCount
             className={'sidebarViewers'}
@@ -133,7 +125,6 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
         <SidebarInfoPopup>
           <div className='borderTop'></div>
           <LiveInfoPopup channel={stream} />
-          {/* <span>{stream.title}</span> */}
           <div className='borderBottom'></div>
         </SidebarInfoPopup>
       </CSSTransition>

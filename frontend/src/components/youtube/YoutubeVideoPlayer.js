@@ -6,7 +6,6 @@ import YouTube from 'react-youtube';
 
 import { VideoAndChatContainer, ShowNavbarBtn } from './../twitch/player/StyledComponents';
 import NavigationContext from './../navigation/NavigationContext';
-// import PlayerNavbar from './PlayerNavbar';
 
 const StyledYoutubeIframe = styled(YouTube)`
   border: none;
@@ -55,7 +54,6 @@ export default () => {
 
   return (
     <>
-      {/* <PlayerNavbar visible={visible} /> */}
       <VideoAndChatContainer
         visible={visible}
         style={{

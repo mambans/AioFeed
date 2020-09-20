@@ -13,13 +13,15 @@ import LoadingBoxes from './../LoadingBoxes';
 import FeedsContext from '../../feed/FeedsContext';
 import { AddCookie, getCookie } from '../../../util/Utils';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
+import { CenterContext } from './../../feed/FeedsCenterContainer';
 
-export default ({ videoElementsAmount }) => {
+export default () => {
   const { vods, setVods } = useContext(VodsContext);
   const { authKey, username, twitchUserId, setTwitchToken, setRefreshToken } = useContext(
     AccountContext
   );
   const { setEnableTwitchVods } = useContext(FeedsContext);
+  const { videoElementsAmount } = useContext(CenterContext);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [vodError, setVodError] = useState(null);
@@ -153,7 +155,6 @@ export default ({ videoElementsAmount }) => {
               return (
                 <CSSTransition
                   key={vod.id}
-                  // key={vod.id + vod.duration}
                   timeout={vodAmounts.timeout}
                   classNames={vod.transition || 'fade-750ms'}
                   unmountOnExit

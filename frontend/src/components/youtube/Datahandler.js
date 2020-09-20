@@ -11,7 +11,6 @@ export default ({ children }) => {
   const [error, setError] = useState(null);
   const [requestError, setRequestError] = useState();
   const followedChannels = useRef();
-  // const videos = useRef(null);
   const [videos, setVideos] = useState([]);
   const oldVideos = useRef(null);
   const { youtubeToken, authKey } = useContext(AccountContext);

@@ -9,7 +9,6 @@ const LiveDot = styled.svg`
   width: 30px;
   height: 100%;
   transform: translate3d(-15px, -5px, 0);
-  /* transform: translateX(25px); */
 `;
 
 export const StyledToolTip = styled(Tooltip)`

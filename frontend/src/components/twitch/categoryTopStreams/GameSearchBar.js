@@ -192,7 +192,6 @@ export default (props) => {
     openInNewTab
       ? window.open(`/category/${returnFirstMatchedGame()}`)
       : navigate(`/category/${returnFirstMatchedGame()}`);
-    // setGame(returnFirstMatchedGame());
     setListIsOpen(false);
     if (openInNewTab) {
       resetGame();
@@ -201,7 +200,6 @@ export default (props) => {
   };
 
   useEffect(() => {
-    // if (!topGames?.data && (listIsOpen || (game && game !== '' && game.length > 1))) {
     if (listIsOpen) {
       fetchTopGamesOnce().catch((e) => {
         setShowDropdown(false);

@@ -1,6 +1,4 @@
-// nav[mode="fixed"] ~ #contentContainer {
 #contentContainer {
-  // padding-top: 75px;
   min-height: 100vh;
   padding-top: 60px;
 }
@@ -12,7 +10,3 @@ nav[mode='fixed'] ~ #contentContainer {
 nav[shrink='true'] ~ #contentContainer {
   padding-top: 70px;
 }
-
-// html {
-//   overflow: hidden;
-// }

@@ -9,7 +9,7 @@ import UpdateTwitterLists from '../navigation/sidebar/UpdateTwitterLists';
 import ThemeContext from './../themes/ThemeContext';
 import FooterContext from '../footer/FooterContext';
 
-export default () => {
+export default ({ in: forceMount = false }) => {
   const { twitterLists, enableTwitter, enableTwitch, enableYoutube, enableTwitchVods } = useContext(
     FeedsContext
   );
@@ -18,7 +18,7 @@ export default () => {
 
   return (
     <CSSTransition
-      in={enableTwitter}
+      in={enableTwitter || forceMount}
       timeout={750}
       classNames='twitter-slide'
       unmountOnExit
@@ -28,7 +28,7 @@ export default () => {
       <MainContainer
         footerVisibleInViewport={footerVisibleInViewport}
         id='twitter'
-        otherFeedsEnabled={enableTwitch || enableYoutube || enableTwitchVods}
+        center={forceMount || (!enableTwitch && !enableYoutube && !enableTwitchVods)}
       >
         <TransitionGroup component={null}>
           {twitterLists?.map((id) => {

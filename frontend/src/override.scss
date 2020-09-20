@@ -1,7 +1,6 @@
 .tooltip-inner {
   padding: 0.25rem 0.5rem;
   color: #fff;
-  // text-align: center;
   text-align: start;
   background-color: #161616e8;
   max-width: unset;
@@ -15,7 +14,6 @@
 
 .btn-outline-secondary:focus,
 .btn-outline-secondary.focus {
-  // box-shadow: 3px 3px 3px 0px #201f1f;
   box-shadow: var(--refreshButtonShadow);
 }
 
@@ -53,8 +51,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      // padding: 5px 0;
-      // min-height: 43px;
     }
 
     li a {
@@ -137,13 +133,10 @@
   background: none !important;
   height: unset;
   max-height: unset;
-  // min-width: unset !important;
-  // width: unset !important;
   overflow: unset !important;
 }
 
 .popup-content {
-  // scrollbar-color: var(--scrollbarColors) !important;
   scrollbar-color: rgb(240, 240, 240) rgba(0, 0, 0, 0) !important;
   scrollbar-width: thin !important;
 }

@@ -35,13 +35,11 @@ export const StyledShowAllButton = styled.li`
 `;
 
 export const GameListUlContainer = styled.ul`
-  /* &&& { */
   background: var(--popupListsBackground);
   scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0);
   scrollbar-width: thin;
   border-radius: 0 0 10px 10px;
   border: none;
-  /* } */
 
   transform: translate3d(0, 0, 0);
   color: rgb(230, 230, 230);
@@ -66,8 +64,6 @@ export const GameListUlContainer = styled.ul`
     border-bottom: thin solid #1e1616;
     padding: 5px 0;
     transform: translate3d(0, 0, 0);
-
-    /* min-height: 43px; */
   }
 
   a {
@@ -106,8 +102,6 @@ export const TypeListUlContainer = styled.ul`
   box-shadow: var(--refreshButtonShadow);
   width: 150px;
 
-  /* max-height: 485px;
-  height: 485px; */
   overflow: scroll;
   overflow-x: hidden;
   z-index: 3;
@@ -148,8 +142,6 @@ export const StyledLoadingListElement = styled.li`
     background: #36393fd1;
     animation: ${pulseLight} 2s linear infinite;
     transform: translate3d(0, 0, 0);
-    /* padding: 5px 0px;
-    min-height: 42px; */
   }
 `;
 
@@ -178,7 +170,6 @@ export const SearchGameForm = styled.form`
   &:after {
     content: '';
     width: ${({ open }) => (open ? '310px' : '0')};
-    /* height: ${({ open }) => (open ? '1px' : '0')}; */
     height: 1px;
     background: rgb(150, 150, 150);
     transition: width 500ms, height 500ms, transform 500ms;
@@ -195,7 +186,6 @@ export const SearchGameForm = styled.form`
   }
 
   input {
-    /* padding: 0.5rem ${({ text, open }) => (text && open ? '25px' : '0.5rem')} 0.5rem 0.5rem; */
     padding: 0.5rem 0.5rem 0.5rem 27px;
     color: var(--refreshButtonColor);
     background: transparent;
@@ -207,7 +197,6 @@ export const SearchGameForm = styled.form`
     z-index: 5;
     font-size: ${({ inputFontSize }) => inputFontSize};
     transition: color 250ms;
-    /* text-align: ${({ open }) => (open ? 'start' : 'center')}; */
 
     &:hover {
       color: var(--textColor1Hover);
@@ -215,7 +204,6 @@ export const SearchGameForm = styled.form`
   }
 
   svg#ToggleListBtn {
-    /* padding: 0.5em 0.75em; */
     padding: 7px;
     cursor: pointer;
     position: absolute;
@@ -230,7 +218,6 @@ export const SearchGameForm = styled.form`
 
   &:hover {
     &:after {
-      /* height: 1px; */
       width: ${({ open }) => (open ? '310px' : '125px')};
       transform: translateX(0);
     }
@@ -289,7 +276,6 @@ const SearchSubmitA = styled.a`
   cursor: pointer;
   color: rgb(240, 240, 240);
   display: flex;
-  /* margin-left: calc(310px - 72px); */
   margin-left: 0;
   padding-left: 5px;
   transform: translateY(-27px);
@@ -307,7 +293,6 @@ const SearchSubmitLink = styled(Link)`
   cursor: pointer;
   color: rgb(240, 240, 240);
   display: flex;
-  /* margin-left: calc(310px - 72px); */
   margin-left: 0;
   padding-left: 5px;
   transform: translateY(-27px);

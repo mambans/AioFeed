@@ -5,14 +5,12 @@ import AccountContext from './../../account/AccountContext';
 import LoadingList from './../LoadingList';
 import VodChannelListElement from './VodChannelListElement';
 import useInput from './../../../hooks/useInput';
-// import VodsContext from "./VodsContext";
 import AddVodChannel from './AddVodChannel';
 import { getLocalstorage } from '../../../util/Utils';
 import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 
 export default () => {
   const { authKey, username } = useContext(AccountContext);
-  // const { channels, setChannels } = useContext(VodsContext);
   const channels = getLocalstorage('TwitchVods-Channels') || [];
   const [validated, setValidated] = useState(false);
   const { value: channel, bind: bindchannel, reset: resetchannel } = useInput('');

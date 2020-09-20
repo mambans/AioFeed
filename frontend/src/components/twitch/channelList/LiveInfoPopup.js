@@ -7,13 +7,10 @@ import { formatViewerNumbers } from '../TwitchUtils';
 
 const Container = styled.div`
   color: rgb(200, 200, 200);
-  /* max-width: 500px;
-  min-width: 250px; */
   width: 450px;
   transition: color 250ms;
 
   img {
-    /* width: 250px; */
     width: 100%;
     border-radius: 0 0 10px 10px;
   }
@@ -31,7 +28,6 @@ const Container = styled.div`
     img#game {
       width: 26px;
       padding: 3px;
-      /* object-fit: cover; */
     }
   }
 
@@ -40,8 +36,6 @@ const Container = styled.div`
     display: flex;
     justify-content: space-between;
     height: 25px;
-    /* margin-top: -28px;
-    padding: 0 10px 10px 10px; */
 
     position: absolute;
     width: 100%;

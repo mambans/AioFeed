@@ -11,8 +11,6 @@ import { NavLink } from 'react-router-dom';
 export const VideoAndChatContainer = styled.div`
   position: fixed;
   width: 100vw;
-  /* height: calc(100vh - 50px); */
-  /* top: 50px; */
   height: ${({ visible }) => (visible ? 'calc(100vh - 70px)' : '100vh')};
   top: ${({ visible }) => (visible ? '70px' : '0')};
   transition: top 300ms, height 300ms;
@@ -243,7 +241,6 @@ export const StyledVolumeSlider = styled.div`
   }
 
   .rangeslider-horizontal .rangeslider__fill {
-    /* background-color: #42b38e; */
     background-color: ${({ volumeMuted }) => (volumeMuted ? '#bd0202' : '#42b38e')};
     border-radius: 6px;
   }
@@ -253,7 +250,6 @@ export const InfoDisplay = styled.div`
   display: grid;
   grid-template-areas: 'logo name' 'logo title' 'logo game' 'logo viewers' 'logo uptime';
   grid-template-columns: 75px auto;
-  /* width: 400px; */
   max-width: 500px;
   background: #00000080;
   padding: 10px 10px 5px;
@@ -311,7 +307,6 @@ export const InfoDisplay = styled.div`
   }
 `;
 
-// export const ButtonShowStats = styled(Icon).attrs({ icon: infoCircle, size: 26 })`
 export const ButtonShowStats = styled(FaInfoCircle).attrs({ size: 24 })`
   margin: 0;
   font-weight: bold;
@@ -386,10 +381,6 @@ export const PlaybackStats = styled.div`
   box-shadow: 5px 5px 10px #0000009c;
 `;
 
-// export const StyledHideChatButton = styled(({ hideChat }) =>
-//   hideChat === "true" ? MdCompareArrows : FaWindowClose
-// ).attrs({ size: 26, color: "red" })`
-
 export const HideChatButton = styled(FaWindowClose).attrs({ size: 26, color: 'red' })`
   position: absolute;
   bottom: 100px;
@@ -455,11 +446,6 @@ export const ShowNavbarBtn = styled(Button)`
   }
 `;
 
-export const NavigateBack = styled(Button)`
-  /* left: 0;
-  position: absolute; */
-`;
-
 export const ResizeDevider = styled.div`
   height: 100%;
   cursor: w-resize;
@@ -475,8 +461,6 @@ export const ResizeDevider = styled.div`
     background: #ffffff;
     width: 1px;
     margin: auto;
-    /* height: ${({ resizeActive, videowidth }) =>
-      resizeActive ? `${(videowidth / 1.777777777777778).toFixed(0)}px` || '25%' : '5%'}; */
     height: ${({ resizeActive }) => (resizeActive ? '40%' : '10%')};
   }
 
@@ -489,7 +473,6 @@ export const ResizeDevider = styled.div`
 
 export const ChatOverlay = styled.div`
   height: 100%;
-  /* width: ${({ videowidth }) => `calc(100vw - ${videowidth}px)`}; */
   width: ${({ chatwidth }) => chatwidth}px;
   position: absolute;
   transform: translate3d(0, 0, 0);
@@ -543,7 +526,6 @@ export const SmallButtonContainer = styled.div`
 export const ChannelButton = styled(Button)`
   position: absolute;
   color: rgb(240, 240, 240);
-  /* top: 115px; */
   padding: 5px 10px;
   background: #313131b8;
   margin: 15px 0 0 250px;

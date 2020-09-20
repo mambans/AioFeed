@@ -36,14 +36,6 @@ export default (data) => {
   useEventListenerMemo('mouseenter', handleMouseOver, ref.current, youtubeVideoHoverEnable);
   useEventListenerMemo('mouseleave', handleMouseOut, ref.current, youtubeVideoHoverEnable);
 
-  // function streamType(type) {
-  //   if (type === "liveYoutube") {
-  //     return <div className={styles.liveDot} />;
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
   function handleMouseOver() {
     streamHoverTimer.current = setTimeout(function () {
       setIsHovered(true);
@@ -75,14 +67,6 @@ export default (data) => {
           <img src={videoImageUrls(data.video.snippet.thumbnails)} alt={styles.thumbnail} />
         </Link>
         {data.video.duration && <p className={styles.duration}>{data.video.duration}</p>}
-        {/* {data.video.df === "liveYoutube" ? (
-          <Moment className={styles.duration} durationFromNow>
-            {data.video.duration}
-          </Moment>
-        ) : (
-          <p className={styles.duration}>{data.video.duration}</p>
-        )}
-        {streamType(data.video.df)} */}
       </ImageContainer>
       {data.video.snippet.title?.length >= 50 ? (
         <OverlayTrigger

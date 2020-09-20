@@ -5,16 +5,6 @@ import { Banner, Name, BannerInfoOverlay } from './StyledComponents';
 export default () => {
   return (
     <Banner>
-      {/* <div
-        id='Banner'
-        alt=''
-        style={{
-          backgroundColor: 'var(--navigationbarBackground)',
-          width: 'calc(100% - 60px)',
-          margin: 'auto',
-          borderRadius: '15px',
-        }}
-      > */}
       <BannerInfoOverlay
         style={{
           backgroundColor: 'var(--navigationbarBackground)',
@@ -52,7 +42,6 @@ export default () => {
           </div>
         </Name>
       </BannerInfoOverlay>
-      {/* </div> */}
     </Banner>
   );
 };

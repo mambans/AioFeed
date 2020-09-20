@@ -158,7 +158,6 @@ export default ({ data, vodBtnDisabled }) => {
             }}
           >
             {truncate(data.title || '', 70)}
-            {/* {data.data.title} */}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
@@ -176,7 +175,7 @@ export default ({ data, vodBtnDisabled }) => {
       <ChannelContainer>
         <Link
           to={{
-            pathname: `/${data.login || data.user_name?.toLowerCase()}/channel`,
+            pathname: `/${data.login || data.user_name?.toLowerCase()}/page`,
             state: {
               p_id: data.user_id,
             },
@@ -188,14 +187,13 @@ export default ({ data, vodBtnDisabled }) => {
         <ChannelNameDiv>
           <Link
             to={{
-              pathname: `/${data.login || data.user_name?.toLowerCase()}/channel`,
+              pathname: `/${data.login || data.user_name?.toLowerCase()}/page`,
               state: {
                 p_id: data.user_id,
               },
             }}
             className={'channelName'}
           >
-            {/* {data.user_name} */}
             {loginNameFormat(data)}
           </Link>
           {!vodBtnDisabled && (
@@ -208,16 +206,7 @@ export default ({ data, vodBtnDisabled }) => {
         </ChannelNameDiv>
         <VodDates>
           <div>
-            <Moment
-              interval={300000}
-              durationFromNow
-              className={'date'}
-              id={'timeago'}
-              // style={{
-              //   gridColumn: 2,
-              //   justifySelf: 'right',
-              // }}
-            >
+            <Moment interval={300000} durationFromNow className={'date'} id={'timeago'}>
               {data.thumbnail_url === '' ? data.created_at : data.endDate}
             </Moment>
             <p

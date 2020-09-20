@@ -34,7 +34,7 @@ export default () => {
     <>
       <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
         <PlayerNavbar>
-          <Link to={`/${channelName}/channel`} className='linkWithIcon' disabled={!channelName}>
+          <Link to={`/${channelName}/page`} className='linkWithIcon' disabled={!channelName}>
             <MdAccountCircle size={26} />
             Channel page
           </Link>

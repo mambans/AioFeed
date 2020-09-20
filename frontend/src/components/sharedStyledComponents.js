@@ -20,7 +20,6 @@ const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
   transition-duration: 250ms;
   transition: color 250ms, background-color 250ms, border-color 250ms, box-shadow 250ms,
     opacity 250ms;
-  /* padding: 1px; */
   margin-right: 25px;
   width: 46px;
   height: 40px;
@@ -28,13 +27,6 @@ const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
   align-content: center;
   justify-content: center;
   padding: 0;
-
-  /* .SpinnerWrapper {
-    height: 34px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  } */
 
   div[aria-label='Countdown timer'] {
     &&& {
@@ -186,7 +178,6 @@ export const HeaderContainer = (props) => {
 export const SubFeedContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  /* padding-bottom: 50px; */
   min-height: 400px;
   max-width: 100%;
 `;
@@ -270,7 +261,6 @@ export const ChannelContainer = styled.div`
     width: max-content;
     transition: color 250ms;
     align-items: center;
-    /* mix-blend-mode: screen; */
   }
 
   .buttonsContainer {
@@ -293,8 +283,6 @@ export const ChannelContainer = styled.div`
   }
 
   a {
-    /* font-size: 1rem !important;
-    height: 100%; */
     display: flex;
     align-items: center;
   }
@@ -307,7 +295,6 @@ export const GameContainer = styled.div`
   align-items: center;
   min-height: 34px;
   transition: color 250ms;
-  /* mix-blend-mode: screen; */
 
   .gameImg {
     width: 26px;
@@ -329,7 +316,6 @@ export const GameContainer = styled.div`
     text-overflow: ellipsis;
     transition: color 250ms;
     color: var(--textColor2);
-    /* width: max-content; */
   }
 
   .viewers {
@@ -363,7 +349,6 @@ export const VideoTitle = styled(Link)`
   line-height: 1.2;
   padding: 0;
   transition: color 200ms;
-  /* mix-blend-mode: screen; */
 
   &:hover {
     color: var(--textColor1Hover);
@@ -383,7 +368,6 @@ export const VideoTitleHref = styled.a`
   line-height: 1.2;
   padding: 0;
   transition: color 200ms;
-  /* mix-blend-mode: screen; */
 
   &:hover {
     color: var(--textColor1Hover);
@@ -417,7 +401,6 @@ export const ImageContainer = styled.div`
   img {
     border-radius: 10px;
     width: 100%;
-    /*  width: 336px; */
     max-height: 189px;
     object-fit: cover;
   }
@@ -487,21 +470,6 @@ export const VodAddRemoveButton = styled(Button).attrs({ variant: 'link' })`
     opacity: 1;
   }
 `;
-
-// export const VodAddButton = styled(Button).attrs({ variant: "link" })`
-//   color: rgb(200, 200, 200);
-//   grid-row: 1;
-//   justify-self: right;
-//   padding: 0px;
-//   margin-right: ${({ marginright }) => marginright || "unset"};
-//   opacity: 0;
-//   transition: opacity 250ms;
-
-//   &:hover {
-//     color: #14ae14;
-//     opacity: 1;
-//   }
-// `;
 
 export const StyledLoadingContainer = styled.div`
   display: grid;

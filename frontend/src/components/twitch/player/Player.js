@@ -92,6 +92,10 @@ export default () => {
   const videoElementRef = useRef();
   const hideChatDelay = useRef();
   const isLive = useRef();
+  const link0 = useRef();
+  const link1 = useRef();
+  const link2 = useRef();
+  const link3 = useRef();
 
   useEventListenerMemo(window.Twitch.Player.ONLINE, onlineEvents, twitchVideoPlayer);
   useEventListenerMemo(window.Twitch.Player.OFFLINE, offlineEvents, twitchVideoPlayer);
@@ -101,6 +105,14 @@ export default () => {
   useEventListenerMemo('dblclick', toggleFullScreen, PlayerUIControlls.current);
   useEventListenerMemo('keydown', keyboardEvents);
   useEventListenerMemo('unload', removeFromStreamNotisFromPlayer);
+  useEventListenerMemo('mousedown', containLinkClicks, link0.current);
+  useEventListenerMemo('mousedown', containLinkClicks, link1.current);
+  useEventListenerMemo('mousedown', containLinkClicks, link2.current);
+  useEventListenerMemo('mousedown', containLinkClicks, link3.current);
+
+  function containLinkClicks(event) {
+    event.stopPropagation();
+  }
 
   const showAndResetTimer = throttle(
     () => {
@@ -379,7 +391,7 @@ export default () => {
             hidechat={String(chatState.hideChat)}
             chatwidth={chatState.chatwidth || DEFAULT_CHAT_WIDTH}
           >
-            <Link to='channel'>Offline</Link>
+            <Link to='page'>Offline</Link>
           </OfflineOverlay>
         )}
         <div id='twitch-embed' ref={videoElementRef}>
@@ -448,19 +460,20 @@ export default () => {
                     <img src={streamInfo.profile_image_url} alt='' />
                     <div id='name'>
                       <Link
+                        ref={link2}
                         to={{
-                          pathname: `channel`,
+                          pathname: `page`,
                           state: {
                             p_id: streamInfo.user_id,
                           },
                         }}
                       >
                         {loginNameFormat(streamInfo || { data: channelName })}
-                        {/* {streamInfo.user_name || channelName} */}
                       </Link>
                       <a
                         className='twitchRedirect'
                         alt=''
+                        ref={link1}
                         href={`https://www.twitch.tv/${streamInfo.user_name || channelName}`}
                       >
                         <FaTwitch size={30} color='purple' />
@@ -482,8 +495,9 @@ export default () => {
                       >
                         <ChannelIconLink
                           to={{
-                            pathname: `channel`,
+                            pathname: `page`,
                           }}
+                          ref={link0}
                         >
                           <MdAccountBox size={30} />
                         </ChannelIconLink>
@@ -491,7 +505,11 @@ export default () => {
                     </div>
                     <p id='title'>{streamInfo.title || p_title}</p>
                     {streamInfo.game_name && (
-                      <Link id='game' to={`/category/${streamInfo.game_name || p_game}`}>
+                      <Link
+                        ref={link3}
+                        id='game'
+                        to={`/category/${streamInfo.game_name || p_game}`}
+                      >
                         Playing {streamInfo.game_name || p_game}
                       </Link>
                     )}
@@ -700,7 +718,7 @@ export default () => {
                   variant='dark'
                   as={Link}
                   to={{
-                    pathname: `channel`,
+                    pathname: `page`,
                   }}
                 >
                   Channel Page

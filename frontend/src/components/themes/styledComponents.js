@@ -1,11 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const ThemeSelector = styled.div`
   margin: 10px 0;
 
   button#active {
-    /* background: ${({ open }) => (open ? "rgba(25, 29, 32, 1)" : "rgba(25, 29, 32, 0)")}; */
-    background: rgba(0,0,0,0.25);
+    background: rgba(0, 0, 0, 0.25);
     margin: 0;
     display: flex;
     align-items: center;
@@ -14,23 +13,20 @@ export const ThemeSelector = styled.div`
     display: flex;
     justify-content: center;
     cursor: pointer;
-    /* border-radius: 10px; */
-    transition: border-radius 250ms, background 250ms, background-color 250ms, background-image 250ms;
-    border-radius: ${({ open }) => (open ? "10px 10px 0 0 " : "10px")};
+    transition: border-radius 250ms, background 250ms, background-color 250ms,
+      background-image 250ms;
+    border-radius: ${({ open }) => (open ? '10px 10px 0 0 ' : '10px')};
     width: 100%;
     border: none;
     outline: 0;
-    /* color:var(--textColor1); */
     color: rgb(200, 200, 203);
     display: grid;
-    /* grid-template-columns: 0% 100%; */
     grid-template-columns: 18% 4% 78%;
     position: relative;
     border: thin solid rgba(255, 255, 255, 0.14);
-    /* background-image: var(--backgroundImg); */
 
     &:before {
-      content: "";
+      content: '';
       background-image: var(--backgroundImg);
       opacity: 1;
       top: 0;
@@ -43,12 +39,11 @@ export const ThemeSelector = styled.div`
       background-repeat: no-repeat;
       background-position-y: center;
       transition: border-radius 250ms, background 250ms;
-      border-radius: ${({ open }) => (open ? "10px 10px 0 0 " : "10px")};
+      border-radius: ${({ open }) => (open ? '10px 10px 0 0 ' : '10px')};
     }
 
     &:hover {
-      background: ${({ open }) => (open ? "transparent" : "rgba(0,0,0,0.1)")};
-      /* color:var(--textColor1Hover); */
+      background: ${({ open }) => (open ? 'transparent' : 'rgba(0,0,0,0.1)')};
       color: rgb(255, 255, 255);
     }
 
@@ -66,7 +61,6 @@ export const ThemeSelector = styled.div`
 export const ThemeSelectorUl = styled.ul`
   list-style: none;
   padding: 0;
-  /* background: rgb(25, 29, 32); */
   background: rgba(0, 0, 0, 0.3);
   margin: auto;
   border-radius: 0 0 10px 10px;
@@ -81,7 +75,7 @@ export const Arrow = styled.i`
   padding: 3px;
   background: transparent;
   border-color: var(--textColor1Hover);
-  transform: ${({ open }) => (open ? "rotate(45deg)" : "rotate(-45deg)")};
+  transform: ${({ open }) => (open ? 'rotate(45deg)' : 'rotate(-45deg)')};
   transition: transform 350ms;
   grid-column: 2;
   width: 3px;
@@ -97,11 +91,9 @@ export const ThemeItem = styled.li`
 
   padding: 7px 0 7px 10px;
   cursor: pointer;
-  /* color: var(--textColor1); */
   color: rgb(200, 200, 203);
 
   &:hover {
-    /* color: var(--textColor1Hover); */
     color: rgb(255, 255, 255);
     text-shadow: 2px 2px 2px black;
   }

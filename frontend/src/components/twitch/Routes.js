@@ -11,10 +11,12 @@ export default () => {
   return (
     <Routes>
       <Route path='' element={<Player />} />
-      <Route path='channel' element={<ChannelPage />} />
-      <Navigate path='clips' to={`../channel`} replace />
-      <Navigate path='videos' to='../channel' replace />
-      <Navigate path='videos/all' to={`../../channel`} replace />
+      <Route path='page' element={<ChannelPage />} />
+      <Navigate path='channel' to='../page' replace />
+      <Navigate path='channelpage' to='../page' replace />
+      <Navigate path='clips' to={`../page`} replace />
+      <Navigate path='videos' to='../page' replace />
+      <Navigate path='videos/all' to={`../../page`} replace />
       <Route path='videos/:videoId' element={<VideoPlayer />} />
       <Route path='vod/:videoId' element={<VideoPlayer />} />
       <Route path='clip/:videoId' element={<PlayerClip />} />

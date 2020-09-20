@@ -7,7 +7,7 @@ import { VodChannelListLi } from './StyledComponents';
 export default ({ channel, param_Channels }) => {
   return (
     <VodChannelListLi>
-      <Link to={`/${channel}/channel`}>{channel}</Link>
+      <Link to={`/${channel}/page`}>{channel}</Link>
       <VodsFollowUnfollowBtn channel={channel} param_Channels={param_Channels} />
     </VodChannelListLi>
   );
