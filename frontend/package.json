@@ -28,7 +28,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cleanup": "onerror  \"./cleanup.sh eu-north-1 aiofeed-frontend\"",
+    "push": "onerror  \"./deploy.sh\"",
+    "deploy": "onerror  \"npm run cleanup && npm run push\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -46,6 +49,7 @@
     ]
   },
   "devDependencies": {
+    "cli-error-notifier": "^2.1.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-react-hooks": "^4.1.0"
   }
