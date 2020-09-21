@@ -11,7 +11,7 @@ html[data-theme='wood'] {
   --textColor2: rgb(175, 175, 175);
   --textColor2Hover: #ffffff;
 
-  --videoContainerBackgroundColor: rgba(0, 0, 0, 0.03);
+  --videoContainerBackgroundColor: rgba(0, 0, 0, 0.04);
 
   --navTextColor: rgba(255, 255, 255, 0.5);
   --navTextColorActive: rgba(255, 255, 255, 1);
@@ -33,7 +33,7 @@ html[data-theme='wood'] {
   --refreshButtonShadow: 2px 2px 5px 0px rgba(12, 12, 12, 0.75);
   --scrollbarColors: rgb(51, 51, 51) #14181bca;
 
-  --videoBoxShadow: rgba(0, 0, 0, 0.1) 4px 4px 8px;
+  --videoBoxShadow: rgba(0, 0, 0, 0.12) 4px 4px 8px;
   --twitterBackground: #1010108c;
   --footerBackground: rgba(0, 0, 0, 0.5);
 }
@@ -56,6 +56,7 @@ html[data-theme='christmas'] {
 
   --navigationbarBackground: rgba(0, 0, 0, 0.75);
   --sidebarsBackgroundColor: rgba(5, 10, 15, 0.75);
+  --twitterBackground: rgba(5, 10, 15, 0.75);
 
   --popupListsBackground: linear-gradient(rgba(0, 0, 0, 0.4) 0%, #000000d8 15%);
   --refreshButtonBackground: #0000007a;
@@ -124,7 +125,7 @@ html[data-theme='light'] {
   --subFeedHeaderBorder: #29292988;
 
   --footerBackground: #00000021;
-  --twitterBackground: #ffffff;
+  --twitterBackground: hsla(0, 0%, 100%, 0.88);
 }
 
 html[data-theme='matt blue'] {
@@ -136,6 +137,7 @@ html[data-theme='matt blue'] {
   --textColor2: #9ca2b7;
   --textColor2Hover: rgb(220, 227, 255);
   --sidebarsBackgroundColor: rgba(8, 13, 17, 0.3);
+  --twitterBackground: rgba(8, 13, 17, 0.3);
 
   --videoBoxShadow: rgba(5, 5, 5, 0.1) 4px 4px 8px;
 
@@ -149,10 +151,18 @@ html[data-theme='headphones'] {
   --backgroundColor: #200920;
 
   --navigationbarBackground: rgba(20, 13, 34, 0.89);
+  // -twitterBackground: transparent;
   --popupListsBackground: linear-gradient(
     rgba(0, 0, 0, 0.4) 0%,
     var(--navigationbarBackground) 15%
   );
 
   --scrollbarColors: #4d2c7e black;
+}
+
+html[data-theme='coffee'] {
+  --backgroundImg: url('/images/coffee.webp');
+  --backgroundColor: #221312;
+  --sidebarsBackgroundColor: rgba(9, 12, 15, 0.678);
+  --twitterBackground: rgba(0, 0, 0, 0.07);
 }

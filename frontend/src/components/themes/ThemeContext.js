@@ -45,6 +45,11 @@ export const ThemeProvider = ({ children }) => {
       default: true,
     },
     {
+      name: 'coffee',
+      type: 'dark',
+      image: 'coffee.webp',
+    },
+    {
       name: 'wood',
       type: 'dark',
       image: 'wood.webp',

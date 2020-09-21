@@ -6,7 +6,7 @@ export const Container = styled.div`
   width: 14vw;
   height: ${({ footerVisibleInViewport }) =>
     footerVisibleInViewport ? `calc(92vh - ${footerVisibleInViewport}px)` : '92vh'};
-  background: var(--sidebarsBackgroundColor);
+  background: var(--twitterBackground);
   border-radius: 10px 10px 2px 2px;
   transition: height 500ms;
   overflow: hidden;
