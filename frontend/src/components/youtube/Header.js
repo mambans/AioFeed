@@ -63,6 +63,7 @@ export default (data) => {
           <FaYoutube size={25} style={{ color: '#a80000' }} />
         </>
       }
+      onHoverIconLink='youtube'
       refreshFunc={refresh}
       isLoading={!isLoaded}
       leftSide={

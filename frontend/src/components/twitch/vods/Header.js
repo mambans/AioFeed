@@ -27,6 +27,7 @@ export default React.forwardRef((props, ref) => {
           <MdVideocam size={25} style={{ color: '#6f166f' }} />
         </>
       }
+      onHoverIconLink='vods'
       leftSide={
         <>
           <LastRefreshText>{(vods && vods.loaded) || new Date()}</LastRefreshText>

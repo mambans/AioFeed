@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { MdRefresh } from 'react-icons/md';
+import { FaRegWindowRestore } from 'react-icons/fa';
 
 import { StyledLoadmore } from './twitch/StyledComponents';
 import Util from './../util/Util';
@@ -67,8 +68,31 @@ const HeaderTitle = styled.div`
   margin-top: -5px;
   min-height: 25px;
 
+  svg {
+    margin-left: 10px;
+  }
+
+  .openIndividualFeed {
+    position: absolute;
+    left: calc(100% - 5px);
+    transition: transform 250ms ease-in-out 200ms, opacity 200ms ease-in-out 200ms,
+      color 200ms ease-in-out 0ms;
+    opacity: 0;
+    transform: translateX(-115%);
+    letter-spacing: unset;
+    font-size: unset;
+    color: rgba(200, 200, 200);
+    display: flex;
+    padding: 5px;
+
+    svg {
+      margin: 0;
+    }
+  }
+
   h4,
   h5 {
+    position: relative;
     cursor: pointer;
     text-align: center;
     color: var(--textColor2);
@@ -85,11 +109,16 @@ const HeaderTitle = styled.div`
     &:hover {
       margin: 0 50px;
       color: var(--textColor1);
-    }
-  }
 
-  svg {
-    margin-left: 10px;
+      .openIndividualFeed {
+        transform: translate3d(0, calc(-100% + 5px), 0);
+        opacity: 1;
+
+        &:hover {
+          color: rgba(255, 255, 255);
+        }
+      }
+    }
   }
 
   span#live-indicator {
@@ -130,6 +159,7 @@ export const HeaderContainer = (props) => {
   const {
     children,
     text,
+    onHoverIconLink,
     id,
     leftSide,
     rightSide,
@@ -168,7 +198,16 @@ export const HeaderContainer = (props) => {
       </HeaderTopContainer>
       <HeaderTitle>
         <HeaderLines />
-        <h5 onClick={handleOnClick}>{text}</h5>
+        <h5 onClick={handleOnClick}>
+          {text}
+          <Link
+            to={`/${onHoverIconLink}`}
+            className='openIndividualFeed'
+            title={`Link to ${text.props.children[0].trim()} individual feed page.`}
+          >
+            <FaRegWindowRestore size={18} />
+          </Link>
+        </h5>
         <HeaderLines />
       </HeaderTitle>
     </HeaderOuterMainContainer>

@@ -14,6 +14,7 @@ export default ({ data }) => {
           Twitch <span id='live-indicator'>Live</span>
         </>
       }
+      onHoverIconLink='live'
       refreshTimer={refreshTimer}
       autoRefreshEnabled={autoRefreshEnabled}
       isLoading={refreshing}
