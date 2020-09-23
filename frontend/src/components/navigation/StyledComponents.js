@@ -24,7 +24,7 @@ export const StyledNavSidebarTrigger = styled.div`
   img#NavigationProfileImage {
     border-radius: 80%;
     object-fit: cover;
-    width: 52px;
+    width: 48px;
     height: 80%;
     align-self: center;
     transition: ease-in-out 0.2s;
