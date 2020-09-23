@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 
 import { CenterContainer } from '../twitch/StyledComponents';
 import AccountContext from './../account/AccountContext';
@@ -56,12 +56,6 @@ export default ({ children, forceMountTwitch } = {}) => {
   useEventListenerMemo('resize', () => {
     setWinWidth(document.documentElement.clientWidth);
   });
-
-  useEffect(() => {
-    Notification.requestPermission().then(function (result) {
-      console.log('Notifications: ', result);
-    });
-  }, []);
 
   if (!username) {
     return (

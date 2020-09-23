@@ -1,6 +1,6 @@
 import { CSSTransition } from 'react-transition-group';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { AddCookie } from '../../../util/Utils';
 import { HideSidebarButton } from '../sidebar/StyledComponents';
@@ -12,6 +12,12 @@ import TwitchStreams from './Twitch';
 
 export default ({ in: forceMount = false }) => {
   const { enableTwitch, showTwitchSidebar, setShowTwitchSidebar } = useContext(FeedsContext);
+
+  useEffect(() => {
+    Notification.requestPermission().then(function (result) {
+      console.log('Notifications: ', result);
+    });
+  }, []);
 
   return (
     <Handler>

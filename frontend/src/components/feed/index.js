@@ -1,5 +1,5 @@
 import { CSSTransition } from 'react-transition-group';
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 
 import { Container } from '../twitch/StyledComponents';
 import AccountContext from './../account/AccountContext';
@@ -16,12 +16,6 @@ export default () => {
   document.title = 'AioFeed | Feed';
   const { enableTwitch, enableYoutube, enableTwitchVods } = useContext(FeedsContext);
   const { username } = useContext(AccountContext);
-
-  useEffect(() => {
-    Notification.requestPermission().then(function (result) {
-      console.log('Notifications: ', result);
-    });
-  }, []);
 
   if (!username) {
     return (
