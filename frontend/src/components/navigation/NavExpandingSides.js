@@ -24,19 +24,25 @@ const NavExpandingSides = styled.div`
   align-items: center;
   position: relative;
 
-  #arrow {
+  .arrow {
     position: absolute;
     left: ${({ side }) => (side === 'right' ? 'unset' : 'calc(100% - 25px)')};
     right: ${({ side }) => (side === 'left' ? 'unset' : 'calc(100% - 25px)')};
     opacity: 0.5;
-    transition: opacity 250ms;
+    transition: opacity 200ms ease-in-out 50ms;
+
+    &.shadow {
+      left: ${({ side }) => (side === 'right' ? 'unset' : 'calc(100% - 30px)')};
+      right: ${({ side }) => (side === 'left' ? 'unset' : 'calc(100% - 30px)')};
+      opacity: 0.2;
+    }
   }
 
   &:hover,
   &:focus {
     width: 100%;
 
-    #arrow {
+    .arrow {
       opacity: 0;
     }
   }

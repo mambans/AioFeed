@@ -63,10 +63,12 @@ export default (prop) => {
               Feed
             </Nav.Link>
           </StyledNav>
-          <FaAngleRight id='arrow' size={20} />
+          <FaAngleRight className='arrow' size={20} />
+          <FaAngleRight className='arrow shadow' size={20} />
         </NavExpandingSides>
         <NavExpandingSides side='right'>
-          <FaAngleLeft id='arrow' size={20} />
+          <FaAngleLeft className='arrow' size={20} />
+          <FaAngleLeft className='arrow shadow' size={20} />
           <GameSearchBar
             position='fixed'
             showButton={false}
