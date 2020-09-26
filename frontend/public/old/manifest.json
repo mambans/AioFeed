@@ -1,6 +1,6 @@
 {
-  "name": "AioFeed",
   "short_name": "AioFeed",
+  "name": "AioFeed",
   "icons": [
     {
       "src": "favicon.ico",
@@ -19,7 +19,7 @@
     }
   ],
   "start_url": ".",
-  "theme_color": "rgb(100,15,0)",
-  "background_color": "rgb(100,15,0)",
-  "display": "standalone"
+  "display": "standalone",
+  "theme_color": "#055",
+  "background_color": "#055"
 }

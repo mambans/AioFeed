@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import './Home.scss';
-import { BlurOverlay, LogoText, WelcomeContainer } from './StyledComponents';
+import { BlurOverlay, LogoText, WelcomeContainer, DevideLine } from './StyledComponents';
 
 export default () => {
   document.title = 'AioFeed';
@@ -13,14 +13,16 @@ export default () => {
         <WelcomeContainer>
           <LogoText>
             <img
-              src={`${process.env.PUBLIC_URL}/A/android-chrome-512x512.png`}
+              // src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}
+              src={`${process.env.PUBLIC_URL}/logo_transparent_shadow.png`}
               alt='logo'
               id='logo'
             />
             <div>
               <h1>
-                <b>ioFeed</b>
+                <b>AioFeed</b>
               </h1>
+              <DevideLine />
               <p>
                 View Twitch & Youtube feeds and a Twitter list in one page, with Twitch
                 (live/offline/update) notifications.
