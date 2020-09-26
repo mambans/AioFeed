@@ -114,8 +114,8 @@ export default ({ children }) => {
                 isEnabledUpdateNotifications,
               }),
             ]).then((res) => {
-              const flattenedArray = res.flat(3);
-              addNotification(flattenedArray);
+              const flattenedArray = res.flat(3).filter((n) => n);
+              if (Boolean(flattenedArray?.lengt)) addNotification(flattenedArray);
             });
           }
         } else if (streams?.status === 201) {

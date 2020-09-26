@@ -13,37 +13,39 @@ export const NotificationsProvider = ({ children }) => {
 
   const addNotification = useCallback(
     (notis) => {
-      new Promise(async (resolve, reject) => {
-        try {
-          const oldUnseenNotifications = getLocalstorage('Unseen-notifications') || [];
-          const existingNotifications = getLocalstorage('notifications') || [];
-          const toAddUnseenUsernames = notis.map((stream) => {
-            return stream.user_name;
-          });
-          const newUnseenNotifications = [...oldUnseenNotifications, ...toAddUnseenUsernames];
+      if (notis) {
+        new Promise(async (resolve, reject) => {
+          try {
+            const oldUnseenNotifications = getLocalstorage('Unseen-notifications') || [];
+            const existingNotifications = getLocalstorage('notifications') || [];
+            const toAddUnseenUsernames = notis?.map((stream) => {
+              return stream?.user_name;
+            });
+            const newUnseenNotifications = [...oldUnseenNotifications, ...toAddUnseenUsernames];
 
-          const newNotificationsWithAddedProps = await notis.map((n) => {
-            n.date = new Date();
-            n.key = (n.id || n._id) + Date.now() + n.notiStatus;
-            return n;
-          });
+            const newNotificationsWithAddedProps = await notis?.map((n) => {
+              n.date = new Date();
+              n.key = (n.id || n._id) + Date.now() + n.notiStatus;
+              return n;
+            });
 
-          const finalNotifications = [
-            ...newNotificationsWithAddedProps,
-            ...existingNotifications,
-          ].splice(0, 100);
+            const finalNotifications = [
+              ...newNotificationsWithAddedProps,
+              ...existingNotifications,
+            ].splice(0, 100);
 
-          resolve({ notifications: finalNotifications, newUnseenNotifications });
-        } catch (e) {
-          console.log('addNotification error', e);
-          reject(e);
-        }
-      }).then((res) => {
-        setTimeout(() => {
-          setUnseenNotifications(res.newUnseenNotifications);
-          setNotifications(res.notifications);
-        }, 800);
-      });
+            resolve({ notifications: finalNotifications, newUnseenNotifications });
+          } catch (e) {
+            console.log('addNotification() error: ', e);
+            reject(e);
+          }
+        }).then((res) => {
+          setTimeout(() => {
+            setUnseenNotifications(res.newUnseenNotifications);
+            setNotifications(res.notifications);
+          }, 800);
+        });
+      }
     },
     [setNotifications, setUnseenNotifications]
   );
