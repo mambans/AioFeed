@@ -130,7 +130,7 @@ export default () => {
   useEventListenerMemo(['mousemove', 'mousedown', 'touchmove'], showAndResetTimer);
 
   useEffect(() => {
-    document.title = `AF | ${channelName} player`;
+    document.title = `${channelName} player`;
   }, [channelName]);
 
   useEffect(() => {
@@ -201,6 +201,7 @@ export default () => {
 
   function offlineEvents() {
     console.log('Stream is Offline');
+    document.title = `${channelName} (Offline)`;
     isLive.current = false;
     setShowUIControlls(false);
     clearInterval(refreshStreamInfoTimer.current);
@@ -263,7 +264,7 @@ export default () => {
   async function onlineEvents() {
     console.log('Stream is Online');
     isLive.current = true;
-    document.title = `AF | ${channelName} -LIVE`;
+    document.title = `${channelName}`;
 
     try {
       if (getCookie('Twitch-access_token')) {

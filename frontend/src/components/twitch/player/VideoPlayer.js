@@ -47,20 +47,20 @@ export default () => {
   }, [setShrinkNavbar, setFooterVisible, setVisible, channelName, videoId, time]);
 
   useEffect(() => {
-    document.title = `AF | ${(channelName && `${channelName} -`) || ''} ${videoId}`;
+    document.title = `${(channelName && `${channelName} -`) || ''} ${videoId}`;
 
     const timer = setTimeout(async () => {
       if (twitchVideoPlayer) {
         const videoDetails = await API.getVideos({ params: { id: videoId } }).then(
           (r) => r.data.data[0]
         );
-        document.title = `AF | ${videoDetails?.user_name || channelName || ''} - ${
+        document.title = `${videoDetails?.user_name || channelName || ''} - ${
           videoDetails?.title || videoId
         }`;
         if (videoDetails?.user_name && !channelName) {
           window.history.pushState(
             {},
-            `AF | ${videoDetails?.user_name || ''} - ${videoDetails?.title || videoId}`,
+            `${videoDetails?.user_name || ''} - ${videoDetails?.title || videoId}`,
             `/${videoDetails?.user_name}/videos/${videoId}${time ? `?t=${time}` : ''}`
           );
         }

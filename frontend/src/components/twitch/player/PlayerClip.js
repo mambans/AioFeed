@@ -16,7 +16,7 @@ import {
 export default () => {
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const { videoId, channelName } = useParams();
-  document.title = `AF | ${channelName} - ${videoId}`;
+  document.title = `${channelName} - ${videoId}`;
 
   useEffect(() => {
     setShrinkNavbar('true');

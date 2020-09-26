@@ -51,7 +51,7 @@ export default () => {
   const { twitchToken } = useContext(AccountContext);
   const oldTopData = useRef();
 
-  document.title = `AF | ${category || 'All'} - Top ${videoType}`;
+  document.title = `${category || 'All'} - Top ${videoType}`;
 
   const videoElementTypeComp = (data) => {
     switch (videoType) {

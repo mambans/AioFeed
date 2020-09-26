@@ -84,14 +84,14 @@ export default () => {
           containerClassName='IframeContainer'
           onReady={(event) => {
             getVideoInfoTimer.current = setTimeout(() => {
-              document.title = `AF | ${event.target.getVideoData().author} - ${
+              document.title = `${event.target.getVideoData().author} - ${
                 event.target.getVideoData().title
               }`;
             }, 2500);
           }}
           // onPlay={(event) => {
           //   // clearTimeout(getVideoInfoTimer.current);
-          //   // document.title = `AF | ${event.target.getVideoData().title}`;
+          //   // document.title = `${event.target.getVideoData().title}`;
           // }}
         />
       </VideoAndChatContainer>

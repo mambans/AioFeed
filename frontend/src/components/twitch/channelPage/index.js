@@ -221,7 +221,7 @@ export default () => {
   }, [channelInfo, channelId]);
 
   useEffect(() => {
-    document.title = `AF | ${channelName}'s Channel`;
+    document.title = `${channelName}'s Channel`;
   }, [channelName]);
 
   useEffect(() => {
@@ -242,7 +242,7 @@ export default () => {
 
   async function onlineEvents() {
     console.log('Stream is Online');
-    document.title = `AF | ${channelName}'s Channel (Live)`;
+    document.title = `${channelName}'s Channel (Live)`;
 
     try {
       if (twitchPlayer.current) {
