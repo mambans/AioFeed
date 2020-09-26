@@ -40,15 +40,12 @@ export const TopBlurOverlay = styled.div`
 `;
 
 export const LogoText = styled.div`
-  display: flex;
-  justify-content: center;
+  transform: translateY(-5vh);
 
   h1 {
     color: var(--textColor1);
-    font-size: 8rem;
+    font-size: 5rem;
     margin: 0;
-    height: 255px;
-    display: flex;
     align-items: flex-end;
     letter-spacing: 5px;
   }
@@ -56,8 +53,8 @@ export const LogoText = styled.div`
   p {
     color: var(--textColor1);
     text-align: left;
-    width: 410px;
     text-align: center;
+    margin: 0;
   }
 `;
 
@@ -71,10 +68,14 @@ export const WelcomeContainer = styled.div`
   align-items: center;
 
   img#logo {
-    width: 300px;
-    height: 300px;
-    margin-right: -60px;
-    box-shadow: 0 0 5px black;
-    border-radius: 50%;
+    height: 30vh;
   }
+`;
+
+export const DevideLine = styled.div`
+  width: 100%;
+  height: 2px;
+  background: white;
+  margin: 10px;
+  opacity: 0.3;
 `;
