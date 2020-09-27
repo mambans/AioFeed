@@ -39,6 +39,16 @@ export default () => {
     };
   }, [setShrinkNavbar, setFooterVisible, setVisible]);
 
+  const setDocumentTitle = (event) => {
+    if (event?.target?.getVideoData()?.author && event?.target?.getVideoData()?.title) {
+      document.title = `${event.target?.getVideoData()?.author} - ${
+        event.target?.getVideoData()?.title
+      }`;
+      return true;
+    }
+    getVideoInfoTimer.current = setTimeout(() => setDocumentTitle(event), 200);
+  };
+
   const opts = {
     height: '100%',
     width: '100%',
@@ -82,13 +92,7 @@ export default () => {
           opts={opts}
           id={video.id + 'player'}
           containerClassName='IframeContainer'
-          onReady={(event) => {
-            getVideoInfoTimer.current = setTimeout(() => {
-              document.title = `${event.target.getVideoData().author} - ${
-                event.target.getVideoData().title
-              }`;
-            }, 2500);
-          }}
+          onReady={(event) => setDocumentTitle(event)}
           // onPlay={(event) => {
           //   // clearTimeout(getVideoInfoTimer.current);
           //   // document.title = `${event.target.getVideoData().title}`;
