@@ -18,7 +18,7 @@ export default ({ data }) => {
       refreshTimer={refreshTimer}
       autoRefreshEnabled={autoRefreshEnabled}
       isLoading={refreshing}
-      refreshFunc={() => refresh({ forceRefreshThumbnails: true })}
+      refreshFunc={() => refresh({ forceRefreshThumbnails: true, forceValidateToken: true })}
       rightSide={<ChannelSearchList placeholder='...' />}
     />
   );

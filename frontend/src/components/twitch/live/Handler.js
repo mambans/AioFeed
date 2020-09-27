@@ -45,12 +45,16 @@ export default ({ children }) => {
   useEventListenerMemo('storage', listener);
 
   const refresh = useCallback(
-    async ({ disableNotifications = false, forceRefreshThumbnails = false } = {}) => {
+    async ({
+      disableNotifications = false,
+      forceRefreshThumbnails = false,
+      forceValidateToken = false,
+    } = {}) => {
       setLoadingStates(({ loaded }) => {
         return { refreshing: true, error: null, loaded: loaded };
       });
       try {
-        followedChannels.current = await getMyFollowedChannels();
+        followedChannels.current = await getMyFollowedChannels(forceValidateToken);
 
         if (followedChannels.current && followedChannels.current[0]) {
           AddCookie('Twitch-username', followedChannels.current[0].from_name);
