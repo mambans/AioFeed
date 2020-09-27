@@ -82,7 +82,12 @@ export default (data_p) => {
 
   return (
     <VideoContainer key={data.user_id}>
-      <ImageContainer id={data.user_id} ref={ref} style={{ marginTop: '5px' }}>
+      <ImageContainer
+        key={thumbnailRefresh}
+        id={data.user_id}
+        ref={ref}
+        style={{ marginTop: '5px' }}
+      >
         <NewHighlightNoti newlyAddedStreams={newlyAddedStreams} login={data?.login} />
         {isHovered && (
           <StreamHoverIframe id={data.user_id} data={data} setIsHovered={setIsHovered} />
@@ -99,7 +104,6 @@ export default (data_p) => {
           }}
         >
           <img
-            key={thumbnailRefresh}
             id={`${data?.user_id}-${Date.now()}`}
             alt='thumbnail'
             style={
@@ -111,8 +115,7 @@ export default (data_p) => {
               data.thumbnail_url?.replace('{width}', 858)?.replace('{height}', 480) +
                 `#` +
                 Date.now() +
-                `?` +
-                Date.now() || `${process.env.PUBLIC_URL}/images/placeholder.webp`
+                thumbnailRefresh || `${process.env.PUBLIC_URL}/images/placeholder.webp`
             }
           />
         </Link>
