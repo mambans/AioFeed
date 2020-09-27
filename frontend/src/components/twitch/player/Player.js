@@ -506,13 +506,12 @@ export default () => {
                     </div>
                     <p id='title'>{streamInfo.title || p_title}</p>
                     {streamInfo.game_name && (
-                      <Link
-                        ref={link3}
-                        id='game'
-                        to={`/category/${streamInfo.game_name || p_game}`}
-                      >
-                        Playing {streamInfo.game_name || p_game}
-                      </Link>
+                      <span id='game'>
+                        {'Playing '}
+                        <Link ref={link3} to={`/category/${streamInfo.game_name || p_game}`}>
+                          {streamInfo.game_name || p_game}
+                        </Link>
+                      </span>
                     )}
                   </>
 
