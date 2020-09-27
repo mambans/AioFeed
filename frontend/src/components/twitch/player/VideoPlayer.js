@@ -49,14 +49,16 @@ export default () => {
   useEffect(() => {
     document.title = `${(channelName && `${channelName} -`) || ''} ${videoId}`;
 
-    const timer = setTimeout(async () => {
+    const fetchDetailsForDocumentTitle = async () => {
       if (twitchVideoPlayer) {
         const videoDetails = await API.getVideos({ params: { id: videoId } }).then(
           (r) => r.data.data[0]
         );
+
         document.title = `${videoDetails?.user_name || channelName || ''} - ${
           videoDetails?.title || videoId
         }`;
+
         if (videoDetails?.user_name && !channelName) {
           window.history.pushState(
             {},
@@ -64,9 +66,12 @@ export default () => {
             `/${videoDetails?.user_name}/videos/${videoId}${time ? `?t=${time}` : ''}`
           );
         }
+
         setVideoInfo(videoDetails);
       }
-    }, 5000);
+    };
+
+    const timer = setTimeout(fetchDetailsForDocumentTitle, 500);
 
     return () => clearTimeout(timer);
   }, [videoId, channelName, twitchVideoPlayer, time]);
