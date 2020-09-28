@@ -227,12 +227,12 @@ export default () => {
   useEffect(() => {
     (async () => {
       if (twitchToken) {
-        if (!channelId)
-          await validateToken().then(async () => {
+        if (!channelId) {
+          await validateToken(true).then(async () => {
             await getIdFromName();
           });
-        if (!channelInfo && channelId && channelId !== 'Not Found') {
-          await validateToken().then(async () => {
+        } else if (!channelInfo && channelId && channelId !== 'Not Found') {
+          await validateToken(true).then(async () => {
             await getChannelInfo();
           });
         }
