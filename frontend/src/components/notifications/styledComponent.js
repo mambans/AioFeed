@@ -29,7 +29,8 @@ export const Notification = styled.li`
 
   grid-template-areas: 'img name name' 'img title title' 'date date date';
   grid-template-columns: 15% 85%;
-  opacity: ${({ status }) => (status === 'Offline' ? 0.35 : status.includes('updated') ? 0.75 : 1)};
+  opacity: ${({ status }) =>
+    status === 'Offline' ? 0.35 : status?.includes('updated') ? 0.75 : 1};
   margin: 7px 0;
   transition: background 250ms, border 250ms, opacity 250ms;
   padding-left: 2px;

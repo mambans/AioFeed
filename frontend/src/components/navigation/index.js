@@ -45,7 +45,7 @@ export default () => {
             as={NavLink}
             to='/'
             className='logo-link'
-            style={{ display: 'flex', alignItems: 'center', minWidth: '200px', paddingLeft: '0' }}
+            style={{ display: 'flex', alignItems: 'center', paddingLeft: '0' }}
           >
             <img
               src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}

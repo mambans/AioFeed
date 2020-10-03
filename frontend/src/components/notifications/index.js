@@ -39,6 +39,7 @@ export default ({ leftExpandRef }) => {
           background: 'none',
           boxShadow: 'none',
           padding: '0 5px',
+          margin: '0 30px',
         }}
         title='Notifications'
       >
