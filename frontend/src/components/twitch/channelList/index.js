@@ -278,9 +278,7 @@ export default ({
           type='text'
           spellCheck='false'
           placeholder={`${channelName || placeholder}`}
-          onFocus={() => {
-            setListIsOpen(true);
-          }}
+          onFocus={() => setListIsOpen(true)}
           {...bindChannel}
         />
         <SearchSubmitBtn

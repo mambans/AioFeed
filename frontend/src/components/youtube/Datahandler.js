@@ -44,9 +44,10 @@ export default ({ children }) => {
   useEffect(() => {
     if (oldVideos.current && videos) {
       videos.forEach((video) => {
-        const videoExists = oldVideos.current.find((old_video) => {
-          return old_video.contentDetails.upload.videoId === video.contentDetails.upload.videoId;
-        });
+        const videoExists = oldVideos.current.find(
+          (old_video) =>
+            old_video.contentDetails?.upload?.videoId === video.contentDetails?.upload?.videoId
+        );
 
         if (!videoExists) console.log('New video Notification.');
         return '';

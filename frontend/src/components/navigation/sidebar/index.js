@@ -1,17 +1,17 @@
-import React, { useContext } from "react";
-import { CSSTransition } from "react-transition-group";
+import React, { useContext } from 'react';
+import { CSSTransition } from 'react-transition-group';
 
-import AccountContext from "./../../account/AccountContext";
-import CreateAccount from "./CreateAccount";
-import Login from "./Login";
-import NavigationContext from "./../NavigationContext";
-import SidebarAccount from "./SidebarAccount";
-import { StyledNavSidebarTrigger, StyledLoginButton } from "./../StyledComponents";
+import AccountContext from './../../account/AccountContext';
+import CreateAccount from './CreateAccount';
+import Login from './Login';
+import NavigationContext from './../NavigationContext';
+import SidebarAccount from './SidebarAccount';
+import { StyledNavSidebarTrigger, StyledLoginButton } from './../StyledComponents';
 import {
   StyledNavSidebar,
   StyledNavSidebarBackdrop,
   StyledSidebarTrigger,
-} from "./StyledComponent";
+} from './StyledComponent';
 
 export default () => {
   const { profileImage, username } = useContext(AccountContext);
@@ -48,7 +48,8 @@ export default () => {
         in={showSidebar}
         timeout={500}
         classNames='NavSidebarBackdropFade'
-        unmountOnExit>
+        unmountOnExit
+      >
         <StyledNavSidebarBackdrop
           onClick={() => {
             setShowSidebar(false);
@@ -60,11 +61,12 @@ export default () => {
         in={showSidebar}
         timeout={1000}
         classNames='NavSidebarSlideRight'
-        unmountOnExit>
+        unmountOnExit
+      >
         <StyledNavSidebar>
           {username ? (
             <SidebarAccount setRenderModal={setRenderModal} />
-          ) : renderModal === "create" ? (
+          ) : renderModal === 'create' ? (
             <CreateAccount />
           ) : (
             <Login />

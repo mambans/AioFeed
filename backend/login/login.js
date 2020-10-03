@@ -1,14 +1,14 @@
-"use strict";
+'use strict';
 
-const DynamoDB = require("aws-sdk/clients/dynamodb");
-const client = new DynamoDB.DocumentClient({ apiVersion: "2012-08-10" });
+const DynamoDB = require('aws-sdk/clients/dynamodb');
+const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
-const bcrypt = require("bcrypt");
-const util = require("util");
-const { v4: uuidv4 } = require("uuid");
+const bcrypt = require('bcrypt');
+const util = require('util');
+const { v4: uuidv4 } = require('uuid');
 const compare = util.promisify(bcrypt.compare);
-const AES = require("crypto-js/aes");
-const enc = require("crypto-js/enc-utf8");
+const AES = require('crypto-js/aes');
+const enc = require('crypto-js/enc-utf8');
 
 const decryptData = async (data, secretString) => {
   if (data) {
@@ -19,21 +19,21 @@ const decryptData = async (data, secretString) => {
 };
 
 module.exports = async ({ username, password }) => {
-  console.log("username", username);
+  console.log('username', username);
   const res = await client
     .query({
       TableName: process.env.USERNAME_TABLE,
-      KeyConditionExpression: "#Username = :InputUsername",
+      KeyConditionExpression: '#Username = :InputUsername',
       ExpressionAttributeNames: {
-        "#Username": "Username",
+        '#Username': 'Username',
       },
       ExpressionAttributeValues: {
-        ":InputUsername": username,
+        ':InputUsername': username,
       },
     })
     .promise();
 
-  if (res.Items.length !== 0 && res.Count !== 0) {
+  if (res && res.Items && res.Items.length !== 0 && res.Count !== 0) {
     const valid = await compare(password, res.Items[0].Password);
 
     if (valid) {
@@ -44,32 +44,32 @@ module.exports = async ({ username, password }) => {
           TableName: process.env.USERNAME_TABLE,
           Key: { Username: username },
           UpdateExpression: `set #auth_key = :key`,
-          ExpressionAttributeNames: { "#auth_key": "AuthKey" },
+          ExpressionAttributeNames: { '#auth_key': 'AuthKey' },
           ExpressionAttributeValues: {
-            ":key": key,
+            ':key': key,
           },
-          ReturnValues: "ALL_NEW",
+          ReturnValues: 'ALL_NEW',
         })
         .promise();
 
       const decryptedData = {
         Attributes: {
           ...data.Attributes,
-          YoutubeAccessToken: await decryptData(data.Attributes.YoutubeAccessToken, "AccessToken"),
+          YoutubeAccessToken: await decryptData(data.Attributes.YoutubeAccessToken, 'AccessToken'),
           YoutubeRefreshToken: await decryptData(
             data.Attributes.YoutubeRefreshToken,
-            "RefreshToken"
+            'RefreshToken'
           ),
           TwitchPreferences: data.Attributes.TwitchPreferences
             ? {
                 ...data.Attributes.TwitchPreferences,
                 Token: await decryptData(
                   data.Attributes.TwitchPreferences.Token,
-                  "TwitchPreferences"
+                  'TwitchPreferences'
                 ),
                 Refresh_token: await decryptData(
                   data.Attributes.TwitchPreferences.Refresh_token,
-                  "TwitchPreferences"
+                  'TwitchPreferences'
                 ),
               }
             : {},
@@ -79,7 +79,7 @@ module.exports = async ({ username, password }) => {
                 ...data.Attributes.YoutubePreferences,
                 Token: await decryptData(
                   data.Attributes.YoutubePreferences.Token,
-                  "YoutubePreferences"
+                  'YoutubePreferences'
                 ),
               }
             : {},
@@ -93,13 +93,13 @@ module.exports = async ({ username, password }) => {
     } else {
       return {
         statusCode: 401,
-        data: { message: "Invalid Password" },
+        data: { message: 'Invalid Password' },
       };
     }
   } else {
     return {
       statusCode: 401,
-      data: { message: "Invalid Username" },
+      data: { message: 'Invalid Username' },
     };
   }
 };
