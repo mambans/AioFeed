@@ -183,13 +183,13 @@ export const StyledLoadingBox = styled.div`
   }
 
   #details {
-    height: ${({ type }) => (type === 'Vods' ? '65px' : type === 'Clips' ? '25px' : '75px')};
+    height: ${({ type }) => (type === 'small' ? '25px' : type === 'big' ? '65px' : '75px')};
 
     #channel {
       animation: ${pulse} 2s linear infinite;
       width: 100px;
-      height: ${({ type }) => (type === 'Clips' ? '25px' : '20px')};
-      margin: ${({ type }) => (type === 'Clips' ? '0' : '7px 0')};
+      height: ${({ type }) => (type === 'big' ? '20px' : '25px')};
+      margin: ${({ type }) => (type === 'big' ? '7px 0' : '0')};
       transform: translate3d(0, 0, 0);
     }
 
@@ -198,7 +198,7 @@ export const StyledLoadingBox = styled.div`
       width: 125px;
       height: 20px;
       margin: 21px 0 0 0;
-      display: ${({ type }) => (type === 'Clips' ? 'none' : 'block')};
+      display: ${({ type }) => (type === 'big' ? 'block' : 'none')};
       transform: translate3d(0, 0, 0);
     }
   }
@@ -303,12 +303,13 @@ export const CenterContainer = styled.div`
     centerWidth,
     twitchSidebarWidth,
     winWidth,
+    fullWidth,
   }) =>
-    !enableTwitter && (!enableTwitch || !showTwitchSidebar)
+    fullWidth || (!enableTwitter && (!enableTwitch || !showTwitchSidebar))
       ? 'auto'
       : (winWidth - (twitchSidebarWidth + twitterWidth + centerWidth)) / 2 +
         twitchSidebarWidth +
         'px'};
-  margin-right: ${({ enableTwitter, enableTwitch, showTwitchSidebar }) =>
-    !enableTwitter && (!enableTwitch || !showTwitchSidebar) ? 'auto' : 'unset'};
+  margin-right: ${({ enableTwitter, enableTwitch, showTwitchSidebar, fullWidth }) =>
+    fullWidth || (!enableTwitter && (!enableTwitch || !showTwitchSidebar)) ? 'auto' : 'unset'};
 `;

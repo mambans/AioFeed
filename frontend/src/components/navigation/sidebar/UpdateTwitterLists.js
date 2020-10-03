@@ -98,7 +98,6 @@ export default ({ style, id, index }) => {
   };
 
   const handleSubmit = (evt) => {
-    console.log('handleSubmit');
     evt.preventDefault();
 
     if (listName !== id) {

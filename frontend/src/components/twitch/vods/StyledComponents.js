@@ -1,6 +1,5 @@
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
-import Moment from 'react-moment';
 
 export const VodLiveIndicator = styled(Link)`
   &&& {
@@ -30,17 +29,22 @@ export const VodLiveIndicator = styled(Link)`
 `;
 
 export const VodType = styled.div`
-  position: relative;
-  bottom: 219px;
   display: flex;
   justify-content: right;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+  transition: opacity 250ms, background 250ms;
+  border-radius: 10px 0px 10px 0px;
+  background: rgba(10, 10, 10, 0.3);
+  padding: 4px;
+  font-size: 0.9rem;
+  color: #dcdcdc;
 
-  span {
-    border-radius: 0px 10px 0px 10px;
-    background: rgba(10, 10, 10, 0.8) none repeat scroll 0% 0%;
-    padding: 3px;
-    font-size: 0.95rem;
-    color: #dcdcdc;
+  &:hover {
+    opacity: 1;
+    background: rgba(10, 10, 10, 0.7);
   }
 `;
 
@@ -51,11 +55,6 @@ export const VodChannelListLi = styled.li`
   button {
     opacity: 1;
   }
-`;
-
-export const LastRefreshText = styled(Moment).attrs({ fromNow: true, interval: 60000 })`
-  position: relative;
-  color: var(--textColor2);
 `;
 
 const AnimateVodPreview = keyframes`

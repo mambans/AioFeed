@@ -5,7 +5,6 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import React, { useRef, useState } from 'react';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { Link } from 'react-router-dom';
-import { Spinner } from 'react-bootstrap';
 
 import {
   VideoContainer,
@@ -14,6 +13,7 @@ import {
   VodVideoInfo,
   ChannelContainer,
   StyledVideoElementAlert,
+  Duration,
 } from './../../sharedStyledComponents';
 import { truncate } from '../../../util/Utils';
 import { VodLiveIndicator, VodType, VodPreview, VodDates } from './StyledComponents';
@@ -24,6 +24,7 @@ import API from '../API';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from '../loginNameFormat';
 import { ChannelNameDiv } from '../StyledComponents';
+import AddVideoButton from '../../favorites/AddVideoButton';
 
 export default ({ data, vodBtnDisabled }) => {
   const [previewAvailable, setPreviewAvailable] = useState({});
@@ -64,7 +65,7 @@ export default ({ data, vodBtnDisabled }) => {
               });
           });
         },
-        previewAvailable.error ? 5000 : 1000
+        previewAvailable.error ? 5000 : 1500
       );
     } else {
       hoverTimeoutRef.current = setTimeout(() => {
@@ -81,6 +82,7 @@ export default ({ data, vodBtnDisabled }) => {
   return (
     <VideoContainer>
       <ImageContainer ref={imgRef}>
+        <AddVideoButton videoId_p={data.id} disablepreview={handleMouseOut} />
         {previewAvailable.error && (
           <StyledVideoElementAlert variant='danger' className='error'>
             {previewAvailable.error}
@@ -90,9 +92,6 @@ export default ({ data, vodBtnDisabled }) => {
           <VodLiveIndicator to={`/${data.login || data.user_name}`}>Live</VodLiveIndicator>
         )}
         <a href={data.url}>
-          {!previewAvailable.error && !previewAvailable.data && (
-            <Spinner className='loadingSpinner' animation='border' role='status' variant='light' />
-          )}
           {previewAvailable.data && showPreview && (
             <VodPreview previewAvailable={previewAvailable.data} className='VodPreview' />
           )}
@@ -106,13 +105,13 @@ export default ({ data, vodBtnDisabled }) => {
         </a>
 
         <VodVideoInfo>
-          <p className={'vodDuration'} title='duration'>
+          <Duration title='duration'>
             {data.thumbnail_url === '' ? (
               <Moment durationFromNow>{data.created_at}</Moment>
             ) : (
               formatTwitchVodsDuration(data.duration)
             )}
-          </p>
+          </Duration>
           <p className={'view_count'} title='views'>
             {formatViewerNumbers(data.view_count)}
             <FaRegEye
@@ -127,11 +126,7 @@ export default ({ data, vodBtnDisabled }) => {
             />
           </p>
         </VodVideoInfo>
-        {data.type !== 'archive' && (
-          <VodType>
-            <span>{data.type}</span>
-          </VodType>
-        )}
+        {data.type !== 'archive' && <VodType>{data.type}</VodType>}
       </ImageContainer>
       {data.title?.length > 50 ? (
         <OverlayTrigger

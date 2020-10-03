@@ -1,8 +1,7 @@
 import React, { useRef } from 'react';
-import YouTube from 'react-youtube';
 
-import styles from './Youtube.module.scss';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
+import { YoutubeIframe } from './StyledComponents';
 
 export default (data) => {
   const ref = useRef();
@@ -21,7 +20,7 @@ export default (data) => {
     data.setIsHovered(false);
     videoHoverOutTimer.current = setTimeout(() => {
       event.target.src = 'about:blank';
-      document.getElementById(`${data.data.contentDetails.upload.videoId}-iframe`).src =
+      document.getElementById(`${data.data.contentDetails?.upload?.videoId}-iframe`).src =
         'about:blank';
     }, 200);
   }
@@ -39,11 +38,10 @@ export default (data) => {
   };
 
   return (
-    <YouTube
-      videoId={data.data.contentDetails.upload.videoId}
+    <YoutubeIframe
+      videoId={data.data.contentDetails?.upload?.videoId}
       opts={opts}
-      id={data.data.contentDetails.upload.videoId + '-iframe'}
-      className={styles.VideoHoverIframe}
+      id={data.data.contentDetails?.upload?.videoId + '-iframe'}
     />
   );
 };

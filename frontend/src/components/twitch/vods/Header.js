@@ -6,8 +6,7 @@ import React from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 
-import { HeaderContainer, ButtonList } from './../../sharedStyledComponents';
-import { LastRefreshText } from './StyledComponents';
+import { HeaderContainer, ButtonList, LastRefreshText } from './../../sharedStyledComponents';
 import VodChannelList from './VodChannelList';
 
 export default React.forwardRef((props, ref) => {

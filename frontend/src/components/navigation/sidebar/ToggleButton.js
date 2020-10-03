@@ -16,6 +16,7 @@ export default ({
   buttonsperrow,
   scrollIntoView,
   smallerIcons,
+  serviceName,
 }) => {
   const [checked, setChecked] = useState(enabled || false);
   const timeout = useRef();
@@ -31,7 +32,7 @@ export default ({
         .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/soft-update`, {
           username: getCookie(`AioFeed_AccountName`),
           columnValue: { Enabled: !checked },
-          columnName: `${label}Preferences`,
+          columnName: `${serviceName}Preferences`,
           authkey: getCookie(`AioFeed_AuthKey`),
         })
         .catch((e) => {

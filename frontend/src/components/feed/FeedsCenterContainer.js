@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom';
 
 export const CenterContext = React.createContext();
 
-const CenterProvider = ({ children }) => {
+const CenterProvider = ({ children, fullWidth }) => {
   const { enableTwitch, enableTwitter, showTwitchSidebar } = useContext(FeedsContext);
   const [winWidth, setWinWidth] = useState(document.documentElement.clientWidth);
   const path = useLocation().pathname?.slice(0, 5);
@@ -19,18 +19,19 @@ const CenterProvider = ({ children }) => {
     setVideoElementsAmount(calcVideoElementsAmount());
   });
 
-  const calcVideoElementsAmount = useCallback(
-    () =>
+  const calcVideoElementsAmount = useCallback(() => {
+    if (fullWidth) return Math.floor((winWidth - 150 / 350) / 350) * 2;
+
+    return (
       Math.floor(
         (winWidth -
           ((enableTwitch && showTwitchSidebar ? 275 : 0) +
             (enableTwitter && path === '/feed' ? winWidth * (winWidth <= 2560 ? 0.2 : 0.14) : 150) +
             25)) /
           350
-      ) * 2,
-
-    [enableTwitch, showTwitchSidebar, enableTwitter, winWidth, path]
-  );
+      ) * 2
+    );
+  }, [enableTwitch, showTwitchSidebar, enableTwitter, winWidth, path, fullWidth]);
 
   const [videoElementsAmount, setVideoElementsAmount] = useState(calcVideoElementsAmount());
 
@@ -46,7 +47,7 @@ const CenterProvider = ({ children }) => {
   );
 };
 
-export default ({ children, forceMountTwitch } = {}) => {
+export default ({ children, forceMountTwitch, fullWidth } = {}) => {
   const { enableTwitch, enableTwitter, showTwitchSidebar, twitterLists } = useContext(FeedsContext);
   const { username } = useContext(AccountContext);
   const NrLists = twitterLists?.length || 1;
@@ -69,6 +70,7 @@ export default ({ children, forceMountTwitch } = {}) => {
   return (
     <CenterProvider>
       <CenterContainer
+        fullWidth={fullWidth}
         winWidth={winWidth}
         enableTwitter={enableTwitter}
         enableTwitch={enableTwitch || forceMountTwitch}

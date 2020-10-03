@@ -26,7 +26,7 @@ export default ({ data }) => {
   if (!loaded) {
     return (
       <Container>
-        <LoadingBoxes amount={videoElementsAmount || 4} />
+        <LoadingBoxes amount={videoElementsAmount || 4} type='big' />
       </Container>
     );
   } else if (error) {

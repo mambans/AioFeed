@@ -144,7 +144,7 @@ export default () => {
           }
         />
       ) : !vods || !vods.data ? (
-        <LoadingBoxes amount={videoElementsAmount} type='Vods' />
+        <LoadingBoxes amount={videoElementsAmount} type='small' />
       ) : (
         <>
           <TransitionGroup

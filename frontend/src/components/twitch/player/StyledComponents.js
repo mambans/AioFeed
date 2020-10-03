@@ -30,8 +30,14 @@ export const VideoAndChatContainer = styled.div`
     linear-gradient(127deg, rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.7) 70.71%),
     linear-gradient(336deg, rgba(30, 30, 30, 0.8), rgba(0, 0, 0, 0.7) 70.71%);
 
-  &:hover #switchSides {
-    opacity: 0.6;
+  &:hover {
+    #switchSides {
+      opacity: 0.6;
+    }
+
+    .listVideoButton {
+      opacity: 1;
+    }
   }
 
   div#twitch-embed {

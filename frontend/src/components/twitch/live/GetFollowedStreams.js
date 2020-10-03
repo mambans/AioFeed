@@ -1,15 +1,6 @@
 import AddVideoExtraData from './../AddVideoExtraData';
 import API from '../API';
-
-function chunk(array, size) {
-  const chunked_arr = [];
-  let index = 0;
-  while (index < array?.length) {
-    chunked_arr.push(array?.slice(index, size + index));
-    index += size;
-  }
-  return chunked_arr;
-}
+import { chunk } from '../../../util/Utils';
 
 const fetchAllOnlineStreams = async (followedChannelsIds) => {
   const channelsInChunks = chunk(followedChannelsIds, 100);

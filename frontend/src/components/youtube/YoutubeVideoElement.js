@@ -1,15 +1,21 @@
 import { Link } from 'react-router-dom';
-import Moment from 'react-moment';
+import moment from 'moment';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import React, { useRef, useState, useContext } from 'react';
 import Tooltip from 'react-bootstrap/Tooltip';
 
 import { truncate } from '../../util/Utils';
-import { VideoContainer, VideoTitleHref, ImageContainer } from './../sharedStyledComponents';
+import {
+  VideoContainer,
+  VideoTitleHref,
+  ImageContainer,
+  Duration,
+} from './../sharedStyledComponents';
 import FeedsContext from '../feed/FeedsContext';
-import styles from './Youtube.module.scss';
 import VideoHoverIframe from './VideoHoverIframe';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
+import AddVideoButton from '../favorites/AddVideoButton';
+import { ChannelNameLink, PublishedDate } from './StyledComponents';
 
 const videoImageUrls = (urls) => {
   if (urls.maxres) {
@@ -27,7 +33,7 @@ const videoImageUrls = (urls) => {
 
 const HOVER_DELAY = 1000;
 
-export default (data) => {
+export default ({ video }) => {
   const { youtubeVideoHoverEnable } = useContext(FeedsContext);
   const streamHoverTimer = useRef();
   const [isHovered, setIsHovered] = useState(false);
@@ -37,38 +43,44 @@ export default (data) => {
   useEventListenerMemo('mouseleave', handleMouseOut, ref.current, youtubeVideoHoverEnable);
 
   function handleMouseOver() {
-    streamHoverTimer.current = setTimeout(function () {
-      setIsHovered(true);
-    }, HOVER_DELAY);
+    streamHoverTimer.current = setTimeout(() => setIsHovered(true), HOVER_DELAY);
   }
 
   function handleMouseOut() {
     clearTimeout(streamHoverTimer.current);
     setIsHovered(false);
-    document.getElementById(data.video.contentDetails.upload.videoId).src = 'about:blank';
+    document.getElementById(video.contentDetails?.upload?.videoId).src = 'about:blank';
   }
 
   return (
-    <VideoContainer key={data.video.contentDetails.upload.videoId}>
-      <ImageContainer id={data.video.contentDetails.upload.videoId} ref={ref}>
+    <VideoContainer key={video.contentDetails?.upload?.videoId}>
+      <ImageContainer id={video.contentDetails?.upload?.videoId} ref={ref}>
+        <AddVideoButton
+          videoId_p={video.contentDetails?.upload?.videoId}
+          disablepreview={handleMouseOut}
+        />
         {isHovered && (
           <VideoHoverIframe
-            id={data.video.contentDetails.upload.videoId}
-            data={data.video}
+            id={video.contentDetails?.upload?.videoId}
+            data={video}
             isHovered={isHovered}
             setIsHovered={setIsHovered}
           />
         )}
+
         <Link
-          className={styles.img}
-          // href={`https://www.youtube.com/watch?v=` + data.video.contentDetails.upload.videoId}
-          to={`/youtube/` + data.video.contentDetails.upload.videoId}
+          // href={`https://www.youtube.com/watch?v=` + video.contentDetails?.upload?.videoId}
+          to={`/youtube/` + video.contentDetails?.upload?.videoId}
         >
-          <img src={videoImageUrls(data.video.snippet.thumbnails)} alt={styles.thumbnail} />
+          <img src={videoImageUrls(video.snippet.thumbnails)} alt='' />
         </Link>
-        {data.video.duration && <p className={styles.duration}>{data.video.duration}</p>}
+        {video.contentDetails.duration && (
+          <Duration bottom='28px'>
+            {moment.duration(video.contentDetails.duration).format('hh:mm:ss')}
+          </Duration>
+        )}
       </ImageContainer>
-      {data.video.snippet.title?.length >= 50 ? (
+      {video.snippet.title?.length >= 50 ? (
         <OverlayTrigger
           key={'bottom'}
           placement={'bottom'}
@@ -80,31 +92,27 @@ export default (data) => {
                 width: '336px',
               }}
             >
-              {data.video.snippet.title}
+              {video.snippet.title}
             </Tooltip>
           }
         >
           <VideoTitleHref
-            href={`https://www.youtube.com/watch?v=` + data.video.contentDetails.upload.videoId}
+            href={`https://www.youtube.com/watch?v=` + video.contentDetails?.upload?.videoId}
           >
-            {truncate(data.video.snippet.title, 50)}
+            {truncate(video.snippet.title, 50)}
           </VideoTitleHref>
         </OverlayTrigger>
       ) : (
         <VideoTitleHref
-          href={`https://www.youtube.com/watch?v=` + data.video.contentDetails.upload.videoId}
+          href={`https://www.youtube.com/watch?v=` + video.contentDetails?.upload?.videoId}
         >
-          {data.video.snippet.title}
+          {video.snippet.title}
         </VideoTitleHref>
       )}
-      <p className={styles.channel}>
-        <a href={`https://www.youtube.com/channel/` + data.video.snippet.channelId}>
-          {data.video.snippet.channelTitle}
-        </a>
-      </p>
-      <Moment className={styles.date} fromNow>
-        {data.video.snippet.publishedAt}
-      </Moment>
+      <ChannelNameLink href={`https://www.youtube.com/channel/` + video.snippet.channelId}>
+        {video.snippet.channelTitle}
+      </ChannelNameLink>
+      <PublishedDate fromNow>{video.snippet.publishedAt}</PublishedDate>
     </VideoContainer>
   );
 };

@@ -1,12 +1,10 @@
 import { FaYoutube } from 'react-icons/fa';
-import Alert from 'react-bootstrap/Alert';
-import Moment from 'react-moment';
 import React from 'react';
 
-import styles from './Youtube.module.scss';
-import { HeaderContainer } from './../sharedStyledComponents';
+import { HeaderContainer, LastRefreshText } from './../sharedStyledComponents';
 import ReAuthenticateButton from '../navigation/sidebar/ReAuthenticateButton';
 import ChannelList from './channelList';
+import { HeaderAlert } from './StyledComponents';
 
 const SubFeedError = (props) => {
   const { error } = props;
@@ -32,11 +30,7 @@ const SubFeedError = (props) => {
 
     return (
       <>
-        <Alert
-          key={error.errors[0].reason}
-          className={styles.requestError}
-          variant={alertVariant || 'warning'}
-        >
+        <HeaderAlert key={error.errors[0].reason} variant={alertVariant || 'warning'}>
           {alertError}
           {error.code === 401 && (
             <ReAuthenticateButton
@@ -44,7 +38,7 @@ const SubFeedError = (props) => {
               style={{ marginLeft: '15px', display: 'inline-block' }}
             />
           )}
-        </Alert>
+        </HeaderAlert>
       </>
     );
   } else {
@@ -68,9 +62,7 @@ export default (data) => {
       isLoading={!isLoaded}
       leftSide={
         <>
-          <Moment key={isLoaded || Date.now()} className={styles.lastRefresh} fromNow>
-            {isLoaded || Date.now()}
-          </Moment>
+          <LastRefreshText key={isLoaded || Date.now()}>{isLoaded || Date.now()}</LastRefreshText>
           <SubFeedError error={requestError}></SubFeedError>
         </>
       }

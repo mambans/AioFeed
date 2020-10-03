@@ -1,0 +1,81 @@
+.fade-appear {
+  opacity: 0;
+  transition: opacity 250ms;
+}
+.fade-appear-active {
+  opacity: 1;
+  transition: opacity 250ms;
+}
+
+.fade-enter {
+  opacity: 0;
+  transition: opacity 250ms;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 250ms;
+}
+
+.fade-exit {
+  opacity: 1;
+  transition: opacity 250ms;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 250ms;
+}
+
+.fade-exit-done {
+  opacity: 0;
+  transition: opacity 250ms;
+}
+
+.listVerticalSlide-appear {
+  opacity: 0;
+  height: 0px;
+  overflow: hidden;
+  transition: opacity 250ms, height 1000ms;
+}
+.listVerticalSlide-appear-active {
+  opacity: 1;
+  height: 307px;
+  overflow: unset;
+  transition: opacity 250ms, height 1000ms;
+}
+
+.listVerticalSlide-enter {
+  opacity: 0;
+  height: 0px;
+  overflow: hidden;
+  transition: opacity 250ms, height 1000ms;
+}
+
+.listVerticalSlide-enter-active {
+  opacity: 1;
+  height: 307px;
+  overflow: unset;
+  transition: opacity 250ms, height 1000ms;
+}
+
+.listVerticalSlide-exit {
+  opacity: 1;
+  height: 307px;
+  overflow: unset;
+  transition: opacity 250ms, height 1000ms;
+}
+
+.listVerticalSlide-exit-active {
+  opacity: 0;
+  height: 0px;
+  overflow: hidden;
+  transition: opacity 250ms, height 1000ms;
+}
+
+.listVerticalSlide-exit-done {
+  opacity: 0;
+  height: 0px;
+  overflow: hidden;
+  transition: opacity 250ms, height 1000ms;
+}

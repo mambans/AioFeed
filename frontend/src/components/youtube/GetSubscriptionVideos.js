@@ -119,7 +119,7 @@ export default async (followedChannels) => {
 
     const flattedVideosArray = videoOnlyArray.flat(1).filter((items) => items);
 
-    const videosWithDetails = await GetVideoInfo(flattedVideosArray);
+    const videosWithDetails = await GetVideoInfo({ videos: flattedVideosArray });
 
     const sortedVideos = reverse(sortBy(videosWithDetails, (video) => video.snippet.publishedAt));
 

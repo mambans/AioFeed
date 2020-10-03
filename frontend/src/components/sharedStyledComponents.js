@@ -5,6 +5,7 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { MdRefresh } from 'react-icons/md';
 import { FaRegWindowRestore } from 'react-icons/fa';
+import Moment from 'react-moment';
 
 import { StyledLoadmore } from './twitch/StyledComponents';
 import Util from './../util/Util';
@@ -179,18 +180,20 @@ export const HeaderContainer = (props) => {
     <HeaderOuterMainContainer ref={ref} style={style} id={id}>
       <HeaderTopContainer>
         <LeftRightDivs>
-          <RefreshButton disabled={isLoading} onClick={refreshFunc}>
-            {autoRefreshEnabled || isLoading ? (
-              <CountdownCircleTimer
-                key={refreshTimer}
-                isLoading={isLoading}
-                autoRefreshEnabled={autoRefreshEnabled}
-                startDuration={Math.max(0, Math.round((refreshTimer - Date.now()) / 1000))}
-              />
-            ) : (
-              <MdRefresh size={32} />
-            )}
-          </RefreshButton>
+          {refreshFunc && (
+            <RefreshButton disabled={isLoading} onClick={refreshFunc}>
+              {autoRefreshEnabled || isLoading ? (
+                <CountdownCircleTimer
+                  key={refreshTimer}
+                  isLoading={isLoading}
+                  autoRefreshEnabled={autoRefreshEnabled}
+                  startDuration={Math.max(0, Math.round((refreshTimer - Date.now()) / 1000))}
+                />
+              ) : (
+                <MdRefresh size={32} />
+              )}
+            </RefreshButton>
+          )}
           {leftSide}
         </LeftRightDivs>
         {children}
@@ -200,13 +203,15 @@ export const HeaderContainer = (props) => {
         <HeaderLines />
         <h5 onClick={handleOnClick}>
           {text}
-          <Link
-            to={`/${onHoverIconLink}`}
-            className='openIndividualFeed'
-            title={`Link to ${text.props.children[0].trim()} individual feed page.`}
-          >
-            <FaRegWindowRestore size={18} />
-          </Link>
+          {onHoverIconLink && (
+            <Link
+              to={`/${onHoverIconLink}`}
+              className='openIndividualFeed'
+              title={`Link to ${text.props.children[0].trim()} individual feed page.`}
+            >
+              <FaRegWindowRestore size={18} />
+            </Link>
+          )}
         </h5>
         <HeaderLines />
       </HeaderTitle>
@@ -425,18 +430,6 @@ export const ImageContainer = styled.div`
     display: block;
   }
 
-  .loadingSpinner {
-    position: absolute;
-    height: 75px;
-    width: 75px;
-    background: rgba(0, 0, 0, 0) none repeat scroll 0% 0%;
-    margin-left: 129.5px;
-    margin-top: 57px;
-    border-width: 0.5em;
-    transition: opacity 200ms 0ms;
-    opacity: 0;
-  }
-
   img {
     border-radius: 10px;
     width: 100%;
@@ -450,17 +443,16 @@ export const ImageContainer = styled.div`
     box-shadow: 0 0px 0px 0px #be0e0e00, 0 0px 0px 0px #be0e0e00,
       12px 0 50px -4px rgba(0, 0, 0, 0.8), -12px 0 50px -4px rgba(0, 0, 0, 0.8);
 
-    .loadingSpinner {
-      transition-delay: 800ms;
-      opacity: 0.5;
-    }
-
     .error {
       opacity: 1;
     }
 
     time {
       z-index: 1;
+    }
+
+    .listVideoButton {
+      opacity: 1;
     }
   }
 
@@ -522,28 +514,12 @@ export const StyledLoadingContainer = styled.div`
 `;
 
 export const VodVideoInfo = styled.div`
-  bottom: 30px;
+  bottom: 28px;
   position: relative;
   display: flex;
   justify-content: space-between;
   font-size: 0.9rem;
   align-items: center;
-  height: 30px;
-
-  .vodDuration {
-    width: max-content;
-    background: #2222228c;
-    padding-right: 5px;
-    padding-left: 5px;
-    background: #161616b0;
-    margin: 0;
-    margin-left: 3px;
-    border-radius: 10px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    z-index: 1;
-  }
 
   .view_count {
     width: max-content;
@@ -652,4 +628,25 @@ export const StyledAlert = styled(Alert)`
   margin: auto;
   margin-top: 50px;
   opacity: 0.7;
+`;
+
+export const LastRefreshText = styled(Moment).attrs({ fromNow: true, interval: 60000 })`
+  position: relative;
+  color: var(--textColor2);
+`;
+
+export const Duration = styled.div`
+  position: relative;
+  height: 24px;
+  width: max-content;
+  z-index: 1;
+  align-items: center;
+  display: flex;
+  border-radius: 10px;
+  padding-right: 5px;
+  padding-left: 5px;
+  background: rgba(22, 22, 22, 0.69);
+  font-size: 0.9rem;
+  margin: 0px 0px 0px 5px;
+  bottom: ${({ bottom }) => bottom || '0px'};
 `;

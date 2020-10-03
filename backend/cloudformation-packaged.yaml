@@ -24,7 +24,7 @@ Resources:
     Type: AWS::DynamoDB::Table
   Create:
     Properties:
-      CodeUri: s3://aiofeed-backend/0f9128ebf7cfcccec511be03a8cbd123
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
       Description: Create an AioFeed account with tokens and monitored vod channels
         default to null and empty array.
       Environment:
@@ -52,7 +52,7 @@ Resources:
     Type: AWS::Serverless::Function
   DeleteAccount:
     Properties:
-      CodeUri: s3://aiofeed-backend/0f9128ebf7cfcccec511be03a8cbd123
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
       Description: Delete an account
       Environment:
         Variables:
@@ -77,9 +77,34 @@ Resources:
           TableName:
             Ref: UserLogins
     Type: AWS::Serverless::Function
+  DeleteSavedLists:
+    Properties:
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
+      Description: Delete custom saved lists.
+      Environment:
+        Variables:
+          SAVED_LISTS:
+            Ref: SavedLists
+      Events:
+        Http:
+          Properties:
+            Method: put
+            Path: /savedlists/delete
+          RequestParameters:
+          - method.request.querystring.username:
+              Required: true
+          - method.request.querystring.listName:
+              Required: true
+          Type: Api
+      Handler: savedListsDelete/handler.handler
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: SavedLists
+    Type: AWS::Serverless::Function
   DeleteTwitchData:
     Properties:
-      CodeUri: s3://aiofeed-backend/0f9128ebf7cfcccec511be03a8cbd123
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
       Description: Deletes all Twitch data associated with the account.
       Environment:
         Variables:
@@ -104,7 +129,7 @@ Resources:
     Type: AWS::Serverless::Function
   DeleteYotubeData:
     Properties:
-      CodeUri: s3://aiofeed-backend/0f9128ebf7cfcccec511be03a8cbd123
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
       Description: Delete all Youtube data associated with the account.
       Environment:
         Variables:
@@ -127,9 +152,32 @@ Resources:
           TableName:
             Ref: UserLogins
     Type: AWS::Serverless::Function
+  FetchSavedLists:
+    Properties:
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
+      Description: Fetch custom saved lists.
+      Environment:
+        Variables:
+          SAVED_LISTS:
+            Ref: SavedLists
+      Events:
+        Http:
+          Properties:
+            Method: get
+            Path: /savedlists
+          RequestParameters:
+          - method.request.querystring.username:
+              Required: true
+          Type: Api
+      Handler: savedListsFetch/handler.handler
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: SavedLists
+    Type: AWS::Serverless::Function
   Login:
     Properties:
-      CodeUri: s3://aiofeed-backend/0f9128ebf7cfcccec511be03a8cbd123
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
       Description: Login with AioFeed account and return account info, tokens and
         monitored vod channels.
       Environment:
@@ -155,7 +203,7 @@ Resources:
     Type: AWS::Serverless::Function
   MakeTwitchWebhookSubsciption:
     Properties:
-      CodeUri: s3://aiofeed-backend/0f9128ebf7cfcccec511be03a8cbd123
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
       Description: Make/initiate a Twitch webhook subsciption
       Environment:
         Variables:
@@ -178,7 +226,7 @@ Resources:
     Type: AWS::Serverless::Function
   ReAuthenticateTwitch:
     Properties:
-      CodeUri: s3://aiofeed-backend/0f9128ebf7cfcccec511be03a8cbd123
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
       Description: Re-authenticate Twitch user to Twitch with refresh token (returns
         access & refresh tokens).
       Environment:
@@ -206,7 +254,7 @@ Resources:
     Type: AWS::Serverless::Function
   RequestTwitchTokens:
     Properties:
-      CodeUri: s3://aiofeed-backend/0f9128ebf7cfcccec511be03a8cbd123
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
       Description: Re-authenticate Twitch user to Twitch with authorization code (returns
         access & refresh tokens).
       Events:
@@ -220,9 +268,21 @@ Resources:
           Type: Api
       Handler: requestTwitchTokens/handler.handler
     Type: AWS::Serverless::Function
+  SavedLists:
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: Username
+        AttributeType: S
+      KeySchema:
+      - AttributeName: Username
+        KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+    Type: AWS::DynamoDB::Table
   SoftUpdate:
     Properties:
-      CodeUri: s3://aiofeed-backend/0f9128ebf7cfcccec511be03a8cbd123
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
       Description: Update a specific column mentioned as a param but merge it with
         its current value.
       Environment:
@@ -252,7 +312,7 @@ Resources:
     Type: AWS::Serverless::Function
   TwitchWebhookCallback:
     Properties:
-      CodeUri: s3://aiofeed-backend/0f9128ebf7cfcccec511be03a8cbd123
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
       Description: Receive Twitch webhooks notifications.
       Events:
         Http:
@@ -264,7 +324,7 @@ Resources:
     Type: AWS::Serverless::Function
   TwitchWebhookCallbackConfirm:
     Properties:
-      CodeUri: s3://aiofeed-backend/0f9128ebf7cfcccec511be03a8cbd123
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
       Description: Receive Twitch webhooks and confirm req.
       Events:
         Http:
@@ -276,7 +336,7 @@ Resources:
     Type: AWS::Serverless::Function
   Update:
     Properties:
-      CodeUri: s3://aiofeed-backend/0f9128ebf7cfcccec511be03a8cbd123
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
       Description: Update a specific column mentioned as a param.
       Environment:
         Variables:
@@ -305,7 +365,7 @@ Resources:
     Type: AWS::Serverless::Function
   UpdateNotisChannelsUpdate:
     Properties:
-      CodeUri: s3://aiofeed-backend/0f9128ebf7cfcccec511be03a8cbd123
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
       Description: Update channel list (channels with updated title/game notifications
         enabled.).
       Environment:
@@ -331,6 +391,33 @@ Resources:
           TableName:
             Ref: UserLogins
     Type: AWS::Serverless::Function
+  UpdateSavedLists:
+    Properties:
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
+      Description: Update custom saved lists.
+      Environment:
+        Variables:
+          SAVED_LISTS:
+            Ref: SavedLists
+      Events:
+        Http:
+          Properties:
+            Method: put
+            Path: /savedlists
+          RequestParameters:
+          - method.request.querystring.username:
+              Required: true
+          - method.request.querystring.videosObj:
+              Required: true
+          - method.request.querystring.listName:
+              Required: true
+          Type: Api
+      Handler: savedListsUpdate/handler.handler
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: SavedLists
+    Type: AWS::Serverless::Function
   UserLogins:
     Properties:
       AttributeDefinitions:
@@ -345,7 +432,7 @@ Resources:
     Type: AWS::DynamoDB::Table
   VodChannelsFetch:
     Properties:
-      CodeUri: s3://aiofeed-backend/0f9128ebf7cfcccec511be03a8cbd123
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
       Description: Fetch monitored vod channels list.
       Environment:
         Variables:
@@ -370,7 +457,7 @@ Resources:
     Type: AWS::Serverless::Function
   VodChannelsUpdate:
     Properties:
-      CodeUri: s3://aiofeed-backend/0f9128ebf7cfcccec511be03a8cbd123
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
       Description: Update monitored vod channels list.
       Environment:
         Variables:
@@ -397,7 +484,7 @@ Resources:
     Type: AWS::Serverless::Function
   YoutubeFetchTokens:
     Properties:
-      CodeUri: s3://aiofeed-backend/0f9128ebf7cfcccec511be03a8cbd123
+      CodeUri: s3://aiofeed-backend/e96d9867132cc6d76de0a236d2f4c497
       Description: Exchange an authorization code for an access and refresh token
       Environment:
         Variables:

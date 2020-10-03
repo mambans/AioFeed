@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from 'react';
 
 /**
  * Save in localstorage and sync state across multipul tabs/windows.
@@ -26,23 +26,26 @@ export default (key, defaultValue) => {
         }
       }
     };
-    window.addEventListener("storage", listener);
+    window.addEventListener('storage', listener);
 
     return () => {
-      window.removeEventListener("storage", listener);
+      window.removeEventListener('storage', listener);
     };
   }, [key]);
 
-  const setLocalStateValue = (newValue) => {
-    setValue((currentValue) => {
-      const finallValue = typeof newValue === "function" ? newValue(currentValue) : newValue;
-      localStorage.setItem(
-        key,
-        typeof finallValue === "string" ? finallValue : JSON.stringify(finallValue)
-      );
-      return finallValue;
-    });
-  };
+  const setLocalStateValue = useCallback(
+    (newValue) => {
+      setValue((currentValue) => {
+        const finallValue = typeof newValue === 'function' ? newValue(currentValue) : newValue;
+        localStorage.setItem(
+          key,
+          typeof finallValue === 'string' ? finallValue : JSON.stringify(finallValue)
+        );
+        return finallValue;
+      });
+    },
+    [key]
+  );
 
   return [value, setLocalStateValue];
 };

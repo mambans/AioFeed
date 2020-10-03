@@ -118,6 +118,7 @@ export default () => {
             }}
             enabled={enableTwitch}
             label='Twitch'
+            serviceName='Twitch'
             tokenExists={getCookie(`Twitch-access_token`)}
             scrollIntoView={true}
             tooltip={
@@ -133,6 +134,7 @@ export default () => {
               setEnableTwitter(value);
               AddCookie('Twitter_FeedEnabled', value);
             }}
+            serviceName='Twitter'
             enabled={enableTwitter}
             label='Twitter'
             tokenExists={true}
@@ -146,6 +148,7 @@ export default () => {
             }}
             enabled={enableYoutube}
             label='Youtube'
+            serviceName='Youtube'
             tokenExists={youtubeToken}
             scrollIntoView={true}
             tooltip={
@@ -162,6 +165,7 @@ export default () => {
             }}
             enabled={enableTwitchVods}
             label='TwitchVods'
+            serviceName='TwitchVods'
             tokenExists={getCookie(`Twitch-access_token`)}
             scrollIntoView={true}
             tooltip={
@@ -184,6 +188,7 @@ export default () => {
             }}
             enabled={autoRefreshEnabled}
             label='Twitch auto-refresh (25s)'
+            serviceName='Twitch'
             tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
               getCookie(`Twitch-access_token`)
@@ -199,6 +204,7 @@ export default () => {
             }}
             enabled={showTwitchSidebar}
             label='Twitch sidebar'
+            serviceName='Twitch'
             tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
               getCookie(`Twitch-access_token`)
@@ -214,6 +220,7 @@ export default () => {
             }}
             enabled={isEnabledUpdateNotifications}
             label='Twitch update notifications'
+            serviceName='Twitch'
             tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
               getCookie(`Twitch-access_token`)
@@ -230,6 +237,7 @@ export default () => {
             }}
             enabled={isEnabledOfflineNotifications}
             label='Twitch offline notifications'
+            serviceName='Twitch'
             tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
               getCookie(`Twitch-access_token`)
@@ -246,6 +254,7 @@ export default () => {
             }}
             enabled={enableForceRefreshThumbnail}
             label='Twitch force refresh thumbnails'
+            serviceName='Twitch'
             tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
               getCookie(`Twitch-access_token`)
@@ -263,6 +272,7 @@ export default () => {
             }}
             enabled={twitchVideoHoverEnable}
             label='Twitch hover-video'
+            serviceName='Twitch'
             tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
               getCookie(`Twitch-access_token`)
@@ -279,6 +289,7 @@ export default () => {
             }}
             enabled={youtubeVideoHoverEnable}
             label='Youtube hover-video'
+            serviceName='Youtube'
             tokenExists={youtubeToken}
             tooltip={
               youtubeToken

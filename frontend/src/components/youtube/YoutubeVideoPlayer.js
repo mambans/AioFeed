@@ -6,6 +6,7 @@ import YouTube from 'react-youtube';
 
 import { VideoAndChatContainer, ShowNavbarBtn } from './../twitch/player/StyledComponents';
 import NavigationContext from './../navigation/NavigationContext';
+import AddVideoButton from '../favorites/AddVideoButton';
 
 const StyledYoutubeIframe = styled(YouTube)`
   border: none;
@@ -70,6 +71,7 @@ export default () => {
           display: 'unset',
         }}
       >
+        <AddVideoButton videoId_p={video.id} style={{ right: '100px' }} size={32} />
         <ShowNavbarBtn
           variant='dark'
           onClick={() => {

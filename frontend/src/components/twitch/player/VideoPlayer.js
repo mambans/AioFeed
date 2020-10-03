@@ -7,6 +7,7 @@ import NavigationContext from './../../navigation/NavigationContext';
 import { VideoAndChatContainer, ShowNavbarBtn } from './StyledComponents';
 import PlayerNavbar from './PlayerNavbar';
 import API from '../API';
+import AddVideoButton from '../../favorites/AddVideoButton';
 
 export default () => {
   const channelName = useParams()?.channelName;
@@ -94,6 +95,7 @@ export default () => {
           display: 'unset',
         }}
       >
+        <AddVideoButton videoId_p={videoInfo?.id || videoId} style={{ right: '100px' }} size={32} />
         <ShowNavbarBtn
           variant='dark'
           type='video'

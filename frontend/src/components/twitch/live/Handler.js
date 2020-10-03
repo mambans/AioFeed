@@ -119,7 +119,7 @@ export default ({ children }) => {
               }),
             ]).then((res) => {
               const flattenedArray = res.flat(3).filter((n) => n);
-              if (Boolean(flattenedArray?.lengt)) addNotification(flattenedArray);
+              if (Boolean(flattenedArray?.length)) addNotification(flattenedArray);
             });
           }
         } else if (streams?.status === 201) {

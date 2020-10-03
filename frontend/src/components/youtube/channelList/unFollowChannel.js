@@ -5,12 +5,10 @@ import validateToken from './../validateToken';
 export default async ({ subscriptionId, channelId, setChannels, videos, setVideos }) => {
   await validateToken({}).then(async () => {
     const followedChannels = getLocalstorage(`YT-followedChannels`) || [];
-    const newFollowedChannels = followedChannels.data.filter(function (channel) {
-      return channel.id !== subscriptionId;
-    });
-    const newFilteredVideos = videos.filter((video) => {
-      return video.snippet.channelId !== channelId;
-    });
+    const newFollowedChannels = followedChannels.data.filter(
+      (channel) => channel.id !== subscriptionId
+    );
+    const newFilteredVideos = videos.filter((video) => video.snippet.channelId !== channelId);
 
     setChannels(newFollowedChannels);
     setVideos(newFilteredVideos);

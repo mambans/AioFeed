@@ -26,14 +26,14 @@ const StyledNav = styled(Nav)`
   }
 `;
 
-export default (prop) => {
+export default () => {
   const { visible, shrinkNavbar } = useContext(NavigationContext);
   const leftExpand = useRef();
 
   return (
     <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
       <StyledNavbar
-        mode={prop.fixed ? 'fixed' : 'unset'}
+        mode='fixed'
         collapseOnSelect
         expand='lg'
         bg='dark'
@@ -59,7 +59,10 @@ export default (prop) => {
             <Nav.Link as={NavLink} to='/home' activeClassName='active'>
               Home
             </Nav.Link>
-            <Nav.Link as={NavLink} to='/feed/' activeClassName='active'>
+            <Nav.Link as={NavLink} to='/favorites' activeClassName='active'>
+              Favorites
+            </Nav.Link>
+            <Nav.Link as={NavLink} to='/feed' activeClassName='active'>
               Feed
             </Nav.Link>
           </StyledNav>

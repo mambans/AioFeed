@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import { SubFeedContainer } from "./../../sharedStyledComponents";
-import LoadingBoxes from "./../LoadingBoxes";
-import SortButton from "./SortButton";
-import { SubFeedHeader } from "./StyledComponents";
+import { SubFeedContainer } from './../../sharedStyledComponents';
+import LoadingBoxes from './../LoadingBoxes';
+import SortButton from './SortButton';
+import { SubFeedHeader } from './StyledComponents';
 
 export default ({ numberOfVideos }) => {
   return (
@@ -11,13 +11,15 @@ export default ({ numberOfVideos }) => {
       <SubFeedHeader
         style={{
           width: `${numberOfVideos * 350}px`,
-        }}>
-        <SortButton sortBy={""} />
+        }}
+      >
+        <SortButton sortBy={''} />
         <h3>Vods</h3>
       </SubFeedHeader>
       <SubFeedContainer
-        style={{ justifyContent: "center", minHeight: "345px", paddingBottom: "0" }}>
-        <LoadingBoxes amount={numberOfVideos} type='Vods' />
+        style={{ justifyContent: 'center', minHeight: '345px', paddingBottom: '0' }}
+      >
+        <LoadingBoxes amount={numberOfVideos} type='small' />
       </SubFeedContainer>
     </>
   );

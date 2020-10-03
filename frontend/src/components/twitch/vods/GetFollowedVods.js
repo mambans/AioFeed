@@ -47,13 +47,13 @@ const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) =
 };
 
 const addVodEndTime = async (followedStreamVods) => {
-  followedStreamVods.map((stream) => {
+  return followedStreamVods.map((stream) => {
     if (stream.type === 'archive') {
       stream.endDate = durationToDate(stream.duration, stream.created_at);
     } else {
       stream.endDate = new Date(stream.created_at).getTime();
     }
-    return '';
+    return stream;
   });
 };
 
@@ -148,9 +148,9 @@ export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchTok
           },
         });
 
-        await addVodEndTime(videos.data);
+        const videoWithEndTime = await addVodEndTime(videos.data);
 
-        const followedOrderedStreamVods = SortAndAddExpire(videos.data, vodExpire);
+        const followedOrderedStreamVods = SortAndAddExpire(videoWithEndTime, vodExpire);
 
         localStorage.setItem(`Vods`, JSON.stringify(followedOrderedStreamVods));
         return {

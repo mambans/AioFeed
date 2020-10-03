@@ -28,7 +28,7 @@ export default ({ requestError, videos }) => {
   } else if (!videos || videos.length < 1) {
     return (
       <SubFeedContainer>
-        <LoadingBoxes amount={videoElementsAmount} type='Vods' />;
+        <LoadingBoxes amount={videoElementsAmount} type='small' />;
       </SubFeedContainer>
     );
   } else {
@@ -43,10 +43,10 @@ export default ({ requestError, videos }) => {
               <CSSTransition
                 timeout={vodAmounts.timeout}
                 classNames={index < videoElementsAmount ? 'videoFadeSlide' : 'fade-750ms'}
-                key={video.contentDetails.upload.videoId}
+                key={video.contentDetails?.upload?.videoId}
                 unmountOnExit
               >
-                <YoutubeVideoElement id={video.contentDetails.upload.videoId} video={video} />
+                <YoutubeVideoElement video={video} />
               </CSSTransition>
             );
           })}

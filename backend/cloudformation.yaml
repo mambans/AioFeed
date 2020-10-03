@@ -385,3 +385,87 @@ Resources:
                 Required: true
             - method.request.querystring.username:
                 Required: true
+  SavedLists:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: Username
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Username
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+  UpdateSavedLists:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Update custom saved lists.'
+      Handler: savedListsUpdate/handler.handler
+      Environment:
+        Variables:
+          SAVED_LISTS: !Ref SavedLists
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SavedLists
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /savedlists
+            Method: put
+          RequestParameters:
+            - method.request.querystring.username:
+                Required: true
+            - method.request.querystring.videosObj:
+                Required: true
+            - method.request.querystring.listName:
+                Required: true
+  FetchSavedLists:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Fetch custom saved lists.'
+      Handler: savedListsFetch/handler.handler
+      Environment:
+        Variables:
+          SAVED_LISTS: !Ref SavedLists
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SavedLists
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /savedlists
+            Method: get
+          RequestParameters:
+            - method.request.querystring.username:
+                Required: true
+            # - method.request.querystring.videosObj:
+            #     Required: true
+            # - method.request.querystring.listName:
+            #     Required: true
+  DeleteSavedLists:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Delete custom saved lists.'
+      Handler: savedListsDelete/handler.handler
+      Environment:
+        Variables:
+          SAVED_LISTS: !Ref SavedLists
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SavedLists
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /savedlists/delete
+            Method: put
+          RequestParameters:
+            - method.request.querystring.username:
+                Required: true
+            - method.request.querystring.listName:
+                Required: true
+            # - method.request.querystring.videosObj:
+            #     Required: true

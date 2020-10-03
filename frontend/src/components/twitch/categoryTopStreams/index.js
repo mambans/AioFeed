@@ -273,6 +273,7 @@ export default () => {
               <LoadingBoxes
                 amount={Math.floor(((window.innerWidth - 150) / 350) * 1.5)}
                 load={!topData || topData.length <= 0}
+                type='big'
               />
 
               <TransitionGroup className='twitch-top-live' component={null}>
