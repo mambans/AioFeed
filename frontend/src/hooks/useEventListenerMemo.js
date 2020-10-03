@@ -22,21 +22,44 @@ export default (eventName, handler, element = window, secondArgument = true, opt
 
     const eventListener = (event) => savedHandler(event);
     if (Array.isArray(savedEventName) && savedEventName[0]) {
-      Boolean(savedSecondArgument) &&
-        savedEventName.map((event) =>
-          savedElement.addEventListener(event, eventListener, savedOptions)
-        );
+      if (Array.isArray(savedElement) && Boolean(savedElement.length)) {
+        Boolean(savedSecondArgument) &&
+          savedElement.map((ele) =>
+            savedEventName.map((event) => ele.addEventListener(event, eventListener, savedOptions))
+          );
 
-      return () => {
-        savedEventName.map((event) => savedElement.removeEventListener(event, eventListener));
-      };
+        return () =>
+          savedElement.map((ele) =>
+            savedEventName.map((event) =>
+              ele.removeEventListener(event, eventListener, savedOptions)
+            )
+          );
+      } else {
+        Boolean(savedSecondArgument) &&
+          savedEventName.map((event) =>
+            savedElement.addEventListener(event, eventListener, savedOptions)
+          );
+
+        return () =>
+          savedEventName.map((event) => savedElement.removeEventListener(event, eventListener));
+      }
     } else {
-      Boolean(savedSecondArgument) &&
-        savedElement.addEventListener(savedEventName, eventListener, savedOptions);
+      if (Array.isArray(savedElement) && Boolean(savedElement.length)) {
+        Boolean(savedSecondArgument) &&
+          savedElement.map((ele) =>
+            ele.addEventListener(savedEventName, eventListener, savedOptions)
+          );
 
-      return () => {
-        savedElement.removeEventListener(savedEventName, eventListener);
-      };
+        return () =>
+          savedElement.map((ele) =>
+            ele.removeEventListener(savedEventName, eventListener, savedOptions)
+          );
+      } else {
+        Boolean(savedSecondArgument) &&
+          savedElement.addEventListener(savedEventName, eventListener, savedOptions);
+
+        return () => savedElement.removeEventListener(savedEventName, eventListener);
+      }
     }
   }, [savedEventName, savedElement, savedSecondArgument, savedHandler, savedOptions]);
 };
