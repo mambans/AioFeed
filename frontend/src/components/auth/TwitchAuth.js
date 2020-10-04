@@ -9,9 +9,7 @@ function TwitchAuth() {
   const [error, setError] = useState();
 
   const initiateAuth = useCallback(async () => {
-    async function generateOrginState() {
-      return uniqid();
-    }
+    const generateOrginState = async () => uniqid();
 
     const orginState = await generateOrginState();
     AddCookie('Twitch-myState', orginState);

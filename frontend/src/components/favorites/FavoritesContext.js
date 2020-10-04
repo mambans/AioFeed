@@ -20,9 +20,7 @@ export const FavoritesProvider = ({ children }) => {
           delete res.data.Item?.Username;
           return res.data.Item;
         })
-        .catch((e) => {
-          console.error(e);
-        });
+        .catch((e) => console.error(e));
 
       setLists(Lists);
     };

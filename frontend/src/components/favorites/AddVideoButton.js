@@ -23,7 +23,6 @@ export default ({ videoId_p, style = {}, size, disablepreview = () => {} }) => {
     e.stopPropagation();
     clearTimeout(fadeOutTimer.current);
     clearTimeout(openTimer.current);
-    // disablepreview();
     openTimer.current = setTimeout(() => setOpen(true), 250);
     setTimeout(() => disablepreview(), 0);
   };

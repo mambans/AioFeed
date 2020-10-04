@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
-import FeedsCenterContainer from '../feed/FeedsCenterContainer';
-import { HeaderContainer } from '../sharedStyledComponents';
-import List from './List';
-import FavoritesContext from './FavoritesContext';
-
-import DeleteListBtn from './DeleteListBtn';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+
 import './FavoritesTransitions.scss';
-import youtubeValidateToken from '../youtube/validateToken';
+import { HeaderContainer } from '../sharedStyledComponents';
+import DeleteListBtn from './DeleteListBtn';
+import FavoritesContext from './FavoritesContext';
+import FeedsCenterContainer from '../feed/FeedsCenterContainer';
+import List from './List';
 import validateToken from '../twitch/validateToken';
+import youtubeValidateToken from '../youtube/validateToken';
 
 export default () => {
   const { lists, setLists } = useContext(FavoritesContext);
@@ -16,32 +16,20 @@ export default () => {
   const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
 
   useEffect(() => {
-    const youtubeVideoExists =
-      lists &&
-      Object.values(lists)
-        .map((list) => {
-          return list.items.find((videoId) => typeof videoId === 'string');
-        })
-        .filter((i) => i).length;
+    const youtubeVideoExists = Object?.values(lists)
+      .map((list) => list.items.find((videoId) => typeof videoId === 'string'))
+      .filter((i) => i).length;
 
-    const twitchVideoExists =
-      lists &&
-      Object.values(lists)
-        .map((list) => {
-          return list.items.find((videoId) => typeof videoId === 'number');
-        })
-        .filter((i) => i).length;
+    const twitchVideoExists = Object?.values(lists)
+      .map((list) => list.items.find((videoId) => typeof videoId === 'number'))
+      .filter((i) => i).length;
 
-    if (youtubeVideoExists) {
-      youtubeValidateToken().then(() => {
-        setYtExistsAndValidated(true);
-      });
+    if (Boolean(youtubeVideoExists)) {
+      youtubeValidateToken().then(() => setYtExistsAndValidated(true));
     }
 
-    if (twitchVideoExists) {
-      validateToken().then(() => {
-        setTwitchExistsAndValidated(true);
-      });
+    if (Boolean(twitchVideoExists)) {
+      validateToken().then(() => setTwitchExistsAndValidated(true));
     }
   }, [lists]);
 

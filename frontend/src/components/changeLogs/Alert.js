@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { Alert } from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { Alert } from 'react-bootstrap';
 
-import { AddCookie, getCookie } from "../../util/Utils";
+import { AddCookie, getCookie } from '../../util/Utils';
 
 const StyledAlert = styled(Alert)`
   text-align: center;
@@ -28,7 +28,6 @@ export default ({ AlertName }) => {
         Something happended, do that thing.
       </StyledAlert>
     );
-  } else {
-    return "";
   }
+  return '';
 };

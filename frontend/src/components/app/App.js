@@ -15,8 +15,8 @@ import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 export default () => {
   return (
     <ThemeProvider>
-      <NavigationProvider>
-        <AccountProvider>
+      <AccountProvider>
+        <NavigationProvider>
           <NotificationsProvider>
             <FeedsProvider>
               <FooterProvider>
@@ -24,8 +24,8 @@ export default () => {
               </FooterProvider>
             </FeedsProvider>
           </NotificationsProvider>
-        </AccountProvider>
-      </NavigationProvider>
+        </NavigationProvider>
+      </AccountProvider>
     </ThemeProvider>
   );
 };
@@ -44,26 +44,19 @@ const App = () => {
 
   useEventListenerMemo('message', receiveMessage, window, true, { capture: false });
 
-  useEffect(() => {
-    SetStartupTheme(themesArray);
-  }, [themesArray]);
+  useEffect(() => SetStartupTheme(themesArray), [themesArray]);
 
-  function receiveMessage(event) {
-    if (
-      event.origin.startsWith('https://aiofeed.com') &&
-      typeof event.data === 'object' &&
-      event.data.token &&
-      event.data.service
-    ) {
-      if (event.data.service === 'twitch') {
-        setTwitchToken(event.data.token);
-        setRefreshToken(event.data.refresh_token);
-        setTwitchUsername(event.data.username);
-        setTwitchProfileImg(event.data.profileImg);
-      } else if (event.data.service === 'youtube') {
-        if (event.data.token) setYoutubeToken(event.data.token);
-        if (event.data.username) setYoutubeUsername(event.data.username);
-        if (event.data.profileImg) setYoutubeProfileImg(event.data.profileImg);
+  function receiveMessage(e) {
+    if (e.origin.startsWith('https://aiofeed.com') && e.data?.token && e.data?.service) {
+      if (e.data.service === 'twitch') {
+        setTwitchToken(e.data.token);
+        setRefreshToken(e.data.refresh_token);
+        setTwitchUsername(e.data.username);
+        setTwitchProfileImg(e.data.profileImg);
+      } else if (e.data.service === 'youtube') {
+        if (e.data.token) setYoutubeToken(e.data.token);
+        if (e.data.username) setYoutubeUsername(e.data.username);
+        if (e.data.profileImg) setYoutubeProfileImg(e.data.profileImg);
       }
     }
   }

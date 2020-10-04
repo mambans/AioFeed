@@ -14,11 +14,11 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
 
   const addVodEndTime = async (followedStreamVods) => {
     return followedStreamVods.map((stream) => {
-      if (stream.type === 'archive') {
-        stream.endDate = durationToDate(stream.duration, stream.created_at);
-      } else {
-        stream.endDate = new Date(stream.created_at).getTime();
-      }
+      stream.endDate =
+        stream.type === 'archive'
+          ? durationToDate(stream.duration, stream.created_at)
+          : new Date(stream.created_at).getTime();
+
       return stream;
     });
   };
@@ -27,47 +27,34 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
     (async () => {
       const twitchFetchVideos = async (items) => {
         const fetchedVideos = await API.getVideos({ params: { id: items } });
-
         const finallFetchedVideos = await AddVideoExtraData({
           items: fetchedVideos.data,
           fetchGameInfo: false,
         });
 
-        return addVodEndTime(finallFetchedVideos.data);
+        return await addVodEndTime(finallFetchedVideos.data);
       };
 
-      const youtubeFetchVideos = async (items) => {
-        const finallFetchedVideos = await GetVideoInfo({ videos: items });
-
-        return finallFetchedVideos;
-      };
+      const youtubeFetchVideos = async (items) => await GetVideoInfo({ videos: items });
 
       const twitchItems = list.items
-        .map((video) => {
-          if (typeof video === 'number') return video;
-          return null;
-        })
+        .map((video) => typeof video === 'number' && video)
         .filter((i) => i);
 
       const youtubeItems = list.items
-        .map((video) => {
-          if (typeof video === 'string') return video;
-          return null;
-        })
+        .map((video) => typeof video === 'string' && video)
         .filter((i) => i);
 
       const twitchItemsWithDetails = Boolean(twitchItems.length)
         ? twitchExistsAndValidated
           ? await twitchFetchVideos(twitchItems)
-          : twitchItems.map((video) => {
-              return { id: video, loading: true };
-            })
+          : twitchItems.map((video) => ({ id: video, loading: true }))
         : [];
 
       const youtubeItemsWithDetails = Boolean(youtubeItems.length)
         ? ytExistsAndValidated
           ? await youtubeFetchVideos(youtubeItems)
-          : youtubeItems?.map((video) => {
+          : youtubeItems.map((video) => {
               return { id: video, contentDetails: { upload: { videoId: video } }, loading: true };
             })
         : [];

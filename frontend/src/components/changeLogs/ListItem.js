@@ -102,23 +102,22 @@ const List = {
 export default ({ name, body, published_at, showInfo, children }) => {
   const [info, setInfo] = useState({ loading: false, data: null });
   const [showFullMessage, setShowFullMessage] = useState(false);
-  const additionsKeywords = useMemo(() => ['added', 'add', 'fix', 'fixed'], []);
-  const deletionsKeywords = useMemo(() => ['removed', 'remove', 'deleted', 'delete'], []);
+  const additionsKeywords = useMemo(() => ['added', 'fixed'], []);
+  const deletionsKeywords = useMemo(() => ['removed', 'deleted'], []);
   const changesKeywords = useMemo(
     () => [
       'changed',
-      'change',
       'refactored',
-      'refactor',
+      'restyled',
       'moved',
-      'move',
       'renamed',
-      'rename',
       'changes',
       'improved',
       'increased',
       'fixed/added',
       'added/fixed',
+      'split',
+      'extracted',
     ],
     []
   );
@@ -159,11 +158,7 @@ export default ({ name, body, published_at, showInfo, children }) => {
     }
   }, [body, published_at, additionsKeywords, deletionsKeywords, changesKeywords]);
 
-  useEffect(() => {
-    if (showInfo) {
-      handleClick();
-    }
-  }, [showInfo, handleClick]);
+  useEffect(() => showInfo && handleClick(), [showInfo, handleClick]);
 
   return (
     <List.Container>

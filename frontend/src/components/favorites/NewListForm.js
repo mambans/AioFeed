@@ -26,12 +26,8 @@ export default ({ lists, setLists, item }) => {
         listName: list_Name,
         authkey: getCookie(`AioFeed_AuthKey`),
       })
-      .then((res) => {
-        return res;
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+      .then((res) => res)
+      .catch((e) => console.error(e));
   };
 
   const CheckForNameAvaliability = !Boolean(

@@ -1,12 +1,8 @@
-import axios from "axios";
+import axios from 'axios';
 
 export default async () => {
   return await axios
-    .get("https://api.github.com/repos/mambans/aiofeed/releases")
-    .then((res) => {
-      return res.data;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+    .get('https://api.github.com/repos/mambans/aiofeed/releases')
+    .then((res) => res.data)
+    .catch((error) => console.error(error));
 };

@@ -18,7 +18,7 @@ export default (data) => {
   } = data?.data || data;
   const [show, setShow] = useState(Boolean(title || message));
 
-  if (show && Boolean(manualShow))
+  if (show && Boolean(manualShow)) {
     return (
       <StyledAlert
         variant={type}
@@ -37,6 +37,7 @@ export default (data) => {
         {children}
       </StyledAlert>
     );
+  }
 
   return null;
 };
