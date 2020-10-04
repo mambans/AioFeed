@@ -57,15 +57,17 @@ export default () => {
                 classNames='listVerticalSlide'
                 unmountOnExit
               >
-                <HeaderContainer
-                  text={<>{list.name}</>}
-                  rightSide={<DeleteListBtn list={list} setLists={setLists} />}
-                />
-                <List
-                  list={list}
-                  ytExistsAndValidated={ytExistsAndValidated}
-                  twitchExistsAndValidated={twitchExistsAndValidated}
-                />
+                <>
+                  <HeaderContainer
+                    text={<>{list.name}</>}
+                    rightSide={<DeleteListBtn list={list} setLists={setLists} />}
+                  />
+                  <List
+                    list={list}
+                    ytExistsAndValidated={ytExistsAndValidated}
+                    twitchExistsAndValidated={twitchExistsAndValidated}
+                  />
+                </>
               </CSSTransition>
             );
           })}

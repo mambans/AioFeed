@@ -8,21 +8,33 @@ import { Lists, ListItem, ListsLink, AddItemBtn, RemoveItemBtn } from './StyledC
 import useClicksOutside from '../../hooks/useClicksOutside';
 import NewListForm from './NewListForm';
 
+const parseNumberAndString = (value) => {
+  if (typeof value === 'number') return value;
+  const parsedToInt = parseInt(value);
+  const parsedToString = String(parseInt(value));
+  if (parsedToInt && parsedToString.length === value.length) return parsedToInt;
+  return value;
+};
+
 export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) => {
   const { lists, setLists } = useContext(FavoritesContext);
   const listRef = useRef();
 
   useClicksOutside(listRef, CloseFunction);
 
-  const checkIfInList = (listItems, value) => listItems.includes(value);
+  const checkIfInList = (listItems, value) => {
+    const newVideo = parseNumberAndString(value);
+
+    return listItems.includes(newVideo);
+  };
 
   const addFunc = async (list_Name, newItem) => {
+    const newVideo = parseNumberAndString(newItem);
     const allOrinalLists = { ...lists };
-
     const existing = allOrinalLists[list_Name];
     const newObj = {
       ...existing,
-      items: [...new Set([...(existing?.items || []), newItem])].filter((i) => i),
+      items: [...new Set([...(existing?.items || []), newVideo])].filter((i) => i),
     };
 
     allOrinalLists[list_Name] = newObj;
@@ -36,26 +48,18 @@ export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) =>
         listName: list_Name,
         authkey: getCookie(`AioFeed_AuthKey`),
       })
-      .then((res) => {
-        return res;
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+      .then((res) => res)
+      .catch((e) => console.error(e));
   };
 
   const removeFunc = async (list_Name, newItem_p) => {
-    const newItem = typeof newItem_p === 'number' ? parseInt(newItem_p) || newItem_p : newItem_p;
-
+    const newItem = parseNumberAndString(newItem_p);
     const allOrinalLists = { ...lists };
-
     const existing = allOrinalLists[list_Name];
-
     const newObj = {
       name: existing.name,
       items: existing.items.filter((item) => item !== newItem),
     };
-    console.log('removeFunc -> newObj', newObj);
 
     allOrinalLists[list_Name] = newObj;
 
@@ -68,12 +72,8 @@ export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) =>
         listName: list_Name,
         authkey: getCookie(`AioFeed_AuthKey`),
       })
-      .then((res) => {
-        return res;
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+      .then((res) => res)
+      .catch((e) => console.error(e));
   };
 
   return (
@@ -81,7 +81,7 @@ export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) =>
       <ListsLink>
         <Link to='/saved'>Lists</Link>
       </ListsLink>
-      {Object.values(lists).map((list) => {
+      {Object?.values(lists).map((list) => {
         return (
           <ListItem>
             {list.name}

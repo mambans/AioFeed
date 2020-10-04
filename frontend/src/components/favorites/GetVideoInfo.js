@@ -10,8 +10,8 @@ export default async ({ videos = [] }) => {
       ? getLocalstorage('Cached_SavedYoutubeVideos')
       : { items: [], expire: Date.now() + 7 * 24 * 60 * 60 * 1000 };
 
-  const CachedFullyVideos = videosArray.filter((video) =>
-    fullyCachedVideos.items.find((cache) => cache?.contentDetails?.upload?.videoId === video)
+  const CachedFullyVideos = fullyCachedVideos.items.filter((video) =>
+    videosArray.includes(video?.contentDetails?.upload?.videoId)
   );
 
   const unCachedFullyVideos =
@@ -41,8 +41,8 @@ export default async ({ videos = [] }) => {
                 },
               }
             )
-            .then((res) =>
-              res.data.items.map((item) => {
+            .then((res) => {
+              return res.data.items.map((item) => {
                 return {
                   ...item,
                   contentDetails: {
@@ -50,22 +50,22 @@ export default async ({ videos = [] }) => {
                     upload: { videoId: item.id },
                   },
                 };
-              })
-            )
-            .catch((e) => {
-              return null;
-            });
+              });
+            })
+            .catch((e) => null);
         })
       ).then((res) => res.flat(1))
     : CachedFullyVideos;
 
-  localStorage.setItem(
-    'Cached_SavedYoutubeVideos',
-    JSON.stringify({
-      items: [...fullyCachedVideos.items, ...newVideosDetails],
-      expire: fullyCachedVideos.expire,
-    })
-  );
+  if (Boolean(fullyCachedVideos.items.length) && Boolean(newVideosDetails.length)) {
+    localStorage.setItem(
+      'Cached_SavedYoutubeVideos',
+      JSON.stringify({
+        items: [...fullyCachedVideos.items, ...newVideosDetails],
+        expire: fullyCachedVideos.expire,
+      })
+    );
+  }
 
-  return newVideosDetails;
+  return [...(newVideosDetails || []), ...(CachedFullyVideos || [])];
 };
