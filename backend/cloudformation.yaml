@@ -264,48 +264,6 @@ Resources:
           RequestParameters:
             - method.request.querystring.authCode:
                 Required: true
-  MakeTwitchWebhookSubsciption:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: 'Make/initiate a Twitch webhook subsciption'
-      Handler: MakeTwitchWebhookSubsciption/handler.handler
-      Environment:
-        Variables:
-          APPINFO_TABLE: !Ref AppInfo
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref AppInfo
-      Events:
-        Http:
-          Type: Api
-          Properties:
-            Path: /twitch/webhook
-            Method: post
-          RequestParameters:
-            - method.request.querystring.topic:
-                Required: true
-  TwitchWebhookCallbackConfirm:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: 'Receive Twitch webhooks and confirm req.'
-      Handler: TwitchWebhookCallbackConfirm/handler.handler
-      Events:
-        Http:
-          Type: Api
-          Properties:
-            Path: /twitch/webhook/callback
-            Method: get
-  TwitchWebhookCallback:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: 'Receive Twitch webhooks notifications.'
-      Handler: TwitchWebhookCallback/handler.handler
-      Events:
-        Http:
-          Type: Api
-          Properties:
-            Path: /twitch/webhook/callback
-            Method: post
   AppInfo:
     Type: AWS::DynamoDB::Table
     Properties:
