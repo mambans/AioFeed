@@ -61,7 +61,7 @@ export default async ({ videos }) => {
       ).then((res) => res.flat(1))
     : CachedFullyVideos;
 
-  const allVideosWithMergedDetails =
+  const newVideosWithDetails =
     unCachedFullyVideos?.map((video) => {
       const newFoundDetails = newVideosDetails?.find(
         (newDetails) => newDetails.id === video?.contentDetails?.upload?.videoId
@@ -72,10 +72,10 @@ export default async ({ videos }) => {
   localStorage.setItem(
     'Cached_SavedYoutubeVideos',
     JSON.stringify({
-      items: [...fullyCachedVideos.items, ...allVideosWithMergedDetails],
+      items: [...(fullyCachedVideos.items || []), ...(newVideosWithDetails || [])],
       expire: fullyCachedVideos.expire,
     })
   );
 
-  return allVideosWithMergedDetails;
+  return [...(fullyCachedVideos.items || []), ...(newVideosWithDetails || [])];
 };
