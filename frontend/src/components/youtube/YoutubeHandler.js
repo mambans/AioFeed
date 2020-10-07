@@ -28,7 +28,7 @@ export default ({ requestError, videos }) => {
   } else if (!videos || videos.length < 1) {
     return (
       <SubFeedContainer>
-        <LoadingBoxes amount={videoElementsAmount} type='small' />;
+        <LoadingBoxes amount={videoElementsAmount} type='small' />
       </SubFeedContainer>
     );
   } else {
