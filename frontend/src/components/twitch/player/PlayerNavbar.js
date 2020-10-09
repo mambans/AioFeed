@@ -51,13 +51,12 @@ export default ({ channelName, streamInfo, setVisible, visible }) => {
         <MdAccountCircle size={26} />
         Channel page
       </Button>
-      {channelInfo && (
-        <FollowUnfollowBtn
-          channel={channelInfo?.user_name || channelName}
-          id={channelInfo?.user_id}
-          style={{ opacity: '1' }}
-        />
-      )}
+      <FollowUnfollowBtn
+        show={channelInfo}
+        channel={channelInfo?.user_name || channelName}
+        id={channelInfo?.user_id}
+        style={{ opacity: '1' }}
+      />
       <Button
         disabled={!channelInfo}
         variant='dark'

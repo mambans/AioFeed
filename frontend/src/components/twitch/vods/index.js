@@ -8,14 +8,22 @@ import VodElement from './VodElement';
 import { SubFeedContainer, LoadMore } from './../../sharedStyledComponents';
 import Header from './Header';
 import AccountContext from './../../account/AccountContext';
-import VodsContext from './VodsContext';
+import VodsContext, { VodsProvider } from './VodsContext';
 import LoadingBoxes from './../LoadingBoxes';
 import FeedsContext from '../../feed/FeedsContext';
 import { AddCookie, getCookie } from '../../../util/Utils';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
-import { CenterContext } from './../../feed/FeedsCenterContainer';
+import FeedsCenterContainer, { CenterContext } from './../../feed/FeedsCenterContainer';
 
-export default () => {
+export default ({ disableContextProvider }) => (
+  <FeedsCenterContainer>
+    <VodsProvider>
+      <Vods disableContextProvider={disableContextProvider} />
+    </VodsProvider>
+  </FeedsCenterContainer>
+);
+
+export const Vods = ({ disableContextProvider }) => {
   const { vods, setVods } = useContext(VodsContext);
   const { authKey, username, twitchUserId, setTwitchToken, setRefreshToken } = useContext(
     AccountContext
@@ -159,7 +167,7 @@ export default () => {
                   classNames={vod.transition || 'fade-750ms'}
                   unmountOnExit
                 >
-                  <VodElement data={vod} />
+                  <VodElement data={vod} disableContextProvider={disableContextProvider} />
                 </CSSTransition>
               );
             })}

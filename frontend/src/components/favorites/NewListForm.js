@@ -6,14 +6,16 @@ import axios from 'axios';
 import { FormButton, FormGroup, Label } from './StyledComponents';
 import { getCookie } from '../../util/Utils';
 import useInput from '../../hooks/useInput';
+import { parseNumberAndString } from './ButtonLists';
 
 export default ({ lists, setLists, item }) => {
   const { value: listName, bind: bindListName, reset: resetListName } = useInput('');
 
   const addFunc = async (list_Name, item) => {
+    const newVideo = parseNumberAndString(item);
     const newListObj = {
       name: list_Name,
-      items: [item].filter((i) => i),
+      items: [newVideo].filter((i) => i),
     };
 
     setLists((curr) => ({ ...curr, [list_Name]: newListObj }));
@@ -26,7 +28,6 @@ export default ({ lists, setLists, item }) => {
         listName: list_Name,
         authkey: getCookie(`AioFeed_AuthKey`),
       })
-      .then((res) => res)
       .catch((e) => console.error(e));
   };
 

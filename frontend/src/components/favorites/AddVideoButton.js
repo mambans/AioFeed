@@ -4,8 +4,15 @@ import { CSSTransition } from 'react-transition-group';
 import { Open, Close, ButtonContainer } from './StyledComponents';
 import ButtonLists from './ButtonLists';
 import './FavoritesTransitions.scss';
+import { FavoritesProvider } from './FavoritesContext';
 
-export default ({ videoId_p, style = {}, size, disablepreview = () => {} }) => {
+export default ({
+  videoId_p,
+  style = {},
+  size,
+  disablepreview = () => {},
+  disableContextProvider = false,
+}) => {
   const videoId = typeof videoId_p === 'number' ? parseInt(videoId_p) || videoId_p : videoId_p;
   const [open, setOpen] = useState();
   const fadeOutTimer = useRef();
@@ -62,12 +69,23 @@ export default ({ videoId_p, style = {}, size, disablepreview = () => {} }) => {
       )}
 
       <CSSTransition in={open} timeout={250} classNames='fade' unmountOnExit>
-        <ButtonLists
-          OpenFunction={OpenFunction}
-          CloseFunctionDelay={CloseFunctionDelay}
-          CloseFunction={CloseFunction}
-          videoId={videoId}
-        />
+        {disableContextProvider ? (
+          <ButtonLists
+            OpenFunction={OpenFunction}
+            CloseFunctionDelay={CloseFunctionDelay}
+            CloseFunction={CloseFunction}
+            videoId={videoId}
+          />
+        ) : (
+          <FavoritesProvider>
+            <ButtonLists
+              OpenFunction={OpenFunction}
+              CloseFunctionDelay={CloseFunctionDelay}
+              CloseFunction={CloseFunction}
+              videoId={videoId}
+            />
+          </FavoritesProvider>
+        )}
       </CSSTransition>
     </ButtonContainer>
   );

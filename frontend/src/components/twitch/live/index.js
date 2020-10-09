@@ -9,8 +9,18 @@ import Handler from './Handler';
 import Header from './Header';
 import Sidebar from '../sidebar';
 import TwitchStreams from './Twitch';
+import FeedsCenterContainer from '../../feed/FeedsCenterContainer';
+import { VodsProvider } from '../vods/VodsContext';
 
-export default ({ in: forceMount = false }) => {
+export default ({ forceMountTwitch = false } = {}) => (
+  <FeedsCenterContainer forceMountTwitch={forceMountTwitch}>
+    <VodsProvider>
+      <Twitch in={forceMountTwitch} />
+    </VodsProvider>
+  </FeedsCenterContainer>
+);
+
+export const Twitch = ({ in: forceMount = false }) => {
   const { enableTwitch, showTwitchSidebar, setShowTwitchSidebar } = useContext(FeedsContext);
 
   useEffect(() => {

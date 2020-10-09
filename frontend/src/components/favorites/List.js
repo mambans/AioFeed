@@ -92,9 +92,9 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
                   </div>
                 </StyledLoadingBox>
               ) : video?.kind === 'youtube#video' ? (
-                <YoutubeVideoElement video={video} />
+                <YoutubeVideoElement video={video} disableContextProvider={true} />
               ) : (
-                <VodElement data={video} />
+                <VodElement data={video} disableContextProvider={true} />
               )}
             </CSSTransition>
           );

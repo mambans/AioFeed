@@ -23,8 +23,8 @@ const StyledNewHighlight = styled.div`
   background: var(--newHighlightColor);
 `;
 
-const NewHighlight = ({ newlyAdded, stream }) => {
-  if (newlyAdded?.includes(stream.user_name)) {
+const NewHighlight = ({ newlyAdded, user_name }) => {
+  if (newlyAdded?.includes(user_name)) {
     return <StyledNewHighlight />;
   } else {
     return '';
@@ -32,6 +32,15 @@ const NewHighlight = ({ newlyAdded, stream }) => {
 };
 
 const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) => {
+  const {
+    user_name,
+    user_id,
+    profile_image_url,
+    viewer_count,
+    game_name,
+    started_at,
+    title,
+  } = stream;
   const [showTitle, setShowTitle] = useState();
   const ref = useRef();
   const timerRef = useRef();
@@ -59,16 +68,16 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
   return (
     <Link
       ref={ref}
-      to={'/' + stream.user_name?.toLowerCase()}
+      to={'/' + user_name?.toLowerCase()}
       style={{ display: 'flex', flexDirection: 'column' }}
     >
-      <StyledsidebarItem key={stream.user_id} duration={shows}>
-        <NewHighlight newlyAdded={newlyAdded} stream={stream}></NewHighlight>
+      <StyledsidebarItem key={user_id} duration={shows}>
+        <NewHighlight newlyAdded={newlyAdded} user_name={user_name}></NewHighlight>
 
         <div className={'profileImage'}>
           <img
             src={
-              stream.profile_image_url?.replace('{width}', 640)?.replace('{height}', 360) ||
+              profile_image_url?.replace('{width}', 640)?.replace('{height}', 360) ||
               `${process.env.PUBLIC_URL}/android-chrome-512x512.png`
             }
             alt=''
@@ -79,12 +88,12 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
 
           <AnimatedViewCount
             className={'sidebarViewers'}
-            viewers={stream.viewer_count}
+            viewers={viewer_count}
             disabePrefix={true}
           />
         </FirstRow>
         <SecondRow>
-          {stream.game_name?.length > 15 ? (
+          {game_name?.length > 15 ? (
             <OverlayTrigger
               key={'bottom'}
               placement={'bottom'}
@@ -96,20 +105,20 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
                     width: '275px',
                   }}
                 >
-                  {stream.game_name}
+                  {game_name}
                 </Tooltip>
               }
             >
-              <p className={'sidebarGame'}>{stream.game_name}</p>
+              <p className={'sidebarGame'}>{game_name}</p>
             </OverlayTrigger>
           ) : (
             <div className={'sidebarGame'}>
-              <p>{truncate(stream.game_name, 15)}</p>
+              <p>{truncate(game_name, 15)}</p>
             </div>
           )}
           <div className={'sidebarDuration'}>
             <Moment interval={1} durationFromNow>
-              {stream.started_at}
+              {started_at}
             </Moment>
             <FaRegClock size={12} />
           </div>
@@ -117,7 +126,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
       </StyledsidebarItem>
       <CSSTransition
         in={showTitle}
-        key={stream.user_id + stream.title}
+        key={user_id + title}
         timeout={1000}
         classNames='sidebarInfoPopup'
         unmountOnExit

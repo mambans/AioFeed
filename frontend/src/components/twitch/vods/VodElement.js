@@ -26,7 +26,22 @@ import loginNameFormat from '../loginNameFormat';
 import { ChannelNameDiv } from '../StyledComponents';
 import AddVideoButton from '../../favorites/AddVideoButton';
 
-export default ({ data, vodBtnDisabled }) => {
+export default ({ data, vodBtnDisabled, disableContextProvider }) => {
+  const {
+    id,
+    user_id,
+    login,
+    user_name,
+    url,
+    thumbnail_url,
+    created_at,
+    duration,
+    view_count,
+    type,
+    title,
+    endDate,
+    profile_image_url,
+  } = data;
   const [previewAvailable, setPreviewAvailable] = useState({});
   const [showPreview, setShowPreview] = useState();
   const imgRef = useRef();
@@ -42,7 +57,7 @@ export default ({ data, vodBtnDisabled }) => {
           await validateToken().then(async () => {
             await API.krakenGetVideo({
               params: {
-                id: data.id,
+                id: id,
               },
             })
               .then((res) => {
@@ -52,7 +67,7 @@ export default ({ data, vodBtnDisabled }) => {
                     error: 'Stream is live - no preview yet',
                   });
                 } else {
-                  if (data.thumbnail_url === '') data.thumbnail_url = res.data.preview.template;
+                  // if (thumbnail_url === '') thumbnail_url = res.data.preview.template;
                   setPreviewAvailable({
                     data: res.data.animated_preview_url,
                   });
@@ -65,7 +80,7 @@ export default ({ data, vodBtnDisabled }) => {
               });
           });
         },
-        previewAvailable.error ? 5000 : 1500
+        previewAvailable.error ? 5000 : 1000
       );
     } else {
       hoverTimeoutRef.current = setTimeout(() => {
@@ -82,22 +97,26 @@ export default ({ data, vodBtnDisabled }) => {
   return (
     <VideoContainer>
       <ImageContainer ref={imgRef}>
-        <AddVideoButton videoId_p={data.id} disablepreview={handleMouseOut} />
+        <AddVideoButton
+          videoId_p={id}
+          disablepreview={handleMouseOut}
+          disableContextProvider={disableContextProvider}
+        />
         {previewAvailable.error && (
           <StyledVideoElementAlert variant='danger' className='error'>
             {previewAvailable.error}
           </StyledVideoElementAlert>
         )}
-        {data.thumbnail_url === '' && (
-          <VodLiveIndicator to={`/${data.login || data.user_name}`}>Live</VodLiveIndicator>
+        {thumbnail_url === '' && !previewAvailable.data && (
+          <VodLiveIndicator to={`/${login || user_name}`}>Live</VodLiveIndicator>
         )}
-        <a href={data.url}>
+        <a href={url}>
           {previewAvailable.data && showPreview && (
             <VodPreview previewAvailable={previewAvailable.data} className='VodPreview' />
           )}
           <img
             src={
-              data.thumbnail_url?.replace('%{width}', 640)?.replace('%{height}', 360) ||
+              thumbnail_url?.replace('%{width}', 640)?.replace('%{height}', 360) ||
               'https://vod-secure.twitch.tv/_404/404_processing_320x180.png'
             }
             alt=''
@@ -106,14 +125,14 @@ export default ({ data, vodBtnDisabled }) => {
 
         <VodVideoInfo>
           <Duration title='duration'>
-            {data.thumbnail_url === '' ? (
-              <Moment durationFromNow>{data.created_at}</Moment>
+            {thumbnail_url === '' && !previewAvailable.data ? (
+              <Moment durationFromNow>{created_at}</Moment>
             ) : (
-              formatTwitchVodsDuration(data.duration)
+              formatTwitchVodsDuration(duration)
             )}
           </Duration>
           <p className={'view_count'} title='views'>
-            {formatViewerNumbers(data.view_count)}
+            {formatViewerNumbers(view_count)}
             <FaRegEye
               size={10}
               style={{
@@ -126,9 +145,9 @@ export default ({ data, vodBtnDisabled }) => {
             />
           </p>
         </VodVideoInfo>
-        {data.type !== 'archive' && <VodType>{data.type}</VodType>}
+        {type !== 'archive' && <VodType>{type}</VodType>}
       </ImageContainer>
-      {data.title?.length > 50 ? (
+      {title?.length > 50 ? (
         <OverlayTrigger
           key={'bottom'}
           placement={'bottom'}
@@ -140,69 +159,69 @@ export default ({ data, vodBtnDisabled }) => {
                 width: '320px',
               }}
             >
-              {data.title || ''}
+              {title || ''}
             </Tooltip>
           }
         >
           <VideoTitle
             to={{
-              pathname: `/${data.login || data.user_name}/videos/${data.id}`,
+              pathname: `/${login || user_name}/videos/${id}`,
               state: {
-                p_title: data.title,
+                p_title: title,
               },
             }}
           >
-            {truncate(data.title || '', 70)}
+            {truncate(title || '', 70)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
         <VideoTitle
           to={{
-            pathname: `/${data.login || data.user_name}/videos/${data.id}`,
+            pathname: `/${login || user_name}/videos/${id}`,
             state: {
-              p_title: data.title,
+              p_title: title,
             },
           }}
         >
-          {data.title || ''}
+          {title || ''}
         </VideoTitle>
       )}
       <ChannelContainer>
         <Link
           to={{
-            pathname: `/${data.login || data.user_name?.toLowerCase()}/page`,
+            pathname: `/${login || user_name?.toLowerCase()}/page`,
             state: {
-              p_id: data.user_id,
+              p_id: user_id,
             },
           }}
           style={{ gridRow: 1, paddingRight: '5px' }}
         >
-          <img src={data.profile_image_url} alt='' className={'profileImg'} />
+          <img src={profile_image_url} alt='' className={'profileImg'} />
         </Link>
         <ChannelNameDiv>
           <Link
             to={{
-              pathname: `/${data.login || data.user_name?.toLowerCase()}/page`,
+              pathname: `/${login || user_name?.toLowerCase()}/page`,
               state: {
-                p_id: data.user_id,
+                p_id: user_id,
               },
             }}
             className={'channelName'}
           >
             {loginNameFormat(data)}
           </Link>
-          {!vodBtnDisabled && (
-            <VodsFollowUnfollowBtn
-              channel={data.login || data.user_name}
-              loweropacity='0.5'
-              className='extaButton'
-            />
-          )}
+
+          <VodsFollowUnfollowBtn
+            show={!vodBtnDisabled}
+            channel={login || user_name}
+            loweropacity='0.5'
+            className='extaButton'
+          />
         </ChannelNameDiv>
         <VodDates>
           <div>
             <Moment interval={300000} durationFromNow className={'date'} id={'timeago'}>
-              {data.thumbnail_url === '' ? data.created_at : data.endDate}
+              {thumbnail_url === '' ? created_at : endDate}
             </Moment>
             <p
               id={'time'}
@@ -212,10 +231,10 @@ export default ({ data, vodBtnDisabled }) => {
                 justifySelf: 'right',
               }}
             >
-              {`${moment(data.created_at).format('dd HH:mm')} → ${
-                data.thumbnail_url === ''
+              {`${moment(created_at).format('dd HH:mm')} → ${
+                thumbnail_url === ''
                   ? moment(Date.now()).format('dd HH:mm')
-                  : moment(data.endDate).format('dd HH:mm')
+                  : moment(endDate).format('dd HH:mm')
               }`}
             </p>
           </div>

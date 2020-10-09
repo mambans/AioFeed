@@ -18,9 +18,9 @@ import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
  * @param {String} [marginright] - overwrite marginright (7px;)
  */
 
-export default ({ channel, loweropacity, marginright, className }) => {
-  const channels = getLocalstorage('TwitchVods-Channels');
-  const { vods, setVods } = useContext(VodsContext) || {};
+export default ({ channel, loweropacity, marginright, className, show = true }) => {
+  // const channels = getLocalstorage('TwitchVods-Channels');
+  const { vods, setVods, channels, setChannels } = useContext(VodsContext) || {};
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
   const [vodEnabled, setVodEnabled] = useState(channels.includes(channel?.toLowerCase()));
@@ -69,6 +69,8 @@ export default ({ channel, loweropacity, marginright, className }) => {
     }
   }
 
+  if (!show) return null;
+
   return (
     <OverlayTrigger
       key={'bottom'}
@@ -92,7 +94,7 @@ export default ({ channel, loweropacity, marginright, className }) => {
             removeChannel(channel);
             setVodEnabled(false);
           } else {
-            AddVodChannel({ channel, username, authKey });
+            AddVodChannel({ channel, channels, setChannels, username, authKey });
             setVodEnabled(true);
           }
         }}

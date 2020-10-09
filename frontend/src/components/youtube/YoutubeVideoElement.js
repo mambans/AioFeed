@@ -33,7 +33,7 @@ const videoImageUrls = (urls) => {
 
 const HOVER_DELAY = 1000;
 
-export default ({ video }) => {
+export default ({ video, disableContextProvider }) => {
   const { youtubeVideoHoverEnable } = useContext(FeedsContext);
   const streamHoverTimer = useRef();
   const [isHovered, setIsHovered] = useState(false);
@@ -58,6 +58,7 @@ export default ({ video }) => {
         <AddVideoButton
           videoId_p={video.contentDetails?.upload?.videoId}
           disablepreview={handleMouseOut}
+          disableContextProvider={disableContextProvider}
         />
         {isHovered && (
           <VideoHoverIframe

@@ -25,6 +25,8 @@ export const FeedsProvider = ({ children }) => {
     getCookie(`Twitch-access_token`) && getCookie('TwitchVods_FeedEnabled')
   );
 
+  const [enableFavorites, setEnableFavorites] = useState(getCookie('Favorites_FeedEnabled'));
+
   const [twitchVideoHoverEnable, setTwitchVideoHoverEnable] = useState(
     getCookie('TwitchVideoHoverEnabled')
   );
@@ -54,6 +56,8 @@ export const FeedsProvider = ({ children }) => {
         setEnableYoutube,
         enableTwitchVods,
         setEnableTwitchVods,
+        enableFavorites,
+        setEnableFavorites,
         twitchVideoHoverEnable,
         setTwitchVideoHoverEnable,
         youtubeVideoHoverEnable,

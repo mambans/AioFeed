@@ -20,7 +20,6 @@ export default ({ list, setLists }) => {
         username: getCookie('AioFeed_AccountName'),
         listName: list.name,
       })
-      .then((res) => console.log('res', res))
       .catch((e) => console.error(e));
   };
 

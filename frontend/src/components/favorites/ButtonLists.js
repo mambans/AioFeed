@@ -8,7 +8,7 @@ import { Lists, ListItem, ListsLink, AddItemBtn, RemoveItemBtn } from './StyledC
 import useClicksOutside from '../../hooks/useClicksOutside';
 import NewListForm from './NewListForm';
 
-const parseNumberAndString = (value) => {
+export const parseNumberAndString = (value) => {
   if (typeof value === 'number') return value;
   const parsedToInt = parseInt(value);
   const parsedToString = String(parseInt(value));
@@ -32,6 +32,7 @@ export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) =>
     const newVideo = parseNumberAndString(newItem);
     const allOrinalLists = { ...lists };
     const existing = allOrinalLists[list_Name];
+
     const newObj = {
       ...existing,
       items: [...new Set([...(existing?.items || []), newVideo])].filter((i) => i),
@@ -39,7 +40,7 @@ export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) =>
 
     allOrinalLists[list_Name] = newObj;
 
-    setLists(allOrinalLists);
+    setLists({ ...allOrinalLists });
 
     await axios
       .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
@@ -48,7 +49,6 @@ export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) =>
         listName: list_Name,
         authkey: getCookie(`AioFeed_AuthKey`),
       })
-      .then((res) => res)
       .catch((e) => console.error(e));
   };
 
@@ -63,7 +63,7 @@ export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) =>
 
     allOrinalLists[list_Name] = newObj;
 
-    setLists(allOrinalLists);
+    setLists({ ...allOrinalLists });
 
     await axios
       .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
@@ -72,7 +72,6 @@ export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) =>
         listName: list_Name,
         authkey: getCookie(`AioFeed_AuthKey`),
       })
-      .then((res) => res)
       .catch((e) => console.error(e));
   };
 

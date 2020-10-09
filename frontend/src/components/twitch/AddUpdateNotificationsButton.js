@@ -17,7 +17,7 @@ import useEventListenerMemo from '../../hooks/useEventListenerMemo';
  * @param {Number} [size=24] - size of the Icons/Svgs;
  */
 
-export default ({ channel, loweropacity, marginright, size = 24 }) => {
+export default ({ channel, loweropacity, marginright, size = 24, show = true }) => {
   const channels = getLocalstorage('ChannelsUpdateNotifs') || [];
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
@@ -77,6 +77,8 @@ export default ({ channel, loweropacity, marginright, size = 24 }) => {
   function handleMouseOut() {
     setIsHovered(null);
   }
+
+  if (!show) return null;
 
   return (
     <OverlayTrigger

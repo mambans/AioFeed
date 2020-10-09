@@ -19,9 +19,7 @@ export default ({ data }) => {
   } = data;
   const { videoElementsAmount } = useContext(CenterContext);
 
-  const refresh = async () => {
-    await data.refresh();
-  };
+  const refresh = async () => await data.refresh();
 
   if (!loaded) {
     return (

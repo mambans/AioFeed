@@ -4,14 +4,22 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import './FavoritesTransitions.scss';
 import { HeaderContainer } from '../sharedStyledComponents';
 import DeleteListBtn from './DeleteListBtn';
-import FavoritesContext from './FavoritesContext';
+import FavoritesContext, { FavoritesProvider } from './FavoritesContext';
 import FeedsCenterContainer from '../feed/FeedsCenterContainer';
 import List from './List';
 import validateToken from '../twitch/validateToken';
 import youtubeValidateToken from '../youtube/validateToken';
 
-export default () => {
-  const { lists, setLists } = useContext(FavoritesContext);
+export default () => (
+  <FavoritesProvider>
+    <FeedsCenterContainer fullWidth={true}>
+      <Favorites />
+    </FeedsCenterContainer>
+  </FavoritesProvider>
+);
+
+export const Favorites = () => {
+  const { lists, setLists, fetchAllLists, isLoading, setIsLoading } = useContext(FavoritesContext);
   const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
   const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
 
@@ -24,17 +32,27 @@ export default () => {
       .map((list) => list.items.find((videoId) => typeof videoId === 'number'))
       .filter((i) => i).length;
 
-    if (Boolean(youtubeVideoExists)) {
-      youtubeValidateToken().then(() => setYtExistsAndValidated(true));
-    }
+    const twitchPromise =
+      Boolean(twitchVideoExists) &&
+      validateToken().then(() => {
+        setTwitchExistsAndValidated(true);
+        return true;
+      });
 
-    if (Boolean(twitchVideoExists)) {
-      validateToken().then(() => setTwitchExistsAndValidated(true));
-    }
-  }, [lists]);
+    const youtubePromise =
+      Boolean(youtubeVideoExists) &&
+      youtubeValidateToken().then(() => {
+        setYtExistsAndValidated(true);
+        return true;
+      });
+
+    Promise.allSettled([twitchPromise, youtubePromise])
+      .catch((e) => console.log(e))
+      .finally(() => setIsLoading(false));
+  }, [lists, setIsLoading]);
 
   return (
-    <FeedsCenterContainer fullWidth={true}>
+    <>
       {lists && (
         <TransitionGroup component={null}>
           {Object.values(lists)?.map((list) => {
@@ -48,6 +66,8 @@ export default () => {
                 <>
                   <HeaderContainer
                     text={<>{list.name}</>}
+                    refreshFunc={fetchAllLists}
+                    isLoading={isLoading}
                     rightSide={<DeleteListBtn list={list} setLists={setLists} />}
                   />
                   <List
@@ -61,6 +81,6 @@ export default () => {
           })}
         </TransitionGroup>
       )}
-    </FeedsCenterContainer>
+    </>
   );
 };

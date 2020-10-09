@@ -23,15 +23,15 @@ const IframeContainer = styled.div`
   }
 `;
 
-export default ({ data }) => (
+export default ({ data: { login, user_name, id } }) => (
   <IframeContainer>
     <HoverIframe
       src={`https://player.twitch.tv/?channel=${
-        data?.login?.toLowerCase() || data.user_name
+        login?.toLowerCase() || user_name
       }&parent=aiofeed.com&autoplay=true&muted=false&!controls`}
-      title={(data?.login?.toLowerCase() || data.user_name) + '-iframe'}
+      title={(login?.toLowerCase() || user_name) + '-iframe'}
       theme='dark'
-      id={data.id + '-iframe'}
+      id={id + '-iframe'}
       width='336px'
       height='189px'
       position='absolute'
@@ -40,7 +40,7 @@ export default ({ data }) => (
       frameBorder='0'
     />
     <Link
-      to={`/${data?.login?.toLowerCase() || data.user_name}`}
+      to={`/${login?.toLowerCase() || user_name}`}
       alt=''
       style={{
         position: 'absolute',

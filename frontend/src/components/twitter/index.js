@@ -8,8 +8,15 @@ import FeedsContext from '../feed/FeedsContext';
 import UpdateTwitterLists from '../navigation/sidebar/UpdateTwitterLists';
 import ThemeContext from './../themes/ThemeContext';
 import FooterContext from '../footer/FooterContext';
+import FeedsCenterContainer from '../feed/FeedsCenterContainer';
 
-export default ({ in: forceMount = false }) => {
+export default () => (
+  <FeedsCenterContainer>
+    <Twitter in={true} />
+  </FeedsCenterContainer>
+);
+
+export const Twitter = ({ in: forceMount = false }) => {
   const { twitterLists, enableTwitter, enableTwitch, enableYoutube, enableTwitchVods } = useContext(
     FeedsContext
   );

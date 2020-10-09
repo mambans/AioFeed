@@ -47,9 +47,27 @@ function NewHighlightNoti({ newlyAddedStreams, login }) {
   return '';
 }
 
-export default (data_p) => {
+export default ({
+  data,
+  newlyAddedStreams,
+  refresh,
+  refreshAfterUnfollowTimer,
+  thumbnailRefresh,
+}) => {
   const location = useLocation();
-  const { data, newlyAddedStreams, refresh, refreshAfterUnfollowTimer, thumbnailRefresh } = data_p;
+  const {
+    user_id,
+    user_name,
+    started_at,
+    title,
+    game_name,
+    viewers,
+    thumbnail_url,
+    profile_image_url,
+    login,
+    game_img,
+    viewer_count,
+  } = data;
   const [isHovered, setIsHovered] = useState(false);
   const { twitchVideoHoverEnable } = useContext(FeedsContext);
   const streamHoverTimer = useRef();
@@ -81,38 +99,29 @@ export default (data_p) => {
   }
 
   return (
-    <VideoContainer key={data.user_id}>
-      <ImageContainer
-        key={thumbnailRefresh}
-        id={data.user_id}
-        ref={ref}
-        style={{ marginTop: '5px' }}
-      >
-        <NewHighlightNoti newlyAddedStreams={newlyAddedStreams} login={data?.login} />
-        {isHovered && (
-          <StreamHoverIframe id={data.user_id} data={data} setIsHovered={setIsHovered} />
-        )}
+    <VideoContainer key={user_id}>
+      <ImageContainer key={thumbnailRefresh} id={user_id} ref={ref} style={{ marginTop: '5px' }}>
+        <NewHighlightNoti newlyAddedStreams={newlyAddedStreams} login={login} />
+        {isHovered && <StreamHoverIframe id={user_id} data={data} setIsHovered={setIsHovered} />}
         <Link
           to={{
-            pathname: '/' + data?.login?.toLowerCase() || data.user_name,
+            pathname: '/' + login?.toLowerCase() || user_name,
             state: {
-              p_uptime: data.started_at,
-              p_title: data.title,
-              p_game: data.game_name,
-              p_viewers: data.viewers,
+              p_uptime: started_at,
+              p_title: title,
+              p_game: game_name,
+              p_viewers: viewers,
             },
           }}
         >
           <img
-            id={`${data?.user_id}-${Date.now()}`}
+            id={`${user_id}-${Date.now()}`}
             alt='thumbnail'
             style={
-              newlyAddedStreams?.includes(data?.login)
-                ? { boxShadow: 'white 0px 0px 3px 2px' }
-                : null
+              newlyAddedStreams?.includes(login) ? { boxShadow: 'white 0px 0px 3px 2px' } : null
             }
             src={
-              data.thumbnail_url?.replace('{width}', 858)?.replace('{height}', 480) +
+              thumbnail_url?.replace('{width}', 858)?.replace('{height}', 480) +
                 `#` +
                 Date.now() +
                 thumbnailRefresh || `${process.env.PUBLIC_URL}/images/placeholder.webp`
@@ -120,10 +129,10 @@ export default (data_p) => {
           />
         </Link>
         <Moment interval={1} className={'duration'} durationFromNow>
-          {data.started_at}
+          {started_at}
         </Moment>
       </ImageContainer>
-      {data.title?.length > 50 ? (
+      {title?.length > 50 ? (
         <OverlayTrigger
           key={'bottom'}
           placement={'bottom'}
@@ -135,58 +144,58 @@ export default (data_p) => {
                 width: '336px',
               }}
             >
-              {data.title || ''}
+              {title || ''}
             </Tooltip>
           }
         >
           <VideoTitle
             to={{
-              pathname: '/' + data?.login?.toLowerCase() || data.user_name,
+              pathname: '/' + login?.toLowerCase() || user_name,
               state: {
-                p_uptime: data.started_at,
-                p_title: data.title,
-                p_game: data.game_name,
-                p_viewers: data.viewers,
+                p_uptime: started_at,
+                p_title: title,
+                p_game: game_name,
+                p_viewers: viewers,
               },
             }}
           >
-            {truncate(data.title || '', 60)}
+            {truncate(title || '', 60)}
           </VideoTitle>
         </OverlayTrigger>
       ) : (
         <VideoTitle
           to={{
-            pathname: '/' + data?.login?.toLowerCase() || data.user_name,
+            pathname: '/' + login?.toLowerCase() || user_name,
             state: {
-              p_uptime: data.started_at,
-              p_title: data.title,
-              p_game: data.game_name,
-              p_viewers: data.viewers,
+              p_uptime: started_at,
+              p_title: title,
+              p_game: game_name,
+              p_viewers: viewers,
             },
           }}
         >
-          {data.title || ''}
+          {title || ''}
         </VideoTitle>
       )}
       <div>
         <ChannelContainer ref={refChannel}>
           <Link
             to={{
-              pathname: `/${data?.login?.toLowerCase() || data.user_name}/page`,
+              pathname: `/${login?.toLowerCase() || user_name}/page`,
               state: {
-                p_id: data.user_id,
+                p_id: user_id,
               },
             }}
             style={{ gridRow: 1, paddingRight: '5px' }}
           >
-            <img src={data.profile_image_url} alt='' className={'profileImg'} />
+            <img src={profile_image_url} alt='' className={'profileImg'} />
           </Link>
           <ChannelNameDiv>
             <Link
               to={{
-                pathname: `/${data?.login?.toLowerCase() || data.user_name}/page`,
+                pathname: `/${login?.toLowerCase() || user_name}/page`,
                 state: {
-                  p_id: data.user_id,
+                  p_id: user_id,
                 },
               }}
               className='channelName'
@@ -195,7 +204,7 @@ export default (data_p) => {
             </Link>
             <a
               alt=''
-              href={'https://www.twitch.tv/' + data?.login?.toLowerCase() || data.user_name}
+              href={'https://www.twitch.tv/' + login?.toLowerCase() || user_name}
               className='extaButton'
             >
               <FaTwitch size={20} />
@@ -203,8 +212,8 @@ export default (data_p) => {
           </ChannelNameDiv>
           {(location.pathname === '/feed/' || location.pathname === '/feed') && (
             <div className='buttonsContainer'>
-              <VodsFollowUnfollowBtn channel={data?.login} marginright='5px;' />
-              <AddUpdateNotificationsButton channel={data?.login} marginright='5px;' />
+              <VodsFollowUnfollowBtn channel={login} marginright='5px;' />
+              <AddUpdateNotificationsButton channel={login} marginright='5px;' />
               <FollowUnfollowBtn
                 style={{
                   gridRow: '1',
@@ -214,8 +223,8 @@ export default (data_p) => {
                   height: '100%',
                 }}
                 size={22}
-                channelName={data?.login}
-                id={data.user_id}
+                channelName={login}
+                id={user_id}
                 followingStatus={true}
                 refreshStreams={refresh}
                 refreshAfterUnfollowTimer={refreshAfterUnfollowTimer}
@@ -225,13 +234,10 @@ export default (data_p) => {
         </ChannelContainer>
 
         <GameContainer>
-          {data.game_img && (
-            <a
-              className={'gameImg'}
-              href={'https://www.twitch.tv/directory/category/' + data.game_name}
-            >
+          {game_img && (
+            <a className={'gameImg'} href={'https://www.twitch.tv/directory/category/' + game_name}>
               <img
-                src={data.game_img?.replace('{width}', 130)?.replace('{height}', 173)}
+                src={game_img?.replace('{width}', 130)?.replace('{height}', 173)}
                 alt=''
                 className={'gameImg'}
               />
@@ -245,19 +251,15 @@ export default (data_p) => {
               gridColumn: '2',
             }}
           >
-            {data.game_name ? (
-              <Link className={'gameName'} to={'/category/' + data.game_name}>
-                {data.game_name}
+            {game_name ? (
+              <Link className={'gameName'} to={'/category/' + game_name}>
+                {game_name}
               </Link>
             ) : (
               <div />
             )}
 
-            <AnimatedViewCount
-              viewers={data.viewer_count}
-              className={'viewers'}
-              disabePrefix={true}
-            />
+            <AnimatedViewCount viewers={viewer_count} className={'viewers'} disabePrefix={true} />
           </div>
         </GameContainer>
       </div>

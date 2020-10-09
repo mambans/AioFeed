@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import FetchMonitoredVodChannelsList from './FetchMonitoredVodChannelsList';
 import AccountContext from '../../account/AccountContext';
+import useSyncedLocalState from '../../../hooks/useSyncedLocalState';
 
 const VodsContext = React.createContext();
 
 export const VodsProvider = ({ children }) => {
   const { username, authKey } = useContext(AccountContext);
   const [vods, setVods] = useState();
-  const [channels, setChannels] = useState([]);
+  const [channels, setChannels] = useSyncedLocalState('TwitchVods-Channels', []);
 
   useEffect(() => {
     (async () => {
@@ -16,17 +17,17 @@ export const VodsProvider = ({ children }) => {
       });
       console.log('useEffect-fetchedChannels', fetchedChannels);
       setChannels(fetchedChannels);
-      localStorage.setItem('TwitchVods-Channels', JSON.stringify(fetchedChannels));
+      // localStorage.setItem('TwitchVods-Channels', JSON.stringify(fetchedChannels));
     })();
-  }, [username, authKey]);
+  }, [username, authKey, setChannels]);
 
   return (
     <VodsContext.Provider
       value={{
-        vods: vods,
-        setVods: setVods,
-        channels: channels,
-        setChannels: setChannels,
+        vods,
+        setVods,
+        channels,
+        setChannels,
       }}
     >
       {children}

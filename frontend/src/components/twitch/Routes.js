@@ -6,34 +6,19 @@ import NoMatch from '../routes/NoMatch';
 import Player from './player/Player';
 import VideoPlayer from './player/VideoPlayer';
 import PlayerClip from './player/PlayerClip';
-import { FavoritesProvider } from '../favorites/FavoritesContext';
 
 export default () => {
   return (
     <Routes>
       <Route path='' element={<Player />} />
 
-      <Route
-        path='page'
-        element={
-          <FavoritesProvider>
-            <ChannelPage />
-          </FavoritesProvider>
-        }
-      />
+      <Route path='page' element={<ChannelPage />} />
       <Navigate path='channel' to='../page' replace />
       <Navigate path='channelpage' to='../page' replace />
       <Navigate path='clips' to={`../page`} replace />
       <Navigate path='videos' to='../page' replace />
       <Navigate path='videos/all' to={`../../page`} replace />
-      <Route
-        path='videos/:videoId'
-        element={
-          <FavoritesProvider>
-            <VideoPlayer />
-          </FavoritesProvider>
-        }
-      />
+      <Route path='videos/:videoId' element={<VideoPlayer />} />
       <Route path='clip/:videoId' element={<PlayerClip />} />
       <Route path='*' element={<NoMatch />} />
     </Routes>

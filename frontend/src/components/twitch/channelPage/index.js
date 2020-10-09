@@ -456,12 +456,17 @@ export default () => {
                               src={`${process.env.PUBLIC_URL}/partnered.png`}
                             />
                           )}
-                          {channelInfo && (
-                            <>
-                              <FollowUnfollowBtn channelName={channelName} id={channelInfo._id} />
-                              <AddUpdateNotificationsButton channel={channelName} size={30} />
-                            </>
-                          )}
+
+                          <FollowUnfollowBtn
+                            show={channelInfo}
+                            channelName={channelName}
+                            id={channelInfo._id}
+                          />
+                          <AddUpdateNotificationsButton
+                            show={channelInfo}
+                            channel={channelName}
+                            size={30}
+                          />
                         </div>
                         <Link
                           to={{

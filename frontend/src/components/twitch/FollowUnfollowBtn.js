@@ -14,6 +14,7 @@ export default ({
   refreshStreams,
   refreshAfterUnfollowTimer,
   followingStatus = null,
+  show = true,
 }) => {
   const [following, setFollowing] = useState(followingStatus || false);
   const { twitchUserId } = useContext(AccountContext);
@@ -85,10 +86,12 @@ export default ({
       });
     };
 
-    if (followingStatus === null) {
+    if (show && followingStatus === null) {
       checkFollowing();
     }
-  }, [channelName, twitchUserId, id, followingStatus]);
+  }, [channelName, twitchUserId, id, followingStatus, show]);
+
+  if (!show) return null;
 
   return (
     <OverlayTrigger

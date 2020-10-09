@@ -1,7 +1,7 @@
 import { Button } from 'react-bootstrap';
 import { GoSignOut } from 'react-icons/go';
 import React, { useContext, useState } from 'react';
-import { MdVideocam, MdAutorenew } from 'react-icons/md';
+import { MdVideocam, MdAutorenew, MdStar } from 'react-icons/md';
 import { FaTwitch, FaYoutube, FaTwitter, FaRegWindowRestore } from 'react-icons/fa';
 import { FiSidebar } from 'react-icons/fi';
 import { BsFillImageFill } from 'react-icons/bs';
@@ -53,6 +53,8 @@ export default () => {
     setShowTwitchSidebar,
     enableYoutube,
     setEnableYoutube,
+    enableFavorites,
+    setEnableFavorites,
     twitchVideoHoverEnable,
     setTwitchVideoHoverEnable,
     youtubeVideoHoverEnable,
@@ -174,6 +176,19 @@ export default () => {
                 : `Need to connect/authenticate with a Twitch account first.`
             }
             icon={<MdVideocam size={24} color='rgb(169, 112, 255)' />}
+          />
+          <ToggleButton
+            setEnable={(value) => {
+              setEnableFavorites(value);
+              AddCookie('Favorites_FeedEnabled', value);
+            }}
+            enabled={enableFavorites}
+            label='Favorites'
+            serviceName='Favorites'
+            tokenExists={getCookie(`Twitch-access_token`) || youtubeToken}
+            scrollIntoView={true}
+            tooltip={(enableFavorites ? 'Disable ' : 'Enable ') + ` Favorites feed`}
+            icon={<MdStar size={24} color='rgb(255,255,0)' />}
           />
         </ToggleButtonsContainer>
         <TwitterForms />

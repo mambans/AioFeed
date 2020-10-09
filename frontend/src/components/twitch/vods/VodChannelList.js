@@ -6,12 +6,14 @@ import LoadingList from './../LoadingList';
 import VodChannelListElement from './VodChannelListElement';
 import useInput from './../../../hooks/useInput';
 import AddVodChannel from './AddVodChannel';
-import { getLocalstorage } from '../../../util/Utils';
+// import { getLocalstorage } from '../../../util/Utils';
 import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
+import useSyncedLocalState from '../../../hooks/useSyncedLocalState';
 
 export default () => {
   const { authKey, username } = useContext(AccountContext);
-  const channels = getLocalstorage('TwitchVods-Channels') || [];
+  const [channels, setChannels] = useSyncedLocalState('TwitchVods-Channels', []);
+  // const channels = getLocalstorage('TwitchVods-Channels') || [];
   const [validated, setValidated] = useState(false);
   const { value: channel, bind: bindchannel, reset: resetchannel } = useInput('');
   useLockBodyScroll(true);
@@ -25,7 +27,7 @@ export default () => {
       evt.stopPropagation();
     } else {
       setValidated(true);
-      AddVodChannel({ channel, channels, username, authKey });
+      AddVodChannel({ channel, channels, setChannels, username, authKey });
 
       resetchannel();
     }
