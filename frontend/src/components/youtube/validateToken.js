@@ -6,7 +6,7 @@ export default async ({ authKey = getCookie(`AioFeed_AuthKey`) } = {}) => {
   const expireDate = new Date(Date.now() + 20000);
   const access_token = getCookie('Youtube-access_token');
 
-  if (!access_token) {
+  if (access_token) {
     if (!getCookie('Youtube_token_validated')) {
       await axios
         .post(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${access_token}`)
