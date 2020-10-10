@@ -28,9 +28,7 @@ export default (key, defaultValue) => {
     };
     window.addEventListener('storage', listener);
 
-    return () => {
-      window.removeEventListener('storage', listener);
-    };
+    return () => window.removeEventListener('storage', listener);
   }, [key]);
 
   const setLocalStateValue = useCallback(

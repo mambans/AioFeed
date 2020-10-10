@@ -54,17 +54,11 @@ export default ({ children }) => {
       });
     }
 
-    if (videos.length >= 1) oldVideos.current = videos;
+    if (Boolean(videos.length)) oldVideos.current = videos;
   }, [videos]);
 
   useEffect(() => {
-    (async () => {
-      try {
-        refresh();
-      } catch (error) {
-        setError(error);
-      }
-    })();
+    refresh().catch((e) => setError(e));
   }, [refresh]);
 
   if (!youtubeToken) {

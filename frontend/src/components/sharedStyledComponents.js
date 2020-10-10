@@ -8,7 +8,6 @@ import { FaRegWindowRestore } from 'react-icons/fa';
 import Moment from 'react-moment';
 
 import { StyledLoadmore } from './twitch/StyledComponents';
-import Util from './../util/Util';
 import CountdownCircleTimer from './twitch/live/CountdownCircleTimer';
 
 const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
@@ -545,6 +544,15 @@ export const StyledVideoElementAlert = styled(Alert)`
   opacity: 0;
 `;
 
+const loadingSpinnerSmall = {
+  position: 'initial',
+  height: '24px',
+  width: '24px',
+  left: '1.5%',
+  bottom: '-25px',
+  background: 'none',
+};
+
 export const LoadMore = ({
   style = {},
   onClick,
@@ -605,7 +613,7 @@ export const LoadMore = ({
                 animation='border'
                 role='status'
                 variant='light'
-                style={{ ...Util.loadingSpinnerSmall, marginLeft: '10px' }}
+                style={{ ...loadingSpinnerSmall, marginLeft: '10px' }}
               />
             </>
           ) : (

@@ -26,7 +26,9 @@ const CenterProvider = ({ children, fullWidth }) => {
       Math.floor(
         (winWidth -
           ((enableTwitch && showTwitchSidebar ? 275 : 0) +
-            (enableTwitter && path === '/feed' ? winWidth * (winWidth <= 2560 ? 0.2 : 0.14) : 150) +
+            (enableTwitter && path === '/feed'
+              ? winWidth * (winWidth <= 2560 ? 0.19 : 0.14)
+              : 150) +
             25)) /
           350
       ) * 2
@@ -77,7 +79,7 @@ export default ({ children, forceMountTwitch, fullWidth } = {}) => {
         showTwitchSidebar={showTwitchSidebar}
         twitterWidth={
           enableTwitter && !forceMountTwitch
-            ? winWidth * (winWidth <= 2560 ? 0.2 * NrLists : 0.14 * NrLists) + NrLists * 20
+            ? winWidth * (winWidth <= 2560 ? 0.19 * NrLists : 0.14 * NrLists) + NrLists * 20
             : 0
         }
         twitchSidebarWidth={(enableTwitch || forceMountTwitch) && showTwitchSidebar ? 275 : 0}
@@ -87,7 +89,7 @@ export default ({ children, forceMountTwitch, fullWidth } = {}) => {
             (winWidth -
               (((enableTwitch || forceMountTwitch) && showTwitchSidebar ? 275 : 0) +
                 (enableTwitter && path === '/feed'
-                  ? winWidth * (winWidth <= 2560 ? 0.2 * NrLists : 0.14 * NrLists) + NrLists * 20
+                  ? winWidth * (winWidth <= 2560 ? 0.19 * NrLists : 0.14 * NrLists) + NrLists * 20
                   : 150))) /
               350
           )

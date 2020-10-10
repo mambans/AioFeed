@@ -13,7 +13,7 @@ export const Container = styled.div`
   margin: 0 10px;
 
   @media screen and (max-width: 2560px) {
-    width: 20vw;
+    width: 19vw;
   }
 `;
 
@@ -47,7 +47,7 @@ export const LoadingImageBox = styled.div`
     transform: translate3d(0, 0, 0);
 
     @media screen and (max-width: 2560px) {
-      height: calc(20vw / 1.777);
+      height: calc(19vw / 1.777);
     }
   }
 `;

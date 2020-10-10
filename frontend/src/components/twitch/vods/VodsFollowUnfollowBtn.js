@@ -20,10 +20,11 @@ import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
 export default ({ channel, loweropacity, marginright, className, show = true }) => {
   // const channels = getLocalstorage('TwitchVods-Channels');
-  const { vods, setVods, channels, setChannels } = useContext(VodsContext) || {};
+  const { vods, setVods, channels, setChannels } =
+    useContext(VodsContext) || getLocalstorage('TwitchVods-Channels') || {};
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
-  const [vodEnabled, setVodEnabled] = useState(channels.includes(channel?.toLowerCase()));
+  const [vodEnabled, setVodEnabled] = useState(channels?.includes(channel?.toLowerCase()));
   const vodButton = useRef();
 
   useEventListenerMemo('mouseenter', handleMouseOver, vodButton.current);

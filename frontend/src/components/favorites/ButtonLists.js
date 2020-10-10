@@ -80,18 +80,16 @@ export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) =>
       <ListsLink>
         <Link to='/saved'>Lists</Link>
       </ListsLink>
-      {Object?.values(lists).map((list) => {
-        return (
-          <ListItem>
-            {list.name}
-            {!checkIfInList(list.items, videoId) ? (
-              <AddItemBtn size={16} onClick={() => addFunc(list.name, videoId)} />
-            ) : (
-              <RemoveItemBtn size={16} onClick={() => removeFunc(list.name, videoId)} />
-            )}
-          </ListItem>
-        );
-      })}
+      {Object?.values(lists).map((list) => (
+        <ListItem>
+          {list.name}
+          {!checkIfInList(list.items, videoId) ? (
+            <AddItemBtn size={16} onClick={() => addFunc(list.name, videoId)} />
+          ) : (
+            <RemoveItemBtn size={16} onClick={() => removeFunc(list.name, videoId)} />
+          )}
+        </ListItem>
+      ))}
       <NewListForm lists={lists} setLists={setLists} item={videoId} />
     </Lists>
   );

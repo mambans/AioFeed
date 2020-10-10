@@ -9,13 +9,16 @@ import FeedsCenterContainer from '../feed/FeedsCenterContainer';
 import List from './List';
 import validateToken from '../twitch/validateToken';
 import youtubeValidateToken from '../youtube/validateToken';
+import { VodsProvider } from '../twitch/vods/VodsContext';
 
 export default () => (
-  <FavoritesProvider>
-    <FeedsCenterContainer fullWidth={true}>
-      <Favorites />
-    </FeedsCenterContainer>
-  </FavoritesProvider>
+  <VodsProvider>
+    <FavoritesProvider>
+      <FeedsCenterContainer fullWidth={true}>
+        <Favorites />
+      </FeedsCenterContainer>
+    </FavoritesProvider>
+  </VodsProvider>
 );
 
 export const Favorites = () => {
@@ -25,7 +28,7 @@ export const Favorites = () => {
 
   useEffect(() => {
     const youtubeVideoExists = Object?.values(lists)
-      .map((list) => list.items.find((videoId) => typeof videoId === 'string'))
+      .map((list) => list.items?.find((videoId) => typeof videoId === 'string'))
       .filter((i) => i).length;
 
     const twitchVideoExists = Object?.values(lists)

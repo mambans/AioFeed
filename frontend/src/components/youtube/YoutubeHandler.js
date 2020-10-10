@@ -23,72 +23,44 @@ export default ({ requestError, videos, disableContextProvider }) => {
     });
   }, [videoElementsAmount]);
 
-  if (requestError && requestError.code === 401 && !videos) {
+  if (requestError?.code === 401 && !videos) {
     return '';
-  } else if (!videos || videos.length < 1) {
+  } else if (!videos || !Boolean(videos.length)) {
     return (
       <SubFeedContainer>
         <LoadingBoxes amount={videoElementsAmount} type='small' />
       </SubFeedContainer>
     );
-  } else {
-    return (
-      <>
-        <TransitionGroup
-          className={vodAmounts.transitionGroup || 'videos'}
-          component={SubFeedContainer}
-        >
-          {videos.slice(0, vodAmounts.amount).map((video, index) => {
-            return (
-              <CSSTransition
-                timeout={vodAmounts.timeout}
-                classNames={index < videoElementsAmount ? 'videoFadeSlide' : 'fade-750ms'}
-                key={video.contentDetails?.upload?.videoId}
-                unmountOnExit
-              >
-                <YoutubeVideoElement
-                  video={video}
-                  disableContextProvider={disableContextProvider}
-                />
-              </CSSTransition>
-            );
-          })}
-        </TransitionGroup>
+  }
+  return (
+    <>
+      <TransitionGroup
+        className={vodAmounts.transitionGroup || 'videos'}
+        component={SubFeedContainer}
+      >
+        {videos.slice(0, vodAmounts.amount).map((video, index) => (
+          <CSSTransition
+            timeout={vodAmounts.timeout}
+            classNames={index < videoElementsAmount ? 'videoFadeSlide' : 'fade-750ms'}
+            key={video.contentDetails?.upload?.videoId}
+            unmountOnExit
+          >
+            <YoutubeVideoElement video={video} disableContextProvider={disableContextProvider} />
+          </CSSTransition>
+        ))}
+      </TransitionGroup>
 
-        <LoadMore
-          loaded={true}
-          text={vodAmounts.amount >= videos.length ? 'Show less (reset)' : 'Show more'}
-          onClick={() => {
-            if (vodAmounts.amount >= videos.length) {
-              setVodAmounts({
-                amount: videoElementsAmount,
-                timeout: 0,
-                transitionGroup: 'instant-disappear',
-              });
-
-              clearTimeout(resetTransitionTimer.current);
-              resetTransitionTimer.current = setTimeout(() => {
-                setVodAmounts({
-                  amount: videoElementsAmount,
-                  timeout: 750,
-                  transitionGroup: 'videos',
-                });
-              }, 750);
-            } else {
-              setVodAmounts((curr) => ({
-                amount: curr.amount + videoElementsAmount,
-                transition: 'fade-750ms',
-                timeout: 750,
-                transitionGroup: 'videos',
-              }));
-            }
-          }}
-          resetFunc={() => {
+      <LoadMore
+        loaded={true}
+        text={vodAmounts.amount >= videos.length ? 'Show less (reset)' : 'Show more'}
+        onClick={() => {
+          if (vodAmounts.amount >= videos.length) {
             setVodAmounts({
               amount: videoElementsAmount,
               timeout: 0,
               transitionGroup: 'instant-disappear',
             });
+
             clearTimeout(resetTransitionTimer.current);
             resetTransitionTimer.current = setTimeout(() => {
               setVodAmounts({
@@ -97,9 +69,31 @@ export default ({ requestError, videos, disableContextProvider }) => {
                 transitionGroup: 'videos',
               });
             }, 750);
-          }}
-        />
-      </>
-    );
-  }
+          } else {
+            setVodAmounts((curr) => ({
+              amount: curr.amount + videoElementsAmount,
+              transition: 'fade-750ms',
+              timeout: 750,
+              transitionGroup: 'videos',
+            }));
+          }
+        }}
+        resetFunc={() => {
+          setVodAmounts({
+            amount: videoElementsAmount,
+            timeout: 0,
+            transitionGroup: 'instant-disappear',
+          });
+          clearTimeout(resetTransitionTimer.current);
+          resetTransitionTimer.current = setTimeout(() => {
+            setVodAmounts({
+              amount: videoElementsAmount,
+              timeout: 750,
+              transitionGroup: 'videos',
+            });
+          }, 750);
+        }}
+      />
+    </>
+  );
 };

@@ -35,7 +35,6 @@ export const Vods = ({ disableContextProvider }) => {
   const [vodError, setVodError] = useState(null);
   const resetVodAmountsTimer = useRef();
   const resetTransitionTimer = useRef();
-  const VodHeaderRef = useRef();
   const [vodAmounts, setVodAmounts] = useState({
     amount: videoElementsAmount,
     timeout: 750,
@@ -127,13 +126,7 @@ export const Vods = ({ disableContextProvider }) => {
 
   return (
     <>
-      <Header
-        refresh={refresh}
-        refreshing={refreshing}
-        vods={vods}
-        ref={VodHeaderRef}
-        vodError={vodError}
-      />
+      <Header refresh={refresh} refreshing={refreshing} vods={vods} vodError={vodError} />
       {error ? (
         <AlertHandler
           data={error}

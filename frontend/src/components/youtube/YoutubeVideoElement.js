@@ -17,26 +17,19 @@ import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import AddVideoButton from '../favorites/AddVideoButton';
 import { ChannelNameLink, PublishedDate } from './StyledComponents';
 
-const videoImageUrls = (urls) => {
-  if (urls.maxres) {
-    return urls.maxres.url;
-  } else if (urls.standard) {
-    return urls.standard.url;
-  } else if (urls.high) {
-    return urls.high.url;
-  } else if (urls.medium) {
-    return urls.medium.url;
-  } else {
-    return `${process.env.PUBLIC_URL}/images/placeholder.webp`;
-  }
-};
+const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
+  maxres?.url ||
+  standard?.url ||
+  high?.url ||
+  medium?.url ||
+  `${process.env.PUBLIC_URL}/images/placeholder.webp`;
 
 const HOVER_DELAY = 1000;
 
 export default ({ video, disableContextProvider }) => {
   const { youtubeVideoHoverEnable } = useContext(FeedsContext);
-  const streamHoverTimer = useRef();
   const [isHovered, setIsHovered] = useState(false);
+  const streamHoverTimer = useRef();
   const ref = useRef();
 
   useEventListenerMemo('mouseenter', handleMouseOver, ref.current, youtubeVideoHoverEnable);

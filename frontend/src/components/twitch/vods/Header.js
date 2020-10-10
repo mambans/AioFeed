@@ -9,12 +9,11 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import { HeaderContainer, ButtonList, LastRefreshText } from './../../sharedStyledComponents';
 import VodChannelList from './VodChannelList';
 
-export default React.forwardRef((props, ref) => {
+export default (props) => {
   const { refresh, refreshing, vods, vodError } = props;
 
   return (
     <HeaderContainer
-      ref={ref}
       id='TwitchVodsHeader'
       refreshFunc={() => {
         refresh(true);
@@ -98,4 +97,4 @@ export default React.forwardRef((props, ref) => {
       }
     ></HeaderContainer>
   );
-});
+};

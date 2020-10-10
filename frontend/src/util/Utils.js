@@ -38,11 +38,8 @@ export const getLocalstorage = (name) => {
   try {
     const itemParsed = JSON.parse(item);
 
-    if (itemParsed === 'null') {
-      return null;
-    } else {
-      return itemParsed;
-    }
+    if (itemParsed === 'null') return null;
+    return itemParsed;
   } catch (error) {
     return item;
   }
@@ -50,7 +47,7 @@ export const getLocalstorage = (name) => {
 
 export const truncate = (input, max) => {
   if (input && input.length > max) return input.substring(0, max) + '..';
-  else return input;
+  return input;
 };
 
 export const chunk = (array, size) => {

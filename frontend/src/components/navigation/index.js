@@ -59,11 +59,11 @@ export default () => {
             <Nav.Link as={NavLink} to='/home' activeClassName='active'>
               Home
             </Nav.Link>
-            <Nav.Link as={NavLink} to='/favorites' activeClassName='active'>
-              Favorites
-            </Nav.Link>
             <Nav.Link as={NavLink} to='/feed' activeClassName='active'>
               Feed
+            </Nav.Link>
+            <Nav.Link as={NavLink} to='/favorites' activeClassName='active'>
+              Favorites
             </Nav.Link>
           </StyledNav>
           <FaAngleRight className='arrow' size={20} />

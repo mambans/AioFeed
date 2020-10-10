@@ -23,7 +23,7 @@ export const FavoritesProvider = ({ children }) => {
       })
       .catch((e) => console.error(e));
 
-    setLists(Lists);
+    if (Lists) setLists(Lists);
   }, [setLists]);
 
   useEffect(() => {
