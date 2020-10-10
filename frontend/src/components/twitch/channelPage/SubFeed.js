@@ -99,9 +99,7 @@ export default ({
         show={items && !items.error}
         text='Load more'
         loaded={itemsloadmoreLoaded}
-        onClick={() => {
-          fetchItems(itemPagination.current);
-        }}
+        onClick={() => fetchItems(itemPagination.current)}
         style={{
           width: `${numberOfVideos * 350}px`,
           margin: 'auto',

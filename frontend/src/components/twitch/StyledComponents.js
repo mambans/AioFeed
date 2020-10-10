@@ -1,3 +1,4 @@
+import React from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import { MdFavorite } from 'react-icons/md';
 import { MdFavoriteBorder } from 'react-icons/md';
@@ -17,7 +18,7 @@ export const StyledLoadmore = styled.div`
     }
   }
 
-  div:not(#Button) {
+  div:not(#Button).line {
     background: var(--subFeedHeaderBorder);
     height: 1px;
     opacity: 0.75;
@@ -25,6 +26,7 @@ export const StyledLoadmore = styled.div`
   }
 
   div#Button {
+    display: flex;
     width: max-content;
     cursor: pointer;
     margin: 0;
@@ -86,14 +88,14 @@ const countdownAnimation = () => css`
 export const StyledCountdownCircle = styled.div`
   position: relative;
   margin: auto;
-  height: 24px;
-  width: 24px;
+  height: ${({ size }) => size}px;
+  width: ${({ size }) => size}px;
 
   div#countdown-number {
     display: inline-block;
-    line-height: 24px;
-    width: 24px;
-    height: 24px;
+    line-height: ${({ size }) => size}px;
+    width: ${({ size }) => size}px;
+    height: ${({ size }) => size}px;
     font-size: 12px;
     display: flex;
     justify-content: center;
@@ -103,14 +105,15 @@ export const StyledCountdownCircle = styled.div`
     position: absolute;
     top: 0;
     right: 0;
-    width: 24px;
-    height: 24px;
+    width: ${({ size }) => size}px;
+    height: ${({ size }) => size}px;
     transform: rotateY(-180deg) rotateZ(-90deg);
     animation: ${({ isLoading }) => isLoading && spinnigAnimation};
   }
 
   svg circle {
-    stroke-dasharray: ${({ isLoading }) => (isLoading ? '47.8px' : '67.8px')};
+    stroke-dasharray: ${({ isLoading, size }) =>
+      isLoading ? 2 * 3.14 * (size / 2 - 2) * 0.7 : 2 * 3.14 * (size / 2 - 2)}px;
     stroke-dashoffset: 0px;
     stroke-linecap: round;
     stroke-width: 3px;
@@ -175,7 +178,7 @@ export const StyledLoadingBox = styled.div`
     div {
       animation: ${pulse} 2s linear infinite;
       width: 260px;
-      height: 24px;
+      height: ${({ size }) => size}px;
       margin-top: 5px;
       border-radius: 10px;
       transform: translate3d(0, 0, 0);
@@ -203,6 +206,19 @@ export const StyledLoadingBox = styled.div`
     }
   }
 `;
+
+export const LoadingVideoElement = ({ type }) => (
+  <StyledLoadingBox type={type}>
+    <div id='video'></div>
+    <div id='title'>
+      <div></div>
+    </div>
+    <div id='details'>
+      <div id='channel'></div>
+      <div id='game'></div>
+    </div>
+  </StyledLoadingBox>
+);
 
 export const StyledLoadingList = styled.ul`
   li div {

@@ -297,10 +297,8 @@ export default () => {
 
               <LoadMore
                 text='Load more'
-                show={topData?.length > 0}
-                onClick={() => {
-                  fetchVideos(true);
-                }}
+                show={topData?.length}
+                onClick={() => fetchVideos(true)}
                 loaded={loadmoreLoaded}
               />
             </>

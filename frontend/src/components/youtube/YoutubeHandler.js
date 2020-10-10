@@ -1,5 +1,5 @@
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import React, { useRef, useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { SubFeedContainer, LoadMore } from './../sharedStyledComponents';
 import YoutubeVideoElement from './YoutubeVideoElement';
@@ -13,7 +13,6 @@ export default ({ requestError, videos, disableContextProvider }) => {
     timeout: 750,
     transitionGroup: 'videos',
   });
-  const resetTransitionTimer = useRef();
 
   useEffect(() => {
     setVodAmounts({
@@ -52,47 +51,9 @@ export default ({ requestError, videos, disableContextProvider }) => {
 
       <LoadMore
         loaded={true}
-        text={vodAmounts.amount >= videos.length ? 'Show less (reset)' : 'Show more'}
-        onClick={() => {
-          if (vodAmounts.amount >= videos.length) {
-            setVodAmounts({
-              amount: videoElementsAmount,
-              timeout: 0,
-              transitionGroup: 'instant-disappear',
-            });
-
-            clearTimeout(resetTransitionTimer.current);
-            resetTransitionTimer.current = setTimeout(() => {
-              setVodAmounts({
-                amount: videoElementsAmount,
-                timeout: 750,
-                transitionGroup: 'videos',
-              });
-            }, 750);
-          } else {
-            setVodAmounts((curr) => ({
-              amount: curr.amount + videoElementsAmount,
-              transition: 'fade-750ms',
-              timeout: 750,
-              transitionGroup: 'videos',
-            }));
-          }
-        }}
-        resetFunc={() => {
-          setVodAmounts({
-            amount: videoElementsAmount,
-            timeout: 0,
-            transitionGroup: 'instant-disappear',
-          });
-          clearTimeout(resetTransitionTimer.current);
-          resetTransitionTimer.current = setTimeout(() => {
-            setVodAmounts({
-              amount: videoElementsAmount,
-              timeout: 750,
-              transitionGroup: 'videos',
-            });
-          }, 750);
-        }}
+        setVideosToShow={setVodAmounts}
+        videosToShow={vodAmounts}
+        videos={videos}
       />
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import AddVideoExtraData from '../twitch/AddVideoExtraData';
 import API from '../twitch/API';
 import VodElement from '../twitch/vods/VodElement';
@@ -6,7 +6,7 @@ import YoutubeVideoElement from '../youtube/YoutubeVideoElement';
 import GetVideoInfo from './GetVideoInfo';
 import { VideosContainer } from './StyledComponents';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { StyledLoadingBox } from '../twitch/StyledComponents';
+import { LoadingVideoElement } from '../twitch/StyledComponents';
 import { durationToDate } from '../twitch/TwitchUtils';
 import { LoadMore } from '../sharedStyledComponents';
 import { CenterContext } from '../feed/FeedsCenterContainer';
@@ -14,8 +14,6 @@ import { CenterContext } from '../feed/FeedsCenterContainer';
 export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
   const [videos, setVideos] = useState();
   const { videoElementsAmount } = useContext(CenterContext);
-  const resetVideosToShowTimer = useRef();
-  const resetTransitionTimer = useRef();
 
   const [videosToShow, setVideosToShow] = useState({
     amount: videoElementsAmount,
@@ -95,16 +93,7 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
               unmountOnExit
             >
               {video.loading ? (
-                <StyledLoadingBox type={'small'}>
-                  <div id='video'></div>
-                  <div id='title'>
-                    <div></div>
-                  </div>
-                  <div id='details'>
-                    <div id='channel'></div>
-                    <div id='game'></div>
-                  </div>
-                </StyledLoadingBox>
+                <LoadingVideoElement type={'small'} />
               ) : video?.kind === 'youtube#video' ? (
                 <YoutubeVideoElement video={video} disableContextProvider={true} />
               ) : (
@@ -116,47 +105,9 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
       </TransitionGroup>
       <LoadMore
         loaded={true}
-        text={videosToShow.amount >= videos?.length ? 'Show less (reset)' : 'Show more'}
-        onClick={() => {
-          if (videosToShow.amount >= videos?.length) {
-            setVideosToShow({
-              amount: videoElementsAmount,
-              timeout: 0,
-              transitionGroup: 'instant-disappear',
-            });
-
-            clearTimeout(resetTransitionTimer.current);
-            resetTransitionTimer.current = setTimeout(() => {
-              setVideosToShow({
-                amount: videoElementsAmount,
-                timeout: 750,
-                transitionGroup: 'videos',
-              });
-            }, 750);
-          } else {
-            setVideosToShow((curr) => ({
-              amount: curr.amount + videoElementsAmount,
-              timeout: 750,
-              transitionGroup: 'videos',
-            }));
-          }
-          clearTimeout(resetVideosToShowTimer.current);
-        }}
-        resetFunc={() => {
-          setVideosToShow({
-            amount: videoElementsAmount,
-            timeout: 0,
-            transitionGroup: 'instant-disappear',
-          });
-          clearTimeout(resetTransitionTimer.current);
-          resetTransitionTimer.current = setTimeout(() => {
-            setVideosToShow({
-              amount: videoElementsAmount,
-              timeout: 750,
-              transitionGroup: 'videos',
-            });
-          }, 750);
-        }}
+        setVideosToShow={setVideosToShow}
+        videosToShow={videosToShow}
+        videos={videos}
       />
     </VideosContainer>
   );
