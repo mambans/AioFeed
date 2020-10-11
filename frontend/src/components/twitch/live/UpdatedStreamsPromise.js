@@ -1,5 +1,5 @@
 import addSystemNotification from './addSystemNotification';
-import { getLocalstorage, truncate } from '../../../util/Utils';
+import { truncate } from '../../../util/Utils';
 
 export default async ({
   oldLiveStreams,
@@ -7,6 +7,7 @@ export default async ({
   newlyAddedStreams,
   setUnseenNotifications,
   isEnabledUpdateNotifications,
+  updateNotischannels,
 }) => {
   try {
     const res = await new Promise((resolve, reject) => {
@@ -22,7 +23,7 @@ export default async ({
       resolve(restStreams);
     });
 
-    if (getLocalstorage('ChannelsUpdateNotifs')) {
+    if (updateNotischannels) {
       const existingStreams = res?.filter((stream) => {
         return oldLiveStreams.current.find((old_stream) => {
           return old_stream.user_name === stream.user_name;
@@ -30,7 +31,7 @@ export default async ({
       });
 
       const updateEnabledStreams = existingStreams?.filter((stream) => {
-        return getLocalstorage('ChannelsUpdateNotifs')?.includes(stream.user_name?.toLowerCase());
+        return updateNotischannels?.includes(stream.user_name?.toLowerCase());
       });
 
       const newTitleAndGameStreams = updateEnabledStreams?.filter((stream) => {

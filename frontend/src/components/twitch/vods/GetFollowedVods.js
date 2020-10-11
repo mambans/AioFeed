@@ -1,126 +1,97 @@
-import { durationToDate } from './../TwitchUtils';
 import { getLocalstorage } from '../../../util/Utils';
 import AddVideoExtraData from '../AddVideoExtraData';
 import API from '../API';
-import FetchMonitoredVodChannelsList from './FetchMonitoredVodChannelsList';
+import { addVodEndTime } from '../TwitchUtils';
 import getMyFollowedChannels from './../getMyFollowedChannels';
 import reauthenticate from './../reauthenticate';
 import SortAndAddExpire from './SortAndAddExpire';
 
-const monitoredChannelNameToId = async (followedChannels, FollowedChannelVods) => {
+const monitoredChannelNameToId = async (followedChannels, followedVodEnabledChannels) => {
   const vodChannelsWithoutFollow = [];
   let error;
-  const vodChannels = await FollowedChannelVods.map((vod) => {
-    const channelFollowed = followedChannels.find(
-      (channel) => channel.to_name?.toLowerCase() === vod
-    );
-    if (channelFollowed) {
-      return channelFollowed.to_id;
-    } else {
-      vodChannelsWithoutFollow.push(vod);
+  const vodChannelIds = await followedVodEnabledChannels
+    .map((vodChannel) => {
+      const channelFollowed = followedChannels.find(
+        (channel) => channel.to_name?.toLowerCase() === vodChannel
+      );
+
+      if (channelFollowed) return channelFollowed.to_id;
+
+      vodChannelsWithoutFollow.push(vodChannel);
       return null;
-    }
-  }).filter((channel) => {
-    return channel !== null;
-  });
-
-  if (vodChannelsWithoutFollow.length > 0) {
-    await API.getUser({
-      params: {
-        login: vodChannelsWithoutFollow,
-        first: 100,
-      },
     })
-      .then((res) => {
-        res.data.data.map((channel) => {
-          vodChannels.push(channel.id);
-          return null;
-        });
+    .filter((channel) => channel);
+
+  const vodChannelsIdsWithoutLiveFollow = Boolean(vodChannelsWithoutFollow.length)
+    ? await API.getUser({
+        params: {
+          login: vodChannelsWithoutFollow,
+          first: 100,
+        },
       })
-      .catch((err) => {
-        console.error(err);
-        error = err;
-      });
-  }
+        .then((res) => res.data.data.map((channel) => channel.id))
+        .catch((err) => {
+          console.error(err);
+          error = err;
+        })
+    : [];
 
-  return { data: vodChannels, error: error };
-};
-
-const addVodEndTime = async (followedStreamVods) => {
-  return followedStreamVods.map((stream) => {
-    if (stream.type === 'archive') {
-      stream.endDate = durationToDate(stream.duration, stream.created_at);
-    } else {
-      stream.endDate = new Date(stream.created_at).getTime();
-    }
-    return stream;
-  });
+  return { data: [...vodChannelIds, ...vodChannelsIdsWithoutLiveFollow], error: error };
 };
 
 const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRefreshToken) => {
   let followedStreamVods = [];
 
   const PromiseAllVods = await Promise.all(
-    vodChannels.map(async (channel) => {
-      followedStreamVods = await API.getVideos({
-        params: {
-          user_id: channel,
-          period: 'month',
-          first: 5,
-          type: 'all',
-        },
-      }).then((response) => {
-        return response.data.data;
-      });
-
-      return followedStreamVods;
-    })
+    vodChannels.map(
+      async (channelId) =>
+        await API.getVideos({
+          params: {
+            user_id: channelId,
+            period: 'month',
+            first: 5,
+            type: 'all',
+          },
+        }).then((response) => response.data.data)
+    )
   ).catch(async () => {
     return await reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
-      const channelFetchedVods = [
-        ...new Set(
-          followedStreamVods.map((vod) => {
-            return vod.user_id;
-          })
-        ),
-      ];
+      const channelFetchedVods = [...new Set(followedStreamVods.map((vod) => vod.user_id))];
 
-      const channelsIdsUnfetchedVods = await vodChannels.filter((channel) => {
-        return !channelFetchedVods?.includes(channel);
-      });
+      const channelsIdsUnfetchedVods = await vodChannels.filter(
+        (channel) => !channelFetchedVods?.includes(channel)
+      );
 
       return await Promise.all(
-        channelsIdsUnfetchedVods.map(async (channel) => {
-          return await API.getVideos({
-            params: {
-              user_id: channel,
-              period: 'month',
-              first: 5,
-              type: 'all',
-            },
-          }).then((response) => {
-            return response.data.data;
-          });
-        })
+        channelsIdsUnfetchedVods.map(
+          async (channel) =>
+            await API.getVideos({
+              params: {
+                user_id: channel,
+                period: 'month',
+                first: 5,
+                type: 'all',
+              },
+            }).then((response) => response.data.data)
+        )
       );
     });
   });
 
-  const AllVods = PromiseAllVods.flat(1);
-
-  return AllVods;
+  return PromiseAllVods.flat(1);
 };
 
-export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchToken) => {
+export default async ({ forceRun, setRefreshToken, setTwitchToken, channels }) => {
   const vodExpire = 3; // Number of hours
+  const cachedVods = getLocalstorage(`Vods`);
 
   try {
-    if (forceRun || !getLocalstorage(`Vods`) || getLocalstorage(`Vods`).expire <= Date.now()) {
+    if (forceRun || !cachedVods || cachedVods.expire <= Date.now()) {
       try {
         const followedChannels = await getMyFollowedChannels(true);
 
-        const followedVodEnabledChannels = await FetchMonitoredVodChannelsList(Username, AuthKey);
-        if (!followedVodEnabledChannels || followedVodEnabledChannels.length === 0) {
+        const followedVodEnabledChannels = channels;
+        if (!followedVodEnabledChannels || !Boolean(followedVodEnabledChannels.length)) {
           return {
             error: {
               data: {
@@ -152,24 +123,23 @@ export default async (forceRun, AuthKey, Username, setRefreshToken, setTwitchTok
 
         const followedOrderedStreamVods = SortAndAddExpire(videoWithEndTime, vodExpire);
 
-        localStorage.setItem(`Vods`, JSON.stringify(followedOrderedStreamVods));
         return {
-          data: followedOrderedStreamVods,
+          videos: followedOrderedStreamVods,
           vodError: vodChannels.error,
         };
       } catch (error) {
         return {
-          data: getLocalstorage('Vods'),
+          videos: cachedVods,
           error: error,
         };
       }
     }
 
-    return { data: getLocalstorage('Vods') };
+    return { videos: cachedVods };
   } catch (error) {
     console.error('message: ', error.message);
     return {
-      data: getLocalstorage('Vods'),
+      videos: cachedVods,
       error: error,
     };
   }

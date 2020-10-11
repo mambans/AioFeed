@@ -7,8 +7,8 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import AccountContext from './../account/AccountContext';
 import { VodAddRemoveButton } from './../sharedStyledComponents';
-import { getLocalstorage } from '../../util/Utils';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
+import VodsContext from './vods/VodsContext';
 
 /**
  * @param {String} channel - channel name
@@ -18,12 +18,11 @@ import useEventListenerMemo from '../../hooks/useEventListenerMemo';
  */
 
 export default ({ channel, loweropacity, marginright, size = 24, show = true }) => {
-  const channels = getLocalstorage('ChannelsUpdateNotifs') || [];
+  const { updateNotischannels, setUpdateNotischannels } = useContext(VodsContext);
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
-  const [updateNotificationEnabled, setUpdateNotificationEnabled] = useState(
-    channels?.includes(channel?.toLowerCase())
-  );
+  const updateNotificationEnabled = updateNotischannels?.includes(channel?.toLowerCase());
+
   const vodButton = useRef();
 
   useEventListenerMemo('mouseenter', handleMouseOver, vodButton.current);
@@ -31,19 +30,18 @@ export default ({ channel, loweropacity, marginright, size = 24, show = true }) 
 
   async function removeChannel(channel) {
     try {
-      const channelss = new Set(getLocalstorage('ChannelsUpdateNotifs') || []);
-      channelss.delete(channel?.toLowerCase());
+      const channelsSets = new Set(updateNotischannels || []);
+      channelsSets.delete(channel?.toLowerCase());
 
-      localStorage.setItem('ChannelsUpdateNotifs', JSON.stringify(Array.from(channelss)));
+      setUpdateNotischannels([...channelsSets]);
+
       await axios
         .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/updatechannels`, {
           username: username,
           authkey: authKey,
-          channels: Array.from(channelss),
+          channels: [...channelsSets],
         })
-        .catch((error) => {
-          console.error(error);
-        });
+        .catch((error) => console.error(error));
     } catch (e) {
       console.log(e.message);
     }
@@ -51,20 +49,17 @@ export default ({ channel, loweropacity, marginright, size = 24, show = true }) 
 
   async function addChannel() {
     try {
-      const existing = new Set(getLocalstorage('ChannelsUpdateNotifs') || []);
+      const existing = new Set(updateNotischannels || []);
+      const newChannels = [...existing.add(channel?.toLowerCase())];
 
-      const newChannels = Array.from(existing.add(channel?.toLowerCase()));
-
-      localStorage.setItem('ChannelsUpdateNotifs', JSON.stringify(newChannels));
+      setUpdateNotischannels(newChannels);
       await axios
         .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/updatechannels`, {
           username: username,
           authkey: authKey,
           channels: newChannels,
         })
-        .catch((error) => {
-          console.error(error);
-        });
+        .catch((error) => console.error(error));
     } catch (error) {
       console.log('error', error);
     }
@@ -103,10 +98,8 @@ export default ({ channel, loweropacity, marginright, size = 24, show = true }) 
         onClick={() => {
           if (updateNotificationEnabled) {
             removeChannel(channel);
-            setUpdateNotificationEnabled(false);
           } else {
             addChannel({ channel, username, authKey });
-            setUpdateNotificationEnabled(true);
           }
         }}
       >

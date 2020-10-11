@@ -104,7 +104,6 @@ export default () => {
   useEventListenerMemo('mouseleave', handleMouseOut, PlayerUIControlls.current);
   useEventListenerMemo('dblclick', toggleFullScreen, PlayerUIControlls.current);
   useEventListenerMemo('keydown', keyboardEvents);
-  useEventListenerMemo('unload', removeFromStreamNotisFromPlayer);
   useEventListenerMemo('mousedown', containLinkClicks, link0.current);
   useEventListenerMemo('mousedown', containLinkClicks, link1.current);
   useEventListenerMemo('mousedown', containLinkClicks, link2.current);
@@ -184,21 +183,6 @@ export default () => {
     return updateCachedChatState.cancel;
   }, [chatState, channelName]);
 
-  function removeFromStreamNotisFromPlayer() {
-    const streams = getLocalstorage('newLiveStreamsFromPlayer') || {
-      data: [],
-    };
-    if (streams.data.length >= 1) {
-      const newStreams = streams.data.filter(
-        (item) => item.user_name?.toLowerCase() !== channelName?.toLowerCase()
-      );
-      localStorage.setItem(
-        'newLiveStreamsFromPlayer',
-        JSON.stringify({ data: newStreams, updated: Date.now() })
-      );
-    }
-  }
-
   function offlineEvents() {
     console.log('Stream is Offline');
     document.title = `${channelName} (Offline)`;
@@ -206,7 +190,6 @@ export default () => {
     setShowUIControlls(false);
     clearInterval(refreshStreamInfoTimer.current);
     setStreamInfo(null);
-    removeFromStreamNotisFromPlayer();
   }
 
   const GetAndSetStreamInfo = useCallback(async () => {
@@ -282,19 +265,6 @@ export default () => {
             !res?.broadcaster_software?.toLowerCase().includes('rerun')
           ) {
             addNoti({ type: 'Live', stream: res });
-
-            const streams = getLocalstorage('newLiveStreamsFromPlayer') || { data: [] };
-            const newStreams = [...streams.data.filter((item) => item), res];
-            const filteredStreams = newStreams.filter(
-              (item, index, self) => index === self.findIndex((t) => t.user_id === item.user_id)
-            );
-            localStorage.setItem(
-              'newLiveStreamsFromPlayer',
-              JSON.stringify({
-                data: filteredStreams,
-                updated: Date.now(),
-              })
-            );
           }
         });
       }

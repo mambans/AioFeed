@@ -180,11 +180,11 @@ Resources:
                 Required: true
             - method.request.querystring.authkey:
                 Required: true
-  VodChannelsFetch:
+  PreferencesFetchAll:
     Type: AWS::Serverless::Function
     Properties:
-      Description: 'Fetch monitored vod channels list.'
-      Handler: vodChannelsFetch/handler.handler
+      Description: 'Fetch all preferences.'
+      Handler: preferencesFetchAll/handler.handler
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
@@ -195,7 +195,7 @@ Resources:
         Http:
           Type: Api
           Properties:
-            Path: /vodchannels
+            Path: /preferences
             Method: get
             RequestParameters:
               - method.request.querystring.username:

@@ -212,7 +212,7 @@ export default ({
           </ChannelNameDiv>
           {(location.pathname === '/feed/' || location.pathname === '/feed') && (
             <div className='buttonsContainer'>
-              <VodsFollowUnfollowBtn channel={login} marginright='5px;' />
+              <VodsFollowUnfollowBtn channel={login} channelId={user_id} marginright='5px;' />
               <AddUpdateNotificationsButton channel={login} marginright='5px;' />
               <FollowUnfollowBtn
                 style={{

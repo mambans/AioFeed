@@ -28,12 +28,12 @@ export const Favorites = () => {
 
   useEffect(() => {
     const youtubeVideoExists = Object?.values(lists)
-      .map((list) => list.items?.find((videoId) => typeof videoId === 'string'))
-      .filter((i) => i).length;
+      .map((list) => list?.items?.find((videoId) => typeof videoId === 'string'))
+      .filter((i) => i)?.length;
 
     const twitchVideoExists = Object?.values(lists)
-      .map((list) => list.items.find((videoId) => typeof videoId === 'number'))
-      .filter((i) => i).length;
+      .map((list) => list?.items?.find((videoId) => typeof videoId === 'number'))
+      .filter((i) => i)?.length;
 
     const twitchPromise =
       Boolean(twitchVideoExists) &&

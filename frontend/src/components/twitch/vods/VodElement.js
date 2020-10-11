@@ -216,6 +216,7 @@ export default ({ data, vodBtnDisabled, disableContextProvider }) => {
             channel={login || user_name}
             loweropacity='0.5'
             className='extaButton'
+            channelId={user_id}
           />
         </ChannelNameDiv>
         <VodDates>

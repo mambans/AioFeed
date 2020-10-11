@@ -23,6 +23,7 @@ export const FavoritesProvider = ({ children }) => {
       })
       .catch((e) => console.error(e));
 
+    console.log('Favorites Lists: ', Lists);
     if (Lists) setLists(Lists);
   }, [setLists]);
 

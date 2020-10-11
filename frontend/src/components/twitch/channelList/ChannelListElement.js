@@ -89,7 +89,11 @@ export default ({
         {loginNameFormat(channel) || `${searchInput}..`}
       </Link>
       <div className='ButtonContianer'>
-        <VodsFollowUnfollowBtn show={showVodBtn} channel={channel?.user_name || searchInput} />
+        <VodsFollowUnfollowBtn
+          show={showVodBtn}
+          channel={channel?.user_name || searchInput}
+          channelId={channel?.user_id}
+        />
         <AddUpdateNotificationsButton channel={channel?.user_name || searchInput} />
         <FollowUnfollowBtn
           style={{ marginLeft: '5px', marginRight: '0px', padding: '0' }}

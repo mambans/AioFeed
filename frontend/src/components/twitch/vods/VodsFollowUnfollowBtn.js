@@ -8,23 +8,23 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import AccountContext from './../../account/AccountContext';
 import { VodAddRemoveButton } from './../../sharedStyledComponents';
 import AddVodChannel from './AddVodChannel';
-import { getLocalstorage } from '../../../util/Utils';
 import VodsContext from './VodsContext';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
+import FetchSingelChannelVods from './FetchSingelChannelVods';
 
 /**
  * @param {String} channel - channel name
+ * @param {Number} channelId - user_id name
  * @param {String} [loweropacity] - overwrite opacity (0.5)
  * @param {String} [marginright] - overwrite marginright (7px;)
+ * @param {Boolean} [show = true] - mount/show button.
  */
 
-export default ({ channel, loweropacity, marginright, className, show = true }) => {
-  // const channels = getLocalstorage('TwitchVods-Channels');
-  const { vods, setVods, channels, setChannels } =
-    useContext(VodsContext) || getLocalstorage('TwitchVods-Channels') || {};
+export default ({ channel, channelId, loweropacity, marginright, className, show = true }) => {
+  const { vods, setVods, channels, setChannels } = useContext(VodsContext) || {};
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
-  const [vodEnabled, setVodEnabled] = useState(channels?.includes(channel?.toLowerCase()));
+  const vodEnabled = useState(channels?.includes(channel?.toLowerCase()));
   const vodButton = useRef();
 
   useEventListenerMemo('mouseenter', handleMouseOver, vodButton.current);
@@ -38,12 +38,12 @@ export default ({ channel, loweropacity, marginright, className, show = true }) 
     setIsHovered(null);
   }
 
-  async function removeChannel(channel) {
+  async function removeChannel({ channel, channels, setChannels }) {
     try {
-      const vodChannels = new Set(channels || getLocalstorage('TwitchVods-Channels') || []);
+      const vodChannels = new Set(channels || []);
 
       vodChannels.delete(channel?.toLowerCase());
-      localStorage.setItem('TwitchVods-Channels', JSON.stringify(Array.from(vodChannels)));
+      setChannels([...vodChannels]);
 
       const existingVodVideos = vods;
       const newVodVideos = {
@@ -53,7 +53,6 @@ export default ({ channel, loweropacity, marginright, className, show = true }) 
         }),
       };
 
-      localStorage.setItem('Vods', JSON.stringify(newVodVideos));
       setVods(newVodVideos);
 
       await axios
@@ -62,9 +61,7 @@ export default ({ channel, loweropacity, marginright, className, show = true }) 
           authkey: authKey,
           channels: Array.from(vodChannels),
         })
-        .catch((err) => {
-          console.error(err);
-        });
+        .catch((err) => console.error(err));
     } catch (e) {
       console.log(e.message);
     }
@@ -92,11 +89,16 @@ export default ({ channel, loweropacity, marginright, className, show = true }) 
         variant='link'
         onClick={() => {
           if (vodEnabled) {
-            removeChannel(channel);
-            setVodEnabled(false);
+            removeChannel({ channel, channels, setChannels });
           } else {
             AddVodChannel({ channel, channels, setChannels, username, authKey });
-            setVodEnabled(true);
+            if (channelId) {
+              FetchSingelChannelVods({
+                channelId,
+                setVods,
+                amount: 5,
+              });
+            }
           }
         }}
       >

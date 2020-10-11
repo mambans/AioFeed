@@ -40,7 +40,7 @@ export default async ({
         getLocalstorage('TwitchVods-Channels')?.includes(stream.user_name?.toLowerCase())
       ) {
         setTimeout(async () => {
-          await FetchSingelChannelVods(stream.user_id, setVods, 'offline');
+          await FetchSingelChannelVods({ channelId: stream.user_id, setVods });
         }, 0);
       }
       return '';

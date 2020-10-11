@@ -1,13 +1,8 @@
-import { sortBy, reverse } from "lodash";
+import { sortBy, reverse } from 'lodash';
 
 export default (followedStreamVods, vodExpire, oldLoaded, oldExpire) => {
-  const liveVods = followedStreamVods.filter((vod) => {
-    return vod.thumbnail_url === "";
-  });
-
-  const completedVods = followedStreamVods.filter((vod) => {
-    return vod.thumbnail_url !== "";
-  });
+  const liveVods = followedStreamVods.filter((vod) => vod.thumbnail_url === '');
+  const completedVods = followedStreamVods.filter((vod) => vod.thumbnail_url !== '');
   const sortedLiveVods = sortBy(
     liveVods,
     (stream) => Date.now() - new Date(stream.created_at).getTime()

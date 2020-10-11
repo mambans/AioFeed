@@ -9,12 +9,9 @@ export default async ({
   authKey,
 }) => {
   try {
-    // const existingChannels = new Set(getLocalstorage('TwitchVods-Channels') || []);
     const existingChannels = new Set(channels);
-
     const newChannels = [...existingChannels.add(channel?.toLowerCase())];
 
-    // localStorage.setItem('TwitchVods-Channels', JSON.stringify(newChannels));
     setChannels(newChannels);
 
     await axios
@@ -23,9 +20,9 @@ export default async ({
         authkey: authKey,
         channels: newChannels,
       })
-      .catch((error) => {
-        console.error(error);
-      });
+      .catch((error) => console.error(error));
+
+    return newChannels;
   } catch (e) {
     console.log(e.message);
   }

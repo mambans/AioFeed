@@ -1,15 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { MdAddCircle } from 'react-icons/md';
 import axios from 'axios';
 
 import { FormButton, FormGroup, Label } from './StyledComponents';
 import { getCookie } from '../../util/Utils';
-import useInput from '../../hooks/useInput';
 import { parseNumberAndString } from './ButtonLists';
 
+const useInput = (initialValue) => {
+  const [value, setValue] = useState(initialValue);
+
+  return {
+    value,
+    setValue,
+    reset: () => setValue(''),
+    manualSet: {
+      onClick: (event) => {
+        setValue(event.target.textContent);
+      },
+    },
+    bind: {
+      value,
+      onChange: (event) => {
+        setValue(event.target.value);
+      },
+    },
+  };
+};
+
 export default ({ lists, setLists, item }) => {
-  const { value: listName, bind: bindListName, reset: resetListName } = useInput('');
+  const { value: listName, bind: bindListName, reset: resetListName, setValue } = useInput('');
 
   const addFunc = async (list_Name, item) => {
     const newVideo = parseNumberAndString(item);
@@ -37,6 +57,7 @@ export default ({ lists, setLists, item }) => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
+    setValue(listName.trim());
 
     if (!listName || CheckForNameAvaliability) addFunc(listName, item);
   };

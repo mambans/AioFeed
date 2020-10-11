@@ -24,10 +24,8 @@ export default ({ disableContextProvider }) => (
 );
 
 export const Vods = ({ disableContextProvider }) => {
-  const { vods, setVods } = useContext(VodsContext);
-  const { authKey, username, twitchUserId, setTwitchToken, setRefreshToken } = useContext(
-    AccountContext
-  );
+  const { vods, setVods, channels } = useContext(VodsContext);
+  const { twitchUserId, setTwitchToken, setRefreshToken } = useContext(AccountContext);
   const { setEnableTwitchVods } = useContext(FeedsContext);
   const { videoElementsAmount } = useContext(CenterContext);
   const [error, setError] = useState(null);
@@ -44,24 +42,29 @@ export const Vods = ({ disableContextProvider }) => {
   const refresh = useCallback(
     async (forceRefresh) => {
       setRefreshing(true);
-      await getFollowedVods(forceRefresh, authKey, username, setRefreshToken, setTwitchToken)
+      await getFollowedVods({
+        forceRun: forceRefresh,
+        setRefreshToken,
+        setTwitchToken,
+        channels,
+      })
         .then((data) => {
           if (data.error) {
             setError(data.error);
           } else if (data.vodError) {
             setVodError(data.vodError);
           }
-          setVods(data.data);
+          setVods(data.videos);
 
           setRefreshing(false);
         })
         .catch((data) => {
           setError(data.error);
 
-          setVods(data.data);
+          setVods(data.videos);
         });
     },
-    [authKey, username, setTwitchToken, setRefreshToken, setVods]
+    [setTwitchToken, setRefreshToken, setVods, channels]
   );
 
   async function windowFocusHandler() {
@@ -71,7 +74,12 @@ export const Vods = ({ disableContextProvider }) => {
   useEffect(() => {
     (async () => {
       setRefreshing(true);
-      await getFollowedVods(false, authKey, username, setRefreshToken, setTwitchToken)
+      await getFollowedVods({
+        forceRun: false,
+        setRefreshToken,
+        setTwitchToken,
+        channels,
+      })
         .then((data) => {
           if (data.error) {
             setError(data.error);
@@ -79,16 +87,15 @@ export const Vods = ({ disableContextProvider }) => {
             setVodError(data.vodError);
           }
 
-          setVods(data.data);
+          setVods(data.videos);
           setRefreshing(false);
         })
         .catch((data) => {
           setError(data.error);
-
-          setVods(data.data);
+          setVods(data.videos);
         });
     })();
-  }, [authKey, username, twitchUserId, setTwitchToken, setRefreshToken, setVods]);
+  }, [twitchUserId, setTwitchToken, setRefreshToken, setVods, channels]);
 
   useEffect(() => {
     setVodAmounts({

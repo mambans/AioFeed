@@ -1,24 +1,13 @@
 export const formatTwitchVodsDuration = (duration) => {
   if (duration) {
-    let hour = '0';
-
-    const duration1 = duration?.replace('h', ':').replace('m', ':').replace('s', '');
-
+    const duration1 = duration.replace('h', ':').replace('m', ':').replace('s', '');
     const durationParts = duration1.split(':');
-    if (duration?.includes('h')) hour = durationParts.shift();
 
-    let i = 0;
-    durationParts.map((number) => {
-      if (number.length < 2) durationParts[i] = 0 + number;
-
-      i++;
-
-      return '';
+    const tr = durationParts.map((number, index) => {
+      if (index === 0) return number;
+      return number.padStart(2, 0) || '';
     });
-
-    if (hour) return hour + ':' + durationParts.join(':');
-
-    return durationParts.join(':');
+    return tr.join(':');
   }
   return '0';
 };
@@ -56,3 +45,12 @@ export const formatViewerNumbers = (viewers) => {
   }
   return viewers;
 };
+
+export const addVodEndTime = async (followedStreamVods) =>
+  followedStreamVods.map((stream) => ({
+    ...stream,
+    endDate:
+      stream.type === 'archive'
+        ? durationToDate(stream.duration, stream.created_at)
+        : new Date(stream.created_at).getTime(),
+  }));

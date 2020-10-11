@@ -31,7 +31,7 @@ import fetchStreamInfo from './../player/fetchStreamInfo';
 import fetchChannelInfo from './../player/fetchChannelInfo';
 import setFavion from '../../setFavion';
 import validateToken from '../validateToken';
-import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
+// import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import API from './../API';
 import AnimatedViewCount from '../live/AnimatedViewCount';
 import { getCookie } from '../../../util/Utils';
@@ -462,11 +462,11 @@ export default () => {
                             channelName={channelName}
                             id={channelInfo._id}
                           />
-                          <AddUpdateNotificationsButton
+                          {/* <AddUpdateNotificationsButton
                             show={channelInfo}
                             channel={channelName}
                             size={30}
-                          />
+                          /> */}
                         </div>
                         <Link
                           to={{

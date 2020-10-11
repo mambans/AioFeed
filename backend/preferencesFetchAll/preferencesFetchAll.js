@@ -12,6 +12,14 @@ module.exports = async ({ username, authkey }) => {
     .promise();
 
   if (authkey === res.Item.AuthKey) {
-    return res.Item.TwitchVodsPreferences.Channels;
+    const columns = { ...res.Item };
+    delete columns.Password;
+    delete columns.AuthKey;
+    delete columns.Username;
+    delete columns.Email;
+    delete columns.ProfileImg;
+    delete columns.YoutubePreferences.Refresh_token;
+
+    return columns;
   }
 };

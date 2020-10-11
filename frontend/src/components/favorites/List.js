@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+
 import AddVideoExtraData from '../twitch/AddVideoExtraData';
 import API from '../twitch/API';
 import VodElement from '../twitch/vods/VodElement';
@@ -7,7 +8,7 @@ import GetVideoInfo from './GetVideoInfo';
 import { VideosContainer } from './StyledComponents';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { LoadingVideoElement } from '../twitch/StyledComponents';
-import { durationToDate } from '../twitch/TwitchUtils';
+import { addVodEndTime } from '../twitch/TwitchUtils';
 import { LoadMore } from '../sharedStyledComponents';
 import { CenterContext } from '../feed/FeedsCenterContainer';
 
@@ -20,17 +21,6 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
     timeout: 750,
     transitionGroup: 'videos',
   });
-
-  const addVodEndTime = async (followedStreamVods) => {
-    return followedStreamVods.map((stream) => {
-      stream.endDate =
-        stream.type === 'archive'
-          ? durationToDate(stream.duration, stream.created_at)
-          : new Date(stream.created_at).getTime();
-
-      return stream;
-    });
-  };
 
   useEffect(() => {
     (async () => {
@@ -75,7 +65,14 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
           .map((item) => mergedVideosUnordered.find((video) => String(video.id) === String(item)))
           .filter((i) => i);
 
-        setVideos(mergeVideosOrdered);
+        // setVideos(mergeVideosOrdered);
+        setVideos((curr) => {
+          return mergeVideosOrdered.map((vid) => {
+            const found = curr?.find((c) => c.id === vid.id);
+            if (!found) return { ...vid, transition: 'videoFadeSlide' };
+            return vid;
+          });
+        });
       }
     })();
   }, [list.items, ytExistsAndValidated, twitchExistsAndValidated]);

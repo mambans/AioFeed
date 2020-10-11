@@ -8,7 +8,7 @@ import NotificationsContext from './../../notifications/NotificationsContext';
 import AccountContext from './../../account/AccountContext';
 import FeedsContext from './../../feed/FeedsContext';
 import VodsContext from './../vods/VodsContext';
-import { AddCookie, getCookie, getLocalstorage } from '../../../util/Utils';
+import { AddCookie, getCookie } from '../../../util/Utils';
 import LiveStreamsPromise from './LiveStreamsPromise';
 import OfflineStreamsPromise from './OfflineStreamsPromise';
 import UpdatedStreamsPromise from './UpdatedStreamsPromise';
@@ -19,7 +19,7 @@ const REFRESH_RATE = 25; // seconds
 export default ({ children }) => {
   const { addNotification, setUnseenNotifications } = useContext(NotificationsContext);
   const { autoRefreshEnabled } = useContext(AccountContext);
-  const { setVods } = useContext(VodsContext);
+  const { setVods, updateNotischannels } = useContext(VodsContext);
   const {
     enableTwitchVods,
     isEnabledOfflineNotifications,
@@ -42,7 +42,6 @@ export default ({ children }) => {
 
   useEventListenerMemo('focus', windowFocusHandler);
   useEventListenerMemo('blur', windowBlurHandler);
-  useEventListenerMemo('storage', listener);
 
   const refresh = useCallback(
     async ({
@@ -68,11 +67,7 @@ export default ({ children }) => {
           }));
 
         if (streams?.status === 200) {
-          const localStreams = getLocalstorage('newLiveStreamsFromPlayer') || {
-            data: [],
-            updated: Date.now(),
-          };
-          const newLiveStreams = [...streams.data, ...localStreams.data];
+          const newLiveStreams = [...streams.data];
           const filteredLiveStreams = _.uniqBy(newLiveStreams, 'user_id');
 
           oldLiveStreams.current = liveStreams.current;
@@ -116,6 +111,7 @@ export default ({ children }) => {
                 newlyAddedStreams,
                 setUnseenNotifications,
                 isEnabledUpdateNotifications,
+                updateNotischannels,
               }),
             ]).then((res) => {
               const flattenedArray = res.flat(3).filter((n) => n);
@@ -145,6 +141,7 @@ export default ({ children }) => {
       isEnabledOfflineNotifications,
       setUnseenNotifications,
       enableForceRefreshThumbnail,
+      updateNotischannels,
     ]
   );
 
@@ -157,12 +154,6 @@ export default ({ children }) => {
   function windowBlurHandler() {
     if (document.title !== 'AioFeed | Feed') document.title = 'AioFeed | Feed';
     resetNewlyAddedStreams();
-  }
-
-  function listener(e) {
-    if (e.storageArea === localStorage && e.key === 'newLiveStreamsFromPlayer') {
-      refresh();
-    }
   }
 
   function resetNewlyAddedStreams() {
@@ -202,10 +193,6 @@ export default ({ children }) => {
     return () => {
       console.log('Unmounting');
       clearInterval(timer.current);
-      localStorage.setItem(
-        'newLiveStreamsFromPlayer',
-        JSON.stringify({ data: [], updated: Date.now() })
-      );
     };
   }, []);
 
