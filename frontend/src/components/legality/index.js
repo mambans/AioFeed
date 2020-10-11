@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { Container, ListHeader, EmailButtonAsLink } from "./StyledComponents";
+import { Container, ListHeader, EmailButtonAsLink } from './StyledComponents';
 
 export default () => {
   const scrollTo = new URL(window.location.href).hash;
@@ -8,7 +8,7 @@ export default () => {
   if (scrollTo) {
     window.setTimeout(() => {
       const element = document.getElementById(scrollTo);
-      element.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+      element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
     }, 1);
   }
 
@@ -85,12 +85,13 @@ export default () => {
         </ul>
         <p>The Youtube permisison "manage account" is used to be able to unfollow channels.</p>
         <p>
-          If you have any question you can contact{" "}
+          If you have any question you can contact{' '}
           <EmailButtonAsLink
             title='mailto:perssons1996@gmail.com?subject=subject&body=body'
             onClick={() => {
-              window.open("mailto:perssons1996@gmail.com?subject=subject&body=body");
-            }}>
+              window.open('mailto:perssons1996@gmail.com?subject=subject&body=body');
+            }}
+          >
             Perssons1996@gmail.com
           </EmailButtonAsLink>
           .

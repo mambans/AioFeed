@@ -545,15 +545,6 @@ export const StyledVideoElementAlert = styled(Alert)`
   opacity: 0;
 `;
 
-// const loadingSpinnerSmall = {
-//   position: 'initial',
-//   height: '24px',
-//   width: '24px',
-//   left: '1.5%',
-//   bottom: '-25px',
-//   background: 'none',
-// };
-
 export const LoadMore = ({
   style = {},
   onClick,
@@ -661,83 +652,6 @@ export const LoadMore = ({
   }
   return null;
 };
-
-// export const LoadMore_old = ({
-//   style = {},
-//   onClick,
-//   loaded,
-//   text = 'Load more',
-//   resetFunc,
-//   show = true,
-// }) => {
-//   const thisEleRef = useRef();
-//   const observer = useRef(
-//     new IntersectionObserver(
-//       function (entries) {
-//         if (entries[0].isIntersecting === false) {
-//           // setTimeout(() => {
-//           if (thisEleRef.current) {
-//             thisEleRef.current.scrollIntoView({
-//               behavior: 'smooth',
-//               block: 'end',
-//               inline: 'nearest',
-//             });
-//             observer.current.unobserve(thisEleRef.current);
-//           }
-//           // }, 0);
-//         }
-//       },
-//       { threshold: 0.8 }
-//     )
-//   );
-
-//   useEffect(() => {
-//     if (show) {
-//       const thisEle = thisEleRef.current;
-//       const observerRef = observer.curren;
-//       return () => {
-//         return observerRef?.unobserve(thisEle);
-//       };
-//     }
-//   }, [show]);
-
-//   const onClickFunc = () => {
-//     observer.current.observe(thisEleRef.current);
-//     onClick();
-//   };
-//   if (show) {
-//     return (
-//       <StyledLoadmore
-//         ref={thisEleRef}
-//         style={{
-//           ...style,
-//         }}
-//       >
-//         <div />
-//         <div id='Button' onClick={onClickFunc}>
-//           {!loaded ? (
-//             <>
-//               Loading..
-//               <Spinner
-//                 animation='border'
-//                 role='status'
-//                 variant='light'
-//                 style={{ ...loadingSpinnerSmall, marginLeft: '10px' }}
-//               />
-//             </>
-//           ) : (
-//             text
-//           )}
-//         </div>
-//         <div />
-//         {resetFunc && (
-//           <GrPowerReset size={20} title='Show less (reset)' id='reset' onClick={resetFunc} />
-//         )}
-//       </StyledLoadmore>
-//     );
-//   }
-//   return null;
-// };
 
 export const StyledAlert = styled(Alert)`
   text-align: center;

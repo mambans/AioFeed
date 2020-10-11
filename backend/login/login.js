@@ -55,11 +55,6 @@ module.exports = async ({ username, password }) => {
       const decryptedData = {
         Attributes: {
           ...data.Attributes,
-          YoutubeAccessToken: await decryptData(data.Attributes.YoutubeAccessToken, 'AccessToken'),
-          YoutubeRefreshToken: await decryptData(
-            data.Attributes.YoutubeRefreshToken,
-            'RefreshToken'
-          ),
           TwitchPreferences: data.Attributes.TwitchPreferences
             ? {
                 ...data.Attributes.TwitchPreferences,
