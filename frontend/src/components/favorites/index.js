@@ -71,6 +71,7 @@ export const Favorites = () => {
                     text={<>{list.name}</>}
                     refreshFunc={fetchAllLists}
                     isLoading={isLoading}
+                    onHoverIconLink='favorites'
                     rightSide={<DeleteListBtn list={list} setLists={setLists} />}
                   />
                   <List

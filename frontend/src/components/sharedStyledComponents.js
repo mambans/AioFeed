@@ -1,6 +1,6 @@
 import { Button, Alert } from 'react-bootstrap';
 import { GrPowerReset } from 'react-icons/gr';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { MdRefresh } from 'react-icons/md';
@@ -171,6 +171,7 @@ export const HeaderContainer = (props) => {
     style = {},
   } = props;
   const ref = useRef();
+  const path = useLocation().pathname.replace('/', '');
 
   const handleOnClick = () => {
     ref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
@@ -203,7 +204,7 @@ export const HeaderContainer = (props) => {
         <HeaderLines />
         <h5 onClick={handleOnClick}>
           {text}
-          {onHoverIconLink && (
+          {onHoverIconLink && onHoverIconLink !== path && (
             <Link
               to={`/${onHoverIconLink}`}
               className='openIndividualFeed'
