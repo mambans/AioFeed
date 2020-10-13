@@ -46,8 +46,8 @@ export const formatViewerNumbers = (viewers) => {
   return viewers;
 };
 
-export const addVodEndTime = async (followedStreamVods) =>
-  followedStreamVods.map((stream) => ({
+export const addVodEndTime = async (videos) =>
+  videos.map((stream) => ({
     ...stream,
     endDate:
       stream.type === 'archive'

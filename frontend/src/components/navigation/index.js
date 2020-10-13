@@ -12,6 +12,7 @@ import Sidebar from './sidebar';
 import GameSearchBar from '../twitch/categoryTopStreams/GameSearchBar';
 import ChannelSearchList from './../twitch/channelList/index';
 import NavExpandingSides from './NavExpandingSides';
+import { VodsProvider } from '../twitch/vods/VodsContext';
 
 const StyledNavbar = styled(Navbar)`
   display: flex;
@@ -79,12 +80,14 @@ export default () => {
             inputStyle={{ textOverflow: 'unset' }}
             openInNewTab={true}
           />
-          <ChannelSearchList
-            position='fixed'
-            showButton={false}
-            style={{ background: 'none', boxShadow: 'none', margin: '0 10px' }}
-            inputStyle={{ textOverflow: 'unset' }}
-          />
+          <VodsProvider>
+            <ChannelSearchList
+              position='fixed'
+              showButton={false}
+              style={{ background: 'none', boxShadow: 'none', margin: '0 10px' }}
+              inputStyle={{ textOverflow: 'unset' }}
+            />
+          </VodsProvider>
           <Sidebar />
         </NavExpandingSides>
       </StyledNavbar>

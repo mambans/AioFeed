@@ -9,7 +9,7 @@ import LoadingPlaceholderBanner from './LoadingPlaceholderBanner';
 import LoadingPlaceholderClips from './LoadingPlaceholderClips';
 import LoadingPlaceholderVods from './LoadingPlaceholderVods';
 import SubFeed from './SubFeed';
-import { durationToDate } from './../TwitchUtils';
+import { addVodEndTime } from './../TwitchUtils';
 import {
   ChannelContainer,
   Banner,
@@ -128,14 +128,7 @@ export default () => {
             vodPagination.current = res.data.pagination.cursor;
 
             const videos = await AddVideoExtraData({ items: res.data, fetchGameInfo: false });
-            const finallVideos = await videos.data.map((stream) => {
-              if (stream.type === 'archive') {
-                stream.endDate = durationToDate(stream.duration, stream.published_at);
-              } else {
-                stream.endDate = new Date(stream.published_at).getTime();
-              }
-              return stream;
-            });
+            const finallVideos = await addVodEndTime(videos.data);
 
             if (pagination) {
               const allVods = previosVodPage.current.concat(finallVideos);
