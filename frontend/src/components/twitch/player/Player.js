@@ -54,12 +54,14 @@ import disconnectTwitch from '../disconnectTwitch';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from '../loginNameFormat';
 import toggleFullscreenFunc from './toggleFullscreenFunc';
+import useToken from '../useToken';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.1, 175);
 
 export default () => {
   const { p_title, p_game, p_channelInfos } = useLocation().state || {};
   const channelName = useParams()?.channelName;
+  const validateToken = useToken();
 
   const { addNotification } = useContext(NotificationsContext);
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
@@ -196,10 +198,12 @@ export default () => {
     if (twitchVideoPlayer) {
       const LIVEStreamInfo = {
         ...savedStreamInfo.current,
-        ...(await fetchStreamInfo(
-          twitchVideoPlayer.getChannelId()
-            ? { user_id: twitchVideoPlayer.getChannelId() }
-            : { user_login: channelName }
+        ...(await validateToken().then(() =>
+          fetchStreamInfo(
+            twitchVideoPlayer.getChannelId()
+              ? { user_id: twitchVideoPlayer.getChannelId() }
+              : { user_login: channelName }
+          )
         )),
       };
 
@@ -219,15 +223,14 @@ export default () => {
 
         return streamWithGameAndProfile;
       } else {
-        const streamWithGameAndProfile = await fetchChannelInfo(
-          twitchVideoPlayer.getChannelId(),
-          true
+        const streamWithGameAndProfile = await validateToken().then(() =>
+          fetchChannelInfo(twitchVideoPlayer.getChannelId(), true)
         );
         setStreamInfo(streamWithGameAndProfile);
         return streamWithGameAndProfile;
       }
     }
-  }, [twitchVideoPlayer, channelName]);
+  }, [twitchVideoPlayer, channelName, validateToken]);
 
   const addNoti = useCallback(
     ({ type, stream }) => {
@@ -526,7 +529,7 @@ export default () => {
                   />
                   <ShowStatsButtons TwitchPlayer={twitchVideoPlayer} />
                   <ShowSetQualityButtons TwitchPlayer={twitchVideoPlayer} />
-                  <ClipButton streamInfo={streamInfo} />
+                  <ClipButton streamInfo={streamInfo} validateToken={validateToken} />
                   <ResetVideoButton
                     title={'Refresh video'}
                     style={{

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useContext } from 'react';
-import _ from 'lodash';
+import { uniqBy } from 'lodash';
 
 import AlertHandler from '../../alert';
 import getMyFollowedChannels from './../getMyFollowedChannels';
@@ -13,6 +13,7 @@ import LiveStreamsPromise from './LiveStreamsPromise';
 import OfflineStreamsPromise from './OfflineStreamsPromise';
 import UpdatedStreamsPromise from './UpdatedStreamsPromise';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
+import useToken from '../useToken';
 
 const REFRESH_RATE = 25; // seconds
 
@@ -39,6 +40,7 @@ export default ({ children }) => {
   const newlyAddedStreams = useRef([]);
   const timer = useRef();
   const refreshAfterUnfollowTimer = useRef();
+  const validateToken = useToken();
 
   useEventListenerMemo('focus', windowFocusHandler);
   useEventListenerMemo('blur', windowBlurHandler);
@@ -53,7 +55,9 @@ export default ({ children }) => {
         return { refreshing: true, error: null, loaded: loaded };
       });
       try {
-        followedChannels.current = await getMyFollowedChannels(forceValidateToken);
+        followedChannels.current = await validateToken().then(() =>
+          getMyFollowedChannels(forceValidateToken)
+        );
 
         if (followedChannels.current && followedChannels.current[0]) {
           AddCookie('Twitch-username', followedChannels.current[0].from_name);
@@ -68,7 +72,7 @@ export default ({ children }) => {
 
         if (streams?.status === 200) {
           const newLiveStreams = [...streams.data];
-          const filteredLiveStreams = _.uniqBy(newLiveStreams, 'user_id');
+          const filteredLiveStreams = uniqBy(newLiveStreams, 'user_id');
 
           oldLiveStreams.current = liveStreams.current;
           liveStreams.current = filteredLiveStreams;
@@ -142,6 +146,7 @@ export default ({ children }) => {
       setUnseenNotifications,
       enableForceRefreshThumbnail,
       updateNotischannels,
+      validateToken,
     ]
   );
 

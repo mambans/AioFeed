@@ -26,10 +26,10 @@ import SortButton from './../channelPage/SortButton';
 import StreamEle from './../live/StreamElement';
 import ClipElement from './../channelPage/ClipElement';
 import VodElement from './../vods/VodElement';
-import validateToken from '../validateToken';
 import { getCookie } from '../../../util/Utils';
 import AccountContext from '../../account/AccountContext';
 import useQuery from '../../../hooks/useQuery';
+import useToken from '../useToken';
 
 export default () => {
   const { category } = useParams();
@@ -50,6 +50,7 @@ export default () => {
   // eslint-disable-next-line no-unused-vars
   const { twitchToken } = useContext(AccountContext);
   const oldTopData = useRef();
+  const validateToken = useToken();
 
   document.title = `${category || 'All'} - Top ${videoType}`;
 
@@ -159,18 +160,14 @@ export default () => {
   const refresh = useCallback(() => {
     setRefreshing(true);
     oldTopData.current = null;
-    validateToken().then(() => {
-      fetchVideos();
-    });
-  }, [fetchVideos]);
+    validateToken().then(() => fetchVideos());
+  }, [fetchVideos, validateToken]);
 
   useEffect(() => {
     setRefreshing(true);
     setTopData([]);
-    validateToken().then(() => {
-      fetchVideos();
-    });
-  }, [fetchVideos]);
+    validateToken().then(() => fetchVideos());
+  }, [fetchVideos, validateToken]);
 
   return !getCookie('Twitch-access_token') ? (
     error && (

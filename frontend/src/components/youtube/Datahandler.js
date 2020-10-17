@@ -4,7 +4,7 @@ import AccountContext from '../account/AccountContext';
 import AlertHandler from '../alert';
 import getMyFollowedChannels from './getMyFollowedChannels';
 import GetSubscriptionVideos from './GetSubscriptionVideos';
-import validateToken from './validateToken';
+import useToken from './useToken';
 
 export default ({ children }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -14,6 +14,7 @@ export default ({ children }) => {
   const [videos, setVideos] = useState([]);
   const oldVideos = useRef(null);
   const { youtubeToken, authKey } = useContext(AccountContext);
+  const validateToken = useToken();
 
   const refresh = useCallback(async () => {
     const fetchData = async () => {
@@ -36,10 +37,8 @@ export default ({ children }) => {
       }
     };
     setIsLoaded(false);
-    await validateToken({ authKey }).then(() => {
-      fetchData();
-    });
-  }, [authKey, setVideos]);
+    validateToken({ authKey }).then(() => fetchData());
+  }, [authKey, setVideos, validateToken]);
 
   useEffect(() => {
     if (oldVideos.current && videos) {

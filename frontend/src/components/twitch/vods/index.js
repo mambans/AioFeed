@@ -1,6 +1,7 @@
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { Button } from 'react-bootstrap';
+import { debounce } from 'lodash';
 
 import AlertHandler from '../../alert';
 import getFollowedVods from './GetFollowedVods';
@@ -14,6 +15,7 @@ import FeedsContext from '../../feed/FeedsContext';
 import { AddCookie, getCookie } from '../../../util/Utils';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import FeedsCenterContainer, { CenterContext } from './../../feed/FeedsCenterContainer';
+import useToken from '../useToken';
 
 export default ({ disableContextProvider }) => (
   <FeedsCenterContainer>
@@ -36,35 +38,38 @@ export const Vods = ({ disableContextProvider }) => {
     timeout: 750,
     transitionGroup: 'videos',
   });
+  const validateToken = useToken();
 
   useEventListenerMemo('focus', windowFocusHandler);
 
   const refresh = useCallback(
     async (forceRefresh) => {
       setRefreshing(true);
-      await getFollowedVods({
-        forceRun: forceRefresh,
-        setRefreshToken,
-        setTwitchToken,
-        channels,
-      })
-        .then((data) => {
-          if (data.error) {
-            setError(data.error);
-          } else if (data.vodError) {
-            setVodError(data.vodError);
-          }
-          setVods(data.videos);
-
-          setRefreshing(false);
+      await validateToken().then(() =>
+        getFollowedVods({
+          forceRun: forceRefresh,
+          setRefreshToken,
+          setTwitchToken,
+          channels,
         })
-        .catch((data) => {
-          setError(data.error);
+          .then((data) => {
+            if (data.error) {
+              setError(data.error);
+            } else if (data.vodError) {
+              setVodError(data.vodError);
+            }
+            setVods(data.videos);
 
-          setVods(data.videos);
-        });
+            setRefreshing(false);
+          })
+          .catch((data) => {
+            setError(data.error);
+
+            setVods(data.videos);
+          })
+      );
     },
-    [setTwitchToken, setRefreshToken, setVods, channels]
+    [setTwitchToken, setRefreshToken, setVods, channels, validateToken]
   );
 
   async function windowFocusHandler() {
@@ -74,35 +79,43 @@ export const Vods = ({ disableContextProvider }) => {
   useEffect(() => {
     (async () => {
       setRefreshing(true);
-      await getFollowedVods({
-        forceRun: false,
-        setRefreshToken,
-        setTwitchToken,
-        channels,
-      })
-        .then((data) => {
-          if (data.error) {
-            setError(data.error);
-          } else if (data.vodError) {
-            setVodError(data.vodError);
-          }
-
-          setVods(data.videos);
-          setRefreshing(false);
+      await validateToken().then(() =>
+        getFollowedVods({
+          forceRun: false,
+          setRefreshToken,
+          setTwitchToken,
+          channels,
         })
-        .catch((data) => {
-          setError(data.error);
-          setVods(data.videos);
-        });
+          .then((data) => {
+            if (data.error) {
+              setError(data.error);
+            } else if (data.vodError) {
+              setVodError(data.vodError);
+            }
+
+            setVods(data.videos);
+            setRefreshing(false);
+          })
+          .catch((data) => {
+            setError(data.error);
+            setVods(data.videos);
+          })
+      );
     })();
-  }, [twitchUserId, setTwitchToken, setRefreshToken, setVods, channels]);
+  }, [twitchUserId, setTwitchToken, setRefreshToken, setVods, channels, validateToken]);
 
   useEffect(() => {
-    setVodAmounts({
-      amount: videoElementsAmount,
-      timeout: 750,
-      transitionGroup: 'videos',
-    });
+    debounce(
+      () => {
+        setVodAmounts({
+          amount: videoElementsAmount,
+          timeout: 750,
+          transitionGroup: 'videos',
+        });
+      },
+      500,
+      { leading: true, trailing: true }
+    );
   }, [videoElementsAmount]);
 
   if (!getCookie(`Twitch-access_token`)) {
@@ -117,7 +130,7 @@ export const Vods = ({ disableContextProvider }) => {
   return (
     <>
       <Header refresh={refresh} refreshing={refreshing} vods={vods} vodError={vodError} />
-      {error ? (
+      {error && (
         <AlertHandler
           data={error}
           style={{ marginTop: '-150px' }}
@@ -134,7 +147,8 @@ export const Vods = ({ disableContextProvider }) => {
             </Button>
           }
         />
-      ) : !vods || !vods.data ? (
+      )}
+      {!vods?.data ? (
         <LoadingBoxes amount={videoElementsAmount} type='small' />
       ) : (
         <>

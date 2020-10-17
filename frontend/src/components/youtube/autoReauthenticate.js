@@ -9,8 +9,12 @@ export default async ({ authKey = getCookie(`AioFeed_AuthKey`) }) => {
       authkey: authKey,
     })
     .then(async (res) => {
+      console.log('YouTube: New Access_token fetched');
       AddCookie('Youtube-access_token', res.data.access_token);
       return res.data.access_token;
     })
-    .catch((e) => console.error(e));
+    .catch((e) => {
+      console.error(e);
+      throw new Error(e.message);
+    });
 };

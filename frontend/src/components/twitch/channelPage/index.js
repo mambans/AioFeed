@@ -30,7 +30,6 @@ import AddVideoExtraData from '../AddVideoExtraData';
 import fetchStreamInfo from './../player/fetchStreamInfo';
 import fetchChannelInfo from './../player/fetchChannelInfo';
 import setFavion from '../../setFavion';
-import validateToken from '../validateToken';
 // import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import API from './../API';
 import AnimatedViewCount from '../live/AnimatedViewCount';
@@ -42,6 +41,7 @@ import ReAuthenticateButton from '../../navigation/sidebar/ReAuthenticateButton'
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import useQuery from '../../../hooks/useQuery';
 import loginNameFormat from '../loginNameFormat';
+import useToken from '../useToken';
 
 export default () => {
   const { channelName } = useParams();
@@ -52,6 +52,7 @@ export default () => {
   const { setTwitchToken, twitchToken } = useContext(AccountContext);
   const { setEnableTwitch } = useContext(FeedsContext);
   const URLQueries = useQuery();
+  const validateToken = useToken();
 
   const [vods, setVods] = useState();
   const [clips, setClips] = useState();
@@ -146,7 +147,7 @@ export default () => {
           });
       });
     },
-    [numberOfVideos, sortVodsBy, channelId, vods]
+    [numberOfVideos, sortVodsBy, channelId, vods, validateToken]
   );
 
   const fetchClips = useCallback(
@@ -203,15 +204,16 @@ export default () => {
           });
       });
     },
-    [numberOfVideos, sortClipsBy, channelId, clips]
+    [numberOfVideos, sortClipsBy, channelId, clips, validateToken]
   );
 
   const getChannelInfo = useCallback(async () => {
     if (!channelInfo) {
-      const res = await fetchChannelInfo(channelId, true);
+      const res = await validateToken().then(() => fetchChannelInfo(channelId, true));
+
       setChannelInfo(res);
     }
-  }, [channelInfo, channelId]);
+  }, [channelInfo, channelId, validateToken]);
 
   useEffect(() => {
     document.title = `${channelName}'s Channel`;
@@ -231,7 +233,7 @@ export default () => {
         }
       }
     })();
-  }, [channelInfo, getChannelInfo, getIdFromName, channelId, twitchToken]);
+  }, [channelInfo, getChannelInfo, getIdFromName, channelId, twitchToken, validateToken]);
 
   async function onlineEvents() {
     console.log('Stream is Online');
@@ -239,10 +241,12 @@ export default () => {
 
     try {
       if (twitchPlayer.current) {
-        const streamInfo = await fetchStreamInfo(
-          twitchPlayer.current && twitchPlayer.current.getChannelId()
-            ? { user_id: twitchPlayer.current.getChannelId() }
-            : { user_login: channelName }
+        const streamInfo = await validateToken().then(() =>
+          fetchStreamInfo(
+            twitchPlayer.current && twitchPlayer.current.getChannelId()
+              ? { user_id: twitchPlayer.current.getChannelId() }
+              : { user_login: channelName }
+          )
         );
         if (streamInfo) {
           setStreamInfo(streamInfo);

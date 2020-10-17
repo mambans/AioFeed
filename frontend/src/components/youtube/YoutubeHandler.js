@@ -1,5 +1,6 @@
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import React, { useState, useEffect, useContext } from 'react';
+import { debounce } from 'lodash';
 
 import { SubFeedContainer, LoadMore } from './../sharedStyledComponents';
 import YoutubeVideoElement from './YoutubeVideoElement';
@@ -15,11 +16,17 @@ export default ({ requestError, videos, disableContextProvider }) => {
   });
 
   useEffect(() => {
-    setVodAmounts({
-      amount: videoElementsAmount,
-      timeout: 750,
-      transitionGroup: 'videos',
-    });
+    debounce(
+      () => {
+        setVodAmounts({
+          amount: videoElementsAmount,
+          timeout: 750,
+          transitionGroup: 'videos',
+        });
+      },
+      500,
+      { leading: true, trailing: true }
+    );
   }, [videoElementsAmount]);
 
   if (requestError?.code === 401 && !videos) {

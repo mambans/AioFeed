@@ -1,30 +1,24 @@
 import axios from 'axios';
-import { getCookie, AddCookie } from '../../util/Utils';
+import { getCookie } from '../../util/Utils';
 import autoReauthenticate from './autoReauthenticate';
 
 export default async ({ authKey = getCookie(`AioFeed_AuthKey`) } = {}) => {
-  const expireDate = new Date(Date.now() + 20000);
   const access_token = getCookie('Youtube-access_token');
 
   if (access_token) {
-    if (!getCookie('Youtube_token_validated')) {
-      await axios
-        .post(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${access_token}`)
-        .then((res) => {
-          console.log('YouTube: Valid Access_token');
-          AddCookie('Youtube_token_validated', true, expireDate);
-        })
-        .catch(async (error) => {
-          console.log('YouTube: Invalid Access_token');
-          await autoReauthenticate({ authKey });
-          console.log('YouTube: New Access_token fetched');
-          AddCookie('Youtube_token_validated', true, expireDate);
-        });
-    }
-    return true;
+    // console.log('Youtube: Validating token..');
+    return await axios
+      .post(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${access_token}`)
+      .then((res) => {
+        // console.log('YouTube: Valid Access_token');
+        return res;
+      })
+      .catch((error) => {
+        console.warn('YouTube: Invalid Access_token');
+        return autoReauthenticate({ authKey });
+      });
   }
-  console.log('YouTube: No Access_token found');
-  await autoReauthenticate({ authKey });
-  console.log('YouTube: New Access_token fetched');
-  AddCookie('Youtube_token_validated', true, expireDate);
+  console.warn('YouTube: No Access_token found');
+  return autoReauthenticate({ authKey });
+  // throw new Error('No tokens found.');
 };

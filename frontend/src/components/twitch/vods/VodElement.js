@@ -19,14 +19,14 @@ import { truncate } from '../../../util/Utils';
 import { VodLiveIndicator, VodType, VodPreview, VodDates } from './StyledComponents';
 import VodsFollowUnfollowBtn from './VodsFollowUnfollowBtn';
 import { formatViewerNumbers, formatTwitchVodsDuration } from './../TwitchUtils';
-import validateToken from '../validateToken';
 import API from '../API';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from '../loginNameFormat';
 import { ChannelNameDiv } from '../StyledComponents';
 import AddVideoButton from '../../favorites/AddVideoButton';
+import useToken from '../useToken';
 
-export default ({ data, vodBtnDisabled, disableContextProvider }) => {
+export default ({ data, vodBtnDisabled, disableContextProvider, movable }) => {
   const {
     id,
     user_id,
@@ -46,6 +46,7 @@ export default ({ data, vodBtnDisabled, disableContextProvider }) => {
   const [showPreview, setShowPreview] = useState();
   const imgRef = useRef();
   const hoverTimeoutRef = useRef();
+  const validateToken = useToken();
 
   useEventListenerMemo('mouseenter', handleMouseOver, imgRef.current);
   useEventListenerMemo('mouseleave', handleMouseOut, imgRef.current);

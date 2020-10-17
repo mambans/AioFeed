@@ -3,8 +3,8 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import { FollowBtn, UnfollowBtn } from './StyledComponents';
 import AccountContext from './../account/AccountContext';
-import validateToken from './validateToken';
 import API from './API';
+import useToken from './useToken';
 
 export default ({
   channelName,
@@ -18,6 +18,7 @@ export default ({
 }) => {
   const [following, setFollowing] = useState(followingStatus || false);
   const { twitchUserId } = useContext(AccountContext);
+  const validateToken = useToken();
 
   const UnfollowStream = async () => {
     await validateToken().then(async () => {
@@ -89,7 +90,7 @@ export default ({
     if (show && followingStatus === null) {
       checkFollowing();
     }
-  }, [channelName, twitchUserId, id, followingStatus, show]);
+  }, [channelName, twitchUserId, id, followingStatus, show, validateToken]);
 
   if (!show) return null;
 

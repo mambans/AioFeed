@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { debounce } from 'lodash';
 
 import AddVideoExtraData from '../twitch/AddVideoExtraData';
 import API from '../twitch/API';
@@ -21,6 +22,20 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
     timeout: 750,
     transitionGroup: 'videos',
   });
+
+  useEffect(() => {
+    debounce(
+      () => {
+        setVideosToShow({
+          amount: videoElementsAmount,
+          timeout: 750,
+          transitionGroup: 'videos',
+        });
+      },
+      500,
+      { leading: true, trailing: true }
+    );
+  }, [videoElementsAmount]);
 
   useEffect(() => {
     (async () => {

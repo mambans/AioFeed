@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getLocalstorage, getCookie, chunk } from '../../util/Utils';
-import _ from 'lodash';
+import { merge } from 'lodash';
 
 export default async ({ videos }) => {
   const videosArray = [...videos];
@@ -66,7 +66,7 @@ export default async ({ videos }) => {
       const newFoundDetails = newVideosDetails?.find(
         (newDetails) => newDetails.id === video?.contentDetails?.upload?.videoId
       );
-      return _.merge(video, newFoundDetails);
+      return merge(video, newFoundDetails);
     }) || [];
 
   localStorage.setItem(

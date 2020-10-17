@@ -1,5 +1,4 @@
 import API from './API';
-import validateToken from './validateToken';
 
 const fetchNextPageOfFollowers = async ({ total, PagePagination, followedchannels }) => {
   if (followedchannels?.length < total && PagePagination) {
@@ -26,17 +25,15 @@ const fetchNextPageOfFollowers = async ({ total, PagePagination, followedchannel
   return followedchannels;
 };
 
-export default async (forceRun = false) => {
+export default async () => {
   try {
-    const followedchannels = await validateToken(forceRun).then(async () => {
-      return await API.getMyFollowedChannels({
-        params: {
-          first: 100,
-        },
-      }).catch((error) => {
-        console.error(error.message);
-        return error;
-      });
+    const followedchannels = await API.getMyFollowedChannels({
+      params: {
+        first: 100,
+      },
+    }).catch((error) => {
+      console.error(error.message);
+      return error;
     });
 
     const channels = await fetchNextPageOfFollowers({

@@ -20,6 +20,7 @@ import InifinityScroll from './InifinityScroll';
 import sortByInput from './sortByInput';
 import StyledLoadingList from './../categoryTopStreams/LoadingList';
 import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
+import useToken from '../useToken';
 
 const removeDuplicates = (items) =>
   items.filter((item, index, self) => {
@@ -41,6 +42,7 @@ export default ({
   const [followedChannels, setFollowedChannels] = useState();
   const [searchResults, setSearchResults] = useState();
   const [loadingMore, setLoadingMore] = useState(false);
+  const validateToken = useToken();
 
   const inputRef = useRef();
   const ulListRef = useRef();
@@ -149,37 +151,39 @@ export default ({
     () =>
       throttle(
         async () => {
-          getMyFollowedChannels().then(async (channels) => {
-            channelListToObject(channels).then(async (res) => {
-              await AddVideoExtraData({
-                items: res?.data,
-                fetchGameInfo: false,
-                fetchProfiles: true,
-              }).then(async (res) => {
-                const liveStreams = await getFollowedOnlineStreams({
-                  followedchannels: res?.data,
-                  fetchGameInfo: true,
-                  fetchProfiles: false,
-                }).then((res) => res.data);
+          validateToken().then(
+            getMyFollowedChannels().then(async (channels) => {
+              channelListToObject(channels).then(async (res) => {
+                await AddVideoExtraData({
+                  items: res?.data,
+                  fetchGameInfo: false,
+                  fetchProfiles: true,
+                }).then(async (res) => {
+                  const liveStreams = await getFollowedOnlineStreams({
+                    followedchannels: res?.data,
+                    fetchGameInfo: true,
+                    fetchProfiles: false,
+                  }).then((res) => res.data);
 
-                const channels = await res?.data?.map((item) => {
-                  const found = liveStreams?.find((stream) => item.user_id === stream.user_id);
-                  return {
-                    ...item,
-                    ...found,
-                    live: found?.type === 'live',
-                  };
+                  const channels = await res?.data?.map((item) => {
+                    const found = liveStreams?.find((stream) => item.user_id === stream.user_id);
+                    return {
+                      ...item,
+                      ...found,
+                      live: found?.type === 'live',
+                    };
+                  });
+
+                  setFollowedChannels(channels);
                 });
-
-                setFollowedChannels(channels);
               });
-            });
-          });
+            })
+          );
         },
         2500,
         { leading: true, trailing: false }
       ),
-    []
+    [validateToken]
   );
 
   const channelListToObject = async (channelsList) => {

@@ -24,7 +24,7 @@ export default ({ channel, channelId, loweropacity, marginright, className, show
   const { vods, setVods, channels, setChannels } = useContext(VodsContext) || {};
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
-  const vodEnabled = useState(channels?.includes(channel?.toLowerCase()));
+  const vodEnabled = channels?.includes(channel?.toLowerCase());
   const vodButton = useRef();
 
   useEventListenerMemo('mouseenter', handleMouseOver, vodButton.current);
@@ -85,7 +85,7 @@ export default ({ channel, channelId, loweropacity, marginright, className, show
         marginright={marginright}
         ref={vodButton}
         loweropacity={loweropacity}
-        vodenabled={vodEnabled.toString()}
+        vodenabled={String(vodEnabled)}
         variant='link'
         onClick={() => {
           if (vodEnabled) {

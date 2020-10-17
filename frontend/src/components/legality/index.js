@@ -8,7 +8,7 @@ export default () => {
   if (scrollTo) {
     window.setTimeout(() => {
       const element = document.getElementById(scrollTo);
-      element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+      element && element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
     }, 1);
   }
 

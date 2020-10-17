@@ -41,6 +41,12 @@ export default ({ lists, setLists, item }) => {
     setLists((curr) => ({ ...curr, [list_Name]: newListObj }));
     resetListName();
 
+    setTimeout(() => {
+      document
+        .getElementById(list_Name)
+        .scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+    }, 0);
+
     await axios
       .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
         username: getCookie(`AioFeed_AccountName`),

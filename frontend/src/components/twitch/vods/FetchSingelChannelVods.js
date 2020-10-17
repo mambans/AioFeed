@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { uniqBy } from 'lodash';
 
 import { addVodEndTime } from './../TwitchUtils';
 import AddVideoExtraData from './../AddVideoExtraData';
@@ -26,7 +26,7 @@ export default async ({ channelId, setVods, amount = 1 }) => {
           .slice(0, amount)
           .map((vod) => ({ ...vod, transition: 'videoFadeSlide' })),
       ];
-      const uniqueVods = _.uniqBy([...vodsToAdd, ...existingVods], 'id');
+      const uniqueVods = uniqBy([...vodsToAdd, ...existingVods], 'id');
       const FinallVods = SortAndAddExpire(uniqueVods, vodExpire, vods.loaded, vods.expire);
 
       return FinallVods;

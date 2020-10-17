@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import FetchMonitoredVodChannelsList from './FetchMonitoredVodChannelsList';
 import AccountContext from '../../account/AccountContext';
 import useSyncedLocalState from '../../../hooks/useSyncedLocalState';
-import { getLocalstorage } from '../../../util/Utils';
+import { getCookie, getLocalstorage } from '../../../util/Utils';
 import FeedsContext from '../../feed/FeedsContext';
 
 const VodsContext = React.createContext();
@@ -23,7 +23,10 @@ export const VodsProvider = ({ children }) => {
 
   useEffect(() => {
     (async () => {
-      if (isEnabledUpdateNotifications || isEnabledOfflineNotifications || enableTwitchVods) {
+      if (
+        getCookie(`Twitch-access_token`) &&
+        (isEnabledUpdateNotifications || isEnabledOfflineNotifications || enableTwitchVods)
+      ) {
         const fetchedColumns = await FetchMonitoredVodChannelsList(username, authKey);
         // console.log('VodsProvider -> fetchedColumns', fetchedColumns);
 

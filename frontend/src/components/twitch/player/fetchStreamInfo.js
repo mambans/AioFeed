@@ -1,4 +1,3 @@
-import validateToken from '../validateToken';
 import API from '../API';
 
 /**
@@ -9,14 +8,12 @@ import API from '../API';
  * @async
  */
 export default async (keyValuePair) => {
-  return await validateToken().then(async () => {
-    return await API.getStreams({
-      params: {
-        ...keyValuePair,
-        first: 1,
-      },
-    })
-      .then((res) => res.data?.data[0])
-      .catch((error) => console.log(error));
-  });
+  return await API.getStreams({
+    params: {
+      ...keyValuePair,
+      first: 1,
+    },
+  })
+    .then((res) => res.data?.data[0])
+    .catch((error) => console.log(error));
 };

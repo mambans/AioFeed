@@ -11,20 +11,26 @@ import Routes from './../routes';
 import SetStartupTheme from '../themes';
 import ThemeContext from './../themes/ThemeContext';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
+import { TwitchProvider } from '../twitch/useToken';
+import { YoutubeProvider } from '../youtube/useToken';
 
 export default () => {
   return (
     <ThemeProvider>
       <AccountProvider>
-        <NavigationProvider>
-          <NotificationsProvider>
-            <FeedsProvider>
-              <FooterProvider>
-                <App />
-              </FooterProvider>
-            </FeedsProvider>
-          </NotificationsProvider>
-        </NavigationProvider>
+        <TwitchProvider>
+          <YoutubeProvider>
+            <NavigationProvider>
+              <NotificationsProvider>
+                <FeedsProvider>
+                  <FooterProvider>
+                    <App />
+                  </FooterProvider>
+                </FeedsProvider>
+              </NotificationsProvider>
+            </NavigationProvider>
+          </YoutubeProvider>
+        </TwitchProvider>
       </AccountProvider>
     </ThemeProvider>
   );

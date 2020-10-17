@@ -8,14 +8,15 @@ import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from './../LoadingIndicator';
 import FeedsContext from '../feed/FeedsContext';
 import { AddCookie } from '../../util/Utils';
-import validateToken from '../twitch/validateToken';
 import API from '../twitch/API';
+import useToken from '../twitch/useToken';
 
 function TwitchAuthCallback() {
   const [error, setError] = useState();
   const { username, autoRefreshEnabled } = useContext(AccountContext);
   const { setVisible, setFooterVisible } = useContext(NavigationContext);
   const { enableTwitch } = useContext(FeedsContext);
+  const validateToken = useToken();
 
   const getAccessToken = useCallback(
     async (url) => {
@@ -70,7 +71,7 @@ function TwitchAuthCallback() {
 
       return { token: accessToken, refresh_token: refreshToken, ...MyTwitch };
     },
-    [username, autoRefreshEnabled, enableTwitch]
+    [username, autoRefreshEnabled, enableTwitch, validateToken]
   );
 
   useEffect(() => {

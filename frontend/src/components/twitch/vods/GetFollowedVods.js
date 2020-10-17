@@ -11,7 +11,7 @@ const monitoredChannelNameToId = async (followedChannels, followedVodEnabledChan
   let error;
   const vodChannelIds = await followedVodEnabledChannels
     .map((vodChannel) => {
-      const channelFollowed = followedChannels.find(
+      const channelFollowed = followedChannels?.find(
         (channel) => channel.to_name?.toLowerCase() === vodChannel
       );
 
@@ -88,7 +88,7 @@ export default async ({ forceRun, setRefreshToken, setTwitchToken, channels }) =
   try {
     if (forceRun || !cachedVods || cachedVods.expire <= Date.now()) {
       try {
-        const followedChannels = await getMyFollowedChannels(true);
+        const followedChannels = await getMyFollowedChannels();
 
         const followedVodEnabledChannels = channels;
         if (!followedVodEnabledChannels || !Boolean(followedVodEnabledChannels.length)) {
