@@ -8,7 +8,6 @@ import {
   GameListUlContainer,
   SearchGameForm,
   SearchSubmitBtn,
-  BackdropChannelList,
 } from './../categoryTopStreams/styledComponents';
 import AddVideoExtraData from '../AddVideoExtraData';
 import API from '../API';
@@ -21,6 +20,7 @@ import sortByInput from './sortByInput';
 import StyledLoadingList from './../categoryTopStreams/LoadingList';
 import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 import useToken from '../useToken';
+import useClicksOutside from '../../../hooks/useClicksOutside';
 
 const removeDuplicates = (items) =>
   items.filter((item, index, self) => {
@@ -49,6 +49,7 @@ export default ({
   const searchTimer = useRef();
   const savedFilteredInputMatched = useRef();
 
+  useClicksOutside(ulListRef, () => setListIsOpen(false));
   useLockBodyScroll(listIsOpen);
 
   const useInput = (initialValue) => {
@@ -360,9 +361,6 @@ export default ({
           </GameListUlContainer>
         </CSSTransition>
       </SearchGameForm>
-      {listIsOpen && (
-        <BackdropChannelList id='BackdropChannelList' onClick={() => setListIsOpen(!listIsOpen)} />
-      )}
     </>
   );
 };

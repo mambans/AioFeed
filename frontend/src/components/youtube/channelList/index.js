@@ -6,12 +6,12 @@ import {
   GameListUlContainer,
   SearchGameForm,
   SearchSubmitBtn,
-  BackdropChannelList,
 } from './../../twitch/categoryTopStreams/styledComponents';
 import StyledLoadingList from './../../twitch/categoryTopStreams/LoadingList';
 import ChannelListElement from './ChannelListElement';
 import { getLocalstorage } from '../../../util/Utils';
 import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
+import useClicksOutside from '../../../hooks/useClicksOutside';
 
 export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
   const parentRect = parentDiv.getBoundingClientRect();
@@ -70,6 +70,10 @@ export default (data) => {
   const inputRef = useRef();
   const ulListRef = useRef();
 
+  useClicksOutside(ulListRef, () => {
+    resetChannel();
+    setListIsOpen(false);
+  });
   useLockBodyScroll(listIsOpen);
 
   const useInput = (initialValue) => {
@@ -234,15 +238,6 @@ export default (data) => {
           </GameListUlContainer>
         </CSSTransition>
       </SearchGameForm>
-      {listIsOpen && (
-        <BackdropChannelList
-          id='BackdropChannelList'
-          onClick={() => {
-            resetChannel();
-            setListIsOpen(!listIsOpen);
-          }}
-        />
-      )}
     </>
   );
 };

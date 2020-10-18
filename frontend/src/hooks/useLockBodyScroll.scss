@@ -1,13 +1,11 @@
 body[popup-open='true'] {
+  transition: overflow 100ms, width 100ms, padding-right 100ms;
   overflow: hidden;
   width: calc(100% - 8px);
   padding-right: 0 !important;
 
   .navbar.navbar-expand-lg.navbar-dark.bg-dark {
+    transition: width 100ms;
     width: calc(100% - 8px);
-  }
-
-  #twitter {
-    right: calc(25px + 8px);
   }
 }

@@ -10,7 +10,7 @@ export const Container = styled.div`
   border-radius: 10px 10px 2px 2px;
   transition: height 500ms;
   overflow: hidden;
-  margin: 0 10px;
+  /* margin: 0 10px; */
 
   @media screen and (max-width: 2560px) {
     width: 19vw;
@@ -19,15 +19,20 @@ export const Container = styled.div`
 
 export const MainContainer = styled.div`
   width: max-content;
-  transition: width 1000ms;
+  transition: width 1000ms, margin-right 100ms, right 100ms;
   position: fixed;
   top: 90px;
   height: ${({ footerVisibleInViewport }) =>
     footerVisibleInViewport ? `calc(92vh - ${footerVisibleInViewport}px)` : '92vh'};
-  right: ${({ center }) => (center ? '50%' : '10px')};
-  transform: ${({ center }) => (center ? 'translateX(50%)' : 'unset')};
+  /* right: ${({ center }) => (center ? '50%' : '10px')}; */
+  left: ${({ center }) => (center ? '50%' : 'calc(86vw - 28px)')};
+  transform: ${({ center }) => (center ? 'translateX(-50%)' : 'unset')};
 
   display: flex;
+
+  @media screen and (max-width: 2560px) {
+    left: ${({ center }) => (center ? '50%' : 'calc(81vw - 28px)')};
+  }
 `;
 
 export const LoadingTextBox = styled.div`

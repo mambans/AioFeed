@@ -39,7 +39,9 @@ const NavExpandingSides = styled.div`
   }
 
   &:hover,
-  &:focus {
+  &:focus,
+  &:focus-visible,
+  &:focus-within {
     width: 100%;
 
     .arrow {

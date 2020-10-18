@@ -77,16 +77,6 @@ export const GameListUlContainer = styled.ul`
   }
 `;
 
-export const BackdropChannelList = styled.div`
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  transition: 175ms;
-  left: 0;
-  top: 0;
-  z-index: 3;
-`;
-
 export const TypeListUlContainer = styled.ul`
   background: var(--popupListsBackground);
   scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0);

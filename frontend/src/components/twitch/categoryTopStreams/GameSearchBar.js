@@ -7,7 +7,6 @@ import {
   GameListUlContainer,
   SearchGameForm,
   StyledShowAllButton,
-  BackdropChannelList,
   SearchSubmitBtn,
 } from './styledComponents';
 import { CSSTransition } from 'react-transition-group';
@@ -19,6 +18,7 @@ import InifinityScroll from '../channelList/InifinityScroll';
 import sortByInput from '../channelList/sortByInput';
 import StyledLoadingList from './LoadingList';
 import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
+import useClicksOutside from '../../../hooks/useClicksOutside';
 
 const removeDuplicates = (items) =>
   items.filter((item, index, self) => {
@@ -51,6 +51,7 @@ export default (props) => {
   const searchTimer = useRef();
   const savedFilteredInputMatched = useRef();
 
+  useClicksOutside(ulListRef, () => setListIsOpen(false));
   useLockBodyScroll(listIsOpen);
 
   const useInput = (initialValue) => {
@@ -302,9 +303,6 @@ export default (props) => {
           </GameListUlContainer>
         </CSSTransition>
       </SearchGameForm>
-      {listIsOpen && (
-        <BackdropChannelList id='BackdropChannelList' onClick={() => setListIsOpen(!listIsOpen)} />
-      )}
     </>
   );
 };
