@@ -22,8 +22,6 @@ export const FavoritesProvider = ({ children }) => {
         return res.data.Item;
       })
       .catch((e) => console.error(e));
-
-    console.log('Favorites Lists: ', Lists);
     if (Lists) setLists(Lists);
   }, [setLists]);
 

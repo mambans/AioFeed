@@ -14,7 +14,7 @@ export default () => {
           <LogoText>
             <img
               // src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}
-              src={`${process.env.PUBLIC_URL}/logo_transparent_shadow.png`}
+              src={`${process.env.PUBLIC_URL}/logo_transparent.png`}
               alt='logo'
               id='logo'
             />

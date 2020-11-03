@@ -72,68 +72,8 @@
   padding-right: 0;
 }
 
-.settingsPopup-content {
-  max-height: 600px;
-
-  form {
-    padding: 5px;
-  }
-
-  input[type='text'] {
-    color: white;
-    border: none;
-    border-bottom: 1px solid white;
-    background-color: transparent;
-    background: transparent;
-  }
-
-  input[type='submit'] {
-    border-radius: 5px;
-    border: thin solid #484848;
-    background-color: #035879;
-    color: rgb(224, 224, 224);
-    width: 100%;
-    margin-top: 5px;
-    &:hover {
-      color: white;
-      background-color: #097099;
-    }
-  }
-  ul li {
-    button {
-      background-color: none !important;
-      background: none !important;
-      border: none !important;
-
-      i {
-        color: rgb(172, 34, 47);
-      }
-
-      &:hover i {
-        color: red;
-      }
-    }
-  }
-}
-
 #twitchSidebar .animated:last-child > div {
   border: none;
-}
-
-.accountPopup-content {
-  width: 1000px !important;
-  min-width: 1000px;
-  border-radius: 25px !important;
-  background-color: transparent !important;
-  left: calc(50% - 500px) !important;
-  border: none !important;
-  z-index: 10 !important;
-  padding: 0 !important;
-
-  background: none !important;
-  height: unset;
-  max-height: unset;
-  overflow: unset !important;
 }
 
 .popup-content {

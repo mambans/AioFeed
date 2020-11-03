@@ -14,9 +14,9 @@ import {
   VideoContainer,
   ChannelContainer,
   GameContainer,
+  GamenameAndViewers,
 } from './../../sharedStyledComponents';
 import { ChannelNameDiv } from './../StyledComponents';
-import FeedsContext from './../../feed/FeedsContext';
 import StreamHoverIframe from '../StreamHoverIframe.js';
 import { truncate } from '../../../util/Utils';
 import FollowUnfollowBtn from './../FollowUnfollowBtn';
@@ -25,6 +25,7 @@ import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import AnimatedViewCount from './AnimatedViewCount';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from './../loginNameFormat';
+import { TwitchContext } from '../useToken';
 
 const HOVER_DELAY = 100;
 
@@ -47,13 +48,7 @@ function NewHighlightNoti({ newlyAddedStreams, login }) {
   return '';
 }
 
-export default ({
-  data,
-  newlyAddedStreams,
-  refresh,
-  refreshAfterUnfollowTimer,
-  thumbnailRefresh,
-}) => {
+export default ({ data, newlyAddedStreams, refresh, refreshAfterUnfollowTimer, lastLoaded }) => {
   const location = useLocation();
   const {
     user_id,
@@ -69,10 +64,13 @@ export default ({
     viewer_count,
   } = data;
   const [isHovered, setIsHovered] = useState(false);
-  const { twitchVideoHoverEnable } = useContext(FeedsContext);
+  const { twitchVideoHoverEnable } = useContext(TwitchContext);
   const streamHoverTimer = useRef();
   const ref = useRef();
   const refChannel = useRef();
+  const thumbnailUrl =
+    `${thumbnail_url?.replace('{width}', 858)?.replace('{height}', 480)}` ||
+    `${process.env.PUBLIC_URL}/images/placeholder.webp`;
 
   useEventListenerMemo(
     'mouseenter',
@@ -88,9 +86,7 @@ export default ({
   );
 
   function handleMouseOver() {
-    streamHoverTimer.current = setTimeout(function () {
-      setIsHovered(true);
-    }, HOVER_DELAY);
+    streamHoverTimer.current = setTimeout(() => setIsHovered(true), HOVER_DELAY);
   }
 
   function handleMouseOut() {
@@ -100,10 +96,21 @@ export default ({
 
   return (
     <VideoContainer key={user_id}>
-      <ImageContainer key={thumbnailRefresh} id={user_id} ref={ref} style={{ marginTop: '5px' }}>
+      <ImageContainer
+        thumbnailUrl={
+          thumbnailUrl +
+          '#' +
+          Math.trunc(Date.now() / 100000) +
+          '?' +
+          Math.trunc(Date.now() / 100000)
+        }
+        id={user_id}
+        ref={ref}
+        style={{ marginTop: '5px' }}
+      >
         <NewHighlightNoti newlyAddedStreams={newlyAddedStreams} login={login} />
-        {isHovered && <StreamHoverIframe id={user_id} data={data} setIsHovered={setIsHovered} />}
         <Link
+          className='imgLink'
           to={{
             pathname: '/' + login?.toLowerCase() || user_name,
             state: {
@@ -114,18 +121,24 @@ export default ({
             },
           }}
         >
+          {isHovered && <StreamHoverIframe id={user_id} data={data} setIsHovered={setIsHovered} />}
+          {/* <img
+            id={`${user_id}-${Date.now()}-bg`}
+            alt='thumbnail-bg'
+            style={{
+              position: 'absolute',
+              // transform: 'translate3d(-100%,0,0)'
+            }}
+            src={thumbnailUrl}
+          /> */}
           <img
             id={`${user_id}-${Date.now()}`}
-            alt='thumbnail'
+            key={`${user_id}-${lastLoaded}`}
+            alt=''
             style={
               newlyAddedStreams?.includes(login) ? { boxShadow: 'white 0px 0px 3px 2px' } : null
             }
-            src={
-              thumbnail_url?.replace('{width}', 858)?.replace('{height}', 480) +
-                `#` +
-                Date.now() +
-                thumbnailRefresh || `${process.env.PUBLIC_URL}/images/placeholder.webp`
-            }
+            src={thumbnailUrl + `#${Date.now()}?${Date.now()}`}
           />
         </Link>
         <Moment interval={1} className={'duration'} durationFromNow>
@@ -180,15 +193,15 @@ export default ({
       <div>
         <ChannelContainer ref={refChannel}>
           <Link
+            className='profileImg'
             to={{
               pathname: `/${login?.toLowerCase() || user_name}/page`,
               state: {
                 p_id: user_id,
               },
             }}
-            style={{ gridRow: 1, paddingRight: '5px' }}
           >
-            <img src={profile_image_url} alt='' className={'profileImg'} />
+            <img src={profile_image_url} alt='' />
           </Link>
           <ChannelNameDiv>
             <Link
@@ -234,23 +247,15 @@ export default ({
         </ChannelContainer>
 
         <GameContainer>
-          {game_img && (
-            <a className={'gameImg'} href={'https://www.twitch.tv/directory/category/' + game_name}>
-              <img
-                src={game_img?.replace('{width}', 130)?.replace('{height}', 173)}
-                alt=''
-                className={'gameImg'}
-              />
-            </a>
-          )}
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              overflow: 'hidden',
-              gridColumn: '2',
-            }}
-          >
+          <a className={'gameImg'} href={'https://www.twitch.tv/directory/category/' + game_name}>
+            <img
+              src={game_img?.replace('{width}', 130)?.replace('{height}', 173)}
+              alt=''
+              className={'gameImg'}
+            />
+          </a>
+
+          <GamenameAndViewers>
             {game_name ? (
               <Link className={'gameName'} to={'/category/' + game_name}>
                 {game_name}
@@ -260,7 +265,7 @@ export default ({
             )}
 
             <AnimatedViewCount viewers={viewer_count} className={'viewers'} disabePrefix={true} />
-          </div>
+          </GamenameAndViewers>
         </GameContainer>
       </div>
     </VideoContainer>

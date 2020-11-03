@@ -5,7 +5,6 @@ import AlertHandler from '../../alert';
 import getMyFollowedChannels from './../getMyFollowedChannels';
 import getFollowedOnlineStreams from './GetFollowedStreams';
 import NotificationsContext from './../../notifications/NotificationsContext';
-import AccountContext from './../../account/AccountContext';
 import FeedsContext from './../../feed/FeedsContext';
 import VodsContext from './../vods/VodsContext';
 import { AddCookie, getCookie } from '../../../util/Utils';
@@ -13,27 +12,26 @@ import LiveStreamsPromise from './LiveStreamsPromise';
 import OfflineStreamsPromise from './OfflineStreamsPromise';
 import UpdatedStreamsPromise from './UpdatedStreamsPromise';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
-import useToken from '../useToken';
+import useToken, { TwitchContext } from '../useToken';
 
 const REFRESH_RATE = 25; // seconds
 
 export default ({ children }) => {
   const { addNotification, setUnseenNotifications } = useContext(NotificationsContext);
-  const { autoRefreshEnabled } = useContext(AccountContext);
-  const { setVods, updateNotischannels } = useContext(VodsContext);
   const {
-    enableTwitchVods,
+    autoRefreshEnabled,
     isEnabledOfflineNotifications,
     isEnabledUpdateNotifications,
-    enableForceRefreshThumbnail,
-  } = useContext(FeedsContext);
+  } = useContext(TwitchContext);
+  const { setVods, updateNotischannels } = useContext(VodsContext);
+  const { enableTwitchVods } = useContext(FeedsContext);
   const [refreshTimer, setRefreshTimer] = useState(20);
   const [loadingStates, setLoadingStates] = useState({
     refreshing: false,
     error: null,
     loaded: false,
+    lastLoaded: false,
   });
-  const [thumbnailRefresh, setThumbnailRefresh] = useState();
   const followedChannels = useRef([]);
   const liveStreams = useRef();
   const oldLiveStreams = useRef([]);
@@ -51,8 +49,8 @@ export default ({ children }) => {
       forceRefreshThumbnails = false,
       forceValidateToken = false,
     } = {}) => {
-      setLoadingStates(({ loaded }) => {
-        return { refreshing: true, error: null, loaded: loaded };
+      setLoadingStates(({ loaded, lastLoaded }) => {
+        return { refreshing: true, error: null, loaded: loaded, lastLoaded: lastLoaded };
       });
       try {
         followedChannels.current = await validateToken().then(() =>
@@ -80,10 +78,8 @@ export default ({ children }) => {
             refreshing: false,
             error: null,
             loaded: true,
+            lastLoaded: Date.now(),
           });
-          if (forceRefreshThumbnails && enableForceRefreshThumbnail) {
-            setThumbnailRefresh(Date.now());
-          }
 
           if (
             !disableNotifications &&
@@ -127,6 +123,7 @@ export default ({ children }) => {
             refreshing: false,
             error: streams.error,
             loaded: true,
+            lastLoaded: Date.now(),
           });
         }
       } catch (error) {
@@ -134,6 +131,7 @@ export default ({ children }) => {
           refreshing: false,
           error: error,
           loaded: true,
+          lastLoaded: Date.now(),
         });
       }
     },
@@ -144,7 +142,7 @@ export default ({ children }) => {
       isEnabledUpdateNotifications,
       isEnabledOfflineNotifications,
       setUnseenNotifications,
-      enableForceRefreshThumbnail,
+
       updateNotischannels,
       validateToken,
     ]
@@ -153,7 +151,6 @@ export default ({ children }) => {
   function windowFocusHandler() {
     document.title = 'AioFeed | Feed';
     resetNewlyAddedStreams();
-    if (enableForceRefreshThumbnail) setThumbnailRefresh(Date.now());
   }
 
   function windowBlurHandler() {
@@ -177,7 +174,6 @@ export default ({ children }) => {
         }
 
         if (autoRefreshEnabled && !timer.current) {
-          console.log('---SetInterval Twitch live timer.---');
           timer.current = setInterval(() => {
             const timeNow = new Date();
             setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
@@ -212,6 +208,7 @@ export default ({ children }) => {
   return children({
     refreshing: loadingStates.refreshing,
     loaded: loadingStates.loaded,
+    lastLoaded: loadingStates.lastLoaded,
     refreshTimer,
     followedChannels: followedChannels.current,
     error: loadingStates.error,
@@ -222,6 +219,5 @@ export default ({ children }) => {
     REFRESH_RATE,
     autoRefreshEnabled,
     refreshAfterUnfollowTimer,
-    thumbnailRefresh,
   });
 };

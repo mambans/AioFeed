@@ -10,6 +10,7 @@ import { CenterContext } from '../../feed/FeedsCenterContainer.js';
 export default ({ data }) => {
   const {
     loaded,
+    lastLoaded,
     error,
     liveStreams,
     thumbnailRefresh,
@@ -53,6 +54,7 @@ export default ({ data }) => {
             >
               <StreamEle
                 key={stream.id}
+                lastLoaded={lastLoaded}
                 thumbnailRefresh={thumbnailRefresh}
                 data={stream}
                 newlyAddedStreams={newlyAddedStreams}

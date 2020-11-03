@@ -128,7 +128,7 @@ export default ({
     });
   }
   function scrollChangeVolumeEvent(e) {
-    if ((e.wheelDelta && e.wheelDelta > 0) || e.deltaY < 0) {
+    if (e?.wheelDelta > 0 || e.deltaY < 0) {
       changeVolume('increase', 0.01);
     } else {
       changeVolume('decrease', 0.01);
@@ -142,7 +142,7 @@ export default ({
 
   return (
     <StyledVolumeSlider volumeMuted={volumeMuted} disabled={!TwitchPlayer}>
-      <h3 className='value'>{volumeText && volumeText.toFixed(0)}</h3>
+      <h3 className='value'>{volumeText?.toFixed(0)}</h3>
 
       <div id='BottomRow'>
         {volumeIcon()}

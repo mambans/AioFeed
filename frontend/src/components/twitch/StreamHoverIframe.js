@@ -5,17 +5,31 @@ import styled from 'styled-components';
 const HoverIframe = styled.iframe`
   border: none;
   border-radius: 10px;
-  z-index: 1;
   cursor: pointer;
-  max-width: 360px;
-  position: absolute;
   display: block;
   transform: translate3d(0, 0, 0);
+  position: absolute;
+  height: 100%;
+  width: 100%;
 `;
 
-const IframeContainer = styled.div`
-  transition: opacity 100ms ease-in 900ms;
+const IframeContainer = styled(Link)`
+  position: absolute;
+  height: 100%;
+  width: 100%;
+`;
+
+const Container = styled.div`
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  display: block;
   transform: translate3d(0, 0, 0);
+  transition: opacity 100ms ease-in 900ms;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
   opacity: 0;
 
   &:hover {
@@ -24,7 +38,7 @@ const IframeContainer = styled.div`
 `;
 
 export default ({ data: { login, user_name, id } }) => (
-  <IframeContainer>
+  <Container>
     <HoverIframe
       src={`https://player.twitch.tv/?channel=${
         login?.toLowerCase() || user_name
@@ -39,18 +53,6 @@ export default ({ data: { login, user_name, id } }) => (
       allowFullScreen={true}
       frameBorder='0'
     />
-    <Link
-      to={`/${login?.toLowerCase() || user_name}`}
-      alt=''
-      style={{
-        position: 'absolute',
-        height: '189px',
-        width: '336px',
-        zIndex: '10',
-        padding: '0',
-      }}
-    >
-      ""
-    </Link>
-  </IframeContainer>
+    <IframeContainer to={`/${login?.toLowerCase() || user_name}`} alt=''></IframeContainer>
+  </Container>
 );

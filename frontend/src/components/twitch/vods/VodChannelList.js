@@ -9,6 +9,7 @@ import AddVodChannel from './AddVodChannel';
 // import { getLocalstorage } from '../../../util/Utils';
 import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 import useSyncedLocalState from '../../../hooks/useSyncedLocalState';
+import { VodChannelListPopup } from './StyledComponents';
 
 export default () => {
   const { authKey, username } = useContext(AccountContext);
@@ -34,7 +35,7 @@ export default () => {
   };
 
   return (
-    <>
+    <VodChannelListPopup>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Form.Group controlId='formGroupChannel'>
           <Form.Label style={{ width: '100%', textAlign: 'center' }}>
@@ -65,6 +66,6 @@ export default () => {
       ) : (
         <LoadingList amount={8} />
       )}
-    </>
+    </VodChannelListPopup>
   );
 };

@@ -120,3 +120,57 @@ export const VodDates = styled.div`
     display: none;
   }
 `;
+
+export const VodChannelListPopupTrigger = styled.div`
+  width: 50px;
+  min-width: 50px;
+  margin-left: 250px;
+  justify-content: right;
+  display: flex;
+`;
+
+export const VodChannelListPopup = styled.div`
+  max-height: 600px;
+
+  form {
+    padding: 5px;
+  }
+
+  input[type='text'] {
+    color: white;
+    border: none;
+    border-bottom: 1px solid white;
+    background-color: transparent;
+  }
+
+  input[type='submit'] {
+    border-radius: 5px;
+    border: thin solid #484848;
+    background-color: #035879;
+    color: rgb(224, 224, 224);
+    width: 100%;
+    margin-top: 5px;
+
+    &:hover {
+      color: white;
+      background-color: #097099;
+    }
+  }
+  ul li {
+    button {
+      &&& {
+        background-color: none;
+        background: none;
+        border: none;
+      }
+
+      i {
+        color: rgb(172, 34, 47);
+      }
+
+      &:hover i {
+        color: red;
+      }
+    }
+  }
+`;

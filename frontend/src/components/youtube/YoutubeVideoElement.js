@@ -11,11 +11,11 @@ import {
   ImageContainer,
   Duration,
 } from './../sharedStyledComponents';
-import FeedsContext from '../feed/FeedsContext';
 import VideoHoverIframe from './VideoHoverIframe';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
-import AddVideoButton from '../favorites/AddVideoButton';
+import AddVideoButton from '../favorites/addRemoveButton/AddVideoButton';
 import { ChannelNameLink, PublishedDate } from './StyledComponents';
+import { YoutubeContext } from './useToken';
 
 const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
   maxres?.url ||
@@ -27,7 +27,7 @@ const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
 const HOVER_DELAY = 1000;
 
 export default ({ video, disableContextProvider }) => {
-  const { youtubeVideoHoverEnable } = useContext(FeedsContext);
+  const { youtubeVideoHoverEnable } = useContext(YoutubeContext);
   const [isHovered, setIsHovered] = useState(false);
   const streamHoverTimer = useRef();
   const ref = useRef();
@@ -63,6 +63,7 @@ export default ({ video, disableContextProvider }) => {
         )}
 
         <Link
+          className='imgLink'
           // href={`https://www.youtube.com/watch?v=` + video.contentDetails?.upload?.videoId}
           to={`/youtube/` + video.contentDetails?.upload?.videoId}
         >

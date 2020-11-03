@@ -297,7 +297,7 @@ export const Container = styled.div`
   flex-wrap: wrap;
   margin-top: 0;
   padding-bottom: 50px;
-  min-height: 400px;
+  min-height: 307px;
 `;
 
 export const CenterContainer = styled.div`

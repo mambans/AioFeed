@@ -32,50 +32,50 @@
   transition: opacity 250ms;
 }
 
-.listVerticalSlide-appear {
+.listHorizontalSlide-appear {
   opacity: 0;
-  height: 0px;
+  margin-top: -392px;
   overflow: hidden;
-  transition: opacity 250ms, height 1000ms;
+  transition: opacity 750ms, margin-top 1000ms;
 }
-.listVerticalSlide-appear-active {
+.listHorizontalSlide-appear-active {
   opacity: 1;
-  height: 307px;
+  margin-top: 0px;
   overflow: unset;
-  transition: opacity 250ms, height 1000ms;
+  transition: opacity 750ms, margin-top 1000ms;
 }
 
-.listVerticalSlide-enter {
+.listHorizontalSlide-enter {
   opacity: 0;
-  height: 0px;
+  margin-top: -392px;
   overflow: hidden;
-  transition: opacity 250ms, height 1000ms;
+  transition: opacity 750ms, margin-top 1000ms;
 }
 
-.listVerticalSlide-enter-active {
+.listHorizontalSlide-enter-active {
   opacity: 1;
-  height: 307px;
+  margin-top: 0px;
   overflow: unset;
-  transition: opacity 250ms, height 1000ms;
+  transition: opacity 750ms, margin-top 1000ms;
 }
 
-.listVerticalSlide-exit {
+.listHorizontalSlide-exit {
   opacity: 1;
-  height: 307px;
+  margin-top: 0px;
   overflow: unset;
-  transition: opacity 250ms, height 1000ms;
+  transition: opacity 750ms, margin-top 1000ms;
 }
 
-.listVerticalSlide-exit-active {
+.listHorizontalSlide-exit-active {
   opacity: 0;
-  height: 0px;
+  margin-top: -392px;
   overflow: hidden;
-  transition: opacity 250ms, height 1000ms;
+  transition: opacity 750ms, margin-top 1000ms;
 }
 
-.listVerticalSlide-exit-done {
+.listHorizontalSlide-exit-done {
   opacity: 0;
-  height: 0px;
+  margin-top: -392px;
   overflow: hidden;
-  transition: opacity 250ms, height 1000ms;
+  transition: opacity 750ms, margin-top 1000ms;
 }

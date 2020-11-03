@@ -2,10 +2,10 @@ import React, { useContext, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-import FavoritesContext from './FavoritesContext';
-import { getCookie } from '../../util/Utils';
-import { Lists, ListItem, ListsLink, AddItemBtn, RemoveItemBtn } from './StyledComponents';
-import useClicksOutside from '../../hooks/useClicksOutside';
+import FavoritesContext from './../FavoritesContext';
+import { getCookie } from '../../../util/Utils';
+import { Lists, ListItem, ListsLink, AddItemBtn, RemoveItemBtn } from './../StyledComponents';
+import useClicksOutside from '../../../hooks/useClicksOutside';
 import NewListForm from './NewListForm';
 
 export const parseNumberAndString = (value) => {
@@ -16,17 +16,9 @@ export const parseNumberAndString = (value) => {
   return value;
 };
 
-export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) => {
+const AddRemoveBtn = ({ list, videoId }) => {
   const { lists, setLists } = useContext(FavoritesContext);
-  const listRef = useRef();
-
-  useClicksOutside(listRef, CloseFunction);
-
-  const checkIfInList = (listItems, value) => {
-    const newVideo = parseNumberAndString(value);
-
-    return listItems.includes(newVideo);
-  };
+  const videoAdded = list.items.includes(parseNumberAndString(videoId));
 
   const addFunc = async (list_Name, newItem) => {
     const newVideo = parseNumberAndString(newItem);
@@ -75,6 +67,16 @@ export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) =>
       .catch((e) => console.error(e));
   };
 
+  if (videoAdded) return <RemoveItemBtn size={18} onClick={() => removeFunc(list.name, videoId)} />;
+  return <AddItemBtn size={18} onClick={() => addFunc(list.name, videoId)} />;
+};
+
+export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) => {
+  const { lists, setLists } = useContext(FavoritesContext);
+  const listRef = useRef();
+
+  useClicksOutside(listRef, CloseFunction);
+
   return (
     <Lists onMouseEnter={OpenFunction} onMouseLeave={CloseFunctionDelay} ref={listRef}>
       <ListsLink>
@@ -83,11 +85,7 @@ export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) =>
       {Object?.values(lists).map((list) => (
         <ListItem>
           {list.name}
-          {!checkIfInList(list.items, videoId) ? (
-            <AddItemBtn size={16} onClick={() => addFunc(list.name, videoId)} />
-          ) : (
-            <RemoveItemBtn size={16} onClick={() => removeFunc(list.name, videoId)} />
-          )}
+          <AddRemoveBtn list={list} videoId={videoId} />
         </ListItem>
       ))}
       <NewListForm lists={lists} setLists={setLists} item={videoId} />

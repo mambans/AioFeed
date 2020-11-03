@@ -23,7 +23,7 @@ import API from '../API';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from '../loginNameFormat';
 import { ChannelNameDiv } from '../StyledComponents';
-import AddVideoButton from '../../favorites/AddVideoButton';
+import AddVideoButton from '../../favorites/addRemoveButton/AddVideoButton';
 import useToken from '../useToken';
 
 export default ({ data, vodBtnDisabled, disableContextProvider, movable }) => {
@@ -111,7 +111,7 @@ export default ({ data, vodBtnDisabled, disableContextProvider, movable }) => {
         {thumbnail_url === '' && !previewAvailable.data && (
           <VodLiveIndicator to={`/${login || user_name}`}>Live</VodLiveIndicator>
         )}
-        <a href={url}>
+        <a href={url} className='imgLink'>
           {previewAvailable.data && showPreview && (
             <VodPreview previewAvailable={previewAvailable.data} className='VodPreview' />
           )}
@@ -134,16 +134,7 @@ export default ({ data, vodBtnDisabled, disableContextProvider, movable }) => {
           </Duration>
           <p className={'view_count'} title='views'>
             {formatViewerNumbers(view_count)}
-            <FaRegEye
-              size={10}
-              style={{
-                color: 'rgb(200, 200, 200)',
-                marginLeft: '5px',
-                marginTop: '3px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            />
+            <FaRegEye size={10} />
           </p>
         </VodVideoInfo>
         {type !== 'archive' && <VodType>{type}</VodType>}
@@ -189,15 +180,15 @@ export default ({ data, vodBtnDisabled, disableContextProvider, movable }) => {
       )}
       <ChannelContainer>
         <Link
+          className={'profileImg'}
           to={{
             pathname: `/${login || user_name?.toLowerCase()}/page`,
             state: {
               p_id: user_id,
             },
           }}
-          style={{ gridRow: 1, paddingRight: '5px' }}
         >
-          <img src={profile_image_url} alt='' className={'profileImg'} />
+          <img src={profile_image_url} alt='' />
         </Link>
         <ChannelNameDiv>
           <Link

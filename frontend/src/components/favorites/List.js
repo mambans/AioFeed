@@ -84,7 +84,7 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
         setVideos((curr) => {
           return mergeVideosOrdered.map((vid) => {
             const found = curr?.find((c) => c.id === vid.id);
-            if (!found) return { ...vid, transition: 'videoFadeSlide' };
+            if (!found && Boolean(curr?.length)) return { ...vid, transition: 'videoFadeSlide' };
             return vid;
           });
         });

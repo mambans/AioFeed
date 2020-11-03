@@ -37,23 +37,17 @@ export default ({ ...data }) => {
   return (
     <VideoContainer>
       <ImageContainer ref={imgRef}>
-        <a href={`https://www.twitch.tv/${login || user_name || broadcaster_name}/clip/${id}`}>
+        <a
+          className='imgLink'
+          href={`https://www.twitch.tv/${login || user_name || broadcaster_name}/clip/${id}`}
+        >
           <img src={thumbnail_url} alt='' />
         </a>
         <VodVideoInfo>
           <p className={'vodDuration'} title='duration'></p>
           <p className={'view_count'} title='views'>
             {formatViewerNumbers(view_count)}
-            <FaRegEye
-              size={10}
-              style={{
-                color: 'rgb(200, 200, 200)',
-                marginLeft: '5px',
-                marginTop: '3px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            />
+            <FaRegEye size={10} />
           </p>
         </VodVideoInfo>
       </ImageContainer>
@@ -86,15 +80,15 @@ export default ({ ...data }) => {
       <div style={{ width: '336px' }}>
         <ChannelContainer>
           <Link
+            className={'profileImg'}
             to={{
               pathname: `/${(login || broadcaster_name)?.toLowerCase()}/page`,
               state: {
                 p_id: broadcaster_id,
               },
             }}
-            style={{ gridRow: 1, paddingRight: '5px' }}
           >
-            <img src={profile_image_url} alt='' className={'profileImg'} />
+            <img src={profile_image_url} alt='' />
           </Link>
           <Link to={`/${(login || broadcaster_name)?.toLowerCase()}/page`} className='channelName'>
             {loginNameFormat(data.data)}

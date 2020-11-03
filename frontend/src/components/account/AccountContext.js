@@ -16,9 +16,6 @@ export const AccountProvider = ({ children }) => {
   const [youtubeToken, setYoutubeToken] = useState(getCookie(`Youtube-access_token`));
   const [youtubeUsername, setYoutubeUsername] = useState(getCookie(`YoutubeUsername`));
   const [youtubeProfileImg, setYoutubeProfileImg] = useState(getCookie(`YoutubeProfileImg`));
-  const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(
-    getCookie(`Twitch_AutoRefresh`) || false
-  );
 
   return (
     <AccountContext.Provider
@@ -39,8 +36,6 @@ export const AccountProvider = ({ children }) => {
         setTwitchUsername,
         twitchProfileImg,
         setTwitchProfileImg,
-        autoRefreshEnabled,
-        setAutoRefreshEnabled,
         refreshToken,
         setRefreshToken,
         youtubeUsername,

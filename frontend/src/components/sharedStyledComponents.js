@@ -294,8 +294,13 @@ export const ChannelContainer = styled.div`
   overflow: hidden;
 
   .profileImg {
-    width: 26px;
-    border-radius: 3px;
+    grid-row: 1;
+    padding-right: 5px;
+
+    img {
+      width: 26px;
+      border-radius: 3px;
+    }
   }
 
   .channelName {
@@ -382,6 +387,13 @@ export const GameContainer = styled.div`
   }
 `;
 
+export const GamenameAndViewers = styled.div`
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  grid-column: 2;
+`;
+
 export const VideoTitle = styled(Link)`
   color: var(--textColor1);
   margin-top: 15px;
@@ -426,15 +438,25 @@ export const ImageContainer = styled.div`
   max-height: 189px;
   min-height: 189px;
   width: 336px;
+  position: relative;
+  background-image: url(${({ thumbnailUrl }) => thumbnailUrl || 'unset'});
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
 
   a {
     display: block;
+
+    &.imgLink {
+      height: 100%;
+      color: var(--textColor2);
+    }
   }
 
   img {
     border-radius: 10px;
     width: 100%;
-    max-height: 189px;
+    height: 100%;
     object-fit: cover;
   }
 
@@ -533,6 +555,14 @@ export const VodVideoInfo = styled.div`
     height: 24px;
     display: flex;
     align-items: center;
+
+    svg {
+      color: var(--textColor2);
+      margin-left: 5px;
+      margin-top: 3px;
+      display: flex;
+      align-items: center;
+    }
   }
 `;
 

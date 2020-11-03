@@ -9,10 +9,8 @@ import Legality from '../legality';
 import Navbar from '../navigation';
 import VideoPlayer from './../twitch/player/VideoPlayer';
 import TopStreams from '../twitch/categoryTopStreams';
-import TwitchAuth from '../auth/TwitchAuth';
 import TwitchAuthCallback from '../auth/TwitchAuthCallback';
 import TwitchChannelRoutes from './../twitch/Routes';
-import YoutubeAuth from '../auth/YoutubeAuth';
 import YoutubeAuthCallback from '../auth/YoutubeAuthCallback';
 import YoutubeVideoPlayer from './../youtube/YoutubeVideoPlayer';
 import Twitch from '../twitch/live';
@@ -45,8 +43,6 @@ export default () => {
           <Route path='twitter' element={<Twitter />} />
 
           <Route path='youtube' element={<Youtube />} />
-          <Route path='auth/youtube' element={<YoutubeAuth />} />
-          <Route path='auth/twitch' element={<TwitchAuth />} />
           <Route path='auth/twitch/callback' element={<TwitchAuthCallback />} />
           <Route path='auth/youtube/callback' element={<YoutubeAuthCallback />} />
           <Route path='legality' element={<Legality />} />

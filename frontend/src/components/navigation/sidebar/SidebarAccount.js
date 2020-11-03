@@ -4,9 +4,7 @@ import React, { useContext, useState } from 'react';
 import { MdVideocam, MdAutorenew, MdStar } from 'react-icons/md';
 import { FaTwitch, FaYoutube, FaTwitter, FaRegWindowRestore } from 'react-icons/fa';
 import { FiSidebar } from 'react-icons/fi';
-import { BsFillImageFill } from 'react-icons/bs';
 import { TiFlash } from 'react-icons/ti';
-import { HiRefresh } from 'react-icons/hi';
 import { AiOutlineDisconnect } from 'react-icons/ai';
 
 import { AddCookie, getCookie } from '../../../util/Utils';
@@ -31,6 +29,8 @@ import {
   ToggleButtonsContainer,
   ToggleButtonsContainerHeader,
 } from './StyledComponent';
+import { TwitchContext } from '../../twitch/useToken';
+import { YoutubeContext } from '../../youtube/useToken';
 
 export default () => {
   const {
@@ -40,9 +40,20 @@ export default () => {
     setTwitchToken,
     setYoutubeToken,
     youtubeToken,
-    autoRefreshEnabled,
-    setAutoRefreshEnabled,
   } = useContext(AccountContext);
+
+  const {
+    setAutoRefreshEnabled,
+    autoRefreshEnabled,
+    twitchVideoHoverEnable,
+    setTwitchVideoHoverEnable,
+    isEnabledOfflineNotifications,
+    setIsEnabledOfflineNotifications,
+    isEnabledUpdateNotifications,
+    setIsEnabledUpdateNotifications,
+  } = useContext(TwitchContext);
+
+  const { youtubeVideoHoverEnable, setYoutubeVideoHoverEnable } = useContext(YoutubeContext);
 
   const {
     enableTwitch,
@@ -55,18 +66,9 @@ export default () => {
     setEnableYoutube,
     enableFavorites,
     setEnableFavorites,
-    twitchVideoHoverEnable,
-    setTwitchVideoHoverEnable,
-    youtubeVideoHoverEnable,
-    setYoutubeVideoHoverEnable,
+
     enableTwitter,
     setEnableTwitter,
-    isEnabledOfflineNotifications,
-    setIsEnabledOfflineNotifications,
-    isEnabledUpdateNotifications,
-    setIsEnabledUpdateNotifications,
-    enableForceRefreshThumbnail,
-    setEnableForceRefreshThumbnail,
   } = useContext(FeedsContext);
   const [showAddImage, setShowAddImage] = useState(false);
 
@@ -262,24 +264,7 @@ export default () => {
             }
             icon={<AiOutlineDisconnect size={18} color='rgb(169, 112, 255)' />}
           />
-          <ToggleButton
-            setEnable={(value) => {
-              setEnableForceRefreshThumbnail(value);
-              AddCookie('Twitch_thumbnail_refresh', value);
-            }}
-            enabled={enableForceRefreshThumbnail}
-            label='Twitch force refresh thumbnails'
-            serviceName='Twitch'
-            tokenExists={getCookie(`Twitch-access_token`)}
-            tooltip={
-              getCookie(`Twitch-access_token`)
-                ? (enableForceRefreshThumbnail ? 'Disable ' : 'Enable ') +
-                  `force refresh thumbnails. \n(When problems with thumbnails not refreshing)`
-                : `Need to connect/authenticate with a Youtube account first.`
-            }
-            icon={<BsFillImageFill size={18} color='rgb(169, 112, 255)' />}
-            smallerIcons={<HiRefresh size={14} color='#ffffff' />}
-          />
+
           <ToggleButton
             setEnable={(value) => {
               setTwitchVideoHoverEnable(value);

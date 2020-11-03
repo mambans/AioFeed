@@ -6,7 +6,7 @@ import YouTube from 'react-youtube';
 
 import { VideoAndChatContainer, ShowNavbarBtn } from './../twitch/player/StyledComponents';
 import NavigationContext from './../navigation/NavigationContext';
-import AddVideoButton from '../favorites/AddVideoButton';
+import AddVideoButton from '../favorites/addRemoveButton/AddVideoButton';
 
 const StyledYoutubeIframe = styled(YouTube)`
   border: none;

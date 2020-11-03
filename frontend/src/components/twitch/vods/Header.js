@@ -1,13 +1,14 @@
 import { MdFormatListBulleted } from 'react-icons/md';
 import { MdVideocam } from 'react-icons/md';
 import Alert from 'react-bootstrap/Alert';
-import Popup from 'reactjs-popup';
 import React from 'react';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 
 import { HeaderContainer, ButtonList, LastRefreshText } from './../../sharedStyledComponents';
 import VodChannelList from './VodChannelList';
+import { VodChannelListPopupTrigger } from './StyledComponents';
+import Popup from 'reactjs-popup';
 
 export default (props) => {
   const { refresh, refreshing, vods, vodError } = props;
@@ -15,9 +16,7 @@ export default (props) => {
   return (
     <HeaderContainer
       id='TwitchVodsHeader'
-      refreshFunc={() => {
-        refresh(true);
-      }}
+      refreshFunc={() => refresh(true)}
       isLoading={refreshing}
       text={
         <>
@@ -57,15 +56,7 @@ export default (props) => {
           placeholder='Channel name..'
           arrow={false}
           trigger={
-            <div
-              style={{
-                width: '50px',
-                minWidth: '50px',
-                marginLeft: '250px',
-                justifyContent: 'right',
-                display: 'flex',
-              }}
-            >
+            <VodChannelListPopupTrigger>
               <OverlayTrigger
                 key={'left'}
                 placement={'left'}
@@ -77,20 +68,12 @@ export default (props) => {
                 }
               >
                 <ButtonList variant='outline-secondary'>
-                  <MdFormatListBulleted
-                    size={22}
-                    style={{
-                      height: '22px',
-                      alignItems: 'center',
-                      display: 'flex',
-                    }}
-                  />
+                  <MdFormatListBulleted size={22} />
                 </ButtonList>
               </OverlayTrigger>
-            </div>
+            </VodChannelListPopupTrigger>
           }
           position='left top'
-          className='settingsPopup'
         >
           <VodChannelList />
         </Popup>

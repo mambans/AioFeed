@@ -10,6 +10,7 @@ import List from './List';
 import { VodsProvider } from '../twitch/vods/VodsContext';
 import useToken from '../twitch/useToken';
 import useYoutubeToken from '../youtube/useToken';
+import styled from 'styled-components';
 
 export default () => (
   <VodsProvider>
@@ -20,6 +21,10 @@ export default () => (
     </FavoritesProvider>
   </VodsProvider>
 );
+
+const FavoriteListContainer = styled.div`
+  width: 100%;
+`;
 
 export const Favorites = () => {
   const { lists, setLists, fetchAllLists, isLoading, setIsLoading } = useContext(FavoritesContext);
@@ -65,10 +70,10 @@ export const Favorites = () => {
               <CSSTransition
                 key={list.name}
                 timeout={1000}
-                classNames='listVerticalSlide'
+                classNames='listHorizontalSlide'
                 unmountOnExit
               >
-                <>
+                <FavoriteListContainer>
                   <HeaderContainer
                     id={list.name}
                     text={<>{list.name}</>}
@@ -82,7 +87,7 @@ export const Favorites = () => {
                     ytExistsAndValidated={ytExistsAndValidated}
                     twitchExistsAndValidated={twitchExistsAndValidated}
                   />
-                </>
+                </FavoriteListContainer>
               </CSSTransition>
             );
           })}

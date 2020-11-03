@@ -9,11 +9,12 @@ import LoadingIndicator from './../LoadingIndicator';
 import FeedsContext from '../feed/FeedsContext';
 import { AddCookie } from '../../util/Utils';
 import API from '../twitch/API';
-import useToken from '../twitch/useToken';
+import useToken, { TwitchContext } from '../twitch/useToken';
 
 function TwitchAuthCallback() {
   const [error, setError] = useState();
-  const { username, autoRefreshEnabled } = useContext(AccountContext);
+  const { autoRefreshEnabled } = useContext(TwitchContext);
+  const { username } = useContext(AccountContext);
   const { setVisible, setFooterVisible } = useContext(NavigationContext);
   const { enableTwitch } = useContext(FeedsContext);
   const validateToken = useToken();

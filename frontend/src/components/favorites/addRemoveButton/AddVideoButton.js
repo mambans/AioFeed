@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-import { Open, Close, ButtonContainer } from './StyledComponents';
+import { Open, Close, ButtonContainer } from './../StyledComponents';
 import ButtonLists from './ButtonLists';
-import './FavoritesTransitions.scss';
-import { FavoritesProvider } from './FavoritesContext';
+import './../FavoritesTransitions.scss';
+import { FavoritesProvider } from './../FavoritesContext';
 
 export default ({
   videoId_p,

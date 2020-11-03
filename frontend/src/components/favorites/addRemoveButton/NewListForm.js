@@ -3,8 +3,8 @@ import { Form } from 'react-bootstrap';
 import { MdAddCircle } from 'react-icons/md';
 import axios from 'axios';
 
-import { FormButton, FormGroup, Label } from './StyledComponents';
-import { getCookie } from '../../util/Utils';
+import { FormButton, FormGroup, Label } from './../StyledComponents';
+import { getCookie } from '../../../util/Utils';
 import { parseNumberAndString } from './ButtonLists';
 
 const useInput = (initialValue) => {

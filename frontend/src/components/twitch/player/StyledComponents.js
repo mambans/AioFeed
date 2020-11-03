@@ -3,7 +3,7 @@ import { FaInfoCircle } from 'react-icons/fa';
 import { MdCompareArrows } from 'react-icons/md';
 import { FaWindowClose } from 'react-icons/fa';
 import { MdChat } from 'react-icons/md';
-import { MdMovieCreation } from 'react-icons/md';
+import { MdMovieCreation, MdLoop } from 'react-icons/md';
 import { Button, Nav } from 'react-bootstrap';
 import { GrRefresh } from 'react-icons/gr';
 import { NavLink } from 'react-router-dom';
@@ -602,4 +602,12 @@ export const OfflineOverlay = styled.div`
       background: rgba(0, 0, 0, 0.4);
     }
   }
+`;
+
+export const LoopBtn = styled(MdLoop)`
+  position: absolute;
+  right: 15px;
+  bottom: 90px;
+  cursor: pointer;
+  opacity: ${({ enabled }) => (enabled ? '1' : '0.3')};
 `;
