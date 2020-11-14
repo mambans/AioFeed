@@ -21,7 +21,7 @@
     "react-twitter-embed": "^3.0.3",
     "react-youtube": "^7.13.0",
     "reactjs-popup": "^2.0.4",
-    "styled-components": "^5.2.0",
+    "styled-components": "^5.2.1",
     "uniqid": "^5.2.0"
   },
   "scripts": {
@@ -49,8 +49,9 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/react": "^11.1.2",
     "cli-error-notifier": "^2.1.0",
-    "eslint-config-prettier": "^6.14.0",
+    "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-react-hooks": "^4.2.0"
   }
 }
