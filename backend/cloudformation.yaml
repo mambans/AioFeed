@@ -427,3 +427,20 @@ Resources:
                 Required: true
             # - method.request.querystring.videosObj:
             #     Required: true
+  FetchAppAccessToken:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Returns App access token and if not avalible fetches new App token and saves it and returns it.'
+      Handler: fetchAppAccessToken/handler.handler
+      Environment:
+        Variables:
+          APPINFO_TABLE: !Ref AppInfo
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AppInfo
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /app/token
+            Method: get

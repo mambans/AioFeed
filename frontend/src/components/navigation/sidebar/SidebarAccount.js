@@ -66,10 +66,9 @@ export default () => {
     setEnableYoutube,
     enableFavorites,
     setEnableFavorites,
-
     enableTwitter,
     setEnableTwitter,
-  } = useContext(FeedsContext);
+  } = useContext(FeedsContext) || {};
   const [showAddImage, setShowAddImage] = useState(false);
 
   function logout() {
@@ -193,8 +192,13 @@ export default () => {
             icon={<MdStar size={24} color='rgb(255,255,0)' />}
           />
         </ToggleButtonsContainer>
-        <TwitterForms />
-        <UpdateTwitterLists style={{ opacity: '0.5', transition: 'opacity 250ms' }} />
+
+        {enableTwitter && (
+          <>
+            <TwitterForms />
+            <UpdateTwitterLists style={{ opacity: '0.5', transition: 'opacity 250ms' }} />
+          </>
+        )}
         <br />
         <ToggleButtonsContainerHeader>Settings</ToggleButtonsContainerHeader>
         <ToggleButtonsContainer buttonsperrow={3}>

@@ -21,7 +21,13 @@ export default ({ forceMountTwitch = false } = {}) => (
 );
 
 export const Twitch = ({ in: forceMount = false }) => {
-  const { enableTwitch, showTwitchSidebar, setShowTwitchSidebar } = useContext(FeedsContext);
+  const {
+    enableTwitch,
+    showTwitchSidebar,
+    setShowTwitchSidebar,
+    showTwitchBigFeed,
+    setShowTwitchBigFeed,
+  } = useContext(FeedsContext) || {};
 
   useEffect(() => {
     Notification.requestPermission().then(function (result) {
@@ -34,7 +40,7 @@ export const Twitch = ({ in: forceMount = false }) => {
       {(data) => (
         <>
           <CSSTransition
-            in={enableTwitch || forceMount}
+            in={(showTwitchBigFeed && enableTwitch) || forceMount}
             timeout={750}
             classNames='fade-750ms'
             unmountOnExit
@@ -42,7 +48,7 @@ export const Twitch = ({ in: forceMount = false }) => {
             <Header data={data} />
           </CSSTransition>
           <CSSTransition
-            in={enableTwitch || forceMount}
+            in={(showTwitchBigFeed && enableTwitch) || forceMount}
             timeout={750}
             classNames='fade-750ms'
             appear
@@ -69,6 +75,25 @@ export const Twitch = ({ in: forceMount = false }) => {
               }}
             />
           </OverlayTrigger>
+          <OverlayTrigger
+            key={'bottom'}
+            placement={'right'}
+            delay={{ show: 500, hide: 0 }}
+            overlay={
+              <Tooltip id={`tooltip-${'right'}`}>{`${
+                showTwitchBigFeed ? 'Hide' : 'Show'
+              } big feed`}</Tooltip>
+            }
+          >
+            <HideSidebarButton
+              show={String(showTwitchBigFeed)}
+              side={'right'}
+              onClick={() => {
+                AddCookie('Twitch_BigFeedEnabled', !showTwitchBigFeed);
+                setShowTwitchBigFeed(!showTwitchBigFeed);
+              }}
+            />
+          </OverlayTrigger>
 
           <CSSTransition
             in={(enableTwitch || forceMount) && showTwitchSidebar}
@@ -78,11 +103,9 @@ export const Twitch = ({ in: forceMount = false }) => {
             unmountOnExit
           >
             <Sidebar
-              setShowTwitchSidebar={setShowTwitchSidebar}
               loaded={data.loaded}
               onlineStreams={data.liveStreams}
               newlyAdded={data.newlyAddedStreams}
-              REFRESH_RATE={data.REFRESH_RATE}
             />
           </CSSTransition>
         </>

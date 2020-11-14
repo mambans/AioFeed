@@ -51,7 +51,7 @@ const StyledButton = styled(Button).attrs({ type: 'submit', variant: 'secondary'
 `;
 
 export default ({ style, id, index }) => {
-  const { enableTwitter, setTwitterLists, twitterLists } = useContext(FeedsContext);
+  const { setTwitterLists, twitterLists } = useContext(FeedsContext) || {};
   const { username } = useContext(AccountContext);
   const { value: listName, bind: bindListName, reset } = useInput(id || '');
 
@@ -107,63 +107,60 @@ export default ({ style, id, index }) => {
     }
   };
 
-  if (enableTwitter) {
-    return (
-      <StyledForm onSubmit={handleSubmit} style={{ ...style }}>
-        <Form.Group controlId='formGroupListName' style={{ marginBottom: '0' }}>
-          <div style={{ display: 'flex' }}>
-            <OverlayTrigger
-              key={`${id}-${index}-icon` || 'nolist'}
-              placement={'bottom'}
-              delay={{ show: 500, hide: 0 }}
-              overlay={
-                <Tooltip id={`tooltip-${'bottom'}`}>{`${id ? `Remove list` : `New list`}`}</Tooltip>
-              }
-            >
-              <div style={{ display: 'inline-flex' }}>
-                <FaTwitter
-                  style={{ position: 'absolute', transform: 'translateX(-60%)' }}
-                  size={12}
-                  color='rgb(29, 161, 242)'
-                />
-                {id ? (
-                  <IoMdList size={22} color='#ffffff' />
-                ) : (
-                  <MdPlaylistAdd size={22} color='ffffff' />
-                )}
-              </div>
-            </OverlayTrigger>
-            <Form.Control
-              type='text'
-              placeholder='12345...'
-              name='listName'
-              required
-              // isInvalid={!listName}
-              {...bindListName}
-            />
-            {/* <Form.Control.Feedback type='invalid'>Enter</Form.Control.Feedback> */}
-            <OverlayTrigger
-              key={`${id}-${index}-button` || 'nolist'}
-              placement={'bottom'}
-              delay={{ show: 500, hide: 0 }}
-              overlay={
-                <Tooltip id={`tooltip-${'bottom'}`}>{`${
-                  id ? `Remove list` : `Add new list`
-                }`}</Tooltip>
-              }
-            >
-              <StyledButton>
-                {id ? (
-                  <MdDelete size={22} color='rgb(200,0,0)' />
-                ) : (
-                  <MdAdd size={22} color='rgb(0,230,0)' />
-                )}
-              </StyledButton>
-            </OverlayTrigger>
-          </div>
-        </Form.Group>
-      </StyledForm>
-    );
-  }
-  return null;
+  return (
+    <StyledForm onSubmit={handleSubmit} style={{ ...style }}>
+      <Form.Group controlId='formGroupListName' style={{ marginBottom: '0' }}>
+        <div style={{ display: 'flex' }}>
+          <OverlayTrigger
+            key={`${id}-${index}-icon` || 'nolist'}
+            placement={'bottom'}
+            delay={{ show: 500, hide: 0 }}
+            overlay={
+              <Tooltip id={`tooltip-${'bottom'}`}>{`${id ? `Remove list` : `New list`}`}</Tooltip>
+            }
+          >
+            <div style={{ display: 'inline-flex' }}>
+              <FaTwitter
+                style={{ position: 'absolute', transform: 'translateX(-60%)' }}
+                size={12}
+                color='rgb(29, 161, 242)'
+              />
+              {id ? (
+                <IoMdList size={22} color='#ffffff' />
+              ) : (
+                <MdPlaylistAdd size={22} color='ffffff' />
+              )}
+            </div>
+          </OverlayTrigger>
+          <Form.Control
+            type='text'
+            placeholder='12345...'
+            name='listName'
+            required
+            // isInvalid={!listName}
+            {...bindListName}
+          />
+          {/* <Form.Control.Feedback type='invalid'>Enter</Form.Control.Feedback> */}
+          <OverlayTrigger
+            key={`${id}-${index}-button` || 'nolist'}
+            placement={'bottom'}
+            delay={{ show: 500, hide: 0 }}
+            overlay={
+              <Tooltip id={`tooltip-${'bottom'}`}>{`${
+                id ? `Remove list` : `Add new list`
+              }`}</Tooltip>
+            }
+          >
+            <StyledButton>
+              {id ? (
+                <MdDelete size={22} color='rgb(200,0,0)' />
+              ) : (
+                <MdAdd size={22} color='rgb(0,230,0)' />
+              )}
+            </StyledButton>
+          </OverlayTrigger>
+        </div>
+      </Form.Group>
+    </StyledForm>
+  );
 };

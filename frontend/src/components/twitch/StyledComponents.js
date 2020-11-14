@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import { MdFavorite } from 'react-icons/md';
 import { MdFavoriteBorder } from 'react-icons/md';
+import FeedsContext from '../feed/FeedsContext';
 
 export const StyledLoadmore = styled.div`
   width: 100%;
@@ -146,6 +147,11 @@ export const StyledLoadingBox = styled.div`
   margin-bottom: 15px;
   height: unset;
 
+  transform-origin: left top;
+  transform: ${({ feedSize }) => (feedSize === 'small' ? 'scale(0.8)' : 'scale(1)')};
+  margin-bottom: ${({ feedSize }) => (feedSize === 'small' ? '-62.5px' : '15px')};
+  margin-right: ${({ feedSize }) => (feedSize === 'small' ? '-66.5px' : '7px')};
+
   transition: all 1s linear;
 
   div#video {
@@ -207,18 +213,22 @@ export const StyledLoadingBox = styled.div`
   }
 `;
 
-export const LoadingVideoElement = ({ type }) => (
-  <StyledLoadingBox type={type}>
-    <div id='video'></div>
-    <div id='title'>
-      <div></div>
-    </div>
-    <div id='details'>
-      <div id='channel'></div>
-      <div id='game'></div>
-    </div>
-  </StyledLoadingBox>
-);
+export const LoadingVideoElement = ({ type }) => {
+  const { feedSize } = useContext(FeedsContext);
+
+  return (
+    <StyledLoadingBox type={type} feedSize={feedSize}>
+      <div id='video'></div>
+      <div id='title'>
+        <div></div>
+      </div>
+      <div id='details'>
+        <div id='channel'></div>
+        <div id='game'></div>
+      </div>
+    </StyledLoadingBox>
+  );
+};
 
 export const StyledLoadingList = styled.ul`
   li div {
@@ -310,6 +320,7 @@ export const CenterContainer = styled.div`
   justify-content: center;
   flex-flow: column;
   transition: width 750ms, margin 750ms;
+  position: relative;
 
   margin-left: ${({
     enableTwitter,

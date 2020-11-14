@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import useSyncedLocalState from '../../hooks/useSyncedLocalState';
 
 import { getCookie, getLocalstorage } from './../../util/Utils';
 
@@ -11,6 +12,9 @@ export const FeedsProvider = ({ children }) => {
   const [showTwitchSidebar, setShowTwitchSidebar] = useState(
     getCookie('Twitch-access_token') && getCookie('Twitch_SidebarEnabled')
   );
+  const [showTwitchBigFeed, setShowTwitchBigFeed] = useState(
+    getCookie('Twitch-access_token') && getCookie('Twitch_BigFeedEnabled')
+  );
   const [enableTwitter, setEnableTwitter] = useState(getCookie('Twitter_FeedEnabled'));
   const [twitterLists, setTwitterLists] = useState(getLocalstorage('Twitter-Lists'));
   const [enableYoutube, setEnableYoutube] = useState(
@@ -20,6 +24,7 @@ export const FeedsProvider = ({ children }) => {
     getCookie(`Twitch-access_token`) && getCookie('TwitchVods_FeedEnabled')
   );
   const [enableFavorites, setEnableFavorites] = useState(getCookie('Favorites_FeedEnabled'));
+  const [feedSize, setFeedSize] = useSyncedLocalState('Feed-size', 'default');
 
   return (
     <FeedsContext.Provider
@@ -38,6 +43,10 @@ export const FeedsProvider = ({ children }) => {
         setShowTwitchSidebar,
         twitterLists,
         setTwitterLists,
+        showTwitchBigFeed,
+        setShowTwitchBigFeed,
+        feedSize,
+        setFeedSize,
       }}
     >
       {children}

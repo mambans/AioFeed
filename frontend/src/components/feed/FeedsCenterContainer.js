@@ -6,12 +6,15 @@ import AlertHandler from './../alert';
 import FeedsContext from './FeedsContext';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import { useLocation } from 'react-router-dom';
+import { FeedSizeBtn, FeedSizeIcon } from '../sharedStyledComponents';
 
 export const CenterContext = React.createContext();
 
 const CenterProvider = ({ children, fullWidth }) => {
-  const { enableTwitch, enableTwitter, showTwitchSidebar } = useContext(FeedsContext);
+  const { enableTwitch, enableTwitter, showTwitchSidebar, feedSize } =
+    useContext(FeedsContext) || {};
   const path = useLocation().pathname?.slice(0, 5);
+  const size = feedSize === 'small' ? 280 : 350;
 
   useEventListenerMemo('resize', () => {
     setVideoDisplayData({
@@ -22,7 +25,7 @@ const CenterProvider = ({ children, fullWidth }) => {
 
   const calcVideoElementsAmount = useCallback(
     (clientWidth) => {
-      if (fullWidth) return Math.floor((clientWidth - 150 / 350) / 350) * 2;
+      if (fullWidth) return Math.floor((clientWidth - 150 / size) / size) * 2;
 
       return (
         Math.floor(
@@ -32,11 +35,11 @@ const CenterProvider = ({ children, fullWidth }) => {
                 ? clientWidth * (clientWidth <= 2560 ? 0.19 : 0.14)
                 : 150) +
               25)) /
-            350
+            size
         ) * 2
       );
     },
-    [enableTwitch, showTwitchSidebar, enableTwitter, path, fullWidth]
+    [enableTwitch, showTwitchSidebar, enableTwitter, path, fullWidth, size]
   );
 
   const [videoDisplayData, setVideoDisplayData] = useState({
@@ -49,9 +52,21 @@ const CenterProvider = ({ children, fullWidth }) => {
 
 const Center = ({ children, forceMountTwitch, fullWidth }) => {
   const { winWidth } = useContext(CenterContext);
-  const { enableTwitch, enableTwitter, showTwitchSidebar, twitterLists } = useContext(FeedsContext);
+  const { enableTwitch, enableTwitter, showTwitchSidebar, twitterLists, feedSize, setFeedSize } =
+    useContext(FeedsContext) || {};
   const NrLists = twitterLists?.length || 1;
   const path = useLocation().pathname?.slice(0, 5);
+  const size = feedSize === 'small' ? 280 : 350;
+
+  const onClickDefault = () => {
+    localStorage.setItem('Feed-size', 'default');
+    setFeedSize('default');
+  };
+
+  const onClickSmall = () => {
+    localStorage.setItem('Feed-size', 'small');
+    setFeedSize('small');
+  };
 
   return (
     <CenterContainer
@@ -67,18 +82,22 @@ const Center = ({ children, forceMountTwitch, fullWidth }) => {
       }
       twitchSidebarWidth={(enableTwitch || forceMountTwitch) && showTwitchSidebar ? 275 : 0}
       centerWidth={
-        350 *
+        size *
         Math.floor(
           (winWidth -
             (((enableTwitch || forceMountTwitch) && showTwitchSidebar ? 275 : 0) +
               (enableTwitter && path === '/feed'
                 ? winWidth * (winWidth <= 2560 ? 0.19 * NrLists : 0.14 * NrLists) + NrLists * 20
                 : 150))) /
-            350
+            size
         )
       }
       id='CenterContainer'
     >
+      <FeedSizeBtn>
+        <FeedSizeIcon size={22} active={feedSize === 'default'} onClick={onClickDefault} />
+        <FeedSizeIcon size={16} active={feedSize === 'small'} onClick={onClickSmall} />
+      </FeedSizeBtn>
       {children}
     </CenterContainer>
   );

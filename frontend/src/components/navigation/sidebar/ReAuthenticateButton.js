@@ -46,7 +46,7 @@ export default ({ disconnect, serviceName, style }) => {
     youtubeProfileImg,
   } = useContext(AccountContext);
 
-  const { setEnableTwitch, setEnableYoutube } = useContext(FeedsContext);
+  const { setEnableTwitch, setEnableYoutube } = useContext(FeedsContext) || {};
 
   if (serviceName === 'Twitch') {
     if (!getCookie(`Twitch-access_token`)) {

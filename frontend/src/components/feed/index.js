@@ -44,12 +44,6 @@ const Feed = () => {
         <Twitch />
       </CSSTransition>
       <FavoritesProvider>
-        <CSSTransition in={enableTwitchVods} classNames='fade-750ms' timeout={750} unmountOnExit>
-          <Container>
-            <Vods disableContextProvider={true} />
-          </Container>
-        </CSSTransition>
-
         <CSSTransition
           in={enableYoutube}
           timeout={750}
@@ -58,7 +52,13 @@ const Feed = () => {
           appear
         >
           <Container>
-            <Youtube disableContextProvider={true} />
+            <Youtube disableContextProvid er={true} />
+          </Container>
+        </CSSTransition>
+
+        <CSSTransition in={enableTwitchVods} classNames='fade-750ms' timeout={750} unmountOnExit>
+          <Container>
+            <Vods disableContextProvider={true} />
           </Container>
         </CSSTransition>
 

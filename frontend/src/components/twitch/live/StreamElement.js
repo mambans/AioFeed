@@ -48,7 +48,13 @@ function NewHighlightNoti({ newlyAddedStreams, login }) {
   return '';
 }
 
-export default ({ data, newlyAddedStreams, refresh, refreshAfterUnfollowTimer, lastLoaded }) => {
+export default ({
+  data = {},
+  newlyAddedStreams,
+  refresh,
+  refreshAfterUnfollowTimer,
+  lastLoaded,
+}) => {
   const location = useLocation();
   const {
     user_id,
@@ -56,7 +62,6 @@ export default ({ data, newlyAddedStreams, refresh, refreshAfterUnfollowTimer, l
     started_at,
     title,
     game_name,
-    viewers,
     thumbnail_url,
     profile_image_url,
     login,
@@ -114,23 +119,20 @@ export default ({ data, newlyAddedStreams, refresh, refreshAfterUnfollowTimer, l
           to={{
             pathname: '/' + login?.toLowerCase() || user_name,
             state: {
-              p_uptime: started_at,
-              p_title: title,
-              p_game: game_name,
-              p_viewers: viewers,
+              passedChannelData: {
+                started_at: started_at,
+                title: title,
+                profile_image_url: profile_image_url,
+                user_id: user_id,
+                user_name: user_name,
+                viewer_count: viewer_count,
+                game_name: game_name,
+                login: login,
+              },
             },
           }}
         >
           {isHovered && <StreamHoverIframe id={user_id} data={data} setIsHovered={setIsHovered} />}
-          {/* <img
-            id={`${user_id}-${Date.now()}-bg`}
-            alt='thumbnail-bg'
-            style={{
-              position: 'absolute',
-              // transform: 'translate3d(-100%,0,0)'
-            }}
-            src={thumbnailUrl}
-          /> */}
           <img
             id={`${user_id}-${Date.now()}`}
             key={`${user_id}-${lastLoaded}`}
@@ -165,10 +167,16 @@ export default ({ data, newlyAddedStreams, refresh, refreshAfterUnfollowTimer, l
             to={{
               pathname: '/' + login?.toLowerCase() || user_name,
               state: {
-                p_uptime: started_at,
-                p_title: title,
-                p_game: game_name,
-                p_viewers: viewers,
+                passedChannelData: {
+                  started_at: started_at,
+                  title: title,
+                  profile_image_url: profile_image_url,
+                  user_id: user_id,
+                  user_name: user_name,
+                  viewer_count: viewer_count,
+                  game_name: game_name,
+                  login: login,
+                },
               },
             }}
           >
@@ -180,10 +188,16 @@ export default ({ data, newlyAddedStreams, refresh, refreshAfterUnfollowTimer, l
           to={{
             pathname: '/' + login?.toLowerCase() || user_name,
             state: {
-              p_uptime: started_at,
-              p_title: title,
-              p_game: game_name,
-              p_viewers: viewers,
+              passedChannelData: {
+                started_at: started_at,
+                title: title,
+                profile_image_url: profile_image_url,
+                user_id: user_id,
+                user_name: user_name,
+                viewer_count: viewer_count,
+                game_name: game_name,
+                login: login,
+              },
             },
           }}
         >
@@ -197,7 +211,16 @@ export default ({ data, newlyAddedStreams, refresh, refreshAfterUnfollowTimer, l
             to={{
               pathname: `/${login?.toLowerCase() || user_name}/page`,
               state: {
-                p_id: user_id,
+                passedChannelData: {
+                  started_at: started_at,
+                  title: title,
+                  profile_image_url: profile_image_url,
+                  user_id: user_id,
+                  user_name: user_name,
+                  viewer_count: viewer_count,
+                  game_name: game_name,
+                  login: login,
+                },
               },
             }}
           >
@@ -208,7 +231,16 @@ export default ({ data, newlyAddedStreams, refresh, refreshAfterUnfollowTimer, l
               to={{
                 pathname: `/${login?.toLowerCase() || user_name}/page`,
                 state: {
-                  p_id: user_id,
+                  passedChannelData: {
+                    started_at: started_at,
+                    title: title,
+                    profile_image_url: profile_image_url,
+                    user_id: user_id,
+                    user_name: user_name,
+                    viewer_count: viewer_count,
+                    game_name: game_name,
+                    login: login,
+                  },
                 },
               }}
               className='channelName'

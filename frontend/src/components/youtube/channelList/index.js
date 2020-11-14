@@ -1,17 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MdFormatListBulleted } from 'react-icons/md';
-import { CSSTransition } from 'react-transition-group';
 
-import {
-  GameListUlContainer,
-  SearchGameForm,
-  SearchSubmitBtn,
-} from './../../twitch/categoryTopStreams/styledComponents';
+import { GameListUlContainer } from './../../twitch/categoryTopStreams/styledComponents';
 import StyledLoadingList from './../../twitch/categoryTopStreams/LoadingList';
 import ChannelListElement from './ChannelListElement';
 import { getLocalstorage } from '../../../util/Utils';
-import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
-import useClicksOutside from '../../../hooks/useClicksOutside';
+import SearchList from '../../SearchList';
 
 export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
   const parentRect = parentDiv.getBoundingClientRect();
@@ -63,18 +56,11 @@ export const sortInputFirst = (input, data) => {
 export default (data) => {
   const [filteredChannels, setFilteredChannels] = useState();
   const [listIsOpen, setListIsOpen] = useState();
-  const [cursor, setCursor] = useState(0);
+  const [cursor, setCursor] = useState({ position: 0 });
   const channels = useRef(
     getLocalstorage(`YT-followedChannels`) ? getLocalstorage(`YT-followedChannels`).data : []
   );
-  const inputRef = useRef();
   const ulListRef = useRef();
-
-  useClicksOutside(ulListRef, () => {
-    resetChannel();
-    setListIsOpen(false);
-  });
-  useLockBodyScroll(listIsOpen);
 
   const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue);
@@ -131,14 +117,18 @@ export default (data) => {
       if (filteredChannels && filteredChannels.length > 1) {
         if (e.key === 'ArrowDown') {
           e.preventDefault();
-          setCursor((cursor) => Math.min(Math.max(cursor + 1, 0), filteredChannels.length - 1));
+          setCursor((cursor) => ({
+            position: Math.min(Math.max(cursor.position + 1, 0), filteredChannels.length - 1),
+          }));
           scrollToIfNeeded(ulListRef.current, document.querySelector('.selected'), 'Down');
-          manualSet(filteredChannels[cursor + 1].snippet.title);
+          manualSet(filteredChannels[cursor.position + 1]?.snippet?.title);
         } else if (e.key === 'ArrowUp') {
           e.preventDefault();
-          setCursor((cursor) => Math.min(Math.max(cursor - 1, 0), filteredChannels.length - 1));
+          setCursor((cursor) => ({
+            position: Math.min(Math.max(cursor.position - 1, 0), filteredChannels.length - 1),
+          }));
           scrollToIfNeeded(ulListRef.current, document.querySelector('.selected'), 'Up');
-          manualSet(filteredChannels[cursor - 1].snippet.title);
+          manualSet(filteredChannels[cursor.position - 1]?.snippet?.title);
         }
       }
     } catch (error) {
@@ -146,8 +136,7 @@ export default (data) => {
     }
   };
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
+  const handleSubmit = () => {
     resetChannel();
     window.open(`https://www.youtube.com/channel/${returnChannelId()}`);
   };
@@ -165,79 +154,45 @@ export default (data) => {
 
   return (
     <>
-      <SearchGameForm
+      <SearchList
         onSubmit={handleSubmit}
-        open={listIsOpen}
         onKeyDown={handleArrowKey}
-        direction={'left'}
         showButton={true}
+        setListIsOpen={setListIsOpen}
+        listIsOpen={listIsOpen}
+        input={channel}
+        placeholder={'...'}
+        setCursor={setCursor}
+        resetInput={resetChannel}
+        bindInput={bindChannel}
+        searchBtnPath={`https://www.youtube.com/channel/${returnChannelId()}`}
       >
-        <input
-          ref={inputRef}
-          type='text'
-          spellCheck='false'
-          placeholder={'...'}
-          {...bindChannel}
-          onFocus={() => {
-            setListIsOpen(true);
-          }}
-        />
-        <SearchSubmitBtn
-          disabled={!channel}
-          href={`https://www.youtube.com/channel/${returnChannelId()}`}
-        />
-        <MdFormatListBulleted
-          id='ToggleListBtn'
-          onClick={() => {
-            resetChannel();
-            setListIsOpen(!listIsOpen);
-          }}
-          size={42}
-        />
-        <CSSTransition
-          in={listIsOpen}
-          timeout={250}
-          classNames='fade-250ms'
-          onExited={() => {
-            setCursor(0);
-          }}
-          unmountOnExit
-        >
-          <GameListUlContainer ref={ulListRef}>
-            {filteredChannels ? (
-              <>
-                <p
-                  style={{
-                    textAlign: 'center',
-                    fontSize: '0.9rem',
-                    fontWeight: 'bold',
-                    margin: '9px 0',
-                    color: 'var(--VideoContainerLinks)',
-                  }}
-                >{`Total: ${filteredChannels.length}`}</p>
+        <GameListUlContainer ref={ulListRef}>
+          {filteredChannels ? (
+            <>
+              <p>{`Total: ${filteredChannels.length}`}</p>
 
-                {filteredChannels.map((channel, index) => {
-                  return (
-                    <ChannelListElement
-                      key={channel.snippet.title}
-                      channel={channel}
-                      setNewChannels={(newChannels) => {
-                        channels.current = newChannels;
-                        setFilteredChannels(newChannels);
-                      }}
-                      videos={data.videos}
-                      setVideos={data.setVideos}
-                      selected={index === cursor}
-                    />
-                  );
-                })}
-              </>
-            ) : (
-              <StyledLoadingList amount={12} />
-            )}
-          </GameListUlContainer>
-        </CSSTransition>
-      </SearchGameForm>
+              {filteredChannels.map((channel, index) => {
+                return (
+                  <ChannelListElement
+                    key={channel.snippet.title}
+                    channel={channel}
+                    setNewChannels={(newChannels) => {
+                      channels.current = newChannels;
+                      setFilteredChannels(newChannels);
+                    }}
+                    videos={data.videos}
+                    setVideos={data.setVideos}
+                    selected={index === cursor.position}
+                  />
+                );
+              })}
+            </>
+          ) : (
+            <StyledLoadingList amount={12} />
+          )}
+        </GameListUlContainer>
+      </SearchList>
     </>
   );
 };

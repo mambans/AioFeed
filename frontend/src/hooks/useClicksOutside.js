@@ -6,7 +6,7 @@ export default (ref, func) => {
       if (ref.current && !ref.current.contains(event.target)) func();
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mouseup', handleClickOutside);
+    return () => document.removeEventListener('mouseup', handleClickOutside);
   }, [ref, func]);
 };

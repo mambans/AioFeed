@@ -1,16 +1,14 @@
 import axios from 'axios';
 import { getCookie, RemoveCookie } from '../../util/Utils';
 
-export default async ({ setTwitchToken, setEnableTwitch }) => {
+export default async ({ setTwitchToken = () => {}, setEnableTwitch = () => {} }) => {
   await axios
     .post(
       `https://id.twitch.tv/oauth2/revoke?client_id=${
         process.env.REACT_APP_TWITCH_CLIENT_ID
       }&token=${getCookie('Twitch-access_token')}`
     )
-    .catch((er) => {
-      console.error(er);
-    });
+    .catch((er) => console.error(er));
 
   RemoveCookie('Twitch-access_token');
   RemoveCookie('Twitch-refresh_token');
@@ -31,10 +29,6 @@ export default async ({ setTwitchToken, setEnableTwitch }) => {
         authkey: getCookie(`AioFeed_AuthKey`),
       },
     })
-    .then(() => {
-      console.log(`Successfully disconnected from Twitch`);
-    })
-    .catch((e) => {
-      console.error(e);
-    });
+    .then(() => console.log(`Successfully disconnected from Twitch`))
+    .catch((e) => console.error(e));
 };

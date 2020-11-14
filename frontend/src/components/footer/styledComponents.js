@@ -9,8 +9,10 @@ export const StyledFooterContainer = styled.div`
   border-top: 2px solid #53463f;
   max-height: 200px;
   width: 100%;
-  color: var(--textColor2);
+  color: var(--textColor3);
   transition: width 750ms, margin 750ms;
+  z-index: 1;
+  position: relative;
 
   ul {
     display: flex;

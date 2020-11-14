@@ -4,8 +4,7 @@ import { pulse } from '../twitch/StyledComponents';
 
 export const Container = styled.div`
   width: 14vw;
-  height: ${({ footerVisibleInViewport }) =>
-    footerVisibleInViewport ? `calc(92vh - ${footerVisibleInViewport}px)` : '92vh'};
+  height: 92vh;
   background: var(--twitterBackground);
   border-radius: 10px 10px 2px 2px;
   transition: height 500ms;
@@ -22,8 +21,7 @@ export const MainContainer = styled.div`
   transition: width 1000ms, margin-right 100ms, right 100ms;
   position: fixed;
   top: 90px;
-  height: ${({ footerVisibleInViewport }) =>
-    footerVisibleInViewport ? `calc(92vh - ${footerVisibleInViewport}px)` : '92vh'};
+  height: 92vh;
   /* right: ${({ center }) => (center ? '50%' : '10px')}; */
   left: ${({ center }) => (center ? '50%' : 'calc(86vw - 28px)')};
   transform: ${({ center }) => (center ? 'translateX(-50%)' : 'unset')};

@@ -1,14 +1,9 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { MdFormatListBulleted } from 'react-icons/md';
-import { CSSTransition } from 'react-transition-group';
+
 import { useParams } from 'react-router-dom';
 import { throttle } from 'lodash';
 
-import {
-  GameListUlContainer,
-  SearchGameForm,
-  SearchSubmitBtn,
-} from './../categoryTopStreams/styledComponents';
+import { GameListUlContainer } from './../categoryTopStreams/styledComponents';
 import AddVideoExtraData from '../AddVideoExtraData';
 import API from '../API';
 import ChannelListElement from '../channelList/ChannelListElement';
@@ -20,7 +15,7 @@ import sortByInput from './sortByInput';
 import StyledLoadingList from './../categoryTopStreams/LoadingList';
 import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 import useToken from '../useToken';
-import useClicksOutside from '../../../hooks/useClicksOutside';
+import SearchList from './../../SearchList';
 
 const removeDuplicates = (items) =>
   items.filter((item, index, self) => {
@@ -28,10 +23,10 @@ const removeDuplicates = (items) =>
   });
 
 export default ({
-  showButton = true,
   style = {},
-  inputStyle = {},
   placeholder = 'Channel..',
+  inputStyle = {},
+  showButton = true,
   position,
 }) => {
   const channelName = useParams()?.channelName;
@@ -44,12 +39,11 @@ export default ({
   const [loadingMore, setLoadingMore] = useState(false);
   const validateToken = useToken();
 
-  const inputRef = useRef();
   const ulListRef = useRef();
   const searchTimer = useRef();
+  const resetListTimer = useRef();
   const savedFilteredInputMatched = useRef();
 
-  useClicksOutside(ulListRef, () => setListIsOpen(false));
   useLockBodyScroll(listIsOpen);
 
   const useInput = (initialValue) => {
@@ -181,7 +175,7 @@ export default ({
             })
           );
         },
-        2500,
+        5000,
         { leading: true, trailing: false }
       ),
     [validateToken]
@@ -249,12 +243,17 @@ export default ({
     return false;
   };
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
+  const onExited = () => {
+    clearTimeout(resetListTimer.current);
+    setSearchResults();
+    resetListTimer.current = setTimeout(() => {
+      setFollowedChannels();
+    }, 5000);
+  };
+
+  const handleSubmit = () => {
     resetChannel();
     window.open(`/${returnChannel()}`);
-    setListIsOpen(false);
-    inputRef.current.blur();
   };
 
   useEffect(() => {
@@ -268,99 +267,59 @@ export default ({
 
   return (
     <>
-      <SearchGameForm
-        style={{ ...style }}
-        showButton={showButton}
+      <SearchList
+        style={style}
+        inputStyle={inputStyle}
         onSubmit={handleSubmit}
-        open={listIsOpen}
+        showButton={showButton}
+        setListIsOpen={setListIsOpen}
+        listIsOpen={listIsOpen}
         onKeyDown={handleArrowKey}
-        text={channel}
-        direction={'left'}
+        input={channel}
+        placeholder={`${channelName || placeholder}`}
+        showDropdown={showDropdown}
+        onExited={onExited}
+        setCursor={setCursor}
+        resetInput={resetChannel}
+        bindInput={bindChannel}
+        searchBtnPath={`/${channel}/page/`}
       >
-        <input
-          ref={inputRef}
-          style={{ ...inputStyle }}
-          type='text'
-          spellCheck='false'
-          placeholder={`${channelName || placeholder}`}
-          onFocus={() => setListIsOpen(true)}
-          {...bindChannel}
-        />
-        <SearchSubmitBtn
-          disabled={!channel}
-          to={{
-            pathname: `/${channel}/page/`,
-          }}
-        />
-        {showButton && (
-          <MdFormatListBulleted
-            id='ToggleListBtn'
-            onClick={() => {
-              resetChannel();
-              setListIsOpen(!listIsOpen);
-            }}
-            size={42}
-          />
-        )}
-        <CSSTransition
-          in={showDropdown && listIsOpen}
-          timeout={250}
-          classNames='fade-250ms'
-          onExited={() => {
-            setCursor({ position: 0 });
-            resetChannel();
-            setFollowedChannels();
-            setSearchResults();
-          }}
-          unmountOnExit
-        >
-          <GameListUlContainer ref={ulListRef} style={{ paddingLeft: '0' }} position={position}>
-            <p
-              style={{
-                textAlign: 'center',
-                fontSize: '0.9rem',
-                fontWeight: 'bold',
-                margin: '9px 0',
-                color: 'var(--VideoContainerLinks)',
-              }}
-            >{`Total: ${
-              filteredInputMatched?.data?.length === 0
-                ? '...'
-                : filteredInputMatched?.data?.length || '...'
-            }`}</p>
-            {filteredInputMatched?.data?.length === 0 && channel ? (
-              <>
-                <ChannelListElement
-                  key={channel}
-                  searchInput={channel}
-                  selected={true}
-                  followingStatus={false}
-                />
-                <StyledLoadingList amount={3} style={{ paddingLeft: '10px' }} />
-              </>
-            ) : filteredInputMatched?.data.length >= 1 ? (
-              <>
-                {filteredInputMatched?.data.map((channel, index) => {
-                  return (
-                    <ChannelListElement
-                      key={channel.user_id}
-                      data={channel}
-                      selected={index === cursor.position}
-                      followingStatus={Boolean(
-                        followedChannels?.find((item) => item?.user_id === channel?.user_id)
-                      )}
-                    />
-                  );
-                })}
+        <GameListUlContainer ref={ulListRef} style={{ paddingLeft: '0' }} position={position}>
+          <p>{`Total: ${
+            Boolean(filteredInputMatched?.data?.length) ? filteredInputMatched?.data?.length : '...'
+          }`}</p>
+          {filteredInputMatched?.data?.length === 0 && channel ? (
+            <>
+              <ChannelListElement
+                key={channel}
+                searchInput={channel}
+                selected={true}
+                followingStatus={false}
+              />
+              <StyledLoadingList amount={3} style={{ paddingLeft: '10px' }} />
+            </>
+          ) : filteredInputMatched?.data.length >= 1 ? (
+            <>
+              {filteredInputMatched?.data.map((channel, index) => {
+                return (
+                  <ChannelListElement
+                    key={channel.user_id}
+                    data={channel}
+                    selected={index === cursor.position}
+                    followingStatus={Boolean(
+                      followedChannels?.find((item) => item?.user_id === channel?.user_id)
+                    )}
+                  />
+                );
+              })}
 
-                {channel && <InifinityScroll observerFunction={observerFunction} />}
-              </>
-            ) : (
-              <StyledLoadingList amount={11} style={{ paddingLeft: '10px' }} />
-            )}
-          </GameListUlContainer>
-        </CSSTransition>
-      </SearchGameForm>
+              {channel && <InifinityScroll observerFunction={observerFunction} />}
+            </>
+          ) : (
+            <StyledLoadingList amount={11} style={{ paddingLeft: '10px' }} />
+          )}
+        </GameListUlContainer>
+      </SearchList>
     </>
   );
 };

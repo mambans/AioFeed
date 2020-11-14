@@ -24,7 +24,7 @@ export default ({ children }) => {
     isEnabledUpdateNotifications,
   } = useContext(TwitchContext);
   const { setVods, updateNotischannels } = useContext(VodsContext);
-  const { enableTwitchVods } = useContext(FeedsContext);
+  const { enableTwitchVods } = useContext(FeedsContext) || {};
   const [refreshTimer, setRefreshTimer] = useState(20);
   const [loadingStates, setLoadingStates] = useState({
     refreshing: false,

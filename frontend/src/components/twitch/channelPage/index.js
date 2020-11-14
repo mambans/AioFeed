@@ -36,7 +36,6 @@ import AnimatedViewCount from '../live/AnimatedViewCount';
 import { getCookie } from '../../../util/Utils';
 import disconnectTwitch from '../disconnectTwitch';
 import AccountContext from '../../account/AccountContext';
-import FeedsContext from '../../feed/FeedsContext';
 import ReAuthenticateButton from '../../navigation/sidebar/ReAuthenticateButton';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import useQuery from '../../../hooks/useQuery';
@@ -44,13 +43,12 @@ import loginNameFormat from '../loginNameFormat';
 import useToken from '../useToken';
 
 export default () => {
+  const { passedChannelData } = useLocation().state || {};
   const { channelName } = useParams();
-  const { p_channelInfos, p_id, p_logo } = useLocation().state || {};
-  const [channelInfo, setChannelInfo] = useState(p_channelInfos);
-  const [streamInfo, setStreamInfo] = useState(p_channelInfos);
+  const [channelInfo, setChannelInfo] = useState(passedChannelData);
+  const [streamInfo, setStreamInfo] = useState(passedChannelData);
   const numberOfVideos = Math.floor(window.innerWidth / 350);
   const { setTwitchToken, twitchToken } = useContext(AccountContext);
-  const { setEnableTwitch } = useContext(FeedsContext);
   const URLQueries = useQuery();
   const validateToken = useToken();
 
@@ -66,7 +64,7 @@ export default () => {
   const [sortClipsBy, setSortClipsBy] = useState(
     URLQueries.get('type')?.toLowerCase() === 'clips' ? URLQueries.get('within') : null
   );
-  const [channelId, setChannelId] = useState(p_id);
+  const [channelId, setChannelId] = useState(passedChannelData?.user_id);
   const [isLive, setIsLive] = useState();
   const [videoOpen, setVideoOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
@@ -290,7 +288,7 @@ export default () => {
 
   useEffect(() => {
     if (twitchToken && channelInfo) {
-      setFavion(channelInfo.logo);
+      setFavion(channelInfo.logo || channelInfo.profile_image_url);
     }
     return () => {
       setFavion();
@@ -327,7 +325,7 @@ export default () => {
                     : 'Channel Not Found!'}
                 </p>
                 <ReAuthenticateButton
-                  disconnect={() => disconnectTwitch({ setTwitchToken, setEnableTwitch })}
+                  disconnect={() => disconnectTwitch({ setTwitchToken })}
                   serviceName={'Twitch'}
                   style={{ margin: '20px', justifyContent: 'center' }}
                 />
@@ -411,7 +409,7 @@ export default () => {
                           to={{
                             pathname: `/${channelName}`,
                             state: {
-                              p_channelInfos: streamInfo,
+                              passedChannelData: streamInfo,
                             },
                           }}
                         >
@@ -433,13 +431,13 @@ export default () => {
                         to={{
                           pathname: `/${channelName}`,
                           state: {
-                            p_channelInfos: streamInfo,
+                            passedChannelData: streamInfo,
                           },
                         }}
                         className='ChannelLiveLink'
                       >
                         <ProfileImage live={Boolean(isLive && streamInfo)}>
-                          <img alt='' src={channelInfo.logo || p_logo} />
+                          <img alt='' src={channelInfo.logo || channelInfo.profile_image_url} />
                           {Boolean(isLive && streamInfo) && <div id='live'>Live</div>}
                         </ProfileImage>
                       </Link>
@@ -469,7 +467,7 @@ export default () => {
                           to={{
                             pathname: `/${channelName}`,
                             state: {
-                              p_channelInfos: streamInfo,
+                              passedChannelData: streamInfo,
                             },
                           }}
                           id='name'
@@ -483,7 +481,7 @@ export default () => {
                       to={{
                         pathname: `/${channelName}`,
                         state: {
-                          p_channelInfos: streamInfo || channelInfo,
+                          passedChannelData: streamInfo || channelInfo,
                         },
                       }}
                       className='ChannelLiveLink'

@@ -27,7 +27,7 @@ export default () => {
 
   const [loopEnabled, setLoopEnabled] = useState();
 
-  const endedEvent = () => {
+  const loopVideo = () => {
     loopEnabled &&
       twitchVideoPlayer.seek(
         time
@@ -41,7 +41,7 @@ export default () => {
       );
   };
 
-  useEventListenerMemo(window.Twitch.Player.ENDED, endedEvent, twitchVideoPlayer);
+  useEventListenerMemo(window.Twitch.Player.ENDED, loopVideo, twitchVideoPlayer);
 
   useEffect(() => {
     document.documentElement.style.overflow = 'hidden';

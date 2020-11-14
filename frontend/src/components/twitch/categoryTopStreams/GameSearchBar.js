@@ -5,20 +5,16 @@ import GetTopGames from './GetTopGames';
 import {
   StyledGameListElement,
   GameListUlContainer,
-  SearchGameForm,
   StyledShowAllButton,
-  SearchSubmitBtn,
 } from './styledComponents';
-import { CSSTransition } from 'react-transition-group';
-import { MdFormatListBulleted } from 'react-icons/md';
+
 import { throttle } from 'lodash';
 import API from '../API';
 import handleArrowNavigation from '../channelList/handleArrowNavigation';
 import InifinityScroll from '../channelList/InifinityScroll';
 import sortByInput from '../channelList/sortByInput';
 import StyledLoadingList from './LoadingList';
-import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
-import useClicksOutside from '../../../hooks/useClicksOutside';
+import SearchList from '../../SearchList';
 
 const removeDuplicates = (items) =>
   items.filter((item, index, self) => {
@@ -30,7 +26,6 @@ export default (props) => {
     gameName,
     videoType,
     style,
-    direction = 'left',
     showButton = true,
     inputFontSize = 'inherit',
     inputStyle = {},
@@ -47,12 +42,8 @@ export default (props) => {
   const [loadingMore, setLoadingMore] = useState(false);
 
   const ulListRef = useRef();
-  const inputRef = useRef();
   const searchTimer = useRef();
   const savedFilteredInputMatched = useRef();
-
-  useClicksOutside(ulListRef, () => setListIsOpen(false));
-  useLockBodyScroll(listIsOpen);
 
   const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue);
@@ -188,15 +179,17 @@ export default (props) => {
     return false;
   };
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
+  const onExited = () => {
+    setTopGames();
+    setSearchResults();
+  };
+
+  const handleSubmit = () => {
     openInNewTab
       ? window.open(`/category/${returnFirstMatchedGame()}`)
       : navigate(`/category/${returnFirstMatchedGame()}`);
-    setListIsOpen(false);
     if (openInNewTab) {
       resetGame();
-      inputRef.current.blur();
     }
   };
 
@@ -211,98 +204,68 @@ export default (props) => {
 
   return (
     <>
-      <SearchGameForm
+      <SearchList
+        style={style}
         onSubmit={handleSubmit}
-        open={listIsOpen}
+        listIsOpen={listIsOpen}
         onKeyDown={handleArrowKey}
-        style={{ ...style }}
-        direction={direction}
         showButton={showButton}
         inputFontSize={inputFontSize}
-        text={game}
+        input={game}
+        inputStyle={inputStyle}
+        placeholder={`${gameName || 'Game'}..`}
+        resetInput={resetGame}
+        bindInput={bindGame}
+        type={'category'}
+        showDropdown={showDropdown}
+        onExited={onExited}
+        setListIsOpen={setListIsOpen}
+        setCursor={setCursor}
+        searchBtnPath={`/category/${game}`}
       >
-        <input
-          ref={inputRef}
-          style={{ ...inputStyle }}
-          type='text'
-          spellCheck='false'
-          placeholder={`${gameName || 'Game'}..`}
-          onFocus={() => {
-            setListIsOpen(true);
-          }}
-          {...bindGame}
-        ></input>
-        <SearchSubmitBtn
-          disabled={!game}
-          to={{
-            pathname: `/category/${game}`,
-          }}
-        />
-        {showButton && (
-          <MdFormatListBulleted
-            id='ToggleListBtn'
-            onClick={() => {
-              setListIsOpen(!listIsOpen);
-            }}
-            size={42}
-          />
-        )}
-        <CSSTransition
-          in={showDropdown && listIsOpen}
-          timeout={250}
-          classNames='fade-250ms'
-          onExited={() => {
-            setCursor({ position: 0 });
-            resetGame();
-            setTopGames();
-            setSearchResults();
-          }}
-          unmountOnExit
-        >
-          <GameListUlContainer ref={ulListRef} position={position}>
-            <StyledShowAllButton key='showAll'>
-              <Link to={'/category/'}>Show all</Link>
-            </StyledShowAllButton>
+        <GameListUlContainer ref={ulListRef} position={position}>
+          <StyledShowAllButton key='showAll'>
+            <Link to={'/category/'}>Show all</Link>
+          </StyledShowAllButton>
 
-            {filteredInputMatched?.data?.length >= 1 ? (
-              <>
-                {filteredInputMatched?.data?.map((game, index) => {
-                  return (
-                    <StyledGameListElement
-                      key={game?.id}
-                      selected={index === cursor.position}
-                      className={index === cursor.position ? 'selected' : ''}
+          {filteredInputMatched?.data?.length >= 1 ? (
+            <>
+              {filteredInputMatched?.data?.map((game, index) => {
+                return (
+                  <StyledGameListElement
+                    key={game?.id}
+                    selected={index === cursor.position}
+                    className={index === cursor.position ? 'selected' : ''}
+                  >
+                    <Link
+                      onClick={() => {
+                        setListIsOpen(false);
+                      }}
+                      to={{
+                        pathname: '/category/' + game?.name,
+                        state: {
+                          p_videoType: videoType,
+                        },
+                      }}
                     >
-                      <Link
-                        onClick={() => {
-                          setListIsOpen(false);
-                        }}
-                        to={{
-                          pathname: '/category/' + game?.name,
-                          state: {
-                            p_videoType: videoType,
-                          },
-                        }}
-                      >
-                        <img
-                          src={game?.box_art_url?.replace('{width}', 300)?.replace('{height}', 300)}
-                          alt=''
-                        />
-                        {game?.name}
-                      </Link>
-                    </StyledGameListElement>
-                  );
-                })}
-                {filteredInputMatched?.data && filteredInputMatched?.nextPage && (
-                  <InifinityScroll observerFunction={observerFunction} />
-                )}
-              </>
-            ) : (
-              <StyledLoadingList amount={12} />
-            )}
-          </GameListUlContainer>
-        </CSSTransition>
-      </SearchGameForm>
+                      <img
+                        src={game?.box_art_url?.replace('{width}', 300)?.replace('{height}', 300)}
+                        alt=''
+                      />
+                      {game?.name}
+                    </Link>
+                  </StyledGameListElement>
+                );
+              })}
+              {filteredInputMatched?.data && filteredInputMatched?.nextPage && (
+                <InifinityScroll observerFunction={observerFunction} />
+              )}
+            </>
+          ) : (
+            <StyledLoadingList amount={12} />
+          )}
+        </GameListUlContainer>
+      </SearchList>
     </>
   );
 };

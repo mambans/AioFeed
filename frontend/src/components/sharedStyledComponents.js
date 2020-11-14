@@ -3,13 +3,14 @@ import { GrPowerReset } from 'react-icons/gr';
 import { Link, useLocation } from 'react-router-dom';
 import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { MdRefresh } from 'react-icons/md';
+import { MdRefresh, MdVideoLabel } from 'react-icons/md';
 import { FaRegWindowRestore } from 'react-icons/fa';
 import Moment from 'react-moment';
 
 import { StyledLoadmore } from './twitch/StyledComponents';
 import CountdownCircleTimer from './twitch/live/CountdownCircleTimer';
 import { CenterContext } from './feed/FeedsCenterContainer';
+import FeedsContext from './feed/FeedsContext';
 
 const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
   color: var(--refreshButtonColor);
@@ -227,24 +228,37 @@ export const SubFeedContainer = styled.div`
   max-width: 100%;
 `;
 
-export const VideoContainer = styled.div`
+const VIDEO_SIZE = 336;
+const FONT_SIZE = 16;
+
+export const StyledVideoContainer = styled.div`
   display: grid;
   grid-template-areas:
     'video video'
     'title title'
     'info info';
 
-  width: 336px;
+  width: ${VIDEO_SIZE}px;
   margin: 7px;
-  max-height: 336px;
+  max-height: ${VIDEO_SIZE}px;
   margin-bottom: 15px;
   position: relative;
+  transform-origin: left top;
+  transform: ${({ feedSize }) => (feedSize === 'small' ? 'scale(0.8)' : 'scale(1)')};
+  margin-bottom: ${({ feedSize }) => (feedSize === 'small' ? '-62.5px' : '15px')};
+  margin-right: ${({ feedSize }) => (feedSize === 'small' ? '-66.5px' : '7px')};
+  transition: margin 500ms, transform 500ms;
+  font-size: ${FONT_SIZE}px;
 
   box-shadow: var(--videoBoxShadow);
   border-radius: 10px;
   background-color: var(--videoContainerBackgroundColor);
 
   a {
+    &&& {
+      font-size: 1em;
+    }
+
     .channelContainer {
       display: grid;
       height: 26px;
@@ -265,9 +279,6 @@ export const VideoContainer = styled.div`
         }
       }
       a {
-        &&& {
-          font-size: 1rem;
-        }
         height: 100%;
         display: flex;
         align-items: center;
@@ -284,6 +295,11 @@ export const VideoContainer = styled.div`
   }
 `;
 
+export const VideoContainer = ({ children }) => {
+  const { feedSize } = useContext(FeedsContext);
+  return <StyledVideoContainer feedSize={feedSize}>{children}</StyledVideoContainer>;
+};
+
 export const ChannelContainer = styled.div`
   display: grid;
   height: 26px;
@@ -292,6 +308,7 @@ export const ChannelContainer = styled.div`
   grid-template-columns: min-content;
   width: inherit;
   overflow: hidden;
+  font-size: 1em;
 
   .profileImg {
     grid-row: 1;
@@ -341,10 +358,11 @@ export const ChannelContainer = styled.div`
 export const GameContainer = styled.div`
   display: grid;
   grid-template-columns: 10% auto;
-  width: 336px;
+  width: ${VIDEO_SIZE}px;
   align-items: center;
   min-height: 34px;
   transition: color 250ms;
+  font-size: 1em;
 
   .gameImg {
     width: 26px;
@@ -360,7 +378,7 @@ export const GameContainer = styled.div`
     bottom: 20px;
     background: none;
     padding-right: 5px;
-    font-size: 1rem;
+
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -399,8 +417,8 @@ export const VideoTitle = styled(Link)`
   margin-top: 15px;
   margin-bottom: 5px;
   grid-area: title;
-  font-size: 1.1rem;
-  max-width: 336px;
+  font-size: 1.1em;
+  max-width: 100%;
   overflow: hidden;
   height: 45px;
   line-height: 1.2;
@@ -413,13 +431,14 @@ export const VideoTitle = styled(Link)`
   }
 `;
 
+// YoutubeVideoElement title
 export const VideoTitleHref = styled.a`
   color: var(--textColor1);
   margin-top: 15px;
   margin-bottom: 5px;
   grid-area: title;
-  font-size: 1.1rem;
-  max-width: 336px;
+  font-size: 1.1em;
+  max-width: 100%;
   overflow: hidden;
   height: 45px;
   line-height: 1.2;
@@ -435,9 +454,8 @@ export const VideoTitleHref = styled.a`
 export const ImageContainer = styled.div`
   grid-area: video;
   transition: all 0.2s ease-in-out;
-  max-height: 189px;
-  min-height: 189px;
-  width: 336px;
+  height: ${(VIDEO_SIZE / 16) * 9}px;
+  width: 100%;
   position: relative;
   background-image: url(${({ thumbnailUrl }) => thumbnailUrl || 'unset'});
   background-size: cover;
@@ -463,8 +481,8 @@ export const ImageContainer = styled.div`
   &:hover {
     z-index: 2;
     transform: scale(1.15);
-    box-shadow: 0 0px 0px 0px #be0e0e00, 0 0px 0px 0px #be0e0e00,
-      12px 0 50px -4px rgba(0, 0, 0, 0.8), -12px 0 50px -4px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0px 0px 0px #be0e0e00, 0 0px 0px 0px #be0e0e00, 6px 0 25px -2px rgba(0, 0, 0, 0.5),
+      -6px 0 25px -2px rgba(0, 0, 0, 0.5);
 
     .error {
       opacity: 1;
@@ -483,7 +501,7 @@ export const ImageContainer = styled.div`
     position: relative;
     width: max-content;
     padding-right: 5px;
-    font-size: 0.9rem;
+    font-size: 0.9em;
     padding-left: 5px;
     z-index: 1;
     height: 24px;
@@ -541,7 +559,7 @@ export const VodVideoInfo = styled.div`
   position: relative;
   display: flex;
   justify-content: space-between;
-  font-size: 0.9rem;
+  font-size: 0.9em;
   align-items: center;
 
   .view_count {
@@ -708,7 +726,30 @@ export const Duration = styled.div`
   padding-right: 5px;
   padding-left: 5px;
   background: rgba(22, 22, 22, 0.69);
-  font-size: 0.9rem;
+  font-size: 0.9em;
   margin: 0px 0px 0px 5px;
   bottom: ${({ bottom }) => bottom || '0px'};
+`;
+
+export const FeedSizeBtn = styled.div`
+  position: absolute;
+  top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  right: -40px;
+  background: var(--refreshButtonBackground);
+  padding: 5px;
+  border-radius: 2px;
+`;
+
+export const FeedSizeIcon = styled(MdVideoLabel)`
+  fill: ${({ active }) => (active ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.4)')};
+  cursor: pointer;
+  margin: 5px 0;
+  transition: fill 500ms;
+
+  &:hover {
+    fill: ${({ active }) => (active ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.75)')};
+  }
 `;

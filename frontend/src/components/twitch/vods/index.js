@@ -28,7 +28,7 @@ export default ({ disableContextProvider }) => (
 export const Vods = ({ disableContextProvider }) => {
   const { vods, setVods, channels } = useContext(VodsContext);
   const { twitchUserId, setTwitchToken, setRefreshToken } = useContext(AccountContext);
-  const { setEnableTwitchVods } = useContext(FeedsContext);
+  const { setEnableTwitchVods } = useContext(FeedsContext) || {};
   const { videoElementsAmount } = useContext(CenterContext);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);

@@ -49,7 +49,6 @@ import ContextMenu from './ContextMenu';
 import AnimatedViewCount from '../live/AnimatedViewCount';
 import ReAuthenticateButton from '../../navigation/sidebar/ReAuthenticateButton';
 import AccountContext from '../../account/AccountContext';
-import FeedsContext from '../../feed/FeedsContext';
 import disconnectTwitch from '../disconnectTwitch';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from '../loginNameFormat';
@@ -59,17 +58,15 @@ import useToken from '../useToken';
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.1, 175);
 
 export default () => {
-  const { p_title, p_game, p_channelInfos } = useLocation().state || {};
   const channelName = useParams()?.channelName;
   const validateToken = useToken();
 
   const { addNotification } = useContext(NotificationsContext);
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const { setTwitchToken } = useContext(AccountContext);
-  const { setEnableTwitch } = useContext(FeedsContext);
 
   const [twitchVideoPlayer, setTwitchVideoPlayer] = useState();
-  const [streamInfo, setStreamInfo] = useState(p_channelInfos);
+  const [streamInfo, setStreamInfo] = useState(useLocation().state?.passedChannelData);
   const [showControlls, setShowControlls] = useState();
   const [showUIControlls, setShowUIControlls] = useState();
   const [chatState, setChatState] = useState({
@@ -253,24 +250,22 @@ export default () => {
     document.title = `${channelName}`;
 
     try {
-      if (getCookie('Twitch-access_token')) {
-        if (!refreshStreamInfoTimer.current && channelName) {
-          refreshStreamInfoTimer.current = setInterval(async () => {
-            GetAndSetStreamInfo();
-          }, 1000 * 60 * 1);
-        }
-
-        await GetAndSetStreamInfo().then((res) => {
-          setFavion(res?.profile_image_url);
-          if (
-            streamInfo === null &&
-            res?.broadcaster_software &&
-            !res?.broadcaster_software?.toLowerCase().includes('rerun')
-          ) {
-            addNoti({ type: 'Live', stream: res });
-          }
-        });
+      if (!refreshStreamInfoTimer.current && channelName) {
+        refreshStreamInfoTimer.current = setInterval(async () => {
+          GetAndSetStreamInfo();
+        }, 1000 * 60 * 1);
       }
+
+      await GetAndSetStreamInfo().then((res) => {
+        setFavion(res?.profile_image_url);
+        if (
+          streamInfo === null &&
+          res?.broadcaster_software &&
+          !res?.broadcaster_software?.toLowerCase().includes('rerun')
+        ) {
+          addNoti({ type: 'Live', stream: res });
+        }
+      });
     } catch (error) {
       console.log('onlineEvents -> error', error);
     }
@@ -477,12 +472,12 @@ export default () => {
                         </ChannelIconLink>
                       </OverlayTrigger>
                     </div>
-                    <p id='title'>{streamInfo.title || p_title}</p>
+                    <p id='title'>{streamInfo.title}</p>
                     {streamInfo.game_name && (
                       <span id='game'>
                         {'Playing '}
-                        <Link ref={link3} to={`/category/${streamInfo.game_name || p_game}`}>
-                          {streamInfo.game_name || p_game}
+                        <Link ref={link3} to={`/category/${streamInfo.game_name}`}>
+                          {streamInfo.game_name}
                         </Link>
                       </span>
                     )}
@@ -507,7 +502,7 @@ export default () => {
               ) : (
                 !getCookie('Twitch-access_token') && (
                   <ReAuthenticateButton
-                    disconnect={() => disconnectTwitch({ setTwitchToken, setEnableTwitch })}
+                    disconnect={() => disconnectTwitch({ setTwitchToken })}
                     serviceName={'Twitch'}
                     style={{ margin: '20px' }}
                   />

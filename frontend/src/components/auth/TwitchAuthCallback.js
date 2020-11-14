@@ -6,7 +6,6 @@ import AlertHandler from './../alert';
 import AccountContext from './../account/AccountContext';
 import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from './../LoadingIndicator';
-import FeedsContext from '../feed/FeedsContext';
 import { AddCookie } from '../../util/Utils';
 import API from '../twitch/API';
 import useToken, { TwitchContext } from '../twitch/useToken';
@@ -16,7 +15,6 @@ function TwitchAuthCallback() {
   const { autoRefreshEnabled } = useContext(TwitchContext);
   const { username } = useContext(AccountContext);
   const { setVisible, setFooterVisible } = useContext(NavigationContext);
-  const { enableTwitch } = useContext(FeedsContext);
   const validateToken = useToken();
 
   const getAccessToken = useCallback(
@@ -54,7 +52,7 @@ function TwitchAuthCallback() {
                   Token: accessToken,
                   Refresh_token: refreshToken,
                   AutoRefresh: autoRefreshEnabled,
-                  enabled: enableTwitch,
+                  enabled: true,
                 },
                 authkey: getCookie(`AioFeed_AuthKey`),
               })
@@ -72,7 +70,7 @@ function TwitchAuthCallback() {
 
       return { token: accessToken, refresh_token: refreshToken, ...MyTwitch };
     },
-    [username, autoRefreshEnabled, enableTwitch, validateToken]
+    [username, autoRefreshEnabled, validateToken]
   );
 
   useEffect(() => {

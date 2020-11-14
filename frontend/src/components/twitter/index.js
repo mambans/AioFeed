@@ -7,7 +7,6 @@ import { Container, LoadingPlaceholder, MainContainer } from './StyledComponents
 import FeedsContext from '../feed/FeedsContext';
 import UpdateTwitterLists from '../navigation/sidebar/UpdateTwitterLists';
 import ThemeContext from './../themes/ThemeContext';
-import FooterContext from '../footer/FooterContext';
 import FeedsCenterContainer from '../feed/FeedsCenterContainer';
 
 export default () => (
@@ -21,7 +20,6 @@ export const Twitter = ({ in: forceMount = false }) => {
     FeedsContext
   );
   const { activeTheme } = useContext(ThemeContext);
-  const { footerVisibleInViewport } = useContext(FooterContext);
 
   return (
     <CSSTransition
@@ -33,7 +31,6 @@ export const Twitter = ({ in: forceMount = false }) => {
       appear={true}
     >
       <MainContainer
-        footerVisibleInViewport={footerVisibleInViewport}
         id='twitter'
         center={forceMount || (!enableTwitch && !enableYoutube && !enableTwitchVods)}
       >
@@ -41,7 +38,7 @@ export const Twitter = ({ in: forceMount = false }) => {
           {twitterLists?.map((id) => {
             return (
               <CSSTransition classNames='twitterList' key={id} timeout={750} unmountOnExit>
-                <Container key={id} footerVisibleInViewport={footerVisibleInViewport}>
+                <Container key={id}>
                   <TwitterTimelineEmbed
                     sourceType='list'
                     id={id}
@@ -64,13 +61,13 @@ export const Twitter = ({ in: forceMount = false }) => {
         </TransitionGroup>
 
         {!Boolean(twitterLists?.length) && (
-          <Container key={'No feed'} footerVisibleInViewport={footerVisibleInViewport}>
+          <Container key={'No feed'}>
             <Alert variant='info' style={{ textAlign: 'center' }}>
               <Alert.Heading>No Twitter list ID entered</Alert.Heading>
               <hr />
               Please enter a public twitter list id below.
             </Alert>
-            <UpdateTwitterLists style={{ padding: '10px' }} />
+            {(enableTwitter || forceMount) && <UpdateTwitterLists style={{ padding: '10px' }} />}
           </Container>
         )}
       </MainContainer>

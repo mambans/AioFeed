@@ -6,7 +6,7 @@ import { MdRssFeed } from 'react-icons/md';
 import { Nav } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 
 import NavigationContext from './../navigation/NavigationContext';
 import {
@@ -17,7 +17,6 @@ import {
 import { getCookie, AddCookie } from '../../util/Utils';
 import ChangeLogs from '../changeLogs';
 import styles from '../changeLogs/ChangeLogs.module.scss';
-import FooterContext from './FooterContext';
 
 export default () => {
   const NewAlertName = `GlobalAlert-NewAlertName`;
@@ -25,26 +24,8 @@ export default () => {
   const { footerVisible, setRenderModal, setShowSidebar } = useContext(NavigationContext);
   const [show, setShow] = useState(!getCookie(NewAlertName));
   const ref = useRef();
-  const { setFooterVisibleInViewport } = useContext(FooterContext);
 
-  const handleClose = () => {
-    setShow(false);
-  };
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting === true) {
-          setFooterVisibleInViewport(entries[0].boundingClientRect.height);
-        } else {
-          setFooterVisibleInViewport(false);
-        }
-      },
-      { threshold: 0 }
-    );
-
-    observer.observe(ref.current);
-  }, [setFooterVisibleInViewport]);
+  const handleClose = () => setShow(false);
 
   return (
     footerVisible && (
@@ -117,20 +98,16 @@ export default () => {
               </a>
             </li>
             <li>
-              <StyledButtonLinks
-                onClick={() => {
-                  setShow(!show);
-                }}
-              >
+              <StyledButtonLinks onClick={() => setShow(!show)}>
                 <FaGithub size={20} style={{ marginRight: '0.75rem' }} />
                 Changelog
               </StyledButtonLinks>
             </li>
             <li>
               <StyledButtonLinks
-                onClick={() => {
-                  window.open('mailto:perssons1996@gmail.com?subject=subject&body=body');
-                }}
+                onClick={() =>
+                  window.open('mailto:perssons1996@gmail.com?subject=subject&body=body')
+                }
               >
                 <MdEmail size={20} style={{ marginRight: '0.75rem' }} />
                 Email
