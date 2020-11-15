@@ -241,12 +241,12 @@ export const StyledVideoContainer = styled.div`
   width: ${VIDEO_SIZE}px;
   margin: 7px;
   max-height: ${VIDEO_SIZE}px;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
   position: relative;
   transform-origin: left top;
   transform: ${({ feedSize }) => (feedSize === 'small' ? 'scale(0.8)' : 'scale(1)')};
-  margin-bottom: ${({ feedSize }) => (feedSize === 'small' ? '-62.5px' : '15px')};
-  margin-right: ${({ feedSize }) => (feedSize === 'small' ? '-66.5px' : '7px')};
+  margin-bottom: ${({ feedSize }) => (feedSize === 'small' ? '-50px' : '15px')};
+  margin-right: ${({ feedSize }) => (feedSize === 'small' ? -(350 * 0.2 - 7) + 'px' : '7px')};
   transition: margin 500ms, transform 500ms;
   font-size: ${FONT_SIZE}px;
 
