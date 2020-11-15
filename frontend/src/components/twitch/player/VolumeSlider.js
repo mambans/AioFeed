@@ -141,12 +141,23 @@ export default ({
   }
 
   return (
-    <StyledVolumeSlider volumeMuted={volumeMuted} disabled={!TwitchPlayer}>
-      <h3 className='value'>{volumeText?.toFixed(0)}</h3>
+    <StyledVolumeSlider
+      volumeMuted={volumeMuted}
+      disabled={!TwitchPlayer}
+      left={Math.round(15 + 157 * (volumeText?.toFixed(0) / 100))}
+    >
+      <div className='value'>
+        <h3>{volumeText?.toFixed(0)}</h3>
+      </div>
 
       <div id='BottomRow'>
         {volumeIcon()}
-        <Slider value={volumeText} orientation='horizontal' onChange={handleChange} />
+        <Slider
+          value={volumeText}
+          orientation='horizontal'
+          onChange={handleChange}
+          tooltip={false}
+        />
       </div>
     </StyledVolumeSlider>
   );

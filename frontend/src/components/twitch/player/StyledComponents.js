@@ -208,13 +208,22 @@ export const StyledVolumeSlider = styled.div`
   text-align: center;
   display: grid;
   grid-template-areas: 'spacer text' 'slider slider';
-  grid-template-columns: 60px auto;
+  grid-template-columns: 45px auto;
   margin: 5px 10px;
 
-  h3 {
+  .value {
     margin-bottom: 0;
     grid-area: text;
     text-shadow: 0 0 5px black;
+    position: relative;
+    height: 35px;
+
+    h3 {
+      position: absolute;
+      min-width: 30px;
+      left: ${({ left }) => left}px;
+      transform: translateX(-50%);
+    }
   }
 
   svg#icon {
