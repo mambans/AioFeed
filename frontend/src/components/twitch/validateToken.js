@@ -14,8 +14,9 @@ const validateFunction = async (token) =>
 const fetchAppAccessToken = async () =>
   await axios
     .get('https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/app/token')
-    .then(({ data: { access_token } }) => {
-      AddCookie('Twitch-app_token', access_token);
+    .then(({ data: { access_token, expires_in } }) => {
+      const expireData = new Date(expires_in * 1000);
+      AddCookie('Twitch-app_token', access_token, expireData);
       return access_token;
     })
     .catch((error) => {

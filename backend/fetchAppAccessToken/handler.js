@@ -2,17 +2,9 @@
 
 const fetchAppAccessToken = require('./fetchAppAccessToken');
 
-exports.handler = async (event) => {
+exports.handler = async () => {
   try {
-    const { user_id, user_login } = event.queryStringParameters;
-
-    // MAYBE Change to just return the ENCRYPTED app token to the client (to replace its none existant access token) instead of making all the Twitch streaminfo api calls on the server.
-
-    const appToken = await fetchAppAccessToken(
-      user_id ? { user_id: user_id } : { user_login: user_login }
-    );
-
-    // NOT DONE
+    const appToken = await fetchAppAccessToken();
 
     return {
       statusCode: 200,
