@@ -264,6 +264,66 @@
     max-width 750ms, transform 750ms;
 }
 
+//New Streams/Vods Small
+.videoFadeSlideSmall-appear {
+  opacity: 0;
+  transition: opacity 750ms;
+}
+.videoFadeSlideSmall-appear-active {
+  opacity: 1;
+  transition: opacity 750ms;
+}
+
+.videoFadeSlideSmall-enter {
+  opacity: 0;
+  width: 0px !important;
+  max-width: 0px !important;
+  transform: translate3d(-268.8px, 0, 0);
+  margin-right: 0px !important;
+  margin-left: 0px !important;
+  transition: opacity 500ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
+    transform 750ms;
+}
+
+.videoFadeSlideSmall-enter-active {
+  opacity: 1;
+  width: 268.8px !important;
+  max-width: 268.8px !important;
+  transform: translate3d(0, 0, 0);
+  margin-right: 5.6px !important;
+  margin-left: 5.6px !important;
+  transition: opacity 500ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
+    transform 750ms;
+}
+
+.videoFadeSlideSmall-enter-done {
+  opacity: 1;
+  transition: opacity 500ms;
+}
+
+.videoFadeSlideSmall-exit {
+  opacity: 1;
+  width: 268.8px !important;
+  max-width: 268.8px !important;
+  transform: translate3d(0, 0, 0);
+  margin-right: 5.6px !important;
+  margin-left: 5.6px !important;
+  transition: opacity 500ms ease 250ms, margin-left 750ms, width 750ms, margin-right 750ms,
+    max-width 750ms, transform 750ms;
+}
+
+.videoFadeSlideSmall-exit-active {
+  opacity: 0;
+  width: 0px !important;
+  max-width: 0px !important;
+  transform: translate3d(-268.8px, 0, 0);
+  margin-right: 0px !important;
+  margin-left: 0px !important;
+  transition: opacity 500ms ease 250ms, margin-left 750ms, width 750ms, margin-right 750ms,
+    max-width 750ms, transform 750ms;
+}
+//
+
 .NavSidebarBackdropFade-enter {
   opacity: 0;
   transform: translate3d(0, 0, 0);

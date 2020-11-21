@@ -58,7 +58,7 @@ export const Twitch = ({ in: forceMount = false }) => {
           </CSSTransition>
 
           <OverlayTrigger
-            key={'bottom'}
+            key={'HideSidebarButtonTooltip'}
             placement={'right'}
             delay={{ show: 500, hide: 0 }}
             overlay={
@@ -76,7 +76,7 @@ export const Twitch = ({ in: forceMount = false }) => {
             />
           </OverlayTrigger>
           <OverlayTrigger
-            key={'bottom'}
+            key={'HideTwitchBigFeedButtonTooltip'}
             placement={'right'}
             delay={{ show: 500, hide: 0 }}
             overlay={

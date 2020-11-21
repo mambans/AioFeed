@@ -228,9 +228,6 @@ export const SubFeedContainer = styled.div`
   max-width: 100%;
 `;
 
-const VIDEO_SIZE = 336;
-const FONT_SIZE = 16;
-
 export const StyledVideoContainer = styled.div`
   display: grid;
   grid-template-areas:
@@ -238,17 +235,13 @@ export const StyledVideoContainer = styled.div`
     'title title'
     'info info';
 
-  width: ${VIDEO_SIZE}px;
-  margin: 7px;
-  max-height: ${VIDEO_SIZE}px;
-  /* margin-bottom: 15px; */
+  width: ${({ feedSizesObj }) => feedSizesObj.width}px;
+  margin: ${({ feedSizesObj }) => feedSizesObj.margin}px;
+  max-height: ${({ feedSizesObj }) => feedSizesObj.width}px;
+  margin-bottom: 15px;
   position: relative;
-  transform-origin: left top;
-  transform: ${({ feedSize }) => (feedSize === 'small' ? 'scale(0.8)' : 'scale(1)')};
-  margin-bottom: ${({ feedSize }) => (feedSize === 'small' ? '-50px' : '15px')};
-  margin-right: ${({ feedSize }) => (feedSize === 'small' ? -(350 * 0.2 - 7) + 'px' : '7px')};
-  transition: margin 500ms, transform 500ms;
-  font-size: ${FONT_SIZE}px;
+  transition: font-size 750ms, height 750ms, max-height 750ms, margin 750ms, width 750ms;
+  font-size: ${({ feedSizesObj }) => feedSizesObj.fontSize}px;
 
   box-shadow: var(--videoBoxShadow);
   border-radius: 10px;
@@ -257,32 +250,6 @@ export const StyledVideoContainer = styled.div`
   a {
     &&& {
       font-size: 1em;
-    }
-
-    .channelContainer {
-      display: grid;
-      height: 26px;
-      align-content: center;
-      margin-bottom: 5px;
-      grid-template-columns: min-content;
-      width: inherit;
-
-      .profile_img {
-        width: 26px;
-        border-radius: 3px;
-      }
-
-      &:hover {
-        button,
-        svg {
-          opacity: 1;
-        }
-      }
-      a {
-        height: 100%;
-        display: flex;
-        align-items: center;
-      }
     }
 
     .game {
@@ -296,13 +263,28 @@ export const StyledVideoContainer = styled.div`
 `;
 
 export const VideoContainer = ({ children }) => {
-  const { feedSize } = useContext(FeedsContext);
-  return <StyledVideoContainer feedSize={feedSize}>{children}</StyledVideoContainer>;
+  const { feedSize, feedSizesObj } = useContext(FeedsContext);
+
+  return (
+    <StyledVideoContainer feedSize={feedSize} feedSizesObj={feedSizesObj}>
+      {children}
+    </StyledVideoContainer>
+  );
 };
+
+export const ImageContainer = React.forwardRef(({ thumbnailUrl, children }, ref) => {
+  const { feedSizesObj } = useContext(FeedsContext);
+
+  return (
+    <StyledImageContainer feedSizesObj={feedSizesObj} thumbnailUrl={thumbnailUrl} ref={ref}>
+      {children}
+    </StyledImageContainer>
+  );
+});
 
 export const ChannelContainer = styled.div`
   display: grid;
-  height: 26px;
+  height: 1.625em;
   align-content: center;
   margin-bottom: 5px;
   grid-template-columns: min-content;
@@ -315,7 +297,7 @@ export const ChannelContainer = styled.div`
     padding-right: 5px;
 
     img {
-      width: 26px;
+      width: 1.625em;
       border-radius: 3px;
     }
   }
@@ -355,21 +337,27 @@ export const ChannelContainer = styled.div`
   }
 `;
 
-export const GameContainer = styled.div`
+export const StyledGameContainer = styled.div`
   display: grid;
   grid-template-columns: 10% auto;
-  width: ${VIDEO_SIZE}px;
+  width: ${({ feedSizesObj }) => feedSizesObj.width}px;
+  transition: width 750ms;
   align-items: center;
-  min-height: 34px;
-  transition: color 250ms;
+  /* min-height: 34px; */
+  transition: color 250ms, width 750ms;
   font-size: 1em;
 
   .gameImg {
-    width: 26px;
+    width: 1.625em;
     border-radius: 3px;
     grid-column: 1;
     object-fit: cover;
     padding: 0;
+
+    img {
+      width: 100%;
+      border-radius: inherit;
+    }
   }
 
   .gameName {
@@ -405,6 +393,12 @@ export const GameContainer = styled.div`
   }
 `;
 
+export const GameContainer = ({ children }) => {
+  const { feedSizesObj } = useContext(FeedsContext);
+
+  return <StyledGameContainer feedSizesObj={feedSizesObj}>{children}</StyledGameContainer>;
+};
+
 export const GamenameAndViewers = styled.div`
   display: flex;
   justify-content: space-between;
@@ -414,16 +408,19 @@ export const GamenameAndViewers = styled.div`
 
 export const VideoTitle = styled(Link)`
   color: var(--textColor1);
-  margin-top: 15px;
-  margin-bottom: 5px;
+  /* margin-top: 15px;
+  margin-bottom: 5px;  */
   grid-area: title;
   font-size: 1.1em;
   max-width: 100%;
   overflow: hidden;
-  height: 45px;
+  /* height: 45px; */
   line-height: 1.2;
   padding: 0;
   transition: color 200ms;
+  margin-top: 0.85em;
+  margin-bottom: 0.3em;
+  height: 2.5em;
 
   &:hover {
     color: var(--textColor1Hover);
@@ -451,16 +448,17 @@ export const VideoTitleHref = styled.a`
   }
 `;
 
-export const ImageContainer = styled.div`
+export const StyledImageContainer = styled.div`
   grid-area: video;
-  transition: all 0.2s ease-in-out;
-  height: ${(VIDEO_SIZE / 16) * 9}px;
+  height: ${({ feedSizesObj }) => (feedSizesObj.width / 16) * 9}px;
   width: 100%;
   position: relative;
-  background-image: url(${({ thumbnailUrl }) => thumbnailUrl || 'unset'});
+  background-image: ${({ thumbnailUrl }) => (thumbnailUrl ? `url(${thumbnailUrl})` : 'unset')};
   background-size: cover;
   background-position: center;
   border-radius: 10px;
+  transition: transform 200ms, box-shadow 200ms, font-size 750ms, height 750ms, margin 750ms,
+    width 750ms;
 
   a {
     display: block;
@@ -476,6 +474,7 @@ export const ImageContainer = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: width 750ms;
   }
 
   &:hover {
@@ -744,12 +743,13 @@ export const FeedSizeBtn = styled.div`
 `;
 
 export const FeedSizeIcon = styled(MdVideoLabel)`
-  fill: ${({ active }) => (active ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.4)')};
+  fill: ${({ active }) => (active === 'true' ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.4)')};
   cursor: pointer;
   margin: 5px 0;
   transition: fill 500ms;
+  z-index: 1;
 
   &:hover {
-    fill: ${({ active }) => (active ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.75)')};
+    fill: ${({ active }) => (active === 'true' ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.75)')};
   }
 `;

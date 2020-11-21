@@ -11,6 +11,7 @@ import AddVodChannel from './AddVodChannel';
 import VodsContext from './VodsContext';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import FetchSingelChannelVods from './FetchSingelChannelVods';
+import FeedsContext from '../../feed/FeedsContext';
 
 /**
  * @param {String} channel - channel name
@@ -26,6 +27,7 @@ export default ({ channel, channelId, loweropacity, marginright, className, show
   const [isHovered, setIsHovered] = useState();
   const vodEnabled = channels?.includes(channel?.toLowerCase());
   const vodButton = useRef();
+  const { feedSizesObj } = useContext(FeedsContext) || {};
 
   useEventListenerMemo('mouseenter', handleMouseOver, vodButton.current);
   useEventListenerMemo('mouseleave', handleMouseOut, vodButton.current);
@@ -71,7 +73,7 @@ export default ({ channel, channelId, loweropacity, marginright, className, show
 
   return (
     <OverlayTrigger
-      key={'bottom'}
+      key={channel + 'VodFollowTooltip'}
       placement={'bottom'}
       delay={{ show: 500, hide: 0 }}
       overlay={
@@ -97,6 +99,7 @@ export default ({ channel, channelId, loweropacity, marginright, className, show
                 channelId,
                 setVods,
                 amount: 5,
+                feedSizesObj,
               });
             }
           }

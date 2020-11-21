@@ -1,9 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
+import FeedsContext from '../feed/FeedsContext';
 import { YoutubeIframe } from './StyledComponents';
 
 export default (data) => {
+  const { feedSizesObj } = useContext(FeedsContext);
   const ref = useRef();
   const videoHoverOutTimer = useRef();
   data.setIsHovered(true);
@@ -20,14 +22,12 @@ export default (data) => {
     data.setIsHovered(false);
     videoHoverOutTimer.current = setTimeout(() => {
       event.target.src = 'about:blank';
-      document.getElementById(`${data.data.contentDetails?.upload?.videoId}-iframe`).src =
-        'about:blank';
     }, 200);
   }
 
   const opts = {
-    height: 189,
-    width: 336,
+    height: (feedSizesObj.width / 16) * 9,
+    width: feedSizesObj.width,
     playerVars: {
       autoplay: 1,
       controls: 1,

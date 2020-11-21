@@ -96,7 +96,7 @@ export default ({
 
   return (
     <OverlayTrigger
-      key={'bottom'}
+      key={channelName + 'followBtnTooltip'}
       placement={'bottom'}
       delay={{ show: 500, hide: 0 }}
       overlay={

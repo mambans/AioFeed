@@ -95,7 +95,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
         <SecondRow>
           {game_name?.length > 15 ? (
             <OverlayTrigger
-              key={'bottom'}
+              key={user_id + 'TitleTooltip'}
               placement={'bottom'}
               delay={{ show: 500, hide: 0 }}
               overlay={

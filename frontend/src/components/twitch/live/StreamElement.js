@@ -149,7 +149,7 @@ export default ({
       </ImageContainer>
       {title?.length > 50 ? (
         <OverlayTrigger
-          key={'bottom'}
+          key={user_id + 'Titletooltip'}
           placement={'bottom'}
           delay={{ show: 250, hide: 0 }}
           overlay={

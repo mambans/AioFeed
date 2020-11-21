@@ -1,7 +1,6 @@
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { Button } from 'react-bootstrap';
-import { debounce } from 'lodash';
 
 import AlertHandler from '../../alert';
 import getFollowedVods from './GetFollowedVods';
@@ -105,17 +104,11 @@ export const Vods = ({ disableContextProvider }) => {
   }, [twitchUserId, setTwitchToken, setRefreshToken, setVods, channels, validateToken]);
 
   useEffect(() => {
-    debounce(
-      () => {
-        setVodAmounts({
-          amount: videoElementsAmount,
-          timeout: 750,
-          transitionGroup: 'videos',
-        });
-      },
-      500,
-      { leading: true, trailing: true }
-    );
+    setVodAmounts({
+      amount: videoElementsAmount,
+      timeout: 750,
+      transitionGroup: 'videos',
+    });
   }, [videoElementsAmount]);
 
   if (!getCookie(`Twitch-access_token`)) {

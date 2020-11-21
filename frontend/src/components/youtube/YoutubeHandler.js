@@ -1,6 +1,5 @@
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import React, { useState, useEffect, useContext } from 'react';
-import { debounce } from 'lodash';
 
 import { SubFeedContainer, LoadMore } from './../sharedStyledComponents';
 import YoutubeVideoElement from './YoutubeVideoElement';
@@ -8,7 +7,7 @@ import LoadingBoxes from './../twitch/LoadingBoxes';
 import { CenterContext } from '../feed/FeedsCenterContainer';
 
 export default ({ requestError, videos, disableContextProvider }) => {
-  const { videoElementsAmount } = useContext(CenterContext);
+  const { videoElementsAmount, feedSizesObj } = useContext(CenterContext);
   const [vodAmounts, setVodAmounts] = useState({
     amount: videoElementsAmount,
     timeout: 750,
@@ -16,17 +15,11 @@ export default ({ requestError, videos, disableContextProvider }) => {
   });
 
   useEffect(() => {
-    debounce(
-      () => {
-        setVodAmounts({
-          amount: videoElementsAmount,
-          timeout: 750,
-          transitionGroup: 'videos',
-        });
-      },
-      500,
-      { leading: true, trailing: true }
-    );
+    setVodAmounts({
+      amount: videoElementsAmount,
+      timeout: 750,
+      transitionGroup: 'videos',
+    });
   }, [videoElementsAmount]);
 
   if (requestError?.code === 401 && !videos) {
@@ -47,7 +40,11 @@ export default ({ requestError, videos, disableContextProvider }) => {
         {videos.slice(0, vodAmounts.amount).map((video, index) => (
           <CSSTransition
             timeout={vodAmounts.timeout}
-            classNames={index < videoElementsAmount ? 'videoFadeSlide' : 'fade-750ms'}
+            classNames={
+              index < videoElementsAmount
+                ? feedSizesObj.transition || 'videoFadeSlide'
+                : 'fade-750ms'
+            }
             key={video.contentDetails?.upload?.videoId}
             unmountOnExit
           >

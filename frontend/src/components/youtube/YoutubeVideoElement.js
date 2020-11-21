@@ -42,7 +42,6 @@ export default ({ video, disableContextProvider }) => {
   function handleMouseOut() {
     clearTimeout(streamHoverTimer.current);
     setIsHovered(false);
-    document.getElementById(video.contentDetails?.upload?.videoId).src = 'about:blank';
   }
 
   return (
@@ -77,7 +76,7 @@ export default ({ video, disableContextProvider }) => {
       </ImageContainer>
       {video.snippet.title?.length >= 50 ? (
         <OverlayTrigger
-          key={'bottom'}
+          key={video.contentDetails?.upload?.videoId + 'YTTitleTooltip'}
           placement={'bottom'}
           delay={{ show: 250, hide: 0 }}
           overlay={

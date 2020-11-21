@@ -51,7 +51,7 @@ export default ({
 
   return (
     <OverlayTrigger
-      key={'bottom'}
+      key={'nav-sidebarTooltip'}
       placement={'bottom'}
       delay={{ show: 200, hide: 0 }}
       overlay={

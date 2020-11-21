@@ -191,8 +191,7 @@ export const StyledContainer = styled.div`
 `;
 
 export const Container = ({ children }) => {
-  const { feedSize, setFeedSize } = useContext(FeedsContext);
-  const size = feedSize === 'small' ? 280 : 350;
+  const { feedSize, feedSizesObj, setFeedSize } = useContext(FeedsContext);
 
   const sizeBtnOnClick = () => {
     setFeedSize((cr) => {
@@ -206,10 +205,10 @@ export const Container = ({ children }) => {
   };
 
   return (
-    <StyledContainer size={size}>
+    <StyledContainer size={feedSizesObj.totalWidth}>
       <FeedSizeBtn>
-        <FeedSizeIcon size={24} active={feedSize === 'default'} onClick={sizeBtnOnClick} />
-        <FeedSizeIcon size={18} active={feedSize === 'small'} onClick={sizeBtnOnClick} />
+        <FeedSizeIcon size={24} active={String(feedSize === 'default')} onClick={sizeBtnOnClick} />
+        <FeedSizeIcon size={18} active={String(feedSize === 'small')} onClick={sizeBtnOnClick} />
       </FeedSizeBtn>
       {children}
     </StyledContainer>

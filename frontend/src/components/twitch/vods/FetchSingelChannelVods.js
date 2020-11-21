@@ -5,7 +5,7 @@ import AddVideoExtraData from './../AddVideoExtraData';
 import SortAndAddExpire from './SortAndAddExpire';
 import API from '../API';
 
-export default async ({ channelId, setVods, amount = 1 }) => {
+export default async ({ channelId, setVods, amount = 1, feedSizesObj = {} }) => {
   const vodExpire = 3; // Number of days
 
   await API.getVideos({
@@ -24,7 +24,7 @@ export default async ({ channelId, setVods, amount = 1 }) => {
       const vodsToAdd = [
         ...newVodWithEndtime
           .slice(0, amount)
-          .map((vod) => ({ ...vod, transition: 'videoFadeSlide' })),
+          .map((vod) => ({ ...vod, transition: feedSizesObj.transition || 'videoFadeSlide' })),
       ];
       const uniqueVods = uniqBy([...vodsToAdd, ...existingVods], 'id');
       const FinallVods = SortAndAddExpire(uniqueVods, vodExpire, vods.loaded, vods.expire);

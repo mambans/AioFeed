@@ -77,7 +77,7 @@ export default ({ channel, loweropacity, marginright, size = 24, show = true }) 
 
   return (
     <OverlayTrigger
-      key={'bottom'}
+      key={channel + 'updateNotiBtnTooltip'}
       placement={'bottom'}
       delay={{ show: 500, hide: 0 }}
       overlay={

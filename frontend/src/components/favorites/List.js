@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { debounce } from 'lodash';
 
 import AddVideoExtraData from '../twitch/AddVideoExtraData';
 import API from '../twitch/API';
@@ -15,7 +14,7 @@ import { CenterContext } from '../feed/FeedsCenterContainer';
 
 export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
   const [videos, setVideos] = useState();
-  const { videoElementsAmount } = useContext(CenterContext);
+  const { videoElementsAmount, feedSizesObj } = useContext(CenterContext) || {};
 
   const [videosToShow, setVideosToShow] = useState({
     amount: videoElementsAmount,
@@ -24,17 +23,11 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
   });
 
   useEffect(() => {
-    debounce(
-      () => {
-        setVideosToShow({
-          amount: videoElementsAmount,
-          timeout: 750,
-          transitionGroup: 'videos',
-        });
-      },
-      500,
-      { leading: true, trailing: true }
-    );
+    setVideosToShow({
+      amount: videoElementsAmount,
+      timeout: 750,
+      transitionGroup: 'videos',
+    });
   }, [videoElementsAmount]);
 
   useEffect(() => {
@@ -84,13 +77,14 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
         setVideos((curr) => {
           return mergeVideosOrdered.map((vid) => {
             const found = curr?.find((c) => c.id === vid.id);
-            if (!found && Boolean(curr?.length)) return { ...vid, transition: 'videoFadeSlide' };
+            if (!found && Boolean(curr?.length))
+              return { ...vid, transition: feedSizesObj.transition || 'videoFadeSlide' };
             return vid;
           });
         });
       }
     })();
-  }, [list.items, ytExistsAndValidated, twitchExistsAndValidated]);
+  }, [list.items, ytExistsAndValidated, twitchExistsAndValidated, feedSizesObj.transition]);
 
   return (
     <VideosContainer>

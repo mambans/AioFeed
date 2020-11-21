@@ -141,7 +141,7 @@ export default ({ data, vodBtnDisabled, disableContextProvider, movable }) => {
       </ImageContainer>
       {title?.length > 50 ? (
         <OverlayTrigger
-          key={'bottom'}
+          key={id + 'VodTitleTooltip'}
           placement={'bottom'}
           delay={{ show: 250, hide: 0 }}
           overlay={

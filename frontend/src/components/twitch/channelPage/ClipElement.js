@@ -53,7 +53,7 @@ export default ({ ...data }) => {
       </ImageContainer>
       {title?.length > 50 ? (
         <OverlayTrigger
-          key={'bottom'}
+          key={id + 'ClipVideoToolTip'}
           placement={'bottom'}
           delay={{ show: 250, hide: 0 }}
           overlay={
