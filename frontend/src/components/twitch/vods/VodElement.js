@@ -15,6 +15,7 @@ import {
   StyledVideoElementAlert,
   Duration,
 } from './../../sharedStyledComponents';
+
 import { truncate } from '../../../util/Utils';
 import { VodLiveIndicator, VodType, VodPreview, VodDates } from './StyledComponents';
 import VodsFollowUnfollowBtn from './VodsFollowUnfollowBtn';
@@ -26,7 +27,7 @@ import { ChannelNameDiv } from '../StyledComponents';
 import AddVideoButton from '../../favorites/addRemoveButton/AddVideoButton';
 import useToken from '../useToken';
 
-export default ({ data, vodBtnDisabled, disableContextProvider, movable }) => {
+export default ({ data, vodBtnDisabled, disableContextProvider, setDragSelected, ...props }) => {
   const {
     id,
     user_id,
@@ -45,6 +46,7 @@ export default ({ data, vodBtnDisabled, disableContextProvider, movable }) => {
   const [previewAvailable, setPreviewAvailable] = useState({});
   const [showPreview, setShowPreview] = useState();
   const imgRef = useRef();
+  const ref = useRef();
   const hoverTimeoutRef = useRef();
   const validateToken = useToken();
 
@@ -68,7 +70,6 @@ export default ({ data, vodBtnDisabled, disableContextProvider, movable }) => {
                     error: 'Stream is live - no preview yet',
                   });
                 } else {
-                  // if (thumbnail_url === '') thumbnail_url = res.data.preview.template;
                   setPreviewAvailable({
                     data: res.data.animated_preview_url,
                   });
@@ -95,8 +96,17 @@ export default ({ data, vodBtnDisabled, disableContextProvider, movable }) => {
     setShowPreview(false);
   }
 
+  const onDragStart = (e) => {
+    if (setDragSelected) {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/html', id);
+
+      setDragSelected({ data: data, element: ref.current });
+    }
+  };
+
   return (
-    <VideoContainer>
+    <VideoContainer draggable={Boolean(setDragSelected)} onDragStart={onDragStart} {...props}>
       <ImageContainer ref={imgRef}>
         <AddVideoButton
           videoId_p={id}

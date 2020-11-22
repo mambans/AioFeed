@@ -86,6 +86,7 @@ export const Favorites = () => {
                     list={list}
                     ytExistsAndValidated={ytExistsAndValidated}
                     twitchExistsAndValidated={twitchExistsAndValidated}
+                    setLists={setLists}
                   />
                 </FavoriteListContainer>
               </CSSTransition>

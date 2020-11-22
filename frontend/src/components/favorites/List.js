@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import AddVideoExtraData from '../twitch/AddVideoExtraData';
 import API from '../twitch/API';
@@ -11,9 +11,11 @@ import { LoadingVideoElement } from '../twitch/StyledComponents';
 import { addVodEndTime } from '../twitch/TwitchUtils';
 import { LoadMore } from '../sharedStyledComponents';
 import { CenterContext } from '../feed/FeedsCenterContainer';
+import { restructureVideoList, uploadNewList } from './dragDropUtils';
 
-export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
+export default ({ list, ytExistsAndValidated, twitchExistsAndValidated, setLists }) => {
   const [videos, setVideos] = useState();
+  const [dragSelected, setDragSelected] = useState();
   const { videoElementsAmount, feedSizesObj } = useContext(CenterContext) || {};
 
   const [videosToShow, setVideosToShow] = useState({
@@ -73,7 +75,6 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
           .map((item) => mergedVideosUnordered.find((video) => String(video.id) === String(item)))
           .filter((i) => i);
 
-        // setVideos(mergeVideosOrdered);
         setVideos((curr) => {
           return mergeVideosOrdered.map((vid) => {
             const found = curr?.find((c) => c.id === vid.id);
@@ -85,6 +86,18 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
       }
     })();
   }, [list.items, ytExistsAndValidated, twitchExistsAndValidated, feedSizesObj.transition]);
+
+  const dragEvents = useMemo(
+    () => ({
+      draggable: true,
+      setDragSelected: setDragSelected,
+      dragSelected: dragSelected,
+      onDragEnd: (e) => uploadNewList(e, list.name, videos, setLists),
+      // onDrop: (e) => uploadNewList(e, list.name, videos, setLists),
+      onDragOver: (e) => restructureVideoList(e, videos, dragSelected, setVideos),
+    }),
+    [dragSelected, videos, list.name, setLists]
+  );
 
   return (
     <VideosContainer>
@@ -101,9 +114,19 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
               {video.loading ? (
                 <LoadingVideoElement type={'small'} />
               ) : video?.kind === 'youtube#video' ? (
-                <YoutubeVideoElement video={video} disableContextProvider={true} />
+                <YoutubeVideoElement
+                  data-id={video.contentDetails?.upload?.videoId}
+                  video={video}
+                  disableContextProvider={true}
+                  {...dragEvents}
+                />
               ) : (
-                <VodElement data={video} disableContextProvider={true} />
+                <VodElement
+                  data-id={video.id}
+                  data={video}
+                  disableContextProvider={true}
+                  {...dragEvents}
+                />
               )}
             </CSSTransition>
           );

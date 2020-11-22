@@ -11,7 +11,8 @@ Globals:
       AllowHeaders: "'*'"
       # For example, "'X-Forwarded-For'". Checkout [HTTP Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers) for more details on the value
 
-      AllowOrigin: "'https://aiofeed.com'"
+      # AllowOrigin: "'https://aiofeed.com'"
+      AllowOrigin: "'*'"
       # AllowOrigin: "'*'"
       # For example, "'www.example.com'". Checkout [HTTP Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin) for more details on this value.
       # MaxAge: Optional. String containing the number of seconds to cache CORS Preflight request.

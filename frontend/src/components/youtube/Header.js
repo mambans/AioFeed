@@ -53,7 +53,7 @@ export default (data) => {
       id='YoutubeHeader'
       text={
         <>
-          Youtube
+          YouTube
           <FaYoutube size={25} style={{ color: '#a80000' }} />
         </>
       }

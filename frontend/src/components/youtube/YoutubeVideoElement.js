@@ -26,7 +26,7 @@ const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
 
 const HOVER_DELAY = 1000;
 
-export default ({ video, disableContextProvider }) => {
+export default ({ video, disableContextProvider, setDragSelected, ...props }) => {
   const { youtubeVideoHoverEnable } = useContext(YoutubeContext);
   const [isHovered, setIsHovered] = useState(false);
   const streamHoverTimer = useRef();
@@ -45,7 +45,16 @@ export default ({ video, disableContextProvider }) => {
   }
 
   return (
-    <VideoContainer key={video.contentDetails?.upload?.videoId}>
+    <VideoContainer
+      key={video.contentDetails?.upload?.videoId}
+      onDragStart={(e) => {
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', video.id);
+
+        setDragSelected({ data: video, element: ref.current });
+      }}
+      {...props}
+    >
       <ImageContainer id={video.contentDetails?.upload?.videoId} ref={ref}>
         <AddVideoButton
           videoId_p={video.contentDetails?.upload?.videoId}

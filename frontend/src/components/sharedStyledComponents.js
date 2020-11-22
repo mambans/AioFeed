@@ -262,11 +262,11 @@ export const StyledVideoContainer = styled.div`
   }
 `;
 
-export const VideoContainer = ({ children }) => {
+export const VideoContainer = ({ children, ...props }) => {
   const { feedSize, feedSizesObj } = useContext(FeedsContext);
 
   return (
-    <StyledVideoContainer feedSize={feedSize} feedSizesObj={feedSizesObj}>
+    <StyledVideoContainer feedSize={feedSize} feedSizesObj={feedSizesObj} {...props}>
       {children}
     </StyledVideoContainer>
   );
@@ -431,16 +431,16 @@ export const VideoTitle = styled(Link)`
 // YoutubeVideoElement title
 export const VideoTitleHref = styled.a`
   color: var(--textColor1);
-  margin-top: 15px;
-  margin-bottom: 5px;
   grid-area: title;
   font-size: 1.1em;
   max-width: 100%;
   overflow: hidden;
-  height: 45px;
   line-height: 1.2;
   padding: 0;
   transition: color 200ms;
+  margin-top: 0.85em;
+  margin-bottom: 0.3em;
+  height: 2.5em;
 
   &:hover {
     color: var(--textColor1Hover);

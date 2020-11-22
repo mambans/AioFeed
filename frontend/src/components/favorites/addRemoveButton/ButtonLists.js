@@ -6,15 +6,8 @@ import FavoritesContext from './../FavoritesContext';
 import { getCookie } from '../../../util/Utils';
 import { Lists, ListItem, ListsLink, AddItemBtn, RemoveItemBtn } from './../StyledComponents';
 import useClicksOutside from '../../../hooks/useClicksOutside';
+import { parseNumberAndString } from './../dragDropUtils';
 import NewListForm from './NewListForm';
-
-export const parseNumberAndString = (value) => {
-  if (typeof value === 'number') return value;
-  const parsedToInt = parseInt(value);
-  const parsedToString = String(parseInt(value));
-  if (parsedToInt && parsedToString.length === value.length) return parsedToInt;
-  return value;
-};
 
 const AddRemoveBtn = ({ list, videoId }) => {
   const { lists, setLists } = useContext(FavoritesContext);
@@ -83,7 +76,7 @@ export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) =>
         <Link to='/saved'>Lists</Link>
       </ListsLink>
       {Object?.values(lists).map((list) => (
-        <ListItem>
+        <ListItem key={list.name}>
           {list.name}
           <AddRemoveBtn list={list} videoId={videoId} />
         </ListItem>
