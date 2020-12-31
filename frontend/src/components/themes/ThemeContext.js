@@ -42,17 +42,17 @@ export const ThemeProvider = ({ children }) => {
       name: 'clean',
       type: 'dark',
       image: 'clean.png',
-      default: true,
     },
     {
       name: 'coffee',
       type: 'dark',
-      image: 'coffee.webp',
+      image: 'coffee.jpg',
+      default: true,
     },
     {
       name: 'wood',
       type: 'dark',
-      image: 'wood.webp',
+      image: 'wood.jpg',
     },
     {
       name: 'headphones',
@@ -77,7 +77,7 @@ export const ThemeProvider = ({ children }) => {
     {
       name: 'christmas',
       type: 'dark',
-      image: 'christmas.webp',
+      image: 'christmas.jpg',
       startMonth: 12,
       startDate: 1,
       endMonth: 12,

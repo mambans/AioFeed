@@ -45,7 +45,7 @@ export default ({ requestError, videos, disableContextProvider }) => {
                 ? feedSizesObj.transition || 'videoFadeSlide'
                 : 'fade-750ms'
             }
-            key={video.contentDetails?.upload?.videoId}
+            key={video?.contentDetails?.upload?.videoId}
             unmountOnExit
           >
             <YoutubeVideoElement video={video} disableContextProvider={disableContextProvider} />

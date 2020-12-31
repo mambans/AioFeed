@@ -71,11 +71,9 @@ export const GameListUlContainer = styled.ul`
     align-items: center;
     border-bottom: thin solid #1e1616;
     padding: 5px 0;
-    transform: translate3d(0, 0, 0);
   }
 
   a {
-    transform: translate3d(0, 0, 0);
     transition: color 50ms, font-weight 50ms;
     color: inherit;
 
@@ -139,7 +137,6 @@ export const StyledLoadingListElement = styled.li`
     border-radius: 8px;
     background: #36393fd1;
     animation: ${pulseLight} 2s linear infinite;
-    transform: translate3d(0, 0, 0);
   }
 `;
 

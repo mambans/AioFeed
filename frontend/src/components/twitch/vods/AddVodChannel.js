@@ -12,7 +12,7 @@ export default async ({
     const existingChannels = new Set(channels);
     const newChannels = [...existingChannels.add(channel?.toLowerCase())];
 
-    setChannels(newChannels);
+    setChannels([...newChannels]);
 
     await axios
       .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/vodchannels`, {

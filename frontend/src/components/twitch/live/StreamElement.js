@@ -26,6 +26,8 @@ import AnimatedViewCount from './AnimatedViewCount';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from './../loginNameFormat';
 import { TwitchContext } from '../useToken';
+import CustomFilters from '../CustomFilters';
+import ChannelButtonsContainer from './ChannelButtonsContainer';
 
 const HOVER_DELAY = 100;
 
@@ -48,13 +50,7 @@ function NewHighlightNoti({ newlyAddedStreams, login }) {
   return '';
 }
 
-export default ({
-  data = {},
-  newlyAddedStreams,
-  refresh,
-  refreshAfterUnfollowTimer,
-  lastLoaded,
-}) => {
+export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTimer }) => {
   const location = useLocation();
   const {
     user_id,
@@ -101,18 +97,7 @@ export default ({
 
   return (
     <VideoContainer key={user_id}>
-      <ImageContainer
-        thumbnailUrl={
-          thumbnailUrl +
-          '#' +
-          Math.trunc(Date.now() / 100000) +
-          '?' +
-          Math.trunc(Date.now() / 100000)
-        }
-        id={user_id}
-        ref={ref}
-        style={{ marginTop: '5px' }}
-      >
+      <ImageContainer id={user_id} ref={ref} style={{ marginTop: '5px' }}>
         <NewHighlightNoti newlyAddedStreams={newlyAddedStreams} login={login} />
         <Link
           className='imgLink'
@@ -135,12 +120,12 @@ export default ({
           {isHovered && <StreamHoverIframe id={user_id} data={data} setIsHovered={setIsHovered} />}
           <img
             id={`${user_id}-${Date.now()}`}
-            key={`${user_id}-${lastLoaded}`}
+            // key={`${user_id}-${lastLoaded}`}
             alt=''
             style={
               newlyAddedStreams?.includes(login) ? { boxShadow: 'white 0px 0px 3px 2px' } : null
             }
-            src={thumbnailUrl + `#${Date.now()}?${Date.now()}`}
+            src={thumbnailUrl + `?${Date.now()}`}
           />
         </Link>
         <Moment interval={1} className={'duration'} durationFromNow>
@@ -256,7 +241,11 @@ export default ({
             </a>
           </ChannelNameDiv>
           {(location.pathname === '/feed/' || location.pathname === '/feed') && (
-            <div className='buttonsContainer'>
+            <ChannelButtonsContainer className='buttonsContainer'>
+              <CustomFilters
+                channel={login?.toLowerCase() || user_name}
+                enableFormControll={true}
+              />
               <VodsFollowUnfollowBtn channel={login} channelId={user_id} marginright='5px;' />
               <AddUpdateNotificationsButton channel={login} marginright='5px;' />
               <FollowUnfollowBtn
@@ -274,7 +263,7 @@ export default ({
                 refreshStreams={refresh}
                 refreshAfterUnfollowTimer={refreshAfterUnfollowTimer}
               />
-            </div>
+            </ChannelButtonsContainer>
           )}
         </ChannelContainer>
 

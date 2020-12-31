@@ -9,6 +9,7 @@ import API from '../API';
 import LiveIndicator from './LiveIndicator';
 import AddVideoExtraData from '../AddVideoExtraData';
 import loginNameFormat from '../loginNameFormat';
+import CustomFilters from '../CustomFilters';
 
 export default ({
   data,
@@ -89,6 +90,7 @@ export default ({
         {loginNameFormat(channel) || `${searchInput}..`}
       </Link>
       <div className='ButtonContianer'>
+        <CustomFilters channel={channel?.user_name.toLowerCase()} />
         <VodsFollowUnfollowBtn
           show={showVodBtn}
           channel={channel?.user_name || searchInput}

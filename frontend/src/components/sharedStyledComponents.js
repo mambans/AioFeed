@@ -272,11 +272,11 @@ export const VideoContainer = ({ children, ...props }) => {
   );
 };
 
-export const ImageContainer = React.forwardRef(({ thumbnailUrl, children }, ref) => {
+export const ImageContainer = React.forwardRef(({ children }, ref) => {
   const { feedSizesObj } = useContext(FeedsContext);
 
   return (
-    <StyledImageContainer feedSizesObj={feedSizesObj} thumbnailUrl={thumbnailUrl} ref={ref}>
+    <StyledImageContainer feedSizesObj={feedSizesObj} ref={ref}>
       {children}
     </StyledImageContainer>
   );
@@ -289,8 +289,10 @@ export const ChannelContainer = styled.div`
   margin-bottom: 5px;
   grid-template-columns: min-content;
   width: inherit;
-  overflow: hidden;
+  /* overflow: hidden; */
   font-size: 1em;
+  z-index: 1;
+  position: relative;
 
   .profileImg {
     grid-row: 1;
@@ -316,18 +318,23 @@ export const ChannelContainer = styled.div`
     display: flex;
     grid-row: 1;
     justify-content: right;
-    transition: transform 350ms;
+    transition: transform 350ms, opacity 150ms ease-in-out 0ms;
     transform: translateX(250px);
+    opacity: 0;
+    pointer-events: none;
   }
 
   &:hover {
     .buttonsContainer {
       transform: translateX(0px);
+      opacity: 1;
+      pointer-events: all;
 
       button,
       svg {
         opacity: 1;
       }
+      transition: transform 350ms, opacity 250ms ease-in-out 100ms;
     }
   }
 
@@ -453,7 +460,6 @@ export const StyledImageContainer = styled.div`
   height: ${({ feedSizesObj }) => (feedSizesObj.width / 16) * 9}px;
   width: 100%;
   position: relative;
-  background-image: ${({ thumbnailUrl }) => (thumbnailUrl ? `url(${thumbnailUrl})` : 'unset')};
   background-size: cover;
   background-position: center;
   border-radius: 10px;

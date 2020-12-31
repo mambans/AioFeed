@@ -7,7 +7,7 @@ import getFollowedOnlineStreams from './GetFollowedStreams';
 import NotificationsContext from './../../notifications/NotificationsContext';
 import FeedsContext from './../../feed/FeedsContext';
 import VodsContext from './../vods/VodsContext';
-import { AddCookie, getCookie } from '../../../util/Utils';
+import { AddCookie, getCookie, getLocalstorage } from '../../../util/Utils';
 import LiveStreamsPromise from './LiveStreamsPromise';
 import OfflineStreamsPromise from './OfflineStreamsPromise';
 import UpdatedStreamsPromise from './UpdatedStreamsPromise';
@@ -67,13 +67,29 @@ export default ({ children }) => {
             disableNotifications: disableNotifications,
             previousStreams: oldLiveStreams.current,
           }));
-
+        const filters = getLocalstorage('CustomFilters') || [];
         if (streams?.status === 200) {
           const newLiveStreams = [...streams.data];
           const filteredLiveStreams = uniqBy(newLiveStreams, 'user_id');
 
+          const customFilteredLiveStreams = filteredLiveStreams.filter((stream) => {
+            const relevantRules = filters?.[
+              stream?.login.toLowerCase() || stream?.user_name.toLowerCase()
+            ]?.filter((rule) => rule.filter === 'Feed');
+
+            if (Boolean(relevantRules?.length)) {
+              return relevantRules?.some((rule) => {
+                return stream[rule.type?.toLowerCase()]
+                  ?.toLowerCase()
+                  ?.includes(rule.match.toLowerCase());
+              });
+            }
+            return true;
+          });
+
           oldLiveStreams.current = liveStreams.current;
-          liveStreams.current = filteredLiveStreams;
+          liveStreams.current = customFilteredLiveStreams;
+
           setLoadingStates({
             refreshing: false,
             error: null,
@@ -114,6 +130,7 @@ export default ({ children }) => {
                 setUnseenNotifications,
                 isEnabledUpdateNotifications,
                 updateNotischannels,
+                filters,
               }),
             ]).then((res) => {
               const flattenedArray = res.flat(3).filter((n) => n);

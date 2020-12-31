@@ -109,7 +109,7 @@ export default ({
 
         if (foundChannel) return `${foundChannel.user_name}${!foundChannel.live ? '/page' : ''}`;
 
-        return value;
+        return value || '';
       },
     };
   };

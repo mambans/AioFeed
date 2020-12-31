@@ -6,6 +6,7 @@ import { FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 import useLockBodyScroll from '../hooks/useLockBodyScroll';
+import useClicksOutside from '../hooks/useClicksOutside';
 
 const SearchSubmitIcon = styled(FaSearch).attrs({ size: 16 })``;
 
@@ -155,8 +156,10 @@ export default ({
   searchBtnPath,
 }) => {
   const inputRef = useRef();
+  const listRef = useRef();
 
   useLockBodyScroll(listIsOpen);
+  useClicksOutside(listRef, () => setListIsOpen(false));
 
   const submit = (evt) => {
     evt.preventDefault();
@@ -173,6 +176,7 @@ export default ({
       onKeyDown={onKeyDown}
       text={input}
       inputFontSize={inputFontSize}
+      ref={listRef}
     >
       <input
         ref={inputRef}
@@ -181,7 +185,7 @@ export default ({
         spellCheck='false'
         placeholder={placeholder}
         onFocus={() => setListIsOpen(true)}
-        onBlur={() => setListIsOpen(false)}
+        // onBlur={() => setListIsOpen(false)}
         {...bindInput}
       />
       <SearchSubmitBtn

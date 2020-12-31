@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 export default (ref, func) => {
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (ref.current && !ref.current.contains(event.target)) func(event);
+      if (ref.current && ref.current.contains(event.target)) func(event);
     };
 
     document.addEventListener('mouseup', handleClickOutside);

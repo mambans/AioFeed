@@ -6,7 +6,7 @@ import { getCookie, getLocalstorage } from './../../util/Utils';
 
 const filterTypeUpload = async (response) => {
   if (Boolean(response?.items?.length)) {
-    return response.items.filter((video) => video?.snippet.type === 'upload') || [];
+    return response.items.filter((video) => video?.snippet?.type === 'upload') || [];
   }
   return [];
 };
@@ -18,8 +18,8 @@ const fetchSubscriptionVideos = async (videosCACHE, channel) => {
   const checkForCachedChannel = () => {
     return videosCACHE.find(
       (cacheChannel) =>
-        cacheChannel?.channel?.snippet.resourceId.channelId ===
-        channel?.snippet?.resourceId.channelId
+        cacheChannel?.channel?.snippet?.resourceId?.channelId ===
+        channel?.snippet?.resourceId?.channelId
     );
   };
 
@@ -39,7 +39,7 @@ const fetchSubscriptionVideos = async (videosCACHE, channel) => {
     .get(`https://www.googleapis.com/youtube/v3/activities?`, {
       params: {
         part: 'snippet,contentDetails',
-        channelId: channel.snippet.resourceId.channelId,
+        channelId: channel?.snippet?.resourceId?.channelId,
         maxResults: 10,
         publishedAfter: DATE_THRESHOLD.toISOString(),
         key: process.env.REACT_APP_YOUTUBE_API_KEY,
@@ -78,7 +78,9 @@ export default async (followedChannels) => {
 
     const videosWithDetails = await GetVideoInfo({ videos: flattedVideosArray });
 
-    const sortedVideos = reverse(sortBy(videosWithDetails, (video) => video.snippet.publishedAt));
+    const sortedVideos = reverse(
+      sortBy(videosWithDetails, (video) => video?.snippet?.publishedAt)
+    ).filter((i) => i);
 
     return { data: sortedVideos, error: error };
   } catch (error) {

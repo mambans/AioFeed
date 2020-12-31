@@ -162,7 +162,7 @@ export const StyledLoadingBox = styled.div`
     border-radius: 10px;
     background: #121415d1;
     animation: ${pulse} 2s linear infinite;
-    transform: translate3d(0, 0, 0);
+
   }
 
   div div {
@@ -187,7 +187,7 @@ export const StyledLoadingBox = styled.div`
       height: ${({ size }) => size}px;
       margin-top: 5px;
       border-radius: 10px;
-      transform: translate3d(0, 0, 0);
+      touch-action
     }
   }
 
@@ -199,7 +199,6 @@ export const StyledLoadingBox = styled.div`
       width: 100px;
       height: ${({ type }) => (type === 'big' ? '20px' : '25px')};
       margin: ${({ type }) => (type === 'big' ? '7px 0' : '0')};
-      transform: translate3d(0, 0, 0);
     }
 
     #game {
@@ -208,7 +207,6 @@ export const StyledLoadingBox = styled.div`
       height: 20px;
       margin: 21px 0 0 0;
       display: ${({ type }) => (type === 'big' ? 'block' : 'none')};
-      transform: translate3d(0, 0, 0);
     }
   }
 `;
@@ -237,7 +235,6 @@ export const StyledLoadingList = styled.ul`
     border-radius: 8px;
     background: #36393fd1;
     animation: ${pulseLight} 2s linear infinite;
-    transform: translate3d(0, 0, 0);
   }
 `;
 
@@ -276,9 +273,9 @@ export const ChannelNameDiv = styled.div`
   transition: color 250ms;
   width: max-content;
 
-  .channelName {
+  /* .channelName {
     z-index: 1;
-  }
+  } */
 
   .extaButton {
     grid-row: 1;

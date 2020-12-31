@@ -14,15 +14,12 @@ import {
   StyledCenterBottomText,
   StyledButtonLinks,
 } from './styledComponents';
-import { getCookie, AddCookie } from '../../util/Utils';
 import ChangeLogs from '../changeLogs';
 import styles from '../changeLogs/ChangeLogs.module.scss';
 
 export default () => {
-  const NewAlertName = `GlobalAlert-NewAlertName`;
-  AddCookie(NewAlertName, true);
   const { footerVisible, setRenderModal, setShowSidebar } = useContext(NavigationContext);
-  const [show, setShow] = useState(!getCookie(NewAlertName));
+  const [show, setShow] = useState();
   const ref = useRef();
 
   const handleClose = () => setShow(false);
@@ -121,7 +118,7 @@ export default () => {
           dialogClassName={styles.modal}
           backdropClassName={styles.modalBackdrop}
         >
-          <ChangeLogs handleClose={handleClose} NewAlertName={NewAlertName} />
+          <ChangeLogs handleClose={handleClose} />
         </Modal>
       </StyledFooterContainer>
     )

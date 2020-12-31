@@ -8,6 +8,7 @@ export default async ({
   setUnseenNotifications,
   isEnabledUpdateNotifications,
   updateNotischannels,
+  filters,
 }) => {
   try {
     const res = await new Promise((resolve, reject) => {
@@ -40,16 +41,33 @@ export default async ({
         });
 
         if (oldStreamData.game_name !== stream.game_name && oldStreamData.title !== stream.title) {
-          addSystemNotification({
-            status: 'Title & Game updated',
-            stream: stream,
-            body: `+ ${truncate(stream.title, 40)} in ${stream.game_name}\n- ${truncate(
-              oldStreamData.title,
-              40
-            )} in ${oldStreamData.game_name}`,
-            newlyAddedStreams: newlyAddedStreams,
-            setUnseenNotifications: setUnseenNotifications,
-          });
+          const relevantRules = filters?.[stream?.login].filter(
+            (rule) => rule.filter === 'Notification'
+          );
+
+          if (
+            !relevantRules ||
+            relevantRules.some((rule) =>
+              stream.game_name
+                .toLowerCase()
+                .includes(
+                  rule.match.toLowerCase() ||
+                    stream.title.toLowerCase().includes(rule.match.toLowerCase())
+                )
+            )
+          ) {
+            addSystemNotification({
+              status: 'Title & Game updated',
+              stream: stream,
+              body: `+ ${truncate(stream.title, 40)} in ${stream.game_name}\n- ${truncate(
+                oldStreamData.title,
+                40
+              )} in ${oldStreamData.game_name}`,
+              newlyAddedStreams: newlyAddedStreams,
+              setUnseenNotifications: setUnseenNotifications,
+            });
+          }
+
           stream.notiStatus = 'Title & Game updated';
           stream.text = `+ ${truncate(stream.title, 40)} in ${stream.game_name}\n- ${truncate(
             oldStreamData.title,
@@ -66,13 +84,27 @@ export default async ({
         });
 
         if (oldStreamData.game_name !== stream.game_name && oldStreamData.title === stream.title) {
-          addSystemNotification({
-            status: 'Game updated',
-            stream: stream,
-            body: `+ ${truncate(stream.game_name, 40)}\n- ${truncate(oldStreamData.game_name, 40)}`,
-            newlyAddedStreams: newlyAddedStreams,
-            setUnseenNotifications: setUnseenNotifications,
-          });
+          const relevantRules = filters?.[stream?.login].filter(
+            (rule) => rule.type === 'game_name' && rule.filter === 'Notification'
+          );
+
+          if (
+            !relevantRules ||
+            relevantRules.some((rule) =>
+              stream.game_name.toLowerCase().includes(rule.match.toLowerCase())
+            )
+          ) {
+            addSystemNotification({
+              status: 'Game updated',
+              stream: stream,
+              body: `+ ${truncate(stream.game_name, 40)}\n- ${truncate(
+                oldStreamData.game_name,
+                40
+              )}`,
+              newlyAddedStreams: newlyAddedStreams,
+              setUnseenNotifications: setUnseenNotifications,
+            });
+          }
           stream.notiStatus = 'Game updated';
           stream.text = `+ ${stream.game_name}\n- ${oldStreamData.game_name}`;
           return stream;
@@ -86,13 +118,25 @@ export default async ({
         });
 
         if (oldStreamData.title !== stream.title && oldStreamData.game_name === stream.game_name) {
-          addSystemNotification({
-            status: 'Title updated',
-            stream: stream,
-            body: `+ ${truncate(stream.title, 40)}\n- ${truncate(oldStreamData.title, 40)}`,
-            newlyAddedStreams: newlyAddedStreams,
-            setUnseenNotifications: setUnseenNotifications,
-          });
+          const relevantRules = filters?.[stream?.login].filter(
+            (rule) => rule.type === 'title' && rule.filter === 'Notification'
+          );
+
+          if (
+            !relevantRules ||
+            relevantRules.some((rule) =>
+              stream.title.toLowerCase().includes(rule.match.toLowerCase())
+            )
+          ) {
+            addSystemNotification({
+              status: 'Title updated',
+              stream: stream,
+              body: `+ ${truncate(stream.title, 40)}\n- ${truncate(oldStreamData.title, 40)}`,
+              newlyAddedStreams: newlyAddedStreams,
+              setUnseenNotifications: setUnseenNotifications,
+            });
+          }
+
           stream.notiStatus = 'Title updated';
           stream.text = `+ ${stream.title}\n- ${oldStreamData.title}`;
           return stream;

@@ -6,7 +6,7 @@ import FetchRepoReleases from './FetchRepoReleases';
 import Alert from './Alert';
 import ListItem from './ListItem';
 
-export default ({ NewAlertName }) => {
+export default () => {
   const [repo, setRepo] = useState();
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default ({ NewAlertName }) => {
         <Modal.Title bsPrefix={styles.title}>Changelog</Modal.Title>
       </Modal.Header>
       <Modal.Body bsPrefix={styles.ulContainer} as='div'>
-        <Alert AlertName={NewAlertName} />
+        <Alert />
         {repo?.tags.slice(0, 1).map((tag) => {
           return (
             <ListItem
