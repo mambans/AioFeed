@@ -43,19 +43,19 @@ const ListContainer = ({ setShow, channel, enableFormControll }) => {
         <Row
           setFilters={setFilters}
           channel={channel}
-          style={{ paddingBottom: '25px' }}
+          style={{ paddingBottom: '60px', height: 'unset' }}
           enableFormControll={enableFormControll}
         />
         <TransitionGroup component={null}>
           {filters[channel]?.map((rule) => (
             <CSSTransition
-              key={`${channel}-${rule.match}-${rule.type}-${rule.filter}`}
+              key={`${channel}-${rule.match}-${rule.type}-${rule.action}`}
               timeout={250}
               classNames='filterRule'
               unmountOnExit
             >
               <Row
-                key={`${channel}-${rule.match}-${rule.type}-${rule.filter}`}
+                key={`${channel}-${rule.match}-${rule.type}-${rule.action}`}
                 rule={rule}
                 setFilters={setFilters}
                 channel={channel}
@@ -94,11 +94,10 @@ const Row = ({
   };
 
   const { value: match, bind: bindMatch, reset: resetMatch } = useInput(rule?.match || '');
-  const { value: type, bind: bindType, reset: resetType } = useInput(rule?.type || 'Game');
-  const { value: filter, bind: bindFilter, reset: resetFilter } = useInput(rule?.filter || 'Feed');
-  // const { value: action, bind: bindAction, reset: resetAction } = useInput(
-  //   rule?.action || 'Whitelist'
-  // );
+  const { value: type, bind: bindType, reset: resetType } = useInput(rule?.type || 'game_name');
+  const { value: action, bind: bindAction, reset: resetAction } = useInput(
+    rule?.action || 'Blacklist'
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -106,18 +105,16 @@ const Row = ({
 
     setFilters((curr = {}) => {
       const newRules = !rule
-        ? [...(curr?.[channel] || []), { match, type, filter }]
+        ? [...(curr?.[channel] || []), { match, type, action }]
         : curr?.[channel].filter(
-            // (r) => r.match !== rule.match && r.type !== rule.type && r.filter !== rule.filter
-            (r) => !(r.match === rule.match && r.type === rule.type && r.filter === rule.filter)
+            (r) => !(r.match === rule.match && r.type === rule.type && r.action === rule.action)
           );
       return { ...curr, [channel]: newRules };
     });
     resetMatch();
     resetType();
-    resetFilter();
+    resetAction();
     return true;
-    // resetAction();
   };
 
   return (
@@ -139,16 +136,11 @@ const Row = ({
         <option label='Game'>game_name</option>
         <option>Title</option>
       </Form.Control>
-      <Form.Control as='select' {...bindFilter} style={{ gridArea: 'filter' }} size='sm'>
-        <option disabled>What to filter </option>
-        <option>Feed</option>
-        <option>Update notis</option>
-      </Form.Control>
-      {/* <Form.Control as='select' {...bindAction} style={{ gridArea: 'blackwhitelist' }}>
-        <option disabled>Black/whitelist</option>
-        <option>Whitelist</option>
+      <Form.Control as='select' {...bindAction} style={{ gridArea: 'filter' }} size='sm'>
+        <option disabled>Action</option>
         <option>Blacklist</option>
-      </Form.Control> */}
+        <option>Whitelist</option>
+      </Form.Control>
       <Button
         type='submit'
         form='CustomFilterForm'

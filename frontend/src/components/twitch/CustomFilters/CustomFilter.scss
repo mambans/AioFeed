@@ -47,7 +47,7 @@
 }
 .filterRule-appear {
   opacity: 0;
-  transform: translateY(85px);
+  transform: translateY(130px);
   transition: opacity 250ms, transform 250ms;
   transition-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
@@ -60,7 +60,7 @@
 
 .filterRule-enter {
   opacity: 0;
-  transform: translateY(85px);
+  transform: translateY(130px);
   transition: opacity 250ms, transform 250ms;
   transition-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
@@ -81,14 +81,14 @@
 
 .filterRule-exit-active {
   opacity: 0;
-  transform: translateY(85px);
+  transform: translateY(130px);
   transition: opacity 250ms, transform 250ms;
   transition-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
 .filterRule-exit-done {
   opacity: 0;
-  transform: translateY(85px);
+  transform: translateY(130px);
   transition: opacity 250ms, transform 250ms;
   transition-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }

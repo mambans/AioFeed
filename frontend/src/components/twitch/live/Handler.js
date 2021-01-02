@@ -73,15 +73,22 @@ export default ({ children }) => {
           const filteredLiveStreams = uniqBy(newLiveStreams, 'user_id');
 
           const customFilteredLiveStreams = filteredLiveStreams.filter((stream) => {
-            const relevantRules = filters?.[
-              stream?.login.toLowerCase() || stream?.user_name.toLowerCase()
-            ]?.filter((rule) => rule.filter === 'Feed');
+            const relevantRules =
+              filters?.[stream?.login.toLowerCase() || stream?.user_name.toLowerCase()];
 
             if (Boolean(relevantRules?.length)) {
+              const whitelists = relevantRules?.some((rule) => rule.action === 'Whitelist');
+
               return relevantRules?.some((rule) => {
-                return stream[rule.type?.toLowerCase()]
+                const match = stream[rule.type?.toLowerCase()]
                   ?.toLowerCase()
                   ?.includes(rule.match.toLowerCase());
+
+                if (whitelists && !match) return false;
+                if (whitelists && match) return true;
+                if (match && rule?.action === 'Blacklist') return false;
+
+                return true;
               });
             }
             return true;
@@ -130,7 +137,6 @@ export default ({ children }) => {
                 setUnseenNotifications,
                 isEnabledUpdateNotifications,
                 updateNotischannels,
-                filters,
               }),
             ]).then((res) => {
               const flattenedArray = res.flat(3).filter((n) => n);
