@@ -6,6 +6,6 @@ set -e
 
 npm run build
 
-aws s3 sync --delete ./build s3://aiofeed.com
+aws s3 sync --exclude '*.psd' --delete ./build s3://aiofeed.com
 
 echo "\e[42mDeploy Done: `date`\e[0m"
