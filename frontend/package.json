@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
     "history": "^5.0.0",
     "moment": "^2.29.1",
@@ -11,9 +11,9 @@
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.0",
     "react-dom": "^17.0.1",
-    "react-icons": "^3.11.0",
+    "react-icons": "^4.1.0",
     "react-loading": "^2.0.3",
-    "react-moment": "^1.0.0",
+    "react-moment": "^1.1.1",
     "react-rangeslider": "^2.2.0",
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "^3.4.4",
@@ -49,9 +49,9 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/react": "^11.1.2",
+    "@testing-library/react": "^11.2.2",
     "cli-error-notifier": "^2.1.0",
-    "eslint-config-prettier": "^6.15.0",
+    "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-react-hooks": "^4.2.0"
   }
 }

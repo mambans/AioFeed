@@ -1,53 +1,54 @@
 .customFilter-appear {
   opacity: 0;
-  transform: translateX(50%);
+  transform: translateY(50%);
   transition: opacity 250ms, transform 250ms;
   transition-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 .customFilter-appear-active {
   opacity: 1;
-  transform: translateX(0%);
+  transform: translateY(0%);
   transition: opacity 250ms, transform 250ms;
   transition-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
 .customFilter-enter {
   opacity: 0;
-  transform: translateX(50%);
+  transform: translateY(50%);
   transition: opacity 250ms, transform 250ms;
   transition-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
 .customFilter-enter-active {
   opacity: 1;
-  transform: translateX(0%);
+  transform: translateY(0%);
   transition: opacity 250ms, transform 250ms;
   transition-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
 .customFilter-exit {
   opacity: 1;
-  transform: translateX(50%);
+  transform: translateY(50%);
   transition: opacity 250ms, transform 250ms;
   transition-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
 .customFilter-exit-active {
   opacity: 0;
-  transform: translateX(0%);
+  transform: translateY(0%);
   transition: opacity 250ms, transform 250ms;
   transition-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
 .customFilter-exit-done {
   opacity: 0;
-  transform: translateX(0%);
+  transform: translateY(0%);
   transition: opacity 250ms, transform 250ms;
   transition-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
+
 .filterRule-appear {
   opacity: 0;
-  transform: translateY(130px);
+  transform: translateY(100%);
   transition: opacity 250ms, transform 250ms;
   transition-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
@@ -60,7 +61,7 @@
 
 .filterRule-enter {
   opacity: 0;
-  transform: translateY(130px);
+  transform: translateY(100%);
   transition: opacity 250ms, transform 250ms;
   transition-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
@@ -81,14 +82,14 @@
 
 .filterRule-exit-active {
   opacity: 0;
-  transform: translateY(130px);
+  transform: translateY(100%);
   transition: opacity 250ms, transform 250ms;
   transition-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
 .filterRule-exit-done {
   opacity: 0;
-  transform: translateY(130px);
+  transform: translateY(100%);
   transition: opacity 250ms, transform 250ms;
   transition-timing-function: cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }

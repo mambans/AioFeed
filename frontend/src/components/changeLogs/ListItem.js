@@ -170,10 +170,9 @@ export default ({ name, body, published_at, showInfo, children }) => {
       <List.Button
         size='sm'
         variant='dark'
-        disabled={info.data}
-        onClick={!info.data ? handleClick : null}
+        onClick={!info.data ? handleClick : () => setInfo({ loading: false, data: null })}
       >
-        {info.loading ? 'Loading' : 'Info'}
+        {info.loading ? 'Loading' : info.data ? 'Hide info' : 'Show Info'}
       </List.Button>
       {info.additions && (
         <List.Group>

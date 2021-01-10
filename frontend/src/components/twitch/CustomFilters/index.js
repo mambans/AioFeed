@@ -13,7 +13,7 @@ export default ({ channel, enableFormControll = false }) => {
 
   return (
     <>
-      <OpenListBtn onClick={OnClick} show={String(show)}></OpenListBtn>
+      <OpenListBtn onClick={OnClick} show={String(show)} size={22}></OpenListBtn>
 
       <CSSTransition in={show} timeout={250} classNames='customFilter' unmountOnExit>
         <ListContainer
@@ -38,12 +38,14 @@ const ListContainer = ({ setShow, channel, enableFormControll }) => {
 
   return (
     <StyledListContainer ref={listRef}>
-      <CloseListBtn onClick={() => setShow(false)}>X</CloseListBtn>
+      <CloseListBtn onClick={() => setShow(false)} size={22}>
+        X
+      </CloseListBtn>
       <ListItems>
         <Row
           setFilters={setFilters}
           channel={channel}
-          style={{ paddingBottom: '60px', height: 'unset' }}
+          style={{ paddingBottom: '10px', borderBottom: '2px solid #4b4b4b', height: 'unset' }}
           enableFormControll={enableFormControll}
         />
         <TransitionGroup component={null}>
@@ -69,13 +71,14 @@ const ListContainer = ({ setShow, channel, enableFormControll }) => {
   );
 };
 
-const Row = ({
+export const Row = ({
   rule,
   setFilters,
   // streamInfo: { channel } = {},
   channel,
   style = {},
   enableFormControll,
+  showChannelName = false,
 }) => {
   const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue);
@@ -93,6 +96,9 @@ const Row = ({
     };
   };
 
+  const { value: channelName, bind: bindChannelName, reset: resetChannelName } = useInput(
+    channel || ''
+  );
   const { value: match, bind: bindMatch, reset: resetMatch } = useInput(rule?.match || '');
   const { value: type, bind: bindType, reset: resetType } = useInput(rule?.type || 'game_name');
   const { value: action, bind: bindAction, reset: resetAction } = useInput(
@@ -105,15 +111,16 @@ const Row = ({
 
     setFilters((curr = {}) => {
       const newRules = !rule
-        ? [...(curr?.[channel] || []), { match, type, action }]
-        : curr?.[channel].filter(
+        ? [...(curr?.[channelName] || []), { match, type, action }]
+        : curr?.[channelName].filter(
             (r) => !(r.match === rule.match && r.type === rule.type && r.action === rule.action)
           );
-      return { ...curr, [channel]: newRules };
+      return { ...curr, [channelName]: newRules };
     });
     resetMatch();
     resetType();
     resetAction();
+    resetChannelName();
     return true;
   };
 
@@ -123,6 +130,16 @@ const Row = ({
       handleSubmit={handleSubmit}
       style={{ ...style }}
     >
+      {(!channel || (channel && showChannelName)) && (
+        <Form.Control
+          type='text'
+          placeholder='channel..'
+          required
+          {...bindChannelName}
+          spellCheck={false}
+          style={{ gridArea: 'channel' }}
+        />
+      )}
       <Form.Control
         type='text'
         placeholder='words..'
@@ -147,7 +164,7 @@ const Row = ({
         variant={!rule ? 'primary' : 'danger'}
         onClick={handleSubmit}
         size='sm'
-        style={{ gridArea: 'button', alignItems: 'center', display: 'flex' }}
+        style={{ gridArea: 'button' }}
       >
         {!rule ? '+' : '-'}
       </Button>

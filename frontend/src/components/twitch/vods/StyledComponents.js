@@ -88,6 +88,7 @@ export const VodDates = styled.div`
   justify-content: right;
   justify-self: right;
   white-space: nowrap;
+  overflow: hidden;
 
   p {
     margin: 0;

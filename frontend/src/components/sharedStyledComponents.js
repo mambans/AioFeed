@@ -319,14 +319,14 @@ export const ChannelContainer = styled.div`
     grid-row: 1;
     justify-content: right;
     transition: transform 350ms, opacity 150ms ease-in-out 0ms;
-    transform: translateX(250px);
+    transform: translateY(50%);
     opacity: 0;
     pointer-events: none;
   }
 
   &:hover {
     .buttonsContainer {
-      transform: translateX(0px);
+      transform: translateY(0px);
       opacity: 1;
       pointer-events: all;
 

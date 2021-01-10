@@ -71,14 +71,8 @@ export default () => {
           display: 'unset',
         }}
       >
-        <AddVideoButton videoId_p={video.id} style={{ right: '100px' }} size={32} />
-        <ShowNavbarBtn
-          variant='dark'
-          onClick={() => {
-            setVisible(!visible);
-          }}
-          style={{ right: '0' }}
-        >
+        <AddVideoButton videoId_p={video.id} style={{ right: '100px', opacity: '1' }} size={32} />
+        <ShowNavbarBtn variant='dark' onClick={() => setVisible(!visible)} style={{ right: '0' }}>
           <MdVerticalAlignBottom
             style={{
               transform: visible ? 'rotateX(180deg)' : 'unset',

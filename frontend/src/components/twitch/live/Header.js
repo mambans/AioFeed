@@ -1,4 +1,5 @@
 import React from 'react';
+import AllFiltersList from '../CustomFilters/AllFiltersList';
 
 import { HeaderContainer } from './../../sharedStyledComponents';
 import ChannelSearchList from './../channelList';
@@ -19,7 +20,12 @@ export default ({ data }) => {
       autoRefreshEnabled={autoRefreshEnabled}
       isLoading={refreshing}
       refreshFunc={() => refresh({ forceRefreshThumbnails: true, forceValidateToken: true })}
-      rightSide={<ChannelSearchList placeholder='...' />}
+      rightSide={
+        <>
+          <AllFiltersList />
+          <ChannelSearchList placeholder='...' />
+        </>
+      }
     />
   );
 };

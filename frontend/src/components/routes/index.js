@@ -22,7 +22,6 @@ import Favorites from '../favorites';
 const MainContentContainer = styled.main`
   min-height: 100vh;
   padding-top: 70px;
-  overflow-x: hidden;
 `;
 
 export default () => {
