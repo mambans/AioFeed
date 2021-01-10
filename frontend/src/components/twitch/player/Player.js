@@ -5,13 +5,15 @@ import Moment from 'react-moment';
 import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import { MdVerticalAlignBottom } from 'react-icons/md';
+import {
+  MdVerticalAlignBottom,
+  MdFullscreen,
+  MdCompareArrows,
+  MdFullscreenExit,
+  MdChat,
+  MdAccountBox,
+} from 'react-icons/md';
 import { FaTwitch } from 'react-icons/fa';
-import { MdFullscreen } from 'react-icons/md';
-import { MdCompareArrows } from 'react-icons/md';
-import { MdFullscreenExit } from 'react-icons/md';
-import { MdChat } from 'react-icons/md';
-import { MdAccountBox } from 'react-icons/md';
 
 import fetchStreamInfo from './fetchStreamInfo';
 import FollowUnfollowBtn from './../FollowUnfollowBtn';
@@ -31,6 +33,7 @@ import {
   ChannelButton,
   ChannelIconLink,
   OfflineOverlay,
+  PlayerExtraButtons,
 } from './StyledComponents';
 import PlayerNavbar from './PlayerNavbar';
 import setFavion from '../../setFavion';
@@ -306,14 +309,8 @@ export default () => {
     }
   }
 
-  const handleResizeMouseDown = () => {
-    setResizeActive(true);
-  };
-
-  const handleResizeMouseUp = (e) => {
-    setResizeActive(false);
-  };
-
+  const handleResizeMouseDown = () => setResizeActive(true);
+  const handleResizeMouseUp = (e) => setResizeActive(false);
   const resize = useCallback(
     (e) => {
       if (resizeActive) {
@@ -710,22 +707,19 @@ export default () => {
               <ChatOverlay switched={chatState.switchChatSide} chatwidth={chatState.chatwidth} />
             )}
             <div id='chat'>
-              <ShowNavbarBtn
-                variant='dark'
-                type='live'
-                onClick={() => {
-                  setVisible(!visible);
-                }}
-              >
-                <MdVerticalAlignBottom
-                  style={{
-                    transform: visible ? 'rotateX(180deg)' : 'unset',
-                    right: '10px',
-                  }}
-                  size={30}
-                  title='Show navbar'
-                />
-              </ShowNavbarBtn>
+              <PlayerExtraButtons>
+                <ShowNavbarBtn variant='dark' onClick={() => setVisible(!visible)}>
+                  <MdVerticalAlignBottom
+                    style={{
+                      transform: visible ? 'rotateX(180deg)' : 'unset',
+                      right: '10px',
+                    }}
+                    size={26}
+                    title='Show navbar'
+                  />
+                  Nav
+                </ShowNavbarBtn>
+              </PlayerExtraButtons>
               <StyledChat
                 frameborder='0'
                 scrolling='yes'
@@ -736,22 +730,19 @@ export default () => {
             </div>
           </>
         ) : (
-          <ShowNavbarBtn
-            variant='dark'
-            type='video'
-            onClick={() => {
-              setVisible(!visible);
-            }}
-          >
-            <MdVerticalAlignBottom
-              style={{
-                transform: visible ? 'rotateX(180deg)' : 'unset',
-                right: '10px',
-              }}
-              size={30}
-              title='Show navbar'
-            />
-          </ShowNavbarBtn>
+          <PlayerExtraButtons>
+            <ShowNavbarBtn variant='dark' onClick={() => setVisible(!visible)}>
+              <MdVerticalAlignBottom
+                style={{
+                  transform: visible ? 'rotateX(180deg)' : 'unset',
+                  right: '10px',
+                }}
+                size={26}
+                title='Show navbar'
+              />
+              Nav
+            </ShowNavbarBtn>
+          </PlayerExtraButtons>
         )}
       </VideoAndChatContainer>
     </>

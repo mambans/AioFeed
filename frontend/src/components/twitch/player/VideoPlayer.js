@@ -1,13 +1,11 @@
-import { CSSTransition } from 'react-transition-group';
+// import { CSSTransition } from 'react-transition-group';
 import { useParams } from 'react-router-dom';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { MdVerticalAlignBottom } from 'react-icons/md';
 
 import NavigationContext from './../../navigation/NavigationContext';
-import { VideoAndChatContainer, ShowNavbarBtn, LoopBtn } from './StyledComponents';
-import PlayerNavbar from './PlayerNavbar';
+import { LoopBtn } from './StyledComponents';
+// import PlayerNavbar from './PlayerNavbar';
 import API from '../API';
-import AddVideoButton from '../../favorites/addRemoveButton/AddVideoButton';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import useQuery from '../../../hooks/useQuery';
@@ -18,11 +16,9 @@ export default () => {
   const time = useQuery().get('t') || useQuery().get('start') || null;
   const endTime = useQuery().get('end') || null;
 
-  const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
+  const { setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
 
   const [twitchVideoPlayer, setTwitchVideoPlayer] = useState();
-  const [videoInfo, setVideoInfo] = useState();
-  const ref = useRef();
   const endTimeRef = useRef();
 
   const [loopEnabled, setLoopEnabled] = useState();
@@ -44,11 +40,6 @@ export default () => {
   useEventListenerMemo(window.Twitch.Player.ENDED, loopVideo, twitchVideoPlayer);
 
   useEffect(() => {
-    document.documentElement.style.overflow = 'hidden';
-    setShrinkNavbar('true');
-    setVisible(false);
-    setFooterVisible(false);
-
     setTwitchVideoPlayer(
       new window.Twitch.Player('twitch-embed', {
         width: '100%',
@@ -62,13 +53,6 @@ export default () => {
         parent: ['aiofeed.com'],
       })
     );
-
-    return () => {
-      document.documentElement.style.overflow = 'visible';
-      setShrinkNavbar('false');
-      setFooterVisible(true);
-      setVisible(true);
-    };
   }, [setShrinkNavbar, setFooterVisible, setVisible, channelName, videoId, time]);
 
   useEffect(() => {
@@ -91,8 +75,6 @@ export default () => {
             `/${videoDetails?.user_name}/videos/${videoId}${time ? `?t=${time}` : ''}`
           );
         }
-
-        setVideoInfo(videoDetails);
       }
     };
 
@@ -133,7 +115,7 @@ export default () => {
 
   return (
     <>
-      <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
+      {/* <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
         <PlayerNavbar
           channelName={channelName}
           streamInfo={videoInfo}
@@ -141,57 +123,31 @@ export default () => {
           setVisible={setVisible}
           visible={visible}
         />
-      </CSSTransition>
-      <VideoAndChatContainer
-        ref={ref}
-        id='twitch-embed'
-        visible={visible}
-        style={{
-          display: 'unset',
-        }}
+      </CSSTransition> */}
+      <OverlayTrigger
+        key='loop'
+        placement={'left'}
+        delay={{ show: 500, hide: 0 }}
+        overlay={
+          <Tooltip id={`tooltip-${'left'}`}>{`${
+            loopEnabled ? 'Disable ' : 'Enable '
+          } loop`}</Tooltip>
+        }
       >
-        <AddVideoButton videoId_p={videoInfo?.id || videoId} style={{ right: '100px' }} size={32} />
-        <OverlayTrigger
-          key='loop'
-          placement={'left'}
-          delay={{ show: 500, hide: 0 }}
-          overlay={
-            <Tooltip id={`tooltip-${'left'}`}>{`${
-              loopEnabled ? 'Disable ' : 'Enable '
-            } loop`}</Tooltip>
-          }
-        >
-          <LoopBtn
-            size={32}
-            enabled={loopEnabled}
-            onClick={() => {
-              setLoopEnabled((cr) => {
-                if (twitchVideoPlayer.getEnded() && !cr) {
-                  twitchVideoPlayer.seek(0);
-                }
-                return !cr;
-              });
-            }}
-          />
-        </OverlayTrigger>
-
-        <ShowNavbarBtn
-          variant='dark'
-          type='video'
+        <LoopBtn
+          size={32}
+          enabled={loopEnabled}
           onClick={() => {
-            setVisible(!visible);
+            setLoopEnabled((cr) => {
+              if (twitchVideoPlayer.getEnded() && !cr) {
+                twitchVideoPlayer.seek(0);
+              }
+              return !cr;
+            });
           }}
-        >
-          <MdVerticalAlignBottom
-            style={{
-              transform: visible ? 'rotateX(180deg)' : 'unset',
-              right: '10px',
-            }}
-            size={30}
-            title='Show navbar'
-          />
-        </ShowNavbarBtn>
-      </VideoAndChatContainer>
+        />
+      </OverlayTrigger>
+      {/* <div id='twitch-embed' style={{ gridArea: 'video' }}></div> */}
     </>
   );
 };

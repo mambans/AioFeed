@@ -13,6 +13,52 @@ import { LoadMore } from '../sharedStyledComponents';
 import { CenterContext } from '../feed/FeedsCenterContainer';
 import { restructureVideoList, uploadNewList } from './dragDropUtils';
 
+export const fetchListVideos = async ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
+  if (list?.items) {
+    const twitchFetchVideos = async (items) => {
+      const fetchedVideos = await API.getVideos({ params: { id: items } });
+      const finallFetchedVideos = await AddVideoExtraData({
+        items: fetchedVideos.data,
+        fetchGameInfo: false,
+      });
+
+      return await addVodEndTime(finallFetchedVideos.data);
+    };
+
+    const youtubeFetchVideos = async (items) => await GetVideoInfo({ videos: items });
+
+    const twitchItems = list.items
+      .map((video) => typeof video === 'number' && video)
+      .filter((i) => i);
+
+    const youtubeItems = list.items
+      .map((video) => typeof video === 'string' && video)
+      .filter((i) => i);
+
+    const twitchItemsWithDetails = Boolean(twitchItems?.length)
+      ? twitchExistsAndValidated
+        ? await twitchFetchVideos(twitchItems)
+        : twitchItems.map((video) => ({ id: video, loading: true }))
+      : [];
+
+    const youtubeItemsWithDetails = Boolean(youtubeItems?.length)
+      ? ytExistsAndValidated
+        ? await youtubeFetchVideos(youtubeItems)
+        : youtubeItems.map((video) => {
+            return { id: video, contentDetails: { upload: { videoId: video } }, loading: true };
+          })
+      : [];
+
+    const mergedVideosUnordered = [...twitchItemsWithDetails, ...youtubeItemsWithDetails];
+
+    const mergeVideosOrdered = list.items
+      .map((item) => mergedVideosUnordered.find((video) => String(video.id) === String(item)))
+      .filter((i) => i);
+
+    return mergeVideosOrdered;
+  }
+};
+
 export default ({ list, ytExistsAndValidated, twitchExistsAndValidated, setLists }) => {
   const [videos, setVideos] = useState();
   const [dragSelected, setDragSelected] = useState();
@@ -34,58 +80,22 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated, setLists
 
   useEffect(() => {
     (async () => {
-      if (list?.items) {
-        const twitchFetchVideos = async (items) => {
-          const fetchedVideos = await API.getVideos({ params: { id: items } });
-          const finallFetchedVideos = await AddVideoExtraData({
-            items: fetchedVideos.data,
-            fetchGameInfo: false,
-          });
+      const allVideos = await fetchListVideos({
+        list,
+        ytExistsAndValidated,
+        twitchExistsAndValidated,
+      });
 
-          return await addVodEndTime(finallFetchedVideos.data);
-        };
-
-        const youtubeFetchVideos = async (items) => await GetVideoInfo({ videos: items });
-
-        const twitchItems = list.items
-          .map((video) => typeof video === 'number' && video)
-          .filter((i) => i);
-
-        const youtubeItems = list.items
-          .map((video) => typeof video === 'string' && video)
-          .filter((i) => i);
-
-        const twitchItemsWithDetails = Boolean(twitchItems?.length)
-          ? twitchExistsAndValidated
-            ? await twitchFetchVideos(twitchItems)
-            : twitchItems.map((video) => ({ id: video, loading: true }))
-          : [];
-
-        const youtubeItemsWithDetails = Boolean(youtubeItems?.length)
-          ? ytExistsAndValidated
-            ? await youtubeFetchVideos(youtubeItems)
-            : youtubeItems.map((video) => {
-                return { id: video, contentDetails: { upload: { videoId: video } }, loading: true };
-              })
-          : [];
-
-        const mergedVideosUnordered = [...twitchItemsWithDetails, ...youtubeItemsWithDetails];
-
-        const mergeVideosOrdered = list.items
-          .map((item) => mergedVideosUnordered.find((video) => String(video.id) === String(item)))
-          .filter((i) => i);
-
-        setVideos((curr) => {
-          return mergeVideosOrdered.map((vid) => {
-            const found = curr?.find((c) => c.id === vid.id);
-            if (!found && Boolean(curr?.length))
-              return { ...vid, transition: feedSizesObj.transition || 'videoFadeSlide' };
-            return vid;
-          });
+      setVideos((curr) => {
+        return allVideos.map((vid) => {
+          const found = curr?.find((c) => c.id === vid.id);
+          if (!found && Boolean(curr?.length))
+            return { ...vid, transition: feedSizesObj.transition || 'videoFadeSlide' };
+          return vid;
         });
-      }
+      });
     })();
-  }, [list.items, ytExistsAndValidated, twitchExistsAndValidated, feedSizesObj.transition]);
+  }, [list, ytExistsAndValidated, twitchExistsAndValidated, feedSizesObj.transition]);
 
   const dragEvents = useMemo(
     () => ({
@@ -115,6 +125,7 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated, setLists
                 <LoadingVideoElement type={'small'} />
               ) : video?.kind === 'youtube#video' ? (
                 <YoutubeVideoElement
+                  listName={list.name}
                   data-id={video.contentDetails?.upload?.videoId}
                   video={video}
                   disableContextProvider={true}
@@ -122,6 +133,7 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated, setLists
                 />
               ) : (
                 <VodElement
+                  listName={list.name}
                   data-id={video.id}
                   data={video}
                   disableContextProvider={true}

@@ -18,6 +18,7 @@ import TwitchVods from '../twitch/vods';
 import Twitter from '../twitter';
 import Youtube from './../youtube';
 import Favorites from '../favorites';
+import SharedVideoPlayer from '../SharedVideoPlayer';
 
 const MainContentContainer = styled.main`
   min-height: 100vh;
@@ -47,7 +48,15 @@ export default () => {
           <Route path='auth/youtube/callback' element={<YoutubeAuthCallback />} />
           <Route path='legality' element={<Legality />} />
           <Route path='privacy' element={<Legality />} />
-          <Route path='youtube/:videoId' element={<YoutubeVideoPlayer />} />
+          {/* <Route path='youtube/:videoId' element={<YoutubeVideoPlayer />} /> */}
+          <Route
+            path='youtube/:videoId'
+            element={
+              <SharedVideoPlayer>
+                <YoutubeVideoPlayer />
+              </SharedVideoPlayer>
+            }
+          />
 
           <Route path='category' element={<TopStreams />} />
           <Navigate path='game' to='/category' />
@@ -56,7 +65,15 @@ export default () => {
           <Route path='game/:category' element={<TopStreams />} />
           <Route path='top/:category' element={<TopStreams />} />
 
-          <Route path='videos/:videoId' element={<VideoPlayer />} />
+          {/* <Route path='videos/:videoId' element={<VideoPlayer />} /> */}
+          <Route
+            path='videos/:videoId'
+            element={
+              <SharedVideoPlayer>
+                <VideoPlayer />
+              </SharedVideoPlayer>
+            }
+          />
           <Route path=':channelName/*' element={<TwitchChannelRoutes />} />
         </Routes>
       </MainContentContainer>

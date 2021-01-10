@@ -12,24 +12,12 @@ import useToken from '../twitch/useToken';
 import useYoutubeToken from '../youtube/useToken';
 import styled from 'styled-components';
 
-export default () => (
-  <VodsProvider>
-    <FavoritesProvider>
-      <FeedsCenterContainer fullWidth={true}>
-        <Favorites />
-      </FeedsCenterContainer>
-    </FavoritesProvider>
-  </VodsProvider>
-);
-
-const FavoriteListContainer = styled.div`
-  width: 100%;
-`;
-
-export const Favorites = () => {
-  const { lists, setLists, fetchAllLists, isLoading, setIsLoading } = useContext(FavoritesContext);
-  const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
-  const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
+export const useCheckForVideosAndValidateToken = ({
+  lists,
+  setIsLoading = () => {},
+  setYtExistsAndValidated,
+  setTwitchExistsAndValidated,
+}) => {
   const validateToken = useToken();
   const validateYoutubeToken = useYoutubeToken();
 
@@ -59,7 +47,42 @@ export const Favorites = () => {
     Promise.allSettled([twitchPromise, youtubePromise])
       .catch((e) => console.log(e))
       .finally(() => setIsLoading(false));
-  }, [lists, setIsLoading, validateToken, validateYoutubeToken]);
+  }, [
+    lists,
+    setIsLoading,
+    validateToken,
+    validateYoutubeToken,
+    setYtExistsAndValidated,
+    setTwitchExistsAndValidated,
+  ]);
+};
+
+export default () => (
+  <VodsProvider>
+    <FavoritesProvider>
+      <FeedsCenterContainer fullWidth={true}>
+        <Favorites />
+      </FeedsCenterContainer>
+    </FavoritesProvider>
+  </VodsProvider>
+);
+
+const FavoriteListContainer = styled.div`
+  width: 100%;
+`;
+
+export const Favorites = () => {
+  const { lists, setLists, fetchAllLists, isLoading, setIsLoading } = useContext(FavoritesContext);
+  const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
+  const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
+  // const validateToken = useToken();
+  // const validateYoutubeToken = useYoutubeToken();
+  useCheckForVideosAndValidateToken({
+    lists,
+    setIsLoading,
+    setYtExistsAndValidated,
+    setTwitchExistsAndValidated,
+  });
 
   return (
     <>

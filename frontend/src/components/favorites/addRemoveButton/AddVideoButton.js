@@ -64,7 +64,7 @@ export default ({
           onMouseEnter={OpenFunctionDelay}
           onMouseLeave={CloseFunctionDelay}
           open={open}
-          size={size || 18}
+          size={size * 0.8 || 18}
         />
       )}
 

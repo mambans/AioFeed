@@ -26,7 +26,7 @@ const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
 
 const HOVER_DELAY = 1000;
 
-export default ({ video, disableContextProvider, setDragSelected, ...props }) => {
+export default ({ video, disableContextProvider, setDragSelected, listName, ...props }) => {
   const { youtubeVideoHoverEnable } = useContext(YoutubeContext);
   const [isHovered, setIsHovered] = useState(false);
   const streamHoverTimer = useRef();
@@ -73,7 +73,11 @@ export default ({ video, disableContextProvider, setDragSelected, ...props }) =>
         <Link
           className='imgLink'
           // href={`https://www.youtube.com/watch?v=` + video.contentDetails?.upload?.videoId}
-          to={`/youtube/` + video.contentDetails?.upload?.videoId}
+          to={
+            `/youtube/` +
+            video.contentDetails?.upload?.videoId +
+            (listName ? `?list=${listName}` : '')
+          }
         >
           <img src={videoImageUrls(video.snippet.thumbnails)} alt='' />
         </Link>

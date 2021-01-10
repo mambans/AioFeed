@@ -1,7 +1,6 @@
 import { CSSTransition } from 'react-transition-group';
 import { Link } from 'react-router-dom';
-import { MdAccountCircle } from 'react-icons/md';
-import { MdVerticalAlignBottom } from 'react-icons/md';
+import { MdAccountCircle, MdVerticalAlignBottom } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import React, { useContext, useEffect } from 'react';
 
@@ -11,6 +10,7 @@ import {
   StyledVideo,
   PlayerNavbar,
   ShowNavbarBtn,
+  PlayerExtraButtons,
 } from './StyledComponents';
 
 export default () => {
@@ -47,23 +47,19 @@ export default () => {
           display: 'unset',
         }}
       >
-        <ShowNavbarBtn
-          variant='dark'
-          type='video'
-          onClick={() => {
-            setVisible(!visible);
-          }}
-        >
-          <MdVerticalAlignBottom
-            style={{
-              transform: visible ? 'rotateX(180deg)' : 'unset',
-              right: '10px',
-            }}
-            size={30}
-            title='Show navbar'
-          />
-          Navbar
-        </ShowNavbarBtn>
+        <PlayerExtraButtons>
+          <ShowNavbarBtn variant='dark' onClick={() => setVisible(!visible)}>
+            <MdVerticalAlignBottom
+              style={{
+                transform: visible ? 'rotateX(180deg)' : 'unset',
+                right: '10px',
+              }}
+              size={26}
+              title='Show navbar'
+            />
+            Navbar
+          </ShowNavbarBtn>
+        </PlayerExtraButtons>
         <StyledVideo
           src={`https://clips.twitch.tv/embed?clip=${videoId}&parent=aiofeed.com`}
           height='100%'

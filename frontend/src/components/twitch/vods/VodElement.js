@@ -14,6 +14,7 @@ import {
   ChannelContainer,
   StyledVideoElementAlert,
   Duration,
+  VideoTitleHref,
 } from './../../sharedStyledComponents';
 
 import { truncate } from '../../../util/Utils';
@@ -27,7 +28,14 @@ import { ChannelNameDiv } from '../StyledComponents';
 import AddVideoButton from '../../favorites/addRemoveButton/AddVideoButton';
 import useToken from '../useToken';
 
-export default ({ data, vodBtnDisabled, disableContextProvider, setDragSelected, ...props }) => {
+export default ({
+  data,
+  vodBtnDisabled,
+  disableContextProvider,
+  setDragSelected,
+  listName,
+  ...props
+}) => {
   const {
     id,
     user_id,
@@ -121,7 +129,15 @@ export default ({ data, vodBtnDisabled, disableContextProvider, setDragSelected,
         {thumbnail_url === '' && !previewAvailable.data && (
           <VodLiveIndicator to={`/${login || user_name}`}>Live</VodLiveIndicator>
         )}
-        <a href={url} className='imgLink'>
+        <Link
+          to={{
+            pathname: `/${login || user_name}/videos/${id}${listName ? `?list=${listName}` : ''}`,
+            state: {
+              p_title: title,
+            },
+          }}
+          className='imgLink'
+        >
           {previewAvailable.data && showPreview && (
             <VodPreview previewAvailable={previewAvailable.data} className='VodPreview' />
           )}
@@ -132,7 +148,7 @@ export default ({ data, vodBtnDisabled, disableContextProvider, setDragSelected,
             }
             alt=''
           />
-        </a>
+        </Link>
 
         <VodVideoInfo>
           <Duration title='duration'>
@@ -165,21 +181,12 @@ export default ({ data, vodBtnDisabled, disableContextProvider, setDragSelected,
             </Tooltip>
           }
         >
-          <VideoTitle
-            to={{
-              pathname: `/${login || user_name}/videos/${id}`,
-              state: {
-                p_title: title,
-              },
-            }}
-          >
-            {truncate(title || '', 70)}
-          </VideoTitle>
+          <VideoTitleHref href={url}>{truncate(title || '', 70)}</VideoTitleHref>
         </OverlayTrigger>
       ) : (
         <VideoTitle
           to={{
-            pathname: `/${login || user_name}/videos/${id}`,
+            pathname: `/${login || user_name}/videos/${id} ${listName ? `?list=${listName}` : ''}`,
             state: {
               p_title: title,
             },

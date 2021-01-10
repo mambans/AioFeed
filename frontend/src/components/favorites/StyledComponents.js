@@ -11,7 +11,7 @@ export const VideosContainer = styled.div`
 
 export const Open = styled(MdStar)`
   position: absolute;
-  right: 5px;
+  left: 2px;
   top: 5px;
   color: ${({ open }) => (open ? 'rgb(255,255,0)' : 'rgb(200,200,200)')};
   transform: ${({ open }) => (open ? 'scale(1.2)' : 'unset')};
@@ -28,8 +28,8 @@ export const Open = styled(MdStar)`
 
 export const Close = styled(IoIosCloseCircleOutline)`
   position: absolute;
-  right: 5px;
-  top: 5px;
+  left: 3px;
+  top: 6px;
   color: ${({ open }) => (open ? '#ffffff' : 'rgb(200,200,200)')};
   transform: ${({ open }) => (open ? 'scale(1.2)' : 'unset')};
   z-index: 4;
@@ -113,9 +113,9 @@ export const ButtonContainer = styled.div`
 
   min-width: 200px;
   width: max-content;
-  right: 0px;
+  left: 0px;
   position: absolute;
-  top: 0;
+  /* top: 0; */
   z-index: 3;
 
   &:focus-within,

@@ -21,6 +21,7 @@ export const VodLiveIndicator = styled(Link)`
   margin: 3px;
   opacity: 0.8;
   transition: opacity 150ms, color 150ms;
+  right: 0;
 
   &:hover {
     opacity: 1;

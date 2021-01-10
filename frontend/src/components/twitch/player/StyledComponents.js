@@ -1,9 +1,7 @@
+import React from 'react';
 import styled from 'styled-components';
-import { FaInfoCircle } from 'react-icons/fa';
-import { MdCompareArrows } from 'react-icons/md';
-import { FaWindowClose } from 'react-icons/fa';
-import { MdChat } from 'react-icons/md';
-import { MdMovieCreation, MdLoop } from 'react-icons/md';
+import { FaInfoCircle, FaWindowClose } from 'react-icons/fa';
+import { MdMovieCreation, MdLoop, MdMore, MdCompareArrows, MdChat } from 'react-icons/md';
 import { Button, Nav } from 'react-bootstrap';
 import { GrRefresh } from 'react-icons/gr';
 import { NavLink } from 'react-router-dom';
@@ -46,6 +44,7 @@ export const VideoAndChatContainer = styled.div`
 
   div#chat {
     grid-area: chat;
+    max-height: 100vh;
   }
 
   .IframeContainer {
@@ -86,20 +85,17 @@ export const ToggleSwitchChatSide = styled(MdCompareArrows).attrs({ size: 30 })`
 
 export const PlayerNavbar = styled.div`
   background: #0000005c;
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  height: 50px;
   display: flex;
   justify-content: center;
-  align-content: center;
   align-items: center;
-  align-self: center;
-
-  top: 10px;
-  position: fixed;
-  width: 450px;
-  left: 50%;
-  margin-left: -225px;
-  height: 50px;
   border-radius: 25px;
   z-index: 3;
+  transform: translateX(-50%);
+  padding: 0 10px;
 
   button,
   a.btn {
@@ -429,35 +425,56 @@ export const CreateClipButton = styled(MdMovieCreation).attrs({ size: 24, color:
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
 `;
 
-export const ShowNavbarBtn = styled(Button)`
-  display: flex;
-  align-items: center;
+export const StyledPlayerExtraButtons = styled.div`
+  transition: transform 250ms, opacity 250ms;
+  transform: translateX(100%) translateX(-35px);
+  opacity: 1;
+  width: max-content;
   position: absolute;
   z-index: 1;
   padding: 5px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+
+  svg {
+    padding: 2px;
+    margin: 0 5px;
+  }
+
+  &:hover {
+    transform: translateX(0);
+  }
+`;
+
+const PlayerExtraButtonsTrigger = styled(MdMore).attrs({ size: 26 })`
+  color: #646464;
+  margin-right: 8px;
+`;
+export const PlayerExtraButtons = ({ children }) => (
+  <StyledPlayerExtraButtons>
+    <PlayerExtraButtonsTrigger />
+    {children}
+  </StyledPlayerExtraButtons>
+);
+
+export const ShowNavbarBtn = styled(Button)`
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
   margin: 4px;
   cursor: pointer;
-  opacity: 0.4;
-  right: ${({ type }) => (type === 'video' ? '10px' : 'unset')};
-  transition: opacity 250ms, transform 250ms, width 250ms;
+  opacity: 0.7;
   overflow: hidden;
-  width: 40px;
   border: none;
-  transform: translate3d(0, 0, 0);
 
   svg {
     min-width: 30px;
-    margin-right: 5px;
-  }
-
-  &::after {
-    content: 'Nav';
-    transition: all 200ms;
   }
 
   &:hover {
     opacity: 1;
-    width: 80px;
   }
 `;
 
