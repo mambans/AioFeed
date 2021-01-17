@@ -36,7 +36,11 @@ a:hover {
   text-decoration: none;
 }
 
-:root {
+:root,
+html,
+body,
+main,
+#root {
   scrollbar-color: var(--scrollbarColors) !important;
   scrollbar-width: thin !important;
 }

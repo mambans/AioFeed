@@ -1,8 +1,5 @@
 import styled from 'styled-components';
 import { MdFilterList, MdClose } from 'react-icons/md';
-import React from 'react';
-
-import useClicksOutside from '../../../hooks/useClicksOutside';
 
 export const StyledListContainer = styled.div`
   position: absolute;
@@ -30,11 +27,9 @@ export const ListItems = styled.div`
 
   form,
   .form {
-    /* height: 105.6px; */
-    height: 86.6px;
     display: flex;
     font-size: 0.9em;
-    margin: 25px 10px;
+    margin: 5px 15px;
 
     display: grid;
     grid-template-columns: auto auto auto;
@@ -89,7 +84,8 @@ export const AllFiltersContainer = styled.div`
     padding: 0.25rem 0.5rem;
   }
 `;
-const StyledAllFiltersListContainer = styled.div`
+
+export const StyledAllFiltersListContainer = styled.div`
   position: absolute;
   z-index: 2;
   border-radius: 5px;
@@ -99,13 +95,15 @@ const StyledAllFiltersListContainer = styled.div`
   width: 20rem;
 `;
 
-export const AllFiltersListContainer = ({ children, setOpen, containerRef }) => {
-  // useLockBodyScroll(true);
-  useClicksOutside(containerRef, () => setOpen(false));
-
-  return <StyledAllFiltersListContainer>{children}</StyledAllFiltersListContainer>;
-};
-
 export const ChannelRulesList = styled.div`
-  margin-bottom: 50px;
+  margin: 40px 0;
+`;
+
+export const ChannelNameHeader = styled.p`
+  text-align: center;
+  border-bottom: 2px solid rgb(49, 49, 49);
+  border-radius: 2px;
+  margin: 0px 15px;
+  color: ${({ color }) => color || 'var(--textColor2Hover)'};
+  padding-bottom: 3px;
 `;

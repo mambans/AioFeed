@@ -1,14 +1,17 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import axios from 'axios';
 
 import useClicksOutside from '../../../hooks/useClicksOutside';
-import useSyncedLocalState from '../../../hooks/useSyncedLocalState';
 import { StyledListContainer, ListItems, OpenListBtn, CloseListBtn } from './StyledComponents';
 import './CustomFilter.scss';
+import { getCookie } from '../../../util/Utils';
+import CustomFilterContext from './CustomFilterContext';
 
 export default ({ channel, enableFormControll = false }) => {
   const [show, setShow] = useState(false);
+  const uploadNewFiltersTimer = useRef();
   const OnClick = () => setShow((i) => !i);
 
   return (
@@ -20,14 +23,15 @@ export default ({ channel, enableFormControll = false }) => {
           setShow={setShow}
           channel={channel}
           enableFormControll={enableFormControll}
+          uploadNewFiltersTimer={uploadNewFiltersTimer}
         />
       </CSSTransition>
     </>
   );
 };
 
-const ListContainer = ({ setShow, channel, enableFormControll }) => {
-  const [filters, setFilters] = useSyncedLocalState('CustomFilters', []);
+const ListContainer = ({ setShow, channel, enableFormControll, uploadNewFiltersTimer }) => {
+  const { filters, setFilters } = useContext(CustomFilterContext);
   const listRef = useRef();
 
   useClicksOutside(listRef, (e) => {
@@ -47,6 +51,7 @@ const ListContainer = ({ setShow, channel, enableFormControll }) => {
           channel={channel}
           style={{ paddingBottom: '10px', borderBottom: '2px solid #4b4b4b', height: 'unset' }}
           enableFormControll={enableFormControll}
+          uploadNewFiltersTimer={uploadNewFiltersTimer}
         />
         <TransitionGroup component={null}>
           {filters[channel]?.map((rule) => (
@@ -62,6 +67,7 @@ const ListContainer = ({ setShow, channel, enableFormControll }) => {
                 setFilters={setFilters}
                 channel={channel}
                 enableFormControll={enableFormControll}
+                uploadNewFiltersTimer={uploadNewFiltersTimer}
               />
             </CSSTransition>
           ))}
@@ -78,7 +84,7 @@ export const Row = ({
   channel,
   style = {},
   enableFormControll,
-  showChannelName = false,
+  uploadNewFiltersTimer,
 }) => {
   const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue);
@@ -115,7 +121,22 @@ export const Row = ({
         : curr?.[channelName].filter(
             (r) => !(r.match === rule.match && r.type === rule.type && r.action === rule.action)
           );
-      return { ...curr, [channelName]: newRules };
+
+      const newFilters = { ...curr, [channelName]: newRules };
+      if (!Boolean(newRules.length)) delete newFilters[channelName];
+
+      clearTimeout(uploadNewFiltersTimer.current);
+      uploadNewFiltersTimer.current = setTimeout(() => {
+        axios
+          .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/customfilters`, {
+            username: getCookie(`AioFeed_AccountName`),
+            filtesObj: newFilters,
+            authkey: getCookie(`AioFeed_AuthKey`),
+          })
+          .catch((e) => console.error(e));
+      }, 5000);
+
+      return newFilters;
     });
     resetMatch();
     resetType();
@@ -130,7 +151,7 @@ export const Row = ({
       handleSubmit={handleSubmit}
       style={{ ...style }}
     >
-      {(!channel || (channel && showChannelName)) && (
+      {!channel && (
         <Form.Control
           type='text'
           placeholder='channel..'

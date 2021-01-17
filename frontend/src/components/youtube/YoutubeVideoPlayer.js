@@ -36,7 +36,7 @@ export default () => {
     playerVars: {
       autoplay: 1,
       controls: 1,
-      origin: 'https://aiofeed.com/youtube',
+      origin: 'https://aiofeed.com',
       start: video.startTime,
       frameborder: '0',
       fs: 1,

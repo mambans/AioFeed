@@ -30,9 +30,7 @@ export const Twitch = ({ in: forceMount = false }) => {
   } = useContext(FeedsContext) || {};
 
   useEffect(() => {
-    Notification.requestPermission().then(function (result) {
-      console.log('Notifications: ', result);
-    });
+    Notification.requestPermission().then((result) => console.log('Notifications: ', result));
   }, []);
 
   return (

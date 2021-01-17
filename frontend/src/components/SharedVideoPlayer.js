@@ -91,28 +91,29 @@ export default ({ children }) => {
             />
             Nav
           </ShowNavbarBtn>
-          <ShowNavbarBtn
-            variant='dark'
-            disabled={!listName}
-            onClick={() => {
-              setViewStates((curr) => {
-                const newValue = !curr.hideList;
-                delete curr?.default;
+          {listName && (
+            <ShowNavbarBtn
+              variant='dark'
+              onClick={() => {
+                setViewStates((curr) => {
+                  const newValue = !curr.hideList;
+                  delete curr?.default;
 
-                return { ...curr, hideList: newValue };
-              });
-            }}
-          >
-            <FaList
-              style={{
-                transform: visible ? 'rotateX(180deg)' : 'unset',
-                right: '10px',
+                  return { ...curr, hideList: newValue };
+                });
               }}
-              size={30}
-              title='Show list'
-            />
-            List
-          </ShowNavbarBtn>
+            >
+              <FaList
+                style={{
+                  transform: visible ? 'rotateX(180deg)' : 'unset',
+                  right: '10px',
+                }}
+                size={30}
+                title='Show list'
+              />
+              List
+            </ShowNavbarBtn>
+          )}
         </PlayerExtraButtons>
         <VolumeEventOverlay
           show={resizeActive}
@@ -121,6 +122,8 @@ export default ({ children }) => {
           hidechat={String(viewStates.hideList)}
           chatwidth={viewStates.listWidth || DEFAULT_LIST_WIDTH}
         />
+
+        {children}
 
         {!viewStates.hideList && listName && (
           <>
@@ -136,7 +139,6 @@ export default ({ children }) => {
             </div>
           </>
         )}
-        {children}
       </VideoAndChatContainer>
     </>
   );

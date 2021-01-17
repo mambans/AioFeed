@@ -13,23 +13,26 @@ import ThemeContext from './../themes/ThemeContext';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import { TwitchProvider } from '../twitch/useToken';
 import { YoutubeProvider } from '../youtube/useToken';
+import { CustomFilterProvider } from '../twitch/CustomFilters/CustomFilterContext';
 
 export default () => {
   return (
     <ThemeProvider>
       <AccountProvider>
         <TwitchProvider>
-          <YoutubeProvider>
-            <NavigationProvider>
-              <NotificationsProvider>
-                <FeedsProvider>
-                  <FooterProvider>
-                    <App />
-                  </FooterProvider>
-                </FeedsProvider>
-              </NotificationsProvider>
-            </NavigationProvider>
-          </YoutubeProvider>
+          <CustomFilterProvider>
+            <YoutubeProvider>
+              <NavigationProvider>
+                <NotificationsProvider>
+                  <FeedsProvider>
+                    <FooterProvider>
+                      <App />
+                    </FooterProvider>
+                  </FeedsProvider>
+                </NotificationsProvider>
+              </NavigationProvider>
+            </YoutubeProvider>
+          </CustomFilterProvider>
         </TwitchProvider>
       </AccountProvider>
     </ThemeProvider>
