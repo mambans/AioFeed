@@ -18,10 +18,11 @@ import { getCookie } from '../../../util/Utils';
 import useClicksOutside from '../../../hooks/useClicksOutside';
 import CustomFilterContext from './CustomFilterContext';
 
-const AllFiltersListContainer = ({ setOpen, containerRef, uploadNewFiltersTimer }) => {
+const AllFiltersListContainer = ({ setOpen, uploadNewFiltersTimer }) => {
   const { filters, setFilters } = useContext(CustomFilterContext);
+  const ref = useRef();
   // useLockBodyScroll(true);
-  useClicksOutside(containerRef, () => setOpen(false));
+  useClicksOutside(ref, () => setOpen(false));
 
   const clearAllFilters = () => {
     setFilters({});
@@ -35,7 +36,7 @@ const AllFiltersListContainer = ({ setOpen, containerRef, uploadNewFiltersTimer 
   };
 
   return (
-    <StyledAllFiltersListContainer>
+    <StyledAllFiltersListContainer ref={ref}>
       <Button variant='dark' onClick={clearAllFilters} style={{ margin: '5px', marginBottom: '0' }}>
         Clear all
       </Button>
@@ -60,7 +61,7 @@ const AllFiltersListContainer = ({ setOpen, containerRef, uploadNewFiltersTimer 
             >
               <ChannelRulesList>
                 <ChannelNameHeader>{channelName}</ChannelNameHeader>
-                {filters[channelName].map((rule, index) => (
+                {filters[channelName]?.map((rule, index) => (
                   <Row
                     key={`${channelName}-${index}`}
                     rule={rule}
@@ -82,15 +83,13 @@ const AllFiltersListContainer = ({ setOpen, containerRef, uploadNewFiltersTimer 
 export default () => {
   const [open, setOpen] = useState();
   const uploadNewFiltersTimer = useRef();
-  const ref = useRef();
 
   return (
-    <AllFiltersContainer ref={ref}>
+    <AllFiltersContainer>
       <OpenListBtn onClick={() => setOpen(true)} size={26} show={String(open)} />
       {open && (
         <AllFiltersListContainer
           setOpen={setOpen}
-          containerRef={ref}
           uploadNewFiltersTimer={uploadNewFiltersTimer}
         ></AllFiltersListContainer>
       )}

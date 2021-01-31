@@ -54,9 +54,9 @@ export const OpenListBtn = styled(MdFilterList)`
   margin: 5px;
   margin-bottom: 0px;
 
-  &&& {
-    opacity: ${({ show }) => (show === 'true' ? '0' : '1')} !important;
-  }
+  /* &&& {
+    opacity: ${({ show }) => (show === 'true' ? 'unset' : '1')};
+  } */
 
   &:hover {
     color: #ffffff;

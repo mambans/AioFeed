@@ -10,6 +10,7 @@ import LiveIndicator from './LiveIndicator';
 import AddVideoExtraData from '../AddVideoExtraData';
 import loginNameFormat from '../loginNameFormat';
 import CustomFilters from '../CustomFilters';
+import ChannelButtonsContainer from '../live/ChannelButtonsContainer';
 
 export default ({
   data,
@@ -89,7 +90,8 @@ export default ({
         )}
         {loginNameFormat(channel) || `${searchInput}..`}
       </Link>
-      <div className='ButtonContianer'>
+      {/* <div className='ButtonContianer'> */}
+      <ChannelButtonsContainer staticOpen={true}>
         <CustomFilters channel={channel?.user_name.toLowerCase()} />
         <VodsFollowUnfollowBtn
           show={showVodBtn}
@@ -104,7 +106,8 @@ export default ({
           id={channel?.user_id}
           followingStatus={followingStatus}
         />
-      </div>
+        {/* </div> */}
+      </ChannelButtonsContainer>
     </ChannelListLi>
   );
 };

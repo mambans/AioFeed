@@ -44,6 +44,11 @@ export const ThemeProvider = ({ children }) => {
       image: 'clean.png',
     },
     {
+      name: 'dark',
+      type: 'dark',
+      backgroundColor: '#101216',
+    },
+    {
       name: 'coffee',
       type: 'dark',
       image: 'coffee.jpg',
@@ -69,11 +74,7 @@ export const ThemeProvider = ({ children }) => {
       type: 'light',
       backgroundColor: 'white',
     },
-    {
-      name: 'simple dark',
-      type: 'dark',
-      backgroundColor: 'black',
-    },
+
     {
       name: 'christmas',
       type: 'dark',

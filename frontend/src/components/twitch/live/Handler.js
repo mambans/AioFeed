@@ -84,6 +84,7 @@ export default ({ children }) => {
                   ?.toLowerCase()
                   ?.includes(rule.match.toLowerCase());
 
+                if (!Boolean(stream?.game_id)) return true;
                 if (whitelists && !match) return false;
                 if (whitelists && match) return true;
                 if (match && rule?.action === 'Blacklist') return false;

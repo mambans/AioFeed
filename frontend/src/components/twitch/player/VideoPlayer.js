@@ -115,15 +115,6 @@ export default () => {
 
   return (
     <>
-      {/* <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
-        <PlayerNavbar
-          channelName={channelName}
-          streamInfo={videoInfo}
-          twitchVideoPlayer={twitchVideoPlayer}
-          setVisible={setVisible}
-          visible={visible}
-        />
-      </CSSTransition> */}
       <OverlayTrigger
         key='loop'
         placement={'left'}

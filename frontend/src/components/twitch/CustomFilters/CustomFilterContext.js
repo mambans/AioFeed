@@ -18,8 +18,11 @@ export const CustomFilterProvider = ({ children }) => {
             authkey: getCookie(`AioFeed_AuthKey`),
           },
         })
-        .then((res) => res.data.Item.filters)
-        .catch((e) => console.error(e));
+        .then((res) => res.data.Item?.filters || {})
+        .catch((e) => {
+          console.error(e);
+          return {};
+        });
 
       setFilters(fetchedFilters);
     })();

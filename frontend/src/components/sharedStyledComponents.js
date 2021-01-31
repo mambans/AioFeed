@@ -107,6 +107,16 @@ const HeaderTitle = styled.div`
     transition: margin 500ms, color 500ms;
     align-items: center;
     min-width: max-content;
+    height: 25px;
+
+    img,
+    .imgPlaceholder {
+      height: 130%;
+      border-radius: 5px;
+      margin-right: 10px;
+      width: 25px;
+      background: var(--navigationbarBackground);
+    }
 
     &:hover {
       margin: 0 50px;
@@ -142,7 +152,7 @@ const HeaderLines = styled.div`
 const HeaderOuterMainContainer = styled.div`
   width: 100%;
   margin-bottom: 5px;
-  padding-top: 20px;
+  padding-top: 25px;
 `;
 
 const HeaderTopContainer = styled.div`
@@ -163,6 +173,7 @@ export const HeaderContainer = (props) => {
     text,
     onHoverIconLink,
     id,
+    leftImage,
     leftSide,
     rightSide,
     isLoading,
@@ -204,6 +215,7 @@ export const HeaderContainer = (props) => {
       <HeaderTitle>
         <HeaderLines />
         <h5 onClick={handleOnClick}>
+          {leftImage}
           {text}
           {onHoverIconLink && onHoverIconLink !== path && (
             <Link
@@ -324,7 +336,8 @@ export const ChannelContainer = styled.div`
     pointer-events: none;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-within {
     .buttonsContainer {
       transform: translateY(0px);
       opacity: 1;
@@ -738,20 +751,26 @@ export const Duration = styled.div`
 
 export const FeedSizeBtn = styled.div`
   position: absolute;
-  top: 20px;
+  top: 0px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  right: -40px;
+  right: 0px;
   background: var(--refreshButtonBackground);
-  padding: 5px;
+  /* padding: 5px; */
   border-radius: 2px;
+  opacity: 0.5;
+  transition: opacity 500ms;
+
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 export const FeedSizeIcon = styled(MdVideoLabel)`
   fill: ${({ active }) => (active === 'true' ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.4)')};
   cursor: pointer;
-  margin: 5px 0;
+  margin: 0 5px;
   transition: fill 500ms;
   z-index: 1;
 

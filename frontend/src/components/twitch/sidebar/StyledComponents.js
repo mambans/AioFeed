@@ -22,6 +22,8 @@ export const Styledsidebar = styled.div`
   padding-bottom: 2px;
   z-index: 2;
   left: 0;
+  box-shadow: 0 9px 0px 0px transparent, 0 -9px 0px 0px transparent, 12px 0 15px -4px #00000030,
+    -12px 0 15px -4px #00000030;
 `;
 
 export const SidebarHeader = styled.p`

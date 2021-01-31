@@ -1,7 +1,6 @@
-import { MdVerticalAlignBottom } from 'react-icons/md';
 import { FaList } from 'react-icons/fa';
-import { useParams } from 'react-router-dom';
-import React, { useContext, useEffect, useState, useCallback } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import React, { useContext, useState, useCallback } from 'react';
 
 import {
   VideoAndChatContainer,
@@ -15,12 +14,16 @@ import AddVideoButton from './favorites/addRemoveButton/AddVideoButton';
 import useQuery from './../hooks/useQuery';
 import PlaylistInPlayer from './youtube/PlaylistInPlayer';
 import useSyncedLocalState from '../hooks/useSyncedLocalState';
+import YoutubeVideoPlayer from './youtube/YoutubeVideoPlayer';
+import VideoPlayer from './twitch/player/VideoPlayer';
+import useFullscreen from '../hooks/useFullscreen';
 
 const DEFAULT_LIST_WIDTH = Math.max(window.innerWidth * 0.1, 400);
 
-export default ({ children }) => {
-  const videoId = useParams().videoId;
-  const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
+export default () => {
+  const location = useLocation();
+  const { videoId, channelName } = useParams() || {};
+  const { visible } = useContext(NavigationContext);
   const listName = useQuery().get('list') || useQuery().get('listName') || null;
   const [viewStates, setViewStates] = useSyncedLocalState(`${listName}-viewStates`, {
     listWidth: DEFAULT_LIST_WIDTH,
@@ -28,6 +31,8 @@ export default ({ children }) => {
     default: true,
   });
   const [resizeActive, setResizeActive] = useState(false);
+
+  useFullscreen();
 
   const handleResizeMouseDown = () => setResizeActive(true);
   const handleResizeMouseUp = (e) => setResizeActive(false);
@@ -49,21 +54,6 @@ export default ({ children }) => {
     },
     [resizeActive, setViewStates]
   );
-
-  useEffect(() => {
-    document.documentElement.style.overflow = 'hidden';
-    setShrinkNavbar('true');
-    setVisible(false);
-    setFooterVisible(false);
-
-    return () => {
-      document.documentElement.style.overflow = 'visible';
-      setShrinkNavbar('false');
-      setFooterVisible(true);
-      setVisible(true);
-    };
-  }, [setShrinkNavbar, setFooterVisible, setVisible]);
-
   return (
     <>
       <VideoAndChatContainer
@@ -80,17 +70,7 @@ export default ({ children }) => {
           style={{ left: '15px', top: '55px', opacity: '1' }}
           size={32}
         />
-        <PlayerExtraButtons>
-          <ShowNavbarBtn variant='dark' onClick={() => setVisible(!visible)} style={{ right: '0' }}>
-            <MdVerticalAlignBottom
-              style={{
-                transform: visible ? 'rotateX(180deg)' : 'unset',
-              }}
-              size={26}
-              title='Show navbar'
-            />
-            Nav
-          </ShowNavbarBtn>
+        <PlayerExtraButtons channelName={channelName}>
           {listName && (
             <ShowNavbarBtn
               variant='dark'
@@ -123,7 +103,8 @@ export default ({ children }) => {
           chatwidth={viewStates.listWidth || DEFAULT_LIST_WIDTH}
         />
 
-        {children}
+        {location.pathname.split('/')[1] === 'youtube' ? <YoutubeVideoPlayer /> : <VideoPlayer />}
+        {/* {children} */}
 
         {!viewStates.hideList && listName && (
           <>

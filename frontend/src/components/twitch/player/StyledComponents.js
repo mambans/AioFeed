@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { FaInfoCircle, FaWindowClose } from 'react-icons/fa';
-import { MdMovieCreation, MdLoop, MdMore, MdCompareArrows, MdChat } from 'react-icons/md';
+import {
+  MdMovieCreation,
+  MdLoop,
+  MdMore,
+  MdCompareArrows,
+  MdChat,
+  MdVerticalAlignBottom,
+  MdAccountCircle,
+  MdViewWeek,
+} from 'react-icons/md';
 import { Button, Nav } from 'react-bootstrap';
 import { GrRefresh } from 'react-icons/gr';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import NavigationContext from '../../navigation/NavigationContext';
 
 export const VideoAndChatContainer = styled.div`
   position: fixed;
@@ -426,9 +436,9 @@ export const CreateClipButton = styled(MdMovieCreation).attrs({ size: 24, color:
 `;
 
 export const StyledPlayerExtraButtons = styled.div`
-  transition: transform 250ms, opacity 250ms;
-  transform: translateX(100%) translateX(-35px);
-  opacity: 1;
+  transition: transform 250ms, opacity 500ms;
+  transform: translateX(100%) translateX(-49px);
+  /* opacity: 1; */
   width: max-content;
   position: absolute;
   z-index: 1;
@@ -437,29 +447,86 @@ export const StyledPlayerExtraButtons = styled.div`
   display: flex;
   align-items: center;
   border-radius: 10px;
+  opacity: 0.75;
 
   svg {
     padding: 2px;
-    margin: 0 5px;
+    margin-right: 4px;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-within {
     transform: translateX(0);
+    opacity: 1;
+  }
+
+  a {
+    color: #fff;
+    background-color: #343a40;
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    margin: 4px;
+    cursor: pointer;
+    /* opacity: 0.7; */
+    overflow: hidden;
+    border: none;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+      border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+    &:hover {
+      opacity: 1;
+      color: #fff;
+      background-color: #23272b;
+      border-color: #1d2124;
+      text-decoration: none;
+    }
   }
 `;
 
-const PlayerExtraButtonsTrigger = styled(MdMore).attrs({ size: 26 })`
-  color: #646464;
+const PlayerExtraButtonsTrigger = styled(MdMore).attrs({ size: 36 })`
+  color: white;
   margin-right: 8px;
 `;
-export const PlayerExtraButtons = ({ children }) => (
-  <StyledPlayerExtraButtons>
-    <PlayerExtraButtonsTrigger />
-    {children}
-  </StyledPlayerExtraButtons>
-);
+const PlayerExtraButtonsTrigger1 = styled(MdViewWeek).attrs({ size: 26 })`
+  color: #646464;
+  position: absolute;
+  transform: translateX(9px);
+  margin-right: 0 !important;
+`;
 
-export const ShowNavbarBtn = styled(Button)`
+export const PlayerExtraButtons = ({ channelName, children }) => {
+  const { visible, setVisible } = useContext(NavigationContext);
+
+  return (
+    <StyledPlayerExtraButtons>
+      <PlayerExtraButtonsTrigger />
+      <PlayerExtraButtonsTrigger1 />
+      <ShowNavbarBtn onClick={() => setVisible(!visible)}>
+        <MdVerticalAlignBottom
+          style={{
+            transform: visible ? 'rotateX(180deg)' : 'unset',
+            right: '10px',
+          }}
+          size={26}
+          title='Show navbar'
+        />
+        Nav
+      </ShowNavbarBtn>
+      {channelName && (
+        <Link to={`/${channelName}/page`}>
+          <MdAccountCircle size={26} /> Page
+        </Link>
+      )}
+      {children}
+    </StyledPlayerExtraButtons>
+  );
+};
+
+export const ShowNavbarBtn = styled(Button).attrs({ variant: 'dark' })`
   display: flex;
   align-items: center;
   padding: 5px 10px;

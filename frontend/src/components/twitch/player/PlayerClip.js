@@ -1,34 +1,23 @@
 import { CSSTransition } from 'react-transition-group';
 import { Link } from 'react-router-dom';
-import { MdAccountCircle, MdVerticalAlignBottom } from 'react-icons/md';
+import { MdAccountCircle } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 
 import NavigationContext from './../../navigation/NavigationContext';
 import {
   VideoAndChatContainer,
   StyledVideo,
   PlayerNavbar,
-  ShowNavbarBtn,
   PlayerExtraButtons,
 } from './StyledComponents';
+import useFullscreen from '../../../hooks/useFullscreen';
 
 export default () => {
-  const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
+  const { visible } = useContext(NavigationContext);
   const { videoId, channelName } = useParams();
   document.title = `${channelName} - ${videoId}`;
-
-  useEffect(() => {
-    setShrinkNavbar('true');
-    setFooterVisible(false);
-    document.documentElement.style.overflow = 'hidden';
-
-    return () => {
-      document.documentElement.style.overflow = 'visible';
-      setShrinkNavbar('false');
-      setFooterVisible(true);
-    };
-  }, [setShrinkNavbar, setFooterVisible]);
+  useFullscreen({ hideNavbar: false });
 
   return (
     <>
@@ -47,19 +36,7 @@ export default () => {
           display: 'unset',
         }}
       >
-        <PlayerExtraButtons>
-          <ShowNavbarBtn variant='dark' onClick={() => setVisible(!visible)}>
-            <MdVerticalAlignBottom
-              style={{
-                transform: visible ? 'rotateX(180deg)' : 'unset',
-                right: '10px',
-              }}
-              size={26}
-              title='Show navbar'
-            />
-            Navbar
-          </ShowNavbarBtn>
-        </PlayerExtraButtons>
+        <PlayerExtraButtons channelName={channelName}></PlayerExtraButtons>
         <StyledVideo
           src={`https://clips.twitch.tv/embed?clip=${videoId}&parent=aiofeed.com`}
           height='100%'

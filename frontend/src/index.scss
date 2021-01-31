@@ -56,3 +56,7 @@ html.theme-transition *:after {
 .tooltip {
   max-width: 500px;
 }
+
+.navbar-dark .navbar-nav a.nav-link.active {
+  color: var(--textColor2Hover);
+}

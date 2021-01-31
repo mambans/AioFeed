@@ -13,10 +13,10 @@ export default ({
   style,
   refreshStreams,
   refreshAfterUnfollowTimer,
-  followingStatus = null,
+  followingStatus,
   show = true,
 }) => {
-  const [following, setFollowing] = useState(followingStatus || false);
+  const [following, setFollowing] = useState(followingStatus);
   const { twitchUserId } = useContext(AccountContext);
   const validateToken = useToken();
 
@@ -87,9 +87,7 @@ export default ({
       });
     };
 
-    if (show && followingStatus === null) {
-      checkFollowing();
-    }
+    if (show && followingStatus === undefined) checkFollowing();
   }, [channelName, twitchUserId, id, followingStatus, show, validateToken]);
 
   if (!show) return null;

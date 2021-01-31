@@ -1,8 +1,5 @@
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { FaRegFileVideo } from 'react-icons/fa';
-import { FaTwitch } from 'react-icons/fa';
-import { MdLiveTv } from 'react-icons/md';
-import { MdMovieCreation } from 'react-icons/md';
+import { MdMovieCreation, MdLiveTv } from 'react-icons/md';
 import { useParams, useLocation } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import React, { useEffect, useState, useCallback, useRef, useContext } from 'react';
@@ -30,11 +27,13 @@ import { getCookie } from '../../../util/Utils';
 import AccountContext from '../../account/AccountContext';
 import useQuery from '../../../hooks/useQuery';
 import useToken from '../useToken';
+import API from '../API';
 
 export default () => {
   const { category } = useParams();
   const { p_videoType } = useLocation().state || {};
   const [topData, setTopData] = useState([]);
+  const [gameInfo, setGameInfo] = useState({ name: category });
   const URLQueries = useQuery();
   const [videoType, setVideoType] = useState(
     URLQueries.get('type')?.toLowerCase() || p_videoType || 'streams'
@@ -164,6 +163,15 @@ export default () => {
   }, [fetchVideos, validateToken]);
 
   useEffect(() => {
+    (async () => {
+      const gameInfo = await API.getGames({ params: { name: category } }).then(
+        (res) => res.data.data[0]
+      );
+      setGameInfo(gameInfo);
+    })();
+  }, [category]);
+
+  useEffect(() => {
     setRefreshing(true);
     setTopData([]);
     validateToken().then(() => fetchVideos());
@@ -193,8 +201,20 @@ export default () => {
         <HeaderContainer
           text={
             <>
-              {category || 'Top'} - {videoType}
-              <FaTwitch size={25} style={{ color: '#6f166f' }} />
+              {gameInfo?.box_art_url ? (
+                <img
+                  src={gameInfo.box_art_url?.replace('{width}', 130)?.replace('{height}', 173)}
+                  alt=''
+                />
+              ) : (
+                <div className='imgPlaceholder'></div>
+              )}
+              {gameInfo.name || 'Top'} - {videoType}
+              {!videoType || videoType === 'streams' ? (
+                <MdLiveTv size={25} />
+              ) : (
+                <MdMovieCreation size={25} />
+              )}
             </>
           }
           isLoading={refreshing}
@@ -210,7 +230,11 @@ export default () => {
                     setTypeListOpen(!typeListOpen);
                   }}
                 >
-                  <FaRegFileVideo size={20} />
+                  {!videoType || videoType === 'streams' ? (
+                    <MdLiveTv size={20} />
+                  ) : (
+                    <MdMovieCreation size={22} />
+                  )}
                   {videoType}
                 </TypeButton>
 

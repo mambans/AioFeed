@@ -7,12 +7,12 @@ import Footer from '../footer';
 import Home from '../home';
 import Legality from '../legality';
 import Navbar from '../navigation';
-import VideoPlayer from './../twitch/player/VideoPlayer';
+// import VideoPlayer from './../twitch/player/VideoPlayer';
 import TopStreams from '../twitch/categoryTopStreams';
 import TwitchAuthCallback from '../auth/TwitchAuthCallback';
 import TwitchChannelRoutes from './../twitch/Routes';
 import YoutubeAuthCallback from '../auth/YoutubeAuthCallback';
-import YoutubeVideoPlayer from './../youtube/YoutubeVideoPlayer';
+// import YoutubeVideoPlayer from './../youtube/YoutubeVideoPlayer';
 import Twitch from '../twitch/live';
 import TwitchVods from '../twitch/vods';
 import Twitter from '../twitter';
@@ -49,14 +49,15 @@ export default () => {
           <Route path='legality' element={<Legality />} />
           <Route path='privacy' element={<Legality />} />
           {/* <Route path='youtube/:videoId' element={<YoutubeVideoPlayer />} /> */}
-          <Route
+          {/* <Route
             path='youtube/:videoId'
             element={
               <SharedVideoPlayer>
                 <YoutubeVideoPlayer />
               </SharedVideoPlayer>
             }
-          />
+          /> */}
+          <Route path='youtube/:videoId' element={<SharedVideoPlayer />} />
 
           <Route path='category' element={<TopStreams />} />
           <Navigate path='game' to='/category' />
@@ -66,14 +67,15 @@ export default () => {
           <Route path='top/:category' element={<TopStreams />} />
 
           {/* <Route path='videos/:videoId' element={<VideoPlayer />} /> */}
-          <Route
+          {/* <Route
             path='videos/:videoId'
             element={
               <SharedVideoPlayer>
                 <VideoPlayer />
               </SharedVideoPlayer>
             }
-          />
+          /> */}
+          <Route path='videos/:videoId' element={<SharedVideoPlayer />} />
           <Route path=':channelName/*' element={<TwitchChannelRoutes />} />
         </Routes>
       </MainContentContainer>

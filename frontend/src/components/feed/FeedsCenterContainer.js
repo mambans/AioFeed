@@ -69,6 +69,7 @@ const Center = ({ children, forceMountTwitch, fullWidth }) => {
   const NrLists = twitterLists?.length || 1;
   const path = useLocation().pathname?.slice(0, 5);
   const ref = useRef();
+  const updateTimer = useRef();
 
   const onClickDefault = () => {
     localStorage.setItem('Feed-size', 'default');
@@ -85,6 +86,13 @@ const Center = ({ children, forceMountTwitch, fullWidth }) => {
       videoElementsAmount: (ref.current.clientWidth / feedSizesObj.totalWidth) * 2,
       winWidth: document.documentElement.clientWidth,
     });
+    clearTimeout(updateTimer.current);
+    updateTimer.current = setTimeout(() => {
+      setVideoDisplayData({
+        videoElementsAmount: (ref.current.clientWidth / feedSizesObj.totalWidth) * 2,
+        winWidth: document.documentElement.clientWidth,
+      });
+    }, 750);
   });
 
   useEffect(() => {
