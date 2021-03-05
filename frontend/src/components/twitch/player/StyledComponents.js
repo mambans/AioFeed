@@ -532,16 +532,11 @@ export const ShowNavbarBtn = styled(Button).attrs({ variant: 'dark' })`
   padding: 5px 10px;
   margin: 4px;
   cursor: pointer;
-  opacity: 0.7;
   overflow: hidden;
   border: none;
 
   svg {
     min-width: 30px;
-  }
-
-  &:hover {
-    opacity: 1;
   }
 `;
 
@@ -622,23 +617,6 @@ export const SmallButtonContainer = styled.div`
   }
 `;
 
-export const ChannelButton = styled(Button)`
-  position: absolute;
-  color: rgb(240, 240, 240);
-  padding: 5px 10px;
-  background: #313131b8;
-  margin: 15px 0 0 250px;
-  border-radius: 5px;
-  transition: color 200ms, background 200ms;
-  opacity: 0.5;
-
-  &:hover {
-    color: rgb(255, 255, 255);
-    background: #3c3c3cb8;
-    opacity: 1;
-  }
-`;
-
 export const ChannelIconLink = styled(Nav.Link).attrs({ as: NavLink })`
   color: rgb(240, 240, 240);
   margin-right: 10px;
@@ -698,9 +676,105 @@ export const OfflineOverlay = styled.div`
 `;
 
 export const LoopBtn = styled(MdLoop)`
-  position: absolute;
-  right: 15px;
-  bottom: 90px;
+  /* position: absolute; */
+  /* right: ${({ listIsOpen, listWidth }) => (listIsOpen === 'true' ? listWidth : '15')}px; */
+  /* right: 15px; */
+  /* bottom: ${({ enabled }) => (enabled === 'true' ? '150px' : '90px')}; */
   cursor: pointer;
-  opacity: ${({ enabled }) => (enabled ? '1' : '0.3')};
+  opacity: ${({ enabled }) => (enabled === 'true' ? '1' : '0.3')};
+  margin: 15px;
+`;
+
+export const LoopTimebarBackground = styled.div`
+  width: 100%;
+  height: 15px;
+  background: #1e1e1e;
+  position: relative;
+`;
+export const LoopTimebarContainer = styled.div`
+  width: calc(100% - 4em);
+  /* position: fixed; */
+  /* bottom: 90px; */
+  /**To match Twitch Iframe font-size for the padding*/
+  font-size: 62.5%;
+  margin-left: 2em;
+  opacity: ${({ active }) => (active ? 1 : 0.2)};
+  transition: opacity 500ms;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+export const LoopTimebarEnabled = styled.div`
+  height: 100%;
+  background: #393939;
+  width: ${({ width }) => width};
+  /* left: ${({ start }) => (start ? '0px' : 'unset')};
+  right: ${({ start }) => (start ? '0px' : 'unset')}; */
+  position: absolute;
+  left: ${({ left }) => left}px;
+  /* cursor: pointer; */
+
+  p#loopedDuration {
+    position: absolute;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.25em;
+    transition: opacity 250ms;
+    width: calc(100% - 20px);
+    margin: 0;
+    margin-left: 10px;
+    user-select: none;
+  }
+
+  &:hover {
+    p#loopedDuration {
+      opacity: 1;
+    }
+  }
+`;
+
+export const LoopPins = styled.div`
+  height: 200%;
+  background: ${({ active }) => (active ? 'white' : '#9b9b9b')};
+  width: 10px;
+  position: absolute;
+  cursor: pointer;
+  transform: translateY(-25%);
+
+  &:hover {
+    background: white;
+    p {
+      opacity: 1;
+    }
+  }
+
+  p {
+    opacity: ${({ active }) => (active ? 1 : 0)};
+    transition: opacity 100ms;
+    color: white;
+    position: absolute;
+    transform: translate3d(-25%, -125%, 0);
+    background: #3e3e3ef0;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 1rem;
+    pointer-events: none;
+  }
+`;
+
+export const Backdrop = styled.div`
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+`;
+
+export const Loop = styled.div`
+  position: fixed;
+  bottom: 90px;
+  width: ${({ listIsOpen, listWidth, loopEnabled }) =>
+    listIsOpen === 'true' ? `calc(100% - ${listWidth}px )` : loopEnabled === 'true' ? '100%' : 'auto'};
 `;

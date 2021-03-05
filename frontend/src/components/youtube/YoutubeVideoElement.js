@@ -13,7 +13,7 @@ import {
 } from './../sharedStyledComponents';
 import VideoHoverIframe from './VideoHoverIframe';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
-import AddVideoButton from '../favorites/addRemoveButton/AddVideoButton';
+import FavoriteButton from '../favorites/buttonList/FavoriteButton';
 import { ChannelNameLink, PublishedDate } from './StyledComponents';
 import { YoutubeContext } from './useToken';
 
@@ -56,7 +56,7 @@ export default ({ video, disableContextProvider, setDragSelected, listName, ...p
       {...props}
     >
       <ImageContainer id={video.contentDetails?.upload?.videoId} ref={ref}>
-        <AddVideoButton
+        <FavoriteButton
           videoId_p={video.contentDetails?.upload?.videoId}
           disablepreview={handleMouseOut}
           disableContextProvider={disableContextProvider}

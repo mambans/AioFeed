@@ -1,43 +1,23 @@
-// import { CSSTransition } from 'react-transition-group';
 import { useParams } from 'react-router-dom';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import NavigationContext from './../../navigation/NavigationContext';
-import { LoopBtn } from './StyledComponents';
-// import PlayerNavbar from './PlayerNavbar';
 import API from '../API';
-import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import useQuery from '../../../hooks/useQuery';
+import Loopbar, { timeToSeconds } from './Loopbar';
+import { LoopBtn, Loop } from './StyledComponents';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
-export default () => {
+export default ({ listIsOpen, listWidth }) => {
   const channelName = useParams()?.channelName;
   const videoId = useParams()?.videoId;
   const time = useQuery().get('t') || useQuery().get('start') || null;
   const endTime = useQuery().get('end') || null;
-
   const { setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
-
   const [twitchVideoPlayer, setTwitchVideoPlayer] = useState();
-  const endTimeRef = useRef();
-
-  const [loopEnabled, setLoopEnabled] = useState();
-
-  const loopVideo = () => {
-    loopEnabled &&
-      twitchVideoPlayer.seek(
-        time
-          ? time.includes('s')
-            ? time
-                .split(/[hms:]+/)
-                .slice(0, -1)
-                .reduce((acc, ti) => 60 * acc + +ti)
-            : time.split(/[hm:]+/).reduce((acc, ti) => 60 * acc + +ti)
-          : 0
-      );
-  };
-
-  useEventListenerMemo(window.Twitch.Player.ENDED, loopVideo, twitchVideoPlayer);
+  const [loopEnabled, setLoopEnabled] = useState(Boolean(time));
+  const [duration, setDuration] = useState();
 
   useEffect(() => {
     setTwitchVideoPlayer(
@@ -48,12 +28,18 @@ export default () => {
         layout: 'video',
         video: videoId || null,
         muted: false,
-        time: time,
+        time: timeToSeconds(time),
         allowfullscreen: true,
         parent: ['aiofeed.com'],
       })
     );
   }, [setShrinkNavbar, setFooterVisible, setVisible, channelName, videoId, time]);
+
+  useEventListenerMemo(
+    window.Twitch.Player.PLAYING,
+    () => setDuration(twitchVideoPlayer.getDuration()),
+    twitchVideoPlayer
+  );
 
   useEffect(() => {
     document.title = `${(channelName && `${channelName} -`) || ''} ${videoId}`;
@@ -72,7 +58,9 @@ export default () => {
           window.history.pushState(
             {},
             `${videoDetails?.user_name || ''} - ${videoDetails?.title || videoId}`,
-            `/${videoDetails?.user_name}/videos/${videoId}${time ? `?t=${time}` : ''}`
+            `/${videoDetails?.user_name}/videos/${videoId}${time ? `?start=${time}` : ''}${
+              endTime ? `&end=${endTime}` : ''
+            }`
           );
         }
       }
@@ -81,64 +69,40 @@ export default () => {
     const timer = setTimeout(fetchDetailsForDocumentTitle, 500);
 
     return () => clearTimeout(timer);
-  }, [videoId, channelName, twitchVideoPlayer, time]);
-
-  useEffect(() => {
-    if (twitchVideoPlayer && endTime && loopEnabled) {
-      const setAndStartTimer = () => {
-        const startTimeInSeconds = time
-          ? time.includes('s')
-            ? time
-                .split(/[hms:]+/)
-                .slice(0, -1)
-                .reduce((acc, ti) => 60 * acc + +ti)
-            : time.split(/[hm:]+/).reduce((acc, ti) => 60 * acc + +ti)
-          : 0;
-
-        const endTimeInSeconds = endTime.includes('s')
-          ? endTime
-              .split(/[hms:]+/)
-              .slice(0, -1)
-              .reduce((acc, ti) => 60 * acc + +ti)
-          : endTime.split(/[hm:]+/).reduce((acc, ti) => 60 * acc + +ti);
-
-        clearTimeout(endTimeRef.current);
-        endTimeRef.current = setTimeout(() => {
-          twitchVideoPlayer.seek(startTimeInSeconds);
-          setAndStartTimer();
-        }, (endTimeInSeconds - startTimeInSeconds) * 1000);
-      };
-
-      setAndStartTimer();
-    }
-  }, [endTime, time, twitchVideoPlayer, loopEnabled]);
+  }, [videoId, channelName, twitchVideoPlayer, time, endTime]);
 
   return (
-    <>
-      <OverlayTrigger
-        key='loop'
-        placement={'left'}
-        delay={{ show: 500, hide: 0 }}
-        overlay={
-          <Tooltip id={`tooltip-${'left'}`}>{`${
-            loopEnabled ? 'Disable ' : 'Enable '
-          } loop`}</Tooltip>
-        }
-      >
-        <LoopBtn
-          size={32}
-          enabled={loopEnabled}
-          onClick={() => {
-            setLoopEnabled((cr) => {
-              if (twitchVideoPlayer.getEnded() && !cr) {
-                twitchVideoPlayer.seek(0);
-              }
-              return !cr;
-            });
-          }}
-        />
-      </OverlayTrigger>
+    <Loop listIsOpen={String(listIsOpen)} listWidth={listWidth} loopEnabled={String(loopEnabled)}>
+      {twitchVideoPlayer && (
+        <OverlayTrigger
+          key='loop'
+          placement='right'
+          delay={{ show: 500, hide: 0 }}
+          overlay={
+            <Tooltip id='loopbtn-tooltip-right'>{`${
+              loopEnabled ? 'Disable ' : 'Enable '
+            } loop`}</Tooltip>
+          }
+        >
+          <LoopBtn
+            size={32}
+            enabled={String(loopEnabled)}
+            onClick={() => {
+              setLoopEnabled((cr) => {
+                if (twitchVideoPlayer.getEnded() && !cr) {
+                  twitchVideoPlayer.seek(0);
+                }
+                return !cr;
+              });
+            }}
+          />
+        </OverlayTrigger>
+      )}
+      {twitchVideoPlayer && loopEnabled && (
+        <Loopbar twitchVideoPlayer={twitchVideoPlayer} duration={duration} />
+      )}
+
       {/* <div id='twitch-embed' style={{ gridArea: 'video' }}></div> */}
-    </>
+    </Loop>
   );
 };

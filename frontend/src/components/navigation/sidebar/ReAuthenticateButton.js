@@ -87,7 +87,7 @@ export default ({ disconnect, serviceName, style }) => {
               <StyledReconnectIcon id='reconnectIcon' />
               <img title='Re-authenticate' src={twitchProfileImg} alt='' />
             </div>
-            <p>{twitchUsername}</p>
+            <p id='name'>{twitchUsername}</p>
           </div>
           {disconnect && (
             <StyledConnectTwitch
@@ -153,7 +153,7 @@ export default ({ disconnect, serviceName, style }) => {
               <StyledReconnectIcon id='reconnectIcon' />
               <img title='Re-authenticate' src={youtubeProfileImg} alt='' />
             </div>
-            <p>{youtubeUsername}</p>
+            <p id='name'>{youtubeUsername}</p>
           </div>
           {disconnect && (
             <StyledConnectYoutube

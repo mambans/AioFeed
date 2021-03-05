@@ -604,7 +604,7 @@ export const VodVideoInfo = styled.div`
 
 export const StyledVideoElementAlert = styled(Alert)`
   text-align: center;
-  padding: 3px;
+  padding: 2px;
   position: absolute;
   width: 100%;
   border-radius: 10px 10px 0 0;

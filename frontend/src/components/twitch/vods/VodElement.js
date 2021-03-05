@@ -25,7 +25,7 @@ import API from '../API';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from '../loginNameFormat';
 import { ChannelNameDiv } from '../StyledComponents';
-import AddVideoButton from '../../favorites/addRemoveButton/AddVideoButton';
+import FavoriteButton from '../../favorites/buttonList/FavoriteButton';
 import useToken from '../useToken';
 
 export default ({
@@ -116,10 +116,11 @@ export default ({
   return (
     <VideoContainer draggable={Boolean(setDragSelected)} onDragStart={onDragStart} {...props}>
       <ImageContainer ref={imgRef}>
-        <AddVideoButton
+        <FavoriteButton
           videoId_p={id}
           disablepreview={handleMouseOut}
           disableContextProvider={disableContextProvider}
+          style={{ top: thumbnail_url === '' && !previewAvailable.data ? '30px' : '0px' }}
         />
         {previewAvailable.error && (
           <StyledVideoElementAlert variant='danger' className='error'>

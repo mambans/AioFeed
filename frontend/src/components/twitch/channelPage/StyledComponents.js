@@ -55,7 +55,7 @@ export const Name = styled.div`
       width: calc(40% - 6px);
     }
 
-    p {
+    p:not(#name) {
       margin-bottom: 0.6rem;
     }
 

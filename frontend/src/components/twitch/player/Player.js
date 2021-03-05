@@ -28,7 +28,6 @@ import {
   ChatOverlay,
   ResetVideoButton,
   SmallButtonContainer,
-  ChannelButton,
   ChannelIconLink,
   OfflineOverlay,
   PlayerExtraButtons,
@@ -128,7 +127,9 @@ export default () => {
     { leading: true, trailing: false }
   );
 
-  useEventListenerMemo(['mousemove', 'mousedown', 'touchmove'], showAndResetTimer);
+  useEventListenerMemo('mousemove', showAndResetTimer);
+  useEventListenerMemo('mousedown', showAndResetTimer);
+  useEventListenerMemo('touchmove', showAndResetTimer);
 
   useEffect(() => {
     document.title = `${channelName} player`;
@@ -649,26 +650,6 @@ export default () => {
                   : 'unset',
               }}
             />
-            <OverlayTrigger
-              key={'right'}
-              placement={'right'}
-              delay={{ show: 500, hide: 0 }}
-              overlay={
-                <Tooltip
-                  id={`tooltip-${'right'}`}
-                >{`${'Go to channel page inc. videos and clips'}`}</Tooltip>
-              }
-            >
-              <ChannelButton
-                variant='dark'
-                as={Link}
-                to={{
-                  pathname: `page`,
-                }}
-              >
-                Channel Page
-              </ChannelButton>
-            </OverlayTrigger>
           </>
         )}
       </div>

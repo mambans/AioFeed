@@ -11,7 +11,7 @@ export const VideosContainer = styled.div`
 
 export const Open = styled(MdStar)`
   position: absolute;
-  left: 2px;
+  right: 5px;
   top: 5px;
   color: ${({ open }) => (open ? 'rgb(255,255,0)' : 'rgb(200,200,200)')};
   transform: ${({ open }) => (open ? 'scale(1.2)' : 'unset')};
@@ -28,7 +28,7 @@ export const Open = styled(MdStar)`
 
 export const Close = styled(IoIosCloseCircleOutline)`
   position: absolute;
-  left: 3px;
+  right: 6px;
   top: 6px;
   color: ${({ open }) => (open ? '#ffffff' : 'rgb(200,200,200)')};
   transform: ${({ open }) => (open ? 'scale(1.2)' : 'unset')};
@@ -44,8 +44,11 @@ export const Close = styled(IoIosCloseCircleOutline)`
 `;
 
 export const Lists = styled.div`
-  background: var(--popupListsBackground);
+  /* background: var(--navigationbarBackground); */
+  background: rgba(20, 20, 20, 0.92);
   padding: 7px;
+  border-radius: 5px;
+  box-shadow: -3px 3px 5px black;
 `;
 
 export const ListItem = styled.div`
@@ -113,7 +116,7 @@ export const ButtonContainer = styled.div`
 
   min-width: 200px;
   width: max-content;
-  left: 0px;
+  right: 0px;
   position: absolute;
   /* top: 0; */
   z-index: 3;

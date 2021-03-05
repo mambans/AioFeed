@@ -10,7 +10,7 @@ import {
   PlayerExtraButtons,
 } from './twitch/player/StyledComponents';
 import NavigationContext from './navigation/NavigationContext';
-import AddVideoButton from './favorites/addRemoveButton/AddVideoButton';
+import FavoriteButton from './favorites/buttonList/FavoriteButton';
 import useQuery from './../hooks/useQuery';
 import PlaylistInPlayer from './youtube/PlaylistInPlayer';
 import useSyncedLocalState from '../hooks/useSyncedLocalState';
@@ -65,9 +65,13 @@ export default () => {
         onMouseUp={handleResizeMouseUp}
         onMouseMove={resize}
       >
-        <AddVideoButton
+        <FavoriteButton
           videoId_p={videoId}
-          style={{ left: '15px', top: '55px', opacity: '1' }}
+          style={{
+            right: listName && !viewStates.hideList ? `${viewStates.listWidth + 15}px` : '15px',
+            top: '55px',
+            opacity: '1',
+          }}
           size={32}
         />
         <PlayerExtraButtons channelName={channelName}>
@@ -103,7 +107,14 @@ export default () => {
           chatwidth={viewStates.listWidth || DEFAULT_LIST_WIDTH}
         />
 
-        {location.pathname.split('/')[1] === 'youtube' ? <YoutubeVideoPlayer /> : <VideoPlayer />}
+        {location.pathname.split('/')[1] === 'youtube' ? (
+          <YoutubeVideoPlayer />
+        ) : (
+          <VideoPlayer
+            listIsOpen={listName && !viewStates.hideList}
+            listWidth={viewStates.listWidth}
+          />
+        )}
         {/* {children} */}
 
         {!viewStates.hideList && listName && (
