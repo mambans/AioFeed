@@ -7,7 +7,7 @@ import LoadingBoxes from './../twitch/LoadingBoxes';
 import { CenterContext } from '../feed/FeedsCenterContainer';
 
 export default ({ requestError, videos, disableContextProvider }) => {
-  const { videoElementsAmount, feedSizesObj } = useContext(CenterContext);
+  const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext);
   const [vodAmounts, setVodAmounts] = useState({
     amount: videoElementsAmount,
     timeout: 750,
@@ -42,7 +42,7 @@ export default ({ requestError, videos, disableContextProvider }) => {
             timeout={vodAmounts.timeout}
             classNames={
               index < videoElementsAmount
-                ? feedSizesObj.transition || 'videoFadeSlide'
+                ? feedVideoSizeProps.transition || 'videoFadeSlide'
                 : 'fade-750ms'
             }
             key={video?.contentDetails?.upload?.videoId}

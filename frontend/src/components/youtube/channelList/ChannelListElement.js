@@ -15,6 +15,13 @@ const ChannelListLi = styled.li`
   a {
     color: ${({ selected }) => (selected ? '#ffffff' : 'inherit')};
     font-weight: ${({ selected }) => (selected ? 'bold' : 'unset')};
+
+    > img {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      border-radius: 3px;
+    }
   }
 `;
 
@@ -42,27 +49,9 @@ export default (data) => {
     >
       <a href={`https://www.youtube.com/channel/${channel.snippet.resourceId.channelId}`}>
         {channel.snippet.thumbnails.default.url ? (
-          <img
-            src={channel.snippet.thumbnails.default.url}
-            style={{
-              width: '30px',
-              height: '30px',
-              marginRight: '10px',
-              borderRadius: '3px',
-            }}
-            alt=''
-          ></img>
+          <img src={channel.snippet.thumbnails.default.url} alt=''></img>
         ) : (
-          <img
-            src={`${process.env.PUBLIC_URL}/images/placeholder.webp`}
-            style={{
-              width: '30px',
-              height: '30px',
-              marginRight: '10px',
-              borderRadius: '3px',
-            }}
-            alt=''
-          ></img>
+          <img src={`${process.env.PUBLIC_URL}/images/placeholder.jpg`} alt=''></img>
         )}
         {channel.snippet.title}
       </a>

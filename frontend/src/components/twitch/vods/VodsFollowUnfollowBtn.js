@@ -27,7 +27,7 @@ export default ({ channel, channelId, loweropacity, marginright, className, show
   const [isHovered, setIsHovered] = useState();
   const vodEnabled = channels?.includes(channel?.toLowerCase());
   const vodButton = useRef();
-  const { feedSizesObj } = useContext(FeedsContext) || {};
+  const { feedVideoSizeProps } = useContext(FeedsContext) || {};
 
   useEventListenerMemo('mouseenter', handleMouseOver, vodButton.current);
   useEventListenerMemo('mouseleave', handleMouseOut, vodButton.current);
@@ -99,7 +99,7 @@ export default ({ channel, channelId, loweropacity, marginright, className, show
                 channelId,
                 setVods,
                 amount: 5,
-                feedSizesObj,
+                feedVideoSizeProps,
               });
             }
           }
@@ -107,12 +107,12 @@ export default ({ channel, channelId, loweropacity, marginright, className, show
       >
         {vodEnabled ? (
           isHovered ? (
-            <MdVideocamOff size={24} color='red' />
+            <MdVideocamOff size='1.4em' color='red' />
           ) : (
-            <MdVideocam size={24} color='green' />
+            <MdVideocam size='1.4em' color='green' />
           )
         ) : (
-          <MdVideoCall size={24} />
+          <MdVideoCall size='1.4em' />
         )}
       </VodAddRemoveButton>
     </OverlayTrigger>

@@ -12,12 +12,7 @@ export default () => {
 
   return (
     <NotificationListContainer>
-      <li
-        id='clear'
-        onClick={() => {
-          clearNotifications();
-        }}
-      >
+      <li id='clear' onClick={clearNotifications}>
         Clear all ({notifications?.length || 0})
       </li>
       {notifications?.map((item) => {
@@ -32,13 +27,11 @@ export default () => {
               </Link>
               <Link to={`/${item.user_name?.toLowerCase()}/page`} className='title'>
                 {(item?.notiStatus?.includes('updated') &&
-                  item?.text?.split('\n').map((line) => {
-                    return (
-                      <p className='UpdateText' key={line}>
-                        {line}
-                      </p>
-                    );
-                  })) ||
+                  item?.text?.split('\n').map((line) => (
+                    <p className='UpdateText' key={line}>
+                      {line}
+                    </p>
+                  ))) ||
                   truncate(item.title, 30)}
               </Link>
               <Date date={item.date} status={item.notiStatus} />

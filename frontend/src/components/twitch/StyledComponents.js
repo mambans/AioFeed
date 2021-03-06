@@ -141,81 +141,78 @@ export const pulseLight = keyframes`
 export const StyledLoadingBox = styled.div`
   display: grid;
   grid-template-areas: 'video video' 'title title' 'info info';
-  width: 336px;
-  margin: 7px;
-  max-height: 336px;
-  margin-bottom: 15px;
+  width: ${({ feedVideoSizeProps }) => feedVideoSizeProps.width || 336}px;
+  margin: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin || 7}px;
+  max-height: ${({ feedVideoSizeProps }) => feedVideoSizeProps.width || 336}px;
+  font-size: ${({ feedVideoSizeProps }) => feedVideoSizeProps.fontSize || 16}px;
+  grid-template-columns: 100%;
   height: unset;
-
   transform-origin: left top;
-  transform: ${({ feedSize }) => (feedSize === 'small' ? 'scale(0.8)' : 'scale(1)')};
-  margin-bottom: ${({ feedSize }) => (feedSize === 'small' ? '-62.5px' : '15px')};
-  margin-right: ${({ feedSize }) => (feedSize === 'small' ? '-66.5px' : '7px')};
-
   transition: all 1s linear;
+  margin-bottom: 15px;
 
   div#video {
     grid-area: video;
-    max-height: 189px;
-    min-height: 189px;
-    width: 336px;
-    border-radius: 10px;
+    max-height: ${({ feedVideoSizeProps }) => ((feedVideoSizeProps.width || 336) / 16) * 9}px;
+    min-height: ${({ feedVideoSizeProps }) => ((feedVideoSizeProps.width || 336) / 16) * 9}px;
+    width: ${({ feedVideoSizeProps }) => feedVideoSizeProps.width || 336}px;
+    border-radius: 1em;
     background: #121415d1;
     animation: ${pulse} 2s linear infinite;
-
   }
 
   div div {
     background: #121415d1;
-    border-radius: 10px;
+    border-radius: 1em;
   }
 
   div#title {
     color: var(--textColor1);
-    margin-top: 15px;
-    margin-bottom: 5px;
+    margin-top: 0.75em;
+    margin-bottom: 0.5em;
     grid-area: title;
-    font-size: 1.1rem;
-    max-width: 336px;
+    /* font-size: 1.1rem; */
+    /* max-width: 336px; */
+    max-width: ${({ feedVideoSizeProps }) => feedVideoSizeProps.width || 336}px;
     overflow: hidden;
-    height: 45px;
+    height: 2.5em;
     line-height: 1.2;
 
     div {
       animation: ${pulse} 2s linear infinite;
-      width: 260px;
-      height: ${({ size }) => size}px;
+      width: 80%;
+      /* width: 260px; */
+      height: 1.5em;
       margin-top: 5px;
       border-radius: 10px;
-      touch-action
     }
   }
 
   #details {
-    height: ${({ type }) => (type === 'small' ? '25px' : type === 'big' ? '65px' : '75px')};
+    height: ${({ type }) => (type === 'small' ? '25px' : type === 'big' ? '5em' : '75px')};
 
     #channel {
       animation: ${pulse} 2s linear infinite;
       width: 100px;
-      height: ${({ type }) => (type === 'big' ? '20px' : '25px')};
+      height: ${({ type }) => (type === 'big' ? '1.5em' : '25px')};
       margin: ${({ type }) => (type === 'big' ? '7px 0' : '0')};
     }
 
     #game {
       animation: ${pulse} 2s linear infinite;
       width: 125px;
-      height: 20px;
-      margin: 21px 0 0 0;
+      height: 1.5em;
+      /* margin: 21px 0 0 0; */
       display: ${({ type }) => (type === 'big' ? 'block' : 'none')};
     }
   }
 `;
 
 export const LoadingVideoElement = ({ type }) => {
-  const { feedSize } = useContext(FeedsContext);
+  const { feedSize, feedVideoSizeProps } = useContext(FeedsContext);
 
   return (
-    <StyledLoadingBox type={type} feedSize={feedSize}>
+    <StyledLoadingBox type={type} feedSize={feedSize} feedVideoSizeProps={feedVideoSizeProps}>
       <div id='video'></div>
       <div id='title'>
         <div></div>

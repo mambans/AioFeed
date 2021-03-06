@@ -10,10 +10,9 @@ import {
   VideoContainer,
   VideoTitle,
   ImageContainer,
-  VodVideoInfo,
+  ImgBottomInfo,
   ChannelContainer,
   StyledVideoElementAlert,
-  Duration,
   VideoTitleHref,
 } from './../../sharedStyledComponents';
 
@@ -151,19 +150,19 @@ export default ({
           />
         </Link>
 
-        <VodVideoInfo>
-          <Duration title='duration'>
+        <ImgBottomInfo>
+          <div title='duration'>
             {thumbnail_url === '' && !previewAvailable.data ? (
               <Moment durationFromNow>{created_at}</Moment>
             ) : (
               formatTwitchVodsDuration(duration)
             )}
-          </Duration>
-          <p className={'view_count'} title='views'>
+          </div>
+          <span className={'view_count'} title='views'>
             {formatViewerNumbers(view_count)}
             <FaRegEye size={10} />
-          </p>
-        </VodVideoInfo>
+          </span>
+        </ImgBottomInfo>
         {type !== 'archive' && <VodType>{type}</VodType>}
       </ImageContainer>
       {title?.length > 50 ? (

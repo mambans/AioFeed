@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import styled from 'styled-components';
 
 import './FavoritesTransitions.scss';
 import { HeaderContainer } from '../sharedStyledComponents';
@@ -10,7 +11,7 @@ import List from './List';
 import { VodsProvider } from '../twitch/vods/VodsContext';
 import useToken from '../twitch/useToken';
 import useYoutubeToken from '../youtube/useToken';
-import styled from 'styled-components';
+import AlertHandler from '../alert';
 
 export const useCheckForVideosAndValidateToken = ({
   lists,
@@ -86,7 +87,7 @@ export const Favorites = () => {
 
   return (
     <>
-      {lists && (
+      {Boolean(Object.keys(lists).length) ? (
         <TransitionGroup component={null}>
           {Object.values(lists)?.map((list) => {
             return (
@@ -116,6 +117,17 @@ export const Favorites = () => {
             );
           })}
         </TransitionGroup>
+      ) : (
+        <AlertHandler
+          show={true}
+          type='secondary'
+          title="You haven't created any 'Favorites' list."
+          style={{
+            width: '50%',
+          }}
+          hideMessage={true}
+          dismissible={true}
+        />
       )}
     </>
   );

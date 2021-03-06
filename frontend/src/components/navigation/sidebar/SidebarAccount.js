@@ -1,11 +1,13 @@
 import { Button } from 'react-bootstrap';
 import { GoSignOut } from 'react-icons/go';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
 import { MdVideocam, MdAutorenew, MdStar } from 'react-icons/md';
 import { FaTwitch, FaYoutube, FaTwitter, FaRegWindowRestore } from 'react-icons/fa';
 import { FiSidebar } from 'react-icons/fi';
 import { TiFlash } from 'react-icons/ti';
 import { AiOutlineDisconnect } from 'react-icons/ai';
+import Slider from 'react-rangeslider';
+import { debounce } from 'lodash';
 
 import { AddCookie, getCookie } from '../../../util/Utils';
 import AccountContext from './../../account/AccountContext';
@@ -31,6 +33,7 @@ import {
 } from './StyledComponent';
 import { TwitchContext } from '../../twitch/useToken';
 import { YoutubeContext } from '../../youtube/useToken';
+import { FeedSizeSlider } from '../StyledComponents';
 
 export default () => {
   const {
@@ -68,41 +71,39 @@ export default () => {
     setEnableFavorites,
     enableTwitter,
     setEnableTwitter,
+    feedSize,
+    setFeedSize,
   } = useContext(FeedsContext) || {};
-  const [showAddImage, setShowAddImage] = useState(false);
 
-  function logout() {
-    ClearAllAccountCookiesStates(setUsername);
-  }
+  const [showAddImage, setShowAddImage] = useState(false);
+  const [sizeValue, setSizeValue] = useState(feedSize);
+
+  const logout = () => ClearAllAccountCookiesStates(setUsername);
+
+  const delayedHandleChange = useCallback(
+    debounce((v) => setFeedSize(v), 250, { leading: true, maxWait: 1000 }),
+    []
+  );
+
+  const handleChange = (v) => {
+    setSizeValue(v);
+    delayedHandleChange(v);
+  };
 
   return (
     <>
       <div style={{ minHeight: 'calc(100% - 120px)' }}>
         <ProfileImgContainer>
           {showAddImage ? (
-            <CloseAddFormBtn
-              onClick={() => {
-                setShowAddImage(false);
-              }}
-            />
+            <CloseAddFormBtn onClick={() => setShowAddImage(false)} />
           ) : (
-            <ShowAddFormBtn
-              onClick={() => {
-                setShowAddImage(true);
-              }}
-            >
+            <ShowAddFormBtn onClick={() => setShowAddImage(true)}>
               Change Profile image
             </ShowAddFormBtn>
           )}
-          {showAddImage && (
-            <UpdateProfileImg
-              close={() => {
-                setShowAddImage(false);
-              }}
-            />
-          )}
+          {showAddImage && <UpdateProfileImg close={() => setShowAddImage(false)} />}
           <StyledProfileImg
-            src={profileImage || `${process.env.PUBLIC_URL}/images/placeholder.webp`}
+            src={profileImage || `${process.env.PUBLIC_URL}/images/placeholder.jpg`}
             alt=''
           />
         </ProfileImgContainer>
@@ -201,6 +202,21 @@ export default () => {
         )}
         <br />
         <ToggleButtonsContainerHeader>Settings</ToggleButtonsContainerHeader>
+        {(enableTwitch || enableTwitchVods || enableYoutube || enableFavorites) && (
+          <FeedSizeSlider>
+            Feed video size
+            <Slider
+              value={sizeValue || 100}
+              // step={10}
+              format={(v) => parseInt(v)}
+              orientation='horizontal'
+              onChange={handleChange}
+              min={30}
+              max={100}
+              tooltip={true}
+            />
+          </FeedSizeSlider>
+        )}
         <ToggleButtonsContainer buttonsperrow={3}>
           <ToggleButton
             setEnable={(value) => {

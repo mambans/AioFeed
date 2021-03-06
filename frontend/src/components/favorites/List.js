@@ -62,7 +62,7 @@ export const fetchListVideos = async ({ list, ytExistsAndValidated, twitchExists
 export default ({ list, ytExistsAndValidated, twitchExistsAndValidated, setLists }) => {
   const [videos, setVideos] = useState();
   const [dragSelected, setDragSelected] = useState();
-  const { videoElementsAmount, feedSizesObj } = useContext(CenterContext) || {};
+  const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext) || {};
 
   const [videosToShow, setVideosToShow] = useState({
     amount: videoElementsAmount,
@@ -90,12 +90,12 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated, setLists
         return allVideos.map((vid) => {
           const found = curr?.find((c) => c.id === vid.id);
           if (!found && Boolean(curr?.length))
-            return { ...vid, transition: feedSizesObj.transition || 'videoFadeSlide' };
+            return { ...vid, transition: feedVideoSizeProps.transition || 'videoFadeSlide' };
           return vid;
         });
       });
     })();
-  }, [list, ytExistsAndValidated, twitchExistsAndValidated, feedSizesObj.transition]);
+  }, [list, ytExistsAndValidated, twitchExistsAndValidated, feedVideoSizeProps.transition]);
 
   const dragEvents = useMemo(
     () => ({

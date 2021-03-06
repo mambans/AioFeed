@@ -9,7 +9,7 @@ import {
   VideoContainer,
   VideoTitleHref,
   ImageContainer,
-  Duration,
+  ImgBottomInfo,
 } from './../sharedStyledComponents';
 import VideoHoverIframe from './VideoHoverIframe';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
@@ -22,7 +22,7 @@ const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
   standard?.url ||
   high?.url ||
   medium?.url ||
-  `${process.env.PUBLIC_URL}/images/placeholder.webp`;
+  `${process.env.PUBLIC_URL}/images/placeholder.jpg`;
 
 const HOVER_DELAY = 1000;
 
@@ -82,9 +82,9 @@ export default ({ video, disableContextProvider, setDragSelected, listName, ...p
           <img src={videoImageUrls(video.snippet.thumbnails)} alt='' />
         </Link>
         {video.contentDetails.duration && (
-          <Duration bottom='28px'>
-            {moment.duration(video.contentDetails.duration).format('hh:mm:ss')}
-          </Duration>
+          <ImgBottomInfo>
+            <span>{moment.duration(video.contentDetails.duration).format('hh:mm:ss')}</span>
+          </ImgBottomInfo>
         )}
       </ImageContainer>
       {video.snippet.title?.length >= 50 ? (

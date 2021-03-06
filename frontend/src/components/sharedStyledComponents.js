@@ -3,7 +3,7 @@ import { GrPowerReset } from 'react-icons/gr';
 import { Link, useLocation } from 'react-router-dom';
 import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { MdRefresh, MdVideoLabel } from 'react-icons/md';
+import { MdRefresh } from 'react-icons/md';
 import { FaRegWindowRestore } from 'react-icons/fa';
 import Moment from 'react-moment';
 
@@ -246,17 +246,18 @@ export const StyledVideoContainer = styled.div`
     'video video'
     'title title'
     'info info';
+  grid-template-columns: 100%;
 
-  width: ${({ feedSizesObj }) => feedSizesObj.width}px;
-  margin: ${({ feedSizesObj }) => feedSizesObj.margin}px;
-  max-height: ${({ feedSizesObj }) => feedSizesObj.width}px;
+  width: ${({ feedVideoSizeProps }) => feedVideoSizeProps.width}px;
+  margin: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px;
+  max-height: ${({ feedVideoSizeProps }) => feedVideoSizeProps.width}px;
   margin-bottom: 15px;
   position: relative;
   transition: font-size 750ms, height 750ms, max-height 750ms, margin 750ms, width 750ms;
-  font-size: ${({ feedSizesObj }) => feedSizesObj.fontSize}px;
+  font-size: ${({ feedVideoSizeProps }) => feedVideoSizeProps.fontSize}px;
 
   box-shadow: var(--videoBoxShadow);
-  border-radius: 10px;
+  border-radius: 1em;
   background-color: var(--videoContainerBackgroundColor);
 
   a {
@@ -275,20 +276,20 @@ export const StyledVideoContainer = styled.div`
 `;
 
 export const VideoContainer = ({ children, ...props }) => {
-  const { feedSize, feedSizesObj } = useContext(FeedsContext);
+  const { feedSize, feedVideoSizeProps } = useContext(FeedsContext);
 
   return (
-    <StyledVideoContainer feedSize={feedSize} feedSizesObj={feedSizesObj} {...props}>
+    <StyledVideoContainer feedSize={feedSize} feedVideoSizeProps={feedVideoSizeProps} {...props}>
       {children}
     </StyledVideoContainer>
   );
 };
 
 export const ImageContainer = React.forwardRef(({ children }, ref) => {
-  const { feedSizesObj } = useContext(FeedsContext);
+  const { feedVideoSizeProps } = useContext(FeedsContext);
 
   return (
-    <StyledImageContainer feedSizesObj={feedSizesObj} ref={ref}>
+    <StyledImageContainer feedVideoSizeProps={feedVideoSizeProps} ref={ref}>
       {children}
     </StyledImageContainer>
   );
@@ -360,7 +361,7 @@ export const ChannelContainer = styled.div`
 export const StyledGameContainer = styled.div`
   display: grid;
   grid-template-columns: 10% auto;
-  width: ${({ feedSizesObj }) => feedSizesObj.width}px;
+  width: ${({ feedVideoSizeProps }) => feedVideoSizeProps.width}px;
   transition: width 750ms;
   align-items: center;
   /* min-height: 34px; */
@@ -414,9 +415,11 @@ export const StyledGameContainer = styled.div`
 `;
 
 export const GameContainer = ({ children }) => {
-  const { feedSizesObj } = useContext(FeedsContext);
+  const { feedVideoSizeProps } = useContext(FeedsContext);
 
-  return <StyledGameContainer feedSizesObj={feedSizesObj}>{children}</StyledGameContainer>;
+  return (
+    <StyledGameContainer feedVideoSizeProps={feedVideoSizeProps}>{children}</StyledGameContainer>
+  );
 };
 
 export const GamenameAndViewers = styled.div`
@@ -470,7 +473,7 @@ export const VideoTitleHref = styled.a`
 
 export const StyledImageContainer = styled.div`
   grid-area: video;
-  height: ${({ feedSizesObj }) => (feedSizesObj.width / 16) * 9}px;
+  height: ${({ feedVideoSizeProps }) => (feedVideoSizeProps.width / 16) * 9}px;
   width: 100%;
   position: relative;
   background-size: cover;
@@ -514,22 +517,6 @@ export const StyledImageContainer = styled.div`
       opacity: 1;
     }
   }
-
-  .duration {
-    position: relative;
-    width: max-content;
-    padding-right: 5px;
-    font-size: 0.9em;
-    padding-left: 5px;
-    z-index: 1;
-    height: 24px;
-    bottom: 28px;
-    left: 4px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    background: #161616b0;
-  }
 `;
 
 export const UnfollowButton = styled(Button).attrs({ variant: 'link' })`
@@ -572,33 +559,37 @@ export const StyledLoadingContainer = styled.div`
   }
 `;
 
-export const VodVideoInfo = styled.div`
-  bottom: 28px;
+export const ImgBottomInfo = styled.div`
+  bottom: 2.2em;
   position: relative;
   display: flex;
   justify-content: space-between;
   font-size: 0.9em;
   align-items: center;
+  height: 2em;
+  margin: 0px 0.2em 0px 0.2em;
 
-  .view_count {
+  > * {
+    position: relative;
     width: max-content;
-    padding-right: 5px;
-    padding-left: 5px;
-    background: #161616b0;
-    margin: 0;
-    margin-right: 3px;
-    border-radius: 10px;
-    height: 24px;
+    /* font-size: 0.9em; */
+    z-index: 1;
+    background: rgba(22, 22, 22, 0.69);
+    align-items: center;
+    display: flex;
+    border-radius: 1em;
+    padding: 0.2em 0.5em;
+
+    /* bottom: 2.2em; */
+    /* height: 2em; */
+  }
+
+  .view_count svg {
+    color: var(--textColor2);
+    margin-left: 5px;
+    margin-top: 3px;
     display: flex;
     align-items: center;
-
-    svg {
-      color: var(--textColor2);
-      margin-left: 5px;
-      margin-top: 3px;
-      display: flex;
-      align-items: center;
-    }
   }
 `;
 
@@ -731,50 +722,4 @@ export const StyledAlert = styled(Alert)`
 export const LastRefreshText = styled(Moment).attrs({ fromNow: true, interval: 60000 })`
   position: relative;
   color: var(--textColor2);
-`;
-
-export const Duration = styled.div`
-  position: relative;
-  height: 24px;
-  width: max-content;
-  z-index: 1;
-  align-items: center;
-  display: flex;
-  border-radius: 10px;
-  padding-right: 5px;
-  padding-left: 5px;
-  background: rgba(22, 22, 22, 0.69);
-  font-size: 0.9em;
-  margin: 0px 0px 0px 5px;
-  bottom: ${({ bottom }) => bottom || '0px'};
-`;
-
-export const FeedSizeBtn = styled.div`
-  position: absolute;
-  top: 0px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  right: 0px;
-  background: var(--refreshButtonBackground);
-  /* padding: 5px; */
-  border-radius: 2px;
-  opacity: 0.5;
-  transition: opacity 500ms;
-
-  &:hover {
-    opacity: 1;
-  }
-`;
-
-export const FeedSizeIcon = styled(MdVideoLabel)`
-  fill: ${({ active }) => (active === 'true' ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.4)')};
-  cursor: pointer;
-  margin: 0 5px;
-  transition: fill 500ms;
-  z-index: 1;
-
-  &:hover {
-    fill: ${({ active }) => (active === 'true' ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.75)')};
-  }
 `;

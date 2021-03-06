@@ -73,15 +73,17 @@ export const VodPreview = styled.div`
   animation-fill-mode: forwards;
   object-fit: cover;
   background-size: cover;
-  width: 336px;
-  height: 189px;
+  width: 100%;
+  height: 100%;
+  /* width: 336px;
+  height: 189px; */
   background-image: ${({ previewAvailable }) => `url(${previewAvailable})`};
   border-radius: 10px;
 `;
 
 export const VodDates = styled.div`
   color: var(--textColor2);
-  font-size: 0.95rem;
+  font-size: 0.95em;
   grid-column: 3;
   align-items: center;
   display: flex;

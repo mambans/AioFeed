@@ -2,7 +2,6 @@ import { Button } from 'react-bootstrap';
 import React, { useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
 import FeedsContext from '../../feed/FeedsContext';
-import { FeedSizeBtn, FeedSizeIcon } from '../../sharedStyledComponents';
 
 export const StyledGameListElement = styled.li`
   justify-content: unset;
@@ -188,26 +187,7 @@ export const StyledContainer = styled.div`
 `;
 
 export const Container = ({ children }) => {
-  const { feedSize, feedSizesObj, setFeedSize } = useContext(FeedsContext);
+  const { feedVideoSizeProps } = useContext(FeedsContext);
 
-  const sizeBtnOnClick = () => {
-    setFeedSize((cr) => {
-      if (cr === 'small') {
-        localStorage.setItem('Feed-size', 'default');
-        return 'default';
-      }
-      localStorage.setItem('Feed-size', 'small');
-      return 'small';
-    });
-  };
-
-  return (
-    <StyledContainer size={feedSizesObj.totalWidth}>
-      <FeedSizeBtn>
-        <FeedSizeIcon size={24} active={String(feedSize === 'default')} onClick={sizeBtnOnClick} />
-        <FeedSizeIcon size={18} active={String(feedSize === 'small')} onClick={sizeBtnOnClick} />
-      </FeedSizeBtn>
-      {children}
-    </StyledContainer>
-  );
+  return <StyledContainer size={feedVideoSizeProps.totalWidth}>{children}</StyledContainer>;
 };

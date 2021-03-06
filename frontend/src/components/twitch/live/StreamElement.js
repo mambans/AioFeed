@@ -15,6 +15,7 @@ import {
   ChannelContainer,
   GameContainer,
   GamenameAndViewers,
+  ImgBottomInfo,
 } from './../../sharedStyledComponents';
 import { ChannelNameDiv } from './../StyledComponents';
 import StreamHoverIframe from '../StreamHoverIframe.js';
@@ -71,7 +72,7 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
   const refChannel = useRef();
   const thumbnailUrl =
     `${thumbnail_url?.replace('{width}', 858)?.replace('{height}', 480)}` ||
-    `${process.env.PUBLIC_URL}/images/placeholder.webp`;
+    `${process.env.PUBLIC_URL}/images/placeholder.jpg`;
 
   useEventListenerMemo(
     'mouseenter',
@@ -128,9 +129,11 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
             src={thumbnailUrl + `?${Date.now()}`}
           />
         </Link>
-        <Moment interval={1} className={'duration'} durationFromNow>
-          {started_at}
-        </Moment>
+        <ImgBottomInfo>
+          <Moment interval={1} durationFromNow>
+            {started_at}
+          </Moment>
+        </ImgBottomInfo>
       </ImageContainer>
       {title?.length > 50 ? (
         <OverlayTrigger
@@ -237,7 +240,7 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
               href={'https://www.twitch.tv/' + login?.toLowerCase() || user_name}
               className='extaButton'
             >
-              <FaTwitch size={20} />
+              <FaTwitch size={'1.4em'} />
             </a>
           </ChannelNameDiv>
           {(location.pathname === '/feed/' || location.pathname === '/feed') && (
@@ -247,7 +250,7 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
                 enableFormControll={true}
               />
               <VodsFollowUnfollowBtn channel={login} channelId={user_id} marginright='5px;' />
-              <AddUpdateNotificationsButton channel={login} marginright='5px;' />
+              <AddUpdateNotificationsButton channel={login} marginright='5px;' size='1.4em' />
               <FollowUnfollowBtn
                 style={{
                   gridRow: '1',
@@ -256,7 +259,7 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
                   marginRight: '8px',
                   height: '100%',
                 }}
-                size={22}
+                size={'1.5em'}
                 channelName={login}
                 id={user_id}
                 followingStatus={true}

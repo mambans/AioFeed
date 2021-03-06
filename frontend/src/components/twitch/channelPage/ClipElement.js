@@ -11,7 +11,7 @@ import {
   ImageContainer,
   GameContainer,
   ChannelContainer,
-  VodVideoInfo,
+  ImgBottomInfo,
 } from './../../sharedStyledComponents';
 import { truncate } from '../../../util/Utils';
 import { formatViewerNumbers } from './../TwitchUtils';
@@ -43,13 +43,13 @@ export default ({ ...data }) => {
         >
           <img src={thumbnail_url} alt='' />
         </a>
-        <VodVideoInfo>
-          <p className={'vodDuration'} title='duration'></p>
-          <p className={'view_count'} title='views'>
+        <ImgBottomInfo>
+          <span className={'vodDuration'} title='duration' />
+          <span className={'view_count'} title='views'>
             {formatViewerNumbers(view_count)}
             <FaRegEye size={10} />
-          </p>
-        </VodVideoInfo>
+          </span>
+        </ImgBottomInfo>
       </ImageContainer>
       {title?.length > 50 ? (
         <OverlayTrigger

@@ -15,7 +15,7 @@ export default ({ channel, enableFormControll = false, setOpenParent = () => {},
 
   return (
     <>
-      <OpenListBtn onClick={OnClick} show={String(openParent)} size={22}></OpenListBtn>
+      <OpenListBtn onClick={OnClick} show={String(openParent)} size='1.4em'></OpenListBtn>
 
       <CSSTransition in={openParent} timeout={250} classNames='customFilter' unmountOnExit>
         <ListContainer

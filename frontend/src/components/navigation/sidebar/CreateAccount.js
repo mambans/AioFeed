@@ -29,8 +29,8 @@ export default () => {
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-
     const form = evt.currentTarget;
+
     if (form.checkValidity() === false) {
       evt.preventDefault();
       evt.stopPropagation();
@@ -82,8 +82,8 @@ export default () => {
       <AlertHandler
         show={error}
         type='warning'
-        title={error.title}
-        message={error.message}
+        title={error?.title}
+        message={error?.message}
         onClose={() => setError(null)}
       />
 
@@ -130,13 +130,7 @@ export default () => {
           <Button variant='primary' type='submit'>
             Create
           </Button>
-          <Button
-            onClick={() => {
-              setRenderModal('login');
-            }}
-          >
-            Login
-          </Button>
+          <Button onClick={() => setRenderModal('login')}>Login</Button>
         </div>
       </StyledCreateForm>
 

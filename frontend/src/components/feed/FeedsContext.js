@@ -24,22 +24,14 @@ export const FeedsProvider = ({ children }) => {
     getCookie(`Twitch-access_token`) && getCookie('TwitchVods_FeedEnabled')
   );
   const [enableFavorites, setEnableFavorites] = useState(getCookie('Favorites_FeedEnabled'));
-  const [feedSize, setFeedSize] = useSyncedLocalState('Feed-size', 'default');
+  const [feedSize, setFeedSize] = useSyncedLocalState('Feed-size', 100);
 
-  const feedSizesObj = {
-    default: {
-      width: 336,
-      margin: 7,
-      fontSize: 16,
-      transition: 'videoFadeSlide',
-    },
-    // default * 0,8
-    small: {
-      width: 268.8,
-      margin: 5.6,
-      fontSize: 13,
-      transition: 'videoFadeSlideSmall',
-    },
+  const feedVideoSizeProps = {
+    width: 336 * (parseInt(feedSize) / 100),
+    margin: 7 * (parseInt(feedSize) / 100),
+    fontSize: 16 * (parseInt(feedSize) / 100),
+    totalWidth: 7 * (parseInt(feedSize) / 100) * 2 + 336 * (parseInt(feedSize) / 100),
+    transition: 'videoFadeSlide',
   };
 
   return (
@@ -61,14 +53,9 @@ export const FeedsProvider = ({ children }) => {
         setTwitterLists,
         showTwitchBigFeed,
         setShowTwitchBigFeed,
-        feedSize,
+        feedSize: parseInt(feedSize),
         setFeedSize,
-        feedSizesObj: {
-          ...feedSizesObj[feedSize || 'default'],
-          totalWidth:
-            feedSizesObj[feedSize || 'default'].margin * 2 +
-            feedSizesObj[feedSize || 'default'].width,
-        },
+        feedVideoSizeProps,
       }}
     >
       {children}

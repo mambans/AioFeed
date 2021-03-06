@@ -11,17 +11,13 @@ export default () => {
   useEffect(() => {
     let timer;
     if (!enableTwitch && !enableTwitter && !enableYoutube && !enableTwitchVods) {
-      timer = setTimeout(() => {
-        setNoFeeds(true);
-      }, 1000);
+      timer = setTimeout(() => setNoFeeds(true), 1000);
     } else {
       clearTimeout(timer);
       setNoFeeds(false);
     }
 
-    return () => {
-      clearTimeout(timer);
-    };
+    return () => clearTimeout(timer);
   }, [enableTwitch, enableYoutube, enableTwitchVods, enableTwitter]);
 
   return (

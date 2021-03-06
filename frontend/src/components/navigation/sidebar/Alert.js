@@ -17,15 +17,9 @@ export default () => {
   const { alert, setAlert } = useContext(NavigationContext);
   const [show, setShow] = useState(alert);
 
-  useEffect(() => {
-    setShow(alert);
-  }, [alert]);
+  useEffect(() => setShow(alert), [alert]);
 
-  useEffect(() => {
-    return () => {
-      setAlert();
-    };
-  }, [setAlert]);
+  useEffect(() => () => setAlert(), [setAlert]);
 
   if (show && alert) {
     return (

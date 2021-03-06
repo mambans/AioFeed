@@ -27,5 +27,17 @@ export default (setMainState) => {
   RemoveCookie('YoutubeProfileImg');
   RemoveCookie('Youtube_FeedEnabled');
 
+  localStorage.removeItem('Unseen-notifications');
+  localStorage.removeItem('YT-followedChannels');
+  localStorage.removeItem('activeTheme');
+  localStorage.removeItem('CustomFilters');
+  localStorage.removeItem('Vods');
+  localStorage.removeItem('FavoritesLists');
+  localStorage.removeItem('TwitchChatState');
+  localStorage.removeItem('Cached_SavedYoutubeVideos');
+  localStorage.removeItem('notifications');
+  localStorage.removeItem('Feed-size');
+  localStorage.removeItem('ChannelsUpdateNotifs');
+
   setMainState();
 };

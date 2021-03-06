@@ -5,7 +5,7 @@ import FeedsContext from '../feed/FeedsContext';
 import { YoutubeIframe } from './StyledComponents';
 
 export default (data) => {
-  const { feedSizesObj } = useContext(FeedsContext);
+  const { feedVideoSizeProps } = useContext(FeedsContext);
   const ref = useRef();
   const videoHoverOutTimer = useRef();
   data.setIsHovered(true);
@@ -26,8 +26,8 @@ export default (data) => {
   }
 
   const opts = {
-    height: (feedSizesObj.width / 16) * 9,
-    width: feedSizesObj.width,
+    height: (feedVideoSizeProps.width / 16) * 9,
+    width: feedVideoSizeProps.width,
     playerVars: {
       autoplay: 1,
       controls: 1,

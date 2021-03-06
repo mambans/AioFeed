@@ -17,7 +17,7 @@ export default ({ data }) => {
     REFRESH_RATE,
     refreshAfterUnfollowTimer,
   } = data;
-  const { videoElementsAmount, feedSizesObj } = useContext(CenterContext);
+  const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext);
 
   const refresh = async () => await data.refresh();
 
@@ -47,7 +47,7 @@ export default ({ data }) => {
             <CSSTransition
               key={stream.user_id}
               timeout={750}
-              classNames={feedSizesObj.transition || 'videoFadeSlide'}
+              classNames={feedVideoSizeProps.transition || 'videoFadeSlide'}
               unmountOnExit
               appear
             >

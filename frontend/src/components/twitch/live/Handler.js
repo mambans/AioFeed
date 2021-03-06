@@ -24,7 +24,7 @@ export default ({ children }) => {
     isEnabledUpdateNotifications,
   } = useContext(TwitchContext);
   const { setVods, updateNotischannels } = useContext(VodsContext);
-  const { enableTwitchVods, feedSizesObj } = useContext(FeedsContext) || {};
+  const { enableTwitchVods, feedVideoSizeProps } = useContext(FeedsContext) || {};
   const [refreshTimer, setRefreshTimer] = useState(20);
   const [loadingStates, setLoadingStates] = useState({
     refreshing: false,
@@ -117,7 +117,7 @@ export default ({ children }) => {
                 setUnseenNotifications,
                 enableTwitchVods,
                 setVods,
-                feedSizesObj,
+                feedVideoSizeProps,
               }),
 
               await OfflineStreamsPromise({
@@ -128,7 +128,7 @@ export default ({ children }) => {
                 setUnseenNotifications,
                 enableTwitchVods,
                 setVods,
-                feedSizesObj,
+                feedVideoSizeProps,
               }),
 
               await UpdatedStreamsPromise({
@@ -170,7 +170,7 @@ export default ({ children }) => {
       setUnseenNotifications,
       updateNotischannels,
       validateToken,
-      feedSizesObj,
+      feedVideoSizeProps,
     ]
   );
 

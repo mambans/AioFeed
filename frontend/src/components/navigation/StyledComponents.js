@@ -40,3 +40,35 @@ export const StyledLoginButton = styled.p`
   margin-right: 15px;
   color: var(--textColor1);
 `;
+
+export const FeedSizeSlider = styled.div`
+  color: rgb(175, 175, 175);
+  text-align: center;
+
+  .rangeslider {
+    margin: 10px 0;
+  }
+
+  .rangeslider-horizontal {
+    width: 100%;
+    height: 8px;
+    cursor: pointer;
+
+    .rangeslider__handle {
+      width: 20px;
+      height: 20px;
+      border-radius: 20px;
+
+      &::after {
+        width: 10.5px;
+        height: 10.5px;
+        top: 4px;
+        left: 4px;
+      }
+    }
+
+    .rangeslider__fill {
+      background-color: #2e6079;
+    }
+  }
+`;

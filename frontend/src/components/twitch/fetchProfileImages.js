@@ -54,7 +54,7 @@ export default async ({ items, forceNewProfiles, previousStreams, saveNewProfile
       profile_image_url:
         foundProfile?.profile_image_url ||
         TwitchProfiles[user?.user_id || user?.broadcaster_id]?.profile_image ||
-        `${process.env.PUBLIC_URL}/images/placeholder.webp`,
+        `${process.env.PUBLIC_URL}/images/placeholder.jpg`,
       login: foundProfile?.login || TwitchProfiles[user?.user_id || user?.broadcaster_id]?.login,
     };
   });
@@ -69,7 +69,7 @@ export default async ({ items, forceNewProfiles, previousStreams, saveNewProfile
       }
     }, [])
     .filter(
-      (item) => item.profile_image_url !== `${process.env.PUBLIC_URL}/images/placeholder.webp`
+      (item) => item.profile_image_url !== `${process.env.PUBLIC_URL}/images/placeholder.jpg`
     );
 
   const newProfiles = finallDataRemovedPlaceholderObjs.reduce(

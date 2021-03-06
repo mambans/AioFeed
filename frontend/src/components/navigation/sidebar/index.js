@@ -15,12 +15,14 @@ import {
 
 export default () => {
   const { profileImage, username } = useContext(AccountContext);
-  const { setRenderModal, renderModal, showSidebar, setShowSidebar } = useContext(
-    NavigationContext
-  );
+  const { renderModal, showSidebar, setShowSidebar } = useContext(NavigationContext);
 
-  const handleToggle = () => {
-    setShowSidebar(!showSidebar);
+  const handleToggle = () => setShowSidebar(!showSidebar);
+
+  const modal = {
+    account: <SidebarAccount />,
+    login: <Login />,
+    create: <CreateAccount />,
   };
 
   return (
@@ -31,11 +33,7 @@ export default () => {
             <StyledSidebarTrigger id='NavigationProfileImageHoverOverlay' open={showSidebar} />
             <img
               id='NavigationProfileImage'
-              src={
-                profileImage !== null
-                  ? profileImage
-                  : `${process.env.PUBLIC_URL}/images/placeholder.webp`
-              }
+              src={profileImage || `${process.env.PUBLIC_URL}/images/placeholder.jpg`}
               alt=''
             />
           </>
@@ -50,11 +48,7 @@ export default () => {
         classNames='NavSidebarBackdropFade'
         unmountOnExit
       >
-        <StyledNavSidebarBackdrop
-          onClick={() => {
-            setShowSidebar(false);
-          }}
-        />
+        <StyledNavSidebarBackdrop onClick={() => setShowSidebar(false)} />
       </CSSTransition>
 
       <CSSTransition
@@ -63,15 +57,7 @@ export default () => {
         classNames='NavSidebarSlideRight'
         unmountOnExit
       >
-        <StyledNavSidebar>
-          {username ? (
-            <SidebarAccount setRenderModal={setRenderModal} />
-          ) : renderModal === 'create' ? (
-            <CreateAccount />
-          ) : (
-            <Login />
-          )}
-        </StyledNavSidebar>
+        <StyledNavSidebar>{modal[renderModal]}</StyledNavSidebar>
       </CSSTransition>
     </>
   );
