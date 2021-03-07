@@ -2,7 +2,7 @@ import { FaRegEye } from 'react-icons/fa';
 import moment from 'moment';
 import Moment from 'react-moment';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { Link } from 'react-router-dom';
 
@@ -26,6 +26,7 @@ import loginNameFormat from '../loginNameFormat';
 import { ChannelNameDiv } from '../StyledComponents';
 import FavoriteButton from '../../favorites/buttonList/FavoriteButton';
 import useToken from '../useToken';
+import FeedsContext from '../../feed/FeedsContext';
 
 export default ({
   data,
@@ -50,6 +51,7 @@ export default ({
     endDate,
     profile_image_url,
   } = data;
+  const { feedVideoSizeProps } = useContext(FeedsContext) || {};
   const [previewAvailable, setPreviewAvailable] = useState({});
   const [showPreview, setShowPreview] = useState();
   const imgRef = useRef();
@@ -139,7 +141,11 @@ export default ({
           className='imgLink'
         >
           {previewAvailable.data && showPreview && (
-            <VodPreview previewAvailable={previewAvailable.data} className='VodPreview' />
+            <VodPreview
+              previewAvailable={previewAvailable.data}
+              className='VodPreview'
+              feedVideoSizeProps={feedVideoSizeProps}
+            />
           )}
           <img
             src={

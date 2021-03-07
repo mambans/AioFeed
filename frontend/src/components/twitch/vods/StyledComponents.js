@@ -58,25 +58,24 @@ export const VodChannelListLi = styled.li`
   }
 `;
 
-const AnimateVodPreview = keyframes`
+const AnimateVodPreview = (height) => keyframes`
   from {
-    background-position-y: 1890px;
+    background-position-y: ${height * 10}px;
   }
   to {
-    background-position-y: 189px;
+    background-position-y: ${height}px;
   }
 `;
 
 export const VodPreview = styled.div`
   position: absolute;
-  animation: ${AnimateVodPreview} 5s steps(9);
+  animation: ${({ feedVideoSizeProps }) => AnimateVodPreview((feedVideoSizeProps.width / 16) * 9)}
+    5s steps(9);
   animation-fill-mode: forwards;
   object-fit: cover;
   background-size: cover;
   width: 100%;
   height: 100%;
-  /* width: 336px;
-  height: 189px; */
   background-image: ${({ previewAvailable }) => `url(${previewAvailable})`};
   border-radius: 10px;
 `;
