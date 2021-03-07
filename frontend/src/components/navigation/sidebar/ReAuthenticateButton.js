@@ -14,10 +14,8 @@ import AccountContext from './../../account/AccountContext';
 import FeedsContext from './../../feed/FeedsContext';
 import { AddCookie, getCookie } from '../../../util/Utils';
 
-const authenticatePopup = async (winName, domain, urlParam) => {
-  async function generateOrginState() {
-    return uniqid();
-  }
+const authenticatePopup = async (domain, urlParam) => {
+  const generateOrginState = async () => uniqid();
 
   const orginState = await generateOrginState();
 
@@ -29,7 +27,7 @@ const authenticatePopup = async (winName, domain, urlParam) => {
   const settings = `height=700,width=600,top=${TopPosition},left=${LeftPosition},scrollbars=yes,resizable`;
 
   try {
-    window.open(url, winName, settings);
+    window.open(url, `Connect ${domain}`, settings);
   } catch (e) {
     alert('Another Authendicate popup window might already be open.');
     console.error('Another Authendicate popup window might already be open.');
@@ -37,145 +35,83 @@ const authenticatePopup = async (winName, domain, urlParam) => {
   }
 };
 
+const TwitchBaseAuthUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit+user:edit:follows+clips:edit&response_type=code`;
+
+//to unfollow: scope=https://www.googleapis.com/auth/youtube
+//else  scope=https://www.googleapis.com/auth/youtube.readonly
+const YoutubeBaseAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/youtube/callback&response_type=code&scope=https://www.googleapis.com/auth/youtube&access_type=offline`;
+
 export default ({ disconnect, serviceName, style }) => {
-  const {
-    twitchUsername,
-    twitchProfileImg,
-    youtubeToken,
-    youtubeUsername,
-    youtubeProfileImg,
-  } = useContext(AccountContext);
+  const { twitchUsername, twitchProfileImg, youtubeUsername, youtubeProfileImg } = useContext(
+    AccountContext
+  );
 
   const { setEnableTwitch, setEnableYoutube } = useContext(FeedsContext) || {};
 
-  if (serviceName === 'Twitch') {
-    if (!getCookie(`Twitch-access_token`)) {
-      return (
-        <StyledConnectContainer style={{ ...style }}>
-          <StyledConnectTwitch
-            id='connect'
-            title='Authenticate/Connect'
-            onClick={() => {
-              authenticatePopup(
-                `Connect Twitch`,
-                'Twitch',
-                `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit+user:edit:follows+clips:edit&response_type=code&force_verify=true`,
-                setEnableTwitch
-              );
-            }}
+  const AuthButton = {
+    Twitch: !getCookie(`Twitch-access_token`) ? (
+      <StyledConnectTwitch
+        id='connect'
+        title='Authenticate/Connect'
+        onClick={() =>
+          authenticatePopup('Twitch', `${TwitchBaseAuthUrl}&force_verify=true`, setEnableTwitch)
+        }
+      >
+        <FaTwitch size={24} />
+        Connect Twitch
+      </StyledConnectTwitch>
+    ) : (
+      <>
+        <div className='username' id='Twitch'>
+          <div
+            title='Re-authenticate'
+            onClick={() => authenticatePopup('Twitch', `${TwitchBaseAuthUrl}`, setEnableTwitch)}
           >
-            <FaTwitch size={24} />
-            Connect Twitch
+            <StyledReconnectIcon id='reconnectIcon' />
+            <img title='Re-authenticate' src={twitchProfileImg} alt='' />
+          </div>
+          <p id='name'>{twitchUsername}</p>
+        </div>
+        {disconnect && (
+          <StyledConnectTwitch id='disconnect' title='Disconnect' onClick={disconnect}>
+            <FiLogOut size={24} />
           </StyledConnectTwitch>
-        </StyledConnectContainer>
-      );
-    } else {
-      return (
-        <StyledConnectContainer style={{ ...style }}>
-          <div className='username' id='Twitch'>
-            <div
-              title='Re-authenticate'
-              onClick={() => {
-                authenticatePopup(
-                  `Connect Twitch`,
-                  'Twitch',
-                  `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/twitch/callback&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit+user:edit:follows+clips:edit&response_type=code`,
-                  setEnableTwitch
-                );
-              }}
-            >
-              <StyledReconnectIcon id='reconnectIcon' />
-              <img title='Re-authenticate' src={twitchProfileImg} alt='' />
-            </div>
-            <p id='name'>{twitchUsername}</p>
-          </div>
-          {disconnect && (
-            <StyledConnectTwitch
-              id='disconnect'
-              title='Disconnect'
-              style={{
-                backgroundColor: 'hsla(268, 77%, 15%, 1)',
-                minWidth: '42px',
-                width: '42px',
-              }}
-              onClick={disconnect}
-            >
-              <FiLogOut
-                size={24}
-                style={{
-                  marginRight: '0',
-                }}
-              />
-            </StyledConnectTwitch>
-          )}
-        </StyledConnectContainer>
-      );
-    }
-  } else if (serviceName === 'Youtube') {
-    if (!youtubeToken) {
-      return (
-        <StyledConnectContainer style={{ ...style }}>
-          <StyledConnectYoutube
-            //to unfollow: scope=https://www.googleapis.com/auth/youtube
-            //else  scope=https://www.googleapis.com/auth/youtube.readonly
-            title='Authenticate/Connect'
-            onClick={() => {
-              authenticatePopup(
-                `Connect Youtube`,
-                'Youtube',
-                `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/youtube/callback&response_type=code&scope=https://www.googleapis.com/auth/youtube&access_type=offline&prompt=consent`,
-                setEnableYoutube
-              );
-            }}
+        )}
+      </>
+    ),
+    Youtube: !getCookie(`Youtube-access_token`) ? (
+      <StyledConnectYoutube
+        id='connect'
+        title='Authenticate/Connect'
+        onClick={() =>
+          authenticatePopup('Youtube', `${YoutubeBaseAuthUrl}&prompt=consent`, setEnableYoutube)
+        }
+      >
+        <FaYoutube size={30} />
+        Connect Youtube
+      </StyledConnectYoutube>
+    ) : (
+      <>
+        <div className='username' id='Youtube'>
+          <div
+            title='Re-authenticate'
+            onClick={() => authenticatePopup('Youtube', YoutubeBaseAuthUrl, setEnableYoutube)}
           >
-            <FaYoutube size={30} />
-            Connect Youtube
-          </StyledConnectYoutube>
-        </StyledConnectContainer>
-      );
-    } else {
-      return (
-        <StyledConnectContainer style={{ ...style }}>
-          <div className='username' id='Youtube'>
-            <div
-              //to unfollow: scope=https://www.googleapis.com/auth/youtube
-              //else  scope=https://www.googleapis.com/auth/youtube.readonly
-              title='Re-authenticate'
-              onClick={() => {
-                authenticatePopup(
-                  `Connect Youtube`,
-                  'Youtube',
-                  `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/youtube/callback&response_type=code&scope=https://www.googleapis.com/auth/youtube&access_type=offline&prompt=consent`,
-                  setEnableYoutube
-                );
-              }}
-            >
-              <StyledReconnectIcon id='reconnectIcon' />
-              <img title='Re-authenticate' src={youtubeProfileImg} alt='' />
-            </div>
-            <p id='name'>{youtubeUsername}</p>
+            <StyledReconnectIcon id='reconnectIcon' />
+            <img title='Re-authenticate' src={youtubeProfileImg} alt='' />
           </div>
-          {disconnect && (
-            <StyledConnectYoutube
-              id='disconnect'
-              title='Disconnect'
-              style={{
-                backgroundColor: 'hsla(0, 65%, 10%, 1)',
-                minWidth: '42px',
-                width: '42px',
-              }}
-              onClick={disconnect}
-            >
-              <FiLogOut
-                size={30}
-                style={{
-                  marginRight: '0',
-                }}
-              />
-            </StyledConnectYoutube>
-          )}
-        </StyledConnectContainer>
-      );
-    }
-  }
+          <p id='name'>{youtubeUsername}</p>
+        </div>
+        {disconnect && (
+          <StyledConnectYoutube id='disconnect' title='Disconnect' onClick={disconnect}>
+            <FiLogOut size={30} />
+          </StyledConnectYoutube>
+        )}
+      </>
+    ),
+  };
+
+  return (
+    <StyledConnectContainer style={{ ...style }}>{AuthButton[serviceName]}</StyledConnectContainer>
+  );
 };

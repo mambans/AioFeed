@@ -61,6 +61,11 @@ export const StyledConnectTwitch = styled(Button)`
   background-color: hsla(268, 77%, 30%, 1);
   margin-left: 0;
   border-radius: 10px;
+
+  #disconnect {
+    background-color: hsla(268, 77%, 15%, 1);
+  }
+
   &&& {
     border: thin solid hsla(268, 77%, 30%, 1);
 
@@ -88,6 +93,10 @@ export const StyledConnectYoutube = styled(Button)`
   height: 42px;
   border-radius: 10px;
   display: flex;
+
+  &#disconnect {
+    background-color: hsla(0, 65%, 10%, 1);
+  }
 
   &&& {
     border: thin solid hsla(0, 65%, 18%, 1);
@@ -339,7 +348,12 @@ export const StyledConnectContainer = styled.div`
     grid-area: disconnect;
     color: #b5b5b5;
     border-radius: 50%;
-    width: 50px;
+    min-width: 42px;
+    width: 42px;
+
+    svg {
+      margin-right: 0;
+    }
 
     &:hover {
       color: #ffffff;
