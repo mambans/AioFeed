@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, useContext } from 'react';
-import { uniqBy } from 'lodash';
+import { uniqBy, orderBy } from 'lodash';
 
 import AlertHandler from '../../alert';
 import getMyFollowedChannels from './../getMyFollowedChannels';
@@ -95,8 +95,16 @@ export default ({ children }) => {
             return true;
           });
 
+          const recentLiveStreams = (liveStreams.current || []).filter(
+            (s) => Math.trunc((Date.now() - new Date(s.started_at).getTime()) / 1000) <= 180
+          );
+
           oldLiveStreams.current = liveStreams.current;
-          liveStreams.current = customFilteredLiveStreams;
+          liveStreams.current = orderBy(
+            uniqBy([...(customFilteredLiveStreams || []), ...(recentLiveStreams || [])], 'id'),
+            (s) => s.viewer_count,
+            'desc'
+          );
 
           setLoadingStates({
             refreshing: false,
