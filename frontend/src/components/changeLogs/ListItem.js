@@ -49,30 +49,24 @@ const List = {
     padding: 5px 0;
     color: rgb(220, 220, 220);
   `,
-  Add: ({ children }) => {
-    return (
-      <List.Item>
-        <AddIcon />
-        <p>{children}</p>
-      </List.Item>
-    );
-  },
-  Remove: ({ children }) => {
-    return (
-      <List.Item>
-        <RemoveIcon />
-        <p>{children}</p>
-      </List.Item>
-    );
-  },
-  Change: ({ children }) => {
-    return (
-      <List.Item>
-        <ChangeIcon />
-        <p>{children}</p>
-      </List.Item>
-    );
-  },
+  Add: ({ children }) => (
+    <List.Item>
+      <AddIcon />
+      <p>{children}</p>
+    </List.Item>
+  ),
+  Remove: ({ children }) => (
+    <List.Item>
+      <RemoveIcon />
+      <p>{children}</p>
+    </List.Item>
+  ),
+  Change: ({ children }) => (
+    <List.Item>
+      <ChangeIcon />
+      <p>{children}</p>
+    </List.Item>
+  ),
   Button: styled(Button)`
     padding: 0.25rem 0.375rem;
   `,
@@ -176,39 +170,37 @@ export default ({ name, body, published_at, showInfo, children }) => {
       </List.Button>
       {info.additions && (
         <List.Group>
-          {info.additions.map((sent) => {
-            return <List.Add key={sent}>{sent}</List.Add>;
-          })}
+          {info.additions.map((sent) => (
+            <List.Add key={sent}>{sent}</List.Add>
+          ))}
         </List.Group>
       )}
       {info.deletions && (
         <List.Group>
-          {info.deletions.map((sent) => {
-            return <List.Remove key={sent}>{sent}</List.Remove>;
-          })}
+          {info.deletions.map((sent) => (
+            <List.Remove key={sent}>{sent}</List.Remove>
+          ))}
         </List.Group>
       )}
       {info.changes && (
         <List.Group>
-          {info.changes.map((sent) => {
-            return <List.Change key={sent}>{sent}</List.Change>;
-          })}
+          {info.changes.map((sent) => (
+            <List.Change key={sent}>{sent}</List.Change>
+          ))}
         </List.Group>
       )}
       {info.rest && (
         <List.Group>
-          {info.rest.map((sent) => {
-            return <List.Item key={sent}>{sent}</List.Item>;
-          })}
+          {info.rest.map((sent) => (
+            <List.Item key={sent}>{sent}</List.Item>
+          ))}
         </List.Group>
       )}
       {info.data && (
         <List.Button
           size='sm'
           variant='dark'
-          onClick={() => {
-            if (info.data) setShowFullMessage(!showFullMessage);
-          }}
+          onClick={() => info.data && setShowFullMessage(!showFullMessage)}
         >
           Full message
         </List.Button>

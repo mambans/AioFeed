@@ -95,13 +95,11 @@ export default ({ channel, loweropacity, marginright, size = 24, show = true }) 
         loweropacity={loweropacity}
         vodenabled={updateNotificationEnabled.toString()}
         variant='link'
-        onClick={() => {
-          if (updateNotificationEnabled) {
-            removeChannel(channel);
-          } else {
-            addChannel({ channel, username, authKey });
-          }
-        }}
+        onClick={() =>
+          updateNotificationEnabled
+            ? removeChannel(channel)
+            : addChannel({ channel, username, authKey })
+        }
       >
         {updateNotificationEnabled ? (
           isHovered ? (

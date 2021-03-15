@@ -15,14 +15,12 @@ const fetchSubscriptionVideos = async (videosCACHE, channel) => {
   const currentDate = new Date();
   const DATE_THRESHOLD = new Date(currentDate.setDate(currentDate.getDate() - 7));
 
-  const checkForCachedChannel = () => {
-    return videosCACHE.find(
+  const checkForCachedChannel = () =>
+    videosCACHE.find(
       (cacheChannel) =>
         cacheChannel?.channel?.snippet?.resourceId?.channelId ===
         channel?.snippet?.resourceId?.channelId
     );
-  };
-
   const cachedChannelObj = checkForCachedChannel();
   const staticHeaders = {
     Authorization: `Bearer ${getCookie('Youtube-access_token')}`,
@@ -59,14 +57,15 @@ export default async (followedChannels) => {
     const videosCACHE = getLocalstorage('YT-ChannelsObj') || [];
 
     const channelWithVideos = await Promise.all(
-      followedChannels.map(async (channel) => {
-        return await fetchSubscriptionVideos(videosCACHE, channel).then(async (result) => {
-          error = result.error;
-          const items = await filterTypeUpload(result.channels);
+      followedChannels.map(
+        async (channel) =>
+          await fetchSubscriptionVideos(videosCACHE, channel).then(async (result) => {
+            error = result.error;
+            const items = await filterTypeUpload(result.channels);
 
-          return { channel, items };
-        });
-      })
+            return { channel, items };
+          })
+      )
     );
     localStorage.setItem('YT-ChannelsObj', JSON.stringify(channelWithVideos));
 

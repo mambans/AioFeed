@@ -19,13 +19,8 @@ export default () => {
   const [validated, setValidated] = useState(false);
   const { setRenderModal, setAlert } = useContext(NavigationContext);
 
-  const handleClose = () => {
-    setShow(false);
-  };
-
-  const handleShow = () => {
-    setShow(true);
-  };
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const deleteAccount = async (event) => {
     const form = event.currentTarget;

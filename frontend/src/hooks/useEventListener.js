@@ -20,16 +20,13 @@ export default (eventName, handler, element = window, secondArgument = true, opt
       Boolean(secondArgument) &&
         savedEventNameRef.map((event) => element.addEventListener(event, eventListener, options));
 
-      return () => {
+      return () =>
         savedEventNameRef.map((event) => element.removeEventListener(event, eventListener));
-      };
     } else {
       Boolean(secondArgument) &&
         element.addEventListener(savedEventNameRef, eventListener, options);
 
-      return () => {
-        element.removeEventListener(savedEventNameRef, eventListener);
-      };
+      return () => element.removeEventListener(savedEventNameRef, eventListener);
     }
   }, [savedEventName, element, secondArgument, options]);
 };

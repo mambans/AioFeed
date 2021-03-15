@@ -42,28 +42,26 @@ export default ({ data }) => {
   return (
     <Container>
       <TransitionGroup component={null}>
-        {liveStreams?.map((stream) => {
-          return (
-            <CSSTransition
-              key={stream.user_id}
-              timeout={750}
-              classNames={feedVideoSizeProps.transition || 'videoFadeSlide'}
-              unmountOnExit
-              appear
-            >
-              <StreamEle
-                key={stream.id}
-                thumbnailRefresh={thumbnailRefresh}
-                data={stream}
-                newlyAddedStreams={newlyAddedStreams}
-                newlyAdded={stream.newlyAdded}
-                refresh={refresh}
-                REFRESH_RATE={REFRESH_RATE}
-                refreshAfterUnfollowTimer={refreshAfterUnfollowTimer}
-              />
-            </CSSTransition>
-          );
-        })}
+        {liveStreams?.map((stream) => (
+          <CSSTransition
+            key={stream.user_id}
+            timeout={750}
+            classNames={feedVideoSizeProps.transition || 'videoFadeSlide'}
+            unmountOnExit
+            appear
+          >
+            <StreamEle
+              key={stream.id}
+              thumbnailRefresh={thumbnailRefresh}
+              data={stream}
+              newlyAddedStreams={newlyAddedStreams}
+              newlyAdded={stream.newlyAdded}
+              refresh={refresh}
+              REFRESH_RATE={REFRESH_RATE}
+              refreshAfterUnfollowTimer={refreshAfterUnfollowTimer}
+            />
+          </CSSTransition>
+        ))}
       </TransitionGroup>
 
       <AlertHandler

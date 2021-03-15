@@ -172,21 +172,19 @@ export default (data) => {
             <>
               <p>{`Total: ${filteredChannels.length}`}</p>
 
-              {filteredChannels.map((channel, index) => {
-                return (
-                  <ChannelListElement
-                    key={channel.snippet.title}
-                    channel={channel}
-                    setNewChannels={(newChannels) => {
-                      channels.current = newChannels;
-                      setFilteredChannels(newChannels);
-                    }}
-                    videos={data.videos}
-                    setVideos={data.setVideos}
-                    selected={index === cursor.position}
-                  />
-                );
-              })}
+              {filteredChannels.map((channel, index) => (
+                <ChannelListElement
+                  key={channel.snippet.title}
+                  channel={channel}
+                  setNewChannels={(newChannels) => {
+                    channels.current = newChannels;
+                    setFilteredChannels(newChannels);
+                  }}
+                  videos={data.videos}
+                  setVideos={data.setVideos}
+                  selected={index === cursor.position}
+                />
+              ))}
             </>
           ) : (
             <StyledLoadingList amount={12} />

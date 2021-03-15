@@ -42,22 +42,23 @@ export default async ({ videos }) => {
 
   const newVideosDetails = Boolean(noVideoDetailsIDS?.length)
     ? await Promise.all(
-        chunk(noVideoDetailsIDS, 50).map(async (chunk) => {
-          return await axios
-            .get(
-              `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${chunk}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
-              {
-                headers: {
-                  Accept: 'application/json',
-                  Authorization: `Bearer ${getCookie('Youtube-access_token')}`,
-                },
-              }
-            )
-            .then((res) => res.data.items)
-            .catch((e) => {
-              return null;
-            });
-        })
+        chunk(noVideoDetailsIDS, 50).map(
+          async (chunk) =>
+            await axios
+              .get(
+                `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${chunk}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+                {
+                  headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${getCookie('Youtube-access_token')}`,
+                  },
+                }
+              )
+              .then((res) => res.data.items)
+              .catch((e) => {
+                return null;
+              })
+        )
       ).then((res) => res.flat(1))
     : CachedFullyVideos;
 

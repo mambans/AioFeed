@@ -31,15 +31,7 @@ export default ({ style }) => {
 
   return (
     <ThemeSelector open={open} style={style}>
-      <button
-        id='active'
-        // onBlur={() => {
-        //   setOpen(false);
-        // }}
-        onClick={() => {
-          setOpen(!open);
-        }}
-      >
+      <button id='active' onClick={() => setOpen(!open)}>
         <span id='prefix'>Theme:</span>
         <Arrow open={open} />
         <span id='ActiveThemeName'>
@@ -49,30 +41,28 @@ export default ({ style }) => {
       <div style={{ overflow: 'hidden' }}>
         <CSSTransition in={open} timeout={500} classNames='themeSelector' unmountOnExit>
           <ThemeSelectorUl>
-            {themesArray.map((theme) => {
-              return (
-                <ThemeItem
-                  key={theme.name}
-                  value={theme.name}
-                  image={
-                    theme.image
-                      ? typeof theme.image === 'function'
-                        ? `${process.env.PUBLIC_URL}/images/${theme.image(themesArray).image}`
-                        : `${process.env.PUBLIC_URL}/images/${theme.image}`
-                      : 'none'
-                  }
-                  backgroundColor={theme.backgroundColor ? theme.backgroundColor : 'unset'}
-                  onClick={() => {
-                    setActiveTheme(theme);
-                    activateTheme(theme);
-                    if (theme.type !== activeTheme.type) setActiveContextTheme(theme);
-                    setOpen(false);
-                  }}
-                >
-                  {theme.name.charAt(0).toUpperCase() + theme.name.slice(1)}
-                </ThemeItem>
-              );
-            })}
+            {themesArray.map((theme) => (
+              <ThemeItem
+                key={theme.name}
+                value={theme.name}
+                image={
+                  theme.image
+                    ? typeof theme.image === 'function'
+                      ? `${process.env.PUBLIC_URL}/images/${theme.image(themesArray).image}`
+                      : `${process.env.PUBLIC_URL}/images/${theme.image}`
+                    : 'none'
+                }
+                backgroundColor={theme.backgroundColor ? theme.backgroundColor : 'unset'}
+                onClick={() => {
+                  setActiveTheme(theme);
+                  activateTheme(theme);
+                  if (theme.type !== activeTheme.type) setActiveContextTheme(theme);
+                  setOpen(false);
+                }}
+              >
+                {theme.name.charAt(0).toUpperCase() + theme.name.slice(1)}
+              </ThemeItem>
+            ))}
           </ThemeSelectorUl>
         </CSSTransition>
       </div>

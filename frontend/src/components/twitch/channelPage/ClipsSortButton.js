@@ -4,11 +4,11 @@ import { MdSort } from 'react-icons/md';
 import { SortButton, SortDropDownList } from './StyledComponents';
 import { Link } from 'react-router-dom';
 
-const PREDefinedDayOptions = [0, 3, 7, 14, 30, 90, 180, 365];
+const PRE_DEFINED_DAY_OPTIONS = [0, 3, 7, 14, 30, 90, 180, 365];
 
 const convertDays = (nrOfDays) => {
   if (!nrOfDays) return 'lifetime';
-  if (!PREDefinedDayOptions?.includes(nrOfDays))
+  if (!PRE_DEFINED_DAY_OPTIONS?.includes(nrOfDays))
     return nrOfDays + ` Day${nrOfDays === 1 ? '' : 's'}`;
 
   const rawWeeks = Math.round(Math.min(nrOfDays / 7, 4));
@@ -35,33 +35,29 @@ export default ({ sortBy: days, setSortBy, setData, resetOldData }) => {
     <div style={{ marginLeft: '0px' }}>
       <SortButton
         title={`Fetch clips from the last ${convertDays(days)}`}
-        onClick={() => {
-          setOpen(!open);
-        }}
+        onClick={() => setOpen(!open)}
       >
         <MdSort size={30} />
         Within: {convertDays(days)}
       </SortButton>
       {open && (
         <SortDropDownList>
-          {PREDefinedDayOptions.map((option) => {
-            return (
-              <Link
-                to={`?type=clips&within=${option}`}
-                key={option}
-                onClick={() => {
-                  if (option !== days && option !== '' + days) {
-                    setData();
-                    if (resetOldData) resetOldData();
-                    setSortBy(option);
-                    setOpen(false);
-                  }
-                }}
-              >
-                {convertDays(option)}
-              </Link>
-            );
-          })}
+          {PRE_DEFINED_DAY_OPTIONS.map((option) => (
+            <Link
+              to={`?type=clips&within=${option}`}
+              key={option}
+              onClick={() => {
+                if (option !== days && option !== '' + days) {
+                  setData();
+                  if (resetOldData) resetOldData();
+                  setSortBy(option);
+                  setOpen(false);
+                }
+              }}
+            >
+              {convertDays(option)}
+            </Link>
+          ))}
         </SortDropDownList>
       )}
     </div>

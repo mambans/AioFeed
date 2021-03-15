@@ -20,7 +20,6 @@ export const Open = styled(MdStar)`
   transition: color 250ms, transform 250ms;
 
   &:hover {
-    /* color: green; */
     color: rgb(255, 255, 0);
     transform: scale(1.2);
   }

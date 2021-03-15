@@ -63,20 +63,18 @@ export default ({ TwitchPlayer }) => {
     <>
       {showPlaybackStats && playbackStats && (
         <PlaybackStats>
-          {Object.keys(playbackStats).map((statName) => {
-            return (
-              <div key={statName}>
-                <span>{`${statName}: `}</span>
-                <span
-                  style={{
-                    color: latencyColorValue(statName, playbackStats[statName]),
-                  }}
-                >
-                  {playbackStats[statName]}
-                </span>
-              </div>
-            );
-          })}
+          {Object.keys(playbackStats).map((statName) => (
+            <div key={statName}>
+              <span>{`${statName}: `}</span>
+              <span
+                style={{
+                  color: latencyColorValue(statName, playbackStats[statName]),
+                }}
+              >
+                {playbackStats[statName]}
+              </span>
+            </div>
+          ))}
         </PlaybackStats>
       )}
       <ButtonShowStats

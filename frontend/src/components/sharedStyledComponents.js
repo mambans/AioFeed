@@ -77,9 +77,10 @@ const HeaderTitle = styled.div`
   .openIndividualFeed {
     position: absolute;
     left: calc(100% - 5px);
-    transition: transform 250ms ease-in-out 200ms, opacity 200ms ease-in-out 200ms,
-      color 200ms ease-in-out 0ms;
     opacity: 0;
+    transition: transform 250ms cubic-bezier(0.73, 0.25, 0.18, 1) 200ms,
+      opacity 200ms cubic-bezier(0.73, 0.25, 0.18, 1) 200ms,
+      color 200ms cubic-bezier(0.73, 0.25, 0.18, 1) 0ms;
     transform: translateX(-115%);
     letter-spacing: unset;
     font-size: unset;

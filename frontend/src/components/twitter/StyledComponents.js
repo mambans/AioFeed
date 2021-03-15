@@ -9,7 +9,6 @@ export const Container = styled.div`
   border-radius: 10px 10px 2px 2px;
   transition: height 500ms;
   overflow: hidden;
-  /* margin: 0 10px; */
 
   @media screen and (max-width: 2560px) {
     width: 19vw;
@@ -22,7 +21,6 @@ export const MainContainer = styled.div`
   position: fixed;
   top: 90px;
   height: 92vh;
-  /* right: ${({ center }) => (center ? '50%' : '10px')}; */
   left: ${({ center }) => (center ? '50%' : 'calc(86vw - 28px)')};
   transform: ${({ center }) => (center ? 'translateX(-50%)' : 'unset')};
 

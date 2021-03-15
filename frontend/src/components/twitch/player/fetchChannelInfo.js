@@ -31,7 +31,5 @@ export default async (channelId, format) => {
         return res.data;
       }
     })
-    .catch((error) => {
-      console.error('fetchChannelInfo: ', error);
-    });
+    .catch((error) => console.error('fetchChannelInfo: ', error));
 };

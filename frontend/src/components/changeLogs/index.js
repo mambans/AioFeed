@@ -22,27 +22,23 @@ export default () => {
       </Modal.Header>
       <Modal.Body bsPrefix={styles.ulContainer} as='div'>
         <Alert />
-        {repo?.tags.slice(0, 1).map((tag) => {
-          return (
-            <ListItem
-              name={tag.name}
-              key={tag.node_id}
-              body={tag.body}
-              published_at={tag.published_at}
-              showInfo
-            ></ListItem>
-          );
-        })}
-        {repo?.tags.slice(1, 15).map((tag) => {
-          return (
-            <ListItem
-              name={tag.name}
-              key={tag.node_id}
-              body={tag.body}
-              published_at={tag.published_at}
-            ></ListItem>
-          );
-        })}
+        {repo?.tags.slice(0, 1).map((tag) => (
+          <ListItem
+            name={tag.name}
+            key={tag.node_id}
+            body={tag.body}
+            published_at={tag.published_at}
+            showInfo
+          ></ListItem>
+        ))}
+        {repo?.tags.slice(1, 15).map((tag) => (
+          <ListItem
+            name={tag.name}
+            key={tag.node_id}
+            body={tag.body}
+            published_at={tag.published_at}
+          ></ListItem>
+        ))}
       </Modal.Body>
     </>
   );

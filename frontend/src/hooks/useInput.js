@@ -12,15 +12,11 @@ export default (initialValue) => {
     setValue,
     reset: () => setValue(''),
     manualSet: {
-      onClick: (event) => {
-        setValue(event.target.textContent.trim());
-      },
+      onClick: (event) => setValue(event.target.textContent.trim()),
     },
     bind: {
       value,
-      onChange: (event) => {
-        setValue(event.target.value.trim());
-      },
+      onChange: (event) => setValue(event.target.value.trim()),
     },
   };
 };

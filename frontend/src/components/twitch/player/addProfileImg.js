@@ -12,12 +12,10 @@ export default async ({ user_id, currentStreamObj }) => {
             params: {
               id: user_id,
             },
-          }).then((res) => {
-            return {
-              profile_image: res.data.data[0].profile_image_url,
-              login: res.data.data[0].login,
-            };
-          });
+          }).then((res) => ({
+            profile_image: res.data.data[0].profile_image_url,
+            login: res.data.data[0].login,
+          }));
 
     if (!TwitchProfiles[user_id]) {
       localStorage.setItem(

@@ -95,7 +95,9 @@ export default ({ disconnect, serviceName, style }) => {
         <div className='username' id='Youtube'>
           <div
             title='Re-authenticate'
-            onClick={() => authenticatePopup('Youtube', YoutubeBaseAuthUrl, setEnableYoutube)}
+            onClick={() =>
+              authenticatePopup('Youtube', `${YoutubeBaseAuthUrl}&prompt=consent`, setEnableYoutube)
+            }
           >
             <StyledReconnectIcon id='reconnectIcon' />
             <img title='Re-authenticate' src={youtubeProfileImg} alt='' />

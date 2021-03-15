@@ -40,37 +40,35 @@ const List = ({ videos, list, setLists, setVideos }) => {
 
   return (
     <TransitionGroup component={null} className={'videos'}>
-      {videos?.map((video) => {
-        return (
-          <CSSTransition
-            key={`${list.name}-${video.contentDetails?.upload?.videoId || video.id}`}
-            timeout={750}
-            classNames={video.transition || 'fade-750ms'}
-            // classNames='videoFadeSlide'
-            unmountOnExit
-          >
-            {video.loading ? (
-              <LoadingVideoElement type={'small'} />
-            ) : video?.kind === 'youtube#video' ? (
-              <YoutubeVideoElement
-                listName={list.name}
-                data-id={video.contentDetails?.upload?.videoId}
-                video={video}
-                disableContextProvider={true}
-                {...dragEvents}
-              />
-            ) : (
-              <VodElement
-                listName={list.name}
-                data-id={video.id}
-                data={video}
-                disableContextProvider={true}
-                {...dragEvents}
-              />
-            )}
-          </CSSTransition>
-        );
-      })}
+      {videos?.map((video) => (
+        <CSSTransition
+          key={`${list.name}-${video.contentDetails?.upload?.videoId || video.id}`}
+          timeout={750}
+          classNames={video.transition || 'fade-750ms'}
+          // classNames='videoFadeSlide'
+          unmountOnExit
+        >
+          {video.loading ? (
+            <LoadingVideoElement type={'small'} />
+          ) : video?.kind === 'youtube#video' ? (
+            <YoutubeVideoElement
+              listName={list.name}
+              data-id={video.contentDetails?.upload?.videoId}
+              video={video}
+              disableContextProvider={true}
+              {...dragEvents}
+            />
+          ) : (
+            <VodElement
+              listName={list.name}
+              data-id={video.id}
+              data={video}
+              disableContextProvider={true}
+              {...dragEvents}
+            />
+          )}
+        </CSSTransition>
+      ))}
     </TransitionGroup>
   );
 };

@@ -26,13 +26,10 @@ export default ({
 
   const recalcWidth = useMemo(
     () =>
-      debounce(
-        () => {
-          setNumberOfVideos(Math.floor(window.innerWidth / 350));
-        },
-        20,
-        { leading: true, trailing: false }
-      ),
+      debounce(() => setNumberOfVideos(Math.floor(window.innerWidth / 350)), 20, {
+        leading: true,
+        trailing: false,
+      }),
     []
   );
 

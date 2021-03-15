@@ -38,11 +38,8 @@ export default () => {
   };
 
   function parseBolean(value) {
-    if (value === 'null' || !value) {
-      return null;
-    } else {
-      return value;
-    }
+    if (value === 'null' || !value) return null;
+    return value;
   }
 
   async function loginAccount() {
@@ -144,13 +141,7 @@ export default () => {
           <Button variant='primary' type='submit' disabled={(!username && !password) || validated}>
             Login
           </Button>
-          <Button
-            onClick={() => {
-              setRenderModal('create');
-            }}
-          >
-            Create Account
-          </Button>
+          <Button onClick={() => setRenderModal('create')}>Create Account</Button>
         </div>
       </StyledCreateForm>
       <Themeselector style={{ marginTop: '20px' }} />

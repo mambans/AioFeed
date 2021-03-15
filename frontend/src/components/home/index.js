@@ -11,12 +11,7 @@ export default () => {
       <BlurOverlay />
       <WelcomeContainer>
         <LogoText>
-          <img
-            // src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}
-            src={`${process.env.PUBLIC_URL}/logo_transparent.png`}
-            alt='logo'
-            id='logo'
-          />
+          <img src={`${process.env.PUBLIC_URL}/logo_transparent.png`} alt='logo' id='logo' />
           <div>
             <h1>
               <b>AioFeed</b>

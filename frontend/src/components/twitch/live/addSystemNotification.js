@@ -3,18 +3,16 @@ import loginNameFormat from './../loginNameFormat';
 const markStreamAsSeen = async (streamName, newlyAddedStreams, setUnseenNotifications) => {
   new Promise(async (resolve, reject) => {
     if (setUnseenNotifications) {
-      setUnseenNotifications((unseenNotifications) => {
-        return unseenNotifications.filter((value) => {
-          return value !== streamName;
-        });
-      });
+      setUnseenNotifications((unseenNotifications) =>
+        unseenNotifications.filter((value) => value !== streamName)
+      );
     }
 
     if (!newlyAddedStreams) reject('Notification from Player');
 
-    const newUnSeenStreams = await newlyAddedStreams.current.filter((value) => {
-      return value !== streamName;
-    });
+    const newUnSeenStreams = await newlyAddedStreams.current.filter(
+      (value) => value !== streamName
+    );
     resolve(newUnSeenStreams);
   }).then((res) => {
     newlyAddedStreams.current = res;

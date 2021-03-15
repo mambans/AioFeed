@@ -91,9 +91,7 @@ export default () => {
       switch (videoType) {
         case 'streams':
           GetTopStreams(category, shouldLoadMore && oldTopData.current)
-            .then((res) => {
-              fetchVideosDataHandler(res, shouldLoadMore);
-            })
+            .then((res) => fetchVideosDataHandler(res, shouldLoadMore))
             .catch((e) => {
               if ((e.message = 'game is undefined')) {
                 setError('Invalid game name');
@@ -105,9 +103,7 @@ export default () => {
           break;
         case 'clips':
           GetTopClips(category, sortByTime, oldTopData.current)
-            .then((res) => {
-              fetchVideosDataHandler(res, shouldLoadMore);
-            })
+            .then((res) => fetchVideosDataHandler(res, shouldLoadMore))
             .catch((e) => {
               if ((e.message = 'game is undefined')) {
                 setError('Invalid game name');
@@ -119,9 +115,7 @@ export default () => {
           break;
         case 'videos':
           GetTopVideos(category, sortBy, oldTopData.current)
-            .then((res) => {
-              fetchVideosDataHandler(res, shouldLoadMore);
-            })
+            .then((res) => fetchVideosDataHandler(res, shouldLoadMore))
             .catch((e) => {
               if ((e.message = 'game is undefined')) {
                 setError('Invalid game name');
@@ -133,9 +127,7 @@ export default () => {
           break;
         default:
           GetTopStreams(category, shouldLoadMore && oldTopData.current)
-            .then((res) => {
-              fetchVideosDataHandler(res, shouldLoadMore);
-            })
+            .then((res) => fetchVideosDataHandler(res, shouldLoadMore))
             .catch((e) => {
               if ((e.message = 'game is undefined')) {
                 setError('Invalid game name');
@@ -226,9 +218,7 @@ export default () => {
                 <TypeButton
                   title={category ? `Fetch top ${videoType}` : 'Select a game/category first'}
                   disabled={category ? false : true}
-                  onClick={() => {
-                    setTypeListOpen(!typeListOpen);
-                  }}
+                  onClick={() => setTypeListOpen(!typeListOpen)}
                 >
                   {!videoType || videoType === 'streams' ? (
                     <MdLiveTv size={20} />
@@ -240,12 +230,7 @@ export default () => {
 
                 {typeListOpen && (
                   <TypeListUlContainer>
-                    <Link
-                      to='?type=streams'
-                      onClick={() => {
-                        videoTypeBtnOnClick('streams');
-                      }}
-                    >
+                    <Link to='?type=streams' onClick={() => videoTypeBtnOnClick('streams')}>
                       <MdLiveTv size={24} />
                       Streams
                     </Link>
@@ -298,22 +283,20 @@ export default () => {
               />
 
               <TransitionGroup className='twitch-top-live' component={null}>
-                {topData?.map((stream) => {
-                  return (
-                    <CSSTransition
-                      key={stream.id}
-                      timeout={{
-                        appear: 500,
-                        enter: 500,
-                        exit: 0,
-                      }}
-                      classNames='fade-500ms'
-                      unmountOnExit
-                    >
-                      {videoElementTypeComp(stream)}
-                    </CSSTransition>
-                  );
-                })}
+                {topData?.map((stream) => (
+                  <CSSTransition
+                    key={stream.id}
+                    timeout={{
+                      appear: 500,
+                      enter: 500,
+                      exit: 0,
+                    }}
+                    classNames='fade-500ms'
+                    unmountOnExit
+                  >
+                    {videoElementTypeComp(stream)}
+                  </CSSTransition>
+                ))}
               </TransitionGroup>
 
               <LoadMore

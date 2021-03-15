@@ -12,16 +12,10 @@ const fetchAllOnlineStreams = async (followedChannelsIds) => {
           first: 100,
         },
       })
-        .then((res) => {
-          return res.data.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        .then((res) => res.data.data)
+        .catch((error) => console.log(error));
     })
-  ).then((res) => {
-    return res.flat(1);
-  });
+  ).then((res) => res.flat(1));
 
   return allOnlineStreams;
 };
@@ -37,9 +31,9 @@ export default async function getFollowedOnlineStreams({
 
   try {
     // Make an array of all followed channels id's for easier/less API reuqests.
-    const followedChannelsIds = await followedchannels.map((channel) => {
-      return channel.to_id || channel.user_id;
-    });
+    const followedChannelsIds = await followedchannels.map(
+      (channel) => channel.to_id || channel.user_id
+    );
 
     // Get all Live-streams from followed channels.
     const LiveFollowedStreams = {

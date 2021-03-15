@@ -458,6 +458,7 @@ export const StyledPlayerExtraButtons = styled.div`
   &:focus-within {
     transform: translateX(0);
     opacity: 1;
+    z-index: 1;
   }
 
   a {
@@ -776,5 +777,9 @@ export const Loop = styled.div`
   position: fixed;
   bottom: 90px;
   width: ${({ listIsOpen, listWidth, loopEnabled }) =>
-    listIsOpen === 'true' ? `calc(100% - ${listWidth}px )` : loopEnabled === 'true' ? '100%' : 'auto'};
+    listIsOpen === 'true'
+      ? `calc(100% - ${listWidth}px )`
+      : loopEnabled === 'true'
+      ? '100%'
+      : 'auto'};
 `;

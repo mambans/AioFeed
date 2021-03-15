@@ -9,9 +9,7 @@ const StyledAlert = styled(Alert)`
 export default () => {
   const [show, setShow] = useState(false);
 
-  const handleClose = () => {
-    setShow(false);
-  };
+  const handleClose = () => setShow(false);
 
   if (show) {
     return (

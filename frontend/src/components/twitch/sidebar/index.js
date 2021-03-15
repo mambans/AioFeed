@@ -17,25 +17,23 @@ export default (data) => {
 
         {onlineStreams?.length > 0 ? (
           <TransitionGroup className='sidebar' component={null}>
-            {onlineStreams.map((stream) => {
-              return (
-                <CSSTransition
+            {onlineStreams.map((stream) => (
+              <CSSTransition
+                key={stream.user_id}
+                timeout={1000}
+                classNames='sidebarVideoFade-1s'
+                unmountOnExit
+              >
+                <SidebarItem
                   key={stream.user_id}
-                  timeout={1000}
-                  classNames='sidebarVideoFade-1s'
-                  unmountOnExit
-                >
-                  <SidebarItem
-                    key={stream.user_id}
-                    stream={stream}
-                    newlyAdded={newlyAdded}
-                    shows={shows}
-                    setShows={setShows}
-                    resetShowsTimer={resetShowsTimer}
-                  />
-                </CSSTransition>
-              );
-            })}
+                  stream={stream}
+                  newlyAdded={newlyAdded}
+                  shows={shows}
+                  setShows={setShows}
+                  resetShowsTimer={resetShowsTimer}
+                />
+              </CSSTransition>
+            ))}
           </TransitionGroup>
         ) : (
           <div
@@ -52,7 +50,6 @@ export default (data) => {
         )}
       </Styledsidebar>
     );
-  } else {
-    return <LoadingSidebar />;
   }
+  return <LoadingSidebar />;
 };

@@ -15,30 +15,30 @@ export default () => {
       <li id='clear' onClick={clearNotifications}>
         Clear all ({notifications?.length || 0})
       </li>
-      {notifications?.map((item) => {
-        return (
-          <Notification key={item.key} status={item.notiStatus}>
-            <Link to={`/${item.user_name?.toLowerCase()}/page`} className='profileImg' alt=''>
-              <img src={item.profile_image_url} alt=''></img>
+      {notifications?.map(
+        ({ key, notiStatus, user_name, profile_image_url, text, title, date }) => (
+          <Notification key={key} status={notiStatus}>
+            <Link to={`/${user_name?.toLowerCase()}/page`} className='profileImg' alt=''>
+              <img src={profile_image_url} alt=''></img>
             </Link>
             <div className='textContainer'>
-              <Link to={`/${item.user_name?.toLowerCase()}/page`} className='name'>
-                <b>{item.user_name}</b> {item.notiStatus}
+              <Link to={`/${user_name?.toLowerCase()}/page`} className='name'>
+                <b>{user_name}</b> {notiStatus}
               </Link>
-              <Link to={`/${item.user_name?.toLowerCase()}/page`} className='title'>
-                {(item?.notiStatus?.includes('updated') &&
-                  item?.text?.split('\n').map((line) => (
+              <Link to={`/${user_name?.toLowerCase()}/page`} className='title'>
+                {(notiStatus?.includes('updated') &&
+                  text?.split('\n').map((line) => (
                     <p className='UpdateText' key={line}>
                       {line}
                     </p>
                   ))) ||
-                  truncate(item.title, 30)}
+                  truncate(title, 30)}
               </Link>
-              <Date date={item.date} status={item.notiStatus} />
+              <Date date={date} status={notiStatus} />
             </div>
           </Notification>
-        );
-      })}
+        )
+      )}
     </NotificationListContainer>
   );
 };

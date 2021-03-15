@@ -54,15 +54,14 @@ export default ({ TwitchPlayer, PlayerUIControlls }) => {
         title={'Play (space)'}
       />
     );
-  } else {
-    return (
-      <FaPause
-        disabled={!TwitchPlayer}
-        id='PausePlay'
-        size={30}
-        onClick={PausePlay}
-        title={'Pause (space)'}
-      />
-    );
   }
+  return (
+    <FaPause
+      disabled={!TwitchPlayer}
+      id='PausePlay'
+      size={30}
+      onClick={PausePlay}
+      title={'Pause (space)'}
+    />
+  );
 };

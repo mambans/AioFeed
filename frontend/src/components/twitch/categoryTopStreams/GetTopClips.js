@@ -20,9 +20,7 @@ export default async (category, sortByTime, page) => {
       params: {
         name: category,
       },
-    }).then((res) => {
-      return res.data.data[0];
-    });
+    }).then((res) => res.data.data[0]);
   } else {
     game = { id: null };
   }

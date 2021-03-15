@@ -37,7 +37,9 @@ export default ({ listIsOpen, listWidth }) => {
 
   useEventListenerMemo(
     window.Twitch.Player.PLAYING,
-    () => setDuration(twitchVideoPlayer.getDuration()),
+    () => {
+      setDuration(twitchVideoPlayer.getDuration());
+    },
     twitchVideoPlayer
   );
 

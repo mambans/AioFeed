@@ -9,10 +9,7 @@ export default async ({ authKey = getCookie(`AioFeed_AuthKey`) } = {}) => {
     // console.log('Youtube: Validating token..');
     return await axios
       .post(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${access_token}`)
-      .then((res) => {
-        // console.log('YouTube: Valid Access_token');
-        return res;
-      })
+      .then((res) => res)
       .catch((error) => {
         console.warn('YouTube: Invalid Access_token');
         return autoReauthenticate({ authKey });

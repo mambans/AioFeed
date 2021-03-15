@@ -88,9 +88,7 @@ export default () => {
           If you have any question you can contact{' '}
           <EmailButtonAsLink
             title='mailto:perssons1996@gmail.com?subject=subject&body=body'
-            onClick={() => {
-              window.open('mailto:perssons1996@gmail.com?subject=subject&body=body');
-            }}
+            onClick={() => window.open('mailto:perssons1996@gmail.com?subject=subject&body=body')}
           >
             Perssons1996@gmail.com
           </EmailButtonAsLink>

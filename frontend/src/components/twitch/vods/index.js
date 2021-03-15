@@ -149,18 +149,16 @@ export const Vods = ({ disableContextProvider }) => {
             className={vodAmounts.transitionGroup || 'videos'}
             component={SubFeedContainer}
           >
-            {vods.data.slice(0, vodAmounts.amount).map((vod) => {
-              return (
-                <CSSTransition
-                  key={vod.id}
-                  timeout={vodAmounts.timeout}
-                  classNames={vod.transition || 'fade-750ms'}
-                  unmountOnExit
-                >
-                  <VodElement data={vod} disableContextProvider={disableContextProvider} />
-                </CSSTransition>
-              );
-            })}
+            {vods.data.slice(0, vodAmounts.amount).map((vod) => (
+              <CSSTransition
+                key={vod.id}
+                timeout={vodAmounts.timeout}
+                classNames={vod.transition || 'fade-750ms'}
+                unmountOnExit
+              >
+                <VodElement data={vod} disableContextProvider={disableContextProvider} />
+              </CSSTransition>
+            ))}
           </TransitionGroup>
           <LoadMore
             loaded={true}

@@ -15,15 +15,11 @@ const useInput = (initialValue) => {
     setValue,
     reset: () => setValue(''),
     manualSet: {
-      onClick: (event) => {
-        setValue(event.target.textContent);
-      },
+      onClick: (event) => setValue(event.target.textContent),
     },
     bind: {
       value,
-      onChange: (event) => {
-        setValue(event.target.value);
-      },
+      onChange: (event) => setValue(event.target.value),
     },
   };
 };

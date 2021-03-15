@@ -35,29 +35,27 @@ export const Twitter = ({ in: forceMount = false }) => {
         center={forceMount || (!enableTwitch && !enableYoutube && !enableTwitchVods)}
       >
         <TransitionGroup component={null}>
-          {twitterLists?.map((id) => {
-            return (
-              <CSSTransition classNames='twitterList' key={id} timeout={750} unmountOnExit>
-                <Container key={id}>
-                  <TwitterTimelineEmbed
-                    sourceType='list'
-                    id={id}
-                    placeholder={<LoadingPlaceholder />}
-                    autoHeight={true}
-                    theme={activeTheme.type}
-                    noScrollbar={true}
-                    noHeader={true}
-                    noFooter={true}
-                    noBorders={true}
-                    transparent={true}
-                    onLoad={() => {
-                      console.log(`Twitter list '${id}' loaded.`);
-                    }}
-                  />
-                </Container>
-              </CSSTransition>
-            );
-          })}
+          {twitterLists?.map((id) => (
+            <CSSTransition classNames='twitterList' key={id} timeout={750} unmountOnExit>
+              <Container key={id}>
+                <TwitterTimelineEmbed
+                  sourceType='list'
+                  id={id}
+                  placeholder={<LoadingPlaceholder />}
+                  autoHeight={true}
+                  theme={activeTheme.type}
+                  noScrollbar={true}
+                  noHeader={true}
+                  noFooter={true}
+                  noBorders={true}
+                  transparent={true}
+                  onLoad={() => {
+                    console.log(`Twitter list '${id}' loaded.`);
+                  }}
+                />
+              </Container>
+            </CSSTransition>
+          ))}
         </TransitionGroup>
 
         {!Boolean(twitterLists?.length) && (

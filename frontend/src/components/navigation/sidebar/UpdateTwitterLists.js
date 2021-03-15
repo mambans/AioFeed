@@ -70,9 +70,7 @@ export default ({ style, id, index }) => {
         columnName: 'TwitterPreferences',
         authkey: getCookie(`AioFeed_AuthKey`),
       })
-      .catch((e) => {
-        console.error(e);
-      });
+      .catch((e) => console.error(e));
 
     reset();
   };
@@ -92,9 +90,7 @@ export default ({ style, id, index }) => {
         columnName: 'TwitterPreferences',
         authkey: getCookie(`AioFeed_AuthKey`),
       })
-      .catch((e) => {
-        console.error(e);
-      });
+      .catch((e) => console.error(e));
   };
 
   const handleSubmit = (evt) => {

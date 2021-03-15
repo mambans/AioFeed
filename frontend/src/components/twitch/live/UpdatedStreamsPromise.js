@@ -12,11 +12,9 @@ export default async ({
   try {
     const res = await new Promise((resolve, reject) => {
       if (!isEnabledUpdateNotifications) reject("Stream 'update' notifications are disabled.");
-      const restStreams = liveStreams.current?.filter((stream) => {
-        return oldLiveStreams.current.find(
-          (old_stream) => stream.user_name === old_stream.user_name
-        );
-      });
+      const restStreams = liveStreams.current?.filter((stream) =>
+        oldLiveStreams.current.find((old_stream) => stream.user_name === old_stream.user_name)
+      );
 
       if (restStreams?.length <= 0) reject('No new Updated streams');
 
@@ -24,20 +22,18 @@ export default async ({
     });
 
     if (updateNotischannels) {
-      const existingStreams = res?.filter((stream) => {
-        return oldLiveStreams.current.find((old_stream) => {
-          return old_stream.user_name === stream.user_name;
-        });
-      });
+      const existingStreams = res?.filter((stream) =>
+        oldLiveStreams.current.find((old_stream) => old_stream.user_name === stream.user_name)
+      );
 
-      const updateEnabledStreams = existingStreams?.filter((stream) => {
-        return updateNotischannels?.includes(stream.user_name?.toLowerCase());
-      });
+      const updateEnabledStreams = existingStreams?.filter((stream) =>
+        updateNotischannels?.includes(stream.user_name?.toLowerCase())
+      );
 
       const newTitleAndGameStreams = updateEnabledStreams?.filter((stream) => {
-        const oldStreamData = oldLiveStreams.current.find((old_stream) => {
-          return old_stream.user_name === stream.user_name;
-        });
+        const oldStreamData = oldLiveStreams.current.find(
+          (old_stream) => old_stream.user_name === stream.user_name
+        );
 
         if (oldStreamData.game_name !== stream.game_name && oldStreamData.title !== stream.title) {
           addSystemNotification({
@@ -62,9 +58,9 @@ export default async ({
       });
 
       const newGameStreams = updateEnabledStreams.filter((stream) => {
-        const oldStreamData = oldLiveStreams.current.find((old_stream) => {
-          return old_stream.user_name === stream.user_name;
-        });
+        const oldStreamData = oldLiveStreams.current.find(
+          (old_stream) => old_stream.user_name === stream.user_name
+        );
 
         if (oldStreamData.game_name !== stream.game_name && oldStreamData.title === stream.title) {
           addSystemNotification({
@@ -83,9 +79,9 @@ export default async ({
       });
 
       const newTitleStreams = updateEnabledStreams.filter((stream) => {
-        const oldStreamData = oldLiveStreams.current.find((old_stream) => {
-          return old_stream.user_name === stream.user_name;
-        });
+        const oldStreamData = oldLiveStreams.current.find(
+          (old_stream) => old_stream.user_name === stream.user_name
+        );
 
         if (oldStreamData.title !== stream.title && oldStreamData.game_name === stream.game_name) {
           addSystemNotification({

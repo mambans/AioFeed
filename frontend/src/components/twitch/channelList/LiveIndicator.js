@@ -30,24 +30,22 @@ export const StyledToolTip = styled(Tooltip)`
   }
 `;
 
-export default ({ channel }) => {
-  return (
-    <OverlayTrigger
-      key={'left'}
-      placement={'left'}
-      delay={{ show: 250, hide: 0 }}
-      overlay={
-        <StyledToolTip id={`tooltip-${'left'}`}>
-          <LiveInfoPopup channel={channel} />
-        </StyledToolTip>
-      }
-    >
-      <div>
-        <img src={channel?.profile_image_url} alt='' />
-        <LiveDot height='100%' width='30px'>
-          <circle cx='5' cy='5' r='5' stroke='white' strokeWidth='0' fill='red' />
-        </LiveDot>
-      </div>
-    </OverlayTrigger>
-  );
-};
+export default ({ channel }) => (
+  <OverlayTrigger
+    key={'left'}
+    placement={'left'}
+    delay={{ show: 250, hide: 0 }}
+    overlay={
+      <StyledToolTip id={`tooltip-${'left'}`}>
+        <LiveInfoPopup channel={channel} />
+      </StyledToolTip>
+    }
+  >
+    <div>
+      <img src={channel?.profile_image_url} alt='' />
+      <LiveDot height='100%' width='30px'>
+        <circle cx='5' cy='5' r='5' stroke='white' strokeWidth='0' fill='red' />
+      </LiveDot>
+    </div>
+  </OverlayTrigger>
+);

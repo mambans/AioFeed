@@ -85,12 +85,8 @@ export default () => {
       },
       throwError: false,
     })
-      .then((res) => {
-        setChannelId(res.data.data[0].id);
-      })
-      .catch((error) => {
-        setChannelId('Not Found');
-      });
+      .then((res) => setChannelId(res.data.data[0].id))
+      .catch((error) => setChannelId('Not Found'));
   }, [channelName]);
 
   const fetchChannelVods = useCallback(
@@ -197,9 +193,7 @@ export default () => {
               setClips(finallClips.data);
             }
           })
-          .catch((error) => {
-            console.error('fetchClips: ', error);
-          });
+          .catch((error) => console.error('fetchClips: ', error));
       });
     },
     [numberOfVideos, sortClipsBy, channelId, clips, validateToken]
@@ -221,13 +215,9 @@ export default () => {
     (async () => {
       if (twitchToken) {
         if (!channelId) {
-          await validateToken(true).then(async () => {
-            await getIdFromName();
-          });
+          await validateToken(true).then(async () => await getIdFromName());
         } else if (!channelInfo && channelId && channelId !== 'Not Found') {
-          await validateToken(true).then(async () => {
-            await getChannelInfo();
-          });
+          await validateToken(true).then(async () => await getChannelInfo());
         }
       }
     })();

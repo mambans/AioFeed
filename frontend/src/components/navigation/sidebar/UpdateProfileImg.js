@@ -20,12 +20,8 @@ export default ({ close }) => {
         columnName: 'ProfileImg',
         authkey: getCookie(`AioFeed_AuthKey`),
       })
-      .then(() => {
-        close();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      .then(() => close())
+      .catch((error) => console.error(error));
   };
 
   const handleSubmit = (evt) => {

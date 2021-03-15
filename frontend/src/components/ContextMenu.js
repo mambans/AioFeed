@@ -75,11 +75,9 @@ export default ({ outerContainer = window, showAndResetTimer = () => {}, childre
 
   if (show?.show) {
     return (
-      <>
-        <Container left={show.x} top={show.y} ref={menuRef}>
-          <ul onClick={() => setShow(false)}>{children}</ul>
-        </Container>
-      </>
+      <Container left={show.x} top={show.y} ref={menuRef}>
+        <ul onClick={() => setShow(false)}>{children}</ul>
+      </Container>
     );
   }
   return null;

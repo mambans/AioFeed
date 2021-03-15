@@ -60,15 +60,14 @@ export default async () => {
       followedchannels: followedchannels.data.items,
     });
 
-    const uniqueSubscriptions = channels.filter((item, index, self) => {
-      return (
+    const uniqueSubscriptions = channels.filter(
+      (item, index, self) =>
         self.findIndex(
           (t) =>
             t.snippet.resourceId.channelId === item.snippet.resourceId.channelId &&
             t.snippet.title === item.snippet.title
         ) === index
-      );
-    });
+    );
 
     localStorage.setItem(
       `YT-followedChannels`,
@@ -82,9 +81,8 @@ export default async () => {
   } catch (error) {
     console.warn('error', error);
     console.log('Youtube: Followed-channels cache used.');
-    if (getLocalstorage('YT-followedChannels')) {
-      return getLocalstorage('YT-followedChannels').data;
-    }
+    if (getLocalstorage('YT-followedChannels')) return getLocalstorage('YT-followedChannels').data;
+
     return [];
   }
 };

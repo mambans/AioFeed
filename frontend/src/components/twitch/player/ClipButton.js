@@ -12,12 +12,10 @@ const CreateAndOpenClip = async ({ streamInfo }) => {
   const settings = `height=${Height},width=${Width},top=${TopPosition},left=${LeftPosition},scrollbars,resizable,status,location,toolbar,`;
 
   await API.postClip({ params: { broadcaster_id: streamInfo.user_id } })
-    .then((res) => {
-      window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings);
-    })
-    .catch((er) => {
-      console.error('CreateAndOpenClip -> er', er);
-    });
+    .then((res) =>
+      window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings)
+    )
+    .catch((er) => console.error('CreateAndOpenClip -> er', er));
 };
 
 export default ({ streamInfo, validateToken }) => {
