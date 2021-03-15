@@ -3,7 +3,8 @@ import { Navbar, Nav } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
-import { FaAngleRight, FaAngleLeft } from 'react-icons/fa';
+import { FaAngleRight, FaAngleLeft, FaTwitch, FaYoutube } from 'react-icons/fa';
+import { MdVideocam, MdStar } from 'react-icons/md';
 
 import RenderNotifications from './../notifications';
 import NavigationContext from './NavigationContext';
@@ -24,6 +25,15 @@ const StyledNav = styled(Nav)`
   &&& {
     margin: 0;
     padding: 0 20px;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+
+    svg {
+      margin: 0 2px;
+    }
   }
 `;
 
@@ -46,7 +56,7 @@ export default () => {
             as={NavLink}
             to='/'
             className='logo-link'
-            style={{ display: 'flex', alignItems: 'center', paddingLeft: '0' }}
+            style={{ display: 'flex', alignItems: 'center', paddingLeft: '0', minWidth: '141px' }}
           >
             <img
               src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}
@@ -64,7 +74,20 @@ export default () => {
               Feed
             </Nav.Link>
             <Nav.Link as={NavLink} to='/favorites' activeClassName='active'>
+              <MdStar size={16} color='rgb(255,255,0)' />
               Favorites
+            </Nav.Link>
+            <Nav.Link as={NavLink} to='/live' activeClassName='active'>
+              <FaTwitch size={16} color='rgb(118, 65, 198)' />
+              Live
+            </Nav.Link>
+            <Nav.Link as={NavLink} to='/youtube' activeClassName='active'>
+              <FaYoutube size={16} color='rgb(255, 0, 0)' />
+              YouTube
+            </Nav.Link>
+            <Nav.Link as={NavLink} to='/vods' activeClassName='active'>
+              <MdVideocam size={16} color='rgb(118, 65, 198)' />
+              Vods
             </Nav.Link>
           </StyledNav>
           <FaAngleRight className='arrow' size={20} />
