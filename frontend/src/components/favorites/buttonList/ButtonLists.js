@@ -9,59 +9,68 @@ import useClicksOutside from '../../../hooks/useClicksOutside';
 import { parseNumberAndString } from './../dragDropUtils';
 import NewListForm from './NewListForm';
 
+export const addFavoriteVideo = async (lists, setLists, list_Name, newItem) => {
+  const newVideo = parseNumberAndString(newItem);
+  const allOrinalLists = { ...lists };
+  const existing = allOrinalLists[list_Name];
+
+  const newObj = {
+    ...existing,
+    items: [...new Set([...(existing?.items || []), newVideo])].filter((i) => i),
+  };
+
+  allOrinalLists[list_Name] = newObj;
+
+  setLists({ ...allOrinalLists });
+
+  await axios
+    .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
+      username: getCookie(`AioFeed_AccountName`),
+      videosObj: newObj,
+      listName: list_Name,
+      authkey: getCookie(`AioFeed_AuthKey`),
+    })
+    .catch((e) => console.error(e));
+};
+
+export const removeFavoriteVideo = async (lists, setLists, list_Name, newItem_p) => {
+  const newItem = parseNumberAndString(newItem_p);
+  const allOrinalLists = { ...lists };
+  const existing = allOrinalLists[list_Name];
+  const newObj = {
+    name: existing.name,
+    items: existing.items.filter((item) => item !== newItem),
+  };
+
+  allOrinalLists[list_Name] = newObj;
+
+  setLists({ ...allOrinalLists });
+
+  await axios
+    .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
+      username: getCookie(`AioFeed_AccountName`),
+      videosObj: newObj,
+      listName: list_Name,
+      authkey: getCookie(`AioFeed_AuthKey`),
+    })
+    .catch((e) => console.error(e));
+};
+
 const AddRemoveBtn = ({ list, videoId }) => {
   const { lists, setLists } = useContext(FavoritesContext);
   const videoAdded = list.items.includes(parseNumberAndString(videoId));
 
-  const addFunc = async (list_Name, newItem) => {
-    const newVideo = parseNumberAndString(newItem);
-    const allOrinalLists = { ...lists };
-    const existing = allOrinalLists[list_Name];
+  if (videoAdded)
+    return (
+      <RemoveItemBtn
+        size={18}
+        onClick={() => removeFavoriteVideo(lists, setLists, list.name, videoId)}
+      />
+    );
 
-    const newObj = {
-      ...existing,
-      items: [...new Set([...(existing?.items || []), newVideo])].filter((i) => i),
-    };
-
-    allOrinalLists[list_Name] = newObj;
-
-    setLists({ ...allOrinalLists });
-
-    await axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
-        username: getCookie(`AioFeed_AccountName`),
-        videosObj: newObj,
-        listName: list_Name,
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .catch((e) => console.error(e));
-  };
-
-  const removeFunc = async (list_Name, newItem_p) => {
-    const newItem = parseNumberAndString(newItem_p);
-    const allOrinalLists = { ...lists };
-    const existing = allOrinalLists[list_Name];
-    const newObj = {
-      name: existing.name,
-      items: existing.items.filter((item) => item !== newItem),
-    };
-
-    allOrinalLists[list_Name] = newObj;
-
-    setLists({ ...allOrinalLists });
-
-    await axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
-        username: getCookie(`AioFeed_AccountName`),
-        videosObj: newObj,
-        listName: list_Name,
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .catch((e) => console.error(e));
-  };
-
-  if (videoAdded) return <RemoveItemBtn size={18} onClick={() => removeFunc(list.name, videoId)} />;
-  return <AddItemBtn size={18} onClick={() => addFunc(list.name, videoId)} />;
+  return (
+    <AddItemBtn size={18} onClick={() => addFavoriteVideo(lists, setLists, list.name, videoId)} />
+  );
 };
 
 export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) => {
