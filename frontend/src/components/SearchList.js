@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { MdFormatListBulleted } from 'react-icons/md';
 import { CSSTransition } from 'react-transition-group';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -10,39 +10,30 @@ import useClicksOutside from '../hooks/useClicksOutside';
 
 const SearchSubmitIcon = styled(FaSearch).attrs({ size: 16 })``;
 
-const SearchSubmitA = styled.a`
+export const submiteButtonStyle = ({ btnDisabled }) => css`
   position: absolute;
   cursor: pointer;
   color: rgb(240, 240, 240);
   display: flex;
-  margin-left: 0;
-  padding-left: 5px;
+  margin-left: 5px;
+  /* padding-left: 5px; */
   transform: translateY(-27px);
   z-index: 5;
-  pointer-events: ${({ disabled }) => (disabled ? 'none' : 'unset')};
-  opacity: ${({ disabled }) => (disabled ? '0.3' : '1')};
+  pointer-events: ${btnDisabled ? 'none' : 'unset'};
+  opacity: ${btnDisabled ? '0.3' : '1'};
+  transition: opacity 500ms;
 
   &:hover {
     color: rgb(255, 255, 255);
   }
 `;
 
-const SearchSubmitLink = styled(Link)`
-  position: absolute;
-  cursor: pointer;
-  color: rgb(240, 240, 240);
-  display: flex;
-  margin-left: 0;
-  padding-left: 5px;
-  transform: translateY(-27px);
-  z-index: 5;
-  pointer-events: ${({ disabled }) => (disabled ? 'none' : 'unset')};
-  opacity: ${({ disabled }) => (disabled ? '0.3' : '1')};
-  transition: opacity 500ms;
+const SearchSubmitA = styled.a`
+  /* ${submiteButtonStyle} */
+`;
 
-  &:hover {
-    color: rgb(255, 255, 255);
-  }
+const SearchSubmitLink = styled(Link)`
+  /* ${submiteButtonStyle} */
 `;
 
 export const SearchListForm = styled.form`
@@ -123,15 +114,19 @@ export const SearchListForm = styled.form`
       transform: translateX(0);
     }
   }
+
+  *[type='submitBtn'] {
+    ${submiteButtonStyle}
+  }
 `;
 
-export const SearchSubmitBtn = ({ href, to, disabled }) =>
+export const SearchSubmitBtn = ({ href, to }) =>
   href ? (
-    <SearchSubmitA href={href} disabled={disabled}>
+    <SearchSubmitA href={href} type='submitBtn'>
       <SearchSubmitIcon />
     </SearchSubmitA>
   ) : (
-    <SearchSubmitLink to={to} disabled={disabled}>
+    <SearchSubmitLink to={to} type='submitBtn'>
       <SearchSubmitIcon />
     </SearchSubmitLink>
   );
@@ -143,17 +138,18 @@ export default ({
   showButton = true,
   showDropdown = true,
   onExited = () => {},
-  onSubmit,
+  onSubmit = () => {},
   listIsOpen,
-  onKeyDown,
+  onKeyDown = () => {},
   input,
   setListIsOpen,
-  setCursor,
+  setCursor = () => {},
   children,
-  resetInput,
+  resetInput = () => {},
   bindInput,
   inputFontSize,
   searchBtnPath,
+  leftIcon,
 }) => {
   const inputRef = useRef();
   const listRef = useRef();
@@ -177,6 +173,7 @@ export default ({
       text={input}
       inputFontSize={inputFontSize}
       ref={listRef}
+      btnDisabled={!input}
     >
       <input
         ref={inputRef}
@@ -188,12 +185,14 @@ export default ({
         // onBlur={() => setListIsOpen(false)}
         {...bindInput}
       />
-      <SearchSubmitBtn
-        disabled={!input}
-        to={{
-          pathname: searchBtnPath,
-        }}
-      />
+      {leftIcon || (
+        <SearchSubmitBtn
+          type='submitBtn'
+          to={{
+            pathname: searchBtnPath,
+          }}
+        />
+      )}
       {showButton && (
         <MdFormatListBulleted
           id='ToggleListBtn'
@@ -204,19 +203,21 @@ export default ({
           size={42}
         />
       )}
-      <CSSTransition
-        in={showDropdown && listIsOpen}
-        timeout={250}
-        classNames='fade-250ms'
-        onExited={() => {
-          setCursor({ position: 0 });
-          resetInput();
-          onExited();
-        }}
-        unmountOnExit
-      >
-        {children}
-      </CSSTransition>
+      {children && (
+        <CSSTransition
+          in={showDropdown && listIsOpen}
+          timeout={250}
+          classNames='fade-250ms'
+          onExited={() => {
+            setCursor({ position: 0 });
+            resetInput();
+            onExited();
+          }}
+          unmountOnExit
+        >
+          {children}
+        </CSSTransition>
+      )}
     </SearchListForm>
   );
 };

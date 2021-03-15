@@ -1,10 +1,7 @@
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import React, { useRef, useState, useContext } from 'react';
-import Tooltip from 'react-bootstrap/Tooltip';
 
-import { truncate } from '../../util/Utils';
 import {
   VideoContainer,
   VideoTitleHref,
@@ -16,8 +13,9 @@ import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import FavoriteButton from '../favorites/buttonList/FavoriteButton';
 import { ChannelNameLink, PublishedDate } from './StyledComponents';
 import { YoutubeContext } from './useToken';
+import ToolTip from '../ToolTip';
 
-const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
+export const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
   maxres?.url ||
   standard?.url ||
   high?.url ||
@@ -69,7 +67,6 @@ export default ({ video, disableContextProvider, setDragSelected, listName, ...p
             setIsHovered={setIsHovered}
           />
         )}
-
         <Link
           className='imgLink'
           // href={`https://www.youtube.com/watch?v=` + video.contentDetails?.upload?.videoId}
@@ -87,35 +84,17 @@ export default ({ video, disableContextProvider, setDragSelected, listName, ...p
           </ImgBottomInfo>
         )}
       </ImageContainer>
-      {video.snippet.title?.length >= 50 ? (
-        <OverlayTrigger
-          key={video.contentDetails?.upload?.videoId + 'YTTitleTooltip'}
-          placement={'bottom'}
-          delay={{ show: 250, hide: 0 }}
-          overlay={
-            <Tooltip
-              id={`tooltip-${'bottom'}`}
-              style={{
-                width: '336px',
-              }}
-            >
-              {video.snippet.title}
-            </Tooltip>
-          }
-        >
-          <VideoTitleHref
-            href={`https://www.youtube.com/watch?v=` + video.contentDetails?.upload?.videoId}
-          >
-            {truncate(video.snippet.title, 50)}
-          </VideoTitleHref>
-        </OverlayTrigger>
-      ) : (
+      <ToolTip
+        show={video.snippet.title?.length >= 50}
+        tooltip={video.snippet.title}
+        placement={'bottom'}
+      >
         <VideoTitleHref
           href={`https://www.youtube.com/watch?v=` + video.contentDetails?.upload?.videoId}
         >
           {video.snippet.title}
         </VideoTitleHref>
-      )}
+      </ToolTip>
       <ChannelNameLink href={`https://www.youtube.com/channel/` + video.snippet.channelId}>
         {video.snippet.channelTitle}
       </ChannelNameLink>

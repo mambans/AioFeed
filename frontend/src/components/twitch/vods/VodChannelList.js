@@ -6,7 +6,6 @@ import LoadingList from './../LoadingList';
 import VodChannelListElement from './VodChannelListElement';
 import useInput from './../../../hooks/useInput';
 import AddVodChannel from './AddVodChannel';
-// import { getLocalstorage } from '../../../util/Utils';
 import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 import useSyncedLocalState from '../../../hooks/useSyncedLocalState';
 import { VodChannelListPopup } from './StyledComponents';
@@ -14,7 +13,6 @@ import { VodChannelListPopup } from './StyledComponents';
 export default () => {
   const { authKey, username } = useContext(AccountContext);
   const [channels, setChannels] = useSyncedLocalState('TwitchVods-Channels', []);
-  // const channels = getLocalstorage('TwitchVods-Channels') || [];
   const [validated, setValidated] = useState(false);
   const { value: channel, bind: bindchannel, reset: resetchannel } = useInput('');
   useLockBodyScroll(true);
@@ -38,18 +36,14 @@ export default () => {
     <VodChannelListPopup>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Form.Group controlId='formGroupChannel'>
-          <Form.Label style={{ width: '100%', textAlign: 'center' }}>
-            Add channel:
-            <Form.Text className='text-muted'>Twitch channel to fetch vods from.</Form.Text>
-            <Form.Control
-              type='text'
-              placeholder='Channel name..'
-              required
-              {...bindchannel}
-              isInvalid={!channel}
-              style={{ marginTop: '5px' }}
-            />
-          </Form.Label>
+          <Form.Control
+            type='text'
+            placeholder='Channel name..'
+            required
+            {...bindchannel}
+            isInvalid={!channel}
+            style={{ marginTop: '5px' }}
+          />
           <Button type='submit' variant='primary' style={{ width: '100%', padding: '5px' }}>
             Add
           </Button>
@@ -57,11 +51,9 @@ export default () => {
       </Form>
       {channels.length > 0 ? (
         <ul>
-          {channels.map((channel) => {
-            return (
-              <VodChannelListElement key={channel} channel={channel} param_Channels={channels} />
-            );
-          })}
+          {channels.map((channel) => (
+            <VodChannelListElement key={channel} channel={channel} param_Channels={channels} />
+          ))}
         </ul>
       ) : (
         <LoadingList amount={8} />

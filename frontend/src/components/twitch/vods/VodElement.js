@@ -1,14 +1,11 @@
 import { FaRegEye } from 'react-icons/fa';
 import moment from 'moment';
 import Moment from 'react-moment';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import React, { useContext, useRef, useState } from 'react';
-import Tooltip from 'react-bootstrap/Tooltip';
 import { Link } from 'react-router-dom';
 
 import {
   VideoContainer,
-  VideoTitle,
   ImageContainer,
   ImgBottomInfo,
   ChannelContainer,
@@ -27,6 +24,7 @@ import { ChannelNameDiv } from '../StyledComponents';
 import FavoriteButton from '../../favorites/buttonList/FavoriteButton';
 import useToken from '../useToken';
 import FeedsContext from '../../feed/FeedsContext';
+import ToolTip from '../../ToolTip';
 
 export default ({
   data,
@@ -171,36 +169,10 @@ export default ({
         </ImgBottomInfo>
         {type !== 'archive' && <VodType>{type}</VodType>}
       </ImageContainer>
-      {title?.length > 50 ? (
-        <OverlayTrigger
-          key={id + 'VodTitleTooltip'}
-          placement={'bottom'}
-          delay={{ show: 250, hide: 0 }}
-          overlay={
-            <Tooltip
-              id={`tooltip-${'bottom'}`}
-              style={{
-                width: '320px',
-              }}
-            >
-              {title || ''}
-            </Tooltip>
-          }
-        >
-          <VideoTitleHref href={url}>{truncate(title || '', 70)}</VideoTitleHref>
-        </OverlayTrigger>
-      ) : (
-        <VideoTitle
-          to={{
-            pathname: `/${login || user_name}/videos/${id} ${listName ? `?list=${listName}` : ''}`,
-            state: {
-              p_title: title,
-            },
-          }}
-        >
-          {title || ''}
-        </VideoTitle>
-      )}
+      <ToolTip show={title?.length > 50} tooltip={title} fontSize={'16px'}>
+        <VideoTitleHref href={url}>{truncate(title || '', 70)}</VideoTitleHref>
+      </ToolTip>
+
       <ChannelContainer>
         <Link
           className={'profileImg'}

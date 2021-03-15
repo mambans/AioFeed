@@ -59,8 +59,14 @@ export const fetchListVideos = async ({ list, ytExistsAndValidated, twitchExists
   }
 };
 
-export default ({ list, ytExistsAndValidated, twitchExistsAndValidated, setLists }) => {
-  const [videos, setVideos] = useState();
+export default ({
+  list,
+  ytExistsAndValidated,
+  twitchExistsAndValidated,
+  setLists,
+  setVideos,
+  videos,
+}) => {
   const [dragSelected, setDragSelected] = useState();
   const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext) || {};
 
@@ -95,7 +101,13 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated, setLists
         });
       });
     })();
-  }, [list, ytExistsAndValidated, twitchExistsAndValidated, feedVideoSizeProps.transition]);
+  }, [
+    list,
+    ytExistsAndValidated,
+    twitchExistsAndValidated,
+    feedVideoSizeProps.transition,
+    setVideos,
+  ]);
 
   const dragEvents = useMemo(
     () => ({
@@ -106,43 +118,40 @@ export default ({ list, ytExistsAndValidated, twitchExistsAndValidated, setLists
       // onDrop: (e) => uploadNewList(e, list.name, videos, setLists),
       onDragOver: (e) => restructureVideoList(e, videos, dragSelected, setVideos),
     }),
-    [dragSelected, videos, list.name, setLists]
+    [dragSelected, videos, list.name, setLists, setVideos]
   );
 
   return (
     <VideosContainer>
       <TransitionGroup component={null} className={videosToShow.transitionGroup || 'videos'}>
-        {videos?.slice(0, videosToShow.amount).map((video) => {
-          return (
-            <CSSTransition
-              key={`${list.name}-${video.contentDetails?.upload?.videoId || video.id}`}
-              timeout={videosToShow.timeout}
-              classNames={video.transition || 'fade-750ms'}
-              // classNames='videoFadeSlide'
-              unmountOnExit
-            >
-              {video.loading ? (
-                <LoadingVideoElement type={'small'} />
-              ) : video?.kind === 'youtube#video' ? (
-                <YoutubeVideoElement
-                  listName={list.name}
-                  data-id={video.contentDetails?.upload?.videoId}
-                  video={video}
-                  disableContextProvider={true}
-                  {...dragEvents}
-                />
-              ) : (
-                <VodElement
-                  listName={list.name}
-                  data-id={video.id}
-                  data={video}
-                  disableContextProvider={true}
-                  {...dragEvents}
-                />
-              )}
-            </CSSTransition>
-          );
-        })}
+        {videos?.slice(0, videosToShow.amount).map((video) => (
+          <CSSTransition
+            key={`${list.name}-${video.contentDetails?.upload?.videoId || video.id}`}
+            timeout={videosToShow.timeout}
+            classNames={video.transition || 'fade-750ms'}
+            unmountOnExit
+          >
+            {video.loading ? (
+              <LoadingVideoElement type={'small'} />
+            ) : video?.kind === 'youtube#video' ? (
+              <YoutubeVideoElement
+                listName={list.name}
+                data-id={video.contentDetails?.upload?.videoId}
+                video={video}
+                disableContextProvider={true}
+                {...dragEvents}
+              />
+            ) : (
+              <VodElement
+                listName={list.name}
+                data-id={video.id}
+                data={video}
+                disableContextProvider={true}
+                {...dragEvents}
+              />
+            )}
+          </CSSTransition>
+        ))}
       </TransitionGroup>
       <LoadMore
         loaded={true}

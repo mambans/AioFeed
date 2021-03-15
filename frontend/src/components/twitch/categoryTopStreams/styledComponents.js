@@ -8,10 +8,11 @@ export const StyledGameListElement = styled.li`
   cursor: pointer;
 
   img {
-    width: 30px;
+    width: ${({ imgWidth }) => imgWidth || '30px'};
     height: 30px;
     margin-right: 10px;
     border-radius: 3px;
+    object-fit: cover;
   }
 
   a {
@@ -43,7 +44,7 @@ export const GameListUlContainer = styled.ul`
   transform: translate3d(0, 0, 0);
   color: rgb(230, 230, 230);
   list-style: none;
-  padding-left: 0.75rem;
+  padding: 0 0.75rem;
   margin: 0;
   position: ${({ position }) => position || 'absolute'};
   box-shadow: var(--refreshButtonShadow);

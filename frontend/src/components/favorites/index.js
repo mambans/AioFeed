@@ -12,6 +12,7 @@ import { VodsProvider } from '../twitch/vods/VodsContext';
 import useToken from '../twitch/useToken';
 import useYoutubeToken from '../youtube/useToken';
 import AlertHandler from '../alert';
+import AddNewVideoInput from './AddNewVideoInput';
 
 export const useCheckForVideosAndValidateToken = ({
   lists,
@@ -68,9 +69,46 @@ export default () => (
   </VodsProvider>
 );
 
-const FavoriteListContainer = styled.div`
+const StyledFavoriteListContainer = styled.div`
   width: 100%;
 `;
+
+export const FavoriteListContainer = ({
+  list,
+  setLists,
+  ytExistsAndValidated,
+  twitchExistsAndValidated,
+  isLoading,
+  fetchAllLists,
+}) => {
+  const [videos, setVideos] = useState();
+
+  return (
+    <StyledFavoriteListContainer>
+      <HeaderContainer
+        id={list.name}
+        text={<>{list.name}</>}
+        refreshFunc={fetchAllLists}
+        isLoading={isLoading}
+        onHoverIconLink='favorites'
+        rightSide={
+          <>
+            <AddNewVideoInput list={list} videos={videos} listName={list.name} />
+            <DeleteListBtn list={list} setLists={setLists} style={{ margin: '0 10px' }} />
+          </>
+        }
+      />
+      <List
+        list={list}
+        ytExistsAndValidated={ytExistsAndValidated}
+        twitchExistsAndValidated={twitchExistsAndValidated}
+        setLists={setLists}
+        setVideos={setVideos}
+        videos={videos}
+      />
+    </StyledFavoriteListContainer>
+  );
+};
 
 export const Favorites = () => {
   const { lists, setLists, fetchAllLists, isLoading, setIsLoading } = useContext(FavoritesContext);
@@ -89,33 +127,23 @@ export const Favorites = () => {
     <>
       {Boolean(Object.keys(lists).length) ? (
         <TransitionGroup component={null}>
-          {Object.values(lists)?.map((list) => {
-            return (
-              <CSSTransition
-                key={list.name}
-                timeout={1000}
-                classNames='listHorizontalSlide'
-                unmountOnExit
-              >
-                <FavoriteListContainer>
-                  <HeaderContainer
-                    id={list.name}
-                    text={<>{list.name}</>}
-                    refreshFunc={fetchAllLists}
-                    isLoading={isLoading}
-                    onHoverIconLink='favorites'
-                    rightSide={<DeleteListBtn list={list} setLists={setLists} />}
-                  />
-                  <List
-                    list={list}
-                    ytExistsAndValidated={ytExistsAndValidated}
-                    twitchExistsAndValidated={twitchExistsAndValidated}
-                    setLists={setLists}
-                  />
-                </FavoriteListContainer>
-              </CSSTransition>
-            );
-          })}
+          {Object.values(lists)?.map((list) => (
+            <CSSTransition
+              key={list.name}
+              timeout={1000}
+              classNames='listHorizontalSlide'
+              unmountOnExit
+            >
+              <FavoriteListContainer
+                list={list}
+                setLists={setLists}
+                isLoading={isLoading}
+                fetchAllLists={fetchAllLists}
+                ytExistsAndValidated={ytExistsAndValidated}
+                twitchExistsAndValidated={twitchExistsAndValidated}
+              />
+            </CSSTransition>
+          ))}
         </TransitionGroup>
       ) : (
         <AlertHandler

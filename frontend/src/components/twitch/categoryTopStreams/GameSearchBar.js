@@ -17,9 +17,7 @@ import StyledLoadingList from './LoadingList';
 import SearchList from '../../SearchList';
 
 const removeDuplicates = (items) =>
-  items.filter((item, index, self) => {
-    return self.findIndex((t) => t.id === item.id) === index;
-  });
+  items.filter((item, index, self) => self.findIndex((t) => t.id === item.id) === index);
 
 export default (props) => {
   const {
@@ -84,9 +82,9 @@ export default (props) => {
         },
       },
       returnFirstMatchedGame: () => {
-        const foundGame = filteredInputMatched?.data?.find((games) => {
-          return games.name?.toLowerCase().includes(value?.toLowerCase());
-        });
+        const foundGame = filteredInputMatched?.data?.find((games) =>
+          games.name?.toLowerCase().includes(value?.toLowerCase())
+        );
 
         return foundGame?.name || value;
       },
@@ -129,9 +127,9 @@ export default (props) => {
     () =>
       throttle(
         async () => {
-          GetTopGames().then((res) => {
-            setTopGames({ data: res.data, nextPage: res.pagination?.cursor });
-          });
+          GetTopGames().then((res) =>
+            setTopGames({ data: res.data, nextPage: res.pagination?.cursor })
+          );
         },
         5000,
         { leading: true, trailing: false }
@@ -222,6 +220,7 @@ export default (props) => {
         setListIsOpen={setListIsOpen}
         setCursor={setCursor}
         searchBtnPath={`/category/${game}`}
+        btnDisabled={!game}
       >
         <GameListUlContainer ref={ulListRef} position={position}>
           <StyledShowAllButton key='showAll'>
@@ -230,33 +229,29 @@ export default (props) => {
 
           {filteredInputMatched?.data?.length >= 1 ? (
             <>
-              {filteredInputMatched?.data?.map((game, index) => {
-                return (
-                  <StyledGameListElement
-                    key={game?.id}
-                    selected={index === cursor.position}
-                    className={index === cursor.position ? 'selected' : ''}
+              {filteredInputMatched?.data?.map((game, index) => (
+                <StyledGameListElement
+                  key={game?.id}
+                  selected={index === cursor.position}
+                  className={index === cursor.position ? 'selected' : ''}
+                >
+                  <Link
+                    onClick={() => setListIsOpen(false)}
+                    to={{
+                      pathname: '/category/' + game?.name,
+                      state: {
+                        p_videoType: videoType,
+                      },
+                    }}
                   >
-                    <Link
-                      onClick={() => {
-                        setListIsOpen(false);
-                      }}
-                      to={{
-                        pathname: '/category/' + game?.name,
-                        state: {
-                          p_videoType: videoType,
-                        },
-                      }}
-                    >
-                      <img
-                        src={game?.box_art_url?.replace('{width}', 300)?.replace('{height}', 300)}
-                        alt=''
-                      />
-                      {game?.name}
-                    </Link>
-                  </StyledGameListElement>
-                );
-              })}
+                    <img
+                      src={game?.box_art_url?.replace('{width}', 300)?.replace('{height}', 300)}
+                      alt=''
+                    />
+                    {game?.name}
+                  </Link>
+                </StyledGameListElement>
+              ))}
               {filteredInputMatched?.data && filteredInputMatched?.nextPage && (
                 <InifinityScroll observerFunction={observerFunction} />
               )}
