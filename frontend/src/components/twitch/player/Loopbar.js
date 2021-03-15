@@ -30,7 +30,7 @@ const secondsToHHMMSS = (s) => {
   }
 };
 
-export default ({ twitchVideoPlayer, duration }) => {
+export default ({ twitchVideoPlayer, duration = twitchVideoPlayer.getDuration() }) => {
   const urlStartTime = useQuery().get('t') || useQuery().get('start') || null;
   const urlEndTime = useQuery().get('end') || null;
   const [start, setStart] = useState({
@@ -63,7 +63,7 @@ export default ({ twitchVideoPlayer, duration }) => {
       setTimeout(() => {
         setAndStartTimer();
       }, 10000);
-    }, ((end.time || duration) - currrentTime) * 1000);
+    }, ((end.time || duration || twitchVideoPlayer.getDuration()) - currrentTime) * 1000);
 
     return () => clearTimeout(endTimeRef.current);
   }, [duration, end.time, start.time, twitchVideoPlayer]);
@@ -74,7 +74,7 @@ export default ({ twitchVideoPlayer, duration }) => {
 
       const mouseX = Math.max(e.clientX - 20, 0);
       const newObj = {
-        time: (duration / ref.current.clientWidth) * mouseX,
+        time: (duration || twitchVideoPlayer.getDuration() / ref.current.clientWidth) * mouseX,
         pos: mouseX,
         active: true,
       };
@@ -82,7 +82,7 @@ export default ({ twitchVideoPlayer, duration }) => {
       if (start.active) setStart(newObj);
       if (end.active) setEnd(newObj);
     },
-    [duration, end, start, setStart, setEnd]
+    [duration, end, start, setStart, setEnd, twitchVideoPlayer]
   );
 
   const seek = () => {
@@ -118,16 +118,16 @@ export default ({ twitchVideoPlayer, duration }) => {
 
     setStart({
       time: startTime,
-      pos: startTime / (duration / ref.current?.clientWidth),
+      pos: startTime / (duration || twitchVideoPlayer.getDuration() / ref.current?.clientWidth),
       active: false,
     });
 
     setEnd({
       time: endTime,
-      pos: endTime / (duration / ref.current?.clientWidth),
+      pos: endTime / (duration || twitchVideoPlayer.getDuration() / ref.current?.clientWidth),
       active: false,
     });
-  }, [duration, urlEndTime, urlStartTime]);
+  }, [duration, urlEndTime, urlStartTime, twitchVideoPlayer]);
 
   return (
     <>
