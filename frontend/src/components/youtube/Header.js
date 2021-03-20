@@ -2,6 +2,7 @@ import { FaYoutube } from 'react-icons/fa';
 import React from 'react';
 
 import { HeaderContainer, LastRefreshText } from './../sharedStyledComponents';
+import ReOrderButtons from './../ReOrderButtons';
 import ReAuthenticateButton from '../navigation/sidebar/ReAuthenticateButton';
 import ChannelList from './channelList';
 import { HeaderAlert } from './StyledComponents';
@@ -47,7 +48,7 @@ const SubFeedError = (props) => {
 };
 
 export default (data) => {
-  const { refresh, requestError, followedChannels, videos, isLoaded, setVideos } = data;
+  const { refresh, requestError, followedChannels, videos, isLoaded, setVideos, setOrder } = data;
   return (
     <HeaderContainer
       id='YoutubeHeader'
@@ -67,7 +68,10 @@ export default (data) => {
         </>
       }
       rightSide={
-        <ChannelList followedChannels={followedChannels} videos={videos} setVideos={setVideos} />
+        <>
+          <ChannelList followedChannels={followedChannels} videos={videos} setVideos={setVideos} />
+          <ReOrderButtons setOrder={setOrder} feedName='Youtube' />
+        </>
       }
     ></HeaderContainer>
   );

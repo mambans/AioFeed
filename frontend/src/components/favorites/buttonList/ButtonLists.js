@@ -56,31 +56,36 @@ export const removeFavoriteVideo = async (lists, setLists, list_Name, newItem_p)
     .catch((e) => console.error(e));
 };
 
-const AddRemoveBtn = ({ list, videoId }) => {
+export const AddRemoveBtn = ({ list, videoId, style }) => {
   const { lists, setLists } = useContext(FavoritesContext);
-  const videoAdded = list.items.includes(parseNumberAndString(videoId));
+  const videoAdded = list?.items?.includes(parseNumberAndString(videoId));
 
   if (videoAdded)
     return (
       <RemoveItemBtn
         size={18}
         onClick={() => removeFavoriteVideo(lists, setLists, list.name, videoId)}
+        style={style}
       />
     );
 
   return (
-    <AddItemBtn size={18} onClick={() => addFavoriteVideo(lists, setLists, list.name, videoId)} />
+    <AddItemBtn
+      size={18}
+      onClick={() => addFavoriteVideo(lists, setLists, list.name, videoId)}
+      style={style}
+    />
   );
 };
 
-export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) => {
-  const { lists, setLists } = useContext(FavoritesContext);
+export default ({ OpenFunction, CloseFunction, videoId }) => {
+  const { lists } = useContext(FavoritesContext);
   const listRef = useRef();
 
   useClicksOutside(listRef, CloseFunction);
 
   return (
-    <Lists onMouseEnter={OpenFunction} onMouseLeave={CloseFunctionDelay} ref={listRef}>
+    <Lists onMouseEnter={OpenFunction} ref={listRef}>
       <ListsLink>
         <Link to='/saved'>Lists</Link>
       </ListsLink>
@@ -90,7 +95,7 @@ export default ({ OpenFunction, CloseFunctionDelay, CloseFunction, videoId }) =>
           <AddRemoveBtn list={list} videoId={videoId} />
         </ListItem>
       ))}
-      <NewListForm lists={lists} setLists={setLists} item={videoId} />
+      <NewListForm item={videoId} />
     </Lists>
   );
 };

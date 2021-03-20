@@ -136,6 +136,7 @@ export default ({
             ) : video?.kind === 'youtube#video' ? (
               <YoutubeVideoElement
                 listName={list.name}
+                list={list}
                 data-id={video.contentDetails?.upload?.videoId}
                 video={video}
                 disableContextProvider={true}
@@ -144,6 +145,7 @@ export default ({
             ) : (
               <VodElement
                 listName={list.name}
+                list={list}
                 data-id={video.id}
                 data={video}
                 disableContextProvider={true}

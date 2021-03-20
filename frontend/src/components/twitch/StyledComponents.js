@@ -301,8 +301,9 @@ export const Container = styled.div`
   flex-wrap: wrap;
   margin-top: 0;
   min-height: 307px;
-  /* padding-bottom: 50px; */
   margin-bottom: 50px;
+  width: 100%;
+  order: ${({ order }) => order};
 `;
 
 export const CenterContainer = styled.div`

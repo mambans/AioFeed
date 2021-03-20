@@ -1,8 +1,8 @@
 import { CSSTransition } from 'react-transition-group';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
-import { AddCookie } from '../../../util/Utils';
+import { AddCookie, getLocalstorage } from '../../../util/Utils';
 import { HideSidebarButton } from '../sidebar/StyledComponents';
 import FeedsContext from '../../feed/FeedsContext';
 import Handler from './Handler';
@@ -11,6 +11,7 @@ import Sidebar from '../sidebar';
 import TwitchStreams from './Twitch';
 import FeedsCenterContainer from '../../feed/FeedsCenterContainer';
 import { VodsProvider } from '../vods/VodsContext';
+import { Container } from '../StyledComponents';
 
 export default ({ forceMountTwitch = false } = {}) => (
   <FeedsCenterContainer forceMountTwitch={forceMountTwitch}>
@@ -29,6 +30,8 @@ export const Twitch = ({ in: forceMount = false }) => {
     setShowTwitchBigFeed,
   } = useContext(FeedsContext) || {};
 
+  const [order, setOrder] = useState(getLocalstorage('FeedOrders')?.['Twitch'] ?? 9);
+
   useEffect(() => {
     Notification.requestPermission().then((result) => console.log('Notifications: ', result));
   }, []);
@@ -41,18 +44,13 @@ export const Twitch = ({ in: forceMount = false }) => {
             in={(showTwitchBigFeed && enableTwitch) || forceMount}
             timeout={750}
             classNames='fade-750ms'
-            unmountOnExit
-          >
-            <Header data={data} />
-          </CSSTransition>
-          <CSSTransition
-            in={(showTwitchBigFeed && enableTwitch) || forceMount}
-            timeout={750}
-            classNames='fade-750ms'
             appear
             unmountOnExit
           >
-            <TwitchStreams data={data} />
+            <Container order={order}>
+              <Header data={data} setOrder={setOrder} />
+              <TwitchStreams data={data} />
+            </Container>
           </CSSTransition>
 
           <OverlayTrigger

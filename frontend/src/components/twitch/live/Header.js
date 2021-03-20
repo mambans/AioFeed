@@ -2,9 +2,11 @@ import React from 'react';
 import AllFiltersList from '../CustomFilters/AllFiltersList';
 
 import { HeaderContainer } from './../../sharedStyledComponents';
+import ReOrderButtons from './../../ReOrderButtons';
+
 import ChannelSearchList from './../channelList';
 
-export default ({ data }) => {
+export default ({ data, setOrder }) => {
   const { refreshing, autoRefreshEnabled, refreshTimer, refresh } = data;
 
   return (
@@ -24,6 +26,7 @@ export default ({ data }) => {
         <>
           <AllFiltersList />
           <ChannelSearchList placeholder='...' />
+          <ReOrderButtons setOrder={setOrder} feedName='Twitch' />
         </>
       }
     />

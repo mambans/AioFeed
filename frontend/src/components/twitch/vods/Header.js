@@ -6,12 +6,14 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 
 import { HeaderContainer, ButtonList, LastRefreshText } from './../../sharedStyledComponents';
+import ReOrderButtons from './../../ReOrderButtons';
+
 import VodChannelList from './VodChannelList';
 import { VodChannelListPopupTrigger } from './StyledComponents';
 import Popup from 'reactjs-popup';
 
 export default (props) => {
-  const { refresh, refreshing, vods, vodError } = props;
+  const { refresh, refreshing, vods, vodError, setOrder } = props;
 
   return (
     <HeaderContainer
@@ -52,31 +54,34 @@ export default (props) => {
         </>
       }
       rightSide={
-        <Popup
-          placeholder='Channel name..'
-          arrow={false}
-          trigger={
-            <VodChannelListPopupTrigger>
-              <OverlayTrigger
-                key={'left'}
-                placement={'left'}
-                delay={{ show: 1000, hide: 0 }}
-                overlay={
-                  <Tooltip id={`tooltip-${'left'}`}>
-                    Add/remove Twitch channels to fetch vods from
-                  </Tooltip>
-                }
-              >
-                <ButtonList variant='outline-secondary'>
-                  <MdFormatListBulleted size={22} />
-                </ButtonList>
-              </OverlayTrigger>
-            </VodChannelListPopupTrigger>
-          }
-          position='left top'
-        >
-          <VodChannelList />
-        </Popup>
+        <>
+          <Popup
+            placeholder='Channel name..'
+            arrow={false}
+            trigger={
+              <VodChannelListPopupTrigger>
+                <OverlayTrigger
+                  key={'left'}
+                  placement={'left'}
+                  delay={{ show: 1000, hide: 0 }}
+                  overlay={
+                    <Tooltip id={`tooltip-${'left'}`}>
+                      Add/remove Twitch channels to fetch vods from
+                    </Tooltip>
+                  }
+                >
+                  <ButtonList variant='outline-secondary'>
+                    <MdFormatListBulleted size={22} />
+                  </ButtonList>
+                </OverlayTrigger>
+              </VodChannelListPopupTrigger>
+            }
+            position='left top'
+          >
+            <VodChannelList />
+          </Popup>
+          <ReOrderButtons setOrder={setOrder} feedName='Vods' />
+        </>
       }
     ></HeaderContainer>
   );

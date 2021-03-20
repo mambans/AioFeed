@@ -24,7 +24,7 @@ export const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
 
 const HOVER_DELAY = 1000;
 
-export default ({ video, disableContextProvider, setDragSelected, listName, ...props }) => {
+export default ({ list, video, disableContextProvider, setDragSelected, listName, ...props }) => {
   const { youtubeVideoHoverEnable } = useContext(YoutubeContext);
   const [isHovered, setIsHovered] = useState(false);
   const streamHoverTimer = useRef();
@@ -55,6 +55,7 @@ export default ({ video, disableContextProvider, setDragSelected, listName, ...p
     >
       <ImageContainer id={video.contentDetails?.upload?.videoId} ref={ref}>
         <FavoriteButton
+          list={list}
           videoId_p={video.contentDetails?.upload?.videoId}
           disablepreview={handleMouseOut}
           disableContextProvider={disableContextProvider}

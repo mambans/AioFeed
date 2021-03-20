@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Button, Form } from 'react-bootstrap';
-import { MdStar, MdStarBorder, MdDeleteForever } from 'react-icons/md';
+import { MdStar, MdStarBorder } from 'react-icons/md';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 
 export const VideosContainer = styled.div`
@@ -13,14 +13,15 @@ export const Open = styled(MdStar)`
   position: absolute;
   right: 5px;
   top: 5px;
-  color: ${({ open }) => (open ? 'rgb(255,255,0)' : 'rgb(200,200,200)')};
+  /* color: ${({ open }) => (open ? 'rgb(255,255,0)' : 'rgb(200,200,200)')}; */
+  color: rgb(200, 200, 200);
   transform: ${({ open }) => (open ? 'scale(1.2)' : 'unset')};
   z-index: 4;
   cursor: pointer;
   transition: color 250ms, transform 250ms;
 
   &:hover {
-    color: rgb(255, 255, 0);
+    color: ${({ open }) => (open ? 'rgb(200,200,200)' : 'rgb(255,255,0)')};
     transform: scale(1.2);
   }
 `;
@@ -132,6 +133,7 @@ export const AddItemBtn = styled(MdStarBorder)`
   margin-left: 7px;
   transition: color 250ms;
   cursor: pointer;
+  z-index: 1;
 
   &:hover {
     color: rgb(255, 255, 0);
@@ -143,21 +145,31 @@ export const RemoveItemBtn = styled(MdStar)`
   color: rgb(255, 255, 0);
   transition: color 250ms;
   cursor: pointer;
+  z-index: 1;
 
   &:hover {
     color: rgb(100, 100, 100);
   }
 `;
 
-export const DeleteListButton = styled(MdDeleteForever)`
-  color: rgb(150, 150, 150);
-  opacity: 0.5;
-  transition: color 250ms, opacity 250ms;
+export const ListActionButton = styled.p`
+  color: rgb(200, 200, 200);
+  transition: color 250ms;
   cursor: pointer;
 
+  svg {
+    color: rgb(150, 150, 150);
+    transition: color 250ms;
+    cursor: pointer;
+    margin-right: 3px;
+  }
+
   &:hover {
-    color: rgb(150, 000, 000);
-    opacity: 1;
+    color: rgb(250, 250, 250);
+
+    svg {
+      color: ${({ color }) => color || 'rgb(150, 000, 000)'};
+    }
   }
 `;
 

@@ -1,11 +1,13 @@
-import React from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import React, { useContext } from 'react';
 import axios from 'axios';
+import { MdDeleteForever } from 'react-icons/md';
 
 import { getCookie } from '../../util/Utils';
-import { DeleteListButton } from './StyledComponents';
+import { ListActionButton } from './StyledComponents';
+import FavoritesContext from './FavoritesContext';
 
-export default ({ list, setLists, style }) => {
+export default ({ list, style, children }) => {
+  const { setLists } = useContext(FavoritesContext);
   const deleteList = async () => {
     const confirmed = window.confirm(`Delete list ${list.name}?`);
     if (!confirmed) return false;
@@ -27,13 +29,9 @@ export default ({ list, setLists, style }) => {
   };
 
   return (
-    <OverlayTrigger
-      key={'delete ' + list.name}
-      placement={'left'}
-      delay={{ show: 500, hide: 0 }}
-      overlay={<Tooltip id={`tooltip-${'left'}`}>{`Delete "${list.name}" list`}</Tooltip>}
-    >
-      <DeleteListButton onClick={deleteList} size={26} style={{ ...style }} />
-    </OverlayTrigger>
+    <ListActionButton onClick={deleteList} style={{ ...style, marginLeft: '-3px' }}>
+      <MdDeleteForever size={24} />
+      {children}
+    </ListActionButton>
   );
 };

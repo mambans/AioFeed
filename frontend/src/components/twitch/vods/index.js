@@ -11,10 +11,11 @@ import AccountContext from './../../account/AccountContext';
 import VodsContext, { VodsProvider } from './VodsContext';
 import LoadingBoxes from './../LoadingBoxes';
 import FeedsContext from '../../feed/FeedsContext';
-import { AddCookie, getCookie } from '../../../util/Utils';
+import { AddCookie, getCookie, getLocalstorage } from '../../../util/Utils';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import FeedsCenterContainer, { CenterContext } from './../../feed/FeedsCenterContainer';
 import useToken from '../useToken';
+import { Container } from '../StyledComponents';
 
 export default ({ disableContextProvider }) => (
   <FeedsCenterContainer>
@@ -30,6 +31,7 @@ export const Vods = ({ disableContextProvider }) => {
   const { setEnableTwitchVods } = useContext(FeedsContext) || {};
   const { videoElementsAmount } = useContext(CenterContext);
   const [error, setError] = useState(null);
+  const [order, setOrder] = useState(getLocalstorage('FeedOrders')?.['Vods'] ?? 27);
   const [refreshing, setRefreshing] = useState(false);
   const [vodError, setVodError] = useState(null);
   const [vodAmounts, setVodAmounts] = useState({
@@ -111,18 +113,21 @@ export const Vods = ({ disableContextProvider }) => {
     });
   }, [videoElementsAmount]);
 
-  if (!getCookie(`Twitch-access_token`)) {
-    return (
-      <AlertHandler
-        title='Not authenticated/connected with Twitch.'
-        message='No access token for twitch availible.'
-      />
-    );
-  }
-
   return (
-    <>
-      <Header refresh={refresh} refreshing={refreshing} vods={vods} vodError={vodError} />
+    <Container order={order}>
+      <Header
+        refresh={refresh}
+        refreshing={refreshing}
+        vods={vods}
+        vodError={vodError}
+        setOrder={setOrder}
+      />
+      {!getCookie(`Twitch-access_token`) && (
+        <AlertHandler
+          title='Not authenticated/connected with Twitch.'
+          message='No access token for twitch availible.'
+        />
+      )}
       {error && (
         <AlertHandler
           data={error}
@@ -168,6 +173,6 @@ export const Vods = ({ disableContextProvider }) => {
           />
         </>
       )}
-    </>
+    </Container>
   );
 };

@@ -14,7 +14,7 @@ import handleArrowNavigation, {
 } from '../twitch/channelList/handleArrowNavigation';
 import { videoImageUrls } from './../youtube/YoutubeVideoElement';
 import { parseNumberAndString } from './dragDropUtils';
-import { DeleteListButton } from './StyledComponents';
+import { ListActionButton } from './StyledComponents';
 import ToolTip from '../ToolTip';
 
 export default ({ list, listName, videos }) => {
@@ -170,7 +170,7 @@ export default ({ list, listName, videos }) => {
                   />
                   {v.title || v?.snippet?.title || v.id}
                 </Link>
-                <DeleteListButton
+                <ListActionButton
                   size={16}
                   onClick={() => removeFavoriteVideo(lists, setLists, listName, v.id)}
                 />

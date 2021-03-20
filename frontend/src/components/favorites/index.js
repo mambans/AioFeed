@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import styled from 'styled-components';
 
 import './FavoritesTransitions.scss';
 import { HeaderContainer } from '../sharedStyledComponents';
-import DeleteListBtn from './DeleteListBtn';
+import ReOrderButtons from './../ReOrderButtons';
+
 import FavoritesContext, { FavoritesProvider } from './FavoritesContext';
 import FeedsCenterContainer from '../feed/FeedsCenterContainer';
 import List from './List';
@@ -13,6 +13,9 @@ import useToken from '../twitch/useToken';
 import useYoutubeToken from '../youtube/useToken';
 import AlertHandler from '../alert';
 import AddNewVideoInput from './AddNewVideoInput';
+import DropDownDrawer from './DropDownDrawer';
+import { Container } from '../twitch/StyledComponents';
+import { getLocalstorage } from '../../util/Utils';
 
 export const useCheckForVideosAndValidateToken = ({
   lists,
@@ -69,10 +72,6 @@ export default () => (
   </VodsProvider>
 );
 
-const StyledFavoriteListContainer = styled.div`
-  width: 100%;
-`;
-
 export const FavoriteListContainer = ({
   list,
   setLists,
@@ -80,11 +79,13 @@ export const FavoriteListContainer = ({
   twitchExistsAndValidated,
   isLoading,
   fetchAllLists,
+  index,
 }) => {
   const [videos, setVideos] = useState();
+  const [order, setOrder] = useState((getLocalstorage('FeedOrders')?.[list.name] ?? 26) + index);
 
   return (
-    <StyledFavoriteListContainer>
+    <Container order={order}>
       <HeaderContainer
         id={list.name}
         text={<>{list.name}</>}
@@ -94,7 +95,8 @@ export const FavoriteListContainer = ({
         rightSide={
           <>
             <AddNewVideoInput list={list} videos={videos} listName={list.name} />
-            <DeleteListBtn list={list} setLists={setLists} style={{ margin: '0 10px' }} />
+            <DropDownDrawer list={list} />
+            <ReOrderButtons setOrder={setOrder} feedName={list.name} />
           </>
         }
       />
@@ -106,7 +108,7 @@ export const FavoriteListContainer = ({
         setVideos={setVideos}
         videos={videos}
       />
-    </StyledFavoriteListContainer>
+    </Container>
   );
 };
 
@@ -127,7 +129,7 @@ export const Favorites = () => {
     <>
       {Boolean(Object.keys(lists).length) ? (
         <TransitionGroup component={null}>
-          {Object.values(lists)?.map((list) => (
+          {Object.values(lists)?.map((list, index) => (
             <CSSTransition
               key={list.name}
               timeout={1000}
@@ -137,6 +139,7 @@ export const Favorites = () => {
               <FavoriteListContainer
                 list={list}
                 setLists={setLists}
+                index={index}
                 isLoading={isLoading}
                 fetchAllLists={fetchAllLists}
                 ytExistsAndValidated={ytExistsAndValidated}

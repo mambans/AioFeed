@@ -40,7 +40,7 @@ export default ({ data }) => {
   }
 
   return (
-    <Container>
+    <Container style={{ margin: '0' }}>
       <TransitionGroup component={null}>
         {liveStreams?.map((stream) => (
           <CSSTransition

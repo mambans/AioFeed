@@ -32,6 +32,7 @@ export default ({
   disableContextProvider,
   setDragSelected,
   listName,
+  list,
   ...props
 }) => {
   const {
@@ -116,6 +117,7 @@ export default ({
     <VideoContainer draggable={Boolean(setDragSelected)} onDragStart={onDragStart} {...props}>
       <ImageContainer ref={imgRef}>
         <FavoriteButton
+          list={list}
           videoId_p={id}
           disablepreview={handleMouseOut}
           disableContextProvider={disableContextProvider}

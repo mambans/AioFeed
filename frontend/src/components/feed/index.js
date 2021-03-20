@@ -1,7 +1,6 @@
 import { CSSTransition } from 'react-transition-group';
 import React, { useContext } from 'react';
 
-import { Container } from '../twitch/StyledComponents';
 import AccountContext from './../account/AccountContext';
 import AlertHandler from './../alert';
 import FeedsContext from './FeedsContext';
@@ -51,15 +50,11 @@ const Feed = () => {
           unmountOnExit
           appear
         >
-          <Container>
-            <Youtube disableContextProvid er={true} />
-          </Container>
+          <Youtube disableContextProvider={true} />
         </CSSTransition>
 
         <CSSTransition in={enableTwitchVods} classNames='fade-750ms' timeout={750} unmountOnExit>
-          <Container>
-            <Vods disableContextProvider={true} />
-          </Container>
+          <Vods disableContextProvider={true} />
         </CSSTransition>
 
         <CSSTransition
@@ -69,9 +64,7 @@ const Feed = () => {
           unmountOnExit
           appear
         >
-          <Container>
-            <Favorites />
-          </Container>
+          <Favorites />
         </CSSTransition>
       </FavoritesProvider>
     </FeedsCenterContainer>
