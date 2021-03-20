@@ -54,6 +54,7 @@ export default ({ outerContainer = window, showAndResetTimer = () => {}, childre
   const menuRef = useRef();
   const toggleShowHide = useCallback(
     (e) => {
+      if (show) return true;
       e.preventDefault();
       showAndResetTimer();
       const boundary = outerContainer.getBoundingClientRect();
@@ -68,7 +69,7 @@ export default ({ outerContainer = window, showAndResetTimer = () => {}, childre
       });
       return false;
     },
-    [outerContainer, showAndResetTimer]
+    [outerContainer, showAndResetTimer, show]
   );
   useEventListenerMemo('contextmenu', toggleShowHide, outerContainer);
   useClicksOutside(menuRef, () => setShow(false));

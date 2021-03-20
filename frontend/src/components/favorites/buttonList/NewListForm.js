@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { MdAddCircle } from 'react-icons/md';
 import axios from 'axios';
@@ -6,6 +6,7 @@ import axios from 'axios';
 import { FormButton, FormGroup, Label } from './../StyledComponents';
 import { getCookie } from '../../../util/Utils';
 import { parseNumberAndString } from './../dragDropUtils';
+import FavoritesContext from '../FavoritesContext';
 
 const useInput = (initialValue) => {
   const [value, setValue] = useState(initialValue);
@@ -24,14 +25,15 @@ const useInput = (initialValue) => {
   };
 };
 
-export default ({ lists, setLists, item }) => {
+export default ({ item }) => {
   const { value: listName, bind: bindListName, reset: resetListName, setValue } = useInput('');
+  const { lists, setLists } = useContext(FavoritesContext);
 
   const addFunc = async (list_Name, item) => {
-    const newVideo = parseNumberAndString(item);
+    const newVideo = Array.isArray(item) ? item : [parseNumberAndString(item)];
     const newListObj = {
       name: list_Name,
-      items: [newVideo].filter((i) => i),
+      items: newVideo.filter((i) => i),
     };
 
     setLists((curr) => ({ ...curr, [list_Name]: newListObj }));
@@ -54,18 +56,19 @@ export default ({ lists, setLists, item }) => {
   };
 
   const CheckForNameAvaliability = !Boolean(
-    Object.values(lists).find((list) => list.name?.toLowerCase() === listName?.toLowerCase())
+    lists &&
+      Object.values(lists).find((list) => list.name?.toLowerCase() === listName?.toLowerCase())
   );
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
     setValue(listName.trim());
 
-    if (!listName || CheckForNameAvaliability) addFunc(listName, item);
+    if (Boolean(listName) || CheckForNameAvaliability) addFunc(listName, item);
   };
 
   return (
-    <Form noValidate onSubmit={handleSubmit}>
+    <Form noValidate onSubmit={handleSubmit} style={{ minWidth: '175px' }}>
       <FormGroup controlId='formGroupChannel'>
         <Label>
           <Form.Control

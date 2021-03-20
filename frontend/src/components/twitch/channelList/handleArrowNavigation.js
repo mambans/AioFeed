@@ -1,11 +1,11 @@
 export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
-  const parentRect = parentDiv.getBoundingClientRect();
-  const childRect = childDiv.getBoundingClientRect();
+  const parentRect = parentDiv?.getBoundingClientRect();
+  const childRect = childDiv?.getBoundingClientRect();
 
   const scrollDown =
-    childRect.bottom + 20.5 >= parentRect.bottom || childRect.top + 20.5 >= parentRect.bottom;
+    childRect?.bottom + 20.5 >= parentRect?.bottom || childRect?.top + 20.5 >= parentRect?.bottom;
   const scrollUp =
-    childRect.top - 20.5 <= parentRect.top || childRect.bottom - 20.5 <= parentRect.top;
+    childRect?.top - 20.5 <= parentRect?.top || childRect?.bottom - 20.5 <= parentRect?.top;
 
   if (scrollDown || scrollUp) {
     childDiv.scrollIntoView({ block: 'nearest', inline: 'nearest' });

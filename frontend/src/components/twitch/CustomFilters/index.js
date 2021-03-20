@@ -37,6 +37,7 @@ const ListContainer = ({ setShow, channel, enableFormControll, uploadNewFiltersT
     e.stopImmediatePropagation();
     e.stopPropagation();
     setShow(false);
+    return false;
   });
 
   return (
