@@ -27,13 +27,17 @@ export const useCheckForVideosAndValidateToken = ({
   const validateYoutubeToken = useYoutubeToken();
 
   useEffect(() => {
-    const youtubeVideoExists = Object?.values(lists)
-      .map((list) => list?.items?.find((videoId) => typeof videoId === 'string'))
-      .filter((i) => i)?.length;
+    const youtubeVideoExists =
+      lists &&
+      Object?.values(lists)
+        .map((list) => list?.items?.find((videoId) => typeof videoId === 'string'))
+        .filter((i) => i)?.length;
 
-    const twitchVideoExists = Object?.values(lists)
-      .map((list) => list?.items?.find((videoId) => typeof videoId === 'number'))
-      .filter((i) => i)?.length;
+    const twitchVideoExists =
+      lists &&
+      Object?.values(lists)
+        .map((list) => list?.items?.find((videoId) => typeof videoId === 'number'))
+        .filter((i) => i)?.length;
 
     const twitchPromise =
       Boolean(twitchVideoExists) &&

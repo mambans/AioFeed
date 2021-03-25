@@ -1,53 +1,75 @@
-import { useParams } from 'react-router-dom';
-import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-import NavigationContext from './../../navigation/NavigationContext';
 import API from '../API';
 import useQuery from '../../../hooks/useQuery';
 import Loopbar, { timeToSeconds } from './Loopbar';
 import { LoopBtn, Loop } from './StyledComponents';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
+import FavoritesContext from '../../favorites/FavoritesContext';
+import autoPlayNext from './../../favorites/autpPlayNext';
 
-export default ({ listIsOpen, listWidth }) => {
+export default ({ listIsOpen, listWidth, listVideos, autoPlayNextEnabled }) => {
   const channelName = useParams()?.channelName;
   const videoId = useParams()?.videoId;
   const time = useQuery().get('t') || useQuery().get('start') || null;
   const endTime = useQuery().get('end') || null;
-  const { setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
-  const [twitchVideoPlayer, setTwitchVideoPlayer] = useState();
+  const twitchVideoPlayer = useRef();
   const [loopEnabled, setLoopEnabled] = useState(Boolean(time));
   const [duration, setDuration] = useState();
+  const navigate = useNavigate();
+  const listName = useQuery().get('list') || useQuery().get('listName') || null;
+  const { lists } = useContext(FavoritesContext) || {};
+  const list =
+    lists && lists[Object.keys(lists).find((key) => key.toLowerCase() === listName?.toLowerCase())];
 
   useEffect(() => {
-    setTwitchVideoPlayer(
-      new window.Twitch.Player('twitch-embed', {
-        width: '100%',
-        height: '100%',
-        theme: 'dark',
-        layout: 'video',
-        video: videoId || null,
-        muted: false,
-        time: timeToSeconds(time),
-        allowfullscreen: true,
-        parent: ['aiofeed.com'],
-      })
-    );
-  }, [setShrinkNavbar, setFooterVisible, setVisible, channelName, videoId, time]);
+    const playerParams = {
+      width: '100%',
+      height: '100%',
+      theme: 'dark',
+      layout: 'video',
+      video: videoId || null,
+      muted: false,
+      time: timeToSeconds(time),
+      allowfullscreen: true,
+      parent: ['aiofeed.com'],
+    };
+
+    if (twitchVideoPlayer.current) {
+      twitchVideoPlayer.current.setVideo(videoId, timeToSeconds(time));
+    } else {
+      twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', playerParams);
+    }
+  }, [videoId, time]);
+
+  const playNext = () => {
+    const nextVideoUrl = autoPlayNext({
+      loopEnabled,
+      listVideos,
+      videoId,
+      list,
+      listName,
+      autoPlayNextEnabled,
+    });
+    if (nextVideoUrl) navigate(nextVideoUrl);
+  };
 
   useEventListenerMemo(
     window.Twitch.Player.PLAYING,
     () => {
-      setDuration(twitchVideoPlayer.getDuration());
+      setDuration(twitchVideoPlayer.current.getDuration());
     },
-    twitchVideoPlayer
+    twitchVideoPlayer.current
   );
+  useEventListenerMemo(window.Twitch.Player.ENDED, playNext, twitchVideoPlayer.current);
 
   useEffect(() => {
     document.title = `${(channelName && `${channelName} -`) || ''} ${videoId}`;
 
     const fetchDetailsForDocumentTitle = async () => {
-      if (twitchVideoPlayer) {
+      if (twitchVideoPlayer.current) {
         const videoDetails = await API.getVideos({ params: { id: videoId } }).then(
           (r) => r.data.data[0]
         );
@@ -75,7 +97,7 @@ export default ({ listIsOpen, listWidth }) => {
 
   return (
     <Loop listIsOpen={String(listIsOpen)} listWidth={listWidth} loopEnabled={String(loopEnabled)}>
-      {twitchVideoPlayer && (
+      {twitchVideoPlayer.current && (
         <OverlayTrigger
           key='loop'
           placement='right'
@@ -91,8 +113,8 @@ export default ({ listIsOpen, listWidth }) => {
             enabled={String(loopEnabled)}
             onClick={() => {
               setLoopEnabled((cr) => {
-                if (twitchVideoPlayer.getEnded() && !cr) {
-                  twitchVideoPlayer.seek(0);
+                if (twitchVideoPlayer.current.getEnded() && !cr) {
+                  twitchVideoPlayer.current.seek(0);
                 }
                 return !cr;
               });
@@ -100,8 +122,8 @@ export default ({ listIsOpen, listWidth }) => {
           />
         </OverlayTrigger>
       )}
-      {twitchVideoPlayer && loopEnabled && (
-        <Loopbar twitchVideoPlayer={twitchVideoPlayer} duration={duration} />
+      {twitchVideoPlayer.current && loopEnabled && (
+        <Loopbar twitchVideoPlayer={twitchVideoPlayer.current} duration={duration} />
       )}
 
       {/* <div id='twitch-embed' style={{ gridArea: 'video' }}></div> */}

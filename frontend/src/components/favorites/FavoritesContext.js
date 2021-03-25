@@ -6,7 +6,7 @@ import useSyncedLocalState from '../../hooks/useSyncedLocalState';
 const FavoritesContext = React.createContext();
 
 export const FavoritesProvider = ({ children }) => {
-  const [lists, setLists] = useSyncedLocalState('FavoritesLists', {});
+  const [lists, setLists] = useSyncedLocalState('FavoritesLists', {}) || {};
   const [isLoading, setIsLoading] = useState();
 
   const fetchAllLists = useCallback(async () => {

@@ -13,7 +13,7 @@ const SearchSubmitIcon = styled(FaSearch).attrs({ size: 16 })``;
 export const submiteButtonStyle = ({ btnDisabled }) => css`
   position: absolute;
   cursor: pointer;
-  color: rgb(240, 240, 240);
+  color: rgb(175, 175, 175);
   display: flex;
   margin-left: 5px;
   /* padding-left: 5px; */

@@ -33,6 +33,7 @@ export default ({
   setDragSelected,
   listName,
   list,
+  active,
   ...props
 }) => {
   const {
@@ -115,7 +116,7 @@ export default ({
 
   return (
     <VideoContainer draggable={Boolean(setDragSelected)} onDragStart={onDragStart} {...props}>
-      <ImageContainer ref={imgRef}>
+      <ImageContainer ref={imgRef} active={active}>
         <FavoriteButton
           list={list}
           videoId_p={id}

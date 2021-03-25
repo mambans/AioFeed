@@ -56,14 +56,14 @@ export const removeFavoriteVideo = async (lists, setLists, list_Name, newItem_p)
     .catch((e) => console.error(e));
 };
 
-export const AddRemoveBtn = ({ list, videoId, style }) => {
-  const { lists, setLists } = useContext(FavoritesContext);
+export const AddRemoveBtn = ({ list, videoId, lists, setLists, size = 18, style }) => {
+  // const { lists, setLists } = useContext(FavoritesContext);
   const videoAdded = list?.items?.includes(parseNumberAndString(videoId));
 
   if (videoAdded)
     return (
       <RemoveItemBtn
-        size={18}
+        size={size}
         onClick={() => removeFavoriteVideo(lists, setLists, list.name, videoId)}
         style={style}
       />
@@ -71,7 +71,7 @@ export const AddRemoveBtn = ({ list, videoId, style }) => {
 
   return (
     <AddItemBtn
-      size={18}
+      size={size}
       onClick={() => addFavoriteVideo(lists, setLists, list.name, videoId)}
       style={style}
     />
@@ -79,7 +79,7 @@ export const AddRemoveBtn = ({ list, videoId, style }) => {
 };
 
 export default ({ OpenFunction, CloseFunction, videoId }) => {
-  const { lists } = useContext(FavoritesContext);
+  const { lists, setLists } = useContext(FavoritesContext) || {};
   const listRef = useRef();
 
   useClicksOutside(listRef, CloseFunction);
@@ -92,7 +92,7 @@ export default ({ OpenFunction, CloseFunction, videoId }) => {
       {Object?.values(lists).map((list) => (
         <ListItem key={list.name}>
           {list.name}
-          <AddRemoveBtn list={list} videoId={videoId} />
+          <AddRemoveBtn list={list} videoId={videoId} setLists={setLists} lists={lists} />
         </ListItem>
       ))}
       <NewListForm item={videoId} />

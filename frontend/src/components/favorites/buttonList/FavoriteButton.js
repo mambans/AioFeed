@@ -63,14 +63,8 @@ export default ({
           videoId={videoId}
           // onMouseEnter={OpenFunction}
           style={{ right: '0', position: 'absolute', margin: '5px' }}
+          size={size}
         />
-        // <Close
-        //   onClick={CloseFunction}
-        //   onMouseEnter={OpenFunction}
-        //   onMouseLeave={CloseFunctionDelay}
-        //   open={open}
-        //   size={size * 0.8 || 18}
-        // />
       )}
 
       <CSSTransition in={open} timeout={250} classNames='fade' unmountOnExit>

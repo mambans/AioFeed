@@ -684,6 +684,7 @@ export const LoopBtn = styled(MdLoop)`
   cursor: pointer;
   opacity: ${({ enabled }) => (enabled === 'true' ? '1' : '0.3')};
   margin: 15px;
+  transition: opacity 250ms;
 `;
 
 export const LoopTimebarBackground = styled.div`
@@ -745,6 +746,7 @@ export const LoopPins = styled.div`
   position: absolute;
   cursor: pointer;
   transform: translateY(-25%);
+  z-index: 1;
 
   &:hover {
     background: white;

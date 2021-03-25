@@ -19,14 +19,7 @@ export default () => {
       <Navigate path='clips' to={`../page`} replace />
       <Navigate path='videos' to='../page' replace />
       <Navigate path='videos/all' to={`../../page`} replace />
-      {/* <Route
-        path='videos/:videoId'
-        element={
-          <SharedVideoPlayer>
-            <VideoPlayer />
-          </SharedVideoPlayer>
-        }
-      /> */}
+
       <Route path='videos/:videoId' element={<SharedVideoPlayer />} />
       <Route path='clip/:videoId' element={<PlayerClip />} />
       <Route path='*' element={<NoMatch />} />

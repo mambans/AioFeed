@@ -11,9 +11,20 @@ const ToolTipText = styled(Tooltip)`
   }
 `;
 
+/**
+ * Add tooltip on hover\
+ *
+ * @param {Element} children - Html elements children
+ * @param {Boolean} [show = True] - Boolean to enable on hover tooltip
+ * @param {Text} [tooltip = ''] - Tooltip text
+ * @param {Text} [placement='bottom'] - HTML element(s) to as trigger for 'on hover'.
+ * @param {Object} [delay = { show: 250, hide: 0 }] - Object '{ show: 250, hide: 0 }' for tooltip delays
+ * @param {Text} [fontSize='14px'] - Font size for tooltip
+ */
+
 export default ({
   children,
-  show,
+  show = true,
   tooltip = '',
   placement = 'bottom',
   delay = { show: 250, hide: 0 },

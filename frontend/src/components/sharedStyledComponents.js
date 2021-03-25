@@ -286,11 +286,11 @@ export const VideoContainer = ({ children, ...props }) => {
   );
 };
 
-export const ImageContainer = React.forwardRef(({ children }, ref) => {
+export const ImageContainer = React.forwardRef(({ children, active }, ref) => {
   const { feedVideoSizeProps } = useContext(FeedsContext);
 
   return (
-    <StyledImageContainer feedVideoSizeProps={feedVideoSizeProps} ref={ref}>
+    <StyledImageContainer feedVideoSizeProps={feedVideoSizeProps} active={active} ref={ref}>
       {children}
     </StyledImageContainer>
   );
@@ -498,6 +498,18 @@ export const StyledImageContainer = styled.div`
     height: 100%;
     object-fit: cover;
     transition: width 750ms;
+  }
+
+  &::after {
+    content: 'Playing';
+    position: absolute;
+    top: 0;
+    padding: 3px 5px;
+    border-radius: 10px;
+    background: rgb(209, 3, 3) none repeat scroll 0% 0%;
+    font-size: 0.8em;
+    transform: translate3d(-30%, -30%, 0);
+    display: ${({ active }) => (active ? 'unset' : 'none')};
   }
 
   &:hover {

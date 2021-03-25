@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
+import axios from 'axios';
 
 import AddVideoExtraData from '../twitch/AddVideoExtraData';
 import API from '../twitch/API';
@@ -11,12 +12,18 @@ import { LoadingVideoElement } from '../twitch/StyledComponents';
 import { addVodEndTime } from '../twitch/TwitchUtils';
 import { LoadMore } from '../sharedStyledComponents';
 import { CenterContext } from '../feed/FeedsCenterContainer';
-import { restructureVideoList, uploadNewList } from './dragDropUtils';
+import { parseNumberAndString, restructureVideoList, uploadNewList } from './dragDropUtils';
+import { getCookie } from '../../util/Utils';
 
 export const fetchListVideos = async ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
   if (list?.items) {
     const twitchFetchVideos = async (items) => {
-      const fetchedVideos = await API.getVideos({ params: { id: items } });
+      const fetchedVideos = await await API.getVideos({ params: { id: items } }).catch((e) => {
+        console.log(e);
+      });
+
+      if (!fetchedVideos) return false;
+
       const finallFetchedVideos = await AddVideoExtraData({
         items: fetchedVideos.data,
         fetchGameInfo: false,
@@ -49,12 +56,34 @@ export const fetchListVideos = async ({ list, ytExistsAndValidated, twitchExists
           })
       : [];
 
-    const mergedVideosUnordered = [...twitchItemsWithDetails, ...youtubeItemsWithDetails];
+    const mergedVideosUnordered = [
+      ...(twitchItemsWithDetails || []),
+      ...(youtubeItemsWithDetails || []),
+    ];
 
     const mergeVideosOrdered = list.items
       .map((item) => mergedVideosUnordered.find((video) => String(video.id) === String(item)))
       .filter((i) => i);
 
+    //Filtered out the video Ids that have been removed from Twitch/Youtube
+    const newFilteredIdsList = mergeVideosOrdered.map((v) => parseNumberAndString(v.id));
+    if (newFilteredIdsList.length !== list.items.length) {
+      const newFilteredIdsListObj = {
+        name: list.name,
+        items: newFilteredIdsList,
+      };
+
+      setTimeout(async () => {
+        await axios
+          .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
+            username: getCookie(`AioFeed_AccountName`),
+            videosObj: newFilteredIdsListObj,
+            listName: list.name,
+            authkey: getCookie(`AioFeed_AuthKey`),
+          })
+          .catch((e) => console.error(e));
+      }, 10000);
+    }
     return mergeVideosOrdered;
   }
 };

@@ -17,20 +17,36 @@ import useSyncedLocalState from '../hooks/useSyncedLocalState';
 import YoutubeVideoPlayer from './youtube/YoutubeVideoPlayer';
 import VideoPlayer from './twitch/player/VideoPlayer';
 import useFullscreen from '../hooks/useFullscreen';
+import { FavoritesProvider } from './favorites/FavoritesContext';
 
 const DEFAULT_LIST_WIDTH = Math.max(window.innerWidth * 0.1, 400);
 
 export default () => {
+  const listName = useQuery().get('list') || useQuery().get('listName') || null;
+
+  if (listName) {
+    return (
+      <FavoritesProvider>
+        <SharedVideoPlayer listName={listName} />
+      </FavoritesProvider>
+    );
+  }
+
+  return <SharedVideoPlayer listName={listName} />;
+};
+
+const SharedVideoPlayer = ({ listName }) => {
   const location = useLocation();
   const { videoId, channelName } = useParams() || {};
   const { visible } = useContext(NavigationContext);
-  const listName = useQuery().get('list') || useQuery().get('listName') || null;
   const [viewStates, setViewStates] = useSyncedLocalState(`${listName}-viewStates`, {
     listWidth: DEFAULT_LIST_WIDTH,
     hideList: false,
     default: true,
   });
   const [resizeActive, setResizeActive] = useState(false);
+  const [listVideos, setListVideos] = useState();
+  const [autoPlayNext, setAutoPlayNext] = useState();
 
   useFullscreen();
 
@@ -108,11 +124,13 @@ export default () => {
         />
 
         {location.pathname.split('/')[1] === 'youtube' ? (
-          <YoutubeVideoPlayer />
+          <YoutubeVideoPlayer listVideos={listVideos} autoPlayNextEnabled={autoPlayNext} />
         ) : (
           <VideoPlayer
             listIsOpen={listName && !viewStates.hideList}
             listWidth={viewStates.listWidth}
+            listVideos={listVideos}
+            autoPlayNextEnabled={autoPlayNext}
           />
         )}
         {/* {children} */}
@@ -127,7 +145,14 @@ export default () => {
               <div />
             </ResizeDevider>
             <div id='chat'>
-              <PlaylistInPlayer listName={listName} />
+              <PlaylistInPlayer
+                listName={listName}
+                listVideos={listVideos}
+                setListVideos={setListVideos}
+                videoId={videoId}
+                setAutoPlayNext={setAutoPlayNext}
+                autoPlayNext={autoPlayNext}
+              />
             </div>
           </>
         )}
