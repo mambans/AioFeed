@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useMemo, useRef, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
@@ -17,9 +17,8 @@ import { parseNumberAndString } from './dragDropUtils';
 import { ListActionButton } from './StyledComponents';
 import ToolTip from '../ToolTip';
 
-export default ({ list, listName, videos }) => {
+export default ({ list, listName, videos, style }) => {
   const { lists, setLists } = useContext(FavoritesContext);
-  const [items, setItems] = useState();
   const [listIsOpen, setListIsOpen] = useState();
   const [cursor, setCursor] = useState({ position: 0 });
 
@@ -61,7 +60,15 @@ export default ({ list, listName, videos }) => {
   } = useInput('');
 
   const handleArrowKey = (event) =>
-    handleArrowNavigation(event, items, cursor, setCursor, setVideoId, ulListRef.current, 'title');
+    handleArrowNavigation(
+      event,
+      filteredInputMatched,
+      cursor,
+      setCursor,
+      setVideoId,
+      ulListRef.current,
+      'title'
+    );
 
   const handleSubmit = async () => {
     const id = videoId;
@@ -115,16 +122,6 @@ export default ({ list, listName, videos }) => {
     return inputFiltered;
   }, [cursor.used, videos, videoId]);
 
-  useEffect(() => {
-    setItems(
-      Boolean(videos?.length)
-        ? videos
-        : list.items.map((i) => ({
-            id: i,
-          }))
-    );
-  }, [list.items, videos]);
-
   return (
     <SearchList
       setListIsOpen={setListIsOpen}
@@ -137,10 +134,11 @@ export default ({ list, listName, videos }) => {
       input={videoId}
       onKeyDown={handleArrowKey}
       setCursor={setCursor}
-      leftIcon={<MdAdd size={16} type='submitBtn' />}
+      leftIcon={<MdAdd size={16} type='submitBtn' onClick={handleSubmit} />}
+      style={style}
     >
-      {filteredInputMatched && (
-        <GameListUlContainer ref={ulListRef}>
+      {Boolean(filteredInputMatched?.length) && (
+        <GameListUlContainer ref={ulListRef} style={{ paddingTop: '10px' }}>
           {filteredInputMatched.map((v, index) => (
             <ToolTip
               key={v?.id + index}

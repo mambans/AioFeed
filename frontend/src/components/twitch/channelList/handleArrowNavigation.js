@@ -18,38 +18,34 @@ export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
 
 export default (e, list, cursor, setCursor, setValue, ulListRef, selectedNewValue) => {
   try {
-    if (list?.length > 1) {
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        const cursorPosition = Math.min(Math.max(cursor.position + 1, 0), list.length - 1);
-        setCursor(() => ({
-          position: cursorPosition,
-          used: true,
-        }));
-        setValue(
-          list[cursorPosition][selectedNewValue] ||
-            list[cursorPosition]?.user_name ||
-            list[cursorPosition]?.name ||
-            list[cursorPosition].id ||
-            list[cursorPosition]
-        );
-        scrollToIfNeeded(ulListRef, document.querySelector('.selected'), 'Down');
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        const cursorPosition = Math.min(Math.max(cursor.position - 1, 0), list.length - 1);
-        setCursor(() => ({
-          position: cursorPosition,
-          used: true,
-        }));
-        setValue(
-          list[cursorPosition][selectedNewValue] ||
-            list[cursorPosition]?.user_name ||
-            list[cursorPosition]?.name ||
-            list[cursorPosition].id ||
-            list[cursorPosition]
-        );
-        scrollToIfNeeded(ulListRef, document.querySelector('.selected'), 'Up');
-      }
+    if (list?.length >= 1 && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+      e.preventDefault();
+
+      const cursorPosition = Math.min(
+        Math.max(cursor.position + (e.key === 'ArrowDown' ? +1 : -1), 0),
+        list.length - 1
+      );
+
+      const newValueProperty =
+        (selectedNewValue === 'title'
+          ? list[cursorPosition]?.title || list[cursorPosition]?.snippet.title
+          : list[cursorPosition]?.[selectedNewValue]) ||
+        list[cursorPosition]?.user_name ||
+        list[cursorPosition]?.name ||
+        list[cursorPosition]?.id ||
+        list[cursorPosition];
+
+      setCursor(() => ({
+        position: cursorPosition,
+        used: true,
+      }));
+
+      setValue(newValueProperty);
+      scrollToIfNeeded(
+        ulListRef,
+        document.querySelector('.selected'),
+        e.key === 'ArrowDown' ? 'Down' : 'Up'
+      );
     }
   } catch (error) {
     console.log('handleArrowKey -> error', error);
