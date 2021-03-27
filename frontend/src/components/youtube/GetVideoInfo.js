@@ -55,9 +55,7 @@ export default async ({ videos }) => {
                 }
               )
               .then((res) => res.data.items)
-              .catch((e) => {
-                return null;
-              })
+              .catch((e) => null)
         )
       ).then((res) => res.flat(1))
     : CachedFullyVideos;
@@ -78,5 +76,5 @@ export default async ({ videos }) => {
     })
   );
 
-  return [...(fullyCachedVideos.items || []), ...(newVideosWithDetails || [])];
+  return [...(CachedFullyVideos || []), ...(newVideosWithDetails || [])];
 };
