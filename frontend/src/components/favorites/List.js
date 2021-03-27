@@ -168,7 +168,6 @@ export default ({
                 list={list}
                 data-id={video.contentDetails?.upload?.videoId}
                 video={video}
-                disableContextProvider={true}
                 {...dragEvents}
               />
             ) : (
@@ -177,7 +176,6 @@ export default ({
                 list={list}
                 data-id={video.id}
                 data={video}
-                disableContextProvider={true}
                 {...dragEvents}
               />
             )}

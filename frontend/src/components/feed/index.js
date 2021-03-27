@@ -50,11 +50,11 @@ const Feed = () => {
           unmountOnExit
           appear
         >
-          <Youtube disableContextProvider={true} />
+          <Youtube />
         </CSSTransition>
 
         <CSSTransition in={enableTwitchVods} classNames='fade-750ms' timeout={750} unmountOnExit>
-          <Vods disableContextProvider={true} />
+          <Vods />
         </CSSTransition>
 
         <CSSTransition

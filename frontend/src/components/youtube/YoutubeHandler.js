@@ -6,7 +6,7 @@ import YoutubeVideoElement from './YoutubeVideoElement';
 import LoadingBoxes from './../twitch/LoadingBoxes';
 import { CenterContext } from '../feed/FeedsCenterContainer';
 
-export default ({ requestError, videos, disableContextProvider }) => {
+export default ({ requestError, videos }) => {
   const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext);
   const [vodAmounts, setVodAmounts] = useState({
     amount: videoElementsAmount,
@@ -48,7 +48,7 @@ export default ({ requestError, videos, disableContextProvider }) => {
             key={video?.contentDetails?.upload?.videoId}
             unmountOnExit
           >
-            <YoutubeVideoElement video={video} disableContextProvider={disableContextProvider} />
+            <YoutubeVideoElement video={video} />
           </CSSTransition>
         ))}
       </TransitionGroup>

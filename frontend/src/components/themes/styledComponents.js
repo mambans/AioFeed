@@ -66,6 +66,47 @@ export const ThemeSelectorUl = styled.ul`
   border-radius: 0 0 10px 10px;
   position: relative;
   font-weight: bold;
+
+  &.themeSelector-appear {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+    transition: transform 500ms, opacity 350ms;
+  }
+  &.themeSelector-appear-active {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    transition: transform 500ms, opacity 350ms;
+  }
+
+  &.themeSelector-enter {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+    transition: transform 500ms, opacity 350ms;
+  }
+
+  &.themeSelector-enter-active {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    transition: transform 500ms, opacity 350ms;
+  }
+
+  &.themeSelector-exit {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    transition: transform 500ms, opacity 350ms;
+  }
+
+  &.themeSelector-exit-active {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+    transition: transform 500ms, opacity 350ms;
+  }
+
+  &.themeSelector-exit-done {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+    transition: transform 500ms, opacity 350ms;
+  }
 `;
 
 export const Arrow = styled.i`

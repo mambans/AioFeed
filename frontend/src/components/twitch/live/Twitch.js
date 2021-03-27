@@ -47,6 +47,7 @@ export default ({ data }) => {
             key={stream.user_id}
             timeout={750}
             classNames={feedVideoSizeProps.transition || 'videoFadeSlide'}
+            // classNames={'fade-750ms'}
             unmountOnExit
             appear
           >

@@ -12,7 +12,6 @@ export default ({ children }) => {
   const [requestError, setRequestError] = useState();
   const followedChannels = useRef();
   const [videos, setVideos] = useState([]);
-  const oldVideos = useRef(null);
   const { youtubeToken, authKey } = useContext(AccountContext);
   const validateToken = useToken();
 
@@ -39,22 +38,6 @@ export default ({ children }) => {
     setIsLoaded(false);
     validateToken({ authKey }).then(() => fetchData());
   }, [authKey, setVideos, validateToken]);
-
-  useEffect(() => {
-    if (oldVideos.current && videos) {
-      videos.forEach((video) => {
-        const videoExists = oldVideos.current.find(
-          (old_video) =>
-            old_video.contentDetails?.upload?.videoId === video.contentDetails?.upload?.videoId
-        );
-
-        if (!videoExists) console.log('New video Notification.');
-        return '';
-      });
-    }
-
-    if (Boolean(videos.length)) oldVideos.current = videos;
-  }, [videos]);
 
   useEffect(() => {
     refresh().catch((e) => setError(e));

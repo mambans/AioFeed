@@ -8,13 +8,13 @@ import YoutubeDataHandler from './../youtube/Datahandler';
 import YoutubeHeader from './../youtube/Header';
 import YoutubeHandler from './YoutubeHandler';
 
-export default ({ disableContextProvider }) => (
+export default () => (
   <FeedsCenterContainer>
-    <Youtube disableContextProvider={disableContextProvider} />
+    <Youtube />
   </FeedsCenterContainer>
 );
 
-export const Youtube = ({ disableContextProvider }) => {
+export const Youtube = () => {
   const [order, setOrder] = useState(getLocalstorage('FeedOrders')?.['Youtube'] ?? 18);
 
   return (
@@ -33,11 +33,7 @@ export const Youtube = ({ disableContextProvider }) => {
 
           {data.error && <AlertHandler data={data.error}></AlertHandler>}
 
-          <YoutubeHandler
-            requestError={data.requestError}
-            videos={data.videos}
-            disableContextProvider={disableContextProvider}
-          />
+          <YoutubeHandler requestError={data.requestError} videos={data.videos} />
         </Container>
       )}
     </YoutubeDataHandler>

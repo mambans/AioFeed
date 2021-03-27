@@ -24,15 +24,7 @@ export const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
 
 const HOVER_DELAY = 1000;
 
-export default ({
-  list,
-  video,
-  disableContextProvider,
-  setDragSelected,
-  listName,
-  active,
-  ...props
-}) => {
+export default ({ list, video, setDragSelected, listName, active, ...props }) => {
   const { youtubeVideoHoverEnable } = useContext(YoutubeContext);
   const [isHovered, setIsHovered] = useState(false);
   const streamHoverTimer = useRef();
@@ -66,7 +58,6 @@ export default ({
           list={list}
           videoId_p={video.contentDetails?.upload?.videoId}
           disablepreview={handleMouseOut}
-          disableContextProvider={disableContextProvider}
         />
         {isHovered && (
           <VideoHoverIframe

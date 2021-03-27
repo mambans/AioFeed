@@ -13,6 +13,48 @@ export const Container = styled.div`
   @media screen and (max-width: 2560px) {
     width: 19vw;
   }
+
+  &.twitterList-enter {
+    opacity: 0;
+    width: 0 !important;
+    margin: 0 !important;
+    transition: opacity 500ms, width 750ms, margin-left 750ms, margin-right 750ms !important;
+  }
+
+  &.twitterList-enter-done {
+    opacity: 1;
+    width: 14vw !important;
+    margin: 0 10px !important;
+    transition: opacity 500ms, width 750ms, margin-left 750ms, margin-right 750ms !important;
+  }
+
+  &.twitterList-enter-active {
+    opacity: 1;
+    width: 14vw !important;
+    margin: 0 10px !important;
+    transition: opacity 500ms, width 750ms, margin-left 750ms, margin-right 750ms !important;
+  }
+
+  &.twitterList-exit {
+    opacity: 1;
+    width: 14vw !important;
+    margin: 0 10px !important;
+    transition: opacity 500ms, width 750ms, margin-left 750ms, margin-right 750ms !important;
+  }
+
+  &.twitterList-exit-active {
+    opacity: 0;
+    width: 0 !important;
+    margin: 0 !important;
+    transition: opacity 500ms, width 750ms, margin-left 750ms, margin-right 750ms !important;
+  }
+
+  &.twitterList-exit-done {
+    opacity: 0;
+    width: 0 !important;
+    margin: 0 !important;
+    transition: opacity 500ms, width 750ms, margin-left 750ms, margin-right 750ms !important;
+  }
 `;
 
 export const MainContainer = styled.div`
@@ -28,6 +70,48 @@ export const MainContainer = styled.div`
 
   @media screen and (max-width: 2560px) {
     left: ${({ center }) => (center ? '50%' : 'calc(81vw - 28px)')};
+  }
+
+  &.twitter-slide-enter {
+    opacity: 0;
+    transform: translate3d(15vw, 0, 0);
+    transition: opacity 375ms, transform 750ms;
+
+    @media screen and (max-width: 3420px) {
+      transform: translate3d(19vw, 0, 0);
+    }
+  }
+
+  &.twitter-slide-enter-active {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    transition: opacity 375ms, transform 750ms;
+  }
+
+  &.twitter-slide-exit {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    transition: opacity 375ms, transform 750ms;
+  }
+
+  &.twitter-slide-exit-active {
+    opacity: 0;
+    transform: translate3d(15vw, 0, 0);
+    transition: opacity 375ms, transform 750ms;
+
+    @media screen and (max-width: 3420px) {
+      right: -19vw;
+    }
+  }
+
+  &.twitter-slide-enter-done {
+    transform: translate3d(0, 0, 0);
+    transition: opacity 375ms, transform 750ms;
+  }
+
+  &.twitter-slide-appear-active {
+    transform: translate3d(0, 0, 0);
+    transition: opacity 375ms, transform 750ms;
   }
 `;
 

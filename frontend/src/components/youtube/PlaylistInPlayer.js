@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { MdQueuePlayNext } from 'react-icons/md';
+import { FaRandom } from 'react-icons/fa';
+import { TiArrowLoop } from 'react-icons/ti';
 
 import { useCheckForVideosAndValidateToken } from '../favorites';
 import AddNewVideoInput from '../favorites/AddNewVideoInput';
@@ -24,6 +26,13 @@ const Container = styled.div`
   padding-top: 10px;
 `;
 
+const PlayListButtonsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 10px;
+`;
+
 const ListTitle = styled.h2`
   height: 50px;
   display: flex;
@@ -33,18 +42,26 @@ const ListTitle = styled.h2`
   position: relative;
 `;
 
-const AutoPlayNextBtn = styled(MdQueuePlayNext)`
-  position: absolute;
+const svgButtonsStyle = ({ enabled }) => css`
   margin: 0 15px;
-  left: 0;
-  transform: translateY(25%);
   cursor: pointer;
-  opacity: ${({ enabled }) => (enabled === 'true' ? '1' : '0.3')};
+  opacity: ${enabled === 'true' ? '1' : '0.3'};
   transition: opacity 250ms;
 
   &:hover {
-    opacity: ${({ enabled }) => (enabled === 'true' ? '1' : '0.6')};
+    opacity: ${enabled === 'true' ? '1' : '0.6'};
   }
+`;
+
+const AutoPlayNextBtn = styled(MdQueuePlayNext)`
+  ${svgButtonsStyle}
+`;
+const LoopListBtn = styled(TiArrowLoop)`
+  ${svgButtonsStyle}
+`;
+
+const PlayNextRandomBtn = styled(FaRandom)`
+  ${svgButtonsStyle}
 `;
 
 const List = ({ listVideos, list, setLists, setListVideos, videoId }) => {
@@ -78,20 +95,20 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId }) => {
             <YoutubeVideoElement
               active={String(video.contentDetails?.upload?.videoId) === videoId}
               listName={list.name}
+              list={list}
               id={'v' + video.contentDetails?.upload?.videoId}
               data-id={'v' + video.contentDetails?.upload?.videoId}
               video={video}
-              disableContextProvider={true}
               {...dragEvents}
             />
           ) : (
             <VodElement
               active={String(video.id) === videoId}
               listName={list.name}
+              list={list}
               id={'v' + video.id}
               data-id={'v' + video.id}
               data={video}
-              disableContextProvider={true}
               {...dragEvents}
             />
           )}
@@ -108,6 +125,10 @@ export default ({
   videoId,
   setAutoPlayNext,
   autoPlayNext,
+  loopList,
+  setLoopList,
+  autoPlayRandom,
+  setAutoPlayRandom,
 }) => {
   const { lists, setLists } = useContext(FavoritesContext) || {};
   const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
@@ -147,7 +168,8 @@ export default ({
 
   return (
     <>
-      <ListTitle>
+      <ListTitle>{listName}</ListTitle>
+      <PlayListButtonsContainer>
         <ToolTip tooltip={`${autoPlayNext ? 'Disable' : 'Enable'} auto play next video.`}>
           <AutoPlayNextBtn
             size={20}
@@ -155,8 +177,21 @@ export default ({
             enabled={String(autoPlayNext)}
           />
         </ToolTip>
-        {listName}
-      </ListTitle>
+        <ToolTip tooltip={`${autoPlayNext ? 'Disable' : 'Enable'} loop list.`}>
+          <LoopListBtn
+            size={20}
+            onClick={() => setLoopList((c) => !c)}
+            enabled={String(loopList)}
+          />
+        </ToolTip>
+        <ToolTip tooltip={`${autoPlayNext ? 'Disable' : 'Enable'} randomise next video.`}>
+          <PlayNextRandomBtn
+            size={20}
+            onClick={() => setAutoPlayRandom((c) => !c)}
+            enabled={String(autoPlayRandom)}
+          />
+        </ToolTip>
+      </PlayListButtonsContainer>
       <AddNewVideoInput
         list={list}
         listName={listName}

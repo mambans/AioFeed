@@ -417,6 +417,7 @@ export const ButtonRow = styled.div`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  width: 100%;
 
   #stats {
     display: flex;

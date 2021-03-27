@@ -27,7 +27,7 @@ const useInput = (initialValue) => {
 
 export default ({ item }) => {
   const { value: listName, bind: bindListName, reset: resetListName, setValue } = useInput('');
-  const { lists, setLists } = useContext(FavoritesContext);
+  const { lists, setLists } = useContext(FavoritesContext) || {};
 
   const addFunc = async (list_Name, item) => {
     const newVideo = Array.isArray(item) ? item : [parseNumberAndString(item)];

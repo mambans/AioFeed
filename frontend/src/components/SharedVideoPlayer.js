@@ -1,5 +1,5 @@
 import { FaList } from 'react-icons/fa';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import React, { useContext, useState, useCallback } from 'react';
 
 import {
@@ -17,7 +17,9 @@ import useSyncedLocalState from '../hooks/useSyncedLocalState';
 import YoutubeVideoPlayer from './youtube/YoutubeVideoPlayer';
 import VideoPlayer from './twitch/player/VideoPlayer';
 import useFullscreen from '../hooks/useFullscreen';
-import { FavoritesProvider } from './favorites/FavoritesContext';
+import FavoritesContext, { FavoritesProvider } from './favorites/FavoritesContext';
+import autoPlayNextFunc from './favorites/autoPlayNext';
+import useLocalStorageState from '../hooks/useLocalStorageState';
 
 const DEFAULT_LIST_WIDTH = Math.max(window.innerWidth * 0.1, 400);
 
@@ -39,6 +41,7 @@ const SharedVideoPlayer = ({ listName }) => {
   const location = useLocation();
   const { videoId, channelName } = useParams() || {};
   const { visible } = useContext(NavigationContext);
+  const { lists } = useContext(FavoritesContext) || {};
   const [viewStates, setViewStates] = useSyncedLocalState(`${listName}-viewStates`, {
     listWidth: DEFAULT_LIST_WIDTH,
     hideList: false,
@@ -46,7 +49,12 @@ const SharedVideoPlayer = ({ listName }) => {
   });
   const [resizeActive, setResizeActive] = useState(false);
   const [listVideos, setListVideos] = useState();
-  const [autoPlayNext, setAutoPlayNext] = useState();
+  const [autoPlayNext, setAutoPlayNext] = useLocalStorageState('autoPlayNext');
+  const [loopList, setLoopList] = useLocalStorageState('loopList');
+  const [autoPlayRandom, setAutoPlayRandom] = useLocalStorageState('autoPlayRandom');
+  const navigate = useNavigate();
+  const list =
+    lists && lists[Object.keys(lists).find((key) => key.toLowerCase() === listName?.toLowerCase())];
 
   useFullscreen();
 
@@ -70,6 +78,20 @@ const SharedVideoPlayer = ({ listName }) => {
     },
     [resizeActive, setViewStates]
   );
+
+  const playNext = () => {
+    const nextVideoUrl = autoPlayNextFunc({
+      listVideos,
+      videoId,
+      list,
+      listName,
+      autoPlayNext,
+      loopList,
+      autoPlayRandom,
+    });
+    if (nextVideoUrl) navigate(nextVideoUrl);
+  };
+
   return (
     <>
       <VideoAndChatContainer
@@ -89,6 +111,7 @@ const SharedVideoPlayer = ({ listName }) => {
             opacity: '1',
           }}
           size={32}
+          list={list}
         />
         <PlayerExtraButtons channelName={channelName}>
           {listName && (
@@ -124,13 +147,12 @@ const SharedVideoPlayer = ({ listName }) => {
         />
 
         {location.pathname.split('/')[1] === 'youtube' ? (
-          <YoutubeVideoPlayer listVideos={listVideos} autoPlayNextEnabled={autoPlayNext} />
+          <YoutubeVideoPlayer playNext={playNext} />
         ) : (
           <VideoPlayer
             listIsOpen={listName && !viewStates.hideList}
             listWidth={viewStates.listWidth}
-            listVideos={listVideos}
-            autoPlayNextEnabled={autoPlayNext}
+            playNext={playNext}
           />
         )}
         {/* {children} */}
@@ -152,6 +174,10 @@ const SharedVideoPlayer = ({ listName }) => {
                 videoId={videoId}
                 setAutoPlayNext={setAutoPlayNext}
                 autoPlayNext={autoPlayNext}
+                loopList={loopList}
+                setLoopList={setLoopList}
+                autoPlayRandom={autoPlayRandom}
+                setAutoPlayRandom={setAutoPlayRandom}
               />
             </div>
           </>

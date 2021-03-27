@@ -1,9 +1,8 @@
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { MdMovieCreation, MdLiveTv } from 'react-icons/md';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, Link } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import React, { useEffect, useState, useCallback, useRef, useContext } from 'react';
-import { Link } from 'react-router-dom';
 
 import { LoadMore, HeaderContainer } from './../../sharedStyledComponents';
 import {
@@ -53,7 +52,7 @@ export default () => {
 
   document.title = `${category || 'All'} - Top ${videoType}`;
 
-  const videoElementTypeComp = (data) => {
+  const VideoElementTypeComp = ({ data }) => {
     switch (videoType) {
       case 'streams':
         return <StreamEle data={data} />;
@@ -291,10 +290,10 @@ export default () => {
                       enter: 500,
                       exit: 0,
                     }}
-                    classNames='fade-500ms'
+                    classNames='fade-750ms'
                     unmountOnExit
                   >
-                    {videoElementTypeComp(stream)}
+                    <VideoElementTypeComp data={stream} />
                   </CSSTransition>
                 ))}
               </TransitionGroup>

@@ -26,16 +26,7 @@ import useToken from '../useToken';
 import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../ToolTip';
 
-export default ({
-  data,
-  vodBtnDisabled,
-  disableContextProvider,
-  setDragSelected,
-  listName,
-  list,
-  active,
-  ...props
-}) => {
+export default ({ data, vodBtnDisabled, setDragSelected, listName, list, active, ...props }) => {
   const {
     id,
     user_id,
@@ -121,7 +112,6 @@ export default ({
           list={list}
           videoId_p={id}
           disablepreview={handleMouseOut}
-          disableContextProvider={disableContextProvider}
           style={{ top: thumbnail_url === '' && !previewAvailable.data ? '30px' : '0px' }}
         />
         {previewAvailable.error && (

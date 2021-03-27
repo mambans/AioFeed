@@ -10,27 +10,29 @@ import { parseNumberAndString } from './../dragDropUtils';
 import NewListForm from './NewListForm';
 
 export const addFavoriteVideo = async (lists, setLists, list_Name, newItem) => {
-  const newVideo = parseNumberAndString(newItem);
-  const allOrinalLists = { ...lists };
-  const existing = allOrinalLists[list_Name];
+  if (lists && setLists && list_Name && newItem) {
+    const newVideo = parseNumberAndString(newItem);
+    const allOrinalLists = { ...lists };
+    const existing = allOrinalLists[list_Name];
 
-  const newObj = {
-    ...existing,
-    items: [...new Set([...(existing?.items || []), newVideo])].filter((i) => i),
-  };
+    const newObj = {
+      ...existing,
+      items: [...new Set([...(existing?.items || []), newVideo])].filter((i) => i),
+    };
 
-  allOrinalLists[list_Name] = newObj;
+    allOrinalLists[list_Name] = newObj;
 
-  setLists({ ...allOrinalLists });
+    setLists({ ...allOrinalLists });
 
-  await axios
-    .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
-      username: getCookie(`AioFeed_AccountName`),
-      videosObj: newObj,
-      listName: list_Name,
-      authkey: getCookie(`AioFeed_AuthKey`),
-    })
-    .catch((e) => console.error(e));
+    await axios
+      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
+        username: getCookie(`AioFeed_AccountName`),
+        videosObj: newObj,
+        listName: list_Name,
+        authkey: getCookie(`AioFeed_AuthKey`),
+      })
+      .catch((e) => console.error(e));
+  }
 };
 
 export const removeFavoriteVideo = async (lists, setLists, list_Name, newItem_p) => {
@@ -56,23 +58,34 @@ export const removeFavoriteVideo = async (lists, setLists, list_Name, newItem_p)
     .catch((e) => console.error(e));
 };
 
-export const AddRemoveBtn = ({ list, videoId, lists, setLists, size = 18, style }) => {
+export const AddRemoveBtn = ({
+  list,
+  videoId,
+  lists,
+  setLists,
+  size = 18,
+  style,
+  onMouseEnter,
+  onMouseLeave,
+}) => {
   // const { lists, setLists } = useContext(FavoritesContext);
-  const videoAdded = list?.items?.includes(parseNumberAndString(videoId));
+  const videoAdded = list && list?.items?.includes(parseNumberAndString(videoId));
 
   if (videoAdded)
     return (
       <RemoveItemBtn
+        onClick={() => removeFavoriteVideo(lists, setLists, list?.name, videoId)}
         size={size}
-        onClick={() => removeFavoriteVideo(lists, setLists, list.name, videoId)}
         style={style}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
       />
     );
 
   return (
     <AddItemBtn
       size={size}
-      onClick={() => addFavoriteVideo(lists, setLists, list.name, videoId)}
+      onClick={() => addFavoriteVideo(lists, setLists, list?.name, videoId)}
       style={style}
     />
   );
@@ -89,12 +102,13 @@ export default ({ OpenFunction, CloseFunction, videoId }) => {
       <ListsLink>
         <Link to='/saved'>Lists</Link>
       </ListsLink>
-      {Object?.values(lists).map((list) => (
-        <ListItem key={list.name}>
-          {list.name}
-          <AddRemoveBtn list={list} videoId={videoId} setLists={setLists} lists={lists} />
-        </ListItem>
-      ))}
+      {lists &&
+        Object?.values(lists).map((list) => (
+          <ListItem key={list.name}>
+            {list.name}
+            <AddRemoveBtn list={list} videoId={videoId} setLists={setLists} lists={lists} />
+          </ListItem>
+        ))}
       <NewListForm item={videoId} />
     </Lists>
   );

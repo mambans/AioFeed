@@ -84,7 +84,7 @@ export default ({ list, listName, videos, style }) => {
       await addFavoriteVideo(lists, setLists, listName, id);
       setTimeout(() => {
         setCursor({ position: list.items.length - 1 });
-        scrollToIfNeeded(ulListRef.current, ulListRef.current.querySelector(`#V${id}`), 'Down');
+        scrollToIfNeeded(ulListRef.current, ulListRef.current?.querySelector(`#V${id}`), 'Down');
       }, 100);
     }
     resetVideoId();

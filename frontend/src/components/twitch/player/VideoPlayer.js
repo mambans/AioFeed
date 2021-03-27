@@ -1,5 +1,5 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import API from '../API';
@@ -7,10 +7,8 @@ import useQuery from '../../../hooks/useQuery';
 import Loopbar, { timeToSeconds } from './Loopbar';
 import { LoopBtn, Loop } from './StyledComponents';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
-import FavoritesContext from '../../favorites/FavoritesContext';
-import autoPlayNext from './../../favorites/autpPlayNext';
 
-export default ({ listIsOpen, listWidth, listVideos, autoPlayNextEnabled }) => {
+export default ({ listIsOpen, listWidth, playNext }) => {
   const channelName = useParams()?.channelName;
   const videoId = useParams()?.videoId;
   const time = useQuery().get('t') || useQuery().get('start') || null;
@@ -18,11 +16,6 @@ export default ({ listIsOpen, listWidth, listVideos, autoPlayNextEnabled }) => {
   const twitchVideoPlayer = useRef();
   const [loopEnabled, setLoopEnabled] = useState(Boolean(time));
   const [duration, setDuration] = useState();
-  const navigate = useNavigate();
-  const listName = useQuery().get('list') || useQuery().get('listName') || null;
-  const { lists } = useContext(FavoritesContext) || {};
-  const list =
-    lists && lists[Object.keys(lists).find((key) => key.toLowerCase() === listName?.toLowerCase())];
 
   useEffect(() => {
     const playerParams = {
@@ -43,18 +36,6 @@ export default ({ listIsOpen, listWidth, listVideos, autoPlayNextEnabled }) => {
       twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', playerParams);
     }
   }, [videoId, time]);
-
-  const playNext = () => {
-    const nextVideoUrl = autoPlayNext({
-      loopEnabled,
-      listVideos,
-      videoId,
-      list,
-      listName,
-      autoPlayNextEnabled,
-    });
-    if (nextVideoUrl) navigate(nextVideoUrl);
-  };
 
   useEventListenerMemo(
     window.Twitch.Player.PLAYING,

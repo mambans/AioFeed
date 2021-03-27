@@ -207,6 +207,31 @@ export const VolumeEventOverlay = styled.div`
       opacity: 1;
     }
   }
+
+  &.fade-controllUI-1s-enter {
+    opacity: 0;
+    transition: opacity 1000ms;
+  }
+
+  &.fade-controllUI-1s-enter-active {
+    opacity: 1;
+    transition: opacity 1000ms;
+  }
+
+  &.fade-controllUI-1s-exit {
+    opacity: 1;
+    transition: opacity 500ms;
+  }
+
+  &.fade-controllUI-1s-exit-active {
+    opacity: 0;
+    transition: opacity 500ms;
+  }
+
+  &.fade-controllUI-1s-exit-done {
+    opacity: 0;
+    transition: opacity 500ms;
+  }
 `;
 
 export const StyledVolumeSlider = styled.div`

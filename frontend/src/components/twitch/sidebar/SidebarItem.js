@@ -23,6 +23,39 @@ const StyledNewHighlight = styled.div`
   background: var(--newHighlightColor);
 `;
 
+const SidebarLinkWrapper = styled(Link)`
+  display: flex;
+  flex-direction: column;
+
+  &.sidebarVideoFade-1s-enter {
+    opacity: 0;
+    transform: translate3d(0, -62px, 0);
+    height: 0px;
+    transition: opacity 1000ms, transform 1000ms, height 1000ms;
+  }
+
+  &.sidebarVideoFade-1s-enter-active {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    height: 62px;
+    transition: opacity 1000ms, transform 1000ms, height 1000ms;
+  }
+
+  &.sidebarVideoFade-1s-exit {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    height: 62px;
+    transition: opacity 1000ms, transform 1000ms, height 1000ms;
+  }
+
+  &.sidebarVideoFade-1s-exit-active {
+    opacity: 0;
+    transform: translate3d(0, -62px, 0);
+    height: 0px;
+    transition: opacity 1000ms, transform 1000ms, height 1000ms;
+  }
+`;
+
 const NewHighlight = ({ newlyAdded, user_name }) => {
   if (newlyAdded?.includes(user_name)) {
     return <StyledNewHighlight />;
@@ -66,11 +99,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
   }
 
   return (
-    <Link
-      ref={ref}
-      to={'/' + user_name?.toLowerCase()}
-      style={{ display: 'flex', flexDirection: 'column' }}
-    >
+    <SidebarLinkWrapper ref={ref} to={'/' + user_name?.toLowerCase()}>
       <StyledsidebarItem key={user_id} duration={shows}>
         <NewHighlight newlyAdded={newlyAdded} user_name={user_name}></NewHighlight>
 
@@ -137,7 +166,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
           <div className='borderBottom'></div>
         </SidebarInfoPopup>
       </CSSTransition>
-    </Link>
+    </SidebarLinkWrapper>
   );
 };
 

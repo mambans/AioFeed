@@ -1,37 +1,3 @@
-.fade-appear {
-  opacity: 0;
-  transition: opacity 250ms;
-}
-.fade-appear-active {
-  opacity: 1;
-  transition: opacity 250ms;
-}
-
-.fade-enter {
-  opacity: 0;
-  transition: opacity 250ms;
-}
-
-.fade-enter-active {
-  opacity: 1;
-  transition: opacity 250ms;
-}
-
-.fade-exit {
-  opacity: 1;
-  transition: opacity 250ms;
-}
-
-.fade-exit-active {
-  opacity: 0;
-  transition: opacity 250ms;
-}
-
-.fade-exit-done {
-  opacity: 0;
-  transition: opacity 250ms;
-}
-
 .listHorizontalSlide-appear {
   opacity: 0;
   margin-top: -392px;

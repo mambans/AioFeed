@@ -2,6 +2,31 @@ import React, { useContext, useEffect, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import FeedsContext from './FeedsContext';
 import AlertHandler from './../alert';
+import styled from 'styled-components';
+
+const NoFeedsAlert = styled(AlertHandler)`
+  &.NoFeedsEnabled-Fade-enter {
+    opacity: 0;
+    transition: opacity 1000ms;
+  }
+
+  &.NoFeedsEnabled-Fade-enter-active {
+    opacity: 1;
+    transition: opacity 1000ms;
+  }
+
+  &.NoFeedsEnabled-Fade-exit {
+    opacity: 1;
+  }
+
+  &.NoFeedsEnabled-Fade-exit-active {
+    opacity: 0;
+  }
+
+  &.NoFeedsEnabled-Fade-exit-done {
+    opacity: 0;
+  }
+`;
 
 export default () => {
   const { enableTwitch, enableYoutube, enableTwitchVods, enableTwitter } = useContext(FeedsContext);
@@ -27,7 +52,7 @@ export default () => {
       classNames='NoFeedsEnabled-Fade'
       unmountOnExit
     >
-      <AlertHandler
+      <NoFeedsAlert
         type='info'
         title='No feeds enabled'
         message='Enable feeds in the navigation sidebar on the right.'

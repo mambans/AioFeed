@@ -42,7 +42,7 @@ export default () => {
   const leftExpand = useRef();
 
   return (
-    <CSSTransition in={visible} timeout={300} classNames='fade-300ms' unmountOnExit>
+    <CSSTransition in={visible} timeout={300} classNames='fade-250ms' unmountOnExit>
       <StyledNavbar
         mode='fixed'
         collapseOnSelect

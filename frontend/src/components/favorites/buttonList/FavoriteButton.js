@@ -1,23 +1,16 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-import { Open, ButtonContainer } from './../StyledComponents';
+import { ButtonContainer } from './../StyledComponents';
 import ButtonLists from './ButtonLists';
-import './../FavoritesTransitions.scss';
-import { FavoritesProvider } from './../FavoritesContext';
+import FavoritesContext, { FavoritesProvider } from './../FavoritesContext';
 import { AddRemoveBtn } from './ButtonLists';
 
-export default ({
-  list,
-  videoId_p,
-  style = {},
-  size,
-  disablepreview = () => {},
-  disableContextProvider = false,
-}) => {
+export default ({ list, videoId_p, style = {}, size, disablepreview = () => {} }) => {
   const videoId = typeof videoId_p === 'number' ? parseInt(videoId_p) || videoId_p : videoId_p;
   const [open, setOpen] = useState();
   const fadeOutTimer = useRef();
+  const { lists, setLists } = useContext(FavoritesContext) || {};
 
   const OpenFunction = (e) => {
     e.stopPropagation();
@@ -49,26 +42,20 @@ export default ({
       open={open}
       onMouseLeave={CloseFunctionDelay}
     >
-      {!open ? (
-        <Open
-          onClick={OpenFunction}
-          onMouseEnter={OpenFunction}
-          onMouseLeave={CloseFunctionDelay}
-          open={open}
-          size={size || 18}
-        />
-      ) : (
-        <AddRemoveBtn
-          list={list}
-          videoId={videoId}
-          // onMouseEnter={OpenFunction}
-          style={{ right: '0', position: 'absolute', margin: '5px' }}
-          size={size}
-        />
-      )}
+      <AddRemoveBtn
+        list={list}
+        videoId={videoId}
+        // onMouseEnter={OpenFunction}
+        style={{ right: '0', position: 'absolute', margin: '5px' }}
+        size={size}
+        lists={lists}
+        setLists={setLists}
+        onMouseEnter={OpenFunction}
+        onMouseLeave={CloseFunctionDelay}
+      />
 
       <CSSTransition in={open} timeout={250} classNames='fade' unmountOnExit>
-        {disableContextProvider ? (
+        {setLists ? (
           <ButtonLists
             OpenFunction={OpenFunction}
             CloseFunctionDelay={CloseFunctionDelay}

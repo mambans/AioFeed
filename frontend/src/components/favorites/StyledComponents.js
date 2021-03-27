@@ -49,6 +49,40 @@ export const Lists = styled.div`
   padding: 7px;
   border-radius: 5px;
   box-shadow: -3px 3px 5px black;
+
+  &.fade-appear {
+    opacity: 0;
+    transition: opacity 250ms;
+  }
+  &.fade-appear-active {
+    opacity: 1;
+    transition: opacity 250ms;
+  }
+
+  &.fade-enter {
+    opacity: 0;
+    transition: opacity 250ms;
+  }
+
+  &.fade-enter-active {
+    opacity: 1;
+    transition: opacity 250ms;
+  }
+
+  &.fade-exit {
+    opacity: 1;
+    transition: opacity 250ms;
+  }
+
+  &.fade-exit-active {
+    opacity: 0;
+    transition: opacity 250ms;
+  }
+
+  &.fade-exit-done {
+    opacity: 0;
+    transition: opacity 250ms;
+  }
 `;
 
 export const ListItem = styled.div`

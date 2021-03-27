@@ -7,6 +7,41 @@ export const SidebarInfoPopup = styled.div`
   background: var(--navigationbarBackground);
   z-index: -1;
   left: 0;
+
+  &.sidebarInfoPopup-enter {
+    opacity: 0;
+    transform: translate3d(100px, 0, 0);
+    transition: opacity 500ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
+      transform 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
+  }
+
+  &.sidebarInfoPopup-enter-active {
+    opacity: 1;
+    transform: translate3d(275px, 0, 0);
+    transition: opacity 500ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
+      transform 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
+  }
+
+  &.sidebarInfoPopup-exit {
+    opacity: 1;
+    transform: translate3d(275px, 0, 0);
+    transition: opacity 500ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
+      transform 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
+  }
+
+  &.sidebarInfoPopup-exit-active {
+    opacity: 0;
+    transform: translate3d(100px, 0, 0);
+    transition: opacity 500ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
+      transform 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
+  }
+
+  &.sidebarInfoPopup-enter-done {
+    transform: translate3d(275px, 0, 0);
+    opacity: 1;
+    transition: opacity 500ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
+      transform 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
+  }
 `;
 
 export const Styledsidebar = styled.div`
@@ -24,6 +59,57 @@ export const Styledsidebar = styled.div`
   left: 0;
   box-shadow: 0 9px 0px 0px transparent, 0 -9px 0px 0px transparent, 12px 0 15px -4px #00000030,
     -12px 0 15px -4px #00000030;
+
+  &.twitchSidebar-appear {
+    opacity: 0;
+    left: -275px !important;
+    transition: opacity 500ms, left 750ms;
+  }
+  &.twitchSidebar-appear-active {
+    opacity: 1;
+    left: 0 !important;
+    transition: opacity 500ms, left 750ms;
+  }
+  &.twitchSidebar-appear-done {
+    opacity: 1;
+    left: 0 !important;
+    transition: opacity 500ms, left 750ms;
+  }
+
+  &.twitchSidebar-enter {
+    opacity: 0;
+    left: -275px !important;
+    transition: opacity 500ms, left 750ms;
+  }
+  &.twitchSidebar-enter-done {
+    opacity: 1;
+    left: 0 !important;
+    transition: opacity 500ms, left 750ms;
+  }
+
+  &.twitchSidebar-enter-active {
+    opacity: 1;
+    left: 0 !important;
+    transition: opacity 500ms, left 750ms;
+  }
+
+  &.twitchSidebar-exit {
+    opacity: 1;
+    left: 0 !important;
+    transition: opacity 500ms, left 750ms;
+  }
+
+  &.twitchSidebar-exit-active {
+    opacity: 0;
+    left: -275px !important;
+    transition: opacity 500ms, left 750ms;
+  }
+
+  &.twitchSidebar-exit-done {
+    opacity: 0;
+    left: -275px !important;
+    transition: opacity 500ms, left 750ms;
+  }
 `;
 
 export const SidebarHeader = styled.p`

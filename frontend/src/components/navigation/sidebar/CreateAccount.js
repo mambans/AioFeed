@@ -23,9 +23,9 @@ export default () => {
     return re.test(email);
   };
 
-  const { value: userName, bind: bindUserName, reset: resetUserName } = useInput('');
-  const { value: email, bind: bindEmail, reset: resetEmail } = useInput('');
-  const { value: password, bind: bindPassword, reset: resetPassword } = useInput('');
+  const { value: userName, bind: bindUserName } = useInput('');
+  const { value: email, bind: bindEmail } = useInput('');
+  const { value: password, bind: bindPassword } = useInput('');
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -58,9 +58,7 @@ export default () => {
           setAuthKey(res.data.AuthKey);
           setUsername(res.data.Username);
 
-          resetUserName();
-          resetEmail();
-          resetPassword();
+          setRenderModal('account');
         })
         .catch((error) => {
           console.error(error.response);

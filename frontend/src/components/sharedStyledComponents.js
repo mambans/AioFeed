@@ -117,6 +117,7 @@ const HeaderTitle = styled.div`
       margin-right: 10px;
       width: 25px;
       background: var(--navigationbarBackground);
+      opacity: 0.7;
     }
 
     &:hover {
@@ -260,6 +261,64 @@ export const StyledVideoContainer = styled.div`
   box-shadow: var(--videoBoxShadow);
   border-radius: 1em;
   background-color: var(--videoContainerBackgroundColor);
+
+  &.videoFadeSlide-appear {
+    opacity: 0;
+    transition: opacity 750ms;
+  }
+  &.videoFadeSlide-appear-active {
+    opacity: 1;
+    transition: opacity 750ms;
+  }
+
+  &.videoFadeSlide-enter {
+    opacity: 0;
+    width: 0px !important;
+    max-width: 0px !important;
+    transform: ${({ feedVideoSizeProps }) => `translate3d(-${feedVideoSizeProps.width}px, 0, 0)`};
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+    transition: opacity 500ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
+      transform 750ms;
+  }
+
+  &.videoFadeSlide-enter-active {
+    opacity: 1;
+    width: ${({ feedVideoSizeProps }) => feedVideoSizeProps.width}px !important;
+    max-width: ${({ feedVideoSizeProps }) => feedVideoSizeProps.width}px !important;
+    transform: translate3d(0, 0, 0);
+    margin-right: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
+    margin-left: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
+    transition: opacity 500ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
+      transform 750ms;
+  }
+
+  &.videoFadeSlide-enter-done {
+    opacity: 1;
+    transition: opacity 500ms;
+  }
+
+  &.videoFadeSlide-exit {
+    opacity: 1;
+    width: ${({ feedVideoSizeProps }) => feedVideoSizeProps.width}px !important;
+    max-width: ${({ feedVideoSizeProps }) => feedVideoSizeProps.width}px !important;
+    transform: translate3d(0, 0, 0);
+    margin-right: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
+    margin-left: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
+    transition: opacity 500ms ease 250ms, margin-left 750ms, width 750ms, margin-right 750ms,
+      max-width 750ms, transform 750ms;
+  }
+
+  &.videoFadeSlide-exit-active {
+    opacity: 0;
+    width: 0px !important;
+    max-width: 0px !important;
+    transform: ${({ feedVideoSizeProps }) => `translate3d(-${feedVideoSizeProps.width}px, 0, 0)`};
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+    transition: opacity 500ms ease 250ms, margin-left 750ms, width 750ms, margin-right 750ms,
+      max-width 750ms, transform 750ms;
+  }
 
   a {
     &&& {

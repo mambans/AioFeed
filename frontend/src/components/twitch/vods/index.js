@@ -17,15 +17,15 @@ import FeedsCenterContainer, { CenterContext } from './../../feed/FeedsCenterCon
 import useToken from '../useToken';
 import { Container } from '../StyledComponents';
 
-export default ({ disableContextProvider }) => (
+export default () => (
   <FeedsCenterContainer>
     <VodsProvider>
-      <Vods disableContextProvider={disableContextProvider} />
+      <Vods />
     </VodsProvider>
   </FeedsCenterContainer>
 );
 
-export const Vods = ({ disableContextProvider }) => {
+export const Vods = () => {
   const { vods, setVods, channels } = useContext(VodsContext);
   const { twitchUserId, setTwitchToken, setRefreshToken } = useContext(AccountContext);
   const { setEnableTwitchVods } = useContext(FeedsContext) || {};
@@ -161,7 +161,7 @@ export const Vods = ({ disableContextProvider }) => {
                 classNames={vod.transition || 'fade-750ms'}
                 unmountOnExit
               >
-                <VodElement data={vod} disableContextProvider={disableContextProvider} />
+                <VodElement data={vod} />
               </CSSTransition>
             ))}
           </TransitionGroup>

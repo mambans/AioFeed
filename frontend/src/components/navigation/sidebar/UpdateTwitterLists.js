@@ -30,6 +30,69 @@ const StyledForm = styled(Form)`
     border-bottom: 1px solid #ffffff;
     border-radius: 0;
   }
+
+  &.twitterForm-appear {
+    opacity: 0;
+    height: 0;
+    margin: 0 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.twitterForm-appear-active {
+    opacity: 1;
+    height: 38px;
+    margin: 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.twitterForm-appear-done {
+    opacity: 1;
+    height: 38px;
+    margin: 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.twitterForm-enter {
+    opacity: 0;
+    height: 0;
+    margin: 0 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.twitterForm-enter-done {
+    opacity: 1;
+    height: 38px;
+    margin: 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.twitterForm-enter-active {
+    opacity: 1;
+    height: 38px;
+    margin: 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.twitterForm-exit {
+    opacity: 1;
+    height: 38px;
+    margin: 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.twitterForm-exit-active {
+    opacity: 0;
+    height: 0;
+    margin: 0 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.twitterForm-exit-done {
+    opacity: 0;
+    height: 0;
+    margin: 0 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
 `;
 const StyledButton = styled(Button).attrs({ type: 'submit', variant: 'secondary' })`
   &&& {
