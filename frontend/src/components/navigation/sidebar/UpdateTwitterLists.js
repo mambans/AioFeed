@@ -5,12 +5,12 @@ import styled from 'styled-components';
 import { IoMdList } from 'react-icons/io';
 import { FaTwitter } from 'react-icons/fa';
 import { MdPlaylistAdd, MdDelete, MdAdd } from 'react-icons/md';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import useInput from './../../../hooks/useInput';
 import FeedsContext from '../../feed/FeedsContext';
 import AccountContext from '../../account/AccountContext';
 import { getCookie } from '../../../util/Utils';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 const StyledForm = styled(Form)`
   margin: 10px;
@@ -170,14 +170,7 @@ export default ({ style, id, index }) => {
     <StyledForm onSubmit={handleSubmit} style={{ ...style }}>
       <Form.Group controlId='formGroupListName' style={{ marginBottom: '0' }}>
         <div style={{ display: 'flex' }}>
-          <OverlayTrigger
-            key={`${id}-${index}-icon` || 'nolist'}
-            placement={'bottom'}
-            delay={{ show: 500, hide: 0 }}
-            overlay={
-              <Tooltip id={`tooltip-${'bottom'}`}>{`${id ? `Remove list` : `New list`}`}</Tooltip>
-            }
-          >
+          <ToolTip delay={{ show: 500, hide: 0 }} toltip={`${id ? `Remove list` : `New list`}`}>
             <div style={{ display: 'inline-flex' }}>
               <FaTwitter
                 style={{ position: 'absolute', transform: 'translateX(-60%)' }}
@@ -190,7 +183,7 @@ export default ({ style, id, index }) => {
                 <MdPlaylistAdd size={22} color='ffffff' />
               )}
             </div>
-          </OverlayTrigger>
+          </ToolTip>
           <Form.Control
             type='text'
             placeholder='12345...'
@@ -200,16 +193,7 @@ export default ({ style, id, index }) => {
             {...bindListName}
           />
           {/* <Form.Control.Feedback type='invalid'>Enter</Form.Control.Feedback> */}
-          <OverlayTrigger
-            key={`${id}-${index}-button` || 'nolist'}
-            placement={'bottom'}
-            delay={{ show: 500, hide: 0 }}
-            overlay={
-              <Tooltip id={`tooltip-${'bottom'}`}>{`${
-                id ? `Remove list` : `Add new list`
-              }`}</Tooltip>
-            }
-          >
+          <ToolTip delay={{ show: 500, hide: 0 }} toltip={`${id ? `Remove list` : `Add new list`}`}>
             <StyledButton>
               {id ? (
                 <MdDelete size={22} color='rgb(200,0,0)' />
@@ -217,7 +201,7 @@ export default ({ style, id, index }) => {
                 <MdAdd size={22} color='rgb(0,230,0)' />
               )}
             </StyledButton>
-          </OverlayTrigger>
+          </ToolTip>
         </div>
       </Form.Group>
     </StyledForm>

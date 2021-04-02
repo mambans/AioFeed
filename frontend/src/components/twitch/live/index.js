@@ -1,5 +1,4 @@
 import { CSSTransition } from 'react-transition-group';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import React, { useContext, useEffect, useState } from 'react';
 
 import { AddCookie, getLocalstorage } from '../../../util/Utils';
@@ -12,6 +11,7 @@ import TwitchStreams from './Twitch';
 import FeedsCenterContainer from '../../feed/FeedsCenterContainer';
 import { VodsProvider } from '../vods/VodsContext';
 import { Container } from '../StyledComponents';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 export default ({ forceMountTwitch = false } = {}) => (
   <FeedsCenterContainer forceMountTwitch={forceMountTwitch}>
@@ -53,15 +53,10 @@ export const Twitch = ({ in: forceMount = false }) => {
             </Container>
           </CSSTransition>
 
-          <OverlayTrigger
-            key={'HideSidebarButtonTooltip'}
+          <ToolTip
             placement={'right'}
             delay={{ show: 500, hide: 0 }}
-            overlay={
-              <Tooltip id={`tooltip-${'right'}`}>{`${
-                showTwitchSidebar ? 'Hide' : 'Show'
-              } sidebar`}</Tooltip>
-            }
+            tooltip={`${showTwitchSidebar ? 'Hide' : 'Show'} sidebar`}
           >
             <HideSidebarButton
               show={String(showTwitchSidebar)}
@@ -70,16 +65,11 @@ export const Twitch = ({ in: forceMount = false }) => {
                 setShowTwitchSidebar(!showTwitchSidebar);
               }}
             />
-          </OverlayTrigger>
-          <OverlayTrigger
-            key={'HideTwitchBigFeedButtonTooltip'}
+          </ToolTip>
+          <ToolTip
             placement={'right'}
             delay={{ show: 500, hide: 0 }}
-            overlay={
-              <Tooltip id={`tooltip-${'right'}`}>{`${
-                showTwitchBigFeed ? 'Hide' : 'Show'
-              } big feed`}</Tooltip>
-            }
+            tooltip={`${showTwitchBigFeed ? 'Hide' : 'Show'} big feed`}
           >
             <HideSidebarButton
               show={String(showTwitchBigFeed)}
@@ -89,7 +79,7 @@ export const Twitch = ({ in: forceMount = false }) => {
                 setShowTwitchBigFeed(!showTwitchBigFeed);
               }}
             />
-          </OverlayTrigger>
+          </ToolTip>
 
           <CSSTransition
             in={(enableTwitch || forceMount) && showTwitchSidebar}

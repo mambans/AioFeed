@@ -10,7 +10,7 @@ import { VideosContainer } from './StyledComponents';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { LoadingVideoElement } from '../twitch/StyledComponents';
 import { addVodEndTime } from '../twitch/TwitchUtils';
-import { LoadMore } from '../sharedStyledComponents';
+import LoadMore from '../sharedComponents/LoadMore';
 import { CenterContext } from '../feed/FeedsCenterContainer';
 import { parseNumberAndString, restructureVideoList, uploadNewList } from './dragDropUtils';
 import { getCookie } from '../../util/Utils';

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
-import { getLocalstorage } from '../util/Utils';
+import { getLocalstorage } from '../../util/Utils';
 
 const StyledReOrderButtons = styled.div`
   align-content: center;
@@ -22,6 +22,12 @@ const StyledReOrderButtons = styled.div`
   }
 `;
 
+/**
+ * Fetch and add following data to stream objects.
+ * @param {Function} setOrder - setOrder state for seting the state
+ * @param {String} feedName - Name of feed.
+ * @returns {Element}
+ */
 export default ({ setOrder, feedName }) => {
   const saveOrder = (order) =>
     localStorage.setItem(

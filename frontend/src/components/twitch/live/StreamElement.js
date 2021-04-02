@@ -1,12 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FiAlertCircle } from 'react-icons/fi';
 import { FaTwitch } from 'react-icons/fa';
-
 import Moment from 'react-moment';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import React, { useRef, useState, useContext } from 'react';
-import Tooltip from 'react-bootstrap/Tooltip';
-import { useLocation } from 'react-router-dom';
 
 import {
   VideoTitle,
@@ -16,7 +12,7 @@ import {
   GameContainer,
   GamenameAndViewers,
   ImgBottomInfo,
-} from './../../sharedStyledComponents';
+} from './../../sharedComponents/sharedStyledComponents';
 import { ChannelNameDiv } from './../StyledComponents';
 import StreamHoverIframe from '../StreamHoverIframe.js';
 import { truncate } from '../../../util/Utils';
@@ -29,6 +25,7 @@ import loginNameFormat from './../loginNameFormat';
 import { TwitchContext } from '../useToken';
 import CustomFilters from '../CustomFilters';
 import ChannelButtonsContainer from './ChannelButtonsContainer';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 const HOVER_DELAY = 100;
 
@@ -135,43 +132,8 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
           </Moment>
         </ImgBottomInfo>
       </ImageContainer>
-      {title?.length > 50 ? (
-        <OverlayTrigger
-          key={user_id + 'Titletooltip'}
-          placement={'bottom'}
-          delay={{ show: 250, hide: 0 }}
-          overlay={
-            <Tooltip
-              id={`tooltip-${'bottom'}`}
-              style={{
-                width: '336px',
-              }}
-            >
-              {title || ''}
-            </Tooltip>
-          }
-        >
-          <VideoTitle
-            to={{
-              pathname: '/' + login?.toLowerCase() || user_name,
-              state: {
-                passedChannelData: {
-                  started_at: started_at,
-                  title: title,
-                  profile_image_url: profile_image_url,
-                  user_id: user_id,
-                  user_name: user_name,
-                  viewer_count: viewer_count,
-                  game_name: game_name,
-                  login: login,
-                },
-              },
-            }}
-          >
-            {truncate(title || '', 60)}
-          </VideoTitle>
-        </OverlayTrigger>
-      ) : (
+
+      <ToolTip show={title?.length > 50} tooltip={title || ''}>
         <VideoTitle
           to={{
             pathname: '/' + login?.toLowerCase() || user_name,
@@ -189,9 +151,10 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
             },
           }}
         >
-          {title || ''}
+          {truncate(title || '', 60)}
         </VideoTitle>
-      )}
+      </ToolTip>
+
       <div>
         <ChannelContainer ref={refChannel}>
           <Link

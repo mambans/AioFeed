@@ -15,7 +15,7 @@ import sortByInput from './sortByInput';
 import StyledLoadingList from './../categoryTopStreams/LoadingList';
 import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 import useToken from '../useToken';
-import SearchList from './../../SearchList';
+import SearchList from '../../sharedComponents/SearchList';
 
 const removeDuplicates = (items) =>
   items.filter((item, index, self) => self.findIndex((t) => t.user_id === item.user_id) === index);

@@ -4,7 +4,8 @@ import { useParams, useLocation, Link } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import React, { useEffect, useState, useCallback, useRef, useContext } from 'react';
 
-import { LoadMore, HeaderContainer } from './../../sharedStyledComponents';
+import LoadMore from './../../sharedComponents/LoadMore';
+import Header from './../../sharedComponents/Header';
 import {
   TypeListUlContainer,
   TypeButton,
@@ -189,7 +190,7 @@ export default () => {
       appear
     >
       <Container>
-        <HeaderContainer
+        <Header
           text={
             <>
               {gameInfo?.box_art_url ? (
@@ -261,7 +262,7 @@ export default () => {
               ) : null}
             </TopDataSortButtonsContainer>
           }
-        ></HeaderContainer>
+        ></Header>
 
         {error ? (
           <Alert

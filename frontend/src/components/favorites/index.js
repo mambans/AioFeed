@@ -2,8 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import './FavoritesTransitions.scss';
-import { HeaderContainer } from '../sharedStyledComponents';
-import ReOrderButtons from './../ReOrderButtons';
+import Header from '../sharedComponents/Header';
 
 import FavoritesContext, { FavoritesProvider } from './FavoritesContext';
 import FeedsCenterContainer from '../feed/FeedsCenterContainer';
@@ -90,7 +89,7 @@ export const FavoriteListContainer = ({
 
   return (
     <Container order={order}>
-      <HeaderContainer
+      <Header
         id={list.name}
         text={<>{list.name}</>}
         refreshFunc={fetchAllLists}
@@ -100,9 +99,10 @@ export const FavoriteListContainer = ({
           <>
             <AddNewVideoInput list={list} videos={videos} listName={list.name} />
             <DropDownDrawer list={list} />
-            <ReOrderButtons setOrder={setOrder} feedName={list.name} />
           </>
         }
+        setOrder={setOrder}
+        feedName={list.name}
       />
       <List
         list={list}

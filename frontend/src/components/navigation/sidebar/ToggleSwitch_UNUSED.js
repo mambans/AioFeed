@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Switch from 'react-switch';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import { StyledToggleSwitch } from './StyledComponent';
 import { AddCookie } from '../../../util/Utils';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 export default ({ setEnable, enabled, label, tokenExists, tooltip, height, width, icon }) => {
   const [checked, setChecked] = useState(enabled || false);
@@ -15,12 +15,7 @@ export default ({ setEnable, enabled, label, tokenExists, tooltip, height, width
   }
 
   return (
-    <OverlayTrigger
-      key={'bottom'}
-      placement={'left'}
-      delay={{ show: 500, hide: 0 }}
-      overlay={<Tooltip id={`tooltip-${'bottom'}`}>{tooltip}</Tooltip>}
-    >
+    <ToolTip tooltip={tooltip} placement={'left'} delay={{ show: 500, hide: 0 }}>
       <StyledToggleSwitch padding={height ? height / 4 : 5}>
         <Switch
           height={height || 23}
@@ -32,6 +27,7 @@ export default ({ setEnable, enabled, label, tokenExists, tooltip, height, width
         {icon}
         <span>{label}</span>
       </StyledToggleSwitch>
-    </OverlayTrigger>
+    </ToolTip>
   );
 };
+``;

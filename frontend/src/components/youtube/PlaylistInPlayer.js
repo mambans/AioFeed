@@ -13,7 +13,7 @@ import { fetchListVideos } from '../favorites/List';
 import { LoadingVideoElement } from '../twitch/StyledComponents';
 import VodElement from '../twitch/vods/VodElement';
 import YoutubeVideoElement from './YoutubeVideoElement';
-import ToolTip from '../ToolTip';
+import ToolTip from '../sharedComponents/ToolTip';
 
 const Container = styled.div`
   height: calc(100% - 60px);
@@ -96,8 +96,8 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId }) => {
               active={String(video.contentDetails?.upload?.videoId) === videoId}
               listName={list.name}
               list={list}
-              id={'v' + video.contentDetails?.upload?.videoId}
-              data-id={'v' + video.contentDetails?.upload?.videoId}
+              id={video.contentDetails?.upload?.videoId}
+              data-id={video.contentDetails?.upload?.videoId}
               video={video}
               {...dragEvents}
             />
@@ -106,8 +106,8 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId }) => {
               active={String(video.id) === videoId}
               listName={list.name}
               list={list}
-              id={'v' + video.id}
-              data-id={'v' + video.id}
+              id={video.id}
+              data-id={video.id}
               data={video}
               {...dragEvents}
             />
@@ -133,6 +133,7 @@ export default ({
   const { lists, setLists } = useContext(FavoritesContext) || {};
   const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
   const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
+
   // const [videos, setVideos] = useState();
   const list =
     lists && lists[Object.keys(lists).find((key) => key.toLowerCase() === listName?.toLowerCase())];
@@ -170,7 +171,10 @@ export default ({
     <>
       <ListTitle>{listName}</ListTitle>
       <PlayListButtonsContainer>
-        <ToolTip tooltip={`${autoPlayNext ? 'Disable' : 'Enable'} auto play next video.`}>
+        <ToolTip
+          tooltip={`${autoPlayNext ? 'Disable' : 'Enable'} auto play next video.`}
+          width='max-content'
+        >
           <AutoPlayNextBtn
             size={20}
             onClick={() => setAutoPlayNext((c) => !c)}
@@ -184,7 +188,10 @@ export default ({
             enabled={String(loopList)}
           />
         </ToolTip>
-        <ToolTip tooltip={`${autoPlayNext ? 'Disable' : 'Enable'} randomise next video.`}>
+        <ToolTip
+          tooltip={`${autoPlayNext ? 'Disable' : 'Enable'} randomise next video.`}
+          width='max-content'
+        >
           <PlayNextRandomBtn
             size={20}
             onClick={() => setAutoPlayRandom((c) => !c)}

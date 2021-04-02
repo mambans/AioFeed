@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SubFeedContainer } from './../../sharedStyledComponents';
+import { SubFeedContainer } from './../../sharedComponents/sharedStyledComponents';
 import LoadingBoxes from './../LoadingBoxes';
 import { SubFeedHeader } from './StyledComponents';
 

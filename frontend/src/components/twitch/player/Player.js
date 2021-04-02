@@ -3,7 +3,6 @@ import { throttle, debounce } from 'lodash';
 import { useParams, useLocation, Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import {
   MdFullscreen,
@@ -33,7 +32,7 @@ import {
   PlayerExtraButtons,
 } from './StyledComponents';
 // import PlayerNavbar from './PlayerNavbar';
-import setFavion from '../../setFavion';
+import setFavion from '../setFavion';
 import PlayPauseButton from './PlayPauseButton';
 import ShowStatsButtons from './ShowStatsButtons';
 import ShowSetQualityButtons from './ShowSetQualityButtons';
@@ -55,6 +54,7 @@ import loginNameFormat from '../loginNameFormat';
 import toggleFullscreenFunc from './toggleFullscreenFunc';
 import useToken from '../useToken';
 import useFullscreen from '../../../hooks/useFullscreen';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.1, 175);
 
@@ -65,7 +65,8 @@ export default () => {
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const { setTwitchToken } = useContext(AccountContext);
 
-  const [twitchVideoPlayer, setTwitchVideoPlayer] = useState();
+  // const [twitchVideoPlayer, setTwitchVideoPlayer] = useState();
+  const twitchVideoPlayer = useRef();
   const [streamInfo, setStreamInfo] = useState(useLocation().state?.passedChannelData);
   const [showControlls, setShowControlls] = useState();
   const [showUIControlls, setShowUIControlls] = useState();
@@ -98,9 +99,9 @@ export default () => {
 
   useFullscreen();
 
-  useEventListenerMemo(window.Twitch.Player.ONLINE, onlineEvents, twitchVideoPlayer);
-  useEventListenerMemo(window.Twitch.Player.OFFLINE, offlineEvents, twitchVideoPlayer);
-  useEventListenerMemo(window.Twitch.Player.PLAYING, playingEvents, twitchVideoPlayer);
+  useEventListenerMemo(window.Twitch.Player.ONLINE, onlineEvents, twitchVideoPlayer.current);
+  useEventListenerMemo(window.Twitch.Player.OFFLINE, offlineEvents, twitchVideoPlayer.current);
+  useEventListenerMemo(window.Twitch.Player.PLAYING, playingEvents, twitchVideoPlayer.current);
 
   useEventListenerMemo('mouseleave', handleMouseOut, PlayerUIControlls.current);
   useEventListenerMemo('dblclick', toggleFullScreen, PlayerUIControlls.current);
@@ -134,18 +135,16 @@ export default () => {
   }, [channelName]);
 
   useEffect(() => {
-    setTwitchVideoPlayer(
-      new window.Twitch.Player('twitch-embed', {
-        width: '100%',
-        height: '100%',
-        theme: 'dark',
-        layout: 'video',
-        channel: channelName,
-        muted: false,
-        allowfullscreen: true,
-        parent: ['aiofeed.com'],
-      })
-    );
+    twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', {
+      width: '100%',
+      height: '100%',
+      theme: 'dark',
+      layout: 'video',
+      channel: channelName,
+      muted: false,
+      allowfullscreen: true,
+      parent: ['aiofeed.com'],
+    });
 
     return () => {
       clearInterval(refreshStreamInfoTimer.current);
@@ -185,13 +184,13 @@ export default () => {
   }
 
   const GetAndSetStreamInfo = useCallback(async () => {
-    if (twitchVideoPlayer) {
+    if (twitchVideoPlayer.current) {
       const LIVEStreamInfo = {
         ...savedStreamInfo.current,
         ...(await validateToken().then(() =>
           fetchStreamInfo(
-            twitchVideoPlayer.getChannelId()
-              ? { user_id: twitchVideoPlayer.getChannelId() }
+            twitchVideoPlayer.current.getChannelId()
+              ? { user_id: twitchVideoPlayer.current.getChannelId() }
               : { user_login: channelName }
           )
         )),
@@ -214,13 +213,13 @@ export default () => {
         return streamWithGameAndProfile;
       } else {
         const streamWithGameAndProfile = await validateToken().then(() =>
-          fetchChannelInfo(twitchVideoPlayer.getChannelId(), true)
+          fetchChannelInfo(twitchVideoPlayer.current.getChannelId(), true)
         );
         setStreamInfo(streamWithGameAndProfile);
         return streamWithGameAndProfile;
       }
     }
-  }, [twitchVideoPlayer, channelName, validateToken]);
+  }, [channelName, validateToken]);
 
   const addNoti = useCallback(
     ({ type, stream }) => {
@@ -263,13 +262,11 @@ export default () => {
       console.log('onlineEvents -> error', error);
     }
 
-    return () => {
-      setFavion();
-    };
+    return () => setFavion();
   }
 
   function playingEvents() {
-    if (twitchVideoPlayer) setShowUIControlls(true);
+    if (twitchVideoPlayer.current) setShowUIControlls(true);
   }
 
   function handleMouseOut() {
@@ -355,13 +352,13 @@ export default () => {
             showcursor={showControlls}
             chatwidth={chatState.chatwidth || DEFAULT_CHAT_WIDTH}
           >
-            {Boolean(twitchVideoPlayer) && (
+            {Boolean(twitchVideoPlayer.current) && (
               <ContextMenu
                 DEFAULT_CHAT_WIDTH={DEFAULT_CHAT_WIDTH}
                 PlayerUIControlls={PlayerUIControlls.current}
                 type='live'
                 hidechat={String(chatState.hideChat)}
-                TwitchPlayer={twitchVideoPlayer}
+                TwitchPlayer={twitchVideoPlayer.current}
                 showAndResetTimer={showAndResetTimer}
                 setChatState={setChatState}
                 chatState={chatState}
@@ -426,17 +423,13 @@ export default () => {
 
                     <FollowUnfollowBtn
                       channelName={streamInfo.user_name || channelName}
-                      id={streamInfo.user_id || twitchVideoPlayer.getChannelId()}
+                      id={streamInfo.user_id || twitchVideoPlayer.current.getChannelId()}
                     />
-                    <OverlayTrigger
-                      key={'right'}
+                    <ToolTip
                       placement={'right'}
                       delay={{ show: 500, hide: 0 }}
-                      overlay={
-                        <Tooltip
-                          id={`tooltip-${'right'}`}
-                        >{`${'Go to channel page incl. videos and clips'}`}</Tooltip>
-                      }
+                      tooltip='Go to channel page incl. videos and clips'
+                      width='max-content'
                     >
                       <ChannelIconLink
                         to={{
@@ -446,7 +439,7 @@ export default () => {
                       >
                         <MdAccountBox size={30} />
                       </ChannelIconLink>
-                    </OverlayTrigger>
+                    </ToolTip>
                   </div>
                   <p id='title'>{streamInfo.title}</p>
                   {streamInfo.game_name && (
@@ -485,43 +478,41 @@ export default () => {
               )
             )}
 
-            {Boolean(twitchVideoPlayer) && (
+            {Boolean(twitchVideoPlayer.current) && (
               <SmallButtonContainer>
                 <PlayPauseButton
-                  TwitchPlayer={twitchVideoPlayer}
+                  TwitchPlayer={twitchVideoPlayer.current}
                   PlayerUIControlls={PlayerUIControlls.current}
                 />
                 <VolumeSlider
                   OpenedDate={OpenedDate}
                   PlayerUIControlls={PlayerUIControlls.current}
-                  TwitchPlayer={twitchVideoPlayer}
+                  TwitchPlayer={twitchVideoPlayer.current}
                   setShowControlls={setShowControlls}
                   showAndResetTimer={showAndResetTimer}
                 />
-                <ShowStatsButtons TwitchPlayer={twitchVideoPlayer} />
-                <ShowSetQualityButtons TwitchPlayer={twitchVideoPlayer} />
+                <ShowStatsButtons TwitchPlayer={twitchVideoPlayer.current} />
+                <ShowSetQualityButtons TwitchPlayer={twitchVideoPlayer.current} />
                 <ClipButton streamInfo={streamInfo} validateToken={validateToken} />
                 <ResetVideoButton
                   title={'Refresh video'}
                   style={{
-                    pointerEvents: !twitchVideoPlayer ? 'none' : 'unset',
-                    opacity: !twitchVideoPlayer ? '0.2' : '0.7',
+                    pointerEvents: !twitchVideoPlayer.current ? 'none' : 'unset',
+                    opacity: !twitchVideoPlayer.current ? '0.2' : '0.7',
                   }}
                   onClick={() => {
                     console.log('Refreshing Twitch video');
                     videoElementRef.current.removeChild(document.querySelector('iframe'));
-                    setTwitchVideoPlayer(
-                      new window.Twitch.Player('twitch-embed', {
-                        width: '100%',
-                        height: '100%',
-                        theme: 'dark',
-                        layout: 'video',
-                        channel: channelName,
-                        muted: false,
-                        allowfullscreen: true,
-                        parent: ['aiofeed.com'],
-                      })
-                    );
+                    twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', {
+                      width: '100%',
+                      height: '100%',
+                      theme: 'dark',
+                      layout: 'video',
+                      channel: channelName,
+                      muted: false,
+                      allowfullscreen: true,
+                      parent: ['aiofeed.com'],
+                    });
                   }}
                 />
               </SmallButtonContainer>
@@ -590,11 +581,11 @@ export default () => {
         </CSSTransition>
         {!showUIControlls && (
           <>
-            <OverlayTrigger
-              key={'left'}
+            <ToolTip
               placement={'left'}
+              width='max-content'
               delay={{ show: 500, hide: 0 }}
-              overlay={<Tooltip id={`tooltip-${'left'}`}>{`${'Switch chat side'}`}</Tooltip>}
+              tooltip='Switch chat side'
             >
               <ToggleSwitchChatSide
                 id='switchSides'
@@ -621,7 +612,7 @@ export default () => {
                     : 'unset',
                 }}
               />
-            </OverlayTrigger>
+            </ToolTip>
 
             <OpenCloseChat
               chatState={chatState}

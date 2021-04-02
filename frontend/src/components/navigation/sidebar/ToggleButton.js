@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
+import axios from 'axios';
 
 import { StyledToggleButton } from './StyledComponent';
 import { AddCookie, getCookie } from '../../../util/Utils';
-import axios from 'axios';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 export default ({
   setEnable,
@@ -50,16 +49,7 @@ export default ({
   }
 
   return (
-    <OverlayTrigger
-      key={'nav-sidebarTooltip'}
-      placement={'bottom'}
-      delay={{ show: 200, hide: 0 }}
-      overlay={
-        <Tooltip style={{ whiteSpace: 'pre-wrap' }} id={`tooltip-${'bottom'}`}>
-          {tooltip}
-        </Tooltip>
-      }
-    >
+    <ToolTip tooltip={tooltip} width='max-content'>
       <StyledToggleButton
         onClick={handleChange}
         disabled={!tokenExists}
@@ -72,6 +62,6 @@ export default ({
           React.isValidElement(icon) ? React.cloneElement(icon, { className: 'smallIcon' }) : icon
         )}
       </StyledToggleButton>
-    </OverlayTrigger>
+    </ToolTip>
   );
 };

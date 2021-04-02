@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import { FollowBtn, UnfollowBtn } from './StyledComponents';
 import AccountContext from './../account/AccountContext';
 import API from './API';
 import useToken from './useToken';
+import ToolTip from '../sharedComponents/ToolTip';
 
 export default ({
   channelName,
@@ -93,15 +93,12 @@ export default ({
   if (!show) return null;
 
   return (
-    <OverlayTrigger
+    <ToolTip
       key={channelName + 'followBtnTooltip'}
       placement={'bottom'}
       delay={{ show: 500, hide: 0 }}
-      overlay={
-        <Tooltip id={`tooltip-${'bottom'}`}>{`${
-          following ? `Unfollow ${channelName || id}` : `Follow ${channelName || id}`
-        }`}</Tooltip>
-      }
+      tooltip={`${following ? 'Unfollow' : 'Follow'} ${channelName || id}`}
+      width='max-content'
     >
       {following ? (
         <UnfollowBtn
@@ -124,6 +121,6 @@ export default ({
           }}
         />
       )}
-    </OverlayTrigger>
+    </ToolTip>
   );
 };

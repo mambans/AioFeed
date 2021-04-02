@@ -3,7 +3,8 @@ import { Alert } from 'react-bootstrap';
 import React, { useState, useMemo } from 'react';
 import { debounce } from 'lodash';
 
-import { SubFeedContainer, LoadMore } from './../../sharedStyledComponents';
+import LoadMore from './../../sharedComponents/LoadMore';
+import { SubFeedContainer } from './../../sharedComponents/sharedStyledComponents';
 import { SubFeedHeader } from './StyledComponents';
 import ClipsSortButton from './ClipsSortButton';
 import SortButton from './SortButton';

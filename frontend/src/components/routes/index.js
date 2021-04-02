@@ -18,7 +18,7 @@ import TwitchVods from '../twitch/vods';
 import Twitter from '../twitter';
 import Youtube from './../youtube';
 import Favorites from '../favorites';
-import SharedVideoPlayer from '../SharedVideoPlayer';
+import SharedVideoPlayer from '../sharedComponents/SharedVideoPlayer';
 
 const MainContentContainer = styled.main`
   min-height: 100vh;

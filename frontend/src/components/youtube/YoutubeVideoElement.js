@@ -7,13 +7,13 @@ import {
   VideoTitleHref,
   ImageContainer,
   ImgBottomInfo,
-} from './../sharedStyledComponents';
+} from '../sharedComponents/sharedStyledComponents';
 import VideoHoverIframe from './VideoHoverIframe';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
-import FavoriteButton from '../favorites/buttonList/FavoriteButton';
+import FavoriteButton from '../favorites/addToListModal/FavoriteButton';
 import { ChannelNameLink, PublishedDate } from './StyledComponents';
 import { YoutubeContext } from './useToken';
-import ToolTip from '../ToolTip';
+import ToolTip from '../sharedComponents/ToolTip';
 
 export const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
   maxres?.url ||
@@ -48,7 +48,6 @@ export default ({ list, video, setDragSelected, listName, active, ...props }) =>
       onDragStart={(e) => {
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/html', video.id);
-
         setDragSelected({ data: video, element: ref.current });
       }}
       {...props}

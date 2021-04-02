@@ -1,17 +1,16 @@
-import React from "react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import React from 'react';
+import ToolTip from '../../sharedComponents/ToolTip';
 
-import { HideChatButton, OpenChatButton } from "./StyledComponents";
+import { HideChatButton, OpenChatButton } from './StyledComponents';
 
 export default ({ hideChat, switched, onClick, style }) => {
   return (
-    <OverlayTrigger
-      key={"left"}
-      placement={"left"}
+    <ToolTip
+      placement={'left'}
       delay={{ show: 500, hide: 0 }}
-      overlay={
-        <Tooltip id={`tooltip-${"left"}`}>{`${hideChat ? "Open chat" : "Hide chat"}`}</Tooltip>
-      }>
+      tooltip={`${hideChat ? 'Open chat' : 'Hide chat'}`}
+      width='max-content'
+    >
       {hideChat ? (
         <OpenChatButton
           hidechat={String(hideChat)}
@@ -27,6 +26,6 @@ export default ({ hideChat, switched, onClick, style }) => {
           style={style}
         />
       )}
-    </OverlayTrigger>
+    </ToolTip>
   );
 };

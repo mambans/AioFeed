@@ -4,10 +4,18 @@ import axios from 'axios';
 
 import FavoritesContext from './../FavoritesContext';
 import { getCookie } from '../../../util/Utils';
-import { Lists, ListItem, ListsLink, AddItemBtn, RemoveItemBtn } from './../StyledComponents';
+import {
+  Lists,
+  ListItem,
+  ListsLink,
+  AddItemBtn,
+  RemoveItemBtn,
+  IconContainer,
+} from './../StyledComponents';
 import useClicksOutside from '../../../hooks/useClicksOutside';
 import { parseNumberAndString } from './../dragDropUtils';
 import NewListForm from './NewListForm';
+import { MdAddCircle, MdRemoveCircle } from 'react-icons/md';
 
 export const addFavoriteVideo = async (lists, setLists, list_Name, newItem) => {
   if (lists && setLists && list_Name && newItem) {
@@ -73,21 +81,39 @@ export const AddRemoveBtn = ({
 
   if (videoAdded)
     return (
-      <RemoveItemBtn
+      <IconContainer
         onClick={() => removeFavoriteVideo(lists, setLists, list?.name, videoId)}
-        size={size}
         style={style}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-      />
+      >
+        <RemoveItemBtn size={size} />
+        <MdRemoveCircle
+          className='actionIcon'
+          color='red'
+          size={size * 0.5}
+          style={{ left: `${size}px` }}
+        />
+      </IconContainer>
     );
 
   return (
-    <AddItemBtn
-      size={size}
+    <IconContainer
       onClick={() => addFavoriteVideo(lists, setLists, list?.name, videoId)}
       style={style}
-    />
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <AddItemBtn size={size} />
+      {list && (
+        <MdAddCircle
+          className='actionIcon'
+          color='green'
+          size={size * 0.5}
+          style={{ left: `${size}px` }}
+        />
+      )}
+    </IconContainer>
   );
 };
 

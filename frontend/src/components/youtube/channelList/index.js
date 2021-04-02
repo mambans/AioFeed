@@ -4,7 +4,7 @@ import { GameListUlContainer } from './../../twitch/categoryTopStreams/styledCom
 import StyledLoadingList from './../../twitch/categoryTopStreams/LoadingList';
 import ChannelListElement from './ChannelListElement';
 import { getLocalstorage } from '../../../util/Utils';
-import SearchList from '../../SearchList';
+import SearchList from '../../sharedComponents/SearchList';
 
 export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
   const parentRect = parentDiv?.getBoundingClientRect();

@@ -1,12 +1,12 @@
 import { useParams } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import API from '../API';
 import useQuery from '../../../hooks/useQuery';
 import Loopbar, { timeToSeconds } from './Loopbar';
 import { LoopBtn, Loop } from './StyledComponents';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 export default ({ listIsOpen, listWidth, playNext }) => {
   const channelName = useParams()?.channelName;
@@ -79,15 +79,11 @@ export default ({ listIsOpen, listWidth, playNext }) => {
   return (
     <Loop listIsOpen={String(listIsOpen)} listWidth={listWidth} loopEnabled={String(loopEnabled)}>
       {twitchVideoPlayer.current && (
-        <OverlayTrigger
-          key='loop'
+        <ToolTip
           placement='right'
           delay={{ show: 500, hide: 0 }}
-          overlay={
-            <Tooltip id='loopbtn-tooltip-right'>{`${
-              loopEnabled ? 'Disable ' : 'Enable '
-            } loop`}</Tooltip>
-          }
+          tooltip={`${loopEnabled ? 'Disable ' : 'Enable '} loop`}
+          width='max-content'
         >
           <LoopBtn
             size={32}
@@ -101,7 +97,7 @@ export default ({ listIsOpen, listWidth, playNext }) => {
               });
             }}
           />
-        </OverlayTrigger>
+        </ToolTip>
       )}
       {twitchVideoPlayer.current && loopEnabled && (
         <Loopbar twitchVideoPlayer={twitchVideoPlayer.current} duration={duration} />

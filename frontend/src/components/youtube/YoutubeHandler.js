@@ -1,7 +1,8 @@
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import React, { useState, useEffect, useContext } from 'react';
 
-import { SubFeedContainer, LoadMore } from './../sharedStyledComponents';
+import LoadMore from './../sharedComponents/LoadMore';
+import { SubFeedContainer } from './../sharedComponents/sharedStyledComponents';
 import YoutubeVideoElement from './YoutubeVideoElement';
 import LoadingBoxes from './../twitch/LoadingBoxes';
 import { CenterContext } from '../feed/FeedsCenterContainer';

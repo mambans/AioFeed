@@ -1,18 +1,12 @@
 import { Button, Alert } from 'react-bootstrap';
-import { GrPowerReset } from 'react-icons/gr';
-import { Link, useLocation } from 'react-router-dom';
-import React, { useContext, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { MdRefresh } from 'react-icons/md';
-import { FaRegWindowRestore } from 'react-icons/fa';
 import Moment from 'react-moment';
 
-import { StyledLoadmore } from './twitch/StyledComponents';
-import CountdownCircleTimer from './twitch/live/CountdownCircleTimer';
-import { CenterContext } from './feed/FeedsCenterContainer';
-import FeedsContext from './feed/FeedsContext';
+import FeedsContext from '../feed/FeedsContext';
 
-const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
+export const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
   color: var(--refreshButtonColor);
   background: var(--refreshButtonBackground);
   box-shadow: var(--refreshButtonShadow);
@@ -44,7 +38,7 @@ const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
   }
 `;
 
-export const ButtonList = styled(Button).attrs({ variant: 'outline-secondary' })`
+export const AddToListModalTrigger = styled(Button).attrs({ variant: 'outline-secondary' })`
   display: flex;
   position: relative;
   color: var(--refreshButtonColor);
@@ -62,7 +56,7 @@ export const ButtonList = styled(Button).attrs({ variant: 'outline-secondary' })
   }
 `;
 
-const HeaderTitle = styled.div`
+export const HeaderTitle = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -145,95 +139,29 @@ const HeaderTitle = styled.div`
   }
 `;
 
-const HeaderLines = styled.div`
+export const HeaderLines = styled.div`
   height: 2px;
   background-color: var(--subFeedHeaderBorder);
   width: 100%;
 `;
 
-const HeaderOuterMainContainer = styled.div`
+export const HeaderOuterMainContainer = styled.div`
   width: 100%;
   margin-bottom: 5px;
   padding-top: 25px;
 `;
 
-const HeaderTopContainer = styled.div`
+export const HeaderTopContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
 `;
 
-const LeftRightDivs = styled.div`
+export const LeftRightDivs = styled.div`
   align-items: end;
   display: flex;
 `;
-
-export const HeaderContainer = (props) => {
-  const {
-    children,
-    text,
-    onHoverIconLink,
-    id,
-    leftImage,
-    leftSide,
-    rightSide,
-    isLoading,
-    autoRefreshEnabled,
-    refreshFunc,
-    refreshTimer,
-    style = {},
-  } = props;
-  const ref = useRef();
-  const path = useLocation().pathname.replace('/', '');
-
-  const handleOnClick = () => {
-    ref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
-  };
-
-  return (
-    <HeaderOuterMainContainer ref={ref} style={style} id={id}>
-      <HeaderTopContainer>
-        <LeftRightDivs>
-          {refreshFunc && (
-            <RefreshButton disabled={isLoading} onClick={refreshFunc}>
-              {autoRefreshEnabled || isLoading ? (
-                <CountdownCircleTimer
-                  key={refreshTimer}
-                  isLoading={isLoading}
-                  autoRefreshEnabled={autoRefreshEnabled}
-                  startDuration={Math.max(0, Math.round((refreshTimer - Date.now()) / 1000))}
-                />
-              ) : (
-                <MdRefresh size={32} />
-              )}
-            </RefreshButton>
-          )}
-          {leftSide}
-        </LeftRightDivs>
-        {children}
-        <LeftRightDivs>{rightSide}</LeftRightDivs>
-      </HeaderTopContainer>
-      <HeaderTitle>
-        <HeaderLines />
-        <h5 onClick={handleOnClick}>
-          {leftImage}
-          {text}
-          {onHoverIconLink && onHoverIconLink !== path && (
-            <Link
-              to={`/${onHoverIconLink}`}
-              className='openIndividualFeed'
-              title={`Link to ${text.props.children[0].trim()} individual feed page.`}
-            >
-              <FaRegWindowRestore size={18} />
-            </Link>
-          )}
-        </h5>
-        <HeaderLines />
-      </HeaderTitle>
-    </HeaderOuterMainContainer>
-  );
-};
 
 export const SubFeedContainer = styled.div`
   display: flex;
@@ -336,10 +264,10 @@ export const StyledVideoContainer = styled.div`
 `;
 
 export const VideoContainer = ({ children, ...props }) => {
-  const { feedSize, feedVideoSizeProps } = useContext(FeedsContext);
+  const { feedVideoSizeProps } = useContext(FeedsContext);
 
   return (
-    <StyledVideoContainer feedSize={feedSize} feedVideoSizeProps={feedVideoSizeProps} {...props}>
+    <StyledVideoContainer feedVideoSizeProps={feedVideoSizeProps} {...props}>
       {children}
     </StyledVideoContainer>
   );
@@ -674,114 +602,6 @@ export const StyledVideoElementAlert = styled(Alert)`
   transition: opacity 250ms;
   opacity: 0;
 `;
-
-export const LoadMore = ({
-  style = {},
-  onClick,
-  loaded,
-  text,
-  resetFunc,
-  show,
-  setVideosToShow,
-  videosToShow,
-  videos,
-}) => {
-  const thisEleRef = useRef();
-  const { videoElementsAmount } = useContext(CenterContext) || {};
-  const resetTransitionTimer = useRef();
-
-  const reset = () => {
-    if (resetFunc) {
-      resetFunc();
-    } else if (setVideosToShow && videoElementsAmount) {
-      setVideosToShow({
-        amount: videoElementsAmount,
-        timeout: 0,
-        transitionGroup: 'instant-disappear',
-      });
-      clearTimeout(resetTransitionTimer.current);
-      resetTransitionTimer.current = setTimeout(() => {
-        setVideosToShow({
-          amount: videoElementsAmount,
-          timeout: 750,
-          transitionGroup: 'videos',
-        });
-      }, 750);
-    }
-  };
-
-  const onClickFunc = () => {
-    observer.current.observe(thisEleRef.current);
-    if (onClick) {
-      onClick();
-    } else {
-      if (videosToShow.amount >= videos?.length) {
-        reset();
-      } else {
-        setVideosToShow((curr) => ({
-          amount: curr.amount + videoElementsAmount,
-          timeout: 750,
-          transitionGroup: 'videos',
-        }));
-      }
-    }
-  };
-
-  const observer = useRef(
-    new IntersectionObserver(
-      function (entries) {
-        if (entries[0].isIntersecting === false) {
-          // setTimeout(() => {
-          if (thisEleRef.current) {
-            thisEleRef.current.scrollIntoView({
-              behavior: 'smooth',
-              block: 'end',
-              inline: 'nearest',
-            });
-            observer.current.unobserve(thisEleRef.current);
-          }
-          // }, 0);
-        }
-      },
-      { threshold: 0.8 }
-    )
-  );
-
-  useEffect(() => {
-    if (Boolean(show || videos?.length > videoElementsAmount)) {
-      const thisEle = thisEleRef.current;
-      const observerRef = observer.curren;
-      return () => {
-        return observerRef?.unobserve(thisEle);
-      };
-    }
-  }, [show, videos, videoElementsAmount]);
-
-  if (Boolean(show || videos?.length > videoElementsAmount)) {
-    return (
-      <StyledLoadmore ref={thisEleRef} style={style} size={18}>
-        <div className='line' />
-        <div id='Button' onClick={onClickFunc}>
-          {!loaded ? (
-            <>
-              Loading..
-              <CountdownCircleTimer isLoading={true} style={{ marginLeft: '10px' }} size={18} />
-            </>
-          ) : (
-            text ||
-            (videosToShow.amount >= videos?.length ? 'Show less (reset)' : 'Show more') ||
-            'Load more'
-          )}
-        </div>
-        <div className='line' />
-        {(setVideosToShow || resetFunc) && (
-          <GrPowerReset size={20} title='Show less (reset)' id='reset' onClick={reset} />
-        )}
-      </StyledLoadmore>
-    );
-  }
-  return null;
-};
 
 export const StyledAlert = styled(Alert)`
   text-align: center;

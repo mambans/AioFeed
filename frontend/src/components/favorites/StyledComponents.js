@@ -164,10 +164,7 @@ export const ButtonContainer = styled.div`
 `;
 
 export const AddItemBtn = styled(MdStarBorder)`
-  margin-left: 7px;
   transition: color 250ms;
-  cursor: pointer;
-  z-index: 1;
 
   &:hover {
     color: rgb(255, 255, 0);
@@ -175,15 +172,12 @@ export const AddItemBtn = styled(MdStarBorder)`
 `;
 
 export const RemoveItemBtn = styled(MdStar)`
-  margin-left: 7px;
-  color: rgb(255, 255, 0);
   transition: color 250ms;
-  cursor: pointer;
-  z-index: 1;
+  color: rgb(255, 255, 0);
 
-  &:hover {
+  /* &:hover {
     color: rgb(100, 100, 100);
-  }
+  } */
 `;
 
 export const ListActionButton = styled.p`
@@ -216,5 +210,33 @@ export const Label = styled(Form.Label)`
     border-top: none;
     border-right: none;
     border-left: none;
+  }
+`;
+
+export const IconContainer = styled.div`
+  position: relative;
+  cursor: pointer;
+  z-index: 1;
+  margin-left: 7px;
+
+  .actionIcon {
+    position: absolute;
+    bottom: 0;
+    opacity: 0;
+    transition: opacity 250ms;
+  }
+
+  &:hover {
+    .actionIcon {
+      opacity: 1;
+    }
+
+    .add {
+      color: rgb(255, 255, 0);
+    }
+
+    .remove {
+      color: rgb(100, 100, 100);
+    }
   }
 `;

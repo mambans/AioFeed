@@ -1,4 +1,4 @@
-import { StyledCountdownCircle } from './../StyledComponents';
+import { StyledCountdownCircle } from '../twitch/StyledComponents';
 import React, { useState, useEffect } from 'react';
 
 export default ({ startDuration, isLoading, autoRefreshEnabled, style = {}, size = 24 }) => {

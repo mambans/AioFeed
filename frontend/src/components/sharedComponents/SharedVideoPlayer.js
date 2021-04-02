@@ -8,18 +8,18 @@ import {
   ResizeDevider,
   VolumeEventOverlay,
   PlayerExtraButtons,
-} from './twitch/player/StyledComponents';
-import NavigationContext from './navigation/NavigationContext';
-import FavoriteButton from './favorites/buttonList/FavoriteButton';
-import useQuery from './../hooks/useQuery';
-import PlaylistInPlayer from './youtube/PlaylistInPlayer';
-import useSyncedLocalState from '../hooks/useSyncedLocalState';
-import YoutubeVideoPlayer from './youtube/YoutubeVideoPlayer';
-import VideoPlayer from './twitch/player/VideoPlayer';
-import useFullscreen from '../hooks/useFullscreen';
-import FavoritesContext, { FavoritesProvider } from './favorites/FavoritesContext';
-import autoPlayNextFunc from './favorites/autoPlayNext';
-import useLocalStorageState from '../hooks/useLocalStorageState';
+} from '../twitch/player/StyledComponents';
+import NavigationContext from '../navigation/NavigationContext';
+import FavoriteButton from '../favorites/addToListModal/FavoriteButton';
+import useQuery from '../../hooks/useQuery';
+import PlaylistInPlayer from '../youtube/PlaylistInPlayer';
+import useSyncedLocalState from '../../hooks/useSyncedLocalState';
+import YoutubeVideoPlayer from '../youtube/YoutubeVideoPlayer';
+import VideoPlayer from '../twitch/player/VideoPlayer';
+import useFullscreen from '../../hooks/useFullscreen';
+import FavoritesContext, { FavoritesProvider } from '../favorites/FavoritesContext';
+import autoPlayNextFunc from '../favorites/autoPlayNext';
+import useLocalStorageState from '../../hooks/useLocalStorageState';
 
 const DEFAULT_LIST_WIDTH = Math.max(window.innerWidth * 0.1, 400);
 

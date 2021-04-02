@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Alert from 'react-bootstrap/Alert';
 
-import { StyledAlert } from '../sharedStyledComponents';
+import { StyledAlert } from '../sharedComponents/sharedStyledComponents';
 
 export default (data) => {
   const {

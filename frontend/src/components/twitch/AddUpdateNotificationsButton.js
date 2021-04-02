@@ -3,12 +3,12 @@ import { TiFlash } from 'react-icons/ti';
 import { IoIosFlashOff } from 'react-icons/io';
 import axios from 'axios';
 import React, { useState, useContext, useRef } from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import AccountContext from './../account/AccountContext';
-import { VodAddRemoveButton } from './../sharedStyledComponents';
+import { VodAddRemoveButton } from './../sharedComponents/sharedStyledComponents';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import VodsContext from './vods/VodsContext';
+import ToolTip from '../sharedComponents/ToolTip';
 
 /**
  * @param {String} channel - channel name
@@ -76,17 +76,12 @@ export default ({ channel, loweropacity, marginright, size = 24, show = true }) 
   if (!show) return null;
 
   return (
-    <OverlayTrigger
-      key={channel + 'updateNotiBtnTooltip'}
-      placement={'bottom'}
+    <ToolTip
       delay={{ show: 500, hide: 0 }}
-      overlay={
-        <Tooltip id={`tooltip-${'bottom'}`}>
-          {updateNotificationEnabled
-            ? `Disable ${channel} stream title/game update notification.`
-            : `Enable ${channel} stream title/game update notification`}
-        </Tooltip>
-      }
+      width='max-content'
+      tooltip={`${
+        updateNotificationEnabled ? 'Disable' : 'Enable'
+      }${channel} stream title/game update notification`}
     >
       <VodAddRemoveButton
         className='StreamUpdateNoitificationsButton'
@@ -111,6 +106,6 @@ export default ({ channel, loweropacity, marginright, size = 24, show = true }) 
           <TiFlashOutline size={size} />
         )}
       </VodAddRemoveButton>
-    </OverlayTrigger>
+    </ToolTip>
   );
 };

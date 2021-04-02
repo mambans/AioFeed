@@ -14,7 +14,7 @@ import handleArrowNavigation from '../channelList/handleArrowNavigation';
 import InifinityScroll from '../channelList/InifinityScroll';
 import sortByInput from '../channelList/sortByInput';
 import StyledLoadingList from './LoadingList';
-import SearchList from '../../SearchList';
+import SearchList from '../../sharedComponents/SearchList';
 
 const removeDuplicates = (items) =>
   items.filter((item, index, self) => self.findIndex((t) => t.id === item.id) === index);

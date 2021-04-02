@@ -1,8 +1,8 @@
 import React from 'react';
-import { OverlayTrigger } from 'react-bootstrap';
 import LiveInfoPopup from './LiveInfoPopup';
 import styled from 'styled-components';
 import { Tooltip } from 'react-bootstrap';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 const LiveDot = styled.svg`
   position: absolute;
@@ -31,11 +31,9 @@ export const StyledToolTip = styled(Tooltip)`
 `;
 
 export default ({ channel }) => (
-  <OverlayTrigger
-    key={'left'}
+  <ToolTip
     placement={'left'}
-    delay={{ show: 250, hide: 0 }}
-    overlay={
+    tooltip={
       <StyledToolTip id={`tooltip-${'left'}`}>
         <LiveInfoPopup channel={channel} />
       </StyledToolTip>
@@ -47,5 +45,5 @@ export default ({ channel }) => (
         <circle cx='5' cy='5' r='5' stroke='white' strokeWidth='0' fill='red' />
       </LiveDot>
     </div>
-  </OverlayTrigger>
+  </ToolTip>
 );

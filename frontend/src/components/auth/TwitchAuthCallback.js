@@ -10,7 +10,7 @@ import { AddCookie } from '../../util/Utils';
 import API from '../twitch/API';
 import useToken, { TwitchContext } from '../twitch/useToken';
 
-function TwitchAuthCallback() {
+export default () => {
   const [error, setError] = useState();
   const { autoRefreshEnabled } = useContext(TwitchContext);
   const { username } = useContext(AccountContext);
@@ -25,9 +25,7 @@ function TwitchAuthCallback() {
         .put('https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/rerequest/twitch', {
           authCode: authCode,
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch((error) => console.log(error));
 
       const accessToken = requestAccessToken.data.access_token;
       const refreshToken = requestAccessToken.data.refresh_token;
@@ -56,9 +54,7 @@ function TwitchAuthCallback() {
                 },
                 authkey: getCookie(`AioFeed_AuthKey`),
               })
-              .catch((e) => {
-                console.error(e);
-              });
+              .catch((e) => console.error(e));
           }
 
           return {
@@ -95,11 +91,7 @@ function TwitchAuthCallback() {
                   '*'
                 );
 
-                if (res.token) {
-                  setTimeout(() => {
-                    window.close();
-                  }, 1);
-                }
+                if (res.token) setTimeout(() => window.close(), 1);
               })
               .catch((error) => {
                 console.log('getAccessToken() failed');
@@ -125,6 +117,4 @@ function TwitchAuthCallback() {
 
   if (error) return <AlertHandler data={error} />;
   return <LoadingIndicator height={150} width={150} />;
-}
-
-export default TwitchAuthCallback;
+};

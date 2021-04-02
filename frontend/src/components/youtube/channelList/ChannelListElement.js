@@ -3,7 +3,7 @@ import { MdDelete } from 'react-icons/md';
 import styled from 'styled-components';
 
 import { getCookie } from './../../../util/Utils';
-import { UnfollowButton } from './../../sharedStyledComponents';
+import { UnfollowButton } from './../../sharedComponents/sharedStyledComponents';
 import UnfollowChannel from './unFollowChannel';
 import useToken from '../useToken';
 

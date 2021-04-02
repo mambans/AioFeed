@@ -1,8 +1,8 @@
 import React, { useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import useEventListenerMemo from '../hooks/useEventListenerMemo';
-import useClicksOutside from '../hooks/useClicksOutside';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
+import useClicksOutside from '../../../hooks/useClicksOutside';
 
 const HEIGHT = 275;
 const WIDTH = 250;

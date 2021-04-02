@@ -3,15 +3,15 @@ import { MdVideocam } from 'react-icons/md';
 import { MdVideocamOff } from 'react-icons/md';
 import axios from 'axios';
 import React, { useState, useContext, useRef } from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import AccountContext from './../../account/AccountContext';
-import { VodAddRemoveButton } from './../../sharedStyledComponents';
+import { VodAddRemoveButton } from '../../sharedComponents/sharedStyledComponents';
 import AddVodChannel from './AddVodChannel';
 import VodsContext from './VodsContext';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import FetchSingelChannelVods from './FetchSingelChannelVods';
 import FeedsContext from '../../feed/FeedsContext';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 /**
  * @param {String} channel - channel name
@@ -72,15 +72,10 @@ export default ({ channel, channelId, loweropacity, marginright, className, show
   if (!show) return null;
 
   return (
-    <OverlayTrigger
-      key={channel + 'VodFollowTooltip'}
-      placement={'bottom'}
+    <ToolTip
       delay={{ show: 500, hide: 0 }}
-      overlay={
-        <Tooltip id={`tooltip-${'bottom'}`}>
-          {vodEnabled ? `Disable ${channel} vods` : `Enable ${channel} vods`}
-        </Tooltip>
-      }
+      tooltip={`${vodEnabled ? 'Disable' : 'Enable'} ${channel} vods`}
+      width='max-content'
     >
       <VodAddRemoveButton
         className={`VodButton ${className || ''}`}
@@ -115,6 +110,6 @@ export default ({ channel, channelId, loweropacity, marginright, className, show
           <MdVideoCall size='1.4em' />
         )}
       </VodAddRemoveButton>
-    </OverlayTrigger>
+    </ToolTip>
   );
 };

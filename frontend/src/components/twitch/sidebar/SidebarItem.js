@@ -2,9 +2,7 @@ import { CSSTransition } from 'react-transition-group';
 import { FaRegClock } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import React, { useState, useRef } from 'react';
-import Tooltip from 'react-bootstrap/Tooltip';
 import styled from 'styled-components';
 
 import { SidebarInfoPopup, StyledsidebarItem, FirstRow, SecondRow } from './StyledComponents';
@@ -13,6 +11,7 @@ import AnimatedViewCount from '../live/AnimatedViewCount';
 import LiveInfoPopup from '../channelList/LiveInfoPopup';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from './../loginNameFormat';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 const StyledNewHighlight = styled.div`
   position: absolute;
@@ -122,29 +121,9 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
           />
         </FirstRow>
         <SecondRow>
-          {game_name?.length > 15 ? (
-            <OverlayTrigger
-              key={user_id + 'TitleTooltip'}
-              placement={'bottom'}
-              delay={{ show: 500, hide: 0 }}
-              overlay={
-                <Tooltip
-                  id={`tooltip-${'bottom'}`}
-                  style={{
-                    width: '275px',
-                  }}
-                >
-                  {game_name}
-                </Tooltip>
-              }
-            >
-              <p className={'sidebarGame'}>{game_name}</p>
-            </OverlayTrigger>
-          ) : (
-            <div className={'sidebarGame'}>
-              <p>{truncate(game_name, 15)}</p>
-            </div>
-          )}
+          <ToolTip show={game_name?.length > 15} delay={{ show: 500, hide: 0 }} tooltip={game_name}>
+            <p className={'sidebarGame'}>{game_name}</p>
+          </ToolTip>
           <div className={'sidebarDuration'}>
             <Moment interval={1} durationFromNow>
               {started_at}

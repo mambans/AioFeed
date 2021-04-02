@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import styled from 'styled-components';
+import FeedsContext from '../feed/FeedsContext';
 
 const ToolTipText = styled(Tooltip)`
-  width: 336px;
+  width: ${({ width }) => width + 'px' || 'max-content'};
+
   &&& {
     .tooltip-inner {
       font-size: ${({ fontSize }) => fontSize};
@@ -12,14 +14,14 @@ const ToolTipText = styled(Tooltip)`
 `;
 
 /**
- * Add tooltip on hover\
+ * Add tooltip on hover
  *
  * @param {Element} children - Html elements children
  * @param {Boolean} [show = True] - Boolean to enable on hover tooltip
  * @param {Text} [tooltip = ''] - Tooltip text
  * @param {Text} [placement='bottom'] - HTML element(s) to as trigger for 'on hover'.
  * @param {Object} [delay = { show: 250, hide: 0 }] - Object '{ show: 250, hide: 0 }' for tooltip delays
- * @param {Text} [fontSize='14px'] - Font size for tooltip
+ * @param {Text} [fontSize='inherit'] - Font size for tooltip
  */
 
 export default ({
@@ -28,8 +30,11 @@ export default ({
   tooltip = '',
   placement = 'bottom',
   delay = { show: 250, hide: 0 },
-  fontSize = '14px',
+  fontSize = 'inherit',
+  width,
 }) => {
+  const { feedVideoSizeProps } = useContext(FeedsContext) || {};
+
   if (show)
     return (
       <OverlayTrigger
@@ -37,9 +42,17 @@ export default ({
         placement={placement}
         delay={delay}
         overlay={
-          <ToolTipText fontSize={fontSize} id={`tooltip-${'bottom'}`}>
-            {tooltip}
-          </ToolTipText>
+          typeof tooltip === 'object' ? (
+            tooltip
+          ) : (
+            <ToolTipText
+              fontSize={fontSize}
+              id={`tooltip-${'bottom'}`}
+              width={width || feedVideoSizeProps?.width}
+            >
+              {tooltip}
+            </ToolTipText>
+          )
         }
       >
         {children}

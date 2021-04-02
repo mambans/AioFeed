@@ -5,8 +5,8 @@ import styled, { css } from 'styled-components';
 import { FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-import useLockBodyScroll from '../hooks/useLockBodyScroll';
-import useClicksOutside from '../hooks/useClicksOutside';
+import useLockBodyScroll from '../../hooks/useLockBodyScroll';
+import useClicksOutside from '../../hooks/useClicksOutside';
 
 const SearchSubmitIcon = styled(FaSearch).attrs({ size: 16 })``;
 
@@ -26,14 +26,6 @@ export const submiteButtonStyle = ({ btnDisabled }) => css`
   &:hover {
     color: rgb(255, 255, 255);
   }
-`;
-
-const SearchSubmitA = styled.a`
-  /* ${submiteButtonStyle} */
-`;
-
-const SearchSubmitLink = styled(Link)`
-  /* ${submiteButtonStyle} */
 `;
 
 export const SearchListForm = styled.form`
@@ -122,13 +114,13 @@ export const SearchListForm = styled.form`
 
 export const SearchSubmitBtn = ({ href, to }) =>
   href ? (
-    <SearchSubmitA href={href} type='submitBtn'>
+    <a href={href} type='submitBtn'>
       <SearchSubmitIcon />
-    </SearchSubmitA>
+    </a>
   ) : (
-    <SearchSubmitLink to={to} type='submitBtn'>
+    <Link to={to} type='submitBtn'>
       <SearchSubmitIcon />
-    </SearchSubmitLink>
+    </Link>
   );
 
 export default ({

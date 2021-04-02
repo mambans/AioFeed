@@ -1,9 +1,7 @@
 import { FaRegEye } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import React, { useRef } from 'react';
-import Tooltip from 'react-bootstrap/Tooltip';
 
 import {
   VideoContainer,
@@ -12,10 +10,11 @@ import {
   GameContainer,
   ChannelContainer,
   ImgBottomInfo,
-} from './../../sharedStyledComponents';
+} from './../../sharedComponents/sharedStyledComponents';
 import { truncate } from '../../../util/Utils';
 import { formatViewerNumbers } from './../TwitchUtils';
 import loginNameFormat from '../loginNameFormat';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 export default ({ ...data }) => {
   const { user_name } = data;
@@ -51,32 +50,11 @@ export default ({ ...data }) => {
           </span>
         </ImgBottomInfo>
       </ImageContainer>
-      {title?.length > 50 ? (
-        <OverlayTrigger
-          key={id + 'ClipVideoToolTip'}
-          placement={'bottom'}
-          delay={{ show: 250, hide: 0 }}
-          overlay={
-            <Tooltip
-              id={`tooltip-${'bottom'}`}
-              style={{
-                width: '320px',
-              }}
-            >
-              {title || ''}
-            </Tooltip>
-          }
-        >
-          <VideoTitle to={`/${login || user_name || broadcaster_name}/clip/${id}`}>
-            {truncate(title || '', 70)}
-          </VideoTitle>
-        </OverlayTrigger>
-      ) : (
+      <ToolTip show={title?.length > 50} tooltip={title || ''}>
         <VideoTitle to={`/${login || user_name || broadcaster_name}/clip/${id}`}>
-          {title || ''}
+          {truncate(title || '', 70)}
         </VideoTitle>
-      )}
-
+      </ToolTip>
       <div style={{ width: '336px' }}>
         <ChannelContainer>
           <Link

@@ -2,9 +2,9 @@ import React, { useContext, useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
 import { ButtonContainer } from './../StyledComponents';
-import ButtonLists from './ButtonLists';
+import AddToListModal from './AddToListModal';
 import FavoritesContext, { FavoritesProvider } from './../FavoritesContext';
-import { AddRemoveBtn } from './ButtonLists';
+import { AddRemoveBtn } from './AddToListModal';
 
 export default ({ list, videoId_p, style = {}, size, disablepreview = () => {} }) => {
   const videoId = typeof videoId_p === 'number' ? parseInt(videoId_p) || videoId_p : videoId_p;
@@ -56,7 +56,7 @@ export default ({ list, videoId_p, style = {}, size, disablepreview = () => {} }
 
       <CSSTransition in={open} timeout={250} classNames='fade' unmountOnExit>
         {setLists ? (
-          <ButtonLists
+          <AddToListModal
             OpenFunction={OpenFunction}
             CloseFunctionDelay={CloseFunctionDelay}
             CloseFunction={CloseFunction}
@@ -64,7 +64,7 @@ export default ({ list, videoId_p, style = {}, size, disablepreview = () => {} }
           />
         ) : (
           <FavoritesProvider>
-            <ButtonLists
+            <AddToListModal
               OpenFunction={OpenFunction}
               CloseFunctionDelay={CloseFunctionDelay}
               CloseFunction={CloseFunction}

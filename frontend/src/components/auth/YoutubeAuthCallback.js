@@ -19,17 +19,13 @@ export default () => {
       'Youtube-readonly',
       location.search
         .split('&')
-        .find((part) => {
-          return part.includes('scope');
-        })
+        .find((part) => part.includes('scope'))
         .includes('.readonly')
     );
 
     const codeFromUrl = location.search
       .split('&')
-      .find((part) => {
-        return part.includes('code');
-      })
+      .find((part) => part.includes('code'))
       .replace('code=', '');
 
     const tokens = await axios
@@ -44,9 +40,7 @@ export default () => {
 
         return { access_token: res.data.access_token, refresh_token: res.data.refresh_token };
       })
-      .catch((e) => {
-        console.error(e);
-      });
+      .catch((e) => console.error(e));
 
     const MyYoutube = await axios
       .get(
@@ -81,9 +75,7 @@ export default () => {
           },
           authkey: getCookie(`AioFeed_AuthKey`),
         })
-        .catch((e) => {
-          console.error(e);
-        });
+        .catch((e) => console.error(e));
     }
 
     return { access_token: tokens.access_token, refresh_token: tokens.refresh_token, ...MyYoutube };
@@ -96,9 +88,7 @@ export default () => {
       try {
         const state = location.search
           .split('&')
-          .find((part) => {
-            return part.includes('state');
-          })
+          .find((part) => part.includes('state'))
           .replace('?state=', '');
 
         if (state === getCookie('Youtube-myState')) {
@@ -117,15 +107,9 @@ export default () => {
                 '*'
               );
 
-              if (res.access_token) {
-                setTimeout(() => {
-                  window.close();
-                }, 1);
-              }
+              if (res.access_token) setTimeout(() => window.close(), 1);
             })
-            .catch((error) => {
-              setError(error);
-            });
+            .catch((error) => setError(error));
         } else {
           setError({ message: "Request didn't come from this website." });
         }

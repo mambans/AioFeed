@@ -6,7 +6,7 @@ import { NotificationsProvider } from '../notifications/NotificationsContext';
 import { ThemeProvider } from '../themes/ThemeContext';
 import { FooterProvider } from '../footer/FooterContext';
 import AccountContext, { AccountProvider } from '../account/AccountContext';
-import CookieConsentAlert from '../CookieConsentAlert';
+import CookieConsentAlert from './CookieConsentAlert';
 import Routes from './../routes';
 import SetStartupTheme from '../themes';
 import ThemeContext from './../themes/ThemeContext';

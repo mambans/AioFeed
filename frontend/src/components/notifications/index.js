@@ -3,7 +3,7 @@ import { MdNotificationsNone } from 'react-icons/md';
 import Modal from 'react-bootstrap/Modal';
 import React, { useState, useContext } from 'react';
 
-import { ButtonList } from './../sharedStyledComponents';
+import { AddToListModalTrigger } from './../sharedComponents/sharedStyledComponents';
 import { UnseenNotifcationCount } from './../notifications/styledComponent';
 import NavigationContext from './../navigation/NavigationContext';
 import NotificationsContext from './../notifications/NotificationsContext';
@@ -32,7 +32,7 @@ export default ({ leftExpandRef }) => {
 
   return (
     <>
-      <ButtonList
+      <AddToListModalTrigger
         onClick={handleShow}
         style={{
           border: 'none',
@@ -68,7 +68,7 @@ export default ({ leftExpandRef }) => {
             }}
           />
         )}
-      </ButtonList>
+      </AddToListModalTrigger>
       <Modal
         show={show}
         onHide={handleClose}

@@ -6,7 +6,7 @@ import NoMatch from '../routes/NoMatch';
 import Player from './player/Player';
 // import VideoPlayer from './player/VideoPlayer';
 import PlayerClip from './player/PlayerClip';
-import SharedVideoPlayer from '../SharedVideoPlayer';
+import SharedVideoPlayer from '../sharedComponents/SharedVideoPlayer';
 
 export default () => {
   return (

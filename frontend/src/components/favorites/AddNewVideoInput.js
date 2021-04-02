@@ -2,8 +2,8 @@ import React, { useContext, useMemo, useRef, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
-import SearchList from './../SearchList';
-import { addFavoriteVideo, removeFavoriteVideo } from './buttonList/ButtonLists';
+import SearchList from '../sharedComponents/SearchList';
+import { addFavoriteVideo, removeFavoriteVideo } from './addToListModal/AddToListModal';
 import FavoritesContext from './FavoritesContext';
 import {
   GameListUlContainer,
@@ -15,7 +15,7 @@ import handleArrowNavigation, {
 import { videoImageUrls } from './../youtube/YoutubeVideoElement';
 import { parseNumberAndString } from './dragDropUtils';
 import { ListActionButton } from './StyledComponents';
-import ToolTip from '../ToolTip';
+import ToolTip from '../sharedComponents/ToolTip';
 
 export default ({ list, listName, videos, style }) => {
   const { lists, setLists } = useContext(FavoritesContext);

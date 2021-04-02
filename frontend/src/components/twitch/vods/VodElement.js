@@ -11,7 +11,7 @@ import {
   ChannelContainer,
   StyledVideoElementAlert,
   VideoTitleHref,
-} from './../../sharedStyledComponents';
+} from '../../sharedComponents/sharedStyledComponents';
 
 import { truncate } from '../../../util/Utils';
 import { VodLiveIndicator, VodType, VodPreview, VodDates } from './StyledComponents';
@@ -21,10 +21,10 @@ import API from '../API';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from '../loginNameFormat';
 import { ChannelNameDiv } from '../StyledComponents';
-import FavoriteButton from '../../favorites/buttonList/FavoriteButton';
+import FavoriteButton from '../../favorites/addToListModal/FavoriteButton';
 import useToken from '../useToken';
 import FeedsContext from '../../feed/FeedsContext';
-import ToolTip from '../../ToolTip';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 export default ({ data, vodBtnDisabled, setDragSelected, listName, list, active, ...props }) => {
   const {

@@ -1,16 +1,14 @@
 import React from 'react';
+
 import AllFiltersList from '../CustomFilters/AllFiltersList';
-
-import { HeaderContainer } from './../../sharedStyledComponents';
-import ReOrderButtons from './../../ReOrderButtons';
-
+import Header from './../../sharedComponents/Header';
 import ChannelSearchList from './../channelList';
 
 export default ({ data, setOrder }) => {
   const { refreshing, autoRefreshEnabled, refreshTimer, refresh } = data;
 
   return (
-    <HeaderContainer
+    <Header
       id='TwitchHeader'
       text={
         <>
@@ -26,9 +24,10 @@ export default ({ data, setOrder }) => {
         <>
           <AllFiltersList />
           <ChannelSearchList placeholder='...' />
-          <ReOrderButtons setOrder={setOrder} feedName='Twitch' />
         </>
       }
+      setOrder={setOrder}
+      feedName='Twitch'
     />
   );
 };

@@ -29,7 +29,7 @@ import FollowUnfollowBtn from './../FollowUnfollowBtn';
 import AddVideoExtraData from '../AddVideoExtraData';
 import fetchStreamInfo from './../player/fetchStreamInfo';
 import fetchChannelInfo from './../player/fetchChannelInfo';
-import setFavion from '../../setFavion';
+import setFavion from '../setFavion';
 // import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import API from './../API';
 import AnimatedViewCount from '../live/AnimatedViewCount';
@@ -280,9 +280,7 @@ export default () => {
     if (twitchToken && channelInfo) {
       setFavion(channelInfo.logo || channelInfo.profile_image_url);
     }
-    return () => {
-      setFavion();
-    };
+    return () => setFavion();
   }, [channelInfo, twitchToken]);
 
   if (channelId === 'Not Found' || !getCookie('Twitch-access_token')) {

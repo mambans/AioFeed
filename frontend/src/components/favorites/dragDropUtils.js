@@ -38,16 +38,17 @@ export const uploadNewList = debounce(
   { leading: false, trailing: true }
 );
 
-const findOutmostContainer = (target) => {
+const findOutmostContainer = (target, count) => {
   if (target?.dataset?.id) return target;
+  if (count > 15) return target;
 
-  return findOutmostContainer(target?.offsetParent);
+  return findOutmostContainer(target?.offsetParent, count++);
 };
 
 export const restructureVideoList = debounce(
   (e, arr, dragSelected, setVideos) => {
     e.preventDefault();
-    const videoElement = findOutmostContainer(e.target);
+    const videoElement = findOutmostContainer(e.target, 0);
     const videoId = videoElement?.dataset?.id;
 
     if (videoId && videoElement !== dragSelected?.element) {
@@ -57,7 +58,8 @@ export const restructureVideoList = debounce(
           (video.id || video.contentDetails?.upload?.videoId) !==
           (dragSelected.data.id || dragSelected.data.contentDetails?.upload?.videoId)
       );
-      const new_index = arr.findIndex(
+
+      const new_index = array.findIndex(
         (video) => (video.id || video.contentDetails?.upload?.videoId) === videoId
       );
       newArray.splice(new_index, 0, dragSelected.data);

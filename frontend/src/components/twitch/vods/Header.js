@@ -2,21 +2,22 @@ import { MdFormatListBulleted } from 'react-icons/md';
 import { MdVideocam } from 'react-icons/md';
 import Alert from 'react-bootstrap/Alert';
 import React from 'react';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
 
-import { HeaderContainer, ButtonList, LastRefreshText } from './../../sharedStyledComponents';
-import ReOrderButtons from './../../ReOrderButtons';
-
+import Header from '../../sharedComponents/Header';
+import {
+  AddToListModalTrigger,
+  LastRefreshText,
+} from '../../sharedComponents/sharedStyledComponents';
 import VodChannelList from './VodChannelList';
 import { VodChannelListPopupTrigger } from './StyledComponents';
 import Popup from 'reactjs-popup';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 export default (props) => {
   const { refresh, refreshing, vods, vodError, setOrder } = props;
 
   return (
-    <HeaderContainer
+    <Header
       id='TwitchVodsHeader'
       refreshFunc={() => refresh(true)}
       isLoading={refreshing}
@@ -60,29 +61,25 @@ export default (props) => {
             arrow={false}
             trigger={
               <VodChannelListPopupTrigger>
-                <OverlayTrigger
-                  key={'left'}
+                <ToolTip
                   placement={'left'}
                   delay={{ show: 1000, hide: 0 }}
-                  overlay={
-                    <Tooltip id={`tooltip-${'left'}`}>
-                      Add/remove Twitch channels to fetch vods from
-                    </Tooltip>
-                  }
+                  tooltip={'Add/remove Twitch channels to fetch vods from'}
                 >
-                  <ButtonList variant='outline-secondary'>
+                  <AddToListModalTrigger variant='outline-secondary'>
                     <MdFormatListBulleted size={22} />
-                  </ButtonList>
-                </OverlayTrigger>
+                  </AddToListModalTrigger>
+                </ToolTip>
               </VodChannelListPopupTrigger>
             }
             position='left top'
           >
             <VodChannelList />
           </Popup>
-          <ReOrderButtons setOrder={setOrder} feedName='Vods' />
         </>
       }
-    ></HeaderContainer>
+      setOrder={setOrder}
+      feedName='Twitch'
+    />
   );
 };

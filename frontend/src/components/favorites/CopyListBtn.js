@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MdContentCopy } from 'react-icons/md';
 
 import { ListActionButton } from './StyledComponents';
-import NewListForm from './buttonList/NewListForm';
+import NewListForm from './addToListModal/NewListForm';
 
 export default ({ list, style, children }) => {
   const [open, setOpen] = useState();
