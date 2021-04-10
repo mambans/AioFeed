@@ -71,7 +71,24 @@ export default ({ list, listName, videos, style }) => {
     );
 
   const handleSubmit = async () => {
-    const id = videoId;
+    const id = (() => {
+      if (videoId?.includes('youtube.com/watch?v')) {
+        const url = new URL(videoId);
+        const searchParams = new URLSearchParams(url.search);
+        return searchParams.get('v');
+      }
+
+      if (
+        videoId?.includes('twitch.tv/videos') ||
+        (videoId?.includes('aiofeed.com') &&
+          (videoId?.includes('/videos/') || videoId?.includes('/youtube/')))
+      ) {
+        const video = videoId.substring(videoId.lastIndexOf('/') + 1);
+        return video;
+      }
+
+      return videoId;
+    })();
 
     if (Boolean(id) && Boolean(filteredInputMatched?.length)) {
       const selectedVideo = returnFirstMatch();
@@ -102,17 +119,16 @@ export default ({ list, listName, videos, style }) => {
 
   const filteredInputMatched = useMemo(() => {
     if (cursor.used) return savedFilteredInputMatched.current;
-
     const input = String(videoId)?.toLowerCase();
     const inputFiltered = Boolean(input)
       ? videos?.filter((v) => {
           return (
-            v?.title?.toLowerCase().includes(input) ||
-            v?.snippet?.title?.toLowerCase().includes(input) ||
-            v?.snippet?.channelTitle?.toLowerCase().includes(input) ||
-            v?.login?.toLowerCase().includes(input) ||
-            v?.user_name?.toLowerCase().includes(input) ||
-            v?.id?.toLowerCase().includes(input)
+            v?.title?.toLowerCase()?.includes(input) ||
+            v?.snippet?.title?.toLowerCase()?.includes(input) ||
+            v?.snippet?.channelTitle?.toLowerCase()?.includes(input) ||
+            v?.login?.toLowerCase()?.includes(input) ||
+            v?.user_name?.toLowerCase()?.includes(input) ||
+            v?.id?.toLowerCase()?.includes(input)
           );
         })
       : videos;
