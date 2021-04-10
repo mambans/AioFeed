@@ -9,7 +9,10 @@ export default async ({ videos }) => {
     getLocalstorage('Cached_SavedYoutubeVideos')?.items &&
     getLocalstorage('Cached_SavedYoutubeVideos')?.expire >= Date.now()
       ? getLocalstorage('Cached_SavedYoutubeVideos')
-      : { items: [], expire: Date.now() + 7 * 24 * 60 * 60 * 1000 };
+      : {
+          items: getLocalstorage('Cached_SavedYoutubeVideos')?.items?.reverse()?.slice(0, 50) || [],
+          expire: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        };
 
   const CachedFullyVideos = videosArray.filter((video) =>
     fullyCachedVideos.items.find(
