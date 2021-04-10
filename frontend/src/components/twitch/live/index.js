@@ -1,7 +1,7 @@
 import { CSSTransition } from 'react-transition-group';
 import React, { useContext, useEffect, useState } from 'react';
 
-import { AddCookie, getLocalstorage } from '../../../util/Utils';
+import { getLocalstorage } from '../../../util/Utils';
 import { HideSidebarButton } from '../sidebar/StyledComponents';
 import FeedsContext from '../../feed/FeedsContext';
 import Handler from './Handler';
@@ -12,6 +12,7 @@ import FeedsCenterContainer from '../../feed/FeedsCenterContainer';
 import { VodsProvider } from '../vods/VodsContext';
 import { Container } from '../StyledComponents';
 import ToolTip from '../../sharedComponents/ToolTip';
+import { CustomFilterProvider } from '../CustomFilters/CustomFilterContext';
 
 export default ({ forceMountTwitch = false } = {}) => (
   <FeedsCenterContainer forceMountTwitch={forceMountTwitch}>
@@ -37,65 +38,61 @@ export const Twitch = ({ in: forceMount = false }) => {
   }, []);
 
   return (
-    <Handler>
-      {(data) => (
-        <>
-          <CSSTransition
-            in={(showTwitchBigFeed && enableTwitch) || forceMount}
-            timeout={750}
-            classNames='fade-750ms'
-            appear
-            unmountOnExit
-          >
-            <Container order={order}>
-              <Header data={data} setOrder={setOrder} />
-              <TwitchStreams data={data} />
-            </Container>
-          </CSSTransition>
+    <CustomFilterProvider>
+      <Handler>
+        {(data) => (
+          <>
+            <CSSTransition
+              in={(showTwitchBigFeed && enableTwitch) || forceMount}
+              timeout={750}
+              classNames='fade-750ms'
+              appear
+              unmountOnExit
+            >
+              <Container order={order}>
+                <Header data={data} setOrder={setOrder} />
+                <TwitchStreams data={data} />
+              </Container>
+            </CSSTransition>
 
-          <ToolTip
-            placement={'right'}
-            delay={{ show: 500, hide: 0 }}
-            tooltip={`${showTwitchSidebar ? 'Hide' : 'Show'} sidebar`}
-          >
-            <HideSidebarButton
-              show={String(showTwitchSidebar)}
-              onClick={() => {
-                AddCookie('Twitch_SidebarEnabled', !showTwitchSidebar);
-                setShowTwitchSidebar(!showTwitchSidebar);
-              }}
-            />
-          </ToolTip>
-          <ToolTip
-            placement={'right'}
-            delay={{ show: 500, hide: 0 }}
-            tooltip={`${showTwitchBigFeed ? 'Hide' : 'Show'} big feed`}
-          >
-            <HideSidebarButton
-              show={String(showTwitchBigFeed)}
-              side={'right'}
-              onClick={() => {
-                AddCookie('Twitch_BigFeedEnabled', !showTwitchBigFeed);
-                setShowTwitchBigFeed(!showTwitchBigFeed);
-              }}
-            />
-          </ToolTip>
+            <ToolTip
+              placement={'right'}
+              delay={{ show: 500, hide: 0 }}
+              tooltip={`${showTwitchSidebar ? 'Hide' : 'Show'} sidebar`}
+            >
+              <HideSidebarButton
+                show={String(showTwitchSidebar)}
+                onClick={() => setShowTwitchSidebar(!showTwitchSidebar)}
+              />
+            </ToolTip>
+            <ToolTip
+              placement={'right'}
+              delay={{ show: 500, hide: 0 }}
+              tooltip={`${showTwitchBigFeed ? 'Hide' : 'Show'} big feed`}
+            >
+              <HideSidebarButton
+                show={String(showTwitchBigFeed)}
+                side={'right'}
+                onClick={() => setShowTwitchBigFeed(!showTwitchBigFeed)}
+              />
+            </ToolTip>
 
-          <CSSTransition
-            in={(enableTwitch || forceMount) && showTwitchSidebar}
-            timeout={750}
-            classNames='twitchSidebar'
-            appear
-            unmountOnExit
-          >
-            <Sidebar
-              loaded={data.loaded}
-              onlineStreams={data.liveStreams}
-              newlyAdded={data.newlyAddedStreams}
-            />
-          </CSSTransition>
-        </>
-      )}
-    </Handler>
+            <CSSTransition
+              in={(enableTwitch || forceMount) && showTwitchSidebar}
+              timeout={750}
+              classNames='twitchSidebar'
+              appear
+              unmountOnExit
+            >
+              <Sidebar
+                loaded={data.loaded}
+                onlineStreams={data.liveStreams}
+                newlyAdded={data.newlyAddedStreams}
+              />
+            </CSSTransition>
+          </>
+        )}
+      </Handler>
+    </CustomFilterProvider>
   );
 };

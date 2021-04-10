@@ -195,13 +195,13 @@ export default () => {
             <>
               {gameInfo?.box_art_url ? (
                 <img
-                  src={gameInfo.box_art_url?.replace('{width}', 130)?.replace('{height}', 173)}
+                  src={gameInfo?.box_art_url?.replace('{width}', 130)?.replace('{height}', 173)}
                   alt=''
                 />
               ) : (
                 <div className='imgPlaceholder'></div>
               )}
-              {gameInfo.name || 'Top'} - {videoType}
+              {gameInfo?.name || 'Top'} - {videoType}
               {!videoType || videoType === 'streams' ? (
                 <MdLiveTv size={25} />
               ) : (

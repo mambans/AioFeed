@@ -11,21 +11,16 @@ export default (setMainState) => {
   RemoveCookie('Twitch-userId');
   RemoveCookie('Twitch-username');
   RemoveCookie('Twitch-profileImg');
-  RemoveCookie('Twitch_AutoRefresh');
-  RemoveCookie('Twitch_FeedEnabled');
   RemoveCookie('Twitch-myState');
   localStorage.removeItem('Twitch-ChannelsUpdateNotifs');
 
-  RemoveCookie('TwitchVods_FeedEnabled');
   localStorage.removeItem('TwitchVods-Channels');
 
-  RemoveCookie('Twitter_FeedEnabled');
   localStorage.removeItem('Twitter-Lists');
 
   RemoveCookie('Youtube-access_token');
   RemoveCookie('YoutubeUsername');
   RemoveCookie('YoutubeProfileImg');
-  RemoveCookie('Youtube_FeedEnabled');
 
   localStorage.removeItem('Unseen-notifications');
   localStorage.removeItem('YT-followedChannels');

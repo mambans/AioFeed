@@ -60,6 +60,7 @@ const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.1, 175);
 
 export default () => {
   const channelName = useParams()?.channelName;
+  document.title = `${channelName} player`;
   const validateToken = useToken();
   const { addNotification } = useContext(NotificationsContext);
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
@@ -129,10 +130,6 @@ export default () => {
   useEventListenerMemo('mousemove', showAndResetTimer);
   useEventListenerMemo('mousedown', showAndResetTimer);
   useEventListenerMemo('touchmove', showAndResetTimer);
-
-  useEffect(() => {
-    document.title = `${channelName} player`;
-  }, [channelName]);
 
   useEffect(() => {
     twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', {
@@ -399,14 +396,14 @@ export default () => {
             {streamInfo ? (
               <InfoDisplay>
                 <>
-                  <img src={streamInfo.profile_image_url} alt='' />
+                  <img src={streamInfo?.profile_image_url} alt='' />
                   <div id='name'>
                     <Link
                       ref={link2}
                       to={{
                         pathname: `page`,
                         state: {
-                          p_id: streamInfo.user_id,
+                          p_id: streamInfo?.user_id,
                         },
                       }}
                     >
@@ -416,13 +413,13 @@ export default () => {
                       className='twitchRedirect'
                       alt=''
                       ref={link1}
-                      href={`https://www.twitch.tv/${streamInfo.user_name || channelName}`}
+                      href={`https://www.twitch.tv/${streamInfo?.user_name || channelName}`}
                     >
                       <FaTwitch size={30} color='purple' />
                     </a>
 
                     <FollowUnfollowBtn
-                      channelName={streamInfo.user_name || channelName}
+                      channelName={streamInfo?.user_name || channelName}
                       id={streamInfo.user_id || twitchVideoPlayer.current.getChannelId()}
                     />
                     <ToolTip
@@ -441,29 +438,29 @@ export default () => {
                       </ChannelIconLink>
                     </ToolTip>
                   </div>
-                  <p id='title'>{streamInfo.title}</p>
-                  {streamInfo.game_name && (
+                  <p id='title'>{streamInfo?.title}</p>
+                  {streamInfo?.game_name && (
                     <span id='game'>
                       {'Playing '}
-                      <Link ref={link3} to={`/category/${streamInfo.game_name}`}>
-                        {streamInfo.game_name}
+                      <Link ref={link3} to={`/category/${streamInfo?.game_name}`}>
+                        {streamInfo?.game_name}
                       </Link>
                     </span>
                   )}
                 </>
 
-                {streamInfo.viewer_count && (
+                {streamInfo?.viewer_count && (
                   <AnimatedViewCount
                     id={'viewers'}
-                    viewers={streamInfo.viewer_count}
+                    viewers={streamInfo?.viewer_count}
                     disabeIcon={true}
                   />
                 )}
-                {streamInfo.started_at && (
+                {streamInfo?.started_at && (
                   <p id='uptime'>
                     Uptime{' '}
                     <Moment interval={1} durationFromNow>
-                      {streamInfo.started_at}
+                      {streamInfo?.started_at}
                     </Moment>
                   </p>
                 )}

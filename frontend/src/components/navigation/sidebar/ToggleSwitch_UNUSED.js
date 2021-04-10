@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Switch from 'react-switch';
 
 import { StyledToggleSwitch } from './StyledComponent';
-import { AddCookie } from '../../../util/Utils';
 import ToolTip from '../../sharedComponents/ToolTip';
 
 export default ({ setEnable, enabled, label, tokenExists, tooltip, height, width, icon }) => {
@@ -11,7 +10,6 @@ export default ({ setEnable, enabled, label, tokenExists, tooltip, height, width
   function handleChange(checked) {
     setEnable(checked);
     setChecked(checked);
-    AddCookie(`${label}_FeedEnabled`, checked);
   }
 
   return (

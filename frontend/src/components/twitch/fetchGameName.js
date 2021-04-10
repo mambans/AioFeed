@@ -17,7 +17,7 @@ const getGameDetails = async (items) => {
     return !filteredCachedGames?.find((cachedGame) => cachedGame.id === game);
   });
 
-  const games = cachedGameInfo?.expire < Date.now() ? gamesNonDuplicates : unCachedGameDetails;
+  const games = cachedGameInfo?.expire > Date.now() ? unCachedGameDetails : gamesNonDuplicates;
 
   if (Array.isArray(games) && games?.length >= 1) {
     return API.getGames({
@@ -32,9 +32,9 @@ const getGameDetails = async (items) => {
           JSON.stringify({
             data: [...filteredCachedGames, ...filteredOutNulls],
             expire:
-              cachedGameInfo?.expire < Date.now()
-                ? Date.now() + 7 * 24 * 60 * 60 * 1000
-                : cachedGameInfo.expire,
+              cachedGameInfo?.expire > Date.now()
+                ? cachedGameInfo.expire
+                : Date.now() + 7 * 24 * 60 * 60 * 1000,
           })
         );
         return [...filteredCachedGames, ...filteredOutNulls];

@@ -15,8 +15,10 @@ export default ({ list, videoId_p, style = {}, size, disablepreview = () => {} }
   const OpenFunction = (e) => {
     e.stopPropagation();
     clearTimeout(fadeOutTimer.current);
-    setOpen(true);
-    setTimeout(() => disablepreview(), 0);
+    setTimeout(() => {
+      setOpen(true);
+      disablepreview();
+    }, 100);
     return false;
   };
 

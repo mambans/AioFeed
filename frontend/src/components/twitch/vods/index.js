@@ -12,7 +12,7 @@ import AccountContext from './../../account/AccountContext';
 import VodsContext, { VodsProvider } from './VodsContext';
 import LoadingBoxes from './../LoadingBoxes';
 import FeedsContext from '../../feed/FeedsContext';
-import { AddCookie, getCookie, getLocalstorage } from '../../../util/Utils';
+import { getCookie, getLocalstorage } from '../../../util/Utils';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import FeedsCenterContainer, { CenterContext } from './../../feed/FeedsCenterContainer';
 import useToken from '../useToken';
@@ -137,10 +137,7 @@ export const Vods = () => {
             <Button
               style={{ margin: '0 20px' }}
               variant='danger'
-              onClick={() => {
-                AddCookie('Twitch_FeedEnabled', false);
-                setEnableTwitchVods(false);
-              }}
+              onClick={() => setEnableTwitchVods(false)}
             >
               Disable vods
             </Button>

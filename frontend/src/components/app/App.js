@@ -7,32 +7,29 @@ import { ThemeProvider } from '../themes/ThemeContext';
 import { FooterProvider } from '../footer/FooterContext';
 import AccountContext, { AccountProvider } from '../account/AccountContext';
 import CookieConsentAlert from './CookieConsentAlert';
-import Routes from './../routes';
+import Routes from '../routes';
 import SetStartupTheme from '../themes';
 import ThemeContext from './../themes/ThemeContext';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import { TwitchProvider } from '../twitch/useToken';
 import { YoutubeProvider } from '../youtube/useToken';
-import { CustomFilterProvider } from '../twitch/CustomFilters/CustomFilterContext';
 
 export default () => {
   return (
     <ThemeProvider>
       <AccountProvider>
         <TwitchProvider>
-          <CustomFilterProvider>
-            <YoutubeProvider>
-              <NavigationProvider>
-                <NotificationsProvider>
-                  <FeedsProvider>
-                    <FooterProvider>
-                      <App />
-                    </FooterProvider>
-                  </FeedsProvider>
-                </NotificationsProvider>
-              </NavigationProvider>
-            </YoutubeProvider>
-          </CustomFilterProvider>
+          <YoutubeProvider>
+            <NavigationProvider>
+              <NotificationsProvider>
+                <FeedsProvider>
+                  <FooterProvider>
+                    <App />
+                  </FooterProvider>
+                </FeedsProvider>
+              </NotificationsProvider>
+            </NavigationProvider>
+          </YoutubeProvider>
         </TwitchProvider>
       </AccountProvider>
     </ThemeProvider>

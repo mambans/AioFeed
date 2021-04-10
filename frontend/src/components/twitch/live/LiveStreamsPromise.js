@@ -35,7 +35,7 @@ export default async ({
       addSystemNotification({
         status: 'Live',
         stream: stream,
-        body: `${stream.title || stream.status}\n${stream.game_name || stream.game}`,
+        body: `${stream.title || stream.status || ''}\n${stream.game_name || stream.game || ''}`,
         newlyAddedStreams: newlyAddedStreams,
         setUnseenNotifications: setUnseenNotifications,
       });

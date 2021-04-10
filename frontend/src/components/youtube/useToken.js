@@ -1,5 +1,5 @@
-import React, { useCallback, useContext, useRef, useState } from 'react';
-import { getCookie } from '../../util/Utils';
+import React, { useCallback, useContext, useRef } from 'react';
+import useLocalStorageState from '../../hooks/useLocalStorageState';
 import validateToken from './validateToken';
 
 const TTL = 30000;
@@ -7,9 +7,9 @@ const TTL = 30000;
 export const YoutubeContext = React.createContext();
 
 export const YoutubeProvider = ({ children }) => {
-  const [youtubeVideoHoverEnable, setYoutubeVideoHoverEnable] = useState(
-    getCookie('YoutubeVideoHoverEnabled')
-  );
+  const [pref, setPref] = useLocalStorageState('YoutubePreferences', {}) || {};
+  const toggle = (i, v) => setPref((c) => ({ ...c, [i]: v || !c[i] }));
+
   const promise = useRef();
 
   const validationOfToken = useCallback(() => {
@@ -21,7 +21,11 @@ export const YoutubeProvider = ({ children }) => {
 
   return (
     <YoutubeContext.Provider
-      value={{ validationOfToken, youtubeVideoHoverEnable, setYoutubeVideoHoverEnable }}
+      value={{
+        validationOfToken,
+        youtubeVideoHoverEnable: Boolean(pref.video_hover),
+        setYoutubeVideoHoverEnable: () => toggle('video_hover'),
+      }}
     >
       {children}
     </YoutubeContext.Provider>

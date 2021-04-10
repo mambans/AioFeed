@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import axios from 'axios';
 
 import { StyledToggleButton } from './StyledComponent';
-import { AddCookie, getCookie } from '../../../util/Utils';
+import { getCookie } from '../../../util/Utils';
 import ToolTip from '../../sharedComponents/ToolTip';
 
 export default ({
@@ -23,7 +23,6 @@ export default ({
   function handleChange() {
     setEnable(!checked);
     setChecked(!checked);
-    AddCookie(`${label}_FeedEnabled`, !checked);
 
     clearTimeout(timeout.current);
     timeout.current = setTimeout(async () => {
@@ -34,9 +33,7 @@ export default ({
           columnName: `${serviceName}Preferences`,
           authkey: getCookie(`AioFeed_AuthKey`),
         })
-        .catch((e) => {
-          console.error(e);
-        });
+        .catch((e) => console.error(e));
     }, 2500);
 
     if (scrollIntoView && !checked === true) {

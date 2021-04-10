@@ -4,7 +4,10 @@ import { getLocalstorage } from '../../../util/Utils';
 export default async ({ streamInfo, newStreamInfo }) => {
   try {
     if (!streamInfo || streamInfo?.game_id !== newStreamInfo) {
-      const cachedGameInfo = getLocalstorage('Twitch_game_details') || { data: [] };
+      const cachedGameInfo =
+        getLocalstorage('Twitch_game_details')?.exire > Date.now()
+          ? getLocalstorage('Twitch_game_details')
+          : { data: [], expire: Date.now() + 7 * 24 * 60 * 60 * 1000 };
       const foundCachedGame = cachedGameInfo.data.find(
         (game) => game?.id === newStreamInfo?.game_id
       );

@@ -1,5 +1,5 @@
-import React, { useCallback, useContext, useRef, useState } from 'react';
-import { getCookie } from '../../util/Utils';
+import React, { useCallback, useContext, useRef } from 'react';
+import useLocalStorageState from '../../hooks/useLocalStorageState';
 import validateToken from './validateToken';
 
 const TTL = 100000;
@@ -7,18 +7,9 @@ const TTL = 100000;
 export const TwitchContext = React.createContext();
 
 export const TwitchProvider = ({ children }) => {
-  const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(
-    getCookie(`Twitch_AutoRefresh`) || false
-  );
-  const [isEnabledOfflineNotifications, setIsEnabledOfflineNotifications] = useState(
-    getCookie('Twitch_offline_notifications')
-  );
-  const [isEnabledUpdateNotifications, setIsEnabledUpdateNotifications] = useState(
-    getCookie('Twitch_update_notifications')
-  );
-  const [twitchVideoHoverEnable, setTwitchVideoHoverEnable] = useState(
-    getCookie('TwitchVideoHoverEnabled')
-  );
+  const [pref, setPref] = useLocalStorageState('TwitchPreferences', {}) || {};
+  const toggle = (i, v) => setPref((c) => ({ ...c, [i]: v || !c[i] }));
+
   const promise = useRef();
 
   const validationOfToken = useCallback(() => {
@@ -32,14 +23,14 @@ export const TwitchProvider = ({ children }) => {
     <TwitchContext.Provider
       value={{
         validationOfToken,
-        autoRefreshEnabled,
-        setAutoRefreshEnabled,
-        twitchVideoHoverEnable,
-        setTwitchVideoHoverEnable,
-        isEnabledOfflineNotifications,
-        setIsEnabledOfflineNotifications,
-        isEnabledUpdateNotifications,
-        setIsEnabledUpdateNotifications,
+        autoRefreshEnabled: Boolean(pref.auto_refresh),
+        setAutoRefreshEnabled: () => toggle('auto_refresh'),
+        twitchVideoHoverEnable: Boolean(pref.video_hover),
+        setTwitchVideoHoverEnable: () => toggle('video_hover'),
+        isEnabledOfflineNotifications: Boolean(pref.offline_notis),
+        setIsEnabledOfflineNotifications: () => toggle('offline_notis'),
+        isEnabledUpdateNotifications: Boolean(pref.update_notis),
+        setIsEnabledUpdateNotifications: () => toggle('update_notis'),
       }}
     >
       {children}

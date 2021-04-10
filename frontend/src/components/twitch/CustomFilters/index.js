@@ -10,12 +10,15 @@ import { getCookie } from '../../../util/Utils';
 import CustomFilterContext from './CustomFilterContext';
 
 export default ({ channel, enableFormControll = false, setOpenParent = () => {}, openParent }) => {
+  const { setFilters } = useContext(CustomFilterContext) || {};
   const uploadNewFiltersTimer = useRef();
   const OnClick = () => setOpenParent(true);
 
   return (
     <>
-      <OpenListBtn onClick={OnClick} show={String(openParent)} size='1.4em'></OpenListBtn>
+      {setFilters && (
+        <OpenListBtn onClick={OnClick} show={String(openParent)} size='1.4em'></OpenListBtn>
+      )}
 
       <CSSTransition in={openParent} timeout={250} classNames='customFilter' unmountOnExit>
         <ListContainer

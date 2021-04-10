@@ -83,7 +83,7 @@ export default (props) => {
       },
       returnFirstMatchedGame: () => {
         const foundGame = filteredInputMatched?.data?.find((games) =>
-          games.name?.toLowerCase().includes(value?.toLowerCase())
+          games?.name?.toLowerCase().includes(value?.toLowerCase())
         );
 
         return foundGame?.name || value;
@@ -104,9 +104,9 @@ export default (props) => {
 
     const filteredTopChannels =
       (game && sortByInput(game, topGames?.data)) ||
-      topGames?.data?.filter((item) => {
-        return item.name?.toLowerCase().includes(game?.toLowerCase() || '');
-      });
+      topGames?.data?.filter((item) =>
+        item?.name?.toLowerCase().includes(game?.toLowerCase() || '')
+      );
 
     const uniqueGames = removeDuplicates([
       ...(filteredTopChannels || []),

@@ -9,7 +9,7 @@ import { AiOutlineDisconnect } from 'react-icons/ai';
 import Slider from 'react-rangeslider';
 import { debounce } from 'lodash';
 
-import { AddCookie, getCookie } from '../../../util/Utils';
+import { getCookie } from '../../../util/Utils';
 import AccountContext from './../../account/AccountContext';
 import ClearAllAccountCookiesStates from './ClearAllAccountCookiesStates';
 import DeleteAccountButton from './DeleteAccountButton';
@@ -116,10 +116,7 @@ export default () => {
         <ToggleButtonsContainerHeader>Feeds</ToggleButtonsContainerHeader>
         <ToggleButtonsContainer>
           <ToggleButton
-            setEnable={(value) => {
-              setEnableTwitch(value);
-              AddCookie('Twitch_FeedEnabled', value);
-            }}
+            setEnable={(value) => setEnableTwitch(value)}
             enabled={enableTwitch}
             label='Twitch'
             serviceName='Twitch'
@@ -134,10 +131,7 @@ export default () => {
           />
 
           <ToggleButton
-            setEnable={(value) => {
-              setEnableTwitter(value);
-              AddCookie('Twitter_FeedEnabled', value);
-            }}
+            setEnable={(value) => setEnableTwitter(value)}
             serviceName='Twitter'
             enabled={enableTwitter}
             label='Twitter'
@@ -146,10 +140,7 @@ export default () => {
             icon={<FaTwitter size={24} color='rgb(29, 161, 242)' />}
           />
           <ToggleButton
-            setEnable={(value) => {
-              setEnableYoutube(value);
-              AddCookie('Youtube_FeedEnabled', value);
-            }}
+            setEnable={(value) => setEnableYoutube(value)}
             enabled={enableYoutube}
             label='Youtube'
             serviceName='Youtube'
@@ -163,10 +154,7 @@ export default () => {
             icon={<FaYoutube size={24} color='rgb(255, 0, 0)' />}
           />
           <ToggleButton
-            setEnable={(value) => {
-              setEnableTwitchVods(value);
-              AddCookie('TwitchVods_FeedEnabled', value);
-            }}
+            setEnable={(value) => setEnableTwitchVods(value)}
             enabled={enableTwitchVods}
             label='TwitchVods'
             serviceName='TwitchVods'
@@ -180,10 +168,7 @@ export default () => {
             icon={<MdVideocam size={24} color='rgb(169, 112, 255)' />}
           />
           <ToggleButton
-            setEnable={(value) => {
-              setEnableFavorites(value);
-              AddCookie('Favorites_FeedEnabled', value);
-            }}
+            setEnable={(value) => setEnableFavorites(value)}
             enabled={enableFavorites}
             label='Favorites'
             serviceName='Favorites'
@@ -219,10 +204,7 @@ export default () => {
         )}
         <ToggleButtonsContainer buttonsperrow={3}>
           <ToggleButton
-            setEnable={(value) => {
-              setAutoRefreshEnabled(value);
-              AddCookie('Twitch_AutoRefresh', value);
-            }}
+            setEnable={(value) => setAutoRefreshEnabled(value)}
             enabled={autoRefreshEnabled}
             label='Twitch auto-refresh (25s)'
             serviceName='Twitch'
@@ -235,10 +217,7 @@ export default () => {
             icon={<MdAutorenew size={18} color='rgb(169, 112, 255)' />}
           />
           <ToggleButton
-            setEnable={(value) => {
-              setShowTwitchSidebar(value);
-              AddCookie('Twitch_SidebarEnabled', value);
-            }}
+            setEnable={(value) => setShowTwitchSidebar(value)}
             enabled={showTwitchSidebar}
             label='Twitch sidebar'
             serviceName='Twitch'
@@ -251,10 +230,7 @@ export default () => {
             icon={<FiSidebar size={18} color='rgb(169, 112, 255)' />}
           />
           <ToggleButton
-            setEnable={(value) => {
-              setIsEnabledUpdateNotifications(value);
-              AddCookie('Twitch_update_notifications', value);
-            }}
+            setEnable={(value) => setIsEnabledUpdateNotifications(value)}
             enabled={isEnabledUpdateNotifications}
             label='Twitch update notifications'
             serviceName='Twitch'
@@ -268,10 +244,7 @@ export default () => {
             icon={<TiFlash size={18} color='rgb(169, 112, 255)' />}
           />
           <ToggleButton
-            setEnable={(value) => {
-              setIsEnabledOfflineNotifications(value);
-              AddCookie('Twitch_offline_notifications', value);
-            }}
+            setEnable={(value) => setIsEnabledOfflineNotifications(value)}
             enabled={isEnabledOfflineNotifications}
             label='Twitch offline notifications'
             serviceName='Twitch'
@@ -286,10 +259,7 @@ export default () => {
           />
 
           <ToggleButton
-            setEnable={(value) => {
-              setTwitchVideoHoverEnable(value);
-              AddCookie('TwitchVideoHoverEnabled', value);
-            }}
+            setEnable={(value) => setTwitchVideoHoverEnable(value)}
             enabled={twitchVideoHoverEnable}
             label='Twitch hover-video'
             serviceName='Twitch'
@@ -303,10 +273,7 @@ export default () => {
             smallerIcons={<FaTwitch size={14} color='rgb(169, 112, 255)' />}
           />
           <ToggleButton
-            setEnable={(value) => {
-              setYoutubeVideoHoverEnable(value);
-              AddCookie('YoutubeVideoHoverEnabled', value);
-            }}
+            setEnable={(value) => setYoutubeVideoHoverEnable(value)}
             enabled={youtubeVideoHoverEnable}
             label='Youtube hover-video'
             serviceName='Youtube'
