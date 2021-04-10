@@ -7,16 +7,14 @@ import Footer from '../footer';
 import Home from '../home';
 import Legality from '../legality';
 import Navbar from '../navigation';
-// import VideoPlayer from './../twitch/player/VideoPlayer';
 import TopStreams from '../twitch/categoryTopStreams';
 import TwitchAuthCallback from '../auth/TwitchAuthCallback';
-import TwitchChannelRoutes from './../twitch/Routes';
+import TwitchChannelRoutes from '../twitch/Routes';
 import YoutubeAuthCallback from '../auth/YoutubeAuthCallback';
-// import YoutubeVideoPlayer from './../youtube/YoutubeVideoPlayer';
 import Twitch from '../twitch/live';
 import TwitchVods from '../twitch/vods';
 import Twitter from '../twitter';
-import Youtube from './../youtube';
+import Youtube from '../youtube';
 import Favorites from '../favorites';
 import SharedVideoPlayer from '../sharedComponents/SharedVideoPlayer';
 
@@ -48,15 +46,6 @@ export default () => {
           <Route path='auth/youtube/callback' element={<YoutubeAuthCallback />} />
           <Route path='legality' element={<Legality />} />
           <Route path='privacy' element={<Legality />} />
-          {/* <Route path='youtube/:videoId' element={<YoutubeVideoPlayer />} /> */}
-          {/* <Route
-            path='youtube/:videoId'
-            element={
-              <SharedVideoPlayer>
-                <YoutubeVideoPlayer />
-              </SharedVideoPlayer>
-            }
-          /> */}
           <Route path='youtube/:videoId' element={<SharedVideoPlayer />} />
 
           <Route path='category' element={<TopStreams />} />
@@ -65,16 +54,6 @@ export default () => {
           <Route path='category/:category' element={<TopStreams />} />
           <Route path='game/:category' element={<TopStreams />} />
           <Route path='top/:category' element={<TopStreams />} />
-
-          {/* <Route path='videos/:videoId' element={<VideoPlayer />} /> */}
-          {/* <Route
-            path='videos/:videoId'
-            element={
-              <SharedVideoPlayer>
-                <VideoPlayer />
-              </SharedVideoPlayer>
-            }
-          /> */}
           <Route path='videos/:videoId' element={<SharedVideoPlayer />} />
           <Route path=':channelName/*' element={<TwitchChannelRoutes />} />
         </Routes>

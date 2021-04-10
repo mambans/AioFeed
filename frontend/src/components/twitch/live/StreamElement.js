@@ -93,6 +93,17 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
     setIsHovered(false);
   }
 
+  const streamData = {
+    started_at,
+    title,
+    profile_image_url,
+    user_id,
+    user_name,
+    viewer_count,
+    game_name,
+    login,
+  };
+
   return (
     <VideoContainer key={user_id}>
       <ImageContainer id={user_id} ref={ref} style={{ marginTop: '5px' }}>
@@ -102,16 +113,7 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
           to={{
             pathname: '/' + login?.toLowerCase() || user_name,
             state: {
-              passedChannelData: {
-                started_at: started_at,
-                title: title,
-                profile_image_url: profile_image_url,
-                user_id: user_id,
-                user_name: user_name,
-                viewer_count: viewer_count,
-                game_name: game_name,
-                login: login,
-              },
+              passedChannelData: streamData,
             },
           }}
         >
@@ -138,16 +140,7 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
           to={{
             pathname: '/' + login?.toLowerCase() || user_name,
             state: {
-              passedChannelData: {
-                started_at: started_at,
-                title: title,
-                profile_image_url: profile_image_url,
-                user_id: user_id,
-                user_name: user_name,
-                viewer_count: viewer_count,
-                game_name: game_name,
-                login: login,
-              },
+              passedChannelData: streamData,
             },
           }}
         >
@@ -162,16 +155,7 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
             to={{
               pathname: `/${login?.toLowerCase() || user_name}/page`,
               state: {
-                passedChannelData: {
-                  started_at: started_at,
-                  title: title,
-                  profile_image_url: profile_image_url,
-                  user_id: user_id,
-                  user_name: user_name,
-                  viewer_count: viewer_count,
-                  game_name: game_name,
-                  login: login,
-                },
+                passedChannelData: streamData,
               },
             }}
           >
@@ -182,16 +166,7 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
               to={{
                 pathname: `/${login?.toLowerCase() || user_name}/page`,
                 state: {
-                  passedChannelData: {
-                    started_at: started_at,
-                    title: title,
-                    profile_image_url: profile_image_url,
-                    user_id: user_id,
-                    user_name: user_name,
-                    viewer_count: viewer_count,
-                    game_name: game_name,
-                    login: login,
-                  },
+                  passedChannelData: streamData,
                 },
               }}
               className='channelName'
