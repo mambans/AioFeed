@@ -73,7 +73,7 @@ export default async ({ items }) => {
       ? foundGame.box_art_url
       : stream.game_name === ''
       ? ''
-      : `${process.env.PUBLIC_URL}/images/placeholder.jpg`;
+      : `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`;
 
     return stream;
   });

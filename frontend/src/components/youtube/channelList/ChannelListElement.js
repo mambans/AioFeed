@@ -51,7 +51,7 @@ export default (data) => {
         {channel.snippet.thumbnails.default.url ? (
           <img src={channel.snippet.thumbnails.default.url} alt=''></img>
         ) : (
-          <img src={`${process.env.PUBLIC_URL}/images/placeholder.jpg`} alt=''></img>
+          <img src={`${process.env.PUBLIC_URL}/images/webp/placeholder.webp`} alt=''></img>
         )}
         {channel.snippet.title}
       </a>

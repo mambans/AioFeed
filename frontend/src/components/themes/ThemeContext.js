@@ -36,12 +36,12 @@ export const ThemeProvider = ({ children }) => {
     {
       name: 'matt blue',
       type: 'dark',
-      image: 'matt_blue.png',
+      image: 'webp/matt_blue.webp',
     },
     {
       name: 'clean',
       type: 'dark',
-      image: 'clean.png',
+      image: 'webp/clean.webp',
     },
     {
       name: 'dark',
@@ -51,23 +51,23 @@ export const ThemeProvider = ({ children }) => {
     {
       name: 'coffee',
       type: 'dark',
-      image: 'coffee.jpg',
+      image: 'webp/coffee.webp',
       default: true,
     },
     {
       name: 'wood',
       type: 'dark',
-      image: 'wood.jpg',
+      image: 'webp/wood.webp',
     },
     {
       name: 'headphones',
       type: 'dark',
-      image: 'headphones3.jpg',
+      image: 'webp/headphones3.webp',
     },
     {
       name: 'stone',
       type: 'dark',
-      image: 'stone.webp',
+      image: 'webp/stone.webp',
     },
     {
       name: 'light',
@@ -78,7 +78,7 @@ export const ThemeProvider = ({ children }) => {
     {
       name: 'christmas',
       type: 'dark',
-      image: 'christmas.jpg',
+      image: 'webp/christmas.webp',
       startMonth: 12,
       startDate: 1,
       endMonth: 12,
@@ -87,7 +87,7 @@ export const ThemeProvider = ({ children }) => {
     {
       name: "new year's eve",
       type: 'dark',
-      image: 'new_years_eve.webp',
+      image: 'webp/new_years_eve.webp',
       startMonth: 1,
       startDate: 1,
       endMonth: 1,

@@ -84,7 +84,9 @@ export default ({
           <LiveIndicator channel={channel} />
         ) : (
           <img
-            src={channel?.profile_image_url || `${process.env.PUBLIC_URL}/images/placeholder.jpg`}
+            src={
+              channel?.profile_image_url || `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`
+            }
             alt=''
           />
         )}

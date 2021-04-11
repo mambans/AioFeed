@@ -36,7 +36,7 @@ html {
 }
 
 html[data-theme='wood'] {
-  --backgroundImg: url('/images/wood.jpg');
+  --backgroundImg: url('/images/webp/wood.webp');
   --backgroundColor: hsl(21, 93%, 5%);
   --sidebarsBackgroundColor: rgba(5, 10, 15, 0.5);
 
@@ -45,14 +45,14 @@ html[data-theme='wood'] {
 }
 
 html[data-theme='clean'] {
-  --backgroundImg: url('/images/clean.png');
+  --backgroundImg: url('/images/webp/clean.webp');
   --backgroundColor: rgb(37, 37, 37);
   --navigationbarBackground: #1c1f22f0;
   --scrollbarColors: #3d3d3d var(--navigationbarBackground);
 }
 
 html[data-theme='christmas'] {
-  --backgroundImg: url('/images/christmas.jpg');
+  --backgroundImg: url('/images/webp/christmas.webp');
   --backgroundColor: rgb(230, 230, 230);
   --textColor2: rgb(160, 160, 160);
   --textColor2Hover: rgb(255, 255, 255);
@@ -69,14 +69,14 @@ html[data-theme='christmas'] {
 }
 
 html[data-theme="new year's eve"] {
-  --backgroundImg: url('/images/new_years_eve.webp');
+  --backgroundImg: url('/images/webp/new_years_eve.webp');
   --backgroundColor: rgb(7, 38, 58);
   --refreshButtonHoverBackground: #000000b2;
   --scrollbarColors: rgb(18, 36, 58) rgb(5, 8, 10);
 }
 
 html[data-theme='stone'] {
-  --backgroundImg: url('/images/stone.webp');
+  --backgroundImg: url('/images/webp/stone.webp');
   --backgroundColor: rgb(15, 15, 15);
   --navigationbarBackground: #121415a8;
   --scrollbarColors: #1c1f22 rgb(5, 8, 10);
@@ -132,7 +132,7 @@ html[data-theme='light'] {
 }
 
 html[data-theme='matt blue'] {
-  --backgroundImg: url('/images/matt_blue.png');
+  --backgroundImg: url('/images/webp/matt_blue.webp');
   --backgroundColor: #1c1f28;
 
   --textColor1: #b2b7cc;
@@ -147,7 +147,7 @@ html[data-theme='matt blue'] {
 }
 
 html[data-theme='headphones'] {
-  --backgroundImg: url('/images/headphones3.jpg');
+  --backgroundImg: url('/images/webp/headphones3.webp');
   --backgroundColor: #200920;
 
   --navigationbarBackground: rgba(20, 13, 34, 0.89);
@@ -162,7 +162,7 @@ html[data-theme='headphones'] {
 
 html[data-theme='coffee'],
 html[data-theme='default'] {
-  --backgroundImg: url('/images/coffee.jpg');
+  --backgroundImg: url('/images/webp/coffee.webp');
   --backgroundColor: #221312;
   --sidebarsBackgroundColor: rgba(9, 12, 15, 0.678);
   --twitterBackground: rgba(0, 0, 0, 0.07);

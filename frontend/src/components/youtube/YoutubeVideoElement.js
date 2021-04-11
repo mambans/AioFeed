@@ -20,7 +20,7 @@ export const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
   standard?.url ||
   high?.url ||
   medium?.url ||
-  `${process.env.PUBLIC_URL}/images/placeholder.jpg`;
+  `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`;
 
 const HOVER_DELAY = 1000;
 

@@ -33,7 +33,7 @@ export default () => {
             <StyledSidebarTrigger id='NavigationProfileImageHoverOverlay' open={showSidebar} />
             <img
               id='NavigationProfileImage'
-              src={profileImage || `${process.env.PUBLIC_URL}/images/placeholder.jpg`}
+              src={profileImage || `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`}
               alt=''
             />
           </>

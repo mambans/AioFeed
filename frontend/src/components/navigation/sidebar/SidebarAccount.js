@@ -103,7 +103,7 @@ export default () => {
           )}
           {showAddImage && <UpdateProfileImg close={() => setShowAddImage(false)} />}
           <StyledProfileImg
-            src={profileImage || `${process.env.PUBLIC_URL}/images/placeholder.jpg`}
+            src={profileImage || `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`}
             alt=''
           />
         </ProfileImgContainer>

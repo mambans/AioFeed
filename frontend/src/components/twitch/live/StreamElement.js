@@ -69,7 +69,7 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
   const refChannel = useRef();
   const thumbnailUrl =
     `${thumbnail_url?.replace('{width}', 858)?.replace('{height}', 480)}` ||
-    `${process.env.PUBLIC_URL}/images/placeholder.jpg`;
+    `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`;
 
   useEventListenerMemo(
     'mouseenter',
