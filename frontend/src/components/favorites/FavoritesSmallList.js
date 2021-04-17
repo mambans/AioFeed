@@ -18,6 +18,12 @@ import { ListActionButton } from './StyledComponents';
 import ToolTip from '../sharedComponents/ToolTip';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
+const getYoutubeIdFromUrl = (videoId) => {
+  const url = new URL(videoId);
+  const searchParams = new URLSearchParams(url.search);
+  return searchParams.get('v');
+};
+
 export default ({ listName, videos, style }) => {
   const { lists, setLists } = useContext(FavoritesContext);
   const [listIsOpen, setListIsOpen] = useState();
@@ -74,9 +80,7 @@ export default ({ listName, videos, style }) => {
   const handleSubmit = async () => {
     const id = (() => {
       if (videoId?.includes('youtube.com/watch?v')) {
-        const url = new URL(videoId);
-        const searchParams = new URLSearchParams(url.search);
-        return searchParams.get('v');
+        return getYoutubeIdFromUrl(videoId);
       }
 
       if (
@@ -84,7 +88,7 @@ export default ({ listName, videos, style }) => {
         (videoId?.includes('aiofeed.com') &&
           (videoId?.includes('/videos/') || videoId?.includes('/youtube/')))
       ) {
-        const video = videoId.substring(videoId.lastIndexOf('/') + 1);
+        const video = videoId.substring(videoId.lastIndexOf('/') + 1).split('?')[0];
         return video;
       }
 
@@ -121,6 +125,14 @@ export default ({ listName, videos, style }) => {
   const filteredInputMatched = useMemo(() => {
     if (cursor.used) return savedFilteredInputMatched.current;
     const input = String(videoId)?.toLowerCase();
+    const youtubeVideoIdFromUrl =
+      Boolean(input) && input?.includes('youtube.com/watch?v') && getYoutubeIdFromUrl(input);
+    const twitchVideoIdFromUrl =
+      (Boolean(input) && input?.includes('twitch.tv/videos')) ||
+      (input?.includes('aiofeed.com') &&
+        (input?.includes('/videos/') || input?.includes('/youtube/')) &&
+        videoId.substring(videoId.lastIndexOf('/') + 1).split('?')[0]);
+
     const inputFiltered = Boolean(input)
       ? videos?.filter((v) => {
           return (
@@ -129,7 +141,9 @@ export default ({ listName, videos, style }) => {
             v?.snippet?.channelTitle?.toLowerCase()?.includes(input) ||
             v?.login?.toLowerCase()?.includes(input) ||
             v?.user_name?.toLowerCase()?.includes(input) ||
-            v?.id?.toLowerCase()?.includes(input)
+            v?.id?.toLowerCase()?.includes(input) ||
+            v?.id?.toLowerCase()?.includes(youtubeVideoIdFromUrl) ||
+            v?.id?.toLowerCase()?.includes(twitchVideoIdFromUrl)
           );
         })
       : videos;
