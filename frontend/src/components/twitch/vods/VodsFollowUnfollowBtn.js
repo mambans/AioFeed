@@ -27,10 +27,10 @@ export default ({ channel, channelId, loweropacity, marginright, className, show
   const [isHovered, setIsHovered] = useState();
   const vodEnabled = channels?.includes(channel?.toLowerCase());
   const vodButton = useRef();
-  const { feedVideoSizeProps } = useContext(FeedsContext) || {};
+  const { feedVideoSizeProps, enableTwitchVods } = useContext(FeedsContext) || {};
 
-  useEventListenerMemo('mouseenter', handleMouseOver, vodButton.current);
-  useEventListenerMemo('mouseleave', handleMouseOut, vodButton.current);
+  useEventListenerMemo('mouseenter', handleMouseOver, vodButton.current, enableTwitchVods);
+  useEventListenerMemo('mouseleave', handleMouseOut, vodButton.current, enableTwitchVods);
 
   function handleMouseOver() {
     setIsHovered(true);
@@ -69,7 +69,7 @@ export default ({ channel, channelId, loweropacity, marginright, className, show
     }
   }
 
-  if (!show) return null;
+  if (!show && !enableTwitchVods) return null;
 
   return (
     <ToolTip
