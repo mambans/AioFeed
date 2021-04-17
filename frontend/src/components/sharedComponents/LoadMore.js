@@ -15,6 +15,7 @@ export default ({
   setVideosToShow,
   videosToShow,
   videos,
+  showAll,
 }) => {
   const thisEleRef = useRef();
   const { videoElementsAmount } = useContext(CenterContext) || {};
@@ -91,7 +92,7 @@ export default ({
     return (
       <StyledLoadmore ref={thisEleRef} style={style} size={18}>
         <div className='line' />
-        <div id='Button' onClick={onClickFunc}>
+        <div className='button' onClick={onClickFunc}>
           {!loaded ? (
             <>
               Loading..
@@ -103,6 +104,11 @@ export default ({
             'Load more'
           )}
         </div>
+        {showAll && (
+          <div className='button' onClick={showAll}>
+            Show all
+          </div>
+        )}
         <div className='line' />
         {(setVideosToShow || resetFunc) && (
           <GrPowerReset size={20} title='Show less (reset)' id='reset' onClick={reset} />

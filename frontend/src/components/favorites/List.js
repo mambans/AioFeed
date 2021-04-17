@@ -177,6 +177,7 @@ export default ({
                 data-id={video.id}
                 data={video}
                 {...dragEvents}
+                vodBtnDisabled={true}
               />
             )}
           </CSSTransition>
@@ -187,6 +188,13 @@ export default ({
         setVideosToShow={setVideosToShow}
         videosToShow={videosToShow}
         videos={videos}
+        showAll={() => {
+          setVideosToShow({
+            amount: videos.length,
+            timeout: 750,
+            transitionGroup: 'videos',
+          });
+        }}
       />
     </VideosContainer>
   );
