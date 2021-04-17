@@ -9,7 +9,7 @@ import LoadMore from './../../sharedComponents/LoadMore';
 import { SubFeedContainer } from './../../sharedComponents/sharedStyledComponents';
 import Header from './Header';
 import AccountContext from './../../account/AccountContext';
-import VodsContext, { VodsProvider } from './VodsContext';
+import VodsContext from './VodsContext';
 import LoadingBoxes from './../LoadingBoxes';
 import FeedsContext from '../../feed/FeedsContext';
 import { getCookie, getLocalstorage } from '../../../util/Utils';
@@ -20,9 +20,7 @@ import { Container } from '../StyledComponents';
 
 export default () => (
   <FeedsCenterContainer>
-    <VodsProvider>
-      <Vods />
-    </VodsProvider>
+    <Vods />
   </FeedsCenterContainer>
 );
 

@@ -11,16 +11,9 @@ import { Youtube } from './../youtube';
 import FeedsCenterContainer from './FeedsCenterContainer';
 import { Twitch } from '../twitch/live';
 import { Favorites } from '../favorites';
-import { VodsProvider } from '../twitch/vods/VodsContext';
 import { FavoritesProvider } from '../favorites/FavoritesContext';
 
-export default () => (
-  <VodsProvider>
-    <Feed />
-  </VodsProvider>
-);
-
-const Feed = () => {
+export default () => {
   document.title = 'AioFeed | Feed';
   const { enableTwitch, enableYoutube, enableTwitchVods, enableFavorites } = useContext(
     FeedsContext

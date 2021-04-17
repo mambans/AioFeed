@@ -7,11 +7,10 @@ import Header from '../sharedComponents/Header';
 import FavoritesContext, { FavoritesProvider } from './FavoritesContext';
 import FeedsCenterContainer from '../feed/FeedsCenterContainer';
 import List from './List';
-import { VodsProvider } from '../twitch/vods/VodsContext';
 import useToken from '../twitch/useToken';
 import useYoutubeToken from '../youtube/useToken';
 import AlertHandler from '../alert';
-import AddNewVideoInput from './AddNewVideoInput';
+import FavoritesSmallList from './FavoritesSmallList';
 import DropDownDrawer from './DropDownDrawer';
 import { Container } from '../twitch/StyledComponents';
 import { getLocalstorage } from '../../util/Utils';
@@ -66,13 +65,11 @@ export const useCheckForVideosAndValidateToken = ({
 };
 
 export default () => (
-  <VodsProvider>
-    <FavoritesProvider>
-      <FeedsCenterContainer fullWidth={true}>
-        <Favorites />
-      </FeedsCenterContainer>
-    </FavoritesProvider>
-  </VodsProvider>
+  <FavoritesProvider>
+    <FeedsCenterContainer fullWidth={true}>
+      <Favorites />
+    </FeedsCenterContainer>
+  </FavoritesProvider>
 );
 
 export const FavoriteListContainer = ({

@@ -9,16 +9,13 @@ import Header from './Header';
 import Sidebar from '../sidebar';
 import TwitchStreams from './Twitch';
 import FeedsCenterContainer from '../../feed/FeedsCenterContainer';
-import { VodsProvider } from '../vods/VodsContext';
 import { Container } from '../StyledComponents';
 import ToolTip from '../../sharedComponents/ToolTip';
 import { CustomFilterProvider } from '../CustomFilters/CustomFilterContext';
 
 export default ({ forceMountTwitch = false } = {}) => (
   <FeedsCenterContainer forceMountTwitch={forceMountTwitch}>
-    <VodsProvider>
-      <Twitch in={forceMountTwitch} />
-    </VodsProvider>
+    <Twitch in={forceMountTwitch} />
   </FeedsCenterContainer>
 );
 

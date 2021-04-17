@@ -13,7 +13,7 @@ import Sidebar from './sidebar';
 import GameSearchBar from '../twitch/categoryTopStreams/GameSearchBar';
 import ChannelSearchList from './../twitch/channelList/index';
 import NavExpandingSides from './NavExpandingSides';
-import { VodsProvider } from '../twitch/vods/VodsContext';
+import VodsContext, { VodsProvider } from '../twitch/vods/VodsContext';
 
 const StyledNavbar = styled(Navbar)`
   display: flex;
@@ -39,7 +39,15 @@ const StyledNav = styled(Nav)`
 
 export default () => {
   const { visible, shrinkNavbar } = useContext(NavigationContext);
+  const { setChannels } = useContext(VodsContext) || {};
   const leftExpand = useRef();
+
+  const channelSearchListProps = {
+    position: 'fixed',
+    showButton: false,
+    style: { background: 'none', boxShadow: 'none', margin: '0 10px' },
+    inputStyle: { textOverflow: 'unset' },
+  };
 
   return (
     <CSSTransition in={visible} timeout={300} classNames='fade-250ms' unmountOnExit>
@@ -96,21 +104,14 @@ export default () => {
         <NavExpandingSides side='right'>
           <FaAngleLeft className='arrow' size={20} />
           <FaAngleLeft className='arrow shadow' size={20} />
-          <GameSearchBar
-            position='fixed'
-            showButton={false}
-            style={{ background: 'none', boxShadow: 'none', margin: '0 10px' }}
-            inputStyle={{ textOverflow: 'unset' }}
-            openInNewTab={true}
-          />
-          <VodsProvider>
-            <ChannelSearchList
-              position='fixed'
-              showButton={false}
-              style={{ background: 'none', boxShadow: 'none', margin: '0 10px' }}
-              inputStyle={{ textOverflow: 'unset' }}
-            />
-          </VodsProvider>
+          <GameSearchBar {...channelSearchListProps} openInNewTab={true} />
+          {setChannels ? (
+            <ChannelSearchList {...channelSearchListProps} />
+          ) : (
+            <VodsProvider forceMount={true}>
+              <ChannelSearchList {...channelSearchListProps} />
+            </VodsProvider>
+          )}
           <Sidebar />
         </NavExpandingSides>
       </StyledNavbar>

@@ -8,7 +8,7 @@ import { TwitchContext } from '../useToken';
 
 const VodsContext = React.createContext();
 
-export const VodsProvider = ({ children }) => {
+export const VodsProvider = ({ children, forceMount = false }) => {
   const { username, authKey } = useContext(AccountContext);
   const { isEnabledUpdateNotifications, isEnabledOfflineNotifications } = useContext(TwitchContext);
   const { enableTwitchVods } = useContext(FeedsContext) || {};
@@ -18,27 +18,37 @@ export const VodsProvider = ({ children }) => {
     'ChannelsUpdateNotifs',
     []
   );
+  const location = window.location.pathname?.split('/')[1];
 
   useEffect(() => {
+    const vodContextBlacklistRoutes = [
+      '',
+      'index',
+      'home',
+      'legality',
+      'privacy',
+      'twitter',
+      'auth',
+    ];
+
     (async () => {
       if (
         getCookie(`Twitch-access_token`) &&
+        (!vodContextBlacklistRoutes.includes(location) || forceMount) &&
         (isEnabledUpdateNotifications || isEnabledOfflineNotifications || enableTwitchVods)
       ) {
         const fetchedColumns = await FetchMonitoredVodChannelsList(username, authKey);
-        // console.log('VodsProvider -> fetchedColumns', fetchedColumns);
-        if (fetchedColumns?.TwitchVodsPreferences) {
-          setChannels(
-            fetchedColumns.TwitchVodsPreferences?.Channels ||
-              getLocalstorage('TwitchVods-Channels') ||
-              []
-          );
-          setUpdateNotischannels(
-            fetchedColumns.TwitchPreferences?.ChannelsUpdateNotifs ||
-              getLocalstorage('ChannelsUpdateNotifs') ||
-              []
-          );
-        }
+
+        setChannels(
+          fetchedColumns?.TwitchVodsPreferences?.Channels ||
+            getLocalstorage('TwitchVods-Channels') ||
+            []
+        );
+        setUpdateNotischannels(
+          fetchedColumns?.TwitchPreferences?.ChannelsUpdateNotifs ||
+            getLocalstorage('ChannelsUpdateNotifs') ||
+            []
+        );
       }
     })();
   }, [
@@ -49,6 +59,8 @@ export const VodsProvider = ({ children }) => {
     isEnabledUpdateNotifications,
     isEnabledOfflineNotifications,
     enableTwitchVods,
+    forceMount,
+    location,
   ]);
 
   return (

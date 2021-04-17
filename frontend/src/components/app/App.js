@@ -13,6 +13,7 @@ import ThemeContext from './../themes/ThemeContext';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import { TwitchProvider } from '../twitch/useToken';
 import { YoutubeProvider } from '../youtube/useToken';
+import { VodsProvider } from '../twitch/vods/VodsContext';
 
 export default () => {
   return (
@@ -23,9 +24,11 @@ export default () => {
             <NavigationProvider>
               <NotificationsProvider>
                 <FeedsProvider>
-                  <FooterProvider>
-                    <App />
-                  </FooterProvider>
+                  <VodsProvider>
+                    <FooterProvider>
+                      <App />
+                    </FooterProvider>
+                  </VodsProvider>
                 </FeedsProvider>
               </NotificationsProvider>
             </NavigationProvider>
