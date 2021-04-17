@@ -14,6 +14,21 @@ export const Container = styled.div`
     width: 19vw;
   }
 
+  a#editLink {
+    right: 0;
+    position: absolute;
+    padding: 5px;
+    display: flex;
+    color: var(----textColor2);
+    opacity: 0.3;
+    transition: opacity 250ms, color 250ms;
+
+    &:hover {
+      color: var(----textColor2Hover);
+      opacity: 0.85;
+    }
+  }
+
   &.twitterList-enter {
     opacity: 0;
     width: 0 !important;
