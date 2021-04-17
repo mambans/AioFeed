@@ -20,16 +20,16 @@ export default ({
   const [volumeText, setVolumeText] = useState(0);
   const [volumeMuted, setVolumeMuted] = useState(true);
 
-  useEventListenerMemo('keydown', keyboardEvents, window, window.Twitch.Player.READY);
+  useEventListenerMemo('keydown', keyboardEvents, window, window?.Twitch?.Player?.READY);
   useEventListenerMemo(
     'wheel',
     scrollChangeVolumeEvent,
     PlayerUIControlls,
-    window.Twitch.Player.READY
+    window?.Twitch?.Player?.READY
   );
-  useEventListenerMemo('mousedown', mouseEvents, PlayerUIControlls, window.Twitch.Player.READY);
+  useEventListenerMemo('mousedown', mouseEvents, PlayerUIControlls, window?.Twitch?.Player?.READY);
   useEventListenerMemo(
-    window.Twitch.Player.PLAYING,
+    window?.Twitch?.Player?.PLAYING,
     OnPlayingEventListeners,
     TwitchPlayer,
     TwitchPlayer

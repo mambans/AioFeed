@@ -100,9 +100,9 @@ export default () => {
 
   useFullscreen();
 
-  useEventListenerMemo(window.Twitch.Player.ONLINE, onlineEvents, twitchVideoPlayer.current);
-  useEventListenerMemo(window.Twitch.Player.OFFLINE, offlineEvents, twitchVideoPlayer.current);
-  useEventListenerMemo(window.Twitch.Player.PLAYING, playingEvents, twitchVideoPlayer.current);
+  useEventListenerMemo(window?.Twitch?.Player?.ONLINE, onlineEvents, twitchVideoPlayer.current);
+  useEventListenerMemo(window?.Twitch?.Player?.OFFLINE, offlineEvents, twitchVideoPlayer.current);
+  useEventListenerMemo(window?.Twitch?.Player?.PLAYING, playingEvents, twitchVideoPlayer.current);
 
   useEventListenerMemo('mouseleave', handleMouseOut, PlayerUIControlls.current);
   useEventListenerMemo('dblclick', toggleFullScreen, PlayerUIControlls.current);
@@ -132,17 +132,18 @@ export default () => {
   useEventListenerMemo('touchmove', showAndResetTimer);
 
   useEffect(() => {
-    twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', {
-      width: '100%',
-      height: '100%',
-      theme: 'dark',
-      layout: 'video',
-      channel: channelName,
-      muted: false,
-      allowfullscreen: true,
-      parent: ['aiofeed.com'],
-    });
-
+    if (window?.Twitch?.Player) {
+      twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', {
+        width: '100%',
+        height: '100%',
+        theme: 'dark',
+        layout: 'video',
+        channel: channelName,
+        muted: false,
+        allowfullscreen: true,
+        parent: ['aiofeed.com'],
+      });
+    }
     return () => {
       clearInterval(refreshStreamInfoTimer.current);
       clearTimeout(fadeTimer.current);
@@ -500,16 +501,18 @@ export default () => {
                   onClick={() => {
                     console.log('Refreshing Twitch video');
                     videoElementRef.current.removeChild(document.querySelector('iframe'));
-                    twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', {
-                      width: '100%',
-                      height: '100%',
-                      theme: 'dark',
-                      layout: 'video',
-                      channel: channelName,
-                      muted: false,
-                      allowfullscreen: true,
-                      parent: ['aiofeed.com'],
-                    });
+                    if (window?.Twitch?.Player) {
+                      twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', {
+                        width: '100%',
+                        height: '100%',
+                        theme: 'dark',
+                        layout: 'video',
+                        channel: channelName,
+                        muted: false,
+                        allowfullscreen: true,
+                        parent: ['aiofeed.com'],
+                      });
+                    }
                   }}
                 />
               </SmallButtonContainer>

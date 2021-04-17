@@ -75,8 +75,8 @@ export default () => {
   const clipPagination = useRef();
   const twitchPlayer = useRef();
 
-  useEventListenerMemo(window.Twitch.Player.ONLINE, onlineEvents, twitchPlayer.current);
-  useEventListenerMemo(window.Twitch.Player.OFFLINE, offlineEvents, twitchPlayer.current);
+  useEventListenerMemo(window?.Twitch?.Player?.ONLINE, onlineEvents, twitchPlayer.current);
+  useEventListenerMemo(window?.Twitch?.Player?.OFFLINE, offlineEvents, twitchPlayer.current);
 
   const getIdFromName = useCallback(async () => {
     await API.getUser({
@@ -252,7 +252,7 @@ export default () => {
   }
 
   useEffect(() => {
-    if (twitchToken && !twitchPlayer.current) {
+    if (twitchToken && !twitchPlayer.current && window.Twitch.Player) {
       twitchPlayer.current = new window.Twitch.Player('twitch-embed', {
         width: `${300 * 1.777777777777778}px`,
         height: '300px',

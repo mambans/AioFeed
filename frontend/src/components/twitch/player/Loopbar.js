@@ -112,8 +112,8 @@ export default ({ twitchVideoPlayer, duration = twitchVideoPlayer.getDuration() 
 
   useEventListenerMemo('mouseup', handleResizeMouseUp, document, end.active || start.active);
   useEventListenerMemo('mousemove', resize, document, end.active || start.active);
-  useEventListenerMemo(window.Twitch.Player.ENDED, loopVideo, twitchVideoPlayer);
-  useEventListenerMemo(window.Twitch.Player.PLAYING, setAndStartTimer, twitchVideoPlayer);
+  useEventListenerMemo(window?.Twitch?.Player?.ENDED, loopVideo, twitchVideoPlayer);
+  useEventListenerMemo(window?.Twitch?.Player?.PLAYING, setAndStartTimer, twitchVideoPlayer);
 
   useEffect(() => {
     const startTime = timeToSeconds(urlStartTime);

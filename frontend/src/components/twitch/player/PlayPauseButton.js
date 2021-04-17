@@ -6,8 +6,8 @@ import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 export default ({ TwitchPlayer, PlayerUIControlls }) => {
   const [isPaused, setIsPaused] = useState(false);
 
-  useEventListenerMemo('keydown', keyboardEvents, window, window.Twitch.Player.READY);
-  useEventListenerMemo('mousedown', mouseEvents, PlayerUIControlls, window.Twitch.Player.READY);
+  useEventListenerMemo('keydown', keyboardEvents, window, window?.Twitch?.Player?.READY);
+  useEventListenerMemo('mousedown', mouseEvents, PlayerUIControlls, window?.Twitch?.Player?.READY);
 
   function PausePlay() {
     if (TwitchPlayer.isPaused()) {

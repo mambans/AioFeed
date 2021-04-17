@@ -32,19 +32,19 @@ export default ({ listIsOpen, listWidth, playNext }) => {
 
     if (twitchVideoPlayer.current) {
       twitchVideoPlayer.current.setVideo(videoId, timeToSeconds(time));
-    } else {
+    } else if (window?.Twitch?.Player) {
       twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', playerParams);
     }
   }, [videoId, time]);
 
   useEventListenerMemo(
-    window.Twitch.Player.PLAYING,
+    window?.Twitch?.Player?.PLAYING,
     () => {
       setDuration(twitchVideoPlayer.current.getDuration());
     },
     twitchVideoPlayer.current
   );
-  useEventListenerMemo(window.Twitch.Player.ENDED, playNext, twitchVideoPlayer.current);
+  useEventListenerMemo(window?.Twitch?.Player?.ENDED, playNext, twitchVideoPlayer.current);
 
   useEffect(() => {
     document.title = `${(channelName && `${channelName} -`) || ''} ${videoId}`;

@@ -2,11 +2,11 @@ import axios from 'axios';
 import { getCookie, getLocalstorage } from '../../util/Utils';
 
 const fetchNextPgeOfSubscriptions = async ({ total, PagePagination, followedchannels }) => {
-  if (followedchannels.length < total && PagePagination) {
+  if (followedchannels?.length < total && PagePagination) {
     const nextPage = await axios
       .get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {
         params: {
-          maxResults: Math.min(Math.max(parseInt(total - followedchannels.length), 0), 50),
+          maxResults: Math.min(Math.max(parseInt(total - followedchannels?.length), 0), 50),
           mine: true,
           part: 'snippet',
           order: 'alphabetical',
@@ -24,7 +24,7 @@ const fetchNextPgeOfSubscriptions = async ({ total, PagePagination, followedchan
 
     const channels = [...followedchannels, ...nextPage.data.items];
 
-    if (channels.length < total && nextPage.data.nextPageToken) {
+    if (channels?.length < total && nextPage.data.nextPageToken) {
       return await fetchNextPgeOfSubscriptions({
         total: total,
         PagePagination: nextPage.data.nextPageToken,

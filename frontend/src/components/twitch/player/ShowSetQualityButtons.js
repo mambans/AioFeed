@@ -9,7 +9,7 @@ export default ({ TwitchPlayer }) => {
   const [qualities, setQualities] = useState();
   const [activeQuality, setActiveQuality] = useState();
 
-  useEventListenerMemo(window.Twitch.Player.PLAYING, onPlaying, TwitchPlayer);
+  useEventListenerMemo(window?.Twitch?.Player?.PLAYING, onPlaying, TwitchPlayer);
 
   function onPlaying() {
     const defaultQuality = TwitchPlayer.getQuality();
