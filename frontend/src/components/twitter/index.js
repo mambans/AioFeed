@@ -2,6 +2,7 @@ import { Alert } from 'react-bootstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { TwitterTimelineEmbed } from 'react-twitter-embed';
 import React, { useContext } from 'react';
+import { MdEdit } from 'react-icons/md';
 
 import { Container, LoadingPlaceholder, MainContainer } from './StyledComponents';
 import FeedsContext from '../feed/FeedsContext';
@@ -38,6 +39,15 @@ export const Twitter = ({ in: forceMount = false }) => {
           {twitterLists?.map((id) => (
             <CSSTransition classNames='twitterList' key={id} timeout={750} unmountOnExit>
               <Container key={id}>
+                <a
+                  title='Edit list info at Twitter.com'
+                  id='editLink'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  href={`https://twitter.com/i/lists/${id}`}
+                >
+                  <MdEdit size={14} />
+                </a>
                 <TwitterTimelineEmbed
                   sourceType='list'
                   id={id}
