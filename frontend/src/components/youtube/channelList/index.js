@@ -5,24 +5,7 @@ import StyledLoadingList from './../../twitch/categoryTopStreams/LoadingList';
 import ChannelListElement from './ChannelListElement';
 import { getLocalstorage } from '../../../util/Utils';
 import SearchList from '../../sharedComponents/SearchList';
-
-export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
-  const parentRect = parentDiv?.getBoundingClientRect();
-  const childRect = childDiv?.getBoundingClientRect();
-
-  const scrollDown =
-    childRect?.bottom + 20.5 >= parentRect?.bottom || childRect?.top + 20.5 >= parentRect?.bottom;
-  const scrollUp =
-    childRect?.top - 20.5 <= parentRect?.top || childRect?.bottom - 20.5 <= parentRect?.top;
-
-  if (scrollDown || scrollUp) {
-    childDiv.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-    parentDiv.scrollBy({
-      top: direction === 'Down' && scrollDown ? +41 : direction === 'Up' && scrollUp ? -41 : 0,
-      behavior: 'smooth',
-    });
-  }
-};
+import { scrollToIfNeeded } from '../../twitch/channelList/handleArrowNavigation';
 
 const sortAlphaByProp = (a, b) => {
   var channelA = a.snippet.title?.toLowerCase();
@@ -36,10 +19,10 @@ export const sortInputFirst = (input, data) => {
   let others = [];
 
   data.forEach((element) => {
-    if (element.snippet.title.slice(0, input.length) === input) {
+    if (element.snippet.title.slice(0, input?.length) === input) {
       caseSensitive.push(element);
     } else if (
-      element.snippet.title.slice(0, input.length)?.toLowerCase() === input?.toLowerCase()
+      element.snippet.title.slice(0, input?.length)?.toLowerCase() === input?.toLowerCase()
     ) {
       caseInsensitive.push(element);
     } else {
@@ -79,7 +62,7 @@ export default (data) => {
                 ?.toLowerCase()
                 .includes((event.target.value || value)?.toLowerCase());
             });
-            if (filtered.length > 1) {
+            if (filtered?.length > 1) {
               const sorted = sortInputFirst(event.target.value || value, filtered);
               setFilteredChannels(sorted);
             } else {
@@ -114,20 +97,20 @@ export default (data) => {
 
   const handleArrowKey = (e) => {
     try {
-      if (filteredChannels && filteredChannels.length > 1) {
+      if (filteredChannels && filteredChannels?.length > 1) {
         if (e.key === 'ArrowDown') {
           e.preventDefault();
           setCursor((cursor) => ({
-            position: Math.min(Math.max(cursor.position + 1, 0), filteredChannels.length - 1),
+            position: Math.min(Math.max(cursor.position + 1, 0), filteredChannels?.length - 1),
           }));
-          scrollToIfNeeded(ulListRef.current, document.querySelector('.selected'), 'Down');
+          scrollToIfNeeded(ulListRef.current);
           manualSet(filteredChannels[cursor.position + 1]?.snippet?.title);
         } else if (e.key === 'ArrowUp') {
           e.preventDefault();
           setCursor((cursor) => ({
-            position: Math.min(Math.max(cursor.position - 1, 0), filteredChannels.length - 1),
+            position: Math.min(Math.max(cursor.position - 1, 0), filteredChannels?.length - 1),
           }));
-          scrollToIfNeeded(ulListRef.current, document.querySelector('.selected'), 'Up');
+          scrollToIfNeeded(ulListRef.current);
           manualSet(filteredChannels[cursor.position - 1]?.snippet?.title);
         }
       }
@@ -170,7 +153,7 @@ export default (data) => {
         <GameListUlContainer ref={ulListRef}>
           {filteredChannels ? (
             <>
-              <p>{`Total: ${filteredChannels.length}`}</p>
+              <p>{`Total: ${filteredChannels?.length}`}</p>
 
               {filteredChannels.map((channel, index) => (
                 <ChannelListElement

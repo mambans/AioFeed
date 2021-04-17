@@ -30,9 +30,7 @@ export const addFavoriteVideo = async (lists, setLists, list_Name, newItem) => {
 
     allOrinalLists[list_Name] = newObj;
 
-    setLists({ ...allOrinalLists });
-
-    await axios
+    axios
       .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
         username: getCookie(`AioFeed_AccountName`),
         videosObj: newObj,
@@ -40,6 +38,14 @@ export const addFavoriteVideo = async (lists, setLists, list_Name, newItem) => {
         authkey: getCookie(`AioFeed_AuthKey`),
       })
       .catch((e) => console.error(e));
+
+    const promise = await new Promise((resolve) => {
+      const items = { ...allOrinalLists };
+      setLists(items);
+      resolve(items[list_Name]);
+    });
+
+    return promise;
   }
 };
 

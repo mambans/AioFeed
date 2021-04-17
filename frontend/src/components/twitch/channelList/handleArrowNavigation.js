@@ -1,19 +1,26 @@
-export const scrollToIfNeeded = (parentDiv, childDiv, direction) => {
-  const parentRect = parentDiv?.getBoundingClientRect();
-  const childRect = childDiv?.getBoundingClientRect();
+export const scrollToIfNeeded = (parentEle, childEle) => {
+  setTimeout(() => {
+    const child = !childEle
+      ? parentEle.querySelector('.selected')
+      : typeof childEle === 'function'
+      ? childEle()
+      : childEle;
+    const parentRect = parentEle?.getBoundingClientRect();
+    const childRect = child?.getBoundingClientRect();
+    const scrollValue = childRect?.bottom - (parentRect.bottom - childRect.height);
 
-  const scrollDown =
-    childRect?.bottom + 20.5 >= parentRect?.bottom || childRect?.top + 20.5 >= parentRect?.bottom;
-  const scrollUp =
-    childRect?.top - 20.5 <= parentRect?.top || childRect?.bottom - 20.5 <= parentRect?.top;
-
-  if (scrollDown || scrollUp) {
-    childDiv.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-    parentDiv.scrollBy({
-      top: direction === 'Down' && scrollDown ? +41 : direction === 'Up' && scrollUp ? -41 : 0,
-      behavior: 'smooth',
-    });
-  }
+    if (scrollValue && Boolean(childRect?.bottom)) {
+      parentEle.scrollBy({
+        top: scrollValue,
+        behavior: 'smooth',
+      });
+    } else if (child) {
+      parentEle.scroll({
+        bottom: child.height || 41,
+        behavior: 'smooth',
+      });
+    }
+  }, 1);
 };
 
 export default (e, list, cursor, setCursor, setValue, ulListRef, selectedNewValue) => {
@@ -41,11 +48,8 @@ export default (e, list, cursor, setCursor, setValue, ulListRef, selectedNewValu
       }));
 
       setValue(newValueProperty);
-      scrollToIfNeeded(
-        ulListRef,
-        document.querySelector('.selected'),
-        e.key === 'ArrowDown' ? 'Down' : 'Up'
-      );
+
+      scrollToIfNeeded(ulListRef);
     }
   } catch (error) {
     console.log('handleArrowKey -> error', error);

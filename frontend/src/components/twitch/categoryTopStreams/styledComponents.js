@@ -23,6 +23,40 @@ export const StyledGameListElement = styled.li`
     color: ${({ selected }) => (selected ? '#ffffff' : 'inherit')};
     font-weight: ${({ selected }) => (selected ? 'bold' : 'unset')};
   }
+
+  &.fade-appear {
+    opacity: 0;
+    transition: opacity 250ms;
+  }
+  &.fade-appear-active {
+    opacity: 1;
+    transition: opacity 250ms;
+  }
+
+  &.fade-enter {
+    opacity: 0;
+    transition: opacity 250ms;
+  }
+
+  &.fade-enter-active {
+    opacity: 1;
+    transition: opacity 250ms;
+  }
+
+  &.fade-exit {
+    opacity: 1;
+    transition: opacity 250ms;
+  }
+
+  &.fade-exit-active {
+    opacity: 0;
+    transition: opacity 250ms;
+  }
+
+  &.fade-exit-done {
+    opacity: 0;
+    transition: opacity 250ms;
+  }
 `;
 
 export const StyledShowAllButton = styled.li`
@@ -40,6 +74,7 @@ export const GameListUlContainer = styled.ul`
   scrollbar-width: thin;
   border-radius: 0 0 10px 10px;
   border: none;
+  scroll-behavior: smooth;
 
   transform: translate3d(0, 0, 0);
   color: rgb(230, 230, 230);
