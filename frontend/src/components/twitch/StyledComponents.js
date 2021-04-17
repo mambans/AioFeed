@@ -13,20 +13,20 @@ export const StyledLoadmore = styled.div`
   padding-bottom: 10px;
 
   &:hover {
-    div:not(#Button) {
+    div:not(.button) {
       opacity: 1;
       transition: opacity 200ms;
     }
   }
 
-  div:not(#Button).line {
+  div:not(.button).line {
     background: var(--subFeedHeaderBorder);
     height: 1px;
     opacity: 0.75;
     transition: opacity 200ms;
   }
 
-  div#Button {
+  div.button {
     display: flex;
     width: max-content;
     cursor: pointer;
