@@ -59,7 +59,7 @@ export default () => {
             style={{ display: 'flex', alignItems: 'center', paddingLeft: '0', minWidth: '141px' }}
           >
             <img
-              src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`}
+              src={`${process.env.PUBLIC_URL}/android-chrome-192x192.webp`}
               alt='logo'
               className='logo'
             />

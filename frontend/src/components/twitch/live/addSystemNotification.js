@@ -33,8 +33,8 @@ export default async ({ status, stream, body, newlyAddedStreams, setUnseenNotifi
       status?.toLowerCase() === 'offline' ? '/page' : ''
     }`;
     let notification = new Notification(`${loginNameFormat(stream)} ${status}`, {
-      icon: stream?.profile_image_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
-      badge: stream?.profile_image_url || `${process.env.PUBLIC_URL}/android-chrome-512x512.png`,
+      icon: stream?.profile_image_url || `${process.env.PUBLIC_URL}/android-chrome-192x192.webp`,
+      badge: stream?.profile_image_url || `${process.env.PUBLIC_URL}/android-chrome-192x192.webp`,
       body,
     });
 
