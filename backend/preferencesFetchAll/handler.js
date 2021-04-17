@@ -12,9 +12,7 @@ exports.handler = async (event) => {
     const res = await preferencesFetchAll({
       username,
       authkey,
-    }).catch((e) => {
-      console.log(e);
-    });
+    }).catch((e) => console.log(e));
 
     return {
       statusCode: 200,
