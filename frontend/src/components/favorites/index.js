@@ -97,7 +97,7 @@ export const FavoriteListContainer = ({
         onHoverIconLink='favorites'
         rightSide={
           <>
-            <AddNewVideoInput list={list} videos={videos} listName={list.name} />
+            <FavoritesSmallList list={list} videos={videos} listName={list.name} />
             <DropDownDrawer list={list} />
           </>
         }

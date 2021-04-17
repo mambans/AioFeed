@@ -6,7 +6,7 @@ import { FaRandom } from 'react-icons/fa';
 import { TiArrowLoop } from 'react-icons/ti';
 
 import { useCheckForVideosAndValidateToken } from '../favorites';
-import AddNewVideoInput from '../favorites/AddNewVideoInput';
+import FavoritesSmallList from '../favorites/FavoritesSmallList';
 import { restructureVideoList, uploadNewList } from '../favorites/dragDropUtils';
 import FavoritesContext from '../favorites/FavoritesContext';
 import { fetchListVideos } from '../favorites/List';
@@ -199,7 +199,7 @@ export default ({
           />
         </ToolTip>
       </PlayListButtonsContainer>
-      <AddNewVideoInput
+      <FavoritesSmallList
         list={list}
         listName={listName}
         videos={listVideos}
