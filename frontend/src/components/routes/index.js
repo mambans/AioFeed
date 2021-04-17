@@ -32,20 +32,23 @@ export default () => {
           <Route path='' element={<Home />} />
           <Route path='index' element={<Home />} />
           <Route path='home' element={<Home />} />
-          <Route path='favorites' element={<Favorites />} />
-          <Route path='saved' to='favorites' />
-          <Route path='lists' to='favorites' />
+
+          <Route path='legality' element={<Legality />} />
+          <Route path='privacy' element={<Legality />} />
+
+          <Route path='vods' element={<TwitchVods />} />
           <Route path='feed' element={<Feed />} />
           <Route path='live' element={<Twitch forceMountTwitch={true} />} />
-          <Route path='twitch' to='live' />
-          <Route path='vods' element={<TwitchVods />} />
+          <Route path='favorites' element={<Favorites />} />
+
+          <Navigate path='saved' to='favorites' />
+          <Navigate path='lists' to='favorites' />
+          <Navigate path='twitch' to='live' />
           <Route path='twitter' element={<Twitter />} />
 
           <Route path='youtube' element={<Youtube />} />
           <Route path='auth/twitch/callback' element={<TwitchAuthCallback />} />
           <Route path='auth/youtube/callback' element={<YoutubeAuthCallback />} />
-          <Route path='legality' element={<Legality />} />
-          <Route path='privacy' element={<Legality />} />
           <Route path='youtube/:videoId' element={<SharedVideoPlayer />} />
 
           <Route path='category' element={<TopStreams />} />
