@@ -175,9 +175,9 @@ export const RemoveItemBtn = styled(MdStar)`
   transition: color 250ms;
   color: rgb(255, 255, 0);
 
-  /* &:hover {
+  &:hover {
     color: rgb(100, 100, 100);
-  } */
+  }
 `;
 
 export const ListActionButton = styled.p`
