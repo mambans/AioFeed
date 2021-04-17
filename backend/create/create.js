@@ -40,6 +40,7 @@ module.exports = async ({ username, email, password }) => {
         TwitchVodsPreferences: {},
         TwitterPreferences: {},
         YoutubePreferences: {},
+        Created_date: new Date().toLocaleString(),
       },
       ConditionExpression: 'attribute_not_exists(Username) AND attribute_not_exists(Email)',
       ReturnItemCollectionMetrics: 'SIZE',
