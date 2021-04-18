@@ -41,6 +41,8 @@ import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import useQuery from '../../../hooks/useQuery';
 import loginNameFormat from '../loginNameFormat';
 import useToken from '../useToken';
+import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
+import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 
 export default () => {
   const { passedChannelData } = useLocation().state || {};
@@ -439,17 +441,22 @@ export default () => {
                               src={`${process.env.PUBLIC_URL}/partnered.png`}
                             />
                           )}
-
                           <FollowUnfollowBtn
                             show={channelInfo}
                             channelName={channelName}
                             id={channelInfo._id}
                           />
-                          {/* <AddUpdateNotificationsButton
+                          <VodsFollowUnfollowBtn
+                            size={28}
+                            channel={channelInfo.name || channelName}
+                            channelId={channelInfo._id}
+                          />
+
+                          <AddUpdateNotificationsButton
                             show={channelInfo}
-                            channel={channelName}
-                            size={30}
-                          /> */}
+                            channel={channelInfo.name || channelName}
+                            size={26}
+                          />
                         </div>
                         <Link
                           to={{

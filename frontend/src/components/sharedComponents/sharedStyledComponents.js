@@ -539,7 +539,7 @@ export const VodAddRemoveButton = styled(Button).attrs({ variant: 'link' })`
   padding: 0px;
   opacity: ${({ loweropacity }) => loweropacity || 1};
   margin-right: ${({ marginright }) => marginright || 'unset'};
-  opacity: 0;
+  /* opacity: 0; */
   transition: opacity 250ms, transform 250ms;
 
   &:hover {

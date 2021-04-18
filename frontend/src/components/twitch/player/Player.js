@@ -55,6 +55,8 @@ import toggleFullscreenFunc from './toggleFullscreenFunc';
 import useToken from '../useToken';
 import useFullscreen from '../../../hooks/useFullscreen';
 import ToolTip from '../../sharedComponents/ToolTip';
+import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
+import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.1, 175);
 
@@ -416,13 +418,27 @@ export default () => {
                       ref={link1}
                       href={`https://www.twitch.tv/${streamInfo?.user_name || channelName}`}
                     >
-                      <FaTwitch size={30} color='purple' />
+                      <FaTwitch size={26} color='purple' />
                     </a>
 
                     <FollowUnfollowBtn
                       channelName={streamInfo?.user_name || channelName}
                       id={streamInfo.user_id || twitchVideoPlayer.current.getChannelId()}
                     />
+
+                    <VodsFollowUnfollowBtn
+                      size={28}
+                      channel={streamInfo?.user_name || channelName}
+                      channelId={streamInfo.user_id}
+                      marginright='5px;'
+                    />
+
+                    <AddUpdateNotificationsButton
+                      channel={streamInfo?.user_name || channelName}
+                      marginright='5px;'
+                      size={26}
+                    />
+
                     <ToolTip
                       placement={'right'}
                       delay={{ show: 500, hide: 0 }}

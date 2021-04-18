@@ -21,7 +21,15 @@ import ToolTip from '../../sharedComponents/ToolTip';
  * @param {Boolean} [show = true] - mount/show button.
  */
 
-export default ({ channel, channelId, loweropacity, marginright, className, show = true }) => {
+export default ({
+  channel,
+  channelId,
+  loweropacity,
+  marginright,
+  className,
+  show = true,
+  size,
+}) => {
   const { vods, setVods, channels, setChannels } = useContext(VodsContext) || {};
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
@@ -102,12 +110,12 @@ export default ({ channel, channelId, loweropacity, marginright, className, show
       >
         {vodEnabled ? (
           isHovered ? (
-            <MdVideocamOff size='1.4em' color='red' />
+            <MdVideocamOff size={size || '1.4em'} color='red' />
           ) : (
-            <MdVideocam size='1.4em' color='green' />
+            <MdVideocam size={size || '1.4em'} color='green' />
           )
         ) : (
-          <MdVideoCall size='1.4em' />
+          <MdVideoCall size={size || '1.4em'} />
         )}
       </VodAddRemoveButton>
     </ToolTip>
