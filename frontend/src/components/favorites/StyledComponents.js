@@ -180,10 +180,11 @@ export const RemoveItemBtn = styled(MdStar)`
   }
 `;
 
-export const ListActionButton = styled.p`
+export const ListActionButton = styled.div`
   color: rgb(200, 200, 200);
   transition: color 250ms;
   cursor: pointer;
+  display: flex;
 
   svg {
     color: rgb(150, 150, 150);

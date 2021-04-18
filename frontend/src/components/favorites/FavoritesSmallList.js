@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useRef, useState } from 'react';
-import { MdAdd } from 'react-icons/md';
+import { MdAdd, MdDeleteForever } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
 import SearchList from '../sharedComponents/SearchList';
@@ -210,7 +210,9 @@ export default ({ listName, videos, style }) => {
                     <ListActionButton
                       size={16}
                       onClick={() => removeFavoriteVideo(lists, setLists, listName, v.id)}
-                    />
+                    >
+                      <MdDeleteForever size={20} />
+                    </ListActionButton>
                   </StyledGameListElement>
                 </ToolTip>
               </CSSTransition>

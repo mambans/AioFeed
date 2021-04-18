@@ -6,8 +6,7 @@ import FeedsContext from '../feed/FeedsContext';
 
 export const StyledLoadmore = styled.div`
   width: 100%;
-  display: grid;
-  grid-template-columns: auto min-content auto min-content;
+  display: flex;
   align-items: center;
   max-width: 100%;
   padding-bottom: 10px;
@@ -24,6 +23,7 @@ export const StyledLoadmore = styled.div`
     height: 1px;
     opacity: 0.75;
     transition: opacity 200ms;
+    flex-grow: 1;
   }
 
   div.button {
@@ -35,6 +35,7 @@ export const StyledLoadmore = styled.div`
     color: var(--textColor2);
     padding: 0px 15px;
     transition: color 200ms, padding 200ms;
+    white-space: nowrap;
 
     &:hover {
       color: white;
