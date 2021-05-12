@@ -7,10 +7,17 @@ const Container = styled.div`
   transform: ${({ open }) => (open ? 'translateY(0px) !important' : 'translateY(50%)')};
   opacity: ${({ open }) => (open ? '1 !important' : '0')};
   pointer-events: ${({ open }) => (open ? 'all !important' : 'none')};
+  position: absolute;
+  right: 0px;
+  display: flex;
+  align-items: center;
 
   button,
   svg {
     opacity: ${({ open }) => (open ? '1 !important' : '0')};
+    display: flex;
+    align-content: center;
+    align-items: center;
   }
 
   &:focus-within {

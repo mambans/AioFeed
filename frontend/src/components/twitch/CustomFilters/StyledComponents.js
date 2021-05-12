@@ -51,8 +51,7 @@ export const OpenListBtn = styled(MdFilterList)`
   height: inherit;
   color: rgb(225, 225, 225);
   transition: color 250ms;
-  margin: 5px;
-  margin-bottom: 0px;
+  margin: 0 5px;
 
   /* &&& {
     opacity: ${({ show }) => (show === 'true' ? 'unset' : '1')};

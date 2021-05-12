@@ -1,6 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
 import { FiAlertCircle } from 'react-icons/fi';
-import { FaTwitch } from 'react-icons/fa';
 import Moment from 'react-moment';
 import React, { useRef, useState, useContext } from 'react';
 
@@ -148,7 +147,7 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
         </VideoTitle>
       </ToolTip>
 
-      <div>
+      <div style={{ overflowX: 'hidden' }}>
         <ChannelContainer ref={refChannel}>
           <Link
             className='profileImg'
@@ -173,13 +172,6 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
             >
               {loginNameFormat(data)}
             </Link>
-            <a
-              alt=''
-              href={'https://www.twitch.tv/' + login?.toLowerCase() || user_name}
-              className='extaButton'
-            >
-              <FaTwitch size={'1.4em'} />
-            </a>
           </ChannelNameDiv>
           {(location.pathname === '/feed/' || location.pathname === '/feed') && (
             <ChannelButtonsContainer className='buttonsContainer'>
