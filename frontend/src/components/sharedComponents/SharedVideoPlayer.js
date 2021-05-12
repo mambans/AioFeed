@@ -37,9 +37,10 @@ export default () => {
   return <SharedVideoPlayer listName={listName} />;
 };
 
-const SharedVideoPlayer = ({ listName }) => {
+const SharedVideoPlayer = ({ listName, channelNameAttr }) => {
   const location = useLocation();
-  const { videoId, channelName } = useParams() || {};
+  const { videoId } = useParams() || {};
+  const channelName = useParams()?.channelName || channelNameAttr;
   const { visible } = useContext(NavigationContext);
   const { lists } = useContext(FavoritesContext) || {};
   const [viewStates, setViewStates] = useSyncedLocalState(`${listName}-viewStates`, {

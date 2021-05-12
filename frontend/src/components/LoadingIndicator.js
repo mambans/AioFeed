@@ -7,7 +7,7 @@ import { StyledLoadingContainer } from './sharedComponents/sharedStyledComponent
  * @param {String} [text] - Optionall loading text
  * @param {Number} [height=150] - Height of the loading bars
  * @param {Number} [width=150] - Width of all loading bars/whole loading element
- * @param {String} [type='bars'] - Height of the loading bars
+ * @param {String} [type='bars'] - Type of loading style ("blank" | "balls" | "bars" | "bubbles" | "cubes" | "cylon" | "spin" | "spinningBubbles" | "spokes")
  * @param {Object} [style] - Additional style object
  * @returns {Element} - JSX loading Element
  */

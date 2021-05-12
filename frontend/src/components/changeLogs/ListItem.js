@@ -96,7 +96,7 @@ const List = {
 export default ({ name, body, published_at, showInfo, children }) => {
   const [info, setInfo] = useState({ loading: false, data: null });
   const [showFullMessage, setShowFullMessage] = useState(false);
-  const additionsKeywords = useMemo(() => ['added', 'fixed'], []);
+  const additionsKeywords = useMemo(() => ['added', 'fixed', 'new'], []);
   const deletionsKeywords = useMemo(() => ['removed', 'deleted'], []);
   const changesKeywords = useMemo(
     () => [

@@ -41,6 +41,7 @@ export const TopBlurOverlay = styled.div`
 
 export const LogoText = styled.div`
   transform: translateY(-5vh);
+  font-family: 'Montserrat', sans-serif;
 
   h1 {
     color: var(--textColor1);
