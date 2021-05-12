@@ -135,7 +135,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer }) =
       <CSSTransition
         in={showTitle}
         key={user_id + title}
-        timeout={1000}
+        timeout={300}
         classNames='sidebarInfoPopup'
         unmountOnExit
       >

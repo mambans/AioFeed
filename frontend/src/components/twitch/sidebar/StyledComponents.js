@@ -10,37 +10,37 @@ export const SidebarInfoPopup = styled.div`
 
   &.sidebarInfoPopup-enter {
     opacity: 0;
-    transform: translate3d(100px, 0, 0);
-    transition: opacity 500ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
-      transform 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
+    transform: translate3d(200px, 0, 0);
+    transition: opacity 200ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
+      transform 300ms cubic-bezier(0.23, 0.82, 0, 0.7);
   }
 
   &.sidebarInfoPopup-enter-active {
     opacity: 1;
     transform: translate3d(275px, 0, 0);
-    transition: opacity 500ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
-      transform 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
+    transition: opacity 200ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
+      transform 300ms cubic-bezier(0.23, 0.82, 0, 0.7);
   }
 
   &.sidebarInfoPopup-exit {
     opacity: 1;
     transform: translate3d(275px, 0, 0);
-    transition: opacity 500ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
-      transform 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
+    transition: opacity 200ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
+      transform 300ms cubic-bezier(0.23, 0.82, 0, 0.7);
   }
 
   &.sidebarInfoPopup-exit-active {
     opacity: 0;
-    transform: translate3d(100px, 0, 0);
-    transition: opacity 500ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
-      transform 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
+    /* transform: translate3d(200px, 0, 0); */
+    transition: opacity 200ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
+      transform 300ms cubic-bezier(0.23, 0.82, 0, 0.7);
   }
 
   &.sidebarInfoPopup-enter-done {
     transform: translate3d(275px, 0, 0);
     opacity: 1;
-    transition: opacity 500ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
-      transform 1000ms cubic-bezier(0.23, 0.82, 0, 0.7);
+    transition: opacity 200ms cubic-bezier(0.79, 0.17, 0.73, 0.24),
+      transform 300ms cubic-bezier(0.23, 0.82, 0, 0.7);
   }
 `;
 
