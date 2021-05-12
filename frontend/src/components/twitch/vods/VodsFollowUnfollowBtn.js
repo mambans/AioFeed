@@ -29,6 +29,10 @@ export default ({
   className,
   show = true,
   size,
+  text,
+  type = 'link',
+  padding,
+  unfollowStream = () => {},
 }) => {
   const { vods, setVods, channels, setChannels } = useContext(VodsContext) || {};
   const { authKey, username } = useContext(AccountContext);
@@ -69,7 +73,7 @@ export default ({
         .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/vodchannels`, {
           username: username,
           authkey: authKey,
-          channels: Array.from(vodChannels),
+          channels: [...vodChannels],
         })
         .catch((err) => console.error(err));
     } catch (e) {
@@ -91,9 +95,11 @@ export default ({
         ref={vodButton}
         loweropacity={loweropacity}
         vodenabled={String(vodEnabled)}
-        variant='link'
+        variant={type}
+        padding={padding}
         onClick={() => {
           if (vodEnabled) {
+            unfollowStream();
             removeChannel({ channel, channels, setChannels });
           } else {
             AddVodChannel({ channel, channels, setChannels, username, authKey });
@@ -108,15 +114,18 @@ export default ({
           }
         }}
       >
-        {vodEnabled ? (
-          isHovered ? (
-            <MdVideocamOff size={size || '1.4em'} color='red' />
+        <>
+          {vodEnabled ? (
+            isHovered ? (
+              <MdVideocamOff size={size || '1.4em'} color='red' />
+            ) : (
+              <MdVideocam size={size || '1.4em'} color='green' />
+            )
           ) : (
-            <MdVideocam size={size || '1.4em'} color='green' />
-          )
-        ) : (
-          <MdVideoCall size={size || '1.4em'} />
-        )}
+            <MdVideoCall size={size || '1.4em'} />
+          )}
+          {text}
+        </>
       </VodAddRemoveButton>
     </ToolTip>
   );

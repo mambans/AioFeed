@@ -532,18 +532,19 @@ export const UnfollowButton = styled(Button).attrs({ variant: 'link' })`
   }
 `;
 
-export const VodAddRemoveButton = styled(Button).attrs({ variant: 'link' })`
+export const VodAddRemoveButton = styled(Button)`
   color: rgb(200, 200, 200);
   grid-row: 1;
   justify-self: right;
-  padding: 0px;
+  padding: ${({ padding }) => padding || '0px'};
   opacity: ${({ loweropacity }) => loweropacity || 1};
   margin-right: ${({ marginright }) => marginright || 'unset'};
   /* opacity: 0; */
-  transition: opacity 250ms, transform 250ms;
+  transition: opacity 250ms, background 250ms, color 250ms, transform 250ms;
 
   &:hover {
-    color: ${({ vodenabled }) => (vodenabled === 'true' ? 'rgb(225, 000, 000)' : '#14ae14')};
+    color: ${({ vodenabled, variant }) =>
+      variant === 'success' ? 'unset' : vodenabled === 'true' ? 'rgb(225, 000, 000)' : '#14ae14'};
     opacity: 1;
   }
 `;

@@ -5,6 +5,9 @@ import AccountContext from './../account/AccountContext';
 import API from './API';
 import useToken from './useToken';
 import ToolTip from '../sharedComponents/ToolTip';
+import { removeChannel as remmoveUpdateChannel } from './AddUpdateNotificationsButton';
+import VodsContext from './vods/VodsContext';
+import UnsubscribeVodsPopupConfirm from './UnsubscribeVodsPopupConfirm';
 
 export default ({
   channelName,
@@ -17,7 +20,10 @@ export default ({
   show = true,
 }) => {
   const [following, setFollowing] = useState(followingStatus);
-  const { twitchUserId } = useContext(AccountContext);
+  const [showUnsubscribeVods, setShowUnsubscribeVods] = useState();
+  const { twitchUserId, authKey, username } = useContext(AccountContext);
+  const { updateNotischannels, setUpdateNotischannels, channels } = useContext(VodsContext);
+
   const validateToken = useToken();
 
   const UnfollowStream = async () => {
@@ -31,6 +37,13 @@ export default ({
         .then((res) => {
           if (res.status === 204) {
             console.log(`Unfollowed: ${channelName}`);
+            remmoveUpdateChannel({
+              channel: channelName,
+              updateNotischannels,
+              setUpdateNotischannels,
+              username,
+              authKey,
+            });
             if (refreshStreams) {
               clearTimeout(refreshAfterUnfollowTimer.current);
               refreshAfterUnfollowTimer.current = setTimeout(() => {
@@ -39,9 +52,7 @@ export default ({
             }
           }
         })
-        .catch((er) => {
-          console.error('UnfollowStream -> er', er);
-        });
+        .catch((er) => console.error('UnfollowStream -> er', er));
     });
   };
 
@@ -100,27 +111,40 @@ export default ({
       tooltip={`${following ? 'Unfollow' : 'Follow'} ${channelName || id}`}
       width='max-content'
     >
-      {following ? (
-        <UnfollowBtn
-          className='StreamFollowBtn'
-          size={size || 30}
-          style={{ ...style }}
-          onClick={() => {
-            setFollowing(false);
-            UnfollowStream();
-          }}
+      <>
+        {following ? (
+          <UnfollowBtn
+            className='StreamFollowBtn'
+            size={size || 30}
+            style={{ ...style }}
+            onClick={() => {
+              if (!channels?.includes(channelName?.toLowerCase())) {
+                setFollowing(false);
+                UnfollowStream();
+                return;
+              }
+              setShowUnsubscribeVods(true);
+            }}
+          />
+        ) : (
+          <FollowBtn
+            className='StreamFollowBtn'
+            size={size || 30}
+            style={{ ...style }}
+            onClick={() => {
+              setFollowing(true);
+              followStream();
+            }}
+          />
+        )}
+
+        <UnsubscribeVodsPopupConfirm
+          show={showUnsubscribeVods}
+          setShowUnsubscribeVods={setShowUnsubscribeVods}
+          channel={channelName}
+          UnfollowStream={UnfollowStream}
         />
-      ) : (
-        <FollowBtn
-          className='StreamFollowBtn'
-          size={size || 30}
-          style={{ ...style }}
-          onClick={() => {
-            setFollowing(true);
-            followStream();
-          }}
-        />
-      )}
+      </>
     </ToolTip>
   );
 };

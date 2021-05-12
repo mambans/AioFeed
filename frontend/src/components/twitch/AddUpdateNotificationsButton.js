@@ -10,6 +10,31 @@ import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import VodsContext from './vods/VodsContext';
 import ToolTip from '../sharedComponents/ToolTip';
 
+export const removeChannel = async ({
+  channel,
+  updateNotischannels,
+  setUpdateNotischannels,
+  username,
+  authKey,
+}) => {
+  try {
+    const channelsSets = new Set(updateNotischannels || []);
+    channelsSets.delete(channel?.toLowerCase());
+
+    setUpdateNotischannels([...channelsSets]);
+
+    await axios
+      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/updatechannels`, {
+        username: username,
+        authkey: authKey,
+        channels: [...channelsSets],
+      })
+      .catch((error) => console.error(error));
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
 /**
  * @param {String} channel - channel name
  * @param {String} [loweropacity] - overwrite opacity (0.5)
@@ -27,25 +52,6 @@ export default ({ channel, loweropacity, marginright, size = 24, show = true }) 
 
   useEventListenerMemo('mouseenter', handleMouseOver, vodButton.current);
   useEventListenerMemo('mouseleave', handleMouseOut, vodButton.current);
-
-  async function removeChannel(channel) {
-    try {
-      const channelsSets = new Set(updateNotischannels || []);
-      channelsSets.delete(channel?.toLowerCase());
-
-      setUpdateNotischannels([...channelsSets]);
-
-      await axios
-        .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/updatechannels`, {
-          username: username,
-          authkey: authKey,
-          channels: [...channelsSets],
-        })
-        .catch((error) => console.error(error));
-    } catch (e) {
-      console.log(e.message);
-    }
-  }
 
   async function addChannel() {
     try {
@@ -92,7 +98,13 @@ export default ({ channel, loweropacity, marginright, size = 24, show = true }) 
         variant='link'
         onClick={() =>
           updateNotificationEnabled
-            ? removeChannel(channel)
+            ? removeChannel({
+                channel,
+                updateNotischannels,
+                setUpdateNotischannels,
+                username,
+                authKey,
+              })
             : addChannel({ channel, username, authKey })
         }
       >
