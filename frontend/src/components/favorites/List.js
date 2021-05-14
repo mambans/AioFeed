@@ -106,12 +106,13 @@ export default ({
   });
 
   useEffect(() => {
-    setVideosToShow({
-      amount: videoElementsAmount,
+    setVideosToShow((cr) => ({
+      amount: cr?.showAll && videos?.length ? videos?.length : videoElementsAmount,
       timeout: 750,
       transitionGroup: 'videos',
-    });
-  }, [videoElementsAmount]);
+      showAll: cr?.showAll,
+    }));
+  }, [videoElementsAmount, videos]);
 
   useEffect(() => {
     (async () => {
@@ -193,6 +194,7 @@ export default ({
             amount: videos.length,
             timeout: 750,
             transitionGroup: 'videos',
+            showAll: true,
           });
         }}
       />
