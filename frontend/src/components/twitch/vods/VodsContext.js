@@ -40,14 +40,18 @@ export const VodsProvider = ({ children, forceMount = false }) => {
         const fetchedColumns = await FetchMonitoredVodChannelsList(username, authKey);
 
         setChannels(
-          fetchedColumns?.TwitchVodsPreferences?.Channels ||
+          (
+            fetchedColumns?.TwitchVodsPreferences?.Channels ||
             getLocalstorage('TwitchVods-Channels') ||
             []
+          ).filter((i) => i)
         );
         setUpdateNotischannels(
-          fetchedColumns?.TwitchPreferences?.ChannelsUpdateNotifs ||
+          (
+            fetchedColumns?.TwitchPreferences?.ChannelsUpdateNotifs ||
             getLocalstorage('ChannelsUpdateNotifs') ||
             []
+          ).filter((i) => i)
         );
       }
     })();
