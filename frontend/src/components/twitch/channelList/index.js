@@ -142,6 +142,7 @@ export default ({
     () =>
       throttle(
         async () => {
+          clearTimeout(resetListTimer.current);
           validateToken().then(
             getMyFollowedChannels().then(async (channels) => {
               channelListToObject(channels).then(async (res) => {
@@ -203,6 +204,7 @@ export default ({
     );
 
   const observerFunction = async () => {
+    clearTimeout(resetListTimer.current);
     if (channel && searchResults?.nextPage && !loadingMore) {
       setLoadingMore(true);
       await API.getSearchChannels({
@@ -249,7 +251,9 @@ export default ({
   };
 
   useEffect(() => {
+    clearTimeout(resetListTimer.current);
     if (listIsOpen) {
+      clearTimeout(resetListTimer.current);
       fetchFollowedChannels().catch((e) => {
         setShowDropdown(false);
         console.warn(e);
