@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { ButtonLookalikeStyle } from '../../sharedComponents/sharedStyledComponents';
 
 export const ChannelContainer = styled.div`
   min-height: 100vh;
@@ -168,15 +169,9 @@ export const SubFeedHeader = styled.div`
 
 export const SortButton = styled(Button).attrs({ variant: 'dark' })`
   width: 200px;
-  background-color: rgba(20, 23, 25, 0.5);
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-  text-transform: capitalize;
 
-  &:hover,
-  &:active,
-  &:focus {
-    background-color: rgba(20, 23, 25, 0.9);
-  }
+  ${ButtonLookalikeStyle}
 
   svg {
     padding-right: 5px;
@@ -187,7 +182,7 @@ export const SortDropDownList = styled.ul`
   position: absolute;
   padding: 10px;
   list-style: none;
-  background-color: rgba(20, 23, 25, 0.9);
+  background: var(--popupListsBackground);
   border-radius: 0 0 5px 5px;
   width: 200px;
   border-color: #1d2124;

@@ -2,6 +2,7 @@ import { Button } from 'react-bootstrap';
 import React, { useContext } from 'react';
 import styled, { keyframes } from 'styled-components';
 import FeedsContext from '../../feed/FeedsContext';
+import { ButtonLookalikeStyle } from '../../sharedComponents/sharedStyledComponents';
 
 export const StyledGameListElement = styled.li`
   justify-content: unset;
@@ -175,20 +176,16 @@ export const StyledLoadingListElement = styled.li`
   }
 `;
 
-export const TypeButton = styled(Button).attrs({ variant: 'dark' })`
+export const StyledTypeButton = styled(Button).attrs({ variant: 'dark' })`
   width: 150px;
-  background-color: rgba(20, 23, 25, 0.5);
   display: grid;
   grid-template-columns: 35% auto;
   text-align: unset;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   text-transform: capitalize;
+  border-radius: 5px;
 
-  &:hover,
-  &:active,
-  &:focus {
-    background-color: rgba(20, 23, 25, 0.9);
-  }
+  ${ButtonLookalikeStyle}
 
   svg {
     padding-right: 5px;

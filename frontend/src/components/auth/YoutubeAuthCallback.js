@@ -120,5 +120,12 @@ export default () => {
   }, [getAccessToken, setVisible, setFooterVisible, location.search]);
 
   if (error) return <AlertHandler data={error} />;
-  return <LoadingIndicator height={150} width={150} />;
+  return (
+    <LoadingIndicator
+      height={150}
+      width={150}
+      text={'Authenticating..'}
+      smallText={'Talking with YouTube..'}
+    />
+  );
 };

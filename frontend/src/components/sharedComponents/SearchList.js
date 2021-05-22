@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 
 import useLockBodyScroll from '../../hooks/useLockBodyScroll';
 import useClicksOutside from '../../hooks/useClicksOutside';
+import { ButtonLookalikeStyle } from './sharedStyledComponents';
 
 const SearchSubmitIcon = styled(FaSearch).attrs({ size: 16 })``;
 
@@ -29,10 +30,11 @@ export const submiteButtonStyle = ({ btnDisabled }) => css`
 `;
 
 export const SearchListForm = styled.form`
-  background: var(--refreshButtonBackground);
-  box-shadow: var(--refreshButtonShadow);
-  border-radius: 5px;
-  transition: width 250ms, min-width 250ms, margin-left 250ms, margin-right 250ms;
+  ${ButtonLookalikeStyle}
+  transition: width 250ms, min-width 250ms, margin-left 250ms, margin-right 250ms, color 250ms, background-color 250ms, border-color 250ms, box-shadow 250ms,
+    opacity 250ms;
+  background: ${({ open }) =>
+    open ? 'var(--refreshButtonHoverBackground)' : 'var(--refreshButtonBackground);'};
   width: ${({ open }) => (open ? '310px' : '125px')};
   min-width: ${({ open }) => (open ? '310px' : '125px')};
   margin-left: ${({ open, direction = 'left' }) =>
@@ -82,8 +84,10 @@ export const SearchListForm = styled.form`
     transition: color 250ms;
     outline: #0000 solid;
 
-    &:hover {
-      color: var(--textColor1Hover);
+    &:hover,
+    &:active,
+    &:focus {
+      border: none;
     }
   }
 

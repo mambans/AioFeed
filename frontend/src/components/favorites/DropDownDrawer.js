@@ -3,23 +3,17 @@ import styled from 'styled-components';
 import { MdFormatListBulleted } from 'react-icons/md';
 import DeleteListBtn from './DeleteListBtn';
 import CopyListBtn from './CopyListBtn';
+import { ButtonLookalikeStyle } from '../sharedComponents/sharedStyledComponents';
 
 const Container = styled.div`
   margin: auto 15px;
 `;
 
 const TriggerBtn = styled.button`
+  ${ButtonLookalikeStyle}
   color: ${({ open }) => (open ? ' rgb(255, 255, 255)' : 'rgb(150, 150, 150)')};
   transition: color 250ms;
-  background: var(--refreshButtonBackground);
-  box-shadow: var(--refreshButtonShadow);
-  border: var(--refreshButtonBorder);
   padding: 5px;
-  border-radius: 5px;
-
-  &:hover {
-    color: rgb(255, 255, 255);
-  }
 `;
 
 const Dropdown = styled.div`

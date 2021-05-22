@@ -1,22 +1,35 @@
 import { Button, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import Moment from 'react-moment';
 
 import FeedsContext from '../feed/FeedsContext';
 
-export const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
+export const ButtonLookalikeStyle = css`
   color: var(--refreshButtonColor);
   background: var(--refreshButtonBackground);
   box-shadow: var(--refreshButtonShadow);
   border: var(--refreshButtonBorder);
+  transition: color 250ms, background-color 250ms, border-color 250ms, box-shadow 250ms,
+    opacity 250ms;
+  text-transform: capitalize;
+  border-radius: 5px;
+
+  /* &:active,
+  &:focus, */
+  &:hover {
+    background: var(--refreshButtonHoverBackground);
+    color: var(--refreshButtonHoverColor);
+    border: var(--refreshButtonHoverBorder);
+  }
+`;
+
+export const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
+  ${ButtonLookalikeStyle}
   position: relative;
   left: 6px;
   align-items: center;
-  transition-duration: 250ms;
-  transition: color 250ms, background-color 250ms, border-color 250ms, box-shadow 250ms,
-    opacity 250ms;
   margin-right: 25px;
   width: 46px;
   height: 40px;
@@ -30,30 +43,14 @@ export const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary'
       margin: 5px auto;
     }
   }
-
-  &:hover {
-    background: var(--refreshButtonHoverBackground);
-    color: var(--refreshButtonHoverColor);
-    border: var(--refreshButtonHoverBorder);
-  }
 `;
 
 export const AddToListModalTrigger = styled(Button).attrs({ variant: 'outline-secondary' })`
+  ${ButtonLookalikeStyle}
   display: flex;
   position: relative;
-  color: var(--refreshButtonColor);
-  background: var(--refreshButtonBackground);
-  box-shadow: var(--refreshButtonShadow);
-  border: var(--refreshButtonBorder);
   font-weight: bold;
   align-items: center;
-  transition-duration: 250ms;
-
-  &:hover {
-    background: var(--refreshButtonHoverBackground);
-    color: var(--refreshButtonHoverColor);
-    border: var(--refreshButtonHoverBorder);
-  }
 `;
 
 export const HeaderTitle = styled.div`
@@ -549,14 +546,28 @@ export const VodAddRemoveButton = styled(Button)`
   }
 `;
 
+const breathing = keyframes`
+    from {
+      color: var(--textColor1);
+    }
+    to {
+      color: var(--textColor2);
+    }
+`;
+
 export const StyledLoadingContainer = styled.div`
   display: grid;
   justify-content: center;
+  justify-items: center;
   transition: all 2s linear ease-in;
 
   h1 {
     color: #dddddd;
     text-align: center;
+    animation: 2s infinite alternate ease-out ${breathing};
+  }
+  p {
+    color: var(--textColor2);
   }
 `;
 

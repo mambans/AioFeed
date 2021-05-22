@@ -1,18 +1,12 @@
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { MdMovieCreation, MdLiveTv } from 'react-icons/md';
-import { useParams, useLocation, Link } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import React, { useEffect, useState, useCallback, useRef, useContext } from 'react';
 
 import LoadMore from './../../sharedComponents/LoadMore';
 import Header from './../../sharedComponents/Header';
-import {
-  TypeListUlContainer,
-  TypeButton,
-  TopDataSortButtonsContainer,
-  TopStreamsContainer,
-  Container,
-} from './styledComponents';
+import { TopDataSortButtonsContainer, TopStreamsContainer, Container } from './styledComponents';
 import ClipsSortButton from './../channelPage/ClipsSortButton';
 import GameSearchBar from './GameSearchBar';
 import GetTopClips from './GetTopClips';
@@ -28,6 +22,7 @@ import AccountContext from '../../account/AccountContext';
 import useQuery from '../../../hooks/useQuery';
 import useToken from '../useToken';
 import API from '../API';
+import TypeButton from './TypeButton';
 
 export default () => {
   const { category } = useParams();
@@ -38,7 +33,6 @@ export default () => {
   const [videoType, setVideoType] = useState(
     URLQueries.get('type')?.toLowerCase() || p_videoType || 'streams'
   );
-  const [typeListOpen, setTypeListOpen] = useState();
   const [loadmoreLoaded, setLoadmoreLoaded] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
@@ -141,13 +135,6 @@ export default () => {
     [category, sortBy, sortByTime, videoType]
   );
 
-  const videoTypeBtnOnClick = (type) => {
-    setTopData([]);
-    oldTopData.current = null;
-    setVideoType(type);
-    setTypeListOpen(false);
-  };
-
   const refresh = useCallback(() => {
     setRefreshing(true);
     oldTopData.current = null;
@@ -214,39 +201,14 @@ export default () => {
           rightSide={
             <TopDataSortButtonsContainer>
               <GameSearchBar gameName={category} videoType={videoType} />
-              <div>
-                <TypeButton
-                  title={category ? `Fetch top ${videoType}` : 'Select a game/category first'}
-                  disabled={category ? false : true}
-                  onClick={() => setTypeListOpen(!typeListOpen)}
-                >
-                  {!videoType || videoType === 'streams' ? (
-                    <MdLiveTv size={20} />
-                  ) : (
-                    <MdMovieCreation size={22} />
-                  )}
-                  {videoType}
-                </TypeButton>
-
-                {typeListOpen && (
-                  <TypeListUlContainer>
-                    <Link to='?type=streams' onClick={() => videoTypeBtnOnClick('streams')}>
-                      <MdLiveTv size={24} />
-                      Streams
-                    </Link>
-                    <Link
-                      to='?type=clips'
-                      onClick={() => {
-                        videoTypeBtnOnClick('clips');
-                        setSortBy('Views');
-                      }}
-                    >
-                      <MdMovieCreation size={24} />
-                      Clips
-                    </Link>
-                  </TypeListUlContainer>
-                )}
-              </div>
+              <TypeButton
+                category={category}
+                videoType={videoType}
+                setSortBy={setSortBy}
+                setTopData={setTopData}
+                oldTopData={oldTopData}
+                setVideoType={setVideoType}
+              />
 
               {videoType === 'videos' ? (
                 <SortButton sortBy={sortBy} setSortBy={setSortBy} setData={setTopData} />
