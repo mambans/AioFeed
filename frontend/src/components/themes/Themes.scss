@@ -160,9 +160,16 @@ html[data-theme='headphones'] {
   --scrollbarColors: #4d2c7e black;
 }
 
-html[data-theme='coffee'],
-html[data-theme='default'] {
+html[data-theme='coffee'] {
   --backgroundImg: url('/images/webp/coffee.webp');
+  --backgroundColor: #221312;
+  --sidebarsBackgroundColor: rgba(9, 12, 15, 0.678);
+  --twitterBackground: rgba(0, 0, 0, 0.07);
+}
+
+html[data-theme='coffee beans'],
+html[data-theme='default'] {
+  --backgroundImg: url('/images/webp/felix-coffee-dimmed.webp');
   --backgroundColor: #221312;
   --sidebarsBackgroundColor: rgba(9, 12, 15, 0.678);
   --twitterBackground: rgba(0, 0, 0, 0.07);

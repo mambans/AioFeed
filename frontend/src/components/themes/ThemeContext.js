@@ -52,6 +52,11 @@ export const ThemeProvider = ({ children }) => {
       name: 'coffee',
       type: 'dark',
       image: 'webp/coffee.webp',
+    },
+    {
+      name: 'coffee beans',
+      type: 'dark',
+      image: 'webp/felix-coffee-dimmed.webp',
       default: true,
     },
     {
