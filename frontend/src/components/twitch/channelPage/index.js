@@ -50,7 +50,7 @@ export default () => {
   const [channelInfo, setChannelInfo] = useState(passedChannelData);
   const [streamInfo, setStreamInfo] = useState(passedChannelData);
   const numberOfVideos = Math.floor(window.innerWidth / 350);
-  const { setTwitchToken, twitchToken } = useContext(AccountContext);
+  const { setTwitchToken } = useContext(AccountContext);
   const URLQueries = useQuery();
   const validateToken = useToken();
 
@@ -215,15 +215,13 @@ export default () => {
 
   useEffect(() => {
     (async () => {
-      if (twitchToken) {
-        if (!channelId) {
-          await validateToken(true).then(async () => await getIdFromName());
-        } else if (!channelInfo && channelId && channelId !== 'Not Found') {
-          await validateToken(true).then(async () => await getChannelInfo());
-        }
+      if (!channelId) {
+        await validateToken(true).then(async () => await getIdFromName());
+      } else if (!channelInfo && channelId && channelId !== 'Not Found') {
+        await validateToken(true).then(async () => await getChannelInfo());
       }
     })();
-  }, [channelInfo, getChannelInfo, getIdFromName, channelId, twitchToken, validateToken]);
+  }, [channelInfo, getChannelInfo, getIdFromName, channelId, validateToken]);
 
   async function onlineEvents() {
     console.log('Stream is Online');
@@ -254,7 +252,7 @@ export default () => {
   }
 
   useEffect(() => {
-    if (twitchToken && !twitchPlayer.current && window.Twitch.Player) {
+    if (!twitchPlayer.current && window.Twitch.Player) {
       twitchPlayer.current = new window.Twitch.Player('twitch-embed', {
         width: `${300 * 1.777777777777778}px`,
         height: '300px',
@@ -264,28 +262,28 @@ export default () => {
         muted: true,
       });
     }
-  }, [channelName, twitchToken]);
+  }, [channelName]);
 
   useEffect(() => {
-    if (twitchToken && channelId && !vods && channelId !== 'Not Found') {
+    if (channelId && !vods && channelId !== 'Not Found') {
       fetchChannelVods();
     }
-  }, [fetchChannelVods, vods, channelId, twitchToken]);
+  }, [fetchChannelVods, vods, channelId]);
 
   useEffect(() => {
-    if (twitchToken && channelId && !clips && channelId !== 'Not Found') {
+    if (channelId && !clips && channelId !== 'Not Found') {
       fetchClips();
     }
-  }, [fetchClips, clips, channelId, twitchToken]);
+  }, [fetchClips, clips, channelId]);
 
   useEffect(() => {
-    if (twitchToken && channelInfo) {
+    if (channelInfo) {
       setFavion(channelInfo.logo || channelInfo.profile_image_url);
     }
     return () => setFavion();
-  }, [channelInfo, twitchToken]);
+  }, [channelInfo]);
 
-  if (channelId === 'Not Found' || !getCookie('Twitch-access_token')) {
+  if (channelId === 'Not Found') {
     return (
       <ChannelContainer>
         <Banner>

@@ -11,8 +11,8 @@ const validateFunction = async (token) =>
     },
   });
 
-const fetchAppAccessToken = async () =>
-  await axios
+const fetchAppAccessToken = async () => {
+  return await axios
     .get('https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/app/token')
     .then(({ data: { access_token, expires_in } }) => {
       const expireData = new Date(expires_in * 1000);
@@ -23,6 +23,7 @@ const fetchAppAccessToken = async () =>
       console.error('error: ', error);
       throw new Error('No User or App access tokens found.');
     });
+};
 
 export default async () => {
   const access_token = getCookie('Twitch-access_token');

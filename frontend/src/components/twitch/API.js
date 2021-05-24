@@ -1,17 +1,17 @@
 import axios from 'axios';
 import { getCookie } from '../../util/Utils';
+import validateToken from './validateToken';
 
 const CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;
 const BASE_URL = 'https://api.twitch.tv/helix';
 const BASE_URL_KRAKEN = 'https://api.twitch.tv/kraken';
 
 export default {
-  getMe: async ({
-    accessToken = getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`),
-  }) => {
+  getMe: async ({ accessToken }) => {
+    const token = accessToken || (await validateToken());
     return await axios.get(`${BASE_URL}/users`, {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
         'Client-ID': CLIENT_ID,
       },
     });
@@ -21,9 +21,7 @@ export default {
     return await axios.get(`${BASE_URL}/streams`, {
       params,
       headers: {
-        Authorization: `Bearer ${
-          getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)
-        }`,
+        Authorization: `Bearer ${await validateToken()}`,
         'Client-ID': CLIENT_ID,
       },
     });
@@ -33,9 +31,7 @@ export default {
     return await axios.get(`${BASE_URL}/videos`, {
       params,
       headers: {
-        Authorization: `Bearer ${
-          getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)
-        }`,
+        Authorization: `Bearer ${await validateToken()}`,
         'Client-ID': CLIENT_ID,
       },
     });
@@ -45,9 +41,7 @@ export default {
     return await axios.get(`${BASE_URL}/clips`, {
       params,
       headers: {
-        Authorization: `Bearer ${
-          getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)
-        }`,
+        Authorization: `Bearer ${await validateToken()}`,
         'Client-ID': CLIENT_ID,
       },
     });
@@ -56,9 +50,7 @@ export default {
   postClip: async ({ params }) => {
     return await axios.post(`${BASE_URL}/clips`, params, {
       headers: {
-        Authorization: `Bearer ${
-          getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)
-        }`,
+        Authorization: `Bearer ${await validateToken()}`,
         'Client-ID': CLIENT_ID,
       },
     });
@@ -68,9 +60,7 @@ export default {
     return await axios.get(`${BASE_URL}/users`, {
       params,
       headers: {
-        Authorization: `Bearer ${
-          getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)
-        }`,
+        Authorization: `Bearer ${await validateToken()}`,
         'Client-ID': CLIENT_ID,
       },
     });
@@ -80,9 +70,7 @@ export default {
     return await axios.get(`${BASE_URL}/search/channels?query=${encodeURI(query)}`, {
       params,
       headers: {
-        Authorization: `Bearer ${
-          getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)
-        }`,
+        Authorization: `Bearer ${await validateToken()}`,
         'Client-ID': CLIENT_ID,
       },
     });
@@ -92,9 +80,7 @@ export default {
     return await axios.get(`${BASE_URL}/channels`, {
       params,
       headers: {
-        Authorization: `Bearer ${
-          getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)
-        }`,
+        Authorization: `Bearer ${await validateToken()}`,
         'Client-ID': CLIENT_ID,
       },
     });
@@ -104,9 +90,7 @@ export default {
     return await axios.get(`${BASE_URL}/users/follows`, {
       params: { ...params, from_id: getCookie('Twitch-userId') },
       headers: {
-        Authorization: `Bearer ${
-          getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)
-        }`,
+        Authorization: `Bearer ${await validateToken()}`,
         'Client-ID': CLIENT_ID,
       },
     });
@@ -116,9 +100,7 @@ export default {
     return await axios.get(`${BASE_URL}/users/follows`, {
       params,
       headers: {
-        Authorization: `Bearer ${
-          getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)
-        }`,
+        Authorization: `Bearer ${await validateToken()}`,
         'Client-ID': CLIENT_ID,
       },
     });
@@ -128,9 +110,7 @@ export default {
     return await axios.get(`${BASE_URL}/games`, {
       params,
       headers: {
-        Authorization: `Bearer ${
-          getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)
-        }`,
+        Authorization: `Bearer ${await validateToken()}`,
         'Client-ID': CLIENT_ID,
       },
     });
@@ -140,9 +120,7 @@ export default {
     return await axios.get(`${BASE_URL}/search/categories?query=${encodeURI(query)}`, {
       params,
       headers: {
-        Authorization: `Bearer ${
-          getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)
-        }`,
+        Authorization: `Bearer ${await validateToken()}`,
         'Client-ID': CLIENT_ID,
       },
     });
@@ -152,9 +130,7 @@ export default {
     return await axios.get(`${BASE_URL}/games/top`, {
       params,
       headers: {
-        Authorization: `Bearer ${
-          getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)
-        }`,
+        Authorization: `Bearer ${await validateToken()}`,
         'Client-ID': CLIENT_ID,
       },
     });
@@ -164,9 +140,7 @@ export default {
     return await axios.get(`${BASE_URL_KRAKEN}/videos/${params.id}`, {
       params,
       headers: {
-        Authorization: `Bearer ${
-          getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)
-        }`,
+        Authorization: `Bearer ${await validateToken()}`,
         'Client-ID': CLIENT_ID,
         Accept: 'application/vnd.twitchtv.v5+json',
       },
@@ -177,7 +151,7 @@ export default {
     return await axios.get(`${BASE_URL_KRAKEN}/channels/${params.id}`, {
       params,
       headers: {
-        Authorization: `OAuth ${getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)}`,
+        Authorization: `OAuth ${await validateToken()}`,
         'Client-ID': CLIENT_ID,
         Accept: 'application/vnd.twitchtv.v5+json',
       },
@@ -188,9 +162,7 @@ export default {
     return await axios.get(`${BASE_URL}/users/follows`, {
       params,
       headers: {
-        Authorization: `Bearer ${
-          getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)
-        }`,
+        Authorization: `Bearer ${await validateToken()}`,
         'Client-ID': CLIENT_ID,
       },
     });
@@ -200,9 +172,7 @@ export default {
     return await axios.delete(`${BASE_URL}/users/follows`, {
       params,
       headers: {
-        Authorization: `Bearer ${
-          getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)
-        }`,
+        Authorization: `Bearer ${await validateToken()}`,
         'Content-Type': 'application/json',
         'Client-ID': CLIENT_ID,
       },
@@ -216,9 +186,7 @@ export default {
       {
         params,
         headers: {
-          Authorization: `Bearer ${
-            getCookie('Twitch-access_token') || getCookie(`Twitch-app_token`)
-          }`,
+          Authorization: `Bearer ${await validateToken()}`,
           'Content-Type': 'application/json',
           'Client-ID': CLIENT_ID,
         },

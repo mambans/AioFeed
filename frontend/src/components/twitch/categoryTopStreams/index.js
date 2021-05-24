@@ -17,7 +17,6 @@ import SortButton from './../channelPage/SortButton';
 import StreamEle from './../live/StreamElement';
 import ClipElement from './../channelPage/ClipElement';
 import VodElement from './../vods/VodElement';
-import { getCookie } from '../../../util/Utils';
 import AccountContext from '../../account/AccountContext';
 import useQuery from '../../../hooks/useQuery';
 import useToken from '../useToken';
@@ -156,26 +155,8 @@ export default () => {
     validateToken().then(() => fetchVideos());
   }, [fetchVideos, validateToken]);
 
-  return !getCookie('Twitch-access_token') ? (
-    error && (
-      <Alert
-        variant='warning'
-        style={{ textAlign: 'center', width: '25%', margin: 'auto', marginTop: '50px' }}
-        dismissible
-        onClose={() => setError(null)}
-      >
-        <Alert.Heading>Need to connect to Twitch</Alert.Heading>
-        <hr />
-        <p>No Twitch access token found.</p>
-      </Alert>
-    )
-  ) : (
-    <CSSTransition
-      in={typeof getCookie('Twitch-access_token') === 'string'}
-      timeout={750}
-      classNames='fade-750ms'
-      appear
-    >
+  return (
+    <CSSTransition in={true} timeout={750} classNames='fade-750ms' appear>
       <Container>
         <Header
           text={

@@ -18,11 +18,8 @@ const REFRESH_RATE = 25; // seconds
 
 export default ({ children }) => {
   const { addNotification, setUnseenNotifications } = useContext(NotificationsContext);
-  const {
-    autoRefreshEnabled,
-    isEnabledOfflineNotifications,
-    isEnabledUpdateNotifications,
-  } = useContext(TwitchContext);
+  const { autoRefreshEnabled, isEnabledOfflineNotifications, isEnabledUpdateNotifications } =
+    useContext(TwitchContext);
   const { setVods, updateNotischannels } = useContext(VodsContext);
   const { enableTwitchVods, feedVideoSizeProps } = useContext(FeedsContext) || {};
   const [refreshTimer, setRefreshTimer] = useState(20);
