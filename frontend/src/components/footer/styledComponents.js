@@ -80,9 +80,17 @@ export const StyledButtonLinks = styled.button`
   padding: 0;
 `;
 
-export const StyledCenterBottomText = styled.p`
+export const StyledCenterBottomText = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--textColor2);
+
+  & > * {
+    padding: 0.5rem 1rem;
+  }
+
+  &&& {
+    width: unset;
+  }
 `;
