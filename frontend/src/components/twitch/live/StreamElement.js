@@ -66,6 +66,7 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
   const streamHoverTimer = useRef();
   const ref = useRef();
   const refChannel = useRef();
+  const videoContainerRef = useRef();
   const thumbnailUrl =
     `${thumbnail_url?.replace('{width}', 858)?.replace('{height}', 480)}` ||
     `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`;
@@ -104,7 +105,7 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
   };
 
   return (
-    <VideoContainer key={user_id}>
+    <VideoContainer key={user_id} ref={videoContainerRef}>
       <ImageContainer id={user_id} ref={ref} style={{ marginTop: '5px' }}>
         <NewHighlightNoti newlyAddedStreams={newlyAddedStreams} login={login} />
         <Link
@@ -178,6 +179,7 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
               <CustomFilters
                 channel={login?.toLowerCase() || user_name}
                 enableFormControll={true}
+                videoContainerRef={videoContainerRef}
               />
               <VodsFollowUnfollowBtn channel={login} channelId={user_id} marginright='5px;' />
               <AddUpdateNotificationsButton channel={login} marginright='5px;' size='1.4em' />

@@ -18,11 +18,11 @@ import { getCookie } from '../../../util/Utils';
 import useClicksOutside from '../../../hooks/useClicksOutside';
 import CustomFilterContext from './CustomFilterContext';
 
-const AllFiltersListContainer = ({ setOpen, uploadNewFiltersTimer }) => {
+const AllFiltersListContainer = ({ setOpen, open, uploadNewFiltersTimer }) => {
   const { filters, setFilters } = useContext(CustomFilterContext);
   const ref = useRef();
   // useLockBodyScroll(true);
-  useClicksOutside(ref, () => setOpen(false));
+  useClicksOutside(ref, () => setOpen(false), Boolean(open));
 
   const clearAllFilters = () => {
     setFilters({});
@@ -89,6 +89,7 @@ export default () => {
       <OpenListBtn onClick={() => setOpen(true)} size={26} show={String(open)} />
       {open && (
         <AllFiltersListContainer
+          open={open}
           setOpen={setOpen}
           uploadNewFiltersTimer={uploadNewFiltersTimer}
         ></AllFiltersListContainer>

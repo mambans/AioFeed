@@ -151,7 +151,7 @@ export default ({
   const listRef = useRef();
 
   useLockBodyScroll(listIsOpen);
-  useClicksOutside(listRef, () => setListIsOpen(false));
+  useClicksOutside(listRef, () => setListIsOpen(false), Boolean(listIsOpen));
 
   const submit = (evt) => {
     evt.preventDefault();

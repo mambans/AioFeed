@@ -50,7 +50,7 @@ const Container = styled.div`
 `;
 
 export default ({ outerContainer = window, showAndResetTimer = () => {}, children }) => {
-  const [show, setShow] = useState();
+  const [show, setShow] = useState(false);
   const menuRef = useRef();
   const toggleShowHide = useCallback(
     (e) => {
@@ -72,7 +72,7 @@ export default ({ outerContainer = window, showAndResetTimer = () => {}, childre
     [outerContainer, showAndResetTimer, show]
   );
   useEventListenerMemo('contextmenu', toggleShowHide, outerContainer);
-  useClicksOutside(menuRef, () => setShow(false));
+  useClicksOutside(menuRef, () => setShow(false), show);
 
   if (show?.show) {
     return (

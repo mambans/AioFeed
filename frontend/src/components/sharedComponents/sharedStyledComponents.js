@@ -165,6 +165,7 @@ export const SubFeedContainer = styled.div`
   flex-wrap: wrap;
   min-height: 400px;
   max-width: 100%;
+  overflow: hidden;
 `;
 
 export const StyledVideoContainer = styled.div`
@@ -260,15 +261,15 @@ export const StyledVideoContainer = styled.div`
   }
 `;
 
-export const VideoContainer = ({ children, ...props }) => {
+export const VideoContainer = React.forwardRef(({ children, ...props }, ref) => {
   const { feedVideoSizeProps } = useContext(FeedsContext);
 
   return (
-    <StyledVideoContainer feedVideoSizeProps={feedVideoSizeProps} {...props}>
+    <StyledVideoContainer feedVideoSizeProps={feedVideoSizeProps} {...props} ref={ref}>
       {children}
     </StyledVideoContainer>
   );
-};
+});
 
 export const ImageContainer = React.forwardRef(({ children, active }, ref) => {
   const { feedVideoSizeProps } = useContext(FeedsContext);

@@ -6,9 +6,9 @@ import useClicksOutside from '../../../hooks/useClicksOutside';
 import { TypeListUlContainer, StyledTypeButton } from './styledComponents';
 
 export default ({ category, videoType, setSortBy, setTopData, oldTopData, setVideoType }) => {
-  const [typeListOpen, setTypeListOpen] = useState();
+  const [typeListOpen, setTypeListOpen] = useState(false);
   const ref = useRef();
-  useClicksOutside(ref, () => setTypeListOpen(false));
+  useClicksOutside(ref, () => setTypeListOpen(false), typeListOpen);
 
   const videoTypeBtnOnClick = (type) => {
     setTopData([]);

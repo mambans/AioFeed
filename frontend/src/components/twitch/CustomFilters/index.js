@@ -9,34 +9,60 @@ import './CustomFilter.scss';
 import { getCookie } from '../../../util/Utils';
 import CustomFilterContext from './CustomFilterContext';
 
-export default ({ channel, enableFormControll = false, setOpenParent = () => {}, openParent }) => {
+import { Portal } from 'react-portal';
+
+export default ({
+  channel,
+  enableFormControll = false,
+  setOpenParent = () => {},
+  openParent,
+  videoContainerRef,
+}) => {
   const { setFilters } = useContext(CustomFilterContext) || {};
   const uploadNewFiltersTimer = useRef();
-  const OnClick = () => setOpenParent(true);
+  const btnRef = useRef();
+  const OnClick = () => setOpenParent((cr) => !cr);
+  const videoContainerPosotion = videoContainerRef?.current?.getBoundingClientRect();
 
   return (
     <>
       {setFilters && (
-        <OpenListBtn onClick={OnClick} show={String(openParent)} size='1.4em'></OpenListBtn>
+        <OpenListBtn
+          ref={btnRef}
+          onClick={OnClick}
+          show={String(openParent)}
+          size='1.4em'
+        ></OpenListBtn>
       )}
 
       <CSSTransition in={openParent} timeout={250} classNames='customFilter' unmountOnExit>
-        <ListContainer
-          setShow={setOpenParent}
-          channel={channel}
-          enableFormControll={enableFormControll}
-          uploadNewFiltersTimer={uploadNewFiltersTimer}
-        />
+        <Portal>
+          <ListContainer
+            videoContainerPosotion={videoContainerPosotion}
+            setShow={setOpenParent}
+            channel={channel}
+            enableFormControll={enableFormControll}
+            uploadNewFiltersTimer={uploadNewFiltersTimer}
+            btnRef={btnRef}
+          />
+        </Portal>
       </CSSTransition>
     </>
   );
 };
 
-const ListContainer = ({ setShow, channel, enableFormControll, uploadNewFiltersTimer }) => {
+const ListContainer = ({
+  setShow,
+  channel,
+  enableFormControll,
+  uploadNewFiltersTimer,
+  videoContainerPosotion,
+  btnRef,
+}) => {
   const { filters, setFilters } = useContext(CustomFilterContext);
   const listRef = useRef();
 
-  useClicksOutside(listRef, (e) => {
+  useClicksOutside([listRef, btnRef], (e) => {
     e.stopImmediatePropagation();
     e.stopPropagation();
     setShow(false);
@@ -44,7 +70,12 @@ const ListContainer = ({ setShow, channel, enableFormControll, uploadNewFiltersT
   });
 
   return (
-    <StyledListContainer ref={listRef}>
+    <StyledListContainer
+      ref={listRef}
+      top={videoContainerPosotion.bottom}
+      left={videoContainerPosotion.left}
+      width={videoContainerPosotion.width}
+    >
       <CloseListBtn onClick={() => setShow(false)} size={22}>
         X
       </CloseListBtn>
@@ -105,14 +136,18 @@ export const Row = ({
     };
   };
 
-  const { value: channelName, bind: bindChannelName, reset: resetChannelName } = useInput(
-    channel || ''
-  );
+  const {
+    value: channelName,
+    bind: bindChannelName,
+    reset: resetChannelName,
+  } = useInput(channel || '');
   const { value: match, bind: bindMatch, reset: resetMatch } = useInput(rule?.match || '');
   const { value: type, bind: bindType, reset: resetType } = useInput(rule?.type || 'game_name');
-  const { value: action, bind: bindAction, reset: resetAction } = useInput(
-    rule?.action || 'Blacklist'
-  );
+  const {
+    value: action,
+    bind: bindAction,
+    reset: resetAction,
+  } = useInput(rule?.action || 'Blacklist');
 
   const handleSubmit = (e) => {
     e.preventDefault();

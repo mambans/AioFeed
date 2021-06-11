@@ -6,7 +6,10 @@ export const StyledListContainer = styled.div`
   background: var(--sidebarsBackgroundColor);
   z-index: 2;
   border-radius: 5px;
-  right: 0;
+  /* right: 0; */
+  top: ${({ top }) => top}px;
+  left: ${({ left }) => left}px;
+  width: ${({ width }) => width}px;
 
   ul {
     padding-top: 50px;
@@ -16,12 +19,12 @@ export const StyledListContainer = styled.div`
     padding: 0.25rem 0.5rem;
   }
 `;
+
 export const ListItems = styled.div`
-  padding-top: 25px;
+  padding-top: 15px;
   padding-bottom: 10px;
   overflow: auto;
-  /* max-height: 500px; */
-  min-width: 300px;
+  width: 100%;
 
   max-height: 75vh;
 
