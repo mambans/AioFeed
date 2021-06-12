@@ -10,6 +10,7 @@ import { getCookie } from '../../../util/Utils';
 import CustomFilterContext from './CustomFilterContext';
 
 import { Portal } from 'react-portal';
+import { TransparentButton } from '../../sharedComponents/sharedStyledComponents';
 
 export default ({
   channel,
@@ -27,12 +28,9 @@ export default ({
   return (
     <>
       {setFilters && (
-        <OpenListBtn
-          ref={btnRef}
-          onClick={OnClick}
-          show={String(openParent)}
-          size='1.4em'
-        ></OpenListBtn>
+        <TransparentButton ref={btnRef} onClick={OnClick}>
+          <OpenListBtn show={String(openParent)} size='1.4em' />
+        </TransparentButton>
       )}
 
       <CSSTransition in={openParent} timeout={250} classNames='customFilter' unmountOnExit>

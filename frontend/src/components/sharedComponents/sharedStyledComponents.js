@@ -628,3 +628,20 @@ export const LastRefreshText = styled(Moment).attrs({ fromNow: true, interval: 6
   position: relative;
   color: var(--textColor2);
 `;
+
+export const TransparentButton = styled.button`
+  &&& {
+    background: transparent;
+    border: none;
+    color: none;
+    display: flex;
+
+    &:hover,
+    &:active,
+    &:focus {
+      background: none;
+      border: none;
+      color: none;
+    }
+  }
+`;
