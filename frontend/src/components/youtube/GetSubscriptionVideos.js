@@ -50,7 +50,7 @@ const fetchSubscriptionVideos = async (videosCACHE, channel) => {
   return res;
 };
 
-export default async (followedChannels) => {
+const getSubscriptionVideos = async (followedChannels) => {
   let error = null;
 
   try {
@@ -87,3 +87,5 @@ export default async (followedChannels) => {
     return error;
   }
 };
+
+export default getSubscriptionVideos;

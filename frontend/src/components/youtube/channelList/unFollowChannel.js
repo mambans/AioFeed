@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getCookie, getLocalstorage } from './../../../util/Utils';
 
-export default async ({ subscriptionId, channelId, setChannels, videos, setVideos }) => {
+const unFollowChannel = async ({ subscriptionId, channelId, setChannels, videos, setVideos }) => {
   const followedChannels = getLocalstorage(`YT-followedChannels`) || [];
   const newFollowedChannels = followedChannels.data.filter(
     (channel) => channel.id !== subscriptionId
@@ -30,3 +30,5 @@ export default async ({ subscriptionId, channelId, setChannels, videos, setVideo
     },
   });
 };
+
+export default unFollowChannel;

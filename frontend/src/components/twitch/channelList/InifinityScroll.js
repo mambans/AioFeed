@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import StyledLoadingList from './../categoryTopStreams/LoadingList';
 
-export default ({ observerFunction }) => {
+const InifinityScroll = ({ observerFunction }) => {
   const ref = useRef();
   const timer = useRef();
   useEffect(() => {
@@ -36,3 +36,4 @@ export default ({ observerFunction }) => {
     </div>
   );
 };
+export default InifinityScroll;

@@ -8,13 +8,16 @@ import { LoopBtn, Loop } from './StyledComponents';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import ToolTip from '../../sharedComponents/ToolTip';
 
-export default ({ listIsOpen, listWidth, playNext }) => {
+const VideoPlayer = ({ listIsOpen, listWidth, playNext }) => {
   const channelName = useParams()?.channelName;
   const videoId = useParams()?.videoId;
-  const time = useQuery().get('t') || useQuery().get('start') || null;
+  const queryTime = useQuery().get('t') || null;
+  const queryTime2 = useQuery().get('start') || null;
+
+  const time = queryTime || queryTime2 || null;
   const endTime = useQuery().get('end') || null;
   const twitchVideoPlayer = useRef();
-  const [loopEnabled, setLoopEnabled] = useState(Boolean(time));
+  const [loopEnabled, setLoopEnabled] = useState(Boolean(useQuery().get('loop')));
   const [duration, setDuration] = useState();
 
   useEffect(() => {
@@ -65,7 +68,7 @@ export default ({ listIsOpen, listWidth, playNext }) => {
             `${videoDetails?.user_name || ''} - ${videoDetails?.title || videoId}`,
             `/${videoDetails?.user_name}/videos/${videoId}${time ? `?start=${time}` : ''}${
               endTime ? `&end=${endTime}` : ''
-            }`
+            }${loopEnabled ? `&loop=${loopEnabled}` : ''}`
           );
         }
       }
@@ -74,7 +77,7 @@ export default ({ listIsOpen, listWidth, playNext }) => {
     const timer = setTimeout(fetchDetailsForDocumentTitle, 500);
 
     return () => clearTimeout(timer);
-  }, [videoId, channelName, twitchVideoPlayer, time, endTime]);
+  }, [videoId, channelName, twitchVideoPlayer, time, endTime, loopEnabled]);
 
   return (
     <Loop listIsOpen={String(listIsOpen)} listWidth={listWidth} loopEnabled={String(loopEnabled)}>
@@ -93,6 +96,10 @@ export default ({ listIsOpen, listWidth, playNext }) => {
                 if (twitchVideoPlayer.current.getEnded() && !cr) {
                   twitchVideoPlayer.current.seek(0);
                 }
+                window.history.pushState(
+                  {},
+                  `${window.location}${loopEnabled ? `&loop=${loopEnabled}` : ''}`
+                );
                 return !cr;
               });
             }}
@@ -100,10 +107,15 @@ export default ({ listIsOpen, listWidth, playNext }) => {
         </ToolTip>
       )}
       {twitchVideoPlayer.current && loopEnabled && (
-        <Loopbar twitchVideoPlayer={twitchVideoPlayer.current} duration={duration} />
+        <Loopbar
+          twitchVideoPlayer={twitchVideoPlayer.current}
+          duration={duration}
+          loopEnabled={loopEnabled}
+        />
       )}
 
       {/* <div id='twitch-embed' style={{ gridArea: 'video' }}></div> */}
     </Loop>
   );
 };
+export default VideoPlayer;

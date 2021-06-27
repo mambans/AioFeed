@@ -6,7 +6,7 @@ import Feed from '../feed';
 import Footer from '../footer';
 import Home from '../home';
 import Legality from '../legality';
-import Navbar from '../navigation';
+import Navigation from '../navigation';
 import TopStreams from '../twitch/categoryTopStreams';
 import TwitchAuthCallback from '../auth/TwitchAuthCallback';
 import TwitchChannelRoutes from '../twitch/Routes';
@@ -23,10 +23,10 @@ const MainContentContainer = styled.main`
   padding-top: 70px;
 `;
 
-export default () => {
+const NavigationRoutes = () => {
   return (
     <BrowserRouter>
-      <Navbar />
+      <Navigation />
       <MainContentContainer>
         <Routes>
           <Route path='' element={<Home />} />
@@ -65,3 +65,5 @@ export default () => {
     </BrowserRouter>
   );
 };
+
+export default NavigationRoutes;

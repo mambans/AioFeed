@@ -11,10 +11,12 @@ import { StyledLoadingContainer } from './sharedComponents/sharedStyledComponent
  * @param {Object} [style] - Additional style object
  * @returns {Element} - JSX loading Element
  */
-export default ({ text, smallText, height = 150, width = 150, type = 'bars', style }) => (
+const LoadingIndicator = ({ text, smallText, height = 150, width = 150, type = 'bars', style }) => (
   <StyledLoadingContainer style={style || null}>
     <ReactLoading type={type} color={'#ffffff'} height={height} width={width} />
     {text && <h1>{text}</h1>}
     {smallText && <p>{smallText}</p>}
   </StyledLoadingContainer>
 );
+
+export default LoadingIndicator;

@@ -10,7 +10,7 @@ import { StyledVolumeSlider } from './StyledComponents';
 import 'react-rangeslider/lib/index.css';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
-export default ({
+const VolumeSlider = ({
   TwitchPlayer,
   OpenedDate,
   PlayerUIControlls,
@@ -162,3 +162,4 @@ export default ({
     </StyledVolumeSlider>
   );
 };
+export default VolumeSlider;

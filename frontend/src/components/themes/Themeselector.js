@@ -3,14 +3,9 @@ import { CSSTransition } from 'react-transition-group';
 
 import { ThemeSelector, ThemeSelectorUl, ThemeItem, Arrow } from './styledComponents';
 import ThemeContext, { findSeasonOrDefaultTheme } from './ThemeContext';
-import useSyncedLocalState from './../../hooks/useSyncedLocalState';
 
-export default ({ style }) => {
-  const { themesArray, setActiveContextTheme } = useContext(ThemeContext);
-  const [activeTheme, setActiveTheme] = useSyncedLocalState('activeTheme', {
-    name: 'default',
-    type: 'dark',
-  });
+const Themeselector = ({ style }) => {
+  const { themesArray, setActiveTheme, activeTheme } = useContext(ThemeContext);
   const [open, setOpen] = useState(false);
 
   const activateTheme = (theme) => {
@@ -30,7 +25,7 @@ export default ({ style }) => {
   };
 
   return (
-    <ThemeSelector open={open} style={style}>
+    <ThemeSelector open={open} style={style} image={activeTheme.image}>
       <button id='active' onClick={() => setOpen(!open)}>
         <span id='prefix'>Theme:</span>
         <Arrow open={open} />
@@ -45,18 +40,20 @@ export default ({ style }) => {
               <ThemeItem
                 key={theme.name}
                 value={theme.name}
-                image={
-                  theme.image
-                    ? typeof theme.image === 'function'
-                      ? `${process.env.PUBLIC_URL}/images/${theme.image(themesArray).image}`
-                      : `${process.env.PUBLIC_URL}/images/${theme.image}`
-                    : 'none'
-                }
+                image={theme.image || 'none'}
+                // image={
+                //   theme.image
+                //     ? typeof theme.image === 'function'
+                //       ? `${process.env.PUBLIC_URL}/images/${theme.image(themesArray).image}`
+                //       : `${process.env.PUBLIC_URL}/images/${theme.image}`
+                //     : 'none'
+                // }
                 backgroundColor={theme.backgroundColor ? theme.backgroundColor : 'unset'}
                 onClick={() => {
                   setActiveTheme(theme);
                   activateTheme(theme);
-                  if (theme.type !== activeTheme.type) setActiveContextTheme(theme);
+
+                  // if (theme.type !== activeTheme.type) setActiveContextTheme(theme);
                   setOpen(false);
                 }}
               >
@@ -69,3 +66,5 @@ export default ({ style }) => {
     </ThemeSelector>
   );
 };
+
+export default Themeselector;

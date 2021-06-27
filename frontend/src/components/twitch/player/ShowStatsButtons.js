@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ButtonShowStats, PlaybackStats } from './StyledComponents';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
-export default ({ TwitchPlayer }) => {
+const ShowStatsButtons = ({ TwitchPlayer }) => {
   const [showPlaybackStats, setShowPlaybackStats] = useState();
   const [playbackStats, setPlaybackStats] = useState();
   const PlayersatsTimer = useRef();
@@ -85,3 +85,4 @@ export default ({ TwitchPlayer }) => {
     </>
   );
 };
+export default ShowStatsButtons;

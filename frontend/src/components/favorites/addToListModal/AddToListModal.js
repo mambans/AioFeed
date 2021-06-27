@@ -123,7 +123,7 @@ export const AddRemoveBtn = ({
   );
 };
 
-export default ({ OpenFunction, CloseFunction, videoId }) => {
+const AddToListModal = ({ OpenFunction, CloseFunction, videoId }) => {
   const { lists, setLists } = useContext(FavoritesContext) || {};
   const listRef = useRef();
 
@@ -145,3 +145,5 @@ export default ({ OpenFunction, CloseFunction, videoId }) => {
     </Lists>
   );
 };
+
+export default AddToListModal;

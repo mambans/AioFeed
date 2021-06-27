@@ -52,7 +52,7 @@ const getGameDetails = async (items) => {
  * @async
  * @returns
  */
-export default async ({ items }) => {
+const fetchGameName = async ({ items }) => {
   const originalArray = items;
 
   const gameNames = await getGameDetails(originalArray.data);
@@ -80,3 +80,4 @@ export default async ({ items }) => {
 
   return finallObj;
 };
+export default fetchGameName;

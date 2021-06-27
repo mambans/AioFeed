@@ -1,7 +1,7 @@
 import addSystemNotification from './addSystemNotification';
 import { truncate } from '../../../util/Utils';
 
-export default async ({
+const updateSreamsPromise = async ({
   oldLiveStreams,
   liveStreams,
   newlyAddedStreams,
@@ -105,3 +105,4 @@ export default async ({
     return [];
   }
 };
+export default updateSreamsPromise;

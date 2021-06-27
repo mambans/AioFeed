@@ -5,7 +5,7 @@ import { StyledLoadmore } from '../twitch/StyledComponents';
 import CountdownCircleTimer from './CountdownCircleTimer';
 import { CenterContext } from '../feed/FeedsCenterContainer';
 
-export default ({
+const LoadMore = ({
   style = {},
   onClick,
   loaded,
@@ -118,3 +118,5 @@ export default ({
   }
   return null;
 };
+
+export default LoadMore;

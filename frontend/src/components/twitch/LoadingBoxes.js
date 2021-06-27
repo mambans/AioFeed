@@ -3,7 +3,7 @@ import React from 'react';
 import { LoadingVideoElement } from './StyledComponents';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
-export default ({ amount, type, load = true }) => {
+const LoadingBoxed = ({ amount, type, load = true }) => {
   const array = Array.apply(null, Array(amount)).map((x, i) => i);
 
   if (load) {
@@ -19,3 +19,4 @@ export default ({ amount, type, load = true }) => {
   }
   return null;
 };
+export default LoadingBoxed;

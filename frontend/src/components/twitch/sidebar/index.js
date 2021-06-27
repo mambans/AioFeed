@@ -5,7 +5,7 @@ import SidebarItem from './SidebarItem';
 import { Styledsidebar, SidebarHeader } from './StyledComponents';
 import LoadingSidebar from './LoadingSidebar';
 
-export default (data) => {
+const Sidebar = (data) => {
   const { onlineStreams, newlyAdded, loaded } = data;
   const [shows, setShows] = useState();
   const resetShowsTimer = useRef();
@@ -53,3 +53,4 @@ export default (data) => {
   }
   return <LoadingSidebar />;
 };
+export default Sidebar;

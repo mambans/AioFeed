@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getCookie, RemoveCookie } from '../../util/Utils';
 
-export default async ({ setYoutubeToken, setEnableYoutube }) => {
+const disconnectYoutube = async ({ setYoutubeToken, setEnableYoutube }) => {
   RemoveCookie('Youtube-access_token');
   RemoveCookie('YoutubeUsername');
   RemoveCookie('YoutubeProfileImg');
@@ -30,3 +30,5 @@ export default async ({ setYoutubeToken, setEnableYoutube }) => {
     }
   );
 };
+
+export default disconnectYoutube;

@@ -19,7 +19,7 @@ import SearchList from '../../sharedComponents/SearchList';
 const removeDuplicates = (items) =>
   items.filter((item, index, self) => self.findIndex((t) => t.id === item.id) === index);
 
-export default (props) => {
+const GameSearchBar = (props) => {
   const {
     gameName,
     videoType,
@@ -264,3 +264,5 @@ export default (props) => {
     </>
   );
 };
+
+export default GameSearchBar;

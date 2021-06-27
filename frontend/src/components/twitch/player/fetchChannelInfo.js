@@ -5,7 +5,7 @@ import { getLocalstorage } from '../../../util/Utils';
  * @param {String} channelId - Channel id of Twitch channel to fetch info from.
  * @param {Boolean} format - format data to match API.getStreams() output.
  */
-export default async (channelId, format) => {
+const fetchChannelInfo = async (channelId, format) => {
   return await API.krakenGetChannelInfo({ params: { id: channelId } })
     .then((res) => {
       if (res) {
@@ -33,3 +33,4 @@ export default async (channelId, format) => {
     })
     .catch((error) => console.error('fetchChannelInfo: ', error));
 };
+export default fetchChannelInfo;

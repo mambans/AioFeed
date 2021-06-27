@@ -3,7 +3,7 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import FeedsContext from '../../feed/FeedsContext';
 import UpdateTwitterLists from './UpdateTwitterLists';
 
-export default () => {
+const TwitterForms = () => {
   const { twitterLists } = useContext(FeedsContext);
 
   return (
@@ -16,3 +16,5 @@ export default () => {
     </TransitionGroup>
   );
 };
+
+export default TwitterForms;

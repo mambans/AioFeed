@@ -10,7 +10,7 @@ import { AddCookie } from '../../util/Utils';
 import API from '../twitch/API';
 import useToken, { TwitchContext } from '../twitch/useToken';
 
-export default () => {
+const TwitchAuthCallback = () => {
   const [error, setError] = useState();
   const { autoRefreshEnabled } = useContext(TwitchContext);
   const { username } = useContext(AccountContext);
@@ -125,3 +125,5 @@ export default () => {
     />
   );
 };
+
+export default TwitchAuthCallback;

@@ -14,7 +14,7 @@ import {
 } from './sharedStyledComponents';
 import ReOrderButtons from './ReOrderButtons';
 
-export default (props) => {
+const Header = (props) => {
   const {
     children,
     text,
@@ -84,3 +84,5 @@ export default (props) => {
     </HeaderOuterMainContainer>
   );
 };
+
+export default Header;

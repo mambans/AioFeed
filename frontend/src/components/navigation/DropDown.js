@@ -49,7 +49,7 @@ const DropdownContainer = ({ triggerRef, onClick, children }) => {
   );
 };
 
-export default ({ title, children }) => {
+const DropDown = ({ title, children }) => {
   const triggerRef = useRef();
 
   return (
@@ -67,3 +67,5 @@ export default ({ title, children }) => {
     </PortalWithState>
   );
 };
+
+export default DropDown;

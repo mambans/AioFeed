@@ -9,9 +9,9 @@ import Header from './../../sharedComponents/Header';
 import { TopDataSortButtonsContainer, TopStreamsContainer, Container } from './styledComponents';
 import ClipsSortButton from './../channelPage/ClipsSortButton';
 import GameSearchBar from './GameSearchBar';
-import GetTopClips from './GetTopClips';
-import GetTopStreams from './GetTopStreams';
-import GetTopVideos from './GetTopVideos';
+import getTopClips from './GetTopClips';
+import getTopStreams from './GetTopStreams';
+import getTopVideos from './GetTopVideos';
 import LoadingBoxes from './../LoadingBoxes';
 import SortButton from './../channelPage/SortButton';
 import StreamEle from './../live/StreamElement';
@@ -23,7 +23,7 @@ import useToken from '../useToken';
 import API from '../API';
 import TypeButton from './TypeButton';
 
-export default () => {
+const TopStreams = () => {
   const { category } = useParams();
   const { p_videoType } = useLocation().state || {};
   const [topData, setTopData] = useState([]);
@@ -83,7 +83,7 @@ export default () => {
 
       switch (videoType) {
         case 'streams':
-          GetTopStreams(category, shouldLoadMore && oldTopData.current)
+          getTopStreams(category, shouldLoadMore && oldTopData.current)
             .then((res) => fetchVideosDataHandler(res, shouldLoadMore))
             .catch((e) => {
               if ((e.message = 'game is undefined')) {
@@ -95,7 +95,7 @@ export default () => {
             });
           break;
         case 'clips':
-          GetTopClips(category, sortByTime, oldTopData.current)
+          getTopClips(category, sortByTime, oldTopData.current)
             .then((res) => fetchVideosDataHandler(res, shouldLoadMore))
             .catch((e) => {
               if ((e.message = 'game is undefined')) {
@@ -107,7 +107,7 @@ export default () => {
             });
           break;
         case 'videos':
-          GetTopVideos(category, sortBy, oldTopData.current)
+          getTopVideos(category, sortBy, oldTopData.current)
             .then((res) => fetchVideosDataHandler(res, shouldLoadMore))
             .catch((e) => {
               if ((e.message = 'game is undefined')) {
@@ -119,7 +119,7 @@ export default () => {
             });
           break;
         default:
-          GetTopStreams(category, shouldLoadMore && oldTopData.current)
+          getTopStreams(category, shouldLoadMore && oldTopData.current)
             .then((res) => fetchVideosDataHandler(res, shouldLoadMore))
             .catch((e) => {
               if ((e.message = 'game is undefined')) {
@@ -255,3 +255,4 @@ export default () => {
     </CSSTransition>
   );
 };
+export default TopStreams;

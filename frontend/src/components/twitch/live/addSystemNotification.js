@@ -27,7 +27,13 @@ const markStreamAsSeen = async (streamName, newlyAddedStreams, setUnseenNotifica
   });
 };
 
-export default async ({ status, stream, body, newlyAddedStreams, setUnseenNotifications }) => {
+const addSystemNotification = async ({
+  status,
+  stream,
+  body,
+  newlyAddedStreams,
+  setUnseenNotifications,
+}) => {
   if (Notification.permission === 'granted') {
     const url = `https://aiofeed.com/${stream.login?.toLowerCase()}${
       status?.toLowerCase() === 'offline' ? '/page' : ''
@@ -47,3 +53,4 @@ export default async ({ status, stream, body, newlyAddedStreams, setUnseenNotifi
     return notification;
   }
 };
+export default addSystemNotification;

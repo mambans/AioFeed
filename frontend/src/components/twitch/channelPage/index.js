@@ -43,8 +43,7 @@ import loginNameFormat from '../loginNameFormat';
 import useToken from '../useToken';
 import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
 import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
-
-export default () => {
+const ChannelPage = () => {
   const { passedChannelData } = useLocation().state || {};
   const { channelName } = useParams();
   const [channelInfo, setChannelInfo] = useState(passedChannelData);
@@ -536,3 +535,4 @@ export default () => {
     );
   }
 };
+export default ChannelPage;

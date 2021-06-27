@@ -4,7 +4,7 @@ import { useState } from 'react';
  * @param {any} initialValue - Start value
  * @returns
  */
-export default (initialValue) => {
+const useInput = (initialValue) => {
   const [value, setValue] = useState(initialValue);
 
   return {
@@ -20,3 +20,4 @@ export default (initialValue) => {
     },
   };
 };
+export default useInput;

@@ -8,7 +8,7 @@ import Player from './player/Player';
 import PlayerClip from './player/PlayerClip';
 import SharedVideoPlayer from '../sharedComponents/SharedVideoPlayer';
 
-export default () => {
+const TwitchRoutes = () => {
   const channelName = useParams()?.channelName;
 
   return (
@@ -28,3 +28,4 @@ export default () => {
     </Routes>
   );
 };
+export default TwitchRoutes;

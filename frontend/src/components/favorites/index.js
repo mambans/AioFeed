@@ -64,7 +64,7 @@ export const useCheckForVideosAndValidateToken = ({
   ]);
 };
 
-export default () => (
+const FavoritesContainer = () => (
   <FavoritesProvider>
     <FeedsCenterContainer fullWidth={true}>
       <Favorites />
@@ -164,3 +164,5 @@ export const Favorites = () => {
     </>
   );
 };
+
+export default FavoritesContainer;

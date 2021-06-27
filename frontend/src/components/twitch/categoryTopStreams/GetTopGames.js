@@ -1,6 +1,6 @@
 import API from '../API';
 
-export default async (cursor) => {
+const getTopGames = async (cursor) => {
   const topGames = await API.getTopGames({
     params: {
       first: 100,
@@ -10,3 +10,4 @@ export default async (cursor) => {
   if (topGames?.data) return topGames.data;
   return { data: [] };
 };
+export default getTopGames;

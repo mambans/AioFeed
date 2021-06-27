@@ -60,7 +60,7 @@ import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.1, 175);
 
-export default () => {
+const Player = () => {
   const channelName = useParams()?.channelName;
   document.title = `${channelName} player`;
   const validateToken = useToken();
@@ -109,14 +109,12 @@ export default () => {
   useEventListenerMemo('mouseleave', handleMouseOut, PlayerUIControlls.current);
   useEventListenerMemo('dblclick', toggleFullScreen, PlayerUIControlls.current);
   useEventListenerMemo('keydown', keyboardEvents);
-  useEventListenerMemo('mousedown', containLinkClicks, link0.current);
-  useEventListenerMemo('mousedown', containLinkClicks, link1.current);
-  useEventListenerMemo('mousedown', containLinkClicks, link2.current);
-  useEventListenerMemo('mousedown', containLinkClicks, link3.current);
 
-  function containLinkClicks(event) {
+  const containLinkClicks = (event) => {
     event.stopPropagation();
-  }
+    event.stopImmediatePropagation();
+    return false;
+  };
 
   const showAndResetTimer = throttle(
     () => {
@@ -132,6 +130,11 @@ export default () => {
   useEventListenerMemo('mousemove', showAndResetTimer);
   useEventListenerMemo('mousedown', showAndResetTimer);
   useEventListenerMemo('touchmove', showAndResetTimer);
+
+  useEventListenerMemo('mousedown', containLinkClicks, link0.current);
+  useEventListenerMemo('mousedown', containLinkClicks, link1.current);
+  useEventListenerMemo('mousedown', containLinkClicks, link2.current);
+  useEventListenerMemo('mousedown', containLinkClicks, link3.current);
 
   useEffect(() => {
     if (window?.Twitch?.Player) {
@@ -689,3 +692,4 @@ export default () => {
     </VideoAndChatContainer>
   );
 };
+export default Player;

@@ -28,7 +28,7 @@ const StyledReOrderButtons = styled.div`
  * @param {String} feedName - Name of feed.
  * @returns {Element}
  */
-export default ({ setOrder, feedName }) => {
+const ReOrderButtons = ({ setOrder, feedName }) => {
   const saveOrder = (order) =>
     localStorage.setItem(
       'FeedOrders',
@@ -63,3 +63,5 @@ export default ({ setOrder, feedName }) => {
     </StyledReOrderButtons>
   );
 };
+
+export default ReOrderButtons;

@@ -8,7 +8,13 @@ import { useEffect, useMemo } from 'react';
  * @param {any} [secondArgument=true] - A second argument (converted to a boolean) if event should be added
  * @param {Object} [options={}] - the event listener options
  */
-export default (eventName, handler, element = window, secondArgument = true, options = {}) => {
+const useEventListenerMemoArray = (
+  eventName,
+  handler,
+  element = window,
+  secondArgument = true,
+  options = {}
+) => {
   const savedHandler = useMemo(() => handler, [handler]);
   const savedEventName = useMemo(() => eventName, [eventName]);
   const savedElement = useMemo(() => element, [element]);
@@ -63,3 +69,4 @@ export default (eventName, handler, element = window, secondArgument = true, opt
     }
   }, [savedEventName, savedElement, savedSecondArgument, savedHandler, savedOptions]);
 };
+export default useEventListenerMemoArray;

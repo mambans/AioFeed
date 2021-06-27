@@ -8,7 +8,12 @@ import { chunk } from '../../util/Utils';
  * @async
  * @returns
  */
-export default async ({ items, forceNewProfiles, previousStreams, saveNewProfiles = true }) => {
+const fetchProfileImages = async ({
+  items,
+  forceNewProfiles,
+  previousStreams,
+  saveNewProfiles = true,
+}) => {
   const originalArray = items;
   const TwitchProfiles = GetCachedProfiles();
   const noCachedProfileArrayObject = await originalArray?.data?.filter(
@@ -91,3 +96,4 @@ export default async ({ items, forceNewProfiles, previousStreams, saveNewProfile
 
   return finallData;
 };
+export default fetchProfileImages;

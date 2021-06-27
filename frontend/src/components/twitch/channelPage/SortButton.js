@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { MdSort } from 'react-icons/md';
 
-import { SortButton, SortDropDownList } from './StyledComponents';
+import { StyledSortButton, SortDropDownList } from './StyledComponents';
 import { Link } from 'react-router-dom';
 
-export default ({ sortBy, setSortBy, setData }) => {
+const SortButton = ({ sortBy, setSortBy, setData }) => {
   const [open, setOpen] = useState(false);
   const SortOptions = ['Time', 'Trending', 'Views'];
 
   return (
     <div>
-      <SortButton onClick={() => setOpen(!open)}>
+      <StyledSortButton onClick={() => setOpen(!open)}>
         <MdSort size={30} />
         Sort by: {sortBy}
-      </SortButton>
+      </StyledSortButton>
       {open && (
         <SortDropDownList>
           {SortOptions.map((option) => (
@@ -34,3 +34,4 @@ export default ({ sortBy, setSortBy, setData }) => {
     </div>
   );
 };
+export default SortButton;

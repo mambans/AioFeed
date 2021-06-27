@@ -24,7 +24,7 @@ export const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
 
 const HOVER_DELAY = 1000;
 
-export default ({ list, video, setDragSelected, listName, active, ...props }) => {
+const YoutubeVideoElement = ({ list, video, setDragSelected, listName, active, ...props }) => {
   const { youtubeVideoHoverEnable } = useContext(YoutubeContext);
   const [isHovered, setIsHovered] = useState(false);
   const streamHoverTimer = useRef();
@@ -101,3 +101,5 @@ export default ({ list, video, setDragSelected, listName, active, ...props }) =>
     </VideoContainer>
   );
 };
+
+export default YoutubeVideoElement;

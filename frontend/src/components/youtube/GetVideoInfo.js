@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getLocalstorage, getCookie, chunk } from '../../util/Utils';
 import { merge } from 'lodash';
 
-export default async ({ videos }) => {
+const getVideoInfo = async ({ videos }) => {
   const videosArray = [...videos];
 
   const fullyCachedVideos =
@@ -81,3 +81,5 @@ export default async ({ videos }) => {
 
   return [...(CachedFullyVideos || []), ...(newVideosWithDetails || [])];
 };
+
+export default getVideoInfo;

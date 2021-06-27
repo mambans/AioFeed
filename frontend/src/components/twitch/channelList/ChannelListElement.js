@@ -12,7 +12,7 @@ import loginNameFormat from '../loginNameFormat';
 import CustomFilters from '../CustomFilters';
 import ChannelButtonsContainer from '../live/ChannelButtonsContainer';
 
-export default ({
+const ChannelListElement = ({
   data,
   selected,
   showVodBtn = true,
@@ -113,3 +113,4 @@ export default ({
     </ChannelListLi>
   );
 };
+export default ChannelListElement;

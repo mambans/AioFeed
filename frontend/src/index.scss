@@ -24,7 +24,7 @@ body {
   background-size: var(--backgroundImgSize);
   background-repeat: var(--backgroundImgRepeat);
   color: var(--textColor1);
-  background-image: var(--backgroundImg);
+  // background-image: var(--backgroundImg);
 }
 
 code {
@@ -59,4 +59,8 @@ html.theme-transition *:after {
 
 .navbar-dark .navbar-nav a.nav-link.active {
   color: var(--textColor2Hover);
+}
+
+a {
+  text-decoration: none;
 }

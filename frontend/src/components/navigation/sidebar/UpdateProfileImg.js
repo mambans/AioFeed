@@ -6,7 +6,7 @@ import useInput from './../../../hooks/useInput';
 import { ProfileImgInput } from './StyledComponent';
 import { AddCookie, getCookie } from '../../../util/Utils';
 
-export default ({ close }) => {
+const UpdateProfileImg = ({ close }) => {
   const { username, setProfileImage } = useContext(AccountContext);
   const { value: image, bind: bindimage, reset: resetimage } = useInput('');
 
@@ -42,3 +42,5 @@ export default ({ close }) => {
     </>
   );
 };
+
+export default UpdateProfileImg;

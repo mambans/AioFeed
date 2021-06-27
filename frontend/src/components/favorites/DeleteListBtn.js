@@ -6,7 +6,7 @@ import { getCookie } from '../../util/Utils';
 import { ListActionButton } from './StyledComponents';
 import FavoritesContext from './FavoritesContext';
 
-export default ({ list, style, children }) => {
+const DeleteListBtn = ({ list, style, children }) => {
   const { setLists } = useContext(FavoritesContext);
   const deleteList = async () => {
     const confirmed = window.confirm(`Delete list ${list.name}?`);
@@ -35,3 +35,5 @@ export default ({ list, style, children }) => {
     </ListActionButton>
   );
 };
+
+export default DeleteListBtn;

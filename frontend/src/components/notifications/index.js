@@ -10,7 +10,7 @@ import NotificationsContext from './../notifications/NotificationsContext';
 import styles from './Notifications.module.scss';
 import NotificationsList from './NotificationsList';
 
-export default ({ leftExpandRef }) => {
+const Notifications = ({ leftExpandRef }) => {
   const [show, setShow] = useState(false);
   const { clearUnseenNotifications, unseenNotifications } = useContext(NotificationsContext);
   const { shrinkNavbar } = useContext(NavigationContext);
@@ -81,3 +81,5 @@ export default ({ leftExpandRef }) => {
     </>
   );
 };
+
+export default Notifications;

@@ -36,7 +36,7 @@ const fetchNextPgeOfSubscriptions = async ({ total, PagePagination, followedchan
   return followedchannels;
 };
 
-export default async () => {
+const getMyFollowedChannels = async () => {
   try {
     const followedchannels = await axios.get(
       `https://www.googleapis.com/youtube/v3/subscriptions?`,
@@ -86,3 +86,5 @@ export default async () => {
     return [];
   }
 };
+
+export default getMyFollowedChannels;

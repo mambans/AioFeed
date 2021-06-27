@@ -20,7 +20,7 @@ import SearchList from '../../sharedComponents/SearchList';
 const removeDuplicates = (items) =>
   items.filter((item, index, self) => self.findIndex((t) => t.user_id === item.user_id) === index);
 
-export default ({
+const ChannelList = ({
   style = {},
   placeholder = 'Channel..',
   inputStyle = {},
@@ -317,3 +317,4 @@ export default ({
     </SearchList>
   );
 };
+export default ChannelList;

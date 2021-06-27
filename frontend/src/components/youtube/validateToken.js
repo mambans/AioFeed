@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getCookie } from '../../util/Utils';
 import autoReauthenticate from './autoReauthenticate';
 
-export default async ({ authKey = getCookie(`AioFeed_AuthKey`) } = {}) => {
+const validateToken = async ({ authKey = getCookie(`AioFeed_AuthKey`) } = {}) => {
   const access_token = getCookie('Youtube-access_token');
 
   if (access_token) {
@@ -19,3 +19,5 @@ export default async ({ authKey = getCookie(`AioFeed_AuthKey`) } = {}) => {
   return autoReauthenticate({ authKey });
   // throw new Error('No tokens found.');
 };
+
+export default validateToken;

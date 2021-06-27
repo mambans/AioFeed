@@ -10,16 +10,15 @@ import UpdateTwitterLists from '../navigation/sidebar/UpdateTwitterLists';
 import ThemeContext from './../themes/ThemeContext';
 import FeedsCenterContainer from '../feed/FeedsCenterContainer';
 
-export default () => (
+const TwitterStandalone = () => (
   <FeedsCenterContainer>
     <Twitter in={true} />
   </FeedsCenterContainer>
 );
 
 export const Twitter = ({ in: forceMount = false }) => {
-  const { twitterLists, enableTwitter, enableTwitch, enableYoutube, enableTwitchVods } = useContext(
-    FeedsContext
-  );
+  const { twitterLists, enableTwitter, enableTwitch, enableYoutube, enableTwitchVods } =
+    useContext(FeedsContext);
   const { activeTheme } = useContext(ThemeContext);
 
   return (
@@ -59,9 +58,10 @@ export const Twitter = ({ in: forceMount = false }) => {
                   noFooter={true}
                   noBorders={true}
                   transparent={true}
-                  onLoad={() => {
-                    console.log(`Twitter list '${id}' loaded.`);
-                  }}
+
+                  // onLoad={() => {
+                  //   console.log(`Twitter list '${id}' loaded.`);
+                  // }}
                 />
               </Container>
             </CSSTransition>
@@ -82,3 +82,5 @@ export const Twitter = ({ in: forceMount = false }) => {
     </CSSTransition>
   );
 };
+
+export default TwitterStandalone;

@@ -13,7 +13,7 @@ import {
   StyledSidebarTrigger,
 } from './StyledComponent';
 
-export default () => {
+const Sidebar = () => {
   const { profileImage, username } = useContext(AccountContext);
   const { renderModal, showSidebar, setShowSidebar } = useContext(NavigationContext);
 
@@ -62,3 +62,5 @@ export default () => {
     </>
   );
 };
+
+export default Sidebar;

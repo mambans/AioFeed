@@ -1,7 +1,7 @@
 import GetCachedProfiles from '../GetCachedProfiles';
 import API from '../API';
 
-export default async ({ user_id, currentStreamObj }) => {
+const addProfileImg = async ({ user_id, currentStreamObj }) => {
   if (!currentStreamObj?.profile_image_url || !currentStreamObj?.login) {
     const TwitchProfiles = GetCachedProfiles();
 
@@ -31,3 +31,4 @@ export default async ({ user_id, currentStreamObj }) => {
   }
   return currentStreamObj;
 };
+export default addProfileImg;

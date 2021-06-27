@@ -7,7 +7,7 @@ import YoutubeVideoElement from './YoutubeVideoElement';
 import LoadingBoxes from './../twitch/LoadingBoxes';
 import { CenterContext } from '../feed/FeedsCenterContainer';
 
-export default ({ requestError, videos }) => {
+const YoutubeHandler = ({ requestError, videos }) => {
   const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext);
   const [vodAmounts, setVodAmounts] = useState({
     amount: videoElementsAmount,
@@ -63,3 +63,5 @@ export default ({ requestError, videos }) => {
     </>
   );
 };
+
+export default YoutubeHandler;

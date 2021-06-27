@@ -40,7 +40,7 @@ const ViewcountContainer = styled.div`
  * @param {Boolean} [formatViewcount = true] - Enable formating of viewers >= 10000 to 10k, 14345 oy 14k
  * @returns {Element} <p></p> with viewCount
  */
-export default ({
+const AnimatedViewCount = ({
   viewers = 0,
   className,
   id,
@@ -147,3 +147,4 @@ export default ({
     </ViewcountContainer>
   );
 };
+export default AnimatedViewCount;

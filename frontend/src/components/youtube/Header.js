@@ -47,7 +47,7 @@ const SubFeedError = (props) => {
   }
 };
 
-export default (data) => {
+const YouTubeHeader = (data) => {
   const { refresh, requestError, followedChannels, videos, isLoaded, setVideos, setOrder } = data;
   return (
     <Header
@@ -77,3 +77,5 @@ export default (data) => {
     />
   );
 };
+
+export default YouTubeHeader;

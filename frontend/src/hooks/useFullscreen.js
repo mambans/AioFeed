@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
 import NavigationContext from '../components/navigation/NavigationContext';
 
-export default ({ hideNavbar = true } = {}) => {
+const useFullscreen = ({ hideNavbar = true } = {}) => {
   const { setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
 
   useEffect(() => {
@@ -18,3 +18,4 @@ export default ({ hideNavbar = true } = {}) => {
     };
   }, [setShrinkNavbar, setFooterVisible, hideNavbar, setVisible]);
 };
+export default useFullscreen;

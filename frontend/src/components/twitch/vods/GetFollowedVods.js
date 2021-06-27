@@ -81,7 +81,7 @@ const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRe
   return PromiseAllVods.flat(1);
 };
 
-export default async ({ forceRun, setRefreshToken, setTwitchToken, channels }) => {
+const getFollowedVods = async ({ forceRun, setRefreshToken, setTwitchToken, channels }) => {
   const vodExpire = 3; // Number of hours
   const cachedVods = getLocalstorage(`Vods`);
 
@@ -144,3 +144,4 @@ export default async ({ forceRun, setRefreshToken, setTwitchToken, channels }) =
     };
   }
 };
+export default getFollowedVods;

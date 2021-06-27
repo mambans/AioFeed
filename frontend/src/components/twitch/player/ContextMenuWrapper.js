@@ -49,7 +49,11 @@ const Container = styled.div`
   }
 `;
 
-export default ({ outerContainer = window, showAndResetTimer = () => {}, children }) => {
+const ContextMenuWrapper = ({
+  outerContainer = window,
+  showAndResetTimer = () => {},
+  children,
+}) => {
   const [show, setShow] = useState(false);
   const menuRef = useRef();
   const toggleShowHide = useCallback(
@@ -83,3 +87,4 @@ export default ({ outerContainer = window, showAndResetTimer = () => {}, childre
   }
   return null;
 };
+export default ContextMenuWrapper;

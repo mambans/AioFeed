@@ -2,7 +2,7 @@ import addSystemNotification from './addSystemNotification';
 import FetchSingelChannelVods from './../vods/FetchSingelChannelVods';
 import { getLocalstorage } from '../../../util/Utils';
 
-export default async ({
+const liveStreamsPromise = async ({
   liveStreams,
   oldLiveStreams,
   newlyAddedStreams,
@@ -54,3 +54,4 @@ export default async ({
     return [];
   }
 };
+export default liveStreamsPromise;

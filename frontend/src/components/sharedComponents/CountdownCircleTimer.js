@@ -1,7 +1,13 @@
 import { StyledCountdownCircle } from '../twitch/StyledComponents';
 import React, { useState, useEffect } from 'react';
 
-export default ({ startDuration, isLoading, autoRefreshEnabled, style = {}, size = 24 }) => {
+const CountdownCircleTimer = ({
+  startDuration,
+  isLoading,
+  autoRefreshEnabled,
+  style = {},
+  size = 24,
+}) => {
   const [countdown, setCountdown] = useState(startDuration);
 
   useEffect(() => {
@@ -25,3 +31,5 @@ export default ({ startDuration, isLoading, autoRefreshEnabled, style = {}, size
     </StyledCountdownCircle>
   );
 };
+
+export default CountdownCircleTimer;

@@ -20,13 +20,18 @@ export const Container = styled.div`
     padding: 5px;
     display: flex;
     color: var(----textColor2);
-    opacity: 0.3;
+    opacity: 0;
     transition: opacity 250ms, color 250ms;
 
     &:hover {
       color: var(----textColor2Hover);
       opacity: 0.85;
     }
+  }
+
+  &:hover a#editLink {
+    color: var(----textColor2Hover);
+    opacity: 0.3;
   }
 
   &.twitterList-enter {

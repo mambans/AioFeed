@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback } from 'react';
  * @param {any} value - Value to save for the localstorage.
  * @returns
  */
-export default (key, defaultValue) => {
+const useSyncedLocalState = (key, defaultValue) => {
   const [value, setValue] = useState(() => {
     const storedValue = localStorage.getItem(key);
     try {
@@ -51,3 +51,4 @@ export default (key, defaultValue) => {
 
   return [value, setLocalStateValue];
 };
+export default useSyncedLocalState;

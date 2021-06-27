@@ -118,7 +118,7 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId }) => {
   );
 };
 
-export default ({
+const PlaylistInPlayer = ({
   listName,
   listVideos,
   setListVideos,
@@ -217,3 +217,5 @@ export default ({
     </>
   );
 };
+
+export default PlaylistInPlayer;

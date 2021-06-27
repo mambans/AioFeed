@@ -51,7 +51,7 @@ const Container = styled.div`
   }
 `;
 
-export default ({ channel }) => {
+const LiveInfoPopup = ({ channel }) => {
   return (
     <Container>
       <div id='title'>
@@ -88,3 +88,4 @@ export default ({ channel }) => {
     </Container>
   );
 };
+export default LiveInfoPopup;

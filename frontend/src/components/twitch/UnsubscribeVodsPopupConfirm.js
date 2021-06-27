@@ -37,7 +37,7 @@ const StyledModal = styled(Modal)`
   }
 `;
 
-export default ({ channel, setShowUnsubscribeVods, ...props }) => {
+const UnsubscribeVodsPopupConfirm = ({ channel, setShowUnsubscribeVods, ...props }) => {
   // const [show, setShow] = useState(props?.show);
 
   return (
@@ -82,3 +82,4 @@ export default ({ channel, setShowUnsubscribeVods, ...props }) => {
     </StyledModal>
   );
 };
+export default UnsubscribeVodsPopupConfirm;

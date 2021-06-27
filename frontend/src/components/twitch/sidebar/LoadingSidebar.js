@@ -1,7 +1,7 @@
 import React from 'react';
 import { Styledsidebar, SidebarHeader, LoadingSidebarItems } from './StyledComponents';
 
-export default () => {
+const LoadingSidebar = () => {
   const array = Array.apply(null, Array(7)).map((x, i) => i);
 
   return (
@@ -21,3 +21,4 @@ export default () => {
     </Styledsidebar>
   );
 };
+export default LoadingSidebar;

@@ -18,7 +18,7 @@ import FeedsCenterContainer, { CenterContext } from './../../feed/FeedsCenterCon
 import useToken from '../useToken';
 import { Container } from '../StyledComponents';
 
-export default () => (
+const VodsStandalone = () => (
   <FeedsCenterContainer>
     <Vods />
   </FeedsCenterContainer>
@@ -172,3 +172,4 @@ export const Vods = () => {
     </Container>
   );
 };
+export default VodsStandalone;

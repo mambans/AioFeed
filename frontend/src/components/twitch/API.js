@@ -6,7 +6,7 @@ const CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;
 const BASE_URL = 'https://api.twitch.tv/helix';
 const BASE_URL_KRAKEN = 'https://api.twitch.tv/kraken';
 
-export default {
+const API = {
   getMe: async ({ accessToken }) => {
     const token = accessToken || (await validateToken());
     return await axios.get(`${BASE_URL}/users`, {
@@ -194,3 +194,4 @@ export default {
     );
   },
 };
+export default API;

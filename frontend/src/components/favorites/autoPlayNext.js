@@ -1,6 +1,6 @@
 import { parseNumberAndString } from './dragDropUtils';
 
-export default ({
+const autoPlayNext = ({
   loopEnabled = false,
   listVideos,
   videoId,
@@ -42,3 +42,5 @@ export default ({
     }
   }
 };
+
+export default autoPlayNext;

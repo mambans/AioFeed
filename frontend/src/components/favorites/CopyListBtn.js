@@ -4,7 +4,7 @@ import { MdContentCopy } from 'react-icons/md';
 import { ListActionButton } from './StyledComponents';
 import NewListForm from './addToListModal/NewListForm';
 
-export default ({ list, style, children }) => {
+const CopyListBtn = ({ list, style, children }) => {
   const [open, setOpen] = useState();
   const copyList = async () => setOpen((c) => !c);
 
@@ -19,3 +19,5 @@ export default ({ list, style, children }) => {
     </>
   );
 };
+
+export default CopyListBtn;

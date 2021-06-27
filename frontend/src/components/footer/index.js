@@ -17,7 +17,7 @@ import {
 import ChangeLogs from '../changeLogs';
 import styles from '../changeLogs/ChangeLogs.module.scss';
 
-export default () => {
+const Footer = () => {
   const { footerVisible, setRenderModal, setShowSidebar } = useContext(NavigationContext);
   const [show, setShow] = useState();
   const ref = useRef();
@@ -125,3 +125,5 @@ export default () => {
     )
   );
 };
+
+export default Footer;

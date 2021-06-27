@@ -5,7 +5,12 @@ import AddVideoExtraData from './../AddVideoExtraData';
 import SortAndAddExpire from './SortAndAddExpire';
 import API from '../API';
 
-export default async ({ channelId, setVods, amount = 1, feedVideoSizeProps = {} }) => {
+const fetchSingelChannelVods = async ({
+  channelId,
+  setVods,
+  amount = 1,
+  feedVideoSizeProps = {},
+}) => {
   const vodExpire = 3; // Number of days
 
   await API.getVideos({
@@ -22,12 +27,10 @@ export default async ({ channelId, setVods, amount = 1, feedVideoSizeProps = {} 
     setVods((vods) => {
       const existingVods = [...vods.data];
       const vodsToAdd = [
-        ...newVodWithEndtime
-          .slice(0, amount)
-          .map((vod) => ({
-            ...vod,
-            transition: feedVideoSizeProps.transition || 'videoFadeSlide',
-          })),
+        ...newVodWithEndtime.slice(0, amount).map((vod) => ({
+          ...vod,
+          transition: feedVideoSizeProps.transition || 'videoFadeSlide',
+        })),
       ];
       const uniqueVods = uniqBy([...vodsToAdd, ...existingVods], 'id');
       const FinallVods = SortAndAddExpire(uniqueVods, vodExpire, vods.loaded, vods.expire);
@@ -36,3 +39,4 @@ export default async ({ channelId, setVods, amount = 1, feedVideoSizeProps = {} 
     });
   });
 };
+export default fetchSingelChannelVods;

@@ -1,4 +1,4 @@
-export default ({
+const toggleFullscreenFunc = ({
   event,
   videoElementRef,
   setChatState,
@@ -49,3 +49,4 @@ export default ({
     }
   }
 };
+export default toggleFullscreenFunc;

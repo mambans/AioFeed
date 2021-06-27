@@ -6,7 +6,7 @@ import AddToListModal from './AddToListModal';
 import FavoritesContext, { FavoritesProvider } from './../FavoritesContext';
 import { AddRemoveBtn } from './AddToListModal';
 
-export default ({ list, videoId_p, style = {}, size, disablepreview = () => {} }) => {
+const FavoriteButton = ({ list, videoId_p, style = {}, size, disablepreview = () => {} }) => {
   const videoId = typeof videoId_p === 'number' ? parseInt(videoId_p) || videoId_p : videoId_p;
   const [open, setOpen] = useState();
   const fadeOutTimer = useRef();
@@ -78,3 +78,5 @@ export default ({ list, videoId_p, style = {}, size, disablepreview = () => {} }
     </ButtonContainer>
   );
 };
+
+export default FavoriteButton;

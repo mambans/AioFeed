@@ -24,7 +24,7 @@ const ToolTipText = styled(Tooltip)`
  * @param {Text} [fontSize='inherit'] - Font size for tooltip
  */
 
-export default ({
+const ToolTip = ({
   children,
   show = true,
   tooltip = '',
@@ -61,3 +61,5 @@ export default ({
 
   return children;
 };
+
+export default ToolTip;

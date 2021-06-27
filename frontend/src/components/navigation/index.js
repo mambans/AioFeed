@@ -40,7 +40,7 @@ const StyledNav = styled(Nav)`
   }
 `;
 
-export default () => {
+const Navigation = () => {
   const { visible, shrinkNavbar } = useContext(NavigationContext);
   const { setChannels } = useContext(VodsContext) || {};
   const leftExpand = useRef();
@@ -128,3 +128,5 @@ export default () => {
     </CSSTransition>
   );
 };
+
+export default Navigation;

@@ -4,7 +4,7 @@ import { MdSettings } from 'react-icons/md';
 import { ButtonShowQualities, QualitiesList } from './StyledComponents';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
-export default ({ TwitchPlayer }) => {
+const ShowSetQualityButtons = ({ TwitchPlayer }) => {
   const [showQualities, setShowQualities] = useState();
   const [qualities, setQualities] = useState();
   const [activeQuality, setActiveQuality] = useState();
@@ -51,3 +51,4 @@ export default ({ TwitchPlayer }) => {
     </>
   );
 };
+export default ShowSetQualityButtons;

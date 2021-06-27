@@ -5,7 +5,7 @@ import LoadingBoxes from './../LoadingBoxes';
 import SortButton from './SortButton';
 import { SubFeedHeader } from './StyledComponents';
 
-export default ({ numberOfVideos }) => (
+const LoadingPlaceholderVods = ({ numberOfVideos }) => (
   <>
     <SubFeedHeader
       style={{
@@ -20,3 +20,4 @@ export default ({ numberOfVideos }) => (
     </SubFeedContainer>
   </>
 );
+export default LoadingPlaceholderVods;

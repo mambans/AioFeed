@@ -23,7 +23,15 @@ export const scrollToIfNeeded = (parentEle, childEle) => {
   }, 1);
 };
 
-export default (e, list, cursor, setCursor, setValue, ulListRef, selectedNewValue) => {
+const handleArrowNavigation = (
+  e,
+  list,
+  cursor,
+  setCursor,
+  setValue,
+  ulListRef,
+  selectedNewValue
+) => {
   try {
     if (list?.length >= 1 && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
       e.preventDefault();
@@ -55,3 +63,4 @@ export default (e, list, cursor, setCursor, setValue, ulListRef, selectedNewValu
     console.log('handleArrowKey -> error', error);
   }
 };
+export default handleArrowNavigation;

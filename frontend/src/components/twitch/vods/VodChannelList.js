@@ -10,7 +10,7 @@ import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 import useSyncedLocalState from '../../../hooks/useSyncedLocalState';
 import { VodChannelListPopup } from './StyledComponents';
 
-export default () => {
+const VodChannelList = () => {
   const { authKey, username } = useContext(AccountContext);
   const [channels, setChannels] = useSyncedLocalState('TwitchVods-Channels', []);
   const [validated, setValidated] = useState(false);
@@ -61,3 +61,4 @@ export default () => {
     </VodChannelListPopup>
   );
 };
+export default VodChannelList;

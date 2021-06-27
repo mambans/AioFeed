@@ -93,7 +93,7 @@ const List = {
   `,
 };
 
-export default ({ name, body, published_at, showInfo, children }) => {
+const ListItem = ({ name, body, published_at, showInfo, children }) => {
   const [info, setInfo] = useState({ loading: false, data: null });
   const [showFullMessage, setShowFullMessage] = useState(false);
   const additionsKeywords = useMemo(() => ['added', 'fixed', 'new'], []);
@@ -214,3 +214,5 @@ export default ({ name, body, published_at, showInfo, children }) => {
     </List.Container>
   );
 };
+
+export default ListItem;

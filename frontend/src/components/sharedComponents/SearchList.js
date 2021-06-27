@@ -127,7 +127,7 @@ export const SearchSubmitBtn = ({ href, to }) =>
     </Link>
   );
 
-export default ({
+const SearchList = ({
   style = {},
   inputStyle = {},
   placeholder = 'Channel..',
@@ -217,3 +217,5 @@ export default ({
     </SearchListForm>
   );
 };
+
+export default SearchList;

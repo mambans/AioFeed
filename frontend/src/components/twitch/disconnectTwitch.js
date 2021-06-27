@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getCookie, RemoveCookie } from '../../util/Utils';
 
-export default async ({ setTwitchToken = () => {}, setEnableTwitch = () => {} }) => {
+const disconnectTwitch = async ({ setTwitchToken = () => {}, setEnableTwitch = () => {} }) => {
   await axios
     .post(
       `https://id.twitch.tv/oauth2/revoke?client_id=${
@@ -32,3 +32,4 @@ export default async ({ setTwitchToken = () => {}, setEnableTwitch = () => {} })
     .then(() => console.log(`Successfully disconnected from Twitch`))
     .catch((e) => console.error(e));
 };
+export default disconnectTwitch;

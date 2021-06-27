@@ -4,7 +4,7 @@ import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import FeedsContext from '../feed/FeedsContext';
 import { YoutubeIframe } from './StyledComponents';
 
-export default (data) => {
+const VideoHoverIframe = (data) => {
   const { feedVideoSizeProps } = useContext(FeedsContext);
   const ref = useRef();
   const videoHoverOutTimer = useRef();
@@ -45,3 +45,4 @@ export default (data) => {
     />
   );
 };
+export default VideoHoverIframe;

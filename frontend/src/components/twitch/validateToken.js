@@ -25,7 +25,7 @@ const fetchAppAccessToken = async () => {
     });
 };
 
-export default async () => {
+const validateToken = async () => {
   const access_token = getCookie('Twitch-access_token');
   const refresh_token = getCookie(`Twitch-refresh_token`);
   const app_token = getCookie(`Twitch-app_token`);
@@ -71,3 +71,4 @@ export default async () => {
   }
   return fetchAppAccessToken();
 };
+export default validateToken;

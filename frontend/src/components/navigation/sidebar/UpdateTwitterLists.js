@@ -113,7 +113,7 @@ const StyledButton = styled(Button).attrs({ type: 'submit', variant: 'secondary'
   }
 `;
 
-export default ({ style, id, index }) => {
+const UpdateTwitterLists = ({ style, id, index }) => {
   const { setTwitterLists, twitterLists } = useContext(FeedsContext) || {};
   const { username } = useContext(AccountContext);
   const { value: listName, bind: bindListName, reset } = useInput(id || '');
@@ -207,3 +207,5 @@ export default ({ style, id, index }) => {
     </StyledForm>
   );
 };
+
+export default UpdateTwitterLists;

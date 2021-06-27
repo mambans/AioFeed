@@ -6,7 +6,7 @@ const StyledAlert = styled(Alert)`
   text-align: center;
 `;
 
-export default () => {
+const ChangelogAlert = () => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -22,3 +22,5 @@ export default () => {
   }
   return '';
 };
+
+export default ChangelogAlert;

@@ -80,7 +80,7 @@ const AllFiltersListContainer = ({ setOpen, open, uploadNewFiltersTimer }) => {
   );
 };
 
-export default () => {
+const AllFilterList = () => {
   const [open, setOpen] = useState();
   const uploadNewFiltersTimer = useRef();
 
@@ -97,3 +97,4 @@ export default () => {
     </AllFiltersContainer>
   );
 };
+export default AllFilterList;

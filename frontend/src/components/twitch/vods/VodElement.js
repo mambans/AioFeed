@@ -26,7 +26,15 @@ import useToken from '../useToken';
 import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../sharedComponents/ToolTip';
 
-export default ({ data, vodBtnDisabled, setDragSelected, listName, list, active, ...props }) => {
+const VodElement = ({
+  data,
+  vodBtnDisabled,
+  setDragSelected,
+  listName,
+  list,
+  active,
+  ...props
+}) => {
   const {
     id,
     user_id,
@@ -224,3 +232,4 @@ export default ({ data, vodBtnDisabled, setDragSelected, listName, list, active,
     </VideoContainer>
   );
 };
+export default VodElement;

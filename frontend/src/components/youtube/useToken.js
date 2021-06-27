@@ -32,7 +32,7 @@ export const YoutubeProvider = ({ children }) => {
   );
 };
 
-export default () => {
+const useToken = () => {
   const { validationOfToken } = useContext(YoutubeContext);
 
   return useCallback(async () => {
@@ -40,3 +40,5 @@ export default () => {
     return Promise.resolve(validPromise);
   }, [validationOfToken]);
 };
+
+export default useToken;

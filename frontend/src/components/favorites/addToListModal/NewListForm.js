@@ -25,7 +25,7 @@ const useInput = (initialValue) => {
   };
 };
 
-export default ({ item }) => {
+const NewListForm = ({ item }) => {
   const { value: listName, bind: bindListName, reset: resetListName, setValue } = useInput('');
   const { lists, setLists } = useContext(FavoritesContext) || {};
 
@@ -93,3 +93,5 @@ export default ({ item }) => {
     </Form>
   );
 };
+
+export default NewListForm;

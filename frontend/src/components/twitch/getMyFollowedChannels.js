@@ -25,7 +25,7 @@ const fetchNextPageOfFollowers = async ({ total, PagePagination, followedchannel
   return followedchannels;
 };
 
-export default async () => {
+const getMyFollowedChannels = async () => {
   try {
     const followedchannels = await API.getMyFollowedChannels({
       params: {
@@ -48,3 +48,4 @@ export default async () => {
     return error;
   }
 };
+export default getMyFollowedChannels;

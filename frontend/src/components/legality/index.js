@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Container, ListHeader, EmailButtonAsLink } from './StyledComponents';
 
-export default () => {
+const Legality = () => {
   const scrollTo = new URL(window.location.href).hash;
 
   if (scrollTo) {
@@ -98,3 +98,5 @@ export default () => {
     </Container>
   );
 };
+
+export default Legality;

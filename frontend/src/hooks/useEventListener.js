@@ -1,6 +1,12 @@
 import { useRef, useEffect } from 'react';
 
-export default (eventName, handler, element = window, secondArgument = true, options = {}) => {
+const useEventListener = (
+  eventName,
+  handler,
+  element = window,
+  secondArgument = true,
+  options = {}
+) => {
   const savedHandler = useRef(handler);
   const savedEventName = useRef(eventName);
 
@@ -30,3 +36,4 @@ export default (eventName, handler, element = window, secondArgument = true, opt
     }
   }, [savedEventName, element, secondArgument, options]);
 };
+export default useEventListener;

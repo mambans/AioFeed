@@ -1,6 +1,6 @@
 import { sortBy, reverse } from 'lodash';
 
-export default (followedStreamVods, vodExpire, oldLoaded, oldExpire) => {
+const sortAndAddExpire = (followedStreamVods, vodExpire, oldLoaded, oldExpire) => {
   const liveVods = followedStreamVods.filter((vod) => vod.thumbnail_url === '');
   const completedVods = followedStreamVods.filter((vod) => vod.thumbnail_url !== '');
   const sortedLiveVods = sortBy(
@@ -19,3 +19,4 @@ export default (followedStreamVods, vodExpire, oldLoaded, oldExpire) => {
 
   return Vods;
 };
+export default sortAndAddExpire;

@@ -42,7 +42,13 @@ export const removeChannel = async ({
  * @param {Number} [size=24] - size of the Icons/Svgs;
  */
 
-export default ({ channel, loweropacity, marginright, size = 24, show = true }) => {
+const AddUpdateNotificationsButton = ({
+  channel,
+  loweropacity,
+  marginright,
+  size = 24,
+  show = true,
+}) => {
   const { updateNotischannels, setUpdateNotischannels } = useContext(VodsContext);
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
@@ -121,3 +127,4 @@ export default ({ channel, loweropacity, marginright, size = 24, show = true }) 
     </ToolTip>
   );
 };
+export default AddUpdateNotificationsButton;

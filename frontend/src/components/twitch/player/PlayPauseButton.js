@@ -3,7 +3,7 @@ import { FaPlay } from 'react-icons/fa';
 import { FaPause } from 'react-icons/fa';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
-export default ({ TwitchPlayer, PlayerUIControlls }) => {
+const PlayPauseButton = ({ TwitchPlayer, PlayerUIControlls }) => {
   const [isPaused, setIsPaused] = useState(false);
 
   useEventListenerMemo('keydown', keyboardEvents, window, window?.Twitch?.Player?.READY);
@@ -65,3 +65,4 @@ export default ({ TwitchPlayer, PlayerUIControlls }) => {
     />
   );
 };
+export default PlayPauseButton;

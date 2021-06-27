@@ -18,7 +18,7 @@ const CreateAndOpenClip = async ({ streamInfo }) => {
     .catch((er) => console.error('CreateAndOpenClip -> er', er));
 };
 
-export default ({ streamInfo, validateToken }) => {
+const ClipButton = ({ streamInfo, validateToken }) => {
   useEventListenerMemo('keydown', keyboardEvents, window, streamInfo);
 
   const createClip = () => {
@@ -38,3 +38,4 @@ export default ({ streamInfo, validateToken }) => {
 
   return <CreateClipButton title='Create clip (c)' disabled={!streamInfo} onClick={createClip} />;
 };
+export default ClipButton;

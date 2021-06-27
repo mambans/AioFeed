@@ -6,7 +6,7 @@ import getMyFollowedChannels from './getMyFollowedChannels';
 import GetSubscriptionVideos from './GetSubscriptionVideos';
 import useToken from './useToken';
 
-export default ({ children }) => {
+const Datahandler = ({ children }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [requestError, setRequestError] = useState();
@@ -61,3 +61,5 @@ export default ({ children }) => {
     requestError,
   });
 };
+
+export default Datahandler;

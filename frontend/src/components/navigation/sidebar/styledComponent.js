@@ -289,7 +289,7 @@ export const StyledLogoutContiner = styled.div`
   }
 `;
 
-export const DeleteAccountButton = styled(Button).attrs({ variant: 'danger' })`
+export const StyledDeleteAccountButton = styled(Button).attrs({ variant: 'danger' })`
   background: hsla(0, 65%, 28%, 1);
   border-radius: 10px;
   width: 52px;

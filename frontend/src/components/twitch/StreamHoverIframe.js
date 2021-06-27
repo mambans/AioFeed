@@ -37,7 +37,7 @@ const Container = styled.div`
   }
 `;
 
-export default ({ data: { login, user_name, id } }) => (
+const StreamHoverIframe = ({ data: { login, user_name, id } }) => (
   <Container>
     <HoverIframe
       src={`https://player.twitch.tv/?channel=${
@@ -56,3 +56,4 @@ export default ({ data: { login, user_name, id } }) => (
     <IframeContainer to={`/${login?.toLowerCase() || user_name}`} alt=''></IframeContainer>
   </Container>
 );
+export default StreamHoverIframe;

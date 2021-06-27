@@ -38,7 +38,7 @@ export const TwitchProvider = ({ children }) => {
   );
 };
 
-export default () => {
+const useToken = () => {
   const { validationOfToken } = useContext(TwitchContext);
 
   return useCallback(async () => {
@@ -46,3 +46,4 @@ export default () => {
     return Promise.resolve(validPromise);
   }, [validationOfToken]);
 };
+export default useToken;

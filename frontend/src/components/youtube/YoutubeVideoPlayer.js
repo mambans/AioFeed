@@ -10,7 +10,7 @@ const StyledYoutubeIframe = styled(YouTube)`
   grid-area: 'video';
 `;
 
-export default ({ playNext }) => {
+const YoutubeVideoPlayer = ({ playNext }) => {
   const [video, setVideo] = useState({});
   const videoId = useParams().videoId;
   const location = useLocation();
@@ -62,3 +62,5 @@ export default ({ playNext }) => {
     </>
   );
 };
+
+export default YoutubeVideoPlayer;

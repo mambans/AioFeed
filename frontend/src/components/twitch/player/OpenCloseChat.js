@@ -3,7 +3,7 @@ import ToolTip from '../../sharedComponents/ToolTip';
 
 import { HideChatButton, OpenChatButton } from './StyledComponents';
 
-export default ({ hideChat, switched, onClick, style }) => {
+const OpenCloseChat = ({ hideChat, switched, onClick, style }) => {
   return (
     <ToolTip
       placement={'left'}
@@ -29,3 +29,4 @@ export default ({ hideChat, switched, onClick, style }) => {
     </ToolTip>
   );
 };
+export default OpenCloseChat;

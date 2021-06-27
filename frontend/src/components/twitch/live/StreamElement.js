@@ -47,7 +47,7 @@ function NewHighlightNoti({ newlyAddedStreams, login }) {
   return '';
 }
 
-export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTimer }) => {
+const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTimer }) => {
   const location = useLocation();
   const {
     user_id,
@@ -227,3 +227,4 @@ export default ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTim
     </VideoContainer>
   );
 };
+export default StreamElement;

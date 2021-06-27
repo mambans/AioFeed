@@ -30,7 +30,7 @@ export const StyledToolTip = styled(Tooltip)`
   }
 `;
 
-export default ({ channel }) => (
+const LiveIndicator = ({ channel }) => (
   <ToolTip
     placement={'left'}
     tooltip={
@@ -47,3 +47,4 @@ export default ({ channel }) => (
     </div>
   </ToolTip>
 );
+export default LiveIndicator;

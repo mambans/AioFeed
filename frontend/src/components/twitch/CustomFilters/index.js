@@ -12,7 +12,7 @@ import CustomFilterContext from './CustomFilterContext';
 import { Portal } from 'react-portal';
 import { TransparentButton } from '../../sharedComponents/sharedStyledComponents';
 
-export default ({
+const CustomFilters = ({
   channel,
   enableFormControll = false,
   setOpenParent = () => {},
@@ -249,3 +249,4 @@ const Container = ({ enableFormControll, handleSubmit, style, children }) => {
     </div>
   );
 };
+export default CustomFilters;

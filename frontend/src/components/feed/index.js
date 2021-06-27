@@ -13,11 +13,10 @@ import { Twitch } from '../twitch/live';
 import { Favorites } from '../favorites';
 import { FavoritesProvider } from '../favorites/FavoritesContext';
 
-export default () => {
+const Feed = () => {
   document.title = 'AioFeed | Feed';
-  const { enableTwitch, enableYoutube, enableTwitchVods, enableFavorites } = useContext(
-    FeedsContext
-  );
+  const { enableTwitch, enableYoutube, enableTwitchVods, enableFavorites } =
+    useContext(FeedsContext);
   const { username } = useContext(AccountContext);
 
   if (!username) {
@@ -63,3 +62,5 @@ export default () => {
     </FeedsCenterContainer>
   );
 };
+
+export default Feed;

@@ -27,7 +27,7 @@ export const ThemeSelector = styled.div`
 
     &:before {
       content: '';
-      background-image: var(--backgroundImg);
+      background-image: ${({ image }) => `url(/images/${image})`};
       opacity: 1;
       top: 0;
       left: 0;
@@ -123,7 +123,8 @@ export const Arrow = styled.i`
 `;
 
 export const ThemeItem = styled.li`
-  background-image: ${({ image }) => `url(${image})`};
+  /* background-image: ${({ image }) => `url(${image})`}; */
+  background-image: ${({ image }) => `url(/images/${image})`};
   background-color: ${({ backgroundColor }) => backgroundColor};
   background-size: cover;
   background-repeat: no-repeat;

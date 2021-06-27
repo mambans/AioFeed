@@ -25,7 +25,7 @@ const ChannelListLi = styled.li`
   }
 `;
 
-export default (data) => {
+const ChannelListElement = (data) => {
   const { channel, setNewChannels, videos, setVideos, selected } = data;
   const validateToken = useToken();
 
@@ -66,3 +66,5 @@ export default (data) => {
     </ChannelListLi>
   );
 };
+
+export default ChannelListElement;

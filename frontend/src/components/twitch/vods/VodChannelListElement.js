@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import VodsFollowUnfollowBtn from './VodsFollowUnfollowBtn';
 import { VodChannelListLi } from './StyledComponents';
 
-export default ({ channel, param_Channels }) => {
+const VodChannelListElement = ({ channel, param_Channels }) => {
   return (
     <VodChannelListLi>
       <Link to={`/${channel}/page`}>{channel}</Link>
@@ -12,3 +12,4 @@ export default ({ channel, param_Channels }) => {
     </VodChannelListLi>
   );
 };
+export default VodChannelListElement;

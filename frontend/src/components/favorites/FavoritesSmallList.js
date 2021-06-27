@@ -24,7 +24,7 @@ const getYoutubeIdFromUrl = (videoId) => {
   return searchParams.get('v');
 };
 
-export default ({ listName, videos, style }) => {
+const FavoritesSmallList = ({ listName, videos, style }) => {
   const { lists, setLists } = useContext(FavoritesContext);
   const [listIsOpen, setListIsOpen] = useState();
   const [cursor, setCursor] = useState({ position: 0 });
@@ -223,3 +223,5 @@ export default ({ listName, videos, style }) => {
     </SearchList>
   );
 };
+
+export default FavoritesSmallList;

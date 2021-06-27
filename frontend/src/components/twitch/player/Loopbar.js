@@ -29,11 +29,18 @@ const secondsToHHMMSS = (s) => {
     return '';
   }
 };
+const Loopbar = ({
+  twitchVideoPlayer,
+  loopEnabled,
+  duration = twitchVideoPlayer.getDuration(),
+}) => {
+  const queryStartTime = useQuery().get('start');
+  const querylist = useQuery().get('list');
+  const querylistName = useQuery().get('listName');
 
-export default ({ twitchVideoPlayer, duration = twitchVideoPlayer.getDuration() }) => {
-  const urlStartTime = useQuery().get('t') || useQuery().get('start') || null;
+  const urlStartTime = useQuery().get('t') || queryStartTime || null;
   const urlEndTime = useQuery().get('end') || null;
-  const listName = useQuery().get('list') || useQuery().get('listName') || null;
+  const listName = querylist || querylistName || null;
   const [start, setStart] = useState({
     time: 0,
     pos: 0,
@@ -97,7 +104,7 @@ export default ({ twitchVideoPlayer, duration = twitchVideoPlayer.getDuration() 
       `${window.location.origin + window.location.pathname}?start=${new Date(start.time * 1000)
         .toISOString()
         .substr(11, 8)}&end=${new Date(end.time * 1000).toISOString().substr(11, 8)}${
-        listName ? `&list=${listName}` : ''
+        listName ? `&list=${listName}${loopEnabled ? `&loop=${loopEnabled}` : ''}` : ''
       }`
     );
   };
@@ -162,3 +169,4 @@ export default ({ twitchVideoPlayer, duration = twitchVideoPlayer.getDuration() 
     </>
   );
 };
+export default Loopbar;

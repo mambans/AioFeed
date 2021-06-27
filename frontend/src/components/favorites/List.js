@@ -88,7 +88,7 @@ export const fetchListVideos = async ({ list, ytExistsAndValidated, twitchExists
   }
 };
 
-export default ({
+const List = ({
   list,
   ytExistsAndValidated,
   twitchExistsAndValidated,
@@ -201,3 +201,5 @@ export default ({
     </VideosContainer>
   );
 };
+
+export default List;

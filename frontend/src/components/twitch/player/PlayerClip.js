@@ -13,7 +13,7 @@ import {
 } from './StyledComponents';
 import useFullscreen from '../../../hooks/useFullscreen';
 
-export default () => {
+const PlayerClip = () => {
   const { visible } = useContext(NavigationContext);
   const { videoId, channelName } = useParams();
   document.title = `${channelName} - ${videoId}`;
@@ -50,3 +50,4 @@ export default () => {
     </>
   );
 };
+export default PlayerClip;

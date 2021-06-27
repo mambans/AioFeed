@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export default (ref, func) => {
+const useClicksInside = (ref, func) => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (ref.current && ref.current.contains(event.target)) func(event);
@@ -10,3 +10,5 @@ export default (ref, func) => {
     return () => document.removeEventListener('mouseup', handleClickOutside);
   }, [ref, func]);
 };
+
+export default useClicksInside;

@@ -9,7 +9,7 @@ import { removeChannel as remmoveUpdateChannel } from './AddUpdateNotificationsB
 import VodsContext from './vods/VodsContext';
 import UnsubscribeVodsPopupConfirm from './UnsubscribeVodsPopupConfirm';
 
-export default ({
+const FollowUnfollowBtn = ({
   channelName,
   id,
   size,
@@ -148,3 +148,4 @@ export default ({
     </ToolTip>
   );
 };
+export default FollowUnfollowBtn;

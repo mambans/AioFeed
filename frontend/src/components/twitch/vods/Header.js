@@ -13,7 +13,7 @@ import { VodChannelListPopupTrigger } from './StyledComponents';
 import Popup from 'reactjs-popup';
 import ToolTip from '../../sharedComponents/ToolTip';
 
-export default (props) => {
+const VodsHeader = (props) => {
   const { refresh, refreshing, vods, vodError, setOrder } = props;
 
   return (
@@ -83,3 +83,4 @@ export default (props) => {
     />
   );
 };
+export default VodsHeader;

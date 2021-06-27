@@ -2,7 +2,7 @@ import React from 'react';
 
 import { StyledLoadingList } from './StyledComponents';
 
-export default (props) => {
+const LoadingList = (props) => {
   const array = Array.apply(null, Array(props.amount)).map((x, i) => i);
 
   return (
@@ -15,3 +15,4 @@ export default (props) => {
     </StyledLoadingList>
   );
 };
+export default LoadingList;

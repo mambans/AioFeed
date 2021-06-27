@@ -10,7 +10,7 @@ import NavigationContext from './../NavigationContext';
 import Themeselector from '../../themes/Themeselector';
 import useInput from './../../../hooks/useInput';
 
-export default () => {
+const Login = () => {
   document.title = 'AioFeed | Login';
   const [validated, setValidated] = useState(false);
   const [validatedUsername, setValidatedUsername] = useState(true);
@@ -149,3 +149,5 @@ export default () => {
     </>
   );
 };
+
+export default Login;

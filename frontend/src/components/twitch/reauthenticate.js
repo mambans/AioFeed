@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getCookie } from './../../util/Utils';
 import { AddCookie } from '../../util/Utils';
 
-export default async (setTwitchToken, setRefreshToken) => {
+const reauthenticate = async (setTwitchToken, setRefreshToken) => {
   console.log('---Re-authenticating with Twitch.---');
 
   return await axios
@@ -22,3 +22,4 @@ export default async (setTwitchToken, setRefreshToken) => {
     })
     .catch(() => console.log('!Failed to re-authenticate with Twitch.'));
 };
+export default reauthenticate;

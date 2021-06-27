@@ -16,7 +16,7 @@ import { formatViewerNumbers } from './../TwitchUtils';
 import loginNameFormat from '../loginNameFormat';
 import ToolTip from '../../sharedComponents/ToolTip';
 
-export default ({ ...data }) => {
+const ClipElement = ({ ...data }) => {
   const { user_name } = data;
   const {
     broadcaster_name,
@@ -98,3 +98,4 @@ export default ({ ...data }) => {
     </VideoContainer>
   );
 };
+export default ClipElement;

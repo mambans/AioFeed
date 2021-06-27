@@ -7,7 +7,7 @@ import LoadingBoxes from '../LoadingBoxes';
 import AlertHandler from './../../alert';
 import { CenterContext } from '../../feed/FeedsCenterContainer.js';
 
-export default ({ data }) => {
+const Twitch = ({ data }) => {
   const {
     loaded,
     error,
@@ -78,3 +78,4 @@ export default ({ data }) => {
     </Container>
   );
 };
+export default Twitch;

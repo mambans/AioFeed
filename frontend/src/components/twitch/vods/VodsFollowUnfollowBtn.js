@@ -21,7 +21,7 @@ import ToolTip from '../../sharedComponents/ToolTip';
  * @param {Boolean} [show = true] - mount/show button.
  */
 
-export default ({
+const VodsFollowUnfollowBtn = ({
   channel,
   channelId,
   loweropacity,
@@ -130,3 +130,4 @@ export default ({
     </ToolTip>
   );
 };
+export default VodsFollowUnfollowBtn;

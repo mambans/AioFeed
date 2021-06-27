@@ -4,7 +4,7 @@ import AllFiltersList from '../CustomFilters/AllFiltersList';
 import Header from './../../sharedComponents/Header';
 import ChannelSearchList from './../channelList';
 
-export default ({ data, setOrder }) => {
+const TwitchHeader = ({ data, setOrder }) => {
   const { refreshing, autoRefreshEnabled, refreshTimer, refresh } = data;
 
   return (
@@ -31,3 +31,4 @@ export default ({ data, setOrder }) => {
     />
   );
 };
+export default TwitchHeader;

@@ -1,6 +1,6 @@
 import { RemoveCookie } from '../../../util/Utils';
 
-export default (setMainState) => {
+const clearAllAccountCookiesStates = (setMainState) => {
   RemoveCookie('AioFeed_AccountName');
   RemoveCookie('AioFeed_AccountEmail');
   RemoveCookie('AioFeed_AccountProfileImg');
@@ -36,3 +36,5 @@ export default (setMainState) => {
 
   setMainState();
 };
+
+export default clearAllAccountCookiesStates;

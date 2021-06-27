@@ -1,6 +1,6 @@
 import { getLocalstorage } from '../../util/Utils';
 
-export default () => {
+const getCachedProfiles = () => {
   const profiles = getLocalstorage('TwitchProfiles') || {};
 
   if (!profiles.expireDate || new Date(profiles.expireDate).getTime() < Date.now()) {
@@ -11,3 +11,4 @@ export default () => {
 
   return profiles;
 };
+export default getCachedProfiles;

@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react';
 import styles from './ChangeLogs.module.scss';
 
 import { Modal } from 'react-bootstrap';
-import FetchRepoReleases from './FetchRepoReleases';
-import Alert from './Alert';
+import fetchRepoReleases from './FetchRepoReleases';
+import ChangelogAlert from './Alert';
 import ListItem from './ListItem';
 
-export default () => {
+const ChangeLogs = () => {
   const [repo, setRepo] = useState();
 
   useEffect(() => {
     (async () => {
-      await FetchRepoReleases().then((tags) => setRepo({ tags: tags }));
+      await fetchRepoReleases().then((tags) => setRepo({ tags: tags }));
     })();
   }, []);
 
@@ -21,7 +21,7 @@ export default () => {
         <Modal.Title bsPrefix={styles.title}>Changelog</Modal.Title>
       </Modal.Header>
       <Modal.Body bsPrefix={styles.ulContainer} as='div'>
-        <Alert />
+        <ChangelogAlert />
         {repo?.tags.slice(0, 1).map((tag) => (
           <ListItem
             name={tag.name}
@@ -43,3 +43,5 @@ export default () => {
     </>
   );
 };
+
+export default ChangeLogs;

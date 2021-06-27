@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getLocalstorage, getCookie, chunk } from '../../util/Utils';
 
-export default async ({ videos = [] }) => {
+const GetVideoInfo = async ({ videos = [] }) => {
   const videosArray = [...videos];
 
   const fullyCachedVideos =
@@ -68,3 +68,5 @@ export default async ({ videos = [] }) => {
 
   return [...(newVideosDetails || []), ...(CachedFullyVideos || [])];
 };
+
+export default GetVideoInfo;

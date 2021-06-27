@@ -167,7 +167,7 @@ export const SubFeedHeader = styled.div`
   }
 `;
 
-export const SortButton = styled(Button).attrs({ variant: 'dark' })`
+export const StyledSortButton = styled(Button).attrs({ variant: 'dark' })`
   width: 200px;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 

@@ -13,7 +13,7 @@ const StyledAccAlert = styled(Alert)`
   }
 `;
 
-export default () => {
+const SidebarAlert = () => {
   const { alert, setAlert } = useContext(NavigationContext);
   const [show, setShow] = useState(alert);
 
@@ -30,7 +30,8 @@ export default () => {
         </span>
       </StyledAccAlert>
     );
-  } else {
-    return null;
   }
+  return null;
 };
+
+export default SidebarAlert;

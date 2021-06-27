@@ -122,7 +122,7 @@ const Center = ({ children, forceMountTwitch, fullWidth }) => {
   );
 };
 
-export default ({ children, forceMountTwitch, fullWidth } = {}) => {
+const FeedsCenterContainer = ({ children, forceMountTwitch, fullWidth } = {}) => {
   const { username } = useContext(AccountContext);
 
   if (!username) {
@@ -142,3 +142,5 @@ export default ({ children, forceMountTwitch, fullWidth } = {}) => {
     </CenterProvider>
   );
 };
+
+export default FeedsCenterContainer;

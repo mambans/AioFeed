@@ -1,7 +1,7 @@
 import { getLocalstorage } from '../../util/Utils';
 import { findSeasonOrDefaultTheme } from './ThemeContext';
 
-export default async (themesArray) => {
+const Themes = async (themesArray) => {
   const savedActiveTheme = getLocalstorage('activeTheme');
 
   if (!savedActiveTheme || savedActiveTheme.name === 'default') {
@@ -18,3 +18,5 @@ export default async (themesArray) => {
     return savedActiveTheme;
   }
 };
+
+export default Themes;

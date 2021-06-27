@@ -8,7 +8,7 @@ import YoutubeDataHandler from './../youtube/Datahandler';
 import YoutubeHeader from './../youtube/Header';
 import YoutubeHandler from './YoutubeHandler';
 
-export default () => (
+const YoutubeStandalone = () => (
   <FeedsCenterContainer>
     <Youtube />
   </FeedsCenterContainer>
@@ -39,3 +39,5 @@ export const Youtube = () => {
     </YoutubeDataHandler>
   );
 };
+
+export default YoutubeStandalone;

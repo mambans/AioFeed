@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import "./NoMatch.scss";
+import './NoMatch.scss';
 
-export default () => {
-  document.title = "AioFeed | 404 Error";
+const NoMatch = () => {
+  document.title = 'AioFeed | 404 Error';
 
   return (
     <section className='error-container'>
@@ -28,3 +28,5 @@ export default () => {
     </section>
   );
 };
+
+export default NoMatch;

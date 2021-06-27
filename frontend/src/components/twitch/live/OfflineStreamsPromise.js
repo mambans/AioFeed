@@ -2,7 +2,7 @@ import addSystemNotification from './addSystemNotification';
 import FetchSingelChannelVods from './../vods/FetchSingelChannelVods';
 import { getLocalstorage } from '../../../util/Utils';
 
-export default async ({
+const offlineStreamsPromise = async ({
   oldLiveStreams,
   liveStreams,
   isEnabledOfflineNotifications,
@@ -52,3 +52,4 @@ export default async ({
     return [];
   }
 };
+export default offlineStreamsPromise;

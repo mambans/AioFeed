@@ -26,7 +26,7 @@ const Container = styled.div`
   }
 `;
 
-export default ({ children, className, forceOpen, style, staticOpen }) => {
+const ChannelButtonsContainer = ({ children, className, forceOpen, style, staticOpen }) => {
   const ref = useRef();
   const [open, setOpen] = useState(forceOpen);
   const childrenWithProps = React.Children.map(children, (child) => {
@@ -45,3 +45,4 @@ export default ({ children, className, forceOpen, style, staticOpen }) => {
     </Container>
   );
 };
+export default ChannelButtonsContainer;

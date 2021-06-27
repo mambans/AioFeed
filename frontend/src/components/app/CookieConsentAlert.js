@@ -17,7 +17,7 @@ const Container = styled.div`
   padding: 10px;
 `;
 
-export default () => {
+const CookieConsentAlert = () => {
   const [accepted, setAccepted] = useState(getCookie('cookieConsentAccepted'));
 
   if (!accepted) {
@@ -38,3 +38,5 @@ export default () => {
   }
   return null;
 };
+
+export default CookieConsentAlert;

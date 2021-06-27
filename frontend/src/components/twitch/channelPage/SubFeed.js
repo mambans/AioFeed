@@ -12,7 +12,7 @@ import ClipElement from './ClipElement';
 import VodElement from '../vods/VodElement';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
-export default ({
+const SubFeed = ({
   feedName,
   items,
   sortBy,
@@ -106,3 +106,4 @@ export default ({
     </>
   );
 };
+export default SubFeed;

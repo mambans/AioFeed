@@ -13,7 +13,7 @@ import fetchGameName from './fetchGameName';
  * @async
  * @returns
  */
-export default async ({
+const addVideoExtraData = async ({
   items,
   fetchGameInfo = true,
   fetchProfiles = true,
@@ -51,3 +51,4 @@ export default async ({
 
   return { ...originalArray, data: finallData };
 };
+export default addVideoExtraData;

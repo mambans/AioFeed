@@ -4,7 +4,7 @@ const sortAlphaByProp = (a, b) => {
   return channelA.localeCompare(channelB);
 };
 
-export default (input, data) => {
+const sortByInput = (input, data) => {
   let caseSensitive = [];
   let caseInsensitive = [];
   let others = [];
@@ -33,3 +33,4 @@ export default (input, data) => {
   others.sort(sortAlphaByProp);
   return [...caseSensitive, ...caseInsensitive, ...others];
 };
+export default sortByInput;

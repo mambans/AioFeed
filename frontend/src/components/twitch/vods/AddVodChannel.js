@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getLocalstorage } from '../../../util/Utils';
 
-export default async ({
+const addVodChannel = async ({
   channel,
   channels = getLocalstorage('TwitchVods-Channels') || [],
   setChannels,
@@ -27,3 +27,4 @@ export default async ({
     console.log(e.message);
   }
 };
+export default addVodChannel;

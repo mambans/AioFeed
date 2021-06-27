@@ -105,7 +105,7 @@ export const ThemeProvider = ({ children }) => {
       value={{
         themesArray,
         activeTheme,
-        setActiveContextTheme: setActiveTheme,
+        setActiveTheme,
       }}
     >
       {children}

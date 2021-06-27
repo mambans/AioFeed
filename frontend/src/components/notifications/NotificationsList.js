@@ -6,7 +6,7 @@ import { truncate } from '../../util/Utils';
 import NotificationsContext from './../notifications/NotificationsContext';
 import useLockBodyScroll from '../../hooks/useLockBodyScroll';
 
-export default () => {
+const NotificationsList = () => {
   const { clearNotifications, notifications } = useContext(NotificationsContext);
   useLockBodyScroll(true);
 
@@ -42,3 +42,5 @@ export default () => {
     </NotificationListContainer>
   );
 };
+
+export default NotificationsList;

@@ -37,7 +37,7 @@ const Dropdown = styled.div`
   }
 `;
 
-export default ({ list }) => {
+const DropDownDrawer = ({ list }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef();
   const dropdownRef = useRef();
@@ -59,3 +59,5 @@ export default ({ list }) => {
     </Container>
   );
 };
+
+export default DropDownDrawer;

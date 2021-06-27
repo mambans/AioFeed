@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 
-import { DeleteAccountForm, DeleteAccountButton } from './StyledComponent';
+import { DeleteAccountForm, StyledDeleteAccountButton } from './StyledComponent';
 import AccountContext from './../../account/AccountContext';
 import styles from './Sidebar.module.scss';
 import useInput from './../../../hooks/useInput';
@@ -13,7 +13,7 @@ import Alert from './Alert';
 import ClearAllAccountCookiesStates from './ClearAllAccountCookiesStates';
 import LoadingIndicator from './../../LoadingIndicator';
 
-export default () => {
+const DeleteAccountButton = () => {
   const { username, setUsername, authKey } = useContext(AccountContext);
   const [show, setShow] = useState(false);
   const [validated, setValidated] = useState(false);
@@ -69,9 +69,9 @@ export default () => {
 
   return (
     <>
-      <DeleteAccountButton onClick={handleShow} title='Delete account'>
+      <StyledDeleteAccountButton onClick={handleShow} title='Delete account'>
         <MdDelete size={24} />
-      </DeleteAccountButton>
+      </StyledDeleteAccountButton>
 
       <Modal
         show={show}
@@ -121,3 +121,5 @@ export default () => {
     </>
   );
 };
+
+export default DeleteAccountButton;

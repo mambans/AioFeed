@@ -7,7 +7,7 @@ import API from '../API';
  * @param {Object} uptimeTimer uptime interval timer (useRef)
  * @async
  */
-export default async (keyValuePair) => {
+const fetchStreamInfo = async (keyValuePair) => {
   return await API.getStreams({
     params: {
       ...keyValuePair,
@@ -17,3 +17,4 @@ export default async (keyValuePair) => {
     .then((res) => res.data?.data[0])
     .catch((error) => console.log(error));
 };
+export default fetchStreamInfo;

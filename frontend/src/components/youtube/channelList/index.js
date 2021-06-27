@@ -36,7 +36,7 @@ export const sortInputFirst = (input, data) => {
   return [...caseSensitive, ...caseInsensitive, ...others];
 };
 
-export default (data) => {
+const ChannelList = (data) => {
   const [filteredChannels, setFilteredChannels] = useState();
   const [listIsOpen, setListIsOpen] = useState();
   const [cursor, setCursor] = useState({ position: 0 });
@@ -177,3 +177,5 @@ export default (data) => {
     </>
   );
 };
+
+export default ChannelList;

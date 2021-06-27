@@ -35,15 +35,9 @@ import { TwitchContext } from '../../twitch/useToken';
 import { YoutubeContext } from '../../youtube/useToken';
 import { FeedSizeSlider } from '../StyledComponents';
 
-export default () => {
-  const {
-    username,
-    setUsername,
-    profileImage,
-    setTwitchToken,
-    setYoutubeToken,
-    youtubeToken,
-  } = useContext(AccountContext);
+const SidebarAccount = () => {
+  const { username, setUsername, profileImage, setTwitchToken, setYoutubeToken, youtubeToken } =
+    useContext(AccountContext);
 
   const {
     setAutoRefreshEnabled,
@@ -81,8 +75,8 @@ export default () => {
   const logout = () => ClearAllAccountCookiesStates(setUsername);
 
   const delayedHandleChange = useCallback(
-    debounce((v) => setFeedSize(v), 250, { leading: true, maxWait: 1000 }),
-    []
+    () => debounce((v) => setFeedSize(v), 250, { leading: true, maxWait: 1000 }),
+    [setFeedSize]
   );
 
   const handleChange = (v) => {
@@ -309,3 +303,5 @@ export default () => {
     </>
   );
 };
+
+export default SidebarAccount;

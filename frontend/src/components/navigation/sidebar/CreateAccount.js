@@ -7,11 +7,11 @@ import NavigationContext from './../NavigationContext';
 import AccountContext from './../../account/AccountContext';
 import LoadingIndicator from './../../LoadingIndicator';
 import useInput from './../../../hooks/useInput';
-import ALert from './Alert';
+import SidebarAlert from './Alert';
 import { AddCookie } from '../../../util/Utils';
 import AlertHandler from './../../alert';
 
-export default () => {
+const CreateAccount = () => {
   document.title = 'AioFeed | Create Account';
   const [error, setError] = useState(null);
   const { setAlert, setRenderModal } = useContext(NavigationContext);
@@ -19,7 +19,8 @@ export default () => {
   const { setAuthKey, setUsername } = useContext(AccountContext);
 
   const validateEmail = (email) => {
-    var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
   };
 
@@ -76,7 +77,7 @@ export default () => {
 
   return (
     <>
-      <ALert />
+      <SidebarAlert />
       <AlertHandler
         show={error}
         type='warning'
@@ -136,3 +137,5 @@ export default () => {
     </>
   );
 };
+
+export default CreateAccount;

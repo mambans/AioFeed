@@ -23,13 +23,14 @@ import useLocalStorageState from '../../hooks/useLocalStorageState';
 
 const DEFAULT_LIST_WIDTH = Math.max(window.innerWidth * 0.1, 400);
 
-export default () => {
-  const listName = useQuery().get('list') || useQuery().get('listName') || null;
+const SharedVideoPlayerDefault = () => {
+  const list = useQuery().get('list');
+  const listName = useQuery().get('listName');
 
-  if (listName) {
+  if (list || listName) {
     return (
       <FavoritesProvider>
-        <SharedVideoPlayer listName={listName} />
+        <SharedVideoPlayer listName={list || listName} />
       </FavoritesProvider>
     );
   }
@@ -187,3 +188,5 @@ const SharedVideoPlayer = ({ listName, channelNameAttr }) => {
     </>
   );
 };
+
+export default SharedVideoPlayerDefault;

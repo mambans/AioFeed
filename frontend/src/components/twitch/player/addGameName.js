@@ -1,7 +1,7 @@
 import API from '../API';
 import { getLocalstorage } from '../../../util/Utils';
 
-export default async ({ streamInfo, newStreamInfo }) => {
+const addGameName = async ({ streamInfo, newStreamInfo }) => {
   try {
     if (!streamInfo || streamInfo?.game_id !== newStreamInfo) {
       const cachedGameInfo =
@@ -38,3 +38,4 @@ export default async ({ streamInfo, newStreamInfo }) => {
     console.log('error', error);
   }
 };
+export default addGameName;

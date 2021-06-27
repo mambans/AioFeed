@@ -1,7 +1,7 @@
 import AddVideoExtraData from '../AddVideoExtraData';
 import API from '../API';
 
-export default async (category, page) => {
+const getTopStreams = async (category, page) => {
   let game;
   let error;
   const nrStreams =
@@ -38,3 +38,4 @@ export default async (category, page) => {
     console.error(e);
   }
 };
+export default getTopStreams;

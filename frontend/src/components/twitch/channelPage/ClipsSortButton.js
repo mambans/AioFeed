@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MdSort } from 'react-icons/md';
 
-import { SortButton, SortDropDownList } from './StyledComponents';
+import { StyledSortButton, SortDropDownList } from './StyledComponents';
 import { Link } from 'react-router-dom';
 
 const PRE_DEFINED_DAY_OPTIONS = [0, 3, 7, 14, 30, 90, 180, 365];
@@ -28,18 +28,18 @@ const convertDays = (nrOfDays) => {
   return FinallOutput;
 };
 
-export default ({ sortBy: days, setSortBy, setData, resetOldData }) => {
+const ClipSortButton = ({ sortBy: days, setSortBy, setData, resetOldData }) => {
   const [open, setOpen] = useState(false);
 
   return (
     <div style={{ marginLeft: '0px' }}>
-      <SortButton
+      <StyledSortButton
         title={`Fetch clips from the last ${convertDays(days)}`}
         onClick={() => setOpen(!open)}
       >
         <MdSort size={30} />
         Within: {convertDays(days)}
-      </SortButton>
+      </StyledSortButton>
       {open && (
         <SortDropDownList>
           {PRE_DEFINED_DAY_OPTIONS.map((option) => (
@@ -63,3 +63,4 @@ export default ({ sortBy: days, setSortBy, setData, resetOldData }) => {
     </div>
   );
 };
+export default ClipSortButton;

@@ -16,7 +16,7 @@ import useToken, { TwitchContext } from '../useToken';
 
 const REFRESH_RATE = 25; // seconds
 
-export default ({ children }) => {
+const Handler = ({ children }) => {
   const { addNotification, setUnseenNotifications } = useContext(NotificationsContext);
   const { autoRefreshEnabled, isEnabledOfflineNotifications, isEnabledUpdateNotifications } =
     useContext(TwitchContext);
@@ -252,3 +252,4 @@ export default ({ children }) => {
     refreshAfterUnfollowTimer,
   });
 };
+export default Handler;

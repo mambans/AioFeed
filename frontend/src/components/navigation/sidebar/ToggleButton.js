@@ -5,7 +5,7 @@ import { StyledToggleButton } from './StyledComponent';
 import { getCookie } from '../../../util/Utils';
 import ToolTip from '../../sharedComponents/ToolTip';
 
-export default ({
+const ToggleButton = ({
   setEnable,
   enabled,
   label,
@@ -52,13 +52,15 @@ export default ({
         disabled={!tokenExists}
         variant='dark'
         buttonsperrow={buttonsperrow}
-        enabled={checked.toString()}
+        enabled={String(checked)}
       >
         {icon}
-        {React.Children.map(smallerIcons, (icon) =>
+        {React.Children?.map(smallerIcons, (icon) =>
           React.isValidElement(icon) ? React.cloneElement(icon, { className: 'smallIcon' }) : icon
         )}
       </StyledToggleButton>
     </ToolTip>
   );
 };
+
+export default ToggleButton;

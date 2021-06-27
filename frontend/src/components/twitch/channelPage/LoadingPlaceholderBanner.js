@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Banner, Name, BannerInfoOverlay } from './StyledComponents';
 
-export default () => (
+const LoadingPlaceholderBanner = () => (
   <Banner>
     <BannerInfoOverlay
       style={{
@@ -43,3 +43,4 @@ export default () => (
     </BannerInfoOverlay>
   </Banner>
 );
+export default LoadingPlaceholderBanner;

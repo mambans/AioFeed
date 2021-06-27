@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export default (ref, func, mount = true) => {
+const useClicksOutside = (ref, func, mount = true) => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (Array.isArray(ref) && ref?.length >= 1) {
@@ -14,3 +14,5 @@ export default (ref, func, mount = true) => {
     return () => document.removeEventListener('mouseup', handleClickOutside);
   }, [ref, func, mount]);
 };
+
+export default useClicksOutside;

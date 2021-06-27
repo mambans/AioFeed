@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
+import ThemeContext from './../themes/ThemeContext';
 
 import './Home.scss';
 import { BlurOverlay, LogoText, WelcomeContainer, DevideLine } from './StyledComponents';
 
-export default () => {
+const Home = () => {
   document.title = 'AioFeed';
+  const { activeTheme } = useContext(ThemeContext);
 
   const Logos = () => (
     <>
-      <BlurOverlay />
+      <BlurOverlay image={activeTheme.image} />
       <WelcomeContainer>
         <LogoText>
           <img
@@ -41,3 +43,5 @@ export default () => {
 
   return <Logos></Logos>;
 };
+
+export default Home;

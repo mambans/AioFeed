@@ -13,7 +13,7 @@ import { Container } from '../StyledComponents';
 import ToolTip from '../../sharedComponents/ToolTip';
 import { CustomFilterProvider } from '../CustomFilters/CustomFilterContext';
 
-export default ({ forceMountTwitch = false } = {}) => (
+const TwitchStandalone = ({ forceMountTwitch = false } = {}) => (
   <FeedsCenterContainer forceMountTwitch={forceMountTwitch}>
     <Twitch in={forceMountTwitch} />
   </FeedsCenterContainer>
@@ -31,7 +31,9 @@ export const Twitch = ({ in: forceMount = false }) => {
   const [order, setOrder] = useState(getLocalstorage('FeedOrders')?.['Twitch'] ?? 9);
 
   useEffect(() => {
-    Notification.requestPermission().then((result) => console.log('Notifications: ', result));
+    Notification.requestPermission().then(
+      (result) => result !== 'granted' && console.log('Notifications: ', result)
+    );
   }, []);
 
   return (
@@ -93,3 +95,4 @@ export const Twitch = ({ in: forceMount = false }) => {
     </CustomFilterProvider>
   );
 };
+export default TwitchStandalone;

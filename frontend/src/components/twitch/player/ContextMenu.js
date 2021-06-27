@@ -3,7 +3,7 @@ import { MdHighQuality } from 'react-icons/md';
 import { GrRefresh } from 'react-icons/gr';
 import ContextMenu from './ContextMenuWrapper';
 
-export default ({
+const PlayerContextMenu = ({
   PlayerUIControlls,
   TwitchPlayer,
   showAndResetTimer,
@@ -63,3 +63,4 @@ export default ({
     />
   );
 };
+export default PlayerContextMenu;

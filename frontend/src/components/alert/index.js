@@ -3,7 +3,7 @@ import Alert from 'react-bootstrap/Alert';
 
 import { StyledAlert } from '../sharedComponents/sharedStyledComponents';
 
-export default (data) => {
+const AlertHandler = (data) => {
   const {
     title,
     message,
@@ -41,3 +41,5 @@ export default (data) => {
 
   return null;
 };
+
+export default AlertHandler;

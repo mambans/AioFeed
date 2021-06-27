@@ -8,7 +8,7 @@ import AccountContext from './../account/AccountContext';
 import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from '../LoadingIndicator';
 
-export default () => {
+const YoutubeAuthCallback = () => {
   const { setVisible, setFooterVisible } = useContext(NavigationContext);
   const [error, setError] = useState();
   const { username, authKey } = useContext(AccountContext);
@@ -129,3 +129,5 @@ export default () => {
     />
   );
 };
+
+export default YoutubeAuthCallback;

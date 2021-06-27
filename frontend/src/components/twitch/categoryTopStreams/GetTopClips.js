@@ -9,7 +9,7 @@ import API from '../API';
  * @returns {Object} {topData , error}
  * @async
  */
-export default async (category, sortByTime, page) => {
+const getTopClips = async (category, sortByTime, page) => {
   let game;
   let error;
   const nrStreams =
@@ -48,3 +48,5 @@ export default async (category, sortByTime, page) => {
     console.error(e);
   }
 };
+
+export default getTopClips;

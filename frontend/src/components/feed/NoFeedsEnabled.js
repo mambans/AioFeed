@@ -28,7 +28,7 @@ const NoFeedsAlert = styled(AlertHandler)`
   }
 `;
 
-export default () => {
+const NoFeedsEnabled = () => {
   const { enableTwitch, enableYoutube, enableTwitchVods, enableTwitter } = useContext(FeedsContext);
   const [noFeeds, setNoFeeds] = useState(
     !enableTwitch && !enableTwitter && !enableYoutube && !enableTwitchVods
@@ -60,3 +60,5 @@ export default () => {
     </CSSTransition>
   );
 };
+
+export default NoFeedsEnabled;

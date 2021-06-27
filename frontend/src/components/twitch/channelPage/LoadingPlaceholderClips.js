@@ -4,7 +4,7 @@ import { SubFeedContainer } from './../../sharedComponents/sharedStyledComponent
 import LoadingBoxes from './../LoadingBoxes';
 import { SubFeedHeader } from './StyledComponents';
 
-export default ({ numberOfVideos }) => (
+const LoadingPlaceholderClips = ({ numberOfVideos }) => (
   <>
     <SubFeedHeader
       style={{
@@ -19,3 +19,4 @@ export default ({ numberOfVideos }) => (
     </SubFeedContainer>
   </>
 );
+export default LoadingPlaceholderClips;
