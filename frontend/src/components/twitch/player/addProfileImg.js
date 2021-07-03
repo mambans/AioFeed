@@ -18,13 +18,17 @@ const addProfileImg = async ({ user_id, currentStreamObj }) => {
           }));
 
     if (!TwitchProfiles[user_id]) {
-      localStorage.setItem(
-        'TwitchProfiles',
-        JSON.stringify({
-          ...TwitchProfiles,
-          [user_id]: { profile_image: profile.profile_image, login: profile.login },
-        })
-      );
+      try {
+        localStorage.setItem(
+          'TwitchProfiles',
+          JSON.stringify({
+            ...TwitchProfiles,
+            [user_id]: { profile_image: profile.profile_image, login: profile.login },
+          })
+        );
+      } catch (error) {
+        console.log('TwitchProfiles localStorage.setItem error:', error);
+      }
     }
 
     return { ...currentStreamObj, profile_image_url: profile.profile_image, login: profile.login };

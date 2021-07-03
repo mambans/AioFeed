@@ -22,13 +22,17 @@ const addGameName = async ({ streamInfo, newStreamInfo }) => {
           }).then((res) => res.data.data[0])));
 
       if (!foundCachedGame && gameInfo) {
-        localStorage.setItem(
-          'Twitch_game_details',
-          JSON.stringify({
-            data: [...cachedGameInfo.data, gameInfo],
-            expire: cachedGameInfo.expire,
-          })
-        );
+        try {
+          localStorage.setItem(
+            'Twitch_game_details',
+            JSON.stringify({
+              data: [...cachedGameInfo.data, gameInfo],
+              expire: cachedGameInfo.expire,
+            })
+          );
+        } catch (error) {
+          console.log('Twitch_game_details localstorage setItem error:', error);
+        }
       }
 
       return { ...newStreamInfo, game_name: gameInfo?.name };

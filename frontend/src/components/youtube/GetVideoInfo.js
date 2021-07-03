@@ -71,13 +71,17 @@ const getVideoInfo = async ({ videos }) => {
       return merge(video, newFoundDetails);
     }) || [];
 
-  localStorage.setItem(
-    'Cached_SavedYoutubeVideos',
-    JSON.stringify({
-      items: [...(fullyCachedVideos.items || []), ...(newVideosWithDetails || [])],
-      expire: fullyCachedVideos.expire,
-    })
-  );
+  try {
+    localStorage.setItem(
+      'Cached_SavedYoutubeVideos',
+      JSON.stringify({
+        items: [...(fullyCachedVideos.items.slice(-50) || []), ...(newVideosWithDetails || [])],
+        expire: fullyCachedVideos.expire,
+      })
+    );
+  } catch (e) {
+    console.log('Cached_SavedYoutubeVideos localStorage.setItem error:', error);
+  }
 
   return [...(CachedFullyVideos || []), ...(newVideosWithDetails || [])];
 };

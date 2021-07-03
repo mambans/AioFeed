@@ -67,7 +67,34 @@ const getSubscriptionVideos = async (followedChannels) => {
           })
       )
     );
-    localStorage.setItem('YT-ChannelsObj', JSON.stringify(channelWithVideos));
+
+    const videoImageUrls = (vid) =>
+      vid?.maxres?.url ||
+      vid?.standard?.url ||
+      vid?.high?.url ||
+      vid?.medium?.url ||
+      vid?.default.url;
+
+    const localStorageObjetToSave = channelWithVideos.slice(-50).map((obj) => {
+      return {
+        ...obj,
+        items: obj.items.map((video) => {
+          const snippet = {
+            ...video.snippet,
+            thumbnails: [videoImageUrls(video.snippet.thumbnails)],
+          };
+          delete snippet.description;
+
+          return { ...video, snippet };
+        }),
+      };
+    });
+
+    try {
+      localStorage.setItem('YT-ChannelsObj', JSON.stringify(localStorageObjetToSave));
+    } catch (e) {
+      console.log('YT-ChannelsObj localStorage.setItem error:', error);
+    }
 
     const videoOnlyArray = channelWithVideos.map((channel) =>
       Array.isArray(channel.items) ? channel.items : null
