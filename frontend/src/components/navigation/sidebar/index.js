@@ -51,12 +51,7 @@ const Sidebar = () => {
         <StyledNavSidebarBackdrop onClick={() => setShowSidebar(false)} />
       </CSSTransition>
 
-      <CSSTransition
-        in={showSidebar}
-        timeout={1000}
-        classNames='NavSidebarSlideRight'
-        unmountOnExit
-      >
+      <CSSTransition in={showSidebar} timeout={500} classNames='NavSidebarSlideRight' unmountOnExit>
         <StyledNavSidebar>{modal[renderModal]}</StyledNavSidebar>
       </CSSTransition>
     </>

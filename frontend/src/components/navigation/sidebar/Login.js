@@ -92,7 +92,7 @@ const Login = () => {
 
           setTimeout(() => {
             setUsername(res.Username);
-          }, 100);
+          }, 500);
         } else {
           console.log(result);
         }

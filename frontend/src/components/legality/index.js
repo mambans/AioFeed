@@ -6,7 +6,7 @@ const Legality = () => {
   const scrollTo = new URL(window.location.href).hash;
 
   if (scrollTo) {
-    window.setTimeout(() => {
+    setTimeout(() => {
       const element = document.getElementById(scrollTo);
       element && element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
     }, 1);

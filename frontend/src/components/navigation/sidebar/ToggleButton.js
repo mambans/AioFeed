@@ -20,6 +20,14 @@ const ToggleButton = ({
   const [checked, setChecked] = useState(enabled || false);
   const timeout = useRef();
 
+  const tokensForDomains = {
+    Twitch: getCookie(`Twitch-access_token`),
+    Youtube: getCookie(`Youtube-access_token`),
+    Favorites: getCookie(`Twitch-access_token`) || getCookie(`Youtube-access_token`),
+  };
+
+  const anTokenExists = Boolean(tokenExists || tokensForDomains[serviceName]);
+
   function handleChange() {
     setEnable(!checked);
     setChecked(!checked);
@@ -37,8 +45,8 @@ const ToggleButton = ({
     }, 2500);
 
     if (scrollIntoView && !checked === true) {
-      window.setTimeout(() => {
-        const element = document.getElementById(`${label}Header`);
+      setTimeout(() => {
+        const element = document.getElementById(`${label || serviceName}Header`);
         element &&
           element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
       }, 100);
@@ -49,7 +57,7 @@ const ToggleButton = ({
     <ToolTip tooltip={tooltip} width='max-content'>
       <StyledToggleButton
         onClick={handleChange}
-        disabled={!tokenExists}
+        disabled={!anTokenExists}
         variant='dark'
         buttonsperrow={buttonsperrow}
         enabled={String(checked)}

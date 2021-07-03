@@ -22,41 +22,42 @@ export const StyledNavSidebar = styled.div`
   overflow-y: scroll;
   scrollbar-width: thin;
   right: 0;
+  transition: opacity 300ms, transform 500ms;
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   @media screen and (max-width: 1920px) {
     width: 300px;
   }
 
-  &.NavSidebarSlideRight-enter {
+  &.NavSidebarSlideRight-enter,
+  &.NavSidebarSlideRight-appear {
     opacity: 0;
     transform: translate3d(400px, 0, 0);
-    transition: opacity 300ms, transform 500ms;
-    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     @media screen and (max-width: 1920px) {
       transform: translate3d(300px, 0, 0);
     }
   }
 
-  &.NavSidebarSlideRight-enter-active {
+  &.NavSidebarSlideRight-enter-active,
+  &.NavSidebarSlideRight-appear-active {
     opacity: 1;
     transform: translate3d(0, 0, 0);
-    transition: opacity 300ms, transform 500ms;
-    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  &.NavSidebarSlideRight-enter-done {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 
   &.NavSidebarSlideRight-exit {
     opacity: 1;
     transform: translate3d(0, 0, 0);
-    transition: opacity 300ms, transform 500ms;
-    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   &.NavSidebarSlideRight-exit-active {
     opacity: 0;
     transform: translate3d(400px, 0, 0);
-    transition: opacity 300ms, transform 500ms;
-    transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     @media screen and (max-width: 1920px) {
       transform: translate3d(300px, 0, 0);

@@ -1,13 +1,11 @@
 import { Button } from 'react-bootstrap';
 import { GoSignOut } from 'react-icons/go';
-import React, { useContext, useState, useCallback } from 'react';
+import React, { useContext } from 'react';
 import { MdVideocam, MdAutorenew, MdStar } from 'react-icons/md';
 import { FaTwitch, FaYoutube, FaTwitter, FaRegWindowRestore } from 'react-icons/fa';
 import { FiSidebar } from 'react-icons/fi';
 import { TiFlash } from 'react-icons/ti';
 import { AiOutlineDisconnect } from 'react-icons/ai';
-import Slider from 'react-rangeslider';
-import { debounce } from 'lodash';
 
 import { getCookie } from '../../../util/Utils';
 import AccountContext from './../../account/AccountContext';
@@ -17,28 +15,23 @@ import FeedsContext from './../../feed/FeedsContext';
 import ReAuthenticateButton from './ReAuthenticateButton';
 import Themeselector from './../../themes/Themeselector';
 import ToggleButton from './ToggleButton';
-import UpdateProfileImg from './UpdateProfileImg';
 import UpdateTwitterLists from './UpdateTwitterLists';
 import disconnectYoutube from './../../youtube/disconnectYoutube';
 import disconnectTwitch from './../../twitch/disconnectTwitch';
 import TwitterForms from './TwitterForms';
 import {
-  StyledProfileImg,
   StyledLogoutContiner,
-  ShowAddFormBtn,
-  CloseAddFormBtn,
-  ProfileImgContainer,
   ToggleButtonsContainer,
   ToggleButtonsContainerHeader,
 } from './StyledComponent';
 import { TwitchContext } from '../../twitch/useToken';
 import { YoutubeContext } from '../../youtube/useToken';
-import { FeedSizeSlider } from '../StyledComponents';
+import FeedSizeSlider from './FeedSizeSlider';
+import AccountDetails from './AccountDetails';
 
 const SidebarAccount = () => {
-  const { username, setUsername, profileImage, setTwitchToken, setYoutubeToken, youtubeToken } =
-    useContext(AccountContext);
-
+  const { setUsername, setTwitchToken, setYoutubeToken, youtubeToken } =
+    useContext(AccountContext) || {};
   const {
     setAutoRefreshEnabled,
     autoRefreshEnabled,
@@ -48,132 +41,76 @@ const SidebarAccount = () => {
     setIsEnabledOfflineNotifications,
     isEnabledUpdateNotifications,
     setIsEnabledUpdateNotifications,
-  } = useContext(TwitchContext);
-
-  const { youtubeVideoHoverEnable, setYoutubeVideoHoverEnable } = useContext(YoutubeContext);
-
-  const {
-    enableTwitch,
-    setEnableTwitch,
-    enableTwitchVods,
-    setEnableTwitchVods,
-    showTwitchSidebar,
-    setShowTwitchSidebar,
-    enableYoutube,
-    setEnableYoutube,
-    enableFavorites,
-    setEnableFavorites,
-    enableTwitter,
-    setEnableTwitter,
-    feedSize,
-    setFeedSize,
-  } = useContext(FeedsContext) || {};
-
-  const [showAddImage, setShowAddImage] = useState(false);
-  const [sizeValue, setSizeValue] = useState(feedSize);
+  } = useContext(TwitchContext) || {};
+  const { youtubeVideoHoverEnable, setYoutubeVideoHoverEnable } = useContext(YoutubeContext) || {};
+  const { showTwitchSidebar, setShowTwitchSidebar, ...feedProps } = useContext(FeedsContext) || {};
 
   const logout = () => ClearAllAccountCookiesStates(setUsername);
 
-  const delayedHandleChange = useCallback(
-    () => debounce((v) => setFeedSize(v), 250, { leading: true, maxWait: 1000 }),
-    [setFeedSize]
-  );
-
-  const handleChange = (v) => {
-    setSizeValue(v);
-    delayedHandleChange(v);
+  const domainColors = {
+    Twitch: 'rgb(169, 112, 255)',
+    Youtube: 'rgb(255, 0, 0)',
+    Favorites: 'rgb(255,255,0)',
+    Twitter: 'rgb(29, 161, 242)',
   };
+
+  const feedsBtns = [
+    {
+      serviceName: 'Twitch',
+      icon: <FaTwitch size={24} color={domainColors.Twitch} />,
+      tooltip: getCookie(`Twitch-access_token`)
+        ? (feedProps.enableTwitch ? 'Disable ' : 'Enable ') + ` Twitch feed`
+        : `Need to connect/authenticate with a Twitch account first.`,
+    },
+    {
+      serviceName: 'Twitter',
+      scrollIntoView: false,
+      icon: <FaTwitter size={24} color={domainColors.Twitter} />,
+      tooltip: (feedProps.enableTwitter ? 'Disable ' : 'Enable ') + ` Twitter feed`,
+      tokenExists: true,
+    },
+    {
+      serviceName: 'Youtube',
+      icon: <FaYoutube size={24} color={domainColors.Youtube} />,
+      tooltip: getCookie(`Youtube-access_token`)
+        ? (feedProps.enableYoutube ? 'Disable ' : 'Enable ') + ` Twitch feed`
+        : `Need to connect/authenticate with a Youtube account first.`,
+    },
+    {
+      serviceName: 'TwitchVods',
+      icon: <MdVideocam size={24} color={domainColors.Twitch} />,
+      tooltip: getCookie(`Twitch-access_token`)
+        ? (feedProps.enableTwitchVods ? 'Disable ' : 'Enable ') + ` Twitch feed`
+        : `Need to connect/authenticate with a Twitch account first.`,
+      tokenExists: getCookie(`Twitch-access_token`),
+    },
+    {
+      serviceName: 'Favorites',
+      icon: <MdStar size={24} color={domainColors.Favorites} />,
+      tooltip: (feedProps.enableFavorites ? 'Disable ' : 'Enable ') + ` Favorites feed`,
+    },
+  ];
 
   return (
     <>
       <div style={{ minHeight: 'calc(100% - 120px)' }}>
-        <ProfileImgContainer>
-          {showAddImage ? (
-            <CloseAddFormBtn onClick={() => setShowAddImage(false)} />
-          ) : (
-            <ShowAddFormBtn onClick={() => setShowAddImage(true)}>
-              Change Profile image
-            </ShowAddFormBtn>
-          )}
-          {showAddImage && <UpdateProfileImg close={() => setShowAddImage(false)} />}
-          <StyledProfileImg
-            src={profileImage || `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`}
-            alt=''
-          />
-        </ProfileImgContainer>
-        <h1 style={{ fontSize: '2rem', textAlign: 'center' }} title='Username'>
-          {username}
-        </h1>
-        <p style={{ textAlign: 'center' }} title='Email'>
-          {getCookie('AioFeed_AccountEmail')}
-        </p>
+        <AccountDetails />
         <ToggleButtonsContainerHeader>Feeds</ToggleButtonsContainerHeader>
         <ToggleButtonsContainer>
-          <ToggleButton
-            setEnable={(value) => setEnableTwitch(value)}
-            enabled={enableTwitch}
-            label='Twitch'
-            serviceName='Twitch'
-            tokenExists={getCookie(`Twitch-access_token`)}
-            scrollIntoView={true}
-            tooltip={
-              getCookie(`Twitch-access_token`)
-                ? (enableTwitch ? 'Disable ' : 'Enable ') + ` Twitch feed`
-                : `Need to connect/authenticate with a Twitch account first.`
-            }
-            icon={<FaTwitch size={24} color='rgb(169, 112, 255)' />}
-          />
-
-          <ToggleButton
-            setEnable={(value) => setEnableTwitter(value)}
-            serviceName='Twitter'
-            enabled={enableTwitter}
-            label='Twitter'
-            tokenExists={true}
-            tooltip={(enableTwitter ? 'Disable ' : 'Enable ') + ` Twitter feed`}
-            icon={<FaTwitter size={24} color='rgb(29, 161, 242)' />}
-          />
-          <ToggleButton
-            setEnable={(value) => setEnableYoutube(value)}
-            enabled={enableYoutube}
-            label='Youtube'
-            serviceName='Youtube'
-            tokenExists={youtubeToken}
-            scrollIntoView={true}
-            tooltip={
-              youtubeToken
-                ? (enableYoutube ? 'Disable ' : 'Enable ') + ` Twitch feed`
-                : `Need to connect/authenticate with a Youtube account first.`
-            }
-            icon={<FaYoutube size={24} color='rgb(255, 0, 0)' />}
-          />
-          <ToggleButton
-            setEnable={(value) => setEnableTwitchVods(value)}
-            enabled={enableTwitchVods}
-            label='TwitchVods'
-            serviceName='TwitchVods'
-            tokenExists={getCookie(`Twitch-access_token`)}
-            scrollIntoView={true}
-            tooltip={
-              getCookie(`Twitch-access_token`)
-                ? (enableTwitchVods ? 'Disable ' : 'Enable ') + ` Twitch feed`
-                : `Need to connect/authenticate with a Twitch account first.`
-            }
-            icon={<MdVideocam size={24} color='rgb(169, 112, 255)' />}
-          />
-          <ToggleButton
-            setEnable={(value) => setEnableFavorites(value)}
-            enabled={enableFavorites}
-            label='Favorites'
-            serviceName='Favorites'
-            tokenExists={getCookie(`Twitch-access_token`) || youtubeToken}
-            scrollIntoView={true}
-            tooltip={(enableFavorites ? 'Disable ' : 'Enable ') + ` Favorites feed`}
-            icon={<MdStar size={24} color='rgb(255,255,0)' />}
-          />
+          {feedsBtns?.map((props, index) => {
+            return (
+              <ToggleButton
+                key={props.serviceName + index}
+                scrollIntoView
+                setEnable={feedProps[`setEnable${props.serviceName}`]}
+                enabled={feedProps[`enable${props.serviceName}`]}
+                {...props}
+              />
+            );
+          })}
         </ToggleButtonsContainer>
 
-        {enableTwitter && (
+        {feedProps.enableTwitter && (
           <>
             <TwitterForms />
             <UpdateTwitterLists style={{ opacity: '0.5', transition: 'opacity 250ms' }} />
@@ -181,115 +118,97 @@ const SidebarAccount = () => {
         )}
         <br />
         <ToggleButtonsContainerHeader>Settings</ToggleButtonsContainerHeader>
-        {(enableTwitch || enableTwitchVods || enableYoutube || enableFavorites) && (
-          <FeedSizeSlider>
-            Feed video size
-            <Slider
-              value={sizeValue || 100}
-              // step={10}
-              format={(v) => parseInt(v)}
-              orientation='horizontal'
-              onChange={handleChange}
-              min={30}
-              max={100}
-              tooltip={true}
-            />
-          </FeedSizeSlider>
-        )}
+        <FeedSizeSlider />
         <ToggleButtonsContainer buttonsperrow={3}>
           <ToggleButton
-            setEnable={(value) => setAutoRefreshEnabled(value)}
+            setEnable={setAutoRefreshEnabled}
             enabled={autoRefreshEnabled}
             label='Twitch auto-refresh (25s)'
             serviceName='Twitch'
-            tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
               getCookie(`Twitch-access_token`)
                 ? (autoRefreshEnabled ? 'Disable ' : 'Enable ') + `Twitch auto refresh`
                 : `Need to connect/authenticate with a Twitch account first.`
             }
-            icon={<MdAutorenew size={18} color='rgb(169, 112, 255)' />}
+            icon={<MdAutorenew size={18} color={domainColors.Twitch} />}
           />
           <ToggleButton
-            setEnable={(value) => setShowTwitchSidebar(value)}
+            setEnable={setShowTwitchSidebar}
             enabled={showTwitchSidebar}
             label='Twitch sidebar'
             serviceName='Twitch'
-            tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
               getCookie(`Twitch-access_token`)
                 ? (showTwitchSidebar ? 'Hide ' : 'Show ') + `Twitch Sidebar`
                 : `Need to connect/authenticate with a Twitch account first.`
             }
-            icon={<FiSidebar size={18} color='rgb(169, 112, 255)' />}
+            icon={<FiSidebar size={18} color={domainColors.Twitch} />}
           />
           <ToggleButton
-            setEnable={(value) => setIsEnabledUpdateNotifications(value)}
+            setEnable={setIsEnabledUpdateNotifications}
             enabled={isEnabledUpdateNotifications}
             label='Twitch update notifications'
             serviceName='Twitch'
-            tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
               getCookie(`Twitch-access_token`)
                 ? (isEnabledUpdateNotifications ? 'Disable ' : 'Enable ') +
                   `notifications for when streams title or game changes`
                 : `Need to connect/authenticate with a Twitch account first.`
             }
-            icon={<TiFlash size={18} color='rgb(169, 112, 255)' />}
+            icon={<TiFlash size={18} color={domainColors.Twitch} />}
           />
           <ToggleButton
-            setEnable={(value) => setIsEnabledOfflineNotifications(value)}
+            setEnable={setIsEnabledOfflineNotifications}
             enabled={isEnabledOfflineNotifications}
             label='Twitch offline notifications'
             serviceName='Twitch'
-            tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
               getCookie(`Twitch-access_token`)
                 ? (isEnabledOfflineNotifications ? 'Disable ' : 'Enable ') +
                   `notifications for when streams go offline`
                 : `Need to connect/authenticate with a Twitch account first.`
             }
-            icon={<AiOutlineDisconnect size={18} color='rgb(169, 112, 255)' />}
+            icon={<AiOutlineDisconnect size={18} color={domainColors.Twitch} />}
           />
-
           <ToggleButton
-            setEnable={(value) => setTwitchVideoHoverEnable(value)}
+            setEnable={setTwitchVideoHoverEnable}
             enabled={twitchVideoHoverEnable}
             label='Twitch hover-video'
             serviceName='Twitch'
-            tokenExists={getCookie(`Twitch-access_token`)}
             tooltip={
               getCookie(`Twitch-access_token`)
                 ? (twitchVideoHoverEnable ? 'Disable ' : 'Enable ') + `live video preview on hover`
                 : `Need to connect/authenticate with a Youtube account first.`
             }
             icon={<FaRegWindowRestore size={18} />}
-            smallerIcons={<FaTwitch size={14} color='rgb(169, 112, 255)' />}
+            smallerIcons={<FaTwitch size={14} color={domainColors.Twitch} />}
           />
           <ToggleButton
-            setEnable={(value) => setYoutubeVideoHoverEnable(value)}
+            setEnable={setYoutubeVideoHoverEnable}
             enabled={youtubeVideoHoverEnable}
             label='Youtube hover-video'
             serviceName='Youtube'
-            tokenExists={youtubeToken}
             tooltip={
               youtubeToken
                 ? (youtubeVideoHoverEnable ? 'Disable ' : 'Enable ') + `video on hover`
                 : `Need to connect/authenticate with a Youtube account first.`
             }
             icon={<FaRegWindowRestore size={18} />}
-            smallerIcons={<FaYoutube size={14} color='rgb(255, 0, 0)' />}
+            smallerIcons={<FaYoutube size={14} color={domainColors.Youtube} />}
           />
         </ToggleButtonsContainer>
         <br />
-
         <ReAuthenticateButton
-          disconnect={() => disconnectTwitch({ setTwitchToken, setEnableTwitch })}
-          serviceName={'Twitch'}
+          disconnect={() =>
+            disconnectTwitch({ setTwitchToken, setEnableTwitch: feedProps.setEnableTwitch })
+          }
+          serviceName='Twitch'
         />
         <ReAuthenticateButton
-          disconnect={() => disconnectYoutube({ setYoutubeToken, setEnableYoutube })}
-          serviceName={'Youtube'}
+          disconnect={() =>
+            disconnectYoutube({ setYoutubeToken, setEnableYoutube: feedProps.setEnableYoutube })
+          }
+          serviceName='Youtube'
         />
         <Themeselector />
       </div>

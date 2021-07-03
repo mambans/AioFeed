@@ -60,7 +60,7 @@ const GetVideoInfo = async ({ videos = [] }) => {
     localStorage.setItem(
       'Cached_SavedYoutubeVideos',
       JSON.stringify({
-        items: [...fullyCachedVideos.items, ...newVideosDetails],
+        items: [...fullyCachedVideos.items.slice(-50), ...newVideosDetails],
         expire: fullyCachedVideos.expire,
       })
     );

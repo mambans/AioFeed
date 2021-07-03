@@ -4,60 +4,23 @@ import useSyncedLocalState from './../../hooks/useSyncedLocalState';
 
 const ThemeContext = React.createContext();
 
-export const findSeasonOrDefaultTheme = (allThemes) => {
-  const currentMonth = new Date().getMonth() + 1;
-  const currentDate = new Date().getDate();
-
-  const startTheme = allThemes.find(
-    (themes) =>
-      themes?.startMonth <= currentMonth &&
-      themes?.endMonth >= currentMonth &&
-      themes?.startDate <= currentDate &&
-      themes?.endDate >= currentDate
-  );
-
-  const defaultTheme = allThemes.find((themes) => themes.default);
-
-  return startTheme || defaultTheme || {};
-};
-
 export const ThemeProvider = ({ children }) => {
-  const [activeTheme, setActiveTheme] = useSyncedLocalState('activeTheme', {
-    name: 'default',
-    type: 'dark',
-  });
-
   const themesArray = [
-    {
-      name: 'default',
-      type: 'dark',
-      image: findSeasonOrDefaultTheme,
-    },
-    {
-      name: 'matt blue',
-      type: 'dark',
-      image: 'webp/matt_blue.webp',
-    },
     {
       name: 'clean',
       type: 'dark',
       image: 'webp/clean.webp',
     },
     {
-      name: 'dark',
+      name: 'coffee beans',
       type: 'dark',
-      backgroundColor: '#101216',
+      image: 'webp/felix-coffee-dimmed.webp',
+      default: true,
     },
     {
       name: 'coffee',
       type: 'dark',
       image: 'webp/coffee.webp',
-    },
-    {
-      name: 'coffee beans',
-      type: 'dark',
-      image: 'webp/felix-coffee-dimmed.webp',
-      default: true,
     },
     {
       name: 'wood',
@@ -70,6 +33,16 @@ export const ThemeProvider = ({ children }) => {
       image: 'webp/headphones3.webp',
     },
     {
+      name: 'matt blue',
+      type: 'dark',
+      image: 'webp/matt_blue.webp',
+    },
+    {
+      name: 'dark',
+      type: 'dark',
+      backgroundColor: '#101216',
+    },
+    {
       name: 'stone',
       type: 'dark',
       image: 'webp/stone.webp',
@@ -79,7 +52,6 @@ export const ThemeProvider = ({ children }) => {
       type: 'light',
       backgroundColor: 'white',
     },
-
     {
       name: 'christmas',
       type: 'dark',
@@ -100,12 +72,33 @@ export const ThemeProvider = ({ children }) => {
     },
   ];
 
+  const [activeTheme, setActiveTheme] = useSyncedLocalState(
+    'activeTheme',
+    themesArray.find((themes) => themes.default) || themesArray[0]
+  );
+
+  const prepareThemeSwitch = (theme) => {
+    document.documentElement.classList.add('theme-transition');
+    document.body.classList.add('theme-transition');
+    document.getElementById('AppContainer').classList.add('theme-transition');
+    document.documentElement.setAttribute('data-theme', theme.name || 'default');
+
+    setTimeout(() => {
+      document.documentElement.classList.remove('theme-transition');
+      document.body.classList.remove('theme-transition');
+      document.getElementById('AppContainer').classList.remove('theme-transition');
+    }, 1000);
+  };
+
   return (
     <ThemeContext.Provider
       value={{
         themesArray,
         activeTheme,
-        setActiveTheme,
+        setActiveTheme: (theme) => {
+          prepareThemeSwitch(theme);
+          setActiveTheme(theme);
+        },
       }}
     >
       {children}

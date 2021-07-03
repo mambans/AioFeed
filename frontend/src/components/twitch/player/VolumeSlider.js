@@ -4,10 +4,8 @@ import { MdVolumeDown } from 'react-icons/md';
 import { MdVolumeMute } from 'react-icons/md';
 import { MdVolumeUp } from 'react-icons/md';
 import React, { useState } from 'react';
-import Slider from 'react-rangeslider';
 
 import { StyledVolumeSlider } from './StyledComponents';
-import 'react-rangeslider/lib/index.css';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
 const VolumeSlider = ({
@@ -66,13 +64,14 @@ const VolumeSlider = ({
     return <IconVolume {...attrs} title={volumeMuted ? 'Unmute (m)' : 'Mute (m)'} />;
   };
 
-  const handleChange = (value) => {
+  const handleChange = (v) => {
     if (TwitchPlayer.getMuted()) {
       TwitchPlayer.setMuted(false);
       setVolumeMuted(false);
     }
-    setVolumeText(value);
-    TwitchPlayer.setVolume(value / 100);
+
+    setVolumeText(parseInt(v.target.value));
+    TwitchPlayer.setVolume(v.target.value / 100);
   };
 
   function mouseEvents(e) {
@@ -111,6 +110,7 @@ const VolumeSlider = ({
         break;
     }
   }
+
   function changeVolume(operator, amount) {
     setShowControlls(true);
     setVolumeText((volumeText) => {
@@ -127,6 +127,7 @@ const VolumeSlider = ({
       return newVolume * 100;
     });
   }
+
   function scrollChangeVolumeEvent(e) {
     if (e?.wheelDelta > 0 || e.deltaY < 0) {
       changeVolume('increase', 0.01);
@@ -144,19 +145,21 @@ const VolumeSlider = ({
     <StyledVolumeSlider
       volumeMuted={volumeMuted}
       disabled={!TwitchPlayer}
-      left={Math.round(15 + 157 * (volumeText?.toFixed(0) / 100))}
+      left={Math.round(15 + 157 * (parseInt(volumeText?.toFixed(0)) / 100))}
     >
       <div className='value'>
-        <h3>{volumeText?.toFixed(0)}</h3>
+        <h3>{parseInt(volumeText?.toFixed(0))}</h3>
       </div>
 
       <div id='BottomRow'>
         {volumeIcon()}
-        <Slider
+        <input
           value={volumeText}
-          orientation='horizontal'
           onChange={handleChange}
-          tooltip={false}
+          type='range'
+          className='form-range'
+          min='0'
+          max='100'
         />
       </div>
     </StyledVolumeSlider>

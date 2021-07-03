@@ -41,7 +41,7 @@ export const StyledLoginButton = styled.p`
   color: var(--textColor1);
 `;
 
-export const FeedSizeSlider = styled.div`
+export const StyledFeedSizeSlider = styled.div`
   color: rgb(175, 175, 175);
   text-align: center;
 

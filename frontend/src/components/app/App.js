@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import FeedsContext, { FeedsProvider } from '../feed/FeedsContext';
@@ -9,12 +9,25 @@ import { FooterProvider } from '../footer/FooterContext';
 import AccountContext, { AccountProvider } from '../account/AccountContext';
 import CookieConsentAlert from './CookieConsentAlert';
 import Routes from '../routes';
-import SetStartupTheme from '../themes';
 import ThemeContext from './../themes/ThemeContext';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import { TwitchProvider } from '../twitch/useToken';
 import { YoutubeProvider } from '../youtube/useToken';
 import { VodsProvider } from '../twitch/vods/VodsContext';
+
+const AppContainer = styled.div`
+  background-image: ${({ image }) => `url(/images/${image})`};
+  background-color: var(--backgroundColor);
+  object-fit: cover;
+  background-position-x: center;
+  background-position-y: center;
+  background-size: var(--backgroundImgSize);
+  background-repeat: var(--backgroundImgRepeat);
+  background-attachment: fixed;
+
+  scrollbar-color: var(--scrollbarColors) !important;
+  scrollbar-width: thin !important;
+`;
 
 const AppRoutesContainer = () => {
   return (
@@ -41,7 +54,7 @@ const AppRoutesContainer = () => {
 };
 
 const App = () => {
-  const { themesArray, activeTheme } = useContext(ThemeContext);
+  const { activeTheme } = useContext(ThemeContext);
   const {
     setTwitchToken,
     setYoutubeToken,
@@ -54,12 +67,6 @@ const App = () => {
   const { setEnableTwitch, setEnableYoutube } = useContext(FeedsContext);
 
   useEventListenerMemo('message', receiveMessage, window, true, { capture: false });
-
-  useEffect(() => {
-    SetStartupTheme(themesArray);
-
-    return () => {};
-  }, [themesArray]);
 
   function receiveMessage(e) {
     if (e.origin.startsWith('https://aiofeed.com') && e.data?.token && e.data?.service) {
@@ -78,22 +85,8 @@ const App = () => {
     }
   }
 
-  const AppContainer = styled.div`
-    background-image: ${({ image }) => `url(/images/${image})`};
-    background-color: var(--backgroundColor);
-    object-fit: cover;
-    background-position-x: center;
-    background-position-y: center;
-    background-size: var(--backgroundImgSize);
-    background-repeat: var(--backgroundImgRepeat);
-    background-attachment: fixed;
-
-    scrollbar-color: var(--scrollbarColors) !important;
-    scrollbar-width: thin !important;
-  `;
-
   return (
-    <AppContainer image={activeTheme.image}>
+    <AppContainer id='AppContainer' image={activeTheme.image}>
       <Routes />
       <CookieConsentAlert />
     </AppContainer>

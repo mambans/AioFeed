@@ -85,7 +85,7 @@ export const FavoriteListContainer = ({
   const [order, setOrder] = useState((getLocalstorage('FeedOrders')?.[list.name] ?? 26) + index);
 
   return (
-    <Container order={order}>
+    <Container order={order} id='FavoritesHeader'>
       <Header
         id={list.name}
         text={<>{list.name}</>}

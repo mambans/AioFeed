@@ -272,6 +272,7 @@ export const StyledVolumeSlider = styled.div`
   #BottomRow {
     display: flex;
     grid-area: slider;
+    align-items: center;
   }
 
   .rangeslider-horizontal {
