@@ -121,7 +121,7 @@ const Player = () => {
       setShowControlls(true);
       clearTimeout(fadeTimer.current);
 
-      fadeTimer.current = setTimeout(() => setShowControlls(false), 2000);
+      fadeTimer.current = setTimeout(() => setShowControlls(false), 1250);
     },
     150,
     { leading: true, trailing: false }
