@@ -103,12 +103,6 @@ const Handler = ({ children }) => {
             'desc'
           );
 
-          const notificationsList = orderBy(
-            uniqBy( ...recentLiveStreams || [], 'id'),
-            (s) => s.viewer_count,
-            'desc'
-          );
-
           setLoadingStates({
             refreshing: false,
             error: null,
@@ -118,11 +112,11 @@ const Handler = ({ children }) => {
 
           if (
             !disableNotifications &&
-            (notificationsList?.length >= 1 || oldLiveStreams.current?.length >= 1)
+            (liveStreams.current?.length >= 1 || oldLiveStreams.current?.length >= 1)
           ) {
             await Promise.all([
               await LiveStreamsPromise({
-                liveStreams: notificationsList,
+                liveStreams,
                 oldLiveStreams,
                 newlyAddedStreams,
                 setUnseenNotifications,
@@ -132,7 +126,7 @@ const Handler = ({ children }) => {
               }),
 
               await OfflineStreamsPromise({
-                liveStreams: notificationsList,
+                liveStreams,
                 oldLiveStreams,
                 isEnabledOfflineNotifications,
                 newlyAddedStreams,
@@ -143,7 +137,7 @@ const Handler = ({ children }) => {
               }),
 
               await UpdatedStreamsPromise({
-                liveStreams: notificationsList,
+                liveStreams,
                 oldLiveStreams,
                 newlyAddedStreams,
                 setUnseenNotifications,
