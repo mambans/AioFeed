@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState, useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
-import { StyledCreateFormTitle, StyledCreateForm } from './StyledComponent';
+import { StyledCreateFormTitle, StyledCreateForm } from './StyledComponents';
 import NavigationContext from './../NavigationContext';
 import AccountContext from './../../account/AccountContext';
 import LoadingIndicator from './../../LoadingIndicator';

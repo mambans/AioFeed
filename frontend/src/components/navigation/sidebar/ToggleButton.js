@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 
-import { StyledToggleButton } from './StyledComponent';
+import { StyledToggleButton } from './StyledComponents';
 import { getCookie } from '../../../util/Utils';
 import ToolTip from '../../sharedComponents/ToolTip';
 

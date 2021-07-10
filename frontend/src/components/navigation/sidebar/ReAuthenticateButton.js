@@ -9,7 +9,7 @@ import {
   StyledConnectYoutube,
   StyledConnectContainer,
   StyledReconnectIcon,
-} from './StyledComponent';
+} from './StyledComponents';
 import AccountContext from './../../account/AccountContext';
 import { AddCookie, getCookie } from '../../../util/Utils';
 

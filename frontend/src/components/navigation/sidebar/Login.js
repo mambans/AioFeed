@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, { useState, useContext } from 'react';
 
 import { AddCookie } from '../../../util/Utils';
-import { StyledCreateFormTitle, StyledCreateForm } from './StyledComponent';
+import { StyledCreateFormTitle, StyledCreateForm } from './StyledComponents';
 import AccountContext from './../../account/AccountContext';
 import LoadingIndicator from './../../LoadingIndicator';
 import NavigationContext from './../NavigationContext';

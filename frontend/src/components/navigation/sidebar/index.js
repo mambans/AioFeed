@@ -11,7 +11,7 @@ import {
   StyledNavSidebar,
   StyledNavSidebarBackdrop,
   StyledSidebarTrigger,
-} from './StyledComponent';
+} from './StyledComponents';
 
 const Sidebar = () => {
   const { profileImage, username } = useContext(AccountContext);

@@ -8,7 +8,7 @@ import {
   ShowAddFormBtn,
   CloseAddFormBtn,
   ProfileImgContainer,
-} from './StyledComponent';
+} from './StyledComponents';
 
 const AccountDetails = () => {
   const { username, profileImage } = useContext(AccountContext);

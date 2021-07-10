@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 
-import { DeleteAccountForm, StyledDeleteAccountButton } from './StyledComponent';
+import { DeleteAccountForm, StyledDeleteAccountButton } from './StyledComponents';
 import AccountContext from './../../account/AccountContext';
 import styles from './Sidebar.module.scss';
 import useInput from './../../../hooks/useInput';

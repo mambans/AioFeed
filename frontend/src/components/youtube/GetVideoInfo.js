@@ -80,7 +80,7 @@ const getVideoInfo = async ({ videos }) => {
       })
     );
   } catch (e) {
-    console.log('Cached_SavedYoutubeVideos localStorage.setItem error:', error);
+    console.log('Cached_SavedYoutubeVideos localStorage.setItem error:', e);
   }
 
   return [...(CachedFullyVideos || []), ...(newVideosWithDetails || [])];

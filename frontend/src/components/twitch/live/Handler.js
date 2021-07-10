@@ -67,9 +67,9 @@ const Handler = ({ children }) => {
         const filters = getLocalstorage('CustomFilters') || [];
         if (streams?.status === 200) {
           const newLiveStreams = [...streams.data];
-          const filteredLiveStreams = uniqBy(newLiveStreams, 'user_id');
+          const uniqueFilteredLiveStreams = uniqBy(newLiveStreams, 'user_id');
 
-          const customFilteredLiveStreams = filteredLiveStreams.filter((stream) => {
+          const rulesFilteredLiveStreams = uniqueFilteredLiveStreams.filter((stream) => {
             const relevantRules =
               filters?.[stream?.login.toLowerCase() || stream?.user_name.toLowerCase()];
 
@@ -93,12 +93,18 @@ const Handler = ({ children }) => {
           });
 
           const recentLiveStreams = (liveStreams.current || []).filter(
-            (s) => Math.trunc((Date.now() - new Date(s.started_at).getTime()) / 1000) <= 180
+            (s) => Math.trunc((Date.now() - new Date(s.started_at).getTime()) / 1000) <= 150
           );
 
           oldLiveStreams.current = liveStreams.current;
           liveStreams.current = orderBy(
-            uniqBy([...(customFilteredLiveStreams || []), ...(recentLiveStreams || [])], 'id'),
+            uniqBy([...(rulesFilteredLiveStreams || []), ...(recentLiveStreams || [])], 'id'),
+            (s) => s.viewer_count,
+            'desc'
+          );
+
+          const notificationsList = orderBy(
+            uniqBy( ...recentLiveStreams || [], 'id'),
             (s) => s.viewer_count,
             'desc'
           );
@@ -112,11 +118,11 @@ const Handler = ({ children }) => {
 
           if (
             !disableNotifications &&
-            (liveStreams.current?.length >= 1 || oldLiveStreams.current?.length >= 1)
+            (notificationsList?.length >= 1 || oldLiveStreams.current?.length >= 1)
           ) {
             await Promise.all([
               await LiveStreamsPromise({
-                liveStreams,
+                liveStreams: notificationsList,
                 oldLiveStreams,
                 newlyAddedStreams,
                 setUnseenNotifications,
@@ -126,7 +132,7 @@ const Handler = ({ children }) => {
               }),
 
               await OfflineStreamsPromise({
-                liveStreams,
+                liveStreams: notificationsList,
                 oldLiveStreams,
                 isEnabledOfflineNotifications,
                 newlyAddedStreams,
@@ -137,7 +143,7 @@ const Handler = ({ children }) => {
               }),
 
               await UpdatedStreamsPromise({
-                liveStreams,
+                liveStreams: notificationsList,
                 oldLiveStreams,
                 newlyAddedStreams,
                 setUnseenNotifications,

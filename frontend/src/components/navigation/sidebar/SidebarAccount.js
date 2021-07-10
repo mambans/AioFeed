@@ -23,7 +23,7 @@ import {
   StyledLogoutContiner,
   ToggleButtonsContainer,
   ToggleButtonsContainerHeader,
-} from './StyledComponent';
+} from './StyledComponents';
 import { TwitchContext } from '../../twitch/useToken';
 import { YoutubeContext } from '../../youtube/useToken';
 import FeedSizeSlider from './FeedSizeSlider';
