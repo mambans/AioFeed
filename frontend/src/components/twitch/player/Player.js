@@ -127,9 +127,9 @@ const Player = () => {
     { leading: true, trailing: false }
   );
 
-  useEventListenerMemo('mousemove', showAndResetTimer);
-  useEventListenerMemo('mousedown', showAndResetTimer);
-  useEventListenerMemo('touchmove', showAndResetTimer);
+  useEventListenerMemo('mousemove', showAndResetTimer, PlayerUIControlls.current);
+  useEventListenerMemo('mousedown', showAndResetTimer, PlayerUIControlls.current);
+  useEventListenerMemo('touchmove', showAndResetTimer, PlayerUIControlls.current);
 
   useEventListenerMemo('mousedown', containLinkClicks, link0.current);
   useEventListenerMemo('mousedown', containLinkClicks, link1.current);
