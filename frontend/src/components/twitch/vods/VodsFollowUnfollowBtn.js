@@ -8,7 +8,6 @@ import AccountContext from './../../account/AccountContext';
 import { VodAddRemoveButton } from '../../sharedComponents/sharedStyledComponents';
 import AddVodChannel from './AddVodChannel';
 import VodsContext from './VodsContext';
-import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import FetchSingelChannelVods from './FetchSingelChannelVods';
 import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../sharedComponents/ToolTip';
@@ -41,16 +40,8 @@ const VodsFollowUnfollowBtn = ({
   const vodButton = useRef();
   const { feedVideoSizeProps, enableTwitchVods } = useContext(FeedsContext) || {};
 
-  useEventListenerMemo('mouseenter', handleMouseOver, vodButton.current, enableTwitchVods);
-  useEventListenerMemo('mouseleave', handleMouseOut, vodButton.current, enableTwitchVods);
-
-  function handleMouseOver() {
-    setIsHovered(true);
-  }
-
-  function handleMouseOut() {
-    setIsHovered(null);
-  }
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => setIsHovered(null);
 
   async function removeChannel({ channel, channels, setChannels }) {
     try {
@@ -97,6 +88,8 @@ const VodsFollowUnfollowBtn = ({
         vodenabled={String(vodEnabled)}
         variant={type}
         padding={padding}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         onClick={() => {
           if (vodEnabled) {
             unfollowStream();
