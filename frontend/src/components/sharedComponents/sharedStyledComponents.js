@@ -156,8 +156,10 @@ export const HeaderTopContainer = styled.div`
 `;
 
 export const LeftRightDivs = styled.div`
-  align-items: end;
+  /* align-items: end; */
+  align-items: center;
   display: flex;
+  position: relative;
 `;
 
 export const SubFeedContainer = styled.div`

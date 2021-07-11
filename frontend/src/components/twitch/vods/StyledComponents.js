@@ -52,6 +52,14 @@ export const VodType = styled.div`
 export const VodChannelListLi = styled.li`
   min-height: 43px;
   border-bottom: thin solid #1e1616;
+  list-style: none;
+
+  a {
+    color: var(--textColor1);
+    &:hover {
+      color: var(--textColor1Hover);
+    }
+  }
 
   button {
     opacity: 1;
@@ -134,6 +142,11 @@ export const VodChannelListPopupTrigger = styled.div`
 
 export const VodChannelListPopup = styled.div`
   max-height: 600px;
+  position: absolute;
+  top: 0;
+  background: var(--popupListsBackground);
+  overflow: auto;
+  z-index: 2;
 
   form {
     padding: 5px;

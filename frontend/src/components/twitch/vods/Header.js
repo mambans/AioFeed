@@ -1,17 +1,10 @@
-import { MdFormatListBulleted } from 'react-icons/md';
 import { MdVideocam } from 'react-icons/md';
 import Alert from 'react-bootstrap/Alert';
 import React from 'react';
 
 import Header from '../../sharedComponents/Header';
-import {
-  AddToListModalTrigger,
-  LastRefreshText,
-} from '../../sharedComponents/sharedStyledComponents';
+import { LastRefreshText } from '../../sharedComponents/sharedStyledComponents';
 import VodChannelList from './VodChannelList';
-import { VodChannelListPopupTrigger } from './StyledComponents';
-import Popup from 'reactjs-popup';
-import ToolTip from '../../sharedComponents/ToolTip';
 
 const VodsHeader = (props) => {
   const { refresh, refreshing, vods, vodError, setOrder } = props;
@@ -54,30 +47,7 @@ const VodsHeader = (props) => {
           )}
         </>
       }
-      rightSide={
-        <>
-          <Popup
-            placeholder='Channel name..'
-            arrow={false}
-            trigger={
-              <VodChannelListPopupTrigger>
-                <ToolTip
-                  placement={'left'}
-                  delay={{ show: 1000, hide: 0 }}
-                  tooltip={'Add/remove Twitch channels to fetch vods from'}
-                >
-                  <AddToListModalTrigger variant='outline-secondary'>
-                    <MdFormatListBulleted size={22} />
-                  </AddToListModalTrigger>
-                </ToolTip>
-              </VodChannelListPopupTrigger>
-            }
-            position='left top'
-          >
-            <VodChannelList />
-          </Popup>
-        </>
-      }
+      rightSide={<VodChannelList />}
       setOrder={setOrder}
       feedName='Twitch'
     />
