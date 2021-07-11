@@ -2,7 +2,7 @@ import { MdVideoCall } from 'react-icons/md';
 import { MdVideocam } from 'react-icons/md';
 import { MdVideocamOff } from 'react-icons/md';
 import axios from 'axios';
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext } from 'react';
 
 import AccountContext from './../../account/AccountContext';
 import { VodAddRemoveButton } from '../../sharedComponents/sharedStyledComponents';
@@ -37,7 +37,6 @@ const VodsFollowUnfollowBtn = ({
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
   const vodEnabled = channels?.includes(channel?.toLowerCase());
-  const vodButton = useRef();
   const { feedVideoSizeProps, enableTwitchVods } = useContext(FeedsContext) || {};
 
   const handleMouseEnter = () => setIsHovered(true);
@@ -83,7 +82,6 @@ const VodsFollowUnfollowBtn = ({
       <VodAddRemoveButton
         className={`VodButton ${className || ''}`}
         marginright={marginright}
-        ref={vodButton}
         loweropacity={loweropacity}
         vodenabled={String(vodEnabled)}
         variant={type}
