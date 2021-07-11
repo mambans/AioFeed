@@ -21,7 +21,8 @@ const fetchAppAccessToken = async () => {
     })
     .catch((error) => {
       console.error('error: ', error);
-      throw new Error('No User or App access tokens found.');
+      console.error('No User or App access tokens found.');
+      // throw new Error('No User or App access tokens found.');
     });
 };
 

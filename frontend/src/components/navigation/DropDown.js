@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { NavDropdown } from 'react-bootstrap';
 import styled from 'styled-components';
+import { FaAngleDown } from 'react-icons/fa';
 
 import { PortalWithState } from 'react-portal';
 
@@ -24,6 +24,16 @@ const StyledDropdownContainer = styled.div`
     svg {
       margin-right: 5px;
     }
+  }
+`;
+
+const DropDownTrigger = styled.div`
+  width: max-content;
+  font-size: 1.15rem;
+
+  svg {
+    transition: transform 250ms;
+    transform: ${({ isOpen }) => (isOpen ? 'rotate(90deg)' : 'rotate(0deg)')};
   }
 `;
 
@@ -56,7 +66,19 @@ const DropDown = ({ title, children }) => {
     <PortalWithState closeOnOutsideClick closeOnEsc>
       {({ openPortal, closePortal, isOpen, portal }) => (
         <>
-          <NavDropdown title={title} onClick={openPortal} ref={triggerRef} />
+          <DropDownTrigger
+            className='nav-link'
+            onClick={(e) => {
+              openPortal(e);
+              isOpen && triggerRef.current.blur();
+            }}
+            ref={triggerRef}
+            isOpen={isOpen}
+            tabIndex='4'
+          >
+            {title}
+            <FaAngleDown size={20} />
+          </DropDownTrigger>
           {portal(
             <DropdownContainer triggerRef={triggerRef} onClick={closePortal}>
               {children}

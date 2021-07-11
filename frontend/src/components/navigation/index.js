@@ -88,7 +88,6 @@ const Navigation = () => {
               Top Streams
             </Nav.Link>
             <DropDown title='Individual Feeds'>
-              {' '}
               <NavDropdown.Item as={NavLink} to='/favorites'>
                 <MdStar size={16} color='rgb(255,255,0)' />
                 Favorites
