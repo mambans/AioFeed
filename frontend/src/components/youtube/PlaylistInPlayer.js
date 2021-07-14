@@ -97,7 +97,7 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId }) => {
               listName={list.name}
               list={list}
               id={video.contentDetails?.upload?.videoId}
-              data-id={video.contentDetails?.upload?.videoId}
+              // data-id={video.contentDetails?.upload?.videoId}
               video={video}
               {...dragEvents}
             />
@@ -107,7 +107,7 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId }) => {
               listName={list.name}
               list={list}
               id={video.id}
-              data-id={video.id}
+              // data-id={video.id}
               data={video}
               {...dragEvents}
             />
@@ -157,7 +157,7 @@ const PlaylistInPlayer = ({
   }, [list, listName, ytExistsAndValidated, twitchExistsAndValidated, setListVideos]);
 
   useEffect(() => {
-    const ele = document.querySelector(`#v${videoId}`);
+    const ele = document.querySelector(`#${videoId}`);
 
     if (ele && listVideos) {
       setTimeout(
