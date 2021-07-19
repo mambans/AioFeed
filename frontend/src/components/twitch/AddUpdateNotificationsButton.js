@@ -52,7 +52,7 @@ const AddUpdateNotificationsButton = ({
   useEventListenerMemo('mouseenter', handleMouseOver, vodButton.current);
   useEventListenerMemo('mouseleave', handleMouseOut, vodButton.current);
 
-  async function addChannel(channel) {
+  async function addChannel() {
     try {
       const existing = new Set(updateNotischannels || []);
       const newChannels = [...existing.add(channel?.toLowerCase())];
@@ -97,7 +97,7 @@ const AddUpdateNotificationsButton = ({
                 updateNotischannels,
                 setUpdateNotischannels,
               })
-            : addChannel({ channel })
+            : addChannel()
         }
       >
         {updateNotificationEnabled ? (
