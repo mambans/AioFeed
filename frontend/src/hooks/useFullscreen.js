@@ -11,7 +11,7 @@ const useFullscreen = ({ hideNavbar = true } = {}) => {
     if (hideNavbar) setVisible(false);
 
     return () => {
-      document.documentElement.style.overflow = 'visible';
+      document.documentElement.style.removeProperty('overflow');
       setShrinkNavbar('false');
       setFooterVisible(true);
       if (hideNavbar) setVisible(true);
