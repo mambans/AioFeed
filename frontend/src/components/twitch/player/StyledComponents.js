@@ -811,3 +811,13 @@ export const Loop = styled.div`
       ? '100%'
       : 'auto'};
 `;
+
+export const ChatContainer = styled.div`
+  position: fixed;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  height: ${({ visible }) => (visible ? 'calc(100vh - 70px)' : '100vh')};
+  top: ${({ visible }) => (visible ? '70px' : '0')};
+  transition: top 300ms, height 300ms;
+`;
