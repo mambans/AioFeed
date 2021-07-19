@@ -1,27 +1,20 @@
-import axios from 'axios';
 import React, { useContext } from 'react';
 
 import AccountContext from './../../account/AccountContext';
 import useInput from './../../../hooks/useInput';
 import { ProfileImgInput } from './StyledComponents';
-import { AddCookie, getCookie } from '../../../util/Utils';
+import { AddCookie } from '../../../util/Utils';
+import API from '../API';
 
 const UpdateProfileImg = ({ close }) => {
-  const { username, setProfileImage } = useContext(AccountContext);
+  const { setProfileImage } = useContext(AccountContext);
   const { value: image, bind: bindimage, reset: resetimage } = useInput('');
 
   const addProfileImage = async () => {
     AddCookie('AioFeed_AccountProfileImg', image);
     setProfileImage(image);
-    await axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
-        username: username,
-        columnValue: image,
-        columnName: 'ProfileImg',
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .then(() => close())
-      .catch((error) => console.error(error));
+
+    await API.updateAccount('ProfileImg', image).then(() => close());
   };
 
   const handleSubmit = (evt) => {

@@ -2,7 +2,6 @@ import { Form, Button } from 'react-bootstrap';
 import { MdDelete } from 'react-icons/md';
 import Modal from 'react-bootstrap/Modal';
 import React, { useState, useContext } from 'react';
-import axios from 'axios';
 
 import { DeleteAccountForm, StyledDeleteAccountButton } from './StyledComponents';
 import AccountContext from './../../account/AccountContext';
@@ -12,6 +11,7 @@ import NavigationContext from '../NavigationContext';
 import Alert from './Alert';
 import ClearAllAccountCookiesStates from './ClearAllAccountCookiesStates';
 import LoadingIndicator from './../../LoadingIndicator';
+import API from '../API';
 
 const DeleteAccountButton = () => {
   const { username, setUsername, authKey } = useContext(AccountContext);
@@ -27,10 +27,7 @@ const DeleteAccountButton = () => {
     if (form.checkValidity() === true && account === username) {
       setValidated(true);
 
-      await axios
-        .delete(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account`, {
-          data: { username: account, password: password, authKey: authKey },
-        })
+      await API.deleteAccount(account, password, authKey)
         .then((res) => {
           ClearAllAccountCookiesStates(setUsername);
 

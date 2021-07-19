@@ -1,9 +1,7 @@
 import React, { useContext, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 
 import FavoritesContext from './../FavoritesContext';
-import { getCookie } from '../../../util/Utils';
 import {
   Lists,
   ListItem,
@@ -16,6 +14,7 @@ import useClicksOutside from '../../../hooks/useClicksOutside';
 import { parseNumberAndString } from './../dragDropUtils';
 import NewListForm from './NewListForm';
 import { MdAddCircle, MdRemoveCircle } from 'react-icons/md';
+import API from '../../navigation/API';
 
 export const addFavoriteVideo = async (lists, setLists, list_Name, newItem) => {
   if (lists && setLists && list_Name && newItem) {
@@ -30,14 +29,7 @@ export const addFavoriteVideo = async (lists, setLists, list_Name, newItem) => {
 
     allOrinalLists[list_Name] = newObj;
 
-    axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
-        username: getCookie(`AioFeed_AccountName`),
-        videosObj: newObj,
-        listName: list_Name,
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .catch((e) => console.error(e));
+    await API.updateSavedList(list_Name, newObj);
 
     const promise = await new Promise((resolve) => {
       const items = { ...allOrinalLists };
@@ -62,14 +54,7 @@ export const removeFavoriteVideo = async (lists, setLists, list_Name, newItem_p)
 
   setLists({ ...allOrinalLists });
 
-  await axios
-    .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
-      username: getCookie(`AioFeed_AccountName`),
-      videosObj: newObj,
-      listName: list_Name,
-      authkey: getCookie(`AioFeed_AuthKey`),
-    })
-    .catch((e) => console.error(e));
+  await API.updateSavedList(list_Name, newObj);
 };
 
 export const AddRemoveBtn = ({

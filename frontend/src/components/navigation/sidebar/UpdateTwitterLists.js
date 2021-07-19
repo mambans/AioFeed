@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import axios from 'axios';
 import styled from 'styled-components';
 import { IoMdList } from 'react-icons/io';
 import { FaTwitter } from 'react-icons/fa';
@@ -8,9 +7,8 @@ import { MdPlaylistAdd, MdDelete, MdAdd } from 'react-icons/md';
 
 import useInput from './../../../hooks/useInput';
 import FeedsContext from '../../feed/FeedsContext';
-import AccountContext from '../../account/AccountContext';
-import { getCookie } from '../../../util/Utils';
 import ToolTip from '../../sharedComponents/ToolTip';
+import API from '../API';
 
 const StyledForm = styled(Form)`
   margin: 10px;
@@ -115,7 +113,6 @@ const StyledButton = styled(Button).attrs({ type: 'submit', variant: 'secondary'
 
 const UpdateTwitterLists = ({ style, id, index }) => {
   const { setTwitterLists, twitterLists } = useContext(FeedsContext) || {};
-  const { username } = useContext(AccountContext);
   const { value: listName, bind: bindListName, reset } = useInput(id || '');
 
   const addList = async () => {
@@ -126,14 +123,7 @@ const UpdateTwitterLists = ({ style, id, index }) => {
     localStorage.setItem('Twitter-Lists', JSON.stringify(newArray));
     setTwitterLists(newArray);
 
-    await axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/soft-update`, {
-        username: username,
-        columnValue: { Lists: newArray },
-        columnName: 'TwitterPreferences',
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .catch((e) => console.error(e));
+    await API.softUpdateAccount('TwitterPreferences', { Lists: newArray });
 
     reset();
   };
@@ -146,14 +136,7 @@ const UpdateTwitterLists = ({ style, id, index }) => {
     localStorage.setItem('Twitter-Lists', JSON.stringify(newArray));
     setTwitterLists(newArray);
 
-    await axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
-        username: username,
-        columnValue: { Lists: newArray },
-        columnName: 'TwitterPreferences',
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .catch((e) => console.error(e));
+    await API.updateAccount('TwitterPreferences', { Lists: newArray });
   };
 
   const handleSubmit = (evt) => {

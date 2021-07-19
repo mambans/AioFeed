@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
-import axios from 'axios';
 import { MdDeleteForever } from 'react-icons/md';
 
-import { getCookie } from '../../util/Utils';
 import { ListActionButton } from './StyledComponents';
 import FavoritesContext from './FavoritesContext';
+import API from '../navigation/API';
 
 const DeleteListBtn = ({ list, style, children }) => {
   const { setLists } = useContext(FavoritesContext);
@@ -20,12 +19,7 @@ const DeleteListBtn = ({ list, style, children }) => {
       return orginialList;
     });
 
-    await axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists/delete`, {
-        username: getCookie('AioFeed_AccountName'),
-        listName: list.name,
-      })
-      .catch((e) => console.error(e));
+    API.deleteSavedList(list.name);
   };
 
   return (

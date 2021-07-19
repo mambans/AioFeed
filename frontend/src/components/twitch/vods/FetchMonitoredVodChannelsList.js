@@ -1,14 +1,6 @@
-import axios from 'axios';
+import API from '../../navigation/API';
 
-const fetchMonitoredVodChannelsList = async (username, authKey) => {
-  return await axios
-    .get(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/preferences`, {
-      params: {
-        username: username,
-        authkey: authKey,
-      },
-    })
-    .then((res) => res?.data)
-    .catch((err) => console.error(err));
-};
+const fetchMonitoredVodChannelsList = async (username, authKey) =>
+  await API.getMonitoredVodChannelsList();
+
 export default fetchMonitoredVodChannelsList;

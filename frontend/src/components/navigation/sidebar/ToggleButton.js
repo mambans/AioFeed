@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
-import axios from 'axios';
+import React, { useState, useRef, useContext } from 'react';
 
 import { StyledToggleButton } from './StyledComponents';
-import { getCookie } from '../../../util/Utils';
 import ToolTip from '../../sharedComponents/ToolTip';
+import AccountContext from '../../account/AccountContext';
+import API from '../API';
 
 const ToggleButton = ({
   setEnable,
@@ -19,11 +19,12 @@ const ToggleButton = ({
 }) => {
   const [checked, setChecked] = useState(enabled || false);
   const timeout = useRef();
+  const { twitchToken, youtubeToken } = useContext(AccountContext);
 
   const tokensForDomains = {
-    Twitch: getCookie(`Twitch-access_token`),
-    Youtube: getCookie(`Youtube-access_token`),
-    Favorites: getCookie(`Twitch-access_token`) || getCookie(`Youtube-access_token`),
+    Twitch: twitchToken,
+    Youtube: youtubeToken,
+    Favorites: twitchToken || youtubeToken,
   };
 
   const anTokenExists = Boolean(tokenExists || tokensForDomains[serviceName]);
@@ -34,14 +35,7 @@ const ToggleButton = ({
 
     clearTimeout(timeout.current);
     timeout.current = setTimeout(async () => {
-      await axios
-        .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/soft-update`, {
-          username: getCookie(`AioFeed_AccountName`),
-          columnValue: { Enabled: !checked },
-          columnName: `${serviceName}Preferences`,
-          authkey: getCookie(`AioFeed_AuthKey`),
-        })
-        .catch((e) => console.error(e));
+      await API.softUpdateAccount(`${serviceName}Preferences`, { Enabled: !checked });
     }, 2500);
 
     if (scrollIntoView && !checked === true) {

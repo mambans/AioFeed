@@ -1,16 +1,15 @@
 import React, { useContext, useRef, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import axios from 'axios';
 
 import useClicksOutside from '../../../hooks/useClicksOutside';
 import { StyledListContainer, ListItems, OpenListBtn, CloseListBtn } from './StyledComponents';
 import './CustomFilter.scss';
-import { getCookie } from '../../../util/Utils';
 import CustomFilterContext from './CustomFilterContext';
 
 import { Portal } from 'react-portal';
 import { TransparentButton } from '../../sharedComponents/sharedStyledComponents';
+import API from '../../navigation/API';
 
 const CustomFilters = ({
   channel,
@@ -163,13 +162,7 @@ export const Row = ({
 
       clearTimeout(uploadNewFiltersTimer.current);
       uploadNewFiltersTimer.current = setTimeout(() => {
-        axios
-          .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/customfilters`, {
-            username: getCookie(`AioFeed_AccountName`),
-            filtesObj: newFilters,
-            authkey: getCookie(`AioFeed_AuthKey`),
-          })
-          .catch((e) => console.error(e));
+        API.addCustomfilters(newFilters);
       }, 5000);
 
       return newFilters;

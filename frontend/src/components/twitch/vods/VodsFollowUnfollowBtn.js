@@ -1,7 +1,6 @@
 import { MdVideoCall } from 'react-icons/md';
 import { MdVideocam } from 'react-icons/md';
 import { MdVideocamOff } from 'react-icons/md';
-import axios from 'axios';
 import React, { useState, useContext } from 'react';
 
 import AccountContext from './../../account/AccountContext';
@@ -11,6 +10,7 @@ import VodsContext from './VodsContext';
 import FetchSingelChannelVods from './FetchSingelChannelVods';
 import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../sharedComponents/ToolTip';
+import API from '../../navigation/API';
 
 /**
  * @param {String} channel - channel name
@@ -59,13 +59,7 @@ const VodsFollowUnfollowBtn = ({
 
       setVods(newVodVideos);
 
-      await axios
-        .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/vodchannels`, {
-          username: username,
-          authkey: authKey,
-          channels: [...vodChannels],
-        })
-        .catch((err) => console.error(err));
+      await API.updateVodChannels(vodChannels);
     } catch (e) {
       console.log(e.message);
     }

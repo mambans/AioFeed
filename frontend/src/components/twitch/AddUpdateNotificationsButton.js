@@ -1,14 +1,13 @@
 import { TiFlashOutline } from 'react-icons/ti';
 import { TiFlash } from 'react-icons/ti';
 import { IoIosFlashOff } from 'react-icons/io';
-import axios from 'axios';
 import React, { useState, useContext, useRef } from 'react';
 
-import AccountContext from './../account/AccountContext';
 import { VodAddRemoveButton } from './../sharedComponents/sharedStyledComponents';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import VodsContext from './vods/VodsContext';
 import ToolTip from '../sharedComponents/ToolTip';
+import API from '../navigation/API';
 
 export const removeChannel = async ({
   channel,
@@ -20,16 +19,11 @@ export const removeChannel = async ({
   try {
     const channelsSets = new Set(updateNotischannels || []);
     channelsSets.delete(channel?.toLowerCase());
+    const newChannels = [...channelsSets];
 
-    setUpdateNotischannels([...channelsSets]);
+    setUpdateNotischannels(newChannels);
 
-    await axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/updatechannels`, {
-        username: username,
-        authkey: authKey,
-        channels: [...channelsSets],
-      })
-      .catch((error) => console.error(error));
+    await API.addUdateChannels(newChannels);
   } catch (e) {
     console.log(e.message);
   }
@@ -50,7 +44,6 @@ const AddUpdateNotificationsButton = ({
   show = true,
 }) => {
   const { updateNotischannels, setUpdateNotischannels } = useContext(VodsContext);
-  const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
   const updateNotificationEnabled = updateNotischannels?.includes(channel?.toLowerCase());
 
@@ -59,19 +52,14 @@ const AddUpdateNotificationsButton = ({
   useEventListenerMemo('mouseenter', handleMouseOver, vodButton.current);
   useEventListenerMemo('mouseleave', handleMouseOut, vodButton.current);
 
-  async function addChannel() {
+  async function addChannel(channel) {
     try {
       const existing = new Set(updateNotischannels || []);
       const newChannels = [...existing.add(channel?.toLowerCase())];
 
       setUpdateNotischannels(newChannels);
-      await axios
-        .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/updatechannels`, {
-          username: username,
-          authkey: authKey,
-          channels: newChannels,
-        })
-        .catch((error) => console.error(error));
+
+      await API.addUdateChannels(newChannels);
     } catch (error) {
       console.log('error', error);
     }
@@ -108,10 +96,8 @@ const AddUpdateNotificationsButton = ({
                 channel,
                 updateNotischannels,
                 setUpdateNotischannels,
-                username,
-                authKey,
               })
-            : addChannel({ channel, username, authKey })
+            : addChannel({ channel })
         }
       >
         {updateNotificationEnabled ? (

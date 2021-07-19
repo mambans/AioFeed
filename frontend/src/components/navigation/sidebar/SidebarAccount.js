@@ -7,7 +7,6 @@ import { FiSidebar } from 'react-icons/fi';
 import { TiFlash } from 'react-icons/ti';
 import { AiOutlineDisconnect } from 'react-icons/ai';
 
-import { getCookie } from '../../../util/Utils';
 import AccountContext from './../../account/AccountContext';
 import ClearAllAccountCookiesStates from './ClearAllAccountCookiesStates';
 import DeleteAccountButton from './DeleteAccountButton';
@@ -28,10 +27,13 @@ import { TwitchContext } from '../../twitch/useToken';
 import { YoutubeContext } from '../../youtube/useToken';
 import FeedSizeSlider from './FeedSizeSlider';
 import AccountDetails from './AccountDetails';
+import NavigationContext from '../NavigationContext';
 
 const SidebarAccount = () => {
-  const { setUsername, setTwitchToken, setYoutubeToken, youtubeToken } =
+  const { setUsername, setTwitchToken, setYoutubeToken, youtubeToken, twitchToken } =
     useContext(AccountContext) || {};
+  const { setRenderModal } = useContext(NavigationContext);
+
   const {
     setAutoRefreshEnabled,
     autoRefreshEnabled,
@@ -45,7 +47,7 @@ const SidebarAccount = () => {
   const { youtubeVideoHoverEnable, setYoutubeVideoHoverEnable } = useContext(YoutubeContext) || {};
   const { showTwitchSidebar, setShowTwitchSidebar, ...feedProps } = useContext(FeedsContext) || {};
 
-  const logout = () => ClearAllAccountCookiesStates(setUsername);
+  const logout = () => ClearAllAccountCookiesStates(setUsername, setRenderModal);
 
   const domainColors = {
     Twitch: 'rgb(169, 112, 255)',
@@ -58,7 +60,7 @@ const SidebarAccount = () => {
     {
       serviceName: 'Twitch',
       icon: <FaTwitch size={24} color={domainColors.Twitch} />,
-      tooltip: getCookie(`Twitch-access_token`)
+      tooltip: twitchToken
         ? (feedProps.enableTwitch ? 'Disable ' : 'Enable ') + ` Twitch feed`
         : `Need to connect/authenticate with a Twitch account first.`,
     },
@@ -72,17 +74,17 @@ const SidebarAccount = () => {
     {
       serviceName: 'Youtube',
       icon: <FaYoutube size={24} color={domainColors.Youtube} />,
-      tooltip: getCookie(`Youtube-access_token`)
+      tooltip: youtubeToken
         ? (feedProps.enableYoutube ? 'Disable ' : 'Enable ') + ` Twitch feed`
         : `Need to connect/authenticate with a Youtube account first.`,
     },
     {
       serviceName: 'TwitchVods',
       icon: <MdVideocam size={24} color={domainColors.Twitch} />,
-      tooltip: getCookie(`Twitch-access_token`)
+      tooltip: twitchToken
         ? (feedProps.enableTwitchVods ? 'Disable ' : 'Enable ') + ` Twitch feed`
         : `Need to connect/authenticate with a Twitch account first.`,
-      tokenExists: getCookie(`Twitch-access_token`),
+      tokenExists: twitchToken,
     },
     {
       serviceName: 'Favorites',
@@ -126,7 +128,7 @@ const SidebarAccount = () => {
             label='Twitch auto-refresh (25s)'
             serviceName='Twitch'
             tooltip={
-              getCookie(`Twitch-access_token`)
+              twitchToken
                 ? (autoRefreshEnabled ? 'Disable ' : 'Enable ') + `Twitch auto refresh`
                 : `Need to connect/authenticate with a Twitch account first.`
             }
@@ -138,7 +140,7 @@ const SidebarAccount = () => {
             label='Twitch sidebar'
             serviceName='Twitch'
             tooltip={
-              getCookie(`Twitch-access_token`)
+              twitchToken
                 ? (showTwitchSidebar ? 'Hide ' : 'Show ') + `Twitch Sidebar`
                 : `Need to connect/authenticate with a Twitch account first.`
             }
@@ -150,7 +152,7 @@ const SidebarAccount = () => {
             label='Twitch update notifications'
             serviceName='Twitch'
             tooltip={
-              getCookie(`Twitch-access_token`)
+              twitchToken
                 ? (isEnabledUpdateNotifications ? 'Disable ' : 'Enable ') +
                   `notifications for when streams title or game changes`
                 : `Need to connect/authenticate with a Twitch account first.`
@@ -163,7 +165,7 @@ const SidebarAccount = () => {
             label='Twitch offline notifications'
             serviceName='Twitch'
             tooltip={
-              getCookie(`Twitch-access_token`)
+              twitchToken
                 ? (isEnabledOfflineNotifications ? 'Disable ' : 'Enable ') +
                   `notifications for when streams go offline`
                 : `Need to connect/authenticate with a Twitch account first.`
@@ -176,7 +178,7 @@ const SidebarAccount = () => {
             label='Twitch hover-video'
             serviceName='Twitch'
             tooltip={
-              getCookie(`Twitch-access_token`)
+              twitchToken
                 ? (twitchVideoHoverEnable ? 'Disable ' : 'Enable ') + `live video preview on hover`
                 : `Need to connect/authenticate with a Youtube account first.`
             }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes, Navigate, useParams } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 
 import ChannelPage from './../twitch/channelPage';
 import NoMatch from '../routes/NoMatch';
@@ -10,8 +10,6 @@ import SharedVideoPlayer from '../sharedComponents/SharedVideoPlayer';
 import StandaloneChat from './player/StandaloneChat';
 
 const TwitchRoutes = () => {
-  const channelName = useParams()?.channelName;
-
   return (
     <Routes>
       <Route path='' element={<Player />} />
@@ -24,10 +22,11 @@ const TwitchRoutes = () => {
       <Navigate path='videos' to='../page' replace />
       <Navigate path='videos/all' to={`../../page`} replace />
 
-      <Route path='videos/:videoId' element={<SharedVideoPlayer channelNameAttr={channelName} />} />
+      <Route path='videos/:videoId' element={<SharedVideoPlayer />} />
       <Route path='clip/:videoId' element={<PlayerClip />} />
       <Route path='*' element={<NoMatch />} />
     </Routes>
   );
 };
+
 export default TwitchRoutes;

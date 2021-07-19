@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { getLocalstorage } from '../../../util/Utils';
+import API from '../../navigation/API';
 
 const addVodChannel = async ({
   channel,
@@ -14,13 +14,7 @@ const addVodChannel = async ({
 
     setChannels([...newChannels]);
 
-    await axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/vodchannels`, {
-        username: username,
-        authkey: authKey,
-        channels: newChannels,
-      })
-      .catch((error) => console.error(error));
+    await API.updateVodChannels(newChannels);
 
     return newChannels;
   } catch (e) {

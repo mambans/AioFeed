@@ -1,22 +1,11 @@
-import axios from 'axios';
+import { AddCookie } from '../../util/Utils';
+import API from '../navigation/API';
 
-import { AddCookie, getCookie } from '../../util/Utils';
-
-const autoReauthenticate = async ({ authKey = getCookie(`AioFeed_AuthKey`) }) => {
-  return await axios
-    .post(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/youtube/token`, {
-      username: getCookie('AioFeed_AccountName'),
-      authkey: authKey,
-    })
-    .then(async (res) => {
-      console.log('YouTube: New Access token fetched');
-      AddCookie('Youtube-access_token', res.data.access_token);
-      return res.data.access_token;
-    })
-    .catch((e) => {
-      console.error(e);
-      throw new Error(e.message);
-    });
+const autoReauthenticate = async () => {
+  return await API.getYoutubeTokens().then(async (res) => {
+    AddCookie('Youtube-access_token', res.access_token);
+    return res.access_token;
+  });
 };
 
 export default autoReauthenticate;

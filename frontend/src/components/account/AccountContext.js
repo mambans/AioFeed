@@ -8,40 +8,53 @@ export const AccountProvider = ({ children }) => {
   const [username, setUsername] = useState(getCookie(`AioFeed_AccountName`));
   const [profileImage, setProfileImage] = useState(getCookie(`AioFeed_AccountProfileImg`));
   const [authKey, setAuthKey] = useState(getCookie(`AioFeed_AuthKey`));
-  const [twitchToken, setTwitchToken] = useState(getCookie(`Twitch-access_token`));
-  const [refreshToken, setRefreshToken] = useState(getCookie(`Twitch-refresh_token`));
-  const [twitchUserId, setTwitchUserId] = useState(getCookie(`Twitch-userId`));
-  const [twitchUsername, setTwitchUsername] = useState(getCookie(`Twitch-username`));
-  const [twitchProfileImg, setTwitchProfileImg] = useState(getCookie(`Twitch-profileImg`));
-  const [youtubeToken, setYoutubeToken] = useState(getCookie(`Youtube-access_token`));
-  const [youtubeUsername, setYoutubeUsername] = useState(getCookie(`YoutubeUsername`));
-  const [youtubeProfileImg, setYoutubeProfileImg] = useState(getCookie(`YoutubeProfileImg`));
+
+  const [twitchPreferences, setTwitchPreferences] = useState({
+    Token: getCookie(`Twitch-access_token`),
+    Refresh_token: getCookie(`Twitch-refresh_token`),
+    Id: getCookie(`Twitch-userId`),
+    Username: getCookie(`Twitch-username`),
+    Profile: getCookie(`Twitch-profileImg`),
+  });
+
+  const [youtubePreferences, setYoutubePreferences] = useState({
+    Token: getCookie(`Youtube-access_token`),
+    Username: getCookie(`YoutubeUsername`),
+    Profile: getCookie(`YoutubeProfileImg`),
+  });
+
+  const setTwitchPref = (n, v) => setTwitchPreferences((c) => ({ ...c, [n]: v }));
+  const setYoutubePref = (n, v) => setYoutubePreferences((c) => ({ ...c, [n]: v }));
 
   return (
     <AccountContext.Provider
       value={{
-        twitchToken,
-        setTwitchToken,
-        youtubeToken,
-        setYoutubeToken,
+        setTwitchPreferences,
+
         authKey,
         setAuthKey,
         username,
         setUsername,
         profileImage,
         setProfileImage,
-        twitchUserId,
-        setTwitchUserId,
-        twitchUsername,
-        setTwitchUsername,
-        twitchProfileImg,
-        setTwitchProfileImg,
-        refreshToken,
-        setRefreshToken,
-        youtubeUsername,
-        setYoutubeUsername,
-        youtubeProfileImg,
-        setYoutubeProfileImg,
+
+        twitchToken: twitchPreferences.Token,
+        setTwitchToken: (v) => setTwitchPref('Token', v),
+        twitchUserId: twitchPreferences.Id,
+        setTwitchUserId: (v) => setTwitchPref('Id', v),
+        twitchUsername: twitchPreferences.Username,
+        setTwitchUsername: (v) => setTwitchPref('Username', v),
+        twitchProfileImg: twitchPreferences.Profile,
+        setTwitchProfileImg: (v) => setTwitchPref('Profile', v),
+        refreshToken: twitchPreferences.Refresh_token,
+        setRefreshToken: (v) => setTwitchPref('Refresh_token', v),
+
+        youtubeToken: youtubePreferences.Token,
+        setYoutubeToken: (v) => setYoutubePref('Token', v),
+        youtubeUsername: youtubePreferences.Username,
+        setYoutubeUsername: (v) => setYoutubePref('Username', v),
+        youtubeProfileImg: youtubePreferences.Profile,
+        setYoutubeProfileImg: (v) => setYoutubePref('Profile', v),
       }}
     >
       {children}

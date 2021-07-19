@@ -41,7 +41,7 @@ const TwitchBaseAuthUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${pro
 const YoutubeBaseAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/youtube/callback&response_type=code&scope=https://www.googleapis.com/auth/youtube&access_type=offline`;
 
 const ReAuthenticateButton = ({ disconnect, serviceName, style }) => {
-  const { twitchUsername, twitchProfileImg, youtubeUsername, youtubeProfileImg } =
+  const { twitchUsername, twitchProfileImg, youtubeUsername, youtubeProfileImg, youtubeToken } =
     useContext(AccountContext);
 
   const AuthButton = {
@@ -73,7 +73,7 @@ const ReAuthenticateButton = ({ disconnect, serviceName, style }) => {
         )}
       </>
     ),
-    Youtube: !getCookie(`Youtube-access_token`) ? (
+    Youtube: !youtubeToken ? (
       <StyledConnectYoutube
         id='connect'
         title='Authenticate/Connect'

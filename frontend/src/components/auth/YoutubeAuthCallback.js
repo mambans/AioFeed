@@ -7,11 +7,12 @@ import AlertHandler from './../alert';
 import AccountContext from './../account/AccountContext';
 import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from '../LoadingIndicator';
+import API from '../navigation/API';
 
 const YoutubeAuthCallback = () => {
   const { setVisible, setFooterVisible } = useContext(NavigationContext);
   const [error, setError] = useState();
-  const { username, authKey } = useContext(AccountContext);
+  const { username } = useContext(AccountContext);
   const location = useLocation();
 
   const getAccessToken = useCallback(async () => {
@@ -28,19 +29,11 @@ const YoutubeAuthCallback = () => {
       .find((part) => part.includes('code'))
       .replace('code=', '');
 
-    const tokens = await axios
-      .post(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/youtube/token`, {
-        code: codeFromUrl,
-        username: getCookie('AioFeed_AccountName'),
-        authkey: authKey,
-      })
-      .then(async (res) => {
-        AddCookie('Youtube-access_token', res.data.access_token);
-        AddCookie('Youtube-access_token_expire', res.data.expires_in);
-
-        return { access_token: res.data.access_token, refresh_token: res.data.refresh_token };
-      })
-      .catch((e) => console.error(e));
+    const tokens = await API.getYoutubeTokens(codeFromUrl).then(async (res) => {
+      AddCookie('Youtube-access_token', res.data.access_token);
+      AddCookie('Youtube-access_token_expire', res.data.expires_in);
+      return res;
+    });
 
     const MyYoutube = await axios
       .get(
@@ -63,23 +56,16 @@ const YoutubeAuthCallback = () => {
       });
 
     if (username) {
-      await axios
-        .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
-          username: username,
-          columnName: 'YoutubePreferences',
-          columnValue: {
-            Username: MyYoutube.Username,
-            Profile: MyYoutube.ProfileImg,
-            Token: tokens.access_token,
-            Refresh_token: tokens.refresh_token,
-          },
-          authkey: getCookie(`AioFeed_AuthKey`),
-        })
-        .catch((e) => console.error(e));
+      await API.updateAccount('YoutubePreferences', {
+        Username: MyYoutube.Username,
+        Profile: MyYoutube.ProfileImg,
+        Token: tokens.access_token,
+        Refresh_token: tokens.refresh_token,
+      });
     }
 
     return { access_token: tokens.access_token, refresh_token: tokens.refresh_token, ...MyYoutube };
-  }, [username, location.search, authKey]);
+  }, [username, location.search]);
 
   useEffect(() => {
     setVisible(false);

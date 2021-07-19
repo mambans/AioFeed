@@ -28,7 +28,7 @@ const FollowUnfollowBtn = ({
 
   const UnfollowStream = async () => {
     await validateToken().then(async () => {
-      await API.deleteFollow({
+      await API.deleteFollow({  
         params: {
           from_id: twitchUserId,
           to_id: id,
@@ -70,9 +70,7 @@ const FollowUnfollowBtn = ({
             if (refreshStreams) refreshStreams();
           }
         })
-        .catch((er) => {
-          console.error('followStream -> er', er);
-        });
+        .catch((er) => console.error('followStream -> er', er));
     });
   }
 

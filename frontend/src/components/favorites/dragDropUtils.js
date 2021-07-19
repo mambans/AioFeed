@@ -1,7 +1,6 @@
-import axios from 'axios';
 import { debounce } from 'lodash';
 
-import { getCookie } from '../../util/Utils';
+import API from '../navigation/API';
 
 export const parseNumberAndString = (value) => {
   if (typeof value === 'number') return value;
@@ -25,14 +24,7 @@ export const uploadNewList = debounce(
 
     setLists((curr) => ({ ...curr, [listName]: newListObj }));
 
-    await axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
-        username: getCookie(`AioFeed_AccountName`),
-        videosObj: newListObj,
-        listName: listName,
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .catch((e) => console.error(e));
+    API.updateSavedList(listName, newListObj);
   },
   5000,
   { leading: false, trailing: true }

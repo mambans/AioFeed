@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useState, useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
@@ -10,6 +9,7 @@ import useInput from './../../../hooks/useInput';
 import SidebarAlert from './Alert';
 import { AddCookie } from '../../../util/Utils';
 import AlertHandler from './../../alert';
+import API from '../API';
 
 const CreateAccount = () => {
   document.title = 'AioFeed | Create Account';
@@ -45,12 +45,7 @@ const CreateAccount = () => {
     setError(null);
 
     try {
-      await axios
-        .post(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/create`, {
-          username: userName,
-          email: email,
-          password: password,
-        })
+      await API.createAccount(userName, password, email)
         .then((res) => {
           AddCookie('AioFeed_AccountName', res.data.Username);
           AddCookie('AioFeed_AccountEmail', res.data.Email);

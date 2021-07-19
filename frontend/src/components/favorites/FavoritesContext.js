@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { getCookie } from '../../util/Utils';
-import axios from 'axios';
 import useSyncedLocalState from '../../hooks/useSyncedLocalState';
+import API from '../navigation/API';
 
 const FavoritesContext = React.createContext();
 
@@ -11,17 +11,8 @@ export const FavoritesProvider = ({ children }) => {
 
   const fetchAllLists = useCallback(async () => {
     setIsLoading(true);
-    const Lists = await axios
-      .get(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
-        params: {
-          username: getCookie(`AioFeed_AccountName`),
-        },
-      })
-      .then((res) => {
-        delete res.data.Item?.Username;
-        return res.data.Item;
-      })
-      .catch((e) => console.error(e));
+    const Lists = await API.getSavedList();
+
     if (Lists) setLists(Lists);
   }, [setLists]);
 

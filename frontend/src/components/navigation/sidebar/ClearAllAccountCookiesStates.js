@@ -1,6 +1,6 @@
 import { RemoveCookie } from '../../../util/Utils';
 
-const clearAllAccountCookiesStates = (setMainState) => {
+const clearAllAccountCookiesStates = (setUsername, setRenderModal) => {
   RemoveCookie('AioFeed_AccountName');
   RemoveCookie('AioFeed_AccountEmail');
   RemoveCookie('AioFeed_AccountProfileImg');
@@ -12,7 +12,6 @@ const clearAllAccountCookiesStates = (setMainState) => {
   RemoveCookie('Twitch-username');
   RemoveCookie('Twitch-profileImg');
   RemoveCookie('Twitch-myState');
-  localStorage.removeItem('Twitch-ChannelsUpdateNotifs');
 
   localStorage.removeItem('TwitchVods-Channels');
 
@@ -34,7 +33,8 @@ const clearAllAccountCookiesStates = (setMainState) => {
   localStorage.removeItem('Feed-size');
   localStorage.removeItem('ChannelsUpdateNotifs');
 
-  setMainState();
+  setUsername();
+  setRenderModal('login');
 };
 
 export default clearAllAccountCookiesStates;

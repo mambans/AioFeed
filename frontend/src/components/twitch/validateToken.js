@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { AddCookie, getCookie } from '../../util/Utils';
+import { getCookie } from '../../util/Utils';
+import API from '../navigation/API';
 import reauthenticate from './reauthenticate';
 
 const TWITCH_CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;
@@ -11,20 +12,7 @@ const validateFunction = async (token) =>
     },
   });
 
-const fetchAppAccessToken = async () => {
-  return await axios
-    .get('https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/app/token')
-    .then(({ data: { access_token, expires_in } }) => {
-      const expireData = new Date(expires_in * 1000);
-      AddCookie('Twitch-app_token', access_token, expireData);
-      return access_token;
-    })
-    .catch((error) => {
-      console.error('error: ', error);
-      console.error('No User or App access tokens found.');
-      // throw new Error('No User or App access tokens found.');
-    });
-};
+const fetchAppAccessToken = async () => await API.getAppAccessToken();
 
 const validateToken = async () => {
   const access_token = getCookie('Twitch-access_token');

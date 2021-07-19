@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getCookie, RemoveCookie } from '../../util/Utils';
+import API from '../navigation/API';
 
 const disconnectTwitch = async ({ setTwitchToken = () => {}, setEnableTwitch = () => {} }) => {
   await axios
@@ -15,21 +16,11 @@ const disconnectTwitch = async ({ setTwitchToken = () => {}, setEnableTwitch = (
   RemoveCookie('Twitch-userId');
   RemoveCookie('Twitch-username');
   RemoveCookie('Twitch-profileImg');
-  RemoveCookie('TwitchVods_FeedEnabled');
   RemoveCookie('Twitch-myState');
-  RemoveCookie('Twitch_AutoRefresh');
 
   setTwitchToken();
   setEnableTwitch(false);
 
-  await axios
-    .delete(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/twitch/token`, {
-      data: {
-        username: getCookie('AioFeed_AccountName'),
-        authkey: getCookie(`AioFeed_AuthKey`),
-      },
-    })
-    .then(() => console.log(`Successfully disconnected from Twitch`))
-    .catch((e) => console.error(e));
+  await API.deleteTwitchToken();
 };
 export default disconnectTwitch;

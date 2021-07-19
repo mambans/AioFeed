@@ -1,5 +1,4 @@
 import { Form, Button } from 'react-bootstrap';
-import axios from 'axios';
 import React, { useState, useContext } from 'react';
 
 import { AddCookie } from '../../../util/Utils';
@@ -9,6 +8,9 @@ import LoadingIndicator from './../../LoadingIndicator';
 import NavigationContext from './../NavigationContext';
 import Themeselector from '../../themes/Themeselector';
 import useInput from './../../../hooks/useInput';
+import FeedsContext from '../../feed/FeedsContext';
+import VodsContext from '../../twitch/vods/VodsContext';
+import API from '../API';
 
 const Login = () => {
   document.title = 'AioFeed | Login';
@@ -16,7 +18,17 @@ const Login = () => {
   const [validatedUsername, setValidatedUsername] = useState(true);
   const [validatedPassword, setValidatedPassword] = useState(true);
   const { setRenderModal } = useContext(NavigationContext);
-  const { setUsername } = useContext(AccountContext);
+  const { setTwitterLists } = useContext(FeedsContext);
+  const { setChannels } = useContext(VodsContext);
+  const {
+    setUsername,
+    setProfileImage,
+    setAuthKey,
+    setTwitchPreferences,
+    setYoutubeToken,
+    setYoutubeUsername,
+    setYoutubeProfileImg,
+  } = useContext(AccountContext);
 
   // eslint-disable-next-line no-unused-vars
   const { value: username, bind: bindUsername, reset: resetUsername } = useInput('');
@@ -37,17 +49,8 @@ const Login = () => {
     }
   };
 
-  function parseBolean(value) {
-    if (value === 'null' || !value) return null;
-    return value;
-  }
-
   async function loginAccount() {
-    await axios
-      .post(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/login`, {
-        username: username,
-        password: password,
-      })
+    await API.login()
       .then((result) => {
         const res = result.data.Attributes;
         if (result.status === 200 && res) {
@@ -63,24 +66,17 @@ const Login = () => {
             AddCookie('Twitch-userId', res.TwitchPreferences.Id);
             AddCookie('Twitch-username', res.TwitchPreferences.Username);
             AddCookie('Twitch-profileImg', res.TwitchPreferences.Profile);
-            AddCookie('Twitch_AutoRefresh', parseBolean(res.TwitchPreferences.AutoRefresh));
-            AddCookie('Twitch_FeedEnabled', parseBolean(res.TwitchPreferences.Enabled));
             localStorage.setItem(
-              'Twitch-ChannelsUpdateNotifs',
+              'ChannelsUpdateNotifs',
               JSON.stringify(res.TwitchPreferences.ChannelsUpdateNotifs)
             );
           }
 
           if (res.TwitchVodsPreferences && Object.keys(res.TwitchVodsPreferences).length >= 1) {
-            AddCookie('TwitchVods_FeedEnabled', res.TwitchVodsPreferences.Enabled);
-            localStorage.setItem(
-              'TwitchVods-Channels',
-              JSON.stringify(res.TwitchVodsPreferences.Channels)
-            );
+            setChannels(res.TwitchVodsPreferences.Channels);
           }
 
           if (res.TwitterPreferences && Object.keys(res.TwitterPreferences).length >= 1) {
-            AddCookie('Twitter_FeedEnabled', res.TwitterPreferences.Enabled);
             localStorage.setItem('Twitter-Lists', JSON.stringify(res.TwitterPreferences.Lists));
           }
 
@@ -92,6 +88,23 @@ const Login = () => {
 
           setTimeout(() => {
             setUsername(res.Username);
+            setProfileImage(res.ProfileImg);
+            setAuthKey(res.AuthKey);
+            if (res.TwitchPreferences && Object.keys(res.TwitchPreferences).length >= 1) {
+              setTwitchPreferences(res.TwitchPreferences);
+            }
+
+            if (res.YoutubePreferences && Object.keys(res.YoutubePreferences).length >= 1) {
+              setYoutubeUsername(res.YoutubePreferences.Username);
+              setYoutubeProfileImg(res.YoutubePreferences.Profile);
+              setYoutubeToken(res.YoutubePreferences.Token);
+            }
+
+            if (res.TwitterPreferences && Object.keys(res.TwitterPreferences).length >= 1) {
+              setTwitterLists(res.TwitterPreferences.Lists);
+            }
+
+            setRenderModal('account');
           }, 500);
         } else {
           console.log(result);

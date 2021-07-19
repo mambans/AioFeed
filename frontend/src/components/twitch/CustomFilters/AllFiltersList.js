@@ -1,7 +1,6 @@
 import React, { useContext, useRef, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import axios from 'axios';
 
 import {
   AllFiltersContainer,
@@ -14,9 +13,9 @@ import {
 } from './StyledComponents';
 import { Row } from './index';
 import './CustomFilter.scss';
-import { getCookie } from '../../../util/Utils';
 import useClicksOutside from '../../../hooks/useClicksOutside';
 import CustomFilterContext from './CustomFilterContext';
+import API from '../../navigation/API';
 
 const AllFiltersListContainer = ({ setOpen, open, uploadNewFiltersTimer }) => {
   const { filters, setFilters } = useContext(CustomFilterContext);
@@ -26,13 +25,7 @@ const AllFiltersListContainer = ({ setOpen, open, uploadNewFiltersTimer }) => {
 
   const clearAllFilters = () => {
     setFilters({});
-    axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/customfilters`, {
-        username: getCookie(`AioFeed_AccountName`),
-        filtesObj: {},
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .catch((e) => console.error(e));
+    API.addCustomfilters({});
   };
 
   return (

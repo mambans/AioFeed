@@ -1,12 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { MdAddCircle } from 'react-icons/md';
-import axios from 'axios';
 
 import { FormButton, FormGroup, Label } from './../StyledComponents';
-import { getCookie } from '../../../util/Utils';
 import { parseNumberAndString } from './../dragDropUtils';
 import FavoritesContext from '../FavoritesContext';
+import API from '../../navigation/API';
 
 const useInput = (initialValue) => {
   const [value, setValue] = useState(initialValue);
@@ -45,14 +44,7 @@ const NewListForm = ({ item }) => {
         .scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
     }, 0);
 
-    await axios
-      .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
-        username: getCookie(`AioFeed_AccountName`),
-        videosObj: newListObj,
-        listName: list_Name,
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .catch((e) => console.error(e));
+    await API.updateSavedList(list_Name, newListObj);
   };
 
   const CheckForNameAvaliability = !Boolean(

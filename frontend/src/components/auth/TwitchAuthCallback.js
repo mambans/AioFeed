@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 
 import { getCookie } from '../../util/Utils';
@@ -8,6 +7,7 @@ import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from './../LoadingIndicator';
 import { AddCookie } from '../../util/Utils';
 import API from '../twitch/API';
+import aiofeedAPI from '../navigation/API';
 import useToken, { TwitchContext } from '../twitch/useToken';
 
 const TwitchAuthCallback = () => {
@@ -21,11 +21,7 @@ const TwitchAuthCallback = () => {
     async (url) => {
       const authCode = url.searchParams.get('code');
 
-      const requestAccessToken = await axios
-        .put('https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/rerequest/twitch', {
-          authCode: authCode,
-        })
-        .catch((error) => console.log(error));
+      const requestAccessToken = await aiofeedAPI.getTwitchAccessToken(authCode);
 
       const accessToken = requestAccessToken.data.access_token;
       const refreshToken = requestAccessToken.data.refresh_token;
@@ -39,22 +35,15 @@ const TwitchAuthCallback = () => {
           AddCookie('Twitch-profileImg', res.data.data[0].profile_image_url);
 
           if (username) {
-            await axios
-              .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/account/update`, {
-                username: username,
-                columnName: 'TwitchPreferences',
-                columnValue: {
-                  Username: res.data.data[0].login,
-                  Id: res.data.data[0].id,
-                  Profile: res.data.data[0].profile_image_url,
-                  Token: accessToken,
-                  Refresh_token: refreshToken,
-                  AutoRefresh: autoRefreshEnabled,
-                  enabled: true,
-                },
-                authkey: getCookie(`AioFeed_AuthKey`),
-              })
-              .catch((e) => console.error(e));
+            await aiofeedAPI.updateAccount('TwitchPreferences', {
+              Username: res.data.data[0].login,
+              Id: res.data.data[0].id,
+              Profile: res.data.data[0].profile_image_url,
+              Token: accessToken,
+              Refresh_token: refreshToken,
+              AutoRefresh: autoRefreshEnabled,
+              enabled: true,
+            });
           }
 
           return {

@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import axios from 'axios';
 
 import AddVideoExtraData from '../twitch/AddVideoExtraData';
 import API from '../twitch/API';
@@ -13,7 +12,7 @@ import { addVodEndTime } from '../twitch/TwitchUtils';
 import LoadMore from '../sharedComponents/LoadMore';
 import { CenterContext } from '../feed/FeedsCenterContainer';
 import { parseNumberAndString, restructureVideoList, uploadNewList } from './dragDropUtils';
-import { getCookie } from '../../util/Utils';
+import aiofeedAPI from '../navigation/API';
 
 export const fetchListVideos = async ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
   if (list?.items) {
@@ -74,14 +73,7 @@ export const fetchListVideos = async ({ list, ytExistsAndValidated, twitchExists
       };
 
       setTimeout(async () => {
-        await axios
-          .put(`https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod/savedlists`, {
-            username: getCookie(`AioFeed_AccountName`),
-            videosObj: newFilteredIdsListObj,
-            listName: list.name,
-            authkey: getCookie(`AioFeed_AuthKey`),
-          })
-          .catch((e) => console.error(e));
+        await aiofeedAPI.updateSavedList(list.name, newFilteredIdsListObj);
       }, 10000);
     }
     return mergeVideosOrdered;
@@ -167,7 +159,7 @@ const List = ({
               <YoutubeVideoElement
                 listName={list.name}
                 list={list}
-                data-id={video.contentDetails?.upload?.videoId}
+                // data-id={video.contentDetails?.upload?.videoId}
                 video={video}
                 {...dragEvents}
               />
@@ -175,7 +167,7 @@ const List = ({
               <VodElement
                 listName={list.name}
                 list={list}
-                data-id={video.id}
+                // data-id={video.id}
                 data={video}
                 {...dragEvents}
                 vodBtnDisabled={true}
