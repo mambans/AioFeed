@@ -541,6 +541,7 @@ export const VodAddRemoveButton = styled(Button)`
   margin-right: ${({ marginright }) => marginright || 'unset'};
   /* opacity: 0; */
   transition: opacity 250ms, background 250ms, color 250ms, transform 250ms;
+  z-index: 2;
 
   &:hover {
     color: ${({ vodenabled, variant }) =>

@@ -23,8 +23,7 @@ import loginNameFormat from './../loginNameFormat';
 import CustomFilters from '../CustomFilters';
 import ChannelButtonsContainer from './ChannelButtonsContainer';
 import ToolTip from '../../sharedComponents/ToolTip';
-
-const HOVER_DELAY = 100;
+import FavoriteStreamBtn from './FavoriteStreamBtn';
 
 function NewHighlightNoti({ newlyAddedStreams, login }) {
   if (newlyAddedStreams?.includes(login?.toLowerCase())) {
@@ -150,6 +149,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
           </ChannelNameDiv>
           {(location.pathname === '/feed/' || location.pathname === '/feed') && (
             <ChannelButtonsContainer className='buttonsContainer'>
+              <FavoriteStreamBtn channel={login} />
               <CustomFilters
                 channel={login?.toLowerCase() || user_name}
                 enableFormControll={true}
@@ -201,4 +201,5 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
     </VideoContainer>
   );
 };
+
 export default StreamElement;

@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from 'react';
+
 import FetchMonitoredVodChannelsList from './FetchMonitoredVodChannelsList';
 import AccountContext from '../../account/AccountContext';
 import useSyncedLocalState from '../../../hooks/useSyncedLocalState';
@@ -18,6 +19,8 @@ export const VodsProvider = ({ children, forceMount = false }) => {
     'ChannelsUpdateNotifs',
     []
   );
+  const [favStreams, setFavStreams] = useSyncedLocalState('FavoriteStreams', []);
+
   const location = window.location.pathname?.split('/')[1];
 
   useEffect(() => {
@@ -76,6 +79,8 @@ export const VodsProvider = ({ children, forceMount = false }) => {
         setChannels,
         updateNotischannels,
         setUpdateNotischannels,
+        favStreams,
+        setFavStreams,
       }}
     >
       {children}

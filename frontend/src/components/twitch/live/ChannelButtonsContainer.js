@@ -31,7 +31,7 @@ const ChannelButtonsContainer = ({ children, className, forceOpen, style, static
   const [open, setOpen] = useState(forceOpen);
   const childrenWithProps = React.Children.map(children, (child) => {
     if (React.isValidElement(child)) {
-      return React.cloneElement(child, { setOpenParent: setOpen, openParent: open });
+      return React.cloneElement(child, { setOpenParent: setOpen, openParent: open, size: '1.5em' });
     }
     return child;
   });

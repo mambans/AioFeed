@@ -43,6 +43,8 @@ import loginNameFormat from '../loginNameFormat';
 import useToken from '../useToken';
 import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
 import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
+import FavoriteStreamBtn from '../live/FavoriteStreamBtn';
+
 const ChannelPage = () => {
   const { passedChannelData } = useLocation().state || {};
   const { channelName } = useParams();
@@ -442,6 +444,11 @@ const ChannelPage = () => {
                             show={channelInfo}
                             channelName={channelName}
                             id={channelInfo._id}
+                          />
+                          <FavoriteStreamBtn
+                            channel={channelInfo.name || channelName}
+                            show={Boolean(channelInfo)}
+                            marginright={'5px'}
                           />
                           <VodsFollowUnfollowBtn
                             size={28}

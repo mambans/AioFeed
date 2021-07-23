@@ -11,6 +11,7 @@ import AddVideoExtraData from '../AddVideoExtraData';
 import loginNameFormat from '../loginNameFormat';
 import CustomFilters from '../CustomFilters';
 import ChannelButtonsContainer from '../live/ChannelButtonsContainer';
+import FavoriteStreamBtn from '../live/FavoriteStreamBtn';
 
 const ChannelListElement = ({
   data,
@@ -94,13 +95,21 @@ const ChannelListElement = ({
       </Link>
       {/* <div className='ButtonContianer'> */}
       <ChannelButtonsContainer staticOpen={true}>
-        <CustomFilters channel={channel?.user_name.toLowerCase()} />
+        <FavoriteStreamBtn channel={channel?.user_name} show={followingStatus} />
+        <CustomFilters
+          channel={channel?.user_name.toLowerCase()}
+          show={followingStatus}
+          style={{ margin: '0' }}
+        />
         <VodsFollowUnfollowBtn
           show={showVodBtn}
           channel={channel?.user_name || searchInput}
           channelId={channel?.user_id}
         />
-        <AddUpdateNotificationsButton channel={channel?.user_name || searchInput} />
+        <AddUpdateNotificationsButton
+          channel={channel?.user_name || searchInput}
+          show={followingStatus}
+        />
         <FollowUnfollowBtn
           style={{ marginLeft: '5px', marginRight: '0px', padding: '0' }}
           size={22}

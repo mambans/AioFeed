@@ -6,18 +6,19 @@ import { Container } from '../StyledComponents';
 import LoadingBoxes from '../LoadingBoxes';
 import AlertHandler from './../../alert';
 import { CenterContext } from '../../feed/FeedsCenterContainer.js';
+import VodsContext from '../vods/VodsContext.js';
 
 const Twitch = ({ data }) => {
-  const {
-    loaded,
-    error,
-    liveStreams,
-    thumbnailRefresh,
-    newlyAddedStreams,
-    REFRESH_RATE,
-    refreshAfterUnfollowTimer,
-  } = data;
+  const { loaded, error, liveStreams, newlyAddedStreams, refreshAfterUnfollowTimer } = data;
   const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext);
+  const { favStreams } = useContext(VodsContext);
+
+  const favoriteStreams = liveStreams.filter((c) =>
+    favStreams.includes(c.user_name?.toLowerCase())
+  );
+  const nonFavoriteStreams = liveStreams.filter(
+    (c) => !favStreams.includes(c.user_name?.toLowerCase())
+  );
 
   const refresh = async () => await data.refresh();
 
@@ -39,27 +40,48 @@ const Twitch = ({ data }) => {
     );
   }
 
+  const streamEleAttrs = {
+    refreshAfterUnfollowTimer,
+    refresh,
+    newlyAddedStreams,
+  };
+
+  const cssTransitionAttrs = {
+    timeout: 750,
+    unmountOnExit: true,
+    appear: true,
+  };
+
   return (
     <Container style={{ margin: '0' }}>
       <TransitionGroup component={null}>
-        {liveStreams?.map((stream) => (
+        {favoriteStreams?.map((stream) => (
           <CSSTransition
             key={stream.user_id}
-            timeout={750}
             classNames={feedVideoSizeProps.transition || 'videoFadeSlide'}
-            // classNames={'fade-750ms'}
-            unmountOnExit
-            appear
+            {...cssTransitionAttrs}
           >
             <StreamEle
               key={stream.id}
-              thumbnailRefresh={thumbnailRefresh}
               data={stream}
-              newlyAddedStreams={newlyAddedStreams}
               newlyAdded={stream.newlyAdded}
-              refresh={refresh}
-              REFRESH_RATE={REFRESH_RATE}
-              refreshAfterUnfollowTimer={refreshAfterUnfollowTimer}
+              {...streamEleAttrs}
+            />
+          </CSSTransition>
+        ))}
+      </TransitionGroup>
+      <TransitionGroup component={null}>
+        {nonFavoriteStreams?.map((stream) => (
+          <CSSTransition
+            key={stream.user_id}
+            classNames={feedVideoSizeProps.transition || 'videoFadeSlide'}
+            {...cssTransitionAttrs}
+          >
+            <StreamEle
+              key={stream.id}
+              data={stream}
+              newlyAdded={stream.newlyAdded}
+              {...streamEleAttrs}
             />
           </CSSTransition>
         ))}
