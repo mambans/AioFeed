@@ -17,6 +17,8 @@ const CustomFilters = ({
   setOpenParent = () => {},
   openParent,
   videoContainerRef,
+  show = true,
+  style,
 }) => {
   const { setFilters } = useContext(CustomFilterContext) || {};
   const uploadNewFiltersTimer = useRef();
@@ -24,11 +26,13 @@ const CustomFilters = ({
   const OnClick = () => setOpenParent((cr) => !cr);
   const videoContainerPosotion = videoContainerRef?.current?.getBoundingClientRect();
 
+  if (!show) return null;
+
   return (
     <>
       {setFilters && (
         <TransparentButton ref={btnRef} onClick={OnClick}>
-          <OpenListBtn show={String(openParent)} size='1.4em' />
+          <OpenListBtn show={String(openParent)} size='1.4em' style={style} />
         </TransparentButton>
       )}
 

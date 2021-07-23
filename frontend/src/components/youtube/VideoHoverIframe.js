@@ -1,25 +1,31 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import FeedsContext from '../feed/FeedsContext';
 import { YoutubeIframe } from './StyledComponents';
+import { YoutubeContext } from './useToken';
 
-const VideoHoverIframe = (data) => {
+const HOVER_DELAY = 500;
+
+const VideoHoverIframe = ({ imageRef, data }) => {
   const { feedVideoSizeProps } = useContext(FeedsContext);
-  const ref = useRef();
-  const videoHoverOutTimer = useRef();
-  data.setIsHovered(true);
+  const { youtubeVideoHoverEnable } = useContext(YoutubeContext);
 
-  useEventListenerMemo('mousenter', handleMouseOver, ref.current);
-  useEventListenerMemo('mouseleave', handleMouseOut, ref.current);
+  const [isHovered, setIsHovered] = useState(false);
+  const videoHoverOutTimer = useRef();
+  const streamHoverTimer = useRef();
+
+  useEventListenerMemo('mouseenter', handleMouseOver, imageRef.current, youtubeVideoHoverEnable);
+  useEventListenerMemo('mouseleave', handleMouseOut, imageRef.current, youtubeVideoHoverEnable);
 
   function handleMouseOver() {
     clearTimeout(videoHoverOutTimer.current);
-    data.setIsHovered(true);
+    streamHoverTimer.current = setTimeout(() => setIsHovered(true), HOVER_DELAY);
   }
 
   function handleMouseOut(event) {
-    data.setIsHovered(false);
+    clearTimeout(streamHoverTimer.current);
+    setIsHovered(false);
     videoHoverOutTimer.current = setTimeout(() => {
       event.target.src = 'about:blank';
     }, 200);
@@ -37,12 +43,17 @@ const VideoHoverIframe = (data) => {
     },
   };
 
-  return (
-    <YoutubeIframe
-      videoId={data.data.contentDetails?.upload?.videoId}
-      opts={opts}
-      id={data.data.contentDetails?.upload?.videoId + '-iframe'}
-    />
-  );
+  if (isHovered) {
+    return (
+      <YoutubeIframe
+        videoId={data.contentDetails?.upload?.videoId}
+        opts={opts}
+        id={data.contentDetails?.upload?.videoId + '-iframe'}
+      />
+    );
+  }
+
+  return null;
 };
+
 export default VideoHoverIframe;

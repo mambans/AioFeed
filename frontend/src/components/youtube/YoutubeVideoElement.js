@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import React, { useRef, useState, useContext } from 'react';
+import React, { useRef } from 'react';
 
 import {
   VideoContainer,
@@ -9,10 +9,8 @@ import {
   ImgBottomInfo,
 } from '../sharedComponents/sharedStyledComponents';
 import VideoHoverIframe from './VideoHoverIframe';
-import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import FavoriteButton from '../favorites/addToListModal/FavoriteButton';
 import { ChannelNameLink, PublishedDate } from './StyledComponents';
-import { YoutubeContext } from './useToken';
 import ToolTip from '../sharedComponents/ToolTip';
 
 export const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
@@ -22,25 +20,8 @@ export const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
   medium?.url ||
   `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`;
 
-const HOVER_DELAY = 1000;
-
 const YoutubeVideoElement = ({ list, video, setDragSelected, listName, active, ...props }) => {
-  const { youtubeVideoHoverEnable } = useContext(YoutubeContext);
-  const [isHovered, setIsHovered] = useState(false);
-  const streamHoverTimer = useRef();
   const ref = useRef();
-
-  useEventListenerMemo('mouseenter', handleMouseOver, ref.current, youtubeVideoHoverEnable);
-  useEventListenerMemo('mouseleave', handleMouseOut, ref.current, youtubeVideoHoverEnable);
-
-  function handleMouseOver() {
-    streamHoverTimer.current = setTimeout(() => setIsHovered(true), HOVER_DELAY);
-  }
-
-  function handleMouseOut() {
-    clearTimeout(streamHoverTimer.current);
-    setIsHovered(false);
-  }
 
   return (
     <VideoContainer
@@ -53,19 +34,8 @@ const YoutubeVideoElement = ({ list, video, setDragSelected, listName, active, .
       {...props}
     >
       <ImageContainer id={video.contentDetails?.upload?.videoId} ref={ref} active={active}>
-        <FavoriteButton
-          list={list}
-          videoId_p={video.contentDetails?.upload?.videoId}
-          disablepreview={handleMouseOut}
-        />
-        {isHovered && (
-          <VideoHoverIframe
-            id={video.contentDetails?.upload?.videoId}
-            data={video}
-            isHovered={isHovered}
-            setIsHovered={setIsHovered}
-          />
-        )}
+        <FavoriteButton list={list} videoId_p={video.contentDetails?.upload?.videoId} />
+        <VideoHoverIframe id={video.contentDetails?.upload?.videoId} data={video} imageRef={ref} />
         <Link
           className='imgLink'
           // href={`https://www.youtube.com/watch?v=` + video.contentDetails?.upload?.videoId}

@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { FiAlertCircle } from 'react-icons/fi';
 import Moment from 'react-moment';
-import React, { useRef, useState, useContext } from 'react';
+import React, { useRef } from 'react';
 
 import {
   VideoTitle,
@@ -19,9 +19,7 @@ import FollowUnfollowBtn from './../FollowUnfollowBtn';
 import VodsFollowUnfollowBtn from './../vods/VodsFollowUnfollowBtn';
 import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import AnimatedViewCount from './AnimatedViewCount';
-import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from './../loginNameFormat';
-import { TwitchContext } from '../useToken';
 import CustomFilters from '../CustomFilters';
 import ChannelButtonsContainer from './ChannelButtonsContainer';
 import ToolTip from '../../sharedComponents/ToolTip';
@@ -61,37 +59,13 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
     game_img,
     viewer_count,
   } = data;
-  const [isHovered, setIsHovered] = useState(false);
-  const { twitchVideoHoverEnable } = useContext(TwitchContext);
-  const streamHoverTimer = useRef();
+
   const ref = useRef();
   const refChannel = useRef();
   const videoContainerRef = useRef();
   const thumbnailUrl =
     `${thumbnail_url?.replace('{width}', 858)?.replace('{height}', 480)}` ||
     `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`;
-
-  useEventListenerMemo(
-    'mouseenter',
-    handleMouseOver,
-    ref.current,
-    ref.current && twitchVideoHoverEnable
-  );
-  useEventListenerMemo(
-    'mouseleave',
-    handleMouseOut,
-    ref.current,
-    ref.current && twitchVideoHoverEnable
-  );
-
-  function handleMouseOver() {
-    streamHoverTimer.current = setTimeout(() => setIsHovered(true), HOVER_DELAY);
-  }
-
-  function handleMouseOut() {
-    clearTimeout(streamHoverTimer.current);
-    setIsHovered(false);
-  }
 
   const streamData = {
     started_at,
@@ -117,7 +91,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
             },
           }}
         >
-          {isHovered && <StreamHoverIframe id={user_id} data={data} setIsHovered={setIsHovered} />}
+          <StreamHoverIframe id={user_id} data={data} imageRef={ref} />
           <img
             id={`${user_id}-${Date.now()}`}
             // key={`${user_id}-${lastLoaded}`}
