@@ -49,6 +49,7 @@ const CenterProvider = ({ children, fullWidth }) => {
         ...(videoDisplayData || {}),
         setVideoDisplayData,
         feedVideoSizeProps,
+        calcVideoElementsAmount,
       }}
     >
       {children}
@@ -57,7 +58,7 @@ const CenterProvider = ({ children, fullWidth }) => {
 };
 
 const Center = ({ children, forceMountTwitch, fullWidth }) => {
-  const { winWidth, setVideoDisplayData } = useContext(CenterContext);
+  const { winWidth, setVideoDisplayData, calcVideoElementsAmount } = useContext(CenterContext);
   const { enableTwitch, enableTwitter, showTwitchSidebar, twitterLists, feedVideoSizeProps } =
     useContext(FeedsContext) || {};
   const NrLists = twitterLists?.length || 1;
@@ -80,14 +81,11 @@ const Center = ({ children, forceMountTwitch, fullWidth }) => {
   });
 
   useEffect(() => {
-    const centerContainer = ref.current;
     setVideoDisplayData({
-      videoElementsAmount: Math.trunc(
-        Math.round((centerContainer.clientWidth / feedVideoSizeProps.totalWidth) * 2)
-      ),
+      videoElementsAmount: calcVideoElementsAmount(document.documentElement.clientWidth),
       winWidth: document.documentElement.clientWidth,
     });
-  }, [setVideoDisplayData, feedVideoSizeProps.totalWidth]);
+  }, [setVideoDisplayData, feedVideoSizeProps.totalWidth, calcVideoElementsAmount]);
 
   return (
     <CenterContainer
