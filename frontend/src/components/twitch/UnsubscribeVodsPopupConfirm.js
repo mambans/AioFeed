@@ -56,8 +56,8 @@ const UnsubscribeVodsPopupConfirm = ({ channel, setShowUnsubscribeVods, ...props
           type='success'
           padding='0.5rem 0.75rem'
           unfollowStream={() => {
+            props.unfollowStream();
             setShowUnsubscribeVods(false);
-            props.UnfollowStream();
           }}
           text={
             <span style={{ marginLeft: '10px' }}>
@@ -68,14 +68,14 @@ const UnsubscribeVodsPopupConfirm = ({ channel, setShowUnsubscribeVods, ...props
         <Button
           variant='danger'
           onClick={() => {
+            props.unfollowStream();
             setShowUnsubscribeVods(false);
-            props.UnfollowStream();
           }}
         >
           <b>No </b>, keep the vods.
         </Button>
         <p id='cancel'>
-          <b onClick={() => setShowUnsubscribeVods(false)}>Cancel</b> unfollow and stay followed to{' '}
+          <b onClick={() => setShowUnsubscribeVods(false)}>Cancel</b> unfollow and stay followed to
           {channel}
         </p>
       </Modal.Body>

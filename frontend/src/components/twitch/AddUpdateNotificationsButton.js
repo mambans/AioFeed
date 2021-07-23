@@ -1,29 +1,24 @@
 import { TiFlashOutline } from 'react-icons/ti';
 import { TiFlash } from 'react-icons/ti';
 import { IoIosFlashOff } from 'react-icons/io';
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext } from 'react';
 
 import { VodAddRemoveButton } from './../sharedComponents/sharedStyledComponents';
-import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import VodsContext from './vods/VodsContext';
 import ToolTip from '../sharedComponents/ToolTip';
 import API from '../navigation/API';
 
-export const removeChannel = async ({
-  channel,
-  updateNotischannels,
-  setUpdateNotischannels,
-  username,
-  authKey,
-}) => {
+export const removeChannel = async ({ channel, updateNotischannels, setUpdateNotischannels }) => {
   try {
     const channelsSets = new Set(updateNotischannels || []);
-    channelsSets.delete(channel?.toLowerCase());
-    const newChannels = [...channelsSets];
+    if (channelsSets.has(channel?.toLowerCase())) {
+      channelsSets.delete(channel?.toLowerCase());
+      const newChannels = [...channelsSets];
 
-    setUpdateNotischannels(newChannels);
+      setUpdateNotischannels(newChannels);
 
-    await API.addUdateChannels(newChannels);
+      await API.addUdateChannels(newChannels);
+    }
   } catch (e) {
     console.log(e.message);
   }
@@ -47,11 +42,6 @@ const AddUpdateNotificationsButton = ({
   const [isHovered, setIsHovered] = useState();
   const updateNotificationEnabled = updateNotischannels?.includes(channel?.toLowerCase());
 
-  const vodButton = useRef();
-
-  useEventListenerMemo('mouseenter', handleMouseOver, vodButton.current);
-  useEventListenerMemo('mouseleave', handleMouseOut, vodButton.current);
-
   async function addChannel() {
     try {
       const existing = new Set(updateNotischannels || []);
@@ -65,11 +55,11 @@ const AddUpdateNotificationsButton = ({
     }
   }
 
-  function handleMouseOver() {
+  function handleMouseEnter() {
     setIsHovered(true);
   }
 
-  function handleMouseOut() {
+  function handleMouseLeave() {
     setIsHovered(null);
   }
 
@@ -84,9 +74,10 @@ const AddUpdateNotificationsButton = ({
       }${channel} stream title/game update notification`}
     >
       <VodAddRemoveButton
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         className='StreamUpdateNoitificationsButton'
         marginright={marginright}
-        ref={vodButton}
         loweropacity={loweropacity}
         vodenabled={updateNotificationEnabled.toString()}
         variant='link'

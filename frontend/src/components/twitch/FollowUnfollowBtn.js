@@ -26,9 +26,9 @@ const FollowUnfollowBtn = ({
 
   const validateToken = useToken();
 
-  const UnfollowStream = async () => {
+  const unfollowStream = async () => {
     await validateToken().then(async () => {
-      await API.deleteFollow({  
+      await API.deleteFollow({
         params: {
           from_id: twitchUserId,
           to_id: id,
@@ -52,7 +52,7 @@ const FollowUnfollowBtn = ({
             }
           }
         })
-        .catch((er) => console.error('UnfollowStream -> er', er));
+        .catch((er) => console.error('unfollowStream -> er', er));
     });
   };
 
@@ -118,7 +118,7 @@ const FollowUnfollowBtn = ({
             onClick={() => {
               if (!channels?.includes(channelName?.toLowerCase())) {
                 setFollowing(false);
-                UnfollowStream();
+                unfollowStream();
                 return;
               }
               setShowUnsubscribeVods(true);
@@ -140,7 +140,7 @@ const FollowUnfollowBtn = ({
           show={showUnsubscribeVods}
           setShowUnsubscribeVods={setShowUnsubscribeVods}
           channel={channelName}
-          UnfollowStream={UnfollowStream}
+          unfollowStream={unfollowStream}
         />
       </>
     </ToolTip>
