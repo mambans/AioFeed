@@ -543,10 +543,12 @@ export const VodAddRemoveButton = styled(Button)`
   transition: opacity 250ms, background 250ms, color 250ms, transform 250ms;
   z-index: 2;
 
-  &:hover {
-    color: ${({ vodenabled, variant }) =>
-      variant === 'success' ? 'unset' : vodenabled === 'true' ? 'rgb(225, 000, 000)' : '#14ae14'};
-    opacity: 1;
+  &&& {
+    &:hover {
+      color: ${({ vodenabled, variant }) =>
+        variant === 'success' ? 'unset' : vodenabled === 'true' ? 'rgb(225, 000, 000)' : '#14ae14'};
+      opacity: 1;
+    }
   }
 `;
 

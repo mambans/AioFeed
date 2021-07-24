@@ -13,6 +13,7 @@ import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from './../loginNameFormat';
 import ToolTip from '../../sharedComponents/ToolTip';
 import FavoriteStreamBtn from '../live/FavoriteStreamBtn';
+import { VodAddRemoveButton } from '../../sharedComponents/sharedStyledComponents';
 
 const StyledNewHighlight = styled.div`
   position: absolute;
@@ -25,6 +26,12 @@ const StyledNewHighlight = styled.div`
 
 const SidebarItemkWrapper = styled.div`
   position: relative;
+
+  &:hover {
+    ${VodAddRemoveButton} {
+      opacity: 0.3;
+    }
+  }
 `;
 
 const SidebarLinkWrapper = styled(Link)`
@@ -97,14 +104,13 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer, fav
 
   return (
     <SidebarItemkWrapper>
-      {favorited && (
-        <FavoriteStreamBtn
-          channel={user_name}
-          size={20}
-          loweropacity={0.3}
-          style={{ position: 'absolute', top: '0px', left: '0px' }}
-        />
-      )}
+      <FavoriteStreamBtn
+        channel={user_name}
+        size={20}
+        loweropacity={!favorited ? '0' : '0.3'}
+        style={{ position: 'absolute', top: '0px', left: '0px' }}
+      />
+
       <SidebarLinkWrapper
         ref={ref}
         to={'/' + user_name?.toLowerCase()}
