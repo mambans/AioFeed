@@ -670,38 +670,6 @@ export const ChannelIconLink = styled(Nav.Link).attrs({ as: NavLink })`
   }
 `;
 
-export const OfflineOverlay = styled.div`
-  position: absolute;
-  display: flex;
-  height: 100%;
-  width: ${({ type, hidechat, chatwidth }) =>
-    hidechat === 'true'
-      ? '100vw'
-      : type === 'live'
-      ? `${window.innerWidth - chatwidth}px`
-      : '100vw'};
-  justify-content: center;
-  align-items: center;
-  font-size: 5rem;
-  font-weight: bold;
-
-  > a {
-    padding: 20px 40px;
-    box-shadow: 0 0 10px 1px #101010;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 15px;
-    text-shadow: 0px 0px 7px black;
-    color: white;
-    opacity: 0.7;
-    transition: color 250ms, background 250ms, opacity 250ms;
-
-    &:hover {
-      opacity: 1;
-      background: rgba(0, 0, 0, 0.4);
-    }
-  }
-`;
-
 export const LoopBtn = styled(MdLoop)`
   /* position: absolute; */
   /* right: ${({ listIsOpen, listWidth }) => (listIsOpen === 'true' ? listWidth : '15')}px; */

@@ -28,7 +28,6 @@ import {
   ResetVideoButton,
   SmallButtonContainer,
   ChannelIconLink,
-  OfflineOverlay,
   PlayerExtraButtons,
 } from './StyledComponents';
 // import PlayerNavbar from './PlayerNavbar';
@@ -94,7 +93,6 @@ const Player = () => {
   const refreshStreamInfoTimer = useRef();
   const videoElementRef = useRef();
   const hideChatDelay = useRef();
-  const isLive = useRef();
   const link0 = useRef();
   const link1 = useRef();
   const link2 = useRef();
@@ -180,7 +178,6 @@ const Player = () => {
   function offlineEvents() {
     console.log('Stream is Offline');
     document.title = `${channelName} (Offline)`;
-    isLive.current = false;
     setShowUIControlls(false);
     clearInterval(refreshStreamInfoTimer.current);
     setStreamInfo(null);
@@ -241,7 +238,6 @@ const Player = () => {
 
   async function onlineEvents() {
     console.log('Stream is Online');
-    isLive.current = true;
     document.title = `${channelName}`;
 
     try {
@@ -330,15 +326,6 @@ const Player = () => {
       switchedChatState={String(chatState.switchChatSide)}
       hidechat={chatState.hideChat}
     >
-      {streamInfo === null && !showUIControlls && !isLive.current && (
-        <OfflineOverlay
-          type='live'
-          hidechat={String(chatState.hideChat)}
-          chatwidth={chatState.chatwidth || DEFAULT_CHAT_WIDTH}
-        >
-          <Link to='page'>Offline</Link>
-        </OfflineOverlay>
-      )}
       <div id='twitch-embed' ref={videoElementRef}>
         <CSSTransition
           in={showControlls}
