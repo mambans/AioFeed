@@ -12,7 +12,7 @@ import UnsubscribeVodsPopupConfirm from './UnsubscribeVodsPopupConfirm';
 const FollowUnfollowBtn = ({
   channelName,
   id,
-  size,
+  size = '1.4em',
   style,
   refreshStreams,
   refreshAfterUnfollowTimer,

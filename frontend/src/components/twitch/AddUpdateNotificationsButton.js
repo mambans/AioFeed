@@ -35,7 +35,7 @@ const AddUpdateNotificationsButton = ({
   channel,
   loweropacity,
   marginright,
-  size = 24,
+  size = '1.4em',
   show = true,
 }) => {
   const { updateNotischannels, setUpdateNotischannels } = useContext(VodsContext);

@@ -27,7 +27,7 @@ const VodsFollowUnfollowBtn = ({
   marginright,
   className,
   show = true,
-  size,
+  size = '1.4em',
   text,
   type = 'link',
   padding,
@@ -102,12 +102,12 @@ const VodsFollowUnfollowBtn = ({
         <>
           {vodEnabled ? (
             isHovered ? (
-              <MdVideocamOff size={size || '1.4em'} color='red' />
+              <MdVideocamOff size={size} color='red' />
             ) : (
-              <MdVideocam size={size || '1.4em'} color='green' />
+              <MdVideocam size={size} color='green' />
             )
           ) : (
-            <MdVideoCall size={size || '1.4em'} />
+            <MdVideoCall size={size} />
           )}
           {text}
         </>

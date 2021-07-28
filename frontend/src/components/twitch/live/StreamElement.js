@@ -156,7 +156,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
                 videoContainerRef={videoContainerRef}
               />
               <VodsFollowUnfollowBtn channel={login} channelId={user_id} marginright='5px;' />
-              <AddUpdateNotificationsButton channel={login} marginright='5px;' size='1.4em' />
+              <AddUpdateNotificationsButton channel={login} marginright='5px;' />
               <FollowUnfollowBtn
                 style={{
                   gridRow: '1',
