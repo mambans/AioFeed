@@ -337,3 +337,28 @@ export const CenterContainer = styled.div`
   margin-right: ${({ enableTwitter, enableTwitch, showTwitchSidebar, fullWidth }) =>
     fullWidth || (!enableTwitter && (!enableTwitch || !showTwitchSidebar)) ? 'auto' : 'unset'};
 `;
+
+export const FavoriteDeviderLine = styled.div`
+  /* background: #bcbc1d; */
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: space-evenly;
+  flex-direction: column;
+  width: 3px;
+  align-items: center;
+  margin: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px;
+  margin-right: 0;
+  margin-left: 0;
+  margin-bottom: 15px;
+
+  div {
+    background: #8888885e;
+    height: 50%;
+    width: 100%;
+    border-radius: 1.5px;
+  }
+
+  svg {
+    margin: 10px 0;
+  }
+`;

@@ -111,7 +111,7 @@ const Center = ({ children, forceMountTwitch, fullWidth }) => {
                   : 150))) /
               feedVideoSizeProps.totalWidth
           ) +
-        1
+        5
       }
       id='CenterContainer'
     >

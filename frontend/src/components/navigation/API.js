@@ -204,6 +204,14 @@ const API = {
       password,
       email,
     }),
+  updateFavoriteStreams: async (value) =>
+    await axios
+      .put(`${BASE_URL}/favoritestreams`, {
+        username: getCookie(`AioFeed_AccountName`),
+        authkey: getCookie(`AioFeed_AuthKey`),
+        channels: [...value],
+      })
+      .catch((e) => console.error(e)),
 };
 
 export default API;

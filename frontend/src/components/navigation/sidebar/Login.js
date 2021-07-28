@@ -19,7 +19,7 @@ const Login = () => {
   const [validatedPassword, setValidatedPassword] = useState(true);
   const { setRenderModal } = useContext(NavigationContext);
   const { setTwitterLists } = useContext(FeedsContext);
-  const { setChannels } = useContext(VodsContext);
+  const { setChannels, setFavStreams } = useContext(VodsContext);
   const {
     setUsername,
     setProfileImage,
@@ -50,7 +50,7 @@ const Login = () => {
   };
 
   async function loginAccount() {
-    await API.login()
+    await API.login(username, password)
       .then((result) => {
         const res = result.data.Attributes;
         if (result.status === 200 && res) {
@@ -70,6 +70,7 @@ const Login = () => {
               'ChannelsUpdateNotifs',
               JSON.stringify(res.TwitchPreferences.ChannelsUpdateNotifs)
             );
+            setFavStreams(res.TwitchPreferences.favoriteStreams);
           }
 
           if (res.TwitchVodsPreferences && Object.keys(res.TwitchVodsPreferences).length >= 1) {

@@ -1,8 +1,9 @@
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import React, { useContext } from 'react';
+import { MdStar } from 'react-icons/md';
 
 import StreamEle from './StreamElement.js';
-import { Container } from '../StyledComponents';
+import { Container, FavoriteDeviderLine } from '../StyledComponents';
 import LoadingBoxes from '../LoadingBoxes';
 import AlertHandler from './../../alert';
 import { CenterContext } from '../../feed/FeedsCenterContainer.js';
@@ -70,6 +71,13 @@ const Twitch = ({ data }) => {
           </CSSTransition>
         ))}
       </TransitionGroup>
+      {Boolean(favoriteStreams?.length) && (
+        <FavoriteDeviderLine feedVideoSizeProps={feedVideoSizeProps}>
+          <div />
+          <MdStar size={16} color={'#bcbc1d'} />
+          <div />
+        </FavoriteDeviderLine>
+      )}
       <TransitionGroup component={null}>
         {nonFavoriteStreams?.map((stream) => (
           <CSSTransition
