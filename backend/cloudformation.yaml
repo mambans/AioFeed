@@ -509,3 +509,27 @@ Resources:
                 Required: true
             - method.request.querystring.authkey:
                 Required: true
+  favoriteStreamsUpdate:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Update favorite marked streams list.'
+      Handler: favoriteStreamsUpdate/handler.handler
+      Environment:
+        Variables:
+          USERNAME_TABLE: !Ref UserLogins
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserLogins
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /favoritestreams
+            Method: put
+          RequestParameters:
+            - method.request.querystring.username:
+                Required: true
+            - method.request.querystring.channels:
+                Required: true
+            - method.request.querystring.authkey:
+                Required: true

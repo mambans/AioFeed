@@ -1,6 +1,6 @@
 'use strict';
 
-const vodChannelsUpdate = require('./vodChannelsUpdate');
+const favoriteStreamsUpdate = require('./favoriteStreamsUpdate');
 
 exports.handler = async (event) => {
   try {
@@ -10,7 +10,7 @@ exports.handler = async (event) => {
     if (!authkey) throw new Error('`authkey` is required');
     if (!channels) throw new Error('`Channels` is required');
 
-    const res = await vodChannelsUpdate({
+    const res = await favoriteStreamsUpdate({
       username,
       channels,
       authkey,
@@ -20,7 +20,7 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(res.Attributes.TwitchVodsPreferences.Channels),
+      body: JSON.stringify(res.Attributes.TwitchPreferences.favoriteStreams),
       headers: {
         'Access-Control-Allow-Origin': 'https://aiofeed.com',
       },
