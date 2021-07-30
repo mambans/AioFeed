@@ -23,6 +23,11 @@ export const ThemeProvider = ({ children }) => {
       image: 'webp/coffee.webp',
     },
     {
+      name: 'coffeepour',
+      type: 'dark',
+      image: 'webp/coffeepour-blurred.webp',
+    },
+    {
       name: 'wood',
       type: 'dark',
       image: 'webp/wood.webp',
