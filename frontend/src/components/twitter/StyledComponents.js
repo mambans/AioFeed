@@ -4,7 +4,7 @@ import { pulse } from '../twitch/StyledComponents';
 
 export const Container = styled.div`
   width: 14vw;
-  height: 92vh;
+  height: inherit;
   background: var(--twitterBackground);
   border-radius: 10px 10px 2px 2px;
   transition: height 500ms;

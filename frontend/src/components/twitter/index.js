@@ -1,14 +1,14 @@
 import { Alert } from 'react-bootstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { TwitterTimelineEmbed } from 'react-twitter-embed';
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import { MdEdit } from 'react-icons/md';
 
-import { Container, LoadingPlaceholder, MainContainer } from './StyledComponents';
+import { Container, MainContainer } from './StyledComponents';
 import FeedsContext from '../feed/FeedsContext';
 import UpdateTwitterLists from '../navigation/sidebar/UpdateTwitterLists';
 import ThemeContext from './../themes/ThemeContext';
 import FeedsCenterContainer from '../feed/FeedsCenterContainer';
+import Timelines from './Timelines';
 
 const TwitterStandalone = () => (
   <FeedsCenterContainer>
@@ -20,6 +20,7 @@ export const Twitter = ({ in: forceMount = false }) => {
   const { twitterLists, enableTwitter, enableTwitch, enableYoutube, enableTwitchVods } =
     useContext(FeedsContext);
   const { activeTheme } = useContext(ThemeContext);
+  const mainContainerRef = useRef();
 
   return (
     <CSSTransition
@@ -33,6 +34,7 @@ export const Twitter = ({ in: forceMount = false }) => {
       <MainContainer
         id='twitter'
         center={forceMount || (!enableTwitch && !enableYoutube && !enableTwitchVods)}
+        ref={mainContainerRef}
       >
         <TransitionGroup component={null}>
           {twitterLists?.map((id) => (
@@ -47,22 +49,7 @@ export const Twitter = ({ in: forceMount = false }) => {
                 >
                   <MdEdit size={14} />
                 </a>
-                <TwitterTimelineEmbed
-                  sourceType='list'
-                  id={id}
-                  placeholder={<LoadingPlaceholder />}
-                  autoHeight={true}
-                  theme={activeTheme.type}
-                  noScrollbar={true}
-                  noHeader={true}
-                  noFooter={true}
-                  noBorders={true}
-                  transparent={true}
-
-                  // onLoad={() => {
-                  //   console.log(`Twitter list '${id}' loaded.`);
-                  // }}
-                />
+                <Timelines id={id} mainContainerRef={mainContainerRef} />
               </Container>
             </CSSTransition>
           ))}
