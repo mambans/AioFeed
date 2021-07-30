@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { MdSort } from 'react-icons/md';
 
 import { StyledSortButton, SortDropDownList } from './StyledComponents';
 import { Link } from 'react-router-dom';
+import useClicksOutside from '../../../hooks/useClicksOutside';
 
 const PRE_DEFINED_DAY_OPTIONS = [0, 3, 7, 14, 30, 90, 180, 365];
 
@@ -30,18 +31,23 @@ const convertDays = (nrOfDays) => {
 
 const ClipSortButton = ({ sortBy: days, setSortBy, setData, resetOldData }) => {
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef();
+  const dropdownRef = useRef();
+
+  useClicksOutside([triggerRef, dropdownRef], () => setOpen(false), open);
 
   return (
     <div style={{ marginLeft: '0px' }}>
       <StyledSortButton
         title={`Fetch clips from the last ${convertDays(days)}`}
         onClick={() => setOpen(!open)}
+        ref={triggerRef}
       >
         <MdSort size={30} />
         Within: {convertDays(days)}
       </StyledSortButton>
       {open && (
-        <SortDropDownList>
+        <SortDropDownList ref={dropdownRef}>
           {PRE_DEFINED_DAY_OPTIONS.map((option) => (
             <Link
               to={`?type=clips&within=${option}`}
