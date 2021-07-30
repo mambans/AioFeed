@@ -35,9 +35,13 @@ const addSystemNotification = async ({
   setUnseenNotifications,
 }) => {
   if (Notification.permission === 'granted') {
-    const url = `https://aiofeed.com/${stream.login?.toLowerCase()}${
-      status?.toLowerCase() === 'offline' ? '/page' : ''
-    }`;
+    const url = `https://aiofeed.com/${(
+      stream.login ||
+      stream.user_name ||
+      stream.name ||
+      stream.display_name ||
+      stream.broadcaster_name
+    )?.toLowerCase()}${status?.toLowerCase() === 'offline' ? '/page' : ''}`;
     let notification = new Notification(`${loginNameFormat(stream)} ${status}`, {
       icon: stream?.profile_image_url || `${process.env.PUBLIC_URL}/android-chrome-192x192.webp`,
       badge: stream?.profile_image_url || `${process.env.PUBLIC_URL}/android-chrome-192x192.webp`,
