@@ -7,7 +7,7 @@ export const StyledFooterContainer = styled.div`
   text-align: center;
   margin-top: 100px;
   border-top: 2px solid #53463f;
-  max-height: 200px;
+  /* max-height: 200px; */
   width: 100%;
   color: var(--textColor3);
   transition: width 750ms, margin 750ms;
@@ -16,9 +16,9 @@ export const StyledFooterContainer = styled.div`
 
   ul {
     display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+    flex-flow: column wrap;
     margin: 0;
+    justify-content: center;
   }
 
   ul li {

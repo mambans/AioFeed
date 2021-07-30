@@ -42,12 +42,6 @@ const Footer = () => {
               </Nav.Link>
             </li>
             <li>
-              <Nav.Link as={NavLink} to='/category'>
-                <MdRssFeed size={20} style={{ marginRight: '0.75rem' }} />
-                Top streams
-              </Nav.Link>
-            </li>
-            <li>
               <div
                 className='button'
                 onClick={() => {
@@ -59,23 +53,9 @@ const Footer = () => {
                 Account
               </div>
             </li>
-            <li>
-              <div
-                className='button'
-                onClick={() => {
-                  setRenderModal('create');
-                  setShowSidebar(true);
-                }}
-              >
-                <MdAccountCircle size={20} style={{ marginRight: '0.75rem' }} />
-                Create account
-              </div>
-            </li>
           </ul>
         </div>
         <div style={{ flexDirection: 'column', width: '50%' }}>
-          <p></p>
-          <p></p>
           <StyledCenterBottomText>
             <Nav.Link as={NavLink} to='/legality#Conditions'>
               Conditions of Use
@@ -83,7 +63,6 @@ const Footer = () => {
             <Nav.Link as={NavLink} to='/legality#Privacy'>
               Privacy Notice
             </Nav.Link>
-
             <span>© 2020 Sweden, Robin Persson.</span>
           </StyledCenterBottomText>
         </div>
