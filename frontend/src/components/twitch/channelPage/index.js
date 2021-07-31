@@ -57,8 +57,6 @@ const ChannelPage = () => {
 
   const [vods, setVods] = useState();
   const [clips, setClips] = useState();
-  const [vodsloadmoreLoaded, setVodsLoadmoreLoaded] = useState(true);
-  const [clipsloadmoreLoaded, setClipsLoadmoreLoaded] = useState(true);
   const [sortVodsBy, setSortVodsBy] = useState(
     URLQueries.get('type')?.toLowerCase() === 'vods'
       ? URLQueries.get('sort')?.toLowerCase()
@@ -93,10 +91,10 @@ const ChannelPage = () => {
   }, [channelName]);
 
   const fetchChannelVods = useCallback(
-    async (pagination) => {
+    async (pagination, setLoading) => {
       await validateToken().then(async () => {
         if (pagination) {
-          setVodsLoadmoreLoaded(false);
+          setLoading(true);
         } else {
           previosVodPage.current = null;
         }
@@ -120,7 +118,7 @@ const ChannelPage = () => {
             }
 
             if (res.data.data?.length === 0 && (vods || Array.isArray(vods) || vods?.length > 1)) {
-              setVodsLoadmoreLoaded(true);
+              setLoading(false);
               return '';
             }
             vodPagination.current = res.data.pagination.cursor;
@@ -132,7 +130,7 @@ const ChannelPage = () => {
               const allVods = previosVodPage.current.concat(finallVideos);
               previosVodPage.current = allVods;
 
-              setVodsLoadmoreLoaded(true);
+              setLoading(false);
               setVods(allVods);
             } else {
               previosVodPage.current = finallVideos;
@@ -148,10 +146,10 @@ const ChannelPage = () => {
   );
 
   const fetchClips = useCallback(
-    async (pagination) => {
+    async (pagination, setLoading) => {
       await validateToken().then(async () => {
         if (pagination) {
-          setClipsLoadmoreLoaded(false);
+          setLoading(true);
         } else {
           previosClipsPage.current = null;
         }
@@ -180,7 +178,7 @@ const ChannelPage = () => {
               res.data.data?.length === 0 &&
               (clips || Array.isArray(clips) || clips?.length > 1)
             ) {
-              setClipsLoadmoreLoaded(true);
+              setLoading(false);
               return '';
             }
             clipPagination.current = res.data.pagination.cursor;
@@ -189,7 +187,7 @@ const ChannelPage = () => {
             if (pagination) {
               const allClips = previosClipsPage.current.concat(finallClips.data);
               previosClipsPage.current = allClips;
-              setClipsLoadmoreLoaded(true);
+              setLoading(false);
               setClips(allClips);
             } else {
               previosClipsPage.current = finallClips.data;
@@ -517,7 +515,6 @@ const ChannelPage = () => {
               setSortData={setVods}
               fetchItems={fetchChannelVods}
               itemPagination={vodPagination}
-              itemsloadmoreLoaded={vodsloadmoreLoaded}
             />
           ) : (
             <LoadingPlaceholderVods numberOfVideos={numberOfVideos} />
@@ -531,7 +528,6 @@ const ChannelPage = () => {
               setSortData={setClips}
               fetchItems={fetchClips}
               itemPagination={clipPagination}
-              itemsloadmoreLoaded={clipsloadmoreLoaded}
               channelInfo={channelInfo}
             />
           ) : (

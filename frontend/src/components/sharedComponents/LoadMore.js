@@ -1,5 +1,5 @@
 import { GrPowerReset } from 'react-icons/gr';
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
 import { StyledLoadmore } from '../twitch/StyledComponents';
 import CountdownCircleTimer from './CountdownCircleTimer';
@@ -8,7 +8,7 @@ import { CenterContext } from '../feed/FeedsCenterContainer';
 const LoadMore = ({
   style = {},
   onClick,
-  loaded,
+  loaded = true,
   text,
   resetFunc,
   show,
@@ -20,6 +20,7 @@ const LoadMore = ({
   const thisEleRef = useRef();
   const { videoElementsAmount } = useContext(CenterContext) || {};
   const resetTransitionTimer = useRef();
+  const [loading, setLoading] = useState(!loaded);
 
   const reset = () => {
     if (resetFunc) {
@@ -44,7 +45,7 @@ const LoadMore = ({
   const onClickFunc = () => {
     observer.current.observe(thisEleRef.current);
     if (onClick) {
-      onClick();
+      onClick(true, setLoading);
     } else {
       if (videosToShow.amount >= videos?.length) {
         reset();
@@ -62,16 +63,16 @@ const LoadMore = ({
     new IntersectionObserver(
       function (entries) {
         if (entries[0].isIntersecting === false) {
-          // setTimeout(() => {
-          if (thisEleRef.current) {
-            thisEleRef.current.scrollIntoView({
-              behavior: 'smooth',
-              block: 'end',
-              inline: 'nearest',
-            });
-            observer.current.unobserve(thisEleRef.current);
-          }
-          // }, 0);
+          setTimeout(() => {
+            if (thisEleRef.current) {
+              thisEleRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'end',
+                inline: 'nearest',
+              });
+              observer.current.unobserve(thisEleRef.current);
+            }
+          }, 0);
         }
       },
       { threshold: 0.8 }
@@ -93,7 +94,7 @@ const LoadMore = ({
       <StyledLoadmore ref={thisEleRef} style={style} size={18}>
         <div className='line' />
         <div className='button' onClick={onClickFunc}>
-          {!loaded ? (
+          {loading ? (
             <>
               Loading..
               <CountdownCircleTimer isLoading={true} style={{ marginLeft: '10px' }} size={18} />

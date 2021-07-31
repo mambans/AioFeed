@@ -32,7 +32,6 @@ const TopStreams = () => {
   const [videoType, setVideoType] = useState(
     URLQueries.get('type')?.toLowerCase() || p_videoType || 'streams'
   );
-  const [loadmoreLoaded, setLoadmoreLoaded] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState('Views');
@@ -59,7 +58,7 @@ const TopStreams = () => {
     }
   };
 
-  const fetchVideosDataHandler = (res, shouldLoadMore) => {
+  const fetchVideosDataHandler = (res, shouldLoadMore, setLoading) => {
     if (shouldLoadMore) {
       const allTopData = oldTopData.current.data.concat(res.topData.data);
       oldTopData.current = {
@@ -67,7 +66,7 @@ const TopStreams = () => {
         pagination: res.topData.pagination,
       };
 
-      setLoadmoreLoaded(true);
+      setLoading(false);
       setTopData(allTopData);
     } else {
       oldTopData.current = res.topData;
@@ -77,14 +76,14 @@ const TopStreams = () => {
   };
 
   const fetchVideos = useCallback(
-    (shouldLoadMore) => {
+    (shouldLoadMore, setLoading) => {
       setError(null);
-      if (shouldLoadMore) setLoadmoreLoaded(false);
+      if (shouldLoadMore) setLoading(true);
 
       switch (videoType) {
         case 'streams':
           getTopStreams(category, shouldLoadMore && oldTopData.current)
-            .then((res) => fetchVideosDataHandler(res, shouldLoadMore))
+            .then((res) => fetchVideosDataHandler(res, shouldLoadMore, setLoading))
             .catch((e) => {
               if ((e.message = 'game is undefined')) {
                 setError('Invalid game name');
@@ -96,7 +95,7 @@ const TopStreams = () => {
           break;
         case 'clips':
           getTopClips(category, sortByTime, oldTopData.current)
-            .then((res) => fetchVideosDataHandler(res, shouldLoadMore))
+            .then((res) => fetchVideosDataHandler(res, shouldLoadMore, setLoading))
             .catch((e) => {
               if ((e.message = 'game is undefined')) {
                 setError('Invalid game name');
@@ -108,7 +107,7 @@ const TopStreams = () => {
           break;
         case 'videos':
           getTopVideos(category, sortBy, oldTopData.current)
-            .then((res) => fetchVideosDataHandler(res, shouldLoadMore))
+            .then((res) => fetchVideosDataHandler(res, shouldLoadMore, setLoading))
             .catch((e) => {
               if ((e.message = 'game is undefined')) {
                 setError('Invalid game name');
@@ -120,7 +119,7 @@ const TopStreams = () => {
           break;
         default:
           getTopStreams(category, shouldLoadMore && oldTopData.current)
-            .then((res) => fetchVideosDataHandler(res, shouldLoadMore))
+            .then((res) => fetchVideosDataHandler(res, shouldLoadMore, setLoading))
             .catch((e) => {
               if ((e.message = 'game is undefined')) {
                 setError('Invalid game name');
@@ -242,12 +241,7 @@ const TopStreams = () => {
                 ))}
               </TransitionGroup>
 
-              <LoadMore
-                text='Load more'
-                show={topData?.length}
-                onClick={() => fetchVideos(true)}
-                loaded={loadmoreLoaded}
-              />
+              <LoadMore text='Load more' show={topData?.length} onClick={fetchVideos} />
             </>
           </TopStreamsContainer>
         )}

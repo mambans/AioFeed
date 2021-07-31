@@ -20,7 +20,6 @@ const SubFeed = ({
   setSortData,
   fetchItems,
   itemPagination,
-  itemsloadmoreLoaded,
   channelInfo,
 }) => {
   const [numberOfVideos, setNumberOfVideos] = useState(Math.floor(window.innerWidth / 350));
@@ -96,8 +95,7 @@ const SubFeed = ({
       <LoadMore
         show={items && !items.error}
         text='Load more'
-        loaded={itemsloadmoreLoaded}
-        onClick={() => fetchItems(itemPagination.current)}
+        onClick={(dull, setLoaded) => fetchItems(itemPagination.current, setLoaded)}
         style={{
           width: `${numberOfVideos * 350}px`,
           margin: 'auto',
