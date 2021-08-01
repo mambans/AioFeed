@@ -20,6 +20,7 @@ const Timelines = ({ id, mainContainerRef }) => {
       height: parentHeight,
       theme: activeTheme?.type || 'dark',
       ariaPolite: 'assertive',
+      id: `'list:${id}`,
     };
 
     window.twttr.widgets
