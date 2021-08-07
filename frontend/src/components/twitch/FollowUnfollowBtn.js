@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 import React, { useEffect, useState, useContext } from 'react';
 
 import { FollowBtn, UnfollowBtn } from './StyledComponents';
@@ -98,6 +99,8 @@ const FollowUnfollowBtn = ({
 
     if (show && followingStatus === undefined) checkFollowing();
   }, [channelName, twitchUserId, id, followingStatus, show, validateToken]);
+
+  return null;
 
   if (!show) return null;
 
