@@ -193,5 +193,24 @@ const API = {
       }
     );
   },
+
+  getTags: async ({ params }) => {
+    return await axios.get(`${BASE_URL}/streams/tags`, {
+      params,
+      headers: {
+        Authorization: `Bearer ${await validateToken()}`,
+        'Client-ID': CLIENT_ID,
+      },
+    });
+  },
+  getSchedule: async ({ params }) => {
+    return await axios.get(`${BASE_URL}/schedule`, {
+      params,
+      headers: {
+        Authorization: `Bearer ${await validateToken()}`,
+        'Client-ID': CLIENT_ID,
+      },
+    });
+  },
 };
 export default API;

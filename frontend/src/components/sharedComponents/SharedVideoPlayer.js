@@ -57,6 +57,7 @@ const SharedVideoPlayer = ({ listName }) => {
   const navigate = useNavigate();
   const list =
     lists && lists[Object.keys(lists).find((key) => key.toLowerCase() === listName?.toLowerCase())];
+  const domain = location.pathname.split('/')[1];
 
   useFullscreen();
 
@@ -148,7 +149,7 @@ const SharedVideoPlayer = ({ listName }) => {
           chatwidth={viewStates.listWidth || DEFAULT_LIST_WIDTH}
         />
 
-        {location.pathname.split('/')[1] === 'youtube' ? (
+        {domain === 'youtube' ? (
           <YoutubeVideoPlayer playNext={playNext} />
         ) : (
           <VideoPlayer

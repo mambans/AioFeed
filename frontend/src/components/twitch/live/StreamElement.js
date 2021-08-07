@@ -24,6 +24,7 @@ import CustomFilters from '../CustomFilters';
 import ChannelButtonsContainer from './ChannelButtonsContainer';
 import ToolTip from '../../sharedComponents/ToolTip';
 import FavoriteStreamBtn from './FavoriteStreamBtn';
+import Schedule from '../schedule';
 
 function NewHighlightNoti({ newlyAddedStreams, login }) {
   if (newlyAddedStreams?.includes(login?.toLowerCase())) {
@@ -121,7 +122,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
         </VideoTitle>
       </ToolTip>
 
-      <div style={{ overflowX: 'hidden' }}>
+      <div style={{ fontSize: '0.95' }}>
         <ChannelContainer ref={refChannel}>
           <Link
             className='profileImg'
@@ -149,6 +150,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
           </ChannelNameDiv>
           {(location.pathname === '/feed/' || location.pathname === '/feed') && (
             <ChannelButtonsContainer className='buttonsContainer'>
+              <Schedule user={login || user_name} user_id={user_id} absolute={false} btnSize={22} />
               <FavoriteStreamBtn channel={login} />
               <CustomFilters
                 channel={login?.toLowerCase() || user_name}

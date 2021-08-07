@@ -295,7 +295,7 @@ export const StyledVolumeSlider = styled.div`
 
 export const InfoDisplay = styled.div`
   display: grid;
-  grid-template-areas: 'logo name' 'logo title' 'logo game' 'logo viewers' 'logo uptime';
+  grid-template-areas: 'logo name' 'logo title' 'logo game' 'logo viewers' 'logo uptime' 'logo tags';
   grid-template-columns: 75px auto;
   max-width: 500px;
   background: #00000080;
@@ -346,6 +346,11 @@ export const InfoDisplay = styled.div`
 
   #uptime {
     grid-area: uptime;
+    width: max-content;
+  }
+
+  #tags {
+    grid-area: tags;
     width: max-content;
   }
 
@@ -487,7 +492,7 @@ export const StyledPlayerExtraButtons = styled.div`
     z-index: 1;
   }
 
-  a {
+  a.link {
     color: #fff;
     background-color: #343a40;
     display: flex;
@@ -544,7 +549,7 @@ export const PlayerExtraButtons = ({ channelName, children }) => {
         Nav
       </ShowNavbarBtn>
       {channelName && (
-        <Link to={`/${channelName}/page`}>
+        <Link className='link' to={`/${channelName}/page`}>
           <MdAccountCircle size={26} /> Page
         </Link>
       )}
@@ -788,4 +793,21 @@ export const ChatContainer = styled.div`
   height: ${({ visible }) => (visible ? 'calc(100vh - 70px)' : '100vh')};
   top: ${({ visible }) => (visible ? '70px' : '0')};
   transition: top 300ms, height 300ms;
+`;
+
+export const TagsContainer = styled.div`
+  display: flex;
+  justify-content: start;
+  transform: translateX(-5px);
+  padding: 5px;
+  grid-area: 'tags';
+
+  a,
+  p {
+    padding: 2px 4px;
+    background: rgb(41, 41, 41) none repeat scroll 0% 0%;
+    border-radius: 5px;
+    margin-right: 5px;
+    font-size: 0.8em;
+  }
 `;

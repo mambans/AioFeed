@@ -29,6 +29,7 @@ import {
   SmallButtonContainer,
   ChannelIconLink,
   PlayerExtraButtons,
+  TagsContainer,
 } from './StyledComponents';
 // import PlayerNavbar from './PlayerNavbar';
 import setFavion from '../setFavion';
@@ -56,8 +57,10 @@ import useFullscreen from '../../../hooks/useFullscreen';
 import ToolTip from '../../sharedComponents/ToolTip';
 import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
 import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
+import API from '../API';
+import Schedule from '../schedule';
 
-const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.1, 175);
+const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.12, 175);
 
 const Player = () => {
   const channelName = useParams()?.channelName;
@@ -154,6 +157,18 @@ const Player = () => {
   }, [setShrinkNavbar, setFooterVisible, setVisible, channelName]);
 
   useEffect(() => {
+    (async () => {
+      if (streamInfo?.user_id && !streamInfo.tags) {
+        const tags = await API.getTags({
+          params: { broadcaster_id: streamInfo.user_id },
+        }).then((res) => res.data.data);
+
+        setStreamInfo((c) => ({ ...c, tags }));
+      }
+    })();
+  }, [streamInfo]);
+
+  useEffect(() => {
     const updateCachedChatState = debounce(
       () => {
         const localstorageTwitchChatState = getLocalstorage('TwitchChatState') || {};
@@ -208,14 +223,14 @@ const Player = () => {
         });
 
         savedStreamInfo.current = streamWithGameAndProfile;
-        setStreamInfo(streamWithGameAndProfile);
+        setStreamInfo((c) => ({ ...c, ...streamWithGameAndProfile }));
 
         return streamWithGameAndProfile;
       } else {
         const streamWithGameAndProfile = await validateToken().then(() =>
           fetchChannelInfo(twitchVideoPlayer.current.getChannelId(), true)
         );
-        setStreamInfo(streamWithGameAndProfile);
+        setStreamInfo((c) => ({ ...c, ...streamWithGameAndProfile }));
         return streamWithGameAndProfile;
       }
     }
@@ -264,7 +279,7 @@ const Player = () => {
     return () => setFavion();
   }
 
-  function playingEvents() {
+  async function playingEvents() {
     if (twitchVideoPlayer.current) setShowUIControlls(true);
   }
 
@@ -455,7 +470,6 @@ const Player = () => {
                     </span>
                   )}
                 </>
-
                 {streamInfo?.viewer_count && (
                   <AnimatedViewCount
                     id={'viewers'}
@@ -470,6 +484,23 @@ const Player = () => {
                       {streamInfo?.started_at}
                     </Moment>
                   </p>
+                )}
+                {streamInfo?.tags && (
+                  <TagsContainer id={'tags'}>
+                    {streamInfo.tags.map((tag) => {
+                      const lang = window.navigator.language?.toLowerCase();
+                      return (
+                        <ToolTip
+                          placement={'bottom'}
+                          delay={{ show: 500, hide: 0 }}
+                          tooltip={tag.localization_descriptions[lang]}
+                          width='max-content'
+                        >
+                          <p>{tag.localization_names[lang]}</p>
+                        </ToolTip>
+                      );
+                    })}
+                  </TagsContainer>
                 )}
               </InfoDisplay>
             ) : (
@@ -663,7 +694,13 @@ const Player = () => {
             <ChatOverlay switched={chatState.switchChatSide} chatwidth={chatState.chatwidth} />
           )}
           <div id='chat'>
-            <PlayerExtraButtons channelName={channelName}></PlayerExtraButtons>
+            <PlayerExtraButtons channelName={channelName}>
+              <Schedule
+                user={streamInfo?.user_name || channelName}
+                user_id={streamInfo?.user_id}
+                absolute={false}
+              />
+            </PlayerExtraButtons>
             <StyledChat
               frameborder='0'
               scrolling='yes'

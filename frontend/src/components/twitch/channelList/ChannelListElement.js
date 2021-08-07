@@ -12,6 +12,7 @@ import loginNameFormat from '../loginNameFormat';
 import CustomFilters from '../CustomFilters';
 import ChannelButtonsContainer from '../live/ChannelButtonsContainer';
 import FavoriteStreamBtn from '../live/FavoriteStreamBtn';
+import Schedule from '../schedule';
 
 const ChannelListElement = ({
   data,
@@ -95,6 +96,12 @@ const ChannelListElement = ({
       </Link>
       {/* <div className='ButtonContianer'> */}
       <ChannelButtonsContainer staticOpen={true}>
+        <Schedule
+          absolute={false}
+          user={channel?.user_name || searchInput}
+          user_id={channel?.user_id}
+          btnSize={22}
+        />
         <FavoriteStreamBtn channel={channel?.user_name} show={followingStatus} />
         <CustomFilters
           channel={channel?.user_name.toLowerCase()}

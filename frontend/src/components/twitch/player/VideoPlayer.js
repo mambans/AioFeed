@@ -7,6 +7,7 @@ import Loopbar, { timeToSeconds } from './Loopbar';
 import { LoopBtn, Loop } from './StyledComponents';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import ToolTip from '../../sharedComponents/ToolTip';
+import Schedule from '../schedule';
 
 const VideoPlayer = ({ listIsOpen, listWidth, playNext }) => {
   const channelName = useParams()?.channelName;
@@ -19,6 +20,7 @@ const VideoPlayer = ({ listIsOpen, listWidth, playNext }) => {
   const twitchVideoPlayer = useRef();
   const [loopEnabled, setLoopEnabled] = useState(Boolean(useQuery().get('loop')));
   const [duration, setDuration] = useState();
+  const [videoDetails, setVideoDetails] = useState();
 
   useEffect(() => {
     const playerParams = {
@@ -54,19 +56,21 @@ const VideoPlayer = ({ listIsOpen, listWidth, playNext }) => {
 
     const fetchDetailsForDocumentTitle = async () => {
       if (twitchVideoPlayer.current) {
-        const videoDetails = await API.getVideos({ params: { id: videoId } }).then(
+        const fetchedvideoDetails = await API.getVideos({ params: { id: videoId } }).then(
           (r) => r.data.data[0]
         );
 
-        document.title = `${videoDetails?.user_name || channelName || ''} - ${
-          videoDetails?.title || videoId
+        setVideoDetails(fetchedvideoDetails);
+
+        document.title = `${fetchedvideoDetails?.user_name || channelName || ''} - ${
+          fetchedvideoDetails?.title || videoId
         }`;
 
-        if (videoDetails?.user_name && !channelName) {
+        if (fetchedvideoDetails?.user_name && !channelName) {
           window.history.pushState(
             {},
-            `${videoDetails?.user_name || ''} - ${videoDetails?.title || videoId}`,
-            `/${videoDetails?.user_name}/videos/${videoId}${time ? `?start=${time}` : ''}${
+            `${fetchedvideoDetails?.user_name || ''} - ${fetchedvideoDetails?.title || videoId}`,
+            `/${fetchedvideoDetails?.user_name}/videos/${videoId}${time ? `?start=${time}` : ''}${
               endTime ? `&end=${endTime}` : ''
             }${loopEnabled ? `&loop=${loopEnabled}` : ''}`
           );
@@ -80,42 +84,49 @@ const VideoPlayer = ({ listIsOpen, listWidth, playNext }) => {
   }, [videoId, channelName, twitchVideoPlayer, time, endTime, loopEnabled]);
 
   return (
-    <Loop listIsOpen={String(listIsOpen)} listWidth={listWidth} loopEnabled={String(loopEnabled)}>
-      {twitchVideoPlayer.current && (
-        <ToolTip
-          placement='right'
-          delay={{ show: 500, hide: 0 }}
-          tooltip={`${loopEnabled ? 'Disable ' : 'Enable '} loop`}
-          width='max-content'
-        >
-          <LoopBtn
-            size={32}
-            enabled={String(loopEnabled)}
-            onClick={() => {
-              setLoopEnabled((cr) => {
-                if (twitchVideoPlayer.current.getEnded() && !cr) {
-                  twitchVideoPlayer.current.seek(0);
-                }
-                window.history.pushState(
-                  {},
-                  `${window.location}${loopEnabled ? `&loop=${loopEnabled}` : ''}`
-                );
-                return !cr;
-              });
-            }}
-          />
-        </ToolTip>
-      )}
-      {twitchVideoPlayer.current && loopEnabled && (
-        <Loopbar
-          twitchVideoPlayer={twitchVideoPlayer.current}
-          duration={duration}
-          loopEnabled={loopEnabled}
-        />
-      )}
+    <>
+      <Schedule
+        user_id={videoDetails?.user_id}
+        user={videoDetails?.login || videoDetails?.user_name || channelName}
+      />
+      <Loop listIsOpen={String(listIsOpen)} listWidth={listWidth} loopEnabled={String(loopEnabled)}>
+        {twitchVideoPlayer.current && (
+          <ToolTip
+            placement='right'
+            delay={{ show: 500, hide: 0 }}
+            tooltip={`${loopEnabled ? 'Disable ' : 'Enable '} loop`}
+            width='max-content'
+          >
+            <LoopBtn
+              size={32}
+              enabled={String(loopEnabled)}
+              onClick={() => {
+                setLoopEnabled((cr) => {
+                  if (twitchVideoPlayer.current.getEnded() && !cr) {
+                    twitchVideoPlayer.current.seek(0);
+                  }
+                  window.history.pushState(
+                    {},
+                    `${window.location}${loopEnabled ? `&loop=${loopEnabled}` : ''}`
+                  );
+                  return !cr;
+                });
+              }}
+            />
+          </ToolTip>
+        )}
 
-      {/* <div id='twitch-embed' style={{ gridArea: 'video' }}></div> */}
-    </Loop>
+        {twitchVideoPlayer.current && loopEnabled && (
+          <Loopbar
+            twitchVideoPlayer={twitchVideoPlayer.current}
+            duration={duration}
+            loopEnabled={loopEnabled}
+          />
+        )}
+
+        {/* <div id='twitch-embed' style={{ gridArea: 'video' }}></div> */}
+      </Loop>
+    </>
   );
 };
 export default VideoPlayer;

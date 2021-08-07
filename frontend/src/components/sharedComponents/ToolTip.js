@@ -40,7 +40,7 @@ const ToolTip = ({
       <OverlayTrigger
         key={tooltip + Date.now()}
         placement={placement}
-        delay={delay}
+        delay={typeof delay === 'object' ? delay : { show: delay }}
         overlay={
           typeof tooltip === 'object' ? (
             tooltip
