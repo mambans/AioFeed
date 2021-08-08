@@ -127,6 +127,12 @@ export const StyledCountdownCircle = styled.div`
   }
 `;
 
+export const pulseOpacity = keyframes`
+  0% {opacity 1;}
+  50% {opacity 0;}
+  100% {opacity 1;}
+`;
+
 export const pulse = keyframes`
   0% {background: #121415d1;}
   40% {background: #1d1e23d1;}

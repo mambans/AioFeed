@@ -46,7 +46,7 @@ const Schedule = ({ user, user_id, alwaysVisible, absolute = true, btnSize = 26 
               style={{
                 position: 'absolute',
                 top: positions.bottom,
-                left: positions?.left - (420 - positions?.width),
+                left: Math.max(0, positions?.left - (420 - positions?.width)),
               }}
               ref={ref}
               user={user}
@@ -70,7 +70,7 @@ const Schedule = ({ user, user_id, alwaysVisible, absolute = true, btnSize = 26 
 const TriggerButton = memo(
   React.forwardRef(({ setShow, absolute, btnSize }, ref) => {
     return (
-      <ToolTip placement='left' tooltip='Show upcoming streams' delay={500}>
+      <ToolTip placement='bottom' tooltip='Show upcoming streams' delay={500}>
         <StyledButton absolute={absolute} onClick={() => setShow((c) => !c)} ref={ref}>
           <AiFillSchedule size={btnSize} />
         </StyledButton>
@@ -95,11 +95,12 @@ const SchedulesList = React.forwardRef(({ schedule, setSchedule, user, user_id, 
           params: { broadcaster_id: id },
         }).catch((e) => {
           console.error('fetchedSchedule error:', e);
-          setSchedule([]);
+          setSchedule({ error: 'No schedule available' });
         });
-        const gameIds = [...new Set(fetchedSchedule.data.data.segments.map((i) => i.category?.id))];
+        const gameIds =
+          [...new Set(fetchedSchedule?.data?.data?.segments.map((i) => i.category?.id))] || [];
 
-        if (Boolean(gameIds.filter((i) => i).length)) {
+        if (Boolean(gameIds?.filter((i) => i).length)) {
           const gameData = await API.getGames({
             params: {
               id: gameIds,
@@ -108,9 +109,9 @@ const SchedulesList = React.forwardRef(({ schedule, setSchedule, user, user_id, 
 
           fetchedSchedule.data.data.segments.map(
             (s) =>
-              (s.category['box_art_url'] = gameData.data.data.find((g) => g.id === s.category?.id)[
-                'box_art_url'
-              ])
+              (s.category['box_art_url'] = gameData?.data?.data?.find(
+                (g) => g.id === s.category?.id
+              )['box_art_url'])
           );
         }
         // else {
@@ -120,14 +121,13 @@ const SchedulesList = React.forwardRef(({ schedule, setSchedule, user, user_id, 
         if (fetchedSchedule?.data?.data?.segments?.[0]) {
           setSchedule(fetchedSchedule.data);
         } else {
-          setSchedule([]);
+          setSchedule({ error: 'No schedule available' });
         }
       }
     })();
   }, [user, user_id, setSchedule, schedule]);
-
   return (
-    <ScheduleListContainer ref={ref} style={style}>
+    <ScheduleListContainer ref={ref} style={style} error={schedule?.error}>
       {schedule?.data?.segments ? (
         schedule.data.segments.map((i, index) => (
           <React.Fragment key={index}>
@@ -135,8 +135,8 @@ const SchedulesList = React.forwardRef(({ schedule, setSchedule, user, user_id, 
             <br />
           </React.Fragment>
         ))
-      ) : schedule ? (
-        <NoSchedulesText>No schedules</NoSchedulesText>
+      ) : schedule?.error ? (
+        <NoSchedulesText>{schedule?.error}</NoSchedulesText>
       ) : (
         Array.apply(null, Array(nrOfItems)).map((x, i) => {
           return (

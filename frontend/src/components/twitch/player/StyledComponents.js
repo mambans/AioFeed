@@ -492,7 +492,8 @@ export const StyledPlayerExtraButtons = styled.div`
     z-index: 1;
   }
 
-  a.link {
+  a,
+  .link {
     color: #fff;
     background-color: #343a40;
     display: flex;

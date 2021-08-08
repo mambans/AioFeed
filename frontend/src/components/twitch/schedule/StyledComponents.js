@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import { pulse } from '../StyledComponents';
 import { MdRefresh } from 'react-icons/md';
 
@@ -14,7 +14,8 @@ export const ScheduleListContainer = styled.div`
   border-radius: 10px;
   padding: 5px;
   padding-left: 10px;
-  height: ${SingelScheduleItemTotalHeight * nrOfItems + 10}px;
+  height: ${({ error }) =>
+    error ? 'auto' : `${SingelScheduleItemTotalHeight * nrOfItems + 10}px`};
   overflow: auto;
   position: absolute;
   right: 0;
@@ -29,6 +30,26 @@ export const ScheduleListContainer = styled.div`
 
 const loadingAnimation = css`
   animation: ${pulse} 2s linear infinite;
+`;
+
+const pulseOpacity = keyframes`
+  0% {opacity 1;
+    height: 100%;
+    bottom: 0px;
+  }
+  50% {
+    opacity 0;
+    height: 10%;
+  }
+  100% {
+    opacity 1;
+    height: 100%;
+    top: 0;
+  }
+`;
+
+const loadingAnimationOpacity = css`
+  animation: ${pulseOpacity} 2s linear infinite;
 `;
 
 export const StyledSchedule = styled.div`
@@ -62,6 +83,7 @@ export const StyledSchedule = styled.div`
     background-color: #e27626;
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
+    ${({ loading }) => (loading === true ? loadingAnimationOpacity : null)};
   }
 
   p,
@@ -212,6 +234,6 @@ export const RefreshBtn = React.forwardRef(({ loading, onClick }, ref) => {
 
 export const NoSchedulesText = styled.div`
   text-align: center;
-  font-size: 1.5em;
+  font-size: 1.35em;
   font-weight: bold;
 `;
