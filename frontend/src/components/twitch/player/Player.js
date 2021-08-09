@@ -421,9 +421,11 @@ const Player = () => {
                       className='twitchRedirect'
                       alt=''
                       ref={link1}
-                      href={`https://www.twitch.tv/${streamInfo?.user_name || channelName}`}
+                      href={`https://www.twitch.tv/${
+                        streamInfo?.user_name || channelName
+                      }?redirect=false`}
                     >
-                      <FaTwitch size={26} color='purple' />
+                      <FaTwitch size={24} color='purple' />
                     </a>
 
                     <FollowUnfollowBtn
@@ -495,8 +497,11 @@ const Player = () => {
                           delay={{ show: 500, hide: 0 }}
                           tooltip={tag.localization_descriptions[lang]}
                           width='max-content'
+                          key={tag.tag_id}
                         >
-                          <p>{tag.localization_names[lang]}</p>
+                          <a href={`https://www.twitch.tv/directory/all/tags/${tag.tag_id}`}>
+                            {tag.localization_names[lang]}
+                          </a>
                         </ToolTip>
                       );
                     })}

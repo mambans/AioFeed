@@ -1,5 +1,5 @@
 import { MdChat } from 'react-icons/md';
-import { FaWindowClose, FaRegClock } from 'react-icons/fa';
+import { FaWindowClose, FaRegClock, FaTwitch } from 'react-icons/fa';
 import { MdLiveTv } from 'react-icons/md';
 import { useParams, useLocation, Link } from 'react-router-dom';
 import React, { useEffect, useCallback, useState, useRef, useContext } from 'react';
@@ -459,6 +459,16 @@ const ChannelPage = () => {
                             channel={channelInfo.name || channelName}
                             size={26}
                           />
+                          <a
+                            className='twitchRedirect'
+                            alt=''
+                            href={`https://www.twitch.tv/${
+                              channelInfo.name || channelName
+                            }?redirect=false`}
+                            style={{ margin: '0 5px' }}
+                          >
+                            <FaTwitch size={22} color='purple' />
+                          </a>
                         </div>
                         <Link
                           to={{
