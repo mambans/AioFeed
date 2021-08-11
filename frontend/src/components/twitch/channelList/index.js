@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 
 import { useParams } from 'react-router-dom';
 import { throttle } from 'lodash';
@@ -16,6 +16,7 @@ import StyledLoadingList from './../categoryTopStreams/LoadingList';
 import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 import useToken from '../useToken';
 import SearchList from '../../sharedComponents/SearchList';
+import AccountContext from '../../account/AccountContext';
 
 const removeDuplicates = (items) =>
   items.filter((item, index, self) => self.findIndex((t) => t.user_id === item.user_id) === index);
@@ -28,6 +29,7 @@ const ChannelList = ({
   position,
 }) => {
   const channelName = useParams()?.channelName;
+  const { username, twitchPreferences } = useContext(AccountContext);
 
   const [listIsOpen, setListIsOpen] = useState();
   const [cursor, setCursor] = useState({ position: 0 });
@@ -252,6 +254,11 @@ const ChannelList = ({
 
   useEffect(() => {
     clearTimeout(resetListTimer.current);
+    if (!twitchPreferences?.Id && !twitchPreferences.Token) {
+      setShowDropdown(false);
+      return false;
+    }
+
     if (listIsOpen) {
       clearTimeout(resetListTimer.current);
       fetchFollowedChannels().catch((e) => {
@@ -259,7 +266,7 @@ const ChannelList = ({
         console.warn(e);
       });
     }
-  }, [listIsOpen, fetchFollowedChannels]);
+  }, [listIsOpen, fetchFollowedChannels, twitchPreferences]);
 
   return (
     <SearchList
@@ -290,12 +297,13 @@ const ChannelList = ({
               searchInput={channel}
               selected={true}
               followingStatus={false}
+              username={username}
             />
             <StyledLoadingList amount={3} style={{ paddingLeft: '10px' }} />
           </>
-        ) : filteredInputMatched?.data.length >= 1 ? (
+        ) : filteredInputMatched?.data?.length >= 1 ? (
           <>
-            {filteredInputMatched?.data.map((channel, index) => {
+            {filteredInputMatched?.data?.map((channel, index) => {
               return (
                 <ChannelListElement
                   key={channel.user_id}

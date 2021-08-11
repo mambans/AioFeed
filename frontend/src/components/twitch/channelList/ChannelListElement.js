@@ -17,10 +17,11 @@ import Schedule from '../schedule';
 const ChannelListElement = ({
   data,
   selected,
-  showVodBtn = true,
+  showVodBtn,
   searchInput,
   followingStatus = true,
   style,
+  username,
 }) => {
   const [channel, setChannel] = useState(data);
   const timer = useRef();
@@ -109,7 +110,7 @@ const ChannelListElement = ({
           style={{ margin: '0' }}
         />
         <VodsFollowUnfollowBtn
-          show={showVodBtn}
+          show={username && showVodBtn}
           channel={channel?.user_name || searchInput}
           channelId={channel?.user_id}
         />
