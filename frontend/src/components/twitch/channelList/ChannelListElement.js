@@ -17,7 +17,7 @@ import Schedule from '../schedule';
 const ChannelListElement = ({
   data,
   selected,
-  showVodBtn,
+  showVodBtn = true,
   searchInput,
   followingStatus = true,
   style,

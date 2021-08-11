@@ -309,6 +309,7 @@ const ChannelList = ({
                   key={channel.user_id}
                   data={channel}
                   selected={index === cursor.position}
+                  username={username}
                   followingStatus={Boolean(
                     followedChannels?.find((item) => item?.user_id === channel?.user_id)
                   )}
