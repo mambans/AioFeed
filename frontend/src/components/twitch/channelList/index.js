@@ -29,7 +29,7 @@ const ChannelList = ({
   position,
 }) => {
   const channelName = useParams()?.channelName;
-  const { username, twitchPreferences } = useContext(AccountContext);
+  const { username, twitchToken, twitchUserId } = useContext(AccountContext);
 
   const [listIsOpen, setListIsOpen] = useState();
   const [cursor, setCursor] = useState({ position: 0 });
@@ -254,7 +254,8 @@ const ChannelList = ({
 
   useEffect(() => {
     clearTimeout(resetListTimer.current);
-    if (!twitchPreferences?.Id && !twitchPreferences.Token) {
+
+    if (!twitchToken || !twitchUserId) {
       setShowDropdown(false);
       return false;
     }
@@ -266,7 +267,7 @@ const ChannelList = ({
         console.warn(e);
       });
     }
-  }, [listIsOpen, fetchFollowedChannels, twitchPreferences]);
+  }, [listIsOpen, fetchFollowedChannels, twitchToken, twitchUserId]);
 
   return (
     <SearchList

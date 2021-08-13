@@ -204,13 +204,19 @@ const API = {
     });
   },
   getSchedule: async ({ params }) => {
-    return await axios.get(`${BASE_URL}/schedule`, {
-      params,
-      headers: {
-        Authorization: `Bearer ${await validateToken()}`,
-        'Client-ID': CLIENT_ID,
-      },
-    });
+    return await axios
+      .get(`${BASE_URL}/schedule`, {
+        params,
+        headers: {
+          Authorization: `Bearer ${await validateToken()}`,
+          'Client-ID': CLIENT_ID,
+        },
+      })
+      .catch((e) => {
+        if (e?.response?.data?.status !== 404) {
+          console.error('fetchedSchedule error:', e);
+        }
+      });
   },
 };
 export default API;

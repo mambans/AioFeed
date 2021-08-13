@@ -87,12 +87,12 @@ const FavoriteStreamBtn = (
       >
         {added ? (
           isHovered ? (
-            <RemoveItemBtn {...props} size={size} />
+            <RemoveItemBtn size={size} />
           ) : (
-            <AddedItemBtn {...props} size={size} />
+            <AddedItemBtn size={size} />
           )
         ) : (
-          <AddItemBtn {...props} size={size} />
+          <AddItemBtn size={size} />
         )}
       </VodAddRemoveButton>
     </ToolTip>

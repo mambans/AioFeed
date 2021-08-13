@@ -14,8 +14,8 @@ export const ScheduleListContainer = styled.div`
   border-radius: 10px;
   padding: 5px;
   padding-left: 10px;
-  height: ${({ error }) =>
-    error ? 'auto' : `${SingelScheduleItemTotalHeight * nrOfItems + 10}px`};
+  height: ${({ error, nrOfItemsP }) =>
+    error ? 'auto' : `${SingelScheduleItemTotalHeight * (nrOfItemsP || nrOfItems) + 10}px`};
   overflow: auto;
   position: absolute;
   right: 0;
@@ -215,18 +215,22 @@ export const RefreshBtnContainer = styled.div`
   margin: 5px;
   opacity: 0.5;
   pointer-events: ${({ loading }) => (loading === 'true' ? 'none' : 'unset')};
-  z-index: 3;
+  z-index: 13;
   transition: opacity 250ms;
   cursor: pointer;
+  width: 16px;
+  display: flex;
+  transform: translate(75%, 50%);
+  position: absolute;
 
   &:hover {
     opacity: ${({ loading }) => (loading ? '0.7' : '1')};
   }
 `;
 
-export const RefreshBtn = React.forwardRef(({ loading, onClick }, ref) => {
+export const RefreshBtn = React.forwardRef(({ loading, onClick, style }, ref) => {
   return (
-    <RefreshBtnContainer ref={ref} loading={String(loading)} onClick={onClick}>
+    <RefreshBtnContainer style={style} ref={ref} loading={String(loading)} onClick={onClick}>
       <RefreshBtnIcon />
     </RefreshBtnContainer>
   );

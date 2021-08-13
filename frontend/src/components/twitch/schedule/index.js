@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import { FaRegClock, FaLongArrowAltRight } from 'react-icons/fa';
 import { AiFillSchedule } from 'react-icons/ai';
+import { BsFillQuestionSquareFill } from 'react-icons/bs';
 
 import {
   StyledSchedule,
@@ -42,6 +43,15 @@ const Schedule = ({ user, user_id, alwaysVisible, absolute = true, btnSize = 26 
         )}
         {(show || alwaysVisible) && (
           <Portal>
+            <RefreshBtn
+              ref={refreshBtnRef}
+              loading={!schedule}
+              onClick={() => setSchedule()}
+              style={{
+                top: positions.bottom,
+                left: Math.max(0, positions?.left),
+              }}
+            />
             <SchedulesList
               style={{
                 position: 'absolute',
@@ -53,8 +63,9 @@ const Schedule = ({ user, user_id, alwaysVisible, absolute = true, btnSize = 26 
               user_id={user_id}
               setSchedule={setSchedule}
               schedule={schedule}
+              refreshBtnRef={refreshBtnRef}
+              btnRef={btnRef}
             />
-            <RefreshBtn ref={refreshBtnRef} loading={!schedule} onClick={() => setSchedule()} />
           </Portal>
         )}
       </Container>
@@ -67,11 +78,16 @@ const Schedule = ({ user, user_id, alwaysVisible, absolute = true, btnSize = 26 
   );
 };
 
-const TriggerButton = memo(
-  React.forwardRef(({ setShow, absolute, btnSize }, ref) => {
+export const TriggerButton = memo(
+  React.forwardRef(({ setShow, absolute, btnSize, style }, ref) => {
     return (
       <ToolTip placement='bottom' tooltip='Show upcoming streams' delay={500}>
-        <StyledButton absolute={absolute} onClick={() => setShow((c) => !c)} ref={ref}>
+        <StyledButton
+          absolute={absolute}
+          style={style}
+          onClick={() => setShow((c) => !c)}
+          ref={ref}
+        >
           <AiFillSchedule size={btnSize} />
         </StyledButton>
       </ToolTip>
@@ -114,9 +130,6 @@ const SchedulesList = React.forwardRef(({ schedule, setSchedule, user, user_id, 
               )['box_art_url'])
           );
         }
-        // else {
-        //   fetchedSchedule.data.data.segments.map((s) => (s.category = {}));
-        // }
 
         if (fetchedSchedule?.data?.data?.segments?.[0]) {
           setSchedule(fetchedSchedule.data);
@@ -151,9 +164,9 @@ const SchedulesList = React.forwardRef(({ schedule, setSchedule, user, user_id, 
   );
 });
 
-const SingelScheduleItem = ({ schedule, user }) => {
+export const SingelScheduleItem = ({ schedule, user }) => {
   return (
-    <StyledSchedule to={`/${user}`} id='SCHDULE' loading={String(!schedule)}>
+    <StyledSchedule to={`/${user}`} id='SCHDEULE' loading={String(!schedule)}>
       {schedule && (
         <>
           <div className='time'>
@@ -200,14 +213,20 @@ const SingelScheduleItem = ({ schedule, user }) => {
             </Link>
           )}
 
-          <img
-            className='image'
-            src={
-              schedule?.category?.box_art_url?.replace('{width}', 144)?.replace('{height}', 192) ||
-              `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`
-            }
-            alt=''
-          />
+          {schedule?.category?.box_art_url ? (
+            <img
+              className='image'
+              src={
+                schedule?.category?.box_art_url
+                  ?.replace('{width}', 144)
+                  ?.replace('{height}', 192) ||
+                `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`
+              }
+              alt=''
+            />
+          ) : (
+            <BsFillQuestionSquareFill className='image' color='rgb(38,38,38)' />
+          )}
         </>
       )}
     </StyledSchedule>

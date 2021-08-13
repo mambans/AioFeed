@@ -356,6 +356,7 @@ export const InfoDisplay = styled.div`
 
   .twitchRedirect {
     margin-left: 10px;
+    margin-right: 10px;
   }
 `;
 
@@ -549,12 +550,12 @@ export const PlayerExtraButtons = ({ channelName, children }) => {
         />
         Nav
       </ShowNavbarBtn>
+      {children}
       {channelName && (
         <Link className='link' to={`/${channelName}/page`}>
           <MdAccountCircle size={26} /> Page
         </Link>
       )}
-      {children}
     </StyledPlayerExtraButtons>
   );
 };
