@@ -601,10 +601,11 @@ export const ResizeDevider = styled.div`
 
 export const ChatOverlay = styled.div`
   height: 100%;
-  width: ${({ chatwidth }) => chatwidth}px;
+  /* width: ${({ chatwidth }) => chatwidth}px; */
+  grid-area: chat;
+  width: 100%;
   position: absolute;
   transform: translate3d(0, 0, 0);
-  grid-area: chat;
 `;
 
 export const ResetVideoButton = styled(GrRefresh).attrs({ size: 24 })`
