@@ -33,7 +33,7 @@ export const VideoAndChatContainer = styled.div`
   color: var(--navTextColorActive);
   cursor: ${({ resizeActive }) => (resizeActive ? 'w-resize' : 'unset')};
   grid-template-columns: ${({ chatwidth, hidechat, switched }) =>
-    `${hidechat ? '100vw' : switched ? `${chatwidth}px 5px auto` : `auto 5px ${chatwidth}px`} `};
+    `${hidechat ? '100vw' : switched ? `${chatwidth}px 7px auto` : `auto 7px ${chatwidth}px`} `};
   background: linear-gradient(217deg, rgba(45, 45, 45, 0.8), rgba(10, 10, 10, 0.7) 70.71%),
     linear-gradient(127deg, rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.7) 70.71%),
     linear-gradient(336deg, rgba(30, 30, 30, 0.8), rgba(0, 0, 0, 0.7) 70.71%);
@@ -587,7 +587,7 @@ export const ResizeDevider = styled.div`
     transition: opacity 500ms, height 250ms;
     opacity: ${({ resizeActive }) => (resizeActive ? 1 : 0.4)};
     background: #ffffff;
-    width: 1px;
+    width: 3px;
     margin: auto;
     height: ${({ resizeActive }) => (resizeActive ? '40%' : '10%')};
   }
