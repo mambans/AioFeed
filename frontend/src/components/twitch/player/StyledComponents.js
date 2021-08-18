@@ -601,8 +601,6 @@ export const ResizeDevider = styled.div`
 
 export const ChatOverlay = styled.div`
   height: 100%;
-  /* width: ${({ chatwidth }) => chatwidth}px; */
-  grid-area: chat;
   width: 100%;
   position: absolute;
   transform: translate3d(0, 0, 0);

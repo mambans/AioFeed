@@ -695,9 +695,7 @@ const Player = () => {
       )}
       {!chatState.hideChat ? (
         <>
-          {resizeActive && (
-            <ChatOverlay switched={chatState.switchChatSide} chatwidth={chatState.chatwidth} />
-          )}
+          {resizeActive && <ChatOverlay switched={chatState.switchChatSide} />}
           <div id='chat'>
             <PlayerExtraButtons channelName={channelName}>
               <Schedule
