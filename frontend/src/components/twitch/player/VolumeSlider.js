@@ -112,16 +112,19 @@ const VolumeSlider = ({
   }
 
   function changeVolume(operator, amount) {
-    setShowControlls(true);
     setVolumeText((volumeText) => {
       const newVolume = Math.min(
         Math.max(
           operator === 'increase' ? volumeText / 100 + amount : volumeText / 100 - amount,
-          0.01
+          0
         ),
         1
       );
 
+      if (TwitchPlayer.getMuted()) {
+        TwitchPlayer.setMuted(false);
+        setVolumeMuted(false);
+      }
       setShowControlls(true);
       TwitchPlayer.setVolume(newVolume);
       return newVolume * 100;
@@ -148,7 +151,7 @@ const VolumeSlider = ({
       left={Math.round(15 + 157 * (parseInt(volumeText?.toFixed(0)) / 100))}
     >
       <div className='value'>
-        <h3>{parseInt(volumeText?.toFixed(0))}</h3>
+        <h3>{volumeText?.toFixed(0)}</h3>
       </div>
 
       <div id='BottomRow'>
