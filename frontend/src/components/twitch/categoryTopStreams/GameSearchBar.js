@@ -9,7 +9,7 @@ import {
 } from './styledComponents';
 
 import { throttle } from 'lodash';
-import API from '../API';
+import TwitchAPI from '../API';
 import handleArrowNavigation from '../channelList/handleArrowNavigation';
 import InifinityScroll from '../channelList/InifinityScroll';
 import sortByInput from '../channelList/sortByInput';
@@ -61,10 +61,7 @@ const GameSearchBar = (props) => {
               clearTimeout(searchTimer.current);
               searchTimer.current = setTimeout(async () => {
                 setSearchResults();
-                await API.getSearchGames({
-                  query: input || value,
-                  params: { first: 20 },
-                }).then((res) => {
+                await TwitchAPI.getSearchGames({ first: 20 }, input || value).then((res) => {
                   setSearchResults({
                     data: res?.data.data,
                     nextPage: res?.data?.pagination.cursor,
@@ -152,16 +149,15 @@ const GameSearchBar = (props) => {
       setLoadingMore(true);
 
       if (game && game !== '' && searchResults?.nextPage) {
-        await API.getSearchGames({
-          query: game,
-          params: { first: 20, after: searchResults?.nextPage },
-        }).then((res) => {
-          setSearchResults((curr) => ({
-            data: removeDuplicates([...(curr.data || []), ...(res.data?.data || [])]),
-            nextPage: res.data.pagination?.cursor,
-          }));
-          setLoadingMore(false);
-        });
+        await TwitchAPI.getSearchGames({ first: 20, after: searchResults?.nextPage }, game).then(
+          (res) => {
+            setSearchResults((curr) => ({
+              data: removeDuplicates([...(curr.data || []), ...(res.data?.data || [])]),
+              nextPage: res.data.pagination?.cursor,
+            }));
+            setLoadingMore(false);
+          }
+        );
       } else {
         GetTopGames(topGames?.nextPage).then((res) => {
           if (res.data?.length >= 1) {

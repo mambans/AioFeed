@@ -1,6 +1,6 @@
 import { getLocalstorage } from '../../../util/Utils';
 import AddVideoExtraData from '../AddVideoExtraData';
-import API from '../API';
+import TwitchAPI from '../API';
 import { addVodEndTime } from '../TwitchUtils';
 import getMyFollowedChannels from './../getMyFollowedChannels';
 import reauthenticate from './../reauthenticate';
@@ -23,11 +23,9 @@ const monitoredChannelNameToId = async (followedChannels, followedVodEnabledChan
     .filter((channel) => channel);
 
   const vodChannelsIdsWithoutLiveFollow = Boolean(vodChannelsWithoutFollow.length)
-    ? await API.getUser({
-        params: {
-          login: vodChannelsWithoutFollow,
-          first: 100,
-        },
+    ? await TwitchAPI.getUser({
+        login: vodChannelsWithoutFollow,
+        first: 100,
       })
         .then((res) => res.data.data.map((channel) => channel.id))
         .catch((err) => {
@@ -45,13 +43,11 @@ const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRe
   const PromiseAllVods = await Promise.all(
     vodChannels.map(
       async (channelId) =>
-        await API.getVideos({
-          params: {
-            user_id: channelId,
-            period: 'month',
-            first: 5,
-            type: 'all',
-          },
+        await TwitchAPI.getVideos({
+          user_id: channelId,
+          period: 'month',
+          first: 5,
+          type: 'all',
         }).then((response) => response.data.data)
     )
   ).catch(async () => {
@@ -65,13 +61,11 @@ const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRe
       return await Promise.all(
         channelsIdsUnfetchedVods.map(
           async (channel) =>
-            await API.getVideos({
-              params: {
-                user_id: channel,
-                period: 'month',
-                first: 5,
-                type: 'all',
-              },
+            await TwitchAPI.getVideos({
+              user_id: channel,
+              period: 'month',
+              first: 5,
+              type: 'all',
             }).then((response) => response.data.data)
         )
       );

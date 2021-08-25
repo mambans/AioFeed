@@ -1,12 +1,12 @@
-import API from '../API';
+import TwitchAPI from '../API';
 import { getLocalstorage } from '../../../util/Utils';
 
 /**
  * @param {String} channelId - Channel id of Twitch channel to fetch info from.
- * @param {Boolean} format - format data to match API.getStreams() output.
+ * @param {Boolean} format - format data to match TwitchAPI.getStreams() output.
  */
 const fetchChannelInfo = async (channelId, format) => {
-  return await API.krakenGetChannelInfo({ params: { id: channelId } })
+  return await TwitchAPI.krakenGetChannelInfo({ id: channelId })
     .then((res) => {
       if (res) {
         if (format) {

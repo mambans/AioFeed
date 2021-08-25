@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { CreateClipButton } from './StyledComponents';
-import API from '../API';
+import TwitchAPI from '../API';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
 const CreateAndOpenClip = async ({ streamInfo }) => {
@@ -11,7 +11,7 @@ const CreateAndOpenClip = async ({ streamInfo }) => {
   const TopPosition = (window.screen.height - Height) / 2;
   const settings = `height=${Height},width=${Width},top=${TopPosition},left=${LeftPosition},scrollbars,resizable,status,location,toolbar,`;
 
-  await API.postClip({ params: { broadcaster_id: streamInfo.user_id } })
+  await TwitchAPI.postClip({ broadcaster_id: streamInfo.user_id })
     .then((res) =>
       window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings)
     )

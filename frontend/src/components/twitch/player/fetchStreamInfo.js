@@ -1,4 +1,4 @@
-import API from '../API';
+import TwitchAPI from '../API';
 
 /**
  * Fetch and Set uptime state from a Live stream.
@@ -8,11 +8,9 @@ import API from '../API';
  * @async
  */
 const fetchStreamInfo = async (keyValuePair) => {
-  return await API.getStreams({
-    params: {
-      ...keyValuePair,
-      first: 1,
-    },
+  return await TwitchAPI.getStreams({
+    ...keyValuePair,
+    first: 1,
   })
     .then((res) => res.data?.data[0])
     .catch((error) => console.log(error));

@@ -3,7 +3,7 @@ import React, { useEffect, useState, useContext } from 'react';
 
 import { FollowBtn, UnfollowBtn } from './StyledComponents';
 import AccountContext from './../account/AccountContext';
-import API from './API';
+import TwitchAPI from './API';
 import useToken from './useToken';
 import ToolTip from '../sharedComponents/ToolTip';
 import { removeChannel as remmoveUpdateChannel } from './AddUpdateNotificationsButton';
@@ -29,11 +29,9 @@ const FollowUnfollowBtn = ({
 
   const unfollowStream = async () => {
     await validateToken().then(async () => {
-      await API.deleteFollow({
-        params: {
-          from_id: twitchUserId,
-          to_id: id,
-        },
+      await TwitchAPI.deleteFollow({
+        from_id: twitchUserId,
+        to_id: id,
       })
         .then((res) => {
           if (res.status === 204) {
@@ -59,11 +57,9 @@ const FollowUnfollowBtn = ({
 
   async function followStream() {
     await validateToken().then(async () => {
-      await API.addFollow({
-        params: {
-          from_id: twitchUserId,
-          to_id: id || (await API.getUser({ params: { login: channelName } })).data.data[0].id,
-        },
+      await TwitchAPI.addFollow({
+        from_id: twitchUserId,
+        to_id: id || (await TwitchAPI.getUser({ login: channelName })).data.data[0].id,
       })
         .then((res) => {
           if (res.status === 204) {
@@ -78,7 +74,7 @@ const FollowUnfollowBtn = ({
   useEffect(() => {
     const checkFollowing = async () => {
       await validateToken().then(async () => {
-        await API.checkFollow({ params: { from_id: twitchUserId, to_id: id } })
+        await TwitchAPI.checkFollow({ from_id: twitchUserId, to_id: id })
           .then((res) => {
             if (res.data.data[0]) {
               setFollowing(true);

@@ -6,7 +6,7 @@ import AccountContext from './../account/AccountContext';
 import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from './../LoadingIndicator';
 import { AddCookie } from '../../util/Utils';
-import API from '../twitch/API';
+import TwitchAPI from '../twitch/API';
 import aiofeedAPI from '../navigation/API';
 import useToken, { TwitchContext } from '../twitch/useToken';
 
@@ -29,7 +29,7 @@ const TwitchAuthCallback = () => {
       AddCookie('Twitch-refresh_token', refreshToken);
 
       const MyTwitch = await validateToken().then(async () => {
-        return API.getMe({ accessToken: accessToken }).then(async (res) => {
+        return TwitchAPI.getMe({ accessToken: accessToken }).then(async (res) => {
           AddCookie('Twitch-userId', res.data.data[0].id);
           AddCookie('Twitch-username', res.data.data[0].login);
           AddCookie('Twitch-profileImg', res.data.data[0].profile_image_url);

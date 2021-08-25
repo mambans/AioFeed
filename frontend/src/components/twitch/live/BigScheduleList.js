@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Portal } from 'react-portal';
 import useClicksOutside from '../../../hooks/useClicksOutside';
-import API from '../API';
+import TwitchAPI from '../API';
 import { SingelScheduleItem, TriggerButton } from '../schedule';
 import { RefreshBtn, ScheduleListContainer } from '../schedule/StyledComponents';
 import { fullValidateFunc } from '../validateToken';
@@ -61,11 +61,7 @@ const SchedulesList = React.forwardRef(
           const fetchedSchedules = await fullValidateFunc().then(async () => {
             const res = await Promise.all(
               followedChannels.map(async (user) => {
-                console.log(1);
-
-                return await API.getSchedule({
-                  params: { broadcaster_id: user.to_id },
-                });
+                return await TwitchAPI.getSchedule({ broadcaster_id: user.to_id });
               })
             );
             const list = res
@@ -80,11 +76,9 @@ const SchedulesList = React.forwardRef(
               ...new Set(list.map((channel) => channel.map((i) => i.category?.id)).flat(1)),
             ].filter((l) => l);
 
-            if (gameIDs) {
-              const gameData = await API.getGames({
-                params: {
-                  id: gameIDs,
-                },
+            if (Boolean(gameIDs?.length)) {
+              const gameData = await TwitchAPI.getGames({
+                id: gameIDs,
               });
 
               return list.map((c) => {

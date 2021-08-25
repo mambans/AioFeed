@@ -5,7 +5,7 @@ import Header from './../../sharedComponents/Header';
 import ChannelSearchList from './../channelList';
 import BigScheduleList from './BigScheduleList';
 
-const TwitchHeader = ({ data, setOrder }) => {
+const TwitchHeader = React.forwardRef(({ data, setOrder }, ref) => {
   const { refreshing, autoRefreshEnabled, refreshTimer, refresh, followedChannels } = data;
 
   return (
@@ -16,6 +16,7 @@ const TwitchHeader = ({ data, setOrder }) => {
           Twitch <span id='live-indicator'>Live</span>
         </>
       }
+      ref={ref}
       onHoverIconLink='live'
       refreshTimer={refreshTimer}
       autoRefreshEnabled={autoRefreshEnabled}
@@ -32,5 +33,5 @@ const TwitchHeader = ({ data, setOrder }) => {
       feedName='Twitch'
     />
   );
-};
+});
 export default TwitchHeader;

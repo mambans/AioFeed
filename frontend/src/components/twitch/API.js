@@ -6,7 +6,7 @@ const CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;
 const BASE_URL = 'https://api.twitch.tv/helix';
 const BASE_URL_KRAKEN = 'https://api.twitch.tv/kraken';
 
-const API = {
+const TwitchAPI = {
   getMe: async ({ accessToken }) => {
     const token = accessToken || (await validateToken());
     return await axios.get(`${BASE_URL}/users`, {
@@ -17,7 +17,7 @@ const API = {
     });
   },
 
-  getStreams: async ({ params }) => {
+  getStreams: async (params) => {
     return await axios.get(`${BASE_URL}/streams`, {
       params,
       headers: {
@@ -27,7 +27,7 @@ const API = {
     });
   },
 
-  getVideos: async ({ params }) => {
+  getVideos: async (params) => {
     return await axios.get(`${BASE_URL}/videos`, {
       params,
       headers: {
@@ -37,7 +37,7 @@ const API = {
     });
   },
 
-  getClips: async ({ params }) => {
+  getClips: async (params) => {
     return await axios.get(`${BASE_URL}/clips`, {
       params,
       headers: {
@@ -47,7 +47,7 @@ const API = {
     });
   },
 
-  postClip: async ({ params }) => {
+  postClip: async (params) => {
     return await axios.post(`${BASE_URL}/clips`, params, {
       headers: {
         Authorization: `Bearer ${await validateToken()}`,
@@ -56,7 +56,7 @@ const API = {
     });
   },
 
-  getUser: async ({ params, throwError = true }) => {
+  getUser: async (params) => {
     return await axios.get(`${BASE_URL}/users`, {
       params,
       headers: {
@@ -66,7 +66,7 @@ const API = {
     });
   },
 
-  getSearchChannels: async ({ params, query, throwError = true }) => {
+  getSearchChannels: async (params, query) => {
     return await axios.get(`${BASE_URL}/search/channels?query=${encodeURI(query)}`, {
       params,
       headers: {
@@ -76,7 +76,7 @@ const API = {
     });
   },
 
-  getChannel: async ({ params, throwError = true }) => {
+  getChannel: async (params) => {
     return await axios.get(`${BASE_URL}/channels`, {
       params,
       headers: {
@@ -86,7 +86,7 @@ const API = {
     });
   },
 
-  getMyFollowedChannels: async ({ params }) => {
+  getMyFollowedChannels: async (params) => {
     return await axios.get(`${BASE_URL}/users/follows`, {
       params: { ...params, from_id: getCookie('Twitch-userId') },
       headers: {
@@ -96,7 +96,7 @@ const API = {
     });
   },
 
-  getFollowedChannels: async ({ params }) => {
+  getFollowedChannels: async (params) => {
     return await axios.get(`${BASE_URL}/users/follows`, {
       params,
       headers: {
@@ -106,7 +106,7 @@ const API = {
     });
   },
 
-  getGames: async ({ params }) => {
+  getGames: async (params) => {
     return await axios.get(`${BASE_URL}/games`, {
       params,
       headers: {
@@ -116,7 +116,7 @@ const API = {
     });
   },
 
-  getSearchGames: async ({ params, query, throwError = true }) => {
+  getSearchGames: async (params, query) => {
     return await axios.get(`${BASE_URL}/search/categories?query=${encodeURI(query)}`, {
       params,
       headers: {
@@ -126,7 +126,7 @@ const API = {
     });
   },
 
-  getTopGames: async ({ params }) => {
+  getTopGames: async (params) => {
     return await axios.get(`${BASE_URL}/games/top`, {
       params,
       headers: {
@@ -136,7 +136,7 @@ const API = {
     });
   },
 
-  krakenGetVideo: async ({ params }) => {
+  krakenGetVideo: async (params) => {
     return await axios.get(`${BASE_URL_KRAKEN}/videos/${params.id}`, {
       params,
       headers: {
@@ -147,7 +147,7 @@ const API = {
     });
   },
 
-  krakenGetChannelInfo: async ({ params }) => {
+  krakenGetChannelInfo: async (params) => {
     return await axios.get(`${BASE_URL_KRAKEN}/channels/${params.id}`, {
       params,
       headers: {
@@ -158,7 +158,7 @@ const API = {
     });
   },
 
-  checkFollow: async ({ params }) => {
+  checkFollow: async (params) => {
     return await axios.get(`${BASE_URL}/users/follows`, {
       params,
       headers: {
@@ -168,7 +168,7 @@ const API = {
     });
   },
 
-  deleteFollow: async ({ params }) => {
+  deleteFollow: async (params) => {
     return await axios.delete(`${BASE_URL}/users/follows`, {
       params,
       headers: {
@@ -179,7 +179,7 @@ const API = {
     });
   },
 
-  addFollow: async ({ params }) => {
+  addFollow: async (params) => {
     return await axios.post(
       `${BASE_URL}/users/follows`,
       {},
@@ -194,7 +194,7 @@ const API = {
     );
   },
 
-  getTags: async ({ params }) => {
+  getTags: async (params) => {
     return await axios.get(`${BASE_URL}/streams/tags`, {
       params,
       headers: {
@@ -203,7 +203,7 @@ const API = {
       },
     });
   },
-  getSchedule: async ({ params }) => {
+  getSchedule: async (params) => {
     return await axios
       .get(`${BASE_URL}/schedule`, {
         params,
@@ -219,4 +219,4 @@ const API = {
       });
   },
 };
-export default API;
+export default TwitchAPI;

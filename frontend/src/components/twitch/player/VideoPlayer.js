@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
 
-import API from '../API';
+import TwitchAPI from '../API';
 import useQuery from '../../../hooks/useQuery';
 import Loopbar, { timeToSeconds } from './Loopbar';
 import { LoopBtn, Loop } from './StyledComponents';
@@ -56,7 +56,7 @@ const VideoPlayer = ({ listIsOpen, listWidth, playNext }) => {
 
     const fetchDetailsForDocumentTitle = async () => {
       if (twitchVideoPlayer.current) {
-        const fetchedvideoDetails = await API.getVideos({ params: { id: videoId } }).then(
+        const fetchedvideoDetails = await TwitchAPI.getVideos({ id: videoId }).then(
           (r) => r.data.data[0]
         );
 

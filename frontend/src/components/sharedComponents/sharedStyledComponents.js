@@ -1,10 +1,12 @@
 import { Button, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import React, { useContext } from 'react';
+import React, { useContext, useImperativeHandle, useState } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import Moment from 'react-moment';
+import { MdRefresh } from 'react-icons/md';
 
 import FeedsContext from '../feed/FeedsContext';
+import CountdownCircleTimer from './CountdownCircleTimer';
 
 export const ButtonLookalikeStyle = css`
   color: var(--refreshButtonColor);
@@ -25,7 +27,7 @@ export const ButtonLookalikeStyle = css`
   }
 `;
 
-export const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
+export const StyledRefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
   ${ButtonLookalikeStyle}
   position: relative;
   left: 6px;
@@ -44,6 +46,34 @@ export const RefreshButton = styled(Button).attrs({ variant: 'outline-secondary'
     }
   }
 `;
+
+export const RefreshButton = React.forwardRef(
+  ({ children, autoRefreshEnabled, refreshTimer, parentIsLoading, ...props }, ref) => {
+    const [isLoading, setIsLoading] = useState();
+
+    useImperativeHandle(ref, () => ({
+      setIsLoading(a) {
+        setIsLoading(a);
+      },
+    }));
+
+    return (
+      <StyledRefreshButton {...props}>
+        {children}
+        {autoRefreshEnabled || isLoading || parentIsLoading ? (
+          <CountdownCircleTimer
+            key={refreshTimer}
+            isLoading={isLoading || parentIsLoading}
+            autoRefreshEnabled={autoRefreshEnabled}
+            startDuration={Math.max(0, Math.round((refreshTimer - Date.now()) / 1000))}
+          />
+        ) : (
+          <MdRefresh size={32} />
+        )}
+      </StyledRefreshButton>
+    );
+  }
+);
 
 export const AddToListModalTrigger = styled(Button).attrs({ variant: 'outline-secondary' })`
   ${ButtonLookalikeStyle}

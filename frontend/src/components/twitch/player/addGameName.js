@@ -1,4 +1,4 @@
-import API from '../API';
+import TwitchAPI from '../API';
 import { getLocalstorage } from '../../../util/Utils';
 
 const addGameName = async ({ streamInfo, newStreamInfo }) => {
@@ -15,10 +15,8 @@ const addGameName = async ({ streamInfo, newStreamInfo }) => {
       const gameInfo =
         foundCachedGame ||
         (newStreamInfo?.game_id &&
-          (await API.getGames({
-            params: {
-              id: newStreamInfo?.game_id,
-            },
+          (await TwitchAPI.getGames({
+            id: newStreamInfo?.game_id,
           }).then((res) => res.data.data[0])));
 
       if (!foundCachedGame && gameInfo) {

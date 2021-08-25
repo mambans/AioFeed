@@ -5,7 +5,7 @@ import { throttle } from 'lodash';
 
 import { GameListUlContainer } from './../categoryTopStreams/styledComponents';
 import AddVideoExtraData from '../AddVideoExtraData';
-import API from '../API';
+import TwitchAPI from '../API';
 import ChannelListElement from '../channelList/ChannelListElement';
 import getMyFollowedChannels from '../getMyFollowedChannels';
 import getFollowedOnlineStreams from '../live/GetFollowedStreams';
@@ -14,7 +14,6 @@ import InifinityScroll from './InifinityScroll';
 import sortByInput from './sortByInput';
 import StyledLoadingList from './../categoryTopStreams/LoadingList';
 import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
-import useToken from '../useToken';
 import SearchList from '../../sharedComponents/SearchList';
 import AccountContext from '../../account/AccountContext';
 
@@ -37,7 +36,6 @@ const ChannelList = ({
   const [followedChannels, setFollowedChannels] = useState();
   const [searchResults, setSearchResults] = useState();
   const [loadingMore, setLoadingMore] = useState(false);
-  const validateToken = useToken();
 
   const ulListRef = useRef();
   const searchTimer = useRef();
@@ -64,10 +62,7 @@ const ChannelList = ({
               clearTimeout(searchTimer.current);
               searchTimer.current = setTimeout(async () => {
                 setSearchResults();
-                await API.getSearchChannels({
-                  query: input || value,
-                  params: { first: 20 },
-                })
+                await TwitchAPI.getSearchChannels({ first: 20 }, input || value)
                   .then((res) => {
                     const searchResult = res.data.data.map((item) => ({
                       ...item,
@@ -145,39 +140,37 @@ const ChannelList = ({
       throttle(
         async () => {
           clearTimeout(resetListTimer.current);
-          validateToken().then(
-            getMyFollowedChannels().then(async (channels) => {
-              channelListToObject(channels).then(async (res) => {
-                await AddVideoExtraData({
-                  items: res?.data,
-                  fetchGameInfo: false,
-                  fetchProfiles: true,
-                }).then(async (res) => {
-                  const liveStreams = await getFollowedOnlineStreams({
-                    followedchannels: res?.data,
-                    fetchGameInfo: true,
-                    fetchProfiles: false,
-                  }).then((res) => res.data);
+          getMyFollowedChannels().then(async (channels) => {
+            channelListToObject(channels).then(async (res) => {
+              await AddVideoExtraData({
+                items: res?.data,
+                fetchGameInfo: false,
+                fetchProfiles: true,
+              }).then(async (res) => {
+                const liveStreams = await getFollowedOnlineStreams({
+                  followedchannels: res?.data,
+                  fetchGameInfo: true,
+                  fetchProfiles: false,
+                }).then((res) => res.data);
 
-                  const channels = await res?.data?.map((item) => {
-                    const found = liveStreams?.find((stream) => item.user_id === stream.user_id);
-                    return {
-                      ...item,
-                      ...found,
-                      live: found?.type === 'live',
-                    };
-                  });
-
-                  setFollowedChannels(channels);
+                const channels = await res?.data?.map((item) => {
+                  const found = liveStreams?.find((stream) => item.user_id === stream.user_id);
+                  return {
+                    ...item,
+                    ...found,
+                    live: found?.type === 'live',
+                  };
                 });
+
+                setFollowedChannels(channels);
               });
-            })
-          );
+            });
+          });
         },
         5000,
         { leading: true, trailing: false }
       ),
-    [validateToken]
+    []
   );
 
   const channelListToObject = async (channelsList) => {
@@ -209,10 +202,7 @@ const ChannelList = ({
     clearTimeout(resetListTimer.current);
     if (channel && searchResults?.nextPage && !loadingMore) {
       setLoadingMore(true);
-      await API.getSearchChannels({
-        query: channel,
-        params: { first: 20, after: searchResults?.nextPage },
-      })
+      await TwitchAPI.getSearchChannels({ first: 20, after: searchResults?.nextPage }, channel)
         .then((res) => {
           const searchResult = res.data.data.map((item) => ({
             ...item,

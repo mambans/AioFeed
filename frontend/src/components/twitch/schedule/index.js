@@ -16,7 +16,7 @@ import {
   nrOfItems,
 } from './StyledComponents';
 import ToolTip from '../../sharedComponents/ToolTip';
-import API from '../API';
+import TwitchAPI from '../API';
 import useClicksOutside from '../../../hooks/useClicksOutside';
 import { Portal } from 'react-portal';
 
@@ -101,15 +101,11 @@ const SchedulesList = React.forwardRef(({ schedule, setSchedule, user, user_id, 
       if (!schedule) {
         const id =
           user_id ||
-          (await API.getUser({
-            params: {
-              login: user,
-            },
+          (await TwitchAPI.getUser({
+            login: user,
           }).then((res) => res.data.data[0].id));
 
-        const fetchedSchedule = await API.getSchedule({
-          params: { broadcaster_id: id },
-        }).catch((e) => {
+        const fetchedSchedule = await TwitchAPI.getSchedule({ broadcaster_id: id }).catch((e) => {
           console.error('fetchedSchedule error:', e);
           setSchedule({ error: 'No schedule available' });
         });
@@ -117,10 +113,8 @@ const SchedulesList = React.forwardRef(({ schedule, setSchedule, user, user_id, 
           [...new Set(fetchedSchedule?.data?.data?.segments.map((i) => i.category?.id))] || [];
 
         if (Boolean(gameIds?.filter((i) => i).length)) {
-          const gameData = await API.getGames({
-            params: {
-              id: gameIds,
-            },
+          const gameData = await TwitchAPI.getGames({
+            id: gameIds,
           });
 
           fetchedSchedule.data.data.segments.map(

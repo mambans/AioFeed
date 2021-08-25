@@ -1,8 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import React, { useRef } from 'react';
-import { MdRefresh } from 'react-icons/md';
 import { FaRegWindowRestore } from 'react-icons/fa';
-import CountdownCircleTimer from './CountdownCircleTimer';
 
 import {
   HeaderOuterMainContainer,
@@ -14,7 +12,7 @@ import {
 } from './sharedStyledComponents';
 import ReOrderButtons from './ReOrderButtons';
 
-const Header = (props) => {
+const Header = React.forwardRef((props, ref) => {
   const {
     children,
     text,
@@ -23,38 +21,33 @@ const Header = (props) => {
     leftImage,
     leftSide,
     rightSide,
-    isLoading,
     autoRefreshEnabled,
     refreshFunc,
     refreshTimer,
     style = {},
+    isLoading,
     setOrder,
     feedName,
   } = props;
-  const ref = useRef();
+  const thisref = useRef();
   const path = useLocation().pathname.replace('/', '');
 
   const handleOnClick = () => {
-    ref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+    thisref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
   };
 
   return (
-    <HeaderOuterMainContainer ref={ref} style={style} id={id}>
+    <HeaderOuterMainContainer ref={thisref} style={style} id={id}>
       <HeaderTopContainer>
         <LeftRightDivs>
           {refreshFunc && (
-            <RefreshButton disabled={isLoading} onClick={refreshFunc}>
-              {autoRefreshEnabled || isLoading ? (
-                <CountdownCircleTimer
-                  key={refreshTimer}
-                  isLoading={isLoading}
-                  autoRefreshEnabled={autoRefreshEnabled}
-                  startDuration={Math.max(0, Math.round((refreshTimer - Date.now()) / 1000))}
-                />
-              ) : (
-                <MdRefresh size={32} />
-              )}
-            </RefreshButton>
+            <RefreshButton
+              ref={ref}
+              onClick={refreshFunc}
+              refreshTimer={refreshTimer}
+              autoRefreshEnabled={autoRefreshEnabled}
+              parentIsLoading={isLoading}
+            />
           )}
           {leftSide}
         </LeftRightDivs>
@@ -83,6 +76,6 @@ const Header = (props) => {
       </HeaderTitle>
     </HeaderOuterMainContainer>
   );
-};
+});
 
 export default Header;

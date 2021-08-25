@@ -1,5 +1,5 @@
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import React, { useState, useEffect, useCallback, useContext, useRef } from 'react';
 import { Button } from 'react-bootstrap';
 
 import AlertHandler from '../../alert';
@@ -15,7 +15,6 @@ import FeedsContext from '../../feed/FeedsContext';
 import { getCookie, getLocalstorage } from '../../../util/Utils';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import FeedsCenterContainer, { CenterContext } from './../../feed/FeedsCenterContainer';
-import useToken from '../useToken';
 import { Container } from '../StyledComponents';
 
 const VodsStandalone = () => (
@@ -31,45 +30,41 @@ export const Vods = () => {
   const { videoElementsAmount } = useContext(CenterContext);
   const [error, setError] = useState(null);
   const [order, setOrder] = useState(getLocalstorage('FeedOrders')?.['Vods'] ?? 27);
-  const [refreshing, setRefreshing] = useState(false);
   const [vodError, setVodError] = useState(null);
   const [vodAmounts, setVodAmounts] = useState({
     amount: videoElementsAmount,
     timeout: 750,
     transitionGroup: 'videos',
   });
-  const validateToken = useToken();
+  const refreshBtnRef = useRef();
 
   useEventListenerMemo('focus', windowFocusHandler);
 
   const refresh = useCallback(
     async (forceRefresh) => {
-      setRefreshing(true);
-      await validateToken().then(() =>
-        getFollowedVods({
-          forceRun: forceRefresh,
-          setRefreshToken,
-          setTwitchToken,
-          channels,
-        })
-          .then((data) => {
-            if (data.error) {
-              setError(data.error);
-            } else if (data.vodError) {
-              setVodError(data.vodError);
-            }
-            setVods(data.videos);
-
-            setRefreshing(false);
-          })
-          .catch((data) => {
+      refreshBtnRef.current.setIsLoading(true);
+      getFollowedVods({
+        forceRun: forceRefresh,
+        setRefreshToken,
+        setTwitchToken,
+        channels,
+      })
+        .then((data) => {
+          if (data.error) {
             setError(data.error);
+          } else if (data.vodError) {
+            setVodError(data.vodError);
+          }
+          setVods(data.videos);
+          refreshBtnRef.current.setIsLoading(false);
+        })
+        .catch((data) => {
+          setError(data.error);
 
-            setVods(data.videos);
-          })
-      );
+          setVods(data.videos);
+        });
     },
-    [setTwitchToken, setRefreshToken, setVods, channels, validateToken]
+    [setTwitchToken, setRefreshToken, setVods, channels]
   );
 
   async function windowFocusHandler() {
@@ -78,31 +73,29 @@ export const Vods = () => {
 
   useEffect(() => {
     (async () => {
-      setRefreshing(true);
-      await validateToken().then(() =>
-        getFollowedVods({
-          forceRun: false,
-          setRefreshToken,
-          setTwitchToken,
-          channels,
-        })
-          .then((data) => {
-            if (data.error) {
-              setError(data.error);
-            } else if (data.vodError) {
-              setVodError(data.vodError);
-            }
-
-            setVods(data.videos);
-            setRefreshing(false);
-          })
-          .catch((data) => {
+      refreshBtnRef.current.setIsLoading(true);
+      getFollowedVods({
+        forceRun: false,
+        setRefreshToken,
+        setTwitchToken,
+        channels,
+      })
+        .then((data) => {
+          if (data.error) {
             setError(data.error);
-            setVods(data.videos);
-          })
-      );
+          } else if (data.vodError) {
+            setVodError(data.vodError);
+          }
+
+          setVods(data.videos);
+          refreshBtnRef.current.setIsLoading(false);
+        })
+        .catch((data) => {
+          setError(data.error);
+          setVods(data.videos);
+        });
     })();
-  }, [twitchUserId, setTwitchToken, setRefreshToken, setVods, channels, validateToken]);
+  }, [twitchUserId, setTwitchToken, setRefreshToken, setVods, channels]);
 
   useEffect(() => {
     setVodAmounts({
@@ -115,8 +108,8 @@ export const Vods = () => {
   return (
     <Container order={order}>
       <Header
+        ref={refreshBtnRef}
         refresh={refresh}
-        refreshing={refreshing}
         vods={vods}
         vodError={vodError}
         setOrder={setOrder}

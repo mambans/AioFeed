@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import AddVideoExtraData from '../twitch/AddVideoExtraData';
-import API from '../twitch/API';
+import TwitchAPI from '../twitch/API';
 import VodElement from '../twitch/vods/VodElement';
 import YoutubeVideoElement from '../youtube/YoutubeVideoElement';
 import GetVideoInfo from './GetVideoInfo';
@@ -17,7 +17,7 @@ import aiofeedAPI from '../navigation/API';
 export const fetchListVideos = async ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
   if (list?.items) {
     const twitchFetchVideos = async (items) => {
-      const fetchedVideos = await await API.getVideos({ params: { id: items } }).catch((e) => {
+      const fetchedVideos = await TwitchAPI.getVideos({ id: items }).catch((e) => {
         console.log(e);
       });
 

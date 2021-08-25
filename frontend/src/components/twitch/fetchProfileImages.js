@@ -1,5 +1,5 @@
 import GetCachedProfiles from './GetCachedProfiles';
-import API from './API';
+import TwitchAPI from './API';
 import { chunk } from '../../util/Utils';
 
 /**
@@ -37,10 +37,8 @@ const fetchProfileImages = async ({
       chunkedNoCachedProfileArrayIds.map(async (channelsChunk) => {
         return (
           channelsChunk?.length >= 1 &&
-          (await API.getUser({
-            params: {
-              id: channelsChunk,
-            },
+          (await TwitchAPI.getUser({
+            id: channelsChunk,
           })
             .then((res) => res.data.data)
             .catch((e) => console.error('newProfileImgUrls: ', e)))

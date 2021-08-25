@@ -17,12 +17,11 @@ import { truncate } from '../../../util/Utils';
 import { VodLiveIndicator, VodType, VodPreview, VodDates } from './StyledComponents';
 import VodsFollowUnfollowBtn from './VodsFollowUnfollowBtn';
 import { formatViewerNumbers, formatTwitchVodsDuration } from './../TwitchUtils';
-import API from '../API';
+import TwitchAPI from '../API';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from '../loginNameFormat';
 import { ChannelNameDiv } from '../StyledComponents';
 import FavoriteButton from '../../favorites/addToListModal/FavoriteButton';
-import useToken from '../useToken';
 import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../sharedComponents/ToolTip';
 
@@ -56,7 +55,6 @@ const VodElement = ({
   const imgRef = useRef();
   const ref = useRef();
   const hoverTimeoutRef = useRef();
-  const validateToken = useToken();
 
   useEventListenerMemo('mouseenter', handleMouseOver, imgRef.current);
   useEventListenerMemo('mouseleave', handleMouseOut, imgRef.current);
@@ -65,30 +63,26 @@ const VodElement = ({
     if (!previewAvailable.data) {
       hoverTimeoutRef.current = setTimeout(
         async () => {
-          await validateToken().then(async () => {
-            await API.krakenGetVideo({
-              params: {
-                id: id,
-              },
+          await TwitchAPI.krakenGetVideo({
+            id: id,
+          })
+            .then((res) => {
+              if (res.data.status === 'recording') {
+                setPreviewAvailable({
+                  status: 'recording',
+                  error: 'Stream is live - no preview yet',
+                });
+              } else {
+                setPreviewAvailable({
+                  data: res.data.animated_preview_url,
+                });
+              }
+              setShowPreview(true);
             })
-              .then((res) => {
-                if (res.data.status === 'recording') {
-                  setPreviewAvailable({
-                    status: 'recording',
-                    error: 'Stream is live - no preview yet',
-                  });
-                } else {
-                  setPreviewAvailable({
-                    data: res.data.animated_preview_url,
-                  });
-                }
-                setShowPreview(true);
-              })
-              .catch((error) => {
-                setPreviewAvailable({ error: 'Preview failed' });
-                console.error(error);
-              });
-          });
+            .catch((error) => {
+              setPreviewAvailable({ error: 'Preview failed' });
+              console.error(error);
+            });
         },
         previewAvailable.error ? 5000 : 1000
       );

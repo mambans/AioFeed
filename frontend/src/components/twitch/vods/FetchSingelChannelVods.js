@@ -3,7 +3,7 @@ import { uniqBy } from 'lodash';
 import { addVodEndTime } from './../TwitchUtils';
 import AddVideoExtraData from './../AddVideoExtraData';
 import SortAndAddExpire from './SortAndAddExpire';
-import API from '../API';
+import TwitchAPI from '../API';
 
 const fetchSingelChannelVods = async ({
   channelId,
@@ -13,13 +13,11 @@ const fetchSingelChannelVods = async ({
 }) => {
   const vodExpire = 3; // Number of days
 
-  await API.getVideos({
-    params: {
-      user_id: channelId,
-      period: 'month',
-      first: amount,
-      type: 'all',
-    },
+  await TwitchAPI.getVideos({
+    user_id: channelId,
+    period: 'month',
+    first: amount,
+    type: 'all',
   }).then(async (res) => {
     const newVodWithProfile = await AddVideoExtraData({ items: res.data });
     const newVodWithEndtime = await addVodEndTime(newVodWithProfile.data);

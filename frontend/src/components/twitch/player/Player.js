@@ -57,7 +57,7 @@ import useFullscreen from '../../../hooks/useFullscreen';
 import ToolTip from '../../sharedComponents/ToolTip';
 import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
 import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
-import API from '../API';
+import TwitchAPI from '../API';
 import Schedule from '../schedule';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.12, 175);
@@ -159,9 +159,9 @@ const Player = () => {
   useEffect(() => {
     (async () => {
       if (streamInfo?.user_id && !streamInfo.tags) {
-        const tags = await API.getTags({
-          params: { broadcaster_id: streamInfo.user_id },
-        }).then((res) => res.data.data);
+        const tags = await TwitchAPI.getTags({ broadcaster_id: streamInfo.user_id }).then(
+          (res) => res.data.data
+        );
 
         setStreamInfo((c) => ({ ...c, tags }));
       }

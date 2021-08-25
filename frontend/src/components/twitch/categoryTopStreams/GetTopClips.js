@@ -1,5 +1,5 @@
 import AddVideoExtraData from '../AddVideoExtraData';
-import API from '../API';
+import TwitchAPI from '../API';
 
 /**
  * Fetch Clips
@@ -16,25 +16,21 @@ const getTopClips = async (category, sortByTime, page) => {
     Math.floor((window.innerWidth - 150) / 350) * Math.floor((window.innerHeight - 150) / 340);
 
   if (category && category !== 'undefined') {
-    game = await API.getGames({
-      params: {
-        name: category,
-      },
+    game = await TwitchAPI.getGames({
+      name: category,
     }).then((res) => res.data.data[0]);
   } else {
     game = { id: null };
   }
   try {
-    const topClips = await API.getClips({
-      params: {
-        first: nrStreams,
-        game_id: game?.id,
-        after: page ? page.pagination.cursor : null,
-        started_at: sortByTime
-          ? new Date(new Date().setDate(new Date().getDate() - sortByTime)).toISOString()
-          : null,
-        ended_at: sortByTime && new Date().toISOString(),
-      },
+    const topClips = await TwitchAPI.getClips({
+      first: nrStreams,
+      game_id: game?.id,
+      after: page ? page.pagination.cursor : null,
+      started_at: sortByTime
+        ? new Date(new Date().setDate(new Date().getDate() - sortByTime)).toISOString()
+        : null,
+      ended_at: sortByTime && new Date().toISOString(),
     }).catch((e) => {
       console.error(e.message);
       error = e;

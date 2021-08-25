@@ -1,16 +1,14 @@
 import AddVideoExtraData from './../AddVideoExtraData';
-import API from '../API';
+import TwitchAPI from '../API';
 import { chunk } from '../../../util/Utils';
 
 const fetchAllOnlineStreams = async (followedChannelsIds) => {
   const channelsInChunks = chunk(followedChannelsIds, 100);
   const allOnlineStreams = await Promise.all(
     channelsInChunks.map(async (channelsChunk) => {
-      return API.getStreams({
-        params: {
-          user_id: channelsChunk,
-          first: 100,
-        },
+      return TwitchAPI.getStreams({
+        user_id: channelsChunk,
+        first: 100,
       })
         .then((res) => res.data.data)
         .catch((error) => console.log(error));

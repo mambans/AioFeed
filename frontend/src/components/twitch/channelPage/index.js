@@ -31,7 +31,7 @@ import fetchStreamInfo from './../player/fetchStreamInfo';
 import fetchChannelInfo from './../player/fetchChannelInfo';
 import setFavion from '../setFavion';
 // import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
-import API from './../API';
+import TwitchAPI from './../API';
 import AnimatedViewCount from '../live/AnimatedViewCount';
 import { getCookie } from '../../../util/Utils';
 import disconnectTwitch from '../disconnectTwitch';
@@ -80,11 +80,8 @@ const ChannelPage = () => {
   useEventListenerMemo(window?.Twitch?.Player?.OFFLINE, offlineEvents, twitchPlayer.current);
 
   const getIdFromName = useCallback(async () => {
-    await API.getUser({
-      params: {
-        login: channelName,
-      },
-      throwError: false,
+    await TwitchAPI.getUser({
+      login: channelName,
     })
       .then((res) => setChannelId(res.data.data[0].id))
       .catch((error) => setChannelId('Not Found'));
@@ -99,14 +96,12 @@ const ChannelPage = () => {
           previosVodPage.current = null;
         }
 
-        await API.getVideos({
-          params: {
-            user_id: channelId,
-            first: numberOfVideos,
-            sort: sortVodsBy?.toLowerCase(),
-            type: 'all',
-            after: pagination || null,
-          },
+        await TwitchAPI.getVideos({
+          user_id: channelId,
+          first: numberOfVideos,
+          sort: sortVodsBy?.toLowerCase(),
+          type: 'all',
+          after: pagination || null,
         })
           .then(async (res) => {
             if (
@@ -154,16 +149,14 @@ const ChannelPage = () => {
           previosClipsPage.current = null;
         }
 
-        await API.getClips({
-          params: {
-            broadcaster_id: channelId,
-            first: numberOfVideos,
-            after: pagination || null,
-            started_at:
-              sortClipsBy &&
-              new Date(new Date().setDate(new Date().getDate() - sortClipsBy)).toISOString(),
-            ended_at: sortClipsBy && new Date().toISOString(),
-          },
+        await TwitchAPI.getClips({
+          broadcaster_id: channelId,
+          first: numberOfVideos,
+          after: pagination || null,
+          started_at:
+            sortClipsBy &&
+            new Date(new Date().setDate(new Date().getDate() - sortClipsBy)).toISOString(),
+          ended_at: sortClipsBy && new Date().toISOString(),
         })
           .then(async (res) => {
             if (

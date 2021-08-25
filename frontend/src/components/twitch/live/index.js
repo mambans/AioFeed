@@ -1,5 +1,5 @@
 import { CSSTransition } from 'react-transition-group';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
 import { getLocalstorage } from '../../../util/Utils';
 import { HideSidebarButton } from '../sidebar/StyledComponents';
@@ -29,6 +29,7 @@ export const Twitch = ({ in: forceMount = false }) => {
   } = useContext(FeedsContext) || {};
 
   const [order, setOrder] = useState(getLocalstorage('FeedOrders')?.['Twitch'] ?? 9);
+  const refreshBtnRef = useRef();
 
   useEffect(() => {
     Notification.requestPermission().then(
@@ -49,7 +50,7 @@ export const Twitch = ({ in: forceMount = false }) => {
               unmountOnExit
             >
               <Container order={order}>
-                <Header data={data} setOrder={setOrder} />
+                <Header data={data} setOrder={setOrder} ref={refreshBtnRef} />
                 <TwitchStreams data={data} />
               </Container>
             </CSSTransition>

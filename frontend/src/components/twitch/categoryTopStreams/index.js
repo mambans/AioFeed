@@ -19,8 +19,7 @@ import ClipElement from './../channelPage/ClipElement';
 import VodElement from './../vods/VodElement';
 import AccountContext from '../../account/AccountContext';
 import useQuery from '../../../hooks/useQuery';
-import useToken from '../useToken';
-import API from '../API';
+import TwitchAPI from '../API';
 import TypeButton from './TypeButton';
 
 const TopStreams = () => {
@@ -32,7 +31,6 @@ const TopStreams = () => {
   const [videoType, setVideoType] = useState(
     URLQueries.get('type')?.toLowerCase() || p_videoType || 'streams'
   );
-  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState('Views');
   const [sortByTime, setSortByTime] = useState(
@@ -41,7 +39,7 @@ const TopStreams = () => {
   // eslint-disable-next-line no-unused-vars
   const { twitchToken } = useContext(AccountContext);
   const oldTopData = useRef();
-  const validateToken = useToken();
+  const refreshBtnRef = useRef();
 
   document.title = `${category || 'All'} - Top ${videoType}`;
 
@@ -71,7 +69,7 @@ const TopStreams = () => {
     } else {
       oldTopData.current = res.topData;
       setTopData(res.topData.data);
-      setRefreshing(false);
+      refreshBtnRef.current.setIsLoading(false);
     }
   };
 
@@ -90,7 +88,7 @@ const TopStreams = () => {
               } else {
                 setError(e.message);
               }
-              setRefreshing(false);
+              refreshBtnRef.current.setIsLoading(false);
             });
           break;
         case 'clips':
@@ -102,7 +100,7 @@ const TopStreams = () => {
               } else {
                 setError(e.message);
               }
-              setRefreshing(false);
+              refreshBtnRef.current.setIsLoading(false);
             });
           break;
         case 'videos':
@@ -114,7 +112,7 @@ const TopStreams = () => {
               } else {
                 setError(e.message);
               }
-              setRefreshing(false);
+              refreshBtnRef.current.setIsLoading(false);
             });
           break;
         default:
@@ -126,7 +124,7 @@ const TopStreams = () => {
               } else {
                 setError(e.message);
               }
-              setRefreshing(false);
+              refreshBtnRef.current.setIsLoading(false);
             });
       }
     },
@@ -134,30 +132,29 @@ const TopStreams = () => {
   );
 
   const refresh = useCallback(() => {
-    setRefreshing(true);
+    refreshBtnRef.current.setIsLoading(true);
     oldTopData.current = null;
-    validateToken().then(() => fetchVideos());
-  }, [fetchVideos, validateToken]);
+    fetchVideos();
+  }, [fetchVideos]);
 
   useEffect(() => {
     (async () => {
-      const gameInfo = await API.getGames({ params: { name: category } }).then(
-        (res) => res.data.data[0]
-      );
+      const gameInfo = await TwitchAPI.getGames({ name: category }).then((res) => res.data.data[0]);
       setGameInfo(gameInfo);
     })();
   }, [category]);
 
   useEffect(() => {
-    setRefreshing(true);
+    refreshBtnRef.current.setIsLoading(true);
     setTopData([]);
-    validateToken().then(() => fetchVideos());
-  }, [fetchVideos, validateToken]);
+    fetchVideos();
+  }, [fetchVideos]);
 
   return (
     <CSSTransition in={true} timeout={750} classNames='fade-750ms' appear>
       <Container>
         <Header
+          ref={refreshBtnRef}
           text={
             <>
               {gameInfo?.box_art_url ? (
@@ -176,7 +173,6 @@ const TopStreams = () => {
               )}
             </>
           }
-          isLoading={refreshing}
           refreshFunc={refresh}
           rightSide={
             <TopDataSortButtonsContainer>

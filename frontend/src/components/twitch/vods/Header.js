@@ -6,14 +6,14 @@ import Header from '../../sharedComponents/Header';
 import { LastRefreshText } from '../../sharedComponents/sharedStyledComponents';
 import VodChannelList from './VodChannelList';
 
-const VodsHeader = (props) => {
-  const { refresh, refreshing, vods, vodError, setOrder } = props;
+const VodsHeader = React.forwardRef((props, ref) => {
+  const { refresh, vods, vodError, setOrder } = props;
 
   return (
     <Header
       id='TwitchVodsHeader'
       refreshFunc={() => refresh(true)}
-      isLoading={refreshing}
+      ref={ref}
       text={
         <>
           Twitch vods
@@ -52,5 +52,5 @@ const VodsHeader = (props) => {
       feedName='Twitch'
     />
   );
-};
+});
 export default VodsHeader;

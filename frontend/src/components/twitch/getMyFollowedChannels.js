@@ -1,12 +1,10 @@
-import API from './API';
+import TwitchAPI from './API';
 
 const fetchNextPageOfFollowers = async ({ total, PagePagination, followedchannels }) => {
   if (followedchannels?.length < total && PagePagination) {
-    const nextPage = await API.getMyFollowedChannels({
-      params: {
-        first: 100,
-        after: PagePagination,
-      },
+    const nextPage = await TwitchAPI.getMyFollowedChannels({
+      first: 100,
+      after: PagePagination,
     }).catch((error) => {
       console.log(error);
     });
@@ -27,10 +25,8 @@ const fetchNextPageOfFollowers = async ({ total, PagePagination, followedchannel
 
 const getMyFollowedChannels = async () => {
   try {
-    const followedchannels = await API.getMyFollowedChannels({
-      params: {
-        first: 100,
-      },
+    const followedchannels = await TwitchAPI.getMyFollowedChannels({
+      first: 100,
     }).catch((error) => {
       console.error(error.message);
       return error;

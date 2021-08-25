@@ -1,5 +1,5 @@
 import { getLocalstorage } from './../../util/Utils';
-import API from './API';
+import TwitchAPI from './API';
 
 const getGameDetails = async (items) => {
   // Removes game id duplicates before sending game request.
@@ -19,11 +19,9 @@ const getGameDetails = async (items) => {
 
   const games = cachedGameInfo?.expire > Date.now() ? unCachedGameDetails : gamesNonDuplicates;
 
-  if (Array.isArray(games) && games?.length >= 1) {
-    return API.getGames({
-      params: {
-        id: games,
-      },
+  if (Array.isArray(games) && Boolean(games?.length)) {
+    return TwitchAPI.getGames({
+      id: games,
     })
       .then((res) => {
         const filteredOutNulls = res.data?.data.filter((game) => game);

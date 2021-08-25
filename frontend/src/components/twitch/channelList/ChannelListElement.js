@@ -5,7 +5,7 @@ import FollowUnfollowBtn from './../FollowUnfollowBtn';
 import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
 import { ChannelListLi } from './StyledComponents';
 import AddUpdateNotificationsButton from './../AddUpdateNotificationsButton';
-import API from '../API';
+import TwitchAPI from '../API';
 import LiveIndicator from './LiveIndicator';
 import AddVideoExtraData from '../AddVideoExtraData';
 import loginNameFormat from '../loginNameFormat';
@@ -31,11 +31,11 @@ const ChannelListElement = ({
       setChannel(data);
     } else if (searchInput) {
       timer.current = setTimeout(async () => {
-        const data = await API.getUser({ params: { login: searchInput } }).then(
+        const data = await TwitchAPI.getUser({ login: searchInput }).then(
           (res) => res?.data?.data[0]
         );
 
-        const liveInfo = await API.getStreams({ params: { user_login: searchInput } }).then(
+        const liveInfo = await TwitchAPI.getStreams({ user_login: searchInput }).then(
           (res) => res?.data?.data[0]
         );
 
