@@ -7,7 +7,7 @@ const StyledBackDrop = styled.div`
   height: 100vh;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 10;
   transform: translate(0, 0, 1000);
   position: fixed;
   transition: all 500ms;

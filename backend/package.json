@@ -14,5 +14,8 @@
     "bcrypt": "^5.0.1",
     "crypto-js": "^4.1.1",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.978.0"
   }
 }
