@@ -20,7 +20,7 @@ import SharedVideoPlayer from '../sharedComponents/SharedVideoPlayer';
 
 const MainContentContainer = styled.main`
   min-height: 100vh;
-  padding-top: 70px;
+  padding-top: 95px;
 `;
 
 const NavigationRoutes = () => {

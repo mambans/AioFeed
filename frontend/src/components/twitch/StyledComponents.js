@@ -323,7 +323,7 @@ export const CenterContainer = styled.div`
     grid-template-areas: 'twitchsidebar feed twitter';
     grid-template-columns: ${({ left }) => left || 0}px ${({ centerWidth }) =>
         centerWidth ? centerWidth + 'px' : 'auto'} ${({ right }) => right || 0}px;
-    padding-top: 25px;
+    /* padding-top: 25px; */
     justify-content: center;
     gap: 25px;
     -webkit-touch-callout: none; /* iOS Safari */
