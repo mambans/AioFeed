@@ -1,5 +1,6 @@
 import { Form, Button } from 'react-bootstrap';
 import React, { useState, useContext } from 'react';
+import { toast } from 'react-toastify';
 
 import { AddCookie } from '../../../util/Utils';
 import { StyledCreateFormTitle, StyledCreateForm } from './StyledComponents';
@@ -106,6 +107,7 @@ const Login = () => {
             }
 
             setRenderModal('account');
+            toast.success(`Logged in as ${res.Username}`);
           }, 500);
         } else {
           console.log(result);
@@ -113,6 +115,7 @@ const Login = () => {
       })
       .catch((e) => {
         setValidated(false);
+        toast.warning(`${e.response.data.message}`);
         if (e?.response?.data?.message === 'Invalid Password') {
           resetPassword();
           setValidatedPassword(false);

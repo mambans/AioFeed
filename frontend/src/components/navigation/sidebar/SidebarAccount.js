@@ -10,6 +10,7 @@ import { AiOutlineDisconnect } from 'react-icons/ai';
 import AccountContext from './../../account/AccountContext';
 import ClearAllAccountCookiesStates from './ClearAllAccountCookiesStates';
 import DeleteAccountButton from './DeleteAccountButton';
+import ChangePassword from './ChangePassword';
 import FeedsContext from './../../feed/FeedsContext';
 import ReAuthenticateButton from './ReAuthenticateButton';
 import Themeselector from './../../themes/Themeselector';
@@ -215,11 +216,12 @@ const SidebarAccount = () => {
         <Themeselector />
       </div>
       <StyledLogoutContiner>
-        <DeleteAccountButton />
         <Button style={{ width: '100%' }} label='logout' onClick={logout} variant='secondary'>
           Logout
           <GoSignOut size={24} style={{ marginLeft: '0.75rem' }} />
         </Button>
+        <ChangePassword variant='secondary' />
+        <DeleteAccountButton />
       </StyledLogoutContiner>
     </>
   );

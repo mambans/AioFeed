@@ -19,7 +19,6 @@ const decryptData = async (data, secretString) => {
 };
 
 module.exports = async ({ username, password }) => {
-  console.log('username', username);
   const res = await client
     .query({
       TableName: process.env.USERNAME_TABLE,

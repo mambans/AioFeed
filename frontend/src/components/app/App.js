@@ -1,5 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import FeedsContext, { FeedsProvider } from '../feed/FeedsContext';
 import { NavigationProvider } from '../navigation/NavigationContext';
@@ -89,6 +91,16 @@ const App = () => {
     <AppContainer id='AppContainer' image={activeTheme.image}>
       <Routes />
       <CookieConsentAlert />
+      <ToastContainer
+        position='bottom-right'
+        autoClose={3000}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='dark'
+      />
     </AppContainer>
   );
 };

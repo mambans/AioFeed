@@ -3,7 +3,7 @@ import { MdDelete } from 'react-icons/md';
 import Modal from 'react-bootstrap/Modal';
 import React, { useState, useContext } from 'react';
 
-import { DeleteAccountForm, StyledDeleteAccountButton } from './StyledComponents';
+import { DeleteAccountForm, StyledAccountButton } from './StyledComponents';
 import AccountContext from './../../account/AccountContext';
 import styles from './Sidebar.module.scss';
 import useInput from './../../../hooks/useInput';
@@ -12,12 +12,13 @@ import Alert from './Alert';
 import ClearAllAccountCookiesStates from './ClearAllAccountCookiesStates';
 import LoadingIndicator from './../../LoadingIndicator';
 import API from '../API';
+import { toast } from 'react-toastify';
 
 const DeleteAccountButton = () => {
   const { username, setUsername, authKey } = useContext(AccountContext);
   const [show, setShow] = useState(false);
   const [validated, setValidated] = useState(false);
-  const { setRenderModal, setAlert } = useContext(NavigationContext);
+  const { setRenderModal } = useContext(NavigationContext);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -29,27 +30,23 @@ const DeleteAccountButton = () => {
 
       await API.deleteAccount(account, password, authKey)
         .then((res) => {
-          ClearAllAccountCookiesStates(setUsername);
+          if (res) {
+            ClearAllAccountCookiesStates(setUsername);
 
-          setRenderModal('create');
-          setAlert({
-            bold: res.data.Attributes.Username,
-            message: ` account deleted`,
-            variant: 'success',
-          });
+            setRenderModal('create');
+            toast.success('Account successfully deleted');
+          }
         })
         .catch((err) => {
           console.error(err);
-          setAlert({
-            message: err.response.data.message,
-            variant: 'warning',
-          });
+          toast.warning(`${err.response.data.message}`);
           setValidated(false);
           resetPassword();
         });
     } else {
       event.preventDefault();
       event.stopPropagation();
+      toast.warning(account + ' is Invalid Username');
       console.log(account + ' is Invalid Username');
     }
   };
@@ -66,9 +63,14 @@ const DeleteAccountButton = () => {
 
   return (
     <>
-      <StyledDeleteAccountButton onClick={handleShow} title='Delete account'>
+      <StyledAccountButton
+        color='hsla(0, 65%, 28%, 1)'
+        onClick={handleShow}
+        title='Delete account'
+        variant='danger'
+      >
         <MdDelete size={24} />
-      </StyledDeleteAccountButton>
+      </StyledAccountButton>
 
       <Modal
         show={show}

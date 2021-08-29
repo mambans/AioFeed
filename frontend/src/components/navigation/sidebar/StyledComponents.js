@@ -259,26 +259,22 @@ export const StyledSidebarTrigger = styled(MdFormatIndentDecrease).attrs({ size:
 export const StyledLogoutContiner = styled.div`
   right: 0;
   width: 100%;
-  display: grid;
-  grid-template-areas: 'page del' 'logout del';
-  padding: 5px;
-  grid-template-columns: 70% 30%;
-  grid-template-rows: 60px;
   height: 120px;
+  padding: 5px;
+  padding-bottom: 10px;
+  display: flex;
+  gap: 10px;
+  display: flex;
+  align-items: end;
 
-  button[label='logout'] {
+  button.btn-secondary {
     background-color: #26292b;
-    grid-area: logout;
-    margin: auto;
-    width: max-content;
-    min-width: 170px;
-    border: thin solid #313131;
     border-radius: 10px;
+    border: thin solid #313131;
 
     &:hover {
       background-color: #434950;
     }
-
     &:focus {
       box-shadow: 0 0 0 0.2rem #434950;
     }
@@ -288,16 +284,24 @@ export const StyledLogoutContiner = styled.div`
       border-color: #434950;
     }
   }
+
+  button[label='logout'] {
+    /* margin: auto; */
+    width: max-content;
+    min-width: 170px;
+  }
 `;
 
-export const StyledDeleteAccountButton = styled(Button).attrs({ variant: 'danger' })`
-  background: hsla(0, 65%, 28%, 1);
+export const StyledAccountButton = styled(Button).attrs(({ variant }) => ({
+  variant: variant || 'secondary',
+}))`
+  background: ${({ color }) => color || 'grey'};
+  border-color: grey;
   border-radius: 10px;
   width: 52px;
   height: 42.5px;
-  grid-area: del;
   grid-row: 2;
-  margin: auto;
+  /* margin: auto; */
 
   i {
     height: 24px;

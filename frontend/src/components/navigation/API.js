@@ -212,6 +212,13 @@ const API = {
         channels: [...value],
       })
       .catch((e) => console.error(e)),
+  changePassword: async ({ username, password, newPassword, authKey }) =>
+    await axios.put(`${BASE_URL}/account/reset`, {
+      username: username,
+      password: password,
+      new_password: newPassword,
+      authkey: authKey,
+    }),
 };
 
 export default API;
