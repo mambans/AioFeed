@@ -111,7 +111,7 @@ const StyledButton = styled(Button).attrs({ type: 'submit', variant: 'secondary'
   }
 `;
 
-const UpdateTwitterLists = ({ style, id, index }) => {
+const UpdateTwitterLists = ({ style, id }) => {
   const { setTwitterLists, twitterLists } = useContext(FeedsContext) || {};
   const { value: listName, bind: bindListName, reset } = useInput(id || '');
 
@@ -153,29 +153,26 @@ const UpdateTwitterLists = ({ style, id, index }) => {
     <StyledForm onSubmit={handleSubmit} style={{ ...style }}>
       <Form.Group controlId='formGroupListName' style={{ marginBottom: '0' }}>
         <div style={{ display: 'flex' }}>
-          <ToolTip delay={{ show: 500, hide: 0 }} toltip={`${id ? `Remove list` : `New list`}`}>
-            <div style={{ display: 'inline-flex' }}>
-              <FaTwitter
-                style={{ position: 'absolute', transform: 'translateX(-60%)' }}
-                size={12}
-                color='rgb(29, 161, 242)'
-              />
-              {id ? (
-                <IoMdList size={22} color='#ffffff' />
-              ) : (
-                <MdPlaylistAdd size={22} color='ffffff' />
-              )}
-            </div>
-          </ToolTip>
+          <div style={{ display: 'inline-flex' }}>
+            <FaTwitter
+              style={{ position: 'absolute', transform: 'translateX(-60%)' }}
+              size={12}
+              color='rgb(29, 161, 242)'
+            />
+            {id ? (
+              <IoMdList size={22} color='#ffffff' />
+            ) : (
+              <MdPlaylistAdd size={22} color='ffffff' />
+            )}
+          </div>
+
           <Form.Control
             type='text'
             placeholder='12345...'
             name='listName'
             required
-            // isInvalid={!listName}
             {...bindListName}
           />
-          {/* <Form.Control.Feedback type='invalid'>Enter</Form.Control.Feedback> */}
           <ToolTip delay={{ show: 500, hide: 0 }} toltip={`${id ? `Remove list` : `Add new list`}`}>
             <StyledButton>
               {id ? (

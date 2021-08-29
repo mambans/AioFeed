@@ -10,7 +10,6 @@ const offlineStreamsPromise = async ({
   setUnseenNotifications,
   enableTwitchVods,
   setVods,
-  feedVideoSizeProps,
 }) => {
   try {
     const res = await new Promise((resolve, reject) => {
@@ -41,7 +40,7 @@ const offlineStreamsPromise = async ({
         getLocalstorage('TwitchVods-Channels')?.includes(stream.user_name?.toLowerCase())
       ) {
         setTimeout(async () => {
-          await FetchSingelChannelVods({ channelId: stream.user_id, setVods, feedVideoSizeProps });
+          await FetchSingelChannelVods({ channelId: stream.user_id, setVods });
         }, 0);
       }
       return '';

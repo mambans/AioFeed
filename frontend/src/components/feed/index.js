@@ -31,34 +31,37 @@ const Feed = () => {
     <FeedsCenterContainer>
       <NoFeedsEnable />
       <Twitter />
-      <CSSTransition in={enableTwitch} classNames='fade-750ms' timeout={750} unmountOnExit appear>
-        <Twitch />
-      </CSSTransition>
-      <FavoritesProvider>
-        <CSSTransition
-          in={enableYoutube}
-          timeout={750}
-          classNames='fade-750ms'
-          unmountOnExit
-          appear
-        >
-          <Youtube />
-        </CSSTransition>
 
-        <CSSTransition in={enableTwitchVods} classNames='fade-750ms' timeout={750} unmountOnExit>
-          <Vods />
+      <div className='feed'>
+        <CSSTransition in={enableTwitch} classNames='fade-750ms' timeout={750} unmountOnExit appear>
+          <Twitch />
         </CSSTransition>
+        <FavoritesProvider>
+          <CSSTransition
+            in={enableYoutube}
+            timeout={750}
+            classNames='fade-750ms'
+            unmountOnExit
+            appear
+          >
+            <Youtube />
+          </CSSTransition>
 
-        <CSSTransition
-          in={enableFavorites}
-          timeout={750}
-          classNames='fade-750ms'
-          unmountOnExit
-          appear
-        >
-          <Favorites />
-        </CSSTransition>
-      </FavoritesProvider>
+          <CSSTransition in={enableTwitchVods} classNames='fade-750ms' timeout={750} unmountOnExit>
+            <Vods />
+          </CSSTransition>
+
+          <CSSTransition
+            in={enableFavorites}
+            timeout={750}
+            classNames='fade-750ms'
+            unmountOnExit
+            appear
+          >
+            <Favorites />
+          </CSSTransition>
+        </FavoritesProvider>
+      </div>
     </FeedsCenterContainer>
   );
 };

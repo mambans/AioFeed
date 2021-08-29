@@ -5,12 +5,7 @@ import AddVideoExtraData from './../AddVideoExtraData';
 import SortAndAddExpire from './SortAndAddExpire';
 import TwitchAPI from '../API';
 
-const fetchSingelChannelVods = async ({
-  channelId,
-  setVods,
-  amount = 1,
-  feedVideoSizeProps = {},
-}) => {
+const fetchSingelChannelVods = async ({ channelId, setVods, amount = 1 }) => {
   const vodExpire = 3; // Number of days
 
   await TwitchAPI.getVideos({
@@ -27,7 +22,7 @@ const fetchSingelChannelVods = async ({
       const vodsToAdd = [
         ...newVodWithEndtime.slice(0, amount).map((vod) => ({
           ...vod,
-          transition: feedVideoSizeProps.transition || 'videoFadeSlide',
+          transition: 'videoFadeSlide',
         })),
       ];
       const uniqueVods = uniqBy([...vodsToAdd, ...existingVods], 'id');

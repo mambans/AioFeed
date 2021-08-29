@@ -13,13 +13,13 @@ import { Container } from '../StyledComponents';
 import ToolTip from '../../sharedComponents/ToolTip';
 import { CustomFilterProvider } from '../CustomFilters/CustomFilterContext';
 
-const TwitchStandalone = ({ forceMountTwitch = false } = {}) => (
-  <FeedsCenterContainer forceMountTwitch={forceMountTwitch}>
-    <Twitch in={forceMountTwitch} />
+const TwitchStandalone = () => (
+  <FeedsCenterContainer left={true} right={false}>
+    <Twitch in={true} className='feed' />
   </FeedsCenterContainer>
 );
 
-export const Twitch = ({ in: forceMount = false }) => {
+export const Twitch = ({ in: forceMount = false, className }) => {
   const {
     enableTwitch,
     showTwitchSidebar,
@@ -49,7 +49,7 @@ export const Twitch = ({ in: forceMount = false }) => {
               appear
               unmountOnExit
             >
-              <Container order={order}>
+              <Container order={order} className={className}>
                 <Header data={data} setOrder={setOrder} ref={refreshBtnRef} />
                 <TwitchStreams data={data} />
               </Container>

@@ -71,16 +71,16 @@ const InfinitSpinnig = keyframes`
 `;
 
 const spinnigAnimation = () => css`
-  ${InfinitSpinnig} 1s infinite;
+  ${InfinitSpinnig} ${'1s infinite'};
 `;
 
 const countdown = keyframes`
-    from {
-      stroke-dashoffset: 0px;
-    }
-    to {
-      stroke-dashoffset: 67.8px;
-    }
+from {
+  stroke-dashoffset: 0px;
+}
+to {
+  stroke-dashoffset: 67.8px;
+}
 `;
 
 const countdownAnimation = () => css`
@@ -315,33 +315,32 @@ export const Container = styled.div`
 
 export const CenterContainer = styled.div`
   &&& {
-    width: ${({ centerWidth }) => centerWidth}px;
     max-width: 100%;
+
+    width: 100%;
+    margin: 0;
+    display: grid;
+    grid-template-areas: 'twitchsidebar feed twitter';
+    grid-template-columns: ${({ left }) => left || 0}px ${({ centerWidth }) =>
+        centerWidth ? centerWidth + 'px' : 'auto'} ${({ right }) => right || 0}px;
+    padding-top: 25px;
+    justify-content: center;
+    gap: 25px;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
   }
 
-  display: flex;
-  justify-content: center;
-  flex-flow: column;
-  transition: width 750ms, margin 750ms;
-  position: relative;
-
-  margin-left: ${({
-    enableTwitter,
-    enableTwitch,
-    showTwitchSidebar,
-    twitterWidth,
-    centerWidth,
-    twitchSidebarWidth,
-    winWidth,
-    fullWidth,
-  }) =>
-    fullWidth || (!enableTwitter && (!enableTwitch || !showTwitchSidebar))
-      ? 'auto'
-      : (winWidth - (twitchSidebarWidth + twitterWidth + centerWidth)) / 2 +
-        twitchSidebarWidth +
-        'px'};
-  margin-right: ${({ enableTwitter, enableTwitch, showTwitchSidebar, fullWidth }) =>
-    fullWidth || (!enableTwitter && (!enableTwitch || !showTwitchSidebar)) ? 'auto' : 'unset'};
+  .feed,
+  #feed {
+    grid-area: feed;
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 export const FavoriteDeviderLine = styled.div`

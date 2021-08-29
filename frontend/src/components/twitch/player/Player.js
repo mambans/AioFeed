@@ -160,7 +160,7 @@ const Player = () => {
     (async () => {
       if (streamInfo?.user_id && !streamInfo.tags) {
         const tags = await TwitchAPI.getTags({ broadcaster_id: streamInfo.user_id }).then(
-          (res) => res.data.data
+          (res) => res?.data?.data
         );
 
         setStreamInfo((c) => ({ ...c, tags }));
@@ -311,7 +311,7 @@ const Player = () => {
   }
 
   const handleResizeMouseDown = () => setResizeActive(true);
-  const handleResizeMouseUp = (e) => setResizeActive(false);
+  const handleResizeMouseUp = () => setResizeActive(false);
   const resize = useCallback(
     (e) => {
       if (resizeActive) {
@@ -332,8 +332,6 @@ const Player = () => {
 
   return (
     <VideoAndChatContainer
-      onMouseUp={handleResizeMouseUp}
-      onMouseMove={resize}
       chatwidth={chatState.chatwidth || DEFAULT_CHAT_WIDTH}
       resizeActive={resizeActive}
       switched={chatState.switchChatSide}
@@ -685,17 +683,12 @@ const Player = () => {
         )}
       </div>
       {!chatState.hideChat && (
-        <ResizeDevider
-          onMouseDown={handleResizeMouseDown}
-          resizeActive={resizeActive}
-          chatwidth={chatState.chatwidth}
-        >
+        <ResizeDevider onMouseDown={handleResizeMouseDown} resizeActive={resizeActive}>
           <div />
         </ResizeDevider>
       )}
       {!chatState.hideChat ? (
         <>
-          {resizeActive && <ChatOverlay switched={chatState.switchChatSide} />}
           <div id='chat'>
             <PlayerExtraButtons channelName={channelName}>
               <Schedule
@@ -712,6 +705,13 @@ const Player = () => {
               src={`https://www.twitch.tv/embed/${channelName}/chat?darkpopout&parent=aiofeed.com`}
             />
           </div>
+          {resizeActive && (
+            <ChatOverlay
+              onMouseUp={handleResizeMouseUp}
+              onMouseMove={resize}
+              switched={chatState.switchChatSide}
+            />
+          )}
         </>
       ) : (
         <PlayerExtraButtons channelName={channelName}></PlayerExtraButtons>

@@ -9,7 +9,6 @@ const liveStreamsPromise = async ({
   setVods,
   enableTwitchVods,
   setUnseenNotifications,
-  feedVideoSizeProps,
 }) => {
   try {
     const res = await new Promise((resolve, reject) => {
@@ -44,7 +43,7 @@ const liveStreamsPromise = async ({
         getLocalstorage('TwitchVods-Channels')?.includes(stream.user_name?.toLowerCase())
       ) {
         setTimeout(async () => {
-          await FetchSingelChannelVods({ channelId: stream.user_id, setVods, feedVideoSizeProps });
+          await FetchSingelChannelVods({ channelId: stream.user_id, setVods });
         }, 30000);
       }
       return '';

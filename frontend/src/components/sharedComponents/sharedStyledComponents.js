@@ -175,7 +175,6 @@ export const HeaderLines = styled.div`
 export const HeaderOuterMainContainer = styled.div`
   width: 100%;
   margin-bottom: 5px;
-  padding-top: 25px;
 `;
 
 export const HeaderTopContainer = styled.div`

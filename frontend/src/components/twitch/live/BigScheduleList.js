@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Portal } from 'react-portal';
 import useClicksOutside from '../../../hooks/useClicksOutside';
+import BackDrop from '../../sharedComponents/BackDrop';
 import TwitchAPI from '../API';
 import { SingelScheduleItem, TriggerButton } from '../schedule';
 import { RefreshBtn, ScheduleListContainer } from '../schedule/StyledComponents';
@@ -43,6 +44,7 @@ const BigScheduleList = ({ followedChannels }) => {
             schedule={schedule}
             followedChannels={followedChannels}
           />
+          <BackDrop />
         </Portal>
       )}
     </>

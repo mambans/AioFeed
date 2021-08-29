@@ -9,18 +9,18 @@ import YoutubeHeader from './../youtube/Header';
 import YoutubeHandler from './YoutubeHandler';
 
 const YoutubeStandalone = () => (
-  <FeedsCenterContainer>
-    <Youtube />
+  <FeedsCenterContainer left={false} right={false}>
+    <Youtube className='feed' />
   </FeedsCenterContainer>
 );
 
-export const Youtube = () => {
+export const Youtube = ({ className }) => {
   const [order, setOrder] = useState(getLocalstorage('FeedOrders')?.['Youtube'] ?? 18);
 
   return (
     <YoutubeDataHandler>
       {(data) => (
-        <Container order={order}>
+        <Container order={order} className={className}>
           <YoutubeHeader
             videos={data.videos}
             setVideos={data.setVideos}

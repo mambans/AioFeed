@@ -18,12 +18,12 @@ import FeedsCenterContainer, { CenterContext } from './../../feed/FeedsCenterCon
 import { Container } from '../StyledComponents';
 
 const VodsStandalone = () => (
-  <FeedsCenterContainer>
-    <Vods />
+  <FeedsCenterContainer left={false} right={false}>
+    <Vods className='feed' />
   </FeedsCenterContainer>
 );
 
-export const Vods = () => {
+export const Vods = ({ className }) => {
   const { vods, setVods, channels } = useContext(VodsContext);
   const { twitchUserId, setTwitchToken, setRefreshToken } = useContext(AccountContext);
   const { setEnableTwitchVods } = useContext(FeedsContext) || {};
@@ -106,7 +106,7 @@ export const Vods = () => {
   }, [videoElementsAmount]);
 
   return (
-    <Container order={order}>
+    <Container order={order} className={className}>
       <Header
         ref={refreshBtnRef}
         refresh={refresh}

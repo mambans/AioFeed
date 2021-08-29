@@ -1,17 +1,18 @@
 import { Alert } from 'react-bootstrap';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import React, { useContext, useRef } from 'react';
+import React, { useCallback, useContext, useRef } from 'react';
 import { MdEdit } from 'react-icons/md';
 
 import { Container, MainContainer } from './StyledComponents';
 import FeedsContext from '../feed/FeedsContext';
 import UpdateTwitterLists from '../navigation/sidebar/UpdateTwitterLists';
 import ThemeContext from './../themes/ThemeContext';
-import FeedsCenterContainer from '../feed/FeedsCenterContainer';
+import FeedsCenterContainer, { CenterContext } from '../feed/FeedsCenterContainer';
 import Timelines from './Timelines';
+import ResizeWrapper from '../sharedComponents/ResizeWrapper';
 
 const TwitterStandalone = () => (
-  <FeedsCenterContainer>
+  <FeedsCenterContainer left={false} right={false}>
     <Twitter in={true} />
   </FeedsCenterContainer>
 );
@@ -20,7 +21,13 @@ export const Twitter = ({ in: forceMount = false }) => {
   const { twitterLists, enableTwitter, enableTwitch, enableYoutube, enableTwitchVods } =
     useContext(FeedsContext);
   const { activeTheme } = useContext(ThemeContext);
+  const { setTwitterWidth } = useContext(CenterContext);
   const mainContainerRef = useRef();
+
+  const pushTwitterWidthToFeed = useCallback(
+    (id, width) => setTwitterWidth((c) => ({ ...c, [id]: width })),
+    [setTwitterWidth]
+  );
 
   return (
     <CSSTransition
@@ -39,18 +46,22 @@ export const Twitter = ({ in: forceMount = false }) => {
         <TransitionGroup component={null}>
           {twitterLists?.map((id) => (
             <CSSTransition classNames='twitterList' key={id} timeout={750} unmountOnExit>
-              <Container key={id}>
-                <a
-                  title='Edit list info at Twitter.com'
-                  id='editLink'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  href={`https://twitter.com/i/lists/${id}`}
-                >
-                  <MdEdit size={14} />
-                </a>
-                <Timelines id={id} mainContainerRef={mainContainerRef} />
-              </Container>
+              <div>
+                <ResizeWrapper parentCallbackWidth={pushTwitterWidthToFeed}>
+                  <List key={id} id={id}>
+                    <a
+                      title='Edit list info at Twitter.com'
+                      id='editLink'
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      href={`https://twitter.com/i/lists/${id}`}
+                    >
+                      <MdEdit size={14} />
+                    </a>
+                    <Timelines id={id} mainContainerRef={mainContainerRef} />
+                  </List>
+                </ResizeWrapper>
+              </div>
             </CSSTransition>
           ))}
         </TransitionGroup>
@@ -68,6 +79,10 @@ export const Twitter = ({ in: forceMount = false }) => {
       </MainContainer>
     </CSSTransition>
   );
+};
+
+const List = ({ children, width }) => {
+  return <Container width={width}>{children}</Container>;
 };
 
 export default TwitterStandalone;

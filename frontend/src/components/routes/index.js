@@ -38,7 +38,7 @@ const NavigationRoutes = () => {
 
           <Route path='vods' element={<TwitchVods />} />
           <Route path='feed' element={<Feed />} />
-          <Route path='live' element={<Twitch forceMountTwitch={true} />} />
+          <Route path='live' element={<Twitch forceMount={true} />} />
           <Route path='favorites' element={<Favorites />} />
 
           <Navigate path='saved' to='favorites' />

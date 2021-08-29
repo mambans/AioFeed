@@ -195,14 +195,17 @@ const TwitchAPI = {
   },
 
   getTags: async (params) => {
-    return await axios.get(`${BASE_URL}/streams/tags`, {
-      params,
-      headers: {
-        Authorization: `Bearer ${await validateToken()}`,
-        'Client-ID': CLIENT_ID,
-      },
-    });
+    return await axios
+      .get(`${BASE_URL}/streams/tags`, {
+        params,
+        headers: {
+          Authorization: `Bearer ${await validateToken()}`,
+          'Client-ID': CLIENT_ID,
+        },
+      })
+      .catch((e) => console.error(e));
   },
+
   getSchedule: async (params) => {
     return await axios
       .get(`${BASE_URL}/schedule`, {

@@ -66,8 +66,10 @@ export const useCheckForVideosAndValidateToken = ({
 
 const FavoritesContainer = () => (
   <FavoritesProvider>
-    <FeedsCenterContainer fullWidth={true}>
-      <Favorites />
+    <FeedsCenterContainer left={false} right={false}>
+      <div className='feed'>
+        <Favorites />
+      </div>
     </FeedsCenterContainer>
   </FavoritesProvider>
 );
@@ -80,6 +82,7 @@ export const FavoriteListContainer = ({
   isLoading,
   fetchAllLists,
   index,
+  className,
 }) => {
   const [videos, setVideos] = useState();
   const [order, setOrder] = useState((getLocalstorage('FeedOrders')?.[list.name] ?? 26) + index);

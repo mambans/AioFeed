@@ -49,7 +49,6 @@ export const Styledsidebar = styled.div`
   scrollbar-color: #232526 transparent;
   scrollbar-width: thin;
   background: var(--sidebarsBackgroundColor);
-  top: 92px;
   position: fixed;
   border-radius: 10px 10px 0 0;
   overflow: auto;
