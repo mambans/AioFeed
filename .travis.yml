@@ -8,9 +8,6 @@ before_install:
   - sudo ./aws/install
   - rm -rf aws awscliv2.zip
 
-before_deploy:
-  - ls -l frontend
-
 install:
   - npm ci --prefix ./frontend
 

@@ -1,8 +1,9 @@
 import { Button } from 'react-bootstrap';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import FeedsContext from '../../feed/FeedsContext';
 import { ButtonLookalikeStyle } from '../../sharedComponents/sharedStyledComponents';
+import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
 export const StyledGameListElement = styled.li`
   justify-content: unset;
@@ -221,6 +222,9 @@ export const StyledContainer = styled.div`
 
 export const Container = ({ children }) => {
   const { feedVideoSizeProps } = useContext(FeedsContext);
+  // eslint-disable-next-line no-unused-vars
+  const [state, setState] = useState();
+  useEventListenerMemo('resize', () => setState((c) => !c));
 
   return <StyledContainer size={feedVideoSizeProps.totalWidth}>{children}</StyledContainer>;
 };
