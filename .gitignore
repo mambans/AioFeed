@@ -25,35 +25,34 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+cloudformation-packaged.yaml
+
+#Configs
+.eslintrc.yml
+.eslintrc
+.gitignore
+.prettierrc.yaml
+.prettierrc
+
+#Images
+originals/
+coffee_beans.webp
+original/
+**/.psd
+*.psd
+
+# Test
+test/
+*.test*
+*Test.*
+
 # Other
 *-workspace
 .VSCodeCounter
-.prettierrc
-test/
-src/server/sql/Query.sql
-.eslintrc
-public/images/originals
-**/.psd
-**/IMPORTANT
-*-copy*
-*.psd
 desktop.ini
-.gitignore
-.prettierrc.yaml
 
-cloudformation-packaged.yaml
-# Temp
-frontend/src/components/youtube/webhooks/
-
-.eslintrc.yml
-
-
-coffee_beans.webp
-
-# Test files TEMPORARY
-*.test*
-*Test*
-TEST
+#Temporary files
 *_old_working*
 *_old*
 *_copy*
+*-copy*
