@@ -357,7 +357,7 @@ export const InfoDisplay = styled.div`
 
   #tags {
     grid-area: tags;
-    width: max-content;
+    /* width: max-content; */
   }
 
   .twitchRedirect {
@@ -809,13 +809,14 @@ export const TagsContainer = styled.div`
   transform: translateX(-5px);
   padding: 5px;
   grid-area: 'tags';
+  flex-wrap: wrap;
+  gap: 10px;
 
   a,
   p {
     padding: 2px 4px;
     background: rgb(41, 41, 41) none repeat scroll 0% 0%;
     border-radius: 5px;
-    margin-right: 5px;
     font-size: 0.8em;
   }
 `;
