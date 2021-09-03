@@ -23,24 +23,56 @@ const VideoPlayer = ({ listIsOpen, listWidth, playNext }) => {
   const [videoDetails, setVideoDetails] = useState();
 
   useEffect(() => {
-    const playerParams = {
-      width: '100%',
-      height: '100%',
-      theme: 'dark',
-      layout: 'video',
-      video: videoId || null,
-      muted: false,
-      time: timeToSeconds(time),
-      allowfullscreen: true,
-      parent: ['aiofeed.com'],
-    };
+    (async () => {
+      const fetchLatestVodId = async () => {
+        const user = await TwitchAPI.getUser({
+          login: channelName,
+        }).then((res) =>
+          res.data.data.find(
+            (u) =>
+              u.display_name.toLowerCase() === channelName.toLowerCase() ||
+              u.login.toLowerCase() === channelName.toLowerCase()
+          )
+        );
+        console.log('user:', user);
 
-    if (twitchVideoPlayer.current) {
-      twitchVideoPlayer.current.setVideo(videoId, timeToSeconds(time));
-    } else if (window?.Twitch?.Player) {
-      twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', playerParams);
-    }
-  }, [videoId, time]);
+        const video = await TwitchAPI.getVideos({
+          user_id: user.id,
+          period: 'month',
+          first: 1,
+          type: 'all',
+        }).then((res) =>
+          res.data.data.find((v) => v.username.toLowerCase() === channelName.toLowerCase())
+        );
+
+        console.log('video:', video);
+        return video;
+      };
+
+      const video =
+        videoId && videoId.toLowerCase() !== 'latest'
+          ? videoId || (await fetchLatestVodId().then((v) => v.id))
+          : null;
+      console.log('video:', video);
+      const playerParams = {
+        width: '100%',
+        height: '100%',
+        theme: 'dark',
+        layout: 'video',
+        video: video || null,
+        muted: false,
+        time: timeToSeconds(time),
+        allowfullscreen: true,
+        parent: ['aiofeed.com'],
+      };
+
+      if (twitchVideoPlayer.current) {
+        twitchVideoPlayer.current.setVideo(videoId, timeToSeconds(time));
+      } else if (window?.Twitch?.Player) {
+        twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', playerParams);
+      }
+    })();
+  }, [videoId, time, latest, channelName]);
 
   useEventListenerMemo(
     window?.Twitch?.Player?.PLAYING,

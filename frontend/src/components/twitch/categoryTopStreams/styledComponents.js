@@ -87,8 +87,8 @@ export const GameListUlContainer = styled.ul`
   box-shadow: var(--refreshButtonShadow);
   width: 310px;
 
-  max-height: 485px;
-  height: 485px;
+  max-height: 385px;
+  height: 385px;
   overflow: scroll;
   overflow-x: scroll;
   overflow-x: hidden;
