@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { FiAlertCircle } from 'react-icons/fi';
 import Moment from 'react-moment';
 import React, { useRef } from 'react';
+import { MdVideocam } from 'react-icons/md';
 
 import {
   VideoTitle,
@@ -11,6 +12,7 @@ import {
   GameContainer,
   GamenameAndViewers,
   ImgBottomInfo,
+  LatestVodBtn,
 } from './../../sharedComponents/sharedStyledComponents';
 import { ChannelNameDiv } from './../StyledComponents';
 import StreamHoverIframe from '../StreamHoverIframe.js';
@@ -102,6 +104,21 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
             src={thumbnailUrl + `?${Date.now()}`}
           />
         </Link>
+
+        <ToolTip
+          delay={{ show: 1000, hide: 0 }}
+          tooltip='Open channels latest vod'
+          placement='bottom'
+        >
+          <LatestVodBtn
+            to={{
+              pathname: `/${login?.toLowerCase() || user_name}/videos/latest?user_id=${user_id}`,
+            }}
+          >
+            <MdVideocam color='inherit' size={24} />
+          </LatestVodBtn>
+        </ToolTip>
+
         <ImgBottomInfo>
           <Moment interval={1} durationFromNow>
             {started_at}

@@ -488,6 +488,24 @@ export const VideoTitleHref = styled.a`
   }
 `;
 
+export const LatestVodBtn = styled(Link)`
+  transition: all 500ms ease-in 0ms;
+  opacity: 0;
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  z-index: 1;
+  color: rgb(200, 200, 200);
+
+  &:hover {
+    &&& {
+      transition: color 250ms ease-in 0ms, opacity 250ms ease-in 0ms;
+      color: rgb(255, 255, 255);
+      opacity: 1;
+    }
+  }
+`;
+
 export const StyledImageContainer = styled.div`
   grid-area: video;
   height: ${({ feedVideoSizeProps }) => (feedVideoSizeProps.width / 16) * 9}px;
@@ -542,8 +560,9 @@ export const StyledImageContainer = styled.div`
       z-index: 1;
     }
 
-    .listVideoButton {
-      opacity: 1;
+    ${LatestVodBtn} {
+      transition: opacity 250ms ease-in 1000ms, color 250ms ease-in 0ms;
+      opacity: 0.7;
     }
   }
 `;

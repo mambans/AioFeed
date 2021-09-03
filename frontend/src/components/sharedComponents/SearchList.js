@@ -37,10 +37,10 @@ export const SearchListForm = styled.form`
     open ? 'var(--refreshButtonHoverBackground)' : 'var(--refreshButtonBackground);'};
   width: ${({ open }) => (open ? '310px' : '125px')};
   min-width: ${({ open }) => (open ? '310px' : '125px')};
-  margin-left: ${({ open, direction = 'left' }) =>
+  /* margin-left: ${({ open, direction = 'left' }) =>
     direction === 'left' ? (open ? '0px' : '185px') : 0};
   margin-right: ${({ open, direction = 'left' }) =>
-    direction === 'right' ? (open ? '0px' : '185px') : 0};
+    direction === 'right' ? (open ? '0px' : '185px') : 0}; */
   z-index: 4;
   height: max-content;
 
