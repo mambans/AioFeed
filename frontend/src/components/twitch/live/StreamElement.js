@@ -111,9 +111,8 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
           placement='bottom'
         >
           <LatestVodBtn
-            to={{
-              pathname: `/${login?.toLowerCase() || user_name}/videos/latest?user_id=${user_id}`,
-            }}
+            target='_blank'
+            href={`/${login?.toLowerCase() || user_name}/videos/latest?user_id=${user_id}`}
           >
             <MdVideocam color='inherit' size={24} />
           </LatestVodBtn>

@@ -488,7 +488,7 @@ export const VideoTitleHref = styled.a`
   }
 `;
 
-export const LatestVodBtn = styled(Link)`
+export const LatestVodBtn = styled.a`
   transition: all 500ms ease-in 0ms;
   opacity: 0;
   position: absolute;
