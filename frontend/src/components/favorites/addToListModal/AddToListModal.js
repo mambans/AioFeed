@@ -29,7 +29,7 @@ export const addFavoriteVideo = async (lists, setLists, list_Name, newItem) => {
 
     allOrinalLists[list_Name] = newObj;
 
-    await API.updateSavedList(list_Name, newObj);
+    API.updateSavedList(list_Name, newObj);
 
     const promise = await new Promise((resolve) => {
       const items = { ...allOrinalLists };

@@ -207,7 +207,6 @@ const TwitchAPI = {
   },
 
   getSchedule: async (params, { skipValidation } = {}) => {
-    console.log('skipValidation:', skipValidation);
     return await axios
       .get(`${BASE_URL}/schedule`, {
         params,
