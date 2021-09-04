@@ -560,6 +560,10 @@ export const StyledImageContainer = styled.div`
       z-index: 1;
     }
 
+    .listVideoButton {
+      opacity: 1;
+    }
+
     ${LatestVodBtn} {
       transition: opacity 250ms ease-in 1000ms, color 250ms ease-in 0ms;
       opacity: 0.7;
