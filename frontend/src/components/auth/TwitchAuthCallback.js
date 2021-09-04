@@ -8,14 +8,13 @@ import LoadingIndicator from './../LoadingIndicator';
 import { AddCookie } from '../../util/Utils';
 import TwitchAPI from '../twitch/API';
 import aiofeedAPI from '../navigation/API';
-import useToken, { TwitchContext } from '../twitch/useToken';
+import { TwitchContext } from '../twitch/useToken';
 
 const TwitchAuthCallback = () => {
   const [error, setError] = useState();
   const { autoRefreshEnabled } = useContext(TwitchContext);
   const { username } = useContext(AccountContext);
   const { setVisible, setFooterVisible } = useContext(NavigationContext);
-  const validateToken = useToken();
 
   const getAccessToken = useCallback(
     async (url) => {
@@ -28,34 +27,32 @@ const TwitchAuthCallback = () => {
       AddCookie('Twitch-access_token', accessToken);
       AddCookie('Twitch-refresh_token', refreshToken);
 
-      const MyTwitch = await validateToken().then(async () => {
-        return TwitchAPI.getMe({ accessToken: accessToken }).then(async (res) => {
-          AddCookie('Twitch-userId', res.data.data[0].id);
-          AddCookie('Twitch-username', res.data.data[0].login);
-          AddCookie('Twitch-profileImg', res.data.data[0].profile_image_url);
+      const MyTwitch = await TwitchAPI.getMe({ accessToken: accessToken }).then(async (res) => {
+        AddCookie('Twitch-userId', res.data.data[0].id);
+        AddCookie('Twitch-username', res.data.data[0].login);
+        AddCookie('Twitch-profileImg', res.data.data[0].profile_image_url);
 
-          if (username) {
-            await aiofeedAPI.updateAccount('TwitchPreferences', {
-              Username: res.data.data[0].login,
-              Id: res.data.data[0].id,
-              Profile: res.data.data[0].profile_image_url,
-              Token: accessToken,
-              Refresh_token: refreshToken,
-              AutoRefresh: autoRefreshEnabled,
-              enabled: true,
-            });
-          }
-
-          return {
+        if (username) {
+          await aiofeedAPI.updateAccount('TwitchPreferences', {
             Username: res.data.data[0].login,
-            ProfileImg: res.data.data[0].profile_image_url,
-          };
-        });
+            Id: res.data.data[0].id,
+            Profile: res.data.data[0].profile_image_url,
+            Token: accessToken,
+            Refresh_token: refreshToken,
+            AutoRefresh: autoRefreshEnabled,
+            enabled: true,
+          });
+        }
+
+        return {
+          Username: res.data.data[0].login,
+          ProfileImg: res.data.data[0].profile_image_url,
+        };
       });
 
       return { token: accessToken, refresh_token: refreshToken, ...MyTwitch };
     },
-    [username, autoRefreshEnabled, validateToken]
+    [username, autoRefreshEnabled]
   );
 
   useEffect(() => {

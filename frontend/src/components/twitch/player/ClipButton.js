@@ -18,11 +18,11 @@ const CreateAndOpenClip = async ({ streamInfo }) => {
     .catch((er) => console.error('CreateAndOpenClip -> er', er));
 };
 
-const ClipButton = ({ streamInfo, validateToken }) => {
+const ClipButton = ({ streamInfo }) => {
   useEventListenerMemo('keydown', keyboardEvents, window, streamInfo);
 
   const createClip = () => {
-    validateToken().then(() => CreateAndOpenClip({ streamInfo }));
+    CreateAndOpenClip({ streamInfo });
   };
 
   function keyboardEvents(e) {

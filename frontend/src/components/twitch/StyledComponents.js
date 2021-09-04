@@ -134,15 +134,19 @@ export const pulseOpacity = keyframes`
 `;
 
 export const pulse = keyframes`
-  0% {background: #121415d1;}
+  0% {background: var(--navigationbarBackground);}
   40% {background: #1d1e23d1;}
-  100% {background: #121415d1;}
+  100% {background: var(--navigationbarBackground);}
 `;
 
 export const pulseLight = keyframes`
   0% {background: #36393fd1;}
   40% {background: #464d54;}
   100% {background: #36393fd1;}
+`;
+
+const pulseAnimation = () => css`
+  ${pulse} 2s linear infinite;
 `;
 
 export const StyledLoadingBox = styled.div`
@@ -164,12 +168,12 @@ export const StyledLoadingBox = styled.div`
     min-height: ${({ feedVideoSizeProps }) => ((feedVideoSizeProps.width || 336) / 16) * 9}px;
     width: ${({ feedVideoSizeProps }) => feedVideoSizeProps.width || 336}px;
     border-radius: 1em;
-    background: #121415d1;
-    animation: ${pulse} 2s linear infinite;
+    background: var(--navigationbarBackground);
+    animation: ${({ freeze }) => freeze || pulseAnimation};
   }
 
   div div {
-    background: #121415d1;
+    background: var(--navigationbarBackground);
     border-radius: 1em;
   }
 
@@ -186,7 +190,7 @@ export const StyledLoadingBox = styled.div`
     line-height: 1.2;
 
     div {
-      animation: ${pulse} 2s linear infinite;
+      animation: ${({ freeze }) => freeze || pulseAnimation};
       width: 80%;
       /* width: 260px; */
       height: 1.5em;
@@ -199,14 +203,14 @@ export const StyledLoadingBox = styled.div`
     height: ${({ type }) => (type === 'small' ? '25px' : type === 'big' ? '5em' : '75px')};
 
     #channel {
-      animation: ${pulse} 2s linear infinite;
+      animation: ${({ freeze }) => freeze || pulseAnimation};
       width: 100px;
       height: ${({ type }) => (type === 'big' ? '1.5em' : '25px')};
       margin: ${({ type }) => (type === 'big' ? '7px 0' : '0')};
     }
 
     #game {
-      animation: ${pulse} 2s linear infinite;
+      animation: ${({ freeze }) => freeze || pulseAnimation};
       width: 125px;
       height: 1.5em;
       /* margin: 21px 0 0 0; */
@@ -215,11 +219,16 @@ export const StyledLoadingBox = styled.div`
   }
 `;
 
-export const LoadingVideoElement = ({ type }) => {
+export const LoadingVideoElement = ({ type, freeze }) => {
   const { feedSize, feedVideoSizeProps } = useContext(FeedsContext);
 
   return (
-    <StyledLoadingBox type={type} feedSize={feedSize} feedVideoSizeProps={feedVideoSizeProps}>
+    <StyledLoadingBox
+      type={type}
+      feedSize={feedSize}
+      feedVideoSizeProps={feedVideoSizeProps}
+      freeze={freeze}
+    >
       <div id='video'></div>
       <div id='title'>
         <div></div>

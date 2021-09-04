@@ -12,7 +12,7 @@ import LiveStreamsPromise from './LiveStreamsPromise';
 import OfflineStreamsPromise from './OfflineStreamsPromise';
 import UpdatedStreamsPromise from './UpdatedStreamsPromise';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
-import useToken, { TwitchContext } from '../useToken';
+import { TwitchContext } from '../useToken';
 
 const REFRESH_RATE = 25; // seconds
 
@@ -35,7 +35,6 @@ const Handler = ({ children }) => {
   const newlyAddedStreams = useRef([]);
   const timer = useRef();
   const refreshAfterUnfollowTimer = useRef();
-  const validateToken = useToken();
 
   useEventListenerMemo('focus', windowFocusHandler);
   useEventListenerMemo('blur', windowBlurHandler);
@@ -50,9 +49,7 @@ const Handler = ({ children }) => {
         return { refreshing: true, error: null, loaded: loaded, lastLoaded: lastLoaded };
       });
       try {
-        followedChannels.current = await validateToken().then(() =>
-          getMyFollowedChannels(forceValidateToken)
-        );
+        followedChannels.current = await getMyFollowedChannels(forceValidateToken);
 
         if (followedChannels.current && followedChannels.current[0]) {
           AddCookie('Twitch-username', followedChannels.current[0].from_name);
@@ -172,7 +169,6 @@ const Handler = ({ children }) => {
       isEnabledOfflineNotifications,
       setUnseenNotifications,
       updateNotischannels,
-      validateToken,
     ]
   );
 

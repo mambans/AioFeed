@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { throttle } from 'lodash';
 
 import { GameListUlContainer } from './../categoryTopStreams/styledComponents';
@@ -16,6 +16,7 @@ import StyledLoadingList from './../categoryTopStreams/LoadingList';
 import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 import SearchList from '../../sharedComponents/SearchList';
 import AccountContext from '../../account/AccountContext';
+import { CancelToken, isCancel } from 'axios';
 
 const removeDuplicates = (items) =>
   items.filter((item, index, self) => self.findIndex((t) => t.user_id === item.user_id) === index);
@@ -29,6 +30,8 @@ const ChannelList = ({
 }) => {
   const channelName = useParams()?.channelName;
   const { username, twitchToken, twitchUserId } = useContext(AccountContext);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const [listIsOpen, setListIsOpen] = useState();
   const [cursor, setCursor] = useState({ position: 0 });
@@ -41,6 +44,7 @@ const ChannelList = ({
   const searchTimer = useRef();
   const resetListTimer = useRef();
   const savedFilteredInputMatched = useRef();
+  const cancelToken = useRef(CancelToken.source());
 
   useLockBodyScroll(listIsOpen);
 
@@ -54,15 +58,23 @@ const ChannelList = ({
       bind: {
         value,
         onChange: (event) => {
+          event.stopPropagation();
           const { value: input } = event.target;
           try {
             setValue(input);
             setCursor({ position: 0 });
             if (listIsOpen && input && input !== '' && !cursor.used) {
               clearTimeout(searchTimer.current);
+              cancelToken.current.cancel('New request incoming');
+              cancelToken.current = CancelToken.source();
+
               searchTimer.current = setTimeout(async () => {
                 setSearchResults();
-                await TwitchAPI.getSearchChannels({ first: 20 }, input || value)
+                await TwitchAPI.getSearchChannels(
+                  { first: 20, cancelToken: cancelToken.current.token },
+
+                  input || value
+                )
                   .then((res) => {
                     const searchResult = res.data.data.map((item) => ({
                       ...item,
@@ -83,7 +95,10 @@ const ChannelList = ({
                       });
                     });
                   })
-                  .catch((e) => console.error('e', e));
+                  .catch((e) => {
+                    if (isCancel(e)) return;
+                    console.log('(e:', e);
+                  });
               }, 500);
             } else if (listIsOpen && !input) {
               setSearchResults();
@@ -239,7 +254,11 @@ const ChannelList = ({
 
   const handleSubmit = () => {
     resetChannel();
-    window.open(`/${returnChannel()}`);
+    if (location.pathname === '/feed') {
+      window.open(`/${returnChannel()}`);
+    } else {
+      navigate(`/${returnChannel()}`);
+    }
   };
 
   useEffect(() => {

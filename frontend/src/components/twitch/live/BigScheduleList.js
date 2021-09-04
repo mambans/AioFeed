@@ -63,7 +63,10 @@ const SchedulesList = React.forwardRef(
           const fetchedSchedules = await fullValidateFunc().then(async () => {
             const res = await Promise.all(
               followedChannels.map(async (user) => {
-                return await TwitchAPI.getSchedule({ broadcaster_id: user.to_id });
+                return await TwitchAPI.getSchedule(
+                  { broadcaster_id: user.to_id },
+                  { skipValidation: true }
+                );
               })
             );
             const list = res

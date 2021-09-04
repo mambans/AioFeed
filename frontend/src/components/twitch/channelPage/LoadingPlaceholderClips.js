@@ -4,18 +4,18 @@ import { SubFeedContainer } from './../../sharedComponents/sharedStyledComponent
 import LoadingBoxes from './../LoadingBoxes';
 import { SubFeedHeader } from './StyledComponents';
 
-const LoadingPlaceholderClips = ({ numberOfVideos }) => (
+const LoadingPlaceholderClips = ({ numberOfVideos, title = 'Clips', freeze }) => (
   <>
     <SubFeedHeader
       style={{
         width: `${numberOfVideos * 350}px`,
       }}
     >
-      <h3>Clips</h3>
+      <h3>{title}</h3>
     </SubFeedHeader>
 
     <SubFeedContainer style={{ justifyContent: 'center', minHeight: '310px', paddingBottom: '0' }}>
-      <LoadingBoxes amount={numberOfVideos} type='big' />
+      <LoadingBoxes amount={numberOfVideos} type='big' freeze={freeze} />
     </SubFeedContainer>
   </>
 );

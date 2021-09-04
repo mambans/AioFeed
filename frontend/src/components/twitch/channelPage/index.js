@@ -2,7 +2,7 @@ import { MdChat } from 'react-icons/md';
 import { FaWindowClose, FaRegClock, FaTwitch } from 'react-icons/fa';
 import { MdLiveTv } from 'react-icons/md';
 import { useParams, useLocation, Link } from 'react-router-dom';
-import React, { useEffect, useCallback, useState, useRef, useContext } from 'react';
+import React, { useEffect, useCallback, useState, useRef } from 'react';
 import Moment from 'react-moment';
 
 import LoadingPlaceholderBanner from './LoadingPlaceholderBanner';
@@ -33,14 +33,9 @@ import setFavion from '../setFavion';
 // import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import TwitchAPI from './../API';
 import AnimatedViewCount from '../live/AnimatedViewCount';
-import { getCookie } from '../../../util/Utils';
-import disconnectTwitch from '../disconnectTwitch';
-import AccountContext from '../../account/AccountContext';
-import ReAuthenticateButton from '../../navigation/sidebar/ReAuthenticateButton';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import useQuery from '../../../hooks/useQuery';
 import loginNameFormat from '../loginNameFormat';
-import useToken from '../useToken';
 import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
 import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import FavoriteStreamBtn from '../live/FavoriteStreamBtn';
@@ -51,10 +46,9 @@ const ChannelPage = () => {
   const [channelInfo, setChannelInfo] = useState(passedChannelData);
   const [streamInfo, setStreamInfo] = useState(passedChannelData);
   const numberOfVideos = Math.floor(window.innerWidth / 350);
-  const { setTwitchToken } = useContext(AccountContext);
   const URLQueries = useQuery();
-  const validateToken = useToken();
 
+  const [userId, setUserId] = useState();
   const [vods, setVods] = useState();
   const [clips, setClips] = useState();
   const [sortVodsBy, setSortVodsBy] = useState(
@@ -65,7 +59,7 @@ const ChannelPage = () => {
   const [sortClipsBy, setSortClipsBy] = useState(
     URLQueries.get('type')?.toLowerCase() === 'clips' ? URLQueries.get('within') : null
   );
-  const [channelId, setChannelId] = useState(passedChannelData?.user_id);
+  // const [channelId, setChannelId] = useState(passedChannelData?.user_id);
   const [isLive, setIsLive] = useState();
   const [videoOpen, setVideoOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
@@ -80,140 +74,148 @@ const ChannelPage = () => {
   useEventListenerMemo(window?.Twitch?.Player?.OFFLINE, offlineEvents, twitchPlayer.current);
 
   const getIdFromName = useCallback(async () => {
-    await TwitchAPI.getUser({
+    const userId = await TwitchAPI.getUser({
       login: channelName,
     })
-      .then((res) => setChannelId(res.data.data[0].id))
-      .catch((error) => setChannelId('Not Found'));
+      .then((res) => res.data.data[0].id)
+      .catch((error) => 'Not Found');
+
+    return userId;
   }, [channelName]);
 
   const fetchChannelVods = useCallback(
-    async (pagination, setLoading) => {
-      await validateToken().then(async () => {
-        if (pagination) {
-          setLoading(true);
-        } else {
-          previosVodPage.current = null;
-        }
+    async ({ pagination, setLoading = () => {} } = {}) => {
+      if (pagination) {
+        setLoading(true);
+      } else {
+        previosVodPage.current = null;
+      }
 
-        await TwitchAPI.getVideos({
-          user_id: channelId,
-          first: numberOfVideos,
-          sort: sortVodsBy?.toLowerCase(),
-          type: 'all',
-          after: pagination || null,
-        })
-          .then(async (res) => {
+      await TwitchAPI.getVideos({
+        user_id: userId,
+        first: numberOfVideos,
+        sort: sortVodsBy?.toLowerCase(),
+        type: 'all',
+        after: pagination || null,
+      })
+        .then(async (res) => {
+          setVods((vods) => {
             if (
               res.data.data?.length === 0 &&
-              (!vods || !Array.isArray(vods) || vods?.length < 1)
+              (vods || Array.isArray(vods) || Boolean(vods?.length))
             ) {
-              setVods({ error: 'No vods available' });
-              return '';
-            }
-
-            if (res.data.data?.length === 0 && (vods || Array.isArray(vods) || vods?.length > 1)) {
               setLoading(false);
-              return '';
             }
-            vodPagination.current = res.data.pagination.cursor;
 
-            const videos = await AddVideoExtraData({ items: res.data, fetchGameInfo: false });
-            const finallVideos = await addVodEndTime(videos.data);
-
-            if (pagination) {
-              const allVods = previosVodPage.current.concat(finallVideos);
-              previosVodPage.current = allVods;
-
-              setLoading(false);
-              setVods(allVods);
-            } else {
-              previosVodPage.current = finallVideos;
-              setVods(finallVideos);
+            if (!res.data.data?.length && (!vods || !Array.isArray(vods) || !vods?.length)) {
+              return { error: 'No vods available' };
             }
-          })
-          .catch((e) => {
-            console.error(e);
+            return vods;
           });
-      });
+
+          vodPagination.current = res.data.pagination.cursor;
+
+          const videos = await AddVideoExtraData({ items: res.data, fetchGameInfo: false });
+          const finallVideos = await addVodEndTime(videos.data);
+
+          if (pagination) {
+            const allVods = previosVodPage.current.concat(finallVideos);
+            previosVodPage.current = allVods;
+
+            setLoading(false);
+            setVods(allVods);
+          } else {
+            previosVodPage.current = finallVideos;
+            setVods(finallVideos);
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     },
-    [numberOfVideos, sortVodsBy, channelId, vods, validateToken]
+    [numberOfVideos, sortVodsBy, userId]
   );
 
   const fetchClips = useCallback(
-    async (pagination, setLoading) => {
-      await validateToken().then(async () => {
-        if (pagination) {
-          setLoading(true);
-        } else {
-          previosClipsPage.current = null;
-        }
+    async ({ pagination, setLoading = () => {} } = {}) => {
+      if (pagination) {
+        setLoading(true);
+      } else {
+        previosClipsPage.current = null;
+      }
 
-        await TwitchAPI.getClips({
-          broadcaster_id: channelId,
-          first: numberOfVideos,
-          after: pagination || null,
-          started_at:
-            sortClipsBy &&
-            new Date(new Date().setDate(new Date().getDate() - sortClipsBy)).toISOString(),
-          ended_at: sortClipsBy && new Date().toISOString(),
+      await TwitchAPI.getClips({
+        broadcaster_id: userId,
+        first: numberOfVideos,
+        after: pagination || null,
+        started_at:
+          sortClipsBy &&
+          new Date(new Date().setDate(new Date().getDate() - sortClipsBy)).toISOString(),
+        ended_at: sortClipsBy && new Date().toISOString(),
+      })
+        .then(async (res) => {
+          setClips((clips) => {
+            if (
+              res.data.data?.length === 0 &&
+              (clips || Array.isArray(clips) || Boolean(clips?.length))
+            ) {
+              setLoading(false);
+            }
+            if (
+              res.data.data?.length === 0 &&
+              (!clips || !Array.isArray(clips) || !clips?.length)
+            ) {
+              return { error: 'No clips available' };
+            }
+
+            return clips;
+          });
+
+          clipPagination.current = res.data.pagination.cursor;
+          const finallClips = await AddVideoExtraData({ items: res.data });
+
+          if (pagination) {
+            const allClips = previosClipsPage.current.concat(finallClips.data);
+            previosClipsPage.current = allClips;
+            setLoading(false);
+            setClips(allClips);
+          } else {
+            previosClipsPage.current = finallClips.data;
+            setClips(finallClips.data);
+          }
         })
-          .then(async (res) => {
-            if (
-              res.data.data?.length === 0 &&
-              (!clips || !Array.isArray(clips) || clips?.length < 1)
-            ) {
-              setClips({ error: 'No clips available' });
-              return '';
-            }
-
-            if (
-              res.data.data?.length === 0 &&
-              (clips || Array.isArray(clips) || clips?.length > 1)
-            ) {
-              setLoading(false);
-              return '';
-            }
-            clipPagination.current = res.data.pagination.cursor;
-            const finallClips = await AddVideoExtraData({ items: res.data });
-
-            if (pagination) {
-              const allClips = previosClipsPage.current.concat(finallClips.data);
-              previosClipsPage.current = allClips;
-              setLoading(false);
-              setClips(allClips);
-            } else {
-              previosClipsPage.current = finallClips.data;
-              setClips(finallClips.data);
-            }
-          })
-          .catch((error) => console.error('fetchClips: ', error));
-      });
+        .catch((error) => console.error('fetchClips: ', error));
     },
-    [numberOfVideos, sortClipsBy, channelId, clips, validateToken]
+    [numberOfVideos, sortClipsBy, userId]
   );
 
-  const getChannelInfo = useCallback(async () => {
-    if (!channelInfo) {
-      const res = await validateToken().then(() => fetchChannelInfo(channelId, true));
-
-      setChannelInfo(res);
-    }
-  }, [channelInfo, channelId, validateToken]);
-
-  useEffect(() => {
-    document.title = `${channelName}'s Channel`;
-  }, [channelName]);
+  const resetAllValues = () => {
+    setUserId();
+    setChannelInfo();
+    setClips();
+    setVods();
+    setFavion();
+  };
 
   useEffect(() => {
     (async () => {
-      if (!channelId) {
-        await validateToken(true).then(async () => await getIdFromName());
-      } else if (!channelInfo && channelId && channelId !== 'Not Found') {
-        await validateToken(true).then(async () => await getChannelInfo());
-      }
+      document.title = `${channelName}'s Channel`;
+      const user_id = await getIdFromName();
+      setUserId(user_id);
+      if (!user_id || user_id === 'Not Found') return false;
+
+      fetchChannelInfo(user_id, true).then((res) => {
+        setChannelInfo(res);
+        if (res) setFavion(res.logo || res.profile_image_url);
+      });
     })();
-  }, [channelInfo, getChannelInfo, getIdFromName, channelId, validateToken]);
+
+    return () => resetAllValues();
+  }, [channelName, getIdFromName]);
+
+  useEffect(() => fetchChannelVods(), [userId, fetchChannelVods]);
+
+  useEffect(() => fetchClips(), [userId, fetchClips]);
 
   async function onlineEvents() {
     console.log('Stream is Online');
@@ -221,13 +223,12 @@ const ChannelPage = () => {
 
     try {
       if (twitchPlayer.current) {
-        const streamInfo = await validateToken().then(() =>
-          fetchStreamInfo(
-            twitchPlayer.current && twitchPlayer.current.getChannelId()
-              ? { user_id: twitchPlayer.current.getChannelId() }
-              : { user_login: channelName }
-          )
+        const streamInfo = await fetchStreamInfo(
+          twitchPlayer.current && twitchPlayer.current.getChannelId()
+            ? { user_id: twitchPlayer.current.getChannelId() }
+            : { user_login: channelName }
         );
+
         if (streamInfo) {
           setStreamInfo(streamInfo);
           setIsLive(true);
@@ -244,38 +245,23 @@ const ChannelPage = () => {
   }
 
   useEffect(() => {
-    if (!twitchPlayer.current && window.Twitch.Player) {
-      twitchPlayer.current = new window.Twitch.Player('twitch-embed', {
-        width: `${300 * 1.777777777777778}px`,
-        height: '300px',
-        theme: 'dark',
-        layout: 'video',
-        channel: channelName,
-        muted: true,
-      });
+    if (userId !== 'Not Found') {
+      if (twitchPlayer.current) {
+        twitchPlayer.current.setChannelId(userId);
+      } else if (window?.Twitch?.Player) {
+        twitchPlayer.current = new window.Twitch.Player('twitch-embed', {
+          width: `${300 * 1.777777777777778}px`,
+          height: '300px',
+          theme: 'dark',
+          layout: 'video',
+          channel: channelName,
+          muted: true,
+        });
+      }
     }
-  }, [channelName]);
+  }, [channelName, userId]);
 
-  useEffect(() => {
-    if (channelId && !vods && channelId !== 'Not Found') {
-      fetchChannelVods();
-    }
-  }, [fetchChannelVods, vods, channelId]);
-
-  useEffect(() => {
-    if (channelId && !clips && channelId !== 'Not Found') {
-      fetchClips();
-    }
-  }, [fetchClips, clips, channelId]);
-
-  useEffect(() => {
-    if (channelInfo) {
-      setFavion(channelInfo.logo || channelInfo.profile_image_url);
-    }
-    return () => setFavion();
-  }, [channelInfo]);
-
-  if (channelId === 'Not Found') {
+  if (userId === 'Not Found') {
     return (
       <ChannelContainer>
         <Banner>
@@ -288,33 +274,17 @@ const ChannelPage = () => {
             }}
           >
             <Name>
-              <div id='HeaderChannelInfo' style={{ height: '80%' }}>
-                <div id='ChannelName'>
-                  <p className='ChannelLiveLink'>
-                    <ProfileImage>
-                      <img alt='' src='' />
-                    </ProfileImage>
-                    {!getCookie('Twitch-access_token')
-                      ? "Can't fetch channel info, no access token found."
-                      : channelName}
-                  </p>
-                </div>
-                <p id='title'>
-                  {!getCookie('Twitch-access_token')
-                    ? 'You need to connect with your Twitch account.'
-                    : 'Channel Not Found!'}
-                </p>
-                <ReAuthenticateButton
-                  disconnect={() => disconnectTwitch({ setTwitchToken })}
-                  serviceName={'Twitch'}
-                  style={{ margin: '20px', justifyContent: 'center' }}
-                />
+              <div style={{ fontSize: '1.5rem' }}>
+                <span style={{ fontSize: '0.85em' }}>{'Sry, '}</span>
+                <b>{channelName}</b>
+                {"'s"}
+                <span style={{ fontSize: '0.85em' }}>{' channel could not be found.'}</span>
               </div>
             </Name>
           </BannerInfoOverlay>
         </Banner>
-        {/* <LoadingPlaceholderVods numberOfVideos={numberOfVideos} />
-        <LoadingPlaceholderClips numberOfVideos={numberOfVideos} /> */}
+        <LoadingPlaceholderVods numberOfVideos={numberOfVideos} title='Not found..' freeze />
+        <LoadingPlaceholderClips numberOfVideos={numberOfVideos} title='Not found..' freeze />
       </ChannelContainer>
     );
   } else {

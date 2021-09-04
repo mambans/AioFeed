@@ -206,12 +206,13 @@ const TwitchAPI = {
       .catch((e) => console.error(e));
   },
 
-  getSchedule: async (params) => {
+  getSchedule: async (params, { skipValidation } = {}) => {
+    console.log('skipValidation:', skipValidation);
     return await axios
       .get(`${BASE_URL}/schedule`, {
         params,
         headers: {
-          Authorization: `Bearer ${await validateToken()}`,
+          Authorization: `Bearer ${await validateToken(skipValidation)}`,
           'Client-ID': CLIENT_ID,
         },
       })

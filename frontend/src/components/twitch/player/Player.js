@@ -52,7 +52,6 @@ import disconnectTwitch from '../disconnectTwitch';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from '../loginNameFormat';
 import toggleFullscreenFunc from './toggleFullscreenFunc';
-import useToken from '../useToken';
 import useFullscreen from '../../../hooks/useFullscreen';
 import ToolTip from '../../sharedComponents/ToolTip';
 import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
@@ -65,12 +64,10 @@ const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.12, 175);
 const Player = () => {
   const channelName = useParams()?.channelName;
   document.title = `${channelName} player`;
-  const validateToken = useToken();
   const { addNotification } = useContext(NotificationsContext);
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const { setTwitchToken } = useContext(AccountContext);
 
-  // const [twitchVideoPlayer, setTwitchVideoPlayer] = useState();
   const twitchVideoPlayer = useRef();
   const [streamInfo, setStreamInfo] = useState(useLocation().state?.passedChannelData);
   const [showControlls, setShowControlls] = useState();
@@ -137,8 +134,21 @@ const Player = () => {
   useEventListenerMemo('mousedown', containLinkClicks, link2.current);
   useEventListenerMemo('mousedown', containLinkClicks, link3.current);
 
+  const resetValues = () => {
+    savedStreamInfo.current = null;
+    setStreamInfo(null);
+    setFavion(null);
+    setChatState({});
+  };
+
   useEffect(() => {
-    if (window?.Twitch?.Player) {
+    return () => resetValues();
+  }, [channelName]);
+
+  useEffect(() => {
+    if (twitchVideoPlayer.current) {
+      twitchVideoPlayer.current.setChannel(channelName);
+    } else if (window?.Twitch?.Player) {
       twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', {
         width: '100%',
         height: '100%',
@@ -150,23 +160,12 @@ const Player = () => {
         parent: ['aiofeed.com'],
       });
     }
+
     return () => {
       clearInterval(refreshStreamInfoTimer.current);
       clearTimeout(fadeTimer.current);
     };
   }, [setShrinkNavbar, setFooterVisible, setVisible, channelName]);
-
-  useEffect(() => {
-    (async () => {
-      if (streamInfo?.user_id && !streamInfo.tags) {
-        const tags = await TwitchAPI.getTags({ broadcaster_id: streamInfo.user_id }).then(
-          (res) => res?.data?.data
-        );
-
-        setStreamInfo((c) => ({ ...c, tags }));
-      }
-    })();
-  }, [streamInfo]);
 
   useEffect(() => {
     const updateCachedChatState = debounce(
@@ -202,12 +201,10 @@ const Player = () => {
     if (twitchVideoPlayer.current) {
       const LIVEStreamInfo = {
         ...savedStreamInfo.current,
-        ...(await validateToken().then(() =>
-          fetchStreamInfo(
-            twitchVideoPlayer.current.getChannelId()
-              ? { user_id: twitchVideoPlayer.current.getChannelId() }
-              : { user_login: channelName }
-          )
+        ...(await fetchStreamInfo(
+          twitchVideoPlayer.current.getChannelId()
+            ? { user_id: twitchVideoPlayer.current.getChannelId() }
+            : { user_login: channelName }
         )),
       };
 
@@ -227,14 +224,15 @@ const Player = () => {
 
         return streamWithGameAndProfile;
       } else {
-        const streamWithGameAndProfile = await validateToken().then(() =>
-          fetchChannelInfo(twitchVideoPlayer.current.getChannelId(), true)
+        const streamWithGameAndProfile = await fetchChannelInfo(
+          twitchVideoPlayer.current.getChannelId(),
+          true
         );
         setStreamInfo((c) => ({ ...c, ...streamWithGameAndProfile }));
         return streamWithGameAndProfile;
       }
     }
-  }, [channelName, validateToken]);
+  }, [channelName]);
 
   const addNoti = useCallback(
     ({ type, stream }) => {
@@ -262,8 +260,13 @@ const Player = () => {
         }, 1000 * 60 * 1);
       }
 
-      await GetAndSetStreamInfo().then((res) => {
+      await GetAndSetStreamInfo().then(async (res) => {
         setFavion(res?.profile_image_url);
+        const tags = await TwitchAPI.getTags({ broadcaster_id: res.user_id }).then(
+          (res) => res?.data?.data
+        );
+        setStreamInfo(() => ({ ...res, tags }));
+
         if (
           streamInfo === null &&
           res?.broadcaster_software &&
@@ -531,7 +534,7 @@ const Player = () => {
                 />
                 <ShowStatsButtons TwitchPlayer={twitchVideoPlayer.current} />
                 <ShowSetQualityButtons TwitchPlayer={twitchVideoPlayer.current} />
-                <ClipButton streamInfo={streamInfo} validateToken={validateToken} />
+                <ClipButton streamInfo={streamInfo} />
                 <ResetVideoButton
                   title={'Refresh video'}
                   style={{

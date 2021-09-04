@@ -156,6 +156,7 @@ const SearchList = ({
   const submit = (evt) => {
     evt.preventDefault();
     onSubmit();
+    setListIsOpen(false);
     inputRef.current.blur();
   };
 

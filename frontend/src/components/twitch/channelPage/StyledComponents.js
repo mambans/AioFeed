@@ -266,6 +266,7 @@ export const BlurredBannerImage = styled.div`
   background-position: center;
   box-shadow: 5px 5px 5px black;
   border: black solid 2px;
+  background-color: var(--navigationbarBackground);
 `;
 
 const StyledVideoChatButton = styled(Button).attrs({ variant: 'dark-outline' })`

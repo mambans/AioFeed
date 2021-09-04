@@ -2,21 +2,19 @@ import React from 'react';
 
 import { SubFeedContainer } from './../../sharedComponents/sharedStyledComponents';
 import LoadingBoxes from './../LoadingBoxes';
-import SortButton from './SortButton';
 import { SubFeedHeader } from './StyledComponents';
 
-const LoadingPlaceholderVods = ({ numberOfVideos }) => (
+const LoadingPlaceholderVods = ({ numberOfVideos, title = 'Vods', freeze }) => (
   <>
     <SubFeedHeader
       style={{
         width: `${numberOfVideos * 350}px`,
       }}
     >
-      <SortButton sortBy={''} />
-      <h3>Vods</h3>
+      <h3>{title}</h3>
     </SubFeedHeader>
     <SubFeedContainer style={{ justifyContent: 'center', minHeight: '345px', paddingBottom: '0' }}>
-      <LoadingBoxes amount={numberOfVideos} type='small' />
+      <LoadingBoxes amount={numberOfVideos} type='small' freeze={freeze} />
     </SubFeedContainer>
   </>
 );

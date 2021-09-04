@@ -25,7 +25,7 @@ const ShowStatsButtons = ({ TwitchPlayer }) => {
     }
   };
 
-  const ToggleShowStats = (event) => {
+  const ToggleShowStats = (event = { stopPropagation: () => {}, preventDefault: () => {} }) => {
     event.stopPropagation();
     event.preventDefault();
     if (!showPlaybackStats) {

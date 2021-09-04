@@ -37,13 +37,15 @@ export const fullValidateFunc = async () => {
   }
 };
 
-const validateToken = async () => {
+const validateToken = async (skipValidation) => {
   const access_token = getCookie('Twitch-access_token');
   const refresh_token = getCookie(`Twitch-refresh_token`);
   const app_token = getCookie(`Twitch-app_token`);
 
+  if (skipValidation) return access_token;
+
   if (access_token) {
-    return fullValidateFunc();
+    return await fullValidateFunc();
   } else if (refresh_token) {
     console.log('Twitch: No Twitch-access_token avalible, trying with Twitch-refresh_token.');
 

@@ -95,7 +95,9 @@ const SubFeed = ({
       <LoadMore
         show={items && !items.error}
         text='Load more'
-        onClick={(dull, setLoaded) => fetchItems(itemPagination.current, setLoaded)}
+        onClick={(dull, setLoaded) =>
+          fetchItems({ pagination: itemPagination.current, setLoading: setLoaded })
+        }
         style={{
           width: `${numberOfVideos * 350}px`,
           margin: 'auto',

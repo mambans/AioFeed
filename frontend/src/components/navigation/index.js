@@ -78,13 +78,25 @@ const Navigation = () => {
           </Nav.Link>
           <RenderNotifications leftExpandRef={leftExpand} />
           <StyledNav className='mr-auto'>
-            <Nav.Link as={NavLink} to='/home' activeClassName='active'>
+            <Nav.Link
+              as={NavLink}
+              to='/home'
+              className={({ isActive }) => `link ${isActive ? 'active-link' : 'inactive-link'}`}
+            >
               Home
             </Nav.Link>
-            <Nav.Link as={NavLink} to='/feed' activeClassName='active'>
+            <Nav.Link
+              as={NavLink}
+              to='/feed'
+              className={({ isActive }) => `link ${isActive ? 'active-link' : 'inactive-link'}`}
+            >
               Feed
             </Nav.Link>
-            <Nav.Link as={NavLink} to='/category' activeClassName='active'>
+            <Nav.Link
+              as={NavLink}
+              to='/category'
+              className={({ isActive }) => `link ${isActive ? 'active-link' : 'inactive-link'}`}
+            >
               Top Streams
             </Nav.Link>
             <DropDown title='Individual Feeds'>
