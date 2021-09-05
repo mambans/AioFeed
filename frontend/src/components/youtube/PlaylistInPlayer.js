@@ -22,7 +22,7 @@ const Container = styled.div`
   overflow: hidden scroll;
   flex-flow: row wrap;
   justify-content: center;
-  padding-bottom: 50px;
+  padding-bottom: 75px;
   padding-top: 10px;
 `;
 
