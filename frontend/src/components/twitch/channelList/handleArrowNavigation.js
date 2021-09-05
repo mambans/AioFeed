@@ -50,13 +50,11 @@ const handleArrowNavigation = (
         list[cursorPosition]?.id ||
         list[cursorPosition];
 
-      setCursor(() => ({
+      setValue(newValueProperty);
+      setCursor({
         position: cursorPosition,
         used: true,
-      }));
-
-      setValue(newValueProperty);
-
+      });
       scrollToIfNeeded(ulListRef);
     }
   } catch (error) {

@@ -26,6 +26,40 @@ export const StyledGameListElement = styled.li`
     font-weight: ${({ selected }) => (selected ? 'bold' : 'unset')};
   }
 
+  /* &.instant-appear {
+    opacity: 0;
+    transition: opacity 250ms;
+  }
+  &.instant-appear-active {
+    opacity: 1;
+    transition: opacity 250ms;
+  }
+
+  &.instant-enter {
+    opacity: 0;
+    transition: opacity 250ms;
+  }
+
+  &.instant-enter-active {
+    opacity: 1;
+    transition: opacity 250ms;
+  }
+
+  &.instant-exit {
+    opacity: 1;
+    transition: opacity 250ms;
+  }
+
+  &.instant-exit-active {
+    opacity: 0;
+    transition: opacity 250ms;
+  }
+
+  &.instant-exit-done {
+    opacity: 0;
+    transition: opacity 250ms;
+  } */
+
   &.fade-appear {
     opacity: 0;
     transition: opacity 250ms;

@@ -105,10 +105,8 @@ const FavoritesSmallList = ({ listName, videos, style }) => {
     } else {
       const newList = await addFavoriteVideo(lists, setLists, listName, id);
       resetVideoId();
-      setCursor({ position: newList.items.length - 1 });
-      // setTimeout(() => {
-      //   scrollToIfNeeded(ulListRef.current);
-      // }, 50);
+      setTimeout(() => setCursor({ position: newList.items.length - 1 }), 0);
+      setTimeout(() => scrollToIfNeeded(ulListRef.current), 750);
     }
   };
 
@@ -174,9 +172,9 @@ const FavoritesSmallList = ({ listName, videos, style }) => {
           <TransitionGroup component={null}>
             {filteredInputMatched.map((v, index) => (
               <CSSTransition
-                timeout={250}
+                timeout={videoId ? 0 : 250}
                 key={v?.id}
-                classNames='fade'
+                classNames={videoId || 'fade'}
                 unmountOnExit
                 onEntered={(node) => scrollToIfNeeded(ulListRef.current, node)}
               >
