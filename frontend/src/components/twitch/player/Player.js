@@ -308,6 +308,11 @@ const Player = () => {
       case 'F':
         toggleFullScreen(e);
         break;
+      case 'q':
+      case 'Q':
+        e.preventDefault();
+        twitchVideoPlayer.current?.setQuality('chunked');
+        break;
       default:
         break;
     }
