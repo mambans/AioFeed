@@ -107,7 +107,7 @@ const FavoritesSmallList = ({ listName, videos, style }) => {
       resetVideoId();
       setCursor({ position: newList.items.length - 1 });
       // setTimeout(() => {
-      // scrollToIfNeeded(ulListRef.current);
+      //   scrollToIfNeeded(ulListRef.current);
       // }, 50);
     }
   };
@@ -165,6 +165,7 @@ const FavoritesSmallList = ({ listName, videos, style }) => {
       input={videoId}
       onKeyDown={handleArrowKey}
       setCursor={setCursor}
+      keepListOpenOnSubmit={true}
       leftIcon={<MdAdd size={16} type='submitBtn' onClick={handleSubmit} />}
       style={style}
     >

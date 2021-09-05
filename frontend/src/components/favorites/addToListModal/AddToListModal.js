@@ -31,13 +31,10 @@ export const addFavoriteVideo = async (lists, setLists, list_Name, newItem) => {
 
     API.updateSavedList(list_Name, newObj);
 
-    const promise = await new Promise((resolve) => {
-      const items = { ...allOrinalLists };
-      setLists(items);
-      resolve(items[list_Name]);
-    });
+    const items = { ...allOrinalLists };
+    setLists(items);
 
-    return promise;
+    return items[list_Name];
   }
 };
 
@@ -54,7 +51,7 @@ export const removeFavoriteVideo = async (lists, setLists, list_Name, newItem_p)
 
   setLists({ ...allOrinalLists });
 
-  await API.updateSavedList(list_Name, newObj);
+  API.updateSavedList(list_Name, newObj);
 };
 
 export const AddRemoveBtn = ({

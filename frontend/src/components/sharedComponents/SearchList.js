@@ -146,6 +146,7 @@ const SearchList = ({
   inputFontSize,
   searchBtnPath,
   leftIcon,
+  keepListOpenOnSubmit = false,
 }) => {
   const inputRef = useRef();
   const listRef = useRef();
@@ -156,8 +157,10 @@ const SearchList = ({
   const submit = (evt) => {
     evt.preventDefault();
     onSubmit();
-    setListIsOpen(false);
-    inputRef.current.blur();
+    if (!keepListOpenOnSubmit) {
+      setListIsOpen(false);
+      inputRef.current.blur();
+    }
   };
 
   return (
