@@ -17,7 +17,7 @@ const CreateAndOpenClip = async ({ streamInfo }) => {
       window.open(res.data.data[0].edit_url, `N| Clip - ${res.data.data[0].id}`, settings)
     )
     .catch((er) => {
-      const { error, message, status } = er.response.data;
+      const { error, message, status } = er?.response?.data || {};
       if (
         error === 'Forbidden' &&
         message === 'User does not have permissions to Clip on this channel.' &&
