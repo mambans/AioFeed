@@ -191,6 +191,10 @@ export const VolumeText = styled.div`
   }
 `;
 
+//VolumeEventOverlay
+const VEO_margin_top = 175;
+const VEO_margin_bottom = 150;
+
 export const StyledVolumeEventOverlay = styled.div`
   position: absolute;
   width: ${({ type, hidechat, chatwidth }) =>
@@ -199,12 +203,18 @@ export const StyledVolumeEventOverlay = styled.div`
       : type === 'live'
       ? `${window.innerWidth - chatwidth}px`
       : '100vw'};
-  height: ${({ vodVolumeOverlayEnabled }) => (vodVolumeOverlayEnabled ? '75%' : '100%')};
+  height: ${({ vodVolumeOverlayEnabled }) =>
+    vodVolumeOverlayEnabled ? `calc(100% - ${VEO_margin_top + VEO_margin_bottom}px)` : '100%'};
   bottom: ${({ type }) => (type === 'live' ? 'unset' : '70px')};
   cursor: ${({ showcursor }) => (showcursor ? 'auto' : 'none')};
   display: ${({ show }) => (show ? 'block' : 'none')};
   align-self: center;
   transition: background-color 500ms, box-shadow 500ms;
+
+  margin-top: ${({ vodVolumeOverlayEnabled }) =>
+    vodVolumeOverlayEnabled ? VEO_margin_top + 'px' : 'unset'};
+  margin-bottom: ${({ vodVolumeOverlayEnabled }) =>
+    vodVolumeOverlayEnabled ? VEO_margin_bottom + 'px' : 'unset'};
 
   a,
   p {
