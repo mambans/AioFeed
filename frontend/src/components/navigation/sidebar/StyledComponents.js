@@ -578,7 +578,7 @@ export const StyledToggleButton = styled(Button)`
 
 export const StyledToggleButtonsContainer = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   flex-wrap: wrap;
 `;
 

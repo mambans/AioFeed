@@ -9,7 +9,7 @@ import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import ToolTip from '../../sharedComponents/ToolTip';
 import Schedule from '../schedule';
 
-const VideoPlayer = ({ listIsOpen, listWidth, playNext }) => {
+const VideoPlayer = ({ listIsOpen, listWidth, playNext, childPlayer = {}, setIsPlaying }) => {
   const channelName = useParams()?.channelName;
   const videoId = useParams()?.videoId;
   const queryTime = useQuery().get('t') || null;
@@ -23,11 +23,37 @@ const VideoPlayer = ({ listIsOpen, listWidth, playNext }) => {
   const [duration, setDuration] = useState();
   const [videoDetails, setVideoDetails] = useState();
 
+  useEventListenerMemo(
+    window?.Twitch?.Player?.PLAYING,
+    OnPlayingEventListeners,
+    twitchVideoPlayer.current,
+    twitchVideoPlayer.current
+  );
+
+  useEventListenerMemo(
+    window?.Twitch?.Player?.PAUSE,
+    OnPauseEventListeners,
+    twitchVideoPlayer.current,
+    twitchVideoPlayer.current
+  );
+  useEventListenerMemo(
+    window?.Twitch?.Player?.ENDED,
+    OnPauseEventListeners,
+    twitchVideoPlayer.current,
+    twitchVideoPlayer.current
+  );
+
+  function OnPlayingEventListeners() {
+    setIsPlaying(true);
+  }
+
+  function OnPauseEventListeners() {
+    setIsPlaying(false);
+  }
+
   useEffect(() => {
     (async () => {
       const fetchLatestVodId = async () => {
-        console.log('query_user_id:', query_user_id);
-
         const user =
           query_user_id ||
           (await TwitchAPI.getUser({
@@ -77,12 +103,14 @@ const VideoPlayer = ({ listIsOpen, listWidth, playNext }) => {
 
         if (twitchVideoPlayer.current) {
           twitchVideoPlayer.current.setVideo(videoId, timeToSeconds(time));
+          childPlayer.current = twitchVideoPlayer.current;
         } else if (window?.Twitch?.Player) {
           twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', playerParams);
+          childPlayer.current = twitchVideoPlayer.current;
         }
       }
     })();
-  }, [videoId, time, channelName, query_user_id]);
+  }, [videoId, time, channelName, query_user_id, childPlayer]);
 
   useEventListenerMemo(
     window?.Twitch?.Player?.PLAYING,

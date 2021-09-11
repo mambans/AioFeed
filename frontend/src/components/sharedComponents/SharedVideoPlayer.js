@@ -1,12 +1,12 @@
 import { FaList } from 'react-icons/fa';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import React, { useContext, useState, useCallback } from 'react';
+import React, { useContext, useState, useCallback, useRef } from 'react';
 
 import {
   VideoAndChatContainer,
   ShowNavbarBtn,
   ResizeDevider,
-  VolumeEventOverlay,
+  // VolumeEventOverlay,
   PlayerExtraButtons,
 } from '../twitch/player/StyledComponents';
 import NavigationContext from '../navigation/NavigationContext';
@@ -20,6 +20,8 @@ import useFullscreen from '../../hooks/useFullscreen';
 import FavoritesContext, { FavoritesProvider } from '../favorites/FavoritesContext';
 import autoPlayNextFunc from '../favorites/autoPlayNext';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
+import VolumeEventOverlay from '../twitch/VolumeEventOverlay';
+import { TwitchContext } from '../twitch/useToken';
 
 const DEFAULT_LIST_WIDTH = Math.max(window.innerWidth * 0.1, 400);
 
@@ -43,6 +45,7 @@ const SharedVideoPlayer = ({ listName }) => {
   const { videoId } = useParams() || {};
   const channelName = useParams()?.channelName;
   const { visible } = useContext(NavigationContext);
+  const { enableVodVolumeOverlay } = useContext(TwitchContext) || {};
   const { lists } = useContext(FavoritesContext) || {};
   const [viewStates, setViewStates] = useSyncedLocalState(`${listName}-viewStates`, {
     listWidth: DEFAULT_LIST_WIDTH,
@@ -58,6 +61,10 @@ const SharedVideoPlayer = ({ listName }) => {
   const list =
     lists && lists[Object.keys(lists).find((key) => key.toLowerCase() === listName?.toLowerCase())];
   const domain = location.pathname.split('/')[1];
+  const VolumeEventOverlayRef = useRef();
+  const [isPlaying, setIsPlaying] = useState();
+  const childPlayer = useRef();
+  const videoElementRef = useRef();
 
   useFullscreen();
 
@@ -99,6 +106,7 @@ const SharedVideoPlayer = ({ listName }) => {
     <>
       <VideoAndChatContainer
         id='twitch-embed'
+        ref={videoElementRef}
         visible={visible}
         chatwidth={viewStates.listWidth || DEFAULT_LIST_WIDTH}
         resizeActive={resizeActive}
@@ -142,11 +150,26 @@ const SharedVideoPlayer = ({ listName }) => {
           )}
         </PlayerExtraButtons>
         <VolumeEventOverlay
-          show={resizeActive}
+          ref={VolumeEventOverlayRef}
+          show={resizeActive || (enableVodVolumeOverlay && isPlaying)}
           type='live'
           id='controls'
-          hidechat={String(viewStates.hideList)}
+          hidechat={String(viewStates.hideList || !listName)}
+          vodVolumeOverlayEnabled={enableVodVolumeOverlay}
           chatwidth={viewStates.listWidth || DEFAULT_LIST_WIDTH}
+          showcursor={enableVodVolumeOverlay && isPlaying}
+          isPlaying={isPlaying}
+          resizeActive={resizeActive}
+          viewStates={viewStates}
+          listName={listName}
+          DEFAULT_LIST_WIDTH={DEFAULT_LIST_WIDTH}
+          VolumeEventOverlayRef={VolumeEventOverlayRef}
+          player={childPlayer}
+          setIsPlaying={setIsPlaying}
+          videoElementRef={videoElementRef}
+          visiblyShowOnHover
+          showVolumeText
+          addEventListeners
         />
 
         {domain === 'youtube' ? (
@@ -156,6 +179,9 @@ const SharedVideoPlayer = ({ listName }) => {
             listIsOpen={listName && !viewStates.hideList}
             listWidth={viewStates.listWidth}
             playNext={playNext}
+            VolumeEventOverlayRef={VolumeEventOverlayRef}
+            setIsPlaying={setIsPlaying}
+            childPlayer={childPlayer}
           />
         )}
         {/* {children} */}

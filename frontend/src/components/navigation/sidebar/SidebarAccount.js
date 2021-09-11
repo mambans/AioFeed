@@ -1,7 +1,7 @@
 import { Button } from 'react-bootstrap';
 import { GoSignOut } from 'react-icons/go';
 import React, { useContext } from 'react';
-import { MdVideocam, MdAutorenew, MdStar } from 'react-icons/md';
+import { MdVideocam, MdAutorenew, MdStar, MdCrop169 } from 'react-icons/md';
 import { FaTwitch, FaYoutube, FaTwitter, FaRegWindowRestore } from 'react-icons/fa';
 import { FiSidebar } from 'react-icons/fi';
 import { TiFlash } from 'react-icons/ti';
@@ -44,6 +44,8 @@ const SidebarAccount = () => {
     setIsEnabledOfflineNotifications,
     isEnabledUpdateNotifications,
     setIsEnabledUpdateNotifications,
+    setEnableVodVolumeOverlay,
+    enableVodVolumeOverlay,
   } = useContext(TwitchContext) || {};
   const { youtubeVideoHoverEnable, setYoutubeVideoHoverEnable } = useContext(YoutubeContext) || {};
   const { showTwitchSidebar, setShowTwitchSidebar, ...feedProps } = useContext(FeedsContext) || {};
@@ -94,6 +96,88 @@ const SidebarAccount = () => {
     },
   ];
 
+  const settinButtons = [
+    {
+      setEnable: setAutoRefreshEnabled,
+      enabled: autoRefreshEnabled,
+      label: 'Twitch auto-refresh (25s)',
+      serviceName: 'Twitch',
+      tooltip: twitchToken
+        ? (autoRefreshEnabled ? 'Disable ' : 'Enable ') + `Twitch auto refresh`
+        : `Need to connect/authenticate with a Twitch account first.`,
+      icon: <MdAutorenew size={18} color={domainColors.Twitch} />,
+    },
+    {
+      setEnable: setShowTwitchSidebar,
+      enabled: showTwitchSidebar,
+      label: 'Twitch sidebar',
+      serviceName: 'Twitch',
+      tooltip: twitchToken
+        ? (showTwitchSidebar ? 'Hide ' : 'Show ') + `Twitch Sidebar`
+        : `Need to connect/authenticate with a Twitch account first.`,
+
+      icon: <FiSidebar size={18} color={domainColors.Twitch} />,
+    },
+    {
+      setEnable: setIsEnabledUpdateNotifications,
+      enabled: isEnabledUpdateNotifications,
+      label: 'Twitch update notifications',
+      serviceName: 'Twitch',
+      tooltip: twitchToken
+        ? (isEnabledUpdateNotifications ? 'Disable ' : 'Enable ') +
+          `notifications for when streams title or game changes`
+        : `Need to connect/authenticate with a Twitch account first.`,
+
+      icon: <TiFlash size={18} color={domainColors.Twitch} />,
+    },
+    {
+      setEnable: setIsEnabledOfflineNotifications,
+      enabled: isEnabledOfflineNotifications,
+      label: 'Twitch offline notifications',
+      serviceName: 'Twitch',
+      tooltip: twitchToken
+        ? (isEnabledOfflineNotifications ? 'Disable ' : 'Enable ') +
+          `notifications for when streams go offline`
+        : `Need to connect/authenticate with a Twitch account first.`,
+
+      icon: <AiOutlineDisconnect size={18} color={domainColors.Twitch} />,
+    },
+    {
+      setEnable: setTwitchVideoHoverEnable,
+      enabled: twitchVideoHoverEnable,
+      label: 'Twitch hover-video',
+      serviceName: 'Twitch',
+      tooltip: twitchToken
+        ? (twitchVideoHoverEnable ? 'Disable ' : 'Enable ') + `live video preview on hover`
+        : `Need to connect/authenticate with a Youtube account first.`,
+
+      icon: <FaRegWindowRestore size={18} />,
+      smallerIcons: <FaTwitch size={14} color={domainColors.Twitch} />,
+    },
+    {
+      setEnable: setYoutubeVideoHoverEnable,
+      enabled: youtubeVideoHoverEnable,
+      label: 'Youtube hover-video',
+      serviceName: 'Youtube',
+      tooltip: youtubeToken
+        ? (youtubeVideoHoverEnable ? 'Disable ' : 'Enable ') + `video on hover`
+        : `Need to connect/authenticate with a Youtube account first.`,
+      icon: <FaRegWindowRestore size={18} />,
+      smallerIcons: <FaYoutube size={14} color={domainColors.Youtube} />,
+    },
+    {
+      setEnable: setEnableVodVolumeOverlay,
+      enabled: enableVodVolumeOverlay,
+      label: 'Twitch vod volume overlay',
+      serviceName: 'Twitch',
+      tooltip: twitchToken
+        ? (enableVodVolumeOverlay ? 'Disable ' : 'Enable ') + `vod volume-overlay`
+        : `Need to connect/authenticate with a Youtube account first.`,
+      icon: <MdCrop169 size={18} />,
+      smallerIcons: <MdVideocam size={14} color={domainColors.Twitch} />,
+    },
+  ];
+
   return (
     <>
       <div style={{ minHeight: 'calc(100% - 120px)' }}>
@@ -123,82 +207,21 @@ const SidebarAccount = () => {
         <ToggleButtonsContainerHeader>Settings</ToggleButtonsContainerHeader>
         <FeedSizeSlider />
         <ToggleButtonsContainer buttonsperrow={3}>
-          <ToggleButton
-            setEnable={setAutoRefreshEnabled}
-            enabled={autoRefreshEnabled}
-            label='Twitch auto-refresh (25s)'
-            serviceName='Twitch'
-            tooltip={
-              twitchToken
-                ? (autoRefreshEnabled ? 'Disable ' : 'Enable ') + `Twitch auto refresh`
-                : `Need to connect/authenticate with a Twitch account first.`
+          {settinButtons.map(
+            ({ setEnable, enabled, label, serviceName, tooltip, icon, smallerIcons }) => {
+              return (
+                <ToggleButton
+                  setEnable={setEnable}
+                  enabled={enabled}
+                  label={label}
+                  serviceName={serviceName}
+                  tooltip={tooltip}
+                  icon={icon}
+                  smallerIcons={smallerIcons}
+                />
+              );
             }
-            icon={<MdAutorenew size={18} color={domainColors.Twitch} />}
-          />
-          <ToggleButton
-            setEnable={setShowTwitchSidebar}
-            enabled={showTwitchSidebar}
-            label='Twitch sidebar'
-            serviceName='Twitch'
-            tooltip={
-              twitchToken
-                ? (showTwitchSidebar ? 'Hide ' : 'Show ') + `Twitch Sidebar`
-                : `Need to connect/authenticate with a Twitch account first.`
-            }
-            icon={<FiSidebar size={18} color={domainColors.Twitch} />}
-          />
-          <ToggleButton
-            setEnable={setIsEnabledUpdateNotifications}
-            enabled={isEnabledUpdateNotifications}
-            label='Twitch update notifications'
-            serviceName='Twitch'
-            tooltip={
-              twitchToken
-                ? (isEnabledUpdateNotifications ? 'Disable ' : 'Enable ') +
-                  `notifications for when streams title or game changes`
-                : `Need to connect/authenticate with a Twitch account first.`
-            }
-            icon={<TiFlash size={18} color={domainColors.Twitch} />}
-          />
-          <ToggleButton
-            setEnable={setIsEnabledOfflineNotifications}
-            enabled={isEnabledOfflineNotifications}
-            label='Twitch offline notifications'
-            serviceName='Twitch'
-            tooltip={
-              twitchToken
-                ? (isEnabledOfflineNotifications ? 'Disable ' : 'Enable ') +
-                  `notifications for when streams go offline`
-                : `Need to connect/authenticate with a Twitch account first.`
-            }
-            icon={<AiOutlineDisconnect size={18} color={domainColors.Twitch} />}
-          />
-          <ToggleButton
-            setEnable={setTwitchVideoHoverEnable}
-            enabled={twitchVideoHoverEnable}
-            label='Twitch hover-video'
-            serviceName='Twitch'
-            tooltip={
-              twitchToken
-                ? (twitchVideoHoverEnable ? 'Disable ' : 'Enable ') + `live video preview on hover`
-                : `Need to connect/authenticate with a Youtube account first.`
-            }
-            icon={<FaRegWindowRestore size={18} />}
-            smallerIcons={<FaTwitch size={14} color={domainColors.Twitch} />}
-          />
-          <ToggleButton
-            setEnable={setYoutubeVideoHoverEnable}
-            enabled={youtubeVideoHoverEnable}
-            label='Youtube hover-video'
-            serviceName='Youtube'
-            tooltip={
-              youtubeToken
-                ? (youtubeVideoHoverEnable ? 'Disable ' : 'Enable ') + `video on hover`
-                : `Need to connect/authenticate with a Youtube account first.`
-            }
-            icon={<FaRegWindowRestore size={18} />}
-            smallerIcons={<FaYoutube size={14} color={domainColors.Youtube} />}
-          />
+          )}
         </ToggleButtonsContainer>
         <br />
         <ReAuthenticateButton

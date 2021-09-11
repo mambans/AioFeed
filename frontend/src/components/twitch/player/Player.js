@@ -22,7 +22,6 @@ import {
   StyledChat,
   ToggleSwitchChatSide,
   VideoAndChatContainer,
-  VolumeEventOverlay,
   ResizeDevider,
   ChatOverlay,
   ResetVideoButton,
@@ -58,6 +57,7 @@ import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
 import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import TwitchAPI from '../API';
 import Schedule from '../schedule';
+import VolumeEventOverlay from '../VolumeEventOverlay';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.12, 175);
 
@@ -362,6 +362,8 @@ const Player = () => {
             hidechat={String(chatState.hideChat)}
             showcursor={showControlls}
             chatwidth={chatState.chatwidth || DEFAULT_CHAT_WIDTH}
+            VolumeEventOverlayRef={PlayerUIControlls}
+            player={twitchVideoPlayer.current}
           >
             {Boolean(twitchVideoPlayer.current) && (
               <ContextMenu

@@ -175,7 +175,23 @@ export const PlayerNavbar = styled.div`
   }
 `;
 
-export const VolumeEventOverlay = styled.div`
+export const VolumeText = styled.div`
+  font-size: 3rem;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  transition: opacity 500ms;
+
+  svg {
+    margin: 0 15px;
+    margin-top: 5px;
+  }
+`;
+
+export const StyledVolumeEventOverlay = styled.div`
   position: absolute;
   width: ${({ type, hidechat, chatwidth }) =>
     hidechat === 'true'
@@ -183,10 +199,12 @@ export const VolumeEventOverlay = styled.div`
       : type === 'live'
       ? `${window.innerWidth - chatwidth}px`
       : '100vw'};
-  height: 100%;
+  height: ${({ vodVolumeOverlayEnabled }) => (vodVolumeOverlayEnabled ? '75%' : '100%')};
   bottom: ${({ type }) => (type === 'live' ? 'unset' : '70px')};
   cursor: ${({ showcursor }) => (showcursor ? 'auto' : 'none')};
   display: ${({ show }) => (show ? 'block' : 'none')};
+  align-self: center;
+  transition: background-color 500ms, box-shadow 500ms;
 
   a,
   p {
@@ -210,6 +228,16 @@ export const VolumeEventOverlay = styled.div`
     transition: opacity 300ms;
 
     &:hover {
+      opacity: 1;
+    }
+  }
+
+  &:hover {
+    background-color: ${({ visiblyShowOnHover }) =>
+      visiblyShowOnHover ? 'rgba(0,0,0,0.2)' : 'transparent'};
+    box-shadow: 0 0 50px 50px rgba(0, 0, 0, 0.2);
+
+    ${VolumeText} {
       opacity: 1;
     }
   }

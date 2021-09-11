@@ -1,10 +1,10 @@
 const toggleFullscreenFunc = ({
   event,
   videoElementRef,
-  setChatState,
-  hideChatDelay,
-  hideChatSaved,
-  setIsFullscreen,
+  setChatState = () => {},
+  hideChatDelay = {},
+  hideChatSaved = {},
+  setIsFullscreen = () => {},
 }) => {
   event.preventDefault();
   const video = videoElementRef.current;
