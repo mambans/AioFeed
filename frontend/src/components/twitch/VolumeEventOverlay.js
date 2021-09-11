@@ -98,6 +98,12 @@ const VolumeEventOverlay = React.forwardRef(
         case 'ArrowUp':
           changeVolume('increase', 0.05);
           break;
+        case 'ArrowRight':
+          player.current.seek(player.current.getCurrentTime() + 10);
+          break;
+        case 'ArrowLeft':
+          player.current.seek(player.current.getCurrentTime() - 10);
+          break;
         default:
           break;
       }
