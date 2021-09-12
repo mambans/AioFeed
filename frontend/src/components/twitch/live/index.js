@@ -72,8 +72,8 @@ export const Twitch = ({ in: forceMount = false, className }) => {
               <HideSidebarButton
                 show={String(showTwitchBigFeed)}
                 style={{
-                  left: showTwitchBigFeed ? '245px' : '5px',
-                  top: showTwitchBigFeed ? '92px' : '150px',
+                  left: showTwitchSidebar ? '245px' : '5px',
+                  top: showTwitchSidebar ? '92px' : '150px',
                 }}
                 onClick={() => setShowTwitchBigFeed(!showTwitchBigFeed)}
               />
