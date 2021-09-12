@@ -252,13 +252,13 @@ export const LoadingSidebarItems = styled.div`
 export const HideSidebarButton = styled(MdFormatIndentDecrease).attrs({ size: 25.5 })`
   position: fixed;
   height: 50.5px;
-  transition: opacity 500ms, transform 350ms;
+  transition: opacity 500ms, transform 350ms, top 350ms, left 350ms;
   color: #ffffff;
   background: none;
   opacity: 0.3;
   transform: ${({ show }) => (show === 'true' ? 'unset' : 'rotateY(180deg)')};
   cursor: pointer;
-  left: ${({ side }) => (side === 'right' ? '245px' : '5px')};
+  left: 5px;
   top: 92px;
   z-index: 3;
 

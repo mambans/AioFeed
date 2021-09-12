@@ -54,7 +54,6 @@ export const Twitch = ({ in: forceMount = false, className }) => {
                 <TwitchStreams data={data} />
               </Container>
             </CSSTransition>
-
             <ToolTip
               placement={'right'}
               delay={{ show: 500, hide: 0 }}
@@ -72,11 +71,13 @@ export const Twitch = ({ in: forceMount = false, className }) => {
             >
               <HideSidebarButton
                 show={String(showTwitchBigFeed)}
-                side={'right'}
+                style={{
+                  left: showTwitchBigFeed ? '245px' : '5px',
+                  top: showTwitchBigFeed ? '92px' : '150px',
+                }}
                 onClick={() => setShowTwitchBigFeed(!showTwitchBigFeed)}
               />
             </ToolTip>
-
             <CSSTransition
               in={(enableTwitch || forceMount) && showTwitchSidebar}
               timeout={750}
