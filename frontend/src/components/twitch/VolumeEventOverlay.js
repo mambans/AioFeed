@@ -4,6 +4,8 @@ import { StyledVolumeEventOverlay, VolumeText } from './player/StyledComponents'
 import toggleFullscreenFunc from './player/toggleFullscreenFunc';
 import { FaVolumeMute } from 'react-icons/fa';
 import { FaVolumeUp } from 'react-icons/fa';
+import { CSSTransition } from 'react-transition-group';
+import { throttle } from 'lodash';
 
 const VolumeEventOverlay = React.forwardRef(
   (
@@ -29,7 +31,9 @@ const VolumeEventOverlay = React.forwardRef(
     const [volumeText, setVolumeText] = useState();
     const [volumeMuted, setVolumeMuted] = useState(true);
     const [seekTime, setSeekTime] = useState();
+    const [showControlls, setShowControlls] = useState();
     const seekresetTimer = useRef();
+    const fadeTimer = useRef();
 
     useEffect(() => {
       if (show) {
@@ -61,6 +65,36 @@ const VolumeEventOverlay = React.forwardRef(
       mouseEvents,
       VolumeEventOverlayRef.current,
       addEventListeners && window?.Twitch?.Player?.PLAYING
+    );
+
+    const showAndResetTimer = throttle(
+      () => {
+        setShowControlls(true);
+        clearTimeout(fadeTimer.current);
+
+        fadeTimer.current = setTimeout(() => setShowControlls(false), 1250);
+      },
+      150,
+      { leading: true, trailing: false }
+    );
+
+    useEventListenerMemo(
+      'mousemove',
+      showAndResetTimer,
+      VolumeEventOverlayRef.current,
+      addEventListeners
+    );
+    useEventListenerMemo(
+      'mousedown',
+      showAndResetTimer,
+      VolumeEventOverlayRef.current,
+      addEventListeners
+    );
+    useEventListenerMemo(
+      'touchmove',
+      showAndResetTimer,
+      VolumeEventOverlayRef.current,
+      addEventListeners
     );
 
     function mouseEvents(e) {
@@ -164,26 +198,33 @@ const VolumeEventOverlay = React.forwardRef(
     }
 
     return (
-      <StyledVolumeEventOverlay
-        style={style}
-        ref={ref}
-        show={show}
-        type={type}
-        id={id}
-        hidechat={hidechat}
-        vodVolumeOverlayEnabled={vodVolumeOverlayEnabled}
-        chatwidth={chatwidth}
-        showcursor={showcursor}
-        visiblyShowOnHover={visiblyShowOnHover}
+      <CSSTransition
+        in={show && showControlls}
+        key={'controllsUI'}
+        timeout={1000}
+        classNames='fade-controllUI-1s'
       >
-        {showVolumeText && (
-          <VolumeText>
-            {volumeMuted ? <FaVolumeMute size='2rem' /> : <FaVolumeUp size='2rem' />}
-            {volumeText?.toFixed(0)}
-          </VolumeText>
-        )}
-        {children}
-      </StyledVolumeEventOverlay>
+        <StyledVolumeEventOverlay
+          style={style}
+          ref={ref}
+          show={show}
+          type={type}
+          id={id}
+          hidechat={hidechat}
+          vodVolumeOverlayEnabled={vodVolumeOverlayEnabled}
+          chatwidth={chatwidth}
+          showcursor={showcursor}
+          visiblyShowOnHover={visiblyShowOnHover}
+        >
+          {showVolumeText && (
+            <VolumeText>
+              {volumeMuted ? <FaVolumeMute size='2rem' /> : <FaVolumeUp size='2rem' />}
+              {volumeText?.toFixed(0)}
+            </VolumeText>
+          )}
+          {children}
+        </StyledVolumeEventOverlay>
+      </CSSTransition>
     );
   }
 );
