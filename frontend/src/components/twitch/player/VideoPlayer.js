@@ -29,6 +29,12 @@ const VideoPlayer = ({ listIsOpen, listWidth, playNext, childPlayer = {}, setIsP
     twitchVideoPlayer.current,
     twitchVideoPlayer.current
   );
+  useEventListenerMemo(
+    window?.Twitch?.Player?.SEEK,
+    OnPlayingEventListeners,
+    twitchVideoPlayer.current,
+    twitchVideoPlayer.current
+  );
 
   useEventListenerMemo(
     window?.Twitch?.Player?.PAUSE,

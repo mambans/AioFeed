@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import { StyledVolumeEventOverlay, VolumeText } from './player/StyledComponents';
 import toggleFullscreenFunc from './player/toggleFullscreenFunc';
@@ -28,6 +28,8 @@ const VolumeEventOverlay = React.forwardRef(
   ) => {
     const [volumeText, setVolumeText] = useState();
     const [volumeMuted, setVolumeMuted] = useState(true);
+    const [seekTime, setSeekTime] = useState();
+    const seekresetTimer = useRef();
 
     useEffect(() => {
       if (show) {
@@ -99,10 +101,27 @@ const VolumeEventOverlay = React.forwardRef(
           changeVolume('increase', 0.05);
           break;
         case 'ArrowRight':
-          player.current.seek(player.current.getCurrentTime() + 10);
+          if (!seekTime) {
+            setSeekTime(player.current.getCurrentTime());
+            player.current.seek(player.current.getCurrentTime() + 10);
+            clearTimeout(seekresetTimer.current);
+            seekresetTimer.current = setTimeout(() => setSeekTime(null), 3000);
+            return;
+          }
+          player.current.seek(seekTime + 10);
+          setSeekTime(seekTime + 10);
           break;
         case 'ArrowLeft':
-          player.current.seek(player.current.getCurrentTime() - 10);
+          if (!seekTime) {
+            setSeekTime(player.current.getCurrentTime());
+            player.current.seek(player.current.getCurrentTime() - 10);
+            clearTimeout(seekresetTimer.current);
+            seekresetTimer.current = setTimeout(() => setSeekTime(null), 3000);
+            return;
+          }
+
+          player.current.seek(seekTime - 10);
+          setSeekTime(seekTime - 10);
           break;
         default:
           break;
