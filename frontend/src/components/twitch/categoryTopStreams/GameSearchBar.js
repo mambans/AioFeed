@@ -55,13 +55,13 @@ const GameSearchBar = (props) => {
         onChange: (event) => {
           const { value: input } = event.target;
           try {
-            setValue(input);
+            setValue(input.trimStart());
             setCursor({ position: 0 });
             if (listIsOpen && input && input !== '') {
               clearTimeout(searchTimer.current);
               searchTimer.current = setTimeout(async () => {
                 setSearchResults();
-                await TwitchAPI.getSearchGames({ first: 20 }, input || value).then((res) => {
+                await TwitchAPI.getSearchGames({ first: 20 }, input || value.trim()).then((res) => {
                   setSearchResults({
                     data: res?.data.data,
                     nextPage: res?.data?.pagination.cursor,

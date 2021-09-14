@@ -61,7 +61,7 @@ const ChannelList = ({
           event.stopPropagation();
           const { value: input } = event.target;
           try {
-            setValue(input);
+            setValue(input.trimStart());
             setCursor({ position: 0 });
             if (listIsOpen && input && input !== '' && !cursor.used) {
               clearTimeout(searchTimer.current);
@@ -73,7 +73,7 @@ const ChannelList = ({
                 await TwitchAPI.getSearchChannels(
                   { first: 20, cancelToken: cancelToken.current.token },
 
-                  input || value
+                  (input || value).trim()
                 )
                   .then((res) => {
                     const searchResult = res.data.data.map((item) => ({
@@ -91,7 +91,7 @@ const ChannelList = ({
                       setSearchResults({
                         data: finalChannels?.data,
                         nextPage: res.data.pagination?.cursor,
-                        query: input,
+                        query: input.trim(),
                       });
                     });
                   })

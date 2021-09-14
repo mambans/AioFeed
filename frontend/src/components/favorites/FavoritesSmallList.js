@@ -16,7 +16,6 @@ import { videoImageUrls } from '../youtube/YoutubeVideoElement';
 import { parseNumberAndString } from './dragDropUtils';
 import { ListActionButton } from './StyledComponents';
 import ToolTip from '../sharedComponents/ToolTip';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 const getYoutubeIdFromUrl = (videoId) => {
   const url = new URL(videoId);
@@ -46,7 +45,7 @@ const FavoritesSmallList = ({ listName, videos, style }) => {
         value,
         onChange: (event) => {
           const { value: input } = event.target;
-          setValue(input.trim());
+          setValue(input.trimStart());
           setCursor({ position: 0 });
 
           // if (listIsOpen && input && input !== '' && !cursor.used) {
@@ -169,54 +168,45 @@ const FavoritesSmallList = ({ listName, videos, style }) => {
     >
       {Boolean(filteredInputMatched?.length) && (
         <GameListUlContainer ref={ulListRef} style={{ paddingTop: '10px' }}>
-          <TransitionGroup component={null}>
-            {filteredInputMatched.map((v, index) => (
-              <CSSTransition
-                timeout={videoId ? 0 : 250}
-                key={v?.id}
-                classNames={videoId || 'fade'}
-                unmountOnExit
-                onEntered={(node) => scrollToIfNeeded(ulListRef.current, node)}
+          {filteredInputMatched.map((v, index) => (
+            <ToolTip
+              key={v?.id + index}
+              show={(v?.title || v?.snippet?.title || v?.id).length >= 30}
+              tooltip={v?.title || v?.snippet?.title || v?.id}
+            >
+              <StyledGameListElement
+                key={v.id}
+                id={`${v.id}`}
+                selected={index === cursor.position}
+                className={index === cursor.position ? 'selected' : ''}
+                imgWidth={`${(30 / 9) * 16}px`}
+                style={{ fontSize: '0.9em' }}
+                // onEntered={(node) => scrollToIfNeeded(ulListRef.current, node)}
               >
-                <ToolTip
-                  key={v?.id + index}
-                  show={(v?.title || v?.snippet?.title || v?.id).length >= 30}
-                  tooltip={v?.title || v?.snippet?.title || v?.id}
+                <Link
+                  onClick={() => setListIsOpen(false)}
+                  to={{
+                    pathname: constructYUrlLink(v),
+                  }}
                 >
-                  <StyledGameListElement
-                    key={v.id}
-                    id={`${v.id}`}
-                    selected={index === cursor.position}
-                    className={index === cursor.position ? 'selected' : ''}
-                    imgWidth={`${(30 / 9) * 16}px`}
-                    style={{ fontSize: '0.9em' }}
-                  >
-                    <Link
-                      onClick={() => setListIsOpen(false)}
-                      to={{
-                        pathname: constructYUrlLink(v),
-                      }}
-                    >
-                      <img
-                        src={
-                          v?.thumbnail_url?.replace('{width}', 300)?.replace('{height}', 300) ||
-                          videoImageUrls(v?.snippet?.thumbnails)
-                        }
-                        alt=''
-                      />
-                      {v.title || v?.snippet?.title || v.id}
-                    </Link>
-                    <ListActionButton
-                      size={16}
-                      onClick={() => removeFavoriteVideo(lists, setLists, listName, v.id)}
-                    >
-                      <MdDeleteForever size={20} />
-                    </ListActionButton>
-                  </StyledGameListElement>
-                </ToolTip>
-              </CSSTransition>
-            ))}
-          </TransitionGroup>
+                  <img
+                    src={
+                      v?.thumbnail_url?.replace('{width}', 300)?.replace('{height}', 300) ||
+                      videoImageUrls(v?.snippet?.thumbnails)
+                    }
+                    alt=''
+                  />
+                  {v.title || v?.snippet?.title || v.id}
+                </Link>
+                <ListActionButton
+                  size={16}
+                  onClick={() => removeFavoriteVideo(lists, setLists, listName, v.id)}
+                >
+                  <MdDeleteForever size={20} />
+                </ListActionButton>
+              </StyledGameListElement>
+            </ToolTip>
+          ))}
         </GameListUlContainer>
       )}
     </SearchList>
