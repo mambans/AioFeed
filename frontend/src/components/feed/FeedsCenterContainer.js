@@ -48,6 +48,8 @@ const CenterProvider = ({ children, left, right }) => {
         reCalcWidthAndAmount,
         twitterWidth: twitterContainerWidth,
         setTwitterWidth,
+        leftWidth,
+        rightWidth,
       }}
     >
       {children}
@@ -55,14 +57,14 @@ const CenterProvider = ({ children, left, right }) => {
   );
 };
 
-const Center = ({ children, left = true, right = true }) => {
-  const { width, twitterWidth } = useContext(CenterContext);
+const Center = ({ children }) => {
+  const { width, twitterWidth, leftWidth, rightWidth } = useContext(CenterContext);
   const { enableTwitter, showTwitchSidebar } = useContext(FeedsContext) || {};
 
   return (
     <CenterContainer
-      left={left && (showTwitchSidebar ? 275 : 0)}
-      right={right && enableTwitter && twitterWidth}
+      left={leftWidth && (showTwitchSidebar ? 275 : 0)}
+      right={rightWidth && enableTwitter && twitterWidth}
       centerWidth={width}
       id='CenterContainer'
     >
