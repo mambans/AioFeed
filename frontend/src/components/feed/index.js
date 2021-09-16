@@ -12,9 +12,10 @@ import FeedsCenterContainer from './FeedsCenterContainer';
 import { Twitch } from '../twitch/live';
 import { Favorites } from '../favorites';
 import { FavoritesProvider } from '../favorites/FavoritesContext';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 const Feed = () => {
-  document.title = 'AioFeed | Feed';
+  useDocumentTitle('Feed');
   const { enableTwitch, enableYoutube, enableTwitchVods, enableFavorites } =
     useContext(FeedsContext);
   const { username } = useContext(AccountContext);

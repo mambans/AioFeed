@@ -245,7 +245,8 @@ export const StyledVolumeEventOverlay = styled.div`
   &:hover {
     background-color: ${({ visiblyShowOnHover }) =>
       visiblyShowOnHover ? 'rgba(0,0,0,0.2)' : 'transparent'};
-    box-shadow: 0 0 50px 50px rgba(0, 0, 0, 0.2);
+    box-shadow: ${({ visiblyShowOnHover }) =>
+      visiblyShowOnHover ? '0 0 50px 50px rgba(0, 0, 0, 0.2)' : 'none'};
 
     ${VolumeText} {
       opacity: 1;

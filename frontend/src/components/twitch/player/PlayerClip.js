@@ -12,11 +12,13 @@ import {
   PlayerExtraButtons,
 } from './StyledComponents';
 import useFullscreen from '../../../hooks/useFullscreen';
+import useDocumentTitle from '../../../hooks/useDocumentTitle';
 
 const PlayerClip = () => {
   const { visible } = useContext(NavigationContext);
   const { videoId, channelName } = useParams();
-  document.title = `${channelName} - ${videoId}`;
+  useDocumentTitle(`${channelName} - ${videoId}`);
+
   useFullscreen({ hideNavbar: false });
 
   return (

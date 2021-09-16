@@ -29,7 +29,7 @@ import FollowUnfollowBtn from './../FollowUnfollowBtn';
 import AddVideoExtraData from '../AddVideoExtraData';
 import fetchStreamInfo from './../player/fetchStreamInfo';
 import fetchChannelInfo from './../player/fetchChannelInfo';
-import setFavion from '../setFavion';
+// import setFavion from '../setFavion';
 // import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import TwitchAPI from './../API';
 import AnimatedViewCount from '../live/AnimatedViewCount';
@@ -39,6 +39,8 @@ import loginNameFormat from '../loginNameFormat';
 import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
 import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import FavoriteStreamBtn from '../live/FavoriteStreamBtn';
+import useDocumentTitle from '../../../hooks/useDocumentTitle';
+import useFavicon from '../../../hooks/useFavicon';
 
 const ChannelPage = () => {
   const { passedChannelData } = useLocation().state || {};
@@ -70,17 +72,23 @@ const ChannelPage = () => {
   const clipPagination = useRef();
   const twitchPlayer = useRef();
 
+  useDocumentTitle(
+    `${loginNameFormat(channelInfo) || channelName}'s Page ${isLive ? '(Live)' : ''}`
+  );
+  useFavicon(channelInfo?.logo || channelInfo?.profile_image_url);
+
   useEventListenerMemo(window?.Twitch?.Player?.ONLINE, onlineEvents, twitchPlayer.current);
   useEventListenerMemo(window?.Twitch?.Player?.OFFLINE, offlineEvents, twitchPlayer.current);
 
   const getIdFromName = useCallback(async () => {
-    const userId = await TwitchAPI.getUser({
+    const user = await TwitchAPI.getUser({
       login: channelName,
     })
-      .then((res) => res.data.data[0].id)
+      .then((res) => res.data.data[0])
       .catch((error) => 'Not Found');
 
-    return userId;
+    setChannelInfo((c) => ({ ...c, ...user }));
+    return user.id;
   }, [channelName]);
 
   const fetchChannelVods = useCallback(
@@ -194,19 +202,18 @@ const ChannelPage = () => {
     setChannelInfo();
     setClips();
     setVods();
-    setFavion();
+    // setFavion();
   };
 
   useEffect(() => {
     (async () => {
-      document.title = `${channelName}'s Channel`;
       const user_id = await getIdFromName();
       setUserId(user_id);
       if (!user_id || user_id === 'Not Found') return false;
 
       fetchChannelInfo(user_id, true).then((res) => {
         setChannelInfo(res);
-        if (res) setFavion(res.logo || res.profile_image_url);
+        // if (res) setFavion(res.logo || res.profile_image_url);
       });
     })();
 
@@ -219,7 +226,6 @@ const ChannelPage = () => {
 
   async function onlineEvents() {
     console.log('Stream is Online');
-    document.title = `${channelName}'s Channel (Live)`;
 
     try {
       if (twitchPlayer.current) {

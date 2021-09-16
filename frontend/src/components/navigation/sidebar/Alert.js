@@ -7,6 +7,7 @@ import NavigationContext from '../NavigationContext';
 const StyledAccAlert = styled(Alert)`
   text-align: center;
   opacity: '0.7';
+  grid-column: 2;
 
   .close {
     padding: 0 7px 0 0;

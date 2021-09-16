@@ -13,6 +13,7 @@ import OfflineStreamsPromise from './OfflineStreamsPromise';
 import UpdatedStreamsPromise from './UpdatedStreamsPromise';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import { TwitchContext } from '../useToken';
+import useDocumentTitle from '../../../hooks/useDocumentTitle';
 
 const REFRESH_RATE = 25; // seconds
 
@@ -36,6 +37,9 @@ const Handler = ({ children }) => {
   const timer = useRef();
   const refreshAfterUnfollowTimer = useRef();
 
+  const [documentTitle, setDocumentTitle] = useDocumentTitle('Feed');
+  const windowFocusHandler = () => (newlyAddedStreams.current = []);
+  const windowBlurHandler = () => (newlyAddedStreams.current = []);
   useEventListenerMemo('focus', windowFocusHandler);
   useEventListenerMemo('blur', windowBlurHandler);
 
@@ -119,6 +123,8 @@ const Handler = ({ children }) => {
                 setUnseenNotifications,
                 enableTwitchVods,
                 setVods,
+                setDocumentTitle,
+                documentTitle,
               }),
 
               await OfflineStreamsPromise({
@@ -169,22 +175,10 @@ const Handler = ({ children }) => {
       isEnabledOfflineNotifications,
       setUnseenNotifications,
       updateNotischannels,
+      documentTitle,
+      setDocumentTitle,
     ]
   );
-
-  function windowFocusHandler() {
-    document.title = 'AioFeed | Feed';
-    resetNewlyAddedStreams();
-  }
-
-  function windowBlurHandler() {
-    if (document.title !== 'AioFeed | Feed') document.title = 'AioFeed | Feed';
-    resetNewlyAddedStreams();
-  }
-
-  function resetNewlyAddedStreams() {
-    newlyAddedStreams.current = [];
-  }
 
   useEffect(() => {
     (async () => {
@@ -237,7 +231,6 @@ const Handler = ({ children }) => {
     followedChannels: followedChannels.current,
     error: loadingStates.error,
     liveStreams: liveStreams.current || [],
-    resetNewlyAddedStreams,
     refresh,
     newlyAddedStreams: newlyAddedStreams.current,
     REFRESH_RATE,

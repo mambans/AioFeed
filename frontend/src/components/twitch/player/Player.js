@@ -58,12 +58,13 @@ import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import TwitchAPI from '../API';
 import Schedule from '../schedule';
 import VolumeEventOverlay from '../VolumeEventOverlay';
+import useDocumentTitle from '../../../hooks/useDocumentTitle';
+import useFavicon from '../../../hooks/useFavicon';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.12, 175);
 
 const Player = () => {
   const channelName = useParams()?.channelName;
-  document.title = `${channelName} player`;
   const { addNotification } = useContext(NotificationsContext);
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const { setTwitchToken } = useContext(AccountContext);
@@ -99,6 +100,8 @@ const Player = () => {
   const link3 = useRef();
 
   useFullscreen();
+  useDocumentTitle(`${streamInfo?.user_name || channelName} (${streamInfo ? 'Live' : 'Offline'})`);
+  useFavicon(streamInfo?.profile_image_url);
 
   useEventListenerMemo(window?.Twitch?.Player?.ONLINE, onlineEvents, twitchVideoPlayer.current);
   useEventListenerMemo(window?.Twitch?.Player?.OFFLINE, offlineEvents, twitchVideoPlayer.current);
@@ -137,7 +140,7 @@ const Player = () => {
   const resetValues = () => {
     savedStreamInfo.current = null;
     setStreamInfo(null);
-    setFavion(null);
+    // setFavion(null);
     setChatState({});
   };
 
@@ -191,7 +194,6 @@ const Player = () => {
 
   function offlineEvents() {
     console.log('Stream is Offline');
-    document.title = `${channelName} (Offline)`;
     setShowUIControlls(false);
     clearInterval(refreshStreamInfoTimer.current);
     setStreamInfo(null);
@@ -251,7 +253,6 @@ const Player = () => {
 
   async function onlineEvents() {
     console.log('Stream is Online');
-    document.title = `${channelName}`;
 
     try {
       if (!refreshStreamInfoTimer.current && channelName) {
@@ -279,7 +280,7 @@ const Player = () => {
       console.log('onlineEvents -> error', error);
     }
 
-    return () => setFavion();
+    // return () => setFavion();
   }
 
   async function playingEvents() {

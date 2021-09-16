@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 import { getLocalstorage } from '../../util/Utils';
 import FeedsCenterContainer from '../feed/FeedsCenterContainer';
 import { Container } from '../twitch/StyledComponents';
@@ -8,11 +9,15 @@ import YoutubeDataHandler from './../youtube/Datahandler';
 import YoutubeHeader from './../youtube/Header';
 import YoutubeHandler from './YoutubeHandler';
 
-const YoutubeStandalone = () => (
-  <FeedsCenterContainer left={false} right={false}>
-    <Youtube className='feed' />
-  </FeedsCenterContainer>
-);
+const YoutubeStandalone = () => {
+  useDocumentTitle('YouTube');
+
+  return (
+    <FeedsCenterContainer left={false} right={false}>
+      <Youtube className='feed' />
+    </FeedsCenterContainer>
+  );
+};
 
 export const Youtube = ({ className }) => {
   const [order, setOrder] = useState(getLocalstorage('FeedOrders')?.['Youtube'] ?? 18);

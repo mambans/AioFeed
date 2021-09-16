@@ -21,6 +21,8 @@ import AccountContext from '../../account/AccountContext';
 import useQuery from '../../../hooks/useQuery';
 import TwitchAPI from '../API';
 import TypeButton from './TypeButton';
+import useDocumentTitle from '../../../hooks/useDocumentTitle';
+import useFavicon from '../../../hooks/useFavicon';
 
 const TopStreams = () => {
   const { category } = useParams();
@@ -40,8 +42,12 @@ const TopStreams = () => {
   const { twitchToken } = useContext(AccountContext);
   const oldTopData = useRef();
   const refreshBtnRef = useRef();
-
-  document.title = `${category || 'All'} - Top ${videoType}`;
+  useDocumentTitle(
+    `${gameInfo?.name || category || 'All'} - ${
+      videoType.charAt(0).toUpperCase() + videoType.slice(1)
+    }`
+  );
+  useFavicon(gameInfo?.box_art_url?.replace('{width}', 130)?.replace('{height}', 173));
 
   const VideoElementTypeComp = ({ data }) => {
     switch (videoType) {

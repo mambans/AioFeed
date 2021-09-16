@@ -8,6 +8,7 @@ import { LoopBtn, Loop } from './StyledComponents';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import ToolTip from '../../sharedComponents/ToolTip';
 import Schedule from '../schedule';
+import useDocumentTitle from '../../../hooks/useDocumentTitle';
 
 const VideoPlayer = ({ listIsOpen, listWidth, playNext, childPlayer = {}, setIsPlaying }) => {
   const channelName = useParams()?.channelName;
@@ -22,6 +23,12 @@ const VideoPlayer = ({ listIsOpen, listWidth, playNext, childPlayer = {}, setIsP
   const [loopEnabled, setLoopEnabled] = useState(Boolean(useQuery().get('loop')));
   const [duration, setDuration] = useState();
   const [videoDetails, setVideoDetails] = useState();
+
+  useDocumentTitle(`${(channelName && `${channelName} -`) || ''} ${videoId}`);
+
+  useDocumentTitle(
+    `${videoDetails?.user_name || channelName || ''} -  ${videoDetails?.title || videoId}`
+  );
 
   useEventListenerMemo(
     window?.Twitch?.Player?.PLAYING,
@@ -129,8 +136,6 @@ const VideoPlayer = ({ listIsOpen, listWidth, playNext, childPlayer = {}, setIsP
 
   useEffect(() => {
     if (videoId?.toLowerCase() !== 'latest') {
-      document.title = `${(channelName && `${channelName} -`) || ''} ${videoId}`;
-
       const fetchDetailsForDocumentTitle = async () => {
         if (twitchVideoPlayer.current) {
           const fetchedvideoDetails = await TwitchAPI.getVideos({ id: videoId }).then(
@@ -138,10 +143,6 @@ const VideoPlayer = ({ listIsOpen, listWidth, playNext, childPlayer = {}, setIsP
           );
 
           setVideoDetails(fetchedvideoDetails);
-
-          document.title = `${fetchedvideoDetails?.user_name || channelName || ''} - ${
-            fetchedvideoDetails?.title || videoId
-          }`;
 
           if (fetchedvideoDetails?.user_name && !channelName) {
             window.history.pushState(

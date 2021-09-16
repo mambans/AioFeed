@@ -16,12 +16,17 @@ import { getCookie, getLocalstorage } from '../../../util/Utils';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import FeedsCenterContainer, { CenterContext } from './../../feed/FeedsCenterContainer';
 import { Container } from '../StyledComponents';
+import useDocumentTitle from '../../../hooks/useDocumentTitle';
 
-const VodsStandalone = () => (
-  <FeedsCenterContainer left={false} right={false}>
-    <Vods className='feed' />
-  </FeedsCenterContainer>
-);
+const VodsStandalone = () => {
+  useDocumentTitle('Twitch Vods');
+
+  return (
+    <FeedsCenterContainer left={false} right={false}>
+      <Vods className='feed' />
+    </FeedsCenterContainer>
+  );
+};
 
 export const Vods = ({ className }) => {
   const { vods, setVods, channels } = useContext(VodsContext);

@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
+import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import useFullscreen from '../../../hooks/useFullscreen';
 import NavigationContext from '../../navigation/NavigationContext';
 // import useQuery from '../../../hooks/useQuery';
@@ -11,6 +12,7 @@ const StandaloneChat = () => {
   const { visible } = useContext(NavigationContext);
 
   useFullscreen({ hideNavbar: false });
+  useDocumentTitle(`${channelName}'s chat'`);
 
   // const darkpopout = useQuery().get('darkpopout');
 

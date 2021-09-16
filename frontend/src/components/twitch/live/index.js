@@ -12,12 +12,16 @@ import FeedsCenterContainer from '../../feed/FeedsCenterContainer';
 import { Container } from '../StyledComponents';
 import ToolTip from '../../sharedComponents/ToolTip';
 import { CustomFilterProvider } from '../CustomFilters/CustomFilterContext';
+import useDocumentTitle from '../../../hooks/useDocumentTitle';
 
-const TwitchStandalone = () => (
-  <FeedsCenterContainer left={true} right={false}>
-    <Twitch in={true} className='feed' />
-  </FeedsCenterContainer>
-);
+const TwitchStandalone = () => {
+  useDocumentTitle('Twitch Live');
+  return (
+    <FeedsCenterContainer left={true} right={false}>
+      <Twitch in={true} className='feed' />
+    </FeedsCenterContainer>
+  );
+};
 
 export const Twitch = ({ in: forceMount = false, className }) => {
   const {

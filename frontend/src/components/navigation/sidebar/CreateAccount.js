@@ -10,9 +10,10 @@ import SidebarAlert from './Alert';
 import { AddCookie } from '../../../util/Utils';
 import AlertHandler from './../../alert';
 import API from '../API';
+import useDocumentTitle from '../../../hooks/useDocumentTitle';
 
 const CreateAccount = () => {
-  document.title = 'AioFeed | Create Account';
+  useDocumentTitle('Create Account');
   const [error, setError] = useState(null);
   const { setAlert, setRenderModal } = useContext(NavigationContext);
   const [validated, setValidated] = useState(false);

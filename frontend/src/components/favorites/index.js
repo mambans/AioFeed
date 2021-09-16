@@ -14,6 +14,7 @@ import FavoritesSmallList from './FavoritesSmallList';
 import DropDownDrawer from './DropDownDrawer';
 import { Container } from '../twitch/StyledComponents';
 import { getLocalstorage } from '../../util/Utils';
+import useDocumentTitle from './../../hooks/useDocumentTitle';
 
 export const useCheckForVideosAndValidateToken = ({
   lists,
@@ -64,15 +65,19 @@ export const useCheckForVideosAndValidateToken = ({
   ]);
 };
 
-const FavoritesContainer = () => (
-  <FavoritesProvider>
-    <FeedsCenterContainer left={false} right={false}>
-      <div className='feed'>
-        <Favorites />
-      </div>
-    </FeedsCenterContainer>
-  </FavoritesProvider>
-);
+const FavoritesContainer = () => {
+  useDocumentTitle('Favorites');
+
+  return (
+    <FavoritesProvider>
+      <FeedsCenterContainer left={false} right={false}>
+        <div className='feed'>
+          <Favorites />
+        </div>
+      </FeedsCenterContainer>
+    </FavoritesProvider>
+  );
+};
 
 export const FavoriteListContainer = ({
   list,

@@ -12,9 +12,10 @@ import useInput from './../../../hooks/useInput';
 import FeedsContext from '../../feed/FeedsContext';
 import VodsContext from '../../twitch/vods/VodsContext';
 import API from '../API';
+import useDocumentTitle from '../../../hooks/useDocumentTitle';
 
 const Login = () => {
-  document.title = 'AioFeed | Login';
+  useDocumentTitle('Login');
   const [validated, setValidated] = useState(false);
   const [validatedUsername, setValidatedUsername] = useState(true);
   const [validatedPassword, setValidatedPassword] = useState(true);

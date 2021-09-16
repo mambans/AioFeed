@@ -9,6 +9,8 @@ const liveStreamsPromise = async ({
   setVods,
   enableTwitchVods,
   setUnseenNotifications,
+  setDocumentTitle,
+  documentTitle,
 }) => {
   try {
     const res = await new Promise((resolve, reject) => {
@@ -18,14 +20,11 @@ const liveStreamsPromise = async ({
       if (newLive?.length <= 0) reject('No new LIVE streams');
       resolve(newLive);
     });
-    if (document.title?.length > 15) {
-      const title = document.title.substring(4);
-      const count = parseInt(document.title.substring(1, 2)) + res?.length;
-      document.title = `(${count}) ${title}`;
-    } else {
-      const title_1 = document.title;
-      document.title = `(${1}) ${title_1}`;
-    }
+    const currentCount =
+      parseInt(
+        documentTitle.substring(documentTitle.indexOf('(') + 1, documentTitle.lastIndexOf(')'))
+      ) || 0;
+    setDocumentTitle(`(${currentCount + res?.length}) Feed`);
 
     res.map((stream) => {
       newlyAddedStreams.current.push(stream.user_name);

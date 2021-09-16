@@ -10,12 +10,16 @@ import ThemeContext from './../themes/ThemeContext';
 import FeedsCenterContainer, { CenterContext } from '../feed/FeedsCenterContainer';
 import Timelines from './Timelines';
 import ResizeWrapper from '../sharedComponents/ResizeWrapper';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 
-const TwitterStandalone = () => (
-  <FeedsCenterContainer left={false} right={false}>
-    <Twitter in={true} />
-  </FeedsCenterContainer>
-);
+const TwitterStandalone = () => {
+  useDocumentTitle('Twitter');
+  return (
+    <FeedsCenterContainer left={false} right={false}>
+      <Twitter in={true} />
+    </FeedsCenterContainer>
+  );
+};
 
 export const Twitter = ({ in: forceMount = false }) => {
   const { twitterLists, enableTwitter, enableTwitch, enableYoutube, enableTwitchVods } =

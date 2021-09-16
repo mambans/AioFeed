@@ -1,9 +1,10 @@
 import React from 'react';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 import './NoMatch.scss';
 
 const NoMatch = () => {
-  document.title = 'AioFeed | 404 Error';
+  useDocumentTitle('404 Error');
 
   return (
     <section className='error-container'>

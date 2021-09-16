@@ -1,11 +1,12 @@
 import React, { useContext, useEffect } from 'react';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 import ThemeContext from './../themes/ThemeContext';
 
 import './Home.scss';
 import { BlurOverlay, LogoText, WelcomeContainer, DevideLine } from './StyledComponents';
 
 const Home = () => {
-  document.title = 'AioFeed';
+  useDocumentTitle();
   const { activeTheme } = useContext(ThemeContext);
 
   const Logos = () => (
