@@ -6,8 +6,6 @@ const offlineStreamsPromise = async ({
   oldLiveStreams,
   liveStreams,
   isEnabledOfflineNotifications,
-  newlyAddedStreams,
-  setUnseenNotifications,
   enableTwitchVods,
   setVods,
 }) => {
@@ -30,8 +28,6 @@ const offlineStreamsPromise = async ({
         addSystemNotification({
           status: 'Offline',
           stream: stream,
-          newlyAddedStreams: newlyAddedStreams,
-          setUnseenNotifications: setUnseenNotifications,
           body: '',
         });
 

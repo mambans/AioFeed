@@ -4,8 +4,6 @@ import { truncate } from '../../../util/Utils';
 const updateSreamsPromise = async ({
   oldLiveStreams,
   liveStreams,
-  newlyAddedStreams,
-  setUnseenNotifications,
   isEnabledUpdateNotifications,
   updateNotischannels,
 }) => {
@@ -43,8 +41,6 @@ const updateSreamsPromise = async ({
               oldStreamData.title,
               40
             )} in ${oldStreamData.game_name}`,
-            newlyAddedStreams: newlyAddedStreams,
-            setUnseenNotifications: setUnseenNotifications,
           });
 
           stream.notiStatus = 'Title & Game updated';
@@ -67,8 +63,6 @@ const updateSreamsPromise = async ({
             status: 'Game updated',
             stream: stream,
             body: `+ ${truncate(stream.game_name, 40)}\n- ${truncate(oldStreamData.game_name, 40)}`,
-            newlyAddedStreams: newlyAddedStreams,
-            setUnseenNotifications: setUnseenNotifications,
           });
 
           stream.notiStatus = 'Game updated';
@@ -88,8 +82,6 @@ const updateSreamsPromise = async ({
             status: 'Title updated',
             stream: stream,
             body: `+ ${truncate(stream.title, 40)}\n- ${truncate(oldStreamData.title, 40)}`,
-            newlyAddedStreams: newlyAddedStreams,
-            setUnseenNotifications: setUnseenNotifications,
           });
 
           stream.notiStatus = 'Title updated';

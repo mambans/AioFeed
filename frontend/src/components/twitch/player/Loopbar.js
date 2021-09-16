@@ -117,8 +117,8 @@ const Loopbar = ({
     }
   };
 
-  useEventListenerMemo('mouseup', handleResizeMouseUp, document, end.active || start.active);
-  useEventListenerMemo('mousemove', resize, document, end.active || start.active);
+  useEventListenerMemo('mouseup', handleResizeMouseUp, window, end.active || start.active);
+  useEventListenerMemo('mousemove', resize, window, end.active || start.active);
   useEventListenerMemo(window?.Twitch?.Player?.ENDED, loopVideo, twitchVideoPlayer);
   useEventListenerMemo(window?.Twitch?.Player?.PLAYING, setAndStartTimer, twitchVideoPlayer);
 

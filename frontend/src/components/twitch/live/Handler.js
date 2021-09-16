@@ -18,7 +18,7 @@ import useDocumentTitle from '../../../hooks/useDocumentTitle';
 const REFRESH_RATE = 25; // seconds
 
 const Handler = ({ children }) => {
-  const { addNotification, setUnseenNotifications } = useContext(NotificationsContext);
+  const { addNotification } = useContext(NotificationsContext);
   const { autoRefreshEnabled, isEnabledOfflineNotifications, isEnabledUpdateNotifications } =
     useContext(TwitchContext);
   const { setVods, updateNotischannels } = useContext(VodsContext);
@@ -33,14 +33,18 @@ const Handler = ({ children }) => {
   const followedChannels = useRef([]);
   const liveStreams = useRef();
   const oldLiveStreams = useRef([]);
-  const newlyAddedStreams = useRef([]);
+  const [newlyAddedStreams, setNewlyAddedStreams] = useState();
+  // const [isInFocus, setIsInFocus] = useState();
+  const isInFocus = useRef();
   const timer = useRef();
   const refreshAfterUnfollowTimer = useRef();
-
-  const [documentTitle, setDocumentTitle] = useDocumentTitle('Feed');
-  const windowFocusHandler = () => (newlyAddedStreams.current = []);
-  const windowBlurHandler = () => (newlyAddedStreams.current = []);
-  useEventListenerMemo('focus', windowFocusHandler);
+  // eslint-disable-next-line no-unused-vars
+  const [documentTitle, setDocumentTitle] = useDocumentTitle(
+    newlyAddedStreams ? `(${newlyAddedStreams?.length}) Feed` : 'Feed'
+  );
+  const windowFocusHandler = () => (isInFocus.current = true);
+  const windowBlurHandler = () => !autoRefreshEnabled && setNewlyAddedStreams();
+  useEventListenerMemo('focus', windowFocusHandler, document);
   useEventListenerMemo('blur', windowBlurHandler);
 
   const refresh = useCallback(
@@ -53,6 +57,8 @@ const Handler = ({ children }) => {
         return { refreshing: true, error: null, loaded: loaded, lastLoaded: lastLoaded };
       });
       try {
+        if (isInFocus.current) setNewlyAddedStreams();
+        isInFocus.current = false;
         followedChannels.current = await getMyFollowedChannels(forceValidateToken);
 
         if (followedChannels.current && followedChannels.current[0]) {
@@ -119,20 +125,15 @@ const Handler = ({ children }) => {
               await LiveStreamsPromise({
                 liveStreams,
                 oldLiveStreams,
-                newlyAddedStreams,
-                setUnseenNotifications,
                 enableTwitchVods,
                 setVods,
-                setDocumentTitle,
-                documentTitle,
+                setNewlyAddedStreams,
               }),
 
               await OfflineStreamsPromise({
                 liveStreams,
                 oldLiveStreams,
                 isEnabledOfflineNotifications,
-                newlyAddedStreams,
-                setUnseenNotifications,
                 enableTwitchVods,
                 setVods,
               }),
@@ -140,8 +141,6 @@ const Handler = ({ children }) => {
               await UpdatedStreamsPromise({
                 liveStreams,
                 oldLiveStreams,
-                newlyAddedStreams,
-                setUnseenNotifications,
                 isEnabledUpdateNotifications,
                 updateNotischannels,
               }),
@@ -173,10 +172,8 @@ const Handler = ({ children }) => {
       setVods,
       isEnabledUpdateNotifications,
       isEnabledOfflineNotifications,
-      setUnseenNotifications,
       updateNotischannels,
-      documentTitle,
-      setDocumentTitle,
+      setNewlyAddedStreams,
     ]
   );
 
@@ -232,7 +229,7 @@ const Handler = ({ children }) => {
     error: loadingStates.error,
     liveStreams: liveStreams.current || [],
     refresh,
-    newlyAddedStreams: newlyAddedStreams.current,
+    newlyAddedStreams: newlyAddedStreams,
     REFRESH_RATE,
     autoRefreshEnabled,
     refreshAfterUnfollowTimer,

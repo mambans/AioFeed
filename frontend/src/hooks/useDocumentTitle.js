@@ -1,14 +1,19 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 const useDocumentTitle = (title, restore = true) => {
   const prevTitleRef = useRef(document.title);
   const append = `${title ? ' | ' : ''}AioFeed`;
 
-  const setDocumentTitle = (title) => {
-    if (document.title !== title) document.title = (title || '') + append;
-  };
+  const setDocumentTitle = useCallback(
+    (newValue) => {
+      const title = typeof newValue === 'function' ? newValue(prevTitleRef.current) : newValue;
 
-  setDocumentTitle(title);
+      if (document.title !== title) document.title = (title || '') + append;
+    },
+    [append]
+  );
+
+  if (title !== false) setDocumentTitle(title);
 
   useEffect(() => {
     const previous = prevTitleRef.current;
