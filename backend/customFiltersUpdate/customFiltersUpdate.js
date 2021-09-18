@@ -3,7 +3,7 @@
 const DynamoDB = require('aws-sdk/clients/dynamodb');
 const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
-const validateAuthKey = require('./../validateAuthKey');
+const validateAuthKey = require('./../validateAuthKey/validateAuthKey');
 
 module.exports = async ({ username, filtesObj, authkey }) => {
   const authTokenValid = await validateAuthKey({ username, authkey });

@@ -14,13 +14,13 @@ import {
 } from './StyledComponents';
 
 const Sidebar = () => {
-  const { profileImage, username } = useContext(AccountContext);
+  const { profileImage, username, authKey } = useContext(AccountContext);
   const { renderModal, showSidebar, setShowSidebar } = useContext(NavigationContext);
 
   const handleToggle = () => setShowSidebar(!showSidebar);
 
   const modal = {
-    account: <SidebarAccount />,
+    account: username && authKey ? <SidebarAccount /> : <Login />,
     login: <Login />,
     create: <CreateAccount />,
   };
@@ -28,7 +28,7 @@ const Sidebar = () => {
   return (
     <>
       <StyledNavSidebarTrigger onClick={handleToggle} title='Sidebar'>
-        {username ? (
+        {username && authKey ? (
           <>
             <StyledSidebarTrigger id='NavigationProfileImageHoverOverlay' open={showSidebar} />
             <img

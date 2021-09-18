@@ -35,6 +35,28 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
+  ValidateAuthKey:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Validates the passed Auth key to the users stored authkey.'
+      Handler: validateAuthKey/handler.handler
+      Environment:
+        Variables:
+          USERNAME_TABLE: !Ref UserLogins
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserLogins
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /account/validate
+            Method: post
+            RequestParameters:
+              - method.request.querystring.username:
+                  Required: true
+              - method.request.querystring.authkey:
+                  Required: true
   Login:
     Type: AWS::Serverless::Function
     Properties:

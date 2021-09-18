@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import FeedsContext, { FeedsProvider } from '../feed/FeedsContext';
@@ -16,6 +16,8 @@ import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import { TwitchProvider } from '../twitch/useToken';
 import { YoutubeProvider } from '../youtube/useToken';
 import { VodsProvider } from '../twitch/vods/VodsContext';
+import API from '../navigation/API';
+import { RemoveCookie } from '../../util';
 
 const AppContainer = styled.div`
   background-image: ${({ image }) => `url(/images/${image})`};
@@ -58,6 +60,9 @@ const AppRoutesContainer = () => {
 const App = () => {
   const { activeTheme } = useContext(ThemeContext);
   const {
+    username,
+    setAuthKey,
+    setUsername,
     setTwitchToken,
     setYoutubeToken,
     setRefreshToken,
@@ -67,6 +72,25 @@ const App = () => {
     setTwitchProfileImg,
   } = useContext(AccountContext);
   const { setEnableTwitch, setEnableYoutube } = useContext(FeedsContext);
+
+  useEffect(() => {
+    (async () => {
+      if (username) {
+        const validated = await API.validateAccount(username).catch((e) => console.error(e));
+        if (!validated?.data?.Username) {
+          setAuthKey();
+          setUsername();
+          RemoveCookie('AioFeed_AccountName');
+          RemoveCookie('AioFeed_AuthKey');
+          RemoveCookie('AioFeed_AccountEmail');
+          RemoveCookie('AioFeed_AccountProfileImg');
+
+          toast.warn('Expired login. Please login again');
+        }
+        return true;
+      }
+    })();
+  }, [username, setAuthKey, setUsername]);
 
   useEventListenerMemo('message', receiveMessage, window, true, { capture: false });
 

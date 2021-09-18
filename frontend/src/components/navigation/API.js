@@ -4,6 +4,11 @@ import { AddCookie, getCookie } from '../../util';
 const BASE_URL = 'https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod';
 
 const API = {
+  validateAccount: async (username) =>
+    await axios.post(`${BASE_URL}/account/validate`, {
+      username,
+      authkey: getCookie(`AioFeed_AuthKey`),
+    }),
   addCustomfilters: async (value) =>
     await axios
       .put(`${BASE_URL}/customfilters`, {

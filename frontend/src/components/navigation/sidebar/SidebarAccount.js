@@ -1,6 +1,6 @@
 import { Button } from 'react-bootstrap';
 import { GoSignOut } from 'react-icons/go';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { MdVideocam, MdAutorenew, MdStar, MdCrop169 } from 'react-icons/md';
 import { FaTwitch, FaYoutube, FaTwitter, FaRegWindowRestore } from 'react-icons/fa';
 import { FiSidebar } from 'react-icons/fi';
@@ -31,8 +31,15 @@ import AccountDetails from './AccountDetails';
 import NavigationContext from '../NavigationContext';
 
 const SidebarAccount = () => {
-  const { setUsername, setTwitchToken, setYoutubeToken, youtubeToken, twitchToken } =
-    useContext(AccountContext) || {};
+  const {
+    setUsername,
+    setTwitchToken,
+    setYoutubeToken,
+    youtubeToken,
+    twitchToken,
+    username,
+    authKey,
+  } = useContext(AccountContext) || {};
   const { setRenderModal } = useContext(NavigationContext);
 
   const {
@@ -51,6 +58,10 @@ const SidebarAccount = () => {
   const { showTwitchSidebar, setShowTwitchSidebar, ...feedProps } = useContext(FeedsContext) || {};
 
   const logout = () => ClearAllAccountCookiesStates(setUsername, setRenderModal);
+
+  useEffect(() => {
+    if (!username || !authKey) setRenderModal('login');
+  }, [username, authKey, setRenderModal]);
 
   const domainColors = {
     Twitch: 'rgb(169, 112, 255)',
