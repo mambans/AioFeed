@@ -72,7 +72,7 @@ export const StyledSchedule = styled.div`
   grid-template-rows: 15% 20% auto;
   align-items: center;
   margin: 10px;
-  ${({ loading }) => (loading === true ? loadingAnimation : null)};
+  ${({ loading }) => (loading === 'true' ? loadingAnimation : null)};
 
   &::before {
     content: '';
@@ -83,7 +83,7 @@ export const StyledSchedule = styled.div`
     background-color: #e27626;
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
-    ${({ loading }) => (loading === true ? loadingAnimationOpacity : null)};
+    ${({ loading }) => (loading === 'true' ? loadingAnimationOpacity : null)};
   }
 
   p,
