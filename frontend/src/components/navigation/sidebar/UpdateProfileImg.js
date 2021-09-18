@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import AccountContext from './../../account/AccountContext';
 import useInput from './../../../hooks/useInput';
 import { ProfileImgInput } from './StyledComponents';
-import { AddCookie } from '../../../util/Utils';
+import { AddCookie } from '../../../util';
 import API from '../API';
 
 const UpdateProfileImg = ({ close }) => {

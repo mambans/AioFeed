@@ -2,7 +2,7 @@ import { Form, Button } from 'react-bootstrap';
 import React, { useState, useContext } from 'react';
 import { toast } from 'react-toastify';
 
-import { AddCookie } from '../../../util/Utils';
+import { AddCookie } from '../../../util';
 import { StyledCreateFormTitle, StyledCreateForm } from './StyledComponents';
 import AccountContext from './../../account/AccountContext';
 import LoadingIndicator from './../../LoadingIndicator';

@@ -1,6 +1,6 @@
 import addSystemNotification from './addSystemNotification';
 import FetchSingelChannelVods from './../vods/FetchSingelChannelVods';
-import { getLocalstorage } from '../../../util/Utils';
+import { getLocalstorage } from '../../../util';
 
 const offlineStreamsPromise = async ({
   oldLiveStreams,

@@ -1,4 +1,4 @@
-import { getLocalstorage } from '../../../util/Utils';
+import { getLocalstorage } from '../../../util';
 import AddVideoExtraData from '../AddVideoExtraData';
 import TwitchAPI from '../API';
 import { addVodEndTime } from '../TwitchUtils';

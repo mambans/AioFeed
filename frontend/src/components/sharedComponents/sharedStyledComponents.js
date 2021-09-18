@@ -175,6 +175,7 @@ export const HeaderLines = styled.div`
 export const HeaderOuterMainContainer = styled.div`
   width: 100%;
   margin-bottom: 5px;
+  scroll-margin-top: 95px;
 `;
 
 export const HeaderTopContainer = styled.div`

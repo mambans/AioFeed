@@ -13,7 +13,7 @@ import AlertHandler from '../alert';
 import FavoritesSmallList from './FavoritesSmallList';
 import DropDownDrawer from './DropDownDrawer';
 import { Container } from '../twitch/StyledComponents';
-import { getLocalstorage } from '../../util/Utils';
+import { getLocalstorage } from '../../util';
 import useDocumentTitle from './../../hooks/useDocumentTitle';
 
 export const useCheckForVideosAndValidateToken = ({

@@ -11,7 +11,7 @@ import {
   ChannelContainer,
   ImgBottomInfo,
 } from './../../sharedComponents/sharedStyledComponents';
-import { truncate } from '../../../util/Utils';
+import { truncate } from '../../../util';
 import { formatViewerNumbers } from './../TwitchUtils';
 import loginNameFormat from '../loginNameFormat';
 import ToolTip from '../../sharedComponents/ToolTip';

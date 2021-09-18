@@ -11,7 +11,7 @@ import {
   StyledReconnectIcon,
 } from './StyledComponents';
 import AccountContext from './../../account/AccountContext';
-import { AddCookie, getCookie } from '../../../util/Utils';
+import { AddCookie, getCookie } from '../../../util';
 
 const authenticatePopup = async (domain, urlParam) => {
   const generateOrginState = async () => uniqid();

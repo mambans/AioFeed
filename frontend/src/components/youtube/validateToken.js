@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCookie } from '../../util/Utils';
+import { getCookie } from '../../util';
 import autoReauthenticate from './autoReauthenticate';
 
 const validateToken = async ({ authKey = getCookie(`AioFeed_AuthKey`) } = {}) => {

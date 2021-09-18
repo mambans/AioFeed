@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { getLocalstorage } from '../../util/Utils';
+import { getLocalstorage } from '../../util';
 import BackDrop from '../sharedComponents/BackDrop';
 
 export const ResizeDevider = styled.div`

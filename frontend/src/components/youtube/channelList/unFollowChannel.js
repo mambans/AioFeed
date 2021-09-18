@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCookie, getLocalstorage } from './../../../util/Utils';
+import { getCookie, getLocalstorage } from './../../../util';
 
 const unFollowChannel = async ({ subscriptionId, channelId, setChannels, videos, setVideos }) => {
   const followedChannels = getLocalstorage(`YT-followedChannels`) || [];

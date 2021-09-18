@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { getCookie } from './../../util/Utils';
+import { getCookie } from '../../util';
 
 const AccountContext = React.createContext();
 

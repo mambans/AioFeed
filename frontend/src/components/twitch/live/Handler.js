@@ -7,7 +7,7 @@ import getFollowedOnlineStreams from './GetFollowedStreams';
 import NotificationsContext from './../../notifications/NotificationsContext';
 import FeedsContext from './../../feed/FeedsContext';
 import VodsContext from './../vods/VodsContext';
-import { AddCookie, getCookie, getLocalstorage } from '../../../util/Utils';
+import { AddCookie, getCookie, getLocalstorage } from '../../../util';
 import LiveStreamsPromise from './LiveStreamsPromise';
 import OfflineStreamsPromise from './OfflineStreamsPromise';
 import UpdatedStreamsPromise from './UpdatedStreamsPromise';

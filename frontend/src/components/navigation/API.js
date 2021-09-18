@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AddCookie, getCookie } from '../../util/Utils';
+import { AddCookie, getCookie } from '../../util';
 
 const BASE_URL = 'https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod';
 

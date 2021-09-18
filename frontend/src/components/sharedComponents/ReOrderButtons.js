@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
-import { getLocalstorage } from '../../util/Utils';
+import { getLocalstorage } from '../../util';
 
 const StyledReOrderButtons = styled.div`
   align-content: center;

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCookie, getLocalstorage } from '../../util/Utils';
+import { getCookie, getLocalstorage } from '../../util';
 
 const fetchNextPgeOfSubscriptions = async ({ total, PagePagination, followedchannels }) => {
   if (followedchannels?.length < total && PagePagination) {

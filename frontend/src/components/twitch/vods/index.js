@@ -12,7 +12,7 @@ import AccountContext from './../../account/AccountContext';
 import VodsContext from './VodsContext';
 import LoadingBoxes from './../LoadingBoxes';
 import FeedsContext from '../../feed/FeedsContext';
-import { getCookie, getLocalstorage } from '../../../util/Utils';
+import { getCookie, getLocalstorage } from '../../../util';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import FeedsCenterContainer, { CenterContext } from './../../feed/FeedsCenterContainer';
 import { Container } from '../StyledComponents';

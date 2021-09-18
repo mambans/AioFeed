@@ -1,4 +1,4 @@
-import { RemoveCookie } from '../../../util/Utils';
+import { RemoveCookie } from '../../../util';
 
 const clearAllAccountCookiesStates = (setUsername, setRenderModal) => {
   RemoveCookie('AioFeed_AccountName');

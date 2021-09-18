@@ -10,7 +10,7 @@ import useInput from './../../../hooks/useInput';
 import Alert from './Alert';
 import LoadingIndicator from './../../LoadingIndicator';
 import API from '../API';
-import { AddCookie } from '../../../util/Utils';
+import { AddCookie } from '../../../util';
 import { toast } from 'react-toastify';
 
 const DeleteAccountButton = () => {

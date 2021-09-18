@@ -42,7 +42,7 @@ import ClipButton from './ClipButton';
 import addGameName from './addGameName';
 import addProfileImg from './addProfileImg';
 import fetchChannelInfo from './fetchChannelInfo';
-import { getLocalstorage, getCookie } from '../../../util/Utils';
+import { getLocalstorage, getCookie } from '../../../util';
 import ContextMenu from './ContextMenu';
 import AnimatedViewCount from '../live/AnimatedViewCount';
 import ReAuthenticateButton from '../../navigation/sidebar/ReAuthenticateButton';

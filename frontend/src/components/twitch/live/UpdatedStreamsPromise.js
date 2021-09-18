@@ -1,5 +1,5 @@
 import addSystemNotification from './addSystemNotification';
-import { truncate } from '../../../util/Utils';
+import { truncate } from '../../../util';
 
 const updateSreamsPromise = async ({
   oldLiveStreams,

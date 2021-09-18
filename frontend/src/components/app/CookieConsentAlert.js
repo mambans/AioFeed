@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
 
-import { AddCookie, getCookie } from '../../util/Utils';
+import { AddCookie, getCookie } from '../../util';
 
 const Container = styled.div`
   position: fixed;

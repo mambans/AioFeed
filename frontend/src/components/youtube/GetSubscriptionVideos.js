@@ -2,7 +2,7 @@ import axios from 'axios';
 import { reverse, sortBy } from 'lodash';
 
 import GetVideoInfo from './GetVideoInfo';
-import { getCookie, getLocalstorage } from './../../util/Utils';
+import { getCookie, getLocalstorage } from './../../util';
 
 const filterTypeUpload = async (response) => {
   if (Boolean(response?.items?.length)) {

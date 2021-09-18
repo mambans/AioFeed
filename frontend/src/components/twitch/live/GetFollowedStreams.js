@@ -1,6 +1,6 @@
 import AddVideoExtraData from './../AddVideoExtraData';
 import TwitchAPI from '../API';
-import { chunk } from '../../../util/Utils';
+import { chunk } from '../../../util';
 
 const fetchAllOnlineStreams = async (followedChannelsIds) => {
   const channelsInChunks = chunk(followedChannelsIds, 100);

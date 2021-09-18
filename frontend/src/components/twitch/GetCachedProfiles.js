@@ -1,4 +1,4 @@
-import { getLocalstorage } from '../../util/Utils';
+import { getLocalstorage } from '../../util';
 
 const getCachedProfiles = () => {
   const profiles = getLocalstorage('TwitchProfiles') || {};

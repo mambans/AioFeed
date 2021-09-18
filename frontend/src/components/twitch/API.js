@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCookie } from '../../util/Utils';
+import { getCookie } from '../../util';
 import validateToken from './validateToken';
 
 const CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;

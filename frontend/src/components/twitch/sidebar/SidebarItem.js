@@ -6,7 +6,7 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 
 import { SidebarInfoPopup, StyledsidebarItem, FirstRow, SecondRow } from './StyledComponents';
-import { truncate } from '../../../util/Utils';
+import { truncate } from '../../../util';
 import AnimatedViewCount from '../live/AnimatedViewCount';
 import LiveInfoPopup from '../channelList/LiveInfoPopup';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';

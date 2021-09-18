@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { GameListUlContainer } from './../../twitch/categoryTopStreams/styledComponents';
 import StyledLoadingList from './../../twitch/categoryTopStreams/LoadingList';
 import ChannelListElement from './ChannelListElement';
-import { getLocalstorage } from '../../../util/Utils';
+import { getLocalstorage } from '../../../util';
 import SearchList from '../../sharedComponents/SearchList';
 import { scrollToIfNeeded } from '../../twitch/channelList/handleArrowNavigation';
 

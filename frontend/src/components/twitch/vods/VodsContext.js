@@ -3,7 +3,7 @@ import React, { useEffect, useContext } from 'react';
 import FetchMonitoredVodChannelsList from './FetchMonitoredVodChannelsList';
 import AccountContext from '../../account/AccountContext';
 import useSyncedLocalState from '../../../hooks/useSyncedLocalState';
-import { getCookie, getLocalstorage } from '../../../util/Utils';
+import { getCookie, getLocalstorage } from '../../../util';
 import FeedsContext from '../../feed/FeedsContext';
 import { TwitchContext } from '../useToken';
 

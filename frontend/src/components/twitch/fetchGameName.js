@@ -1,4 +1,4 @@
-import { getLocalstorage } from './../../util/Utils';
+import { getLocalstorage } from '../../util';
 import TwitchAPI from './API';
 
 const getGameDetails = async (items) => {

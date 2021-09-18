@@ -1,5 +1,5 @@
 import TwitchAPI from '../API';
-import { getLocalstorage } from '../../../util/Utils';
+import { getLocalstorage } from '../../../util';
 
 /**
  * @param {String} channelId - Channel id of Twitch channel to fetch info from.

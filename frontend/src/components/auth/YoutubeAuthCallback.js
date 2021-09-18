@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, useContext } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
-import { getCookie, AddCookie } from '../../util/Utils';
+import { getCookie, AddCookie } from '../../util';
 import AlertHandler from './../alert';
 import AccountContext from './../account/AccountContext';
 import NavigationContext from './../navigation/NavigationContext';

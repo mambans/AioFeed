@@ -59,3 +59,10 @@ export const chunk = (array, size) => {
   }
   return chunked_arr;
 };
+
+export const imageAspectDimensions = ({ width, height, ar }) => {
+  const calcDimen = height ? height * ar : width / ar;
+
+  if (height) return { height, width: calcDimen };
+  if (width) return { width, height: calcDimen };
+};

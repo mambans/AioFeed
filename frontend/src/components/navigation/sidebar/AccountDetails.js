@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 
-import { getCookie } from '../../../util/Utils';
+import { getCookie } from '../../../util';
 import AccountContext from './../../account/AccountContext';
 import UpdateProfileImg from './UpdateProfileImg';
 import {

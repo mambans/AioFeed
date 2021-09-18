@@ -1,6 +1,6 @@
 import GetCachedProfiles from './GetCachedProfiles';
 import TwitchAPI from './API';
-import { chunk } from '../../util/Utils';
+import { chunk } from '../../util';
 
 /**
  * @param {Object} items - Object of Streams/Videos/Clips. (With items.data[] )

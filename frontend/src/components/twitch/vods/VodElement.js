@@ -13,7 +13,7 @@ import {
   VideoTitleHref,
 } from '../../sharedComponents/sharedStyledComponents';
 
-import { truncate } from '../../../util/Utils';
+import { truncate } from '../../../util';
 import { VodLiveIndicator, VodType, VodPreview, VodDates } from './StyledComponents';
 import VodsFollowUnfollowBtn from './VodsFollowUnfollowBtn';
 import { formatViewerNumbers, formatTwitchVodsDuration } from './../TwitchUtils';

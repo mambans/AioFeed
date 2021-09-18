@@ -1,4 +1,4 @@
-import { getLocalstorage } from '../../../util/Utils';
+import { getLocalstorage } from '../../../util';
 import API from '../../navigation/API';
 
 const addVodChannel = async ({

@@ -23,6 +23,7 @@ import TwitchAPI from '../API';
 import TypeButton from './TypeButton';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import useFavicon from '../../../hooks/useFavicon';
+import { imageAspectDimensions } from '../../../util';
 
 const TopStreams = () => {
   const { category } = useParams();
@@ -167,16 +168,31 @@ const TopStreams = () => {
                 <img
                   src={gameInfo?.box_art_url?.replace('{width}', 130)?.replace('{height}', 173)}
                   alt=''
+                  style={{
+                    ...imageAspectDimensions({ height: 80, ar: 3 / 4 }),
+                    alignSelf: 'end',
+                  }}
                 />
               ) : (
-                <div className='imgPlaceholder'></div>
+                <div
+                  className='imgPlaceholder'
+                  style={{
+                    ...imageAspectDimensions({ height: 80, ar: 3 / 4 }),
+                    alignSelf: 'end',
+                  }}
+                />
               )}
-              {gameInfo?.name || 'Top'} - {videoType}
-              {!videoType || videoType === 'streams' ? (
-                <MdLiveTv size={25} />
-              ) : (
-                <MdMovieCreation size={25} />
-              )}
+              <div style={{ alignSelf: 'end', textAlign: 'start', fontSize: '0.95em' }}>
+                <p style={{ textTransform: 'capitalize' }}>{gameInfo?.name || 'Top'}</p>
+                <span style={{ textTransform: 'capitalize', fontSize: '0.85em' }}>
+                  {videoType}
+                  {!videoType || videoType === 'streams' ? (
+                    <MdLiveTv size={25} />
+                  ) : (
+                    <MdMovieCreation size={25} />
+                  )}
+                </span>
+              </div>
             </>
           }
           refreshFunc={refresh}

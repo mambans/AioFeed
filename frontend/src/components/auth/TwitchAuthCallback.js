@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 
-import { getCookie } from '../../util/Utils';
+import { getCookie } from '../../util';
 import AlertHandler from './../alert';
 import AccountContext from './../account/AccountContext';
 import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from './../LoadingIndicator';
-import { AddCookie } from '../../util/Utils';
+import { AddCookie } from '../../util';
 import TwitchAPI from '../twitch/API';
 import aiofeedAPI from '../navigation/API';
 import { TwitchContext } from '../twitch/useToken';

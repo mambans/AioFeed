@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
-import { getLocalstorage } from './../../util/Utils';
+import { getLocalstorage } from '../../util';
 
 const FeedsContext = React.createContext();
 

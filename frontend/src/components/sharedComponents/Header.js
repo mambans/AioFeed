@@ -36,6 +36,17 @@ const Header = React.forwardRef((props, ref) => {
     thisref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
   };
 
+  const OnHoverOpenInNewTab =
+    onHoverIconLink && onHoverIconLink !== path ? (
+      <Link
+        to={`/${onHoverIconLink}`}
+        className='openIndividualFeed'
+        title={`Link to ${text.props.children[0].trim()} individual feed page.`}
+      >
+        <FaRegWindowRestore size={18} />
+      </Link>
+    ) : null;
+
   return (
     <HeaderOuterMainContainer ref={thisref} style={style} id={id}>
       <HeaderTopContainer>
@@ -62,15 +73,7 @@ const Header = React.forwardRef((props, ref) => {
         <h5 onClick={handleOnClick}>
           {leftImage}
           {text}
-          {onHoverIconLink && onHoverIconLink !== path && (
-            <Link
-              to={`/${onHoverIconLink}`}
-              className='openIndividualFeed'
-              title={`Link to ${text.props.children[0].trim()} individual feed page.`}
-            >
-              <FaRegWindowRestore size={18} />
-            </Link>
-          )}
+          {OnHoverOpenInNewTab}
         </h5>
         <HeaderLines />
       </HeaderTitle>

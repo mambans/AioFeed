@@ -1,7 +1,7 @@
 import { CSSTransition } from 'react-transition-group';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
-import { getLocalstorage } from '../../../util/Utils';
+import { getLocalstorage } from '../../../util';
 import { HideSidebarButton } from '../sidebar/StyledComponents';
 import FeedsContext from '../../feed/FeedsContext';
 import Handler from './Handler';

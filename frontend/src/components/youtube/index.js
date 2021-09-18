@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
-import { getLocalstorage } from '../../util/Utils';
+import { getLocalstorage } from '../../util';
 import FeedsCenterContainer from '../feed/FeedsCenterContainer';
 import { Container } from '../twitch/StyledComponents';
 

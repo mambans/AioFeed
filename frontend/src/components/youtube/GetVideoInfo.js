@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getLocalstorage, getCookie, chunk } from '../../util/Utils';
+import { getLocalstorage, getCookie, chunk } from '../../util';
 import { merge } from 'lodash';
 
 const getVideoInfo = async ({ videos }) => {

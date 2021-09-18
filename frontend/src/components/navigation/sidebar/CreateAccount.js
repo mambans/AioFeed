@@ -7,7 +7,7 @@ import AccountContext from './../../account/AccountContext';
 import LoadingIndicator from './../../LoadingIndicator';
 import useInput from './../../../hooks/useInput';
 import SidebarAlert from './Alert';
-import { AddCookie } from '../../../util/Utils';
+import { AddCookie } from '../../../util';
 import AlertHandler from './../../alert';
 import API from '../API';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';

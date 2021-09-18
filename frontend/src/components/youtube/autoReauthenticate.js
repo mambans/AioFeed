@@ -1,4 +1,4 @@
-import { AddCookie } from '../../util/Utils';
+import { AddCookie } from '../../util';
 import API from '../navigation/API';
 
 const autoReauthenticate = async () => {

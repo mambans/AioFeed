@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCookie } from '../../util/Utils';
+import { getCookie } from '../../util';
 import API from '../navigation/API';
 import reauthenticate from './reauthenticate';
 

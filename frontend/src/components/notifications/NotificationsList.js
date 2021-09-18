@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import React, { useContext } from 'react';
 
 import { Notification, Date, NotificationListContainer } from './styledComponent';
-import { truncate } from '../../util/Utils';
+import { truncate } from '../../util';
 import NotificationsContext from './../notifications/NotificationsContext';
 import useLockBodyScroll from '../../hooks/useLockBodyScroll';
 

@@ -1,5 +1,5 @@
 import TwitchAPI from '../API';
-import { getLocalstorage } from '../../../util/Utils';
+import { getLocalstorage } from '../../../util';
 
 const addGameName = async ({ streamInfo, newStreamInfo }) => {
   try {

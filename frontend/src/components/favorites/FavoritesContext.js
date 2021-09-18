@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { getCookie } from '../../util/Utils';
+import { getCookie } from '../../util';
 import useSyncedLocalState from '../../hooks/useSyncedLocalState';
 import API from '../navigation/API';
 

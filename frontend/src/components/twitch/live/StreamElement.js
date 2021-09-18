@@ -16,7 +16,7 @@ import {
 } from './../../sharedComponents/sharedStyledComponents';
 import { ChannelNameDiv } from './../StyledComponents';
 import StreamHoverIframe from '../StreamHoverIframe.js';
-import { truncate } from '../../../util/Utils';
+import { truncate } from '../../../util';
 import FollowUnfollowBtn from './../FollowUnfollowBtn';
 import VodsFollowUnfollowBtn from './../vods/VodsFollowUnfollowBtn';
 import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
