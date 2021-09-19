@@ -21,7 +21,7 @@ const BigScheduleList = ({ followedChannels }) => {
 
   return (
     <>
-      <TriggerButton setShow={setShow} ref={btnRef} btnSize={30} style={{ marginRight: '10px' }} />
+      <TriggerButton setShow={setShow} ref={btnRef} btnSize={30} style={{ marginRight: '15px' }} />
       {show && (
         <Portal>
           <RefreshBtn
