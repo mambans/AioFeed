@@ -12,6 +12,7 @@ import VideoHoverIframe from './VideoHoverIframe';
 import FavoriteButton from '../favorites/addToListModal/FavoriteButton';
 import { ChannelNameLink, PublishedDate } from './StyledComponents';
 import ToolTip from '../sharedComponents/ToolTip';
+import AddRemoveFromPlayQueueButton from '../sharedComponents/AddRemoveFromPlayQueueButton';
 
 export const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
   maxres?.url ||
@@ -20,7 +21,16 @@ export const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
   medium?.url ||
   `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`;
 
-const YoutubeVideoElement = ({ list, video, setDragSelected, listName, active, ...props }) => {
+const YoutubeVideoElement = ({
+  list,
+  video,
+  setDragSelected,
+  listName,
+  active,
+  setPlayQueue,
+  playQueue,
+  ...props
+}) => {
   const ref = useRef();
 
   return (
@@ -35,6 +45,14 @@ const YoutubeVideoElement = ({ list, video, setDragSelected, listName, active, .
     >
       <ImageContainer id={video.contentDetails?.upload?.videoId} ref={ref} active={active}>
         <FavoriteButton list={list} videoId_p={video.contentDetails?.upload?.videoId} />
+        {setPlayQueue && (
+          <AddRemoveFromPlayQueueButton
+            videoId={video.contentDetails?.upload?.videoId}
+            setPlayQueue={setPlayQueue}
+            playQueue={playQueue}
+            active={active}
+          />
+        )}
         <VideoHoverIframe id={video.contentDetails?.upload?.videoId} data={video} imageRef={ref} />
         <Link
           className='imgLink'

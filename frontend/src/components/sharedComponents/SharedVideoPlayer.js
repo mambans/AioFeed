@@ -65,6 +65,7 @@ const SharedVideoPlayer = ({ listName }) => {
   const [isPlaying, setIsPlaying] = useState();
   const childPlayer = useRef();
   const videoElementRef = useRef();
+  const [playQueue, setPlayQueue] = useState([]);
 
   useFullscreen();
 
@@ -98,6 +99,8 @@ const SharedVideoPlayer = ({ listName }) => {
       autoPlayNext,
       loopList,
       autoPlayRandom,
+      playQueue,
+      setPlayQueue,
     });
     if (nextVideoUrl) navigate(nextVideoUrl);
   };
@@ -207,6 +210,9 @@ const SharedVideoPlayer = ({ listName }) => {
                 setLoopList={setLoopList}
                 autoPlayRandom={autoPlayRandom}
                 setAutoPlayRandom={setAutoPlayRandom}
+                playQueue={playQueue}
+                setPlayQueue={setPlayQueue}
+                playNext={playNext}
               />
             </div>
           </>

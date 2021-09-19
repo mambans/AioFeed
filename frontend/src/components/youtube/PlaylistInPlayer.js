@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled, { css } from 'styled-components';
-import { MdQueuePlayNext } from 'react-icons/md';
+import { MdQueuePlayNext, MdSkipNext } from 'react-icons/md';
 import { FaRandom } from 'react-icons/fa';
 import { TiArrowLoop } from 'react-icons/ti';
 
@@ -53,6 +53,15 @@ const svgButtonsStyle = ({ enabled }) => css`
   }
 `;
 
+const PlayNextBtn = styled(MdSkipNext)`
+  ${svgButtonsStyle}
+  opacity: 0.7;
+  transition: opacity 250ms;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
 const AutoPlayNextBtn = styled(MdQueuePlayNext)`
   ${svgButtonsStyle}
 `;
@@ -64,7 +73,7 @@ const PlayNextRandomBtn = styled(FaRandom)`
   ${svgButtonsStyle}
 `;
 
-const List = ({ listVideos, list, setLists, setListVideos, videoId }) => {
+const List = ({ listVideos, list, setLists, setListVideos, videoId, playQueue, setPlayQueue }) => {
   const [dragSelected, setDragSelected] = useState();
 
   const dragEvents = useMemo(
@@ -100,6 +109,8 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId }) => {
               // data-id={video.contentDetails?.upload?.videoId}
               video={video}
               {...dragEvents}
+              setPlayQueue={setPlayQueue}
+              playQueue={playQueue}
             />
           ) : (
             <VodElement
@@ -110,6 +121,8 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId }) => {
               // data-id={video.id}
               data={video}
               {...dragEvents}
+              setPlayQueue={setPlayQueue}
+              playQueue={playQueue}
             />
           )}
         </CSSTransition>
@@ -129,6 +142,9 @@ const PlaylistInPlayer = ({
   setLoopList,
   autoPlayRandom,
   setAutoPlayRandom,
+  playQueue,
+  setPlayQueue,
+  playNext,
 }) => {
   const { lists, setLists } = useContext(FavoritesContext) || {};
   const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
@@ -198,6 +214,10 @@ const PlaylistInPlayer = ({
             enabled={String(autoPlayRandom)}
           />
         </ToolTip>
+
+        <ToolTip tooltip={'play next video in queue/list'} width='max-content'>
+          <PlayNextBtn size={20} onClick={playNext} />
+        </ToolTip>
       </PlayListButtonsContainer>
       <FavoritesSmallList
         list={list}
@@ -212,6 +232,8 @@ const PlaylistInPlayer = ({
           setLists={setLists}
           setListVideos={setListVideos}
           videoId={videoId}
+          setPlayQueue={setPlayQueue}
+          playQueue={playQueue}
         />
       </Container>
     </>

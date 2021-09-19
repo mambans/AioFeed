@@ -9,10 +9,16 @@ const autoPlayNext = ({
   autoPlayNext,
   loopList,
   autoPlayRandom,
+  playQueue,
+  setPlayQueue,
 }) => {
   if (!loopEnabled && Boolean(listVideos?.length)) {
     const nextVideo = (() => {
-      if (autoPlayRandom) {
+      if (playQueue?.length) {
+        const nextVideo = { id: playQueue.shift() };
+        setPlayQueue(playQueue);
+        return nextVideo;
+      } else if (autoPlayRandom) {
         const randomIndex = Math.floor(Math.random() * (listVideos?.length - 1));
         return listVideos[randomIndex];
       } else if (autoPlayNext) {

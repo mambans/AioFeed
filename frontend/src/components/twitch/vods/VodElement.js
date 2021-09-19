@@ -24,6 +24,7 @@ import { ChannelNameDiv } from '../StyledComponents';
 import FavoriteButton from '../../favorites/addToListModal/FavoriteButton';
 import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../sharedComponents/ToolTip';
+import AddRemoveFromPlayQueueButton from '../../sharedComponents/AddRemoveFromPlayQueueButton';
 
 const VodElement = ({
   data,
@@ -32,6 +33,8 @@ const VodElement = ({
   listName,
   list,
   active,
+  setPlayQueue,
+  playQueue,
   ...props
 }) => {
   const {
@@ -116,6 +119,13 @@ const VodElement = ({
           disablepreview={handleMouseOut}
           style={{ top: thumbnail_url === '' && !previewAvailable.data ? '30px' : '0px' }}
         />
+        {setPlayQueue && (
+          <AddRemoveFromPlayQueueButton
+            videoId={id}
+            setPlayQueue={setPlayQueue}
+            playQueue={playQueue}
+          />
+        )}
         {previewAvailable.error && (
           <StyledVideoElementAlert variant='danger' className='error'>
             {previewAvailable.error}

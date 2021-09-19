@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import React, { useContext, useImperativeHandle, useState } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import Moment from 'react-moment';
-import { MdRefresh } from 'react-icons/md';
+import { MdRefresh, MdAddToQueue, MdRemoveFromQueue } from 'react-icons/md';
 
 import FeedsContext from '../feed/FeedsContext';
 import CountdownCircleTimer from './CountdownCircleTimer';
@@ -702,4 +702,36 @@ export const TransparentButton = styled.button`
       color: none;
     }
   }
+`;
+
+export const AddToQueueButton = styled(MdAddToQueue)`
+  position: absolute;
+  top: 5px;
+  left: 5px;
+
+  cursor: pointer;
+  opacity: ${({ enabled }) => (enabled === 'true' ? '1' : '0.5')};
+  transition: opacity 250ms;
+
+  &:hover {
+    opacity: ${({ enabled }) => (enabled === 'true' ? '1' : '0.7')};
+  }
+`;
+export const RemoveFromQueueButton = styled(MdRemoveFromQueue)`
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  cursor: pointer;
+  opacity: ${({ enabled }) => (enabled === 'true' ? '1' : '0.5')};
+  transition: opacity 250ms;
+
+  &:hover {
+    opacity: ${({ enabled }) => (enabled === 'true' ? '1' : '0.7')};
+  }
+`;
+
+export const PositionInQueue = styled.div`
+  position: absolute;
+  top: 5px;
+  left: 35px;
 `;
