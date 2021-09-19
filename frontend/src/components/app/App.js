@@ -4,7 +4,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import FeedsContext, { FeedsProvider } from '../feed/FeedsContext';
-import { NavigationProvider } from '../navigation/NavigationContext';
+import NavigationContext, { NavigationProvider } from '../navigation/NavigationContext';
 import { NotificationsProvider } from '../notifications/NotificationsContext';
 import { ThemeProvider } from '../themes/ThemeContext';
 import { FooterProvider } from '../footer/FooterContext';
@@ -70,6 +70,7 @@ const App = () => {
   } = useContext(TwitchContext);
   const { setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage } =
     useContext(YoutubeContext);
+  const { setShowSidebar } = useContext(NavigationContext);
 
   useEffect(() => {
     (async () => {
@@ -80,12 +81,13 @@ const App = () => {
           setUsername();
           setEmail();
           setProfileImage();
+          setShowSidebar(true);
           toast.warn('Expired login. Please login again');
         }
         return true;
       }
     })();
-  }, [username, setAuthKey, setUsername, setEmail, setProfileImage]);
+  }, [username, setAuthKey, setUsername, setEmail, setProfileImage, setShowSidebar]);
 
   useEventListenerMemo('message', receiveMessage, window, true, { capture: false });
 
