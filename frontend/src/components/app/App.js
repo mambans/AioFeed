@@ -58,7 +58,7 @@ const AppRoutesContainer = () => {
 
 const App = () => {
   const { activeTheme } = useContext(ThemeContext);
-  const { username, setAuthKey, setUsername, setEmail, setProfileImage } =
+  const { username, setAuthKey, authKey, setUsername, setEmail, setProfileImage } =
     useContext(AccountContext);
   const { setEnableTwitch, setEnableYoutube } = useContext(FeedsContext);
   const {
@@ -77,17 +77,19 @@ const App = () => {
       if (username) {
         const validated = await API.validateAccount(username).catch((e) => console.error(e));
         if (!validated?.data?.Username) {
-          setAuthKey();
-          setUsername();
-          setEmail();
-          setProfileImage();
-          setShowSidebar(true);
-          toast.warn('Expired login. Please login again');
+          setTimeout(() => {
+            setAuthKey();
+            setUsername();
+            setEmail();
+            setProfileImage();
+            setShowSidebar(true);
+            toast.warn('Expired login. Please login again');
+          }, 0);
         }
         return true;
       }
     })();
-  }, [username, setAuthKey, setUsername, setEmail, setProfileImage, setShowSidebar]);
+  }, [username, setAuthKey, setUsername, setEmail, setProfileImage, setShowSidebar, authKey]);
 
   useEventListenerMemo('message', receiveMessage, window, true, { capture: false });
 

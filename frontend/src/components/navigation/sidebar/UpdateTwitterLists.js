@@ -120,7 +120,6 @@ const UpdateTwitterLists = ({ style, id }) => {
     set.add(listName);
     const newArray = [...set];
 
-    localStorage.setItem('Twitter-Lists', JSON.stringify(newArray));
     setTwitterLists(newArray);
 
     await API.softUpdateAccount('TwitterPreferences', { Lists: newArray });
@@ -133,7 +132,6 @@ const UpdateTwitterLists = ({ style, id }) => {
     set.delete(listName);
     const newArray = [...set];
 
-    localStorage.setItem('Twitter-Lists', JSON.stringify(newArray));
     setTwitterLists(newArray);
 
     await API.updateAccount('TwitterPreferences', { Lists: newArray });

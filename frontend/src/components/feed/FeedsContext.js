@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
-import { getLocalstorage } from '../../util';
 
 const FeedsContext = React.createContext();
 
@@ -13,7 +12,7 @@ export const FeedsProvider = ({ children }) => {
     }) || {};
   const toggle = (i, v) => setPref((c) => ({ ...c, [i]: v || !c[i] }));
 
-  const [twitterLists, setTwitterLists] = useState(getLocalstorage('Twitter-Lists'));
+  const [twitterLists, setTwitterLists] = useLocalStorageState('Twitter-Lists');
 
   const feedVideoSizeProps = {
     width: 336 * (parseInt(pref.size) / 100),
