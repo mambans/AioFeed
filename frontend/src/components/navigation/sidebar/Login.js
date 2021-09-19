@@ -13,6 +13,7 @@ import FeedsContext from '../../feed/FeedsContext';
 import VodsContext from '../../twitch/vods/VodsContext';
 import API from '../API';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
+import { TwitchContext } from '../../twitch/useToken';
 
 const Login = () => {
   useDocumentTitle('Login');
@@ -22,6 +23,13 @@ const Login = () => {
   const { setRenderModal } = useContext(NavigationContext);
   const { setTwitterLists } = useContext(FeedsContext);
   const { setChannels, setFavStreams } = useContext(VodsContext);
+  const {
+    setTwitchAccessToken,
+    setTwitchRefreshToken,
+    setTwitchUserId,
+    setTitchUsername,
+    setTwitchProfileImage,
+  } = useContext(TwitchContext);
   const {
     setUsername,
     setProfileImage,
@@ -56,18 +64,12 @@ const Login = () => {
       .then((result) => {
         const res = result.data.Attributes;
         if (result.status === 200 && res) {
-          AddCookie('AioFeed_AccountName', res.Username);
-          AddCookie('AioFeed_AccountProfileImg', res.ProfileImg);
-          AddCookie('AioFeed_AuthKey', res.AuthKey);
-          AddCookie('AioFeed_AccountEmail', res.Email);
-
           if (res.TwitchPreferences && Object.keys(res.TwitchPreferences).length >= 1) {
-            AddCookie('Twitch-access_token', res.TwitchPreferences.Token);
-            AddCookie('Twitch-refresh_token', res.TwitchPreferences.Refresh_token);
-
-            AddCookie('Twitch-userId', res.TwitchPreferences.Id);
-            AddCookie('Twitch-username', res.TwitchPreferences.Username);
-            AddCookie('Twitch-profileImg', res.TwitchPreferences.Profile);
+            setTitchUsername(res.TwitchPreferences.Username);
+            setTwitchUserId(res.TwitchPreferences.Id);
+            setTwitchProfileImage(res.TwitchPreferences.Profile);
+            setTwitchAccessToken(res.TwitchPreferences.Token);
+            setTwitchRefreshToken(res.TwitchPreferences.Refresh_token);
             localStorage.setItem(
               'ChannelsUpdateNotifs',
               JSON.stringify(res.TwitchPreferences.ChannelsUpdateNotifs)

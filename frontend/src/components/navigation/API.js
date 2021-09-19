@@ -135,7 +135,7 @@ const API = {
       .get(`${BASE_URL}/app/token`)
       .then(({ data: { access_token, expires_in } }) => {
         const expireData = new Date(expires_in * 1000);
-        AddCookie('Twitch-app_token', access_token, expireData);
+        AddCookie('Twitch-app_token', access_token, { expires: expireData });
         return access_token;
       })
       .catch((e) => {
@@ -143,7 +143,10 @@ const API = {
         console.error('No User or App access tokens found.');
       }),
 
-  updateTwitchToken: async (setTwitchToken, setRefreshToken) =>
+  updateTwitchToken: async (
+    setTwitchToken = (v) => AddCookie('Twitch-access_token', v),
+    setRefreshToken = (v) => AddCookie('Twitch-refresh_token', v)
+  ) =>
     await axios
       .put(`${BASE_URL}/reauth/twitch`, {
         refresh_token: getCookie(`Twitch-refresh_token`),
@@ -151,10 +154,8 @@ const API = {
         authkey: getCookie(`AioFeed_AuthKey`),
       })
       .then(async (res) => {
-        AddCookie('Twitch-access_token', res.data.access_token);
-        AddCookie('Twitch-refresh_token', res.data.refresh_token);
-        if (setTwitchToken) setTwitchToken(res.data.access_token);
-        if (setRefreshToken) setRefreshToken(res.data.refresh_token);
+        setTwitchToken(res.data.access_token);
+        setRefreshToken(res.data.refresh_token);
         console.log('Successfully re-authenticated to Twitch.');
 
         return res.data.access_token;

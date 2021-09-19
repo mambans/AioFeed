@@ -11,7 +11,8 @@ import {
   StyledReconnectIcon,
 } from './StyledComponents';
 import AccountContext from './../../account/AccountContext';
-import { AddCookie, getCookie } from '../../../util';
+import { AddCookie } from '../../../util';
+import { TwitchContext } from '../../twitch/useToken';
 
 const authenticatePopup = async (domain, urlParam) => {
   const generateOrginState = async () => uniqid();
@@ -41,11 +42,12 @@ const TwitchBaseAuthUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${pro
 const YoutubeBaseAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/youtube/callback&response_type=code&scope=https://www.googleapis.com/auth/youtube&access_type=offline`;
 
 const ReAuthenticateButton = ({ disconnect, serviceName, style }) => {
-  const { twitchUsername, twitchProfileImg, youtubeUsername, youtubeProfileImg, youtubeToken } =
+  const { twitchProfileImg, youtubeUsername, youtubeProfileImg, youtubeToken } =
     useContext(AccountContext);
+  const { twitchUsername } = useContext(TwitchContext);
 
   const AuthButton = {
-    Twitch: !getCookie(`Twitch-access_token`) ? (
+    Twitch: !twitchUsername ? (
       <StyledConnectTwitch
         id='connect'
         title='Authenticate/Connect'

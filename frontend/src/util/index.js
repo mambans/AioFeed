@@ -3,10 +3,10 @@ export const RemoveCookie = (cookieName) => {
   document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 };
 
-export const AddCookie = (cookieName, value, expire_date) => {
-  document.cookie = `${cookieName}=${value}; ${
-    expire_date ? `expires=${expire_date};` : ''
-  } path=/;  SameSite=Lax`;
+export const AddCookie = (cookieName, value, options = {}) => {
+  document.cookie = `${cookieName}=${value}; ${Object.entries(options)
+    .map((i) => `${i[0]}=${i[1]}`)
+    .join('; ')}  path=/;  SameSite=Lax`;
 };
 
 export const getCookie = (cname) => {

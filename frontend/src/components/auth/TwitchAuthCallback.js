@@ -5,14 +5,20 @@ import AlertHandler from './../alert';
 import AccountContext from './../account/AccountContext';
 import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from './../LoadingIndicator';
-import { AddCookie } from '../../util';
 import TwitchAPI from '../twitch/API';
 import aiofeedAPI from '../navigation/API';
 import { TwitchContext } from '../twitch/useToken';
 
 const TwitchAuthCallback = () => {
   const [error, setError] = useState();
-  const { autoRefreshEnabled } = useContext(TwitchContext);
+  const {
+    autoRefreshEnabled,
+    setTwitchAccessToken,
+    setTwitchRefreshToken,
+    setTwitchUserId,
+    setTitchUsername,
+    setTwitchProfileImage,
+  } = useContext(TwitchContext);
   const { username } = useContext(AccountContext);
   const { setVisible, setFooterVisible } = useContext(NavigationContext);
 
@@ -24,13 +30,13 @@ const TwitchAuthCallback = () => {
 
       const accessToken = requestAccessToken.data.access_token;
       const refreshToken = requestAccessToken.data.refresh_token;
-      AddCookie('Twitch-access_token', accessToken);
-      AddCookie('Twitch-refresh_token', refreshToken);
+      setTwitchAccessToken(accessToken);
+      setTwitchRefreshToken(refreshToken);
 
       const MyTwitch = await TwitchAPI.getMe({ accessToken: accessToken }).then(async (res) => {
-        AddCookie('Twitch-userId', res.data.data[0].id);
-        AddCookie('Twitch-username', res.data.data[0].login);
-        AddCookie('Twitch-profileImg', res.data.data[0].profile_image_url);
+        setTwitchUserId(res.data.data[0].id);
+        setTitchUsername(res.data.data[0].login);
+        setTwitchProfileImage(res.data.data[0].profile_image_url);
 
         if (username) {
           await aiofeedAPI.updateAccount('TwitchPreferences', {
@@ -52,7 +58,15 @@ const TwitchAuthCallback = () => {
 
       return { token: accessToken, refresh_token: refreshToken, ...MyTwitch };
     },
-    [username, autoRefreshEnabled]
+    [
+      username,
+      autoRefreshEnabled,
+      setTwitchAccessToken,
+      setTwitchRefreshToken,
+      setTwitchUserId,
+      setTitchUsername,
+      setTwitchProfileImage,
+    ]
   );
 
   useEffect(() => {

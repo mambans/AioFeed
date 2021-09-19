@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 
 import { getCookie } from '../../util';
+import useCookieState from './../../hooks/useCookieState';
 
 const AccountContext = React.createContext();
 
 export const AccountProvider = ({ children }) => {
-  const [username, setUsername] = useState(getCookie(`AioFeed_AccountName`));
-  const [profileImage, setProfileImage] = useState(getCookie(`AioFeed_AccountProfileImg`));
-  const [authKey, setAuthKey] = useState(getCookie(`AioFeed_AuthKey`));
+  const [username, setUsername] = useCookieState(`AioFeed_AccountName`);
+  const [profileImage, setProfileImage] = useCookieState(`AioFeed_AccountProfileImg`);
+  const [authKey, setAuthKey] = useCookieState(`AioFeed_AuthKey`);
+  const [email, setEmail] = useCookieState('AioFeed_AccountEmail');
 
   const [twitchPreferences, setTwitchPreferences] = useState({
     Token: getCookie(`Twitch-access_token`),
@@ -37,6 +39,8 @@ export const AccountProvider = ({ children }) => {
         setUsername,
         profileImage,
         setProfileImage,
+        email,
+        setEmail,
 
         twitchToken: twitchPreferences.Token,
         setTwitchToken: (v) => setTwitchPref('Token', v),

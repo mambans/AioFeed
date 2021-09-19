@@ -39,6 +39,9 @@ const SidebarAccount = () => {
     twitchToken,
     username,
     authKey,
+    setProfileImage,
+    setAuthKey,
+    setEmail,
   } = useContext(AccountContext) || {};
   const { setRenderModal } = useContext(NavigationContext);
 
@@ -57,7 +60,14 @@ const SidebarAccount = () => {
   const { youtubeVideoHoverEnable, setYoutubeVideoHoverEnable } = useContext(YoutubeContext) || {};
   const { showTwitchSidebar, setShowTwitchSidebar, ...feedProps } = useContext(FeedsContext) || {};
 
-  const logout = () => ClearAllAccountCookiesStates(setUsername, setRenderModal);
+  const logout = () =>
+    ClearAllAccountCookiesStates({
+      setUsername,
+      setProfileImage,
+      setAuthKey,
+      setEmail,
+      setRenderModal,
+    });
 
   useEffect(() => {
     if (!username || !authKey) setRenderModal('login');

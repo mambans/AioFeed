@@ -7,7 +7,7 @@ import getFollowedOnlineStreams from './GetFollowedStreams';
 import NotificationsContext from './../../notifications/NotificationsContext';
 import FeedsContext from './../../feed/FeedsContext';
 import VodsContext from './../vods/VodsContext';
-import { AddCookie, getCookie, getLocalstorage } from '../../../util';
+import { AddCookie, getLocalstorage } from '../../../util';
 import LiveStreamsPromise from './LiveStreamsPromise';
 import OfflineStreamsPromise from './OfflineStreamsPromise';
 import UpdatedStreamsPromise from './UpdatedStreamsPromise';
@@ -19,8 +19,12 @@ const REFRESH_RATE = 25; // seconds
 
 const Handler = ({ children }) => {
   const { addNotification } = useContext(NotificationsContext);
-  const { autoRefreshEnabled, isEnabledOfflineNotifications, isEnabledUpdateNotifications } =
-    useContext(TwitchContext);
+  const {
+    autoRefreshEnabled,
+    isEnabledOfflineNotifications,
+    isEnabledUpdateNotifications,
+    twitchAccessToken,
+  } = useContext(TwitchContext);
   const { setVods, updateNotischannels } = useContext(VodsContext);
   const { enableTwitchVods } = useContext(FeedsContext) || {};
   const [refreshTimer, setRefreshTimer] = useState(20);
@@ -212,7 +216,7 @@ const Handler = ({ children }) => {
     };
   }, []);
 
-  if (!getCookie(`Twitch-access_token`)) {
+  if (!twitchAccessToken) {
     return (
       <AlertHandler
         title='Not authenticated/connected with Twitch.'

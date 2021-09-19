@@ -12,11 +12,12 @@ import AccountContext from './../../account/AccountContext';
 import VodsContext from './VodsContext';
 import LoadingBoxes from './../LoadingBoxes';
 import FeedsContext from '../../feed/FeedsContext';
-import { getCookie, getLocalstorage } from '../../../util';
+import { getLocalstorage } from '../../../util';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import FeedsCenterContainer, { CenterContext } from './../../feed/FeedsCenterContainer';
 import { Container } from '../StyledComponents';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
+import { TwitchContext } from '../useToken';
 
 const VodsStandalone = () => {
   useDocumentTitle('Twitch Vods');
@@ -33,6 +34,7 @@ export const Vods = ({ className }) => {
   const { twitchUserId, setTwitchToken, setRefreshToken } = useContext(AccountContext);
   const { setEnableTwitchVods } = useContext(FeedsContext) || {};
   const { videoElementsAmount } = useContext(CenterContext);
+  const { twitchAccessToken } = useContext(TwitchContext);
   const [error, setError] = useState(null);
   const [order, setOrder] = useState(getLocalstorage('FeedOrders')?.['Vods'] ?? 27);
   const [vodError, setVodError] = useState(null);
@@ -119,7 +121,7 @@ export const Vods = ({ className }) => {
         vodError={vodError}
         setOrder={setOrder}
       />
-      {!getCookie(`Twitch-access_token`) && (
+      {!twitchAccessToken && (
         <AlertHandler
           title='Not authenticated/connected with Twitch.'
           message='No access token for twitch availible.'

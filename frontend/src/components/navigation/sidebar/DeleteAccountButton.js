@@ -15,7 +15,8 @@ import API from '../API';
 import { toast } from 'react-toastify';
 
 const DeleteAccountButton = () => {
-  const { username, setUsername, authKey } = useContext(AccountContext);
+  const { username, setUsername, setProfileImage, setAuthKey, setEmail, authKey } =
+    useContext(AccountContext);
   const [show, setShow] = useState(false);
   const [validated, setValidated] = useState(false);
   const { setRenderModal } = useContext(NavigationContext);
@@ -31,7 +32,7 @@ const DeleteAccountButton = () => {
       await API.deleteAccount(account, password, authKey)
         .then((res) => {
           if (res) {
-            ClearAllAccountCookiesStates(setUsername);
+            ClearAllAccountCookiesStates({ setUsername, setProfileImage, setAuthKey, setEmail });
 
             setRenderModal('create');
             toast.success('Account successfully deleted');

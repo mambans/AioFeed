@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 
-import { getCookie } from '../../../util';
 import AccountContext from './../../account/AccountContext';
 import UpdateProfileImg from './UpdateProfileImg';
 import {
@@ -11,7 +10,7 @@ import {
 } from './StyledComponents';
 
 const AccountDetails = () => {
-  const { username, profileImage } = useContext(AccountContext);
+  const { username, profileImage, email } = useContext(AccountContext);
   const [showAddImage, setShowAddImage] = useState(false);
 
   return (
@@ -36,7 +35,7 @@ const AccountDetails = () => {
         {username}
       </h1>
       <p style={{ textAlign: 'center' }} title='Email'>
-        {getCookie('AioFeed_AccountEmail')}
+        {email}
       </p>
     </>
   );

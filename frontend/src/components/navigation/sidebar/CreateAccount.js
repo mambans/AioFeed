@@ -7,7 +7,6 @@ import AccountContext from './../../account/AccountContext';
 import LoadingIndicator from './../../LoadingIndicator';
 import useInput from './../../../hooks/useInput';
 import SidebarAlert from './Alert';
-import { AddCookie } from '../../../util';
 import AlertHandler from './../../alert';
 import API from '../API';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
@@ -17,7 +16,7 @@ const CreateAccount = () => {
   const [error, setError] = useState(null);
   const { setAlert, setRenderModal } = useContext(NavigationContext);
   const [validated, setValidated] = useState(false);
-  const { setAuthKey, setUsername } = useContext(AccountContext);
+  const { setAuthKey, setUsername, setEmail } = useContext(AccountContext);
 
   const validateEmail = (email) => {
     var re =
@@ -48,12 +47,9 @@ const CreateAccount = () => {
     try {
       await API.createAccount(userName, password, email)
         .then((res) => {
-          AddCookie('AioFeed_AccountName', res.data.Username);
-          AddCookie('AioFeed_AccountEmail', res.data.Email);
-          AddCookie('AioFeed_AuthKey', res.data.AuthKey);
-
           setAuthKey(res.data.AuthKey);
           setUsername(res.data.Username);
+          setEmail(res.data.Email);
 
           setRenderModal('account');
         })

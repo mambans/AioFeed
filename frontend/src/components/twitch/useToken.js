@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useRef } from 'react';
+import useCookiesState from '../../hooks/useCookieState';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
 import validateToken from './validateToken';
 
@@ -8,6 +9,11 @@ export const TwitchContext = React.createContext();
 
 export const TwitchProvider = ({ children }) => {
   const [pref, setPref] = useLocalStorageState('TwitchPreferences', {}) || {};
+  const [twitchAccessToken, setTwitchAccessToken] = useCookiesState('Twitch-access_token');
+  const [twitchRefreshToken, setTwitchRefreshToken] = useCookiesState('Twitch-refresh_token');
+  const [twitchUserId, setTwitchUserId] = useCookiesState('Twitch-userId');
+  const [twitchUsername, setTitchUsername] = useCookiesState('Twitch-username');
+  const [twitchProfileImage, setTwitchProfileImage] = useCookiesState('Twitch-profileImg');
   const toggle = (i, v) => setPref((c) => ({ ...c, [i]: v || !c[i] }));
 
   const promise = useRef();
@@ -33,6 +39,16 @@ export const TwitchProvider = ({ children }) => {
         setIsEnabledUpdateNotifications: () => toggle('update_notis'),
         setEnableVodVolumeOverlay: () => toggle('vod_volume_overlay'),
         enableVodVolumeOverlay: Boolean(pref.vod_volume_overlay),
+        twitchAccessToken,
+        setTwitchAccessToken,
+        twitchRefreshToken,
+        setTwitchRefreshToken,
+        twitchUserId,
+        setTwitchUserId,
+        twitchUsername,
+        setTitchUsername,
+        twitchProfileImage,
+        setTwitchProfileImage,
       }}
     >
       {children}

@@ -42,7 +42,7 @@ import ClipButton from './ClipButton';
 import addGameName from './addGameName';
 import addProfileImg from './addProfileImg';
 import fetchChannelInfo from './fetchChannelInfo';
-import { getLocalstorage, getCookie } from '../../../util';
+import { getLocalstorage } from '../../../util';
 import ContextMenu from './ContextMenu';
 import AnimatedViewCount from '../live/AnimatedViewCount';
 import ReAuthenticateButton from '../../navigation/sidebar/ReAuthenticateButton';
@@ -60,6 +60,7 @@ import Schedule from '../schedule';
 import VolumeEventOverlay from '../VolumeEventOverlay';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import useFavicon from '../../../hooks/useFavicon';
+import { TwitchContext } from '../useToken';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.12, 175);
 
@@ -68,6 +69,7 @@ const Player = () => {
   const { addNotification } = useContext(NotificationsContext);
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const { setTwitchToken } = useContext(AccountContext);
+  const { twitchAccessToken } = useContext(TwitchContext);
 
   const twitchVideoPlayer = useRef();
   const [streamInfo, setStreamInfo] = useState(useLocation().state?.passedChannelData);
@@ -518,7 +520,7 @@ const Player = () => {
                 )}
               </InfoDisplay>
             ) : (
-              !getCookie('Twitch-access_token') && (
+              !twitchAccessToken && (
                 <ReAuthenticateButton
                   disconnect={() => disconnectTwitch({ setTwitchToken })}
                   serviceName={'Twitch'}
