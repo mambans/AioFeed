@@ -24,5 +24,5 @@ module.exports = async ({ username, filtesObj, authkey }) => {
 
     return res;
   }
-  throw new Error('Invalid AuthKey');
+  return false;
 };

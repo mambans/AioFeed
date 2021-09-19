@@ -11,20 +11,14 @@ const hash = util.promisify(bcrypt.hash);
 
 module.exports = async ({ username, password, new_password, authkey }) => {
   const res = await client
-    .query({
+    .get({
       TableName: process.env.USERNAME_TABLE,
-      KeyConditionExpression: '#Username = :InputUsername',
-      ExpressionAttributeNames: {
-        '#Username': 'Username',
-      },
-      ExpressionAttributeValues: {
-        ':InputUsername': username,
-      },
+      Key: { Username: username },
     })
     .promise();
 
-  if (res && authkey === res.Items[0].AuthKey) {
-    const valid = await compare(password, res.Items[0].Password);
+  if (res && authkey === res.Item.AuthKey) {
+    const valid = await compare(password, res.Item.Password);
 
     if (valid) {
       const key = uuidv4();

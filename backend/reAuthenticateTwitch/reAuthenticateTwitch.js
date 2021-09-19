@@ -12,12 +12,8 @@ module.exports = async ({ refresh_token, username, authkey }) => {
         process.env.TWITCH_CLIENT_SECRET
       }&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit+user:edit:follows&response_type=code`
     )
-    .then(async (res) => {
-      return res.data;
-    })
-    .catch((e) => {
-      console.log('reAuthenticateTwitch -> e', e);
-    });
+    .then(async (res) => res.data)
+    .catch((e) => console.log('reAuthenticateTwitch -> e', e));
 
   if (username && authkey) {
     const AccountInfo = await client

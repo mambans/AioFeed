@@ -17,5 +17,5 @@ module.exports = async ({ username, authkey }) => {
       .promise();
     return res;
   }
-  throw new Error('Invalid AuthKey');
+  return false;
 };

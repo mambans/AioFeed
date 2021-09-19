@@ -20,20 +20,14 @@ const decryptData = async (data, secretString) => {
 
 module.exports = async ({ username, password }) => {
   const res = await client
-    .query({
+    .get({
       TableName: process.env.USERNAME_TABLE,
-      KeyConditionExpression: '#Username = :InputUsername',
-      ExpressionAttributeNames: {
-        '#Username': 'Username',
-      },
-      ExpressionAttributeValues: {
-        ':InputUsername': username,
-      },
+      Key: { Username: username },
     })
     .promise();
 
-  if (res && res.Items && res.Items.length !== 0 && res.Count !== 0) {
-    const valid = await compare(password, res.Items[0].Password);
+  if (res && res.Item) {
+    const valid = await compare(password, res.Item.Password);
 
     if (valid) {
       const key = uuidv4();

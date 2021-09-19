@@ -16,9 +16,18 @@ exports.handler = async (event) => {
       authkey,
     });
 
+    if (res) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify(res),
+        headers: {
+          'Access-Control-Allow-Origin': 'https://aiofeed.com',
+        },
+      };
+    }
     return {
       statusCode: 200,
-      body: JSON.stringify(res),
+      body: JSON.stringify({ message: 'Invalid AuthKey' }),
       headers: {
         'Access-Control-Allow-Origin': 'https://aiofeed.com',
       },
