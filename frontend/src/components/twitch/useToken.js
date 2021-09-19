@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useRef } from 'react';
-import useCookiesState from '../../hooks/useCookieState';
+import useCookieState from '../../hooks/useCookieState';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
 import validateToken from './validateToken';
 
@@ -9,11 +9,11 @@ export const TwitchContext = React.createContext();
 
 export const TwitchProvider = ({ children }) => {
   const [pref, setPref] = useLocalStorageState('TwitchPreferences', {}) || {};
-  const [twitchAccessToken, setTwitchAccessToken] = useCookiesState('Twitch-access_token');
-  const [twitchRefreshToken, setTwitchRefreshToken] = useCookiesState('Twitch-refresh_token');
-  const [twitchUserId, setTwitchUserId] = useCookiesState('Twitch-userId');
-  const [twitchUsername, setTwitchUsername] = useCookiesState('Twitch-username');
-  const [twitchProfileImage, setTwitchProfileImage] = useCookiesState('Twitch-profileImg');
+  const [twitchAccessToken, setTwitchAccessToken] = useCookieState('Twitch-access_token');
+  const [twitchRefreshToken, setTwitchRefreshToken] = useCookieState('Twitch-refresh_token');
+  const [twitchUserId, setTwitchUserId] = useCookieState('Twitch-userId');
+  const [twitchUsername, setTwitchUsername] = useCookieState('Twitch-username');
+  const [twitchProfileImage, setTwitchProfileImage] = useCookieState('Twitch-profileImg');
   const toggle = (i, v) => setPref((c) => ({ ...c, [i]: v || !c[i] }));
 
   const promise = useRef();

@@ -8,7 +8,7 @@ import { AddCookie, getCookie, RemoveCookie } from '../util';
  * @param {object} options - Options object for the cookie
  * @returns
  */
-const useCookiesState = (key, defaultValue, options) => {
+const useCookieState = (key, defaultValue, options) => {
   const [value, setValue] = useState(() => getCookie(key) || defaultValue);
 
   const setCookieValue = useCallback(
@@ -22,7 +22,7 @@ const useCookiesState = (key, defaultValue, options) => {
             RemoveCookie(key);
           }
         } catch (error) {
-          console.log('useCookiesState error:', error);
+          console.log('useCookieState error:', error);
         }
         return finallValue;
       });
@@ -32,4 +32,4 @@ const useCookiesState = (key, defaultValue, options) => {
 
   return [value, setCookieValue];
 };
-export default useCookiesState;
+export default useCookieState;
