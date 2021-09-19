@@ -1,4 +1,5 @@
 import React, { useCallback, useContext, useRef } from 'react';
+import useCookiesState from '../../hooks/useCookieState';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
 import validateToken from './validateToken';
 
@@ -8,6 +9,9 @@ export const YoutubeContext = React.createContext();
 
 export const YoutubeProvider = ({ children }) => {
   const [pref, setPref] = useLocalStorageState('YoutubePreferences', {}) || {};
+  const [youtubeAccessToken, setYoutubeAccessToken] = useCookiesState('Youtube-access_token');
+  const [youtubeUsername, setYoutubeUsername] = useCookiesState('YoutubeUsername');
+  const [youtubeProfileImage, setYoutubeProfileImage] = useCookiesState('YoutubeProfileImg');
   const toggle = (i, v) => setPref((c) => ({ ...c, [i]: v || !c[i] }));
 
   const promise = useRef();
@@ -25,6 +29,12 @@ export const YoutubeProvider = ({ children }) => {
         validationOfToken,
         youtubeVideoHoverEnable: Boolean(pref.video_hover),
         setYoutubeVideoHoverEnable: () => toggle('video_hover'),
+        youtubeAccessToken,
+        setYoutubeAccessToken,
+        youtubeUsername,
+        setYoutubeUsername,
+        youtubeProfileImage,
+        setYoutubeProfileImage,
       }}
     >
       {children}

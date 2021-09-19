@@ -4,7 +4,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { FollowBtn, UnfollowBtn } from './StyledComponents';
 import AccountContext from './../account/AccountContext';
 import TwitchAPI from './API';
-import useToken from './useToken';
+import useToken, { TwitchContext } from './useToken';
 import ToolTip from '../sharedComponents/ToolTip';
 import { removeChannel as remmoveUpdateChannel } from './AddUpdateNotificationsButton';
 import VodsContext from './vods/VodsContext';
@@ -22,8 +22,9 @@ const FollowUnfollowBtn = ({
 }) => {
   const [following, setFollowing] = useState(followingStatus);
   const [showUnsubscribeVods, setShowUnsubscribeVods] = useState();
-  const { twitchUserId, authKey, username } = useContext(AccountContext);
+  const { authKey, username } = useContext(AccountContext);
   const { updateNotischannels, setUpdateNotischannels, channels } = useContext(VodsContext);
+  const { twitchUserId } = useContext(TwitchContext);
 
   const validateToken = useToken();
 

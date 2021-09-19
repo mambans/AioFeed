@@ -12,7 +12,7 @@ export const TwitchProvider = ({ children }) => {
   const [twitchAccessToken, setTwitchAccessToken] = useCookiesState('Twitch-access_token');
   const [twitchRefreshToken, setTwitchRefreshToken] = useCookiesState('Twitch-refresh_token');
   const [twitchUserId, setTwitchUserId] = useCookiesState('Twitch-userId');
-  const [twitchUsername, setTitchUsername] = useCookiesState('Twitch-username');
+  const [twitchUsername, setTwitchUsername] = useCookiesState('Twitch-username');
   const [twitchProfileImage, setTwitchProfileImage] = useCookiesState('Twitch-profileImg');
   const toggle = (i, v) => setPref((c) => ({ ...c, [i]: v || !c[i] }));
 
@@ -46,7 +46,7 @@ export const TwitchProvider = ({ children }) => {
         twitchUserId,
         setTwitchUserId,
         twitchUsername,
-        setTitchUsername,
+        setTwitchUsername,
         twitchProfileImage,
         setTwitchProfileImage,
       }}

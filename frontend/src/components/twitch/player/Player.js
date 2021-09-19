@@ -46,7 +46,6 @@ import { getLocalstorage } from '../../../util';
 import ContextMenu from './ContextMenu';
 import AnimatedViewCount from '../live/AnimatedViewCount';
 import ReAuthenticateButton from '../../navigation/sidebar/ReAuthenticateButton';
-import AccountContext from '../../account/AccountContext';
 import disconnectTwitch from '../disconnectTwitch';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from '../loginNameFormat';
@@ -68,8 +67,7 @@ const Player = () => {
   const channelName = useParams()?.channelName;
   const { addNotification } = useContext(NotificationsContext);
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
-  const { setTwitchToken } = useContext(AccountContext);
-  const { twitchAccessToken } = useContext(TwitchContext);
+  const { twitchAccessToken, setTwitchAccessToken } = useContext(TwitchContext);
 
   const twitchVideoPlayer = useRef();
   const [streamInfo, setStreamInfo] = useState(useLocation().state?.passedChannelData);
@@ -522,7 +520,7 @@ const Player = () => {
             ) : (
               !twitchAccessToken && (
                 <ReAuthenticateButton
-                  disconnect={() => disconnectTwitch({ setTwitchToken })}
+                  disconnect={() => disconnectTwitch({ setTwitchAccessToken })}
                   serviceName={'Twitch'}
                   style={{ margin: '20px' }}
                 />

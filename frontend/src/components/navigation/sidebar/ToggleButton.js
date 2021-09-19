@@ -2,8 +2,9 @@ import React, { useState, useRef, useContext } from 'react';
 
 import { StyledToggleButton } from './StyledComponents';
 import ToolTip from '../../sharedComponents/ToolTip';
-import AccountContext from '../../account/AccountContext';
 import API from '../API';
+import { TwitchContext } from '../../twitch/useToken';
+import { YoutubeContext } from '../../youtube/useToken';
 
 const ToggleButton = ({
   setEnable,
@@ -19,12 +20,13 @@ const ToggleButton = ({
 }) => {
   const [checked, setChecked] = useState(enabled || false);
   const timeout = useRef();
-  const { twitchToken, youtubeToken } = useContext(AccountContext);
+  const { twitchAccessToken } = useContext(TwitchContext);
+  const { youtubeAccessToken } = useContext(YoutubeContext);
 
   const tokensForDomains = {
-    Twitch: twitchToken,
-    Youtube: youtubeToken,
-    Favorites: twitchToken || youtubeToken,
+    Twitch: twitchAccessToken,
+    Youtube: youtubeAccessToken,
+    Favorites: twitchAccessToken || youtubeAccessToken,
   };
 
   const anTokenExists = Boolean(tokenExists || tokensForDomains[serviceName]);

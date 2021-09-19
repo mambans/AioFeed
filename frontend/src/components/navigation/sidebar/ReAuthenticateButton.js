@@ -10,9 +10,9 @@ import {
   StyledConnectContainer,
   StyledReconnectIcon,
 } from './StyledComponents';
-import AccountContext from './../../account/AccountContext';
 import { AddCookie } from '../../../util';
 import { TwitchContext } from '../../twitch/useToken';
+import { YoutubeContext } from '../../youtube/useToken';
 
 const authenticatePopup = async (domain, urlParam) => {
   const generateOrginState = async () => uniqid();
@@ -42,9 +42,9 @@ const TwitchBaseAuthUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${pro
 const YoutubeBaseAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_YOUTUBE_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/youtube/callback&response_type=code&scope=https://www.googleapis.com/auth/youtube&access_type=offline`;
 
 const ReAuthenticateButton = ({ disconnect, serviceName, style }) => {
-  const { twitchProfileImg, youtubeUsername, youtubeProfileImg, youtubeToken } =
-    useContext(AccountContext);
-  const { twitchUsername } = useContext(TwitchContext);
+  const { twitchUsername, twitchProfileImage } = useContext(TwitchContext);
+  const { youtubeUsername, setYoutubeProfileImage, youtubeAccessToken } =
+    useContext(YoutubeContext);
 
   const AuthButton = {
     Twitch: !twitchUsername ? (
@@ -64,7 +64,7 @@ const ReAuthenticateButton = ({ disconnect, serviceName, style }) => {
             onClick={() => authenticatePopup('Twitch', `${TwitchBaseAuthUrl}`)}
           >
             <StyledReconnectIcon id='reconnectIcon' />
-            <img title='Re-authenticate' src={twitchProfileImg} alt='' />
+            <img title='Re-authenticate' src={twitchProfileImage} alt='' />
           </div>
           <p id='name'>{twitchUsername}</p>
         </div>
@@ -75,7 +75,7 @@ const ReAuthenticateButton = ({ disconnect, serviceName, style }) => {
         )}
       </>
     ),
-    Youtube: !youtubeToken ? (
+    Youtube: !youtubeAccessToken ? (
       <StyledConnectYoutube
         id='connect'
         title='Authenticate/Connect'
@@ -92,7 +92,7 @@ const ReAuthenticateButton = ({ disconnect, serviceName, style }) => {
             onClick={() => authenticatePopup('Youtube', `${YoutubeBaseAuthUrl}&prompt=consent`)}
           >
             <StyledReconnectIcon id='reconnectIcon' />
-            <img title='Re-authenticate' src={youtubeProfileImg} alt='' />
+            <img title='Re-authenticate' src={setYoutubeProfileImage} alt='' />
           </div>
           <p id='name'>{youtubeUsername}</p>
         </div>

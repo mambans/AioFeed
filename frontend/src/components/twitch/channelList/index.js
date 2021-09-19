@@ -17,6 +17,7 @@ import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 import SearchList from '../../sharedComponents/SearchList';
 import AccountContext from '../../account/AccountContext';
 import { CancelToken, isCancel } from 'axios';
+import { TwitchContext } from '../useToken';
 
 const removeDuplicates = (items) =>
   items.filter((item, index, self) => self.findIndex((t) => t.user_id === item.user_id) === index);
@@ -29,7 +30,8 @@ const ChannelList = ({
   position,
 }) => {
   const channelName = useParams()?.channelName;
-  const { username, twitchToken, twitchUserId } = useContext(AccountContext);
+  const { username } = useContext(AccountContext);
+  const { twitchAccessToken, twitchUserId } = useContext(TwitchContext);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -264,7 +266,7 @@ const ChannelList = ({
   useEffect(() => {
     clearTimeout(resetListTimer.current);
 
-    if (!twitchToken || !twitchUserId) {
+    if (!twitchAccessToken || !twitchUserId) {
       setShowDropdown(false);
       return false;
     }
@@ -276,7 +278,7 @@ const ChannelList = ({
         console.warn(e);
       });
     }
-  }, [listIsOpen, fetchFollowedChannels, twitchToken, twitchUserId]);
+  }, [listIsOpen, fetchFollowedChannels, twitchAccessToken, twitchUserId]);
 
   return (
     <SearchList

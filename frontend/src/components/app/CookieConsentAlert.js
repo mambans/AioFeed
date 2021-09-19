@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
 
-import { AddCookie, getCookie } from '../../util';
+import useCookieState from './../../hooks/useCookieState';
 
 const Container = styled.div`
   position: fixed;
@@ -18,19 +18,13 @@ const Container = styled.div`
 `;
 
 const CookieConsentAlert = () => {
-  const [accepted, setAccepted] = useState(getCookie('cookieConsentAccepted'));
+  const [accepted, setAccepted] = useCookieState('cookieConsentAccepted');
 
   if (!accepted) {
     return (
       <Container>
         <p>We use cookies to improve performance and deliver the best experience on our website.</p>
-        <Button
-          variant='info'
-          onClick={() => {
-            AddCookie('cookieConsentAccepted', 'true');
-            setAccepted(true);
-          }}
-        >
+        <Button variant='info' onClick={() => setAccepted(true)}>
           I understand
         </Button>
       </Container>

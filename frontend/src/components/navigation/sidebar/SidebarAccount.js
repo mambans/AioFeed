@@ -31,18 +31,8 @@ import AccountDetails from './AccountDetails';
 import NavigationContext from '../NavigationContext';
 
 const SidebarAccount = () => {
-  const {
-    setUsername,
-    setTwitchToken,
-    setYoutubeToken,
-    youtubeToken,
-    twitchToken,
-    username,
-    authKey,
-    setProfileImage,
-    setAuthKey,
-    setEmail,
-  } = useContext(AccountContext) || {};
+  const { setUsername, username, authKey, setProfileImage, setAuthKey, setEmail } =
+    useContext(AccountContext) || {};
   const { setRenderModal } = useContext(NavigationContext);
 
   const {
@@ -56,8 +46,21 @@ const SidebarAccount = () => {
     setIsEnabledUpdateNotifications,
     setEnableVodVolumeOverlay,
     enableVodVolumeOverlay,
+    setTwitchAccessToken,
+    setTwitchRefreshToken,
+    setTwitchUserId,
+    setTwitchUsername,
+    setTwitchProfileImage,
+    twitchAccessToken,
   } = useContext(TwitchContext) || {};
-  const { youtubeVideoHoverEnable, setYoutubeVideoHoverEnable } = useContext(YoutubeContext) || {};
+  const {
+    youtubeVideoHoverEnable,
+    setYoutubeVideoHoverEnable,
+    setYoutubeAccessToken,
+    setYoutubeUsername,
+    setYoutubeProfileImage,
+    youtubeAccessToken,
+  } = useContext(YoutubeContext) || {};
   const { showTwitchSidebar, setShowTwitchSidebar, ...feedProps } = useContext(FeedsContext) || {};
 
   const logout = () =>
@@ -66,6 +69,14 @@ const SidebarAccount = () => {
       setProfileImage,
       setAuthKey,
       setEmail,
+      setTwitchAccessToken,
+      setTwitchRefreshToken,
+      setTwitchUserId,
+      setTwitchUsername,
+      setTwitchProfileImage,
+      setYoutubeAccessToken,
+      setYoutubeUsername,
+      setYoutubeProfileImage,
       setRenderModal,
     });
 
@@ -84,7 +95,7 @@ const SidebarAccount = () => {
     {
       serviceName: 'Twitch',
       icon: <FaTwitch size={24} color={domainColors.Twitch} />,
-      tooltip: twitchToken
+      tooltip: twitchAccessToken
         ? (feedProps.enableTwitch ? 'Disable ' : 'Enable ') + ` Twitch feed`
         : `Need to connect/authenticate with a Twitch account first.`,
     },
@@ -98,17 +109,17 @@ const SidebarAccount = () => {
     {
       serviceName: 'Youtube',
       icon: <FaYoutube size={24} color={domainColors.Youtube} />,
-      tooltip: youtubeToken
+      tooltip: youtubeAccessToken
         ? (feedProps.enableYoutube ? 'Disable ' : 'Enable ') + ` Twitch feed`
         : `Need to connect/authenticate with a Youtube account first.`,
     },
     {
       serviceName: 'TwitchVods',
       icon: <MdVideocam size={24} color={domainColors.Twitch} />,
-      tooltip: twitchToken
+      tooltip: twitchAccessToken
         ? (feedProps.enableTwitchVods ? 'Disable ' : 'Enable ') + ` Twitch feed`
         : `Need to connect/authenticate with a Twitch account first.`,
-      tokenExists: twitchToken,
+      tokenExists: twitchAccessToken,
     },
     {
       serviceName: 'Favorites',
@@ -123,7 +134,7 @@ const SidebarAccount = () => {
       enabled: autoRefreshEnabled,
       label: 'Twitch auto-refresh (25s)',
       serviceName: 'Twitch',
-      tooltip: twitchToken
+      tooltip: twitchAccessToken
         ? (autoRefreshEnabled ? 'Disable ' : 'Enable ') + `Twitch auto refresh`
         : `Need to connect/authenticate with a Twitch account first.`,
       icon: <MdAutorenew size={18} color={domainColors.Twitch} />,
@@ -133,7 +144,7 @@ const SidebarAccount = () => {
       enabled: showTwitchSidebar,
       label: 'Twitch sidebar',
       serviceName: 'Twitch',
-      tooltip: twitchToken
+      tooltip: twitchAccessToken
         ? (showTwitchSidebar ? 'Hide ' : 'Show ') + `Twitch Sidebar`
         : `Need to connect/authenticate with a Twitch account first.`,
 
@@ -144,7 +155,7 @@ const SidebarAccount = () => {
       enabled: isEnabledUpdateNotifications,
       label: 'Twitch update notifications',
       serviceName: 'Twitch',
-      tooltip: twitchToken
+      tooltip: twitchAccessToken
         ? (isEnabledUpdateNotifications ? 'Disable ' : 'Enable ') +
           `notifications for when streams title or game changes`
         : `Need to connect/authenticate with a Twitch account first.`,
@@ -156,7 +167,7 @@ const SidebarAccount = () => {
       enabled: isEnabledOfflineNotifications,
       label: 'Twitch offline notifications',
       serviceName: 'Twitch',
-      tooltip: twitchToken
+      tooltip: twitchAccessToken
         ? (isEnabledOfflineNotifications ? 'Disable ' : 'Enable ') +
           `notifications for when streams go offline`
         : `Need to connect/authenticate with a Twitch account first.`,
@@ -168,7 +179,7 @@ const SidebarAccount = () => {
       enabled: twitchVideoHoverEnable,
       label: 'Twitch hover-video',
       serviceName: 'Twitch',
-      tooltip: twitchToken
+      tooltip: twitchAccessToken
         ? (twitchVideoHoverEnable ? 'Disable ' : 'Enable ') + `live video preview on hover`
         : `Need to connect/authenticate with a Youtube account first.`,
 
@@ -180,7 +191,7 @@ const SidebarAccount = () => {
       enabled: youtubeVideoHoverEnable,
       label: 'Youtube hover-video',
       serviceName: 'Youtube',
-      tooltip: youtubeToken
+      tooltip: youtubeAccessToken
         ? (youtubeVideoHoverEnable ? 'Disable ' : 'Enable ') + `video on hover`
         : `Need to connect/authenticate with a Youtube account first.`,
       icon: <FaRegWindowRestore size={18} />,
@@ -191,7 +202,7 @@ const SidebarAccount = () => {
       enabled: enableVodVolumeOverlay,
       label: 'Twitch vod volume overlay',
       serviceName: 'Twitch',
-      tooltip: twitchToken
+      tooltip: twitchAccessToken
         ? (enableVodVolumeOverlay ? 'Disable ' : 'Enable ') + `vod volume-overlay`
         : `Need to connect/authenticate with a Youtube account first.`,
       icon: <MdCrop169 size={18} />,
@@ -247,13 +258,16 @@ const SidebarAccount = () => {
         <br />
         <ReAuthenticateButton
           disconnect={() =>
-            disconnectTwitch({ setTwitchToken, setEnableTwitch: feedProps.setEnableTwitch })
+            disconnectTwitch({ setTwitchAccessToken, setEnableTwitch: feedProps.setEnableTwitch })
           }
           serviceName='Twitch'
         />
         <ReAuthenticateButton
           disconnect={() =>
-            disconnectYoutube({ setYoutubeToken, setEnableYoutube: feedProps.setEnableYoutube })
+            disconnectYoutube({
+              setYoutubeAccessToken,
+              setEnableYoutube: feedProps.setEnableYoutube,
+            })
           }
           serviceName='Youtube'
         />

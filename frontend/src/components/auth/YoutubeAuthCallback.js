@@ -8,11 +8,14 @@ import AccountContext from './../account/AccountContext';
 import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from '../LoadingIndicator';
 import API from '../navigation/API';
+import { YoutubeContext } from '../youtube/useToken';
 
 const YoutubeAuthCallback = () => {
   const { setVisible, setFooterVisible } = useContext(NavigationContext);
   const [error, setError] = useState();
   const { username } = useContext(AccountContext);
+  const { setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage } =
+    useContext(YoutubeContext);
   const location = useLocation();
 
   const getAccessToken = useCallback(async () => {
@@ -30,8 +33,7 @@ const YoutubeAuthCallback = () => {
       .replace('code=', '');
 
     const tokens = await API.getYoutubeTokens(codeFromUrl).then(async (res) => {
-      AddCookie('Youtube-access_token', res.data.access_token);
-      AddCookie('Youtube-access_token_expire', res.data.expires_in);
+      setYoutubeAccessToken(res.data.access_token);
       return res;
     });
 
@@ -46,8 +48,8 @@ const YoutubeAuthCallback = () => {
         }
       )
       .then((res) => {
-        AddCookie('YoutubeUsername', res.data.items[0].snippet.title);
-        AddCookie('YoutubeProfileImg', res.data.items[0].snippet.thumbnails.default.url);
+        setYoutubeUsername(res.data.items[0].snippet.title);
+        setYoutubeProfileImage(res.data.items[0].snippet.thumbnails.default.url);
 
         return {
           Username: res.data.items[0].snippet.title,
@@ -65,7 +67,13 @@ const YoutubeAuthCallback = () => {
     }
 
     return { access_token: tokens.access_token, refresh_token: tokens.refresh_token, ...MyYoutube };
-  }, [username, location.search]);
+  }, [
+    username,
+    location.search,
+    setYoutubeAccessToken,
+    setYoutubeUsername,
+    setYoutubeProfileImage,
+  ]);
 
   useEffect(() => {
     setVisible(false);

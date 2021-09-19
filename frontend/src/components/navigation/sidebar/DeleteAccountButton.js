@@ -13,6 +13,8 @@ import ClearAllAccountCookiesStates from './ClearAllAccountCookiesStates';
 import LoadingIndicator from './../../LoadingIndicator';
 import API from '../API';
 import { toast } from 'react-toastify';
+import { TwitchContext } from '../../twitch/useToken';
+import { YoutubeContext } from '../../youtube/useToken';
 
 const DeleteAccountButton = () => {
   const { username, setUsername, setProfileImage, setAuthKey, setEmail, authKey } =
@@ -20,6 +22,15 @@ const DeleteAccountButton = () => {
   const [show, setShow] = useState(false);
   const [validated, setValidated] = useState(false);
   const { setRenderModal } = useContext(NavigationContext);
+  const {
+    setTwitchAccessToken,
+    setTwitchRefreshToken,
+    setTwitchUserId,
+    setTwitchUsername,
+    setTwitchProfileImage,
+  } = useContext(TwitchContext);
+  const { setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage } =
+    useContext(YoutubeContext);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -32,7 +43,20 @@ const DeleteAccountButton = () => {
       await API.deleteAccount(account, password, authKey)
         .then((res) => {
           if (res) {
-            ClearAllAccountCookiesStates({ setUsername, setProfileImage, setAuthKey, setEmail });
+            ClearAllAccountCookiesStates({
+              setUsername,
+              setProfileImage,
+              setAuthKey,
+              setEmail,
+              setTwitchAccessToken,
+              setTwitchRefreshToken,
+              setTwitchUserId,
+              setTwitchUsername,
+              setTwitchProfileImage,
+              setYoutubeAccessToken,
+              setYoutubeUsername,
+              setYoutubeProfileImage,
+            });
 
             setRenderModal('create');
             toast.success('Account successfully deleted');

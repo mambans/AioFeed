@@ -4,7 +4,7 @@ import AccountContext from '../account/AccountContext';
 import AlertHandler from '../alert';
 import getMyFollowedChannels from './getMyFollowedChannels';
 import GetSubscriptionVideos from './GetSubscriptionVideos';
-import useToken from './useToken';
+import useToken, { YoutubeContext } from './useToken';
 
 const Datahandler = ({ children }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -12,7 +12,8 @@ const Datahandler = ({ children }) => {
   const [requestError, setRequestError] = useState();
   const followedChannels = useRef();
   const [videos, setVideos] = useState([]);
-  const { youtubeToken, authKey } = useContext(AccountContext);
+  const { authKey } = useContext(AccountContext);
+  const { youtubeAccessToken } = useContext(YoutubeContext);
   const validateToken = useToken();
 
   const refresh = useCallback(async () => {
@@ -43,7 +44,7 @@ const Datahandler = ({ children }) => {
     refresh().catch((e) => setError(e));
   }, [refresh]);
 
-  if (!youtubeToken) {
+  if (!youtubeAccessToken) {
     return (
       <AlertHandler
         title="Couldn't load Youtube feed"

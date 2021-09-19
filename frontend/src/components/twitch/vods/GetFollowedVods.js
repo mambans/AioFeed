@@ -37,7 +37,11 @@ const monitoredChannelNameToId = async (followedChannels, followedVodEnabledChan
   return { data: [...vodChannelIds, ...vodChannelsIdsWithoutLiveFollow], error: error };
 };
 
-const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRefreshToken) => {
+const fetchVodsFromMonitoredChannels = async (
+  vodChannels,
+  setTwitchAccessToken,
+  setRefreshToken
+) => {
   let followedStreamVods = [];
 
   const PromiseAllVods = await Promise.all(
@@ -51,31 +55,33 @@ const fetchVodsFromMonitoredChannels = async (vodChannels, setTwitchToken, setRe
         }).then((response) => response.data.data)
     )
   ).catch(async () => {
-    return await reauthenticate(setTwitchToken, setRefreshToken).then(async (access_token) => {
-      const channelFetchedVods = [...new Set(followedStreamVods.map((vod) => vod.user_id))];
+    return await reauthenticate(setTwitchAccessToken, setRefreshToken).then(
+      async (access_token) => {
+        const channelFetchedVods = [...new Set(followedStreamVods.map((vod) => vod.user_id))];
 
-      const channelsIdsUnfetchedVods = await vodChannels.filter(
-        (channel) => !channelFetchedVods?.includes(channel)
-      );
+        const channelsIdsUnfetchedVods = await vodChannels.filter(
+          (channel) => !channelFetchedVods?.includes(channel)
+        );
 
-      return await Promise.all(
-        channelsIdsUnfetchedVods.map(
-          async (channel) =>
-            await TwitchAPI.getVideos({
-              user_id: channel,
-              period: 'month',
-              first: 5,
-              type: 'all',
-            }).then((response) => response.data.data)
-        )
-      );
-    });
+        return await Promise.all(
+          channelsIdsUnfetchedVods.map(
+            async (channel) =>
+              await TwitchAPI.getVideos({
+                user_id: channel,
+                period: 'month',
+                first: 5,
+                type: 'all',
+              }).then((response) => response.data.data)
+          )
+        );
+      }
+    );
   });
 
   return PromiseAllVods.flat(1);
 };
 
-const getFollowedVods = async ({ forceRun, setRefreshToken, setTwitchToken, channels }) => {
+const getFollowedVods = async ({ forceRun, setRefreshToken, setTwitchAccessToken, channels }) => {
   const vodExpire = 3; // Number of hours
   const cachedVods = getLocalstorage(`Vods`);
 
@@ -103,7 +109,7 @@ const getFollowedVods = async ({ forceRun, setRefreshToken, setTwitchToken, chan
 
         const followedStreamVods = await fetchVodsFromMonitoredChannels(
           vodChannels.data,
-          setTwitchToken,
+          setTwitchAccessToken,
           setRefreshToken
         );
 

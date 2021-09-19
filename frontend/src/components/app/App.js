@@ -13,8 +13,8 @@ import CookieConsentAlert from './CookieConsentAlert';
 import Routes from '../routes';
 import ThemeContext from './../themes/ThemeContext';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
-import { TwitchProvider } from '../twitch/useToken';
-import { YoutubeProvider } from '../youtube/useToken';
+import { TwitchContext, TwitchProvider } from '../twitch/useToken';
+import { YoutubeContext, YoutubeProvider } from '../youtube/useToken';
 import { VodsProvider } from '../twitch/vods/VodsContext';
 import API from '../navigation/API';
 
@@ -58,21 +58,18 @@ const AppRoutesContainer = () => {
 
 const App = () => {
   const { activeTheme } = useContext(ThemeContext);
-  const {
-    username,
-    setAuthKey,
-    setUsername,
-    setEmail,
-    setProfileImage,
-    setTwitchToken,
-    setYoutubeToken,
-    setRefreshToken,
-    setYoutubeUsername,
-    setYoutubeProfileImg,
-    setTwitchUsername,
-    setTwitchProfileImg,
-  } = useContext(AccountContext);
+  const { username, setAuthKey, setUsername, setEmail, setProfileImage } =
+    useContext(AccountContext);
   const { setEnableTwitch, setEnableYoutube } = useContext(FeedsContext);
+  const {
+    setTwitchAccessToken,
+    setTwitchRefreshToken,
+    setTwitchUserId,
+    setTwitchUsername,
+    setTwitchProfileImage,
+  } = useContext(TwitchContext);
+  const { setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage } =
+    useContext(YoutubeContext);
 
   useEffect(() => {
     (async () => {
@@ -95,15 +92,17 @@ const App = () => {
   function receiveMessage(e) {
     if (e.origin.startsWith('https://aiofeed.com') && e.data?.token && e.data?.service) {
       if (e.data.service === 'twitch') {
-        setTwitchToken(e.data.token);
-        setRefreshToken(e.data.refresh_token);
+        setTwitchAccessToken(e.data.token);
+        setTwitchRefreshToken(e.data.refresh_token);
         setTwitchUsername(e.data.username);
-        setTwitchProfileImg(e.data.profileImg);
+        setTwitchUserId(e.data.userId);
+        setTwitchProfileImage(e.data.profileImg);
+
         setEnableTwitch(true);
       } else if (e.data.service === 'youtube') {
-        if (e.data.token) setYoutubeToken(e.data.token);
+        if (e.data.token) setYoutubeAccessToken(e.data.token);
         if (e.data.username) setYoutubeUsername(e.data.username);
-        if (e.data.profileImg) setYoutubeProfileImg(e.data.profileImg);
+        if (e.data.profileImg) setYoutubeProfileImage(e.data.profileImg);
         setEnableYoutube(true);
       }
     }

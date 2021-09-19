@@ -8,7 +8,6 @@ import VodElement from './VodElement';
 import LoadMore from './../../sharedComponents/LoadMore';
 import { SubFeedContainer } from './../../sharedComponents/sharedStyledComponents';
 import Header from './Header';
-import AccountContext from './../../account/AccountContext';
 import VodsContext from './VodsContext';
 import LoadingBoxes from './../LoadingBoxes';
 import FeedsContext from '../../feed/FeedsContext';
@@ -31,10 +30,10 @@ const VodsStandalone = () => {
 
 export const Vods = ({ className }) => {
   const { vods, setVods, channels } = useContext(VodsContext);
-  const { twitchUserId, setTwitchToken, setRefreshToken } = useContext(AccountContext);
   const { setEnableTwitchVods } = useContext(FeedsContext) || {};
   const { videoElementsAmount } = useContext(CenterContext);
-  const { twitchAccessToken } = useContext(TwitchContext);
+  const { twitchAccessToken, setTwitchAccessToken, setTwitchRefreshToken, twitchUserId } =
+    useContext(TwitchContext);
   const [error, setError] = useState(null);
   const [order, setOrder] = useState(getLocalstorage('FeedOrders')?.['Vods'] ?? 27);
   const [vodError, setVodError] = useState(null);
@@ -52,8 +51,8 @@ export const Vods = ({ className }) => {
       refreshBtnRef.current.setIsLoading(true);
       getFollowedVods({
         forceRun: forceRefresh,
-        setRefreshToken,
-        setTwitchToken,
+        setTwitchRefreshToken,
+        setTwitchAccessToken,
         channels,
       })
         .then((data) => {
@@ -71,7 +70,7 @@ export const Vods = ({ className }) => {
           setVods(data.videos);
         });
     },
-    [setTwitchToken, setRefreshToken, setVods, channels]
+    [setTwitchAccessToken, setTwitchRefreshToken, setVods, channels]
   );
 
   async function windowFocusHandler() {
@@ -83,8 +82,8 @@ export const Vods = ({ className }) => {
       refreshBtnRef.current.setIsLoading(true);
       getFollowedVods({
         forceRun: false,
-        setRefreshToken,
-        setTwitchToken,
+        setTwitchRefreshToken,
+        setTwitchAccessToken,
         channels,
       })
         .then((data) => {
@@ -102,7 +101,7 @@ export const Vods = ({ className }) => {
           setVods(data.videos);
         });
     })();
-  }, [twitchUserId, setTwitchToken, setRefreshToken, setVods, channels]);
+  }, [twitchUserId, setTwitchAccessToken, setTwitchRefreshToken, setVods, channels]);
 
   useEffect(() => {
     setVodAmounts({

@@ -2,7 +2,6 @@ import { Form, Button } from 'react-bootstrap';
 import React, { useState, useContext } from 'react';
 import { toast } from 'react-toastify';
 
-import { AddCookie } from '../../../util';
 import { StyledCreateFormTitle, StyledCreateForm } from './StyledComponents';
 import AccountContext from './../../account/AccountContext';
 import LoadingIndicator from './../../LoadingIndicator';
@@ -14,6 +13,7 @@ import VodsContext from '../../twitch/vods/VodsContext';
 import API from '../API';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import { TwitchContext } from '../../twitch/useToken';
+import { YoutubeContext } from '../../youtube/useToken';
 
 const Login = () => {
   useDocumentTitle('Login');
@@ -27,18 +27,12 @@ const Login = () => {
     setTwitchAccessToken,
     setTwitchRefreshToken,
     setTwitchUserId,
-    setTitchUsername,
+    setTwitchUsername,
     setTwitchProfileImage,
   } = useContext(TwitchContext);
-  const {
-    setUsername,
-    setProfileImage,
-    setAuthKey,
-    setTwitchPreferences,
-    setYoutubeToken,
-    setYoutubeUsername,
-    setYoutubeProfileImg,
-  } = useContext(AccountContext);
+  const { setUsername, setProfileImage, setAuthKey, setEmail } = useContext(AccountContext);
+  const { setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage } =
+    useContext(YoutubeContext);
 
   // eslint-disable-next-line no-unused-vars
   const { value: username, bind: bindUsername, reset: resetUsername } = useInput('');
@@ -65,11 +59,6 @@ const Login = () => {
         const res = result.data.Attributes;
         if (result.status === 200 && res) {
           if (res.TwitchPreferences && Object.keys(res.TwitchPreferences).length >= 1) {
-            setTitchUsername(res.TwitchPreferences.Username);
-            setTwitchUserId(res.TwitchPreferences.Id);
-            setTwitchProfileImage(res.TwitchPreferences.Profile);
-            setTwitchAccessToken(res.TwitchPreferences.Token);
-            setTwitchRefreshToken(res.TwitchPreferences.Refresh_token);
             localStorage.setItem(
               'ChannelsUpdateNotifs',
               JSON.stringify(res.TwitchPreferences.ChannelsUpdateNotifs)
@@ -85,24 +74,24 @@ const Login = () => {
             localStorage.setItem('Twitter-Lists', JSON.stringify(res.TwitterPreferences.Lists));
           }
 
-          if (res.YoutubePreferences && Object.keys(res.YoutubePreferences).length >= 1) {
-            AddCookie('YoutubeUsername', res.YoutubePreferences.Username);
-            AddCookie('YoutubeProfileImg', res.YoutubePreferences.Profile);
-            AddCookie('Youtube-access_token', res.YoutubePreferences.Token);
-          }
-
           setTimeout(() => {
             setUsername(res.Username);
             setProfileImage(res.ProfileImg);
             setAuthKey(res.AuthKey);
+            setEmail(res.Email);
+
             if (res.TwitchPreferences && Object.keys(res.TwitchPreferences).length >= 1) {
-              setTwitchPreferences(res.TwitchPreferences);
+              setTwitchUsername(res.TwitchPreferences.Username);
+              setTwitchUserId(res.TwitchPreferences.Id);
+              setTwitchProfileImage(res.TwitchPreferences.Profile);
+              setTwitchAccessToken(res.TwitchPreferences.Token);
+              setTwitchRefreshToken(res.TwitchPreferences.Refresh_token);
             }
 
             if (res.YoutubePreferences && Object.keys(res.YoutubePreferences).length >= 1) {
               setYoutubeUsername(res.YoutubePreferences.Username);
-              setYoutubeProfileImg(res.YoutubePreferences.Profile);
-              setYoutubeToken(res.YoutubePreferences.Token);
+              setYoutubeProfileImage(res.YoutubePreferences.Profile);
+              setYoutubeAccessToken(res.YoutubePreferences.Token);
             }
 
             if (res.TwitterPreferences && Object.keys(res.TwitterPreferences).length >= 1) {

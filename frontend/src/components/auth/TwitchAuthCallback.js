@@ -16,7 +16,7 @@ const TwitchAuthCallback = () => {
     setTwitchAccessToken,
     setTwitchRefreshToken,
     setTwitchUserId,
-    setTitchUsername,
+    setTwitchUsername,
     setTwitchProfileImage,
   } = useContext(TwitchContext);
   const { username } = useContext(AccountContext);
@@ -35,7 +35,7 @@ const TwitchAuthCallback = () => {
 
       const MyTwitch = await TwitchAPI.getMe({ accessToken: accessToken }).then(async (res) => {
         setTwitchUserId(res.data.data[0].id);
-        setTitchUsername(res.data.data[0].login);
+        setTwitchUsername(res.data.data[0].login);
         setTwitchProfileImage(res.data.data[0].profile_image_url);
 
         if (username) {
@@ -53,6 +53,7 @@ const TwitchAuthCallback = () => {
         return {
           Username: res.data.data[0].login,
           ProfileImg: res.data.data[0].profile_image_url,
+          userId: res.data.data[0].id,
         };
       });
 
@@ -64,7 +65,7 @@ const TwitchAuthCallback = () => {
       setTwitchAccessToken,
       setTwitchRefreshToken,
       setTwitchUserId,
-      setTitchUsername,
+      setTwitchUsername,
       setTwitchProfileImage,
     ]
   );
@@ -87,6 +88,7 @@ const TwitchAuthCallback = () => {
                     refresh_token: res.refresh_token,
                     username: res.Username,
                     profileImg: res.ProfileImg,
+                    userId: res.userId,
                   },
                   '*'
                 );

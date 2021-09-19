@@ -2,7 +2,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { MdMovieCreation, MdLiveTv } from 'react-icons/md';
 import { useParams, useLocation } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
-import React, { useEffect, useState, useCallback, useRef, useContext } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 
 import LoadMore from './../../sharedComponents/LoadMore';
 import Header from './../../sharedComponents/Header';
@@ -17,7 +17,6 @@ import SortButton from './../channelPage/SortButton';
 import StreamEle from './../live/StreamElement';
 import ClipElement from './../channelPage/ClipElement';
 import VodElement from './../vods/VodElement';
-import AccountContext from '../../account/AccountContext';
 import useQuery from '../../../hooks/useQuery';
 import TwitchAPI from '../API';
 import TypeButton from './TypeButton';
@@ -39,8 +38,6 @@ const TopStreams = () => {
   const [sortByTime, setSortByTime] = useState(
     parseInt(URLQueries.get('within')?.toLowerCase()) || null
   );
-  // eslint-disable-next-line no-unused-vars
-  const { twitchToken } = useContext(AccountContext);
   const oldTopData = useRef();
   const refreshBtnRef = useRef();
   useDocumentTitle(
