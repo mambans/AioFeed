@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { FaAngleDown } from 'react-icons/fa';
 
 import { PortalWithState } from 'react-portal';
+import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 
 const StyledDropdownContainer = styled.div`
   position: fixed;
@@ -24,23 +25,32 @@ const StyledDropdownContainer = styled.div`
     svg {
       margin-right: 5px;
     }
+
+    &:hover {
+      background: rgba(50, 50, 50, 0.7);
+      color: #ffffff;
+    }
   }
 `;
 
 const DropDownTrigger = styled.div`
   width: max-content;
   font-size: 1.15rem;
+  cursor: pointer;
+  user-select: none;
 
   svg {
     transition: transform 250ms;
-    transform: ${({ isOpen }) => (isOpen ? 'rotate(90deg)' : 'rotate(0deg)')};
+    transform: ${({ isOpen }) => (isOpen ? 'rotate(0deg)' : 'rotate(90deg)')};
   }
 `;
 
-const DropdownContainer = ({ triggerRef, onClick, children }) => {
+const DropdownContainer = ({ triggerRef, close, children }) => {
   const [selfOffets, setSelfOffsets] = useState();
   const [triggerOffset, setTriggerOffset] = useState();
   const ref = useRef();
+
+  useEventListenerMemo('blur', close);
 
   useEffect(() => {
     setSelfOffsets(ref.current?.getBoundingClientRect());
@@ -52,7 +62,7 @@ const DropdownContainer = ({ triggerRef, onClick, children }) => {
       ref={ref}
       triggerOffset={triggerOffset}
       selfOffets={selfOffets}
-      onClick={onClick}
+      onClick={close}
     >
       {children}
     </StyledDropdownContainer>
@@ -80,7 +90,7 @@ const DropDown = ({ title, children }) => {
             <FaAngleDown size={20} />
           </DropDownTrigger>
           {portal(
-            <DropdownContainer triggerRef={triggerRef} onClick={closePortal}>
+            <DropdownContainer triggerRef={triggerRef} close={closePortal}>
               {children}
             </DropdownContainer>
           )}
