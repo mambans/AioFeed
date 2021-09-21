@@ -7,16 +7,18 @@ import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 
 const StyledDropdownContainer = styled.div`
   position: fixed;
-  left: ${({ triggerOffset, selfOffets }) =>
-    triggerOffset?.left - (selfOffets?.width - triggerOffset?.width) / 2}px;
+  left: ${({ triggerOffset, selfOffets }) => triggerOffset?.left}px;
   top: ${({ triggerOffset }) => triggerOffset?.bottom}px;
   background: var(--navigationbarBackground);
   border-radius: 10px;
   z-index: 2;
   padding-top: 8px;
+  width: ${({ triggerOffset }) => triggerOffset?.width}px;
 
   a {
     color: var(--navTextColor);
+    /* padding-left: 25px;
+    padding-right: 25px; */
 
     &:last-child {
       border-radius: 0 0 10px 10px;
@@ -38,6 +40,7 @@ const DropDownTrigger = styled.div`
   font-size: 1.15rem;
   cursor: pointer;
   user-select: none;
+  outline: none;
 
   svg {
     transition: transform 250ms;
@@ -75,12 +78,26 @@ const DropDown = ({ title, children }) => {
   return (
     <PortalWithState closeOnOutsideClick closeOnEsc>
       {({ openPortal, closePortal, isOpen, portal }) => (
-        <>
+        <div
+          onMouseEnter={(e) => {
+            triggerRef.current.focus();
+            openPortal(e);
+          }}
+          onMouseLeave={(e) => {
+            closePortal(e);
+            triggerRef.current.blur();
+          }}
+          tabIndex='5'
+        >
           <DropDownTrigger
             className='nav-link'
             onClick={(e) => {
+              if (isOpen) {
+                closePortal(e);
+                triggerRef.current.blur();
+                return;
+              }
               openPortal(e);
-              isOpen && triggerRef.current.blur();
             }}
             ref={triggerRef}
             isOpen={isOpen}
@@ -90,11 +107,18 @@ const DropDown = ({ title, children }) => {
             <FaAngleDown size={20} />
           </DropDownTrigger>
           {portal(
-            <DropdownContainer triggerRef={triggerRef} close={closePortal}>
+            <DropdownContainer
+              triggerRef={triggerRef}
+              close={closePortal}
+              onMouseEnter={(e) => {
+                triggerRef.current.focus();
+                openPortal(e);
+              }}
+            >
               {children}
             </DropdownContainer>
           )}
-        </>
+        </div>
       )}
     </PortalWithState>
   );
