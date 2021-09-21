@@ -183,10 +183,10 @@ export const AddedItemBtn = styled(MdPlaylistAddCheck)`
 
 export const RemoveItemBtn = styled(CgPlayListRemove)`
   transition: color 250ms;
-  color: rgb(150, 50, 50);
+  color: rgb(100, 100, 100);
 
   &:hover {
-    color: rgb(100, 100, 100);
+    color: rgb(150, 20, 30);
   }
 `;
 

@@ -61,8 +61,8 @@ export const AddRemoveBtn = ({
   setLists,
   size = 18,
   style,
-  onMouseEnter,
-  onMouseLeave,
+  onMouseEnter = () => {},
+  onMouseLeave = () => {},
   redirect,
   setListName = () => {},
 }) => {
@@ -72,12 +72,12 @@ export const AddRemoveBtn = ({
 
   // const navigate = useNavigate();
 
-  const mouseEnter = () => {
-    onMouseEnter();
+  const mouseEnter = (e) => {
+    onMouseEnter(e);
     setIsHovered(true);
   };
-  const mouseLeave = () => {
-    onMouseLeave();
+  const mouseLeave = (e) => {
+    onMouseLeave(e);
     setIsHovered(null);
   };
 
@@ -131,7 +131,7 @@ const AddToListModal = ({ OpenFunction, CloseFunction, videoId, redirect, setLis
   return (
     <Lists onMouseEnter={OpenFunction} ref={listRef}>
       <ListsLink>
-        <Link to='/saved'>Lists</Link>
+        <Link to='/mylists'>Lists</Link>
       </ListsLink>
       {lists &&
         Object?.values(lists).map((list) => (
