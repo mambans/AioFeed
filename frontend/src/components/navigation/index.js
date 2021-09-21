@@ -4,7 +4,8 @@ import { NavLink } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
 import { FaAngleRight, FaAngleLeft, FaTwitch, FaYoutube } from 'react-icons/fa';
-import { MdVideocam, MdStar } from 'react-icons/md';
+import { MdVideocam } from 'react-icons/md';
+import { BsList } from 'react-icons/bs';
 import { NavDropdown } from 'react-bootstrap';
 
 import RenderNotifications from './../notifications';
@@ -101,7 +102,7 @@ const Navigation = () => {
             </Nav.Link>
             <DropDown title='Individual Feeds'>
               <NavDropdown.Item as={NavLink} to='/favorites'>
-                <MdStar size={16} color='rgb(255,255,0)' />
+                <BsList size={16} color='var(--listColorAdd)' />
                 Favorites
               </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to='/live'>

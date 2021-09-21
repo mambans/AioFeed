@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Button, Form } from 'react-bootstrap';
-import { MdStar, MdStarBorder } from 'react-icons/md';
+import { MdPlaylistAdd, MdPlaylistAddCheck } from 'react-icons/md';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 
 export const VideosContainer = styled.div`
@@ -9,22 +9,22 @@ export const VideosContainer = styled.div`
   min-height: 307px;
 `;
 
-export const Open = styled(MdStar)`
-  position: absolute;
-  right: 5px;
-  top: 5px;
-  /* color: ${({ open }) => (open ? 'rgb(255,255,0)' : 'rgb(200,200,200)')}; */
-  color: rgb(200, 200, 200);
-  transform: ${({ open }) => (open ? 'scale(1.2)' : 'unset')};
-  z-index: 4;
-  cursor: pointer;
-  transition: color 250ms, transform 250ms;
+// export const Open = styled(MdStar)`
+//   position: absolute;
+//   right: 5px;
+//   top: 5px;
+//   /* color: ${({ open }) => (open ? 'rgb(255,255,0)' : 'rgb(200,200,200)')}; */
+//   color: rgb(200, 200, 200);
+//   transform: ${({ open }) => (open ? 'scale(1.2)' : 'unset')};
+//   z-index: 4;
+//   cursor: pointer;
+//   transition: color 250ms, transform 250ms;
 
-  &:hover {
-    color: ${({ open }) => (open ? 'rgb(200,200,200)' : 'rgb(255,255,0)')};
-    transform: scale(1.2);
-  }
-`;
+//   &:hover {
+//     color: ${({ open }) => (open ? 'rgb(200,200,200)' : 'rgb(255,255,0)')};
+//     transform: scale(1.2);
+//   }
+// `;
 
 export const Close = styled(IoIosCloseCircleOutline)`
   position: absolute;
@@ -163,17 +163,17 @@ export const ButtonContainer = styled.div`
   }
 `;
 
-export const AddItemBtn = styled(MdStarBorder)`
+export const AddItemBtn = styled(MdPlaylistAdd)`
   transition: color 250ms;
 
   &:hover {
-    color: rgb(255, 255, 0);
+    color: var(--listColorAdd);
   }
 `;
 
-export const RemoveItemBtn = styled(MdStar)`
+export const RemoveItemBtn = styled(MdPlaylistAddCheck)`
   transition: color 250ms;
-  color: rgb(255, 255, 0);
+  color: var(--listColorAdd)
 
   &:hover {
     color: rgb(100, 100, 100);
@@ -233,7 +233,7 @@ export const IconContainer = styled.div`
     }
 
     .add {
-      color: rgb(255, 255, 0);
+      color: var(--listColorAdd);
     }
 
     .remove {

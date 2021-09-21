@@ -1,11 +1,12 @@
 import { Button } from 'react-bootstrap';
 import { GoSignOut } from 'react-icons/go';
 import React, { useContext, useEffect } from 'react';
-import { MdVideocam, MdAutorenew, MdStar, MdCrop169 } from 'react-icons/md';
+import { MdVideocam, MdAutorenew, MdCrop169 } from 'react-icons/md';
 import { FaTwitch, FaYoutube, FaTwitter, FaRegWindowRestore } from 'react-icons/fa';
 import { FiSidebar } from 'react-icons/fi';
 import { TiFlash } from 'react-icons/ti';
 import { AiOutlineDisconnect } from 'react-icons/ai';
+import { BsList } from 'react-icons/bs';
 
 import AccountContext from './../../account/AccountContext';
 import ClearAllAccountCookiesStates from './ClearAllAccountCookiesStates';
@@ -87,7 +88,7 @@ const SidebarAccount = () => {
   const domainColors = {
     Twitch: 'rgb(169, 112, 255)',
     Youtube: 'rgb(255, 0, 0)',
-    Favorites: 'rgb(255,255,0)',
+    Favorites: 'var(--listColorAdd)',
     Twitter: 'rgb(29, 161, 242)',
   };
 
@@ -123,7 +124,7 @@ const SidebarAccount = () => {
     },
     {
       serviceName: 'Favorites',
-      icon: <MdStar size={24} color={domainColors.Favorites} />,
+      icon: <BsList size={24} color={domainColors.Favorites} />,
       tooltip: (feedProps.enableFavorites ? 'Disable ' : 'Enable ') + ` Favorites feed`,
     },
   ];
