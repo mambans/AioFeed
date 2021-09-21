@@ -2,11 +2,11 @@ import React, { useContext } from 'react';
 import { MdDeleteForever } from 'react-icons/md';
 
 import { ListActionButton } from './StyledComponents';
-import FavoritesContext from './FavoritesContext';
+import MyListsContext from './MyListsContext';
 import API from '../navigation/API';
 
 const DeleteListBtn = ({ list, style, children }) => {
-  const { setLists } = useContext(FavoritesContext);
+  const { setLists } = useContext(MyListsContext);
   const deleteList = async () => {
     const confirmed = window.confirm(`Delete list ${list.name}?`);
     if (!confirmed) return false;

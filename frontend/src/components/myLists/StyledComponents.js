@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Button, Form } from 'react-bootstrap';
 import { MdPlaylistAdd, MdPlaylistAddCheck } from 'react-icons/md';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
+import { CgPlayListRemove } from 'react-icons/cg';
 
 export const VideosContainer = styled.div`
   display: flex;
@@ -171,9 +172,18 @@ export const AddItemBtn = styled(MdPlaylistAdd)`
   }
 `;
 
-export const RemoveItemBtn = styled(MdPlaylistAddCheck)`
+export const AddedItemBtn = styled(MdPlaylistAddCheck)`
   transition: color 250ms;
-  color: var(--listColorAdd)
+  color: var(--listColorAdd);
+
+  &:hover {
+    color: rgb(100, 100, 100);
+  }
+`;
+
+export const RemoveItemBtn = styled(CgPlayListRemove)`
+  transition: color 250ms;
+  color: rgb(150, 50, 50);
 
   &:hover {
     color: rgb(100, 100, 100);

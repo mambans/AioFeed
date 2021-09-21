@@ -5,7 +5,7 @@ import FeedsContext from '../../feed/FeedsContext';
 import { StyledFeedSizeSlider } from '../StyledComponents';
 
 const FeedSizeSlider = () => {
-  const { setFeedSize, feedSize, enableTwitch, enableTwitchVods, enableYoutube, enableFavorites } =
+  const { setFeedSize, feedSize, enableTwitch, enableTwitchVods, enableYoutube, enableMyLists } =
     useContext(FeedsContext) || {};
   const [sizeValue, setSizeValue] = useState(feedSize);
 
@@ -19,7 +19,7 @@ const FeedSizeSlider = () => {
     delayedHandleChange(v.target.value);
   };
 
-  if (enableTwitch || enableTwitchVods || enableYoutube || enableFavorites) {
+  if (enableTwitch || enableTwitchVods || enableYoutube || enableMyLists) {
     return (
       <StyledFeedSizeSlider>
         {`Feed video size: ${sizeValue}`}

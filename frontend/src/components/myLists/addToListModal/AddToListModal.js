@@ -1,13 +1,14 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import FavoritesContext from './../FavoritesContext';
+import MyListsContext from './../MyListsContext';
 import {
   Lists,
   ListItem,
   ListsLink,
   AddItemBtn,
   RemoveItemBtn,
+  AddedItemBtn,
   IconContainer,
 } from './../StyledComponents';
 import useClicksOutside from '../../../hooks/useClicksOutside';
@@ -65,9 +66,20 @@ export const AddRemoveBtn = ({
   redirect,
   setListName = () => {},
 }) => {
-  // const { lists, setLists } = useContext(FavoritesContext);
+  // const { lists, setLists } = useContext(MyListsContext);
   const videoAdded = list && list?.items?.includes(parseNumberAndString(videoId));
+  const [isHovered, setIsHovered] = useState();
+
   // const navigate = useNavigate();
+
+  const mouseEnter = () => {
+    onMouseEnter();
+    setIsHovered(true);
+  };
+  const mouseLeave = () => {
+    onMouseLeave();
+    setIsHovered(null);
+  };
 
   if (videoAdded)
     return (
@@ -81,10 +93,10 @@ export const AddRemoveBtn = ({
           );
         }}
         style={style}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
+        onMouseEnter={mouseEnter}
+        onMouseLeave={mouseLeave}
       >
-        <RemoveItemBtn size={size} />
+        {isHovered ? <RemoveItemBtn size={size} /> : <AddedItemBtn size={size} />}
       </IconContainer>
     );
 
@@ -102,8 +114,8 @@ export const AddRemoveBtn = ({
         }
       }}
       style={style}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
+      onMouseEnter={mouseEnter}
+      onMouseLeave={mouseLeave}
     >
       <AddItemBtn size={size} />
     </IconContainer>
@@ -111,7 +123,7 @@ export const AddRemoveBtn = ({
 };
 
 const AddToListModal = ({ OpenFunction, CloseFunction, videoId, redirect, setListName }) => {
-  const { lists, setLists } = useContext(FavoritesContext) || {};
+  const { lists, setLists } = useContext(MyListsContext) || {};
   const listRef = useRef();
 
   useClicksOutside(listRef, CloseFunction);

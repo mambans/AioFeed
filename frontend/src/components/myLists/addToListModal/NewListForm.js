@@ -4,7 +4,7 @@ import { MdAddCircle } from 'react-icons/md';
 
 import { FormButton, FormGroup, Label } from './../StyledComponents';
 import { parseNumberAndString } from './../dragDropUtils';
-import FavoritesContext from '../FavoritesContext';
+import MyListsContext from '../MyListsContext';
 import API from '../../navigation/API';
 
 const useInput = (initialValue) => {
@@ -26,7 +26,7 @@ const useInput = (initialValue) => {
 
 const NewListForm = ({ item }) => {
   const { value: listName, bind: bindListName, reset: resetListName, setValue } = useInput('');
-  const { lists, setLists } = useContext(FavoritesContext) || {};
+  const { lists, setLists } = useContext(MyListsContext) || {};
 
   const addFunc = async (list_Name, item) => {
     const newVideo = Array.isArray(item) ? item : [parseNumberAndString(item)];

@@ -5,7 +5,7 @@ import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
 import { FaAngleRight, FaAngleLeft, FaTwitch, FaYoutube } from 'react-icons/fa';
 import { MdVideocam } from 'react-icons/md';
-import { BsList } from 'react-icons/bs';
+import { HiViewList } from 'react-icons/hi';
 import { NavDropdown } from 'react-bootstrap';
 
 import RenderNotifications from './../notifications';
@@ -101,9 +101,9 @@ const Navigation = () => {
               Top Streams
             </Nav.Link>
             <DropDown title='Individual Feeds'>
-              <NavDropdown.Item as={NavLink} to='/favorites'>
-                <BsList size={16} color='var(--listColorAdd)' />
-                Favorites
+              <NavDropdown.Item as={NavLink} to='/mylists'>
+                <HiViewList size={18} color='var(--listColorAdd)' />
+                My lists
               </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to='/live'>
                 <FaTwitch size={16} color='rgb(118, 65, 198)' />

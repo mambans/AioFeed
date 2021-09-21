@@ -10,14 +10,12 @@ import { Twitter } from '../twitter';
 import { Youtube } from './../youtube';
 import FeedsCenterContainer from './FeedsCenterContainer';
 import { Twitch } from '../twitch/live';
-import { Favorites } from '../favorites';
-import { FavoritesProvider } from '../favorites/FavoritesContext';
+import { MyLists } from '../myLists';
 // import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 const Feed = () => {
   // useDocumentTitle('Feed');
-  const { enableTwitch, enableYoutube, enableTwitchVods, enableFavorites } =
-    useContext(FeedsContext);
+  const { enableTwitch, enableYoutube, enableTwitchVods, enableMyLists } = useContext(FeedsContext);
   const { username } = useContext(AccountContext);
 
   if (!username) {
@@ -37,31 +35,29 @@ const Feed = () => {
         <CSSTransition in={enableTwitch} classNames='fade-750ms' timeout={750} unmountOnExit appear>
           <Twitch />
         </CSSTransition>
-        <FavoritesProvider>
-          <CSSTransition
-            in={enableYoutube}
-            timeout={750}
-            classNames='fade-750ms'
-            unmountOnExit
-            appear
-          >
-            <Youtube />
-          </CSSTransition>
+        <CSSTransition
+          in={enableYoutube}
+          timeout={750}
+          classNames='fade-750ms'
+          unmountOnExit
+          appear
+        >
+          <Youtube />
+        </CSSTransition>
 
-          <CSSTransition in={enableTwitchVods} classNames='fade-750ms' timeout={750} unmountOnExit>
-            <Vods />
-          </CSSTransition>
+        <CSSTransition in={enableTwitchVods} classNames='fade-750ms' timeout={750} unmountOnExit>
+          <Vods />
+        </CSSTransition>
 
-          <CSSTransition
-            in={enableFavorites}
-            timeout={750}
-            classNames='fade-750ms'
-            unmountOnExit
-            appear
-          >
-            <Favorites />
-          </CSSTransition>
-        </FavoritesProvider>
+        <CSSTransition
+          in={enableMyLists}
+          timeout={750}
+          classNames='fade-750ms'
+          unmountOnExit
+          appear
+        >
+          <MyLists />
+        </CSSTransition>
       </div>
     </FeedsCenterContainer>
   );

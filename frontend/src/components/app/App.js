@@ -17,6 +17,7 @@ import { TwitchContext, TwitchProvider } from '../twitch/useToken';
 import { YoutubeContext, YoutubeProvider } from '../youtube/useToken';
 import { VodsProvider } from '../twitch/vods/VodsContext';
 import API from '../navigation/API';
+import { MyListsProvider } from '../myLists/MyListsContext';
 
 const AppContainer = styled.div`
   background-image: ${({ image }) => `url(/images/${image})`};
@@ -41,11 +42,13 @@ const AppRoutesContainer = () => {
             <NavigationProvider>
               <NotificationsProvider>
                 <FeedsProvider>
-                  <VodsProvider>
-                    <FooterProvider>
-                      <App />
-                    </FooterProvider>
-                  </VodsProvider>
+                  <MyListsProvider>
+                    <VodsProvider>
+                      <FooterProvider>
+                        <App />
+                      </FooterProvider>
+                    </VodsProvider>
+                  </MyListsProvider>
                 </FeedsProvider>
               </NotificationsProvider>
             </NavigationProvider>

@@ -1,12 +1,12 @@
 import React, { useContext, useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-import { ButtonContainer } from './../StyledComponents';
+import { ButtonContainer } from '../StyledComponents';
 import AddToListModal from './AddToListModal';
-import FavoritesContext, { FavoritesProvider } from './../FavoritesContext';
+import MyListsContext from '../MyListsContext';
 import { AddRemoveBtn } from './AddToListModal';
 
-const FavoriteButton = ({
+const AddToListButton = ({
   list,
   videoId_p,
   style = {},
@@ -18,7 +18,7 @@ const FavoriteButton = ({
   const videoId = typeof videoId_p === 'number' ? parseInt(videoId_p) || videoId_p : videoId_p;
   const [open, setOpen] = useState();
   const fadeOutTimer = useRef();
-  const { lists, setLists } = useContext(FavoritesContext) || {};
+  const { lists, setLists } = useContext(MyListsContext) || {};
 
   const OpenFunction = (e) => {
     e.stopPropagation();
@@ -65,30 +65,17 @@ const FavoriteButton = ({
       />
 
       <CSSTransition in={open} timeout={250} classNames='fade' unmountOnExit>
-        {setLists ? (
-          <AddToListModal
-            OpenFunction={OpenFunction}
-            CloseFunctionDelay={CloseFunctionDelay}
-            CloseFunction={CloseFunction}
-            videoId={videoId}
-            redirect={redirect}
-            setListName={setListName}
-          />
-        ) : (
-          <FavoritesProvider>
-            <AddToListModal
-              OpenFunction={OpenFunction}
-              CloseFunctionDelay={CloseFunctionDelay}
-              CloseFunction={CloseFunction}
-              videoId={videoId}
-              redirect={redirect}
-              setListName={setListName}
-            />
-          </FavoritesProvider>
-        )}
+        <AddToListModal
+          OpenFunction={OpenFunction}
+          CloseFunctionDelay={CloseFunctionDelay}
+          CloseFunction={CloseFunction}
+          videoId={videoId}
+          redirect={redirect}
+          setListName={setListName}
+        />
       </CSSTransition>
     </ButtonContainer>
   );
 };
 
-export default FavoriteButton;
+export default AddToListButton;

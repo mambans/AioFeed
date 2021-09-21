@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import SearchList from '../sharedComponents/SearchList';
 import { addFavoriteVideo, removeFavoriteVideo } from './addToListModal/AddToListModal';
-import FavoritesContext from './FavoritesContext';
+import MyListsContext from './MyListsContext';
 import {
   GameListUlContainer,
   StyledGameListElement,
@@ -23,8 +23,8 @@ const getYoutubeIdFromUrl = (videoId) => {
   return searchParams.get('v');
 };
 
-const FavoritesSmallList = ({ listName, videos, style }) => {
-  const { lists, setLists } = useContext(FavoritesContext);
+const MyListSmallList = ({ listName, videos, style }) => {
+  const { lists, setLists } = useContext(MyListsContext);
   const [listIsOpen, setListIsOpen] = useState();
   const [cursor, setCursor] = useState({ position: 0 });
 
@@ -213,4 +213,4 @@ const FavoritesSmallList = ({ listName, videos, style }) => {
   );
 };
 
-export default FavoritesSmallList;
+export default MyListSmallList;

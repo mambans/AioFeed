@@ -27,7 +27,7 @@ const clearAllAccountCookiesStates = ({
   localStorage.removeItem('activeTheme');
   localStorage.removeItem('CustomFilters');
   localStorage.removeItem('Vods');
-  localStorage.removeItem('FavoritesLists');
+  localStorage.removeItem('MyLists');
   localStorage.removeItem('TwitchChatState');
   localStorage.removeItem('Cached_SavedYoutubeVideos');
   localStorage.removeItem('notifications');

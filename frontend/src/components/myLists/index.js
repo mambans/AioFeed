@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-import './FavoritesTransitions.scss';
+import './MyListsTransitions.scss';
 import Header from '../sharedComponents/Header';
 
-import FavoritesContext, { FavoritesProvider } from './FavoritesContext';
+import MyListsContext from './MyListsContext';
 import FeedsCenterContainer from '../feed/FeedsCenterContainer';
 import List from './List';
 import useToken from '../twitch/useToken';
 import useYoutubeToken from '../youtube/useToken';
 import AlertHandler from '../alert';
-import FavoritesSmallList from './FavoritesSmallList';
+import MyListSmallList from './MyListSmallList';
 import DropDownDrawer from './DropDownDrawer';
 import { Container } from '../twitch/StyledComponents';
 import { getLocalstorage } from '../../util';
@@ -65,17 +65,15 @@ export const useCheckForVideosAndValidateToken = ({
   ]);
 };
 
-const FavoritesContainer = () => {
-  useDocumentTitle('Favorites');
+const MylistsContainer = () => {
+  useDocumentTitle('My lists');
 
   return (
-    <FavoritesProvider>
-      <FeedsCenterContainer left={false} right={false}>
-        <div className='feed'>
-          <Favorites />
-        </div>
-      </FeedsCenterContainer>
-    </FavoritesProvider>
+    <FeedsCenterContainer left={false} right={false}>
+      <div className='feed'>
+        <MyLists />
+      </div>
+    </FeedsCenterContainer>
   );
 };
 
@@ -93,16 +91,16 @@ export const FavoriteListContainer = ({
   const [order, setOrder] = useState((getLocalstorage('FeedOrders')?.[list.name] ?? 26) + index);
 
   return (
-    <Container order={order} id='FavoritesHeader'>
+    <Container order={order} id='MyListsHeader'>
       <Header
         id={list.name}
         text={<>{list.name}</>}
         refreshFunc={fetchAllLists}
         isLoading={isLoading}
-        onHoverIconLink='favorites'
+        onHoverIconLink='nylists'
         rightSide={
           <>
-            <FavoritesSmallList list={list} videos={videos} listName={list.name} />
+            <MyListSmallList list={list} videos={videos} listName={list.name} />
             <DropDownDrawer list={list} />
           </>
         }
@@ -121,8 +119,8 @@ export const FavoriteListContainer = ({
   );
 };
 
-export const Favorites = () => {
-  const { lists, setLists, fetchAllLists, isLoading, setIsLoading } = useContext(FavoritesContext);
+export const MyLists = () => {
+  const { lists, setLists, fetchAllLists, isLoading, setIsLoading } = useContext(MyListsContext);
   const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
   const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
   // const validateToken = useToken();
@@ -161,7 +159,7 @@ export const Favorites = () => {
         <AlertHandler
           show={true}
           type='secondary'
-          title="You haven't created any 'Favorites' list."
+          title="You haven't created any custom list."
           style={{
             width: '50%',
           }}
@@ -173,4 +171,4 @@ export const Favorites = () => {
   );
 };
 
-export default FavoritesContainer;
+export default MylistsContainer;

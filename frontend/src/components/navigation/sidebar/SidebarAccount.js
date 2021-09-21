@@ -6,7 +6,7 @@ import { FaTwitch, FaYoutube, FaTwitter, FaRegWindowRestore } from 'react-icons/
 import { FiSidebar } from 'react-icons/fi';
 import { TiFlash } from 'react-icons/ti';
 import { AiOutlineDisconnect } from 'react-icons/ai';
-import { BsList } from 'react-icons/bs';
+import { HiViewList } from 'react-icons/hi';
 
 import AccountContext from './../../account/AccountContext';
 import ClearAllAccountCookiesStates from './ClearAllAccountCookiesStates';
@@ -88,7 +88,7 @@ const SidebarAccount = () => {
   const domainColors = {
     Twitch: 'rgb(169, 112, 255)',
     Youtube: 'rgb(255, 0, 0)',
-    Favorites: 'var(--listColorAdd)',
+    MyLists: 'var(--listColorAdd)',
     Twitter: 'rgb(29, 161, 242)',
   };
 
@@ -123,9 +123,9 @@ const SidebarAccount = () => {
       tokenExists: twitchAccessToken,
     },
     {
-      serviceName: 'Favorites',
-      icon: <BsList size={24} color={domainColors.Favorites} />,
-      tooltip: (feedProps.enableFavorites ? 'Disable ' : 'Enable ') + ` Favorites feed`,
+      serviceName: 'MyLists',
+      icon: <HiViewList size={24} color={domainColors.MyLists} />,
+      tooltip: (feedProps.enableMyLists ? 'Disable ' : 'Enable ') + ` MyLists feed`,
     },
   ];
 

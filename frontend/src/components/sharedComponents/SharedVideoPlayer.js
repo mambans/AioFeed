@@ -10,15 +10,15 @@ import {
   PlayerExtraButtons,
 } from '../twitch/player/StyledComponents';
 import NavigationContext from '../navigation/NavigationContext';
-import FavoriteButton from '../favorites/addToListModal/FavoriteButton';
+import AddToListButton from '../myLists/addToListModal/AddToListButton';
 import useQuery from '../../hooks/useQuery';
 import PlaylistInPlayer from '../youtube/PlaylistInPlayer';
 import useSyncedLocalState from '../../hooks/useSyncedLocalState';
 import YoutubeVideoPlayer from '../youtube/YoutubeVideoPlayer';
 import VideoPlayer from '../twitch/player/VideoPlayer';
 import useFullscreen from '../../hooks/useFullscreen';
-import FavoritesContext, { FavoritesProvider } from '../favorites/FavoritesContext';
-import autoPlayNextFunc from '../favorites/autoPlayNext';
+import MyListsContext from '../myLists/MyListsContext';
+import autoPlayNextFunc from '../myLists/autoPlayNext';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
 import VolumeEventOverlay from '../twitch/VolumeEventOverlay';
 import { TwitchContext } from '../twitch/useToken';
@@ -30,11 +30,7 @@ const SharedVideoPlayerDefault = () => {
   const listName_p = useQuery().get('listName');
   const [listName, setListName] = useState(list_p || listName_p);
 
-  return (
-    <FavoritesProvider>
-      <SharedVideoPlayer listName={listName} setListName={setListName} />
-    </FavoritesProvider>
-  );
+  return <SharedVideoPlayer listName={listName} setListName={setListName} />;
 };
 
 const SharedVideoPlayer = ({ listName, setListName }) => {
@@ -43,7 +39,7 @@ const SharedVideoPlayer = ({ listName, setListName }) => {
   const channelName = useParams()?.channelName;
   const { visible } = useContext(NavigationContext);
   const { enableVodVolumeOverlay } = useContext(TwitchContext) || {};
-  const { lists } = useContext(FavoritesContext) || {};
+  const { lists } = useContext(MyListsContext) || {};
   const [viewStates, setViewStates] = useSyncedLocalState(`${listName}-viewStates`, {
     listWidth: DEFAULT_LIST_WIDTH,
     hideList: false,
@@ -114,7 +110,7 @@ const SharedVideoPlayer = ({ listName, setListName }) => {
         onMouseUp={handleResizeMouseUp}
         onMouseMove={resize}
       >
-        <FavoriteButton
+        <AddToListButton
           videoId_p={videoId}
           style={{
             right: listName && !viewStates.hideList ? `${viewStates.listWidth + 15}px` : '15px',

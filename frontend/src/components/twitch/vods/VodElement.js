@@ -21,7 +21,7 @@ import TwitchAPI from '../API';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from '../loginNameFormat';
 import { ChannelNameDiv } from '../StyledComponents';
-import FavoriteButton from '../../favorites/addToListModal/FavoriteButton';
+import AddToListButton from '../../myLists/addToListModal/AddToListButton';
 import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../sharedComponents/ToolTip';
 import AddRemoveFromPlayQueueButton from '../../sharedComponents/AddRemoveFromPlayQueueButton';
@@ -113,7 +113,7 @@ const VodElement = ({
   return (
     <VideoContainer draggable={Boolean(setDragSelected)} onDragStart={onDragStart} {...props}>
       <ImageContainer ref={imgRef} active={active}>
-        <FavoriteButton
+        <AddToListButton
           list={list}
           videoId_p={id}
           disablepreview={handleMouseOut}

@@ -26,7 +26,7 @@ const ToggleButton = ({
   const tokensForDomains = {
     Twitch: twitchAccessToken,
     Youtube: youtubeAccessToken,
-    Favorites: twitchAccessToken || youtubeAccessToken,
+    MyLists: twitchAccessToken || youtubeAccessToken,
   };
 
   const anTokenExists = Boolean(tokenExists || tokensForDomains[serviceName]);
@@ -37,7 +37,10 @@ const ToggleButton = ({
 
     clearTimeout(timeout.current);
     timeout.current = setTimeout(async () => {
-      await API.softUpdateAccount(`${serviceName}Preferences`, { Enabled: !checked });
+      await API.softUpdateAccount(
+        `${serviceName === 'MyLists' ? 'Favorites' : serviceName}Preferences`,
+        { Enabled: !checked }
+      );
     }, 2500);
 
     if (scrollIntoView && !checked === true) {

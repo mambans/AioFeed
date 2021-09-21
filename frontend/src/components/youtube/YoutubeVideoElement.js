@@ -9,7 +9,7 @@ import {
   ImgBottomInfo,
 } from '../sharedComponents/sharedStyledComponents';
 import VideoHoverIframe from './VideoHoverIframe';
-import FavoriteButton from '../favorites/addToListModal/FavoriteButton';
+import AddToListButton from '../myLists/addToListModal/AddToListButton';
 import { ChannelNameLink, PublishedDate } from './StyledComponents';
 import ToolTip from '../sharedComponents/ToolTip';
 import AddRemoveFromPlayQueueButton from '../sharedComponents/AddRemoveFromPlayQueueButton';
@@ -44,7 +44,7 @@ const YoutubeVideoElement = ({
       {...props}
     >
       <ImageContainer id={video.contentDetails?.upload?.videoId} ref={ref} active={active}>
-        <FavoriteButton list={list} videoId_p={video.contentDetails?.upload?.videoId} />
+        <AddToListButton list={list} videoId_p={video.contentDetails?.upload?.videoId} />
         {setPlayQueue && (
           <AddRemoveFromPlayQueueButton
             videoId={video.contentDetails?.upload?.videoId}

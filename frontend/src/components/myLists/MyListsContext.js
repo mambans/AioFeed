@@ -3,10 +3,10 @@ import { getCookie } from '../../util';
 import useSyncedLocalState from '../../hooks/useSyncedLocalState';
 import API from '../navigation/API';
 
-const FavoritesContext = React.createContext();
+const MyListsContext = React.createContext();
 
-export const FavoritesProvider = ({ children }) => {
-  const [lists, setLists] = useSyncedLocalState('FavoritesLists', {}) || {};
+export const MyListsProvider = ({ children }) => {
+  const [lists, setLists] = useSyncedLocalState('Mylists', {}) || {};
   const [isLoading, setIsLoading] = useState();
 
   const fetchAllLists = useCallback(async () => {
@@ -21,7 +21,7 @@ export const FavoritesProvider = ({ children }) => {
   }, [fetchAllLists]);
 
   return (
-    <FavoritesContext.Provider
+    <MyListsContext.Provider
       value={{
         lists,
         setLists,
@@ -31,8 +31,8 @@ export const FavoritesProvider = ({ children }) => {
       }}
     >
       {children}
-    </FavoritesContext.Provider>
+    </MyListsContext.Provider>
   );
 };
 
-export default FavoritesContext;
+export default MyListsContext;

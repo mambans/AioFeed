@@ -15,7 +15,7 @@ import Twitch from '../twitch/live';
 import TwitchVods from '../twitch/vods';
 import Twitter from '../twitter';
 import Youtube from '../youtube';
-import Favorites from '../favorites';
+import MyLists from '../myLists';
 import SharedVideoPlayer from '../sharedComponents/SharedVideoPlayer';
 
 const MainContentContainer = styled.main`
@@ -39,10 +39,12 @@ const NavigationRoutes = () => {
           <Route path='vods' element={<TwitchVods />} />
           <Route path='feed' element={<Feed />} />
           <Route path='live' element={<Twitch forceMount={true} />} />
-          <Route path='favorites' element={<Favorites />} />
+          <Navigate path='favorites' to='mylists' />
+          <Navigate path='customlists' to='mylists' />
+          <Navigate path='lists' to='mylists' />
+          <Navigate path='saved' to='mylists' />
+          <Route path='mylists' element={<MyLists />} />
 
-          <Navigate path='saved' to='favorites' />
-          <Navigate path='lists' to='favorites' />
           <Navigate path='twitch' to='live' />
           <Route path='twitter' element={<Twitter />} />
 

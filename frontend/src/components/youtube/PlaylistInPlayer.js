@@ -5,11 +5,11 @@ import { MdQueuePlayNext, MdSkipNext } from 'react-icons/md';
 import { FaRandom } from 'react-icons/fa';
 import { TiArrowLoop } from 'react-icons/ti';
 
-import { useCheckForVideosAndValidateToken } from '../favorites';
-import FavoritesSmallList from '../favorites/FavoritesSmallList';
-import { restructureVideoList, uploadNewList } from '../favorites/dragDropUtils';
-import FavoritesContext from '../favorites/FavoritesContext';
-import { fetchListVideos } from '../favorites/List';
+import { useCheckForVideosAndValidateToken } from '../myLists';
+import MyListSmallList from '../myLists/MyListSmallList';
+import { restructureVideoList, uploadNewList } from '../myLists/dragDropUtils';
+import MyListsContext from '../myLists/MyListsContext';
+import { fetchListVideos } from '../myLists/List';
 import { LoadingVideoElement } from '../twitch/StyledComponents';
 import VodElement from '../twitch/vods/VodElement';
 import YoutubeVideoElement from './YoutubeVideoElement';
@@ -146,7 +146,7 @@ const PlaylistInPlayer = ({
   setPlayQueue,
   playNext,
 }) => {
-  const { lists, setLists } = useContext(FavoritesContext) || {};
+  const { lists, setLists } = useContext(MyListsContext) || {};
   const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
   const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
 
@@ -219,7 +219,7 @@ const PlaylistInPlayer = ({
           <PlayNextBtn size={20} onClick={playNext} />
         </ToolTip>
       </PlayListButtonsContainer>
-      <FavoritesSmallList
+      <MyListSmallList
         list={list}
         listName={listName}
         videos={listVideos}
