@@ -6,7 +6,15 @@ import AddToListModal from './AddToListModal';
 import FavoritesContext, { FavoritesProvider } from './../FavoritesContext';
 import { AddRemoveBtn } from './AddToListModal';
 
-const FavoriteButton = ({ list, videoId_p, style = {}, size, disablepreview = () => {} }) => {
+const FavoriteButton = ({
+  list,
+  videoId_p,
+  style = {},
+  size,
+  disablepreview = () => {},
+  redirect,
+  setListName,
+}) => {
   const videoId = typeof videoId_p === 'number' ? parseInt(videoId_p) || videoId_p : videoId_p;
   const [open, setOpen] = useState();
   const fadeOutTimer = useRef();
@@ -63,6 +71,8 @@ const FavoriteButton = ({ list, videoId_p, style = {}, size, disablepreview = ()
             CloseFunctionDelay={CloseFunctionDelay}
             CloseFunction={CloseFunction}
             videoId={videoId}
+            redirect={redirect}
+            setListName={setListName}
           />
         ) : (
           <FavoritesProvider>
@@ -71,6 +81,8 @@ const FavoriteButton = ({ list, videoId_p, style = {}, size, disablepreview = ()
               CloseFunctionDelay={CloseFunctionDelay}
               CloseFunction={CloseFunction}
               videoId={videoId}
+              redirect={redirect}
+              setListName={setListName}
             />
           </FavoritesProvider>
         )}

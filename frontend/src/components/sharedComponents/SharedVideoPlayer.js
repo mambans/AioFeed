@@ -26,21 +26,18 @@ import { TwitchContext } from '../twitch/useToken';
 const DEFAULT_LIST_WIDTH = Math.max(window.innerWidth * 0.1, 400);
 
 const SharedVideoPlayerDefault = () => {
-  const list = useQuery().get('list');
-  const listName = useQuery().get('listName');
+  const list_p = useQuery().get('list');
+  const listName_p = useQuery().get('listName');
+  const [listName, setListName] = useState(list_p || listName_p);
 
-  if (list || listName) {
-    return (
-      <FavoritesProvider>
-        <SharedVideoPlayer listName={list || listName} />
-      </FavoritesProvider>
-    );
-  }
-
-  return <SharedVideoPlayer listName={listName} />;
+  return (
+    <FavoritesProvider>
+      <SharedVideoPlayer listName={listName} setListName={setListName} />
+    </FavoritesProvider>
+  );
 };
 
-const SharedVideoPlayer = ({ listName }) => {
+const SharedVideoPlayer = ({ listName, setListName }) => {
   const location = useLocation();
   const { videoId } = useParams() || {};
   const channelName = useParams()?.channelName;
@@ -126,6 +123,8 @@ const SharedVideoPlayer = ({ listName }) => {
           }}
           size={32}
           list={list}
+          setListName={setListName}
+          redirect
         />
         <PlayerExtraButtons channelName={channelName}>
           {listName && (

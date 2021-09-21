@@ -13,7 +13,6 @@ import {
 import useClicksOutside from '../../../hooks/useClicksOutside';
 import { parseNumberAndString } from './../dragDropUtils';
 import NewListForm from './NewListForm';
-import { MdAddCircle, MdRemoveCircle } from 'react-icons/md';
 import API from '../../navigation/API';
 
 export const addFavoriteVideo = async (lists, setLists, list_Name, newItem) => {
@@ -63,49 +62,55 @@ export const AddRemoveBtn = ({
   style,
   onMouseEnter,
   onMouseLeave,
+  redirect,
+  setListName = () => {},
 }) => {
   // const { lists, setLists } = useContext(FavoritesContext);
   const videoAdded = list && list?.items?.includes(parseNumberAndString(videoId));
+  // const navigate = useNavigate();
 
   if (videoAdded)
     return (
       <IconContainer
-        onClick={() => removeFavoriteVideo(lists, setLists, list?.name, videoId)}
+        onClick={() => {
+          removeFavoriteVideo(lists, setLists, list?.name, videoId);
+          window.history.pushState(
+            {},
+            document.title,
+            `${window.location.origin + window.location.pathname}`
+          );
+        }}
         style={style}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
         <RemoveItemBtn size={size} />
-        <MdRemoveCircle
-          className='actionIcon'
-          color='red'
-          size={size * 0.5}
-          style={{ left: `${size}px` }}
-        />
       </IconContainer>
     );
 
   return (
     <IconContainer
-      onClick={() => addFavoriteVideo(lists, setLists, list?.name, videoId)}
+      onClick={() => {
+        addFavoriteVideo(lists, setLists, list?.name, videoId);
+        if (redirect && list?.name) {
+          setListName(`${list?.name}`);
+          window.history.pushState(
+            {},
+            document.title,
+            `${window.location.origin + window.location.pathname}?list=${list?.name}`
+          );
+        }
+      }}
       style={style}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
       <AddItemBtn size={size} />
-      {list && (
-        <MdAddCircle
-          className='actionIcon'
-          color='green'
-          size={size * 0.5}
-          style={{ left: `${size}px` }}
-        />
-      )}
     </IconContainer>
   );
 };
 
-const AddToListModal = ({ OpenFunction, CloseFunction, videoId }) => {
+const AddToListModal = ({ OpenFunction, CloseFunction, videoId, redirect, setListName }) => {
   const { lists, setLists } = useContext(FavoritesContext) || {};
   const listRef = useRef();
 
@@ -120,7 +125,14 @@ const AddToListModal = ({ OpenFunction, CloseFunction, videoId }) => {
         Object?.values(lists).map((list) => (
           <ListItem key={list.name}>
             {list.name}
-            <AddRemoveBtn list={list} videoId={videoId} setLists={setLists} lists={lists} />
+            <AddRemoveBtn
+              list={list}
+              videoId={videoId}
+              setLists={setLists}
+              lists={lists}
+              redirect={redirect}
+              setListName={setListName}
+            />
           </ListItem>
         ))}
       <NewListForm item={videoId} />
