@@ -37,10 +37,7 @@ const ToggleButton = ({
 
     clearTimeout(timeout.current);
     timeout.current = setTimeout(async () => {
-      await API.softUpdateAccount(
-        `${serviceName === 'MyLists' ? 'Favorites' : serviceName}Preferences`,
-        { Enabled: !checked }
-      );
+      await API.softUpdateAccount(`${serviceName}Preferences`, { Enabled: !checked });
     }, 2500);
 
     if (scrollIntoView && !checked === true) {
