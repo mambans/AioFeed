@@ -18,12 +18,8 @@ const CreateAndOpenClip = async ({ streamInfo }) => {
     )
     .catch((er) => {
       const { error, message, status } = er?.response?.data || {};
-      if (
-        error === 'Forbidden' &&
-        message === 'User does not have permissions to Clip on this channel.' &&
-        status === 403
-      ) {
-        toast.warning("You don't have permission to create clips on this channel.");
+      if (error === 'Forbidden' && status === 403) {
+        toast.warning(message.replace('User does', 'You do'));
         return;
       }
 
