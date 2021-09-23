@@ -66,3 +66,13 @@ export const imageAspectDimensions = ({ width, height, ar }) => {
   if (height) return { height, width: calcDimen };
   if (width) return { width, height: calcDimen };
 };
+
+export const convertArrayToObject = (array, key) => {
+  const initialValue = {};
+  return array.reduce((obj, item) => {
+    return {
+      ...obj,
+      [item[key]]: item,
+    };
+  }, initialValue);
+};

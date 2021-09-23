@@ -168,7 +168,7 @@ export const AddItemBtn = styled(MdPlaylistAdd)`
   transition: color 250ms;
 
   &:hover {
-    color: var(--listColorAdd);
+    color: ${({ disableHoverEffect }) => (disableHoverEffect ? '#ffffff' : 'var (--listColorAdd)')};
   }
 `;
 

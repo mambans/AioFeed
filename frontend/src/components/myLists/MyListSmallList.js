@@ -24,7 +24,7 @@ const getYoutubeIdFromUrl = (videoId) => {
 };
 
 const MyListSmallList = ({ listName, videos, style }) => {
-  const { lists, setLists } = useContext(MyListsContext);
+  const { setLists } = useContext(MyListsContext);
   const [listIsOpen, setListIsOpen] = useState();
   const [cursor, setCursor] = useState({ position: 0 });
 
@@ -47,9 +47,6 @@ const MyListSmallList = ({ listName, videos, style }) => {
           const { value: input } = event.target;
           setValue(input.trimStart());
           setCursor({ position: 0 });
-
-          // if (listIsOpen && input && input !== '' && !cursor.used) {
-          // }
         },
       },
       returnFirstMatch: () => filteredInputMatched[cursor.position],
@@ -102,7 +99,7 @@ const MyListSmallList = ({ listName, videos, style }) => {
       resetVideoId();
       // : navigate(`/category/${returnFirstMatch()}`);
     } else {
-      const newList = await addFavoriteVideo(lists, setLists, listName, id);
+      const newList = await addFavoriteVideo(setLists, listName, id);
       resetVideoId();
       setTimeout(() => setCursor({ position: newList.items.length - 1 }), 0);
       setTimeout(() => scrollToIfNeeded(ulListRef.current), 750);
@@ -200,7 +197,7 @@ const MyListSmallList = ({ listName, videos, style }) => {
                 </Link>
                 <ListActionButton
                   size={16}
-                  onClick={() => removeFavoriteVideo(lists, setLists, listName, v.id)}
+                  onClick={() => removeFavoriteVideo(setLists, listName, v.id)}
                 >
                   <MdDeleteForever size={20} />
                 </ListActionButton>

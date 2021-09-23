@@ -16,48 +16,48 @@ import { parseNumberAndString } from './../dragDropUtils';
 import NewListForm from './NewListForm';
 import API from '../../navigation/API';
 
-export const addFavoriteVideo = async (lists, setLists, list_Name, newItem) => {
-  if (lists && setLists && list_Name && newItem) {
-    const newVideo = parseNumberAndString(newItem);
+export const addFavoriteVideo = async (setLists, list_Name, newItem) => {
+  if (typeof setLists === 'function')
+    setLists((lists) => {
+      if (lists && list_Name && newItem) {
+        const newVideo = parseNumberAndString(newItem);
+        const allOrinalLists = { ...lists };
+        const existing = allOrinalLists[list_Name];
+
+        const newObj = {
+          ...existing,
+          items: [...new Set([...(existing?.items || []), newVideo])].filter((i) => i),
+        };
+
+        allOrinalLists[list_Name] = newObj;
+
+        API.updateSavedList(list_Name, newObj);
+
+        return { ...allOrinalLists };
+      }
+    });
+};
+
+export const removeFavoriteVideo = async (setLists, list_Name, newItem_p) => {
+  setLists((lists) => {
+    const newItem = parseNumberAndString(newItem_p);
     const allOrinalLists = { ...lists };
     const existing = allOrinalLists[list_Name];
-
     const newObj = {
-      ...existing,
-      items: [...new Set([...(existing?.items || []), newVideo])].filter((i) => i),
+      name: existing.name,
+      items: existing.items.filter((item) => item !== newItem),
     };
 
     allOrinalLists[list_Name] = newObj;
-
     API.updateSavedList(list_Name, newObj);
 
-    const items = { ...allOrinalLists };
-    setLists(items);
-
-    return items[list_Name];
-  }
-};
-
-export const removeFavoriteVideo = async (lists, setLists, list_Name, newItem_p) => {
-  const newItem = parseNumberAndString(newItem_p);
-  const allOrinalLists = { ...lists };
-  const existing = allOrinalLists[list_Name];
-  const newObj = {
-    name: existing.name,
-    items: existing.items.filter((item) => item !== newItem),
-  };
-
-  allOrinalLists[list_Name] = newObj;
-
-  setLists({ ...allOrinalLists });
-
-  API.updateSavedList(list_Name, newObj);
+    return { ...allOrinalLists };
+  });
 };
 
 export const AddRemoveBtn = ({
   list,
   videoId,
-  lists,
   setLists,
   size = 18,
   style,
@@ -66,11 +66,8 @@ export const AddRemoveBtn = ({
   redirect,
   setListName = () => {},
 }) => {
-  // const { lists, setLists } = useContext(MyListsContext);
   const videoAdded = list && list?.items?.includes(parseNumberAndString(videoId));
   const [isHovered, setIsHovered] = useState();
-
-  // const navigate = useNavigate();
 
   const mouseEnter = (e) => {
     onMouseEnter(e);
@@ -85,7 +82,7 @@ export const AddRemoveBtn = ({
     return (
       <IconContainer
         onClick={() => {
-          removeFavoriteVideo(lists, setLists, list?.name, videoId);
+          removeFavoriteVideo(setLists, list?.name, videoId);
           window.history.pushState(
             {},
             document.title,
@@ -103,21 +100,23 @@ export const AddRemoveBtn = ({
   return (
     <IconContainer
       onClick={() => {
-        addFavoriteVideo(lists, setLists, list?.name, videoId);
-        if (redirect && list?.name) {
-          setListName(`${list?.name}`);
-          window.history.pushState(
-            {},
-            document.title,
-            `${window.location.origin + window.location.pathname}?list=${list?.name}`
-          );
+        if (list) {
+          addFavoriteVideo(setLists, list?.name, videoId);
+          if (redirect && list?.name) {
+            setListName(`${list?.name}`);
+            window.history.pushState(
+              {},
+              document.title,
+              `${window.location.origin + window.location.pathname}?list=${list?.name}`
+            );
+          }
         }
       }}
       style={style}
       onMouseEnter={mouseEnter}
       onMouseLeave={mouseLeave}
     >
-      <AddItemBtn size={size} />
+      <AddItemBtn size={size} disableHoverEffect={!list} />
     </IconContainer>
   );
 };
@@ -141,7 +140,6 @@ const AddToListModal = ({ OpenFunction, CloseFunction, videoId, redirect, setLis
               list={list}
               videoId={videoId}
               setLists={setLists}
-              lists={lists}
               redirect={redirect}
               setListName={setListName}
             />

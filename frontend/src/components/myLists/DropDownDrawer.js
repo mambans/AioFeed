@@ -5,6 +5,7 @@ import DeleteListBtn from './DeleteListBtn';
 import CopyListBtn from './CopyListBtn';
 import { ButtonLookalikeStyle } from '../sharedComponents/sharedStyledComponents';
 import useClicksOutside from '../../hooks/useClicksOutside';
+import ReverseListButton from './ReverseListButton';
 
 const Container = styled.div`
   margin: auto 15px;
@@ -17,6 +18,8 @@ const TriggerBtn = styled.button`
   transition: color 250ms, width 250ms;
   padding: 5px;
   padding-left: ${({ open }) => (open ? '10px' : '5px')};
+  background: ${({ open }) =>
+    open ? 'var(--popupListsBackground)' : 'var(--refreshButtonBackground)'};
   text-align: left;
 `;
 
@@ -24,7 +27,7 @@ const Dropdown = styled.div`
   position: absolute;
   z-index: 1;
   /* background: background: var(--popupListsBackground); */
-  background: var(--refreshButtonBackground);
+  background: var(--popupListsBackground);
   padding: 5px 10px;
 
   p {
@@ -54,6 +57,7 @@ const DropDownDrawer = ({ list }) => {
         <Dropdown ref={dropdownRef}>
           <CopyListBtn list={list}>Copy</CopyListBtn>
           <DeleteListBtn list={list}>Delete</DeleteListBtn>
+          <ReverseListButton list={list}>Reverse</ReverseListButton>
         </Dropdown>
       )}
     </Container>

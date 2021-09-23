@@ -14,6 +14,7 @@ import API from '../API';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import { TwitchContext } from '../../twitch/useToken';
 import { YoutubeContext } from '../../youtube/useToken';
+import MyListsContext from '../../myLists/MyListsContext';
 
 const Login = () => {
   useDocumentTitle('Login');
@@ -31,6 +32,7 @@ const Login = () => {
     setTwitchProfileImage,
   } = useContext(TwitchContext);
   const { setUsername, setProfileImage, setAuthKey, setEmail } = useContext(AccountContext);
+  const { setMyListPreferences } = useContext(MyListsContext);
   const { setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage } =
     useContext(YoutubeContext);
 
@@ -77,6 +79,9 @@ const Login = () => {
               setFavStreams(res.TwitchPreferences.favoriteStreams);
             }
 
+            if (res.MyListsPreferences && Object.keys(res.MyListsPreferences).length >= 1) {
+              setMyListPreferences(res.MyListsPreferences);
+            }
             if (res.TwitchVodsPreferences && Object.keys(res.TwitchVodsPreferences).length >= 1) {
               setChannels(res.TwitchVodsPreferences.Channels);
             }
