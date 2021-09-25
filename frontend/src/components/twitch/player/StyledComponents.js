@@ -15,7 +15,7 @@ import { Button, Nav } from 'react-bootstrap';
 import { GrRefresh } from 'react-icons/gr';
 import { Link, NavLink } from 'react-router-dom';
 import NavigationContext from '../../navigation/NavigationContext';
-import { RemoveItemBtn, AddItemBtn, AddedItemBtn } from '../../myLists/StyledComponents';
+import { IconContainer } from '../../myLists/StyledComponents';
 
 export const VideoAndChatContainer = styled.div`
   position: fixed;
@@ -59,7 +59,7 @@ export const VideoAndChatContainer = styled.div`
     height: 100%;
   }
 
-  ${AddedItemBtn}, ${RemoveItemBtn}, ${AddItemBtn} {
+  ${IconContainer} {
     opacity: 0;
   }
 
@@ -71,8 +71,8 @@ export const VideoAndChatContainer = styled.div`
     .listVideoButton {
       opacity: 1;
     }
-    ${AddedItemBtn}, ${RemoveItemBtn}, ${AddItemBtn} {
-      opacity: 0;
+    ${IconContainer} {
+      opacity: 1;
     }
   }
 `;

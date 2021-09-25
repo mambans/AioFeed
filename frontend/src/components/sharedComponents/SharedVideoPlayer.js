@@ -115,7 +115,7 @@ const SharedVideoPlayer = ({ listName, setListName }) => {
           style={{
             right: listName && !viewStates.hideList ? `${viewStates.listWidth + 15}px` : '15px',
             top: '55px',
-            opacity: '1',
+            // opacity: '1',
           }}
           size={32}
           list={list}

@@ -229,6 +229,7 @@ export const IconContainer = styled.div`
   cursor: pointer;
   z-index: 1;
   margin-left: 7px;
+  transition: color 250ms, opacity 250ms;
 
   .actionIcon {
     position: absolute;
