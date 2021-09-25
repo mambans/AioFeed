@@ -189,7 +189,8 @@ export const VolumeText = styled.div`
   height: 100%;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
+  text-shadow: 0px 0px 1px rgb(0, 0, 0);
   opacity: 0;
   transition: opacity 500ms;
 
@@ -224,6 +225,10 @@ export const StyledVolumeEventOverlay = styled.div`
   margin-bottom: ${({ vodVolumeOverlayEnabled }) =>
     vodVolumeOverlayEnabled ? VEO_margin_bottom + 'px' : 'unset'};
 
+  display: ${({ centerBotttom }) => centerBotttom && 'flex'};
+  justify-content: ${({ centerBotttom }) => centerBotttom && 'center'};
+  align-items: ${({ centerBotttom }) => centerBotttom && 'end'};
+
   a,
   p {
     text-shadow: 0 0 2px black;
@@ -251,11 +256,6 @@ export const StyledVolumeEventOverlay = styled.div`
   }
 
   &:hover {
-    background-color: ${({ visiblyShowOnHover }) =>
-      visiblyShowOnHover ? 'rgba(0,0,0,0.2)' : 'transparent'};
-    box-shadow: ${({ visiblyShowOnHover }) =>
-      visiblyShowOnHover ? '0 0 50px 50px rgba(0, 0, 0, 0.2)' : 'none'};
-
     ${VolumeText} {
       opacity: 1;
     }

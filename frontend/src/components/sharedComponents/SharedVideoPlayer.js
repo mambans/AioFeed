@@ -165,9 +165,9 @@ const SharedVideoPlayer = ({ listName, setListName }) => {
           player={childPlayer}
           setIsPlaying={setIsPlaying}
           videoElementRef={videoElementRef}
-          visiblyShowOnHover
-          showVolumeText
+          showVolumeSlider
           addEventListeners
+          centerBotttom
         />
 
         {domain === 'youtube' ? (

@@ -81,7 +81,7 @@ const VolumeSlider = ({
         setVolumeMuted(!TwitchPlayer.getMuted());
         break;
       case 0:
-        if (!TwitchPlayer.isPaused() && Date.now() - OpenedDate.current <= 15000) {
+        if (!TwitchPlayer.isPaused() && Date.now() - OpenedDate?.current <= 15000) {
           TwitchPlayer.setMuted(false);
           setVolumeMuted(false);
           setVolumeText(TwitchPlayer.getVolume() * 100);

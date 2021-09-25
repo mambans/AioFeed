@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
-import { StyledVolumeEventOverlay, VolumeText } from './player/StyledComponents';
+import { StyledVolumeEventOverlay } from './player/StyledComponents';
 import toggleFullscreenFunc from './player/toggleFullscreenFunc';
-import { FaVolumeMute } from 'react-icons/fa';
-import { FaVolumeUp } from 'react-icons/fa';
 import { CSSTransition } from 'react-transition-group';
 import { throttle } from 'lodash';
+import VolumeSlider from './player/VolumeSlider';
 
 const VolumeEventOverlay = React.forwardRef(
   (
@@ -22,32 +21,17 @@ const VolumeEventOverlay = React.forwardRef(
       player,
       videoElementRef,
       style,
-      visiblyShowOnHover,
-      showVolumeText,
+      showVolumeSlider,
       addEventListeners = false,
+      centerBotttom,
     },
     ref
   ) => {
-    const [volumeText, setVolumeText] = useState();
-    const [volumeMuted, setVolumeMuted] = useState(true);
     const [seekTime, setSeekTime] = useState();
     const [showControlls, setShowControlls] = useState();
     const seekresetTimer = useRef();
     const fadeTimer = useRef();
 
-    useEffect(() => {
-      if (show) {
-        setVolumeText(player.current?.getVolume() * 100);
-        setVolumeMuted(player.current?.getMuted());
-      }
-    }, [show, player]);
-
-    useEventListenerMemo(
-      'wheel',
-      scrollChangeVolumeEvent,
-      VolumeEventOverlayRef.current,
-      addEventListeners && window?.Twitch?.Player?.PLAYING
-    );
     useEventListenerMemo(
       'keydown',
       keyboardEvents,
@@ -59,12 +43,6 @@ const VolumeEventOverlay = React.forwardRef(
       toggleFullScreen,
       VolumeEventOverlayRef.current,
       addEventListeners
-    );
-    useEventListenerMemo(
-      'mousedown',
-      mouseEvents,
-      VolumeEventOverlayRef.current,
-      addEventListeners && window?.Twitch?.Player?.PLAYING
     );
 
     const showAndResetTimer = throttle(
@@ -97,17 +75,6 @@ const VolumeEventOverlay = React.forwardRef(
       addEventListeners
     );
 
-    function mouseEvents(e) {
-      switch (e.button) {
-        case 1:
-          player.current.setMuted(!player.current.getMuted());
-          setVolumeMuted(!player.current.getMuted());
-          break;
-        default:
-          break;
-      }
-    }
-
     function keyboardEvents(e) {
       switch (e.key) {
         case 'f':
@@ -122,17 +89,6 @@ const VolumeEventOverlay = React.forwardRef(
         case ' ':
           e.preventDefault();
           player.current.isPaused() ? player.current.play() : player.current.pause();
-          break;
-        case 'm':
-        case 'M':
-          player.current.setMuted(!player.current.getMuted());
-          setVolumeMuted(!player.current.getMuted());
-          break;
-        case 'ArrowDown':
-          changeVolume('decrease', 0.05);
-          break;
-        case 'ArrowUp':
-          changeVolume('increase', 0.05);
           break;
         case 'ArrowRight':
           if (!seekTime) {
@@ -169,34 +125,6 @@ const VolumeEventOverlay = React.forwardRef(
       });
     }
 
-    function changeVolume(operator, amount) {
-      setVolumeText((volumeText) => {
-        const newVolume = Math.min(
-          Math.max(
-            operator === 'increase' ? volumeText / 100 + amount : volumeText / 100 - amount,
-            0
-          ),
-          1
-        );
-
-        if (player.current.getMuted()) {
-          player.current.setMuted(false);
-          setVolumeMuted(false);
-        }
-
-        player.current.setVolume(newVolume);
-        return newVolume * 100;
-      });
-    }
-
-    function scrollChangeVolumeEvent(e) {
-      if (e?.wheelDelta > 0 || e.deltaY < 0) {
-        changeVolume('increase', 0.01);
-      } else {
-        changeVolume('decrease', 0.01);
-      }
-    }
-
     return (
       <CSSTransition
         in={show && showControlls}
@@ -214,13 +142,16 @@ const VolumeEventOverlay = React.forwardRef(
           vodVolumeOverlayEnabled={vodVolumeOverlayEnabled}
           chatwidth={chatwidth}
           showcursor={showcursor}
-          visiblyShowOnHover={visiblyShowOnHover}
+          centerBotttom={centerBotttom}
         >
-          {showVolumeText && (
-            <VolumeText>
-              {volumeMuted ? <FaVolumeMute size='2rem' /> : <FaVolumeUp size='2rem' />}
-              {volumeText?.toFixed(0)}
-            </VolumeText>
+          {showVolumeSlider && (
+            <VolumeSlider
+              // OpenedDate={OpenedDate}
+              PlayerUIControlls={VolumeEventOverlayRef.current}
+              TwitchPlayer={player.current}
+              setShowControlls={setShowControlls}
+              showAndResetTimer={showAndResetTimer}
+            />
           )}
           {children}
         </StyledVolumeEventOverlay>

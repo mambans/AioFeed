@@ -116,7 +116,7 @@ export const AddRemoveBtn = ({
       onMouseEnter={mouseEnter}
       onMouseLeave={mouseLeave}
     >
-      <AddItemBtn size={size} disableHoverEffect={!list} />
+      <AddItemBtn size={size} disablehovereffect={String(!list)} />
     </IconContainer>
   );
 };
