@@ -216,7 +216,7 @@ export const StyledVolumeEventOverlay = styled.div`
     vodVolumeOverlayEnabled ? `calc(100% - ${VEO_margin_top + VEO_margin_bottom}px)` : '100%'};
   bottom: ${({ type }) => (type === 'live' ? 'unset' : '70px')};
   cursor: ${({ showcursor }) => (showcursor ? 'auto' : 'none')};
-  display: ${({ show }) => (show ? 'block' : 'none')};
+  display: ${({ show, centerBotttom }) => (show ? (centerBotttom ? 'flex' : 'block') : 'none')};
   align-self: center;
   transition: background-color 500ms, box-shadow 500ms;
 
@@ -225,7 +225,6 @@ export const StyledVolumeEventOverlay = styled.div`
   margin-bottom: ${({ vodVolumeOverlayEnabled }) =>
     vodVolumeOverlayEnabled ? VEO_margin_bottom + 'px' : 'unset'};
 
-  display: ${({ centerBotttom }) => centerBotttom && 'flex'};
   justify-content: ${({ centerBotttom }) => centerBotttom && 'center'};
   align-items: ${({ centerBotttom }) => centerBotttom && 'end'};
 
