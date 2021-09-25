@@ -456,7 +456,6 @@ export const QualitiesList = styled.ul`
   position: absolute;
   bottom: 50px;
   font-weight: bold;
-  left: 415px;
   cursor: pointer;
   margin: 5px;
   list-style: none;

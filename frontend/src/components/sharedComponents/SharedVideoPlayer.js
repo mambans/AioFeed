@@ -155,7 +155,7 @@ const SharedVideoPlayer = ({ listName, setListName }) => {
           hidechat={String(viewStates.hideList || !listName)}
           vodVolumeOverlayEnabled={enableVodVolumeOverlay}
           chatwidth={viewStates.listWidth || DEFAULT_LIST_WIDTH}
-          showcursor={enableVodVolumeOverlay && isPlaying}
+          showcursor={enableVodVolumeOverlay}
           isPlaying={isPlaying}
           resizeActive={resizeActive}
           viewStates={viewStates}
@@ -165,6 +165,7 @@ const SharedVideoPlayer = ({ listName, setListName }) => {
           player={childPlayer}
           setIsPlaying={setIsPlaying}
           videoElementRef={videoElementRef}
+          channelName={channelName}
           showVolumeSlider
           addEventListeners
           centerBotttom

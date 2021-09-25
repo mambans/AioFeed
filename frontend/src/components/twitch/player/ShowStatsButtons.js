@@ -60,7 +60,7 @@ const ShowStatsButtons = ({ TwitchPlayer }) => {
   }, []);
 
   return (
-    <>
+    <div>
       {showPlaybackStats && playbackStats && (
         <PlaybackStats>
           {Object.keys(playbackStats).map((statName) => (
@@ -82,7 +82,7 @@ const ShowStatsButtons = ({ TwitchPlayer }) => {
         title='Show video stats (s)'
         onClick={ToggleShowStats}
       />
-    </>
+    </div>
   );
 };
 export default ShowStatsButtons;

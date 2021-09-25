@@ -5,6 +5,10 @@ import toggleFullscreenFunc from './player/toggleFullscreenFunc';
 import { CSSTransition } from 'react-transition-group';
 import { throttle } from 'lodash';
 import VolumeSlider from './player/VolumeSlider';
+import PlayPauseButton from './player/PlayPauseButton';
+import ShowStatsButtons from './player/ShowStatsButtons';
+import ShowSetQualityButtons from './player/ShowSetQualityButtons';
+import ClipButton from './player/ClipButton';
 
 const VolumeEventOverlay = React.forwardRef(
   (
@@ -24,6 +28,7 @@ const VolumeEventOverlay = React.forwardRef(
       showVolumeSlider,
       addEventListeners = false,
       centerBotttom,
+      channelName,
     },
     ref
   ) => {
@@ -144,14 +149,23 @@ const VolumeEventOverlay = React.forwardRef(
           showcursor={showcursor}
           centerBotttom={centerBotttom}
         >
-          {showVolumeSlider && (
-            <VolumeSlider
-              // OpenedDate={OpenedDate}
-              PlayerUIControlls={VolumeEventOverlayRef.current}
-              TwitchPlayer={player.current}
-              setShowControlls={setShowControlls}
-              showAndResetTimer={showAndResetTimer}
-            />
+          {showVolumeSlider && player.current && (
+            <>
+              <PlayPauseButton
+                TwitchPlayer={player.current}
+                PlayerUIControlls={VolumeEventOverlayRef.current}
+              />
+              <VolumeSlider
+                // OpenedDate={OpenedDate}
+                PlayerUIControlls={VolumeEventOverlayRef.current}
+                TwitchPlayer={player.current}
+                setShowControlls={setShowControlls}
+                showAndResetTimer={showAndResetTimer}
+              />
+              <ShowStatsButtons TwitchPlayer={player.current} />
+              <ShowSetQualityButtons TwitchPlayer={player.current} />
+              <ClipButton streamInfo={{ user_name: channelName }} />
+            </>
           )}
           {children}
         </StyledVolumeEventOverlay>

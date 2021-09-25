@@ -19,7 +19,7 @@ const ShowSetQualityButtons = ({ TwitchPlayer }) => {
   }
 
   return (
-    <>
+    <div>
       {showQualities && qualities && (
         <QualitiesList>
           {qualities.map((quality) => (
@@ -48,7 +48,7 @@ const ShowSetQualityButtons = ({ TwitchPlayer }) => {
         <MdSettings size={24} />
         {activeQuality ? activeQuality.name : TwitchPlayer && TwitchPlayer.getQuality().name}
       </ButtonShowQualities>
-    </>
+    </div>
   );
 };
 export default ShowSetQualityButtons;
