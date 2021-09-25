@@ -15,6 +15,7 @@ import { Button, Nav } from 'react-bootstrap';
 import { GrRefresh } from 'react-icons/gr';
 import { Link, NavLink } from 'react-router-dom';
 import NavigationContext from '../../navigation/NavigationContext';
+import { RemoveItemBtn, AddItemBtn, AddedItemBtn } from '../../myLists/StyledComponents';
 
 export const VideoAndChatContainer = styled.div`
   position: fixed;
@@ -44,16 +45,6 @@ export const VideoAndChatContainer = styled.div`
     linear-gradient(127deg, rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.7) 70.71%),
     linear-gradient(336deg, rgba(30, 30, 30, 0.8), rgba(0, 0, 0, 0.7) 70.71%);
 
-  &:hover {
-    #switchSides {
-      opacity: 0.6;
-    }
-
-    .listVideoButton {
-      opacity: 1;
-    }
-  }
-
   div#twitch-embed {
     grid-area: video;
   }
@@ -66,6 +57,23 @@ export const VideoAndChatContainer = styled.div`
   .IframeContainer {
     width: 100%;
     height: 100%;
+  }
+
+  ${AddedItemBtn}, ${RemoveItemBtn}, ${AddItemBtn} {
+    opacity: 0;
+  }
+
+  &:hover {
+    #switchSides {
+      opacity: 0.6;
+    }
+
+    .listVideoButton {
+      opacity: 1;
+    }
+    ${AddedItemBtn}, ${RemoveItemBtn}, ${AddItemBtn} {
+      opacity: 0;
+    }
   }
 `;
 

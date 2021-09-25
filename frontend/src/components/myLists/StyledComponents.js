@@ -165,7 +165,7 @@ export const ButtonContainer = styled.div`
 `;
 
 export const AddItemBtn = styled(MdPlaylistAdd)`
-  transition: color 250ms;
+  transition: color 250ms, opacity 250ms;
 
   &:hover {
     color: ${({ disableHoverEffect }) => (disableHoverEffect ? '#ffffff' : 'var (--listColorAdd)')};
@@ -173,7 +173,7 @@ export const AddItemBtn = styled(MdPlaylistAdd)`
 `;
 
 export const AddedItemBtn = styled(MdPlaylistAddCheck)`
-  transition: color 250ms;
+  transition: color 250ms, opacity 250ms;
   color: var(--listColorAdd);
 
   &:hover {
@@ -182,7 +182,7 @@ export const AddedItemBtn = styled(MdPlaylistAddCheck)`
 `;
 
 export const RemoveItemBtn = styled(CgPlayListRemove)`
-  transition: color 250ms;
+  transition: color 250ms, opacity 250ms;
   color: rgb(100, 100, 100);
 
   &:hover {
