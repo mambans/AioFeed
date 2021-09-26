@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 /**
  * Save in localstorage.
@@ -35,6 +35,17 @@ const useLocalStorageState = (key, defaultValue) => {
     },
     [key]
   );
+
+  useEffect(() => {
+    setValue(() => {
+      const storedValue = localStorage.getItem(key);
+      try {
+        return storedValue ? JSON.parse(storedValue) : defaultValue;
+      } catch (error) {
+        return storedValue || defaultValue;
+      }
+    });
+  }, [key, defaultValue]);
 
   return [value, setLocalStateValue];
 };
