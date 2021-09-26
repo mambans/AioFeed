@@ -8,6 +8,18 @@ const PlayPauseButton = ({ TwitchPlayer, PlayerUIControlls }) => {
 
   useEventListenerMemo('keydown', keyboardEvents, window, window?.Twitch?.Player?.READY);
   useEventListenerMemo('mousedown', mouseEvents, PlayerUIControlls, window?.Twitch?.Player?.READY);
+  useEventListenerMemo(
+    window?.Twitch?.Player?.PLAY,
+    () => setIsPaused(false),
+    TwitchPlayer,
+    window?.Twitch?.Player?.READY
+  );
+  useEventListenerMemo(
+    window?.Twitch?.Player?.PAUSE,
+    () => setIsPaused(true),
+    TwitchPlayer,
+    window?.Twitch?.Player?.READY
+  );
 
   function PausePlay() {
     if (TwitchPlayer.isPaused()) {
