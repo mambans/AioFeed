@@ -167,6 +167,7 @@ export const Container = styled.div`
   top: 50px;
   z-index: 3;
   grid-column: video-start;
+  pointer-events: auto;
 `;
 
 export const StyledButton = styled(Button)`

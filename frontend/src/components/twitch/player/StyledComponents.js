@@ -216,8 +216,10 @@ export const StyledVolumeEventOverlay = styled.div`
     vodVolumeOverlayEnabled ? `calc(100% - ${VEO_margin_top + VEO_margin_bottom}px)` : '100%'};
   bottom: ${({ type }) => (type === 'live' ? 'unset' : '70px')};
   cursor: ${({ showcursor }) => (showcursor ? 'auto' : 'none')};
-  display: ${({ show, centerBotttom }) => (show ? (centerBotttom ? 'flex' : 'block') : 'none')};
+  display: ${({ centerBotttom }) => (centerBotttom ? 'flex' : 'block')};
   align-self: center;
+  pointer-events: ${({ show }) => (show ? 'all' : 'none')};
+
   transition: background-color 500ms, box-shadow 500ms;
 
   margin-top: ${({ vodVolumeOverlayEnabled }) =>
@@ -227,6 +229,10 @@ export const StyledVolumeEventOverlay = styled.div`
 
   justify-content: ${({ centerBotttom }) => centerBotttom && 'center'};
   align-items: ${({ centerBotttom }) => centerBotttom && 'end'};
+
+  * {
+    pointer-events: auto;
+  }
 
   a,
   p {
@@ -255,7 +261,7 @@ export const StyledVolumeEventOverlay = styled.div`
   }
 
   &:hover {
-    ${VolumeText} {
+    & ${VolumeText} {
       opacity: 1;
     }
   }

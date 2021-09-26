@@ -36,7 +36,6 @@ const SharedVideoPlayer = () => {
   const { lists } = useContext(MyListsContext) || {};
   const [listToShow, setListToShow] = useState();
 
-  console.log('listToShow?.name || empty-viewStates:', `${listToShow?.name || 'empty'}-viewStates`);
   const [viewStates, setViewStates] = useLocalStorageState(
     `${listToShow?.name || 'empty'}-viewStates`,
     {
@@ -45,7 +44,6 @@ const SharedVideoPlayer = () => {
       default: true,
     }
   );
-  console.log('viewStates:', viewStates);
 
   const [resizeActive, setResizeActive] = useState(false);
   const [listVideos, setListVideos] = useState();
@@ -97,12 +95,6 @@ const SharedVideoPlayer = () => {
       }
     }
   }, [videoId, urlListName, lists]);
-
-  // useEffect(() => {
-  //   if (!urlListName) {
-  //     toggleShowList({ show: false, updateLocalstorage: false });
-  //   }
-  // }, [toggleShowList, urlListName]);
 
   useFullscreen();
 
@@ -197,8 +189,7 @@ const SharedVideoPlayer = () => {
           <AddToListButton
             videoId_p={videoId}
             style={{
-              right:
-                urlListName && !viewStates.hideList ? `${viewStates.listWidth + 15}px` : '15px',
+              right: '10px',
               top: '10px',
               // opacity: '1',
             }}

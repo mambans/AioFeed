@@ -4,7 +4,7 @@ import { FaPause } from 'react-icons/fa';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
 const PlayPauseButton = ({ TwitchPlayer, PlayerUIControlls }) => {
-  const [isPaused, setIsPaused] = useState(false);
+  const [isPaused, setIsPaused] = useState(TwitchPlayer?.isPaused() || false);
 
   useEventListenerMemo('keydown', keyboardEvents, window, window?.Twitch?.Player?.READY);
   useEventListenerMemo('mousedown', mouseEvents, PlayerUIControlls, window?.Twitch?.Player?.READY);
