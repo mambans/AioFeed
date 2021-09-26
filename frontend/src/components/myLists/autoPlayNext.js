@@ -4,8 +4,7 @@ const autoPlayNext = ({
   loopEnabled = false,
   listVideos,
   videoId,
-  list,
-  listName,
+  listToShow,
   autoPlayNext,
   loopList,
   autoPlayRandom,
@@ -24,7 +23,7 @@ const autoPlayNext = ({
       } else if (autoPlayNext) {
         const nextVideoIndex = listVideos?.findIndex((v) => v.id === videoId) + 1;
 
-        if (nextVideoIndex >= list?.items?.length) {
+        if (nextVideoIndex >= listToShow?.items?.length) {
           if (loopList) return listVideos?.[0];
           return false;
         }
@@ -32,7 +31,7 @@ const autoPlayNext = ({
         return listVideos?.[nextVideoIndex];
       } else if (loopList) {
         const nextVideoIndex = listVideos?.findIndex((v) => v.id === videoId) + 1;
-        return listVideos?.[nextVideoIndex >= list?.items?.length ? 0 : nextVideoIndex];
+        return listVideos?.[nextVideoIndex >= listToShow?.items?.length ? 0 : nextVideoIndex];
       }
 
       return false;
@@ -42,9 +41,9 @@ const autoPlayNext = ({
 
     const videoType = typeof parseNumberAndString(nextVideo.id) === 'string' ? 'youtube' : 'videos';
     if (videoType === 'youtube') {
-      return `/youtube/${nextVideo.id}?list=${listName}`;
+      return `/youtube/${nextVideo.id}?list=${listToShow.name}`;
     } else {
-      return `/${nextVideo.user_login}/videos/${nextVideo.id}?list=${listName}`;
+      return `/${nextVideo.user_login}/videos/${nextVideo.id}?list=${listToShow.name}`;
     }
   }
 };

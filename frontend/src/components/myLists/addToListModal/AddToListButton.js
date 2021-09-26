@@ -5,6 +5,7 @@ import { ButtonContainer } from '../StyledComponents';
 import AddToListModal from './AddToListModal';
 import MyListsContext from '../MyListsContext';
 import { AddRemoveBtn } from './AddToListModal';
+import useClicksOutside from '../../../hooks/useClicksOutside';
 
 const AddToListButton = ({
   list,
@@ -13,12 +14,14 @@ const AddToListButton = ({
   size,
   disablepreview = () => {},
   redirect,
-  setListName,
 }) => {
   const videoId = typeof videoId_p === 'number' ? parseInt(videoId_p) || videoId_p : videoId_p;
   const [open, setOpen] = useState();
   const fadeOutTimer = useRef();
   const { lists, setLists } = useContext(MyListsContext) || {};
+  const ref = useRef();
+
+  useClicksOutside(ref, CloseFunction, open);
 
   const OpenFunction = (e) => {
     e.stopPropagation();
@@ -30,11 +33,17 @@ const AddToListButton = ({
     return false;
   };
 
-  const CloseFunction = (e) => {
+  function CloseFunction(e) {
     if (e) e.stopPropagation();
     clearTimeout(fadeOutTimer.current);
     setOpen(false);
     return false;
+  }
+
+  const toggle = (e) => {
+    if (e) e.stopPropagation();
+    clearTimeout(fadeOutTimer.current);
+    setOpen((c) => !c);
   };
 
   const CloseFunctionDelay = (e) => {
@@ -51,6 +60,7 @@ const AddToListButton = ({
       style={style}
       open={open}
       onMouseLeave={CloseFunctionDelay}
+      ref={ref}
     >
       <AddRemoveBtn
         list={list}
@@ -62,6 +72,7 @@ const AddToListButton = ({
         setLists={setLists}
         onMouseEnter={OpenFunction}
         onMouseLeave={CloseFunctionDelay}
+        onClick={toggle}
       />
 
       <CSSTransition in={open} timeout={250} classNames='fade' unmountOnExit>
@@ -71,7 +82,6 @@ const AddToListButton = ({
           CloseFunction={CloseFunction}
           videoId={videoId}
           redirect={redirect}
-          setListName={setListName}
         />
       </CSSTransition>
     </ButtonContainer>

@@ -86,6 +86,35 @@ export const Lists = styled.div`
   }
 `;
 
+export const IconContainer = styled.div`
+  position: relative;
+  cursor: pointer;
+  z-index: 1;
+  margin-left: 7px;
+  transition: color 250ms, opacity 250ms;
+
+  .actionIcon {
+    position: absolute;
+    bottom: 0;
+    opacity: 0;
+    transition: opacity 250ms;
+  }
+
+  &:hover {
+    .actionIcon {
+      opacity: 1;
+    }
+
+    .add {
+      color: var(--listColorAdd);
+    }
+
+    .remove {
+      color: rgb(100, 100, 100);
+    }
+  }
+`;
+
 export const ListItem = styled.div`
   height: 30px;
   font-size: 16px;
@@ -94,14 +123,27 @@ export const ListItem = styled.div`
   box-shadow: 0px 1px 2px #2f2c37;
   display: flex;
   align-items: center;
+  transition: color 250ms;
+  color: rgb(200, 200, 200);
+
+  button {
+    background: none;
+    border: none;
+    box-shadow: none;
+    font-weight: inherit;
+    transition: inherit;
+    color: ${({ added }) => (added ? '#ffffff' : 'rgb(200,200,200)')};
+
+    &:hover {
+      color: #ffffff;
+    }
+  }
 
   &:last-child {
     box-shadow: none;
   }
 
-  color: rgb(200, 200, 200);
-
-  &:hover {
+  &:hover:not(${IconContainer}) {
     color: #ffffff;
   }
 
@@ -168,7 +210,8 @@ export const AddItemBtn = styled(MdPlaylistAdd)`
   transition: color 250ms, opacity 250ms;
 
   &:hover {
-    color: ${({ disablehovereffect }) => (disablehovereffect === "true" ? '#ffffff' : 'var (--listColorAdd)')};
+    color: ${({ disablehovereffect }) =>
+      disablehovereffect === 'true' ? '#ffffff' : 'var (--listColorAdd)'};
   }
 `;
 
@@ -221,34 +264,5 @@ export const Label = styled(Form.Label)`
     border-top: none;
     border-right: none;
     border-left: none;
-  }
-`;
-
-export const IconContainer = styled.div`
-  position: relative;
-  cursor: pointer;
-  z-index: 1;
-  margin-left: 7px;
-  transition: color 250ms, opacity 250ms;
-
-  .actionIcon {
-    position: absolute;
-    bottom: 0;
-    opacity: 0;
-    transition: opacity 250ms;
-  }
-
-  &:hover {
-    .actionIcon {
-      opacity: 1;
-    }
-
-    .add {
-      color: var(--listColorAdd);
-    }
-
-    .remove {
-      color: rgb(100, 100, 100);
-    }
   }
 `;

@@ -24,7 +24,7 @@ const useInput = (initialValue) => {
   };
 };
 
-const NewListForm = ({ item }) => {
+const NewListForm = ({ item, style }) => {
   const { value: listName, bind: bindListName, reset: resetListName, setValue } = useInput('');
   const { lists, setLists } = useContext(MyListsContext) || {};
 
@@ -60,7 +60,8 @@ const NewListForm = ({ item }) => {
   };
 
   return (
-    <Form noValidate onSubmit={handleSubmit} style={{ minWidth: '175px' }}>
+    // <Form noValidate onSubmit={handleSubmit} style={{ minWidth: '175px' }}>
+    <Form noValidate onSubmit={handleSubmit} style={style}>
       <FormGroup controlId='formGroupChannel'>
         <Label>
           <Form.Control

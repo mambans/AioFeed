@@ -18,7 +18,7 @@ export const ScheduleListContainer = styled.div`
     error ? 'auto' : `${SingelScheduleItemTotalHeight * (nrOfItemsP || nrOfItems) + 10}px`};
   overflow: auto;
   position: absolute;
-  right: 0;
+  right: 0px;
   margin-top: 10px;
   z-index: 12;
   margin-right: 10px;
@@ -162,10 +162,11 @@ export const StyledSchedule = styled.div`
 `;
 
 export const Container = styled.div`
-  position: ${({ absolute }) => (absolute === 'true' ? 'absolute' : 'unset')};
+  position: ${({ absolute }) => (absolute === 'true' ? 'absolute' : 'relative')};
   right: 18px;
-  top: 120px;
+  top: 50px;
   z-index: 3;
+  grid-column: video-start;
 `;
 
 export const StyledButton = styled(Button)`

@@ -7,7 +7,6 @@ import Loopbar, { timeToSeconds } from './Loopbar';
 import { LoopBtn, Loop } from './StyledComponents';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import ToolTip from '../../sharedComponents/ToolTip';
-import Schedule from '../schedule';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 
 const VideoPlayer = ({ listIsOpen, listWidth, playNext, childPlayer = {}, setIsPlaying }) => {
@@ -158,10 +157,6 @@ const VideoPlayer = ({ listIsOpen, listWidth, playNext, childPlayer = {}, setIsP
 
   return (
     <>
-      <Schedule
-        user_id={videoDetails?.user_id}
-        user={videoDetails?.login || videoDetails?.user_name || channelName}
-      />
       <Loop listIsOpen={String(listIsOpen)} listWidth={listWidth} loopEnabled={String(loopEnabled)}>
         {twitchVideoPlayer.current && (
           <ToolTip

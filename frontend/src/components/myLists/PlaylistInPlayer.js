@@ -1,22 +1,28 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled, { css } from 'styled-components';
 import { MdQueuePlayNext, MdSkipNext } from 'react-icons/md';
+import { HiViewList } from 'react-icons/hi';
 import { FaRandom } from 'react-icons/fa';
 import { TiArrowLoop } from 'react-icons/ti';
 
-import { useCheckForVideosAndValidateToken } from '../myLists';
-import MyListSmallList from '../myLists/MyListSmallList';
-import { restructureVideoList, uploadNewList } from '../myLists/dragDropUtils';
-import MyListsContext from '../myLists/MyListsContext';
-import { fetchListVideos } from '../myLists/List';
+import { useCheckForVideosAndValidateToken } from '.';
+import MyListSmallList from './MyListSmallList';
+import { restructureVideoList, uploadNewList } from './dragDropUtils';
+import MyListsContext from './MyListsContext';
+import { fetchListVideos } from './List';
 import { LoadingVideoElement } from '../twitch/StyledComponents';
 import VodElement from '../twitch/vods/VodElement';
-import YoutubeVideoElement from './YoutubeVideoElement';
+import YoutubeVideoElement from '../youtube/YoutubeVideoElement';
 import ToolTip from '../sharedComponents/ToolTip';
+import { useParams } from 'react-router';
+import { ListItem } from './StyledComponents';
+import { AddRemoveBtn } from './addToListModal/AddToListModal';
+import NewListForm from './addToListModal/NewListForm';
+import useClicksOutside from '../../hooks/useClicksOutside';
 
 const Container = styled.div`
-  height: calc(100% - 60px);
+  max-height: calc(100% - 60px);
   width: 100%;
   display: flex;
   overflow: hidden scroll;
@@ -31,6 +37,7 @@ const PlayListButtonsContainer = styled.div`
   justify-content: center;
   width: 100%;
   margin-bottom: 10px;
+  position: relative;
 `;
 
 const ListTitle = styled.h2`
@@ -62,6 +69,20 @@ const PlayNextBtn = styled(MdSkipNext)`
     opacity: 1;
   }
 `;
+const ShowListsBtn = styled(HiViewList)`
+  ${svgButtonsStyle}
+`;
+const ListsList = styled.div`
+  position: absolute;
+  background: rgba(20, 20, 20, 0.92);
+  left: 0;
+  top: 0;
+  border-radius: 3px;
+  min-width: 125px;
+  min-height: 50px;
+  padding: 10px 5px;
+`;
+
 const AutoPlayNextBtn = styled(MdQueuePlayNext)`
   ${svgButtonsStyle}
 `;
@@ -73,6 +94,44 @@ const PlayNextRandomBtn = styled(FaRandom)`
   ${svgButtonsStyle}
 `;
 
+const ShowLists = ({ setListToShow, listToShow, setLists, lists }) => {
+  const [open, setOpen] = useState();
+  const { videoId } = useParams() || {};
+  const ref = useRef();
+  useClicksOutside(ref, () => setOpen(false), open);
+
+  return (
+    <div ref={ref} style={{ height: '20px', display: 'flex' }}>
+      <ShowListsBtn size={20} onClick={() => setOpen((c) => !c)} />
+      <CSSTransition in={open} timeout={500} classNames='SlideHorizontal' unmountOnExit>
+        <ListsList>
+          {Object.values(lists).map((list, index) => {
+            return (
+              <ListItem key={list?.name + index} added={list.items.includes(videoId)}>
+                <button
+                  onClick={() => {
+                    if (listToShow?.name !== list.name) setListToShow(list);
+                  }}
+                >
+                  {list.name}
+                </button>
+                <AddRemoveBtn
+                  list={list}
+                  videoId={videoId}
+                  setLists={setLists}
+                  redirect={true}
+                  setListToShow={setListToShow}
+                />
+              </ListItem>
+            );
+          })}
+          <NewListForm item={videoId} style={{ marginTop: '25px' }} />
+        </ListsList>
+      </CSSTransition>
+    </div>
+  );
+};
+
 const List = ({ listVideos, list, setLists, setListVideos, videoId, playQueue, setPlayQueue }) => {
   const [dragSelected, setDragSelected] = useState();
 
@@ -81,11 +140,11 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId, playQueue, s
       draggable: true,
       setDragSelected: setDragSelected,
       dragSelected: dragSelected,
-      onDragEnd: (e) => uploadNewList(e, list.name, listVideos, setLists),
+      onDragEnd: (e) => uploadNewList(e, list?.name, listVideos, setLists),
       // onDrop: (e) => uploadNewList(e, list.name, videos, setLists),
       onDragOver: (e) => restructureVideoList(e, listVideos, dragSelected, setListVideos),
     }),
-    [dragSelected, listVideos, list.name, setLists, setListVideos]
+    [dragSelected, listVideos, list?.name, setLists, setListVideos]
   );
 
   return (
@@ -145,14 +204,13 @@ const PlaylistInPlayer = ({
   playQueue,
   setPlayQueue,
   playNext,
+  list,
+  lists,
+  setListToShow,
 }) => {
-  const { lists, setLists } = useContext(MyListsContext) || {};
+  const { setLists } = useContext(MyListsContext);
   const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
   const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
-
-  // const [videos, setVideos] = useState();
-  const list =
-    lists && lists[Object.keys(lists).find((key) => key.toLowerCase() === listName?.toLowerCase())];
 
   useCheckForVideosAndValidateToken({
     lists,
@@ -185,8 +243,16 @@ const PlaylistInPlayer = ({
 
   return (
     <>
-      <ListTitle>{listName}</ListTitle>
+      <ListTitle>{list?.name}</ListTitle>
       <PlayListButtonsContainer>
+        <ToolTip tooltip='Show and switch between lists' width='max-content'>
+          <ShowLists
+            setListToShow={setListToShow}
+            listToShow={list}
+            setLists={setLists}
+            lists={lists}
+          />
+        </ToolTip>
         <ToolTip
           tooltip={`${autoPlayNext ? 'Disable' : 'Enable'} auto play next video.`}
           width='max-content'
@@ -226,15 +292,17 @@ const PlaylistInPlayer = ({
         style={{ width: '87%', margin: '0 auto' }}
       />
       <Container>
-        <List
-          listVideos={listVideos}
-          list={list}
-          setLists={setLists}
-          setListVideos={setListVideos}
-          videoId={videoId}
-          setPlayQueue={setPlayQueue}
-          playQueue={playQueue}
-        />
+        {list && (
+          <List
+            listVideos={listVideos}
+            list={list}
+            setListVideos={setListVideos}
+            videoId={videoId}
+            setPlayQueue={setPlayQueue}
+            playQueue={playQueue}
+            setLists={setLists}
+          />
+        )}
       </Container>
     </>
   );

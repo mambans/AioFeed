@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import MyListsContext from './../MyListsContext';
@@ -11,7 +11,6 @@ import {
   AddedItemBtn,
   IconContainer,
 } from './../StyledComponents';
-import useClicksOutside from '../../../hooks/useClicksOutside';
 import { parseNumberAndString } from './../dragDropUtils';
 import NewListForm from './NewListForm';
 import API from '../../navigation/API';
@@ -64,7 +63,8 @@ export const AddRemoveBtn = ({
   onMouseEnter = () => {},
   onMouseLeave = () => {},
   redirect,
-  setListName = () => {},
+  setListToShow = () => {},
+  onClick,
 }) => {
   const videoAdded = list && list?.items?.includes(parseNumberAndString(videoId));
   const [isHovered, setIsHovered] = useState();
@@ -81,7 +81,12 @@ export const AddRemoveBtn = ({
   if (videoAdded)
     return (
       <IconContainer
-        onClick={() => {
+        onClick={(e) => {
+          if (onClick) {
+            onClick(e);
+            return;
+          }
+
           removeFavoriteVideo(setLists, list?.name, videoId);
           window.history.pushState(
             {},
@@ -99,11 +104,16 @@ export const AddRemoveBtn = ({
 
   return (
     <IconContainer
-      onClick={() => {
+      onClick={(e) => {
+        if (onClick) {
+          onClick(e);
+          return;
+        }
+
         if (list) {
           addFavoriteVideo(setLists, list?.name, videoId);
           if (redirect && list?.name) {
-            setListName(`${list?.name}`);
+            setListToShow(list);
             window.history.pushState(
               {},
               document.title,
@@ -121,28 +131,19 @@ export const AddRemoveBtn = ({
   );
 };
 
-const AddToListModal = ({ OpenFunction, CloseFunction, videoId, redirect, setListName }) => {
+const AddToListModal = ({ OpenFunction, videoId, redirect }) => {
   const { lists, setLists } = useContext(MyListsContext) || {};
-  const listRef = useRef();
-
-  useClicksOutside(listRef, CloseFunction);
 
   return (
-    <Lists onMouseEnter={OpenFunction} ref={listRef}>
+    <Lists onMouseEnter={OpenFunction}>
       <ListsLink>
         <Link to='/mylists'>Lists</Link>
       </ListsLink>
       {lists &&
-        Object?.values(lists).map((list) => (
-          <ListItem key={list.name}>
+        Object?.values(lists).map((list, index) => (
+          <ListItem key={list.name + index}>
             {list.name}
-            <AddRemoveBtn
-              list={list}
-              videoId={videoId}
-              setLists={setLists}
-              redirect={redirect}
-              setListName={setListName}
-            />
+            <AddRemoveBtn list={list} videoId={videoId} setLists={setLists} redirect={redirect} />
           </ListItem>
         ))}
       <NewListForm item={videoId} />

@@ -17,14 +17,16 @@ const useLocalStorageState = (key, defaultValue) => {
   });
 
   const setLocalStateValue = useCallback(
-    (newValue) => {
+    (newValue, updateLocalstorage = true) => {
       setValue((currentValue) => {
         const finallValue = typeof newValue === 'function' ? newValue(currentValue) : newValue;
         try {
-          localStorage.setItem(
-            key,
-            typeof finallValue === 'string' ? finallValue : JSON.stringify(finallValue)
-          );
+          if (updateLocalstorage) {
+            localStorage.setItem(
+              key,
+              typeof finallValue === 'string' ? finallValue : JSON.stringify(finallValue)
+            );
+          }
         } catch (error) {
           console.log('Localstorage error:', error);
         }
