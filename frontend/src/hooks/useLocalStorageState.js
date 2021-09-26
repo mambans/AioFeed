@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 
 /**
  * Save in localstorage.
@@ -7,6 +7,7 @@ import { useState, useCallback, useEffect } from 'react';
  * @returns
  */
 const useLocalStorageState = (key, defaultValue) => {
+  const previousKey = useRef(key);
   const [value, setValue] = useState(() => {
     const storedValue = localStorage.getItem(key);
     try {
@@ -37,15 +38,19 @@ const useLocalStorageState = (key, defaultValue) => {
   );
 
   useEffect(() => {
-    setValue(() => {
-      const storedValue = localStorage.getItem(key);
-      try {
-        return storedValue ? JSON.parse(storedValue) : defaultValue;
-      } catch (error) {
-        return storedValue || defaultValue;
-      }
-    });
-  }, [key, defaultValue]);
+    if (previousKey.current !== key) {
+      setValue(() => {
+        const storedValue = localStorage.getItem(key);
+        previousKey.current = key;
+
+        try {
+          if (storedValue) return JSON.parse(storedValue);
+        } catch (error) {
+          return storedValue || defaultValue;
+        }
+      });
+    }
+  }, [key, defaultValue, previousKey]);
 
   return [value, setLocalStateValue];
 };
