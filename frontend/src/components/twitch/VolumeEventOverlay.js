@@ -8,7 +8,6 @@ import VolumeSlider from './player/VolumeSlider';
 import PlayPauseButton from './player/PlayPauseButton';
 import ShowStatsButtons from './player/ShowStatsButtons';
 import ShowSetQualityButtons from './player/ShowSetQualityButtons';
-import ClipButton from './player/ClipButton';
 import Schedule from './schedule';
 
 const VolumeEventOverlay = React.forwardRef(
@@ -166,7 +165,6 @@ const VolumeEventOverlay = React.forwardRef(
               />
               <ShowStatsButtons TwitchPlayer={player.current} />
               <ShowSetQualityButtons TwitchPlayer={player.current} />
-              <ClipButton streamInfo={{ user_name: channelName }} />
             </>
           )}
           {children}
