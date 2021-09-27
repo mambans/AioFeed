@@ -38,25 +38,29 @@ const findOutmostContainer = (target, count) => {
 };
 
 export const restructureVideoList = debounce(
-  (e, arr, dragSelected, setVideos) => {
+  (e, dragSelected, setVideos) => {
     e.preventDefault();
+    // e.dataTransfer.dropEffect = 'all';
     const videoElement = findOutmostContainer(e.target, 0);
     const videoId = videoElement?.dataset?.id;
 
     if (videoId && videoElement !== dragSelected?.element) {
-      const array = [...arr];
-      const newArray = array.filter(
-        (video) =>
-          (video.id || video.contentDetails?.upload?.videoId) !==
-          (dragSelected.data.id || dragSelected.data.contentDetails?.upload?.videoId)
-      );
+      setVideos((c) => {
+        const array = [...c];
+        const newArray = array.filter(
+          (video) =>
+            (video.id || video.contentDetails?.upload?.videoId) !==
+            (dragSelected?.data.id || dragSelected?.data.contentDetails?.upload?.videoId)
+        );
 
-      const new_index = array.findIndex(
-        (video) => (video.id || video.contentDetails?.upload?.videoId) === videoId
-      );
-      newArray.splice(new_index, 0, dragSelected.data);
+        const new_index = array.findIndex(
+          (video) => (video.id || video.contentDetails?.upload?.videoId) === videoId
+        );
 
-      setVideos(newArray);
+        newArray.splice(new_index, 0, dragSelected?.data);
+
+        return newArray;
+      });
     }
   },
   20,

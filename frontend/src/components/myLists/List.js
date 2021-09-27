@@ -138,9 +138,11 @@ const List = ({
       dragSelected: dragSelected,
       onDragEnd: (e) => uploadNewList(e, list.name, videos, setLists),
       // onDrop: (e) => uploadNewList(e, list.name, videos, setLists),
-      onDragOver: (e) => restructureVideoList(e, videos, dragSelected, setVideos),
+      // onDragStart: (e) => (e.dataTransfer.effectAllowed = 'all'),
+      onDragOver: (e) => restructureVideoList(e, dragSelected, setVideos),
+      onDragEnter: (e) => e.preventDefault(),
     }),
-    [dragSelected, videos, list.name, setLists, setVideos]
+    [dragSelected, setVideos, videos, list.name, setLists]
   );
 
   return (
@@ -159,7 +161,8 @@ const List = ({
               <YoutubeVideoElement
                 listName={list.name}
                 list={list}
-                // data-id={video.contentDetails?.upload?.videoId}
+                //data-id used for dragEvents
+                data-id={video.contentDetails?.upload?.videoId}
                 video={video}
                 {...dragEvents}
               />
@@ -167,7 +170,8 @@ const List = ({
               <VodElement
                 listName={list.name}
                 list={list}
-                // data-id={video.id}
+                //data-id used for dragEvents
+                data-id={video.id}
                 data={video}
                 {...dragEvents}
                 vodBtnDisabled={true}
