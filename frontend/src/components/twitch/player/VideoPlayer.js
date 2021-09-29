@@ -8,8 +8,18 @@ import { LoopBtn, Loop } from './StyledComponents';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import ToolTip from '../../sharedComponents/ToolTip';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
+import toggleFullscreenFunc from './toggleFullscreenFunc';
 
-const VideoPlayer = ({ listIsOpen, listWidth, playNext, childPlayer = {}, setIsPlaying }) => {
+const VideoPlayer = ({
+  listIsOpen,
+  listWidth,
+  playNext,
+  childPlayer = {},
+  setIsPlaying,
+  VolumeEventOverlayRef,
+  videoElementRef,
+  setIsFullscreen,
+}) => {
   const channelName = useParams()?.channelName;
   const videoId = useParams()?.videoId;
   const queryTime = useQuery().get('t') || null;
@@ -28,7 +38,26 @@ const VideoPlayer = ({ listIsOpen, listWidth, playNext, childPlayer = {}, setIsP
   useDocumentTitle(
     `${videoDetails?.user_name || channelName || ''} -  ${videoDetails?.title || videoId}`
   );
+  useEventListenerMemo('dblclick', toggleFullScreen, VolumeEventOverlayRef.current);
+  useEventListenerMemo('keydown', keyboardEvents);
 
+  function toggleFullScreen(event) {
+    toggleFullscreenFunc({
+      event,
+      videoElementRef,
+      setIsFullscreen,
+    });
+  }
+  function keyboardEvents(e) {
+    switch (e.key) {
+      case 'f':
+      case 'F':
+        toggleFullScreen(e);
+        break;
+      default:
+        break;
+    }
+  }
   useEventListenerMemo(
     window?.Twitch?.Player?.PLAYING,
     OnPlayingEventListeners,

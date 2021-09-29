@@ -58,6 +58,7 @@ const SharedVideoPlayer = () => {
   const childPlayer = useRef();
   const videoElementRef = useRef();
   const [playQueue, setPlayQueue] = useState([]);
+  const [isFullscreen, setIsFullscreen] = useState();
 
   const toggleShowList = useCallback(
     ({ show, updateLocalstorage }) => {
@@ -141,7 +142,7 @@ const SharedVideoPlayer = () => {
         visible={visible}
         chatwidth={viewStates.listWidth || DEFAULT_LIST_WIDTH}
         resizeActive={resizeActive}
-        hidechat={viewStates.hideList}
+        hidechat={viewStates.hideList || isFullscreen}
         onMouseUp={handleResizeMouseUp}
         onMouseMove={resize}
       >
@@ -209,20 +210,24 @@ const SharedVideoPlayer = () => {
             VolumeEventOverlayRef={VolumeEventOverlayRef}
             setIsPlaying={setIsPlaying}
             childPlayer={childPlayer}
+            videoElementRef={videoElementRef}
+            setIsFullscreen={setIsFullscreen}
           />
         )}
         {/* {children} */}
 
         {!viewStates.hideList && (
           <>
-            <ResizeDevider
-              onMouseDown={handleResizeMouseDown}
-              resizeActive={resizeActive}
-              chatwidth={viewStates.listWidth}
-            >
-              <div />
-            </ResizeDevider>
-            <div id='chat'>
+            {!isFullscreen && (
+              <ResizeDevider
+                onMouseDown={handleResizeMouseDown}
+                resizeActive={resizeActive}
+                chatwidth={viewStates.listWidth}
+              >
+                <div />
+              </ResizeDevider>
+            )}
+            <div id='chat' style={{ display: isFullscreen ? 'none' : 'initial' }}>
               <PlaylistInPlayer
                 listName={urlListName}
                 listVideos={listVideos}
@@ -240,6 +245,7 @@ const SharedVideoPlayer = () => {
                 list={listToShow}
                 lists={lists}
                 setListToShow={setListToShow}
+                isFullscreen={isFullscreen}
               />
             </div>
           </>
