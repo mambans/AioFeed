@@ -79,7 +79,12 @@ const AllFilterList = () => {
 
   return (
     <AllFiltersContainer>
-      <OpenListBtn onClick={() => setOpen(true)} size={26} show={String(open)} />
+      <OpenListBtn
+        onClick={() => setOpen(true)}
+        size={26}
+        show={String(open)}
+        style={{ marginRight: '15px' }}
+      />
       {open && (
         <AllFiltersListContainer
           open={open}

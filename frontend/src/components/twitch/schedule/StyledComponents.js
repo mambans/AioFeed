@@ -163,8 +163,8 @@ export const StyledSchedule = styled.div`
 
 export const Container = styled.div`
   position: ${({ absolute }) => (absolute === 'true' ? 'absolute' : 'relative')};
-  right: 18px;
-  top: 50px;
+  right: ${({ absolute }) => (absolute === 'true' ? '18px' : '0px')};
+  top: ${({ absolute }) => (absolute === 'true' ? '50px' : '0px')};
   z-index: 3;
   grid-column: video-start;
   pointer-events: auto;
