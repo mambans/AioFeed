@@ -106,6 +106,11 @@ const Player = () => {
   useEventListenerMemo(window?.Twitch?.Player?.ONLINE, onlineEvents, twitchVideoPlayer.current);
   useEventListenerMemo(window?.Twitch?.Player?.OFFLINE, offlineEvents, twitchVideoPlayer.current);
   useEventListenerMemo(window?.Twitch?.Player?.PLAYING, playingEvents, twitchVideoPlayer.current);
+  useEventListenerMemo(
+    window?.Twitch?.Player?.PLAYBACK_BLOCKED,
+    (e) => console.log('PLAYBACK_BLOCKED: ', e),
+    twitchVideoPlayer.current
+  );
 
   useEventListenerMemo('mouseleave', handleMouseOut, PlayerUIControlls.current);
   useEventListenerMemo('dblclick', toggleFullScreen, PlayerUIControlls.current);
