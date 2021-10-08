@@ -10,6 +10,7 @@ export const Container = styled.div`
   transition: height 500ms;
   overflow: hidden;
   margin-right: 10px;
+  position: relative;
 
   a#editLink {
     right: 0;

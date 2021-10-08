@@ -54,7 +54,7 @@ export const Twitter = ({ in: forceMount = false }) => {
                 <ResizeWrapper parentCallbackWidth={pushTwitterWidthToFeed}>
                   <List key={id} id={id}>
                     <a
-                      title='Edit list info at Twitter.com'
+                      title={`Edit list ${id} at Twitter.com`}
                       id='editLink'
                       target='_blank'
                       rel='noopener noreferrer'

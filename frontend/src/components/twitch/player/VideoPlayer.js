@@ -77,11 +77,6 @@ const VideoPlayer = ({
     twitchVideoPlayer.current,
     twitchVideoPlayer.current
   );
-  useEventListenerMemo(
-    window?.Twitch?.Player?.PLAYBACK_BLOCKED,
-    (e) => console.log('PLAYBACK_BLOCKED: ', e),
-    twitchVideoPlayer.current
-  );
 
   function OnPlayingEventListeners() {
     setIsPlaying(true);
