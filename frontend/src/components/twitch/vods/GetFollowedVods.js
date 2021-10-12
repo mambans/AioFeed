@@ -55,7 +55,7 @@ const fetchVodsFromMonitoredChannels = async (
         }).then((response) => response.data.data)
     )
   ).catch(async () => {
-    return await reauthenticate(setTwitchAccessToken, setRefreshToken).then(
+    return await reauthenticate({ setTwitchToken: setTwitchAccessToken, setRefreshToken }).then(
       async (access_token) => {
         const channelFetchedVods = [...new Set(followedStreamVods.map((vod) => vod.user_id))];
 

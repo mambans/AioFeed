@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import Moment from 'react-moment';
 import moment from 'moment';
 
-export const NotificationListContainer = styled.ul`
-  li#clear {
+export const NotificationListContainer = styled.div`
+  #clear {
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -13,6 +13,10 @@ export const NotificationListContainer = styled.ul`
     align-items: center;
     color: rgb(150, 150, 150);
     transition: color 250ms;
+    position: absolute;
+    right: 0;
+    top: 580px;
+    transform: translateY(-100%);
 
     &:hover {
       color: rgb(255, 255, 255);
@@ -119,6 +123,8 @@ const StyledDate = styled.div`
   margin: 0;
   grid-row: 3;
   justify-self: right;
+  display: flex;
+  justify-content: end;
 
   p {
     margin: 0;
@@ -126,30 +132,44 @@ const StyledDate = styled.div`
 
   & > div {
     height: 20px;
+    position: relative;
+    min-width: 150px;
+
+    * {
+      position: absolute;
+      top: 0;
+      right: 0;
+      transition: opacity 250ms;
+    }
   }
 
   & > div:hover {
     #timeago {
-      display: none;
+      /* display: none; */
+      opacity: 0;
     }
 
     #time {
-      display: inline;
+      /* display: inline; */
+      opacity: 1;
     }
   }
 
   #time {
-    display: none;
+    /* display: none; */
+    opacity: 0;
   }
 `;
 
-export const Date = ({ date, status }) => (
-  <StyledDate status={status}>
-    <div>
-      <Moment fromNow id='timeago'>
-        {date}
-      </Moment>
-      <p id='time'>{moment(date).format('MM-DD HH:mm')}</p>
-    </div>
-  </StyledDate>
-);
+export const Date = ({ date, status }) => {
+  return (
+    <StyledDate status={status}>
+      <div>
+        <Moment fromNow id='timeago'>
+          {date}
+        </Moment>
+        <p id='time'>{moment(date).format('MM-DD HH:mm')}</p>
+      </div>
+    </StyledDate>
+  );
+};

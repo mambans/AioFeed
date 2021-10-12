@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { AddCookie, getCookie } from '../../util';
+import addLogBase from './../logs/addLogBase';
 
 const BASE_URL = 'https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod';
 
@@ -111,6 +112,11 @@ const API = {
       .post(`${BASE_URL}/youtube/token`, data)
       .then(async (res) => {
         console.log('YouTube: New Access token fetched');
+        addLogBase({
+          title: 'YouTube re-authenticated',
+          text: 'Successfully re-authenticated to YouTube (renewed access token)',
+          icon: 'youtube',
+        });
         return {
           access_token: res.data.access_token,
           refresh_token: res.data.refresh_token,
@@ -157,6 +163,11 @@ const API = {
         setTwitchToken(res.data.access_token);
         setRefreshToken(res.data.refresh_token);
         console.log('Successfully re-authenticated to Twitch.');
+        addLogBase({
+          title: 'Twitch re-authenticated',
+          text: 'Successfully re-authenticated to Twitch (renewed access token)',
+          icon: 'twitch',
+        });
 
         return res.data.access_token;
       })

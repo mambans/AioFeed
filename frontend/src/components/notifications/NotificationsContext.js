@@ -31,7 +31,7 @@ export const NotificationsProvider = ({ children }) => {
             const finalNotifications = [
               ...newNotificationsWithAddedProps,
               ...existingNotifications,
-            ].splice(0, 100);
+            ].splice(0, 200);
 
             resolve({ notifications: finalNotifications, newUnseenNotifications });
           } catch (e) {

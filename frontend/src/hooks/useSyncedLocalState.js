@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 /**
  * Save in localstorage and sync state across multipul tabs/windows.
  * @param {string} key - Name of the localstorage.
- * @param {any} value - Value to save for the localstorage.
+ * @param {any} defaultValue - Default value for the localstorage.
  * @returns
  */
 const useSyncedLocalState = (key, defaultValue) => {

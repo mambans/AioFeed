@@ -17,6 +17,7 @@ import ChannelSearchList from './../twitch/channelList/index';
 import NavExpandingSides from './NavExpandingSides';
 import VodsContext, { VodsProvider } from '../twitch/vods/VodsContext';
 import DropDown from './DropDown';
+import LogsContext from '../logs/LogsContext';
 
 const StyledNavbar = styled(Navbar)`
   display: flex;
@@ -44,6 +45,7 @@ const StyledNav = styled(Nav)`
 const Navigation = () => {
   const { visible, shrinkNavbar } = useContext(NavigationContext);
   const { setChannels } = useContext(VodsContext) || {};
+  const { LogsIcon } = useContext(LogsContext) || {};
   const leftExpand = useRef();
 
   const channelSearchListProps = {
@@ -134,6 +136,7 @@ const Navigation = () => {
               <ChannelSearchList {...channelSearchListProps} />
             </VodsProvider>
           )}
+          {LogsIcon}
           <Sidebar />
         </NavExpandingSides>
       </StyledNavbar>

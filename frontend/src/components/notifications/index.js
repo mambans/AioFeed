@@ -73,7 +73,6 @@ const Notifications = ({ leftExpandRef }) => {
         show={show}
         onHide={handleClose}
         dialogClassName={styles.modal}
-        backdropClassName={styles.modalBackdrop}
         style={{ minWidth: 'unset', maxWidth: 'unset' }}
       >
         <NotificationsList />

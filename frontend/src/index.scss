@@ -64,3 +64,7 @@ html.theme-transition *:after {
 a {
   text-decoration: none;
 }
+
+.fade.modal-backdrop.show {
+  opacity: 0;
+}

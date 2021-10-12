@@ -18,6 +18,7 @@ import { YoutubeContext, YoutubeProvider } from '../youtube/useToken';
 import { VodsProvider } from '../twitch/vods/VodsContext';
 import API from '../navigation/API';
 import { MyListsProvider } from '../myLists/MyListsContext';
+import LogsContext, { LogsProvider } from '../logs/LogsContext';
 
 const AppContainer = styled.div`
   background-image: ${({ image }) => `url(/images/${image})`};
@@ -35,27 +36,29 @@ const AppContainer = styled.div`
 
 const AppRoutesContainer = () => {
   return (
-    <ThemeProvider>
-      <AccountProvider>
-        <TwitchProvider>
-          <YoutubeProvider>
-            <NavigationProvider>
-              <NotificationsProvider>
-                <FeedsProvider>
-                  <MyListsProvider>
-                    <VodsProvider>
-                      <FooterProvider>
-                        <App />
-                      </FooterProvider>
-                    </VodsProvider>
-                  </MyListsProvider>
-                </FeedsProvider>
-              </NotificationsProvider>
-            </NavigationProvider>
-          </YoutubeProvider>
-        </TwitchProvider>
-      </AccountProvider>
-    </ThemeProvider>
+    <LogsProvider>
+      <ThemeProvider>
+        <AccountProvider>
+          <TwitchProvider>
+            <YoutubeProvider>
+              <NavigationProvider>
+                <NotificationsProvider>
+                  <FeedsProvider>
+                    <MyListsProvider>
+                      <VodsProvider>
+                        <FooterProvider>
+                          <App />
+                        </FooterProvider>
+                      </VodsProvider>
+                    </MyListsProvider>
+                  </FeedsProvider>
+                </NotificationsProvider>
+              </NavigationProvider>
+            </YoutubeProvider>
+          </TwitchProvider>
+        </AccountProvider>
+      </ThemeProvider>
+    </LogsProvider>
   );
 };
 
@@ -74,6 +77,7 @@ const App = () => {
   const { setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage } =
     useContext(YoutubeContext);
   const { setShowSidebar } = useContext(NavigationContext);
+  const { addLog } = useContext(LogsContext);
 
   useEffect(() => {
     (async () => {
@@ -87,12 +91,26 @@ const App = () => {
             setProfileImage();
             setShowSidebar(true);
             toast.warn('Expired login. Please login again');
+            addLog({
+              title: 'Expired login',
+              text: 'Logged in session expired, please login again.',
+              icon: 'logout',
+            });
           }, 0);
         }
         return true;
       }
     })();
-  }, [username, setAuthKey, setUsername, setEmail, setProfileImage, setShowSidebar, authKey]);
+  }, [
+    username,
+    setAuthKey,
+    setUsername,
+    setEmail,
+    setProfileImage,
+    setShowSidebar,
+    authKey,
+    addLog,
+  ]);
 
   useEventListenerMemo('message', receiveMessage, window, true, { capture: false });
 
