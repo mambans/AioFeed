@@ -32,6 +32,10 @@ const AppContainer = styled.div`
 
   scrollbar-color: var(--scrollbarColors) !important;
   scrollbar-width: thin !important;
+
+  /* body.modal-open & {
+    background-position-x: -8px;
+  } */
 `;
 
 const AppRoutesContainer = () => {

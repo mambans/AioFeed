@@ -43,12 +43,12 @@ const addVideoExtraData = async ({
     );
 
     return {
-      ...foundGameInfo,
-      ...foundProfile,
-      ...dataItem,
+      ...(foundGameInfo || {}),
+      ...(foundProfile || {}),
+      ...(dataItem || {}),
     };
   });
 
-  return { ...originalArray, data: finallData };
+  return { ...(originalArray || {}), data: finallData };
 };
 export default addVideoExtraData;

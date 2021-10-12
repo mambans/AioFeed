@@ -14,15 +14,15 @@ export const NotificationsProvider = ({ children }) => {
 
   const addNotification = useCallback(
     (notis) => {
-      if (notis) {
+      if (notis && notis.length) {
         new Promise(async (resolve, reject) => {
           try {
             const oldUnseenNotifications = getLocalstorage('Unseen-notifications') || [];
             const existingNotifications = getLocalstorage('notifications') || [];
-            const toAddUnseenUsernames = notis?.map((stream) => stream?.user_name);
+            const toAddUnseenUsernames = notis?.map((stream) => stream?.user_name) || [];
             const newUnseenNotifications = [...oldUnseenNotifications, ...toAddUnseenUsernames];
 
-            const newNotificationsWithAddedProps = await notis?.map((n) => ({
+            const newNotificationsWithAddedProps = await notis?.map((n = {}) => ({
               ...n,
               date: new Date(),
               key: (n.id || n._id) + Date.now() + n.notiStatus,

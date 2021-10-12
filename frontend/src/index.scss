@@ -15,7 +15,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-attachment: fixed;
-  padding: 0 !important;
+  padding: 0;
 
   background-color: var(--backgroundColor);
   object-fit: cover;
@@ -25,6 +25,11 @@ body {
   background-repeat: var(--backgroundImgRepeat);
   color: var(--textColor1);
   // background-image: var(--backgroundImg);
+}
+
+body.modal-open {
+  padding-right: 0 !important;
+  overflow: visible !important;
 }
 
 code {
@@ -67,4 +72,7 @@ a {
 
 .fade.modal-backdrop.show {
   opacity: 0;
+}
+.modal-dialog {
+  margin: 0;
 }

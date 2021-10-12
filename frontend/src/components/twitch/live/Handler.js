@@ -47,7 +47,7 @@ const Handler = ({ children }) => {
     newlyAddedStreams ? `(${newlyAddedStreams?.length}) Feed` : 'Feed'
   );
   const windowFocusHandler = () => (isInFocus.current = true);
-  const windowBlurHandler = () => !autoRefreshEnabled && setNewlyAddedStreams();
+  const windowBlurHandler = () => !autoRefreshEnabled && setNewlyAddedStreams([]);
   useEventListenerMemo('focus', windowFocusHandler, document);
   useEventListenerMemo('blur', windowBlurHandler);
 
@@ -61,7 +61,7 @@ const Handler = ({ children }) => {
         return { refreshing: true, error: null, loaded: loaded, lastLoaded: lastLoaded };
       });
       try {
-        if (isInFocus.current) setNewlyAddedStreams();
+        if (isInFocus.current) setNewlyAddedStreams([]);
         isInFocus.current = false;
         followedChannels.current = await getMyFollowedChannels(forceValidateToken);
 
@@ -77,7 +77,7 @@ const Handler = ({ children }) => {
           }));
         const filters = getLocalstorage('CustomFilters') || [];
         if (streams?.status === 200) {
-          const newLiveStreams = [...streams.data];
+          const newLiveStreams = [...(streams?.data || [])];
           const uniqueFilteredLiveStreams = uniqBy(newLiveStreams, 'user_id');
 
           const rulesFilteredLiveStreams = uniqueFilteredLiveStreams.filter((stream) => {

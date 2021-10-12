@@ -66,7 +66,7 @@ const NrLogs = styled.svg`
 `;
 
 const Smodal = styled(Modal)`
-  position: absolute;
+  /* position: absolute; */
   z-index: 9999;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
   padding: 5px;
@@ -95,6 +95,7 @@ const Log = styled.li`
   padding: 10px;
   background: rgba(10, 10, 10, 0.75);
   border-radius: 10px;
+  margin-bottom: 10px;
 
   h3 {
     font-size: 1.15em;
@@ -122,19 +123,26 @@ const LogText = styled.div`
 
 export const LogsProvider = ({ children }) => {
   const [logs, setLogs] = useSyncedLocalState('logs', []);
+  const [logsUnreadCount, setLogsUnreadCount] = useSyncedLocalState('logsUnreadCount', 0);
   const [show, setShow] = useState(false);
   const triggerBtnRef = useRef();
   const [triggerRefPositions, setTriggerRefPositions] = useState();
 
   const addLog = useCallback(
     (n) => {
-      console.log('n:', n);
-      if (n) setLogs((c) => [...c, { date: new Date().toISOString(), ...n }].slice(0, 100));
+      if (n && Object.prototype.toString.call(n) === '[object Object]')
+        setLogs((c) => {
+          return [{ date: new Date().toISOString(), ...(n || {}) }, ...(c || [])].slice(0, 100);
+        });
+      setLogsUnreadCount((c = 0) => c + 1);
     },
-    [setLogs]
+    [setLogs, setLogsUnreadCount]
   );
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setLogsUnreadCount(0);
+  };
   const handleShow = () => {
     setLogs(getLocalstorage('logs'));
     setShow(true);
@@ -144,7 +152,6 @@ export const LogsProvider = ({ children }) => {
     setTriggerRefPositions(triggerBtnRef?.current?.getBoundingClientRect?.());
   }, []);
 
-  console.log('logs:', logs);
   const icons = (icon) => {
     switch (icon?.toLowerCase()) {
       case 'twitch':
@@ -166,11 +173,13 @@ export const LogsProvider = ({ children }) => {
       <ToolTip tooltip='Account/"system" logs' delay={{ show: 1000, hide: 0 }}>
         <LogsButtonIcon onClick={handleShow} ref={triggerBtnRef}>
           <SiLogstash size={24} />
-          <NrLogs height='20' width='20'>
-            <text x='0' y='15' fill='white'>
-              3
-            </text>
-          </NrLogs>
+          {logsUnreadCount && (
+            <NrLogs height='20' width='20'>
+              <text x='0' y='15' fill='white'>
+                {logsUnreadCount}
+              </text>
+            </NrLogs>
+          )}
         </LogsButtonIcon>
       </ToolTip>
       <Smodal
@@ -178,18 +187,27 @@ export const LogsProvider = ({ children }) => {
         onHide={handleClose}
         left={triggerRefPositions?.left + triggerRefPositions?.width}
       >
-        {logs.map(({ title, text, icon, date }, index) => (
-          <Logs key={String(index)}>
-            <Log>
-              <LogIcon>{icons(icon)}</LogIcon>
+        <Logs>
+          {logs?.length ? (
+            logs?.map(({ title, text, icon, date }, index) => (
+              <Log key={String(index)}>
+                <LogIcon>{icons(icon)}</LogIcon>
+                <LogText>
+                  <h3>{title}</h3>
+                  <span>{text}</span>
+                  <DateText date={date} />
+                </LogText>
+              </Log>
+            ))
+          ) : (
+            <Log key={'no logs'}>
+              <LogIcon>{icons()}</LogIcon>
               <LogText>
-                <h3>{title}</h3>
-                <span>{text}</span>
-                <DateText date={date} />
+                <h3>No logs...</h3>
               </LogText>
             </Log>
-          </Logs>
-        ))}
+          )}
+        </Logs>
       </Smodal>
     </>
   );

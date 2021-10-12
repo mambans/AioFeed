@@ -161,15 +161,13 @@ const StyledDate = styled.div`
   }
 `;
 
-export const Date = ({ date, status }) => {
-  return (
-    <StyledDate status={status}>
-      <div>
-        <Moment fromNow id='timeago'>
-          {date}
-        </Moment>
-        <p id='time'>{moment(date).format('MM-DD HH:mm')}</p>
-      </div>
-    </StyledDate>
-  );
-};
+export const Date = ({ date, status }) => (
+  <StyledDate status={status}>
+    <div>
+      <Moment fromNow id='timeago'>
+        {date}
+      </Moment>
+      <p id='time'>{moment(date).format('MM-DD HH:mm')}</p>
+    </div>
+  </StyledDate>
+);

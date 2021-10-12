@@ -15,6 +15,7 @@ import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import { TwitchContext } from '../../twitch/useToken';
 import { YoutubeContext } from '../../youtube/useToken';
 import MyListsContext from '../../myLists/MyListsContext';
+import LogsContext from '../../logs/LogsContext';
 
 const Login = () => {
   useDocumentTitle('Login');
@@ -33,6 +34,7 @@ const Login = () => {
   } = useContext(TwitchContext);
   const { setUsername, setProfileImage, setAuthKey, setEmail } = useContext(AccountContext);
   const { setMyListPreferences } = useContext(MyListsContext);
+  const { addLog } = useContext(LogsContext);
   const { setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage } =
     useContext(YoutubeContext);
 
@@ -99,6 +101,11 @@ const Login = () => {
           setTimeout(() => {
             toast.success(`Logged in as ${res.Username}`);
             setRenderModal('account');
+            addLog({
+              title: `Logged in`,
+              text: `Logged in as  ${res.Username}`,
+              icon: 'login',
+            });
           }, 500);
         } else {
           console.log(result);

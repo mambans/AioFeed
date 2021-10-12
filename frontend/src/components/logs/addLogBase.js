@@ -1,12 +1,17 @@
 import { getLocalstorage } from '../../util';
 
 const addLogBase = (n) => {
-  if (n) {
-    const current = getLocalstorage('logs');
-    localStorage.setItem(
-      'logs',
-      JSON.stringify([...current, { date: new Date().toISOString(), ...n }].slice(0, 100))
-    );
-  }
+  try {
+    if (n && Object.prototype.toString.call(n) === '[object Object]') {
+      const current = getLocalstorage('logs') || [];
+      const currentUnreadCount = getLocalstorage('logsUnreadCount') || [];
+      localStorage.setItem(
+        'logs',
+        JSON.stringify([{ date: new Date().toISOString(), ...(n || {}) }, ...current].slice(0, 100))
+      );
+      localStorage.setItem('logsUnreadCount', parseInt(currentUnreadCount) + 1);
+    }
+  } catch (error) {}
+  return;
 };
 export default addLogBase;

@@ -23,6 +23,10 @@ const StyledNavbar = styled(Navbar)`
   display: flex;
   justify-content: space-between;
   padding-right: 0;
+
+  /* body.modal-open & {
+    padding-right: 8px;
+  } */
 `;
 
 const StyledNav = styled(Nav)`

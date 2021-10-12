@@ -46,10 +46,10 @@ const fetchProfileImages = async ({
       })
     ).then((res) => res.flat(1)));
 
-  const finallData = await originalArray?.data?.map((user) => {
-    const foundProfile = newProfileImgUrls?.find(
-      (p_user) => p_user?.id === (user?.user_id || user?.broadcaster_id)
-    );
+  const finallData = await originalArray?.data?.map((user = {}) => {
+    const foundProfile =
+      newProfileImgUrls?.find((p_user) => p_user?.id === (user?.user_id || user?.broadcaster_id)) ||
+      {};
 
     return {
       ...user,
@@ -88,7 +88,7 @@ const fetchProfileImages = async ({
   );
 
   if (saveNewProfiles) {
-    const FinallTwitchProfilesObj = { ...TwitchProfiles, ...newProfiles };
+    const FinallTwitchProfilesObj = { ...(TwitchProfiles || {}), ...(newProfiles || {}) };
     localStorage.setItem('TwitchProfiles', JSON.stringify(FinallTwitchProfilesObj));
   }
 

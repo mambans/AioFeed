@@ -18,14 +18,14 @@ const fetchSingelChannelVods = async ({ channelId, setVods, amount = 1 }) => {
     const newVodWithEndtime = await addVodEndTime(newVodWithProfile.data);
 
     setVods((vods) => {
-      const existingVods = [...vods.data];
+      const existingVods = [...(vods?.data || [])];
       const vodsToAdd = [
         ...newVodWithEndtime.slice(0, amount).map((vod) => ({
           ...vod,
           transition: 'videoFadeSlide',
         })),
       ];
-      const uniqueVods = uniqBy([...vodsToAdd, ...existingVods], 'id');
+      const uniqueVods = uniqBy([...(vodsToAdd || []), ...(existingVods || [])], 'id');
       const FinallVods = SortAndAddExpire(uniqueVods, vodExpire, vods.loaded, vods.expire);
 
       return FinallVods;

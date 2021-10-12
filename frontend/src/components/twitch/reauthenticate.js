@@ -1,6 +1,6 @@
 import API from '../navigation/API';
 
-const reauthenticate = async ({ setTwitchToken, setRefreshToken }) => {
+const reauthenticate = async ({ setTwitchToken, setRefreshToken } = {}) => {
   console.log('---Re-authenticating with Twitch.---');
 
   return await API.updateTwitchToken(setTwitchToken, setRefreshToken);

@@ -1,7 +1,7 @@
 import { getLocalstorage } from '../../util';
 import TwitchAPI from './API';
 
-const getGameDetails = async (items) => {
+const getGameDetails = async (items = []) => {
   // Removes game id duplicates before sending game request.
   const gamesNonDuplicates = [
     ...new Set(
@@ -28,14 +28,14 @@ const getGameDetails = async (items) => {
         localStorage.setItem(
           'Twitch_game_details',
           JSON.stringify({
-            data: [...filteredCachedGames, ...filteredOutNulls],
+            data: [...(filteredCachedGames || []), ...(filteredOutNulls || [])],
             expire:
               cachedGameInfo?.expire > Date.now()
                 ? cachedGameInfo.expire
                 : Date.now() + 7 * 24 * 60 * 60 * 1000,
           })
         );
-        return [...filteredCachedGames, ...filteredOutNulls];
+        return [...(filteredCachedGames || []), ...(filteredOutNulls || [])];
       })
       .catch((error) => {
         console.log(error);
