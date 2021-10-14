@@ -107,34 +107,31 @@ const ChannelPage = () => {
         after: pagination || null,
       })
         .then(async (res) => {
-          setVods((vods) => {
-            if (
-              res.data.data?.length === 0 &&
-              (vods || Array.isArray(vods) || Boolean(vods?.length))
-            ) {
+          setVods((vods = []) => {
+            if (res.data.data?.length === 0 && (Array.isArray(vods) || Boolean(vods?.length))) {
               setLoading(false);
             }
 
             if (!res.data.data?.length && (!vods || !Array.isArray(vods) || !vods?.length)) {
               return { error: 'No vods available' };
             }
-            return vods;
+            return (vods || [])?.slice(0, 100);
           });
 
           vodPagination.current = res.data.pagination.cursor;
 
           const videos = await AddVideoExtraData({ items: res.data, fetchGameInfo: false });
-          const finallVideos = await addVodEndTime(videos.data);
+          const finallVideos = (await addVodEndTime(videos.data)) || [];
 
           if (pagination) {
-            const allVods = previosVodPage.current.concat(finallVideos);
-            previosVodPage.current = allVods;
+            const allVods = previosVodPage.current.concat(finallVideos) || [];
+            previosVodPage.current = allVods?.slice(0, 100);
 
             setLoading(false);
-            setVods(allVods);
+            setVods(allVods?.slice(0, 100));
           } else {
-            previosVodPage.current = finallVideos;
-            setVods(finallVideos);
+            previosVodPage.current = finallVideos?.slice(0, 100);
+            setVods(finallVideos?.slice(0, 100));
           }
         })
         .catch((e) => {
@@ -180,7 +177,7 @@ const ChannelPage = () => {
           });
 
           clipPagination.current = res.data.pagination.cursor;
-          const finallClips = await AddVideoExtraData({ items: res.data });
+          const finallClips = await AddVideoExtraData({ items: res.data, saveNewProfiles: false });
 
           if (pagination) {
             const allClips = previosClipsPage.current.concat(finallClips.data);

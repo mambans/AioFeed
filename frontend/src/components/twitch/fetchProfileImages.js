@@ -89,7 +89,10 @@ const fetchProfileImages = async ({
 
   if (saveNewProfiles) {
     const FinallTwitchProfilesObj = { ...(TwitchProfiles || {}), ...(newProfiles || {}) };
-    localStorage.setItem('TwitchProfiles', JSON.stringify(FinallTwitchProfilesObj));
+    localStorage.setItem(
+      'TwitchProfiles',
+      JSON.stringify(Object.fromEntries(Object.entries(FinallTwitchProfilesObj).slice(0, 100)))
+    );
   }
 
   return finallData;

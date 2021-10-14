@@ -8,7 +8,7 @@ const NotificationsContext = React.createContext();
 export const NotificationsProvider = ({ children }) => {
   const [notifications, setNotifications] = useSyncedLocalState('notifications', []);
   const [unseenNotifications, setUnseenNotifications] = useSyncedLocalState(
-    'Unseen-notifications',
+    'notificationsUnreadCount',
     []
   );
 
@@ -17,14 +17,16 @@ export const NotificationsProvider = ({ children }) => {
       if (notis && notis.length) {
         new Promise(async (resolve, reject) => {
           try {
-            const oldUnseenNotifications = getLocalstorage('Unseen-notifications') || [];
+            const notificationsUnreadCount = getLocalstorage('notificationsUnreadCount') || [];
             const existingNotifications = getLocalstorage('notifications') || [];
-            const toAddUnseenUsernames = notis?.map((stream) => stream?.user_name) || [];
-            const newUnseenNotifications = [...oldUnseenNotifications, ...toAddUnseenUsernames];
 
             const newNotificationsWithAddedProps = await notis?.map((n = {}) => ({
-              ...n,
-              date: new Date(),
+              user_name: n.user_name,
+              notiStatus: n.notiStatus,
+              profile_image_url: n.profile_image_url,
+              text: n.text,
+              title: n.title,
+              date: n.date || new Date(),
               key: (n.id || n._id) + Date.now() + n.notiStatus,
             }));
 
@@ -33,14 +35,17 @@ export const NotificationsProvider = ({ children }) => {
               ...existingNotifications,
             ].splice(0, 200);
 
-            resolve({ notifications: finalNotifications, newUnseenNotifications });
+            resolve({
+              notifications: finalNotifications,
+              notificationsUnreadCount: parseInt(notificationsUnreadCount) + (notis?.length || 0),
+            });
           } catch (e) {
             console.log('addNotification() error: ', e);
             reject(e);
           }
         }).then((res) => {
           setTimeout(() => {
-            setUnseenNotifications(res.newUnseenNotifications);
+            setUnseenNotifications(res.notificationsUnreadCount);
             setNotifications(res.notifications);
           }, 800);
         });
@@ -50,12 +55,12 @@ export const NotificationsProvider = ({ children }) => {
   );
 
   const clearUnseenNotifications = useCallback(() => {
-    setUnseenNotifications([]);
+    setUnseenNotifications(0);
   }, [setUnseenNotifications]);
 
   const clearNotifications = useCallback(() => {
     setNotifications([]);
-    setUnseenNotifications([]);
+    setUnseenNotifications(0);
   }, [setNotifications, setUnseenNotifications]);
 
   return (

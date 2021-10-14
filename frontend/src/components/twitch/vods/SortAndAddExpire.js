@@ -12,7 +12,7 @@ const sortAndAddExpire = (followedStreamVods, vodExpire, oldLoaded, oldExpire) =
   );
 
   const Vods = {
-    data: sortedLiveVods.concat(sortedCompletedVods),
+    data: sortedLiveVods.concat(sortedCompletedVods)?.slice(0, 100),
     expire: oldExpire || Date.now() + vodExpire * 60 * 60 * 1000,
     loaded: oldLoaded || Date.now(),
   };

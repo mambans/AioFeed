@@ -1,7 +1,7 @@
 import GetCachedProfiles from '../GetCachedProfiles';
 import TwitchAPI from '../API';
 
-const addProfileImg = async ({ user_id, currentStreamObj }) => {
+const addProfileImg = async ({ user_id, currentStreamObj, save = true }) => {
   if (!currentStreamObj?.profile_image_url || !currentStreamObj?.login) {
     const TwitchProfiles = GetCachedProfiles();
 
@@ -17,13 +17,17 @@ const addProfileImg = async ({ user_id, currentStreamObj }) => {
 
     if (!TwitchProfiles[user_id]) {
       try {
-        localStorage.setItem(
-          'TwitchProfiles',
-          JSON.stringify({
-            ...TwitchProfiles,
-            [user_id]: { profile_image: profile.profile_image, login: profile.login },
-          })
-        );
+        if (save) {
+          setTimeout(() => {
+            localStorage.setItem(
+              'TwitchProfiles',
+              JSON.stringify({
+                ...Object.fromEntries(Object.entries(TwitchProfiles).slice(0, 100)),
+                [user_id]: { profile_image: profile.profile_image, login: profile.login },
+              })
+            );
+          }, 60 * 20);
+        }
       } catch (error) {
         console.log('TwitchProfiles localStorage.setItem error:', error);
       }

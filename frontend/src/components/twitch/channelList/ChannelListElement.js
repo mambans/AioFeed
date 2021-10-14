@@ -43,6 +43,7 @@ const ChannelListElement = ({
           ? await AddVideoExtraData({
               items: { data: [liveInfo] },
               fetchGameInfo: true,
+              saveNewProfiles: false,
             }).then((res) => res?.data[0])
           : {};
 

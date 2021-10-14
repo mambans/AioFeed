@@ -22,7 +22,6 @@ const clearAllAccountCookiesStates = ({
   localStorage.removeItem('TwitchVods-Channels');
   localStorage.removeItem('Twitter-Lists');
 
-  localStorage.removeItem('Unseen-notifications');
   localStorage.removeItem('YT-followedChannels');
   localStorage.removeItem('activeTheme');
   localStorage.removeItem('CustomFilters');
@@ -31,6 +30,7 @@ const clearAllAccountCookiesStates = ({
   localStorage.removeItem('TwitchChatState');
   localStorage.removeItem('Cached_SavedYoutubeVideos');
   localStorage.removeItem('notifications');
+  localStorage.removeItem('notificationsUnreadCount');
   localStorage.removeItem('Feed-size');
   localStorage.removeItem('ChannelsUpdateNotifs');
 

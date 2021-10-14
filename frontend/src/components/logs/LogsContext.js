@@ -11,6 +11,7 @@ import ToolTip from '../sharedComponents/ToolTip';
 import { FaTwitch, FaYoutube } from 'react-icons/fa';
 import { getLocalstorage } from '../../util';
 
+const LOGS_HEIGHT = 600;
 const LogsContext = React.createContext();
 
 const LogsButtonIcon = styled(TransparentButton)`
@@ -35,36 +36,6 @@ const LogsButtonIcon = styled(TransparentButton)`
   }
 `;
 
-const LOGS_HEIGHT = 600;
-
-export const Logs = styled.div`
-  #clear {
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    font-weight: bold;
-    height: 35px;
-    align-items: center;
-    color: rgb(150, 150, 150);
-    transition: color 250ms;
-    position: absolute;
-    right: 0;
-    top: ${LOGS_HEIGHT - 20}px;
-    transform: translateY(-100%);
-
-    &:hover {
-      color: rgb(255, 255, 255);
-    }
-  }
-`;
-
-const NrLogs = styled.svg`
-  position: absolute;
-  right: 0;
-  top: 0;
-  transform: translate(40%, -40%);
-`;
-
 const Smodal = styled(Modal)`
   /* position: absolute; */
   z-index: 9999;
@@ -87,13 +58,41 @@ const Smodal = styled(Modal)`
   transform: translateX(-100%);
 `;
 
+const NrLogs = styled.svg`
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translate(40%, -40%);
+`;
+
+export const Logs = styled.div`
+  #clear {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    height: 35px;
+    align-items: center;
+    color: rgb(150, 150, 150);
+    transition: color 250ms;
+    position: absolute;
+    right: 0;
+    top: ${LOGS_HEIGHT - 20}px;
+    transform: translateY(-100%);
+
+    &:hover {
+      color: rgb(255, 255, 255);
+    }
+  }
+`;
+
 const Log = styled.li`
   display: flex;
   flex-direction: row;
   box-shadow: rgba(0, 0, 0, 0.25) 4px 8px 15px;
   transition: box-shadow 250ms;
   padding: 10px;
-  background: rgba(10, 10, 10, 0.75);
+  background: rgba(10, 10, 10, 0.95);
   border-radius: 10px;
   margin-bottom: 10px;
 
@@ -108,6 +107,7 @@ const Log = styled.li`
 
   &:hover {
     box-shadow: rgba(0, 0, 0, 0.5) 4px 8px 15px;
+    background: rgba(10, 10, 10, 1);
   }
 `;
 

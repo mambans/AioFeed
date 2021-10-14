@@ -124,7 +124,7 @@ const getFollowedVods = async ({ forceRun, setRefreshToken, setTwitchAccessToken
         const followedOrderedStreamVods = SortAndAddExpire(videoWithEndTime, vodExpire);
 
         return {
-          videos: followedOrderedStreamVods,
+          videos: followedOrderedStreamVods || [],
           vodError: vodChannels.error,
         };
       } catch (error) {

@@ -49,12 +49,12 @@ const VodsFollowUnfollowBtn = ({
       vodChannels.delete(channel?.toLowerCase());
       setChannels([...vodChannels]);
 
-      const existingVodVideos = vods;
+      const existingVodVideos = vods || { data: [] };
       const newVodVideos = {
         ...existingVodVideos,
-        data: existingVodVideos.data.filter((video) => {
-          return video.user_name?.toLowerCase() !== channel?.toLowerCase();
-        }),
+        data: existingVodVideos.data
+          .filter((video) => video.user_name?.toLowerCase() !== channel?.toLowerCase())
+          ?.slice(0, 100),
       };
 
       setVods(newVodVideos);
