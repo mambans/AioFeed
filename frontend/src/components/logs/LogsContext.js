@@ -130,15 +130,16 @@ export const LogsProvider = ({ children }) => {
 
   const addLog = useCallback(
     (n) => {
-      if (n && Object.prototype.toString.call(n) === '[object Object]')
+      if (n && Object.prototype.toString.call(n) === '[object Object]') {
         setLogs((c) => {
           return [{ date: new Date().toISOString(), ...(n || {}) }, ...(c || [])].slice(0, 100);
         });
-      setLogsUnreadCount((c = 0) => {
-        const count = c + 1;
-        console.log('count:', count);
-        return count;
-      });
+        setLogsUnreadCount((c = 0) => {
+          const count = c + 1;
+          console.log('count:', count);
+          return count;
+        });
+      }
     },
     [setLogs, setLogsUnreadCount]
   );
@@ -212,7 +213,6 @@ export const LogsProvider = ({ children }) => {
               </LogText>
             </Log>
           )}
-          
         </Logs>
       </Smodal>
     </>
