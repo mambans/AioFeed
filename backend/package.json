@@ -10,12 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.23.0",
     "bcrypt": "^5.0.1",
     "crypto-js": "^4.1.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "aws-sdk": "^2.978.0"
+    "aws-sdk": "^2.1009.0"
   }
 }
