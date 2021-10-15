@@ -9,6 +9,8 @@ const addLogBase = (n) => {
         'logs',
         JSON.stringify([{ date: new Date().toISOString(), ...(n || {}) }, ...current].slice(0, 100))
       );
+      console.log('currentUnreadCount:', currentUnreadCount);
+      console.log('parseInt(currentUnreadCount) + 1:', parseInt(currentUnreadCount) + 1);
       localStorage.setItem('logsUnreadCount', parseInt(currentUnreadCount) + 1);
     }
   } catch (error) {}

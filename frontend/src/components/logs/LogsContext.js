@@ -134,7 +134,11 @@ export const LogsProvider = ({ children }) => {
         setLogs((c) => {
           return [{ date: new Date().toISOString(), ...(n || {}) }, ...(c || [])].slice(0, 100);
         });
-      setLogsUnreadCount((c = 0) => c + 1);
+      setLogsUnreadCount((c = 0) => {
+        const count = c + 1;
+        console.log('count:', count);
+        return count;
+      });
     },
     [setLogs, setLogsUnreadCount]
   );
@@ -168,6 +172,7 @@ export const LogsProvider = ({ children }) => {
         return <GiDominoTiles size={24} />;
     }
   };
+  console.log('logsUnreadCount:', logsUnreadCount);
   const LogsIcon = (
     <>
       <ToolTip tooltip='Account/"system" logs' delay={{ show: 1000, hide: 0 }}>
@@ -207,6 +212,7 @@ export const LogsProvider = ({ children }) => {
               </LogText>
             </Log>
           )}
+          
         </Logs>
       </Smodal>
     </>
