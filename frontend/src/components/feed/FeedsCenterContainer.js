@@ -15,7 +15,8 @@ const CenterProvider = ({ children, left, right }) => {
     videoElementsAmount: 3,
   });
   const [twittersWidth, setTwitterWidth] = useState({});
-  const twitterContainerWidth = Object.values?.(twittersWidth)?.reduce((a, b) => a + (b + 10), 0);
+  const twitterContainerWidth =
+    Object.values?.(twittersWidth)?.reduce((a, b) => a + (b + 10), 0) || window.outerWidth * 0.14;
   const leftWidth = left && (showTwitchSidebar ? 275 : 0);
   const rightWidth = right && enableTwitter && twitterContainerWidth;
 

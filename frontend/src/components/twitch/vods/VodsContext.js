@@ -1,11 +1,11 @@
 import React, { useEffect, useContext } from 'react';
-
 import FetchMonitoredVodChannelsList from './FetchMonitoredVodChannelsList';
 import AccountContext from '../../account/AccountContext';
 import useSyncedLocalState from '../../../hooks/useSyncedLocalState';
 import { getCookie, getLocalstorage } from '../../../util';
 import FeedsContext from '../../feed/FeedsContext';
 import { TwitchContext } from '../useToken';
+import useLocalStorageState from '../../../hooks/useLocalStorageState';
 
 const VodsContext = React.createContext();
 
@@ -13,7 +13,7 @@ export const VodsProvider = ({ children, forceMount = false }) => {
   const { username, authKey } = useContext(AccountContext);
   const { isEnabledUpdateNotifications, isEnabledOfflineNotifications } = useContext(TwitchContext);
   const { enableTwitchVods } = useContext(FeedsContext) || {};
-  const [vods, setVods] = useSyncedLocalState('Vods', []);
+  const [vods, setVods] = useLocalStorageState('Vods', {});
   const [channels, setChannels] = useSyncedLocalState('TwitchVods-Channels', []);
   const [updateNotischannels, setUpdateNotischannels] = useSyncedLocalState(
     'ChannelsUpdateNotifs',

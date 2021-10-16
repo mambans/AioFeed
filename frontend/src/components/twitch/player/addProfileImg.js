@@ -4,6 +4,7 @@ import TwitchAPI from '../API';
 const addProfileImg = async ({ user_id, currentStreamObj, save = true }) => {
   if (!currentStreamObj?.profile_image_url || !currentStreamObj?.login) {
     const TwitchProfiles = GetCachedProfiles();
+    // const TwitchProfiles = {};
 
     const profile =
       TwitchProfiles[user_id]?.profile_image_url && TwitchProfiles[user_id]?.login
@@ -33,7 +34,11 @@ const addProfileImg = async ({ user_id, currentStreamObj, save = true }) => {
       }
     }
 
-    return { ...currentStreamObj, profile_image_url: profile.profile_image, login: profile.login };
+    return {
+      ...currentStreamObj,
+      profile_image_url: profile?.profile_image,
+      login: profile?.login,
+    };
   }
   return currentStreamObj;
 };

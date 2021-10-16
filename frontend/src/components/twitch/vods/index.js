@@ -49,26 +49,24 @@ export const Vods = ({ className }) => {
   const refresh = useCallback(
     async (forceRefresh) => {
       refreshBtnRef.current.setIsLoading(true);
-      getFollowedVods({
-        forceRun: forceRefresh,
-        setTwitchRefreshToken,
-        setTwitchAccessToken,
-        channels,
-      })
-        .then((data) => {
-          if (data.error) {
-            setError(data.error);
+      setVods((c) => {
+        getFollowedVods({
+          forceRun: forceRefresh,
+          setTwitchRefreshToken,
+          setTwitchAccessToken,
+          channels,
+          currentVods: c,
+        }).then((data) => {
+          if (data.er) {
+            setError(data.er);
           } else if (data.vodError) {
             setVodError(data.vodError);
           }
-          setVods(data.videos);
           refreshBtnRef.current.setIsLoading(false);
-        })
-        .catch((data) => {
-          setError(data.error);
-
-          setVods(data.videos);
+          setVods(data.data);
+          // return data.data;
         });
+      });
     },
     [setTwitchAccessToken, setTwitchRefreshToken, setVods, channels]
   );
@@ -80,26 +78,24 @@ export const Vods = ({ className }) => {
   useEffect(() => {
     (async () => {
       refreshBtnRef.current.setIsLoading(true);
-      getFollowedVods({
-        forceRun: false,
-        setTwitchRefreshToken,
-        setTwitchAccessToken,
-        channels,
-      })
-        .then((data) => {
-          if (data.error) {
-            setError(data.error);
+      setVods((c) => {
+        getFollowedVods({
+          forceRun: false,
+          setTwitchRefreshToken,
+          setTwitchAccessToken,
+          channels,
+          currentVods: c,
+        }).then((data) => {
+          if (data.er) {
+            setError(data.er);
           } else if (data.vodError) {
             setVodError(data.vodError);
           }
-
-          setVods(data.videos);
           refreshBtnRef.current.setIsLoading(false);
-        })
-        .catch((data) => {
-          setError(data.error);
-          setVods(data.videos);
+          setVods(data.data);
+          // return data.data;
         });
+      });
     })();
   }, [twitchUserId, setTwitchAccessToken, setTwitchRefreshToken, setVods, channels]);
 

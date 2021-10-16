@@ -82,7 +82,7 @@ const Handler = ({ children }) => {
 
           const rulesFilteredLiveStreams = uniqueFilteredLiveStreams.filter((stream) => {
             const relevantRules =
-              filters?.[stream?.login.toLowerCase() || stream?.user_name.toLowerCase()];
+              filters?.[stream?.login?.toLowerCase() || stream?.user_name?.toLowerCase()];
 
             if (Boolean(relevantRules?.length)) {
               const whitelists = relevantRules?.some((rule) => rule.action === 'Whitelist');

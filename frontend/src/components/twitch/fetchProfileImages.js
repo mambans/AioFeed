@@ -16,6 +16,7 @@ const fetchProfileImages = async ({
 }) => {
   const originalArray = items;
   const TwitchProfiles = GetCachedProfiles();
+  // const TwitchProfiles = {};
   const noCachedProfileArrayObject = await originalArray?.data?.filter(
     (user) =>
       !Object.keys(TwitchProfiles).some((id) => id === (user?.user_id || user?.broadcaster_id)) ||

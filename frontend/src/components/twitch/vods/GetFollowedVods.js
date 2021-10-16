@@ -1,4 +1,3 @@
-import { getLocalstorage } from '../../../util';
 import AddVideoExtraData from '../AddVideoExtraData';
 import TwitchAPI from '../API';
 import { addVodEndTime } from '../TwitchUtils';
@@ -81,12 +80,25 @@ const fetchVodsFromMonitoredChannels = async (
   return PromiseAllVods.flat(1);
 };
 
-const getFollowedVods = async ({ forceRun, setRefreshToken, setTwitchAccessToken, channels }) => {
+const getFollowedVods = async ({
+  forceRun,
+  setRefreshToken,
+  setTwitchAccessToken,
+  channels,
+  currentVods,
+}) => {
   const vodExpire = 3; // Number of hours
-  const cachedVods = getLocalstorage(`Vods`);
+  // const cachedVods = getLocalstorage(`Vods`);
+  const cachedVods = currentVods;
 
   try {
-    if (forceRun || !cachedVods || cachedVods.expire <= Date.now()) {
+    if (
+      forceRun ||
+      !cachedVods ||
+      !cachedVods.data ||
+      !Object.values(cachedVods.data).length ||
+      cachedVods.expire <= Date.now()
+    ) {
       try {
         const followedChannels = await getMyFollowedChannels();
 
@@ -124,23 +136,23 @@ const getFollowedVods = async ({ forceRun, setRefreshToken, setTwitchAccessToken
         const followedOrderedStreamVods = SortAndAddExpire(videoWithEndTime, vodExpire);
 
         return {
-          videos: followedOrderedStreamVods || [],
+          data: followedOrderedStreamVods || [],
           vodError: vodChannels.error,
         };
-      } catch (error) {
+      } catch (er) {
         return {
-          videos: cachedVods,
-          error: error,
+          data: cachedVods,
+          er,
         };
       }
     }
 
-    return { videos: cachedVods };
-  } catch (error) {
-    console.error('message: ', error.message);
+    return { data: cachedVods };
+  } catch (er) {
+    console.error('message: ', er.message);
     return {
-      videos: cachedVods,
-      error: error,
+      data: cachedVods,
+      er,
     };
   }
 };
