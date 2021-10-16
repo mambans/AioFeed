@@ -126,6 +126,7 @@ export const LogsProvider = ({ children }) => {
   const [logsUnreadCount, setLogsUnreadCount] = useSyncedLocalState('logsUnreadCount', 0);
   const [show, setShow] = useState(false);
   const triggerBtnRef = useRef();
+  const updateTimer = useRef();
   const [triggerRefPositions, setTriggerRefPositions] = useState();
 
   const addLog = useCallback(
@@ -163,7 +164,14 @@ export const LogsProvider = ({ children }) => {
 
   useEffect(() => {
     setTriggerRefPositions(triggerBtnRef?.current?.getBoundingClientRect?.());
-  }, []);
+    clearInterval(updateTimer.current);
+    updateTimer.current = setInterval(
+      () => setLogsUnreadCount(getLocalstorage('logsUnreadCount')),
+      60 * 10
+    );
+
+    return () => clearInterval(updateTimer.current);
+  }, [setLogsUnreadCount]);
 
   const icons = (icon) => {
     switch (icon?.toLowerCase()) {
