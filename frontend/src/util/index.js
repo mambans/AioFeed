@@ -39,8 +39,13 @@ export const getLocalstorage = (name) => {
     const itemParsed = JSON.parse(item);
 
     if (itemParsed === 'null') return null;
+    if (itemParsed === 'NaN') return NaN;
+    if (itemParsed === 'undefined') return undefined;
     return itemParsed;
   } catch (error) {
+    if (item === 'null') return null;
+    if (item === 'NaN') return NaN;
+    if (item === 'undefined') return undefined;
     return item;
   }
 };

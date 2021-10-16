@@ -10,6 +10,9 @@ const useSyncedLocalState = (key, defaultValue) => {
   const [value, setValue] = useState(() => {
     const storedValue = localStorage.getItem(key);
     try {
+      if (storedValue === 'null') return null;
+      if (storedValue === 'NaN') return NaN;
+      if (storedValue === 'undefined') return undefined;
       return storedValue ? JSON.parse(storedValue) : defaultValue;
     } catch (error) {
       return storedValue || defaultValue;
@@ -20,7 +23,9 @@ const useSyncedLocalState = (key, defaultValue) => {
     const listener = (e) => {
       if (e.storageArea === localStorage && e.key === key) {
         try {
-          setValue(JSON.parse(e.newValue));
+          const newVal = e.newValue;
+          if (newVal === 'null' || newVal === 'nNaNull' || newVal === 'undefined') setValue();
+          setValue(JSON.parse(newVal));
         } catch (error) {
           setValue(e.newValue);
         }

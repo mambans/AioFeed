@@ -135,9 +135,15 @@ export const LogsProvider = ({ children }) => {
           return [{ date: new Date().toISOString(), ...(n || {}) }, ...(c || [])].slice(0, 100);
         });
         setLogsUnreadCount((c = 0) => {
-          const count = c + 1;
-          console.log('count:', count);
-          return count;
+          try {
+            const parsed = parseInt(JSON.parse(c));
+            if (typeof parsed === 'number') {
+              return parsed + 1;
+            }
+            return 1;
+          } catch (error) {
+            return 1;
+          }
         });
       }
     },
@@ -146,12 +152,14 @@ export const LogsProvider = ({ children }) => {
 
   const handleClose = () => {
     setShow(false);
-    setLogsUnreadCount(0);
+    setLogsUnreadCount();
   };
   const handleShow = () => {
     setLogs(getLocalstorage('logs'));
+    setLogsUnreadCount(getLocalstorage('logsUnreadCount'));
     setShow(true);
   };
+  const handleHover = () => setLogsUnreadCount(getLocalstorage('logsUnreadCount'));
 
   useEffect(() => {
     setTriggerRefPositions(triggerBtnRef?.current?.getBoundingClientRect?.());
@@ -173,11 +181,10 @@ export const LogsProvider = ({ children }) => {
         return <GiDominoTiles size={24} />;
     }
   };
-  console.log('logsUnreadCount:', logsUnreadCount);
   const LogsIcon = (
     <>
       <ToolTip tooltip='Account/"system" logs' delay={{ show: 1000, hide: 0 }}>
-        <LogsButtonIcon onClick={handleShow} ref={triggerBtnRef}>
+        <LogsButtonIcon onClick={handleShow} ref={triggerBtnRef} onMouseEnter={handleHover}>
           <SiLogstash size={24} />
           {logsUnreadCount && (
             <NrLogs height='20' width='20'>
