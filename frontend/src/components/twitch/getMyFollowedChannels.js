@@ -9,12 +9,12 @@ const fetchNextPageOfFollowers = async ({ total, PagePagination, followedchannel
       console.log(error);
     });
 
-    const channels = [...followedchannels, ...nextPage.data.data];
+    const channels = [...followedchannels, ...nextPage?.data?.data];
 
     if (channels?.length < total) {
       return await fetchNextPageOfFollowers({
         total: total,
-        PagePagination: nextPage.data.pagination.cursor,
+        PagePagination: nextPage?.data?.pagination?.cursor,
         followedchannels: channels,
       });
     }

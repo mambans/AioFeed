@@ -19,8 +19,13 @@ const addGameName = async ({ streamInfo, newStreamInfo }) => {
             id: newStreamInfo?.game_id,
           }).then((res) => res.data.data[0])));
 
+      console.log('gameInfo:', gameInfo);
       if (!foundCachedGame && gameInfo) {
         try {
+          console.log('1: ', {
+            data: [...cachedGameInfo.data, gameInfo],
+            expire: cachedGameInfo.expire,
+          });
           localStorage.setItem(
             'Twitch_game_details',
             JSON.stringify({

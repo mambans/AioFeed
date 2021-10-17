@@ -22,12 +22,12 @@ const fetchNextPgeOfSubscriptions = async ({ total, PagePagination, followedchan
         console.log(error);
       });
 
-    const channels = [...followedchannels, ...nextPage.data.items];
+    const channels = [...followedchannels, ...nextPage?.data?.items];
 
-    if (channels?.length < total && nextPage.data.nextPageToken) {
+    if (channels?.length < total && nextPage?.data?.nextPageToken) {
       return await fetchNextPgeOfSubscriptions({
         total: total,
-        PagePagination: nextPage.data.nextPageToken,
+        PagePagination: nextPage?.data?.nextPageToken,
         followedchannels: channels,
       });
     }

@@ -3,13 +3,9 @@ import TwitchAPI from './API';
 
 const getGameDetails = async (items = []) => {
   // Removes game id duplicates before sending game request.
-  const gamesNonDuplicates = [
-    ...new Set(
-      items.map((channel) => {
-        return channel?.game_id;
-      })
-    ),
-  ].filter((game) => game);
+  const gamesNonDuplicates = [...new Set(items.map((channel) => channel?.game_id))].filter(
+    (game) => game
+  );
 
   const cachedGameInfo = getLocalstorage('Twitch_game_details') || { data: [] };
   const filteredCachedGames = cachedGameInfo.data.filter((game) => game);
@@ -17,7 +13,10 @@ const getGameDetails = async (items = []) => {
     return !filteredCachedGames?.find((cachedGame) => cachedGame.id === game);
   });
 
-  const games = cachedGameInfo?.expire > Date.now() ? unCachedGameDetails : gamesNonDuplicates;
+  const games =
+    cachedGameInfo?.expire > Date.now() || unCachedGameDetails?.length
+      ? unCachedGameDetails
+      : gamesNonDuplicates;
 
   if (Array.isArray(games) && Boolean(games?.length)) {
     return TwitchAPI.getGames({
@@ -25,6 +24,13 @@ const getGameDetails = async (items = []) => {
     })
       .then((res) => {
         const filteredOutNulls = res.data?.data.filter((game) => game);
+        console.log('2: ', {
+          data: [...(filteredCachedGames || []), ...(filteredOutNulls || [])],
+          expire:
+            cachedGameInfo?.expire > Date.now()
+              ? cachedGameInfo.expire
+              : Date.now() + 7 * 24 * 60 * 60 * 1000,
+        });
         localStorage.setItem(
           'Twitch_game_details',
           JSON.stringify({
