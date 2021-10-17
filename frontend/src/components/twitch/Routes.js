@@ -12,15 +12,21 @@ import StandaloneChat from './player/StandaloneChat';
 const TwitchRoutes = () => {
   return (
     <Routes>
-      <Route path='' element={<Player />} />
+      <Route index element={<Player />} />
+      {/* <Route path='' element={<Player />} /> */}
 
       <Route path='page' element={<ChannelPage />} />
       <Route path='chat' element={<StandaloneChat />} />
-      <Navigate path='channel' to='../page' replace />
-      <Navigate path='channelpage' to='../page' replace />
-      <Navigate path='clips' to={`../page`} replace />
-      <Navigate path='videos' to='../page' replace />
-      <Navigate path='videos/all' to={`../../page`} replace />
+      {/* <Navigate path='channel' to='page' replace />
+      <Navigate path='channelpage' to='page' replace />
+      <Navigate path='clips' to={`page`} replace /> */}
+      {/* <Navigate path='videos' to='page' replace /> */}
+      {/* <Navigate path='videos/all' to={`page`} replace /> */}
+      <Route path='channel' element={<Navigate to={'../page'} replace />} />
+      <Route path='channelpage' element={<Navigate to={'../page'} replace />} />
+      <Route path='clips' element={<Navigate to={'../page'} replace />} />
+      <Route path='videos' element={<Navigate to={'../page'} replace />} />
+      <Route path='videos/all' element={<Navigate to={'../page'} replace />} />
 
       <Route path='videos/:videoId' element={<SharedVideoPlayer />} />
       <Route path='clip/:videoId' element={<PlayerClip />} />

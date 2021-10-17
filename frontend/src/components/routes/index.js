@@ -29,7 +29,8 @@ const NavigationRoutes = () => {
       <Navigation />
       <MainContentContainer>
         <Routes>
-          <Route path='' element={<Home />} />
+          <Route index element={<Home />} />
+          {/* <Route path='' element={<Home />} /> */}
           <Route path='index' element={<Home />} />
           <Route path='home' element={<Home />} />
 
@@ -39,13 +40,19 @@ const NavigationRoutes = () => {
           <Route path='vods' element={<TwitchVods />} />
           <Route path='feed' element={<Feed />} />
           <Route path='live' element={<Twitch forceMount={true} />} />
-          <Navigate path='favorites' to='mylists' />
+          {/* <Navigate path='favorites' to='mylists' />
           <Navigate path='customlists' to='mylists' />
           <Navigate path='lists' to='mylists' />
-          <Navigate path='saved' to='mylists' />
+          <Navigate path='saved' to='mylists' /> */}
           <Route path='mylists' element={<MyLists />} />
+          <Route path='favorites' element={<Navigate to={'../mylists'} replace />} />
+          <Route path='customlists' element={<Navigate to={'../mylists'} replace />} />
+          <Route path='lists' element={<Navigate to={'../mylists'} replace />} />
+          <Route path='saved' element={<Navigate to={'../mylists'} replace />} />
 
-          <Navigate path='twitch' to='live' />
+          {/* <Navigate path='twitch' to='live' /> */}
+          <Route path='twitch' element={<Navigate to={'../live'} replace />} />
+
           <Route path='twitter' element={<Twitter />} />
 
           <Route path='youtube' element={<Youtube />} />
@@ -54,8 +61,12 @@ const NavigationRoutes = () => {
           <Route path='youtube/:videoId' element={<SharedVideoPlayer />} />
 
           <Route path='category' element={<TopStreams />} />
-          <Navigate path='game' to='/category' />
-          <Navigate path='top' to='/category' />
+          {/* <Navigate path='game' to='/category' />
+          <Navigate path='top' to='/category' /> */}
+
+          <Route path='game' element={<Navigate to={'../category'} replace />} />
+          <Route path='top' element={<Navigate to={'../category'} replace />} />
+
           <Route path='category/:category' element={<TopStreams />} />
           <Route path='game/:category' element={<TopStreams />} />
           <Route path='top/:category' element={<TopStreams />} />

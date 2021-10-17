@@ -85,8 +85,9 @@ const App = () => {
 
   useEffect(() => {
     (async () => {
-      if (username) {
+      if (username && window.location.host !== 'localhost:3000') {
         const validated = await API.validateAccount(username).catch((e) => console.error(e));
+        console.log('validated:', validated);
         if (!validated?.data?.Username) {
           setTimeout(() => {
             setAuthKey();
