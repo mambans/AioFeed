@@ -32,6 +32,7 @@ const VolumeEventOverlay = React.forwardRef(
     },
     ref
   ) => {
+    // eslint-disable-next-line no-unused-vars
     const [seekTime, setSeekTime] = useState();
     const [showControlls, setShowControlls] = useState();
     const seekresetTimer = useRef();
@@ -96,27 +97,22 @@ const VolumeEventOverlay = React.forwardRef(
           player.current.isPaused() ? player.current.play() : player.current.pause();
           break;
         case 'ArrowRight':
-          if (!seekTime) {
-            setSeekTime(player.current.getCurrentTime());
-            player.current.seek(player.current.getCurrentTime() + 10);
+          setSeekTime((c) => {
+            const curr = c || player.current.getCurrentTime();
+            player.current.seek(curr + 10);
             clearTimeout(seekresetTimer.current);
             seekresetTimer.current = setTimeout(() => setSeekTime(null), 3000);
-            return;
-          }
-          player.current.seek(seekTime + 10);
-          setSeekTime(seekTime + 10);
-          break;
+            return curr + 10;
+          });
+          return;
         case 'ArrowLeft':
-          if (!seekTime) {
-            setSeekTime(player.current.getCurrentTime());
-            player.current.seek(player.current.getCurrentTime() - 10);
+          setSeekTime((c) => {
+            const curr = c || player.current.getCurrentTime();
+            player.current.seek(curr - 10);
             clearTimeout(seekresetTimer.current);
             seekresetTimer.current = setTimeout(() => setSeekTime(null), 3000);
-            return;
-          }
-
-          player.current.seek(seekTime - 10);
-          setSeekTime(seekTime - 10);
+            return curr - 10;
+          });
           break;
         default:
           break;
