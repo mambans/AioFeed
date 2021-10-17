@@ -5,6 +5,8 @@ aws cloudformation deploy --template-file cloudformation.yaml --stack-name aiofe
 set -e
 
 npm run build
+pwd
+ls
 
 aws s3 sync --delete ./build s3://aiofeed.com
 
