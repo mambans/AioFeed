@@ -15,7 +15,7 @@ module.exports = async ({ refresh_token, username, authkey }) => {
     .then(async (res) => res.data)
     .catch((e) => console.log('reAuthenticateTwitch -> e', e));
 
-  if (username && authkey) {
+  if (username && authkey && res) {
     const AccountInfo = await client
       .get({
         TableName: process.env.USERNAME_TABLE,

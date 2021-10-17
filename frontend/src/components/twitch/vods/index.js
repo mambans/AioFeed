@@ -48,7 +48,7 @@ export const Vods = ({ className }) => {
 
   const refresh = useCallback(
     async (forceRefresh) => {
-      refreshBtnRef.current.setIsLoading(true);
+      refreshBtnRef?.current?.setIsLoading(true);
       setVods((c) => {
         getFollowedVods({
           forceRun: forceRefresh,
@@ -62,7 +62,7 @@ export const Vods = ({ className }) => {
           } else if (data.vodError) {
             setVodError(data.vodError);
           }
-          refreshBtnRef.current.setIsLoading(false);
+          refreshBtnRef?.current?.setIsLoading(false);
           setVods(data.data);
           // return data.data;
         });
@@ -77,7 +77,7 @@ export const Vods = ({ className }) => {
 
   useEffect(() => {
     (async () => {
-      refreshBtnRef.current.setIsLoading(true);
+      refreshBtnRef?.current?.setIsLoading(true);
       setVods((c) => {
         getFollowedVods({
           forceRun: false,
@@ -91,7 +91,7 @@ export const Vods = ({ className }) => {
           } else if (data.vodError) {
             setVodError(data.vodError);
           }
-          refreshBtnRef.current.setIsLoading(false);
+          refreshBtnRef?.current?.setIsLoading(false);
           setVods(data.data);
           // return data.data;
         });

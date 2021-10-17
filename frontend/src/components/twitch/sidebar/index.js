@@ -13,10 +13,10 @@ const Sidebar = (data) => {
   const resetShowsTimer = useRef();
 
   const favoriteStreams = onlineStreams.filter((c) =>
-    favStreams.includes(c.user_name?.toLowerCase())
+    favStreams?.includes(c.user_name?.toLowerCase())
   );
   const nonFavoriteStreams = onlineStreams.filter(
-    (c) => !favStreams.includes(c.user_name?.toLowerCase())
+    (c) => !favStreams?.includes(c.user_name?.toLowerCase())
   );
 
   const sidebarItemAttrs = {

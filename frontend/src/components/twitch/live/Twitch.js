@@ -15,10 +15,10 @@ const Twitch = ({ data }) => {
   const { favStreams } = useContext(VodsContext);
 
   const favoriteStreams = liveStreams.filter((c) =>
-    favStreams.includes(c.user_name?.toLowerCase())
+    favStreams?.includes(c.user_name?.toLowerCase())
   );
   const nonFavoriteStreams = liveStreams.filter(
-    (c) => !favStreams.includes(c.user_name?.toLowerCase())
+    (c) => !favStreams?.includes(c.user_name?.toLowerCase())
   );
 
   const refresh = async () => await data.refresh();

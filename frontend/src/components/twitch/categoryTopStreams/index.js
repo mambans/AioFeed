@@ -73,7 +73,7 @@ const TopStreams = () => {
     } else {
       oldTopData.current = res.topData;
       setTopData(res.topData.data);
-      refreshBtnRef.current.setIsLoading(false);
+      refreshBtnRef?.current?.setIsLoading(false);
     }
   };
 
@@ -92,7 +92,7 @@ const TopStreams = () => {
               } else {
                 setError(e.message);
               }
-              refreshBtnRef.current.setIsLoading(false);
+              refreshBtnRef?.current?.setIsLoading(false);
             });
           break;
         case 'clips':
@@ -104,7 +104,7 @@ const TopStreams = () => {
               } else {
                 setError(e.message);
               }
-              refreshBtnRef.current.setIsLoading(false);
+              refreshBtnRef?.current?.setIsLoading(false);
             });
           break;
         case 'videos':
@@ -116,7 +116,7 @@ const TopStreams = () => {
               } else {
                 setError(e.message);
               }
-              refreshBtnRef.current.setIsLoading(false);
+              refreshBtnRef?.current?.setIsLoading(false);
             });
           break;
         default:
@@ -128,7 +128,7 @@ const TopStreams = () => {
               } else {
                 setError(e.message);
               }
-              refreshBtnRef.current.setIsLoading(false);
+              refreshBtnRef?.current?.setIsLoading(false);
             });
       }
     },
@@ -136,7 +136,7 @@ const TopStreams = () => {
   );
 
   const refresh = useCallback(() => {
-    refreshBtnRef.current.setIsLoading(true);
+    refreshBtnRef?.current?.setIsLoading(true);
     oldTopData.current = null;
     fetchVideos();
   }, [fetchVideos]);
@@ -149,7 +149,7 @@ const TopStreams = () => {
   }, [category]);
 
   useEffect(() => {
-    refreshBtnRef.current.setIsLoading(true);
+    refreshBtnRef?.current?.setIsLoading(true);
     setTopData([]);
     fetchVideos();
   }, [fetchVideos]);

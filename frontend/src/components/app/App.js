@@ -68,7 +68,7 @@ const AppRoutesContainer = () => {
 
 const App = () => {
   const { activeTheme } = useContext(ThemeContext);
-  const { username, setAuthKey, authKey, setUsername, setEmail, setProfileImage } =
+  const { username, setAuthKey, setUsername, setEmail, setProfileImage } =
     useContext(AccountContext);
   const { setEnableTwitch, setEnableYoutube } = useContext(FeedsContext);
   const {
@@ -86,9 +86,9 @@ const App = () => {
   useEffect(() => {
     (async () => {
       if (username && window.location.host !== 'localhost:3000') {
-        const validated = await API.validateAccount(username).catch((e) => console.error(e));
-        console.log('validated:', validated);
-        if (!validated?.data?.Username) {
+        const { data } = await API.validateAccount(username).catch((e) => console.error(e));
+
+        if (!data?.Username) {
           setTimeout(() => {
             setAuthKey();
             setUsername();
@@ -103,19 +103,11 @@ const App = () => {
             });
           }, 0);
         }
+
         return true;
       }
     })();
-  }, [
-    username,
-    setAuthKey,
-    setUsername,
-    setEmail,
-    setProfileImage,
-    setShowSidebar,
-    authKey,
-    addLog,
-  ]);
+  }, [username, setAuthKey, setUsername, setEmail, setProfileImage, setShowSidebar, addLog]);
 
   useEventListenerMemo('message', receiveMessage, window, true, { capture: false });
 
