@@ -53,7 +53,6 @@ const validateToken = async (skipValidation) => {
 };
 
 const validateTokenFunc = async (skipValidation) => {
-  console.log('---validateTokenFunc:---');
   const access_token = getCookie('Twitch-access_token');
   const refresh_token = getCookie(`Twitch-refresh_token`);
   const app_token = getCookie(`Twitch-app_token`);
