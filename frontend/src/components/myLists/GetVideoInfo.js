@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getLocalstorage, getCookie, chunk } from '../../util';
+import { getLocalstorage, getCookie, chunk, setLocalStorage } from '../../util';
 
 const GetVideoInfo = async ({ videos = [] }) => {
   const videosArray = [...videos];
@@ -57,13 +57,10 @@ const GetVideoInfo = async ({ videos = [] }) => {
     : CachedFullyVideos;
 
   if (Boolean(fullyCachedVideos.items.length) && Boolean(newVideosDetails.length)) {
-    localStorage.setItem(
-      'Cached_SavedYoutubeVideos',
-      JSON.stringify({
-        items: [...fullyCachedVideos.items.slice(-50), ...newVideosDetails],
-        expire: fullyCachedVideos.expire,
-      })
-    );
+    setLocalStorage('Cached_SavedYoutubeVideos', {
+      items: [...fullyCachedVideos.items.slice(-50), ...newVideosDetails],
+      expire: fullyCachedVideos.expire,
+    });
   }
 
   return [...(newVideosDetails || []), ...(CachedFullyVideos || [])];

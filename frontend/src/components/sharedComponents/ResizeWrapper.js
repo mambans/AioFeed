@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { getLocalstorage } from '../../util';
+import { getLocalstorage, setLocalStorage } from '../../util';
 import BackDrop from '../sharedComponents/BackDrop';
 
 export const ResizeDevider = styled.div`
@@ -49,11 +49,7 @@ const ResizeWrapper = ({ children, parentCallbackWidth = () => {} }) => {
     setResize((c) => ({ ...c, active: false }));
 
     const savedWidths = getLocalstorage('resize-widths');
-
-    localStorage.setItem(
-      'resize-widths',
-      JSON.stringify({ ...savedWidths, [children.props.id]: resize.width })
-    );
+    setLocalStorage('resize-widths', { ...savedWidths, [children.props.id]: resize.width });
   };
 
   const parentCallbackWidthDebounce = useCallback(

@@ -16,6 +16,7 @@ import { TwitchContext } from '../../twitch/useToken';
 import { YoutubeContext } from '../../youtube/useToken';
 import MyListsContext from '../../myLists/MyListsContext';
 import LogsContext from '../../logs/LogsContext';
+import { setLocalStorage } from '../../../util';
 
 const Login = () => {
   useDocumentTitle('Login');
@@ -69,10 +70,8 @@ const Login = () => {
             setEmail(res.Email);
 
             if (res.TwitchPreferences && Object.keys(res.TwitchPreferences).length >= 1) {
-              localStorage.setItem(
-                'ChannelsUpdateNotifs',
-                JSON.stringify(res.TwitchPreferences.ChannelsUpdateNotifs)
-              );
+              setLocalStorage('ChannelsUpdateNotifs', res.TwitchPreferences.ChannelsUpdateNotifs);
+
               setTwitchUsername(res.TwitchPreferences.Username);
               setTwitchUserId(res.TwitchPreferences.Id);
               setTwitchProfileImage(res.TwitchPreferences.Profile);

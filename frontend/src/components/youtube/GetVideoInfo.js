@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getLocalstorage, getCookie, chunk } from '../../util';
+import { getLocalstorage, getCookie, chunk, setLocalStorage } from '../../util';
 import { merge } from 'lodash';
 
 const getVideoInfo = async ({ videos }) => {
@@ -71,17 +71,10 @@ const getVideoInfo = async ({ videos }) => {
       return merge(video, newFoundDetails);
     }) || [];
 
-  try {
-    localStorage.setItem(
-      'Cached_SavedYoutubeVideos',
-      JSON.stringify({
-        items: [...(fullyCachedVideos.items.slice(-50) || []), ...(newVideosWithDetails || [])],
-        expire: fullyCachedVideos.expire,
-      })
-    );
-  } catch (e) {
-    console.log('Cached_SavedYoutubeVideos localStorage.setItem error:', e);
-  }
+  setLocalStorage('Cached_SavedYoutubeVideos', {
+    items: [...(fullyCachedVideos.items.slice(-50) || []), ...(newVideosWithDetails || [])],
+    expire: fullyCachedVideos.expire,
+  });
 
   return [...(CachedFullyVideos || []), ...(newVideosWithDetails || [])];
 };

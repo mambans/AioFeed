@@ -2,7 +2,7 @@ import axios from 'axios';
 import { reverse, sortBy } from 'lodash';
 
 import GetVideoInfo from './GetVideoInfo';
-import { getCookie, getLocalstorage } from './../../util';
+import { getCookie, getLocalstorage, setLocalStorage } from './../../util';
 
 const filterTypeUpload = async (response) => {
   if (Boolean(response?.items?.length)) {
@@ -90,11 +90,7 @@ const getSubscriptionVideos = async (followedChannels) => {
       };
     });
 
-    try {
-      localStorage.setItem('YT-ChannelsObj', JSON.stringify(localStorageObjetToSave));
-    } catch (e) {
-      console.log('YT-ChannelsObj localStorage.setItem error:', error);
-    }
+    setLocalStorage('YT-ChannelsObj', localStorageObjetToSave);
 
     const videoOnlyArray = channelWithVideos.map((channel) =>
       Array.isArray(channel.items) ? channel.items : null

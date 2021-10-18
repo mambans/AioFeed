@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCookie, getLocalstorage } from './../../../util';
+import { getCookie, getLocalstorage, setLocalStorage } from './../../../util';
 
 const unFollowChannel = async ({ subscriptionId, channelId, setChannels, videos, setVideos }) => {
   const followedChannels = getLocalstorage(`YT-followedChannels`) || [];
@@ -11,13 +11,10 @@ const unFollowChannel = async ({ subscriptionId, channelId, setChannels, videos,
   setChannels(newFollowedChannels);
   setVideos(newFilteredVideos);
 
-  localStorage.setItem(
-    `YT-followedChannels`,
-    JSON.stringify({
-      data: newFollowedChannels,
-      casheExpire: followedChannels.casheExpire,
-    })
-  );
+  setLocalStorage(`YT-followedChannels`, {
+    data: newFollowedChannels,
+    casheExpire: followedChannels.casheExpire,
+  });
 
   await axios.delete(`https://www.googleapis.com/youtube/v3/subscriptions`, {
     params: {

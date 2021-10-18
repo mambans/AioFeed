@@ -42,7 +42,7 @@ import ClipButton from './ClipButton';
 import addGameName from './addGameName';
 import addProfileImg from './addProfileImg';
 import fetchChannelInfo from './fetchChannelInfo';
-import { getLocalstorage } from '../../../util';
+import { getLocalstorage, setLocalStorage } from '../../../util';
 import ContextMenu from './ContextMenu';
 import AnimatedViewCount from '../live/AnimatedViewCount';
 import ReAuthenticateButton from '../../navigation/sidebar/ReAuthenticateButton';
@@ -175,13 +175,10 @@ const Player = () => {
       () => {
         const localstorageTwitchChatState = getLocalstorage('TwitchChatState') || {};
 
-        localStorage.setItem(
-          'TwitchChatState',
-          JSON.stringify({
-            ...localstorageTwitchChatState,
-            [channelName?.toLowerCase()]: chatState,
-          })
-        );
+        setLocalStorage('TwitchChatState', {
+          ...localstorageTwitchChatState,
+          [channelName?.toLowerCase()]: chatState,
+        });
       },
       500,
       { leading: false, trailing: true }

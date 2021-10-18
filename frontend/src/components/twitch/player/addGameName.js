@@ -1,5 +1,5 @@
 import TwitchAPI from '../API';
-import { getLocalstorage } from '../../../util';
+import { getLocalstorage, setLocalStorage } from '../../../util';
 
 const addGameName = async ({ streamInfo, newStreamInfo }) => {
   try {
@@ -19,20 +19,12 @@ const addGameName = async ({ streamInfo, newStreamInfo }) => {
             id: newStreamInfo?.game_id,
           }).then((res) => res.data.data[0])));
 
-      console.log('gameInfo:', gameInfo);
       if (!foundCachedGame && gameInfo) {
         try {
-          console.log('1: ', {
+          setLocalStorage('Twitch_game_details', {
             data: [...cachedGameInfo.data, gameInfo],
             expire: cachedGameInfo.expire,
           });
-          localStorage.setItem(
-            'Twitch_game_details',
-            JSON.stringify({
-              data: [...cachedGameInfo.data, gameInfo],
-              expire: cachedGameInfo.expire,
-            })
-          );
         } catch (error) {
           console.log('Twitch_game_details localstorage setItem error:', error);
         }

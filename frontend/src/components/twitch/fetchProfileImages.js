@@ -1,6 +1,6 @@
 import GetCachedProfiles from './GetCachedProfiles';
 import TwitchAPI from './API';
-import { chunk } from '../../util';
+import { chunk, setLocalStorage } from '../../util';
 
 /**
  * @param {Object} items - Object of Streams/Videos/Clips. (With items.data[] )
@@ -90,7 +90,7 @@ const fetchProfileImages = async ({
 
   if (saveNewProfiles) {
     const FinallTwitchProfilesObj = { ...(TwitchProfiles || {}), ...(newProfiles || {}) };
-    localStorage.setItem(
+    setLocalStorage(
       'TwitchProfiles',
       JSON.stringify(Object.fromEntries(Object.entries(FinallTwitchProfilesObj).slice(0, 100)))
     );

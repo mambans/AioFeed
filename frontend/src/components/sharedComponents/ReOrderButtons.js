@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
-import { getLocalstorage } from '../../util';
+import { getLocalstorage, setLocalStorage } from '../../util';
 
 const StyledReOrderButtons = styled.div`
   align-content: center;
@@ -30,13 +30,10 @@ const StyledReOrderButtons = styled.div`
  */
 const ReOrderButtons = ({ setOrder, feedName }) => {
   const saveOrder = (order) =>
-    localStorage.setItem(
-      'FeedOrders',
-      JSON.stringify({
-        ...(getLocalstorage('FeedOrders') || {}),
-        [feedName]: order,
-      })
-    );
+    setLocalStorage('FeedOrders', {
+      ...(getLocalstorage('FeedOrders') || {}),
+      [feedName]: order,
+    });
 
   return (
     <StyledReOrderButtons>

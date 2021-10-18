@@ -2,6 +2,7 @@ import React from 'react';
 import { MdHighQuality } from 'react-icons/md';
 import { GrRefresh } from 'react-icons/gr';
 import ContextMenu from './ContextMenuWrapper';
+import { setLocalStorage } from '../../../util';
 
 const PlayerContextMenu = ({
   PlayerUIControlls,
@@ -40,12 +41,9 @@ const PlayerContextMenu = ({
             onClick={() => {
               const confirmed = window.confirm('Reset ALL chat positions?');
               if (confirmed) {
-                localStorage.setItem(
-                  'TwitchChatState',
-                  JSON.stringify({
-                    [channelName?.toLowerCase()]: chatState,
-                  })
-                );
+                setLocalStorage('TwitchChatState', {
+                  [channelName?.toLowerCase()]: chatState,
+                });
 
                 setChatState({
                   chatWidth: DEFAULT_CHAT_WIDTH,

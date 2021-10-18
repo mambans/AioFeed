@@ -1,4 +1,4 @@
-import { getLocalstorage } from '../../util';
+import { getLocalstorage, setLocalStorage } from '../../util';
 import TwitchAPI from './API';
 
 const getGameDetails = async (items = []) => {
@@ -24,23 +24,15 @@ const getGameDetails = async (items = []) => {
     })
       .then((res) => {
         const filteredOutNulls = res.data?.data.filter((game) => game);
-        console.log('2: ', {
+
+        setLocalStorage('Twitch_game_details', {
           data: [...(filteredCachedGames || []), ...(filteredOutNulls || [])],
           expire:
             cachedGameInfo?.expire > Date.now()
               ? cachedGameInfo.expire
               : Date.now() + 7 * 24 * 60 * 60 * 1000,
         });
-        localStorage.setItem(
-          'Twitch_game_details',
-          JSON.stringify({
-            data: [...(filteredCachedGames || []), ...(filteredOutNulls || [])],
-            expire:
-              cachedGameInfo?.expire > Date.now()
-                ? cachedGameInfo.expire
-                : Date.now() + 7 * 24 * 60 * 60 * 1000,
-          })
-        );
+
         return [...(filteredCachedGames || []), ...(filteredOutNulls || [])];
       })
       .catch((error) => {

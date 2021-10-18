@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { setLocalStorage } from '../util';
 
 /**
  * Save in localstorage.
@@ -23,10 +24,7 @@ const useLocalStorageState = (key, defaultValue) => {
         const finallValue = typeof newValue === 'function' ? newValue(currentValue) : newValue;
         try {
           if (updateLocalstorage) {
-            localStorage.setItem(
-              key,
-              typeof finallValue === 'string' ? finallValue : JSON.stringify(finallValue)
-            );
+            setLocalStorage(key, finallValue);
           }
         } catch (error) {
           console.log('Localstorage error:', error);

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCookie, getLocalstorage } from '../../util';
+import { getCookie, getLocalstorage, setLocalStorage } from '../../util';
 
 const fetchNextPgeOfSubscriptions = async ({ total, PagePagination, followedchannels }) => {
   if (followedchannels?.length < total && PagePagination) {
@@ -69,13 +69,10 @@ const getMyFollowedChannels = async () => {
         ) === index
     );
 
-    localStorage.setItem(
-      `YT-followedChannels`,
-      JSON.stringify({
-        data: uniqueSubscriptions,
-        casheExpire: Date.now() + 12 * 60 * 60 * 1000,
-      })
-    );
+    setLocalStorage(`YT-followedChannels`, {
+      data: uniqueSubscriptions,
+      casheExpire: Date.now() + 12 * 60 * 60 * 1000,
+    });
 
     return uniqueSubscriptions;
   } catch (error) {

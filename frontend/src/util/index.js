@@ -50,6 +50,15 @@ export const getLocalstorage = (name) => {
   }
 };
 
+export const setLocalStorage = (name, data) => {
+  try {
+    localStorage.setItem(name, typeof finallValue === 'string' ? data : JSON.stringify(data));
+    return data;
+  } catch (error) {
+    console.warn(`setLocalStorage - ${name}: `, error);
+  }
+};
+
 export const truncate = (input, max) => {
   if (input && input.length > max) return input.substring(0, max) + '..';
   return input;

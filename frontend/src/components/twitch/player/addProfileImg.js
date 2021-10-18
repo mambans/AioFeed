@@ -1,5 +1,6 @@
 import GetCachedProfiles from '../GetCachedProfiles';
 import TwitchAPI from '../API';
+import { setLocalStorage } from '../../../util';
 
 const addProfileImg = async ({ user_id, currentStreamObj, save = true }) => {
   if (!currentStreamObj?.profile_image_url || !currentStreamObj?.login) {
@@ -20,13 +21,10 @@ const addProfileImg = async ({ user_id, currentStreamObj, save = true }) => {
       try {
         if (save) {
           setTimeout(() => {
-            localStorage.setItem(
-              'TwitchProfiles',
-              JSON.stringify({
-                ...Object.fromEntries(Object.entries(TwitchProfiles).slice(0, 100)),
-                [user_id]: { profile_image: profile.profile_image, login: profile.login },
-              })
-            );
+            setLocalStorage('TwitchProfiles', {
+              ...Object.fromEntries(Object.entries(TwitchProfiles).slice(0, 100)),
+              [user_id]: { profile_image: profile.profile_image, login: profile.login },
+            });
           }, 60 * 20);
         }
       } catch (error) {
