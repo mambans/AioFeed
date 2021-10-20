@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import useSyncedLocalState from '../../hooks/useSyncedLocalState';
 import { GiDominoTiles } from 'react-icons/gi';
 import { SiLogstash, SiAuthy } from 'react-icons/si';
-import { TransparentButton } from '../sharedComponents/sharedStyledComponents';
 import styled from 'styled-components';
 import { Date as DateText } from '../notifications/styledComponent';
 import { FiLogOut, FiLogIn } from 'react-icons/fi';
@@ -13,28 +12,6 @@ import MyModal from '../sharedComponents/MyModal';
 
 const LOGS_HEIGHT = 600;
 const LogsContext = React.createContext();
-
-const LogsButtonIcon = styled(TransparentButton)`
-  opacity: 0.75;
-  transition: transform 250ms, opacity 250ms;
-  padding: 0 10px;
-  position: relative;
-  user-select: none;
-  outline: none;
-
-  * {
-    user-select: none;
-    outline: none;
-  }
-
-  svg {
-    color: #ffffff;
-  }
-  &:hover {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-`;
 
 const NrLogs = styled.svg`
   position: absolute;
