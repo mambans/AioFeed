@@ -104,7 +104,6 @@ export const LogsProvider = ({ children }) => {
   const [logsUnreadCount, setLogsUnreadCount] = useSyncedLocalState('logsUnreadCount', 0);
   const triggerBtnRef = useRef();
   const updateTimer = useRef();
-  const [triggerRefPositions, setTriggerRefPositions] = useState();
 
   const addLog = useCallback(
     (n) => {
@@ -138,7 +137,6 @@ export const LogsProvider = ({ children }) => {
   const handleHover = () => setLogsUnreadCount(getLocalstorage('logsUnreadCount'));
 
   useEffect(() => {
-    setTriggerRefPositions(triggerBtnRef?.current?.getBoundingClientRect?.());
     clearInterval(updateTimer.current);
     updateTimer.current = setInterval(
       () => setLogsUnreadCount(getLocalstorage('logsUnreadCount')),
@@ -165,19 +163,21 @@ export const LogsProvider = ({ children }) => {
     }
   };
 
+  const triggerPos = triggerBtnRef?.current?.getBoundingClientRect?.();
   const LogsIcon = (
     <MyModal
       style={{
-        left: triggerRefPositions?.left + triggerRefPositions?.width - 400,
-        top: triggerRefPositions?.bottom + triggerRefPositions?.height,
+        left: triggerPos?.left + triggerPos?.width - 400,
+        top: triggerPos?.bottom + triggerPos?.height,
         width: '400px',
       }}
       handleClose={handleClose}
       handleOpen={handleShow}
+      onMouseEnter={handleHover}
       direction='down'
       trigger={
         <ToolTip tooltip='Account/"system" logs' delay={{ show: 1000, hide: 0 }}>
-          <LogsButtonIcon onClick={handleShow} ref={triggerBtnRef} onMouseEnter={handleHover}>
+          <div ref={triggerBtnRef}>
             <SiLogstash size={24} />
             {logsUnreadCount && (
               <NrLogs height='20' width='20'>
@@ -186,7 +186,7 @@ export const LogsProvider = ({ children }) => {
                 </text>
               </NrLogs>
             )}
-          </LogsButtonIcon>
+          </div>
         </ToolTip>
       }
     >

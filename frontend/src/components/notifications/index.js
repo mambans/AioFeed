@@ -26,6 +26,8 @@ const Notifications = ({ leftExpandRef }) => {
       '0';
   };
 
+  const triggerRef = ref?.current?.getBoundingClientRect();
+
   return (
     <>
       <MyModal
@@ -33,8 +35,8 @@ const Notifications = ({ leftExpandRef }) => {
         handleOpen={handleShow}
         handleClose={handleClose}
         style={{
-          left: ref?.current?.getBoundingClientRect()?.left + 'px',
-          top: ref?.current?.getBoundingClientRect()?.bottom + 'px',
+          left: triggerRef?.left + 'px',
+          top: triggerRef?.bottom + 'px',
           position: 'fixed',
         }}
         triggerStyle={{ padding: '0 5px', margin: '0 30px' }}

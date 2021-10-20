@@ -28,6 +28,10 @@ const MyModal = ({
   triggerStyle,
   children,
   style,
+  onMouseEnter = () => {},
+  onMouseOver = () => {},
+  onMouseOut = () => {},
+  onMouseLeave = () => {},
   ...props
 }) => {
   const [show, setShow] = useState(open);
@@ -82,7 +86,15 @@ const MyModal = ({
   return (
     <>
       <Container ref={ref}>
-        <TriggerButton onClick={handleToggle} ref={triggerBtnRef} style={triggerStyle}>
+        <TriggerButton
+          onClick={handleToggle}
+          ref={triggerBtnRef}
+          style={triggerStyle}
+          onMouseEnter={onMouseEnter}
+          onMouseOver={onMouseOver}
+          onMouseOut={onMouseOut}
+          onMouseLeave={onMouseLeave}
+        >
           {trigger}
         </TriggerButton>
 
