@@ -122,7 +122,7 @@ export const LogsProvider = ({ children }) => {
       style={{
         left: triggerPos?.left + triggerPos?.width - 400,
         top: triggerPos?.bottom + triggerPos?.height,
-        width: '400px',
+        minWidth: '400px',
       }}
       handleClose={handleClose}
       handleOpen={handleShow}

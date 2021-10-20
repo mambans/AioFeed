@@ -148,6 +148,7 @@ const SModal = styled.div`
   position: absolute;
   z-index: 999999;
   pointer-events: initial;
+  overflow-y: scroll;
 
   &.slideLeft-appear {
     opacity: 0;

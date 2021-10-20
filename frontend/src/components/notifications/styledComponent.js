@@ -6,7 +6,8 @@ import { NotificationBoxStyle } from '../sharedComponents/sharedStyledComponents
 
 export const NotificationListContainer = styled.div`
   max-height: 600px;
-  overflow-y: scroll;
+  min-width: 400px;
+  /* overflow-y: scroll; */
   margin-top: 20px;
   padding-right: 10px;
   /* width: 400px; */
