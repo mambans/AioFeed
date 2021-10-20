@@ -27,6 +27,24 @@ export const ButtonLookalikeStyle = css`
   }
 `;
 
+export const NotificationBoxStyle = css`
+  display: flex;
+  flex-direction: row;
+  box-shadow: rgba(0, 0, 0, 0.25) 4px 8px 15px;
+  transition: box-shadow 250ms, opacity 250ms;
+  padding: 10px;
+  background: var(--navigationbarBackground);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  opacity: 0.8;
+  position: relative;
+
+  &:hover {
+    box-shadow: rgba(0, 0, 0, 0.5) 4px 8px 15px;
+    opacity: 1;
+  }
+`;
+
 export const StyledRefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
   ${ButtonLookalikeStyle}
   position: relative;

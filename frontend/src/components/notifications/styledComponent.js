@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Moment from 'react-moment';
 import moment from 'moment';
+import { NotificationBoxStyle } from '../sharedComponents/sharedStyledComponents';
 
 export const NotificationListContainer = styled.div`
   height: 600px;
@@ -31,6 +32,7 @@ export const NotificationListContainer = styled.div`
 
 export const Notification = styled.li`
   &&& {
+    ${NotificationBoxStyle}
     display: grid;
     min-height: 80px;
     height: 80px;
@@ -38,12 +40,11 @@ export const Notification = styled.li`
 
   grid-template-areas: 'img name name' 'img title title' 'date date date';
   grid-template-columns: 15% 85%;
-  opacity: ${({ status }) =>
-    status === 'Offline' ? 0.35 : status?.includes('updated') ? 0.75 : 1};
+  /* opacity: ${({ status }) =>
+    status === 'Offline' ? 0.35 : status?.includes('updated') ? 0.75 : 1}; */
   margin: 7px 0;
   transition: background 250ms, border 250ms, opacity 250ms;
   padding-left: 2px;
-  border-left: 1px solid transparent;
 
   a,
   p,
@@ -52,8 +53,8 @@ export const Notification = styled.li`
   }
 
   &:hover {
-    border-left: 1px solid white;
     opacity: 1;
+    box-shadow: rgba(0, 0, 0, 0.5) 4px 8px 15px;
 
     a,
     p,
@@ -122,14 +123,18 @@ export const UnseenNotifcationCount = styled.div`
 `;
 
 const StyledDate = styled.div`
-  color: ${({ status }) => (status === 'Offline' ? '#ffffff' : '#838181')};
+  /* color: ${({ status }) => (status === 'Offline' ? '#ffffff' : '#838181')}; */
+  color: #838181;
   font-size: 0.85rem;
   text-align: right;
   margin: 0;
-  grid-row: 3;
-  justify-self: right;
+  /* grid-row: 3; */
+  /* justify-self: right; */
   display: flex;
   justify-content: end;
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
 
   p {
     margin: 0;

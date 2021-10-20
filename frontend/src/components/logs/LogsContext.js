@@ -9,6 +9,7 @@ import ToolTip from '../sharedComponents/ToolTip';
 import { FaTwitch, FaYoutube } from 'react-icons/fa';
 import { getLocalstorage } from '../../util';
 import MyModal from '../sharedComponents/MyModal';
+import { NotificationBoxStyle } from '../sharedComponents/sharedStyledComponents';
 
 const LOGS_HEIGHT = 600;
 const LogsContext = React.createContext();
@@ -42,14 +43,7 @@ export const Logs = styled.div`
 `;
 
 const Log = styled.li`
-  display: flex;
-  flex-direction: row;
-  box-shadow: rgba(0, 0, 0, 0.25) 4px 8px 15px;
-  transition: box-shadow 250ms;
-  padding: 10px;
-  background: rgba(10, 10, 10, 0.95);
-  border-radius: 10px;
-  margin-bottom: 10px;
+  ${NotificationBoxStyle}
 
   h3 {
     font-size: 1.15em;
@@ -62,7 +56,7 @@ const Log = styled.li`
 
   &:hover {
     box-shadow: rgba(0, 0, 0, 0.5) 4px 8px 15px;
-    background: rgba(10, 10, 10, 1);
+    opacity: 1;
   }
 `;
 
