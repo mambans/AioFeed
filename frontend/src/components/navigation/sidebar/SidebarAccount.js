@@ -1,5 +1,3 @@
-import { Button } from 'react-bootstrap';
-import { GoSignOut } from 'react-icons/go';
 import React, { useContext, useEffect } from 'react';
 import { MdVideocam, MdAutorenew, MdCrop169 } from 'react-icons/md';
 import { FaTwitch, FaYoutube, FaTwitter, FaRegWindowRestore } from 'react-icons/fa';
@@ -9,9 +7,6 @@ import { AiOutlineDisconnect } from 'react-icons/ai';
 import { HiViewList } from 'react-icons/hi';
 
 import AccountContext from './../../account/AccountContext';
-import ClearAllAccountCookiesStates from './ClearAllAccountCookiesStates';
-import DeleteAccountButton from './DeleteAccountButton';
-import ChangePassword from './ChangePassword';
 import FeedsContext from './../../feed/FeedsContext';
 import ReAuthenticateButton from './ReAuthenticateButton';
 import Themeselector from './../../themes/Themeselector';
@@ -30,10 +25,10 @@ import { YoutubeContext } from '../../youtube/useToken';
 import FeedSizeSlider from './FeedSizeSlider';
 import AccountDetails from './AccountDetails';
 import NavigationContext from '../NavigationContext';
+import Settings from './Settings';
 
 const SidebarAccount = () => {
-  const { setUsername, username, authKey, setProfileImage, setAuthKey, setEmail } =
-    useContext(AccountContext) || {};
+  const { username, authKey } = useContext(AccountContext) || {};
   const { setRenderModal } = useContext(NavigationContext);
 
   const {
@@ -48,38 +43,15 @@ const SidebarAccount = () => {
     setEnableVodVolumeOverlay,
     enableVodVolumeOverlay,
     setTwitchAccessToken,
-    setTwitchRefreshToken,
-    setTwitchUserId,
-    setTwitchUsername,
-    setTwitchProfileImage,
     twitchAccessToken,
   } = useContext(TwitchContext) || {};
   const {
     youtubeVideoHoverEnable,
     setYoutubeVideoHoverEnable,
     setYoutubeAccessToken,
-    setYoutubeUsername,
-    setYoutubeProfileImage,
     youtubeAccessToken,
   } = useContext(YoutubeContext) || {};
   const { showTwitchSidebar, setShowTwitchSidebar, ...feedProps } = useContext(FeedsContext) || {};
-
-  const logout = () =>
-    ClearAllAccountCookiesStates({
-      setUsername,
-      setProfileImage,
-      setAuthKey,
-      setEmail,
-      setTwitchAccessToken,
-      setTwitchRefreshToken,
-      setTwitchUserId,
-      setTwitchUsername,
-      setTwitchProfileImage,
-      setYoutubeAccessToken,
-      setYoutubeUsername,
-      setYoutubeProfileImage,
-      setRenderModal,
-    });
 
   useEffect(() => {
     if (!username || !authKey) setRenderModal('login');
@@ -241,9 +213,10 @@ const SidebarAccount = () => {
         <FeedSizeSlider />
         <ToggleButtonsContainer buttonsperrow={3}>
           {settinButtons.map(
-            ({ setEnable, enabled, label, serviceName, tooltip, icon, smallerIcons }) => {
+            ({ setEnable, enabled, label, serviceName, tooltip, icon, smallerIcons }, index) => {
               return (
                 <ToggleButton
+                  key={serviceName + index}
                   setEnable={setEnable}
                   enabled={enabled}
                   label={label}
@@ -275,12 +248,7 @@ const SidebarAccount = () => {
         <Themeselector />
       </div>
       <StyledLogoutContiner>
-        <Button style={{ width: '100%' }} label='logout' onClick={logout} variant='secondary'>
-          Logout
-          <GoSignOut size={24} style={{ marginLeft: '0.75rem' }} />
-        </Button>
-        <ChangePassword variant='secondary' />
-        <DeleteAccountButton />
+        <Settings />
       </StyledLogoutContiner>
     </>
   );

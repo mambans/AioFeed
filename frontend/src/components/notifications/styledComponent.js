@@ -4,23 +4,28 @@ import Moment from 'react-moment';
 import moment from 'moment';
 
 export const NotificationListContainer = styled.div`
+  height: 600px;
+  overflow-y: scroll;
+  margin-top: 20px;
+  padding-right: 10px;
+
   #clear {
     cursor: pointer;
-    display: flex;
-    justify-content: center;
     font-weight: bold;
-    height: 35px;
-    align-items: center;
     color: rgb(150, 150, 150);
     transition: color 250ms;
     position: absolute;
     right: 0;
-    top: 580px;
-    transform: translateY(-100%);
+    bottom: 0;
+    transform: translateY(100%);
 
     &:hover {
       color: rgb(255, 255, 255);
     }
+  }
+
+  ul {
+    padding: 0;
   }
 `;
 

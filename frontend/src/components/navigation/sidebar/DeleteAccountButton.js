@@ -15,6 +15,7 @@ import API from '../API';
 import { toast } from 'react-toastify';
 import { TwitchContext } from '../../twitch/useToken';
 import { YoutubeContext } from '../../youtube/useToken';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 const DeleteAccountButton = () => {
   const { username, setUsername, setProfileImage, setAuthKey, setEmail, authKey } =
@@ -88,14 +89,12 @@ const DeleteAccountButton = () => {
 
   return (
     <>
-      <StyledAccountButton
-        color='hsla(0, 65%, 28%, 1)'
-        onClick={handleShow}
-        title='Delete account'
-        variant='danger'
-      >
-        <MdDelete size={24} />
-      </StyledAccountButton>
+      <ToolTip tooltip='Delete account'>
+        <StyledAccountButton color='hsla(0, 65%, 28%, 1)' onClick={handleShow} variant='danger'>
+          Delete account
+          <MdDelete size={24} style={{ marginLeft: '0.75rem' }} />
+        </StyledAccountButton>
+      </ToolTip>
 
       <Modal
         show={show}

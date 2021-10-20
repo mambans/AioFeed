@@ -298,7 +298,7 @@ export const StyledAccountButton = styled(Button).attrs(({ variant }) => ({
 }))`
   background: ${({ color }) => color || 'grey'};
   border-color: grey;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   width: 52px;
   height: 42.5px;
   grid-row: 2;

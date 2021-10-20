@@ -12,6 +12,7 @@ import LoadingIndicator from './../../LoadingIndicator';
 import API from '../API';
 import { AddCookie } from '../../../util';
 import { toast } from 'react-toastify';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 const DeleteAccountButton = () => {
   const { username, authKey, setAuthKey } = useContext(AccountContext);
@@ -75,9 +76,12 @@ const DeleteAccountButton = () => {
 
   return (
     <>
-      <StyledAccountButton onClick={handleShow} title='Change password' variant='secondary'>
-        <RiLockPasswordLine size={24} />
-      </StyledAccountButton>
+      <ToolTip tooltip='Change password'>
+        <StyledAccountButton onClick={handleShow} variant='secondary'>
+          Change password
+          <RiLockPasswordLine size={24} style={{ marginLeft: '0.75rem' }} />
+        </StyledAccountButton>
+      </ToolTip>
 
       <Modal
         show={show}

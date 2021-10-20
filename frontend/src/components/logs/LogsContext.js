@@ -4,12 +4,12 @@ import { GiDominoTiles } from 'react-icons/gi';
 import { SiLogstash, SiAuthy } from 'react-icons/si';
 import { TransparentButton } from '../sharedComponents/sharedStyledComponents';
 import styled from 'styled-components';
-import { Modal } from 'react-bootstrap';
 import { Date as DateText } from '../notifications/styledComponent';
 import { FiLogOut, FiLogIn } from 'react-icons/fi';
 import ToolTip from '../sharedComponents/ToolTip';
 import { FaTwitch, FaYoutube } from 'react-icons/fa';
 import { getLocalstorage } from '../../util';
+import MyModal from '../sharedComponents/MyModal';
 
 const LOGS_HEIGHT = 600;
 const LogsContext = React.createContext();
@@ -34,28 +34,6 @@ const LogsButtonIcon = styled(TransparentButton)`
     opacity: 1;
     transform: scale(1.05);
   }
-`;
-
-const Smodal = styled(Modal)`
-  /* position: absolute; */
-  z-index: 9999;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
-  padding: 5px;
-  max-height: ${LOGS_HEIGHT}px !important;
-  height: ${LOGS_HEIGHT}px !important;
-  width: 400px !important;
-  scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0) !important;
-  scrollbar-width: thin !important;
-  border-radius: 10px !important;
-  overflow: scroll;
-  overflow-x: hidden;
-  /* padding-right: 10px; */
-  margin: 0;
-  border: none !important;
-
-  top: 75px;
-  left: ${({ left }) => left + 'px'};
-  transform: translateX(-100%);
 `;
 
 const NrLogs = styled.svg`
@@ -124,7 +102,6 @@ const LogText = styled.div`
 export const LogsProvider = ({ children }) => {
   const [logs, setLogs] = useSyncedLocalState('logs', []);
   const [logsUnreadCount, setLogsUnreadCount] = useSyncedLocalState('logsUnreadCount', 0);
-  const [show, setShow] = useState(false);
   const triggerBtnRef = useRef();
   const updateTimer = useRef();
   const [triggerRefPositions, setTriggerRefPositions] = useState();
@@ -152,13 +129,11 @@ export const LogsProvider = ({ children }) => {
   );
 
   const handleClose = () => {
-    setShow(false);
     setLogsUnreadCount();
   };
   const handleShow = () => {
     setLogs(getLocalstorage('logs'));
     setLogsUnreadCount(getLocalstorage('logsUnreadCount'));
-    setShow(true);
   };
   const handleHover = () => setLogsUnreadCount(getLocalstorage('logsUnreadCount'));
 
@@ -189,48 +164,54 @@ export const LogsProvider = ({ children }) => {
         return <GiDominoTiles size={24} />;
     }
   };
+
   const LogsIcon = (
-    <>
-      <ToolTip tooltip='Account/"system" logs' delay={{ show: 1000, hide: 0 }}>
-        <LogsButtonIcon onClick={handleShow} ref={triggerBtnRef} onMouseEnter={handleHover}>
-          <SiLogstash size={24} />
-          {logsUnreadCount && (
-            <NrLogs height='20' width='20'>
-              <text x='0' y='15' fill='white'>
-                {logsUnreadCount}
-              </text>
-            </NrLogs>
-          )}
-        </LogsButtonIcon>
-      </ToolTip>
-      <Smodal
-        show={show}
-        onHide={handleClose}
-        left={triggerRefPositions?.left + triggerRefPositions?.width}
-      >
-        <Logs>
-          {logs?.length ? (
-            logs?.map(({ title, text, icon, date }, index) => (
-              <Log key={String(index)}>
-                <LogIcon>{icons(icon)}</LogIcon>
-                <LogText>
-                  <h3>{title}</h3>
-                  <span>{text}</span>
-                  <DateText date={date} />
-                </LogText>
-              </Log>
-            ))
-          ) : (
-            <Log key={'no logs'}>
-              <LogIcon>{icons()}</LogIcon>
+    <MyModal
+      style={{
+        left: triggerRefPositions?.left + triggerRefPositions?.width - 400,
+        top: triggerRefPositions?.bottom + triggerRefPositions?.height,
+        width: '400px',
+      }}
+      handleClose={handleClose}
+      handleOpen={handleShow}
+      direction='down'
+      trigger={
+        <ToolTip tooltip='Account/"system" logs' delay={{ show: 1000, hide: 0 }}>
+          <LogsButtonIcon onClick={handleShow} ref={triggerBtnRef} onMouseEnter={handleHover}>
+            <SiLogstash size={24} />
+            {logsUnreadCount && (
+              <NrLogs height='20' width='20'>
+                <text x='0' y='15' fill='white'>
+                  {logsUnreadCount}
+                </text>
+              </NrLogs>
+            )}
+          </LogsButtonIcon>
+        </ToolTip>
+      }
+    >
+      <Logs>
+        {logs?.length ? (
+          logs?.map(({ title, text, icon, date }, index) => (
+            <Log key={String(index)}>
+              <LogIcon>{icons(icon)}</LogIcon>
               <LogText>
-                <h3>No logs...</h3>
+                <h3>{title}</h3>
+                <span>{text}</span>
+                <DateText date={date} />
               </LogText>
             </Log>
-          )}
-        </Logs>
-      </Smodal>
-    </>
+          ))
+        ) : (
+          <Log key={'no logs'}>
+            <LogIcon>{icons()}</LogIcon>
+            <LogText>
+              <h3>No logs...</h3>
+            </LogText>
+          </Log>
+        )}
+      </Logs>
+    </MyModal>
   );
 
   return (

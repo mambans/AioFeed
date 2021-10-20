@@ -44,7 +44,6 @@ const SharedVideoPlayer = () => {
       default: true,
     }
   );
-  console.log('viewStates:', viewStates);
 
   const [resizeActive, setResizeActive] = useState(false);
   const [listVideos, setListVideos] = useState();

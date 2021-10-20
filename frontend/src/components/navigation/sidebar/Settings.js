@@ -1,0 +1,56 @@
+import React, { useRef } from 'react';
+import DeleteAccountButton from './DeleteAccountButton';
+import ChangePassword from './ChangePassword';
+import Logout from './Logout';
+import MyModal from '../../sharedComponents/MyModal';
+import { MdSettings } from 'react-icons/md';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  &&& {
+    & > * {
+      width: 100%;
+      min-width: 100%;
+    }
+  }
+`;
+
+const Settings = ({ children }) => {
+  const ref = useRef();
+  console.log(
+    '111: ',
+    ref.current?.getBoundingClientRect()?.width +
+      ref.current?.getBoundingClientRect()?.right +
+      10 +
+      'px'
+  );
+  console.log('ref.current?.getBoundingClientRect()?.width:', ref.current?.getBoundingClientRect());
+  return (
+    <MyModal
+      direction='left'
+      trigger={
+        <div ref={ref}>
+          <MdSettings size={30} />
+        </div>
+      }
+      style={{
+        right: '70px',
+        bottom: '10px',
+        position: 'fixed',
+      }}
+    >
+      <Container>
+        <Logout />
+        <ChangePassword variant='secondary' />
+        <DeleteAccountButton />
+        {children}
+      </Container>
+    </MyModal>
+  );
+};
+export default Settings;
