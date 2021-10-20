@@ -135,6 +135,7 @@ const Container = styled.div`
 const SModal = styled.div`
   position: absolute;
   z-index: 999999;
+  pointer-events: initial;
 
   &.slideLeft-appear {
     opacity: 0;
@@ -147,6 +148,7 @@ const SModal = styled.div`
     transform: translate(0, 0);
     transition: opacity ${({ duration }) => duration / 2 + 'ms'},
       transform ${({ duration }) => duration + 'ms'};
+    pointer-events: none;
   }
 
   &.slideLeft-enter {
@@ -161,6 +163,7 @@ const SModal = styled.div`
     transform: translate(0, 0);
     transition: opacity ${({ duration }) => duration / 2 + 'ms'},
       transform ${({ duration }) => duration + 'ms'};
+    pointer-events: none;
   }
 
   &.slideLeft-exit {
@@ -175,6 +178,7 @@ const SModal = styled.div`
     transform: ${({ direction }) => direction};
     transition: opacity ${({ duration }) => duration / 2 + 'ms'},
       transform ${({ duration }) => duration + 'ms'};
+    pointer-events: none;
   }
 
   &.slideLeft-exit-done {
