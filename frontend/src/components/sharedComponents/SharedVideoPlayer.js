@@ -169,13 +169,12 @@ const SharedVideoPlayer = () => {
           show={resizeActive || (enableVodVolumeOverlay && isPlaying)}
           type='live'
           id='controls'
-          hidechat={String(viewStates.hideList)}
+          hidechat={String(viewStates?.hideList)}
           vodVolumeOverlayEnabled={enableVodVolumeOverlay}
           chatwidth={viewStates?.listWidth || DEFAULT_LIST_WIDTH}
           showcursor={enableVodVolumeOverlay}
           isPlaying={isPlaying}
           resizeActive={resizeActive}
-          viewStates={viewStates}
           listName={urlListName}
           DEFAULT_LIST_WIDTH={DEFAULT_LIST_WIDTH}
           VolumeEventOverlayRef={VolumeEventOverlayRef}
@@ -204,7 +203,7 @@ const SharedVideoPlayer = () => {
           <YoutubeVideoPlayer playNext={playNext} />
         ) : (
           <VideoPlayer
-            listIsOpen={!viewStates.hideList}
+            listIsOpen={!viewStates?.hideList}
             listWidth={viewStates?.listWidth}
             playNext={playNext}
             VolumeEventOverlayRef={VolumeEventOverlayRef}
@@ -216,7 +215,7 @@ const SharedVideoPlayer = () => {
         )}
         {/* {children} */}
 
-        {!viewStates.hideList && (
+        {!viewStates?.hideList && (
           <>
             {!isFullscreen && (
               <ResizeDevider
