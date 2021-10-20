@@ -140,7 +140,7 @@ const SharedVideoPlayer = () => {
         id='twitch-embed'
         ref={videoElementRef}
         visible={visible}
-        chatwidth={viewStates??.listWidth || DEFAULT_LIST_WIDTH}
+        chatwidth={viewStates?.listWidth || DEFAULT_LIST_WIDTH}
         resizeActive={resizeActive}
         hidechat={viewStates?.hideList || isFullscreen}
         onMouseUp={handleResizeMouseUp}
