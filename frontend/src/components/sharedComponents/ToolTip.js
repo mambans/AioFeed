@@ -31,7 +31,7 @@ const ToolTip = ({
   placement = 'bottom',
   delay = { show: 250, hide: 0 },
   fontSize = 'inherit',
-  width,
+  width = 'unset',
 }) => {
   const { feedVideoSizeProps } = useContext(FeedsContext) || {};
 

@@ -266,6 +266,7 @@ export const StyledLogoutContiner = styled.div`
   gap: 10px;
   display: flex;
   align-items: end;
+  justify-content: end;
 
   button.btn-secondary {
     background-color: #26292b;

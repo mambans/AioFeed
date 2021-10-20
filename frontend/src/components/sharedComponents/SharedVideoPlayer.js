@@ -140,9 +140,9 @@ const SharedVideoPlayer = () => {
         id='twitch-embed'
         ref={videoElementRef}
         visible={visible}
-        chatwidth={viewStates.listWidth || DEFAULT_LIST_WIDTH}
+        chatwidth={viewStates??.listWidth || DEFAULT_LIST_WIDTH}
         resizeActive={resizeActive}
-        hidechat={viewStates.hideList || isFullscreen}
+        hidechat={viewStates?.hideList || isFullscreen}
         onMouseUp={handleResizeMouseUp}
         onMouseMove={resize}
       >
@@ -171,7 +171,7 @@ const SharedVideoPlayer = () => {
           id='controls'
           hidechat={String(viewStates.hideList)}
           vodVolumeOverlayEnabled={enableVodVolumeOverlay}
-          chatwidth={viewStates.listWidth || DEFAULT_LIST_WIDTH}
+          chatwidth={viewStates?.listWidth || DEFAULT_LIST_WIDTH}
           showcursor={enableVodVolumeOverlay}
           isPlaying={isPlaying}
           resizeActive={resizeActive}
@@ -205,7 +205,7 @@ const SharedVideoPlayer = () => {
         ) : (
           <VideoPlayer
             listIsOpen={!viewStates.hideList}
-            listWidth={viewStates.listWidth}
+            listWidth={viewStates?.listWidth}
             playNext={playNext}
             VolumeEventOverlayRef={VolumeEventOverlayRef}
             setIsPlaying={setIsPlaying}
@@ -222,7 +222,7 @@ const SharedVideoPlayer = () => {
               <ResizeDevider
                 onMouseDown={handleResizeMouseDown}
                 resizeActive={resizeActive}
-                chatwidth={viewStates.listWidth}
+                chatwidth={viewStates?.listWidth}
               >
                 <div />
               </ResizeDevider>
