@@ -5,25 +5,11 @@ import moment from 'moment';
 import { NotificationBoxStyle } from '../sharedComponents/sharedStyledComponents';
 
 export const NotificationListContainer = styled.div`
-  height: 600px;
+  max-height: 600px;
   overflow-y: scroll;
   margin-top: 20px;
   padding-right: 10px;
-
-  #clear {
-    cursor: pointer;
-    font-weight: bold;
-    color: rgb(150, 150, 150);
-    transition: color 250ms;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    transform: translateY(100%);
-
-    &:hover {
-      color: rgb(255, 255, 255);
-    }
-  }
+  /* width: 400px; */
 
   ul {
     padding: 0;

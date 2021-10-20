@@ -11,7 +11,6 @@ import { getLocalstorage } from '../../util';
 import MyModal from '../sharedComponents/MyModal';
 import { NotificationBoxStyle } from '../sharedComponents/sharedStyledComponents';
 
-const LOGS_HEIGHT = 600;
 const LogsContext = React.createContext();
 
 const NrLogs = styled.svg`
@@ -22,24 +21,7 @@ const NrLogs = styled.svg`
 `;
 
 export const Logs = styled.div`
-  #clear {
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    font-weight: bold;
-    height: 35px;
-    align-items: center;
-    color: rgb(150, 150, 150);
-    transition: color 250ms;
-    position: absolute;
-    right: 0;
-    top: ${LOGS_HEIGHT - 20}px;
-    transform: translateY(-100%);
-
-    &:hover {
-      color: rgb(255, 255, 255);
-    }
-  }
+  max-height: 600px;
 `;
 
 const Log = styled.li`

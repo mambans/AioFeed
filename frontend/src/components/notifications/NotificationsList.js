@@ -4,6 +4,7 @@ import React, { useContext } from 'react';
 import { Notification, Date, NotificationListContainer } from './styledComponent';
 import { truncate } from '../../util';
 import NotificationsContext from './../notifications/NotificationsContext';
+import { ClearAllNotifications } from '../sharedComponents/sharedStyledComponents';
 
 //deconstruct nested params
 const NotificationTwitchItem = ({
@@ -38,13 +39,11 @@ const NotificationsList = () => {
 
   return (
     <NotificationListContainer>
-      <div id='clear' onClick={clearNotifications}>
-        Clear all ({notifications?.length || 0})
-      </div>
       <ul>
         {notifications?.map((data = {}, index) => {
           return <NotificationTwitchItem data={data} key={String(index)} />;
         })}
+        <ClearAllNotifications onClick={clearNotifications} nr={notifications?.length || 0} />
       </ul>
     </NotificationListContainer>
   );

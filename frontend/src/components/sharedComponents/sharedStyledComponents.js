@@ -31,19 +31,36 @@ export const NotificationBoxStyle = css`
   display: flex;
   flex-direction: row;
   box-shadow: rgba(0, 0, 0, 0.25) 4px 8px 15px;
-  transition: box-shadow 250ms, opacity 250ms;
+  transition: box-shadow 250ms, filter 250ms;
   padding: 10px;
   background: var(--navigationbarBackground);
   border-radius: 10px;
   margin-bottom: 10px;
-  opacity: 0.8;
+  filter: brightness(85%);
   position: relative;
+  min-width: 400px;
+  width: 100%;
 
   &:hover {
     box-shadow: rgba(0, 0, 0, 0.5) 4px 8px 15px;
-    opacity: 1;
+    filter: brightness(100%);
   }
 `;
+const StyledClearAllNotifications = styled.button`
+  ${NotificationBoxStyle};
+  cursor: pointer;
+  font-weight: bold;
+  justify-content: center;
+  border: none;
+  color: #ffffff;
+  filter: brightness(50%) contrast(95%);
+`;
+
+export const ClearAllNotifications = ({ nr, onClick }) => (
+  <StyledClearAllNotifications disabled={!nr} onClick={onClick}>
+    Clear all {!!nr && `(${nr})`}
+  </StyledClearAllNotifications>
+);
 
 export const StyledRefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
   ${ButtonLookalikeStyle}

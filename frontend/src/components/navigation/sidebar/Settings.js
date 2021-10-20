@@ -22,14 +22,6 @@ const Container = styled.div`
 
 const Settings = ({ children }) => {
   const ref = useRef();
-  console.log(
-    '111: ',
-    ref.current?.getBoundingClientRect()?.width +
-      ref.current?.getBoundingClientRect()?.right +
-      10 +
-      'px'
-  );
-  console.log('ref.current?.getBoundingClientRect()?.width:', ref.current?.getBoundingClientRect());
   return (
     <MyModal
       direction='left'
