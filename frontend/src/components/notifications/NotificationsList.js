@@ -1,38 +1,14 @@
 import { Link } from 'react-router-dom';
 import React, { useContext } from 'react';
 
-import { Notification, Date, NotificationListContainer } from './styledComponent';
-import { truncate } from '../../util';
+import { NotificationListContainer } from './styledComponent';
 import NotificationsContext from './../notifications/NotificationsContext';
-import { ClearAllNotifications } from '../sharedComponents/sharedStyledComponents';
+import NotificationItem, { ClearAllNotifications } from './NotificationItem';
 
 //deconstruct nested params
-const NotificationTwitchItem = ({
-  data: { notiStatus, user_name, profile_image_url, text, title, date } = {},
-}) => {
-  return (
-    <Notification status={notiStatus}>
-      <Link to={`/${user_name?.toLowerCase()}/page`} className='profileImg' alt=''>
-        <img src={profile_image_url} alt=''></img>
-      </Link>
-      <div className='textContainer'>
-        <Link to={`/${user_name?.toLowerCase()}/page`} className='name'>
-          <b>{user_name}</b> {notiStatus}
-        </Link>
-        <Link to={`/${user_name?.toLowerCase()}/page`} className='title'>
-          {(notiStatus?.includes('updated') &&
-            text?.split('\n').map((line) => (
-              <p className='UpdateText' key={line}>
-                {line}
-              </p>
-            ))) ||
-            truncate(title, 30)}
-        </Link>
-        <Date date={date} status={notiStatus} />
-      </div>
-    </Notification>
-  );
-};
+// const NotificationTwitchItem = ({
+//   data: { notiStatus, user_name, profile_image_url, text, title, date } = {},
+// }) => {}
 
 const NotificationsList = () => {
   const { clearNotifications, notifications } = useContext(NotificationsContext);
@@ -40,10 +16,44 @@ const NotificationsList = () => {
   return (
     <NotificationListContainer>
       <ul>
-        {notifications?.map((data = {}, index) => {
-          return <NotificationTwitchItem data={data} key={String(index)} />;
-        })}
-        <ClearAllNotifications onClick={clearNotifications} nr={notifications?.length || 0} />
+        {notifications?.map(
+          ({ notiStatus, user_name, profile_image_url, text, title, date } = {}, index) => {
+            return (
+              <NotificationItem
+                key={String(index)}
+                title={
+                  <Link
+                    to={`/${user_name?.toLowerCase()}/page`}
+                    className='name'
+                    style={{ fontSize: '0.85em' }}
+                  >
+                    <b>{user_name}</b> {notiStatus}
+                  </Link>
+                }
+                text={
+                  (notiStatus?.includes('updated') &&
+                    text?.split('\n').map((line) => (
+                      <p className='UpdateText' key={line}>
+                        {line}
+                      </p>
+                    ))) ||
+                  title
+                }
+                icon={
+                  <Link to={`/${user_name?.toLowerCase()}/page`} className='profileImg' alt=''>
+                    <img style={{ borderRadius: '50%' }} src={profile_image_url} alt=''></img>
+                  </Link>
+                }
+                date={date}
+              />
+            );
+          }
+        )}
+        <ClearAllNotifications
+          onClick={clearNotifications}
+          nr={notifications?.length || 0}
+          disabled={!notifications?.length}
+        />
       </ul>
     </NotificationListContainer>
   );

@@ -3,13 +3,12 @@ import useSyncedLocalState from '../../hooks/useSyncedLocalState';
 import { GiDominoTiles } from 'react-icons/gi';
 import { SiLogstash, SiAuthy } from 'react-icons/si';
 import styled from 'styled-components';
-import { Date as DateText } from '../notifications/styledComponent';
 import { FiLogOut, FiLogIn } from 'react-icons/fi';
 import ToolTip from '../sharedComponents/ToolTip';
 import { FaTwitch, FaYoutube } from 'react-icons/fa';
 import { getLocalstorage } from '../../util';
 import MyModal from '../sharedComponents/MyModal';
-import { NotificationBoxStyle } from '../sharedComponents/sharedStyledComponents';
+import NotificationItem from '../notifications/NotificationItem';
 
 const LogsContext = React.createContext();
 
@@ -22,34 +21,6 @@ const NrLogs = styled.svg`
 
 export const Logs = styled.div`
   max-height: 600px;
-`;
-
-const Log = styled.li`
-  ${NotificationBoxStyle}
-
-  h3 {
-    font-size: 1.15em;
-  }
-
-  span {
-    font-size: 0.9em;
-    opacity: 0.85;
-  }
-
-  &:hover {
-    box-shadow: rgba(0, 0, 0, 0.5) 4px 8px 15px;
-    opacity: 1;
-  }
-`;
-
-const LogIcon = styled.div`
-  padding-right: 10px;
-  display: flex;
-  align-items: center;
-`;
-
-const LogText = styled.div`
-  flex-grow: 1;
 `;
 
 export const LogsProvider = ({ children }) => {
@@ -123,6 +94,7 @@ export const LogsProvider = ({ children }) => {
         left: triggerPos?.left + triggerPos?.width - 400,
         top: triggerPos?.bottom + triggerPos?.height,
         minWidth: '400px',
+        position: 'fixed',
       }}
       handleClose={handleClose}
       handleOpen={handleShow}
@@ -146,22 +118,17 @@ export const LogsProvider = ({ children }) => {
       <Logs>
         {logs?.length ? (
           logs?.map(({ title, text, icon, date }, index) => (
-            <Log key={String(index)}>
-              <LogIcon>{icons(icon)}</LogIcon>
-              <LogText>
-                <h3>{title}</h3>
-                <span>{text}</span>
-                <DateText date={date} />
-              </LogText>
-            </Log>
+            <NotificationItem
+              key={String(index)}
+              title={title}
+              text={text}
+              icon={icons(icon)}
+              date={date}
+              iconWidth='35px'
+            />
           ))
         ) : (
-          <Log key={'no logs'}>
-            <LogIcon>{icons()}</LogIcon>
-            <LogText>
-              <h3>No logs...</h3>
-            </LogText>
-          </Log>
+          <NotificationItem key={'no logs'} title='No logs...' />
         )}
       </Logs>
     </MyModal>

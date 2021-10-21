@@ -1,99 +1,12 @@
-import React from 'react';
-import styled from 'styled-components';
-import Moment from 'react-moment';
-import moment from 'moment';
-import { NotificationBoxStyle } from '../sharedComponents/sharedStyledComponents';
+import styled, { css } from 'styled-components';
 
 export const NotificationListContainer = styled.div`
   max-height: 600px;
-  min-width: 400px;
-  /* overflow-y: scroll; */
+  width: 400px;
   margin-top: 20px;
-  padding-right: 10px;
-  /* width: 400px; */
-
+  margin-right: 7px;
   ul {
     padding: 0;
-  }
-`;
-
-export const Notification = styled.li`
-  &&& {
-    ${NotificationBoxStyle}
-    display: grid;
-    min-height: 80px;
-    height: 80px;
-  }
-
-  grid-template-areas: 'img name name' 'img title title' 'date date date';
-  grid-template-columns: 15% 85%;
-  /* opacity: ${({ status }) =>
-    status === 'Offline' ? 0.35 : status?.includes('updated') ? 0.75 : 1}; */
-  margin: 7px 0;
-  transition: background 250ms, border 250ms, opacity 250ms;
-  padding-left: 2px;
-
-  a,
-  p,
-  div {
-    transition: color 250ms, font-weight 250ms;
-  }
-
-  &:hover {
-    opacity: 1;
-    box-shadow: rgba(0, 0, 0, 0.5) 4px 8px 15px;
-
-    a,
-    p,
-    div {
-      color: white;
-    }
-  }
-
-  * {
-    outline-color: transparent;
-  }
-
-  .textContainer {
-    height: 80px;
-    display: grid;
-    grid-template-rows: 22% 56% 22%;
-    align-items: center;
-  }
-
-  .profileImg {
-    grid-area: img;
-    display: flex;
-    align-items: center;
-
-    img {
-      width: 46px;
-      border-radius: 23px;
-      grid-area: img;
-      height: 46px;
-      object-fit: cover;
-    }
-  }
-
-  .name {
-    color: rgb(240, 240, 240);
-    grid-row: 1;
-    padding-top: ${({ type }) => (type === 'Offline' ? '15px' : null)};
-    padding-left: 3px;
-    max-width: 310px;
-  }
-
-  .title {
-    color: #c1c1c1;
-    grid-row: 2;
-  }
-
-  .UpdateText {
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 310px;
   }
 `;
 
@@ -109,7 +22,7 @@ export const UnseenNotifcationCount = styled.div`
   text-align: center;
 `;
 
-const StyledDate = styled.div`
+export const StyledDate = styled.div`
   /* color: ${({ status }) => (status === 'Offline' ? '#ffffff' : '#838181')}; */
   color: #838181;
   font-size: 0.85rem;
@@ -158,13 +71,75 @@ const StyledDate = styled.div`
   }
 `;
 
-export const Date = ({ date, status }) => (
-  <StyledDate status={status}>
-    <div>
-      <Moment fromNow id='timeago'>
-        {date}
-      </Moment>
-      <p id='time'>{moment(date).format('MM-DD HH:mm')}</p>
-    </div>
-  </StyledDate>
-);
+export const NotificationBoxStyle = css`
+  display: flex;
+  flex-direction: row;
+  box-shadow: rgba(0, 0, 0, 0.25) 4px 8px 15px;
+  transition: box-shadow 250ms, filter 250ms;
+  padding: 10px;
+  background: var(--navigationbarBackground);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  filter: brightness(85%);
+  position: relative;
+  min-width: 400px;
+  width: 100%;
+
+  &:hover {
+    box-shadow: rgba(0, 0, 0, 0.5) 4px 8px 15px;
+    filter: brightness(100%);
+  }
+`;
+
+export const StyledClearAllNotifications = styled.button`
+  ${NotificationBoxStyle};
+  cursor: pointer;
+  font-weight: bold;
+  justify-content: center;
+  border: none;
+  color: #ffffff;
+  filter: brightness(50%) contrast(95%);
+`;
+
+export const NotificationText = styled.div`
+  flex-grow: 1;
+  padding-bottom: 15px;
+
+  a {
+    color: #ffffff;
+  }
+`;
+export const NotificationIcon = styled.div`
+  padding-right: 10px;
+  display: flex;
+  align-items: center;
+  width: ${({ width }) => width};
+  min-width: ${({ width }) => width};
+  max-width: ${({ width }) => width};
+
+  &,
+  img {
+    background-size: contain;
+    max-width: 100%;
+    max-height: 100%;
+  }
+`;
+
+export const StyledNotificationItem = styled.li`
+  ${NotificationBoxStyle}
+
+  h1 {
+    font-size: 1.15em;
+  }
+
+  span {
+    font-size: 0.9em;
+    opacity: 0.85;
+    padding-bottom: 25px;
+  }
+
+  &:hover {
+    box-shadow: rgba(0, 0, 0, 0.5) 4px 8px 15px;
+    opacity: 1;
+  }
+`;
