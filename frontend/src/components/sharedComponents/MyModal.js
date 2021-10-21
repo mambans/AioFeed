@@ -68,15 +68,15 @@ const MyModal = ({
   const animationDirection = () => {
     switch (direction) {
       case 'left':
-        return 'translate(100%, 0)';
+        return 'translate(50%, 0)';
       case 'right':
-        return 'translate(-100%, 0)';
+        return 'translate(-50%, 0)';
       case 'top':
       case 'up':
-        return 'translate(0, 100%)';
+        return 'translate(0, 50%)';
       case 'bottom':
       case 'down':
-        return 'translate(0, -100%)';
+        return 'translate(0, -50%)';
       default:
         return;
       // return 'translate(0, 0)';
