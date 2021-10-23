@@ -315,6 +315,10 @@ export const StyledVolumeSlider = styled.div`
     }
   }
 
+  input {
+    cursor: pointer;
+  }
+
   svg#icon {
     color: #f4f4f49c;
     margin-right: 15px;

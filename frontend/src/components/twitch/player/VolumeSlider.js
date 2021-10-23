@@ -161,7 +161,6 @@ const VolumeSlider = ({
           onChange={handleChange}
           type='range'
           className='form-range'
-          style={{ cursor: 'pointer' }}
           min='0'
           max='100'
         />
