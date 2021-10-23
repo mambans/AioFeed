@@ -16,7 +16,6 @@ const fetchProfileImages = async ({
 }) => {
   const originalArray = items;
   const TwitchProfiles = GetCachedProfiles();
-  // const TwitchProfiles = {};
   const noCachedProfileArrayObject = await originalArray?.data?.filter(
     (user) =>
       !Object.keys(TwitchProfiles).some((id) => id === (user?.user_id || user?.broadcaster_id)) ||
@@ -49,17 +48,18 @@ const fetchProfileImages = async ({
 
   const finallData = await originalArray?.data?.map((user = {}) => {
     const foundProfile =
-      newProfileImgUrls?.find((p_user) => p_user?.id === (user?.user_id || user?.broadcaster_id)) ||
-      {};
+      newProfileImgUrls?.find(
+        (p_user) => parseInt(p_user?.id) === parseInt(user?.user_id || user?.broadcaster_id)
+      ) || {};
 
     return {
-      ...user,
       ...foundProfile,
       profile_image_url:
         foundProfile?.profile_image_url ||
         TwitchProfiles[user?.user_id || user?.broadcaster_id]?.profile_image ||
         `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`,
       login: foundProfile?.login || TwitchProfiles[user?.user_id || user?.broadcaster_id]?.login,
+      ...user,
     };
   });
 
