@@ -44,7 +44,7 @@ const BigScheduleList = ({ followedChannels }) => {
             schedule={schedule}
             followedChannels={followedChannels}
           />
-          <BackDrop />
+          <BackDrop transparent />
         </Portal>
       )}
     </>
