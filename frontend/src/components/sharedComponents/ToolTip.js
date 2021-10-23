@@ -5,6 +5,7 @@ import FeedsContext from '../feed/FeedsContext';
 
 const ToolTipText = styled(Tooltip)`
   width: ${({ width }) => width + 'px' || 'max-content'};
+  z-index: 99999999;
 
   &&& {
     .tooltip-inner {

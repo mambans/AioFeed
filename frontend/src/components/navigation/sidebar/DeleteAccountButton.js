@@ -34,7 +34,7 @@ const DeleteAccountButton = () => {
     useContext(YoutubeContext);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleToggle = () => setShow((c) => !c);
 
   const deleteAccount = async (event) => {
     const form = event.currentTarget;
@@ -89,8 +89,8 @@ const DeleteAccountButton = () => {
 
   return (
     <>
-      <ToolTip tooltip='Delete account'>
-        <StyledAccountButton color='hsla(0, 65%, 28%, 1)' onClick={handleShow} variant='danger'>
+      <ToolTip tooltip='Delete account' placement='top'>
+        <StyledAccountButton color='hsla(0, 65%, 28%, 1)' onClick={handleToggle} variant='danger'>
           Delete account
           <MdDelete size={24} style={{ marginLeft: '0.75rem' }} />
         </StyledAccountButton>

@@ -20,18 +20,25 @@ const DeleteAccountButton = () => {
   const [validated, setValidated] = useState(false);
   const [validatedPassword, setValidatedPassword] = useState(true);
   const [validatedNewPassword, setValidatedNewPassword] = useState(true);
+  const [validatedNewPasswordConfirm, setValidatedNewPasswordConfirm] = useState(true);
 
   const handleClose = () => {
     setShow(false);
     resetPassword();
     resetNewPassword();
+    resetNewPasswordConfirm();
     setValidated(false);
   };
-  const handleShow = () => setShow(true);
+  const handleToggle = () => setShow((c) => !c);
 
   const changePassword = async (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === true) {
+      if (newPassword !== newPasswordConfirm) {
+        setValidatedNewPasswordConfirm(false);
+        setValidated(false);
+        return false;
+      }
       setValidated(true);
       setValidatedPassword(true);
       setValidatedNewPassword(true);
@@ -73,11 +80,16 @@ const DeleteAccountButton = () => {
 
   const { value: password, bind: bindPassword, reset: resetPassword } = useInput('');
   const { value: newPassword, bind: bindNewPassword, reset: resetNewPassword } = useInput('');
+  const {
+    value: newPasswordConfirm,
+    bind: bindNewPasswordConfirm,
+    reset: resetNewPasswordConfirm,
+  } = useInput('');
 
   return (
     <>
       <ToolTip tooltip='Change password'>
-        <StyledAccountButton onClick={handleShow} variant='secondary'>
+        <StyledAccountButton onClick={handleToggle} variant='secondary'>
           Change password
           <RiLockPasswordLine size={24} style={{ marginLeft: '0.75rem' }} />
         </StyledAccountButton>
@@ -91,7 +103,7 @@ const DeleteAccountButton = () => {
       >
         <h2>Change password</h2>
         <div>
-          <h4>Enter current password the the new desired password.</h4>
+          <h4>Enter current and new password</h4>
         </div>
         <Alert />
         <DeleteAccountForm onSubmit={handleSubmit} validated={validated}>
@@ -109,7 +121,7 @@ const DeleteAccountButton = () => {
           </Form.Group>
 
           <Form.Group controlId='formBasicNewPassword'>
-            <Form.Label>new Password</Form.Label>
+            <Form.Label>New Password</Form.Label>
             <Form.Control
               required
               size='lg'
@@ -120,9 +132,20 @@ const DeleteAccountButton = () => {
             />
             <Form.Control.Feedback type='invalid'>Invalid new password</Form.Control.Feedback>
           </Form.Group>
+          <Form.Group controlId='formBasicNewPasswordConfirm' style={{ marginTop: 10 }}>
+            <Form.Control
+              required
+              size='lg'
+              type='password'
+              placeholder='Enter new password again'
+              {...bindNewPasswordConfirm}
+              isInvalid={!validatedNewPasswordConfirm}
+            />
+            <Form.Control.Feedback type='invalid'>New passwords do not match</Form.Control.Feedback>
+          </Form.Group>
 
-          <Button variant='secondary' type='submit' disabled={validated}>
-            Change
+          <Button variant='primary' type='submit' disabled={validated}>
+            Submit
           </Button>
         </DeleteAccountForm>
 

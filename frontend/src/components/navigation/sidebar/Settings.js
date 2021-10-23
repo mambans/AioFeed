@@ -5,6 +5,7 @@ import Logout from './Logout';
 import MyModal from '../../sharedComponents/MyModal';
 import { MdSettings } from 'react-icons/md';
 import styled from 'styled-components';
+import ClearAllLocalstorage from './ClearAllLocalstorage';
 
 const Container = styled.div`
   width: 200px;
@@ -37,8 +38,9 @@ const Settings = ({ children }) => {
       }}
     >
       <Container>
+        <ClearAllLocalstorage />
         <Logout />
-        <ChangePassword variant='secondary' />
+        <ChangePassword />
         <DeleteAccountButton />
         {children}
       </Container>

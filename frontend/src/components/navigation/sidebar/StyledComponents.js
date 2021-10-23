@@ -293,16 +293,12 @@ export const StyledLogoutContiner = styled.div`
   }
 `;
 
-export const StyledAccountButton = styled(Button).attrs(({ variant }) => ({
-  variant: variant || 'secondary',
-}))`
+export const StyledAccountButton = styled(Button)`
   background: ${({ color }) => color || 'grey'};
   border-color: grey;
-  /* border-radius: 10px; */
   width: 52px;
   height: 42.5px;
   grid-row: 2;
-  /* margin: auto; */
 
   i {
     height: 24px;
@@ -332,16 +328,16 @@ export const DeleteAccountForm = styled(Form)`
     display: flex;
     font-size: 22px;
     padding: 10px 25px;
-    background: #921818;
-    border: 2px solid #c80c0c;
+    /* background: #921818;
+    border: 2px solid #c80c0c; */
     color: white;
     border-radius: 10px;
     box-shadow: 2px 2px 5px black;
     margin-top: 50px;
 
-    :hover {
+    /* :hover {
       background: #c70f0f;
-    }
+    } */
   }
 `;
 
