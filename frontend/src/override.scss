@@ -89,3 +89,15 @@ div[aria-label='Countdown timer'] {
     height: 22px !important;
   }
 }
+.form-control:focus {
+  color: #fff;
+  background-color: transparent;
+  border-color: transparent;
+  border-bottom-color: transparent;
+  outline: 0;
+  box-shadow: none;
+  border-bottom: 2px solid rgb(200, 200, 200);
+}
+input.form-control {
+  border-bottom: 2px solid rgb(100, 100, 100);
+}

@@ -35,8 +35,8 @@ const Notifications = ({ leftExpandRef }) => {
         handleOpen={handleShow}
         handleClose={handleClose}
         style={{
-          left: triggerRef?.left + 'px',
-          top: triggerRef?.bottom + 'px',
+          left: triggerRef?.left ? triggerRef?.left + 'px' : 'unset',
+          top: triggerRef?.bottom ? triggerRef?.bottom + 'px' : 'unset',
           position: 'fixed',
         }}
         triggerStyle={{ padding: '0 5px', margin: '0 30px' }}

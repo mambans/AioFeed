@@ -1,8 +1,6 @@
 import React, { useState, useContext, useCallback, useEffect } from 'react';
 
 import { CenterContainer } from '../twitch/StyledComponents';
-import AccountContext from './../account/AccountContext';
-import AlertHandler from './../alert';
 import FeedsContext from './FeedsContext';
 import useEventListenerMemo from './../../hooks/useEventListenerMemo';
 
@@ -16,7 +14,7 @@ const CenterProvider = ({ children, left, right }) => {
   });
   const [twittersWidth, setTwitterWidth] = useState({});
   const twitterContainerWidth =
-    Object.values?.(twittersWidth)?.reduce((a, b) => a + (b + 10), 0) || window.outerWidth * 0.14;
+    Object.values?.(twittersWidth)?.reduce((a, b) => a + (b + 10), 0) || window.outerWidth * 0.12;
   const leftWidth = left && (showTwitchSidebar ? 275 : 0);
   const rightWidth = right && enableTwitter && twitterContainerWidth;
 
@@ -75,17 +73,6 @@ const Center = ({ children }) => {
 };
 
 const FeedsCenterContainer = ({ children, left = true, right = true } = {}) => {
-  const { username } = useContext(AccountContext);
-
-  if (!username) {
-    return (
-      <AlertHandler
-        title='Login to continue'
-        message='You are not logged with your AioFeed account.'
-      />
-    );
-  }
-
   return (
     <CenterProvider left={left} right={right}>
       <Center>{children}</Center>

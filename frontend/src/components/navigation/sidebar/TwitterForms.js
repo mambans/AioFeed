@@ -9,7 +9,7 @@ const TwitterForms = () => {
   return (
     <TransitionGroup component={null}>
       {twitterLists?.map((id, index) => (
-        <CSSTransition classNames='twitterForm' key={id} timeout={500} unmountOnExit>
+        <CSSTransition classNames='ListForm' key={id} timeout={500} unmountOnExit>
           <UpdateTwitterLists key={id} id={id} index={index} />
         </CSSTransition>
       ))}

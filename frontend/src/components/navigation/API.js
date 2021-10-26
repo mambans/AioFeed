@@ -236,6 +236,38 @@ const API = {
       new_password: newPassword,
       authkey: authKey,
     }),
+  fetchCustomFeedSections: async () =>
+    await axios
+      .get(`${BASE_URL}/custom_feed_sections`, {
+        params: {
+          username: getCookie(`AioFeed_AccountName`),
+        },
+      })
+      .then((res) => {
+        delete res.data.Item?.Username;
+        return res.data.Item;
+      })
+      .catch((e) => console.error(e)),
+
+  deleteCustomFeedSections: async (name) =>
+    await axios
+      .delete(`${BASE_URL}/custom_feed_sections`, {
+        data: {
+          username: getCookie('AioFeed_AccountName'),
+          name,
+        },
+      })
+      .catch((e) => console.error(e)),
+
+  updateCustomFeedSections: async (name, data) => {
+    return await axios
+      .put(`${BASE_URL}/custom_feed_sections`, {
+        username: getCookie('AioFeed_AccountName'),
+        name,
+        data,
+      })
+      .catch((e) => console.error(e));
+  },
 };
 
 export default API;

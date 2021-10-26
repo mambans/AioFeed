@@ -1,7 +1,6 @@
 import { CSSTransition } from 'react-transition-group';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 
-import { getLocalstorage } from '../../../util';
 import { HideSidebarButton } from '../sidebar/StyledComponents';
 import FeedsContext from '../../feed/FeedsContext';
 import Handler from './Handler';
@@ -13,6 +12,7 @@ import { Container } from '../StyledComponents';
 import ToolTip from '../../sharedComponents/ToolTip';
 import { CustomFilterProvider } from '../CustomFilters/CustomFilterContext';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
+import FeedSections from '../../feedSections/FeedSections';
 
 const TwitchStandalone = () => {
   useDocumentTitle('Twitch Live');
@@ -30,9 +30,10 @@ export const Twitch = ({ in: forceMount = false, className }) => {
     setShowTwitchSidebar,
     showTwitchBigFeed,
     setShowTwitchBigFeed,
+    enableFeedSections,
   } = useContext(FeedsContext) || {};
 
-  const [order, setOrder] = useState(getLocalstorage('FeedOrders')?.['Twitch'] ?? 9);
+  const { orders } = useContext(FeedsContext);
   const refreshBtnRef = useRef();
 
   useEffect(() => {
@@ -53,8 +54,8 @@ export const Twitch = ({ in: forceMount = false, className }) => {
               appear
               unmountOnExit
             >
-              <Container order={order} className={className}>
-                <Header data={data} setOrder={setOrder} ref={refreshBtnRef} />
+              <Container order={orders['twitch']} className={className}>
+                <Header data={data} ref={refreshBtnRef} />
                 <TwitchStreams data={data} />
               </Container>
             </CSSTransition>
@@ -94,6 +95,15 @@ export const Twitch = ({ in: forceMount = false, className }) => {
                 onlineStreams={data.liveStreams}
                 newlyAdded={data.newlyAddedStreams}
               />
+            </CSSTransition>
+            <CSSTransition
+              in={enableFeedSections}
+              timeout={750}
+              classNames='fade-750ms'
+              unmountOnExit
+              appear
+            >
+              <FeedSections data={data} />
             </CSSTransition>
           </>
         )}

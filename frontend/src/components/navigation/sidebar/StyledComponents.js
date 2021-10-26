@@ -24,6 +24,7 @@ export const StyledNavSidebar = styled.div`
   right: 0;
   transition: opacity 300ms, transform 500ms;
   transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: visible;
 
   @media screen and (max-width: 1920px) {
     width: 300px;
@@ -594,5 +595,16 @@ export const ToggleButtonsContainerHeader = styled.h5`
   padding-bottom: 0.3rem;
   text-align: center;
   border-bottom: thin solid rgb(50, 50, 50);
+  transition: color 250ms;
   color: rgb(200, 200, 200);
+  cursor: pointer;
+
+  svg {
+    transition: transform 250ms;
+    transform: ${({ expanded }) => (expanded ? 'rotate(0deg)' : 'rotate(180deg)')};
+  }
+
+  &:hover {
+    color: rgb(235, 235, 235);
+  }
 `;

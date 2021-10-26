@@ -11,7 +11,6 @@ import Header from './Header';
 import VodsContext from './VodsContext';
 import LoadingBoxes from './../LoadingBoxes';
 import FeedsContext from '../../feed/FeedsContext';
-import { getLocalstorage } from '../../../util';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import FeedsCenterContainer, { CenterContext } from './../../feed/FeedsCenterContainer';
 import { Container } from '../StyledComponents';
@@ -30,12 +29,11 @@ const VodsStandalone = () => {
 
 export const Vods = ({ className }) => {
   const { vods, setVods, channels } = useContext(VodsContext);
-  const { setEnableTwitchVods } = useContext(FeedsContext) || {};
+  const { setEnableTwitchVods, orders } = useContext(FeedsContext) || {};
   const { videoElementsAmount } = useContext(CenterContext);
   const { twitchAccessToken, setTwitchAccessToken, setTwitchRefreshToken, twitchUserId } =
     useContext(TwitchContext);
   const [error, setError] = useState(null);
-  const [order, setOrder] = useState(getLocalstorage('FeedOrders')?.['Vods'] ?? 27);
   const [vodError, setVodError] = useState(null);
   const [vodAmounts, setVodAmounts] = useState({
     amount: videoElementsAmount,
@@ -108,14 +106,8 @@ export const Vods = ({ className }) => {
   }, [videoElementsAmount]);
 
   return (
-    <Container order={order} className={className}>
-      <Header
-        ref={refreshBtnRef}
-        refresh={refresh}
-        vods={vods}
-        vodError={vodError}
-        setOrder={setOrder}
-      />
+    <Container order={orders['vods']} className={className}>
+      <Header ref={refreshBtnRef} refresh={refresh} vods={vods} vodError={vodError} />
       {!twitchAccessToken && (
         <AlertHandler
           title='Not authenticated/connected with Twitch.'

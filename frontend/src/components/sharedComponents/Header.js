@@ -10,7 +10,6 @@ import {
   HeaderLines,
   HeaderTitle,
 } from './sharedStyledComponents';
-import ReOrderButtons from './ReOrderButtons';
 
 const Header = React.forwardRef((props, ref) => {
   const {
@@ -26,8 +25,6 @@ const Header = React.forwardRef((props, ref) => {
     refreshTimer,
     style = {},
     isLoading,
-    setOrder,
-    feedName,
   } = props;
   const thisref = useRef();
   const path = useLocation().pathname.replace('/', '');
@@ -65,7 +62,7 @@ const Header = React.forwardRef((props, ref) => {
         {children}
         <LeftRightDivs>
           {rightSide}
-          <ReOrderButtons setOrder={setOrder} feedName={feedName} />
+          {/* <ReOrderButtons setOrder={setOrder} feedName={feedName} /> */}
         </LeftRightDivs>
       </HeaderTopContainer>
       <HeaderTitle>

@@ -11,6 +11,7 @@ export const FeedsProvider = ({ children }) => {
       twitch_bigFeed: true,
     }) || {};
   const toggle = (i, v) => setPref((c) => ({ ...c, [i]: v || !c[i] }));
+  const [orders, setOrders] = useLocalStorageState('FeedOrders', {});
 
   const [twitterLists, setTwitterLists] = useLocalStorageState('Twitter-Lists');
 
@@ -33,6 +34,8 @@ export const FeedsProvider = ({ children }) => {
         setEnableTwitchVods: (v) => toggle('vods', v),
         enableMyLists: Boolean(pref.mylists),
         setEnableMyLists: (v) => toggle('mylists', v),
+        setEnableFeedSections: (v) => toggle('feedsections', v),
+        enableFeedSections: Boolean(pref.feedsections),
         enableTwitter: Boolean(pref.twitter),
         setEnableTwitter: (v) => toggle('twitter', v),
         showTwitchSidebar: Boolean(pref.twitch_sidebar),
@@ -45,6 +48,8 @@ export const FeedsProvider = ({ children }) => {
         setFeedSize: (v) => toggle('size', v),
         feedVideoSizeProps,
         toggle,
+        orders,
+        setOrders,
       }}
     >
       {children}

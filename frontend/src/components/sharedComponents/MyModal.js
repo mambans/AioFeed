@@ -5,6 +5,7 @@ import { CSSTransition } from 'react-transition-group';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import { FaRegWindowRestore } from 'react-icons/fa';
 import { Portal } from 'react-portal';
+import useClicksOutside from '../../hooks/useClicksOutside';
 // import useClicksOutside from '../../hooks/useClicksOutside';
 
 /**
@@ -28,10 +29,13 @@ const MyModal = ({
   triggerStyle,
   children,
   style,
+  relative,
   onMouseEnter = () => {},
   onMouseOver = () => {},
   onMouseOut = () => {},
   onMouseLeave = () => {},
+  onClick = () => {},
+  onOpen = () => {},
   ...props
 }) => {
   const [show, setShow] = useState(open);
@@ -45,13 +49,16 @@ const MyModal = ({
     props?.handleOpen?.();
   };
   const handleToggle = () => {
+    onClick?.();
     setShow((c) => {
       if (!c) props?.handleOpen?.();
       if (c) props?.handleClose?.();
       return !c;
     });
   };
-  const handleClose = () => {
+  const handleClose = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     setShow(false);
     props?.handleClose?.();
   };
@@ -61,6 +68,7 @@ const MyModal = ({
     window,
     closeOnRequest && show
   );
+  useClicksOutside(ref, handleClose, show && relative);
 
   useEffect(() => setTriggerRefPositions(triggerBtnRef?.current?.getBoundingClientRect?.()), []);
   useEffect(() => setShow(open), [open]);
@@ -94,6 +102,7 @@ const MyModal = ({
           onMouseOver={onMouseOver}
           onMouseOut={onMouseOut}
           onMouseLeave={onMouseLeave}
+          type='button'
         >
           {trigger}
         </TriggerButton>
@@ -104,8 +113,9 @@ const MyModal = ({
           classNames='slideLeft'
           unmountOnExit
           appear
+          onEnter={onOpen}
         >
-          <Portal>
+          <Portal node={relative ? ref.current : document.querySelector('body')}>
             <SModal
               refPos={triggerRefPositions}
               direction={animationDirection()}
@@ -116,9 +126,9 @@ const MyModal = ({
             </SModal>
           </Portal>
         </CSSTransition>
-        {show && (
+        {show && !relative && (
           <Portal>
-            <Backdrop onClick={handleClose} />
+            <Backdrop onClick={handleClose} id='BACKDROP' />
           </Portal>
         )}
       </Container>

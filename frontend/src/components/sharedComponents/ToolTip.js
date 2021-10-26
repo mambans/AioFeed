@@ -4,8 +4,14 @@ import styled from 'styled-components';
 import FeedsContext from '../feed/FeedsContext';
 
 const ToolTipText = styled(Tooltip)`
-  width: ${({ width }) => width + 'px' || 'max-content'};
+  width: ${({ width }) =>
+    width ? (typeof width === 'number' ? width + 'px' : width) : 'max-content'};
   z-index: 99999999;
+
+  top: ${({ top }) => (top ? top + ' !important' : 'initial')};
+  right: ${({ right }) => (right ? right + ' !important' : 'initial')};
+  bottom: ${({ bottom }) => (bottom ? bottom + ' !important' : 'initial')};
+  left: ${({ left }) => (left ? left + ' !important' : 'initial')};
 
   &&& {
     .tooltip-inner {
@@ -33,6 +39,7 @@ const ToolTip = ({
   delay = { show: 250, hide: 0 },
   fontSize = 'inherit',
   width = 'unset',
+  style,
 }) => {
   const { feedVideoSizeProps } = useContext(FeedsContext) || {};
 
@@ -47,6 +54,10 @@ const ToolTip = ({
             tooltip
           ) : (
             <ToolTipText
+              top={style?.top}
+              right={style?.right}
+              bottom={style?.bottom}
+              left={style?.left}
               fontSize={fontSize}
               id={`tooltip-${'bottom'}`}
               width={width || feedVideoSizeProps?.width}

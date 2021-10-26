@@ -11,6 +11,7 @@ import { Youtube } from './../youtube';
 import FeedsCenterContainer from './FeedsCenterContainer';
 import { Twitch } from '../twitch/live';
 import { MyLists } from '../myLists';
+import FeedOrderSlider from './FeedOrderSlider';
 // import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 const Feed = () => {
@@ -26,12 +27,14 @@ const Feed = () => {
       />
     );
   }
+
   return (
     <FeedsCenterContainer>
       <NoFeedsEnable />
       <Twitter />
 
       <div className='feed'>
+        <FeedOrderSlider />
         <CSSTransition in={enableTwitch} classNames='fade-750ms' timeout={750} unmountOnExit appear>
           <Twitch />
         </CSSTransition>

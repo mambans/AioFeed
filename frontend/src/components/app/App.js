@@ -19,6 +19,7 @@ import { VodsProvider } from '../twitch/vods/VodsContext';
 import API from '../navigation/API';
 import { MyListsProvider } from '../myLists/MyListsContext';
 import LogsContext, { LogsProvider } from '../logs/LogsContext';
+import { FeedSectionsProvider } from '../feedSections/FeedSectionsContext';
 
 const AppContainer = styled.div`
   background-image: ${({ image }) => `url(/images/${image})`};
@@ -48,13 +49,15 @@ const AppRoutesContainer = () => {
               <NavigationProvider>
                 <NotificationsProvider>
                   <FeedsProvider>
-                    <MyListsProvider>
-                      <VodsProvider>
-                        <FooterProvider>
-                          <App />
-                        </FooterProvider>
-                      </VodsProvider>
-                    </MyListsProvider>
+                    <FeedSectionsProvider>
+                      <MyListsProvider>
+                        <VodsProvider>
+                          <FooterProvider>
+                            <App />
+                          </FooterProvider>
+                        </VodsProvider>
+                      </MyListsProvider>
+                    </FeedSectionsProvider>
                   </FeedsProvider>
                 </NotificationsProvider>
               </NavigationProvider>

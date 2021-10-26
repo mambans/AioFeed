@@ -52,7 +52,7 @@ export const LogsProvider = ({ children }) => {
   );
 
   const handleClose = () => {
-    setLogsUnreadCount();
+    setLogsUnreadCount(0);
   };
   const handleShow = () => {
     setLogs(getLocalstorage('logs'));
@@ -91,8 +91,8 @@ export const LogsProvider = ({ children }) => {
   const LogsIcon = (
     <MyModal
       style={{
-        left: triggerPos?.left + triggerPos?.width - 400,
-        top: triggerPos?.bottom + triggerPos?.height,
+        left: triggerPos?.left + triggerPos?.width - 400 || 'unset',
+        top: triggerPos?.bottom + triggerPos?.height || 'unset',
         minWidth: '400px',
         position: 'fixed',
       }}
@@ -104,7 +104,7 @@ export const LogsProvider = ({ children }) => {
         <ToolTip tooltip='Account/"system" logs' delay={{ show: 1000, hide: 0 }}>
           <div ref={triggerBtnRef}>
             <SiLogstash size={24} />
-            {logsUnreadCount && (
+            {!!logsUnreadCount && (
               <NrLogs height='20' width='20'>
                 <text x='0' y='15' fill='white'>
                   {logsUnreadCount}

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
-import { getLocalstorage } from '../../util';
 import FeedsCenterContainer from '../feed/FeedsCenterContainer';
+import FeedsContext from '../feed/FeedsContext';
 import { Container } from '../twitch/StyledComponents';
 
 import AlertHandler from './../alert';
@@ -20,12 +20,12 @@ const YoutubeStandalone = () => {
 };
 
 export const Youtube = ({ className }) => {
-  const [order, setOrder] = useState(getLocalstorage('FeedOrders')?.['Youtube'] ?? 18);
+  const { orders } = useContext(FeedsContext);
 
   return (
     <YoutubeDataHandler>
       {(data) => (
-        <Container order={order} className={className}>
+        <Container order={orders['youtube']} className={className}>
           <YoutubeHeader
             videos={data.videos}
             setVideos={data.setVideos}
@@ -33,7 +33,6 @@ export const Youtube = ({ className }) => {
             isLoaded={data.isLoaded}
             requestError={data.requestError}
             followedChannels={data.followedChannels}
-            setOrder={setOrder}
           />
 
           {data.error && <AlertHandler data={data.error}></AlertHandler>}

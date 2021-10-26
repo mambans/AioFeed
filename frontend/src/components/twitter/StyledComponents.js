@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { pulse } from '../twitch/StyledComponents';
 
 export const Container = styled.div`
-  width: ${({ width }) => (width && width + 'px') || '14vw'};
+  width: ${({ width }) => (width && width + 'px') || '12vw'};
   height: inherit;
   background: var(--twitterBackground);
   border-radius: 10px 10px 2px 2px;
@@ -41,21 +41,21 @@ export const Container = styled.div`
 
   &.twitterList-enter-done {
     opacity: 1;
-    width: 14vw !important;
+    width: 12vw !important;
     margin: 0 10px !important;
     transition: opacity 500ms, width 750ms, margin-left 750ms, margin-right 750ms !important;
   }
 
   &.twitterList-enter-active {
     opacity: 1;
-    width: 14vw !important;
+    width: 12vw !important;
     margin: 0 10px !important;
     transition: opacity 500ms, width 750ms, margin-left 750ms, margin-right 750ms !important;
   }
 
   &.twitterList-exit {
     opacity: 1;
-    width: 14vw !important;
+    width: 12vw !important;
     margin: 0 10px !important;
     transition: opacity 500ms, width 750ms, margin-left 750ms, margin-right 750ms !important;
   }
@@ -132,7 +132,7 @@ export const LoadingImageBox = styled.div`
   height: 450px;
 
   .img {
-    height: calc(14vw / 1.777);
+    height: calc(12vw / 1.777);
     border-radius: 20px;
     animation: ${pulse} 2s linear infinite;
 

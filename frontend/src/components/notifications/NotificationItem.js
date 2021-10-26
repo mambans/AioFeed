@@ -22,7 +22,7 @@ export const DateText = ({ date, status }) => (
 
 export const ClearAllNotifications = ({ nr, disabled, onClick, text }) => (
   <StyledClearAllNotifications disabled={disabled} onClick={onClick}>
-    {text || `Clear all ${!!nr && `(${nr})`}`}
+    {text || `Clear all ${!!nr ? `(${nr})` : ''}`}
   </StyledClearAllNotifications>
 );
 

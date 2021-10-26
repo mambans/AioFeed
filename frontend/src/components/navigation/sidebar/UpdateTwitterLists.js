@@ -10,8 +10,9 @@ import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../sharedComponents/ToolTip';
 import API from '../API';
 
-const StyledForm = styled(Form)`
-  margin: 10px;
+export const StyledListForm = styled(Form)`
+  /* margin: 10px; */
+  height: 60px;
 
   &:hover,
   &:focus-within,
@@ -25,74 +26,69 @@ const StyledForm = styled(Form)`
     border: none;
     padding: 0.1875rem 0.75rem;
     height: calc(1.5em + 0.5rem + 0px);
-    border-bottom: 1px solid #ffffff;
+    border-bottom: 2px solid rgb(75, 75, 75);
     border-radius: 0;
   }
 
-  &.twitterForm-appear {
+  &.ListForm-appear {
     opacity: 0;
     height: 0;
-    margin: 0 10px !important;
     transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
   }
 
-  &.twitterForm-appear-active {
+  &.ListForm-appear-active {
     opacity: 1;
-    height: 38px;
-    margin: 10px !important;
+    height: 60px;
     transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
   }
 
-  &.twitterForm-appear-done {
+  &.ListForm-appear-done {
     opacity: 1;
-    height: 38px;
-    margin: 10px !important;
+    height: 60px;
     transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
   }
 
-  &.twitterForm-enter {
+  &.ListForm-enter {
     opacity: 0;
     height: 0;
-    margin: 0 10px !important;
     transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
   }
 
-  &.twitterForm-enter-done {
+  &.ListForm-enter-done {
     opacity: 1;
-    height: 38px;
-    margin: 10px !important;
+    height: 60px;
     transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
   }
 
-  &.twitterForm-enter-active {
+  &.ListForm-enter-active {
     opacity: 1;
-    height: 38px;
-    margin: 10px !important;
+    height: 60px;
     transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
   }
 
-  &.twitterForm-exit {
+  &.ListForm-exit {
     opacity: 1;
-    height: 38px;
-    margin: 10px !important;
+    height: 60px;
     transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
   }
 
-  &.twitterForm-exit-active {
+  &.ListForm-exit-active {
     opacity: 0;
     height: 0;
-    margin: 0 10px !important;
     transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
   }
 
-  &.twitterForm-exit-done {
+  &.ListForm-exit-done {
     opacity: 0;
     height: 0;
-    margin: 0 10px !important;
     transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
   }
 `;
-const StyledButton = styled(Button).attrs({ type: 'submit', variant: 'secondary' })`
+
+export const StyledButton = styled(Button).attrs(({ type }) => ({
+  type: type || 'submit',
+  variant: 'secondary',
+}))`
   &&& {
     border: none;
   }
@@ -101,7 +97,8 @@ const StyledButton = styled(Button).attrs({ type: 'submit', variant: 'secondary'
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 10px;
+  /* margin-left: 10px; */
+  padding: 0.5rem 0.5rem;
   opacity: 0.5;
   transition: opacity 250ms, background 250ms;
 
@@ -148,7 +145,7 @@ const UpdateTwitterLists = ({ style, id }) => {
   };
 
   return (
-    <StyledForm onSubmit={handleSubmit} style={{ ...style }}>
+    <StyledListForm onSubmit={handleSubmit} style={{ ...style }}>
       <Form.Group controlId='formGroupListName' style={{ marginBottom: '0' }}>
         <div style={{ display: 'flex' }}>
           <div style={{ display: 'inline-flex' }}>
@@ -182,7 +179,7 @@ const UpdateTwitterLists = ({ style, id }) => {
           </ToolTip>
         </div>
       </Form.Group>
-    </StyledForm>
+    </StyledListForm>
   );
 };
 

@@ -349,6 +349,7 @@ export const CenterContainer = styled.div`
     grid-column: 2;
     display: flex;
     flex-direction: column;
+    position: relative;
   }
 `;
 

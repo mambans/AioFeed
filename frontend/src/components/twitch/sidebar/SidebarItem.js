@@ -115,7 +115,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer, fav
         ref={ref}
         to={'/' + user_name?.toLowerCase()}
         key={user_id}
-        duration={shows}
+        duration={String(shows)}
       >
         <StyledsidebarItem key={user_id} duration={shows}>
           <NewHighlight newlyAdded={newlyAdded} user_name={user_name}></NewHighlight>

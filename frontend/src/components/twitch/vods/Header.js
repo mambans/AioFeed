@@ -7,7 +7,7 @@ import { LastRefreshText } from '../../sharedComponents/sharedStyledComponents';
 import VodChannelList from './VodChannelList';
 
 const VodsHeader = React.forwardRef((props, ref) => {
-  const { refresh, vods, vodError, setOrder } = props;
+  const { refresh, vods, vodError } = props;
 
   return (
     <Header
@@ -48,7 +48,6 @@ const VodsHeader = React.forwardRef((props, ref) => {
         </>
       }
       rightSide={<VodChannelList />}
-      setOrder={setOrder}
       feedName='Twitch'
     />
   );

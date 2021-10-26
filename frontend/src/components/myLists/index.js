@@ -13,8 +13,8 @@ import AlertHandler from '../alert';
 import MyListSmallList from './MyListSmallList';
 import DropDownDrawer from './DropDownDrawer';
 import { Container } from '../twitch/StyledComponents';
-import { getLocalstorage } from '../../util';
 import useDocumentTitle from './../../hooks/useDocumentTitle';
+import FeedsContext from '../feed/FeedsContext';
 
 export const useCheckForVideosAndValidateToken = ({
   lists,
@@ -88,23 +88,22 @@ export const FavoriteListContainer = ({
   className,
 }) => {
   const [videos, setVideos] = useState();
-  const [order, setOrder] = useState((getLocalstorage('FeedOrders')?.[list.name] ?? 26) + index);
+  const { orders } = useContext(FeedsContext);
 
   return (
-    <Container order={order} id='MyListsHeader'>
+    <Container order={orders[list.name]} id='MyListsHeader'>
       <Header
         id={list.name}
         text={<>{list.name}</>}
         refreshFunc={fetchAllLists}
         isLoading={isLoading}
-        onHoverIconLink='nylists'
+        onHoverIconLink='mylists'
         rightSide={
           <>
             <MyListSmallList list={list} videos={videos} listName={list.name} />
             <DropDownDrawer list={list} />
           </>
         }
-        setOrder={setOrder}
         feedName={list.name}
       />
       <List

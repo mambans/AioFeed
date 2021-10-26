@@ -9,7 +9,7 @@ import AlertHandler from './../../alert';
 import { CenterContext } from '../../feed/FeedsCenterContainer.js';
 import VodsContext from '../vods/VodsContext.js';
 
-const Twitch = ({ data }) => {
+const Twitch = ({ data, hideOnEmpty }) => {
   const { loaded, error, liveStreams, newlyAddedStreams, refreshAfterUnfollowTimer } = data;
   const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext);
   const { favStreams } = useContext(VodsContext);
@@ -95,16 +95,18 @@ const Twitch = ({ data }) => {
         ))}
       </TransitionGroup>
 
-      <AlertHandler
-        show={!Boolean(liveStreams?.length)}
-        type='secondary'
-        title='No streams online at the momment'
-        hideMessage={true}
-        style={{
-          width: '50%',
-        }}
-        dismissible={true}
-      />
+      {!hideOnEmpty && (
+        <AlertHandler
+          show={!Boolean(liveStreams?.length)}
+          type='secondary'
+          title='No streams online at the momment'
+          hideMessage={true}
+          style={{
+            width: '50%',
+          }}
+          dismissible={true}
+        />
+      )}
     </Container>
   );
 };

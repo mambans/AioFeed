@@ -48,7 +48,7 @@ const SubFeedError = (props) => {
 };
 
 const YouTubeHeader = (data) => {
-  const { refresh, requestError, followedChannels, videos, isLoaded, setVideos, setOrder } = data;
+  const { refresh, requestError, followedChannels, videos, isLoaded, setVideos } = data;
   return (
     <Header
       id='YoutubeHeader'
@@ -72,7 +72,6 @@ const YouTubeHeader = (data) => {
           <ChannelList followedChannels={followedChannels} videos={videos} setVideos={setVideos} />
         </>
       }
-      setOrder={setOrder}
       feedName='Twitch'
     />
   );

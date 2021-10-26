@@ -5,7 +5,7 @@ import Header from './../../sharedComponents/Header';
 import ChannelSearchList from './../channelList';
 import BigScheduleList from './BigScheduleList';
 
-const TwitchHeader = React.forwardRef(({ data, setOrder }, ref) => {
+const TwitchHeader = React.forwardRef(({ data }, ref) => {
   const { refreshing, autoRefreshEnabled, refreshTimer, refresh, followedChannels } = data;
 
   return (
@@ -29,7 +29,6 @@ const TwitchHeader = React.forwardRef(({ data, setOrder }, ref) => {
           <ChannelSearchList placeholder='...' />
         </>
       }
-      setOrder={setOrder}
       feedName='Twitch'
     />
   );

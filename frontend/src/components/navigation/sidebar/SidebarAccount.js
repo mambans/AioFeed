@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { MdVideocam, MdAutorenew, MdCrop169 } from 'react-icons/md';
+import { MdVideocam, MdAutorenew, MdCrop169, MdDynamicFeed } from 'react-icons/md';
 import { FaTwitch, FaYoutube, FaTwitter, FaRegWindowRestore } from 'react-icons/fa';
 import { FiSidebar } from 'react-icons/fi';
 import { TiFlash } from 'react-icons/ti';
@@ -26,6 +26,7 @@ import FeedSizeSlider from './FeedSizeSlider';
 import AccountDetails from './AccountDetails';
 import NavigationContext from '../NavigationContext';
 import Settings from './Settings';
+import FeedSectionAdd from '../../feedSections';
 
 const SidebarAccount = () => {
   const { username, authKey } = useContext(AccountContext) || {};
@@ -62,6 +63,7 @@ const SidebarAccount = () => {
     Youtube: 'rgb(255, 0, 0)',
     MyLists: 'var(--listColorAdd)',
     Twitter: 'rgb(29, 161, 242)',
+    FeedSections: 'hsl(60, 80%, 50%)',
   };
 
   const feedsBtns = [
@@ -99,9 +101,15 @@ const SidebarAccount = () => {
       icon: <HiViewList size={24} color={domainColors.MyLists} />,
       tooltip: (feedProps.enableMyLists ? 'Disable ' : 'Enable ') + ` MyLists feed`,
     },
+    {
+      serviceName: 'FeedSections',
+      icon: <MdDynamicFeed size={24} color={domainColors.FeedSections} />,
+      tooltip: (feedProps.enableMyLists ? 'Disable ' : 'Enable ') + ` MyLists feed`,
+      tokenExists: twitchAccessToken,
+    },
   ];
 
-  const settinButtons = [
+  const settingsButtons = [
     {
       setEnable: setAutoRefreshEnabled,
       enabled: autoRefreshEnabled,
@@ -188,7 +196,7 @@ const SidebarAccount = () => {
       <div style={{ minHeight: 'calc(100% - 120px)' }}>
         <AccountDetails />
         <ToggleButtonsContainerHeader>Feeds</ToggleButtonsContainerHeader>
-        <ToggleButtonsContainer>
+        <ToggleButtonsContainer buttonsperrow={3}>
           {feedsBtns?.map((props, index) => {
             return (
               <ToggleButton
@@ -201,18 +209,19 @@ const SidebarAccount = () => {
             );
           })}
         </ToggleButtonsContainer>
-
         {feedProps.enableTwitter && (
-          <>
+          <div style={{ padding: '5px' }}>
             <TwitterForms />
             <UpdateTwitterLists style={{ opacity: '0.5', transition: 'opacity 250ms' }} />
-          </>
+          </div>
         )}
+        <br />
+        {feedProps.enableFeedSections && <FeedSectionAdd />}
         <br />
         <ToggleButtonsContainerHeader>Settings</ToggleButtonsContainerHeader>
         <FeedSizeSlider />
         <ToggleButtonsContainer buttonsperrow={3}>
-          {settinButtons.map(
+          {settingsButtons.map(
             ({ setEnable, enabled, label, serviceName, tooltip, icon, smallerIcons }, index) => {
               return (
                 <ToggleButton

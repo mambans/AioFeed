@@ -15,7 +15,7 @@ export const MyListsProvider = ({ children }) => {
     return Object.values(lists).reduce((lists, list) => {
       return {
         ...lists,
-        [list['name']]: {
+        [list[list.name]]: {
           ...list,
           items: myListPreferences?.[list.name]?.Reversed
             ? [...list?.items]?.reverse()

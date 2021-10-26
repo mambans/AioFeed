@@ -119,7 +119,7 @@ export const HeaderTitle = styled.div`
     position: relative;
     cursor: pointer;
     text-align: center;
-    color: var(--textColor2);
+    color: var(--textColor3);
     margin: auto;
     letter-spacing: 1px;
     margin: 2px auto;
@@ -734,4 +734,75 @@ export const PositionInQueue = styled.div`
   position: absolute;
   top: 5px;
   left: 35px;
+`;
+
+export const ExpandSection = styled.div`
+  transition: height 500ms;
+  overflow: hidden;
+  height: ${({ height, expanded }) => (expanded === 'true' ? height : 0)}px;
+  padding: 5px;
+  overflow: ${({ expanded }) => (expanded === 'true' ? 'visible' : 'hidden')};
+
+  &.ListForm-appear {
+    opacity: 0;
+    height: 0;
+    margin: 0 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.ListForm-appear-active {
+    opacity: 1;
+    height: 38px;
+    margin: 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.ListForm-appear-done {
+    opacity: 1;
+    height: 38px;
+    margin: 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.ListForm-enter {
+    opacity: 0;
+    height: 0;
+    margin: 0 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.ListForm-enter-done {
+    opacity: 1;
+    height: 38px;
+    margin: 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.ListForm-enter-active {
+    opacity: 1;
+    height: 38px;
+    margin: 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.ListForm-exit {
+    opacity: 1;
+    height: 38px;
+    margin: 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.ListForm-exit-active {
+    opacity: 0;
+    height: 0;
+    margin: 0 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.ListForm-exit-done {
+    opacity: 0;
+    height: 0;
+    margin: 0 10px !important;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
 `;

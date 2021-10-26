@@ -581,3 +581,87 @@ Resources:
                 Required: true
             - method.request.querystring.authkey:
                 Required: true
+  CustomFeedSections:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: Username
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Username
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+  UpdateCustomFeedSections:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Update custom feed sections.'
+      Handler: customFeedSectionsUpdate/handler.handler
+      Environment:
+        Variables:
+          CUSTOM_FEED_SECTIONS: !Ref CustomFeedSections
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CustomFeedSections
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /custom_feed_sections
+            Method: put
+          RequestParameters:
+            - method.request.querystring.username:
+                Required: true
+            - method.request.querystring.data:
+                Required: true
+            - method.request.querystring.name:
+                Required: true
+  FetchCustomFeedSections:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Fetch custom feed sections.'
+      Handler: customFeedSectionsFetch/handler.handler
+      Environment:
+        Variables:
+          CUSTOM_FEED_SECTIONS: !Ref CustomFeedSections
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CustomFeedSections
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /custom_feed_sections
+            Method: get
+          RequestParameters:
+            - method.request.querystring.username:
+                Required: true
+            # - method.request.querystring.videosObj:
+            #     Required: true
+            # - method.request.querystring.listName:
+            #     Required: true
+  DeleteCustomFeedSections:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Delete custom feed sections.'
+      Handler: customFeedSectionsDelete/handler.handler
+      Environment:
+        Variables:
+          CUSTOM_FEED_SECTIONS: !Ref CustomFeedSections
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CustomFeedSections
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /custom_feed_sections
+            Method: delete
+          RequestParameters:
+            - method.request.querystring.username:
+                Required: true
+            - method.request.querystring.name:
+                Required: true
+            # - method.request.querystring.videosObj:
+            #     Required: true
