@@ -88,7 +88,7 @@ const App = () => {
 
   useEffect(() => {
     (async () => {
-      if (username && window.location.host !== 'localhost:3000') {
+      if (username && window.location.host !== 'localhost:3000' && false) {
         const { data } = await API.validateAccount(username).catch((e) => console.error(e));
 
         if (!data?.Username) {

@@ -28,6 +28,11 @@ export const ThemeProvider = ({ children }) => {
       default: true,
     },
     {
+      name: 'leafs',
+      type: 'dark',
+      image: 'webp/leafs.webp',
+    },
+    {
       name: 'wood',
       type: 'dark',
       image: 'webp/wood.webp',

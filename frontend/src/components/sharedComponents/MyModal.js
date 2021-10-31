@@ -36,6 +36,7 @@ const MyModal = ({
   onMouseLeave = () => {},
   onClick = () => {},
   onOpen = () => {},
+  onClose = () => {},
   ...props
 }) => {
   const [show, setShow] = useState(open);
@@ -59,8 +60,9 @@ const MyModal = ({
   const handleClose = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setShow(false);
+    onClose?.();
     props?.handleClose?.();
+    setShow(false);
   };
   useEventListenerMemo(
     'keydown',
@@ -114,6 +116,7 @@ const MyModal = ({
           unmountOnExit
           appear
           onEnter={onOpen}
+          onExited={onClose}
         >
           <Portal node={relative ? ref.current : document.querySelector('body')}>
             <SModal

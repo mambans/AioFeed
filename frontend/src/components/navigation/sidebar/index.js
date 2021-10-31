@@ -15,7 +15,7 @@ import {
 
 const Sidebar = () => {
   const { profileImage, username, authKey } = useContext(AccountContext);
-  const { renderModal, showSidebar, setShowSidebar } = useContext(NavigationContext);
+  const { renderModal, showSidebar, setShowSidebar, overflow } = useContext(NavigationContext);
 
   const handleToggle = () => setShowSidebar(!showSidebar);
 
@@ -52,7 +52,7 @@ const Sidebar = () => {
       </CSSTransition>
 
       <CSSTransition in={showSidebar} timeout={500} classNames='NavSidebarSlideRight' unmountOnExit>
-        <StyledNavSidebar>{modal[renderModal]}</StyledNavSidebar>
+        <StyledNavSidebar overflow={overflow}>{modal[renderModal]}</StyledNavSidebar>
       </CSSTransition>
     </>
   );

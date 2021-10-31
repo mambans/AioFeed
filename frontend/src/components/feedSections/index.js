@@ -5,9 +5,11 @@ import FeedSectionNameInList from './FeedSectionNameInList';
 import { MdExpandMore } from 'react-icons/md';
 import { ExpandSection } from './../sharedComponents/sharedStyledComponents';
 import FeedSectionsContext from './FeedSectionsContext';
+import NavigationContext from '../navigation/NavigationContext';
 
 const FeedSectionAdd = () => {
   const { feedSections } = useContext(FeedSectionsContext);
+  const { setOverflow } = useContext(NavigationContext);
   const [expanded, setExpanded] = useState(true);
 
   return (
@@ -24,7 +26,7 @@ const FeedSectionAdd = () => {
         <TransitionGroup component={null}>
           {Object.values(feedSections)?.map((section, index) => (
             <CSSTransition classNames='ListForm' key={section.name} timeout={500} unmountOnExit>
-              <FeedSectionNameInList section={section} />
+              <FeedSectionNameInList section={section} setOverflow={setOverflow} />
             </CSSTransition>
           ))}
         </TransitionGroup>

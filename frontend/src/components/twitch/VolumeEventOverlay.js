@@ -98,18 +98,18 @@ const VolumeEventOverlay = React.forwardRef(
           break;
         case 'ArrowRight':
           setSeekTime((c) => {
+            clearTimeout(seekresetTimer.current);
             const curr = c || player.current.getCurrentTime();
             player.current.seek(curr + 10);
-            clearTimeout(seekresetTimer.current);
             seekresetTimer.current = setTimeout(() => setSeekTime(null), 3000);
             return curr + 10;
           });
           return;
         case 'ArrowLeft':
           setSeekTime((c) => {
+            clearTimeout(seekresetTimer.current);
             const curr = c || player.current.getCurrentTime();
             player.current.seek(curr - 10);
-            clearTimeout(seekresetTimer.current);
             seekresetTimer.current = setTimeout(() => setSeekTime(null), 3000);
             return curr - 10;
           });

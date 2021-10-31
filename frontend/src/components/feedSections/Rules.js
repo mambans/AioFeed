@@ -8,7 +8,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 const WIDTH = 900;
 const ITEM_HEIGHT = 60;
 
-const Rules = ({ rules, name }) => {
+const Rules = ({ rules, name, setOverflow = () => {} }) => {
   return (
     <MyModal
       trigger={<MdFormatListBulleted size={22} />}
@@ -22,6 +22,8 @@ const Rules = ({ rules, name }) => {
         boxShadow: 'rgba(0, 0, 0, 0.25) 4px 8px 15px',
         width: WIDTH + 'px',
       }}
+      onClick={() => setOverflow('visible')}
+      onClose={() => setOverflow(null)}
       relative
     >
       <RulesContainer itemHeight={ITEM_HEIGHT} id='RULES'>

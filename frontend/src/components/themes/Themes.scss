@@ -178,3 +178,10 @@ html[data-theme='default'] {
   --sidebarsBackgroundColor: rgba(9, 12, 15, 0.678);
   --twitterBackground: rgba(0, 0, 0, 0.07);
 }
+html[data-theme='leafs'] {
+  // --backgroundImg: url('/images/webp/felix-coffee-dimmed.webp');
+  --backgroundColor: #1a1e1c9b;
+  --sidebarsBackgroundColor: rgba(9, 12, 15, 0.678);
+  --twitterBackground: rgba(0, 0, 0, 0.07);
+  --navigationbarBackground: #1a1e1c54;
+}
