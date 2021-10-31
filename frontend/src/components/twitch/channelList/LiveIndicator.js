@@ -19,7 +19,8 @@ export const StyledToolTip = styled(Tooltip)`
     opacity: 1;
   }
 
-  .arrow {
+  .arrow,
+  .tooltip-arrow {
     &&& {
       transform: translate3d(6px, 18px, 0);
     }
