@@ -24,8 +24,9 @@ const Handler = ({ children }) => {
     isEnabledOfflineNotifications,
     isEnabledUpdateNotifications,
     twitchAccessToken,
+    updateNotischannels,
   } = useContext(TwitchContext);
-  const { setVods, updateNotischannels } = useContext(VodsContext);
+  const { setVods } = useContext(VodsContext);
   const { enableTwitchVods } = useContext(FeedsContext) || {};
   const [refreshTimer, setRefreshTimer] = useState(20);
   const [loadingStates, setLoadingStates] = useState({

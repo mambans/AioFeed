@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import FeedsContext from '../../feed/FeedsContext';
+import TwitterContext from '../../twitter/TwitterContext';
 import UpdateTwitterLists from './UpdateTwitterLists';
 
 const TwitterForms = () => {
-  const { twitterLists } = useContext(FeedsContext);
+  const { twitterLists } = useContext(TwitterContext);
 
   return (
     <TransitionGroup component={null}>

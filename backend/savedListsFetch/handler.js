@@ -4,13 +4,11 @@ const fetchListsUpdate = require('./fetchListsUpdate');
 
 exports.handler = async (event) => {
   try {
-    const { username } = event.queryStringParameters || {};
-
-    if (!username) throw new Error('`Username` is required');
-    // if (!authkey) throw new Error('`Authkey` is required');
+    const { authkey } = event.queryStringParameters || {};
+    if (!authkey) throw new Error('`authkey` is required');
 
     const res = await fetchListsUpdate({
-      username,
+      authkey,
     });
 
     return {

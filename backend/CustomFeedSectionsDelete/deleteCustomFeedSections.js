@@ -1,9 +1,12 @@
 'use strict';
 
 const DynamoDB = require('aws-sdk/clients/dynamodb');
+const { validateAuthkey } = require('../authkey');
 const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
-module.exports = async ({ username, name }) => {
+module.exports = async ({ authkey, name }) => {
+  const username = await validateAuthkey(authkey);
+
   const res = await client
     .update({
       TableName: process.env.CUSTOM_FEED_SECTIONS,
@@ -13,7 +16,7 @@ module.exports = async ({ username, name }) => {
         '#feedSection': name,
       },
     })
-    .promise(); 
+    .promise();
 
   console.log('res', res);
 

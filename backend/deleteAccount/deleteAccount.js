@@ -5,9 +5,11 @@ const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
 const bcrypt = require('bcrypt');
 const util = require('util');
+const { validateAuthkey } = require('../authkey');
 const compare = util.promisify(bcrypt.compare);
 
-module.exports = async ({ username, password, authKey }) => {
+module.exports = async ({ password, authKey }) => {
+  const username = await validateAuthkey(authKey);
   console.log('deleteAccount -> username', username);
   const res = await client
     .get({
@@ -18,17 +20,11 @@ module.exports = async ({ username, password, authKey }) => {
 
   if (res && res.Item) {
     const validPassword = await compare(password, res.Item.Password);
-    const validAuthKey = authKey === res.Item.AuthKey;
 
     if (!validPassword) {
       return {
         statusCode: 401,
         data: { message: 'Invalid password.' },
-      };
-    } else if (!validAuthKey) {
-      return {
-        statusCode: 401,
-        data: { message: 'Invalid authKey (relog)' },
       };
     } else {
       const auth_data = await client

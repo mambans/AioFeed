@@ -4,14 +4,13 @@ const deleteCustomFeedSections = require('./deleteCustomFeedSections');
 
 exports.handler = async (event) => {
   try {
-    const { username, name } = JSON.parse(event.body) || {};
-
-    if (!username) throw new Error('`Username` is required');
+    const { name, authkey } = JSON.parse(event.body) || {};
     if (!name) throw new Error('`name` is required');
+    if (!authkey) throw new Error('`authkey` is required');
 
     const res = await deleteCustomFeedSections({
-      username,
       name,
+      authkey,
     });
 
     return {

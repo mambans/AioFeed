@@ -4,13 +4,13 @@ const deleteList = require('./deleteList');
 
 exports.handler = async (event) => {
   try {
-    const { username, listName } = JSON.parse(event.body) || {};
+    const { authkey, listName } = JSON.parse(event.body) || {};
 
-    if (!username) throw new Error('`Username` is required');
+    if (!authkey) throw new Error('`authkey` is required');
     if (!listName) throw new Error('`ListName` is required');
 
     const res = await deleteList({
-      username,
+      authkey,
       listName,
     });
 

@@ -4,16 +4,13 @@ const reAuthenticateTwitch = require('./reAuthenticateTwitch');
 
 exports.handler = async (event) => {
   try {
-    const { refresh_token, username, authkey } = JSON.parse(event.body);
-    console.log('username', username);
+    const { refresh_token, authkey } = JSON.parse(event.body);
 
     if (!refresh_token) throw new Error('refresh_token` is required');
-    // if (!username) throw new Error("username` is required");
-    // if (!authkey) throw new Error("authkey` is required");
+    if (!authkey) throw new Error('authkey` is required');
 
     const res = await reAuthenticateTwitch({
       refresh_token,
-      username,
       authkey,
     });
 

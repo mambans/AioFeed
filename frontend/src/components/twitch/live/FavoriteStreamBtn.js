@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { MdStar, MdStarBorder } from 'react-icons/md';
 import ToolTip from '../../sharedComponents/ToolTip';
 import { VodAddRemoveButton } from '../../sharedComponents/sharedStyledComponents';
-import VodsContext from '../vods/VodsContext';
 import API from '../../navigation/API';
+import { TwitchContext } from '../useToken';
 
 const AddItemBtn = styled(MdStarBorder)`
   transition: color 250ms;
@@ -32,7 +32,7 @@ const FavoriteStreamBtn = (
   { channel, size = '1.4em', loweropacity, marginright, show = true, style },
   ...props
 ) => {
-  const { favStreams, setFavStreams } = useContext(VodsContext);
+  const { favStreams, setFavStreams } = useContext(TwitchContext);
   const [isHovered, setIsHovered] = useState();
   const added = favStreams?.includes(channel?.toLowerCase());
 

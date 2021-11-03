@@ -1,19 +1,25 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { getCookie } from '../../util';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import AccountContext from '../account/AccountContext';
 import API from '../navigation/API';
+import { TwitchContext } from '../twitch/useToken';
 import useSyncedLocalState from './../../hooks/useSyncedLocalState';
 
 const FeedSectionsContext = React.createContext();
 
 export const FeedSectionsProvider = ({ children }) => {
+  const { authKey } = useContext(AccountContext);
+  const { twitchAccessToken } = useContext(TwitchContext);
   const [isloading, setIsLoading] = useState();
   const [feedSections, setFeedSections] = useSyncedLocalState('customFeedSections', {});
+  const invoked = useRef(false);
 
-  const fetch = useCallback(async () => {
+  const fetchFeedSectionsContextData = useCallback(async () => {
+    console.log('fetchFeedSectionsContextData:');
     setIsLoading(true);
     const result = await API.fetchCustomFeedSections();
 
     if (result) setFeedSections(result);
+    invoked.current = true;
     setIsLoading(false);
   }, [setFeedSections]);
 
@@ -106,8 +112,8 @@ export const FeedSectionsProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (getCookie(`AioFeed_AccountName`)) fetch();
-  }, [fetch]);
+    if (twitchAccessToken && authKey && !invoked.current) fetchFeedSectionsContextData();
+  }, [fetchFeedSectionsContextData, twitchAccessToken, authKey]);
 
   return (
     <FeedSectionsContext.Provider
@@ -119,6 +125,7 @@ export const FeedSectionsProvider = ({ children }) => {
         addFeedSectionRule,
         deleteFeedSectionRule,
         toggleFeedSection,
+        fetchFeedSectionsContextData,
       }}
     >
       {children}

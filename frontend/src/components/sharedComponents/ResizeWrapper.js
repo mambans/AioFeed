@@ -13,6 +13,7 @@ export const ResizeDevider = styled.div`
   transform: translate3d(0, 0, 0);
   position: absolute;
   width: ${({ width }) => width || 3}px;
+  left: ${({ width }) => (width || 3) * -1}px;
 
   > div {
     transition: opacity 500ms, height 250ms;

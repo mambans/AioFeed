@@ -4,14 +4,12 @@ const customFiltersUpdate = require('./customFiltersUpdate');
 
 exports.handler = async (event) => {
   try {
-    const { username, filtesObj, authkey } = JSON.parse(event.body);
+    const { filtesObj, authkey } = JSON.parse(event.body);
 
-    if (!username) throw new Error('`Username` is required');
     if (!filtesObj) throw new Error('`Column value` is required');
     if (!authkey) throw new Error('`Authkey` is required');
 
     const res = await customFiltersUpdate({
-      username,
       filtesObj,
       authkey,
     });

@@ -7,12 +7,12 @@ import { Container, FavoriteDeviderLine } from '../StyledComponents';
 import LoadingBoxes from '../LoadingBoxes';
 import AlertHandler from './../../alert';
 import { CenterContext } from '../../feed/FeedsCenterContainer.js';
-import VodsContext from '../vods/VodsContext.js';
+import { TwitchContext } from '../useToken.js';
 
 const Twitch = ({ data, hideOnEmpty }) => {
   const { loaded, error, liveStreams, newlyAddedStreams, refreshAfterUnfollowTimer } = data;
   const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext);
-  const { favStreams } = useContext(VodsContext);
+  const { favStreams } = useContext(TwitchContext);
 
   const favoriteStreams = liveStreams.filter((c) =>
     favStreams?.includes(c.user_name?.toLowerCase())

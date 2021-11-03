@@ -2,25 +2,14 @@ const axios = require('axios');
 
 const DynamoDB = require('aws-sdk/clients/dynamodb');
 const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
-const AES = require('crypto-js/aes');
-const enc = require('crypto-js/enc-utf8');
+const { validateAuthkey } = require('../authkey');
+const { encrypt, decrypt } = require('../crypto');
 
-module.exports = async ({ code, authkey, username }) => {
-  const AccountInfo = await client
-    .get({
-      TableName: process.env.USERNAME_TABLE,
-      Key: { Username: username },
-    })
-    .promise();
+module.exports = async ({ code, authkey }) => {
+  const username = await validateAuthkey(authkey);
 
-  if (authkey !== AccountInfo.Item.AuthKey) throw new Error('Invalid AuthKey');
-  if (code === 'undefined' && !AccountInfo.Item.YoutubePreferences.Refresh_token) {
-    throw new Error(
-      'Invalid request, no refresh token found in database. Require an code={authorizationCode} as param for the first authtication.'
-    );
-  }
-
-  if (authkey === AccountInfo.Item.AuthKey) {
+  if (username) {
+    console.log('code:', code);
     if (code !== 'undefined') {
       return await axios
         .post('https://oauth2.googleapis.com/token', {
@@ -31,57 +20,50 @@ module.exports = async ({ code, authkey, username }) => {
           redirect_uri: 'https://aiofeed.com/auth/youtube/callback',
         })
         .then(async (res) => {
-          const encrypted_AccessToken = await AES.encrypt(
-            res.data.access_token,
-            'YoutubePreferences'
-          ).toString();
-          const encrypted_RefreshToken = await AES.encrypt(
-            res.data.refresh_token,
-            'YoutubePreferences'
-          ).toString();
-
-          const updateData = AccountInfo.Item.YoutubePreferences
-            ? {
-                UpdateExpression: `set #Preferences.#AccessToken = :Access_token, #Preferences.#RefreshToken = :Refresh_token`,
-                ExpressionAttributeNames: {
-                  '#Preferences': 'YoutubePreferences',
-                  '#AccessToken': 'Token',
-                  '#RefreshToken': 'Refresh_token',
-                },
-                ExpressionAttributeValues: {
-                  ':Access_token': encrypted_AccessToken,
-                  ':Refresh_token': encrypted_RefreshToken,
-                },
-              }
-            : {
-                UpdateExpression: `set #Preferences = :PrefObj`,
-                ExpressionAttributeNames: {
-                  '#Preferences': 'YoutubePreferences',
-                },
-                ExpressionAttributeValues: {
-                  ':PrefObj': {
-                    Token: encrypted_AccessToken,
-                    Refresh_token: encrypted_RefreshToken,
-                  },
-                },
-              };
+          console.log('res:', res);
+          console.log('res.data.access_token:', res.data.access_token);
+          console.log('res.data.refresh_token:', res.data.refresh_token);
+          const encrypted_AccessToken = await encrypt(res.data.access_token);
+          console.log('encrypted_AccessToken:', encrypted_AccessToken);
+          const encrypted_RefreshToken = await encrypt(res.data.refresh_token);
+          console.log('encrypted_RefreshToken:', encrypted_RefreshToken);
 
           await client
             .update({
-              TableName: process.env.USERNAME_TABLE,
-              Key: { Username: AccountInfo.Item.Username },
-              ...updateData,
+              TableName: process.env.YOUTUBE_DATA_TABLE,
+              Key: { Username: username },
+              UpdateExpression: `set #access_token = :access_token, #refresh_token = :refresh_token`,
+              ExpressionAttributeNames: {
+                '#access_token': 'access_token',
+                '#refresh_token': 'refresh_token',
+              },
+              ExpressionAttributeValues: {
+                ':access_token': encrypted_AccessToken,
+                ':refresh_token': encrypted_RefreshToken,
+              },
             })
             .promise();
 
           return res.data;
-        })
-        .catch((error) => console.log('error: ', error));
+        });
     } else {
-      const decryptedRefreshToken = await AES.decrypt(
-        AccountInfo.Item.YoutubePreferences.Refresh_token,
-        'YoutubePreferences'
-      ).toString(enc);
+      const YoutubeData = await client
+        .get({
+          TableName: process.env.YOUTUBE_DATA_TABLE,
+          Key: { Username: username },
+        })
+        .promise();
+
+      if (code === 'undefined' && !YoutubeData.Item.refresh_token) {
+        throw new Error(
+          'Invalid request, no refresh token found in database. Require an code={authorizationCode} as param for the first authtication.'
+        );
+      }
+
+      console.log('YoutubeData:', YoutubeData);
+      console.log('YoutubeData.Item.refresh_token:', YoutubeData.Item.refresh_token);
+      const decryptedRefreshToken = await decrypt(YoutubeData.Item.refresh_token);
+      console.log('decryptedRefreshToken:', decryptedRefreshToken);
 
       return await axios
         .post('https://oauth2.googleapis.com/token', {
@@ -91,43 +73,26 @@ module.exports = async ({ code, authkey, username }) => {
           grant_type: 'refresh_token',
         })
         .then(async (res) => {
-          const encrypted_AccessToken = await AES.encrypt(
-            res.data.access_token,
-            'YoutubePreferences'
-          ).toString();
-
-          const updateData = AccountInfo.Item.YoutubePreferences
-            ? {
-                UpdateExpression: `set #Preferences.#AccessToken = :Access_token`,
-                ExpressionAttributeNames: {
-                  '#Preferences': 'YoutubePreferences',
-                  '#AccessToken': 'Token',
-                },
-                ExpressionAttributeValues: {
-                  ':Access_token': encrypted_AccessToken,
-                },
-              }
-            : {
-                UpdateExpression: `set #Preferences = :PrefObj`,
-                ExpressionAttributeNames: {
-                  '#Preferences': 'YoutubePreferences',
-                },
-                ExpressionAttributeValues: {
-                  ':PrefObj': { Token: encrypted_AccessToken },
-                },
-              };
+          console.log('res:', res);
+          const encrypted_AccessToken = await encrypt(res.data.access_token);
+          console.log('encrypted_AccessToken:', encrypted_AccessToken);
 
           await client
             .update({
-              TableName: process.env.USERNAME_TABLE,
-              Key: { Username: AccountInfo.Item.Username },
-              ...updateData,
+              TableName: process.env.YOUTUBE_DATA_TABLE,
+              Key: { Username: username },
+              UpdateExpression: `set #access_token = :access_token`,
+              ExpressionAttributeNames: {
+                '#access_token': 'access_token',
+              },
+              ExpressionAttributeValues: {
+                ':access_token': encrypted_AccessToken,
+              },
             })
             .promise();
 
           return res.data;
-        })
-        .catch((error) => console.log('Error: ', error));
+        });
     }
   }
 };

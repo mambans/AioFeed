@@ -4,13 +4,11 @@ const customFiltersFetch = require('./customFiltersFetch');
 
 exports.handler = async (event) => {
   try {
-    const { username, authkey } = event.queryStringParameters || {};
+    const { authkey } = event.queryStringParameters || {};
 
-    if (!username) throw new Error('`Username` is required');
     if (!authkey) throw new Error('`Authkey` is required');
 
     const res = await customFiltersFetch({
-      username,
       authkey,
     });
 

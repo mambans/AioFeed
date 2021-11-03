@@ -5,18 +5,11 @@ const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
 const bcrypt = require('bcrypt');
 const util = require('util');
-const { v4: uuidv4 } = require('uuid');
 const compare = util.promisify(bcrypt.compare);
-const AES = require('crypto-js/aes');
-const enc = require('crypto-js/enc-utf8');
+const { encrypt, decrypt } = require('../crypto');
+// const { validateAuthkey } = require('../authkey');
 
-const decryptData = async (data, secretString) => {
-  if (data) {
-    const bytes = await AES.decrypt(data, secretString);
-    return bytes.toString(enc);
-  }
-  return null;
-};
+const EXPIRE_LENGTH = 180;
 
 module.exports = async ({ username, password }) => {
   const res = await client
@@ -28,47 +21,31 @@ module.exports = async ({ username, password }) => {
 
   if (res && res.Item) {
     const valid = await compare(password, res.Item.Password);
-
     if (valid) {
-      const key = uuidv4();
-
-      const data = await client
-        .update({
-          TableName: process.env.USERNAME_TABLE,
-          Key: { Username: username },
-          UpdateExpression: `set #auth_key = :key`,
-          ExpressionAttributeNames: { '#auth_key': 'AuthKey' },
-          ExpressionAttributeValues: {
-            ':key': key,
-          },
-          ReturnValues: 'ALL_NEW',
-        })
-        .promise();
+      const date = new Date();
+      const expireDate = date.setDate(date.getDate() + EXPIRE_LENGTH);
+      const AuthKey = await encrypt([username, expireDate].join('@@'));
+      // console.log('decryped aiuthkey:', await validateAuthkey(AuthKey));
 
       const decryptedData = {
         Attributes: {
-          ...data.Attributes,
-          TwitchPreferences: data.Attributes.TwitchPreferences
+          ...res.Item,
+          AuthKey,
+          TwitchPreferences: res.Item.TwitchPreferences
             ? {
-                ...data.Attributes.TwitchPreferences,
-                Token: await decryptData(
-                  data.Attributes.TwitchPreferences.Token,
-                  'TwitchPreferences'
-                ),
-                Refresh_token: await decryptData(
-                  data.Attributes.TwitchPreferences.Refresh_token,
+                ...res.Item.TwitchPreferences,
+                Token: await decrypt(res.Item.TwitchPreferences.Token, 'TwitchPreferences'),
+                Refresh_token: await decrypt(
+                  res.Item.TwitchPreferences.Refresh_token,
                   'TwitchPreferences'
                 ),
               }
             : {},
 
-          YoutubePreferences: data.Attributes.YoutubePreferences
+          YoutubePreferences: res.Item.YoutubePreferences
             ? {
-                ...data.Attributes.YoutubePreferences,
-                Token: await decryptData(
-                  data.Attributes.YoutubePreferences.Token,
-                  'YoutubePreferences'
-                ),
+                ...res.Item.YoutubePreferences,
+                Token: await decrypt(res.Item.YoutubePreferences.Token, 'YoutubePreferences'),
               }
             : {},
         },

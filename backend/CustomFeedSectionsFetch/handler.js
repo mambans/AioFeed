@@ -4,12 +4,11 @@ const fetchCustomFeedSections = require('./fetchCustomFeedSections');
 
 exports.handler = async (event) => {
   try {
-    const { username } = event.queryStringParameters || {};
-    if (!username) throw new Error('`Username` is required');
-    // if (!authkey) throw new Error('`Authkey` is required');
+    const { authkey } = event.queryStringParameters || {};
+    if (!authkey) throw new Error('`Authkey` is required');
 
     const res = await fetchCustomFeedSections({
-      username,
+      authkey,
     });
 
     return {

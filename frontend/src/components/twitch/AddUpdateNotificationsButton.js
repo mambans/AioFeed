@@ -4,9 +4,9 @@ import { IoIosFlashOff } from 'react-icons/io';
 import React, { useState, useContext } from 'react';
 
 import { VodAddRemoveButton } from './../sharedComponents/sharedStyledComponents';
-import VodsContext from './vods/VodsContext';
 import ToolTip from '../sharedComponents/ToolTip';
 import API from '../navigation/API';
+import { TwitchContext } from './useToken';
 
 export const removeChannel = async ({ channel, updateNotischannels, setUpdateNotischannels }) => {
   try {
@@ -38,7 +38,7 @@ const AddUpdateNotificationsButton = ({
   size = '1.4em',
   show = true,
 }) => {
-  const { updateNotischannels, setUpdateNotischannels } = useContext(VodsContext);
+  const { updateNotischannels, setUpdateNotischannels } = useContext(TwitchContext);
   const [isHovered, setIsHovered] = useState();
   const updateNotificationEnabled = updateNotischannels?.includes(channel?.toLowerCase());
 

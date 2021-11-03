@@ -38,10 +38,10 @@ const Settings = ({ children }) => {
       }}
     >
       <Container>
+        <DeleteAccountButton />
+        <ChangePassword />
         <ClearAllLocalstorage />
         <Logout />
-        <ChangePassword />
-        <DeleteAccountButton />
         {children}
       </Container>
     </MyModal>

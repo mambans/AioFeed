@@ -1,6 +1,9 @@
-import React, { useCallback, useContext, useRef } from 'react';
+import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import { toast } from 'react-toastify';
 import useCookieState from '../../hooks/useCookieState';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
+import AccountContext from '../account/AccountContext';
+import API from '../navigation/API';
 import validateToken from './validateToken';
 
 const TTL = 30000;
@@ -8,12 +11,14 @@ const TTL = 30000;
 export const YoutubeContext = React.createContext();
 
 export const YoutubeProvider = ({ children }) => {
+  const { authKey } = useContext(AccountContext);
   const [pref, setPref] = useLocalStorageState('YoutubePreferences', {}) || {};
   const [youtubeAccessToken, setYoutubeAccessToken] = useCookieState('Youtube-access_token');
   const [youtubeUsername, setYoutubeUsername] = useCookieState('YoutubeUsername');
   const [youtubeProfileImage, setYoutubeProfileImage] = useCookieState('YoutubeProfileImg');
   const toggle = (i, v) => setPref((c) => ({ ...c, [i]: v || !c[i] }));
 
+  const invoked = useRef(false);
   const promise = useRef();
 
   const validationOfToken = useCallback(() => {
@@ -22,6 +27,26 @@ export const YoutubeProvider = ({ children }) => {
     }
     return promise.current.promise;
   }, []);
+
+  const fetchYoutubeContextData = useCallback(async () => {
+    console.log('fetchYoutubeContextData:');
+    const { access_token, user: { Profile, Username } = {} } = await API.getYoutubeData()
+      .then((res) => res?.data?.Item || {})
+      .catch((e) => {
+        console.error('Twitch usetoken useEffect error: ', e);
+        toast.error(e.message);
+        return {};
+      });
+
+    setYoutubeUsername(Username);
+    setYoutubeProfileImage(Profile);
+    setYoutubeAccessToken(access_token);
+    invoked.current = true;
+  }, [setYoutubeUsername, setYoutubeProfileImage, setYoutubeAccessToken]);
+
+  useEffect(() => {
+    if (youtubeAccessToken && authKey && !invoked.current) fetchYoutubeContextData();
+  }, [fetchYoutubeContextData, youtubeAccessToken, authKey]);
 
   return (
     <YoutubeContext.Provider
@@ -35,6 +60,7 @@ export const YoutubeProvider = ({ children }) => {
         setYoutubeUsername,
         youtubeProfileImage,
         setYoutubeProfileImage,
+        fetchYoutubeContextData,
       }}
     >
       {children}

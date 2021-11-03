@@ -20,7 +20,7 @@ phases:
   pre_build:
     commands:
       - echo "-Start Phase pre_build- at `date`"
-      - npm run test --prefix ./frontend
+      # - npm run test --prefix ./frontend
       - echo "-End Phase pre_build- at `date`"
   build:
     commands:

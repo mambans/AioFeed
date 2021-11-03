@@ -1,13 +1,13 @@
 'use strict';
-const validateAuthKey = require('./validateAuthKey');
+
+const { validateAuthkey } = require('../authkey');
 
 exports.handler = async (event) => {
   try {
-    const { username, authkey } = JSON.parse(event.body);
-    if (!username) throw { statusCode: 422, message: 'Username is required' };
+    const { authkey } = JSON.parse(event.body);
     if (!authkey) throw { statusCode: 422, message: 'Auth key is required' };
 
-    const authTokenValid = await validateAuthKey({ username, authkey });
+    const authTokenValid = await validateAuthkey(authkey);
 
     if (!authTokenValid) {
       return {

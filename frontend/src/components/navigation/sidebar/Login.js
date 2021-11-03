@@ -8,15 +8,15 @@ import LoadingIndicator from './../../LoadingIndicator';
 import NavigationContext from './../NavigationContext';
 import Themeselector from '../../themes/Themeselector';
 import useInput from './../../../hooks/useInput';
-import FeedsContext from '../../feed/FeedsContext';
-import VodsContext from '../../twitch/vods/VodsContext';
 import API from '../API';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
-import { TwitchContext } from '../../twitch/useToken';
-import { YoutubeContext } from '../../youtube/useToken';
 import MyListsContext from '../../myLists/MyListsContext';
 import LogsContext from '../../logs/LogsContext';
-import { setLocalStorage } from '../../../util';
+import { TwitchContext } from '../../twitch/useToken';
+import { YoutubeContext } from '../../youtube/useToken';
+import TwitterContext from '../../twitter/TwitterContext';
+import FeedSectionsContext from '../../feedSections/FeedSectionsContext';
+import VodsContext from '../../twitch/vods/VodsContext';
 
 const Login = () => {
   useDocumentTitle('Login');
@@ -24,20 +24,14 @@ const Login = () => {
   const [validatedUsername, setValidatedUsername] = useState(true);
   const [validatedPassword, setValidatedPassword] = useState(true);
   const { setRenderModal } = useContext(NavigationContext);
-  const { setTwitterLists } = useContext(FeedsContext);
-  const { setChannels, setFavStreams } = useContext(VodsContext);
-  const {
-    setTwitchAccessToken,
-    setTwitchRefreshToken,
-    setTwitchUserId,
-    setTwitchUsername,
-    setTwitchProfileImage,
-  } = useContext(TwitchContext);
   const { setUsername, setProfileImage, setAuthKey, setEmail } = useContext(AccountContext);
-  const { setMyListPreferences } = useContext(MyListsContext);
   const { addLog } = useContext(LogsContext);
-  const { setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage } =
-    useContext(YoutubeContext);
+  const { fetchTwitchContextData } = useContext(TwitchContext);
+  const { fetchFeedSectionsContextData } = useContext(FeedSectionsContext);
+  const { fetchVodsContextData } = useContext(VodsContext);
+  const { fetchYoutubeContextData } = useContext(YoutubeContext);
+  const { fetchTwitterContextData } = useContext(TwitterContext);
+  const { fetchMyListContextData } = useContext(MyListsContext);
 
   // eslint-disable-next-line no-unused-vars
   const { value: username, bind: bindUsername, reset: resetUsername } = useInput('');
@@ -63,40 +57,20 @@ const Login = () => {
       .then((result) => {
         const res = result.data.Attributes;
         if (result.status === 200 && res) {
+          setAuthKey(res.AuthKey);
+          setUsername(res.Username);
+          setProfileImage(res.ProfileImg);
+          setEmail(res.Email);
+
           setTimeout(() => {
-            setAuthKey(res.AuthKey);
-            setUsername(res.Username);
-            setProfileImage(res.ProfileImg);
-            setEmail(res.Email);
+            fetchTwitchContextData();
+            fetchFeedSectionsContextData();
+            fetchVodsContextData();
+            fetchYoutubeContextData();
+            fetchTwitterContextData();
+            fetchMyListContextData();
+          }, 1);
 
-            if (res.TwitchPreferences && Object.keys(res.TwitchPreferences).length >= 1) {
-              setLocalStorage('ChannelsUpdateNotifs', res.TwitchPreferences.ChannelsUpdateNotifs);
-
-              setTwitchUsername(res.TwitchPreferences.Username);
-              setTwitchUserId(res.TwitchPreferences.Id);
-              setTwitchProfileImage(res.TwitchPreferences.Profile);
-              setTwitchAccessToken(res.TwitchPreferences.Token);
-              setTwitchRefreshToken(res.TwitchPreferences.Refresh_token);
-              setFavStreams(res.TwitchPreferences.favoriteStreams);
-            }
-
-            if (res.MyListsPreferences && Object.keys(res.MyListsPreferences).length >= 1) {
-              setMyListPreferences(res.MyListsPreferences);
-            }
-            if (res.TwitchVodsPreferences && Object.keys(res.TwitchVodsPreferences).length >= 1) {
-              setChannels(res.TwitchVodsPreferences.Channels);
-            }
-
-            if (res.YoutubePreferences && Object.keys(res.YoutubePreferences).length >= 1) {
-              setYoutubeUsername(res.YoutubePreferences.Username);
-              setYoutubeProfileImage(res.YoutubePreferences.Profile);
-              setYoutubeAccessToken(res.YoutubePreferences.Token);
-            }
-
-            if (res.TwitterPreferences && Object.keys(res.TwitterPreferences).length >= 1) {
-              setTwitterLists(res.TwitterPreferences.Lists);
-            }
-          }, 0);
           setTimeout(() => {
             toast.success(`Logged in as ${res.Username}`);
             setRenderModal('account');

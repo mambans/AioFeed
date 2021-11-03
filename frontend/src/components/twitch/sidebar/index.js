@@ -4,10 +4,10 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import SidebarItem from './SidebarItem';
 import { Styledsidebar, SidebarHeader } from './StyledComponents';
 import LoadingSidebar from './LoadingSidebar';
-import VodsContext from '../vods/VodsContext';
+import { TwitchContext } from '../useToken';
 
 const Sidebar = (data) => {
-  const { favStreams } = useContext(VodsContext);
+  const { favStreams } = useContext(TwitchContext);
   const { onlineStreams, newlyAdded, loaded } = data;
   const [shows, setShows] = useState();
   const resetShowsTimer = useRef();

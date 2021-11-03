@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
-import { MdVideocam, MdAutorenew, MdCrop169, MdDynamicFeed } from 'react-icons/md';
+import { MdVideocam, MdAutorenew, MdCrop169 } from 'react-icons/md';
 import { FaTwitch, FaYoutube, FaTwitter, FaRegWindowRestore } from 'react-icons/fa';
+import { BsCollectionFill } from 'react-icons/bs';
 import { FiSidebar } from 'react-icons/fi';
 import { TiFlash } from 'react-icons/ti';
 import { AiOutlineDisconnect } from 'react-icons/ai';
@@ -63,7 +64,7 @@ const SidebarAccount = () => {
     Youtube: 'rgb(255, 0, 0)',
     MyLists: 'var(--listColorAdd)',
     Twitter: 'rgb(29, 161, 242)',
-    FeedSections: 'hsl(60, 80%, 50%)',
+    FeedSections: '#ff0060',
   };
 
   const feedsBtns = [
@@ -103,7 +104,7 @@ const SidebarAccount = () => {
     },
     {
       serviceName: 'FeedSections',
-      icon: <MdDynamicFeed size={24} color={domainColors.FeedSections} />,
+      icon: <BsCollectionFill size={24} color={domainColors.FeedSections} />,
       tooltip: (feedProps.enableMyLists ? 'Disable ' : 'Enable ') + ` MyLists feed`,
       tokenExists: twitchAccessToken,
     },

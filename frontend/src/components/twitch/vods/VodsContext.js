@@ -1,29 +1,27 @@
-import React, { useEffect, useContext } from 'react';
-import FetchMonitoredVodChannelsList from './FetchMonitoredVodChannelsList';
-import AccountContext from '../../account/AccountContext';
+import React, { useEffect, useContext, useCallback, useRef } from 'react';
 import useSyncedLocalState from '../../../hooks/useSyncedLocalState';
 import { getCookie, getLocalstorage } from '../../../util';
 import FeedsContext from '../../feed/FeedsContext';
 import { TwitchContext } from '../useToken';
 import useLocalStorageState from '../../../hooks/useLocalStorageState';
+import API from '../../navigation/API';
+import { toast } from 'react-toastify';
+import AccountContext from '../../account/AccountContext';
 
 const VodsContext = React.createContext();
 
 export const VodsProvider = ({ children, forceMount = false }) => {
-  const { username, authKey } = useContext(AccountContext);
-  const { isEnabledUpdateNotifications, isEnabledOfflineNotifications } = useContext(TwitchContext);
+  const { isEnabledUpdateNotifications, isEnabledOfflineNotifications, twitchAccessToken } =
+    useContext(TwitchContext);
+  const { authKey } = useContext(AccountContext) || {};
   const { enableTwitchVods } = useContext(FeedsContext) || {};
   const [vods, setVods] = useLocalStorageState('Vods', {});
   const [channels, setChannels] = useSyncedLocalState('TwitchVods-Channels', []);
-  const [updateNotischannels, setUpdateNotischannels] = useSyncedLocalState(
-    'ChannelsUpdateNotifs',
-    []
-  );
-  const [favStreams, setFavStreams] = useSyncedLocalState('FavoriteStreams', []);
-
   const location = window.location.pathname?.split('/')[1];
+  const invoked = useRef(false);
 
-  useEffect(() => {
+  const fetchVodsContextData = useCallback(async () => {
+    console.log('fetchVodsContextData:');
     const vodContextBlacklistRoutes = [
       '',
       'index',
@@ -34,41 +32,33 @@ export const VodsProvider = ({ children, forceMount = false }) => {
       'auth',
     ];
 
-    (async () => {
-      if (
-        getCookie(`Twitch-access_token`) &&
-        (!vodContextBlacklistRoutes.includes(location) || forceMount) &&
-        (isEnabledUpdateNotifications || isEnabledOfflineNotifications || enableTwitchVods)
-      ) {
-        const fetchedColumns = await FetchMonitoredVodChannelsList(username, authKey);
+    if (
+      getCookie(`Twitch-access_token`) &&
+      (!vodContextBlacklistRoutes.includes(location) || forceMount) &&
+      (isEnabledUpdateNotifications || isEnabledOfflineNotifications || enableTwitchVods)
+    ) {
+      const { vod_channels } = await API.getTwitchData()
+        .then((res) => res?.data?.Item)
+        .catch((e) => {
+          console.error('Twitch usetoken useEffect error: ', e);
+          toast.error(e.message);
+        });
 
-        setChannels(
-          (
-            fetchedColumns?.TwitchVodsPreferences?.Channels ||
-            getLocalstorage('TwitchVods-Channels') ||
-            []
-          ).filter((i) => i)
-        );
-        setUpdateNotischannels(
-          (
-            fetchedColumns?.TwitchPreferences?.ChannelsUpdateNotifs ||
-            getLocalstorage('ChannelsUpdateNotifs') ||
-            []
-          ).filter((i) => i)
-        );
-      }
-    })();
+      setChannels((vod_channels || getLocalstorage('TwitchVods-Channels') || []).filter((i) => i));
+      invoked.current = true;
+    }
   }, [
-    username,
-    authKey,
     setChannels,
-    setUpdateNotischannels,
     isEnabledUpdateNotifications,
     isEnabledOfflineNotifications,
     enableTwitchVods,
     forceMount,
     location,
   ]);
+
+  useEffect(() => {
+    if (twitchAccessToken && authKey && !invoked.current) fetchVodsContextData();
+  }, [fetchVodsContextData, twitchAccessToken, authKey]);
 
   return (
     <VodsContext.Provider
@@ -77,10 +67,7 @@ export const VodsProvider = ({ children, forceMount = false }) => {
         setVods,
         channels,
         setChannels,
-        updateNotischannels,
-        setUpdateNotischannels,
-        favStreams,
-        setFavStreams,
+        fetchVodsContextData,
       }}
     >
       {children}

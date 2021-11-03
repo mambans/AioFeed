@@ -7,6 +7,7 @@ import Rules from './Rules';
 import TwitchStreams from './../twitch/live/Twitch';
 import loginNameFormat from '../twitch/loginNameFormat';
 import FeedsContext from '../feed/FeedsContext';
+import { BsCollectionFill } from 'react-icons/bs';
 
 const FeedSections = ({ data }) => {
   const { feedSections } = useContext(FeedSectionsContext);
@@ -49,8 +50,13 @@ const Section = ({ feed: { name, enabled, rules }, data, index }) => {
       <Container order={orders[name]} id={`FeedSection${name}Header`}>
         <Header
           id={name}
-          text={<>{name}</>}
-          // refreshFunc={fetchAllLists}
+          text={
+            <>
+              {name}
+              <BsCollectionFill size={22} color={'#ff0060'} />
+            </>
+          }
+          // refreshFunc={fetchMyListContextData}
           // isLoading={isLoading}
           // onHoverIconLink='nylists'
           rightSide={<Rules rules={rules} name={name} />}

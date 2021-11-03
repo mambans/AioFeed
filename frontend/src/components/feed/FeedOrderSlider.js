@@ -37,6 +37,7 @@ const StyledSliderThumb = styled.input.attrs({ type: 'range', min: 1, max: 1000 
   -webkit-appearance: none;
   background: transparent;
   pointer-events: none;
+  transform: width 500ms;
 
   &:first-of-type {
     background: rgba(67, 71, 74, 0.3);
@@ -139,7 +140,7 @@ const FeedOrderSlider = () => {
         .filter((feed) => feed.enabled)
         .map((feed) => ({
           name: feed.name,
-          icon: `url(${process.env.PUBLIC_URL}/list-icon.svg)`,
+          icon: `url(${process.env.PUBLIC_URL}/feedSection-icon.svg)`,
         })),
   ]
     .flat(1)

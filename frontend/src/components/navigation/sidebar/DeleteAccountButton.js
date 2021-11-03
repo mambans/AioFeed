@@ -41,7 +41,7 @@ const DeleteAccountButton = () => {
     if (form.checkValidity() === true && account === username) {
       setValidated(true);
 
-      await API.deleteAccount(account, password, authKey)
+      await API.deleteAccount(password, authKey)
         .then((res) => {
           if (res) {
             ClearAllAccountCookiesStates({

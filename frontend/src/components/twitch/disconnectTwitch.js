@@ -21,6 +21,6 @@ const disconnectTwitch = async ({ setTwitchToken = () => {}, setEnableTwitch = (
   setTwitchToken();
   setEnableTwitch(false);
 
-  await API.deleteTwitchToken();
+  await API.deleteTwitchDataUser();
 };
 export default disconnectTwitch;

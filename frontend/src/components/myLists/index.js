@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-
+import { HiViewList } from 'react-icons/hi';
 import './MyListsTransitions.scss';
 import Header from '../sharedComponents/Header';
 
@@ -83,7 +83,7 @@ export const FavoriteListContainer = ({
   ytExistsAndValidated,
   twitchExistsAndValidated,
   isLoading,
-  fetchAllLists,
+  fetchMyListContextData,
   index,
   className,
 }) => {
@@ -94,8 +94,12 @@ export const FavoriteListContainer = ({
     <Container order={orders[list.name]} id='MyListsHeader'>
       <Header
         id={list.name}
-        text={<>{list.name}</>}
-        refreshFunc={fetchAllLists}
+        text={
+          <>
+            {list.name} <HiViewList size={25} color={'var(--listColorAdd)'} />
+          </>
+        }
+        refreshFunc={fetchMyListContextData}
         isLoading={isLoading}
         onHoverIconLink='mylists'
         rightSide={
@@ -119,7 +123,8 @@ export const FavoriteListContainer = ({
 };
 
 export const MyLists = () => {
-  const { lists, setLists, fetchAllLists, isLoading, setIsLoading } = useContext(MyListsContext);
+  const { lists, setLists, fetchMyListContextData, isLoading, setIsLoading } =
+    useContext(MyListsContext);
   const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
   const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
   // const validateToken = useToken();
@@ -137,7 +142,7 @@ export const MyLists = () => {
         <TransitionGroup component={null}>
           {Object.values(lists)?.map((list, index) => (
             <CSSTransition
-              key={list.name}
+              key={'mylist- ' + list.name}
               timeout={1000}
               classNames='listHorizontalSlide'
               unmountOnExit
@@ -147,7 +152,7 @@ export const MyLists = () => {
                 setLists={setLists}
                 index={index}
                 isLoading={isLoading}
-                fetchAllLists={fetchAllLists}
+                fetchMyListContextData={fetchMyListContextData}
                 ytExistsAndValidated={ytExistsAndValidated}
                 twitchExistsAndValidated={twitchExistsAndValidated}
               />

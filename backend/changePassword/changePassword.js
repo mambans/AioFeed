@@ -6,18 +6,20 @@ const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 const bcrypt = require('bcrypt');
 const util = require('util');
 const { v4: uuidv4 } = require('uuid');
+const { validateAuthkey } = require('../authkey');
 const compare = util.promisify(bcrypt.compare);
 const hash = util.promisify(bcrypt.hash);
 
-module.exports = async ({ username, password, new_password, authkey }) => {
-  const res = await client
-    .get({
-      TableName: process.env.USERNAME_TABLE,
-      Key: { Username: username },
-    })
-    .promise();
+module.exports = async ({ password, new_password, authkey }) => {
+  const username = await validateAuthkey(authkey);
 
-  if (res && authkey === res.Item.AuthKey) {
+  if (username) {
+    const res = await client
+      .get({
+        TableName: process.env.USERNAME_TABLE,
+        Key: { Username: username },
+      })
+      .promise();
     const valid = await compare(password, res.Item.Password);
 
     if (valid) {

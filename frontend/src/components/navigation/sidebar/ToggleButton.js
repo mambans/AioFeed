@@ -2,7 +2,6 @@ import React, { useState, useRef, useContext } from 'react';
 
 import { StyledToggleButton } from './StyledComponents';
 import ToolTip from '../../sharedComponents/ToolTip';
-import API from '../API';
 import { TwitchContext } from '../../twitch/useToken';
 import { YoutubeContext } from '../../youtube/useToken';
 
@@ -37,7 +36,7 @@ const ToggleButton = ({
 
     clearTimeout(timeout.current);
     timeout.current = setTimeout(async () => {
-      await API.softUpdateAccount(`${serviceName}Preferences`, { Enabled: !checked });
+      // save enabled state in database?
     }, 2500);
 
     if (scrollIntoView && !checked === true) {

@@ -12,7 +12,6 @@ import { TwitchContext } from '../twitch/useToken';
 const TwitchAuthCallback = () => {
   const [error, setError] = useState();
   const {
-    autoRefreshEnabled,
     setTwitchAccessToken,
     setTwitchRefreshToken,
     setTwitchUserId,
@@ -39,15 +38,15 @@ const TwitchAuthCallback = () => {
         setTwitchProfileImage(res.data.data[0].profile_image_url);
 
         if (username) {
-          await aiofeedAPI.updateAccount('TwitchPreferences', {
-            Username: res.data.data[0].login,
-            Id: res.data.data[0].id,
-            Profile: res.data.data[0].profile_image_url,
-            Token: accessToken,
-            Refresh_token: refreshToken,
-            AutoRefresh: autoRefreshEnabled,
-            enabled: true,
-          });
+          await aiofeedAPI.updateTwitchUserData(
+            {
+              Username: res.data.data[0].login,
+              Id: res.data.data[0].id,
+              Profile: res.data.data[0].profile_image_url,
+            },
+            accessToken,
+            refreshToken
+          );
         }
 
         return {
@@ -61,7 +60,6 @@ const TwitchAuthCallback = () => {
     },
     [
       username,
-      autoRefreshEnabled,
       setTwitchAccessToken,
       setTwitchRefreshToken,
       setTwitchUserId,

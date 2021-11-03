@@ -6,9 +6,9 @@ import { FaTwitter } from 'react-icons/fa';
 import { MdPlaylistAdd, MdDelete, MdAdd } from 'react-icons/md';
 
 import useInput from './../../../hooks/useInput';
-import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../sharedComponents/ToolTip';
 import API from '../API';
+import TwitterContext from '../../twitter/TwitterContext';
 
 export const StyledListForm = styled(Form)`
   /* margin: 10px; */
@@ -109,7 +109,7 @@ export const StyledButton = styled(Button).attrs(({ type }) => ({
 `;
 
 const UpdateTwitterLists = ({ style, id }) => {
-  const { setTwitterLists, twitterLists } = useContext(FeedsContext) || {};
+  const { setTwitterLists, twitterLists } = useContext(TwitterContext) || {};
   const { value: listName, bind: bindListName, reset } = useInput(id || '');
 
   const addList = async () => {
@@ -119,7 +119,7 @@ const UpdateTwitterLists = ({ style, id }) => {
 
     setTwitterLists(newArray);
 
-    await API.softUpdateAccount('TwitterPreferences', { Lists: newArray });
+    await API.addTwitterList(newArray);
 
     reset();
   };
@@ -131,7 +131,7 @@ const UpdateTwitterLists = ({ style, id }) => {
 
     setTwitterLists(newArray);
 
-    await API.updateAccount('TwitterPreferences', { Lists: newArray });
+    await API.addTwitterList(newArray);
   };
 
   const handleSubmit = (evt) => {

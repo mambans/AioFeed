@@ -20,6 +20,7 @@ import API from '../navigation/API';
 import { MyListsProvider } from '../myLists/MyListsContext';
 import LogsContext, { LogsProvider } from '../logs/LogsContext';
 import { FeedSectionsProvider } from '../feedSections/FeedSectionsContext';
+import { TwitterProvider } from '../twitter/TwitterContext';
 
 const AppContainer = styled.div`
   background-image: ${({ image }) => `url(/images/${image})`};
@@ -48,17 +49,19 @@ const AppRoutesContainer = () => {
             <YoutubeProvider>
               <NavigationProvider>
                 <NotificationsProvider>
-                  <FeedsProvider>
-                    <FeedSectionsProvider>
-                      <MyListsProvider>
-                        <VodsProvider>
-                          <FooterProvider>
-                            <App />
-                          </FooterProvider>
-                        </VodsProvider>
-                      </MyListsProvider>
-                    </FeedSectionsProvider>
-                  </FeedsProvider>
+                  <TwitterProvider>
+                    <FeedsProvider>
+                      <FeedSectionsProvider>
+                        <MyListsProvider>
+                          <VodsProvider>
+                            <FooterProvider>
+                              <App />
+                            </FooterProvider>
+                          </VodsProvider>
+                        </MyListsProvider>
+                      </FeedSectionsProvider>
+                    </FeedsProvider>
+                  </TwitterProvider>
                 </NotificationsProvider>
               </NavigationProvider>
             </YoutubeProvider>
@@ -88,23 +91,28 @@ const App = () => {
 
   useEffect(() => {
     (async () => {
-      if (username && window.location.host !== 'localhost:3000' && false) {
-        const { data } = await API.validateAccount(username).catch((e) => console.error(e));
+      if (username && window.location.host !== 'localhost:3000') {
+        const { data } = await API.validateAccount(username).catch((e) => {
+          console.error('validateAccount error: ', e);
+          return {};
+        });
+        console.log('validateAccount data:', data);
 
-        if (!data?.Username) {
-          setTimeout(() => {
-            setAuthKey();
-            setUsername();
-            setEmail();
-            setProfileImage();
-            setShowSidebar(true);
-            toast.warn('Expired login. Please login again');
-            addLog({
-              title: 'Expired login',
-              text: 'Logged in session expired, please login again.',
-              icon: 'logout',
-            });
-          }, 0);
+        if (!data) {
+          console.log('--expired login--');
+          // setTimeout(() => {
+          //   setAuthKey();
+          //   setUsername();
+          //   setEmail();
+          //   setProfileImage();
+          //   setShowSidebar(true);
+          toast.warn('Expired login. Please login again');
+          //   addLog({
+          //     title: 'Expired login',
+          //     text: 'Logged in session expired, please login again.',
+          //     icon: 'logout',
+          //   });
+          // }, 0);
         }
 
         return true;

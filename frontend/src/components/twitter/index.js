@@ -11,6 +11,7 @@ import FeedsCenterContainer, { CenterContext } from '../feed/FeedsCenterContaine
 import Timelines from './Timelines';
 import ResizeWrapper from '../sharedComponents/ResizeWrapper';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
+import TwitterContext from './TwitterContext';
 
 const TwitterStandalone = () => {
   useDocumentTitle('Twitter');
@@ -22,8 +23,8 @@ const TwitterStandalone = () => {
 };
 
 export const Twitter = ({ in: forceMount = false }) => {
-  const { twitterLists, enableTwitter, enableTwitch, enableYoutube, enableTwitchVods } =
-    useContext(FeedsContext);
+  const { enableTwitter, enableTwitch, enableYoutube, enableTwitchVods } = useContext(FeedsContext);
+  const { twitterLists } = useContext(TwitterContext);
   const { activeTheme } = useContext(ThemeContext);
   const { setTwitterWidth } = useContext(CenterContext);
   const mainContainerRef = useRef();

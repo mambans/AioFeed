@@ -1,20 +1,17 @@
 'use strict';
 
-const softColumnUpdate = require('./softColumnUpdate');
+const profileImageUpdate = require('./profileImageUpdate');
 
 exports.handler = async (event) => {
   try {
-    const { username, columnValue, columnName, authkey } = JSON.parse(event.body);
+    console.log('JSON.parse(event.body):', JSON.parse(event.body));
+    const { data, authkey } = JSON.parse(event.body);
 
-    if (!username) throw new Error('`Username` is required');
-    if (!columnValue) throw new Error('`Column value` is required');
-    if (!columnName) throw new Error('`Column name` is required');
+    if (!data) throw new Error('`Data value` is required');
     if (!authkey) throw new Error('`Authkey` is required');
 
-    const res = await softColumnUpdate({
-      username,
-      columnValue,
-      columnName,
+    const res = await profileImageUpdate({
+      data,
       authkey,
     });
 

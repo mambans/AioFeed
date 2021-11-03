@@ -23,8 +23,8 @@ const FollowUnfollowBtn = ({
   const [following, setFollowing] = useState(followingStatus);
   const [showUnsubscribeVods, setShowUnsubscribeVods] = useState();
   const { authKey, username } = useContext(AccountContext);
-  const { updateNotischannels, setUpdateNotischannels, channels } = useContext(VodsContext);
-  const { twitchUserId } = useContext(TwitchContext);
+  const { channels } = useContext(VodsContext);
+  const { twitchUserId, setUpdateNotischannels, updateNotischannels } = useContext(TwitchContext);
 
   const validateToken = useToken();
 

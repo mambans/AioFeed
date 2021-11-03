@@ -1,18 +1,18 @@
 'use strict';
 
-const preferencesFetchAll = require('./preferencesFetchAll');
+const twitterDataUpdate = require('./twitterDataUpdate');
 
 exports.handler = async (event) => {
   try {
-    const { username, authkey } = event.queryStringParameters;
+    const { authkey, data } = JSON.parse(event.body);
+    console.log('data:', data);
 
-    if (!username) throw new Error('`Username` is required');
-    if (!authkey) throw new Error('`Authkey` is required');
+    if (!authkey) throw new Error('`authkey` is required');
 
-    const res = await preferencesFetchAll({
-      username,
+    const res = await twitterDataUpdate({
+      data,
       authkey,
-    }).catch((e) => console.log(e));
+    });
 
     return {
       statusCode: 200,
@@ -25,10 +25,10 @@ exports.handler = async (event) => {
     console.log('TCL: e', e);
     return {
       statusCode: 422,
-      // body: JSON.stringify(res.data),
       headers: {
         'Access-Control-Allow-Origin': 'https://aiofeed.com',
       },
+      // body: JSON.stringify(res.data),
     };
   }
 };

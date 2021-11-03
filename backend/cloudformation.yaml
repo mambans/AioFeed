@@ -35,6 +35,42 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
+  TwitchData:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: Username
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Username
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+  YoutubeData:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: Username
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Username
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+  TwitterData:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: Username
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Username
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
   ValidateAuthKey:
     Type: AWS::Serverless::Function
     Properties:
@@ -53,8 +89,6 @@ Resources:
             Path: /account/validate
             Method: post
             RequestParameters:
-              - method.request.querystring.username:
-                  Required: true
               - method.request.querystring.authkey:
                   Required: true
   Login:
@@ -103,11 +137,11 @@ Resources:
                   Required: true
               - method.request.querystring.password:
                   Required: true
-  Update:
+  ProfileImageUpdate:
     Type: AWS::Serverless::Function
     Properties:
-      Description: 'Update a specific column mentioned as a param.'
-      Handler: update/handler.handler
+      Description: 'Update acocunt profile image.'
+      Handler: profileImageUpdate/handler.handler
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
@@ -118,40 +152,10 @@ Resources:
         Http:
           Type: Api
           Properties:
-            Path: /account/update
+            Path: /account/profile-image
             Method: put
           RequestParameters:
-            - method.request.querystring.username:
-                Required: true
-            - method.request.querystring.columnValue:
-                Required: true
-            - method.request.querystring.columnName:
-                Required: true
-            - method.request.querystring.authkey:
-                Required: true
-  SoftUpdate:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: 'Update a specific column mentioned as a param but merge it with its current value.'
-      Handler: softUpdate/handler.handler
-      Environment:
-        Variables:
-          USERNAME_TABLE: !Ref UserLogins
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref UserLogins
-      Events:
-        Http:
-          Type: Api
-          Properties:
-            Path: /account/soft-update
-            Method: put
-          RequestParameters:
-            - method.request.querystring.username:
-                Required: true
-            - method.request.querystring.columnValue:
-                Required: true
-            - method.request.querystring.columnName:
+            - method.request.querystring.data:
                 Required: true
             - method.request.querystring.authkey:
                 Required: true
@@ -162,69 +166,45 @@ Resources:
       Handler: vodChannelsUpdate/handler.handler
       Environment:
         Variables:
-          USERNAME_TABLE: !Ref UserLogins
+          TWITCH_DATA_TABLE: !Ref TwitchData
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: !Ref UserLogins
+            TableName: !Ref TwitchData
       Events:
         Http:
           Type: Api
           Properties:
-            Path: /vodchannels
+            Path: /twitch/vod-channels
             Method: put
           RequestParameters:
-            - method.request.querystring.username:
-                Required: true
             - method.request.querystring.channels:
                 Required: true
             - method.request.querystring.authkey:
                 Required: true
-  UpdateNotisChannelsUpdate:
+  NotisChannelsUpdate:
     Type: AWS::Serverless::Function
     Properties:
       Description: 'Update channel list (channels with updated title/game notifications enabled.).'
-      Handler: updateNotisChannelsUpdate/handler.handler
+      Handler: notisChannelsUpdate/handler.handler
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
+          TWITCH_DATA_TABLE: !Ref TwitchData
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref UserLogins
+            TableName: !Ref TwitchData
       Events:
         Http:
           Type: Api
           Properties:
-            Path: /updatechannels
+            Path: /twitch/update-notis-channels
             Method: put
           RequestParameters:
-            - method.request.querystring.username:
-                Required: true
             - method.request.querystring.channels:
                 Required: true
             - method.request.querystring.authkey:
                 Required: true
-  PreferencesFetchAll:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: 'Fetch all preferences.'
-      Handler: preferencesFetchAll/handler.handler
-      Environment:
-        Variables:
-          USERNAME_TABLE: !Ref UserLogins
-      Policies:
-        - DynamoDBReadPolicy:
-            TableName: !Ref UserLogins
-      Events:
-        Http:
-          Type: Api
-          Properties:
-            Path: /preferences
-            Method: get
-            RequestParameters:
-              - method.request.querystring.username:
-                  Required: true
-              - method.request.querystring.authkey:
-                  Required: true
   DeleteAccount:
     Type: AWS::Serverless::Function
     Properties:
@@ -257,19 +237,19 @@ Resources:
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
+          TWITCH_DATA_TABLE: !Ref TwitchData
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref UserLogins
+            TableName: !Ref TwitchData
       Events:
         Http:
           Type: Api
           Properties:
-            Path: /reauth/twitch
+            Path: /twitch/reauth
             Method: put
           RequestParameters:
             - method.request.querystring.refresh_token:
-                Required: true
-            - method.request.querystring.username:
                 Required: true
             - method.request.querystring.authkey:
                 Required: true
@@ -282,10 +262,12 @@ Resources:
         Http:
           Type: Api
           Properties:
-            Path: /rerequest/twitch
+            Path: /twitch/request_auth
             Method: put
           RequestParameters:
             - method.request.querystring.authCode:
+                Required: true
+            - method.request.querystring.authkey:
                 Required: true
   AppInfo:
     Type: AWS::DynamoDB::Table
@@ -307,9 +289,11 @@ Resources:
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
+          YOUTUBE_DATA_TABLE: !Ref YoutubeData
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref UserLogins
+            TableName: !Ref YoutubeData
       Events:
         Http:
           Type: Api
@@ -318,8 +302,6 @@ Resources:
             Method: post
           RequestParameters:
             - method.request.querystring.authCode:
-            - method.request.querystring.username:
-                Required: true
             - method.request.querystring.authkey:
                 Required: true
   DeleteYotubeData:
@@ -342,29 +324,25 @@ Resources:
           RequestParameters:
             - method.request.querystring.authkey:
                 Required: true
-            - method.request.querystring.username:
-                Required: true
   DeleteTwitchData:
     Type: AWS::Serverless::Function
     Properties:
-      Description: 'Deletes all Twitch data associated with the account.'
+      Description: 'Deletes all Twitch user data associated with the account.'
       Handler: DeleteTwitchData/handler.handler
       Environment:
         Variables:
-          USERNAME_TABLE: !Ref UserLogins
+          TWITCH_DATA_TABLE: !Ref TwitchData
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: !Ref UserLogins
+            TableName: !Ref TwitchData
       Events:
         Http:
           Type: Api
           Properties:
-            Path: /twitch/token
+            Path: /twitch/user
             Method: delete
           RequestParameters:
             - method.request.querystring.authkey:
-                Required: true
-            - method.request.querystring.username:
                 Required: true
   SavedLists:
     Type: AWS::DynamoDB::Table
@@ -396,7 +374,7 @@ Resources:
             Path: /savedlists
             Method: put
           RequestParameters:
-            - method.request.querystring.username:
+            - method.request.querystring.authkey:
                 Required: true
             - method.request.querystring.videosObj:
                 Required: true
@@ -420,7 +398,7 @@ Resources:
             Path: /savedlists
             Method: get
           RequestParameters:
-            - method.request.querystring.username:
+            - method.request.querystring.authkey:
                 Required: true
             # - method.request.querystring.videosObj:
             #     Required: true
@@ -444,7 +422,7 @@ Resources:
             Path: /savedlists/delete
             Method: put
           RequestParameters:
-            - method.request.querystring.username:
+            - method.request.querystring.authkey:
                 Required: true
             - method.request.querystring.listName:
                 Required: true
@@ -500,8 +478,6 @@ Resources:
             Path: /customfilters
             Method: put
           RequestParameters:
-            - method.request.querystring.username:
-                Required: true
             - method.request.querystring.filtesObj:
                 Required: true
             - method.request.querystring.authkey:
@@ -527,8 +503,6 @@ Resources:
             Path: /customfilters
             Method: get
           RequestParameters:
-            - method.request.querystring.username:
-                Required: true
             - method.request.querystring.authkey:
                 Required: true
   favoriteStreamsUpdate:
@@ -539,18 +513,18 @@ Resources:
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
+          TWITCH_DATA_TABLE: !Ref TwitchData
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref UserLogins
+            TableName: !Ref TwitchData
       Events:
         Http:
           Type: Api
           Properties:
-            Path: /favoritestreams
+            Path: /twitch/favorite_streams
             Method: put
           RequestParameters:
-            - method.request.querystring.username:
-                Required: true
             - method.request.querystring.channels:
                 Required: true
             - method.request.querystring.authkey:
@@ -573,8 +547,6 @@ Resources:
             Path: /account/reset
             Method: put
           RequestParameters:
-            - method.request.querystring.username:
-                Required: true
             - method.request.querystring.password:
                 Required: true
             - method.request.querystring.new_password:
@@ -611,7 +583,7 @@ Resources:
             Path: /custom_feed_sections
             Method: put
           RequestParameters:
-            - method.request.querystring.username:
+            - method.request.querystring.authkey:
                 Required: true
             - method.request.querystring.data:
                 Required: true
@@ -635,7 +607,7 @@ Resources:
             Path: /custom_feed_sections
             Method: get
           RequestParameters:
-            - method.request.querystring.username:
+            - method.request.querystring.authkey:
                 Required: true
             # - method.request.querystring.videosObj:
             #     Required: true
@@ -659,9 +631,140 @@ Resources:
             Path: /custom_feed_sections
             Method: delete
           RequestParameters:
-            - method.request.querystring.username:
-                Required: true
             - method.request.querystring.name:
+                Required: true
+            - method.request.querystring.authkey:
                 Required: true
             # - method.request.querystring.videosObj:
             #     Required: true
+  YoutubeUserDataUpdate:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Update Youtube user data.'
+      Handler: youtubeUserDataUpdate/handler.handler
+      Environment:
+        Variables:
+          USERNAME_TABLE: !Ref UserLogins
+          YOUTUBE_DATA_TABLE: !Ref YoutubeData
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserLogins
+            TableName: !Ref YoutubeData
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /youtube/user
+            Method: put
+          RequestParameters:
+            - method.request.querystring.authkey:
+                Required: true
+            - method.request.querystring.data:
+            - method.request.querystring.access_token:
+            - method.request.querystring.refresh_token:
+  TwitchUserDataUpdate:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Update Twitch user data.'
+      Handler: twitchUserDataUpdate/handler.handler
+      Environment:
+        Variables:
+          USERNAME_TABLE: !Ref UserLogins
+          TWITCH_DATA_TABLE: !Ref TwitchData
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UserLogins
+            TableName: !Ref TwitchData
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /twitch/user
+            Method: put
+          RequestParameters:
+            - method.request.querystring.authkey:
+                Required: true
+            - method.request.querystring.data:
+            - method.request.querystring.access_token:
+            - method.request.querystring.refresh_token:
+  TwitchDataFetch:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Fetch all data from Twitch table.'
+      Handler: twitchDataFetch/handler.handler
+      Environment:
+        Variables:
+          TWITCH_DATA_TABLE: !Ref TwitchData
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TwitchData
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /twitch
+            Method: get
+          RequestParameters:
+            - method.request.querystring.authkey:
+                Required: true
+  YoutubeDataFetch:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Fetch all data from Youtube table.'
+      Handler: youtubeDataFetch/handler.handler
+      Environment:
+        Variables:
+          YOUTUBE_DATA_TABLE: !Ref YoutubeData
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref YoutubeData
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /youtube
+            Method: get
+          RequestParameters:
+            - method.request.querystring.authkey:
+                Required: true
+  TwitterDataFetch:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Fetch all data from Twitter table.'
+      Handler: twitterDataFetch/handler.handler
+      Environment:
+        Variables:
+          TWITTER_DATA_TABLE: !Ref TwitterData
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TwitterData
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /twitter
+            Method: get
+          RequestParameters:
+            - method.request.querystring.authkey:
+                Required: true
+  TwitterDataUpdate:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Update Twitter user data.'
+      Handler: twitterDataUpdate/handler.handler
+      Environment:
+        Variables:
+          TWITTER_DATA_TABLE: !Ref TwitterData
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TwitterData
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /twitter
+            Method: put
+          RequestParameters:
+            - method.request.querystring.authkey:
+                Required: true
+            - method.request.querystring.data:

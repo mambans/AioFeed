@@ -1,21 +1,23 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { getCookie } from '../../util';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import useSyncedLocalState from '../../hooks/useSyncedLocalState';
 import API from '../navigation/API';
+import AccountContext from '../account/AccountContext';
 
 const MyListsContext = React.createContext();
 
 export const MyListsProvider = ({ children }) => {
+  const { authKey } = useContext(AccountContext);
   const [lists, setLists] = useSyncedLocalState('Mylists', {}) || {};
   const [myListPreferences, setMyListPreferences] =
     useSyncedLocalState('MylistsPreferences', {}) || {};
   const [isLoading, setIsLoading] = useState();
+  const invoked = useRef(false);
 
   const orderedList = useMemo(() => {
     return Object.values(lists).reduce((lists, list) => {
       return {
         ...lists,
-        [list[list.name]]: {
+        [list.name]: {
           ...list,
           items: myListPreferences?.[list.name]?.Reversed
             ? [...list?.items]?.reverse()
@@ -25,7 +27,7 @@ export const MyListsProvider = ({ children }) => {
     }, {});
   }, [lists, myListPreferences]);
 
-  const fetchAllLists = useCallback(async () => {
+  const fetchMyListContextData = useCallback(async () => {
     setIsLoading(true);
     const Lists = await API.getSavedList();
 
@@ -33,15 +35,15 @@ export const MyListsProvider = ({ children }) => {
   }, [setLists]);
 
   useEffect(() => {
-    if (getCookie(`AioFeed_AccountName`)) fetchAllLists();
-  }, [fetchAllLists]);
+    if (authKey && !invoked.current) fetchMyListContextData();
+  }, [fetchMyListContextData, authKey]);
 
   return (
     <MyListsContext.Provider
       value={{
         lists: orderedList,
         setLists,
-        fetchAllLists,
+        fetchMyListContextData,
         isLoading,
         setIsLoading,
         myListPreferences,

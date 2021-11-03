@@ -14,7 +14,7 @@ const UpdateProfileImg = ({ close }) => {
     AddCookie('AioFeed_AccountProfileImg', image);
     setProfileImage(image);
 
-    await API.updateAccount('ProfileImg', image).then(() => close());
+    await API.changeProfileImage(image).then(close);
   };
 
   const handleSubmit = (evt) => {

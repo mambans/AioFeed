@@ -33,7 +33,8 @@ const YoutubeAuthCallback = () => {
       .replace('code=', '');
 
     const tokens = await API.getYoutubeTokens(codeFromUrl).then(async (res) => {
-      setYoutubeAccessToken(res.data.access_token);
+      console.log('resss1:', res);
+      setYoutubeAccessToken(res.access_token);
       return res;
     });
 
@@ -58,12 +59,14 @@ const YoutubeAuthCallback = () => {
       });
 
     if (username) {
-      await API.updateAccount('YoutubePreferences', {
-        Username: MyYoutube.Username,
-        Profile: MyYoutube.ProfileImg,
-        Token: tokens.access_token,
-        Refresh_token: tokens.refresh_token,
-      });
+      await API.updateYoutubeUserData(
+        {
+          Username: MyYoutube.Username,
+          Profile: MyYoutube.ProfileImg,
+        },
+        tokens.access_token,
+        tokens.refresh_token
+      );
     }
 
     return { access_token: tokens.access_token, refresh_token: tokens.refresh_token, ...MyYoutube };
@@ -88,7 +91,7 @@ const YoutubeAuthCallback = () => {
         if (state === getCookie('Youtube-myState')) {
           await getAccessToken()
             .then((res) => {
-              console.log('res', res);
+              console.log('res22', res);
               console.log('successfully authenticated to Youtube.');
               window.opener.postMessage(
                 {
