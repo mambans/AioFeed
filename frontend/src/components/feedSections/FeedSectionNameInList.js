@@ -21,7 +21,7 @@ const InvalidError = styled.span`
   /* border-bottom: 2px solid #dc3545; */
 `;
 
-const FeedSectionNameInList = ({ section, setOverflow }) => {
+const FeedSectionNameInList = ({ section, setOverflow, style = {} }) => {
   const { name, enabled, rules } = section || {};
   const { createFeedSection, deleteFeedSection, toggleFeedSection, feedSections } =
     useContext(FeedSectionsContext);
@@ -41,7 +41,7 @@ const FeedSectionNameInList = ({ section, setOverflow }) => {
   };
 
   return (
-    <StyledListForm onSubmit={handleSubmit}>
+    <StyledListForm onSubmit={handleSubmit} style={style}>
       <Form.Group controlId='formGroupListName' style={{ marginBottom: '0' }}>
         <div style={{ display: 'flex' }}>
           {name && <Rules rules={rules} name={name} setOverflow={setOverflow} />}

@@ -1,19 +1,19 @@
 import React, { useContext } from 'react';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import TwitterContext from '../../twitter/TwitterContext';
 import UpdateTwitterLists from './UpdateTwitterLists';
+import SidebarExpandableSection from './SidebarExpandableSection';
 
 const TwitterForms = () => {
   const { twitterLists } = useContext(TwitterContext);
 
   return (
-    <TransitionGroup component={null}>
-      {twitterLists?.map((id, index) => (
-        <CSSTransition classNames='ListForm' key={id} timeout={500} unmountOnExit>
-          <UpdateTwitterLists key={id} id={id} index={index} />
-        </CSSTransition>
-      ))}
-    </TransitionGroup>
+    <SidebarExpandableSection
+      title='Twitter lists'
+      items={twitterLists}
+      renderItem={(id, index) => <UpdateTwitterLists key={id} id={id} index={index} />}
+      keyGetter={(id) => id}
+      fixedTopItem={<UpdateTwitterLists style={{ opacity: '0.5', transition: 'opacity 250ms' }} />}
+    />
   );
 };
 

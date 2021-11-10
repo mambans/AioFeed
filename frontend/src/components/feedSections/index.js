@@ -1,37 +1,21 @@
-import React, { useContext, useState } from 'react';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { ToggleButtonsContainerHeader } from '../navigation/sidebar/StyledComponents';
+import React, { useContext } from 'react';
+import SidebarExpandableSection from '../navigation/sidebar/SidebarExpandableSection';
 import FeedSectionNameInList from './FeedSectionNameInList';
-import { MdExpandMore } from 'react-icons/md';
-import { ExpandSection } from './../sharedComponents/sharedStyledComponents';
 import FeedSectionsContext from './FeedSectionsContext';
-import NavigationContext from '../navigation/NavigationContext';
 
 const FeedSectionAdd = () => {
   const { feedSections } = useContext(FeedSectionsContext);
-  const { setOverflow } = useContext(NavigationContext);
-  const [expanded, setExpanded] = useState(true);
 
   return (
-    <div>
-      <ToggleButtonsContainerHeader expanded={expanded} onClick={() => setExpanded((c) => !c)}>
-        Feed Sections
-        <MdExpandMore />
-      </ToggleButtonsContainerHeader>
-      <ExpandSection
-        height={60 + Object.values(feedSections).length * 60}
-        expanded={String(expanded)}
-      >
-        <FeedSectionNameInList />
-        <TransitionGroup component={null}>
-          {Object.values(feedSections)?.map((section, index) => (
-            <CSSTransition classNames='ListForm' key={section.name} timeout={500} unmountOnExit>
-              <FeedSectionNameInList section={section} setOverflow={setOverflow} />
-            </CSSTransition>
-          ))}
-        </TransitionGroup>
-      </ExpandSection>
-    </div>
+    <SidebarExpandableSection
+      title='Feed Sections'
+      items={Object.values(feedSections)}
+      renderItem={(section, index, setOverflow) => (
+        <FeedSectionNameInList section={section} setOverflow={setOverflow} />
+      )}
+      keyGetter={(item) => item.name}
+      fixedTopItem={<FeedSectionNameInList style={{ marginTop: '10px' }} />}
+    />
   );
 };
 export default FeedSectionAdd;

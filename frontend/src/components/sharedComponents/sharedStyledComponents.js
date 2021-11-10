@@ -740,69 +740,79 @@ export const ExpandSection = styled.div`
   transition: height 500ms;
   overflow: hidden;
   height: ${({ height, expanded }) => (expanded === 'true' ? height : 0)}px;
-  padding: 5px;
+  padding: 0px;
   overflow: ${({ expanded }) => (expanded === 'true' ? 'visible' : 'hidden')};
+
+  * {
+    visibility: ${({ hide }) => (hide === 'true' ? 'hidden' : 'visible')};
+    pointer-events: ${({ hide }) => (hide === 'true' ? 'none' : 'all')};
+  }
 
   &.ListForm-appear {
     opacity: 0;
     height: 0;
     margin: 0 10px !important;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms, padding 500ms;
   }
 
   &.ListForm-appear-active {
     opacity: 1;
+    padding: 5px;
     height: 38px;
     margin: 10px !important;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms, padding 500ms;
   }
 
   &.ListForm-appear-done {
     opacity: 1;
+    padding: 5px;
     height: 38px;
     margin: 10px !important;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms, padding 500ms;
   }
 
   &.ListForm-enter {
     opacity: 0;
     height: 0;
     margin: 0 10px !important;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms, padding 500ms;
   }
 
   &.ListForm-enter-done {
     opacity: 1;
+    padding: 5px;
     height: 38px;
     margin: 10px !important;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms, padding 500ms;
   }
 
   &.ListForm-enter-active {
     opacity: 1;
+    padding: 5px;
     height: 38px;
     margin: 10px !important;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms, padding 500ms;
   }
 
   &.ListForm-exit {
     opacity: 1;
+    padding: 5px;
     height: 38px;
     margin: 10px !important;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms, padding 500ms;
   }
 
   &.ListForm-exit-active {
     opacity: 0;
     height: 0;
     margin: 0 10px !important;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms, padding 500ms;
   }
 
   &.ListForm-exit-done {
     opacity: 0;
     height: 0;
     margin: 0 10px !important;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms, padding 500ms;
   }
 `;

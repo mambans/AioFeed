@@ -12,7 +12,6 @@ import FeedsContext from './../../feed/FeedsContext';
 import ReAuthenticateButton from './ReAuthenticateButton';
 import Themeselector from './../../themes/Themeselector';
 import ToggleButton from './ToggleButton';
-import UpdateTwitterLists from './UpdateTwitterLists';
 import disconnectYoutube from './../../youtube/disconnectYoutube';
 import disconnectTwitch from './../../twitch/disconnectTwitch';
 import TwitterForms from './TwitterForms';
@@ -210,12 +209,7 @@ const SidebarAccount = () => {
             );
           })}
         </ToggleButtonsContainer>
-        {feedProps.enableTwitter && (
-          <div style={{ padding: '5px' }}>
-            <TwitterForms />
-            <UpdateTwitterLists style={{ opacity: '0.5', transition: 'opacity 250ms' }} />
-          </div>
-        )}
+        {feedProps.enableTwitter && <TwitterForms />}
         <br />
         {feedProps.enableFeedSections && <FeedSectionAdd />}
         <br />

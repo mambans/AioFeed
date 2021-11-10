@@ -7,6 +7,7 @@ import useLocalStorageState from '../../../hooks/useLocalStorageState';
 import API from '../../navigation/API';
 import { toast } from 'react-toastify';
 import AccountContext from '../../account/AccountContext';
+import blacklistedRoutesCheck from '../../../BlacklistedRoutesCheck';
 
 const VodsContext = React.createContext();
 
@@ -17,24 +18,14 @@ export const VodsProvider = ({ children, forceMount = false }) => {
   const { enableTwitchVods } = useContext(FeedsContext) || {};
   const [vods, setVods] = useLocalStorageState('Vods', {});
   const [channels, setChannels] = useSyncedLocalState('TwitchVods-Channels', []);
-  const location = window.location.pathname?.split('/')[1];
   const invoked = useRef(false);
 
   const fetchVodsContextData = useCallback(async () => {
     console.log('fetchVodsContextData:');
-    const vodContextBlacklistRoutes = [
-      '',
-      'index',
-      'home',
-      'legality',
-      'privacy',
-      'twitter',
-      'auth',
-    ];
 
     if (
       getCookie(`Twitch-access_token`) &&
-      (!vodContextBlacklistRoutes.includes(location) || forceMount) &&
+      (blacklistedRoutesCheck() || forceMount) &&
       (isEnabledUpdateNotifications || isEnabledOfflineNotifications || enableTwitchVods)
     ) {
       const { vod_channels } = await API.getTwitchData()
@@ -53,7 +44,6 @@ export const VodsProvider = ({ children, forceMount = false }) => {
     isEnabledOfflineNotifications,
     enableTwitchVods,
     forceMount,
-    location,
   ]);
 
   useEffect(() => {
