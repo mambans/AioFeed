@@ -43,11 +43,11 @@ const SidebarExpandableSection = ({
   const getHeight = () => {
     if (height) return height;
     if (items?.length || fixedTopItem || fixedBottomItem)
-      return items?.length ? items?.length * 60 : 0 + (fixedTopItem || fixedBottomItem ? 60 : 0);
+      return (items?.length ? items?.length * 60 : 0) + (fixedTopItem || fixedBottomItem ? 60 : 0);
   };
 
   return (
-    <div style={{ padding: '5px' }}>
+    <div style={{ padding: '5px', marginTop: '15px' }}>
       <ToggleButtonsContainerHeader expanded={expanded} onClick={handleOnClick}>
         {title}
         <MdExpandMore />
