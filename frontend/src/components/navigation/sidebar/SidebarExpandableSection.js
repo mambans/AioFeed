@@ -8,10 +8,12 @@ import { ExpandSection } from '../../sharedComponents/sharedStyledComponents';
 const SidebarExpandableSection = ({
   title,
   items,
-  renderItem,
-  keyGetter,
+  renderItem = () => {},
+  keyGetter = (i) => i?.id,
   fixedTopItem = null,
   fixedBottomItem = null,
+  height,
+  children = null,
 }) => {
   const { setOverflow } = useContext(NavigationContext);
   const [expanded, setExpanded] = useState(true);
@@ -38,17 +40,19 @@ const SidebarExpandableSection = ({
     });
   };
 
+  const getHeight = () => {
+    if (height) return height;
+    if (items?.length || fixedTopItem || fixedBottomItem)
+      return items?.length ? items?.length * 60 : 0 + (fixedTopItem || fixedBottomItem ? 60 : 0);
+  };
+
   return (
     <div style={{ padding: '5px' }}>
       <ToggleButtonsContainerHeader expanded={expanded} onClick={handleOnClick}>
         {title}
         <MdExpandMore />
       </ToggleButtonsContainerHeader>
-      <ExpandSection
-        height={60 + (items?.length ? items.length * 60 : 0)}
-        expanded={String(expanded)}
-        hide={String(hide)}
-      >
+      <ExpandSection height={getHeight()} expanded={String(expanded)} hide={String(hide)}>
         {fixedTopItem}
         <TransitionGroup component={null}>
           {items?.map((item, index) => (
@@ -63,6 +67,7 @@ const SidebarExpandableSection = ({
           ))}
         </TransitionGroup>
         {fixedBottomItem}
+        {children}
       </ExpandSection>
     </div>
   );

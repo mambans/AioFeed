@@ -598,6 +598,7 @@ export const ToggleButtonsContainerHeader = styled.h5`
   transition: color 250ms;
   color: rgb(200, 200, 200);
   cursor: pointer;
+  margin-top: 15px;
 
   svg {
     transition: transform 250ms;

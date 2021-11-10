@@ -27,6 +27,7 @@ import AccountDetails from './AccountDetails';
 import NavigationContext from '../NavigationContext';
 import Settings from './Settings';
 import FeedSectionAdd from '../../feedSections';
+import SidebarExpandableSection from './SidebarExpandableSection';
 
 const SidebarAccount = () => {
   const { username, authKey } = useContext(AccountContext) || {};
@@ -210,46 +211,47 @@ const SidebarAccount = () => {
           })}
         </ToggleButtonsContainer>
         {feedProps.enableTwitter && <TwitterForms />}
-        <br />
+
         {feedProps.enableFeedSections && <FeedSectionAdd />}
-        <br />
-        <ToggleButtonsContainerHeader>Settings</ToggleButtonsContainerHeader>
-        <FeedSizeSlider />
-        <ToggleButtonsContainer buttonsperrow={3}>
-          {settingsButtons.map(
-            ({ setEnable, enabled, label, serviceName, tooltip, icon, smallerIcons }, index) => {
-              return (
-                <ToggleButton
-                  key={serviceName + index}
-                  setEnable={setEnable}
-                  enabled={enabled}
-                  label={label}
-                  serviceName={serviceName}
-                  tooltip={tooltip}
-                  icon={icon}
-                  smallerIcons={smallerIcons}
-                />
-              );
+
+        <SidebarExpandableSection title='Settings'>
+          <FeedSizeSlider />
+          <ToggleButtonsContainer buttonsperrow={3}>
+            {settingsButtons.map(
+              ({ setEnable, enabled, label, serviceName, tooltip, icon, smallerIcons }, index) => {
+                return (
+                  <ToggleButton
+                    key={serviceName + index}
+                    setEnable={setEnable}
+                    enabled={enabled}
+                    label={label}
+                    serviceName={serviceName}
+                    tooltip={tooltip}
+                    icon={icon}
+                    smallerIcons={smallerIcons}
+                  />
+                );
+              }
+            )}
+          </ToggleButtonsContainer>
+          <br />
+          <ReAuthenticateButton
+            disconnect={() =>
+              disconnectTwitch({ setTwitchAccessToken, setEnableTwitch: feedProps.setEnableTwitch })
             }
-          )}
-        </ToggleButtonsContainer>
-        <br />
-        <ReAuthenticateButton
-          disconnect={() =>
-            disconnectTwitch({ setTwitchAccessToken, setEnableTwitch: feedProps.setEnableTwitch })
-          }
-          serviceName='Twitch'
-        />
-        <ReAuthenticateButton
-          disconnect={() =>
-            disconnectYoutube({
-              setYoutubeAccessToken,
-              setEnableYoutube: feedProps.setEnableYoutube,
-            })
-          }
-          serviceName='Youtube'
-        />
-        <Themeselector />
+            serviceName='Twitch'
+          />
+          <ReAuthenticateButton
+            disconnect={() =>
+              disconnectYoutube({
+                setYoutubeAccessToken,
+                setEnableYoutube: feedProps.setEnableYoutube,
+              })
+            }
+            serviceName='Youtube'
+          />
+          <Themeselector />
+        </SidebarExpandableSection>
       </div>
       <StyledLogoutContiner>
         <Settings />
