@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { setLocalStorage } from '../util';
+import { getLocalstorage, setLocalStorage } from '../util';
 
 /**
  * Save in localstorage and sync state across multipul tabs/windows.
@@ -9,14 +9,14 @@ import { setLocalStorage } from '../util';
  */
 const useSyncedLocalState = (key, defaultValue) => {
   const [value, setValue] = useState(() => {
-    const storedValue = localStorage.getItem(key);
+    const storedValue = getLocalstorage(key);
     try {
-      if (storedValue === 'null') return null;
-      if (storedValue === 'NaN') return NaN;
-      if (storedValue === 'undefined') return undefined;
-      return storedValue ? JSON.parse(storedValue) : defaultValue;
+      // if (storedValue === 'null') return null;
+      // if (storedValue === 'NaN') return NaN;
+      // if (storedValue === 'undefined') return undefined;
+      return storedValue ?? defaultValue;
     } catch (error) {
-      return storedValue || defaultValue;
+      return storedValue ?? defaultValue;
     }
   });
 

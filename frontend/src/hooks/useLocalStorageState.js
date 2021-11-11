@@ -12,7 +12,7 @@ const useLocalStorageState = (key, defaultValue) => {
   const [value, setValue] = useState(() => {
     try {
       const storedValue = getLocalstorage(key);
-      return storedValue || defaultValue;
+      return storedValue ?? defaultValue;
     } catch (error) {
       return defaultValue;
     }
@@ -41,7 +41,7 @@ const useLocalStorageState = (key, defaultValue) => {
         try {
           const storedValue = getLocalstorage(key);
           previousKey.current = key;
-          return storedValue || defaultValue;
+          return storedValue ?? defaultValue;
         } catch (error) {
           return defaultValue;
         }
