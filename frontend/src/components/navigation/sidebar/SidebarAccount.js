@@ -15,11 +15,7 @@ import ToggleButton from './ToggleButton';
 import disconnectYoutube from './../../youtube/disconnectYoutube';
 import disconnectTwitch from './../../twitch/disconnectTwitch';
 import TwitterForms from './TwitterForms';
-import {
-  StyledLogoutContiner,
-  ToggleButtonsContainer,
-  ToggleButtonsContainerHeader,
-} from './StyledComponents';
+import { StyledLogoutContiner, ToggleButtonsContainer } from './StyledComponents';
 import { TwitchContext } from '../../twitch/useToken';
 import { YoutubeContext } from '../../youtube/useToken';
 import FeedSizeSlider from './FeedSizeSlider';
@@ -196,24 +192,23 @@ const SidebarAccount = () => {
     <>
       <div style={{ minHeight: 'calc(100% - 120px)' }}>
         <AccountDetails />
-        <ToggleButtonsContainerHeader>Feeds</ToggleButtonsContainerHeader>
-        <ToggleButtonsContainer buttonsperrow={3}>
-          {feedsBtns?.map((props, index) => {
-            return (
-              <ToggleButton
-                key={props.serviceName + index}
-                scrollIntoView
-                setEnable={feedProps[`setEnable${props.serviceName}`]}
-                enabled={feedProps[`enable${props.serviceName}`]}
-                {...props}
-              />
-            );
-          })}
-        </ToggleButtonsContainer>
+        <SidebarExpandableSection title='Feeds'>
+          <ToggleButtonsContainer buttonsperrow={3}>
+            {feedsBtns?.map((props, index) => {
+              return (
+                <ToggleButton
+                  key={props.serviceName + index}
+                  scrollIntoView
+                  setEnable={feedProps[`setEnable${props.serviceName}`]}
+                  enabled={feedProps[`enable${props.serviceName}`]}
+                  {...props}
+                />
+              );
+            })}
+          </ToggleButtonsContainer>
+        </SidebarExpandableSection>
         {feedProps.enableTwitter && <TwitterForms />}
-
         {feedProps.enableFeedSections && <FeedSectionAdd />}
-
         <SidebarExpandableSection title='Settings'>
           <FeedSizeSlider />
           <ToggleButtonsContainer buttonsperrow={3}>

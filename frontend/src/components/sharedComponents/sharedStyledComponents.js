@@ -741,11 +741,11 @@ export const ExpandSection = styled.div`
   overflow: hidden;
   height: ${({ height, expanded }) => (expanded === 'true' ? height : 0)}px;
   padding: 0px;
-  overflow: ${({ expanded }) => (expanded === 'true' ? 'visible' : 'hidden')};
+  overflow: ${({ isOpened }) => (isOpened === 'true' ? 'visible' : 'hidden')};
 
   * {
-    visibility: ${({ hide }) => (hide === 'true' ? 'hidden' : 'visible')};
-    pointer-events: ${({ hide }) => (hide === 'true' ? 'none' : 'all')};
+    visibility: ${({ isclosed }) => (isclosed === 'true' ? 'hidden' : 'visible')};
+    pointer-events: ${({ isclosed }) => (isclosed === 'true' ? 'none' : 'all')};
   }
 
   &.ListForm-appear {

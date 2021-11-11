@@ -17,26 +17,39 @@ const SidebarExpandableSection = ({
 }) => {
   const { setOverflow } = useContext(NavigationContext);
   const [expanded, setExpanded] = useState(true);
-  const timer = useRef();
-  const [hide, setHide] = useState();
+  const closedTimer = useRef();
+  const openedTimer = useRef();
+  const [isclosed, setIsClosed] = useState(false);
+  const [isOpened, setIsOpened] = useState(true);
 
-  const handleTimer = () => {
-    clearTimeout(timer.current);
-    timer.current = setTimeout(() => {
-      setHide(true);
+  const handleCloseTimer = () => {
+    clearTimeout(closedTimer.current);
+    closedTimer.current = setTimeout(() => {
+      setIsClosed(true);
     }, 450);
+  };
+  const handleOpenTimer = () => {
+    clearTimeout(openedTimer.current);
+    openedTimer.current = setTimeout(() => {
+      setIsOpened(true);
+    }, 500);
   };
 
   const handleOnClick = () => {
-    handleTimer();
     setExpanded((c) => {
-      if (c) {
-        handleTimer();
+      const n = !c;
+      if (n) {
+        clearTimeout(closedTimer.current);
+        clearTimeout(openedTimer.current);
+        setIsClosed(false);
+        handleOpenTimer();
       } else {
-        clearTimeout(timer.current);
-        setHide(false);
+        clearTimeout(closedTimer.current);
+        clearTimeout(openedTimer.current);
+        setIsOpened(false);
+        handleCloseTimer();
       }
-      return !c;
+      return n;
     });
   };
 
@@ -52,7 +65,12 @@ const SidebarExpandableSection = ({
         {title}
         <MdExpandMore />
       </ToggleButtonsContainerHeader>
-      <ExpandSection height={getHeight()} expanded={String(expanded)} hide={String(hide)}>
+      <ExpandSection
+        height={getHeight()}
+        expanded={String(expanded)}
+        isclosed={String(isclosed)}
+        isOpened={String(isOpened)}
+      >
         {fixedTopItem}
         <TransitionGroup component={null}>
           {items?.map((item, index) => (
