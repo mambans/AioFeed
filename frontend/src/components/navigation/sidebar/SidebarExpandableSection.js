@@ -4,6 +4,7 @@ import { MdExpandMore } from 'react-icons/md';
 import NavigationContext from '../NavigationContext';
 import { ToggleButtonsContainerHeader } from './StyledComponents';
 import { ExpandSection } from '../../sharedComponents/sharedStyledComponents';
+import useLocalStorageState from '../../../hooks/useLocalStorageState';
 
 const SidebarExpandableSection = ({
   title,
@@ -16,11 +17,11 @@ const SidebarExpandableSection = ({
   children = null,
 }) => {
   const { setOverflow } = useContext(NavigationContext);
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useLocalStorageState(title + '-expandableSection', true);
   const closedTimer = useRef();
   const openedTimer = useRef();
-  const [isclosed, setIsClosed] = useState(false);
-  const [isOpened, setIsOpened] = useState(true);
+  const [isclosed, setIsClosed] = useState(!expanded);
+  const [isOpened, setIsOpened] = useState(expanded);
 
   const handleCloseTimer = () => {
     clearTimeout(closedTimer.current);
