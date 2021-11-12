@@ -4,16 +4,12 @@ const youtubeDataFetch = require('./youtubeDataFetch');
 
 exports.handler = async (event) => {
   try {
-    console.log('event.queryStringParameters:', event.queryStringParameters);
     const { authkey } = event.queryStringParameters || {};
-    console.log('authkey:', authkey);
     if (!authkey) throw new Error('`authkey` is required');
 
     const res = await youtubeDataFetch({
       authkey,
     });
-
-    console.log('res:', res);
 
     return {
       statusCode: 200,

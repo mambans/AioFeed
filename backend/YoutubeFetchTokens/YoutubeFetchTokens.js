@@ -9,7 +9,6 @@ module.exports = async ({ code, authkey }) => {
   const username = await validateAuthkey(authkey);
 
   if (username) {
-    console.log('code:', code);
     if (code !== 'undefined') {
       return await axios
         .post('https://oauth2.googleapis.com/token', {
@@ -20,13 +19,8 @@ module.exports = async ({ code, authkey }) => {
           redirect_uri: 'https://aiofeed.com/auth/youtube/callback',
         })
         .then(async (res) => {
-          console.log('res:', res);
-          console.log('res.data.access_token:', res.data.access_token);
-          console.log('res.data.refresh_token:', res.data.refresh_token);
           const encrypted_AccessToken = await encrypt(res.data.access_token);
-          console.log('encrypted_AccessToken:', encrypted_AccessToken);
           const encrypted_RefreshToken = await encrypt(res.data.refresh_token);
-          console.log('encrypted_RefreshToken:', encrypted_RefreshToken);
 
           await client
             .update({
@@ -60,10 +54,7 @@ module.exports = async ({ code, authkey }) => {
         );
       }
 
-      console.log('YoutubeData:', YoutubeData);
-      console.log('YoutubeData.Item.refresh_token:', YoutubeData.Item.refresh_token);
       const decryptedRefreshToken = await decrypt(YoutubeData.Item.refresh_token);
-      console.log('decryptedRefreshToken:', decryptedRefreshToken);
 
       return await axios
         .post('https://oauth2.googleapis.com/token', {
@@ -73,9 +64,7 @@ module.exports = async ({ code, authkey }) => {
           grant_type: 'refresh_token',
         })
         .then(async (res) => {
-          console.log('res:', res);
           const encrypted_AccessToken = await encrypt(res.data.access_token);
-          console.log('encrypted_AccessToken:', encrypted_AccessToken);
 
           await client
             .update({

@@ -6,16 +6,11 @@ const { encrypt } = require('../crypto');
 const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
 module.exports = async ({ data, access_token, refresh_token, authkey }) => {
-  console.log('refresh_token:', refresh_token);
-  console.log('access_token:', access_token);
-  console.log('data:', data);
   const username = await validateAuthkey(authkey);
 
   if (username) {
-    console.log('access_token:', access_token);
     const encrypted_AccessToken = await encrypt(access_token);
     const encrypted_RefreshToken = await encrypt(refresh_token);
-    console.log('encrypted_AccessToken:', encrypted_AccessToken);
 
     const updateExpressions =
       access_token && refresh_token
@@ -49,7 +44,6 @@ module.exports = async ({ data, access_token, refresh_token, authkey }) => {
       })
       .promise();
 
-    console.log('res:', res);
     return res;
   }
 };

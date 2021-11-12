@@ -19,7 +19,5 @@ module.exports = async ({ username, videosObj, authkey, listName }) => {
     })
     .promise();
 
-  console.log('res', res);
-
   return res;
 };

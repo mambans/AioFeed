@@ -6,7 +6,6 @@ const { encrypt } = require('../crypto');
 const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
 module.exports = async ({ data, authkey }) => {
-  console.log('data:', data);
   const username = await validateAuthkey(authkey);
 
   if (username) {
@@ -23,7 +22,6 @@ module.exports = async ({ data, authkey }) => {
       })
       .promise();
 
-    console.log('res:', res);
     return res;
   }
 };

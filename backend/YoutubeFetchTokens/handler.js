@@ -4,7 +4,6 @@ const YoutubeFetchTokens = require('./YoutubeFetchTokens');
 
 exports.handler = async (event) => {
   try {
-    console.log('handler -> event', event);
     const { code, authkey } = JSON.parse(event.body);
     if (!authkey) throw new Error('authkey is required');
 

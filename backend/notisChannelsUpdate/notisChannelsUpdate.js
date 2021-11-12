@@ -6,10 +6,8 @@ const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
 module.exports = async ({ channels, authkey }) => {
   const username = await validateAuthkey(authkey);
-  console.log('username:', username);
 
   if (username) {
-    console.log('channels:', channels);
     const res = await client
       .update({
         TableName: process.env.TWITCH_DATA_TABLE,
@@ -23,7 +21,6 @@ module.exports = async ({ channels, authkey }) => {
       })
       .promise();
 
-    console.log('res:', res);
     return res;
   }
 };

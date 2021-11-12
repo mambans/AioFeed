@@ -19,9 +19,7 @@ module.exports = async ({ refresh_token, authkey }) => {
     .catch((e) => console.log('reAuthenticateTwitch -> e', e));
 
   if (username && res) {
-    console.log('res.access_token:', res.access_token);
     const encrypted_AccessToken = await encrypt(res.access_token);
-    console.log('encrypted_AccessToken:', encrypted_AccessToken);
     const encrypted_RefreshToken = await encrypt(res.refresh_token);
 
     await client

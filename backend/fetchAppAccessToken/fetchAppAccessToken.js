@@ -11,8 +11,6 @@ module.exports = async () => {
     })
     .promise();
 
-  console.log('savedToken: ', savedToken);
-
   if (savedToken && savedToken.Item && savedToken.Item.token) {
     return { access_token: savedToken.Item.token, expires_in: savedToken.Item.TTL };
   }
@@ -23,8 +21,6 @@ module.exports = async () => {
     )
     .then((res) => res.data)
     .catch((e) => console.log(e));
-
-  console.log('newAppToken: ', newAppToken);
 
   if (newAppToken && newAppToken.access_token) {
     await client

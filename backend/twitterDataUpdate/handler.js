@@ -5,8 +5,6 @@ const twitterDataUpdate = require('./twitterDataUpdate');
 exports.handler = async (event) => {
   try {
     const { authkey, data } = JSON.parse(event.body);
-    console.log('data:', data);
-
     if (!authkey) throw new Error('`authkey` is required');
 
     const res = await twitterDataUpdate({

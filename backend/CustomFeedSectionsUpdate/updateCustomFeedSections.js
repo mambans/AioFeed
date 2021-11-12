@@ -21,8 +21,6 @@ module.exports = async ({ data, name }) => {
       })
       .promise();
 
-    console.log('res', res);
-
     return res;
   }
 };

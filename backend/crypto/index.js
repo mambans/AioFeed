@@ -4,12 +4,8 @@ const AES = require('crypto-js/aes');
 const enc = require('crypto-js/enc-utf8');
 
 const decrypt = async (data) => {
-  console.log(' process.env.ENCODE_KEY:', process.env.ENCODE_KEY);
-  console.log('data:', data);
   if (data) {
     const bytes = await AES.decrypt(data, process.env.ENCODE_KEY);
-    console.log('bytes:', bytes);
-    console.log('bytes.toString(enc):', bytes.toString(enc));
     return bytes.toString(enc);
   }
   return null;

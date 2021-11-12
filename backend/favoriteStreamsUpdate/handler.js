@@ -13,7 +13,6 @@ exports.handler = async (event) => {
       channels,
       authkey,
     });
-    console.log('res:', res);
 
     return {
       statusCode: 200,

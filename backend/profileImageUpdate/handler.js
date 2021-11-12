@@ -4,7 +4,6 @@ const profileImageUpdate = require('./profileImageUpdate');
 
 exports.handler = async (event) => {
   try {
-    console.log('JSON.parse(event.body):', JSON.parse(event.body));
     const { data, authkey } = JSON.parse(event.body);
 
     if (!data) throw new Error('`Data value` is required');
