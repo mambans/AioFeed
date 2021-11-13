@@ -56,7 +56,6 @@ export const LogsProvider = ({ children }) => {
   };
   const handleShow = () => {
     setLogs(getLocalstorage('logs'));
-    setLogsUnreadCount(getLocalstorage('logsUnreadCount'));
   };
   const handleHover = () => setLogsUnreadCount(getLocalstorage('logsUnreadCount'));
 

@@ -11,6 +11,7 @@ const compare = util.promisify(bcrypt.compare);
 module.exports = async ({ password, authKey }) => {
   const username = await validateAuthkey(authKey);
   console.log('deleteAccount -> username', username);
+
   const res = await client
     .get({
       TableName: process.env.USERNAME_TABLE,
@@ -27,9 +28,51 @@ module.exports = async ({ password, authKey }) => {
         data: { message: 'Invalid password.' },
       };
     } else {
-      const auth_data = await client
+      const user = await client
         .delete({
           TableName: process.env.USERNAME_TABLE,
+          Key: { Username: username },
+          ReturnValues: 'ALL_OLD',
+        })
+        .promise();
+      const twitch = await client
+        .delete({
+          TableName: process.env.TWITCH_DATA_TABLE,
+          Key: { Username: username },
+          ReturnValues: 'ALL_OLD',
+        })
+        .promise();
+      const youtube = await client
+        .delete({
+          TableName: process.env.YOUTUBE_DATA_TABLE,
+          Key: { Username: username },
+          ReturnValues: 'ALL_OLD',
+        })
+        .promise();
+      const saed_lists = await client
+        .delete({
+          TableName: process.env.SAVED_LISTS,
+          Key: { Username: username },
+          ReturnValues: 'ALL_OLD',
+        })
+        .promise();
+      const feed_sections = await client
+        .delete({
+          TableName: process.env.CUSTOM_FEED_SECTIONS,
+          Key: { Username: username },
+          ReturnValues: 'ALL_OLD',
+        })
+        .promise();
+      const filters = await client
+        .delete({
+          TableName: process.env.CUSTOM_FILTERS_TABLE,
+          Key: { Username: username },
+          ReturnValues: 'ALL_OLD',
+        })
+        .promise();
+      const twitter = await client
+        .delete({
+          TableName: process.env.TWITTER_DATA_TABLE,
           Key: { Username: username },
           ReturnValues: 'ALL_OLD',
         })
@@ -37,7 +80,7 @@ module.exports = async ({ password, authKey }) => {
 
       return {
         statusCode: 200,
-        data: auth_data,
+        data: { user, twitch, youtube, saed_lists, feed_sections, filters, twitter },
       };
     }
   } else {

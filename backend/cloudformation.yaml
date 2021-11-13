@@ -213,9 +213,21 @@ Resources:
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins
+          TWITCH_DATA_TABLE: !Ref TwitchData
+          YOUTUBE_DATA_TABLE: !Ref YoutubeData
+          SAVED_LISTS: !Ref SavedLists
+          CUSTOM_FEED_SECTIONS: !Ref CustomFeedSections
+          CUSTOM_FILTERS_TABLE: !Ref CustomFiltersTable
+          TWITTER_DATA_TABLE: !Ref TwitterData
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref UserLogins
+            TableName: !Ref TwitchData
+            TableName: !Ref YoutubeData
+            TableName: !Ref SavedLists
+            TableName: !Ref CustomFeedSections
+            TableName: !Ref CustomFiltersTable
+            TableName: !Ref TwitterData
       Events:
         Http:
           Type: Api
