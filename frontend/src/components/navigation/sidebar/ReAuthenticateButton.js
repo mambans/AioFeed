@@ -13,6 +13,7 @@ import {
 import { AddCookie } from '../../../util';
 import { TwitchContext } from '../../twitch/useToken';
 import { YoutubeContext } from '../../youtube/useToken';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 const authenticatePopup = async (domain, urlParam) => {
   const generateOrginState = async () => uniqid();
@@ -48,14 +49,15 @@ const ReAuthenticateButton = ({ disconnect, serviceName, style }) => {
 
   const AuthButton = {
     Twitch: !twitchUsername ? (
-      <StyledConnectTwitch
-        id='connect'
-        title='Authenticate/Connect'
-        onClick={() => authenticatePopup('Twitch', `${TwitchBaseAuthUrl}&force_verify=true`)}
-      >
-        <FaTwitch size={24} />
-        Connect Twitch
-      </StyledConnectTwitch>
+      <ToolTip tooltip='Authenticate to Twitch'>
+        <StyledConnectTwitch
+          id='connect'
+          onClick={() => authenticatePopup('Twitch', `${TwitchBaseAuthUrl}&force_verify=true`)}
+        >
+          <FaTwitch size={24} />
+          Connect Twitch
+        </StyledConnectTwitch>
+      </ToolTip>
     ) : (
       <>
         <div className='username' id='Twitch'>
@@ -76,14 +78,16 @@ const ReAuthenticateButton = ({ disconnect, serviceName, style }) => {
       </>
     ),
     Youtube: !youtubeAccessToken ? (
-      <StyledConnectYoutube
-        id='connect'
-        title='Authenticate/Connect'
-        onClick={() => authenticatePopup('Youtube', `${YoutubeBaseAuthUrl}&prompt=consent`)}
-      >
-        <FaYoutube size={30} />
-        Connect Youtube
-      </StyledConnectYoutube>
+      <ToolTip tooltip={'Authenticate to YouTube'}>
+        <StyledConnectYoutube
+          id='connect'
+          title='Authenticate/Connect'
+          onClick={() => authenticatePopup('Youtube', `${YoutubeBaseAuthUrl}&prompt=consent`)}
+        >
+          <FaYoutube size={30} />
+          Connect Youtube
+        </StyledConnectYoutube>
+      </ToolTip>
     ) : (
       <>
         <div className='username' id='Youtube'>

@@ -6,6 +6,7 @@ import { getCookie } from './../../../util';
 import { UnfollowButton } from './../../sharedComponents/sharedStyledComponents';
 import UnfollowChannel from './unFollowChannel';
 import useToken from '../useToken';
+import ToolTip from '../../sharedComponents/ToolTip';
 
 const ChannelListLi = styled.li`
   position: relative;
@@ -55,14 +56,15 @@ const ChannelListElement = (data) => {
         )}
         {channel.snippet.title}
       </a>
-      <UnfollowButton
-        disabled={getCookie('Youtube-readonly')}
-        title={'Unfollow ' + channel.snippet.title}
-        variant='link'
-        onClick={handleUnfollow}
-      >
-        <MdDelete size={18} />
-      </UnfollowButton>
+      <ToolTip tooltip={`Unfollow ${channel.snippet.title}`}>
+        <UnfollowButton
+          disabled={getCookie('Youtube-readonly')}
+          variant='link'
+          onClick={handleUnfollow}
+        >
+          <MdDelete size={18} />
+        </UnfollowButton>
+      </ToolTip>
     </ChannelListLi>
   );
 };

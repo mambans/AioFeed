@@ -50,21 +50,17 @@ const ToolTip = ({
         placement={placement}
         delay={typeof delay === 'object' ? delay : { show: delay }}
         overlay={
-          typeof tooltip === 'object' ? (
-            tooltip
-          ) : (
-            <ToolTipText
-              top={style?.top}
-              right={style?.right}
-              bottom={style?.bottom}
-              left={style?.left}
-              fontSize={fontSize}
-              id={`tooltip-${'bottom'}`}
-              width={width || feedVideoSizeProps?.width}
-            >
-              {tooltip}
-            </ToolTipText>
-          )
+          <ToolTipText
+            top={style?.top}
+            right={style?.right}
+            bottom={style?.bottom}
+            left={style?.left}
+            fontSize={fontSize}
+            id={`tooltip-${'bottom'}`}
+            width={width || feedVideoSizeProps?.width}
+          >
+            {tooltip}
+          </ToolTipText>
         }
       >
         {children}
