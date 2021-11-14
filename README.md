@@ -4,7 +4,7 @@
 
 <img src="https://github.com/mambans/AioFeed/blob/master/frontend/public/android-chrome-192x192.webp" alt="Logo" width="300"/>
 
-My personal project **AioFeed**, is a site that combines feeds from different sites such as [Twitch](https://twitch.tv), [Youtube](https://youtube.com) and Twitter lists into one page. Along with some features I personally thought was missing from [Twitch](https://twitch.tv) such as filtering out streams based on current title/game, saving vods in custom lists and show all vods without leaving main page.
+My personal project **AioFeed**, is a site that combines feeds from different sites such as [Twitch](https://twitch.tv), [Youtube](https://youtube.com) and Twitter lists into one page. Along with some features I personally thought was missing from [Twitch](https://twitch.tv) such as filtering out/grouping streams based on current title/game, saving vods in custom lists and show all vods without leaving main page.
 
 ## Pages
 
@@ -74,7 +74,7 @@ _(This feed is pretty limited because of quite low quota/request limit.)_
 
 User created lists with Twitch vods/videos and YouTube videos.
 
-## Account & Data
+<!-- ## Account & Data
 
 AioFeed stores/saves the following data for safe storage and easier auto-reauthentication:
 
@@ -105,4 +105,4 @@ AioFeed stores/saves the following data for safe storage and easier auto-reauthe
   - _Encrypted_ refresh token
 
 - **Twitter**
-  - List ids
+  - List ids -->
