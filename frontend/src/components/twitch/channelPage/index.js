@@ -2,7 +2,7 @@ import { MdChat } from 'react-icons/md';
 import { FaWindowClose, FaRegClock, FaTwitch } from 'react-icons/fa';
 import { MdLiveTv } from 'react-icons/md';
 import { useParams, useLocation, Link } from 'react-router-dom';
-import React, { useEffect, useCallback, useState, useRef } from 'react';
+import React, { useEffect, useCallback, useState, useRef, useContext } from 'react';
 import Moment from 'react-moment';
 
 import LoadingPlaceholderBanner from './LoadingPlaceholderBanner';
@@ -41,13 +41,15 @@ import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import FavoriteStreamBtn from '../live/FavoriteStreamBtn';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import useFavicon from '../../../hooks/useFavicon';
+import FeedsContext from '../../feed/FeedsContext';
 
 const ChannelPage = () => {
   const { passedChannelData } = useLocation().state || {};
   const { channelName } = useParams();
   const [channelInfo, setChannelInfo] = useState(passedChannelData);
   const [streamInfo, setStreamInfo] = useState(passedChannelData);
-  const numberOfVideos = Math.floor(window.innerWidth / 350);
+  const { feedVideoSizeProps } = useContext(FeedsContext) || {};
+  const numberOfVideos = Math.floor(window.innerWidth / feedVideoSizeProps?.totalWidth);
   const URLQueries = useQuery();
 
   const [userId, setUserId] = useState();

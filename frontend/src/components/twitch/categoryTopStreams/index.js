@@ -2,7 +2,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { MdMovieCreation, MdLiveTv } from 'react-icons/md';
 import { useParams, useLocation } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef, useContext } from 'react';
 
 import LoadMore from './../../sharedComponents/LoadMore';
 import Header from './../../sharedComponents/Header';
@@ -23,6 +23,7 @@ import TypeButton from './TypeButton';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import useFavicon from '../../../hooks/useFavicon';
 import { imageAspectDimensions } from '../../../util';
+import FeedsContext from '../../feed/FeedsContext';
 
 const TopStreams = () => {
   const { category } = useParams();
@@ -33,6 +34,7 @@ const TopStreams = () => {
   const [videoType, setVideoType] = useState(
     URLQueries.get('type')?.toLowerCase() || p_videoType || 'streams'
   );
+  const { feedVideoSizeProps } = useContext(FeedsContext) || {};
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState('Views');
   const [sortByTime, setSortByTime] = useState(
@@ -84,7 +86,7 @@ const TopStreams = () => {
 
       switch (videoType) {
         case 'streams':
-          getTopStreams(category, shouldLoadMore && oldTopData.current)
+          getTopStreams(category, shouldLoadMore && oldTopData.current, feedVideoSizeProps)
             .then((res) => fetchVideosDataHandler(res, shouldLoadMore, setLoading))
             .catch((e) => {
               if ((e.message = 'game is undefined')) {
@@ -96,7 +98,7 @@ const TopStreams = () => {
             });
           break;
         case 'clips':
-          getTopClips(category, sortByTime, oldTopData.current)
+          getTopClips(category, sortByTime, oldTopData.current, feedVideoSizeProps)
             .then((res) => fetchVideosDataHandler(res, shouldLoadMore, setLoading))
             .catch((e) => {
               if ((e.message = 'game is undefined')) {
@@ -108,7 +110,7 @@ const TopStreams = () => {
             });
           break;
         case 'videos':
-          getTopVideos(category, sortBy, oldTopData.current)
+          getTopVideos(category, sortBy, oldTopData.current, feedVideoSizeProps)
             .then((res) => fetchVideosDataHandler(res, shouldLoadMore, setLoading))
             .catch((e) => {
               if ((e.message = 'game is undefined')) {
@@ -120,7 +122,7 @@ const TopStreams = () => {
             });
           break;
         default:
-          getTopStreams(category, shouldLoadMore && oldTopData.current)
+          getTopStreams(category, shouldLoadMore && oldTopData.current, feedVideoSizeProps)
             .then((res) => fetchVideosDataHandler(res, shouldLoadMore, setLoading))
             .catch((e) => {
               if ((e.message = 'game is undefined')) {
@@ -132,7 +134,7 @@ const TopStreams = () => {
             });
       }
     },
-    [category, sortBy, sortByTime, videoType]
+    [category, sortBy, sortByTime, videoType, feedVideoSizeProps]
   );
 
   const refresh = useCallback(() => {
@@ -234,7 +236,9 @@ const TopStreams = () => {
           <TopStreamsContainer>
             <>
               <LoadingBoxes
-                amount={Math.floor(((window.innerWidth - 150) / 350) * 1.5)}
+                amount={Math.floor(
+                  ((window.innerWidth - 150) / feedVideoSizeProps?.totalWidth) * 1.5
+                )}
                 load={!topData || topData.length <= 0}
                 type='big'
               />

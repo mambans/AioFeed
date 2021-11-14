@@ -1,11 +1,12 @@
 import AddVideoExtraData from './../AddVideoExtraData';
 import TwitchAPI from '../API';
 
-const getTopVideos = async (category, sortBy, page) => {
+const getTopVideos = async (category, sortBy, page, feedVideoSizeProps) => {
   let game;
   let error;
   const nrStreams =
-    Math.floor((window.innerWidth - 150) / 350) * Math.floor((window.innerHeight - 150) / 340);
+    Math.floor((window.innerWidth - 150) / feedVideoSizeProps?.totalWidth) *
+    Math.floor((window.innerHeight - 150) / feedVideoSizeProps?.height);
 
   if (category && category !== 'undefined') {
     game = await TwitchAPI.getGames({

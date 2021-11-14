@@ -1,6 +1,6 @@
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Alert } from 'react-bootstrap';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useContext } from 'react';
 import { debounce } from 'lodash';
 
 import LoadMore from './../../sharedComponents/LoadMore';
@@ -11,6 +11,7 @@ import SortButton from './SortButton';
 import ClipElement from './ClipElement';
 import VodElement from '../vods/VodElement';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
+import FeedsContext from '../../feed/FeedsContext';
 
 const SubFeed = ({
   feedName,
@@ -22,15 +23,22 @@ const SubFeed = ({
   itemPagination,
   channelInfo,
 }) => {
-  const [numberOfVideos, setNumberOfVideos] = useState(Math.floor(window.innerWidth / 350));
+  const { feedVideoSizeProps } = useContext(FeedsContext) || {};
+  const [numberOfVideos, setNumberOfVideos] = useState(
+    Math.floor(window.innerWidth / feedVideoSizeProps?.totalWidth)
+  );
 
   const recalcWidth = useMemo(
     () =>
-      debounce(() => setNumberOfVideos(Math.floor(window.innerWidth / 350)), 20, {
-        leading: true,
-        trailing: false,
-      }),
-    []
+      debounce(
+        () => setNumberOfVideos(Math.floor(window.innerWidth / feedVideoSizeProps?.totalWidth)),
+        20,
+        {
+          leading: true,
+          trailing: false,
+        }
+      ),
+    [feedVideoSizeProps]
   );
 
   useEventListenerMemo('resize', recalcWidth);
@@ -39,7 +47,7 @@ const SubFeed = ({
     <>
       <SubFeedHeader
         style={{
-          width: `${numberOfVideos * 350}px`,
+          width: `${numberOfVideos * feedVideoSizeProps?.totalWidth}px`,
         }}
       >
         {feedName?.toLowerCase() === 'vods' ? (
@@ -56,7 +64,7 @@ const SubFeed = ({
           style={{
             minHeight: feedName === 'Vods' ? '310px' : '310px',
             paddingBottom: '0',
-            width: `${numberOfVideos * 350}px`,
+            width: `${numberOfVideos * feedVideoSizeProps?.totalWidth}px`,
             margin: 'auto',
           }}
           component={SubFeedContainer}
@@ -78,7 +86,7 @@ const SubFeed = ({
             style={{
               minHeight: feedName === 'Vods' ? '310px' : '310px',
               paddingBottom: '0',
-              width: `${numberOfVideos * 350}px`,
+              width: `${numberOfVideos * feedVideoSizeProps?.totalWidth}px`,
               margin: 'auto',
             }}
           >
@@ -99,7 +107,7 @@ const SubFeed = ({
           fetchItems({ pagination: itemPagination.current, setLoading: setLoaded })
         }
         style={{
-          width: `${numberOfVideos * 350}px`,
+          width: `${numberOfVideos * feedVideoSizeProps?.totalWidth}px`,
           margin: 'auto',
         }}
       />
