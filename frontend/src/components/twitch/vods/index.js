@@ -47,26 +47,24 @@ export const Vods = ({ className }) => {
   const refresh = useCallback(
     async (forceRefresh) => {
       refreshBtnRef?.current?.setIsLoading(true);
-      setVods((c) => {
-        getFollowedVods({
-          forceRun: forceRefresh,
-          setTwitchRefreshToken,
-          setTwitchAccessToken,
-          channels,
-          currentVods: c,
-        }).then((data) => {
-          if (data.er) {
-            setError(data.er);
-          } else if (data.vodError) {
-            setVodError(data.vodError);
-          }
-          refreshBtnRef?.current?.setIsLoading(false);
-          setVods(data.data);
-          // return data.data;
-        });
+      getFollowedVods({
+        forceRun: forceRefresh,
+        setTwitchRefreshToken,
+        setTwitchAccessToken,
+        channels,
+        currentVods: vods,
+      }).then((data) => {
+        if (data.er) {
+          setError(data.er);
+        } else if (data.vodError) {
+          setVodError(data.vodError);
+        }
+        refreshBtnRef?.current?.setIsLoading(false);
+        setVods(data.data);
+        // return data.data;
       });
     },
-    [setTwitchAccessToken, setTwitchRefreshToken, setVods, channels]
+    [setTwitchAccessToken, setTwitchRefreshToken, setVods, vods, channels]
   );
 
   async function windowFocusHandler() {

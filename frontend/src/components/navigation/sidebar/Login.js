@@ -1,6 +1,7 @@
 import { Form, Button } from 'react-bootstrap';
 import React, { useState, useContext } from 'react';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 import { StyledCreateFormTitle, StyledCreateForm } from './StyledComponents';
 import AccountContext from './../../account/AccountContext';
@@ -134,6 +135,13 @@ const Login = () => {
       </StyledCreateForm>
       <Themeselector style={{ marginTop: '20px' }} />
       {validated && <LoadingIndicator height={150} width={150} />}
+
+      <Link
+        style={{ position: 'absolute', bottom: '20px', left: '20px', color: '#ffffff' }}
+        to='/legality#Privacy'
+      >
+        Privacy Notice
+      </Link>
     </>
   );
 };

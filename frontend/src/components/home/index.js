@@ -26,9 +26,11 @@ const Home = () => {
             </h1>
             <DevideLine />
             <p>
-              View Twitch & Youtube feeds and a Twitter list in one page, with Twitch
+              View Twitch & YouTube feeds and Twitter list in one page, with Twitch
               (live/offline/update) notifications.
             </p>
+            <p>Custom lists with Twitch/YouTube videos.</p>
+            <p>Group Twitch live streams by title/category/channel etc.. </p>
           </div>
         </LogoText>
       </WelcomeContainer>

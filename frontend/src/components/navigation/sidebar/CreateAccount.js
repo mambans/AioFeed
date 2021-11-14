@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 import { StyledCreateFormTitle, StyledCreateForm } from './StyledComponents';
 import NavigationContext from './../NavigationContext';
@@ -126,6 +127,12 @@ const CreateAccount = () => {
       </StyledCreateForm>
 
       {validated && <LoadingIndicator height={150} width={150} />}
+      <Link
+        style={{ position: 'absolute', bottom: '20px', left: '20px', color: '#ffffff' }}
+        to='/legality#Privacy'
+      >
+        Privacy Notice
+      </Link>
     </>
   );
 };

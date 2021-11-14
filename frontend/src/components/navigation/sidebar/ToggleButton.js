@@ -52,7 +52,7 @@ const ToggleButton = ({
     <ToolTip tooltip={tooltip} width='max-content'>
       <StyledToggleButton
         onClick={handleChange}
-        disabled={!anTokenExists}
+        disabled={!anTokenExists && !checked}
         variant='dark'
         buttonsperrow={buttonsperrow}
         enabled={String(checked)}
