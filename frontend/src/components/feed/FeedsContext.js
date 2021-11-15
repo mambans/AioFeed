@@ -15,6 +15,7 @@ export const FeedsProvider = ({ children }) => {
 
   const feedVideoSizeProps = {
     width: 336 * (parseInt(pref.size) / 100),
+    height: 336 * (parseInt(pref.size) / 100) * 0.97, // only used for amount of video elements
     margin: 7 * (parseInt(pref.size) / 100),
     fontSize: 16 * (parseInt(pref.size) / 100),
     totalWidth: 7 * (parseInt(pref.size) / 100) * 2 + 336 * (parseInt(pref.size) / 100),
