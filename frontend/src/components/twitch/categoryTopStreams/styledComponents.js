@@ -260,5 +260,5 @@ export const Container = ({ children }) => {
   const [state, setState] = useState();
   useEventListenerMemo('resize', () => setState((c) => !c));
 
-  return <StyledContainer size={feedVideoSizeProps.totalWidth}>{children}</StyledContainer>;
+  return <StyledContainer size={feedVideoSizeProps.totalWidth || 350}>{children}</StyledContainer>;
 };

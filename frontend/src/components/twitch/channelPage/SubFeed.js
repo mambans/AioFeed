@@ -25,13 +25,16 @@ const SubFeed = ({
 }) => {
   const { feedVideoSizeProps } = useContext(FeedsContext) || {};
   const [numberOfVideos, setNumberOfVideos] = useState(
-    Math.floor(window.innerWidth / feedVideoSizeProps?.totalWidth)
+    Math.floor(window.innerWidth / (feedVideoSizeProps?.totalWidth || 350))
   );
 
   const recalcWidth = useMemo(
     () =>
       debounce(
-        () => setNumberOfVideos(Math.floor(window.innerWidth / feedVideoSizeProps?.totalWidth)),
+        () =>
+          setNumberOfVideos(
+            Math.floor(window.innerWidth / (feedVideoSizeProps?.totalWidth || 350))
+          ),
         20,
         {
           leading: true,
@@ -47,7 +50,7 @@ const SubFeed = ({
     <>
       <SubFeedHeader
         style={{
-          width: `${numberOfVideos * feedVideoSizeProps?.totalWidth}px`,
+          width: `${numberOfVideos * (feedVideoSizeProps?.totalWidth || 350)}px`,
         }}
       >
         {feedName?.toLowerCase() === 'vods' ? (
@@ -64,7 +67,7 @@ const SubFeed = ({
           style={{
             minHeight: feedName === 'Vods' ? '310px' : '310px',
             paddingBottom: '0',
-            width: `${numberOfVideos * feedVideoSizeProps?.totalWidth}px`,
+            width: `${numberOfVideos * (feedVideoSizeProps?.totalWidth || 350)}px`,
             margin: 'auto',
           }}
           component={SubFeedContainer}
@@ -86,7 +89,7 @@ const SubFeed = ({
             style={{
               minHeight: feedName === 'Vods' ? '310px' : '310px',
               paddingBottom: '0',
-              width: `${numberOfVideos * feedVideoSizeProps?.totalWidth}px`,
+              width: `${numberOfVideos * (feedVideoSizeProps?.totalWidth || 350)}px`,
               margin: 'auto',
             }}
           >
@@ -107,7 +110,7 @@ const SubFeed = ({
           fetchItems({ pagination: itemPagination.current, setLoading: setLoaded })
         }
         style={{
-          width: `${numberOfVideos * feedVideoSizeProps?.totalWidth}px`,
+          width: `${numberOfVideos * (feedVideoSizeProps?.totalWidth || 350)}px`,
           margin: 'auto',
         }}
       />

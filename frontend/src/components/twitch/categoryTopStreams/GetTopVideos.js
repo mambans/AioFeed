@@ -5,8 +5,8 @@ const getTopVideos = async (category, sortBy, page, feedVideoSizeProps) => {
   let game;
   let error;
   const nrStreams =
-    Math.floor((window.innerWidth - 150) / feedVideoSizeProps?.totalWidth) *
-    Math.floor((window.innerHeight - 150) / feedVideoSizeProps?.height);
+    Math.floor((window.innerWidth - 150) / (feedVideoSizeProps?.totalWidth || 350)) *
+    Math.floor((window.innerHeight - 150) / (feedVideoSizeProps?.height || 340));
 
   if (category && category !== 'undefined') {
     game = await TwitchAPI.getGames({

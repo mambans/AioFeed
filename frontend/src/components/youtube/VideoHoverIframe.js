@@ -32,8 +32,8 @@ const VideoHoverIframe = ({ imageRef, data }) => {
   }
 
   const opts = {
-    height: (feedVideoSizeProps.width / 16) * 9,
-    width: feedVideoSizeProps.width,
+    height: ((feedVideoSizeProps.width || 350) / 16) * 9,
+    width: feedVideoSizeProps.width || 350,
     playerVars: {
       autoplay: 1,
       controls: 1,

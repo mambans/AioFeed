@@ -49,7 +49,7 @@ const ChannelPage = () => {
   const [channelInfo, setChannelInfo] = useState(passedChannelData);
   const [streamInfo, setStreamInfo] = useState(passedChannelData);
   const { feedVideoSizeProps } = useContext(FeedsContext) || {};
-  const numberOfVideos = Math.floor(window.innerWidth / feedVideoSizeProps?.totalWidth);
+  const numberOfVideos = Math.floor(window.innerWidth / (feedVideoSizeProps?.totalWidth || 350));
   const URLQueries = useQuery();
 
   const [userId, setUserId] = useState();

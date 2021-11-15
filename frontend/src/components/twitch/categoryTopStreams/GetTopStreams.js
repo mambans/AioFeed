@@ -4,10 +4,12 @@ import TwitchAPI from '../API';
 const getTopStreams = async (category, page, feedVideoSizeProps) => {
   let game;
   let error;
+  console.log('feedVideoSizeProps:', feedVideoSizeProps);
   const nrStreams =
-    Math.floor((window.innerWidth - 150) / feedVideoSizeProps?.totalWidth) *
-    Math.floor((window.innerHeight - 150) / feedVideoSizeProps?.height);
+    Math.floor((window.innerWidth - 150) / (feedVideoSizeProps?.totalWidth || 350)) *
+    Math.floor((window.innerHeight - 150) / (feedVideoSizeProps?.height || 340));
 
+  console.log('nrStreams:', nrStreams);
   if (category && category !== 'undefined') {
     game = await TwitchAPI.getGames({
       name: category,

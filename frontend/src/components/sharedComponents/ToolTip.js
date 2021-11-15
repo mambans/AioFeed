@@ -57,7 +57,7 @@ const ToolTip = ({
             left={style?.left}
             fontSize={fontSize}
             id={`tooltip-${'bottom'}`}
-            width={width || feedVideoSizeProps?.width}
+            width={width || feedVideoSizeProps?.width || 350}
           >
             {tooltip}
           </ToolTipText>

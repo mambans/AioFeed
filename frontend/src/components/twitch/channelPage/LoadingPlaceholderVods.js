@@ -11,7 +11,7 @@ const LoadingPlaceholderVods = ({ numberOfVideos, title = 'Vods', freeze }) => {
     <>
       <SubFeedHeader
         style={{
-          width: `${numberOfVideos * feedVideoSizeProps?.totalWidth}px`,
+          width: `${numberOfVideos * (feedVideoSizeProps?.totalWidth || 350)}px`,
         }}
       >
         <h3>{title}</h3>
