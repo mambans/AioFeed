@@ -323,10 +323,10 @@ Resources:
       Handler: DeleteYoutubeData/handler.handler
       Environment:
         Variables:
-          USERNAME_TABLE: !Ref UserLogins
+          YOUTUBE_DATA_TABLE: !Ref YoutubeData
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: !Ref UserLogins
+            TableName: !Ref YoutubeData
       Events:
         Http:
           Type: Api

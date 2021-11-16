@@ -10,9 +10,11 @@ module.exports = async ({ authkey }) => {
       .update({
         TableName: process.env.TWITCH_DATA_TABLE,
         Key: { Username: username },
-        UpdateExpression: `REMOVE #User`,
+        UpdateExpression: `REMOVE #user, #refresh_token, #access_token`,
         ExpressionAttributeNames: {
-          '#User': 'user',
+          '#user': 'user',
+          '#refresh_token': 'refresh_token',
+          '#access_token': 'access_token',
         },
       })
       .promise();
