@@ -92,6 +92,8 @@ export const TwitchProvider = ({ children }) => {
         setIsEnabledUpdateNotifications: () => toggle('update_notis'),
         setEnableVodVolumeOverlay: () => toggle('vod_volume_overlay'),
         enableVodVolumeOverlay: Boolean(pref.vod_volume_overlay),
+        setStartAtMaxQuality: () => toggle('start_at_max_quality'),
+        startAtMaxQuality: Boolean(pref.start_at_max_quality),
         twitchAccessToken,
         setTwitchAccessToken,
         twitchRefreshToken,
