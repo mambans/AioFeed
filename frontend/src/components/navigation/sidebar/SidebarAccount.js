@@ -24,7 +24,7 @@ import NavigationContext from '../NavigationContext';
 import Settings from './Settings';
 import FeedSectionAdd from '../../feedSections';
 import SidebarExpandableSection from './SidebarExpandableSection';
-import ListInAccountSidebar from '../../myLists/ListInAccountSidebar';
+// import ListInAccountSidebar from '../../myLists/ListInAccountSidebar';
 
 const SidebarAccount = () => {
   const { username, authKey } = useContext(AccountContext) || {};
@@ -223,7 +223,7 @@ const SidebarAccount = () => {
         </SidebarExpandableSection>
         {feedProps.enableTwitter && <TwitterForms />}
         {feedProps.enableFeedSections && <FeedSectionAdd />}
-        {feedProps.enableMyLists && false && <ListInAccountSidebar />}
+        {/* {feedProps.enableMyLists && <ListInAccountSidebar />} */}
         <SidebarExpandableSection title='Settings'>
           <FeedSizeSlider />
           <ToggleButtonsContainer buttonsperrow={3}>
