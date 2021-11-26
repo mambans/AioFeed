@@ -360,11 +360,15 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        - AttributeName: Username
+        - AttributeName: username
           AttributeType: S
+        - AttributeName: id
+          AttributeType: N
       KeySchema:
-        - AttributeName: Username
+        - AttributeName: username
           KeyType: HASH
+        - AttributeName: id
+          KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
@@ -388,9 +392,33 @@ Resources:
           RequestParameters:
             - method.request.querystring.authkey:
                 Required: true
-            - method.request.querystring.videosObj:
+            - method.request.querystring.obj:
                 Required: true
-            - method.request.querystring.listName:
+            - method.request.querystring.id:
+                Required: true
+  CreateSavedLists:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Create custom saved lists.'
+      Handler: savedListsCreate/handler.handler
+      Environment:
+        Variables:
+          SAVED_LISTS: !Ref SavedLists
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SavedLists
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /savedlists
+            Method: post
+          RequestParameters:
+            - method.request.querystring.authkey:
+                Required: true
+            - method.request.querystring.obj:
+                Required: true
+            - method.request.querystring.id:
                 Required: true
   FetchSavedLists:
     Type: AWS::Serverless::Function
@@ -436,7 +464,7 @@ Resources:
           RequestParameters:
             - method.request.querystring.authkey:
                 Required: true
-            - method.request.querystring.listName:
+            - method.request.querystring.id:
                 Required: true
             # - method.request.querystring.videosObj:
             #     Required: true

@@ -86,23 +86,24 @@ const StyledSliderThumb = styled.input.attrs({ type: 'range', min: 1, max: 1000 
   }
 `;
 
-const SliderThumb = ({ name, icon, sliderLength }) => {
+const SliderThumb = ({ name, id, icon, sliderLength }) => {
   const { orders, setOrders } = useContext(FeedsContext);
+  const ID = id || name;
 
   const handleSubmit = (e) => {
-    setOrders((c) => ({ ...c, [name]: parseInt(e.target.value) }));
+    setOrders((c) => ({ ...c, [ID]: parseInt(e.target.value) }));
   };
 
   return (
     <ToolTip
-      tooltip={name + ' @' + orders?.[name]}
+      tooltip={name + ' @' + orders?.[ID]}
       placement='left'
-      style={{ top: (orders?.[name] - 500) * (sliderLength / 2 / 500) + 'px', right: '20px' }}
+      style={{ top: (orders?.[ID] - 500) * (sliderLength / 2 / 500) + 'px', right: '20px' }}
     >
       <StyledSliderThumb
         icon={icon}
         onMouseUp={handleSubmit}
-        defaultValue={orders[name]}
+        defaultValue={orders[ID]}
         sliderLength={sliderLength}
       />
     </ToolTip>
@@ -118,28 +119,35 @@ const FeedOrderSlider = () => {
   const feeds = [
     enableTwitch && {
       name: 'twitch',
+      id: 'twitch',
       icon: `url(${process.env.PUBLIC_URL}/twitch-icon.svg)`,
     },
     enableYoutube && {
       name: 'youtube',
+      id: 'youtube',
       icon: `url(${process.env.PUBLIC_URL}/youtube-icon.svg)`,
     },
     enableTwitchVods && {
       name: 'vods',
+      id: 'vods',
       icon: `url(${process.env.PUBLIC_URL}/vods-icon.svg)`,
     },
     enableMyLists &&
       lists &&
-      Object.values(lists).map((list) => ({
-        name: list.name,
-        icon: `url(${process.env.PUBLIC_URL}/list-icon.svg)`,
-      })),
+      Object.values(lists)
+        .filter((l) => l.enabled)
+        .map((list) => ({
+          name: list.title,
+          id: list.id,
+          icon: `url(${process.env.PUBLIC_URL}/list-icon.svg)`,
+        })),
     enableFeedSections &&
       feedSections &&
       Object.values(feedSections)
         .filter((feed) => feed.enabled)
         .map((feed) => ({
           name: feed.name,
+          id: feed.name,
           icon: `url(${process.env.PUBLIC_URL}/feedSection-icon.svg)`,
         })),
   ]
@@ -151,8 +159,8 @@ const FeedOrderSlider = () => {
   return (
     <SliderMultipuleHandles sliderLength={feeds?.length * 75}>
       <div style={{ position: 'relative' }}>
-        {feeds.map(({ name, icon = `url(${process.env.PUBLIC_URL}/list-icon.svg)` }) => {
-          return <SliderThumb name={name} icon={icon} sliderLength={feeds?.length * 75} />;
+        {feeds.map(({ name, id, icon = `url(${process.env.PUBLIC_URL}/list-icon.svg)` }) => {
+          return <SliderThumb name={name} icon={icon} id={id} sliderLength={feeds?.length * 75} />;
         })}
       </div>
     </SliderMultipuleHandles>

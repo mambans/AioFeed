@@ -18,7 +18,5 @@ module.exports = async ({ authkey, name }) => {
     })
     .promise();
 
-  console.log('res', res);
-
   return res;
 };

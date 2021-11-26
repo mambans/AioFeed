@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import AccountContext from '../account/AccountContext';
+import LogsContext from '../logs/LogsContext';
 import API from '../navigation/API';
 import { TwitchContext } from '../twitch/useToken';
 import useSyncedLocalState from './../../hooks/useSyncedLocalState';
@@ -9,12 +10,12 @@ const FeedSectionsContext = React.createContext();
 export const FeedSectionsProvider = ({ children }) => {
   const { authKey } = useContext(AccountContext);
   const { twitchAccessToken } = useContext(TwitchContext);
+  const { addLog } = useContext(LogsContext);
   const [isloading, setIsLoading] = useState();
   const [feedSections, setFeedSections] = useSyncedLocalState('customFeedSections', {});
   const invoked = useRef(false);
 
   const fetchFeedSectionsContextData = useCallback(async () => {
-    console.log('fetchFeedSectionsContextData:');
     setIsLoading(true);
     const result = await API.fetchCustomFeedSections();
 
@@ -48,6 +49,11 @@ export const FeedSectionsProvider = ({ children }) => {
       const current = { ...c };
       delete current[name];
       return current;
+    });
+    addLog({
+      title: `${name} feed section deleted`,
+      text: `${name} feed section deleted`,
+      icon: 'feedsection',
     });
   };
 

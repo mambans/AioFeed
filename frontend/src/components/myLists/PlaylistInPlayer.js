@@ -107,13 +107,13 @@ const ShowLists = ({ setListToShow, listToShow, setLists, lists }) => {
         <ListsList>
           {Object.values(lists).map((list, index) => {
             return (
-              <ListItem key={list?.name + index} added={list.items.includes(videoId)}>
+              <ListItem key={list?.title + index} added={list.videos.includes(videoId)}>
                 <button
                   onClick={() => {
-                    if (listToShow?.name !== list.name) setListToShow(list);
+                    if (listToShow?.title !== list.title) setListToShow(list);
                   }}
                 >
-                  {list.name}
+                  {list.title}
                 </button>
                 <AddRemoveBtn
                   list={list}
@@ -140,18 +140,18 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId, playQueue, s
       draggable: true,
       setDragSelected: setDragSelected,
       dragSelected: dragSelected,
-      onDragEnd: (e) => uploadNewList(e, list?.name, listVideos, setLists),
+      onDragEnd: (e) => uploadNewList(e, list?.id, listVideos, setLists),
       // onDrop: (e) => uploadNewList(e, list.name, videos, setLists),
       onDragOver: (e) => restructureVideoList(e, listVideos, dragSelected, setListVideos),
     }),
-    [dragSelected, listVideos, list?.name, setLists, setListVideos]
+    [dragSelected, listVideos, list?.id, setLists, setListVideos]
   );
 
   return (
     <TransitionGroup component={null} className={'videos'}>
       {listVideos?.map((video) => (
         <CSSTransition
-          key={`${list.name}-${video.contentDetails?.upload?.videoId || video.id}`}
+          key={`${list.title}-${video.contentDetails?.upload?.videoId || video.id}`}
           timeout={750}
           classNames={video.transition || 'fade-750ms'}
           // classNames='videoFadeSlide'
@@ -162,7 +162,7 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId, playQueue, s
           ) : video?.kind === 'youtube#video' ? (
             <YoutubeVideoElement
               active={String(video.contentDetails?.upload?.videoId) === videoId}
-              listName={list.name}
+              listName={list.title}
               list={list}
               id={`v${video.contentDetails?.upload?.videoId}`}
               // data-id={video.contentDetails?.upload?.videoId}
@@ -174,7 +174,7 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId, playQueue, s
           ) : (
             <VodElement
               active={String(video.id) === videoId}
-              listName={list.name}
+              listName={list.title}
               list={list}
               id={`v${video.id}`}
               // data-id={video.id}
@@ -243,7 +243,7 @@ const PlaylistInPlayer = ({
 
   return (
     <>
-      <ListTitle>{list?.name}</ListTitle>
+      <ListTitle>{list?.title}</ListTitle>
       <PlayListButtonsContainer>
         <ToolTip tooltip='Show and switch between lists' width='max-content'>
           <ShowLists

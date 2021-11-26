@@ -53,18 +53,7 @@ const FeedSectionNameInList = ({ section, setOverflow, style = {} }) => {
             {...bindInput}
             isInvalid={Object.keys(feedSections).includes(input) && !name}
           />
-          <ToolTip
-            delay={{ show: 500, hide: 0 }}
-            toltip={`${name ? `Remove list` : `Add new list`}`}
-          >
-            <StyledButton>
-              {name ? (
-                <MdDelete size={22} color='rgb(200,0,0)' />
-              ) : (
-                <MdAdd size={22} color='rgb(0,230,0)' />
-              )}
-            </StyledButton>
-          </ToolTip>
+
           {name && (
             <ToolTip
               delay={{ show: 500, hide: 0 }}
@@ -79,6 +68,18 @@ const FeedSectionNameInList = ({ section, setOverflow, style = {} }) => {
               </StyledButton>
             </ToolTip>
           )}
+          <ToolTip
+            delay={{ show: 500, hide: 0 }}
+            toltip={`${name ? `Remove list` : `Add new list`}`}
+          >
+            <StyledButton>
+              {name ? (
+                <MdDelete size={22} color='rgb(200,0,0)' />
+              ) : (
+                <MdAdd size={22} color='rgb(0,230,0)' />
+              )}
+            </StyledButton>
+          </ToolTip>
         </div>
         {Object.keys(feedSections).includes(input) && !name && (
           <InvalidError>Section already exists</InvalidError>

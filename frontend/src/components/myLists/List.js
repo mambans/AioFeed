@@ -15,7 +15,7 @@ import { parseNumberAndString, restructureVideoList, uploadNewList } from './dra
 import aiofeedAPI from '../navigation/API';
 
 export const fetchListVideos = async ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
-  if (list?.items) {
+  if (list?.videos) {
     const twitchFetchVideos = async (items) => {
       const fetchedVideos = await TwitchAPI.getVideos({ id: items }).catch((e) => {
         console.log(e);
@@ -33,11 +33,11 @@ export const fetchListVideos = async ({ list, ytExistsAndValidated, twitchExists
 
     const youtubeFetchVideos = async (items) => await GetVideoInfo({ videos: items });
 
-    const twitchItems = list.items
+    const twitchItems = list.videos
       .map((video) => typeof video === 'number' && video)
       .filter((i) => i);
 
-    const youtubeItems = list.items
+    const youtubeItems = list.videos
       .map((video) => typeof video === 'string' && video)
       .filter((i) => i);
 
@@ -60,20 +60,15 @@ export const fetchListVideos = async ({ list, ytExistsAndValidated, twitchExists
       ...(youtubeItemsWithDetails || []),
     ];
 
-    const mergeVideosOrdered = list.items
+    const mergeVideosOrdered = list.videos
       .map((item) => mergedVideosUnordered.find((video) => String(video.id) === String(item)))
       .filter((i) => i);
 
     //Filtered out the video Ids that have been removed from Twitch/Youtube
     const newFilteredIdsList = mergeVideosOrdered.map((v) => parseNumberAndString(v.id));
-    if (newFilteredIdsList.length !== list.items.length) {
-      const newFilteredIdsListObj = {
-        name: list.name,
-        items: newFilteredIdsList,
-      };
-
+    if (newFilteredIdsList.length !== list.videos.length) {
       setTimeout(async () => {
-        await aiofeedAPI.updateSavedList(list.name, newFilteredIdsListObj);
+        await aiofeedAPI.updateSavedList(list.id, { videos: newFilteredIdsList });
       }, 10000);
     }
     return mergeVideosOrdered;
@@ -115,7 +110,7 @@ const List = ({
       });
 
       setVideos((curr) => {
-        return allVideos.map((vid) => {
+        return allVideos?.map((vid) => {
           const found = curr?.find((c) => c.id === vid.id);
           if (!found && Boolean(curr?.length))
             return { ...vid, transition: feedVideoSizeProps.transition || 'videoFadeSlide' };
@@ -136,13 +131,13 @@ const List = ({
       draggable: true,
       setDragSelected: setDragSelected,
       dragSelected: dragSelected,
-      onDragEnd: (e) => uploadNewList(e, list.name, videos, setLists),
+      onDragEnd: (e) => uploadNewList(e, list.id, videos, setLists),
       // onDrop: (e) => uploadNewList(e, list.name, videos, setLists),
       // onDragStart: (e) => (e.dataTransfer.effectAllowed = 'all'),
       onDragOver: (e) => restructureVideoList(e, dragSelected, setVideos),
       onDragEnter: (e) => e.preventDefault(),
     }),
-    [dragSelected, setVideos, videos, list.name, setLists]
+    [dragSelected, setVideos, videos, list.id, setLists]
   );
 
   return (
@@ -150,7 +145,7 @@ const List = ({
       <TransitionGroup component={null} className={videosToShow.transitionGroup || 'videos'}>
         {videos?.slice(0, videosToShow.amount).map((video) => (
           <CSSTransition
-            key={`${list.name}-${video.contentDetails?.upload?.videoId || video.id}`}
+            key={`${list.title}-${video.contentDetails?.upload?.videoId || video.id}`}
             timeout={videosToShow.timeout}
             classNames={video.transition || 'fade-750ms'}
             unmountOnExit
@@ -159,7 +154,7 @@ const List = ({
               <LoadingVideoElement type={'small'} />
             ) : video?.kind === 'youtube#video' ? (
               <YoutubeVideoElement
-                listName={list.name}
+                listName={list.title}
                 list={list}
                 //data-id used for dragEvents
                 data-id={video.contentDetails?.upload?.videoId}
@@ -168,7 +163,7 @@ const List = ({
               />
             ) : (
               <VodElement
-                listName={list.name}
+                listName={list.title}
                 list={list}
                 //data-id used for dragEvents
                 data-id={video.id}

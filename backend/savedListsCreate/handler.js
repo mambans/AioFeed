@@ -1,18 +1,18 @@
 'use strict';
 
-const savedListsUpdate = require('./savedListsUpdate');
+const savedListsCreate = require('./savedListsCreate');
 
 exports.handler = async (event) => {
   try {
     const { id, authkey, obj } = JSON.parse(event.body);
 
-    if (!id) throw new Error('`Column name` is required');
+    if (!id) throw new Error('`List id missing');
     // if (!authkey) throw new Error('`Authkey` is required');
 
-    const res = await savedListsUpdate({
+    const res = await savedListsCreate({
       authkey,
       id,
-      obj,
+      obj: obj || {},
     });
 
     return {

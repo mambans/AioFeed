@@ -9,6 +9,7 @@ import useInput from './../../../hooks/useInput';
 import ToolTip from '../../sharedComponents/ToolTip';
 import API from '../API';
 import TwitterContext from '../../twitter/TwitterContext';
+import LogsContext from '../../logs/LogsContext';
 
 export const StyledListForm = styled(Form)`
   /* margin: 10px; */
@@ -110,6 +111,7 @@ export const StyledButton = styled(Button).attrs(({ type }) => ({
 
 const UpdateTwitterLists = ({ style, id }) => {
   const { setTwitterLists, twitterLists } = useContext(TwitterContext) || {};
+  const { addLog } = useContext(LogsContext) || {};
   const { value: listName, bind: bindListName, reset } = useInput(id || '');
 
   const addList = async () => {
@@ -132,6 +134,11 @@ const UpdateTwitterLists = ({ style, id }) => {
     setTwitterLists(newArray);
 
     await API.addTwitterList(newArray);
+    addLog({
+      title: `${listName} twitter list removed`,
+      text: `${listName} twitter list removed`,
+      icon: 'feedsection',
+    });
   };
 
   const handleSubmit = (evt) => {

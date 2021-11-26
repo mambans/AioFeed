@@ -11,6 +11,7 @@ const TwitchHeader = React.forwardRef(({ data }, ref) => {
   return (
     <Header
       id='TwitchHeader'
+      title={'Twitch'}
       text={
         <>
           Twitch <span id='live-indicator'>Live</span>

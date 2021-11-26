@@ -30,11 +30,20 @@ const API = {
         return {};
       }),
 
-  updateSavedList: async (listName, value) =>
+  createSavedList: async (id, values) =>
+    await axios
+      .post(`${BASE_URL}/savedlists`, {
+        id: id,
+        obj: values,
+        authkey: getCookie(`AioFeed_AuthKey`),
+      })
+      .catch((e) => console.error(e)),
+
+  updateSavedList: async (id, values) =>
     await axios
       .put(`${BASE_URL}/savedlists`, {
-        listName: listName,
-        videosObj: value,
+        id: id,
+        obj: values,
         authkey: getCookie(`AioFeed_AuthKey`),
       })
       .catch((e) => console.error(e)),
@@ -47,16 +56,16 @@ const API = {
         },
       })
       .then((res) => {
-        delete res.data.Item?.Username;
-        return res.data.Item;
+        console.log('savedlists res:', res);
+        return res.data;
       })
       .catch((e) => console.error(e)),
 
-  deleteSavedList: async (listName) =>
+  deleteSavedList: async (id) =>
     await axios
       .put(`${BASE_URL}/savedlists/delete`, {
         authkey: getCookie(`AioFeed_AuthKey`),
-        listName,
+        id,
       })
       .catch((e) => console.error(e)),
 

@@ -12,7 +12,6 @@ export const TwitterProvider = ({ children }) => {
   const invoked = useRef(false);
 
   const fetchTwitterContextData = useCallback(async () => {
-    console.log('fetchTwitterContextData:');
     const { lists } = await API.getTwitterLists()
       .then((res) => res?.data?.Item || {})
       .catch((e) => {

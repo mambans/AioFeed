@@ -8,9 +8,16 @@ module.exports = async ({ authkey }) => {
   const username = await validateAuthkey(authkey);
   if (username) {
     const res = await client
-      .get({
+      .query({
         TableName: process.env.SAVED_LISTS,
-        Key: { Username: username },
+        KeyConditionExpression: '#username = :username',
+        ExpressionAttributeNames: {
+          '#username': 'username',
+        },
+        ExpressionAttributeValues: {
+          ':username': username,
+        },
+        // ReturnConsumedCapacity: 'TOTAL',
       })
       .promise();
 

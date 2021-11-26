@@ -4,20 +4,16 @@ const DynamoDB = require('aws-sdk/clients/dynamodb');
 const { validateAuthkey } = require('../authkey');
 const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
-module.exports = async ({ authkey, listName }) => {
+module.exports = async ({ authkey, id }) => {
   const username = await validateAuthkey(authkey);
+
   const res = await client
-    .update({
+    .delete({
       TableName: process.env.SAVED_LISTS,
-      Key: { Username: username },
-      UpdateExpression: `REMOVE #list`,
-      ExpressionAttributeNames: {
-        '#list': listName,
-      },
+      Key: { username, id },
+      ReturnValues: 'ALL_OLD',
     })
     .promise();
-
-  console.log('res', res);
 
   return res;
 };

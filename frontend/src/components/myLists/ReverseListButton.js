@@ -12,7 +12,7 @@ const ReverseListButton = ({ list, style = {}, children }) => {
       clearTimeout(timer.current);
       return {
         ...pref,
-        [list.name]: { ...pref?.[list.name], Reversed: !pref?.[list.name]?.Reversed },
+        [list.title]: { ...pref?.[list.title], Reversed: !pref?.[list.title]?.Reversed },
       };
     });
   };
@@ -27,7 +27,7 @@ const ReverseListButton = ({ list, style = {}, children }) => {
     >
       <div
         style={{
-          transform: myListPreferences[list?.name]?.Reversed ? 'rotate(180deg)' : 'rotate(0deg)',
+          transform: myListPreferences[list?.title]?.Reversed ? 'rotate(180deg)' : 'rotate(0deg)',
         }}
       >
         <MdArrowDownward size={24} />

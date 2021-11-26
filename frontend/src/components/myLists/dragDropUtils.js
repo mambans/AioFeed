@@ -11,7 +11,7 @@ export const parseNumberAndString = (value) => {
 };
 
 export const uploadNewList = debounce(
-  async (e, listName, newList, setLists) => {
+  async (e, id, newList, setLists) => {
     e.preventDefault();
     const newListItems = newList.map((item) => {
       const id = item.id || item.contentDetails?.upload?.videoId;
@@ -20,11 +20,9 @@ export const uploadNewList = debounce(
       return videoId;
     });
 
-    const newListObj = { name: listName, items: newListItems };
+    setLists((curr) => ({ ...curr, [id]: { ...curr[id], videos: newListItems } }));
 
-    setLists((curr) => ({ ...curr, [listName]: newListObj }));
-
-    API.updateSavedList(listName, newListObj);
+    API.updateSavedList(id, { videos: newListItems });
   },
   5000,
   { leading: false, trailing: true }

@@ -23,7 +23,7 @@ const getYoutubeIdFromUrl = (videoId) => {
   return searchParams.get('v');
 };
 
-const MyListSmallList = ({ listName, videos, style }) => {
+const MyListSmallList = ({ listName, videos, style, list }) => {
   const { setLists } = useContext(MyListsContext);
   const [listIsOpen, setListIsOpen] = useState();
   const [cursor, setCursor] = useState({ position: 0 });
@@ -74,7 +74,7 @@ const MyListSmallList = ({ listName, videos, style }) => {
     );
 
   const handleSubmit = async () => {
-    const id = (() => {
+    const videoId = (() => {
       if (videoId?.includes('youtube.com/watch?v')) {
         return getYoutubeIdFromUrl(videoId);
       }
@@ -91,7 +91,7 @@ const MyListSmallList = ({ listName, videos, style }) => {
       return videoId;
     })();
 
-    if (Boolean(id) && Boolean(filteredInputMatched?.length)) {
+    if (Boolean(videoId) && Boolean(filteredInputMatched?.length)) {
       const selectedVideo = returnFirstMatch();
       const navigateToUrl = constructYUrlLink(selectedVideo);
 
@@ -99,9 +99,9 @@ const MyListSmallList = ({ listName, videos, style }) => {
       resetVideoId();
       // : navigate(`/category/${returnFirstMatch()}`);
     } else {
-      const newList = await addFavoriteVideo(setLists, listName, id);
+      const newList = await addFavoriteVideo({ setLists, id: list.id, videoId });
       resetVideoId();
-      setTimeout(() => setCursor({ position: newList.items.length - 1 }), 0);
+      setTimeout(() => setCursor({ position: newList.videos.length - 1 }), 0);
       setTimeout(() => scrollToIfNeeded(ulListRef.current), 750);
     }
   };
@@ -197,7 +197,7 @@ const MyListSmallList = ({ listName, videos, style }) => {
                 </Link>
                 <ListActionButton
                   size={16}
-                  onClick={() => removeFavoriteVideo(setLists, listName, v.id)}
+                  onClick={() => removeFavoriteVideo({ setLists, id: list.id, videoId: v.id })}
                 >
                   <MdDeleteForever size={20} />
                 </ListActionButton>

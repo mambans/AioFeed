@@ -29,7 +29,6 @@ export const TwitchProvider = ({ children }) => {
 
   const toggle = (i, v) => setPref((c) => ({ ...c, [i]: v || !c[i] }));
   const fetchTwitchContextData = useCallback(async () => {
-    console.log('fetchTwitchContextData:');
     const {
       access_token,
       channel_update_notis,
@@ -92,8 +91,6 @@ export const TwitchProvider = ({ children }) => {
         setIsEnabledUpdateNotifications: () => toggle('update_notis'),
         setEnableVodVolumeOverlay: () => toggle('vod_volume_overlay'),
         enableVodVolumeOverlay: Boolean(pref.vod_volume_overlay),
-        setStartAtMaxQuality: () => toggle('start_at_max_quality'),
-        startAtMaxQuality: Boolean(pref.start_at_max_quality),
         twitchAccessToken,
         setTwitchAccessToken,
         twitchRefreshToken,

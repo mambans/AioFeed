@@ -12,6 +12,7 @@ const VodsHeader = React.forwardRef((props, ref) => {
   return (
     <Header
       id='TwitchVodsHeader'
+      title={'Twitch vods'}
       refreshFunc={() => refresh(true)}
       ref={ref}
       text={

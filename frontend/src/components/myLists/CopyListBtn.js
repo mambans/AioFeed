@@ -15,7 +15,7 @@ const CopyListBtn = ({ list, style, children }) => {
         {children}
       </ListActionButton>
 
-      {open && <NewListForm item={list.items} />}
+      {open && <NewListForm item={list.videos} />}
     </>
   );
 };

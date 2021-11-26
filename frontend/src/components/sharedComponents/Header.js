@@ -25,6 +25,7 @@ const Header = React.forwardRef((props, ref) => {
     refreshTimer,
     style = {},
     isLoading,
+    title,
   } = props;
   const thisref = useRef();
   const path = useLocation().pathname.replace('/', '');
@@ -38,7 +39,7 @@ const Header = React.forwardRef((props, ref) => {
       <Link
         to={`/${onHoverIconLink}`}
         className='openIndividualFeed'
-        title={`Link to ${text.props.children[0].trim()} individual feed page.`}
+        title={title && `Link to ${title} individual feed page.`}
       >
         <FaRegWindowRestore size={18} />
       </Link>

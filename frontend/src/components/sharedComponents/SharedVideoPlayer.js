@@ -37,7 +37,7 @@ const SharedVideoPlayer = () => {
   const [listToShow, setListToShow] = useState();
 
   const [viewStates, setViewStates] = useLocalStorageState(
-    `${listToShow?.name || 'empty'}-viewStates`,
+    `${listToShow?.title || 'empty'}-viewStates`,
     {
       listWidth: DEFAULT_LIST_WIDTH,
       hideList: true,
@@ -75,22 +75,22 @@ const SharedVideoPlayer = () => {
     if (lists) {
       const list = (() => {
         const listFromListname = Object.values(lists).find(
-          (list) => list?.name?.toLowerCase() === urlListName?.toLowerCase()
+          (list) => list?.title?.toLowerCase() === urlListName?.toLowerCase()
         );
 
         if (listFromListname) return listFromListname;
         if (!listFromListname) {
           return Object.values(lists).find((list) =>
-            list?.items.includes(parseNumberAndString(videoId))
+            list?.videos.includes(parseNumberAndString(videoId))
           );
         }
       })();
 
-      if (list?.name) {
+      if (list?.title) {
         window.history.pushState(
           {},
           document.title,
-          `${window.location.origin + window.location.pathname}?list=${list?.name}`
+          `${window.location.origin + window.location.pathname}?list=${list?.title}`
         );
         setListToShow(list);
       }

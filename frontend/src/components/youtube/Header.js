@@ -52,6 +52,7 @@ const YouTubeHeader = (data) => {
   return (
     <Header
       id='YoutubeHeader'
+      title={'YouTube'}
       text={
         <>
           YouTube

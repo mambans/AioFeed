@@ -50,6 +50,7 @@ const Section = ({ feed: { name, enabled, rules }, data, index }) => {
       <Container order={orders[name]} id={`FeedSection${name}Header`}>
         <Header
           id={name}
+          title={name}
           text={
             <>
               {name}

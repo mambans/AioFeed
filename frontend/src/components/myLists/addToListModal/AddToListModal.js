@@ -15,40 +15,42 @@ import { parseNumberAndString } from './../dragDropUtils';
 import NewListForm from './NewListForm';
 import API from '../../navigation/API';
 
-export const addFavoriteVideo = async (setLists, list_Name, newItem) => {
+export const addFavoriteVideo = async ({ setLists, id, videoId }) => {
   if (typeof setLists === 'function')
     setLists((lists) => {
-      if (lists && list_Name && newItem) {
-        const newVideo = parseNumberAndString(newItem);
+      if (lists && id && videoId) {
+        const newVideo = parseNumberAndString(videoId);
         const allOrinalLists = { ...lists };
-        const existing = allOrinalLists[list_Name];
+        const existing = allOrinalLists[id];
 
+        const videos = [...new Set([...(existing?.videos || []), newVideo])].filter((i) => i);
         const newObj = {
           ...existing,
-          items: [...new Set([...(existing?.items || []), newVideo])].filter((i) => i),
+          videos,
         };
 
-        allOrinalLists[list_Name] = newObj;
+        allOrinalLists[id] = newObj;
 
-        API.updateSavedList(list_Name, newObj);
+        API.updateSavedList(id, { videos });
 
         return { ...allOrinalLists };
       }
     });
 };
 
-export const removeFavoriteVideo = async (setLists, list_Name, newItem_p) => {
+export const removeFavoriteVideo = async ({ setLists, id, videoId }) => {
   setLists((lists) => {
-    const newItem = parseNumberAndString(newItem_p);
+    const newItem = parseNumberAndString(videoId);
     const allOrinalLists = { ...lists };
-    const existing = allOrinalLists[list_Name];
+    const existing = allOrinalLists[id];
+    const videos = existing.videos.filter((item) => item !== newItem);
     const newObj = {
-      name: existing.name,
-      items: existing.items.filter((item) => item !== newItem),
+      title: existing.title,
+      videos,
     };
 
-    allOrinalLists[list_Name] = newObj;
-    API.updateSavedList(list_Name, newObj);
+    allOrinalLists[id] = newObj;
+    API.updateSavedList(id, { videos });
 
     return { ...allOrinalLists };
   });
@@ -66,7 +68,7 @@ export const AddRemoveBtn = ({
   setListToShow = () => {},
   onClick,
 }) => {
-  const videoAdded = list && list?.items?.includes(parseNumberAndString(videoId));
+  const videoAdded = list && list?.videos?.includes(parseNumberAndString(videoId));
   const [isHovered, setIsHovered] = useState();
 
   const mouseEnter = (e) => {
@@ -87,7 +89,7 @@ export const AddRemoveBtn = ({
             return;
           }
 
-          removeFavoriteVideo(setLists, list?.name, videoId);
+          removeFavoriteVideo({ setLists, id: list?.id, videoId });
           window.history.pushState(
             {},
             document.title,
@@ -111,13 +113,13 @@ export const AddRemoveBtn = ({
         }
 
         if (list) {
-          addFavoriteVideo(setLists, list?.name, videoId);
-          if (redirect && list?.name) {
+          addFavoriteVideo({ setLists, id: list?.id, videoId });
+          if (redirect && list?.title) {
             setListToShow(list);
             window.history.pushState(
               {},
               document.title,
-              `${window.location.origin + window.location.pathname}?list=${list?.name}`
+              `${window.location.origin + window.location.pathname}?list=${list?.title}`
             );
           }
         }
@@ -141,8 +143,8 @@ const AddToListModal = ({ OpenFunction, videoId, redirect }) => {
       </ListsLink>
       {lists &&
         Object?.values(lists).map((list, index) => (
-          <ListItem key={list.name + index}>
-            {list.name}
+          <ListItem key={list.title + index}>
+            {list.title}
             <AddRemoveBtn list={list} videoId={videoId} setLists={setLists} redirect={redirect} />
           </ListItem>
         ))}

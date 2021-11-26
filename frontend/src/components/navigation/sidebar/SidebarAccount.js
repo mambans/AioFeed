@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { MdVideocam, MdAutorenew, MdCrop169, MdHighQuality } from 'react-icons/md';
+import { MdVideocam, MdAutorenew, MdCrop169 } from 'react-icons/md';
 import { FaTwitch, FaYoutube, FaTwitter, FaRegWindowRestore } from 'react-icons/fa';
 import { BsCollectionFill } from 'react-icons/bs';
 import { FiSidebar } from 'react-icons/fi';
@@ -24,7 +24,7 @@ import NavigationContext from '../NavigationContext';
 import Settings from './Settings';
 import FeedSectionAdd from '../../feedSections';
 import SidebarExpandableSection from './SidebarExpandableSection';
-// import ListInAccountSidebar from '../../myLists/ListInAccountSidebar';
+import ListInAccountSidebar from '../../myLists/ListInAccountSidebar';
 
 const SidebarAccount = () => {
   const { username, authKey } = useContext(AccountContext) || {};
@@ -43,8 +43,6 @@ const SidebarAccount = () => {
     enableVodVolumeOverlay,
     setTwitchAccessToken,
     twitchAccessToken,
-    setStartAtMaxQuality,
-    startAtMaxQuality,
   } = useContext(TwitchContext) || {};
   const {
     youtubeVideoHoverEnable,
@@ -189,17 +187,6 @@ const SidebarAccount = () => {
       icon: <MdCrop169 size={18} />,
       smallerIcons: <MdVideocam size={14} color={domainColors.Twitch} />,
     },
-    {
-      setEnable: setStartAtMaxQuality,
-      enabled: startAtMaxQuality,
-      label: 'Start Twitch player at max quality',
-      serviceName: 'Twitch',
-      tooltip: twitchAccessToken
-        ? (startAtMaxQuality ? 'Disable ' : 'Enable ') + `start at max quality`
-        : `Need to connect/authenticate with a Youtube account first.`,
-      icon: <MdHighQuality size={18} />,
-      smallerIcons: <FaTwitch size={14} color={domainColors.Twitch} />,
-    },
   ];
 
   return (
@@ -223,7 +210,7 @@ const SidebarAccount = () => {
         </SidebarExpandableSection>
         {feedProps.enableTwitter && <TwitterForms />}
         {feedProps.enableFeedSections && <FeedSectionAdd />}
-        {/* {feedProps.enableMyLists && <ListInAccountSidebar />} */}
+        {feedProps.enableMyLists && <ListInAccountSidebar />}
         <SidebarExpandableSection title='Settings'>
           <FeedSizeSlider />
           <ToggleButtonsContainer buttonsperrow={3}>

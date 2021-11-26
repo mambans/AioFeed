@@ -67,7 +67,7 @@ const Player = () => {
   const channelName = useParams()?.channelName;
   const { addNotification } = useContext(NotificationsContext);
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
-  const { twitchAccessToken, setTwitchAccessToken, startAtMaxQuality } = useContext(TwitchContext);
+  const { twitchAccessToken, setTwitchAccessToken } = useContext(TwitchContext);
 
   const twitchVideoPlayer = useRef();
   const [streamInfo, setStreamInfo] = useState(useLocation().state?.passedChannelData);
@@ -282,11 +282,6 @@ const Player = () => {
 
   async function playingEvents() {
     if (twitchVideoPlayer.current) setShowUIControlls(true);
-    if (twitchVideoPlayer.current && startAtMaxQuality) {
-      setTimeout(() => {
-        twitchVideoPlayer.current.setQuality('chunked');
-      }, 0);
-    }
   }
 
   function handleMouseOut() {

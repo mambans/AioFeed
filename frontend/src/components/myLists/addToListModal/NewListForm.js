@@ -3,9 +3,7 @@ import { Form } from 'react-bootstrap';
 import { MdAddCircle } from 'react-icons/md';
 
 import { FormButton, FormGroup, Label } from './../StyledComponents';
-import { parseNumberAndString } from './../dragDropUtils';
 import MyListsContext from '../MyListsContext';
-import API from '../../navigation/API';
 
 const useInput = (initialValue) => {
   const [value, setValue] = useState(initialValue);
@@ -24,39 +22,23 @@ const useInput = (initialValue) => {
   };
 };
 
-const NewListForm = ({ item, style }) => {
+const NewListForm = ({ item, style } = {}) => {
   const { value: listName, bind: bindListName, reset: resetListName, setValue } = useInput('');
-  const { lists, setLists } = useContext(MyListsContext) || {};
-
-  const addFunc = async (list_Name, item) => {
-    const newVideo = Array.isArray(item) ? item : [parseNumberAndString(item)];
-    const newListObj = {
-      name: list_Name,
-      items: newVideo.filter((i) => i),
-    };
-
-    setLists((curr) => ({ ...curr, [list_Name]: newListObj }));
-    resetListName();
-
-    setTimeout(() => {
-      document
-        .getElementById(list_Name)
-        .scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
-    }, 0);
-
-    await API.updateSavedList(list_Name, newListObj);
-  };
+  const { lists, addList } = useContext(MyListsContext) || {};
 
   const CheckForNameAvaliability = !Boolean(
     lists &&
-      Object.values(lists).find((list) => list.name?.toLowerCase() === listName?.toLowerCase())
+      Object.values(lists).find((list) => list.title?.toLowerCase() === listName?.toLowerCase())
   );
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
     setValue(listName.trim());
 
-    if (Boolean(listName) || CheckForNameAvaliability) addFunc(listName, item);
+    if (Boolean(listName) || CheckForNameAvaliability) {
+      addList(listName, item);
+      resetListName();
+    }
   };
 
   return (

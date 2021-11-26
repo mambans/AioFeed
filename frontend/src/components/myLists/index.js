@@ -29,13 +29,15 @@ export const useCheckForVideosAndValidateToken = ({
     const youtubeVideoExists =
       lists &&
       Object?.values(lists)
-        .map((list) => list?.items?.find((videoId) => typeof videoId === 'string'))
+        .filter((l) => l.enabled)
+        .map((list) => list?.videos?.find((videoId) => typeof videoId === 'string'))
         .filter((i) => i)?.length;
 
     const twitchVideoExists =
       lists &&
       Object?.values(lists)
-        .map((list) => list?.items?.find((videoId) => typeof videoId === 'number'))
+        .filter((l) => l.enabled)
+        .map((list) => list?.videos?.find((videoId) => typeof videoId === 'number'))
         .filter((i) => i)?.length;
 
     const twitchPromise =
@@ -84,19 +86,19 @@ export const FavoriteListContainer = ({
   twitchExistsAndValidated,
   isLoading,
   fetchMyListContextData,
-  index,
   className,
 }) => {
   const [videos, setVideos] = useState();
   const { orders } = useContext(FeedsContext);
 
   return (
-    <Container order={orders[list.name]} id='MyListsHeader'>
+    <Container order={orders[list.id]} id='MyListsHeader'>
       <Header
-        id={list.name}
+        id={list.title}
+        title={list.title}
         text={
           <>
-            {list.name} <HiViewList size={25} color={'var(--listColorAdd)'} />
+            {list.title} <HiViewList size={25} color={'var(--listColorAdd)'} />
           </>
         }
         refreshFunc={fetchMyListContextData}
@@ -104,11 +106,11 @@ export const FavoriteListContainer = ({
         onHoverIconLink='mylists'
         rightSide={
           <>
-            <MyListSmallList list={list} videos={videos} listName={list.name} />
+            <MyListSmallList list={list} videos={videos} listName={list.title} />
             <DropDownDrawer list={list} />
           </>
         }
-        feedName={list.name}
+        feedName={list.title}
       />
       <List
         list={list}
@@ -138,26 +140,27 @@ export const MyLists = () => {
 
   return (
     <>
-      {Boolean(Object.keys(lists).length) ? (
+      {Boolean(Object.values(lists).length) ? (
         <TransitionGroup component={null}>
-          {Object.values(lists)?.map((list, index) => (
-            <CSSTransition
-              key={'mylist- ' + list.name}
-              timeout={1000}
-              classNames='listHorizontalSlide'
-              unmountOnExit
-            >
-              <FavoriteListContainer
-                list={list}
-                setLists={setLists}
-                index={index}
-                isLoading={isLoading}
-                fetchMyListContextData={fetchMyListContextData}
-                ytExistsAndValidated={ytExistsAndValidated}
-                twitchExistsAndValidated={twitchExistsAndValidated}
-              />
-            </CSSTransition>
-          ))}
+          {Object.values(lists)
+            .filter((list) => list.enabled)
+            ?.map((list) => (
+              <CSSTransition
+                key={'mylist- ' + list.id}
+                timeout={1000}
+                classNames='listHorizontalSlide'
+                unmountOnExit
+              >
+                <FavoriteListContainer
+                  list={list}
+                  setLists={setLists}
+                  isLoading={isLoading}
+                  fetchMyListContextData={fetchMyListContextData}
+                  ytExistsAndValidated={ytExistsAndValidated}
+                  twitchExistsAndValidated={twitchExistsAndValidated}
+                />
+              </CSSTransition>
+            ))}
         </TransitionGroup>
       ) : (
         <AlertHandler

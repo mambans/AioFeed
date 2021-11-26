@@ -5,10 +5,12 @@ import { SiLogstash, SiAuthy } from 'react-icons/si';
 import styled from 'styled-components';
 import { FiLogOut, FiLogIn } from 'react-icons/fi';
 import ToolTip from '../sharedComponents/ToolTip';
-import { FaTwitch, FaYoutube } from 'react-icons/fa';
+import { FaTwitch, FaYoutube, FaTwitter } from 'react-icons/fa';
 import { getLocalstorage } from '../../util';
 import MyModal from '../sharedComponents/MyModal';
 import NotificationItem from '../notifications/NotificationItem';
+import { HiViewList } from 'react-icons/hi';
+import { BsCollectionFill } from 'react-icons/bs';
 
 const LogsContext = React.createContext();
 
@@ -81,6 +83,15 @@ export const LogsProvider = ({ children }) => {
         return <FiLogIn size={24} color='rgb(200,50,50)' />;
       case 'authenticated':
         return <SiAuthy size={24} color='rgb(200,50,50)' />;
+      case 'deleted':
+      case 'removed':
+        return <SiAuthy size={24} color='rgb(200,50,50)' />;
+      case 'mylist':
+        return <HiViewList size={24} color='rgb(50, 200, 50)' />;
+      case 'feedsection':
+        return <BsCollectionFill size={24} color='rgb(50, 200, 50)' />;
+      case 'twitter':
+        return <FaTwitter size={24} color='rgb(50, 200, 50)' />;
       default:
         return <GiDominoTiles size={24} />;
     }
