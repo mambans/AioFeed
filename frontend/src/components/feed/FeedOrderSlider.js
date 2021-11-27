@@ -146,8 +146,8 @@ const FeedOrderSlider = () => {
       Object.values(feedSections)
         .filter((feed) => feed.enabled)
         .map((feed) => ({
-          name: feed.name,
-          id: feed.name,
+          name: feed.title,
+          id: feed.id,
           icon: `url(${process.env.PUBLIC_URL}/feedSection-icon.svg)`,
         })),
   ]

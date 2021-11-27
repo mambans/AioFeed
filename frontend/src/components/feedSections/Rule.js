@@ -82,7 +82,7 @@ const InputsContainer = styled.div`
   }
 `;
 
-const Rule = ({ rule, height, name }) => {
+const Rule = ({ rule, height, id }) => {
   const { addFeedSectionRule, deleteFeedSectionRule } = useContext(FeedSectionsContext);
 
   const { value: title, bind: bindTitle, reset: resetTitle } = useInput(rule?.title || '');
@@ -110,7 +110,7 @@ const Rule = ({ rule, height, name }) => {
           viewers !== rule?.viewers
       )
     ) {
-      addFeedSectionRule(name, { title, category, channel, viewers, id: rule?.id });
+      addFeedSectionRule(id, { title, category, channel, viewers, id: rule?.id });
       if (!rule?.id) {
         resetTitle();
         resetCategory();
@@ -127,7 +127,7 @@ const Rule = ({ rule, height, name }) => {
   const handleAdd = (e) => {
     e.preventDefault();
     if (!rule?.id && Boolean(title || category || channel || viewers)) {
-      addFeedSectionRule(name, { title, category, channel, viewers });
+      addFeedSectionRule(id, { title, category, channel, viewers });
       resetTitle();
       resetCategory();
       resetChannel();
@@ -136,7 +136,7 @@ const Rule = ({ rule, height, name }) => {
   };
   const handleRemove = (e) => {
     e.preventDefault();
-    deleteFeedSectionRule(name, rule);
+    deleteFeedSectionRule(id, rule);
   };
 
   const handleKeyDown = (ev) => ev.key === 'Enter' && handleSubmit(ev);

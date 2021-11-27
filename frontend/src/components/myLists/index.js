@@ -150,6 +150,7 @@ export const MyLists = () => {
                 timeout={1000}
                 classNames='listHorizontalSlide'
                 unmountOnExit
+                appear
               >
                 <FavoriteListContainer
                   list={list}

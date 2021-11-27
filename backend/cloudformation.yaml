@@ -597,14 +597,42 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        - AttributeName: Username
+        - AttributeName: username
           AttributeType: S
+        - AttributeName: id
+          AttributeType: N
       KeySchema:
-        - AttributeName: Username
+        - AttributeName: username
           KeyType: HASH
+        - AttributeName: id
+          KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
+  CreateCustomFeedSections:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Create custom feed section.'
+      Handler: customFeedSectionsCreate/handler.handler
+      Environment:
+        Variables:
+          CUSTOM_FEED_SECTIONS: !Ref CustomFeedSections
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CustomFeedSections
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /custom_feed_sections
+            Method: post
+          RequestParameters:
+            - method.request.querystring.authkey:
+                Required: true
+            - method.request.querystring.data:
+                Required: true
+            - method.request.querystring.id:
+                Required: true
   UpdateCustomFeedSections:
     Type: AWS::Serverless::Function
     Properties:
@@ -627,7 +655,7 @@ Resources:
                 Required: true
             - method.request.querystring.data:
                 Required: true
-            - method.request.querystring.name:
+            - method.request.querystring.id:
                 Required: true
   FetchCustomFeedSections:
     Type: AWS::Serverless::Function
@@ -649,10 +677,6 @@ Resources:
           RequestParameters:
             - method.request.querystring.authkey:
                 Required: true
-            # - method.request.querystring.videosObj:
-            #     Required: true
-            # - method.request.querystring.listName:
-            #     Required: true
   DeleteCustomFeedSections:
     Type: AWS::Serverless::Function
     Properties:
@@ -671,7 +695,7 @@ Resources:
             Path: /custom_feed_sections
             Method: delete
           RequestParameters:
-            - method.request.querystring.name:
+            - method.request.querystring.id:
                 Required: true
             - method.request.querystring.authkey:
                 Required: true

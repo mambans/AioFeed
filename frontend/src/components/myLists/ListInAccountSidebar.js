@@ -77,6 +77,13 @@ const ListInAccountSidebar = () => {
                 ))
             // name && !Object.values(lists).find((list) => name && list.name === name)
           }
+          rightSide={
+            <ToolTip delay={{ show: 500, hide: 0 }} toltip={`Add new list`}>
+              <StyledButton>
+                <MdAdd size={22} color='rgb(0,230,0)' />
+              </StyledButton>
+            </ToolTip>
+          }
         />
       }
     />

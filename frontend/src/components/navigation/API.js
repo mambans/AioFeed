@@ -56,7 +56,6 @@ const API = {
         },
       })
       .then((res) => {
-        console.log('savedlists res:', res);
         return res.data;
       })
       .catch((e) => console.error(e)),
@@ -141,6 +140,16 @@ const API = {
       new_password: newPassword,
       authkey: authKey,
     }),
+
+  createCustomFeedSections: async ({ id, data }) => {
+    return await axios
+      .post(`${BASE_URL}/custom_feed_sections`, {
+        authkey: getCookie(`AioFeed_AuthKey`),
+        id,
+        data,
+      })
+      .catch((e) => console.error(e));
+  },
   fetchCustomFeedSections: async () =>
     await axios
       .get(`${BASE_URL}/custom_feed_sections`, {
@@ -149,26 +158,25 @@ const API = {
         },
       })
       .then((res) => {
-        delete res.data.Item?.Username;
-        return res.data.Item;
+        return res.data;
       })
       .catch((e) => console.error(e)),
 
-  deleteCustomFeedSections: async (name) =>
+  deleteCustomFeedSections: async (id) =>
     await axios
       .delete(`${BASE_URL}/custom_feed_sections`, {
         data: {
           authkey: getCookie(`AioFeed_AuthKey`),
-          name,
+          id,
         },
       })
       .catch((e) => console.error(e)),
 
-  updateCustomFeedSections: async (name, data) => {
+  updateCustomFeedSections: async (id, data) => {
     return await axios
       .put(`${BASE_URL}/custom_feed_sections`, {
         authkey: getCookie(`AioFeed_AuthKey`),
-        name,
+        id,
         data,
       })
       .catch((e) => console.error(e));

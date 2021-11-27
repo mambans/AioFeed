@@ -1,14 +1,17 @@
 'use strict';
 
-const deleteCustomFeedSections = require('./deleteCustomFeedSections');
+const createCustomFeedSections = require('./createCustomFeedSections');
 
 exports.handler = async (event) => {
   try {
-    const { id, authkey } = JSON.parse(event.body) || {};
-    if (!id) throw new Error('`id` is required');
-    if (!authkey) throw new Error('`authkey` is required');
+    const { data, id, authkey } = JSON.parse(event.body);
 
-    const res = await deleteCustomFeedSections({
+    if (!data) throw new Error('`Data` is required');
+    if (!id) throw new Error('`Id` is required');
+    if (!authkey) throw new Error('`Authkey` is required');
+
+    const res = await createCustomFeedSections({
+      data,
       id,
       authkey,
     });
@@ -21,6 +24,7 @@ exports.handler = async (event) => {
       },
     };
   } catch (e) {
+    console.log('TCL: e', e);
     return {
       statusCode: 422,
       headers: {

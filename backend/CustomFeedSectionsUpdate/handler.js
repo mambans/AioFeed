@@ -4,15 +4,16 @@ const updateCustomFeedSections = require('./updateCustomFeedSections');
 
 exports.handler = async (event) => {
   try {
-    const { data, name } = JSON.parse(event.body);
+    const { id, data, authkey } = JSON.parse(event.body);
 
-    if (!data) throw new Error('`Column value` is required');
-    if (!name) throw new Error('`Column name` is required');
+    if (!authkey) throw new Error('authkey mssing');
+    if (!id) throw new Error('Id missing');
     // if (!authkey) throw new Error('`Authkey` is required');
 
     const res = await updateCustomFeedSections({
+      id,
       data,
-      name,
+      authkey,
     });
 
     return {

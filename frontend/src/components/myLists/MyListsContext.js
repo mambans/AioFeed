@@ -34,7 +34,7 @@ export const MyListsProvider = ({ children }) => {
       list?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
     }, 0);
 
-    await API.createSavedList(id, newListObj);
+    API.createSavedList(id, newListObj);
   };
 
   const deleteList = async ({ id }) => {
@@ -62,9 +62,9 @@ export const MyListsProvider = ({ children }) => {
       const orginialList = { ...curr };
       const list = orginialList[id];
       const newList = { [id]: { ...list, title } };
-      API.updateSavedList(id, { title });
       return { ...orginialList, ...newList };
     });
+    API.updateSavedList(id, { title });
   };
 
   const toggleList = async (id) => {

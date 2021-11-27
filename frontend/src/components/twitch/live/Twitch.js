@@ -21,7 +21,7 @@ const Twitch = ({ data, hideOnEmpty }) => {
     (c) => !favStreams?.includes(c.user_name?.toLowerCase())
   );
 
-  const refresh = async () => await data.refresh();
+  const refresh = async () => await data?.refresh();
 
   if (!loaded) {
     return (

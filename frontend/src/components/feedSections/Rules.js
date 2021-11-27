@@ -8,7 +8,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 const WIDTH = 900;
 const ITEM_HEIGHT = 60;
 
-const Rules = ({ rules, name, setOverflow = () => {} }) => {
+const Rules = ({ rules, name, id, setOverflow = () => {} }) => {
   return (
     <MyModal
       trigger={<MdFormatListBulleted size={22} />}
@@ -27,11 +27,11 @@ const Rules = ({ rules, name, setOverflow = () => {} }) => {
       relative
     >
       <RulesContainer itemHeight={ITEM_HEIGHT} id='RULES'>
-        <Rule height={ITEM_HEIGHT} name={name} />
+        <Rule height={ITEM_HEIGHT} name={name} id={id} />
         <TransitionGroup component={null}>
           {rules?.map((rule, index) => (
             <CSSTransition classNames='ListForm' key={rule.id} timeout={500} unmountOnExit>
-              <Rule height={ITEM_HEIGHT} rule={rule} name={name} />
+              <Rule height={ITEM_HEIGHT} rule={rule} name={name} id={id} />
             </CSSTransition>
           ))}
         </TransitionGroup>

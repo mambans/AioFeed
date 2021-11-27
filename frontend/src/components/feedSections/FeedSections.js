@@ -12,18 +12,7 @@ import { BsCollectionFill } from 'react-icons/bs';
 const FeedSections = ({ data }) => {
   const { feedSections } = useContext(FeedSectionsContext);
 
-  return (
-    <TransitionGroup component={null}>
-      {Object.values(feedSections)?.map((feed, index) => (
-        <Section key={feed.name} feed={feed} index={index} data={data} />
-      ))}
-    </TransitionGroup>
-  );
-};
-
-const Section = ({ feed: { name, enabled, rules }, data, index }) => {
-  const { orders } = useContext(FeedsContext);
-  const checkAgainstRules = (stream) => {
+  const checkAgainstRules = (stream, rules) => {
     return rules.some(
       (r) =>
         stream.title.toLowerCase().includes(r.title.toLowerCase()) &&
@@ -33,39 +22,48 @@ const Section = ({ feed: { name, enabled, rules }, data, index }) => {
     );
   };
 
-  const filterdData = {
-    ...data,
-    liveStreams: data.liveStreams.filter(checkAgainstRules),
-  };
-
-  if (!enabled) return null;
   return (
-    <CSSTransition
-      in={!!filterdData.liveStreams.length}
-      timeout={1000}
-      classNames='listHorizontalSlide'
-      unmountOnExit
-      appear
-    >
-      <Container order={orders[name]} id={`FeedSection${name}Header`}>
-        <Header
-          id={name}
-          title={name}
-          text={
-            <>
-              {name}
-              <BsCollectionFill size={22} color={'#ff0060'} />
-            </>
-          }
-          // refreshFunc={fetchMyListContextData}
-          // isLoading={isLoading}
-          // onHoverIconLink='nylists'
-          rightSide={<Rules rules={rules} name={name} />}
-          feedName={name}
-        />
-        <TwitchStreams data={filterdData} hideOnEmpty />
-      </Container>
-    </CSSTransition>
+    <TransitionGroup component={null}>
+      {Object.values(feedSections)
+        .reduce((acc, curr) => {
+          const liveStreams = data?.liveStreams.filter((stream) =>
+            checkAgainstRules(stream, curr.rules)
+          );
+          if (!curr.enabled || !liveStreams.length) return acc;
+          return [...acc, { ...curr, data: { ...data, liveStreams } }];
+        }, [])
+
+        ?.map((feed, index) => (
+          <CSSTransition timeout={1000} classNames='listHorizontalSlide' unmountOnExit appear>
+            <Section key={feed.id} feed={feed} index={index} data={feed.data} />
+          </CSSTransition>
+        ))}
+    </TransitionGroup>
+  );
+};
+
+const Section = ({ feed: { title, rules, id }, data, index }) => {
+  const { orders } = useContext(FeedsContext);
+
+  return (
+    <Container order={orders[id]} id={`FeedSection${title}Header`}>
+      <Header
+        id={title}
+        title={title}
+        text={
+          <>
+            {title}
+            <BsCollectionFill size={22} color={'#ff0060'} />
+          </>
+        }
+        // refreshFunc={fetchMyListContextData}
+        // isLoading={isLoading}
+        // onHoverIconLink='nylists'
+        rightSide={<Rules rules={rules} name={title} id={id} />}
+        feedName={title}
+      />
+      <TwitchStreams data={data} hideOnEmpty />
+    </Container>
   );
 };
 export default FeedSections;

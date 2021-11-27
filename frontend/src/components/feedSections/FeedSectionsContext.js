@@ -1,6 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import AccountContext from '../account/AccountContext';
-import LogsContext from '../logs/LogsContext';
 import API from '../navigation/API';
 import { TwitchContext } from '../twitch/useToken';
 import useSyncedLocalState from './../../hooks/useSyncedLocalState';
@@ -10,73 +9,78 @@ const FeedSectionsContext = React.createContext();
 export const FeedSectionsProvider = ({ children }) => {
   const { authKey } = useContext(AccountContext);
   const { twitchAccessToken } = useContext(TwitchContext);
-  const { addLog } = useContext(LogsContext);
   const [isloading, setIsLoading] = useState();
   const [feedSections, setFeedSections] = useSyncedLocalState('customFeedSections', {});
   const invoked = useRef(false);
 
   const fetchFeedSectionsContextData = useCallback(async () => {
     setIsLoading(true);
-    const result = await API.fetchCustomFeedSections();
+    const { Items } = (await API.fetchCustomFeedSections()) || {};
 
-    if (result) setFeedSections(result);
+    const sections = Items?.reduce((acc, curr) => {
+      return {
+        ...acc,
+        [curr.id]: curr,
+      };
+    }, {});
+
+    if (sections) setFeedSections(sections);
     invoked.current = true;
     setIsLoading(false);
   }, [setFeedSections]);
 
-  const createFeedSection = (name) => {
+  const createFeedSection = (title) => {
+    const id = Date.now();
+    const data = {
+      id,
+      title,
+      enabled: true,
+      rules: [],
+    };
     setFeedSections((c) => {
-      const obj = {
-        name,
-        enabled: true,
-        rules: [],
-      };
-      const newFeedSection = {
-        [name]: obj,
-      };
-
-      API.updateCustomFeedSections(name, obj);
       return {
         ...c,
-        ...newFeedSection,
+        [id]: data,
       };
     });
+    API.createCustomFeedSections({ id, data });
   };
 
-  const deleteFeedSection = (name) => {
-    API.deleteCustomFeedSections(name);
+  const deleteFeedSection = (id) => {
     setFeedSections((c) => {
       const current = { ...c };
-      delete current[name];
+      delete current[id];
       return current;
     });
-    addLog({
-      title: `${name} feed section deleted`,
-      text: `${name} feed section deleted`,
-      icon: 'feedsection',
-    });
+    API.deleteCustomFeedSections(id);
   };
 
-  const addFeedSectionRule = (name, rule) => {
+  const editFeedSectionTitle = async ({ id, title }) => {
     setFeedSections((c) => {
-      const existingRule = rule?.id && c?.[name]?.rules.findIndex((r) => r.id === rule?.id);
+      const current = { ...c };
+      const list = current[id];
+      const newList = { [id]: { ...list, title } };
+      return { ...current, ...newList };
+    });
+    API.updateCustomFeedSections(id, { title });
+  };
+
+  const addFeedSectionRule = (id, rule) => {
+    setFeedSections((c) => {
+      const existingRule = rule?.id && c?.[id]?.rules.findIndex((r) => r.id === rule?.id);
 
       const rules = (() => {
         if (existingRule !== undefined && existingRule >= 0) {
-          c?.[name]?.rules.splice(existingRule, 1, rule);
-          return c?.[name]?.rules;
+          c?.[id]?.rules.splice(existingRule, 1, rule);
+          return c?.[id]?.rules;
         }
-        return [{ ...rule, id: Date.now() }, ...c?.[name]?.rules];
+        return [{ ...rule, id: Date.now() }, ...c?.[id]?.rules];
       })();
 
-      const obj = {
-        ...c[name],
-        rules,
-      };
       const newRule = {
-        [name]: obj,
+        [id]: { ...c[id], rules },
       };
-      API.updateCustomFeedSections(name, obj);
+      API.updateCustomFeedSections(id, { rules });
       return {
         ...c,
         ...newRule,
@@ -84,13 +88,13 @@ export const FeedSectionsProvider = ({ children }) => {
     });
   };
 
-  const deleteFeedSectionRule = (name, rule) => {
+  const deleteFeedSectionRule = (id, rule) => {
     setFeedSections((c) => {
-      const obj = { ...c[name], rules: c[name].rules.filter((r) => r.id !== rule.id) };
+      const rules = c[id].rules.filter((r) => r.id !== rule.id);
       const newRule = {
-        [name]: obj,
+        [id]: { ...c[id], rules },
       };
-      API.updateCustomFeedSections(name, obj);
+      API.updateCustomFeedSections(id, { rules });
 
       return {
         ...c,
@@ -99,16 +103,15 @@ export const FeedSectionsProvider = ({ children }) => {
     });
   };
 
-  const toggleFeedSection = (name) => {
+  const toggleFeedSection = (id) => {
     setFeedSections((c) => {
-      const obj = {
-        ...c[name],
-        enabled: !c[name].enabled,
-      };
+      const enabled = !c[id].enabled;
+
       const newFeedSection = {
-        [name]: obj,
+        [id]: { ...c[id], enabled },
       };
-      API.updateCustomFeedSections(name, obj);
+
+      API.updateCustomFeedSections(id, { enabled });
 
       return {
         ...c,
@@ -132,6 +135,7 @@ export const FeedSectionsProvider = ({ children }) => {
         deleteFeedSectionRule,
         toggleFeedSection,
         fetchFeedSectionsContextData,
+        editFeedSectionTitle,
       }}
     >
       {children}

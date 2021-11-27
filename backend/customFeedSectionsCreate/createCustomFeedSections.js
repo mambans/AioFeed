@@ -4,21 +4,22 @@ const DynamoDB = require('aws-sdk/clients/dynamodb');
 const { validateAuthkey } = require('../authkey');
 const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
-module.exports = async ({ authkey }) => {
+module.exports = async ({ id, data: { title, rules, enabled }, authkey }) => {
   const username = await validateAuthkey(authkey);
 
   if (username) {
     const res = await client
-      .query({
+      .put({
         TableName: process.env.CUSTOM_FEED_SECTIONS,
-        KeyConditionExpression: '#username = :username',
-        ExpressionAttributeNames: {
-          '#username': 'username',
+        Item: {
+          username,
+          id,
+          title,
+          rules,
+          enabled,
         },
-        ExpressionAttributeValues: {
-          ':username': username,
-        },
-        // ReturnConsumedCapacity: 'TOTAL',
+        ReturnItemCollectionMetrics: 'SIZE',
+        ReturnValues: 'ALL_OLD',
       })
       .promise();
 

@@ -22,21 +22,25 @@ const InvalidError = styled.span`
 `;
 
 const FeedSectionNameInList = ({ section, setOverflow, style = {} }) => {
-  const { name, enabled, rules } = section || {};
-  const { createFeedSection, deleteFeedSection, toggleFeedSection, feedSections } =
-    useContext(FeedSectionsContext);
-  const { value: input, bind: bindInput, reset: resetInput } = useInput(name || '');
+  const { title, enabled, rules, id } = section || {};
+  const {
+    createFeedSection,
+    deleteFeedSection,
+    toggleFeedSection,
+    feedSections,
+    editFeedSectionTitle,
+  } = useContext(FeedSectionsContext);
+  const { value: input, bind: bindInput, reset: resetInput } = useInput(title || '');
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    if (Object.keys(feedSections).includes(input) && !name) return null;
+    if (Object.keys(feedSections).includes(input) && !id) return null;
 
-    if (!name && input) {
+    if (!id && input) {
       createFeedSection(input);
       resetInput();
-    } else if (name) {
-      deleteFeedSection(input);
-      resetInput();
+    } else if (id) {
+      editFeedSectionTitle({ id, title: input });
     }
   };
 
@@ -44,22 +48,22 @@ const FeedSectionNameInList = ({ section, setOverflow, style = {} }) => {
     <StyledListForm onSubmit={handleSubmit} style={style}>
       <Form.Group controlId='formGroupListName' style={{ marginBottom: '0' }}>
         <div style={{ display: 'flex' }}>
-          {name && <Rules rules={rules} name={name} setOverflow={setOverflow} />}
+          {id && <Rules rules={rules} name={title} setOverflow={setOverflow} id={id} />}
           <Form.Control
             type='text'
             placeholder='name...'
             name='listName'
             required
             {...bindInput}
-            isInvalid={Object.keys(feedSections).includes(input) && !name}
+            isInvalid={Object.keys(feedSections).includes(input) && !id}
           />
 
-          {name && (
+          {id && (
             <ToolTip
               delay={{ show: 500, hide: 0 }}
               toltip={`${enabled ? `Disable feed` : `Enable feed`}`}
             >
-              <StyledButton onClick={() => toggleFeedSection(name)}>
+              <StyledButton type='button' onClick={() => toggleFeedSection(id)}>
                 {enabled ? (
                   <AiFillEye size={22} color='#ffffff' />
                 ) : (
@@ -68,20 +72,19 @@ const FeedSectionNameInList = ({ section, setOverflow, style = {} }) => {
               </StyledButton>
             </ToolTip>
           )}
-          <ToolTip
-            delay={{ show: 500, hide: 0 }}
-            toltip={`${name ? `Remove list` : `Add new list`}`}
-          >
-            <StyledButton>
-              {name ? (
+          <ToolTip delay={{ show: 500, hide: 0 }} toltip={`${id ? `Remove list` : `Add new list`}`}>
+            {id ? (
+              <StyledButton type='button' onClick={() => deleteFeedSection(id)}>
                 <MdDelete size={22} color='rgb(200,0,0)' />
-              ) : (
+              </StyledButton>
+            ) : (
+              <StyledButton>
                 <MdAdd size={22} color='rgb(0,230,0)' />
-              )}
-            </StyledButton>
+              </StyledButton>
+            )}
           </ToolTip>
         </div>
-        {Object.keys(feedSections).includes(input) && !name && (
+        {Object.keys(feedSections).includes(input) && !id && (
           <InvalidError>Section already exists</InvalidError>
         )}
       </Form.Group>
