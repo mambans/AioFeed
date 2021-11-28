@@ -29,7 +29,6 @@ export const YoutubeProvider = ({ children }) => {
   }, []);
 
   const fetchYoutubeContextData = useCallback(async () => {
-    console.log('fetchYoutubeContextData:');
     const { access_token, user: { Profile, Username } = {} } = await API.getYoutubeData()
       .then((res) => res?.data?.Item || {})
       .catch((e) => {

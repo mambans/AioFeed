@@ -45,14 +45,13 @@ export const removeFavoriteVideo = async ({ setLists, id, videoId }) => {
     const existing = allOrinalLists[id];
     const videos = existing.videos.filter((item) => item !== newItem);
     const newObj = {
-      title: existing.title,
+      ...existing,
       videos,
     };
 
-    allOrinalLists[id] = newObj;
     API.updateSavedList(id, { videos });
 
-    return { ...allOrinalLists };
+    return { ...allOrinalLists, [id]: newObj };
   });
 };
 

@@ -231,7 +231,7 @@ const SidebarAccount = () => {
               }
             )}
           </ToggleButtonsContainer>
-          <br />
+          <br style={{ height: '24px' }} />
           <ReAuthenticateButton
             disconnect={() =>
               disconnectTwitch({ setTwitchAccessToken, setEnableTwitch: feedProps.setEnableTwitch })

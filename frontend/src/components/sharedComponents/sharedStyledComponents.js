@@ -737,9 +737,9 @@ export const PositionInQueue = styled.div`
 `;
 
 export const ExpandSection = styled.div`
-  transition: height 500ms;
-  overflow: hidden;
+  transition: height 500ms, margin 500ms;
   height: ${({ height, expanded }) => (expanded === 'true' ? height : 0)}px;
+  margin-top: ${({ expanded }) => (expanded === 'true' ? 20 : 0)}px;
   padding: 0px;
   overflow: ${({ isOpened }) => (isOpened === 'true' ? 'visible' : 'hidden')};
 

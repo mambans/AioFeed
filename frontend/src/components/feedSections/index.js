@@ -25,10 +25,6 @@ const FeedSectionAdd = () => {
       title='Feed Sections'
       items={Object.values(feedSections)}
       keyGetter={(item) => item.id}
-      // renderItem={(section, index, setOverflow) => (
-      //   <FeedSectionNameInList section={section} setOverflow={setOverflow} />
-      // )}
-      // fixedTopItem={<FeedSectionNameInList style={{ marginTop: '10px' }} />}
       renderItem={(section, index) => (
         <MyInput
           edit={editFeedSectionTitle}

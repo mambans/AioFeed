@@ -30,6 +30,7 @@ const MyInput = ({
   error = 'Invalid name',
   readOnly,
   plaintext,
+  children,
 } = {}) => {
   const { value: input, bind: bindInput, reset: resetInput } = useInput(name || '');
   const ref = useRef();
@@ -66,6 +67,7 @@ const MyInput = ({
           {rightSide}
         </div>
         {!valid(input) && <InvalidError>{error}</InvalidError>}
+        {children}
       </Form.Group>
     </StyledListForm>
   );

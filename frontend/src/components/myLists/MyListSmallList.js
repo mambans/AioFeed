@@ -74,7 +74,7 @@ const MyListSmallList = ({ listName, videos, style, list }) => {
     );
 
   const handleSubmit = async () => {
-    const videoId = (() => {
+    const video_Id = (() => {
       if (videoId?.includes('youtube.com/watch?v')) {
         return getYoutubeIdFromUrl(videoId);
       }
@@ -91,7 +91,7 @@ const MyListSmallList = ({ listName, videos, style, list }) => {
       return videoId;
     })();
 
-    if (Boolean(videoId) && Boolean(filteredInputMatched?.length)) {
+    if (Boolean(video_Id) && Boolean(filteredInputMatched?.length)) {
       const selectedVideo = returnFirstMatch();
       const navigateToUrl = constructYUrlLink(selectedVideo);
 
@@ -99,21 +99,23 @@ const MyListSmallList = ({ listName, videos, style, list }) => {
       resetVideoId();
       // : navigate(`/category/${returnFirstMatch()}`);
     } else {
-      const newList = await addFavoriteVideo({ setLists, id: list.id, videoId });
+      const newList = await addFavoriteVideo({ setLists, id: list.id, videoId: video_Id });
       resetVideoId();
-      setTimeout(() => setCursor({ position: newList.videos.length - 1 }), 0);
-      setTimeout(() => scrollToIfNeeded(ulListRef.current), 750);
+      if (newList) {
+        setTimeout(() => setCursor({ position: newList?.videos?.length - 1 }), 0);
+        setTimeout(() => scrollToIfNeeded(ulListRef.current), 750);
+      }
     }
   };
 
   const constructYUrlLink = (v = {}) => {
     if (v?.kind === 'youtube#video' && v?.contentDetails)
-      return `/youtube/${v.id}?list=${listName}`;
+      return `/youtube/${v?.id}?list=${listName}`;
 
-    if (typeof parseNumberAndString(v.id) === 'number')
-      return `/${v?.login || v?.user_name}/videos/${v.id}?list=${listName}`;
+    if (typeof parseNumberAndString(v?.id) === 'number')
+      return `/${v?.login || v?.user_name}/videos/${v?.id}?list=${listName}`;
 
-    return `/youtube/${v.id}?list=${listName}`;
+    return `/youtube/${v?.id}?list=${listName}`;
   };
 
   const filteredInputMatched = useMemo(() => {
