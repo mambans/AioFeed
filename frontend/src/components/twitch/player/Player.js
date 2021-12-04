@@ -362,51 +362,51 @@ const Player = () => {
             chatwidth={chatState.chatwidth || DEFAULT_CHAT_WIDTH}
             VolumeEventOverlayRef={PlayerUIControlls}
             player={twitchVideoPlayer.current}
+            ContextMenu={
+              Boolean(twitchVideoPlayer.current) && (
+                <ContextMenu
+                  DEFAULT_CHAT_WIDTH={DEFAULT_CHAT_WIDTH}
+                  PlayerUIControlls={PlayerUIControlls.current}
+                  hidechat={String(chatState.hideChat)}
+                  TwitchPlayer={twitchVideoPlayer.current}
+                  showAndResetTimer={showAndResetTimer}
+                  setChatState={setChatState}
+                  chatState={chatState}
+                  channelName={channelName}
+                  children={
+                    <>
+                      <li
+                        onClick={() => {
+                          setChatState((curr) => {
+                            delete curr?.default;
+                            return { ...curr, hideChat: !curr.hideChat };
+                          });
+                        }}
+                      >
+                        <MdChat size={24} />
+                        {chatState.hideChat ? 'Show chat' : 'Hide chat'}
+                      </li>
+
+                      <li
+                        onClick={() => {
+                          setChatState((curr) => {
+                            delete curr?.default;
+                            return {
+                              ...curr,
+                              switchChatSide: !chatState.switchChatSide,
+                            };
+                          });
+                        }}
+                      >
+                        <MdCompareArrows size={24} />
+                        Switch chat side
+                      </li>
+                    </>
+                  }
+                />
+              )
+            }
           >
-            {Boolean(twitchVideoPlayer.current) && (
-              <ContextMenu
-                DEFAULT_CHAT_WIDTH={DEFAULT_CHAT_WIDTH}
-                PlayerUIControlls={PlayerUIControlls.current}
-                type='live'
-                hidechat={String(chatState.hideChat)}
-                TwitchPlayer={twitchVideoPlayer.current}
-                showAndResetTimer={showAndResetTimer}
-                setChatState={setChatState}
-                chatState={chatState}
-                channelName={channelName}
-                children={
-                  <>
-                    <li
-                      onClick={() => {
-                        setChatState((curr) => {
-                          delete curr?.default;
-                          return { ...curr, hideChat: !curr.hideChat };
-                        });
-                      }}
-                    >
-                      <MdChat size={24} />
-                      {chatState.hideChat ? 'Show chat' : 'Hide chat'}
-                    </li>
-
-                    <li
-                      onClick={() => {
-                        setChatState((curr) => {
-                          delete curr?.default;
-                          return {
-                            ...curr,
-                            switchChatSide: !chatState.switchChatSide,
-                          };
-                        });
-                      }}
-                    >
-                      <MdCompareArrows size={24} />
-                      Switch chat side
-                    </li>
-                  </>
-                }
-              />
-            )}
-
             {streamInfo ? (
               <InfoDisplay>
                 <>

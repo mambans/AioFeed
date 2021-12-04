@@ -9,6 +9,7 @@ import PlayPauseButton from './player/PlayPauseButton';
 import ShowStatsButtons from './player/ShowStatsButtons';
 import ShowSetQualityButtons from './player/ShowSetQualityButtons';
 import Schedule from './schedule';
+import ContextMenuWrapper from './player/ContextMenuWrapper';
 
 const VolumeEventOverlay = React.forwardRef(
   (
@@ -29,6 +30,8 @@ const VolumeEventOverlay = React.forwardRef(
       addEventListeners = false,
       centerBotttom,
       channelName,
+      contextMenuChildren,
+      ContextMenu,
     },
     ref
   ) => {
@@ -145,6 +148,14 @@ const VolumeEventOverlay = React.forwardRef(
           showcursor={showcursor}
           centerBotttom={centerBotttom}
         >
+          {ContextMenu ||
+            (contextMenuChildren && (
+              <ContextMenuWrapper
+                outerContainer={VolumeEventOverlayRef.current}
+                showAndResetTimer={showAndResetTimer}
+                children={<>{contextMenuChildren}</>}
+              />
+            ))}
           {showVolumeSlider && player.current && (
             <>
               <Schedule user={channelName} />

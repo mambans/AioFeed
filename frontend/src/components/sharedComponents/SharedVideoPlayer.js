@@ -185,6 +185,15 @@ const SharedVideoPlayer = () => {
           showVolumeSlider
           addEventListeners
           centerBotttom
+          contextMenuChildren={
+            domain !== 'youtube' && (
+              <>
+                <p>test 1</p>
+                <p>test 2</p>
+                <p>test 3</p>
+              </>
+            )
+          }
         >
           <AddToListButton
             videoId_p={videoId}

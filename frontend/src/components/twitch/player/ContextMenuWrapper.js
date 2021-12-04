@@ -58,6 +58,7 @@ const ContextMenuWrapper = ({
   const menuRef = useRef();
   const toggleShowHide = useCallback(
     (e) => {
+      console.log('toggleShowHide:');
       if (show) return true;
       e.preventDefault();
       showAndResetTimer();
