@@ -11,7 +11,8 @@ import {
   MdChat,
   MdAccountBox,
 } from 'react-icons/md';
-import { FaTwitch } from 'react-icons/fa';
+import { FaTwitch, FaInfoCircle } from 'react-icons/fa';
+import { GrRefresh } from 'react-icons/gr';
 
 import fetchStreamInfo from './fetchStreamInfo';
 import FollowUnfollowBtn from './../FollowUnfollowBtn';
@@ -33,7 +34,7 @@ import {
 // import PlayerNavbar from './PlayerNavbar';
 import setFavion from '../setFavion';
 import PlayPauseButton from './PlayPauseButton';
-import ShowStatsButtons from './ShowStatsButtons';
+import ShowStatsButtons, { latencyColorValue } from './ShowStatsButtons';
 import ShowSetQualityButtons from './ShowSetQualityButtons';
 import OpenCloseChat from './OpenCloseChat';
 import addSystemNotification from '../live/addSystemNotification';
@@ -43,7 +44,7 @@ import addGameName from './addGameName';
 import addProfileImg from './addProfileImg';
 import fetchChannelInfo from './fetchChannelInfo';
 import { getLocalstorage, setLocalStorage } from '../../../util';
-import ContextMenu from './ContextMenu';
+import PlayerContextMenu from './ContextMenu';
 import AnimatedViewCount from '../live/AnimatedViewCount';
 import ReAuthenticateButton from '../../navigation/sidebar/ReAuthenticateButton';
 import disconnectTwitch from '../disconnectTwitch';
@@ -60,6 +61,7 @@ import VolumeEventOverlay from '../VolumeEventOverlay';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import useFavicon from '../../../hooks/useFavicon';
 import { TwitchContext } from '../useToken';
+import { ContextMenuDropDown } from './ContextMenuWrapper';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.12, 175);
 
@@ -336,6 +338,52 @@ const Player = () => {
     [resizeActive, chatState]
   );
 
+  const reloadVideoPlayer = () => {
+    console.log('Refreshing Twitch video');
+    videoElementRef.current.removeChild(document.querySelector('iframe'));
+    if (window?.Twitch?.Player) {
+      twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', {
+        width: '100%',
+        height: '100%',
+        theme: 'dark',
+        layout: 'video',
+        channel: channelName,
+        muted: false,
+        allowfullscreen: true,
+        parent: ['aiofeed.com'],
+      });
+    }
+  };
+
+  const Stats = () => {
+    const playbackStats = twitchVideoPlayer?.current?.getPlaybackStats();
+    if (!playbackStats || !Object.keys(playbackStats).length) return null;
+
+    return (
+      <ContextMenuDropDown
+        trigger={
+          <>
+            <FaInfoCircle size={20} />
+            Video stats
+          </>
+        }
+      >
+        {Object.keys(playbackStats)?.map((statName) => (
+          <div key={statName}>
+            <span>{`${statName}: `}</span>
+            <span
+              style={{
+                color: latencyColorValue(statName, playbackStats?.[statName]),
+              }}
+            >
+              {playbackStats?.[statName]}
+            </span>
+          </div>
+        ))}
+      </ContextMenuDropDown>
+    );
+  };
+
   return (
     <VideoAndChatContainer
       chatwidth={chatState.chatwidth || DEFAULT_CHAT_WIDTH}
@@ -364,7 +412,7 @@ const Player = () => {
             player={twitchVideoPlayer.current}
             ContextMenu={
               Boolean(twitchVideoPlayer.current) && (
-                <ContextMenu
+                <PlayerContextMenu
                   DEFAULT_CHAT_WIDTH={DEFAULT_CHAT_WIDTH}
                   PlayerUIControlls={PlayerUIControlls.current}
                   hidechat={String(chatState.hideChat)}
@@ -400,6 +448,11 @@ const Player = () => {
                       >
                         <MdCompareArrows size={24} />
                         Switch chat side
+                      </li>
+                      <Stats />
+                      <li onClick={reloadVideoPlayer}>
+                        <GrRefresh size={24} />
+                        Reload Videoplayer
                       </li>
                     </>
                   }
@@ -541,27 +594,12 @@ const Player = () => {
                 <ShowSetQualityButtons TwitchPlayer={twitchVideoPlayer.current} />
                 <ClipButton streamInfo={streamInfo} />
                 <ResetVideoButton
-                  title={'Refresh video'}
+                  title={'Reload video'}
                   style={{
                     pointerEvents: !twitchVideoPlayer.current ? 'none' : 'unset',
                     opacity: !twitchVideoPlayer.current ? '0.2' : '0.7',
                   }}
-                  onClick={() => {
-                    console.log('Refreshing Twitch video');
-                    videoElementRef.current.removeChild(document.querySelector('iframe'));
-                    if (window?.Twitch?.Player) {
-                      twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', {
-                        width: '100%',
-                        height: '100%',
-                        theme: 'dark',
-                        layout: 'video',
-                        channel: channelName,
-                        muted: false,
-                        allowfullscreen: true,
-                        parent: ['aiofeed.com'],
-                      });
-                    }
-                  }}
+                  onClick={reloadVideoPlayer}
                 />
               </SmallButtonContainer>
             )}

@@ -154,6 +154,7 @@ const VolumeEventOverlay = React.forwardRef(
                 outerContainer={VolumeEventOverlayRef.current}
                 showAndResetTimer={showAndResetTimer}
                 children={<>{contextMenuChildren}</>}
+                includeMarginTop={true}
               />
             ))}
           {showVolumeSlider && player.current && (

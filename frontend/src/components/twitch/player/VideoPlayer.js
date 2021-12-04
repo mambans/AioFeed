@@ -1,5 +1,7 @@
 import { useParams } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
+import { MdOutlineHighQuality, MdHighQuality } from 'react-icons/md';
+import { FaInfoCircle } from 'react-icons/fa';
 
 import TwitchAPI from '../API';
 import useQuery from '../../../hooks/useQuery';
@@ -9,6 +11,8 @@ import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import ToolTip from '../../sharedComponents/ToolTip';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import toggleFullscreenFunc from './toggleFullscreenFunc';
+import ContextMenuWrapper, { ContextMenuDropDown } from './ContextMenuWrapper';
+import { latencyColorValue } from './ShowStatsButtons';
 
 const VideoPlayer = ({
   listIsOpen,
@@ -29,6 +33,7 @@ const VideoPlayer = ({
   const time = queryTime || queryTime2 || null;
   const endTime = useQuery().get('end') || null;
   const twitchVideoPlayer = useRef();
+  const qualities = useRef();
   const [loopEnabled, setLoopEnabled] = useState(Boolean(useQuery().get('loop')));
   const [duration, setDuration] = useState();
   const [videoDetails, setVideoDetails] = useState();
@@ -72,14 +77,21 @@ const VideoPlayer = ({
     twitchVideoPlayer.current
   );
   useEventListenerMemo(
-    window?.Twitch?.Player?.ENDED,
-    OnPauseEventListeners,
+    window?.Twitch?.Player?.READY,
+    OnReadyEventListeners,
     twitchVideoPlayer.current,
     twitchVideoPlayer.current
   );
 
+  function OnReadyEventListeners(e) {
+    console.log('OnReady');
+  }
   function OnPlayingEventListeners() {
     setIsPlaying(true);
+    if (!qualities?.current || !qualities?.current?.length) {
+      qualities.current = twitchVideoPlayer.current.getQualities();
+    }
+    setDuration(twitchVideoPlayer.current.getDuration());
   }
 
   function OnPauseEventListeners() {
@@ -148,13 +160,11 @@ const VideoPlayer = ({
   }, [videoId, time, channelName, query_user_id, childPlayer]);
 
   useEventListenerMemo(
-    window?.Twitch?.Player?.PLAYING,
-    () => {
-      setDuration(twitchVideoPlayer.current.getDuration());
-    },
+    window?.Twitch?.Player?.ENDED,
+    playNext,
+    twitchVideoPlayer.current,
     twitchVideoPlayer.current
   );
-  useEventListenerMemo(window?.Twitch?.Player?.ENDED, playNext, twitchVideoPlayer.current);
 
   useEffect(() => {
     if (videoId?.toLowerCase() !== 'latest') {
@@ -184,8 +194,84 @@ const VideoPlayer = ({
     }
   }, [videoId, channelName, twitchVideoPlayer, time, endTime, loopEnabled]);
 
+  const setPlayerQuality = (q) => {
+    twitchVideoPlayer.current.setQuality(q);
+  };
+
+  const Qualities = () => {
+    if (!qualities?.current || !qualities?.current?.length) return null;
+    const sourceQuality = qualities?.current?.find((q) => q.group === 'chunked');
+
+    return (
+      <>
+        {sourceQuality && (
+          <li onClick={() => setPlayerQuality(sourceQuality.group)}>
+            <MdHighQuality size={24} />
+            Max quality (Source)
+          </li>
+        )}
+
+        <ContextMenuDropDown
+          trigger={
+            <>
+              <MdOutlineHighQuality size={24} />
+              Qualities
+            </>
+          }
+        >
+          {qualities?.current
+            ?.filter((q) => q.group !== 'chunked')
+            ?.map((q) => (
+              <li onClick={() => setPlayerQuality(q.group)}>{q.name}</li>
+            ))}
+        </ContextMenuDropDown>
+      </>
+    );
+  };
+
+  const Stats = () => {
+    const playbackStats = twitchVideoPlayer?.current?.getPlaybackStats();
+    if (!playbackStats || !Object.keys(playbackStats).length) return null;
+
+    return (
+      <ContextMenuDropDown
+        trigger={
+          <>
+            <FaInfoCircle size={20} />
+            Video stats
+          </>
+        }
+      >
+        {Object.keys(playbackStats)?.map((statName) => (
+          <div key={statName}>
+            <span>{`${statName}: `}</span>
+            <span
+              style={{
+                color: latencyColorValue(statName, playbackStats?.[statName]),
+              }}
+            >
+              {playbackStats?.[statName]}
+            </span>
+          </div>
+        ))}
+      </ContextMenuDropDown>
+    );
+  };
+
   return (
     <>
+      {twitchVideoPlayer.current && (
+        <ContextMenuWrapper
+          outerContainer={VolumeEventOverlayRef.current}
+          // showAndResetTimer={showAndResetTimer}
+          children={
+            <>
+              <Qualities />
+              <Stats />
+            </>
+          }
+        />
+      )}
       <Loop listIsOpen={String(listIsOpen)} listWidth={listWidth} loopEnabled={String(loopEnabled)}>
         {twitchVideoPlayer.current && (
           <ToolTip

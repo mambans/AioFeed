@@ -2,28 +2,28 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ButtonShowStats, PlaybackStats } from './StyledComponents';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
+export const latencyColorValue = (name, value) => {
+  if (name === 'hlsLatencyBroadcaster' || name === 'hlsLatencyEncoder') {
+    if (value >= 10) {
+      return '#f00';
+    } else if (value >= 5) {
+      return '#f66329';
+    } else if (value >= 2.5) {
+      return '#f6b029';
+    } else {
+      return '#4cf629';
+    }
+  } else {
+    return 'unset';
+  }
+};
+
 const ShowStatsButtons = ({ TwitchPlayer }) => {
   const [showPlaybackStats, setShowPlaybackStats] = useState();
   const [playbackStats, setPlaybackStats] = useState();
   const PlayersatsTimer = useRef();
 
   useEventListenerMemo('keydown', keyboardEvents, window, TwitchPlayer);
-
-  const latencyColorValue = (name, value) => {
-    if (name === 'hlsLatencyBroadcaster' || name === 'hlsLatencyEncoder') {
-      if (value >= 10) {
-        return '#f00';
-      } else if (value >= 5) {
-        return '#f66329';
-      } else if (value >= 2.5) {
-        return '#f6b029';
-      } else {
-        return '#4cf629';
-      }
-    } else {
-      return 'unset';
-    }
-  };
 
   const ToggleShowStats = (event = { stopPropagation: () => {}, preventDefault: () => {} }) => {
     event.stopPropagation();
