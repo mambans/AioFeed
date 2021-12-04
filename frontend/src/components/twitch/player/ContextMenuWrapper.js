@@ -63,7 +63,7 @@ const ContextMenuWrapper = ({
       showAndResetTimer();
       const boundary = outerContainer.getBoundingClientRect();
       const mouseX = e.clientX - boundary.left;
-      const mouseY = e.clientX - boundary.top;
+      const mouseY = e.clientY - boundary.top;
 
       setShow({
         show: true,
