@@ -58,13 +58,12 @@ const ContextMenuWrapper = ({
   const menuRef = useRef();
   const toggleShowHide = useCallback(
     (e) => {
-      console.log('toggleShowHide:');
       if (show) return true;
       e.preventDefault();
       showAndResetTimer();
       const boundary = outerContainer.getBoundingClientRect();
       const mouseX = e.clientX - boundary.left;
-      const mouseY = e.clientY;
+      const mouseY = e.clientX - boundary.top;
 
       setShow({
         show: true,
