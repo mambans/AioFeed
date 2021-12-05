@@ -5,17 +5,20 @@ import { MdKeyboardArrowRight } from 'react-icons/md';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import useClicksOutside from '../../../hooks/useClicksOutside';
 
-const HEIGHT = 275;
-const WIDTH = 250;
+const MIN_HEIGHT = 275;
+const WIDTH = 275;
 
 const Container = styled.div`
   position: absolute;
   width: ${WIDTH}px;
-  min-height: ${HEIGHT}px;
+  min-height: ${MIN_HEIGHT}px;
+  max-height: ${({ maxHeight }) => maxHeight + 'px'};
   background: rgba(0, 0, 0, 0.75);
   border-radius: 3px;
   left: ${({ left }) => left + 'px'};
   top: ${({ top }) => top + 'px'};
+  visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
+  pointer-events: ${({ show }) => (show ? 'all' : 'none')};
   /* padding: 0px 10px; */
   font-weight: bold;
   color: rgb(225, 225, 225);
@@ -32,6 +35,9 @@ const Container = styled.div`
       font-size: 1rem;
       padding: 0 10px;
       color: rgb(200, 200, 200);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
 
       svg {
         margin-right: 5px;
@@ -58,6 +64,7 @@ const StyledArrow = styled(MdKeyboardArrowRight)`
     transform: rotate(0deg);
     transition: transform 250ms, fill 250ms;
     fill: rgb(200, 200, 200);
+    top: 0mm;
   }
 `;
 
@@ -89,7 +96,7 @@ export const ContextMenuDropDownList = styled.div`
   }
 `;
 
-const StyledDropDownTrigger = styled.li`
+const StyledDropDownTrigger = styled.div`
   position: relative;
   &:hover {
     ${ContextMenuDropDownList} {
@@ -107,7 +114,7 @@ const StyledDropDownTrigger = styled.li`
 export const ContextMenuDropDown = ({ trigger, children }) => {
   return (
     <StyledDropDownTrigger>
-      {trigger}
+      <li>{trigger}</li>
       <StyledArrow size={24} />
       <ContextMenuDropDownList>
         <div>{children}</div>
@@ -122,7 +129,7 @@ const ContextMenuWrapper = ({
   includeMarginTop,
   children,
 }) => {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState({});
   const menuRef = useRef();
   const toggleShowHide = useCallback(
     (e) => {
@@ -140,11 +147,21 @@ const ContextMenuWrapper = ({
       const mouseX = e.clientX - boundary.left;
       const mouseY = e.clientY - (includeMarginTop ? boundary.top : 0);
 
+      const menu = menuRef?.current?.getBoundingClientRect?.();
+      const menuHeight = menu.height;
+      const menuWidth = menu.width;
+
       setShow({
         show: true,
-        x: mouseX + WIDTH > boundary.width ? mouseX - (mouseX + WIDTH - boundary.width) : mouseX,
+        x:
+          mouseX + menuWidth > boundary.width
+            ? mouseX - (mouseX + menuWidth - boundary.width)
+            : mouseX,
         y:
-          mouseY + HEIGHT > boundary.bottom ? mouseY - (mouseY + HEIGHT - boundary.bottom) : mouseY,
+          mouseY + menuHeight > boundary.bottom
+            ? mouseY - (mouseY + menuHeight - boundary.bottom)
+            : mouseY,
+        maxHeight: boundary.height,
       });
       return false;
     },
@@ -153,13 +170,19 @@ const ContextMenuWrapper = ({
   useEventListenerMemo('contextmenu', toggleShowHide, outerContainer);
   useClicksOutside(menuRef, () => setShow(false), show);
 
-  if (show?.show) {
-    return (
-      <Container left={show.x} top={show.y} ref={menuRef}>
-        <ul onClick={() => setShow(false)}>{children}</ul>
-      </Container>
-    );
-  }
-  return null;
+  // if (show?.show) {
+  return (
+    <Container
+      left={show?.x}
+      top={show?.y}
+      ref={menuRef}
+      maxHeight={show?.maxHeight}
+      show={show?.show}
+    >
+      <ul onClick={() => setShow({})}>{children}</ul>
+    </Container>
+  );
+  // }
+  // return null;
 };
 export default ContextMenuWrapper;
