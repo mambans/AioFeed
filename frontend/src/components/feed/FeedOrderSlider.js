@@ -91,19 +91,19 @@ const SliderThumb = ({ name, id, icon, sliderLength }) => {
   const ID = id || name;
 
   const handleSubmit = (e) => {
-    setOrders((c) => ({ ...c, [ID]: parseInt(e.target.value) }));
+    setOrders((c) => ({ ...c, [ID]: { ...c[ID], order: parseInt(e.target.value) } }));
   };
 
   return (
     <ToolTip
-      tooltip={name + ' @' + orders?.[ID]}
+      tooltip={name + ' @' + orders?.[ID]?.order}
       placement='left'
-      style={{ top: (orders?.[ID] - 500) * (sliderLength / 2 / 500) + 'px', right: '20px' }}
+      style={{ top: (orders?.[ID]?.order - 500) * (sliderLength / 2 / 500) + 'px', right: '20px' }}
     >
       <StyledSliderThumb
         icon={icon}
         onMouseUp={handleSubmit}
-        defaultValue={orders[ID]}
+        defaultValue={orders[ID]?.order}
         sliderLength={sliderLength}
       />
     </ToolTip>

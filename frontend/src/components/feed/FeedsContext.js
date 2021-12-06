@@ -22,6 +22,10 @@ export const FeedsProvider = ({ children }) => {
     transition: 'videoFadeSlide',
   };
 
+  const toggleExpanded = (ID) => {
+    setOrders((c) => ({ ...c, [ID]: { ...(c?.[ID] || {}), collapsed: !c?.[ID]?.collapsed } }));
+  };
+
   return (
     <FeedsContext.Provider
       value={{
@@ -47,6 +51,7 @@ export const FeedsProvider = ({ children }) => {
         toggle,
         orders,
         setOrders,
+        toggleExpanded,
       }}
     >
       {children}

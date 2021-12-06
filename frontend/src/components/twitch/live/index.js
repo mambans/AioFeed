@@ -13,6 +13,7 @@ import ToolTip from '../../sharedComponents/ToolTip';
 import { CustomFilterProvider } from '../CustomFilters/CustomFilterContext';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import FeedSections from '../../feedSections/FeedSections';
+import ExpandableSection from '../../sharedComponents/ExpandableSection';
 
 const TwitchStandalone = () => {
   useDocumentTitle('Twitch Live');
@@ -33,7 +34,7 @@ export const Twitch = ({ in: forceMount = false, className }) => {
     enableFeedSections,
   } = useContext(FeedsContext) || {};
 
-  const { orders } = useContext(FeedsContext);
+  const { orders, toggleExpanded } = useContext(FeedsContext);
   const refreshBtnRef = useRef();
 
   useEffect(() => {
@@ -54,9 +55,16 @@ export const Twitch = ({ in: forceMount = false, className }) => {
               appear
               unmountOnExit
             >
-              <Container order={orders['twitch']} className={className}>
-                <Header data={data} ref={refreshBtnRef} />
-                <TwitchStreams data={data} />
+              <Container order={orders?.['twitch']?.order} className={className}>
+                <Header
+                  data={data}
+                  ref={refreshBtnRef}
+                  collapsed={orders?.['twitch']?.collapsed}
+                  toggleExpanded={() => toggleExpanded('twitch')}
+                />
+                <ExpandableSection collapsed={orders?.['twitch']?.collapsed}>
+                  <TwitchStreams data={data} />
+                </ExpandableSection>
               </Container>
             </CSSTransition>
             <ToolTip

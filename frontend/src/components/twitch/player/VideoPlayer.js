@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
 import { MdOutlineHighQuality, MdHighQuality } from 'react-icons/md';
 import { FaInfoCircle } from 'react-icons/fa';
@@ -6,13 +6,14 @@ import { FaInfoCircle } from 'react-icons/fa';
 import TwitchAPI from '../API';
 import useQuery from '../../../hooks/useQuery';
 import Loopbar, { timeToSeconds } from './Loopbar';
-import { LoopBtn, Loop } from './StyledComponents';
+import { LoopBtn, Loop, ErrorMessage } from './StyledComponents';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import ToolTip from '../../sharedComponents/ToolTip';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import toggleFullscreenFunc from './toggleFullscreenFunc';
 import ContextMenuWrapper, { ContextMenuDropDown } from './ContextMenuWrapper';
 import { latencyColorValue } from './ShowStatsButtons';
+import { toast } from 'react-toastify';
 
 const VideoPlayer = ({
   listIsOpen,
@@ -170,9 +171,14 @@ const VideoPlayer = ({
     if (videoId?.toLowerCase() !== 'latest') {
       const fetchDetailsForDocumentTitle = async () => {
         if (twitchVideoPlayer.current) {
-          const fetchedvideoDetails = await TwitchAPI.getVideos({ id: videoId }).then(
-            (r) => r.data.data[0]
-          );
+          const fetchedvideoDetails = await TwitchAPI.getVideos({ id: videoId })
+            .then((r) => r.data.data[0])
+            .catch((er) => {
+              if (er?.response?.data?.error === 'Not Found') {
+                toast.error(er?.response?.data?.message);
+                return { error: 'Video unavailable' };
+              }
+            });
 
           setVideoDetails(fetchedvideoDetails);
 
@@ -193,6 +199,12 @@ const VideoPlayer = ({
       return () => clearTimeout(timer);
     }
   }, [videoId, channelName, twitchVideoPlayer, time, endTime, loopEnabled]);
+
+  useEffect(() => {
+    return () => {
+      if (videoDetails?.error) setVideoDetails(null);
+    };
+  }, [videoDetails]);
 
   const setPlayerQuality = (q) => {
     twitchVideoPlayer.current.setQuality(q);
@@ -257,6 +269,18 @@ const VideoPlayer = ({
       </ContextMenuDropDown>
     );
   };
+
+  if (videoDetails?.error)
+    return (
+      <ErrorMessage>
+        <h1>{videoDetails.error}</h1>
+        {channelName && (
+          <p>
+            Back to <Link to={`/${channelName}/page`}>{channelName}'s channel page</Link>
+          </p>
+        )}
+      </ErrorMessage>
+    );
 
   return (
     <>

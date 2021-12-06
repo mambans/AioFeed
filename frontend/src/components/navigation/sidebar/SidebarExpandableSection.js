@@ -3,8 +3,8 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { MdExpandMore } from 'react-icons/md';
 import NavigationContext from '../NavigationContext';
 import { ToggleButtonsContainerHeader } from './StyledComponents';
-import { ExpandSection } from '../../sharedComponents/sharedStyledComponents';
 import useLocalStorageState from '../../../hooks/useLocalStorageState';
+import ExpandableSection from '../../sharedComponents/ExpandableSection';
 
 const SidebarExpandableSection = ({
   title,
@@ -19,7 +19,6 @@ const SidebarExpandableSection = ({
   const [expanded, setExpanded] = useLocalStorageState(title + '-expandableSection', true);
   const closedTimer = useRef();
   const openedTimer = useRef();
-  const ref = useRef();
   const [isclosed, setIsClosed] = useState(!expanded);
   const [isOpened, setIsOpened] = useState(expanded);
 
@@ -60,30 +59,28 @@ const SidebarExpandableSection = ({
         {title}
         <MdExpandMore />
       </ToggleButtonsContainerHeader>
-      <ExpandSection
-        height={ref.current?.getBoundingClientRect()?.height}
-        expanded={String(expanded)}
-        isclosed={String(isclosed)}
-        isOpened={String(isOpened)}
+      <ExpandableSection
+        collapsed={!expanded}
+        isclosed={isclosed}
+        isOpened={isOpened}
+        style={{ marginTop: `${!expanded ? 0 : 20}px` }}
       >
-        <div ref={ref}>
-          {fixedTopItem}
-          <TransitionGroup component={null}>
-            {items?.map((item, index) => (
-              <CSSTransition
-                classNames='ListForm'
-                key={keyGetter(item) || index}
-                timeout={500}
-                unmountOnExit
-              >
-                {renderItem(item, index, setOverflow)}
-              </CSSTransition>
-            ))}
-          </TransitionGroup>
-          {fixedBottomItem}
-          {children}
-        </div>
-      </ExpandSection>
+        {fixedTopItem}
+        <TransitionGroup component={null}>
+          {items?.map((item, index) => (
+            <CSSTransition
+              classNames='ListForm'
+              key={keyGetter(item) || index}
+              timeout={500}
+              unmountOnExit
+            >
+              {renderItem(item, index, setOverflow)}
+            </CSSTransition>
+          ))}
+        </TransitionGroup>
+        {fixedBottomItem}
+        {children}
+      </ExpandableSection>
     </div>
   );
 };

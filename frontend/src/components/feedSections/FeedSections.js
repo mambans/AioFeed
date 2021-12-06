@@ -8,6 +8,8 @@ import TwitchStreams from './../twitch/live/Twitch';
 import loginNameFormat from '../twitch/loginNameFormat';
 import FeedsContext from '../feed/FeedsContext';
 import { BsCollectionFill } from 'react-icons/bs';
+import { ExpandCollapseFeedButton } from '../sharedComponents/sharedStyledComponents';
+import ExpandableSection from '../sharedComponents/ExpandableSection';
 
 const FeedSections = ({ data }) => {
   const { feedSections } = useContext(FeedSectionsContext);
@@ -43,10 +45,10 @@ const FeedSections = ({ data }) => {
 };
 
 const Section = ({ feed: { title, rules, id }, data, index }) => {
-  const { orders } = useContext(FeedsContext);
+  const { orders, toggleExpanded } = useContext(FeedsContext);
 
   return (
-    <Container order={orders[id]} id={`FeedSection${title}Header`}>
+    <Container order={orders?.[id]?.order} id={`FeedSection${title}Header`}>
       <Header
         id={title}
         title={title}
@@ -59,10 +61,18 @@ const Section = ({ feed: { title, rules, id }, data, index }) => {
         // refreshFunc={fetchMyListContextData}
         // isLoading={isLoading}
         // onHoverIconLink='nylists'
+        leftSide={
+          <ExpandCollapseFeedButton
+            onClick={() => toggleExpanded(id)}
+            collapsed={orders?.[id]?.collapsed}
+          />
+        }
         rightSide={<Rules rules={rules} name={title} id={id} />}
         feedName={title}
       />
-      <TwitchStreams data={data} hideOnEmpty />
+      <ExpandableSection collapsed={orders?.[id]?.collapsed}>
+        <TwitchStreams data={data} hideOnEmpty />{' '}
+      </ExpandableSection>
     </Container>
   );
 };

@@ -15,6 +15,8 @@ import DropDownDrawer from './DropDownDrawer';
 import { Container } from '../twitch/StyledComponents';
 import useDocumentTitle from './../../hooks/useDocumentTitle';
 import FeedsContext from '../feed/FeedsContext';
+import { ExpandCollapseFeedButton } from '../sharedComponents/sharedStyledComponents';
+import ExpandableSection from '../sharedComponents/ExpandableSection';
 
 export const useCheckForVideosAndValidateToken = ({
   lists,
@@ -89,10 +91,14 @@ export const FavoriteListContainer = ({
   className,
 }) => {
   const [videos, setVideos] = useState();
-  const { orders } = useContext(FeedsContext);
+  const { orders, toggleExpanded } = useContext(FeedsContext);
 
   return (
-    <Container order={orders[list.id]} id='MyListsHeader'>
+    <Container
+      order={orders?.[list.id]?.order}
+      id={'MyListsHeader-' + list.id}
+      collapsed={orders?.[list.id]?.collapsed}
+    >
       <Header
         id={list.title}
         title={list.title}
@@ -104,6 +110,12 @@ export const FavoriteListContainer = ({
         refreshFunc={fetchMyListContextData}
         isLoading={isLoading}
         onHoverIconLink='mylists'
+        leftSide={
+          <ExpandCollapseFeedButton
+            onClick={() => toggleExpanded(list.id)}
+            collapsed={orders?.[list.id]?.collapsed}
+          />
+        }
         rightSide={
           <>
             <MyListSmallList list={list} videos={videos} listName={list.title} />
@@ -112,14 +124,16 @@ export const FavoriteListContainer = ({
         }
         feedName={list.title}
       />
-      <List
-        list={list}
-        ytExistsAndValidated={ytExistsAndValidated}
-        twitchExistsAndValidated={twitchExistsAndValidated}
-        setLists={setLists}
-        setVideos={setVideos}
-        videos={videos}
-      />
+      <ExpandableSection collapsed={orders?.[list.id]?.collapsed}>
+        <List
+          list={list}
+          ytExistsAndValidated={ytExistsAndValidated}
+          twitchExistsAndValidated={twitchExistsAndValidated}
+          setLists={setLists}
+          setVideos={setVideos}
+          videos={videos}
+        />
+      </ExpandableSection>
     </Container>
   );
 };

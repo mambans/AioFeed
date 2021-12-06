@@ -7,7 +7,7 @@ import { CgPlayListRemove } from 'react-icons/cg';
 export const VideosContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  min-height: 307px;
+  /* min-height: 307px; */
 `;
 
 // export const Open = styled(MdStar)`

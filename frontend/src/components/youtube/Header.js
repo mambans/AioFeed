@@ -2,7 +2,10 @@ import { FaYoutube } from 'react-icons/fa';
 import React from 'react';
 
 import Header from './../sharedComponents/Header';
-import { LastRefreshText } from './../sharedComponents/sharedStyledComponents';
+import {
+  ExpandCollapseFeedButton,
+  LastRefreshText,
+} from './../sharedComponents/sharedStyledComponents';
 import ReAuthenticateButton from '../navigation/sidebar/ReAuthenticateButton';
 import ChannelList from './channelList';
 import { HeaderAlert } from './StyledComponents';
@@ -48,7 +51,16 @@ const SubFeedError = (props) => {
 };
 
 const YouTubeHeader = (data) => {
-  const { refresh, requestError, followedChannels, videos, isLoaded, setVideos } = data;
+  const {
+    refresh,
+    requestError,
+    followedChannels,
+    videos,
+    isLoaded,
+    setVideos,
+    toggleExpanded,
+    collapsed,
+  } = data;
   return (
     <Header
       id='YoutubeHeader'
@@ -65,6 +77,7 @@ const YouTubeHeader = (data) => {
       leftSide={
         <>
           <LastRefreshText key={isLoaded || Date.now()}>{isLoaded || Date.now()}</LastRefreshText>
+          <ExpandCollapseFeedButton onClick={toggleExpanded} collapsed={collapsed} />
           <SubFeedError error={requestError}></SubFeedError>
         </>
       }

@@ -3,11 +3,14 @@ import Alert from 'react-bootstrap/Alert';
 import React from 'react';
 
 import Header from '../../sharedComponents/Header';
-import { LastRefreshText } from '../../sharedComponents/sharedStyledComponents';
+import {
+  ExpandCollapseFeedButton,
+  LastRefreshText,
+} from '../../sharedComponents/sharedStyledComponents';
 import VodChannelList from './VodChannelList';
 
 const VodsHeader = React.forwardRef((props, ref) => {
-  const { refresh, vods, vodError } = props;
+  const { refresh, vods, vodError, toggleExpanded, collapsed } = props;
 
   return (
     <Header
@@ -25,6 +28,8 @@ const VodsHeader = React.forwardRef((props, ref) => {
       leftSide={
         <>
           <LastRefreshText>{(vods && vods.loaded) || new Date()}</LastRefreshText>
+          <ExpandCollapseFeedButton onClick={toggleExpanded} collapsed={collapsed} />
+
           {vodError && (
             <Alert
               key={vodError}

@@ -16,6 +16,7 @@ import FeedsCenterContainer, { CenterContext } from './../../feed/FeedsCenterCon
 import { Container } from '../StyledComponents';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import { TwitchContext } from '../useToken';
+import ExpandableSection from '../../sharedComponents/ExpandableSection';
 
 const VodsStandalone = () => {
   useDocumentTitle('Twitch Vods');
@@ -29,7 +30,7 @@ const VodsStandalone = () => {
 
 export const Vods = ({ className }) => {
   const { vods, setVods, channels } = useContext(VodsContext);
-  const { setEnableTwitchVods, orders } = useContext(FeedsContext) || {};
+  const { setEnableTwitchVods, orders, toggleExpanded } = useContext(FeedsContext) || {};
   const { videoElementsAmount } = useContext(CenterContext);
   const { twitchAccessToken, setTwitchAccessToken, setTwitchRefreshToken, twitchUserId } =
     useContext(TwitchContext);
@@ -104,56 +105,65 @@ export const Vods = ({ className }) => {
   }, [videoElementsAmount]);
 
   return (
-    <Container order={orders['vods']} className={className}>
-      <Header ref={refreshBtnRef} refresh={refresh} vods={vods} vodError={vodError} />
-      {!twitchAccessToken && (
-        <AlertHandler
-          title='Not authenticated/connected with Twitch.'
-          message='No access token for twitch availible.'
-        />
-      )}
-      {error && (
-        <AlertHandler
-          data={error}
-          style={{ marginTop: '-150px' }}
-          element={
-            <Button
-              style={{ margin: '0 20px' }}
-              variant='danger'
-              onClick={() => setEnableTwitchVods(false)}
-            >
-              Disable vods
-            </Button>
-          }
-        />
-      )}
-      {!vods?.data ? (
-        <LoadingBoxes amount={videoElementsAmount} type='small' />
-      ) : (
-        <>
-          <TransitionGroup
-            className={vodAmounts.transitionGroup || 'videos'}
-            component={SubFeedContainer}
-          >
-            {vods.data?.slice(0, vodAmounts.amount).map((vod) => (
-              <CSSTransition
-                key={vod.id}
-                timeout={vodAmounts.timeout}
-                classNames={vod.transition || 'fade-750ms'}
-                unmountOnExit
-              >
-                <VodElement data={vod} />
-              </CSSTransition>
-            ))}
-          </TransitionGroup>
-          <LoadMore
-            loaded={true}
-            setVideosToShow={setVodAmounts}
-            videosToShow={vodAmounts}
-            videos={vods.data}
+    <Container order={orders?.['vods']?.order} className={className}>
+      <Header
+        ref={refreshBtnRef}
+        refresh={refresh}
+        vods={vods}
+        vodError={vodError}
+        collapsed={orders?.['vods']?.collapsed}
+        toggleExpanded={() => toggleExpanded('vods')}
+      />
+      <ExpandableSection collapsed={orders?.['vods']?.collapsed}>
+        {!twitchAccessToken && (
+          <AlertHandler
+            title='Not authenticated/connected with Twitch.'
+            message='No access token for twitch availible.'
           />
-        </>
-      )}
+        )}
+        {error && (
+          <AlertHandler
+            data={error}
+            style={{ marginTop: '-150px' }}
+            element={
+              <Button
+                style={{ margin: '0 20px' }}
+                variant='danger'
+                onClick={() => setEnableTwitchVods(false)}
+              >
+                Disable vods
+              </Button>
+            }
+          />
+        )}
+        {!vods?.data ? (
+          <LoadingBoxes amount={videoElementsAmount} type='small' />
+        ) : (
+          <>
+            <TransitionGroup
+              className={vodAmounts.transitionGroup || 'videos'}
+              component={SubFeedContainer}
+            >
+              {vods.data?.slice(0, vodAmounts.amount).map((vod) => (
+                <CSSTransition
+                  key={vod.id}
+                  timeout={vodAmounts.timeout}
+                  classNames={vod.transition || 'fade-750ms'}
+                  unmountOnExit
+                >
+                  <VodElement data={vod} />
+                </CSSTransition>
+              ))}
+            </TransitionGroup>
+            <LoadMore
+              loaded={true}
+              setVideosToShow={setVodAmounts}
+              videosToShow={vodAmounts}
+              videos={vods.data}
+            />
+          </>
+        )}
+      </ExpandableSection>
     </Container>
   );
 };

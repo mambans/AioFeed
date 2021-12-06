@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import React, { useContext, useImperativeHandle, useState } from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import Moment from 'react-moment';
-import { MdRefresh, MdAddToQueue, MdRemoveFromQueue } from 'react-icons/md';
+import { MdRefresh, MdAddToQueue, MdRemoveFromQueue, MdExpandLess } from 'react-icons/md';
 
 import FeedsContext from '../feed/FeedsContext';
 import CountdownCircleTimer from './CountdownCircleTimer';
+import { VideosContainer } from '../myLists/StyledComponents';
+import ToolTip from './ToolTip';
 
 export const ButtonLookalikeStyle = css`
   color: var(--refreshButtonColor);
@@ -736,16 +738,19 @@ export const PositionInQueue = styled.div`
   left: 35px;
 `;
 
-export const ExpandSection = styled.div`
+export const StyledExpandSection = styled.div`
   transition: height 500ms, margin 500ms;
-  height: ${({ height, expanded }) => (expanded === 'true' ? height : 0)}px;
-  margin-top: ${({ expanded }) => (expanded === 'true' ? 20 : 0)}px;
+  height: ${({ height, collapsed }) => (collapsed === 'true' ? 0 : height)};
   padding: 0px;
-  overflow: ${({ isOpened }) => (isOpened === 'true' ? 'visible' : 'hidden')};
+  overflow: ${({ isOpened }) => (isOpened ? 'visible' : 'hidden')};
+
+  ${VideosContainer} {
+    min-height: 0px !important;
+  }
 
   * {
-    visibility: ${({ isclosed }) => (isclosed === 'true' ? 'hidden' : 'visible')};
-    pointer-events: ${({ isclosed }) => (isclosed === 'true' ? 'none' : 'all')};
+    visibility: ${({ isclosed }) => (isclosed ? 'hidden' : 'visible')};
+    pointer-events: ${({ isclosed }) => (isclosed ? 'none' : 'all')};
   }
 
   &.ListForm-appear {
@@ -816,3 +821,25 @@ export const ExpandSection = styled.div`
     transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms, padding 500ms;
   }
 `;
+
+const ExpandIcon = styled(MdExpandLess)`
+  transition: transform 250ms, opacity 250ms;
+  transform: ${({ collapsed }) => (collapsed === 'true' ? 'rotate(0deg)' : 'rotate(180deg)')};
+  opacity: 0.75;
+
+  &:hover {
+    transform: ${({ collapsed }) =>
+      collapsed === 'true' ? 'rotate(0deg) scale(1.2)' : 'rotate(180deg) scale(1.2)'};
+    opacity: 1;
+  }
+`;
+
+export const ExpandCollapseFeedButton = (props) => {
+  return (
+    <ToolTip tooltip={`${props.collapsed ? 'Expand' : 'Collapse'} feed`}>
+      <TransparentButton {...props}>
+        <ExpandIcon size={24} color='white' collapsed={String(props.collapsed)} />
+      </TransparentButton>
+    </ToolTip>
+  );
+};

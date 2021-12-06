@@ -316,7 +316,7 @@ export const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin-top: 0;
-  min-height: 307px;
+  /* min-height: ${({ collapsed }) => (collapsed ? 0 : 307)}px; */
   margin-bottom: 20px;
   width: 100%;
   order: ${({ order }) => order};
