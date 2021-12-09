@@ -23,13 +23,13 @@ const AddToListButton = ({
 
   useClicksOutside(ref, handleClose, open);
 
-  const openFunction = (e) => {
+  const handleOpen = (e) => {
     e.stopPropagation();
     clearTimeout(fadeOutTimer.current);
     setTimeout(() => {
       setOpen(true);
       disablepreview();
-    }, 500);
+    }, 300);
     return false;
   };
 
@@ -70,12 +70,12 @@ const AddToListButton = ({
         size={size}
         lists={lists}
         setLists={setLists}
-        onMouseEnter={openFunction}
+        onMouseEnter={handleOpen}
         onMouseLeave={handleCloseDelayed}
         onClick={toggle}
       />
       <CSSTransition in={open} timeout={250} classNames='fade' unmountOnExit>
-        <AddToListModal openFunction={openFunction} videoId={videoId} redirect={redirect} />
+        <AddToListModal handleOpen={handleOpen} videoId={videoId} redirect={redirect} />
       </CSSTransition>
     </ButtonContainer>
   );

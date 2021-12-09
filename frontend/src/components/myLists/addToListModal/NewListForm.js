@@ -21,6 +21,7 @@ const NewListForm = ({ item, style } = {}) => {
         </ToolTip>
       }
       error={'List already exists'}
+      style={{ display: 'flex', alignItems: 'center' }}
     />
   );
 };

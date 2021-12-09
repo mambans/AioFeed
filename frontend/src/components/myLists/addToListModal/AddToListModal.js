@@ -132,21 +132,51 @@ export const AddRemoveBtn = ({
   );
 };
 
-const AddToListModal = ({ openFunction, videoId, redirect }) => {
+const AddToListModal = ({ handleOpen, videoId, redirect }) => {
   const { lists, setLists } = useContext(MyListsContext) || {};
 
   return (
-    <Lists onMouseEnter={openFunction}>
+    <Lists onMouseEnter={handleOpen}>
       <ListsLink>
         <Link to='/mylists'>Lists</Link>
       </ListsLink>
       {lists &&
-        Object?.values(lists).map((list, index) => (
-          <ListItem key={list.title + index}>
-            {list.title}
-            <AddRemoveBtn list={list} videoId={videoId} setLists={setLists} redirect={redirect} />
-          </ListItem>
-        ))}
+        Object?.values(lists).map((list, index) => {
+          const videoAdded = list && list?.videos?.includes(parseNumberAndString(videoId));
+
+          return (
+            <ListItem
+              key={list.title + index}
+              onClick={(e) => {
+                if (videoAdded) {
+                  removeFavoriteVideo({ setLists, id: list?.id, videoId });
+                  window.history.pushState(
+                    {},
+                    document.title,
+                    `${window.location.origin + window.location.pathname}`
+                  );
+                  return;
+                }
+
+                addFavoriteVideo({ setLists, id: list?.id, videoId });
+                if (redirect && list?.title) {
+                  window.history.pushState(
+                    {},
+                    document.title,
+                    `${window.location.origin + window.location.pathname}?list=${list?.title}`
+                  );
+                }
+              }}
+              added={String(!!videoAdded)}
+              cursor='pointer'
+            >
+              <RemoveItemBtn size={18} color='rgb(150,00,0)' />
+              <AddedItemBtn size={18} />
+              <AddItemBtn size={18} />
+              <span style={{ marginLeft: '30px' }}>{list.title}</span>
+            </ListItem>
+          );
+        })}
       <NewListForm item={videoId} />
     </Lists>
   );

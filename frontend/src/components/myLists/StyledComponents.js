@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Button, Form } from 'react-bootstrap';
 import { MdPlaylistAdd, MdPlaylistAddCheck } from 'react-icons/md';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
@@ -115,6 +115,39 @@ export const IconContainer = styled.div`
   }
 `;
 
+export const AddedItemBtn = styled(MdPlaylistAddCheck)`
+  transition: color 250ms, opacity 250ms;
+  color: var(--listColorAdd);
+
+  &:hover {
+    color: rgb(100, 100, 100);
+  }
+`;
+
+export const RemoveItemBtn = styled(CgPlayListRemove)`
+  transition: color 250ms, opacity 250ms;
+  color: rgb(100, 100, 100);
+
+  &:hover {
+    color: rgb(150, 00, 00);
+  }
+`;
+
+export const AddItemBtn = styled(MdPlaylistAdd)`
+  transition: color 250ms, opacity 250ms;
+
+  &:hover {
+    color: ${({ disablehovereffect }) =>
+      disablehovereffect === 'true' ? '#ffffff' : 'var (--listColorAdd)'};
+  }
+`;
+
+const listCss = css`
+  transition: color 250ms, opacity 250ms;
+  position: absolute;
+  left: 5px;
+`;
+
 export const ListItem = styled.div`
   height: 30px;
   font-size: 16px;
@@ -125,6 +158,8 @@ export const ListItem = styled.div`
   align-items: center;
   transition: color 250ms;
   color: rgb(200, 200, 200);
+  cursor: ${({ cursor }) => cursor || 'unset'};
+  position: relative;
 
   button {
     background: none;
@@ -149,6 +184,33 @@ export const ListItem = styled.div`
 
   svg {
     cursor: pointer;
+  }
+
+  ${RemoveItemBtn} {
+    ${listCss};
+    opacity: 0;
+  }
+  ${AddedItemBtn} {
+    ${listCss};
+    opacity: ${({ added }) => (added === 'true' ? 1 : 0)};
+  }
+  ${AddItemBtn} {
+    ${listCss};
+    opacity: ${({ added }) => (added === 'true' ? 0 : 1)};
+  }
+
+  &:hover {
+    ${RemoveItemBtn} {
+      opacity: ${({ added }) => (added === 'true' ? 1 : 0)};
+    }
+    ${AddedItemBtn} {
+      opacity: 0;
+      color: #ffffff;
+    }
+    ${AddItemBtn} {
+      opacity: ${({ added }) => (added === 'true' ? 0 : 1)};
+      color: var(--listColorAdd);
+    }
   }
 `;
 
@@ -204,33 +266,6 @@ export const ButtonContainer = styled.div`
   &:hover {
     opacity: 1;
     transition-delay: 0ms;
-  }
-`;
-
-export const AddItemBtn = styled(MdPlaylistAdd)`
-  transition: color 250ms, opacity 250ms;
-
-  &:hover {
-    color: ${({ disablehovereffect }) =>
-      disablehovereffect === 'true' ? '#ffffff' : 'var (--listColorAdd)'};
-  }
-`;
-
-export const AddedItemBtn = styled(MdPlaylistAddCheck)`
-  transition: color 250ms, opacity 250ms;
-  color: var(--listColorAdd);
-
-  &:hover {
-    color: rgb(100, 100, 100);
-  }
-`;
-
-export const RemoveItemBtn = styled(CgPlayListRemove)`
-  transition: color 250ms, opacity 250ms;
-  color: rgb(100, 100, 100);
-
-  &:hover {
-    color: rgb(150, 20, 30);
   }
 `;
 
