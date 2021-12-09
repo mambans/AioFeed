@@ -132,11 +132,11 @@ export const AddRemoveBtn = ({
   );
 };
 
-const AddToListModal = ({ OpenFunction, videoId, redirect }) => {
+const AddToListModal = ({ openFunction, videoId, redirect }) => {
   const { lists, setLists } = useContext(MyListsContext) || {};
 
   return (
-    <Lists onMouseEnter={OpenFunction}>
+    <Lists onMouseEnter={openFunction}>
       <ListsLink>
         <Link to='/mylists'>Lists</Link>
       </ListsLink>

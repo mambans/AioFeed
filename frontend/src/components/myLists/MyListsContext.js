@@ -112,6 +112,19 @@ export const MyListsProvider = ({ children }) => {
     if (lists) setLists(lists);
   }, [setLists]);
 
+  const checkIfListNameIsAvaliable = useCallback(
+    (name) => {
+      return (
+        !name ||
+        !lists ||
+        lists.length ||
+        (name &&
+          !Object.values(lists).find((list) => list.title.toLowerCase() === name.toLowerCase()))
+      );
+    },
+    [lists]
+  );
+
   useEffect(() => {
     if (authKey && !invoked.current) fetchMyListContextData();
   }, [fetchMyListContextData, authKey]);
@@ -130,6 +143,7 @@ export const MyListsProvider = ({ children }) => {
         toggleList,
         deleteList,
         editListName,
+        checkIfListNameIsAvaliable,
       }}
     >
       {children}

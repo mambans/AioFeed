@@ -1,71 +1,27 @@
-import React, { useContext, useState } from 'react';
-import { Form } from 'react-bootstrap';
-import { MdAddCircle } from 'react-icons/md';
+import React, { useContext } from 'react';
+import { MdAdd } from 'react-icons/md';
 
-import { FormButton, FormGroup, Label } from './../StyledComponents';
 import MyListsContext from '../MyListsContext';
-
-const useInput = (initialValue) => {
-  const [value, setValue] = useState(initialValue);
-
-  return {
-    value,
-    setValue,
-    reset: () => setValue(''),
-    manualSet: {
-      onClick: (event) => setValue(event.target.textContent),
-    },
-    bind: {
-      value,
-      onChange: (event) => setValue(event.target.value),
-    },
-  };
-};
+import MyInput from '../../MyInput';
+import ToolTip from '../../sharedComponents/ToolTip';
+import { StyledButton } from '../../navigation/sidebar/UpdateTwitterLists';
 
 const NewListForm = ({ item, style } = {}) => {
-  const { value: listName, bind: bindListName, reset: resetListName, setValue } = useInput('');
-  const { lists, addList } = useContext(MyListsContext) || {};
-
-  const CheckForNameAvaliability = !Boolean(
-    lists &&
-      Object.values(lists).find((list) => list.title?.toLowerCase() === listName?.toLowerCase())
-  );
-
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    setValue(listName.trim());
-
-    if (Boolean(listName) || CheckForNameAvaliability) {
-      addList(listName, item);
-      resetListName();
-    }
-  };
+  const { addList, checkIfListNameIsAvaliable } = useContext(MyListsContext) || {};
 
   return (
-    // <Form noValidate onSubmit={handleSubmit} style={{ minWidth: '175px' }}>
-    <Form noValidate onSubmit={handleSubmit} style={style}>
-      <FormGroup controlId='formGroupChannel'>
-        <Label>
-          <Form.Control
-            type='text'
-            placeholder='list name..'
-            required
-            {...bindListName}
-            isInvalid={!CheckForNameAvaliability}
-          />
-          <Form.Control.Feedback type='invalid' style={{ width: 'max-content' }}>
-            List already exists
-          </Form.Control.Feedback>
-        </Label>
-        <FormButton
-          type='submit'
-          variant='primary'
-          disabled={!listName || !CheckForNameAvaliability}
-        >
-          <MdAddCircle size={20} type='submit' />
-        </FormButton>
-      </FormGroup>
-    </Form>
+    <MyInput
+      add={(name) => addList(name, item)}
+      valid={checkIfListNameIsAvaliable}
+      rightSide={
+        <ToolTip delay={{ show: 500, hide: 0 }} toltip={`Add new list`}>
+          <StyledButton>
+            <MdAdd size={22} color='rgb(0,230,0)' />
+          </StyledButton>
+        </ToolTip>
+      }
+      error={'List already exists'}
+    />
   );
 };
 

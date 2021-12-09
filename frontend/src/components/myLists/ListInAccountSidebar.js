@@ -8,7 +8,8 @@ import { AiFillEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { MdDelete, MdAdd } from 'react-icons/md';
 
 const ListInAccountSidebar = () => {
-  const { lists, addList, toggleList, editListName, deleteList } = useContext(MyListsContext);
+  const { lists, addList, toggleList, editListName, deleteList, checkIfListNameIsAvaliable } =
+    useContext(MyListsContext);
 
   return (
     <SidebarExpandableSection
@@ -20,17 +21,14 @@ const ListInAccountSidebar = () => {
           edit={editListName}
           item={list}
           name={list.title}
-          valid={(name) => {
-            return (
-              name &&
-              (!Object.values(lists).find((l) => l?.title?.toLowerCase() === name?.toLowerCase()) ||
-                Object.values(lists).find(
-                  (l) =>
-                    l?.title?.toLowerCase() === name?.toLowerCase() &&
-                    parseInt(l.id) === parseInt(list.id)
-                ))
-            );
-          }}
+          valid={(name) =>
+            checkIfListNameIsAvaliable(name) ||
+            Object.values(lists).find(
+              (l) =>
+                l?.title?.toLowerCase() === name?.toLowerCase() &&
+                parseInt(l.id) === parseInt(list.id)
+            )
+          }
           rightSide={
             <>
               {Object.values(lists).find((l) => parseInt(l.id) === parseInt(list.id)) && (
@@ -68,15 +66,7 @@ const ListInAccountSidebar = () => {
       fixedTopItem={
         <MyInput
           add={addList}
-          valid={
-            (name) =>
-              !name ||
-              (name &&
-                !Object.values(lists).find(
-                  (list) => list.title.toLowerCase() === name.toLowerCase()
-                ))
-            // name && !Object.values(lists).find((list) => name && list.name === name)
-          }
+          valid={checkIfListNameIsAvaliable}
           rightSide={
             <ToolTip delay={{ show: 500, hide: 0 }} toltip={`Add new list`}>
               <StyledButton>

@@ -21,19 +21,19 @@ const AddToListButton = ({
   const { lists, setLists } = useContext(MyListsContext) || {};
   const ref = useRef();
 
-  useClicksOutside(ref, CloseFunction, open);
+  useClicksOutside(ref, handleClose, open);
 
-  const OpenFunction = (e) => {
+  const openFunction = (e) => {
     e.stopPropagation();
     clearTimeout(fadeOutTimer.current);
     setTimeout(() => {
       setOpen(true);
       disablepreview();
-    }, 100);
+    }, 500);
     return false;
   };
 
-  function CloseFunction(e) {
+  function handleClose(e) {
     if (e) e.stopPropagation();
     clearTimeout(fadeOutTimer.current);
     setOpen(false);
@@ -46,7 +46,7 @@ const AddToListButton = ({
     setOpen((c) => !c);
   };
 
-  const CloseFunctionDelay = (e) => {
+  const handleCloseDelayed = (e) => {
     e.stopPropagation();
     clearTimeout(fadeOutTimer.current);
     fadeOutTimer.current = setTimeout(() => setOpen(false), 250);
@@ -59,7 +59,7 @@ const AddToListButton = ({
       className='listVideoButton'
       style={style}
       open={open}
-      onMouseLeave={CloseFunctionDelay}
+      onMouseLeave={handleCloseDelayed}
       ref={ref}
     >
       <AddRemoveBtn
@@ -70,19 +70,12 @@ const AddToListButton = ({
         size={size}
         lists={lists}
         setLists={setLists}
-        onMouseEnter={OpenFunction}
-        onMouseLeave={CloseFunctionDelay}
+        onMouseEnter={openFunction}
+        onMouseLeave={handleCloseDelayed}
         onClick={toggle}
       />
-
       <CSSTransition in={open} timeout={250} classNames='fade' unmountOnExit>
-        <AddToListModal
-          OpenFunction={OpenFunction}
-          CloseFunctionDelay={CloseFunctionDelay}
-          CloseFunction={CloseFunction}
-          videoId={videoId}
-          redirect={redirect}
-        />
+        <AddToListModal openFunction={openFunction} videoId={videoId} redirect={redirect} />
       </CSSTransition>
     </ButtonContainer>
   );
