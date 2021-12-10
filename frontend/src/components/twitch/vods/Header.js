@@ -15,20 +15,18 @@ const VodsHeader = React.forwardRef((props, ref) => {
   return (
     <Header
       id='TwitchVodsHeader'
-      title={'Twitch vods'}
       refreshFunc={() => refresh(true)}
       ref={ref}
-      text={
-        <>
+      title={
+        <h5 onClick={toggleExpanded}>
           Twitch vods
           <MdVideocam size={25} style={{ color: '#6f166f' }} />
-        </>
+          <ExpandCollapseFeedButton collapsed={collapsed} />
+        </h5>
       }
-      onHoverIconLink='vods'
       leftSide={
         <>
           <LastRefreshText>{(vods && vods.loaded) || new Date()}</LastRefreshText>
-          <ExpandCollapseFeedButton onClick={toggleExpanded} collapsed={collapsed} />
 
           {vodError && (
             <Alert
@@ -54,7 +52,6 @@ const VodsHeader = React.forwardRef((props, ref) => {
         </>
       }
       rightSide={<VodChannelList />}
-      feedName='Twitch'
     />
   );
 });

@@ -14,17 +14,16 @@ const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed }, ref)
       id='TwitchHeader'
       title={'Twitch'}
       text={
-        <>
+        <h5 onClick={toggleExpanded}>
           Twitch <span id='live-indicator'>Live</span>
-        </>
+          <ExpandCollapseFeedButton collapsed={collapsed} />
+        </h5>
       }
       ref={ref}
-      onHoverIconLink='live'
       refreshTimer={refreshTimer}
       autoRefreshEnabled={autoRefreshEnabled}
       isLoading={refreshing}
       refreshFunc={() => refresh({ forceRefreshThumbnails: true, forceValidateToken: true })}
-      leftSide={<ExpandCollapseFeedButton onClick={toggleExpanded} collapsed={collapsed} />}
       rightSide={
         <>
           <BigScheduleList followedChannels={followedChannels} />
@@ -32,7 +31,6 @@ const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed }, ref)
           <ChannelSearchList placeholder='...' />
         </>
       }
-      feedName='Twitch'
     />
   );
 });

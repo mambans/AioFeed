@@ -51,24 +51,18 @@ const Section = ({ feed: { title, rules, id }, data, index }) => {
     <Container order={orders?.[id]?.order} id={`FeedSection${title}Header`}>
       <Header
         id={title}
-        title={title}
-        text={
-          <>
+        title={
+          <h5 onClick={() => toggleExpanded(id)}>
             {title}
             <BsCollectionFill size={22} color={'#ff0060'} />
-          </>
+            <ExpandCollapseFeedButton collapsed={orders?.[id]?.collapsed} />
+          </h5>
         }
         // refreshFunc={fetchMyListContextData}
         // isLoading={isLoading}
         // onHoverIconLink='nylists'
-        leftSide={
-          <ExpandCollapseFeedButton
-            onClick={() => toggleExpanded(id)}
-            collapsed={orders?.[id]?.collapsed}
-          />
-        }
+
         rightSide={<Rules rules={rules} name={title} id={id} />}
-        feedName={title}
       />
       <ExpandableSection collapsed={orders?.[id]?.collapsed}>
         <TwitchStreams data={data} hideOnEmpty />{' '}

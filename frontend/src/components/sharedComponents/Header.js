@@ -1,6 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
-import React, { useRef } from 'react';
-import { FaRegWindowRestore } from 'react-icons/fa';
+import React from 'react';
 
 import {
   HeaderOuterMainContainer,
@@ -14,10 +12,7 @@ import {
 const Header = React.forwardRef((props, ref) => {
   const {
     children,
-    text,
-    onHoverIconLink,
     id,
-    leftImage,
     leftSide,
     rightSide,
     autoRefreshEnabled,
@@ -27,26 +22,9 @@ const Header = React.forwardRef((props, ref) => {
     isLoading,
     title,
   } = props;
-  const thisref = useRef();
-  const path = useLocation().pathname.replace('/', '');
-
-  const handleOnClick = () => {
-    thisref.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
-  };
-
-  const OnHoverOpenInNewTab =
-    onHoverIconLink && onHoverIconLink !== path ? (
-      <Link
-        to={`/${onHoverIconLink}`}
-        className='openIndividualFeed'
-        title={title && `Link to ${title} individual feed page.`}
-      >
-        <FaRegWindowRestore size={18} />
-      </Link>
-    ) : null;
 
   return (
-    <HeaderOuterMainContainer ref={thisref} style={style} id={id}>
+    <HeaderOuterMainContainer style={style} id={id}>
       <HeaderTopContainer>
         <LeftRightDivs>
           {refreshFunc && (
@@ -61,18 +39,11 @@ const Header = React.forwardRef((props, ref) => {
           {leftSide}
         </LeftRightDivs>
         {children}
-        <LeftRightDivs>
-          {rightSide}
-          {/* <ReOrderButtons setOrder={setOrder} feedName={feedName} /> */}
-        </LeftRightDivs>
+        <LeftRightDivs>{rightSide}</LeftRightDivs>
       </HeaderTopContainer>
       <HeaderTitle>
         <HeaderLines />
-        <h5 onClick={handleOnClick}>
-          {leftImage}
-          {text}
-          {OnHoverOpenInNewTab}
-        </h5>
+        {title}
         <HeaderLines />
       </HeaderTitle>
     </HeaderOuterMainContainer>

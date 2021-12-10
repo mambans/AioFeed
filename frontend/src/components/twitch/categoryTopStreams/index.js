@@ -161,8 +161,8 @@ const TopStreams = () => {
       <Container>
         <Header
           ref={refreshBtnRef}
-          text={
-            <>
+          title={
+            <h5>
               {gameInfo?.box_art_url ? (
                 <img
                   src={gameInfo?.box_art_url?.replace('{width}', 130)?.replace('{height}', 173)}
@@ -192,7 +192,7 @@ const TopStreams = () => {
                   )}
                 </span>
               </div>
-            </>
+            </h5>
           }
           refreshFunc={refresh}
           rightSide={

@@ -64,20 +64,18 @@ const YouTubeHeader = (data) => {
   return (
     <Header
       id='YoutubeHeader'
-      title={'YouTube'}
-      text={
-        <>
+      title={
+        <h5 onClick={toggleExpanded}>
           YouTube
           <FaYoutube size={25} style={{ color: '#a80000' }} />
-        </>
+          <ExpandCollapseFeedButton collapsed={collapsed} />
+        </h5>
       }
-      onHoverIconLink='youtube'
       refreshFunc={refresh}
       isLoading={!isLoaded}
       leftSide={
         <>
           <LastRefreshText key={isLoaded || Date.now()}>{isLoaded || Date.now()}</LastRefreshText>
-          <ExpandCollapseFeedButton onClick={toggleExpanded} collapsed={collapsed} />
           <SubFeedError error={requestError}></SubFeedError>
         </>
       }
@@ -86,7 +84,6 @@ const YouTubeHeader = (data) => {
           <ChannelList followedChannels={followedChannels} videos={videos} setVideos={setVideos} />
         </>
       }
-      feedName='Twitch'
     />
   );
 };

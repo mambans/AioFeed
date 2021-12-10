@@ -101,28 +101,20 @@ export const FavoriteListContainer = ({
     >
       <Header
         id={list.title}
-        title={list.title}
-        text={
-          <>
+        title={
+          <h5 onClick={() => toggleExpanded(list.id)}>
             {list.title} <HiViewList size={25} color={'var(--listColorAdd)'} />
-          </>
+            <ExpandCollapseFeedButton collapsed={orders?.[list.id]?.collapsed} />
+          </h5>
         }
         refreshFunc={fetchMyListContextData}
         isLoading={isLoading}
-        onHoverIconLink='mylists'
-        leftSide={
-          <ExpandCollapseFeedButton
-            onClick={() => toggleExpanded(list.id)}
-            collapsed={orders?.[list.id]?.collapsed}
-          />
-        }
         rightSide={
           <>
             <MyListSmallList list={list} videos={videos} listName={list.title} />
             <DropDownDrawer list={list} />
           </>
         }
-        feedName={list.title}
       />
       <ExpandableSection collapsed={orders?.[list.id]?.collapsed}>
         <List
