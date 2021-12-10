@@ -94,11 +94,7 @@ export const FavoriteListContainer = ({
   const { orders, toggleExpanded } = useContext(FeedsContext);
 
   return (
-    <Container
-      order={orders?.[list.id]?.order}
-      id={'MyListsHeader-' + list.id}
-      collapsed={orders?.[list.id]?.collapsed}
-    >
+    <Container order={orders?.[list.id]?.order} id={'MyListsHeader-' + list.id}>
       <Header
         id={list.title}
         title={
@@ -107,6 +103,7 @@ export const FavoriteListContainer = ({
             <ExpandCollapseFeedButton collapsed={orders?.[list.id]?.collapsed} />
           </h5>
         }
+        collapsed={orders?.[list.id]?.collapsed}
         refreshFunc={fetchMyListContextData}
         isLoading={isLoading}
         rightSide={

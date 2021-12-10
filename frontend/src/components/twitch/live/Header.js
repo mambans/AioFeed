@@ -18,6 +18,7 @@ const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed }, ref)
           <ExpandCollapseFeedButton collapsed={collapsed} />
         </h5>
       }
+      collapsed={collapsed}
       ref={ref}
       refreshTimer={refreshTimer}
       autoRefreshEnabled={autoRefreshEnabled}

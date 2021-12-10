@@ -21,6 +21,7 @@ const Header = React.forwardRef((props, ref) => {
     style = {},
     isLoading,
     title,
+    collapsed,
   } = props;
 
   return (
@@ -41,7 +42,7 @@ const Header = React.forwardRef((props, ref) => {
         {children}
         <LeftRightDivs>{rightSide}</LeftRightDivs>
       </HeaderTopContainer>
-      <HeaderTitle>
+      <HeaderTitle collapsed={String(collapsed)}>
         <HeaderLines />
         {title}
         <HeaderLines />

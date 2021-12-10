@@ -58,10 +58,7 @@ const Section = ({ feed: { title, rules, id }, data, index }) => {
             <ExpandCollapseFeedButton collapsed={orders?.[id]?.collapsed} />
           </h5>
         }
-        // refreshFunc={fetchMyListContextData}
-        // isLoading={isLoading}
-        // onHoverIconLink='nylists'
-
+        collapsed={orders?.[id]?.collapsed}
         rightSide={<Rules rules={rules} name={title} id={id} />}
       />
       <ExpandableSection collapsed={orders?.[id]?.collapsed}>

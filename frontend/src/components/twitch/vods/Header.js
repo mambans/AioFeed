@@ -24,6 +24,7 @@ const VodsHeader = React.forwardRef((props, ref) => {
           <ExpandCollapseFeedButton collapsed={collapsed} />
         </h5>
       }
+      collapsed={collapsed}
       leftSide={
         <>
           <LastRefreshText>{(vods && vods.loaded) || new Date()}</LastRefreshText>

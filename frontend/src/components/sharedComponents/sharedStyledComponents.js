@@ -85,6 +85,18 @@ export const AddToListModalTrigger = styled(Button).attrs({ variant: 'outline-se
   align-items: center;
 `;
 
+const ExpandIcon = styled(MdExpandLess)`
+  transition: transform 250ms, opacity 250ms;
+  transform: ${({ collapsed }) => (collapsed === 'true' ? 'rotate(0deg)' : 'rotate(180deg)')};
+  opacity: 0.75;
+
+  &:hover {
+    transform: ${({ collapsed }) =>
+      collapsed === 'true' ? 'rotate(0deg) scale(1.2)' : 'rotate(180deg) scale(1.2)'};
+    opacity: 1;
+  }
+`;
+
 export const HeaderTitle = styled.div`
   width: 100%;
   display: flex;
@@ -95,25 +107,6 @@ export const HeaderTitle = styled.div`
 
   svg {
     margin-left: 10px;
-  }
-
-  .openIndividualFeed {
-    position: absolute;
-    left: calc(100% - 5px);
-    opacity: 0;
-    transition: transform 250ms cubic-bezier(0.73, 0.25, 0.18, 1) 200ms,
-      opacity 200ms cubic-bezier(0.73, 0.25, 0.18, 1) 200ms,
-      color 200ms cubic-bezier(0.73, 0.25, 0.18, 1) 0ms;
-    transform: translateX(-115%);
-    letter-spacing: unset;
-    font-size: unset;
-    color: rgba(200, 200, 200);
-    display: flex;
-    padding: 5px;
-
-    svg {
-      margin: 0;
-    }
   }
 
   h4,
@@ -147,24 +140,11 @@ export const HeaderTitle = styled.div`
       margin: 0 50px;
       color: var(--textColor1);
 
-      .openIndividualFeed {
-        transform: translate3d(0, calc(-100% + 5px), 0);
-        opacity: 1;
-
-        &:hover {
-          color: rgba(255, 255, 255);
-        }
+      ${ExpandIcon} {
+        transform: ${({ collapsed }) =>
+          collapsed === 'true' ? 'rotate(180deg) scale(1.2)' : 'rotate(0deg) scale(1.2)'};
       }
     }
-  }
-
-  span#live-indicator {
-    background: rgb(202, 35, 43);
-    font-weight: bold;
-    border-radius: 5px;
-    font-size: 0.9em;
-    padding: 0px 3px;
-    margin: 0 5px;
   }
 `;
 
@@ -819,18 +799,6 @@ export const StyledExpandSection = styled.div`
     height: 0;
     margin: 0 10px !important;
     transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms, padding 500ms;
-  }
-`;
-
-const ExpandIcon = styled(MdExpandLess)`
-  transition: transform 250ms, opacity 250ms;
-  transform: ${({ collapsed }) => (collapsed === 'true' ? 'rotate(0deg)' : 'rotate(180deg)')};
-  opacity: 0.75;
-
-  &:hover {
-    transform: ${({ collapsed }) =>
-      collapsed === 'true' ? 'rotate(0deg) scale(1.2)' : 'rotate(180deg) scale(1.2)'};
-    opacity: 1;
   }
 `;
 
