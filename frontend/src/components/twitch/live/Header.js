@@ -12,8 +12,7 @@ const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed }, ref)
   return (
     <Header
       id='TwitchHeader'
-      title={'Twitch'}
-      text={
+      title={
         <h5 onClick={toggleExpanded}>
           Twitch <span id='live-indicator'>Live</span>
           <ExpandCollapseFeedButton collapsed={collapsed} />
