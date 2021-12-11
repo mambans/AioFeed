@@ -1,5 +1,5 @@
 import { useParams, useLocation } from 'react-router-dom';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import YouTube from 'react-youtube';
 
@@ -11,14 +11,14 @@ const StyledYoutubeIframe = styled(YouTube)`
 `;
 
 const YoutubeVideoPlayer = ({ playNext }) => {
-  const [video, setVideo] = useState({});
+  // const [video, setVideo] = useState({});
   const videoId = useParams().videoId;
   const location = useLocation();
   const getVideoInfoTimer = useRef();
 
-  useEffect(() => {
-    setVideo({ id: videoId, startTime: location.search?.replace(/[?t=]|s/g, '') });
-  }, [location.search, videoId]);
+  // useEffect(() => {
+  //   setVideo({ id: videoId, startTime: location.search?.replace(/[?t=]|s/g, '') });
+  // }, [location.search, videoId]);
 
   const setDocumentTitle = (event) => {
     if (event?.target?.getVideoData()?.author && event?.target?.getVideoData()?.title) {
@@ -38,7 +38,7 @@ const YoutubeVideoPlayer = ({ playNext }) => {
       autoplay: 1,
       controls: 1,
       origin: 'https://aiofeed.com',
-      start: video.startTime,
+      start: location.search?.replace(/[?t=]|s/g, ''),
       frameborder: '0',
       fs: 1,
     },
@@ -47,9 +47,9 @@ const YoutubeVideoPlayer = ({ playNext }) => {
   return (
     <>
       <StyledYoutubeIframe
-        videoId={video.id}
+        videoId={videoId}
         opts={opts}
-        id={video.id + 'player'}
+        id={videoId + 'player'}
         containerClassName='IframeContainer'
         onReady={(event) => setDocumentTitle(event)}
         onEnd={playNext}
