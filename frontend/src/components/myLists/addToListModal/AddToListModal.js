@@ -15,6 +15,23 @@ import { parseNumberAndString } from './../dragDropUtils';
 import NewListForm from './NewListForm';
 import API from '../../navigation/API';
 
+const mouseOverDisablePreview = () => {
+  if (
+    document.querySelector('.VodPreview') &&
+    document.querySelector('.VodPreview').style.display !== 'none'
+  ) {
+    document.querySelector('.VodPreview').style.display = 'none';
+  }
+};
+const mouseLeaveEnablePreview = () => {
+  if (
+    document.querySelector('.VodPreview') &&
+    document.querySelector('.VodPreview').style.display === 'none'
+  ) {
+    document.querySelector('.VodPreview').style.display = 'block';
+  }
+};
+
 export const addFavoriteVideo = async ({ setLists, id, videoId }) => {
   if (typeof setLists === 'function')
     setLists((lists) => {
@@ -76,12 +93,14 @@ export const AddRemoveBtn = ({
   };
   const mouseLeave = (e) => {
     onMouseLeave(e);
+    mouseLeaveEnablePreview();
     setIsHovered(null);
   };
 
   if (videoAdded)
     return (
       <IconContainer
+        onMouseOver={mouseOverDisablePreview}
         onClick={(e) => {
           if (onClick) {
             onClick(e);
@@ -105,6 +124,8 @@ export const AddRemoveBtn = ({
 
   return (
     <IconContainer
+      onMouseOver={mouseOverDisablePreview}
+      onMouseLeave={mouseLeaveEnablePreview}
       onClick={(e) => {
         if (onClick) {
           onClick(e);
@@ -125,7 +146,6 @@ export const AddRemoveBtn = ({
       }}
       style={style}
       onMouseEnter={mouseEnter}
-      onMouseLeave={mouseLeave}
     >
       <AddItemBtn size={size} disablehovereffect={String(!list)} />
     </IconContainer>
@@ -136,7 +156,11 @@ const AddToListModal = ({ handleOpen, videoId, redirect }) => {
   const { lists, setLists } = useContext(MyListsContext) || {};
 
   return (
-    <Lists onMouseEnter={handleOpen}>
+    <Lists
+      onMouseEnter={handleOpen}
+      onMouseOver={mouseOverDisablePreview}
+      onMouseLeave={mouseLeaveEnablePreview}
+    >
       <ListsLink>
         <Link to='/mylists'>Lists</Link>
       </ListsLink>

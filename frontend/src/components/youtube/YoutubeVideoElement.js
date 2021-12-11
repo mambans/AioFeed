@@ -44,7 +44,7 @@ const YoutubeVideoElement = ({
       {...props}
     >
       <ImageContainer id={video.contentDetails?.upload?.videoId} ref={ref} active={active}>
-        <AddToListButton list={list} videoId_p={video.contentDetails?.upload?.videoId} />
+        <AddToListButton list={list} videoId_p={video.contentDetails?.upload?.videoId} size={24} />
         {setPlayQueue && (
           <AddRemoveFromPlayQueueButton
             videoId={video.contentDetails?.upload?.videoId}

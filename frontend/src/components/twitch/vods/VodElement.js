@@ -118,6 +118,7 @@ const VodElement = ({
           videoId_p={id}
           disablepreview={handleMouseOut}
           style={{ top: thumbnail_url === '' && !previewAvailable.data ? '30px' : '0px' }}
+          size={24}
         />
         {setPlayQueue && (
           <AddRemoveFromPlayQueueButton
