@@ -1,6 +1,31 @@
 import React from 'react';
 import ReactLoading from 'react-loading';
-import { StyledLoadingContainer } from './sharedComponents/sharedStyledComponents';
+import styled, { keyframes } from 'styled-components';
+
+const breathing = keyframes`
+    from {
+      color: var(--textColor1);
+    }
+    to {
+      color: var(--textColor2);
+    }
+`;
+
+const StyledLoadingContainer = styled.div`
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  transition: all 2s linear ease-in;
+
+  h1 {
+    color: #dddddd;
+    text-align: center;
+    animation: 2s infinite alternate ease-out ${breathing};
+  }
+  p {
+    color: var(--textColor2);
+  }
+`;
 
 /**
  * Returns a loading element.

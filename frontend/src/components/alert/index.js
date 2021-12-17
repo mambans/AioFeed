@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import Alert from 'react-bootstrap/Alert';
+import styled from 'styled-components';
 
-import { StyledAlert } from '../sharedComponents/sharedStyledComponents';
+const StyledAlert = styled(Alert)`
+  text-align: center;
+  width: 86%;
+  margin: auto;
+  margin-top: 50px;
+  opacity: 0.7;
+`;
 
 const AlertHandler = (data) => {
   const {

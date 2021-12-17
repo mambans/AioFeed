@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import NavigationContext from '../components/navigation/NavigationContext';
+import NavigationContext from '../pages/navigation/NavigationContext';
 
 const useFullscreen = ({ hideNavbar = true } = {}) => {
   const { setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);

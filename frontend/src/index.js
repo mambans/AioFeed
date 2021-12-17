@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.scss';
 import './transitions.scss';
 import './components/themes/Themes.scss';
-import App from './components/app/App';
+import App from './pages/app/App';
 
 import * as serviceWorker from './serviceWorker';
 
