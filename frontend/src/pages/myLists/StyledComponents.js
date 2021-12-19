@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { Button, Form } from 'react-bootstrap';
-import { MdPlaylistAdd, MdPlaylistAddCheck } from 'react-icons/md';
+import { MdPlaylistAdd, MdPlaylistAddCheck, MdAdd } from 'react-icons/md';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 import { CgPlayListRemove } from 'react-icons/cg';
 
@@ -295,4 +295,15 @@ export const Label = styled(Form.Label)`
     border-right: none;
     border-left: none;
   }
+`;
+
+export const AddPlusIcon = styled(MdAdd)`
+  /* &&& {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transform: translate(0);
+    margin: 0;
+    padding-left: 5px;
+  } */
 `;

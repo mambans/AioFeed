@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useRef, useState } from 'react';
-import { MdAdd, MdDeleteForever } from 'react-icons/md';
+import { MdDeleteForever } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
 import SearchList from '../sharedComponents/SearchList';
@@ -14,7 +14,7 @@ import handleArrowNavigation, {
 } from '../twitch/channelList/handleArrowNavigation';
 import { videoImageUrls } from '../youtube/YoutubeVideoElement';
 import { parseNumberAndString } from './dragDropUtils';
-import { ListActionButton } from './StyledComponents';
+import { ListActionButton, AddPlusIcon } from './StyledComponents';
 import ToolTip from '../../components/tooltip/ToolTip';
 
 const getYoutubeIdFromUrl = (videoId) => {
@@ -162,7 +162,7 @@ const MyListSmallList = ({ listName, videos, style, list }) => {
       onKeyDown={handleArrowKey}
       setCursor={setCursor}
       keepListOpenOnSubmit={true}
-      leftIcon={<MdAdd size={16} type='submitBtn' onClick={handleSubmit} />}
+      leftIcon={<AddPlusIcon size={24} type='submitBtn' onClick={handleSubmit} />}
       style={style}
     >
       {Boolean(filteredInputMatched?.length) && (

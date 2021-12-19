@@ -9,20 +9,21 @@ import useLockBodyScroll from '../../hooks/useLockBodyScroll';
 import useClicksOutside from '../../hooks/useClicksOutside';
 import { ButtonLookalikeStyle } from './../../components/styledComponents';
 
-const SearchSubmitIcon = styled(FaSearch).attrs({ size: 16 })``;
+const SearchSubmitIcon = styled(FaSearch).attrs({ size: 22 })``;
 
 export const submiteButtonStyle = ({ btnDisabled }) => css`
   position: absolute;
   cursor: pointer;
   color: rgb(175, 175, 175);
   display: flex;
-  margin-left: 5px;
-  /* padding-left: 5px; */
-  transform: translateY(-27px);
   z-index: 5;
   pointer-events: ${btnDisabled ? 'none' : 'unset'};
   opacity: ${btnDisabled ? '0.3' : '1'};
-  transition: opacity 500ms;
+  transition: opacity 500ms, color 250ms, transform 500ms;
+
+  top: 0;
+  height: 100%;
+  padding-left: 5px;
 
   &:hover {
     color: rgb(255, 255, 255);
@@ -203,6 +204,7 @@ const SearchList = ({
           size={42}
         />
       )}
+
       {children && (
         <CSSTransition
           in={showDropdown && listIsOpen}
