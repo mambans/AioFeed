@@ -89,6 +89,10 @@ const Player = () => {
   const [isFullscreen, setIsFullscreen] = useState();
   const [resizeActive, setResizeActive] = useState(false);
 
+  // force refresh when streamer goes live?
+  // eslint-disable-next-line no-unused-vars
+  const [status, setStatus] = useState();
+
   const savedStreamInfo = useRef();
   const PlayerUIControlls = useRef();
   const OpenedDate = useRef(Date.now());
@@ -196,6 +200,7 @@ const Player = () => {
     setShowUIControlls(false);
     clearInterval(refreshStreamInfoTimer.current);
     setStreamInfo(null);
+    setStatus('offline-' + Date.now());
   }
 
   const GetAndSetStreamInfo = useCallback(async () => {
@@ -252,6 +257,7 @@ const Player = () => {
 
   async function onlineEvents() {
     console.log('Stream is Online');
+    setStatus('live' + Date.now());
 
     try {
       if (!refreshStreamInfoTimer.current && channelName) {

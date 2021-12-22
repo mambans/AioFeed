@@ -64,14 +64,15 @@ const VolumeSlider = ({
     return <IconVolume {...attrs} title={volumeMuted ? 'Unmute (m)' : 'Mute (m)'} />;
   };
 
-  const handleChange = (v) => {
+  const handleChange = (e) => {
     if (TwitchPlayer.getMuted()) {
       TwitchPlayer.setMuted(false);
       setVolumeMuted(false);
     }
 
-    setVolumeText(parseInt(v.target.value));
-    TwitchPlayer.setVolume(v.target.value / 100);
+    setVolumeText(parseInt(e.target.value));
+    TwitchPlayer.setVolume(e.target.value / 100);
+    e.StopPropagation();
   };
 
   function mouseEvents(e) {
