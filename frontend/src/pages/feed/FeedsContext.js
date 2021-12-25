@@ -43,8 +43,6 @@ export const FeedsProvider = ({ children }) => {
         setEnableTwitter: (v) => toggle('twitter', v),
         showTwitchSidebar: Boolean(pref.twitch_sidebar),
         setShowTwitchSidebar: (v) => toggle('twitch_sidebar', v),
-        showTwitchBigFeed: Boolean(pref.twitch_bigFeed),
-        setShowTwitchBigFeed: (v) => toggle('twitch_bigFeed', v),
         feedSize: parseInt(pref.size),
         setFeedSize: (v) => toggle('size', v),
         feedVideoSizeProps,

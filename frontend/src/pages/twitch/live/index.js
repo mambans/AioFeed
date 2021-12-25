@@ -25,14 +25,8 @@ const TwitchStandalone = () => {
 };
 
 export const Twitch = ({ in: forceMount = false, className }) => {
-  const {
-    enableTwitch,
-    showTwitchSidebar,
-    setShowTwitchSidebar,
-    showTwitchBigFeed,
-    setShowTwitchBigFeed,
-    enableFeedSections,
-  } = useContext(FeedsContext) || {};
+  const { enableTwitch, showTwitchSidebar, setShowTwitchSidebar, enableFeedSections } =
+    useContext(FeedsContext) || {};
 
   const { orders, toggleExpanded } = useContext(FeedsContext);
   const refreshBtnRef = useRef();
@@ -49,7 +43,7 @@ export const Twitch = ({ in: forceMount = false, className }) => {
         {(data) => (
           <>
             <CSSTransition
-              in={(showTwitchBigFeed && enableTwitch) || forceMount}
+              in={enableTwitch || forceMount}
               timeout={750}
               classNames='fade-750ms'
               appear
@@ -75,20 +69,6 @@ export const Twitch = ({ in: forceMount = false, className }) => {
               <HideSidebarButton
                 show={String(showTwitchSidebar)}
                 onClick={() => setShowTwitchSidebar(!showTwitchSidebar)}
-              />
-            </ToolTip>
-            <ToolTip
-              placement={'right'}
-              delay={{ show: 500, hide: 0 }}
-              tooltip={`${showTwitchBigFeed ? 'Hide' : 'Show'} big feed`}
-            >
-              <HideSidebarButton
-                show={String(showTwitchBigFeed)}
-                style={{
-                  left: showTwitchSidebar ? '245px' : '5px',
-                  top: showTwitchSidebar ? '92px' : '150px',
-                }}
-                onClick={() => setShowTwitchBigFeed(!showTwitchBigFeed)}
               />
             </ToolTip>
             <CSSTransition
