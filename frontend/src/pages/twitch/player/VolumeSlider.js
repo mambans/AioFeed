@@ -72,7 +72,6 @@ const VolumeSlider = ({
 
     setVolumeText(parseInt(e.target.value));
     TwitchPlayer.setVolume(e.target.value / 100);
-    e.StopPropagation();
   };
 
   function mouseEvents(e) {

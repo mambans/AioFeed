@@ -213,8 +213,7 @@ const PlaylistInPlayer = ({
   const { setLists } = useContext(MyListsContext);
   const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
   const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
-  const [loading, setLoading] = useState();
-  console.log('list:', list);
+  const listVideosRefs = useRef([]);
 
   useCheckForVideosAndValidateToken({
     lists,
@@ -224,18 +223,37 @@ const PlaylistInPlayer = ({
 
   useEffect(() => {
     (async () => {
-      setLoading(true);
+      console.log('listVideosRefs.current:', listVideosRefs.current);
+      console.log('list.videos:', list.videos);
+      if (
+        list.videos?.some(
+          (i) => !listVideosRefs.current?.find((v) => String(i) === String(v.id) && !v.loading)
+        )
+      ) {
+        const allVideos = await fetchListVideos({
+          list,
+          ytExistsAndValidated,
+          twitchExistsAndValidated,
+          // currentVideos: listVideosRefs.current,
+        });
 
-      const allVideos = await fetchListVideos({
-        list,
-        ytExistsAndValidated,
-        twitchExistsAndValidated,
-      });
+        console.log('allVideos--:', allVideos);
 
-      console.log('allVideos:', allVideos);
+        setTimeout(() => {
+          setListVideos(allVideos);
+          listVideosRefs.current = allVideos;
+        }, 0);
+        return;
+      }
+      const mergeVideosOrderedAndUnique = list.videos
+        .map((item) => listVideosRefs.current?.find((video) => String(video.id) === String(item)))
+        .filter((i) => i);
+      console.log('mergeVideosOrderedAndUnique:', mergeVideosOrderedAndUnique);
 
-      setListVideos(allVideos);
-      setLoading(false);
+      setTimeout(() => {
+        setListVideos(mergeVideosOrderedAndUnique);
+        listVideosRefs.current = mergeVideosOrderedAndUnique;
+      }, 0);
     })();
   }, [list, listName, ytExistsAndValidated, twitchExistsAndValidated, setListVideos]);
 
@@ -311,20 +329,16 @@ const PlaylistInPlayer = ({
         style={{ width: '87%', margin: '0 auto', position: 'relative' }}
       />
       <Container>
-        {loading ? (
-          <LoadingVideoElement type={'small'} />
-        ) : (
-          list && (
-            <List
-              listVideos={listVideos}
-              list={list}
-              setListVideos={setListVideos}
-              videoId={videoId}
-              setPlayQueue={setPlayQueue}
-              playQueue={playQueue}
-              setLists={setLists}
-            />
-          )
+        {list && (
+          <List
+            listVideos={listVideos}
+            list={list}
+            setListVideos={setListVideos}
+            videoId={videoId}
+            setPlayQueue={setPlayQueue}
+            playQueue={playQueue}
+            setLists={setLists}
+          />
         )}
       </Container>
     </>

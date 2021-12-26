@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import AddVideoExtraData from '../twitch/AddVideoExtraData';
 import TwitchAPI from '../twitch/API';
@@ -14,7 +14,12 @@ import { parseNumberAndString, restructureVideoList, uploadNewList } from './dra
 import aiofeedAPI from '../navigation/API';
 import { VideosContainer } from '../../components/styledComponents';
 
-export const fetchListVideos = async ({ list, ytExistsAndValidated, twitchExistsAndValidated }) => {
+export const fetchListVideos = async ({
+  list,
+  ytExistsAndValidated,
+  twitchExistsAndValidated,
+  currentVideos = [],
+}) => {
   if (list?.videos) {
     const twitchFetchVideos = async (items) => {
       const fetchedVideos = await TwitchAPI.getVideos({ id: items }).catch((e) => {
@@ -39,7 +44,7 @@ export const fetchListVideos = async ({ list, ytExistsAndValidated, twitchExists
 
     const youtubeItems = list.videos
       .map((video) => typeof video === 'string' && video)
-      .filter((i) => i);
+      .filter((i) => i && !currentVideos.find((v) => String(v.id) === String(i)));
 
     const twitchItemsWithDetails = Boolean(twitchItems?.length)
       ? twitchExistsAndValidated
@@ -58,20 +63,21 @@ export const fetchListVideos = async ({ list, ytExistsAndValidated, twitchExists
     const mergedVideosUnordered = [
       ...(twitchItemsWithDetails || []),
       ...(youtubeItemsWithDetails || []),
+      ...currentVideos,
     ];
 
-    const mergeVideosOrdered = list.videos
+    const mergeVideosOrderedAndUnique = list.videos
       .map((item) => mergedVideosUnordered.find((video) => String(video.id) === String(item)))
       .filter((i) => i);
 
     //Filtered out the video Ids that have been removed from Twitch/Youtube
-    const newFilteredIdsList = mergeVideosOrdered.map((v) => parseNumberAndString(v.id));
+    const newFilteredIdsList = mergeVideosOrderedAndUnique.map((v) => parseNumberAndString(v.id));
     if (newFilteredIdsList.length !== list.videos.length) {
       setTimeout(async () => {
         await aiofeedAPI.updateSavedList(list.id, { videos: newFilteredIdsList });
       }, 10000);
     }
-    return mergeVideosOrdered;
+    return mergeVideosOrderedAndUnique;
   }
 };
 
@@ -85,6 +91,7 @@ const List = ({
 }) => {
   const [dragSelected, setDragSelected] = useState();
   const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext) || {};
+  const listVideosRefs = useRef([]);
 
   const [videosToShow, setVideosToShow] = useState({
     amount: videoElementsAmount,
@@ -103,20 +110,37 @@ const List = ({
 
   useEffect(() => {
     (async () => {
-      const allVideos = await fetchListVideos({
-        list,
-        ytExistsAndValidated,
-        twitchExistsAndValidated,
-      });
-
-      setVideos((curr) => {
-        return allVideos?.map((vid) => {
-          const found = curr?.find((c) => c.id === vid.id);
-          if (!found && Boolean(curr?.length))
-            return { ...vid, transition: feedVideoSizeProps.transition || 'videoFadeSlide' };
-          return vid;
+      if (
+        list.videos?.some(
+          (i) => !listVideosRefs.current?.find((v) => String(i) === String(v.id) && !v.loading)
+        )
+      ) {
+        const allVideos = await fetchListVideos({
+          list,
+          ytExistsAndValidated,
+          twitchExistsAndValidated,
+          // currentVideos: listVideosRefs.current,
         });
-      });
+
+        setVideos((curr) => {
+          return allVideos?.map((vid) => {
+            const found = curr?.find((c) => c.id === vid.id);
+            if (!found && Boolean(curr?.length))
+              return { ...vid, transition: feedVideoSizeProps.transition || 'videoFadeSlide' };
+            return vid;
+          });
+        });
+        listVideosRefs.current = allVideos;
+        return;
+      }
+      const mergeVideosOrderedAndUnique = list.videos
+        .map((item) => listVideosRefs.current?.find((video) => String(video.id) === String(item)))
+        .filter((i) => i);
+
+      setTimeout(() => {
+        setVideos(mergeVideosOrderedAndUnique);
+        listVideosRefs.current = mergeVideosOrderedAndUnique;
+      }, 0);
     })();
   }, [
     list,
