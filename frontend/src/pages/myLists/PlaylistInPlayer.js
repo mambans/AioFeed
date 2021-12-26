@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled, { css } from 'styled-components';
 import { MdQueuePlayNext, MdSkipNext } from 'react-icons/md';
+import { CgScrollV } from 'react-icons/cg';
 import { HiViewList } from 'react-icons/hi';
 import { FaRandom } from 'react-icons/fa';
 import { TiArrowLoop } from 'react-icons/ti';
@@ -17,9 +18,9 @@ import YoutubeVideoElement from '../youtube/YoutubeVideoElement';
 import ToolTip from '../../components/tooltip/ToolTip';
 import { useParams } from 'react-router';
 import { ListItem } from './StyledComponents';
-import { AddRemoveBtn } from './addToListModal/AddToListModal';
 import NewListForm from './addToListModal/NewListForm';
 import useClicksOutside from '../../hooks/useClicksOutside';
+import { TransparentButton } from '../../components/styledComponents';
 
 const Container = styled.div`
   max-height: calc(100% - 60px);
@@ -75,15 +76,19 @@ const ShowListsBtn = styled(HiViewList)`
 const ListsList = styled.div`
   position: absolute;
   background: rgba(20, 20, 20, 0.92);
-  left: 0;
+  left: 500;
   top: 0;
   border-radius: 3px;
   min-width: 125px;
   min-height: 50px;
-  padding: 10px 5px;
+  padding: 15px;
+  z-index: 3;
 `;
 
 const AutoPlayNextBtn = styled(MdQueuePlayNext)`
+  ${svgButtonsStyle}
+`;
+const ScrollToVideoBtn = styled(CgScrollV)`
   ${svgButtonsStyle}
 `;
 const LoopListBtn = styled(TiArrowLoop)`
@@ -94,34 +99,32 @@ const PlayNextRandomBtn = styled(FaRandom)`
   ${svgButtonsStyle}
 `;
 
-const ShowLists = ({ setListToShow, listToShow, setLists, lists }) => {
+export const ShowLists = ({ setListToShow, listToShow, setLists, lists = {} }) => {
   const [open, setOpen] = useState();
   const { videoId } = useParams() || {};
   const ref = useRef();
   useClicksOutside(ref, () => setOpen(false), open);
+  const handleToggle = () => setOpen((c) => !c);
 
   return (
     <div ref={ref} style={{ height: '20px', display: 'flex' }}>
-      <ShowListsBtn size={20} onClick={() => setOpen((c) => !c)} />
+      <ShowListsBtn size={20} onClick={handleToggle} />
       <CSSTransition in={open} timeout={500} classNames='SlideHorizontal' unmountOnExit>
         <ListsList>
-          {Object.values(lists).map((list, index) => {
+          {Object?.values(lists)?.map((list, index) => {
             return (
-              <ListItem key={list?.title + index} added={list.videos.includes(videoId)}>
-                <button
+              <ListItem
+                key={list?.title + index}
+                added={list?.videos?.includes(videoId)}
+                style={{ height: '45px', fontSize: '1.1em' }}
+              >
+                <TransparentButton
                   onClick={() => {
                     if (listToShow?.title !== list.title) setListToShow(list);
                   }}
                 >
                   {list.title}
-                </button>
-                <AddRemoveBtn
-                  list={list}
-                  videoId={videoId}
-                  setLists={setLists}
-                  redirect={true}
-                  setListToShow={setListToShow}
-                />
+                </TransparentButton>
               </ListItem>
             );
           })}
@@ -284,12 +287,22 @@ const PlaylistInPlayer = ({
         <ToolTip tooltip={'play next video in queue/list'} width='max-content'>
           <PlayNextBtn size={20} onClick={playNext} />
         </ToolTip>
+        <ToolTip tooltip={'Scroll to video'} width='max-content'>
+          <ScrollToVideoBtn
+            onClick={() => {
+              const ele = document.querySelector(`#v${videoId}`);
+              if (ele && listVideos) {
+                ele.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+              }
+            }}
+          />
+        </ToolTip>
       </PlayListButtonsContainer>
       <MyListSmallList
         list={list}
         listName={listName}
         videos={listVideos}
-        style={{ width: '87%', margin: '0 auto' }}
+        style={{ width: '87%', margin: '0 auto', position: 'relative' }}
       />
       <Container>
         {list && (

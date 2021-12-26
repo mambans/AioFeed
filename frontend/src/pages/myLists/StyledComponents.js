@@ -147,7 +147,7 @@ export const ListItem = styled.div`
   font-size: 16px;
   font-weight: 600;
   width: 100%;
-  box-shadow: 0px 1px 2px #2f2c37;
+  /* box-shadow: 0px 1px 2px #2f2c37; */
   display: flex;
   align-items: center;
   transition: color 250ms;
