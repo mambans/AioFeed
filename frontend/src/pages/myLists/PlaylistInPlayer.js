@@ -35,7 +35,7 @@ const Container = styled.div`
 
 const PlayListButtonsContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   width: 100%;
   margin-bottom: 10px;
   position: relative;
@@ -51,7 +51,6 @@ const ListTitle = styled.h2`
 `;
 
 const svgButtonsStyle = ({ enabled }) => css`
-  margin: 0 15px;
   cursor: pointer;
   opacity: ${enabled === 'true' ? '1' : '0.3'};
   transition: opacity 250ms;
@@ -214,6 +213,7 @@ const PlaylistInPlayer = ({
   const { setLists } = useContext(MyListsContext);
   const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
   const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
+  const [loading, setLoading] = useState();
   console.log('list:', list);
 
   useCheckForVideosAndValidateToken({
@@ -224,6 +224,8 @@ const PlaylistInPlayer = ({
 
   useEffect(() => {
     (async () => {
+      setLoading(true);
+
       const allVideos = await fetchListVideos({
         list,
         ytExistsAndValidated,
@@ -231,20 +233,22 @@ const PlaylistInPlayer = ({
       });
 
       console.log('allVideos:', allVideos);
+
       setListVideos(allVideos);
+      setLoading(false);
     })();
   }, [list, listName, ytExistsAndValidated, twitchExistsAndValidated, setListVideos]);
 
   useEffect(() => {
     const ele = document.querySelector(`#v${videoId}`);
 
-    if (ele && listVideos) {
+    if (ele) {
       setTimeout(
         () => ele.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' }),
         0
       );
     }
-  }, [videoId, listVideos]);
+  }, [videoId]);
 
   return (
     <>
@@ -307,16 +311,20 @@ const PlaylistInPlayer = ({
         style={{ width: '87%', margin: '0 auto', position: 'relative' }}
       />
       <Container>
-        {list && (
-          <List
-            listVideos={listVideos}
-            list={list}
-            setListVideos={setListVideos}
-            videoId={videoId}
-            setPlayQueue={setPlayQueue}
-            playQueue={playQueue}
-            setLists={setLists}
-          />
+        {loading ? (
+          <LoadingVideoElement type={'small'} />
+        ) : (
+          list && (
+            <List
+              listVideos={listVideos}
+              list={list}
+              setListVideos={setListVideos}
+              videoId={videoId}
+              setPlayQueue={setPlayQueue}
+              playQueue={playQueue}
+              setLists={setLists}
+            />
+          )
         )}
       </Container>
     </>
