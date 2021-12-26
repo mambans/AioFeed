@@ -214,6 +214,7 @@ const PlaylistInPlayer = ({
   const { setLists } = useContext(MyListsContext);
   const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
   const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
+  console.log('list:', list);
 
   useCheckForVideosAndValidateToken({
     lists,
@@ -229,6 +230,7 @@ const PlaylistInPlayer = ({
         twitchExistsAndValidated,
       });
 
+      console.log('allVideos:', allVideos);
       setListVideos(allVideos);
     })();
   }, [list, listName, ytExistsAndValidated, twitchExistsAndValidated, setListVideos]);
