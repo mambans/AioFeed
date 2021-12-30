@@ -12,7 +12,8 @@ export const StyledExpandSection = styled.div`
   }
 
   * {
-    visibility: ${({ isclosed }) => (isclosed ? 'hidden' : 'visible')};
+    /* visibility: ${({ isclosed }) => (isclosed ? 'hidden' : 'visible')}; */
+    display: ${({ isclosed }) => (isclosed ? 'none' : 'initial')};
     pointer-events: ${({ isclosed }) => (isclosed ? 'none' : 'all')};
   }
 
