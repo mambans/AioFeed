@@ -6,6 +6,7 @@ export const StyledExpandSection = styled.div`
   height: ${({ height, collapsed }) => (collapsed === 'true' ? 0 : height)};
   padding: 0px;
   overflow: ${({ isOpened }) => (isOpened ? 'visible' : 'hidden')};
+  width: inherit;
 
   ${VideosContainer} {
     min-height: 0px !important;
@@ -13,7 +14,7 @@ export const StyledExpandSection = styled.div`
 
   * {
     /* visibility: ${({ isclosed }) => (isclosed ? 'hidden' : 'visible')}; */
-    display: ${({ isclosed }) => (isclosed ? 'none' : 'initial')};
+    display: ${({ isclosed }) => (isclosed ? 'none' : 'ignore-asd')};
     pointer-events: ${({ isclosed }) => (isclosed ? 'none' : 'all')};
   }
 

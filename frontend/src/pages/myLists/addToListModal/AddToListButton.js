@@ -1,12 +1,19 @@
 import React, { useContext, useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-import { AddedItemBtn, ButtonContainer, IconContainer } from '../StyledComponents';
+import { AddedItemBtn, AddItemBtn, ButtonContainer, IconContainer } from '../StyledComponents';
 import AddToListModal, { mouseLeaveEnablePreview, mouseOverDisablePreview } from './AddToListModal';
 import useClicksOutside from '../../../hooks/useClicksOutside';
 import FeedsContext from '../../feed/FeedsContext';
 
-const AddToListButton = ({ videoId_p, style = {}, size, disablepreview = () => {}, redirect }) => {
+const AddToListButton = ({
+  list,
+  videoId_p,
+  style = {},
+  size,
+  disablepreview = () => {},
+  redirect,
+}) => {
   const videoId = typeof videoId_p === 'number' ? parseInt(videoId_p) || videoId_p : videoId_p;
   const [open, setOpen] = useState();
   const fadeOutTimer = useRef();
@@ -72,7 +79,7 @@ const AddToListButton = ({ videoId_p, style = {}, size, disablepreview = () => {
         onMouseEnter={handleOpen}
         onMouseLeave={handleCloseDelayed}
       >
-        <AddedItemBtn size={size} />
+        {list ? <AddedItemBtn size={size} /> : <AddItemBtn size={size} />}
       </IconContainer>
 
       <CSSTransition in={open} timeout={250} classNames='fade' unmountOnExit>

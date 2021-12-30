@@ -120,6 +120,7 @@ const VodElement = ({
           disablepreview={handleMouseOut}
           style={{ top: thumbnail_url === '' && !previewAvailable.data ? '30px' : '0px' }}
           size={24}
+          list={list}
         />
         {setPlayQueue && (
           <AddRemoveFromPlayQueueButton

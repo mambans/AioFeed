@@ -137,7 +137,9 @@ export const Vods = ({ className }) => {
           />
         )}
         {!vods?.data ? (
-          <LoadingBoxes amount={videoElementsAmount} type='small' />
+          <SubFeedContainer>
+            <LoadingBoxes amount={videoElementsAmount} type='small' />
+          </SubFeedContainer>
         ) : (
           <>
             <TransitionGroup

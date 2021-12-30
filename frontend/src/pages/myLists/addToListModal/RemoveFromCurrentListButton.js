@@ -17,13 +17,14 @@ export const TransparentRemoveFromCurrentListButton = styled(TransparentButton)`
   top: 0;
   transform: translate(50%, -50%);
   opacity: 0;
+  z-index: 999999;
 
   &:hover {
     opacity: 1;
   }
 `;
 
-const RemoveFromCurrentListButton = ({ videoId_p, size = 24, disablepreview = () => {}, list }) => {
+const RemoveFromCurrentListButton = ({ videoId_p, size = 20, disablepreview = () => {}, list }) => {
   const videoId = typeof videoId_p === 'number' ? parseInt(videoId_p) || videoId_p : videoId_p;
   const { setLists } = useContext(MyListsContext) || {};
 

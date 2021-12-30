@@ -49,7 +49,7 @@ const YoutubeVideoElement = ({
           videoId_p={video.contentDetails?.upload?.videoId}
           list={list}
         />
-        <AddToListButton videoId_p={video.contentDetails?.upload?.videoId} />
+        <AddToListButton videoId_p={video.contentDetails?.upload?.videoId} list={list} />
         {setPlayQueue && (
           <AddRemoveFromPlayQueueButton
             videoId={video.contentDetails?.upload?.videoId}
