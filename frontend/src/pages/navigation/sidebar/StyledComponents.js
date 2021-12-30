@@ -34,6 +34,7 @@ export const StyledNavSidebar = styled.div`
   &.NavSidebarSlideRight-appear {
     opacity: 0;
     transform: translate3d(400px, 0, 0);
+    will-change: transform, opacity;
 
     @media screen and (max-width: 1920px) {
       transform: translate3d(300px, 0, 0);

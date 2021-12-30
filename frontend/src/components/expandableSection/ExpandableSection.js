@@ -8,22 +8,28 @@ const ExpandableSection = ({ collapsed, children, isOpened, ...rest }) => {
 
   useEffect(() => {
     clearTimeout(timer.current);
-    setHeight({ height: ref.current?.getBoundingClientRect()?.height + 'px', isOpened: false });
+    setHeight({
+      height: ref.current?.getBoundingClientRect()?.height + 'px',
+      isOpened: false,
+      willChange: true,
+    });
     requestAnimationFrame(() => {
-      setHeight({
+      setHeight((c) => ({
+        ...c,
         height: ref.current?.getBoundingClientRect()?.height + 'px',
         collapsed,
-        isOpened: false,
-      });
+      }));
     });
 
     timer.current = setTimeout(() => {
-      // requestAnimationFrame(() => {
-      setHeight((c) => {
-        if (!c.collapsed) return { height: 'unset', collapsed: c.collapsed, isOpened: true };
-        return c;
+      requestAnimationFrame(() => {
+        setHeight((c) => {
+          if (!c.collapsed) {
+            return { height: 'unset', collapsed: c.collapsed, isOpened: true, willChange: false };
+          }
+          return { ...c, willChange: false };
+        });
       });
-      // });
     }, 501);
   }, [collapsed]);
 
@@ -33,6 +39,7 @@ const ExpandableSection = ({ collapsed, children, isOpened, ...rest }) => {
       isOpened={height?.isOpened}
       height={height?.height}
       collapsed={String(height?.collapsed)}
+      willChange={String(height?.willChange)}
     >
       <div ref={ref}>{children}</div>
     </StyledExpandSection>

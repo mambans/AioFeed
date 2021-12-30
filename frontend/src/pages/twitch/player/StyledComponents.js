@@ -33,6 +33,7 @@ export const VideoAndChatContainer = styled.div`
       : '"video devider chat"'};
   color: var(--navTextColorActive);
   cursor: ${({ resizeActive }) => (resizeActive ? 'w-resize' : 'unset')};
+  will-change: ${({ resizeActive }) => (resizeActive ? 'contents' : 'auto')};
   grid-template-columns: ${({ chatwidth, hidechat, switched }) =>
     `${
       hidechat

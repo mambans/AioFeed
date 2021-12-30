@@ -7,6 +7,8 @@ export const StyledExpandSection = styled.div`
   padding: 0px;
   overflow: ${({ isOpened }) => (isOpened ? 'visible' : 'hidden')};
   width: inherit;
+  /* transform: translate(0); */
+  will-change: ${({ willChange }) => (willChange === 'true' ? 'height' : 'auto')};
 
   ${VideosContainer} {
     min-height: 0px !important;
