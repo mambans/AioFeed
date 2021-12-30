@@ -39,6 +39,7 @@ const Schedule = ({ user, user_id, alwaysVisible, absolute = true, btnSize = 26 
             ref={btnRef}
             absolute={String(absolute)}
             btnSize={btnSize}
+            style={{ padding: 0, marginRight: '5px' }}
           />
         )}
         {(show || alwaysVisible) && (
