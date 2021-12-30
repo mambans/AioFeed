@@ -15,7 +15,7 @@ import { parseNumberAndString } from './../dragDropUtils';
 import NewListForm from './NewListForm';
 import API from '../../navigation/API';
 
-const mouseOverDisablePreview = () => {
+export const mouseOverDisablePreview = () => {
   if (
     document.querySelector('.VodPreview') &&
     document.querySelector('.VodPreview').style.display !== 'none'
@@ -23,7 +23,7 @@ const mouseOverDisablePreview = () => {
     document.querySelector('.VodPreview').style.display = 'none';
   }
 };
-const mouseLeaveEnablePreview = () => {
+export const mouseLeaveEnablePreview = () => {
   if (
     document.querySelector('.VodPreview') &&
     document.querySelector('.VodPreview').style.display === 'none'

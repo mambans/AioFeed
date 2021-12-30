@@ -22,6 +22,7 @@ const NewListForm = ({ item, style } = {}) => {
       }
       error={'List already exists'}
       style={{ display: 'flex', alignItems: 'center' }}
+      placeholder='New list..'
     />
   );
 };

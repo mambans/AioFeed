@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import { Button, Form } from 'react-bootstrap';
 import { MdPlaylistAdd, MdPlaylistAddCheck, MdAdd } from 'react-icons/md';
-import { IoIosCloseCircleOutline } from 'react-icons/io';
+import { IoIosCloseCircleOutline, IoMdCloseCircle } from 'react-icons/io';
 import { CgPlayListRemove } from 'react-icons/cg';
 
 // export const Open = styled(MdStar)`
@@ -124,6 +124,14 @@ export const RemoveItemBtn = styled(CgPlayListRemove)`
 
   &:hover {
     color: rgb(150, 00, 00);
+  }
+`;
+export const RemoveItemFromCurrentListIcon = styled(IoMdCloseCircle)`
+  transition: color 250ms, opacity 250ms;
+  color: rgb(125, 00, 00);
+
+  &:hover {
+    color: rgb(175, 00, 00);
   }
 `;
 

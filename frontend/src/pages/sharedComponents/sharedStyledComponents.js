@@ -8,6 +8,7 @@ import { MdAddToQueue, MdRemoveFromQueue, MdExpandLess } from 'react-icons/md';
 import FeedsContext from '../feed/FeedsContext';
 import ToolTip from '../../components/tooltip/ToolTip';
 import { ButtonLookalikeStyle, TransparentButton } from '../../components/styledComponents';
+import { TransparentRemoveFromCurrentListButton } from '../myLists/addToListModal/RemoveFromCurrentListButton';
 
 export const AddToListModalTrigger = styled(Button).attrs({ variant: 'outline-secondary' })`
   ${ButtonLookalikeStyle}
@@ -126,6 +127,12 @@ export const StyledVideoContainer = styled.div`
 
     &:hover {
       color: var(--textColor2Hover);
+    }
+  }
+
+  &:hover {
+    ${TransparentRemoveFromCurrentListButton} {
+      opacity: 1;
     }
   }
 `;

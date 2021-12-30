@@ -29,6 +29,7 @@ const MyInput = ({
   readOnly,
   plaintext,
   children,
+  placeholder = 'name...',
 } = {}) => {
   const { value: input, bind: bindInput, reset: resetInput } = useInput(name || '');
   const ref = useRef();
@@ -56,7 +57,7 @@ const MyInput = ({
             readOnly={readOnly}
             plaintext={plaintext}
             type='text'
-            placeholder='name...'
+            placeholder={placeholder}
             name='listName'
             required
             {...bindInput}

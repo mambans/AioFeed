@@ -61,7 +61,7 @@ const Section = ({ feed: { title, rules, id }, data, index }) => {
         rightSide={<Rules rules={rules} name={title} id={id} />}
       />
       <ExpandableSection collapsed={orders?.[id]?.collapsed}>
-        <TwitchStreams data={data} hideOnEmpty />{' '}
+        <TwitchStreams data={data} hideOnEmpty />
       </ExpandableSection>
     </Container>
   );

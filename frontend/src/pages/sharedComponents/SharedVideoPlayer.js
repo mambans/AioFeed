@@ -197,7 +197,6 @@ const SharedVideoPlayer = () => {
               // opacity: '1',
             }}
             size={32}
-            // list={listToShow}
             redirect
           />
         </VolumeEventOverlay>

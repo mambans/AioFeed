@@ -13,6 +13,7 @@ import AddToListButton from '../myLists/addToListModal/AddToListButton';
 import { ChannelNameLink, PublishedDate } from './StyledComponents';
 import ToolTip from '../../components/tooltip/ToolTip';
 import AddRemoveFromPlayQueueButton from '../sharedComponents/AddRemoveFromPlayQueueButton';
+import RemoveFromCurrentListButton from '../myLists/addToListModal/RemoveFromCurrentListButton';
 
 export const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
   maxres?.url ||
@@ -44,7 +45,11 @@ const YoutubeVideoElement = ({
       {...props}
     >
       <ImageContainer id={video.contentDetails?.upload?.videoId} ref={ref} active={active}>
-        <AddToListButton list={list} videoId_p={video.contentDetails?.upload?.videoId} size={24} />
+        <RemoveFromCurrentListButton
+          videoId_p={video.contentDetails?.upload?.videoId}
+          list={list}
+        />
+        <AddToListButton videoId_p={video.contentDetails?.upload?.videoId} />
         {setPlayQueue && (
           <AddRemoveFromPlayQueueButton
             videoId={video.contentDetails?.upload?.videoId}

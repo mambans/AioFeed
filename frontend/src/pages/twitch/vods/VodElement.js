@@ -25,6 +25,7 @@ import AddToListButton from '../../myLists/addToListModal/AddToListButton';
 import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../../components/tooltip/ToolTip';
 import AddRemoveFromPlayQueueButton from '../../sharedComponents/AddRemoveFromPlayQueueButton';
+import RemoveFromCurrentListButton from '../../myLists/addToListModal/RemoveFromCurrentListButton';
 
 const VodElement = ({
   data,
@@ -113,8 +114,8 @@ const VodElement = ({
   return (
     <VideoContainer draggable={Boolean(setDragSelected)} onDragStart={onDragStart} {...props}>
       <ImageContainer ref={imgRef} active={active}>
+        <RemoveFromCurrentListButton videoId_p={id} disablepreview={handleMouseOut} list={list} />
         <AddToListButton
-          list={list}
           videoId_p={id}
           disablepreview={handleMouseOut}
           style={{ top: thumbnail_url === '' && !previewAvailable.data ? '30px' : '0px' }}

@@ -1,33 +1,23 @@
 import React, { useContext, useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-import { ButtonContainer } from '../StyledComponents';
-import AddToListModal from './AddToListModal';
-import MyListsContext from '../MyListsContext';
-import { AddRemoveBtn } from './AddToListModal';
+import { AddedItemBtn, ButtonContainer, IconContainer } from '../StyledComponents';
+import AddToListModal, { mouseLeaveEnablePreview, mouseOverDisablePreview } from './AddToListModal';
 import useClicksOutside from '../../../hooks/useClicksOutside';
 import FeedsContext from '../../feed/FeedsContext';
 
-const AddToListButton = ({
-  list,
-  videoId_p,
-  style = {},
-  size,
-  disablepreview = () => {},
-  redirect,
-}) => {
+const AddToListButton = ({ videoId_p, style = {}, size, disablepreview = () => {}, redirect }) => {
   const videoId = typeof videoId_p === 'number' ? parseInt(videoId_p) || videoId_p : videoId_p;
   const [open, setOpen] = useState();
   const fadeOutTimer = useRef();
   const fadeInTimer = useRef();
-  const { lists, setLists } = useContext(MyListsContext) || {};
   const { enableMyLists } = useContext(FeedsContext) || {};
   const ref = useRef();
 
   useClicksOutside(ref, handleClose, open);
 
   const handleOpen = (e) => {
-    // disablepreview();
+    disablepreview();
     e.stopPropagation();
     clearTimeout(fadeOutTimer.current);
     if (!fadeInTimer.current) {
@@ -61,7 +51,7 @@ const AddToListButton = ({
     fadeInTimer.current = null;
     clearTimeout(fadeOutTimer.current);
     fadeOutTimer.current = setTimeout(() => setOpen(false), 250);
-
+    mouseLeaveEnablePreview();
     return false;
   };
 
@@ -75,18 +65,16 @@ const AddToListButton = ({
       onMouseLeave={handleCloseDelayed}
       ref={ref}
     >
-      <AddRemoveBtn
-        list={list}
-        videoId={videoId}
-        // onMouseEnter={OpenFunction}
+      <IconContainer
+        onMouseOver={mouseOverDisablePreview}
+        onClick={toggle}
         style={{ right: '0', position: 'absolute', margin: '5px' }}
-        size={size}
-        lists={lists}
-        setLists={setLists}
         onMouseEnter={handleOpen}
         onMouseLeave={handleCloseDelayed}
-        onClick={toggle}
-      />
+      >
+        <AddedItemBtn size={size} />
+      </IconContainer>
+
       <CSSTransition in={open} timeout={250} classNames='fade' unmountOnExit>
         <AddToListModal handleOpen={handleOpen} videoId={videoId} redirect={redirect} />
       </CSSTransition>
