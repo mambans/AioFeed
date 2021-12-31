@@ -2,12 +2,13 @@ import React from 'react';
 import { ExpandCollapseFeedButton } from '../../sharedComponents/sharedStyledComponents';
 
 import AllFiltersList from '../CustomFilters/AllFiltersList';
-import Header from '../../../components/Header';
+import Header, { HeaderNumberCount } from '../../../components/Header';
 import ChannelSearchList from './../channelList';
 import BigScheduleList from './BigScheduleList';
 
 const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed }, ref) => {
-  const { refreshing, autoRefreshEnabled, refreshTimer, refresh, followedChannels } = data;
+  const { refreshing, autoRefreshEnabled, refreshTimer, refresh, followedChannels, liveStreams } =
+    data;
 
   return (
     <Header
@@ -27,6 +28,7 @@ const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed }, ref)
           >
             Live
           </span>
+          <HeaderNumberCount text={liveStreams?.length} />
           <ExpandCollapseFeedButton collapsed={collapsed} />
         </h5>
       }

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { HiViewList } from 'react-icons/hi';
 import './MyListsTransitions.scss';
-import Header from '../../components/Header';
+import Header, { HeaderNumberCount } from '../../components/Header';
 
 import MyListsContext from './MyListsContext';
 import FeedsCenterContainer from '../feed/FeedsCenterContainer';
@@ -99,7 +99,9 @@ export const FavoriteListContainer = ({
         id={list.title}
         title={
           <h5 onClick={() => toggleExpanded(list.id)}>
-            {list.title} <HiViewList size={25} color={'var(--listColorAdd)'} />
+            {list.title}
+            <HeaderNumberCount text={list?.videos?.length} />
+            <HiViewList size={25} color={'var(--listColorAdd)'} />
             <ExpandCollapseFeedButton collapsed={orders?.[list.id]?.collapsed} />
           </h5>
         }

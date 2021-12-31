@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import Header from '../../components/Header';
+import Header, { HeaderNumberCount } from '../../components/Header';
 import { Container } from '../twitch/StyledComponents';
 import FeedSectionsContext from './FeedSectionsContext';
 import Rules from './Rules';
@@ -54,6 +54,7 @@ const Section = ({ feed: { title, rules, id }, data, index }) => {
         title={
           <h5 onClick={() => toggleExpanded(id)}>
             {title}
+            <HeaderNumberCount text={data?.liveStreams?.length} />
             <BsCollectionFill size={22} color={'#ff0060'} />
             <ExpandCollapseFeedButton collapsed={orders?.[id]?.collapsed} />
           </h5>

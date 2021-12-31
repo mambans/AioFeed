@@ -24,6 +24,15 @@ export const HeaderOuterMainContainer = styled.div`
   scroll-margin-top: 95px;
 `;
 
+export const HeaderNumberCountContainer = styled.div`
+  height: 100%;
+  display: flex;
+  align-items: start;
+  margin: 0 5px;
+  font-size: 0.65em;
+  color: rgb(224, 224, 224);
+`;
+
 export const HeaderTopContainer = styled.div`
   display: flex;
   justify-content: space-between;
