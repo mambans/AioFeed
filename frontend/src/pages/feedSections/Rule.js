@@ -82,6 +82,15 @@ const InputsContainer = styled.div`
   }
 `;
 
+const Input = styled(Form.Control)`
+  font-weight: ${({ value }) => value && '600'};
+  color: ${({ value }) => value && '#ffffff'};
+
+  &::placeholder {
+    color: #373d44;
+  }
+`;
+
 const Rule = ({ rule, height, id }) => {
   const { addFeedSectionRule, deleteFeedSectionRule } = useContext(FeedSectionsContext);
 
@@ -152,28 +161,28 @@ const Rule = ({ rule, height, id }) => {
           {/* <Form.Label>asd</Form.Label> */}
           <InputsContainer>
             {/* <InputGroup className='mb-3'> */}
-            <Form.Control
+            <Input
               type='text'
               placeholder='title..'
               name='title'
               {...bindTitle}
               onBlur={handleOnblur}
             />
-            <Form.Control
+            <Input
               type='text'
               placeholder='category..'
               name='category'
               {...bindCategory}
               onBlur={handleOnblur}
             />
-            <Form.Control
+            <Input
               type='text'
               placeholder='channel..'
               name='channel'
               {...bindChannel}
               onBlur={handleOnblur}
             />
-            <Form.Control
+            <Input
               type='number'
               placeholder='viewers..'
               name='viewers'

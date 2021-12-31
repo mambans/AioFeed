@@ -31,13 +31,11 @@ const NotificationsList = () => {
                   </Link>
                 }
                 text={
-                  (notiStatus?.includes('updated') &&
-                    text?.split('\n').map((line) => (
-                      <p className='UpdateText' key={line}>
-                        {line}
-                      </p>
-                    ))) ||
-                  title
+                  text?.split('\n').map((line) => (
+                    <p className='UpdateText' key={line}>
+                      {line}
+                    </p>
+                  )) || title
                 }
                 icon={
                   <Link to={`/${user_name?.toLowerCase()}/page`} className='profileImg' alt=''>

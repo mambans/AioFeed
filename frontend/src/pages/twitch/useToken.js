@@ -89,6 +89,8 @@ export const TwitchProvider = ({ children }) => {
         setIsEnabledOfflineNotifications: () => toggle('offline_notis'),
         isEnabledUpdateNotifications: Boolean(pref.update_notis),
         setIsEnabledUpdateNotifications: () => toggle('update_notis'),
+        isEnabledFeedsectionNotifications: Boolean(pref.feedsection_notis),
+        setIsEnabledFeedsectionNotifications: () => toggle('feedsection_notis'),
         setEnableVodVolumeOverlay: () => toggle('vod_volume_overlay'),
         enableVodVolumeOverlay: Boolean(pref.vod_volume_overlay),
         twitchAccessToken,

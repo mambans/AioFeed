@@ -232,6 +232,7 @@ const Handler = ({ children }) => {
     refreshTimer,
     followedChannels: followedChannels.current,
     error: loadingStates.error,
+    oldLiveStreams: oldLiveStreams.current || [],
     liveStreams: liveStreams.current || [],
     refresh,
     newlyAddedStreams: newlyAddedStreams,
