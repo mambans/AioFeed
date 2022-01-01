@@ -11,12 +11,10 @@ import { BsCollectionFill } from 'react-icons/bs';
 import { ExpandCollapseFeedButton } from '../sharedComponents/sharedStyledComponents';
 import ExpandableSection from '../../components/expandableSection/ExpandableSection';
 import addSystemNotification from '../twitch/live/addSystemNotification';
-import { TwitchContext } from '../twitch/useToken';
 import NotificationsContext from '../notifications/NotificationsContext';
 
 const FeedSections = ({ data }) => {
   const { feedSections } = useContext(FeedSectionsContext);
-  const { isEnabledFeedsectionNotifications } = useContext(TwitchContext);
   const { addNotification } = useContext(NotificationsContext);
 
   const checkAgainstRules = (stream, rules) => {
@@ -47,7 +45,6 @@ const FeedSections = ({ data }) => {
               feed={feed}
               index={index}
               data={feed.data}
-              isEnabledFeedsectionNotifications={isEnabledFeedsectionNotifications}
               addNotification={addNotification}
             />
           </CSSTransition>
@@ -57,29 +54,25 @@ const FeedSections = ({ data }) => {
 };
 
 const Section = ({
-  feed: { title, rules, id },
+  feed: { title, rules, id, notifications_enabled },
   data,
   index,
-  isEnabledFeedsectionNotifications,
+
   addNotification,
 }) => {
   const { orders, toggleExpanded } = useContext(FeedsContext);
   const previosStreams = useRef();
 
   useEffect(() => {
-    console.log('previosStreams.current:', previosStreams.current);
-    if (isEnabledFeedsectionNotifications && previosStreams?.current) {
-      console.log('data?.liveStreams:', data?.liveStreams);
+    if (notifications_enabled && previosStreams?.current) {
       const streamsToNotify = data?.liveStreams.filter(
         (stream) =>
           !previosStreams?.current?.find((s) => s.user_id === stream.user_id) &&
           data?.oldLiveStreams.find((s) => s.user_id === stream.user_id)
       );
-      console.log('streamsToNotify:', streamsToNotify);
 
-      console.log('data?.oldLiveStreams:', data?.oldLiveStreams);
       const streams = streamsToNotify?.map((stream = {}) => {
-        stream.notiStatus = ` in ${title}}`;
+        stream.notiStatus = `in ${title}}`;
 
         addSystemNotification({
           status: `in ${title}`,
@@ -91,17 +84,10 @@ const Section = ({
         return stream;
       });
 
-      console.log('streams:', streams);
       addNotification(streams);
     }
     previosStreams.current = data?.liveStreams || [];
-  }, [
-    data?.liveStreams,
-    data?.oldLiveStreams,
-    title,
-    isEnabledFeedsectionNotifications,
-    addNotification,
-  ]);
+  }, [data?.liveStreams, data?.oldLiveStreams, title, addNotification, notifications_enabled]);
 
   return (
     <Container order={orders?.[id]?.order} id={`FeedSection${title}Header`}>

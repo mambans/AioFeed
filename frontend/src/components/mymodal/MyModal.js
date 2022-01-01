@@ -163,6 +163,7 @@ const SModal = styled.div`
   pointer-events: initial;
   overflow-y: auto;
   padding-right: 5px;
+  border-radius: 7px;
 
   &.slideLeft-appear {
     opacity: 0;

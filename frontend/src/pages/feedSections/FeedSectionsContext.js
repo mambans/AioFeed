@@ -120,6 +120,23 @@ export const FeedSectionsProvider = ({ children }) => {
     });
   };
 
+  const toggleFeedSectionNotification = (id) => {
+    setFeedSections((c) => {
+      const notifications_enabled = !c[id].notifications_enabled;
+
+      const newFeedSection = {
+        [id]: { ...c[id], notifications_enabled },
+      };
+
+      API.updateCustomFeedSections(id, { notifications_enabled });
+
+      return {
+        ...c,
+        ...newFeedSection,
+      };
+    });
+  };
+
   useEffect(() => {
     if (twitchAccessToken && authKey && !invoked.current) fetchFeedSectionsContextData();
   }, [fetchFeedSectionsContextData, twitchAccessToken, authKey]);
@@ -136,6 +153,7 @@ export const FeedSectionsProvider = ({ children }) => {
         toggleFeedSection,
         fetchFeedSectionsContextData,
         editFeedSectionTitle,
+        toggleFeedSectionNotification,
       }}
     >
       {children}

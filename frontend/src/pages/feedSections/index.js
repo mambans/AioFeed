@@ -5,9 +5,16 @@ import { StyledButton } from '../../components/styledComponents';
 import ToolTip from '../../components/tooltip/ToolTip';
 import FeedSectionsContext from './FeedSectionsContext';
 import { AiFillEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { MdDelete, MdAdd } from 'react-icons/md';
+import { MdDelete, MdAdd, MdNotifications, MdNotificationsOff } from 'react-icons/md';
+import { HiDotsVertical } from 'react-icons/hi';
 import Rules from './Rules';
 import NavigationContext from '../navigation/NavigationContext';
+import MyModal from '../../components/mymodal/MyModal';
+import styled from 'styled-components';
+
+const RightButton = styled(StyledButton)`
+  width: 100%;
+`;
 
 const FeedSectionAdd = () => {
   const {
@@ -16,6 +23,7 @@ const FeedSectionAdd = () => {
     toggleFeedSection,
     feedSections,
     editFeedSectionTitle,
+    toggleFeedSectionNotification,
   } = useContext(FeedSectionsContext);
 
   const { setOverflow } = useContext(NavigationContext);
@@ -53,34 +61,61 @@ const FeedSectionAdd = () => {
           }
           rightSide={
             <>
-              {Object.values(feedSections).find((l) => parseInt(l.id) === parseInt(section.id)) && (
-                <ToolTip
-                  delay={{ show: 500, hide: 0 }}
-                  toltip={`${section.enabled ? `Disable feed` : `Enable feed`}`}
-                >
-                  <StyledButton type='button' onClick={() => toggleFeedSection(section.id)}>
+              <MyModal
+                trigger={<HiDotsVertical size={20} />}
+                direction={'left'}
+                // onClick={() => setOverflow('visible')}
+                // onClose={() => setOverflow(null)}
+                style={{
+                  right: 0,
+                  background: 'rgba(29, 29, 29, 0.88)',
+                  minWidth: '125px',
+                  marginTop: '5px',
+                }}
+                relative
+                duration={350}
+              >
+                {/* {Object.values(feedSections).find((l) => parseInt(l.id) === parseInt(section.id)) && ( */}
+                {section.id && (
+                  <RightButton type='button' onClick={() => toggleFeedSection(section.id)}>
                     {section.enabled ? (
                       <AiFillEye size={22} color='#ffffff' />
                     ) : (
                       <AiOutlineEyeInvisible size={22} color='rgb(150,150,150)' />
                     )}
-                  </StyledButton>
-                </ToolTip>
-              )}
-              <ToolTip
-                delay={{ show: 500, hide: 0 }}
-                toltip={`${section.id ? `Remove list` : `Add new list`}`}
-              >
-                {section.id ? (
-                  <StyledButton type='button' onClick={() => deleteFeedSection(section.id)}>
-                    <MdDelete size={22} color='rgb(200,0,0)' />
-                  </StyledButton>
-                ) : (
-                  <StyledButton>
-                    <MdAdd size={22} color='rgb(0,230,0)' />
-                  </StyledButton>
+                    <span style={{ paddingLeft: '5px' }}>
+                      {section.enabled ? 'Enabled' : 'Disabled'}
+                    </span>
+                  </RightButton>
                 )}
-              </ToolTip>
+                {section.id && (
+                  <RightButton
+                    type='button'
+                    onClick={() => toggleFeedSectionNotification(section.id)}
+                  >
+                    {section.notifications_enabled ? (
+                      <MdNotifications size={22} color='#ffffff' />
+                    ) : (
+                      <MdNotificationsOff size={22} color='rgb(150,150,150)' />
+                    )}
+                    <span style={{ paddingLeft: '5px' }}>
+                      {section.notifications_enabled ? 'Enabled' : 'Disabled'}
+                    </span>
+                  </RightButton>
+                )}
+
+                {section.id ? (
+                  <RightButton type='button' onClick={() => deleteFeedSection(section.id)}>
+                    <MdDelete size={22} color='rgb(200,0,0)' />
+                    <span style={{ paddingLeft: '5px' }}>Delete</span>
+                  </RightButton>
+                ) : (
+                  <RightButton>
+                    <MdAdd size={22} color='rgb(0,230,0)' />
+                    <span style={{ paddingLeft: '5px' }}>Add </span>
+                  </RightButton>
+                )}
+              </MyModal>
             </>
           }
         />

@@ -267,6 +267,7 @@ export const StyledButton = styled(Button).attrs(({ type }) => ({
 }))`
   &&& {
     border: none;
+    box-shadow: none;
   }
 
   background: transparent;

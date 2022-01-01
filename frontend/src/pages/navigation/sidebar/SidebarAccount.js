@@ -43,8 +43,6 @@ const SidebarAccount = () => {
     enableVodVolumeOverlay,
     setTwitchAccessToken,
     twitchAccessToken,
-    isEnabledFeedsectionNotifications,
-    setIsEnabledFeedsectionNotifications,
   } = useContext(TwitchContext) || {};
   const {
     youtubeVideoHoverEnable,
@@ -188,16 +186,6 @@ const SidebarAccount = () => {
         : `Need to connect/authenticate with a Youtube account first.`,
       icon: <MdCrop169 size={18} />,
       smallerIcons: <MdVideocam size={14} color={domainColors.Twitch} />,
-    },
-    {
-      setEnable: setIsEnabledFeedsectionNotifications,
-      enabled: isEnabledFeedsectionNotifications,
-      label: 'Feedsection notifications',
-      serviceName: 'Twitch',
-      tooltip:
-        (isEnabledFeedsectionNotifications ? 'Disable ' : 'Enable ') + `feedsection notifications`,
-      icon: <BsCollectionFill size={18} color={'var(--listColorAdd)'} />,
-      smallerIcons: <FaTwitch size={14} color={domainColors.Twitch} />,
     },
   ];
 
