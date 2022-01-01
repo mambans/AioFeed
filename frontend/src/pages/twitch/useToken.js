@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import useCookieState from '../../hooks/useCookieState';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
 import useSyncedLocalState from '../../hooks/useSyncedLocalState';
-import { getLocalstorage } from '../../util';
+import { askForBrowserNotificationPermission, getLocalstorage } from '../../util';
 import AccountContext from '../account/AccountContext';
 import API from '../navigation/API';
 import validateToken from './validateToken';
@@ -86,9 +86,15 @@ export const TwitchProvider = ({ children }) => {
         twitchVideoHoverEnable: Boolean(pref.video_hover),
         setTwitchVideoHoverEnable: () => toggle('video_hover'),
         isEnabledOfflineNotifications: Boolean(pref.offline_notis),
-        setIsEnabledOfflineNotifications: () => toggle('offline_notis'),
+        setIsEnabledOfflineNotifications: () => {
+          askForBrowserNotificationPermission();
+          toggle('offline_notis');
+        },
         isEnabledUpdateNotifications: Boolean(pref.update_notis),
-        setIsEnabledUpdateNotifications: () => toggle('update_notis'),
+        setIsEnabledUpdateNotifications: () => {
+          askForBrowserNotificationPermission();
+          toggle('update_notis');
+        },
         setEnableVodVolumeOverlay: () => toggle('vod_volume_overlay'),
         enableVodVolumeOverlay: Boolean(pref.vod_volume_overlay),
         twitchAccessToken,

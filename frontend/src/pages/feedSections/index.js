@@ -11,6 +11,7 @@ import Rules from './Rules';
 import NavigationContext from '../navigation/NavigationContext';
 import MyModal from '../../components/mymodal/MyModal';
 import styled from 'styled-components';
+import { askForBrowserNotificationPermission } from '../../util';
 
 const RightButton = styled(StyledButton)`
   width: 100%;
@@ -91,7 +92,10 @@ const FeedSectionAdd = () => {
                 {section.id && (
                   <RightButton
                     type='button'
-                    onClick={() => toggleFeedSectionNotification(section.id)}
+                    onClick={() => {
+                      askForBrowserNotificationPermission();
+                      toggleFeedSectionNotification(section.id);
+                    }}
                   >
                     {section.notifications_enabled ? (
                       <MdNotifications size={22} color='#ffffff' />

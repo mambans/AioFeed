@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 export const RemoveCookie = (cookieName) => {
   document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax`;
   document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
@@ -89,4 +91,14 @@ export const convertArrayToObject = (array, key) => {
       [item[key]]: item,
     };
   }, initialValue);
+};
+
+export const askForBrowserNotificationPermission = async () => {
+  if (Notification && Notification.permission === 'default') {
+    const result = await Notification.requestPermission();
+    console.log('Notifications: ', result);
+    if (result === 'granted') toast.success('Notifications allowed');
+    if (result === 'denied') toast.success('Notifications blocked');
+    return result;
+  }
 };

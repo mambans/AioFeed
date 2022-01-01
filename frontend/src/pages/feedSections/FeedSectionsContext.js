@@ -35,6 +35,7 @@ export const FeedSectionsProvider = ({ children }) => {
       id,
       title,
       enabled: true,
+      notifications_enabled: false,
       rules: [],
     };
     setFeedSections((c) => {

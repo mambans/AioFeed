@@ -14,6 +14,7 @@ import { CustomFilterProvider } from '../CustomFilters/CustomFilterContext';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import FeedSections from '../../feedSections/FeedSections';
 import ExpandableSection from '../../../components/expandableSection/ExpandableSection';
+import { askForBrowserNotificationPermission } from '../../../util';
 
 const TwitchStandalone = () => {
   useDocumentTitle('Twitch Live');
@@ -32,9 +33,7 @@ export const Twitch = ({ in: forceMount = false, className }) => {
   const refreshBtnRef = useRef();
 
   useEffect(() => {
-    Notification.requestPermission().then(
-      (result) => result !== 'granted' && console.log('Notifications: ', result)
-    );
+    askForBrowserNotificationPermission();
   }, []);
 
   return (
