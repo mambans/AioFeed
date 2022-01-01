@@ -57,7 +57,6 @@ const Section = ({
   feed: { title, rules, id, notifications_enabled },
   data,
   index,
-
   addNotification,
 }) => {
   const { orders, toggleExpanded } = useContext(FeedsContext);
@@ -72,7 +71,7 @@ const Section = ({
       );
 
       const streams = streamsToNotify?.map((stream = {}) => {
-        stream.notiStatus = `in ${title}}`;
+        stream.notiStatus = `in ${title}`;
 
         addSystemNotification({
           status: `in ${title}`,
