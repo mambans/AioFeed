@@ -23,6 +23,9 @@ const FeedSections = ({ data }) => {
         stream.title.toLowerCase().includes(r.title.toLowerCase()) &&
         stream.game_name.toLowerCase().includes(r.category.toLowerCase()) &&
         loginNameFormat(stream).includes(r.channel.toLowerCase()) &&
+        stream?.tag_names?.find((tag_name) =>
+          tag_name?.toLowerCase()?.includes(r?.tag?.toLowerCase())
+        ) &&
         stream.viewer_count >= r.viewers
     );
   };

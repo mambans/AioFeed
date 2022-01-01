@@ -206,6 +206,18 @@ const TwitchAPI = {
       .catch((e) => console.error(e));
   },
 
+  getAllTags: async (params, query) => {
+    return await axios
+      .get(`${BASE_URL}/tags/streams${query || ''}`, {
+        params,
+        headers: {
+          Authorization: `Bearer ${await validateToken()}`,
+          'Client-ID': CLIENT_ID,
+        },
+      })
+      .catch((e) => console.error(e));
+  },
+
   getSchedule: async (params, { skipValidation } = {}) => {
     return await axios
       .get(`${BASE_URL}/schedule`, {

@@ -14,6 +14,7 @@ import UpdatedStreamsPromise from './UpdatedStreamsPromise';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import { TwitchContext } from '../useToken';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
+import { fetchAndAddTags } from '../fetchAndAddTags';
 
 const REFRESH_RATE = 25; // seconds
 
@@ -42,6 +43,7 @@ const Handler = ({ children }) => {
   // const [isInFocus, setIsInFocus] = useState();
   const isInFocus = useRef();
   const timer = useRef();
+  const streamTags = useRef([]);
   const refreshAfterUnfollowTimer = useRef();
   // eslint-disable-next-line no-unused-vars
   const [documentTitle, setDocumentTitle] = useDocumentTitle(
@@ -80,6 +82,28 @@ const Handler = ({ children }) => {
         if (streams?.status === 200) {
           const newLiveStreams = [...(streams?.data || [])];
           const uniqueFilteredLiveStreams = uniqBy(newLiveStreams, 'user_id');
+          const streamsTag_ids = uniqueFilteredLiveStreams.reduce((acc, curr) => {
+            return [...acc, ...(curr?.tag_ids || [])];
+          }, []);
+          const tag_ids = streamsTag_ids.filter(
+            (tag) => !streamTags.current.find(({ tag_id } = {}) => tag_id === tag)
+          );
+          const uniqueTags = [...new Set(tag_ids)];
+
+          if (uniqueTags?.length) {
+            console.log('uniqueTags to fetch:', uniqueTags);
+          }
+
+          const fetchedStreamTags = uniqueTags?.length
+            ? await fetchAndAddTags({
+                tag_ids: uniqueTags,
+              })
+            : [];
+          const tags = uniqBy(
+            [...(streamTags.current || []), ...(fetchedStreamTags || [])],
+            'tag_id'
+          );
+          streamTags.current = tags;
 
           const rulesFilteredLiveStreams = uniqueFilteredLiveStreams.filter((stream) => {
             const relevantRules =
@@ -104,16 +128,26 @@ const Handler = ({ children }) => {
             return true;
           });
 
-          const recentLiveStreams = (liveStreams.current || []).filter(
-            (s) => Math.trunc((Date.now() - new Date(s.started_at).getTime()) / 1000) <= 150
+          const recentLiveStreams = (rulesFilteredLiveStreams || []).filter(
+            (s = {}) => Math.trunc((Date.now() - new Date(s?.started_at).getTime()) / 1000) <= 150
           );
 
           oldLiveStreams.current = liveStreams.current;
-          liveStreams.current = orderBy(
-            uniqBy([...(rulesFilteredLiveStreams || []), ...(recentLiveStreams || [])], 'id'),
-            (s) => s.viewer_count,
-            'desc'
+          const uniqueStreams = uniqBy(
+            [...(rulesFilteredLiveStreams || []), ...(recentLiveStreams || [])],
+            'id'
           );
+
+          const streamsWithTags = uniqueStreams?.map((stream = {}) => {
+            const streams_tags = stream?.tag_ids?.map((id) => {
+              return tags?.find(({ tag_id } = {}) => tag_id === id);
+            });
+            const tag_names = streams_tags?.map((tag) => tag?.localization_names?.['en-us']);
+
+            return { ...stream, tag_names, tags: streams_tags };
+          });
+
+          liveStreams.current = orderBy(streamsWithTags, (s) => s.viewer_count, 'desc');
 
           setLoadingStates({
             refreshing: false,

@@ -106,25 +106,28 @@ const Rule = ({ rule, height, id }) => {
     bind: bindViewers,
     reset: resetViewers,
   } = useInput(rule?.viewers || '', { type: 'number' });
+  const { value: tag, bind: bindTag, reset: resetTag } = useInput(rule?.tag || '');
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
     if (
-      Boolean(title || category || channel || viewers) &&
+      Boolean(title || category || channel || viewers || tag) &&
       Boolean(
         title?.toLowerCase() !== rule?.title?.toLowerCase() ||
           category?.toLowerCase() !== rule?.category?.toLowerCase() ||
           channel?.toLowerCase() !== rule?.channel?.toLowerCase() ||
+          tag?.toLowerCase() !== rule?.tag?.toLowerCase() ||
           viewers !== rule?.viewers
       )
     ) {
-      addFeedSectionRule(id, { title, category, channel, viewers, id: rule?.id });
+      addFeedSectionRule(id, { title, category, channel, viewers, tag, id: rule?.id });
       if (!rule?.id) {
         resetTitle();
         resetCategory();
         resetChannel();
         resetViewers();
+        resetTag();
       }
     }
   };
@@ -135,12 +138,13 @@ const Rule = ({ rule, height, id }) => {
 
   const handleAdd = (e) => {
     e.preventDefault();
-    if (!rule?.id && Boolean(title || category || channel || viewers)) {
-      addFeedSectionRule(id, { title, category, channel, viewers });
+    if (!rule?.id && Boolean(title || category || channel || viewers || tag)) {
+      addFeedSectionRule(id, { title, category, channel, tag, viewers });
       resetTitle();
       resetCategory();
       resetChannel();
       resetViewers();
+      resetTag();
     }
   };
   const handleRemove = (e) => {
@@ -182,6 +186,7 @@ const Rule = ({ rule, height, id }) => {
               {...bindChannel}
               onBlur={handleOnblur}
             />
+            <Input type='text' placeholder='tag..' name='tag' {...bindTag} onBlur={handleOnblur} />
             <Input
               type='number'
               placeholder='viewers..'
