@@ -69,28 +69,34 @@ const Section = ({
   useEffect(() => {
     console.log('notifications_enabled:', notifications_enabled);
     console.log('previosStreams?.current:', previosStreams?.current);
-    if (notifications_enabled && previosStreams?.current) {
-      const streamsToNotify = data?.liveStreams.filter(
-        (stream) =>
-          !previosStreams?.current?.find((s) => s.user_id === stream.user_id) &&
-          data?.oldLiveStreams.find((s) => s.user_id === stream.user_id)
-      );
+    try {
+      if (notifications_enabled && previosStreams?.current) {
+        const streamsToNotify = data?.liveStreams?.filter(
+          (stream) =>
+            !previosStreams?.current?.find((s) => s?.user_id === stream?.user_id) &&
+            data?.oldLiveStreams?.find((s) => s?.user_id === stream?.user_id)
+        );
 
-      console.log('streamsToNotify:', streamsToNotify);
-      const streams = streamsToNotify?.map((stream = {}) => {
-        stream.notiStatus = `in ${title}`;
+        console.log('streamsToNotify:', streamsToNotify);
+        const streams = streamsToNotify?.map((stream = {}) => {
+          stream.notiStatus = `in ${title}`;
 
-        addSystemNotification({
-          status: `in ${title}`,
-          stream: stream,
-          title: `${title}`,
-          body: `${stream.title || stream.status || ''}\n${stream.game_name || stream.game || ''}`,
+          addSystemNotification({
+            status: `in ${title}`,
+            stream: stream,
+            title: `${title}`,
+            body: `${stream.title || stream.status || ''}\n${
+              stream.game_name || stream.game || ''
+            }`,
+          });
+
+          return stream;
         });
 
-        return stream;
-      });
-
-      addNotification(streams);
+        addNotification(streams);
+      }
+    } catch (e) {
+      console.log('Section useeffect Error', e);
     }
     previosStreams.current = data?.liveStreams || [];
   }, [data?.liveStreams, data?.oldLiveStreams, title, addNotification, notifications_enabled]);
