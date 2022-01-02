@@ -14,6 +14,7 @@ import addSystemNotification from '../twitch/live/addSystemNotification';
 import NotificationsContext from '../notifications/NotificationsContext';
 
 const FeedSections = ({ data }) => {
+  console.log('FeedSections data:', data);
   const { feedSections } = useContext(FeedSectionsContext);
   const { addNotification } = useContext(NotificationsContext);
 
@@ -66,6 +67,8 @@ const Section = ({
   const previosStreams = useRef();
 
   useEffect(() => {
+    console.log('notifications_enabled:', notifications_enabled);
+    console.log('previosStreams?.current:', previosStreams?.current);
     if (notifications_enabled && previosStreams?.current) {
       const streamsToNotify = data?.liveStreams.filter(
         (stream) =>
@@ -73,6 +76,7 @@ const Section = ({
           data?.oldLiveStreams.find((s) => s.user_id === stream.user_id)
       );
 
+      console.log('streamsToNotify:', streamsToNotify);
       const streams = streamsToNotify?.map((stream = {}) => {
         stream.notiStatus = `in ${title}`;
 

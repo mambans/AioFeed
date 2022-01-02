@@ -129,7 +129,7 @@ export const StyledVideoContainer = styled.div`
     opacity: 0;
     margin-top: ${({ feedVideoSizeProps }) => -feedVideoSizeProps.totalHeight}px !important;
     margin-bottom: 0px !important;
-    transition: opacity 500ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
+    transition: opacity 500ms, margin-top 750ms, width 750ms, margin-bottom 750ms, max-width 750ms,
       transform 750ms;
   }
 
@@ -137,7 +137,7 @@ export const StyledVideoContainer = styled.div`
     opacity: 1;
     margin-top: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
     margin-bottom: 15px;
-    transition: opacity 500ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
+    transition: opacity 500ms, margin-top 750ms, width 750ms, margin-bottom 750ms, max-width 750ms,
       transform 750ms;
   }
 
@@ -150,7 +150,7 @@ export const StyledVideoContainer = styled.div`
     opacity: 1;
     margin-top: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
     margin-bottom: 15px;
-    transition: opacity 500ms ease 250ms, margin-left 750ms, width 750ms, margin-right 750ms,
+    transition: opacity 500ms ease 250ms, margin-top 750ms, width 750ms, margin-bottom 750ms,
       max-width 750ms, transform 750ms;
   }
 
@@ -158,7 +158,7 @@ export const StyledVideoContainer = styled.div`
     opacity: 0;
     margin-top: ${({ feedVideoSizeProps }) => -feedVideoSizeProps.totalHeight}px !important;
     margin-bottom: 0px !important;
-    transition: opacity 500ms ease 250ms, margin-left 750ms, width 750ms, margin-right 750ms,
+    transition: opacity 500ms ease 250ms, margin-top 750ms, width 750ms, margin-bottom 750ms,
       max-width 750ms, transform 750ms;
   }
 
