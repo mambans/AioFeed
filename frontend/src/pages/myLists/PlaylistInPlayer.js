@@ -144,7 +144,8 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId, playQueue, s
       dragSelected: dragSelected,
       onDragEnd: (e) => uploadNewList(e, list?.id, listVideos, setLists),
       // onDrop: (e) => uploadNewList(e, list.name, videos, setLists),
-      onDragOver: (e) => restructureVideoList(e, listVideos, dragSelected, setListVideos),
+      onDragOver: (e) => restructureVideoList(e, dragSelected, setListVideos),
+      onDragEnter: (e) => e.preventDefault(),
     }),
     [dragSelected, listVideos, list?.id, setLists, setListVideos]
   );
@@ -172,6 +173,7 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId, playQueue, s
               {...dragEvents}
               setPlayQueue={setPlayQueue}
               playQueue={playQueue}
+              data-id={video.contentDetails?.upload?.videoId}
             />
           ) : (
             <VodElement
@@ -184,6 +186,7 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId, playQueue, s
               {...dragEvents}
               setPlayQueue={setPlayQueue}
               playQueue={playQueue}
+              data-id={video.id}
             />
           )}
         </CSSTransition>
