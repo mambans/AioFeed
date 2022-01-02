@@ -116,6 +116,52 @@ export const StyledVideoContainer = styled.div`
       max-width 750ms, transform 750ms;
   }
 
+  &.verticalSlide-appear {
+    opacity: 0;
+    transition: opacity 750ms;
+  }
+  &.verticalSlide-appear-active {
+    opacity: 1;
+    transition: opacity 750ms;
+  }
+
+  &.verticalSlide-enter {
+    opacity: 0;
+    margin-top: ${({ feedVideoSizeProps }) => -feedVideoSizeProps.totalHeight}px !important;
+    margin-bottom: 0px !important;
+    transition: opacity 500ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
+      transform 750ms;
+  }
+
+  &.verticalSlide-enter-active {
+    opacity: 1;
+    margin-top: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
+    margin-bottom: 15px;
+    transition: opacity 500ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
+      transform 750ms;
+  }
+
+  &.verticalSlide-enter-done {
+    opacity: 1;
+    transition: opacity 500ms;
+  }
+
+  &.verticalSlide-exit {
+    opacity: 1;
+    margin-top: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
+    margin-bottom: 15px;
+    transition: opacity 500ms ease 250ms, margin-left 750ms, width 750ms, margin-right 750ms,
+      max-width 750ms, transform 750ms;
+  }
+
+  &.verticalSlide-exit-active {
+    opacity: 0;
+    margin-top: ${({ feedVideoSizeProps }) => -feedVideoSizeProps.totalHeight}px !important;
+    margin-bottom: 0px !important;
+    transition: opacity 500ms ease 250ms, margin-left 750ms, width 750ms, margin-right 750ms,
+      max-width 750ms, transform 750ms;
+  }
+
   a {
     &&& {
       font-size: 1em;

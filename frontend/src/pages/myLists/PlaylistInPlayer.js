@@ -150,12 +150,12 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId, playQueue, s
   );
 
   return (
-    <TransitionGroup component={null} className={'videos'}>
+    <TransitionGroup component={null}>
       {listVideos?.map((video) => (
         <CSSTransition
           key={`${list.title}-${video.contentDetails?.upload?.videoId || video.id}`}
           timeout={750}
-          classNames={video.transition || 'fade-750ms'}
+          classNames={'verticalSlide'}
           // classNames='videoFadeSlide'
           unmountOnExit
         >

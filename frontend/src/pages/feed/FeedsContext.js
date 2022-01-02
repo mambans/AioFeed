@@ -19,8 +19,10 @@ export const FeedsProvider = ({ children }) => {
     margin: 7 * (parseInt(pref.size) / 100),
     fontSize: 16 * (parseInt(pref.size) / 100),
     totalWidth: 7 * (parseInt(pref.size) / 100) * 2 + 336 * (parseInt(pref.size) / 100),
+    totalHeight: 336 * (parseInt(pref.size) / 100) * 0.97 + 7 * (parseInt(pref.size) / 100),
     transition: 'videoFadeSlide',
   };
+  console.log('feedVideoSizeProps:', feedVideoSizeProps);
 
   const toggleExpanded = (ID) => {
     setOrders((c) => ({ ...c, [ID]: { ...(c?.[ID] || {}), collapsed: !c?.[ID]?.collapsed } }));
