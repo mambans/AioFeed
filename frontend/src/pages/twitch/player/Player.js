@@ -106,7 +106,7 @@ const Player = () => {
   const link3 = useRef();
 
   useFullscreen();
-  useDocumentTitle(`${streamInfo?.user_name || channelName} (${status || ''})`);
+  useDocumentTitle(`${streamInfo?.user_name || channelName} ${status ? `(${status || ''})` : ''}`);
   useFavicon(streamInfo?.profile_image_url);
 
   useEventListenerMemo(window?.Twitch?.Player?.ONLINE, onlineEvents, twitchVideoPlayer.current);
