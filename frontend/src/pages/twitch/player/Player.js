@@ -106,7 +106,7 @@ const Player = () => {
   const link3 = useRef();
 
   useFullscreen();
-  useDocumentTitle(`${streamInfo?.user_name || channelName} (${streamInfo ? 'Live' : 'Offline'})`);
+  useDocumentTitle(`${streamInfo?.user_name || channelName} (${status || ''})`);
   useFavicon(streamInfo?.profile_image_url);
 
   useEventListenerMemo(window?.Twitch?.Player?.ONLINE, onlineEvents, twitchVideoPlayer.current);
@@ -197,10 +197,12 @@ const Player = () => {
 
   function offlineEvents() {
     console.log('Stream is Offline');
-    setShowUIControlls(false);
-    clearInterval(refreshStreamInfoTimer.current);
-    setStreamInfo(null);
-    setStatus('offline-' + Date.now());
+    setTimeout(() => {
+      clearInterval(refreshStreamInfoTimer.current);
+      setShowUIControlls(false);
+      setStreamInfo(null);
+      setStatus('Offline');
+    }, 0);
   }
 
   const GetAndSetStreamInfo = useCallback(async () => {
@@ -257,7 +259,7 @@ const Player = () => {
 
   async function onlineEvents() {
     console.log('Stream is Online');
-    setStatus('live' + Date.now());
+    setStatus('Live');
 
     try {
       if (!refreshStreamInfoTimer.current && channelName) {
