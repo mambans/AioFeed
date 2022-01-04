@@ -7,7 +7,7 @@ import FeedsContext from './FeedsContext';
 
 const SliderMultipuleHandles = styled.div`
   position: absolute;
-  right: ${({ right, sliderLength }) => sliderLength / 2 - 25}px;
+  right: ${({ right, sliderLength }) => sliderLength / 2 - 20}px;
   top: ${({ top, sliderLength }) => sliderLength / 2 + 50}px;
 `;
 

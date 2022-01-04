@@ -25,6 +25,7 @@ export const StyledNavSidebar = styled.div`
   transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   overflow: ${({ overflow }) => overflow || 'auto'};
   scrollbar-color: var(--scrollbarColors) !important;
+  z-index: 999;
 
   @media screen and (max-width: 1920px) {
     width: 300px;
