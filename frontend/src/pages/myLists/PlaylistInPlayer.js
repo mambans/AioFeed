@@ -156,7 +156,7 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId, playQueue, s
         <CSSTransition
           key={`${list.title}-${video.contentDetails?.upload?.videoId || video.id}`}
           timeout={750}
-          classNames={'verticalSlide'}
+          classNames={video.list_id !== list.id ? 'fade-750ms' : 'verticalSlide'}
           // classNames='videoFadeSlide'
           unmountOnExit
         >

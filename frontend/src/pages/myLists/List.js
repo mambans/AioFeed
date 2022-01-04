@@ -67,7 +67,10 @@ export const fetchListVideos = async ({
     ];
 
     const mergeVideosOrderedAndUnique = list.videos
-      .map((item) => mergedVideosUnordered.find((video) => String(video.id) === String(item)))
+      .map((item) => ({
+        ...mergedVideosUnordered.find((video) => String(video.id) === String(item)),
+        list_id: list?.id,
+      }))
       .filter((i) => i);
 
     //Filtered out the video Ids that have been removed from Twitch/Youtube
