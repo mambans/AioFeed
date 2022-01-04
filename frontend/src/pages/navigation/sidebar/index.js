@@ -12,6 +12,7 @@ import {
   StyledNavSidebarBackdrop,
   StyledSidebarTrigger,
 } from './StyledComponents';
+import { Portal } from 'react-portal';
 
 const Sidebar = () => {
   const { profileImage, username, authKey } = useContext(AccountContext);
@@ -48,11 +49,15 @@ const Sidebar = () => {
         classNames='NavSidebarBackdropFade'
         unmountOnExit
       >
-        <StyledNavSidebarBackdrop onClick={() => setShowSidebar(false)} />
+        <Portal>
+          <StyledNavSidebarBackdrop onClick={() => setShowSidebar(false)} />
+        </Portal>
       </CSSTransition>
 
       <CSSTransition in={showSidebar} timeout={500} classNames='NavSidebarSlideRight' unmountOnExit>
-        <StyledNavSidebar overflow={overflow}>{modal[renderModal]}</StyledNavSidebar>
+        <Portal>
+          <StyledNavSidebar overflow={overflow}>{modal[renderModal]}</StyledNavSidebar>
+        </Portal>
       </CSSTransition>
     </>
   );
