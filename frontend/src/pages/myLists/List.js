@@ -19,8 +19,9 @@ export const fetchListVideos = async ({
   ytExistsAndValidated,
   twitchExistsAndValidated,
   currentVideos = [],
+  videos,
 }) => {
-  if (list?.videos) {
+  if (videos || list?.videos) {
     const twitchFetchVideos = async (items) => {
       const fetchedVideos = await TwitchAPI.getVideos({ id: items }).catch((e) => {
         console.log(e);
@@ -38,11 +39,11 @@ export const fetchListVideos = async ({
 
     const youtubeFetchVideos = async (items) => await GetVideoInfo({ videos: items });
 
-    const twitchItems = list.videos
+    const twitchItems = (videos || list.videos)
       .map((video) => typeof video === 'number' && video)
       .filter((i) => i);
 
-    const youtubeItems = list.videos
+    const youtubeItems = (videos || list.videos)
       .map((video) => typeof video === 'string' && video)
       .filter((i) => i && !currentVideos.find((v) => String(v.id) === String(i)));
 
@@ -66,7 +67,7 @@ export const fetchListVideos = async ({
       ...currentVideos,
     ];
 
-    const mergeVideosOrderedAndUnique = list.videos
+    const mergeVideosOrderedAndUnique = (videos || list.videos)
       .map((item) => ({
         ...mergedVideosUnordered.find((video) => String(video.id) === String(item)),
         list_id: list?.id,
@@ -75,7 +76,7 @@ export const fetchListVideos = async ({
 
     //Filtered out the video Ids that have been removed from Twitch/Youtube
     const newFilteredIdsList = mergeVideosOrderedAndUnique.map((v) => parseNumberAndString(v.id));
-    if (newFilteredIdsList.length !== list.videos.length) {
+    if (newFilteredIdsList.length !== (videos || list.videos).length) {
       setTimeout(async () => {
         await aiofeedAPI.updateSavedList(list.id, { videos: newFilteredIdsList });
       }, 10000);
@@ -118,22 +119,34 @@ const List = ({
           (i) => !listVideosRefs.current?.find((v) => String(i) === String(v.id) && !v.loading)
         )
       ) {
+        const newVideosIds = list.videos.filter(
+          (item) => !listVideosRefs.current?.find((video) => String(video.id) === String(item))
+        );
         const allVideos = await fetchListVideos({
           list,
           ytExistsAndValidated,
           twitchExistsAndValidated,
+          videos: newVideosIds,
           // currentVideos: listVideosRefs.current,
         });
 
+        console.log('allVideos--:', allVideos);
+        console.log('listVideosRefs.current:', listVideosRefs.current);
+        const newVideoArray = list.videos.map((item) =>
+          [...allVideos, ...listVideosRefs.current]?.find(
+            (video) => String(video.id) === String(item)
+          )
+        );
+
         setVideos((curr) => {
-          return allVideos?.map((vid) => {
+          return newVideoArray?.map((vid) => {
             const found = curr?.find((c) => c.id === vid.id);
             if (!found && Boolean(curr?.length))
               return { ...vid, transition: feedVideoSizeProps.transition || 'videoFadeSlide' };
             return vid;
           });
         });
-        listVideosRefs.current = allVideos;
+        listVideosRefs.current = newVideoArray;
         return;
       }
       const mergeVideosOrderedAndUnique = list.videos

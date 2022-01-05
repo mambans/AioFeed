@@ -233,18 +233,36 @@ const PlaylistInPlayer = ({
           (i) => !listVideosRefs.current?.find((v) => String(i) === String(v.id) && !v.loading)
         )
       ) {
+        const newVideosIds = list.videos.filter(
+          (item) => !listVideosRefs.current?.find((video) => String(video.id) === String(item))
+        );
         const allVideos = await fetchListVideos({
           list,
           ytExistsAndValidated,
           twitchExistsAndValidated,
+          videos: newVideosIds,
           // currentVideos: listVideosRefs.current,
         });
 
         console.log('allVideos--:', allVideos);
+        console.log('listVideosRefs.current:', listVideosRefs.current);
+        const newVideoArray = list.videos.map((item) =>
+          [...allVideos, ...listVideosRefs.current]?.find(
+            (video) => String(video.id) === String(item)
+          )
+        );
+        console.log('newVideoArray:', newVideoArray);
 
         setTimeout(() => {
-          setListVideos(allVideos);
-          listVideosRefs.current = allVideos;
+          setListVideos((curr) =>
+            newVideoArray.map((vid) => {
+              if (curr?.find((c) => c.id === vid.id)) {
+                return { ...vid, transition: 'verticalSlide' };
+              }
+              return vid;
+            })
+          );
+          listVideosRefs.current = newVideoArray;
         }, 0);
         return;
       }
