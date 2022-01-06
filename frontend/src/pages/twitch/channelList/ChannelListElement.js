@@ -75,8 +75,9 @@ const ChannelListElement = ({
       <Link
         to={{
           pathname: `/${
-            `${channel?.login || channel?.user_name}${!channel?.live ? '/page' : ''}` ||
-            `${searchInput?.toLowerCase()}${!channel?.live ? '/page' : ''}`
+            channel
+              ? `${channel?.login || channel?.user_name}${!channel?.live ? '/page' : ''}`
+              : `${searchInput?.toLowerCase()}${!channel?.live ? '/page' : ''}`
           }`,
           state: {
             p_id: channel?.user_id,
