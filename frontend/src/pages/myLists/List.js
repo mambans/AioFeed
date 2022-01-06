@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import AddVideoExtraData from '../twitch/AddVideoExtraData';
 import TwitchAPI from '../twitch/API';
@@ -13,6 +13,7 @@ import { CenterContext } from '../feed/FeedsCenterContainer';
 import { parseNumberAndString, restructureVideoList, uploadNewList } from './dragDropUtils';
 import aiofeedAPI from '../navigation/API';
 import { VideosContainer } from '../../components/styledComponents';
+import addVideoDataToVideos from './addVideoDataToVideos';
 
 export const fetchListVideos = async ({
   list,
@@ -92,10 +93,11 @@ const List = ({
   setLists,
   setVideos,
   videos,
+  savedVideosWithData,
+  addSavedData,
 }) => {
   const [dragSelected, setDragSelected] = useState();
   const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext) || {};
-  const listVideosRefs = useRef([]);
 
   const [videosToShow, setVideosToShow] = useState({
     amount: videoElementsAmount,
@@ -114,49 +116,26 @@ const List = ({
 
   useEffect(() => {
     (async () => {
-      if (
-        list.videos?.some(
-          (i) => !listVideosRefs.current?.find((v) => String(i) === String(v.id) && !v.loading)
-        )
-      ) {
-        const newVideosIds = list.videos.filter(
-          (item) => !listVideosRefs.current?.find((video) => String(video.id) === String(item))
-        );
-        const allVideos = await fetchListVideos({
-          list,
-          ytExistsAndValidated,
-          twitchExistsAndValidated,
-          videos: newVideosIds,
-          // currentVideos: listVideosRefs.current,
+      const videos = await addVideoDataToVideos({
+        savedVideosWithData: savedVideosWithData.current,
+        list,
+        ytExistsAndValidated,
+        twitchExistsAndValidated,
+      });
+      console.log('videos:', videos);
+
+      setVideos((curr) => {
+        return videos?.map((vid) => {
+          const found = curr?.find((c) => c.id === vid.id);
+          if (!found && Boolean(curr?.length))
+            return {
+              ...vid,
+              transition: feedVideoSizeProps.transition || 'videoFadeSlide',
+            };
+          return vid;
         });
-
-        console.log('allVideos--:', allVideos);
-        console.log('listVideosRefs.current:', listVideosRefs.current);
-        const newVideoArray = list.videos.map((item) =>
-          [...allVideos, ...listVideosRefs.current]?.find(
-            (video) => String(video.id) === String(item)
-          )
-        );
-
-        setVideos((curr) => {
-          return newVideoArray?.map((vid) => {
-            const found = curr?.find((c) => c.id === vid.id);
-            if (!found && Boolean(curr?.length))
-              return { ...vid, transition: feedVideoSizeProps.transition || 'videoFadeSlide' };
-            return vid;
-          });
-        });
-        listVideosRefs.current = newVideoArray;
-        return;
-      }
-      const mergeVideosOrderedAndUnique = list.videos
-        .map((item) => listVideosRefs.current?.find((video) => String(video.id) === String(item)))
-        .filter((i) => i);
-
-      setTimeout(() => {
-        setVideos(mergeVideosOrderedAndUnique);
-        listVideosRefs.current = mergeVideosOrderedAndUnique;
-      }, 0);
+      });
+      addSavedData(videos);
     })();
   }, [
     list,
@@ -164,6 +143,8 @@ const List = ({
     twitchExistsAndValidated,
     feedVideoSizeProps.transition,
     setVideos,
+    savedVideosWithData,
+    addSavedData,
   ]);
 
   const dragEvents = useMemo(

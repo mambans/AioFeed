@@ -244,7 +244,6 @@ const SharedVideoPlayer = () => {
                 setPlayQueue={setPlayQueue}
                 playNext={playNext}
                 list={listToShow}
-                lists={lists}
                 setListToShow={setListToShow}
                 isFullscreen={isFullscreen}
               />

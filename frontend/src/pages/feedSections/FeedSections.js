@@ -67,7 +67,6 @@ const Section = ({
   const previosStreams = useRef();
 
   useEffect(() => {
-    console.log('notifications_enabled:', notifications_enabled);
     console.log('previosStreams?.current:', previosStreams?.current);
     try {
       if (notifications_enabled && previosStreams?.current) {

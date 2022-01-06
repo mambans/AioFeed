@@ -89,6 +89,8 @@ export const FavoriteListContainer = ({
   isLoading,
   fetchMyListContextData,
   className,
+  savedVideosWithData,
+  addSavedData,
 }) => {
   const [videos, setVideos] = useState();
   const { orders, toggleExpanded } = useContext(FeedsContext);
@@ -122,6 +124,8 @@ export const FavoriteListContainer = ({
           setLists={setLists}
           setVideos={setVideos}
           videos={videos}
+          savedVideosWithData={savedVideosWithData}
+          addSavedData={addSavedData}
         />
       </ExpandableSection>
     </Container>
@@ -129,8 +133,15 @@ export const FavoriteListContainer = ({
 };
 
 export const MyLists = () => {
-  const { lists, setLists, fetchMyListContextData, isLoading, setIsLoading } =
-    useContext(MyListsContext);
+  const {
+    lists,
+    setLists,
+    fetchMyListContextData,
+    isLoading,
+    setIsLoading,
+    savedVideosWithData,
+    addSavedData,
+  } = useContext(MyListsContext);
   const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
   const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
   // const validateToken = useToken();
@@ -163,6 +174,8 @@ export const MyLists = () => {
                   fetchMyListContextData={fetchMyListContextData}
                   ytExistsAndValidated={ytExistsAndValidated}
                   twitchExistsAndValidated={twitchExistsAndValidated}
+                  savedVideosWithData={savedVideosWithData}
+                  addSavedData={addSavedData}
                 />
               </CSSTransition>
             ))}

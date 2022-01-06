@@ -11,7 +11,6 @@ import { useCheckForVideosAndValidateToken } from '.';
 import MyListSmallList from './MyListSmallList';
 import { restructureVideoList, uploadNewList } from './dragDropUtils';
 import MyListsContext from './MyListsContext';
-import { fetchListVideos } from './List';
 import { LoadingVideoElement } from '../twitch/StyledComponents';
 import VodElement from '../twitch/vods/VodElement';
 import YoutubeVideoElement from '../youtube/YoutubeVideoElement';
@@ -21,6 +20,7 @@ import { ListItem } from './StyledComponents';
 import NewListForm from './addToListModal/NewListForm';
 import useClicksOutside from '../../hooks/useClicksOutside';
 import { TransparentButton } from '../../components/styledComponents';
+import addVideoDataToVideos from './addVideoDataToVideos';
 
 const Container = styled.div`
   max-height: calc(100% - 60px);
@@ -210,13 +210,11 @@ const PlaylistInPlayer = ({
   setPlayQueue,
   playNext,
   list,
-  lists,
   setListToShow,
 }) => {
-  const { setLists } = useContext(MyListsContext);
+  const { setLists, lists, savedVideosWithData, addSavedData } = useContext(MyListsContext);
   const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
   const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
-  const listVideosRefs = useRef([]);
 
   useCheckForVideosAndValidateToken({
     lists,
@@ -226,57 +224,35 @@ const PlaylistInPlayer = ({
 
   useEffect(() => {
     (async () => {
-      console.log('listVideosRefs.current:', listVideosRefs.current);
-      console.log('list.videos:', list.videos);
-      if (
-        list.videos?.some(
-          (i) => !listVideosRefs.current?.find((v) => String(i) === String(v.id) && !v.loading)
-        )
-      ) {
-        const newVideosIds = list.videos.filter(
-          (item) => !listVideosRefs.current?.find((video) => String(video.id) === String(item))
-        );
-        const allVideos = await fetchListVideos({
-          list,
-          ytExistsAndValidated,
-          twitchExistsAndValidated,
-          videos: newVideosIds,
-          // currentVideos: listVideosRefs.current,
-        });
-
-        console.log('allVideos--:', allVideos);
-        console.log('listVideosRefs.current:', listVideosRefs.current);
-        const newVideoArray = list.videos.map((item) =>
-          [...allVideos, ...listVideosRefs.current]?.find(
-            (video) => String(video.id) === String(item)
-          )
-        );
-        console.log('newVideoArray:', newVideoArray);
-
-        setTimeout(() => {
-          setListVideos((curr) =>
-            newVideoArray.map((vid) => {
-              if (curr?.find((c) => c.id === vid.id)) {
-                return { ...vid, transition: 'verticalSlide' };
-              }
-              return vid;
-            })
-          );
-          listVideosRefs.current = newVideoArray;
-        }, 0);
-        return;
-      }
-      const mergeVideosOrderedAndUnique = list.videos
-        .map((item) => listVideosRefs.current?.find((video) => String(video.id) === String(item)))
-        .filter((i) => i);
-      console.log('mergeVideosOrderedAndUnique:', mergeVideosOrderedAndUnique);
+      const videos = await addVideoDataToVideos({
+        savedVideosWithData: savedVideosWithData.current,
+        list,
+        ytExistsAndValidated,
+        twitchExistsAndValidated,
+      });
+      console.log('videos:', videos);
 
       setTimeout(() => {
-        setListVideos(mergeVideosOrderedAndUnique);
-        listVideosRefs.current = mergeVideosOrderedAndUnique;
+        setListVideos((curr) =>
+          videos.map((vid) => {
+            if (curr?.find((c) => c.id === vid.id)) {
+              return { ...vid, transition: 'verticalSlide' };
+            }
+            return vid;
+          })
+        );
+        addSavedData(videos);
       }, 0);
     })();
-  }, [list, listName, ytExistsAndValidated, twitchExistsAndValidated, setListVideos]);
+  }, [
+    list,
+    listName,
+    ytExistsAndValidated,
+    twitchExistsAndValidated,
+    setListVideos,
+    savedVideosWithData,
+    addSavedData,
+  ]);
 
   useEffect(() => {
     const ele = document.querySelector(`#v${videoId}`);

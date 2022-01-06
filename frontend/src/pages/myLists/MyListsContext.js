@@ -4,6 +4,7 @@ import API from '../navigation/API';
 import AccountContext from '../account/AccountContext';
 import LogsContext from '../logs/LogsContext';
 import { parseNumberAndString } from './dragDropUtils';
+import { uniqBy } from 'lodash';
 
 const MyListsContext = React.createContext();
 
@@ -15,6 +16,15 @@ export const MyListsProvider = ({ children }) => {
     useSyncedLocalState('MylistsPreferences', {}) || {};
   const [isLoading, setIsLoading] = useState();
   const invoked = useRef(false);
+  const savedVideosWithData = useRef([]);
+
+  const addSavedData = (newData = []) => {
+    const data = [...(savedVideosWithData.current || []), ...newData].filter((i) => i);
+    console.log('data:', data);
+    const uniqueData = uniqBy(data, 'id');
+    console.log('uniqueData:', uniqueData);
+    savedVideosWithData.current = uniqueData;
+  };
 
   const addList = async (title, item) => {
     const newVideo = item ? (Array.isArray(item) ? item : [parseNumberAndString(item)]) : [];
@@ -144,6 +154,8 @@ export const MyListsProvider = ({ children }) => {
         deleteList,
         editListName,
         checkIfListNameIsAvaliable,
+        savedVideosWithData: savedVideosWithData,
+        addSavedData,
       }}
     >
       {children}
