@@ -6,10 +6,6 @@ const addVideoDataToVideos = async ({
   ytExistsAndValidated,
   twitchExistsAndValidated,
 }) => {
-  console.log('savedVideosWithData:', savedVideosWithData);
-  console.log('list:', list);
-  console.log('ytExistsAndValidated:', ytExistsAndValidated);
-  console.log('twitchExistsAndValidated:', twitchExistsAndValidated);
   const filteredVideos = list?.videos.reduce(
     (acc, id) => {
       const video = savedVideosWithData.find((v) => String(v.id) === String(id) && !v?.loading);
@@ -21,7 +17,6 @@ const addVideoDataToVideos = async ({
     { missing: [], existing: [] }
   );
 
-  console.log('filteredVideos:', filteredVideos);
   if (filteredVideos?.missing?.length) {
     const newlyFetchedVideoData = await fetchListVideos({
       list,
@@ -29,7 +24,6 @@ const addVideoDataToVideos = async ({
       twitchExistsAndValidated,
       videos: filteredVideos.missing,
     });
-    console.log('newlyFetchedVideoData:', newlyFetchedVideoData);
 
     const orderAndMergeVideos = list?.videos.reduce((acc, id) => {
       const video = [...filteredVideos.existing, ...newlyFetchedVideoData].find(
@@ -39,7 +33,6 @@ const addVideoDataToVideos = async ({
       if (video) return [...acc, video];
       return acc;
     }, []);
-    console.log('orderAndMergeVideos:', orderAndMergeVideos);
 
     return orderAndMergeVideos;
   }

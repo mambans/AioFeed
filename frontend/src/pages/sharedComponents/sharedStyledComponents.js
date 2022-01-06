@@ -69,22 +69,16 @@ export const StyledVideoContainer = styled.div`
 
   &.videoFadeSlide-enter {
     opacity: 0;
-    width: 0px !important;
-    max-width: 0px !important;
-    transform: ${({ feedVideoSizeProps }) => `translate3d(-${feedVideoSizeProps.width}px, 0, 0)`};
+    margin-left: ${({ feedVideoSizeProps }) => -feedVideoSizeProps.totalWidth}px !important;
     margin-right: 0px !important;
-    margin-left: 0px !important;
     transition: opacity 500ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
       transform 750ms;
   }
 
   &.videoFadeSlide-enter-active {
     opacity: 1;
-    width: ${({ feedVideoSizeProps }) => feedVideoSizeProps.width}px !important;
-    max-width: ${({ feedVideoSizeProps }) => feedVideoSizeProps.width}px !important;
-    transform: translate3d(0, 0, 0);
-    margin-right: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
     margin-left: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
+    margin-right: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
     transition: opacity 500ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
       transform 750ms;
   }
@@ -96,22 +90,17 @@ export const StyledVideoContainer = styled.div`
 
   &.videoFadeSlide-exit {
     opacity: 1;
-    width: ${({ feedVideoSizeProps }) => feedVideoSizeProps.width}px !important;
-    max-width: ${({ feedVideoSizeProps }) => feedVideoSizeProps.width}px !important;
-    transform: translate3d(0, 0, 0);
-    margin-right: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
     margin-left: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
+    margin-right: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
     transition: opacity 500ms ease 250ms, margin-left 750ms, width 750ms, margin-right 750ms,
       max-width 750ms, transform 750ms;
   }
 
   &.videoFadeSlide-exit-active {
     opacity: 0;
-    width: 0px !important;
-    max-width: 0px !important;
-    transform: ${({ feedVideoSizeProps }) => `translate3d(-${feedVideoSizeProps.width}px, 0, 0)`};
+    margin-left: ${({ feedVideoSizeProps }) =>
+      -(feedVideoSizeProps.totalWidth + feedVideoSizeProps.margin)}px !important;
     margin-right: 0px !important;
-    margin-left: 0px !important;
     transition: opacity 500ms ease 250ms, margin-left 750ms, width 750ms, margin-right 750ms,
       max-width 750ms, transform 750ms;
   }

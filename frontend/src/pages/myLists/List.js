@@ -124,17 +124,7 @@ const List = ({
       });
       console.log('videos:', videos);
 
-      setVideos((curr) => {
-        return videos?.map((vid) => {
-          const found = curr?.find((c) => c.id === vid.id);
-          if (!found && Boolean(curr?.length))
-            return {
-              ...vid,
-              transition: feedVideoSizeProps.transition || 'videoFadeSlide',
-            };
-          return vid;
-        });
-      });
+      setVideos(videos);
       addSavedData(videos);
     })();
   }, [
