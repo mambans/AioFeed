@@ -10,7 +10,7 @@ const AddToListButton = ({
   list,
   videoId_p,
   style = {},
-  size,
+  size = 24,
   disablepreview = () => {},
   redirect,
 }) => {

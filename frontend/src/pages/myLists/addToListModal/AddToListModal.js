@@ -14,6 +14,8 @@ import {
 import { parseNumberAndString } from './../dragDropUtils';
 import NewListForm from './NewListForm';
 import API from '../../navigation/API';
+import Button from '../../../components/Button';
+import { Animate } from '../../../components/Button/styledComponents';
 
 export const mouseOverDisablePreview = () => {
   if (
@@ -169,35 +171,44 @@ const AddToListModal = ({ handleOpen, videoId, redirect }) => {
           const videoAdded = list && list?.videos?.includes(parseNumberAndString(videoId));
 
           return (
-            <ListItem
-              key={list.title + index}
-              onClick={(e) => {
-                if (videoAdded) {
-                  removeFavoriteVideo({ setLists, id: list?.id, videoId });
-                  window.history.pushState(
-                    {},
-                    document.title,
-                    `${window.location.origin + window.location.pathname}`
-                  );
-                  return;
-                }
+            <ListItem key={list.title + index} added={String(!!videoAdded)} cursor='pointer'>
+              <Button
+                style={{ width: '100%' }}
+                variant={'transparent'}
+                disableClickAnimation
+                onClick={(e) => {
+                  if (videoAdded) {
+                    removeFavoriteVideo({ setLists, id: list?.id, videoId });
+                    window.history.pushState(
+                      {},
+                      document.title,
+                      `${window.location.origin + window.location.pathname}`
+                    );
+                    return;
+                  }
 
-                addFavoriteVideo({ setLists, id: list?.id, videoId });
-                if (redirect && list?.title) {
-                  window.history.pushState(
-                    {},
-                    document.title,
-                    `${window.location.origin + window.location.pathname}?list=${list?.title}`
-                  );
-                }
-              }}
-              added={String(!!videoAdded)}
-              cursor='pointer'
-            >
-              <RemoveItemBtn size={18} color='rgb(150,00,0)' />
-              <AddedItemBtn size={18} />
-              <AddItemBtn size={18} />
-              <span style={{ marginLeft: '30px' }}>{list.title}</span>
+                  addFavoriteVideo({ setLists, id: list?.id, videoId });
+                  if (redirect && list?.title) {
+                    window.history.pushState(
+                      {},
+                      document.title,
+                      `${window.location.origin + window.location.pathname}?list=${list?.title}`
+                    );
+                  }
+                }}
+              >
+                <Animate>
+                  {videoAdded ? (
+                    <>
+                      <RemoveItemBtn size={18} color='rgb(150,00,0)' />
+                      <AddedItemBtn size={18} />
+                    </>
+                  ) : (
+                    <AddItemBtn size={18} />
+                  )}
+                </Animate>
+                <span style={{ marginLeft: '30px' }}>{list.title}</span>
+              </Button>
             </ListItem>
           );
         })}

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useRef, useContext } from 'react';
 
 import { StyledToggleButton } from './StyledComponents';
 import ToolTip from '../../../components/tooltip/ToolTip';
@@ -17,7 +17,7 @@ const ToggleButton = ({
   smallerIcons,
   serviceName,
 }) => {
-  const [checked, setChecked] = useState(enabled || false);
+  // const [checked, setChecked] = useState(enabled || false);
   const timeout = useRef();
   const { twitchAccessToken } = useContext(TwitchContext);
   const { youtubeAccessToken } = useContext(YoutubeContext);
@@ -31,15 +31,15 @@ const ToggleButton = ({
   const anTokenExists = Boolean(tokenExists || tokensForDomains[serviceName]);
 
   function handleChange() {
-    setEnable(!checked);
-    setChecked(!checked);
+    setEnable(!enabled);
+    // setChecked(!checked);
 
     clearTimeout(timeout.current);
     timeout.current = setTimeout(async () => {
       // save enabled state in database?
     }, 2500);
 
-    if (scrollIntoView && !checked === true) {
+    if (scrollIntoView && !enabled === true) {
       setTimeout(() => {
         const element = document.getElementById(`${label || serviceName}Header`);
         element &&
@@ -52,10 +52,10 @@ const ToggleButton = ({
     <ToolTip tooltip={tooltip} width='max-content'>
       <StyledToggleButton
         onClick={handleChange}
-        disabled={!anTokenExists && !checked}
+        disabled={!anTokenExists && !enabled}
         variant='dark'
         buttonsperrow={buttonsperrow}
-        enabled={String(checked)}
+        enabled={String(enabled)}
       >
         {icon}
         {React.Children?.map(smallerIcons, (icon) =>
