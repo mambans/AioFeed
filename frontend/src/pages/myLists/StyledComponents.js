@@ -163,7 +163,7 @@ export const ListItem = styled.div`
   cursor: ${({ cursor }) => cursor || 'unset'};
   position: relative;
 
-  button {
+  /* button {
     background: none;
     border: none;
     box-shadow: none;
@@ -174,7 +174,7 @@ export const ListItem = styled.div`
     &:hover {
       color: #ffffff;
     }
-  }
+  } */
 
   &:last-child {
     box-shadow: none;
@@ -187,7 +187,9 @@ export const ListItem = styled.div`
   svg {
     cursor: pointer;
   }
+`;
 
+export const IconContainerListItem = styled.div`
   ${RemoveItemBtn} {
     ${listCss};
     opacity: 0;

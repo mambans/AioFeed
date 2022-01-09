@@ -10,6 +10,7 @@ import {
   RemoveItemBtn,
   AddedItemBtn,
   IconContainer,
+  IconContainerListItem,
 } from './../StyledComponents';
 import { parseNumberAndString } from './../dragDropUtils';
 import NewListForm from './NewListForm';
@@ -197,16 +198,18 @@ const AddToListModal = ({ handleOpen, videoId, redirect }) => {
                   }
                 }}
               >
-                <Animate>
-                  {videoAdded ? (
-                    <>
-                      <RemoveItemBtn size={18} color='rgb(150,00,0)' />
-                      <AddedItemBtn size={18} />
-                    </>
-                  ) : (
-                    <AddItemBtn size={18} />
-                  )}
-                </Animate>
+                <IconContainerListItem>
+                  <Animate>
+                    {videoAdded ? (
+                      <>
+                        <RemoveItemBtn size={18} color='rgb(150,00,0)' />
+                        <AddedItemBtn size={18} />
+                      </>
+                    ) : (
+                      <AddItemBtn size={18} />
+                    )}
+                  </Animate>
+                </IconContainerListItem>
                 <span style={{ marginLeft: '30px' }}>{list.title}</span>
               </Button>
             </ListItem>
