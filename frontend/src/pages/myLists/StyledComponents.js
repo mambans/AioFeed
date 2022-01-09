@@ -41,7 +41,7 @@ export const Close = styled(IoIosCloseCircleOutline)`
 export const Lists = styled.div`
   /* background: var(--navigationbarBackground); */
   background: rgba(20, 20, 20, 0.92);
-  padding: 7px;
+  /* padding: 7px; */
   border-radius: 5px;
   box-shadow: -3px 3px 5px black;
 
@@ -190,6 +190,8 @@ export const ListItem = styled.div`
 `;
 
 export const IconContainerListItem = styled.div`
+  display: flex;
+
   ${RemoveItemBtn} {
     ${listCss};
     opacity: 0;
@@ -222,6 +224,8 @@ export const ListsLink = styled.div`
   display: flex;
   justify-content: center;
   height: 23px;
+  padding-top: 5px;
+  margin-bottom: 5px;
 
   a {
     color: rgb(200, 200, 200);

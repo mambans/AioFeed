@@ -4,19 +4,16 @@ import { Link } from 'react-router-dom';
 import MyListsContext from './../MyListsContext';
 import {
   Lists,
-  ListItem,
   ListsLink,
   AddItemBtn,
   RemoveItemBtn,
   AddedItemBtn,
   IconContainer,
-  IconContainerListItem,
 } from './../StyledComponents';
 import { parseNumberAndString } from './../dragDropUtils';
 import NewListForm from './NewListForm';
 import API from '../../navigation/API';
-import Button from '../../../components/Button';
-import { Animate } from '../../../components/Button/styledComponents';
+import AddVideoButton from '../AddVideoButton';
 
 export const mouseOverDisablePreview = () => {
   if (
@@ -156,7 +153,7 @@ export const AddRemoveBtn = ({
 };
 
 const AddToListModal = ({ handleOpen, videoId, redirect }) => {
-  const { lists, setLists } = useContext(MyListsContext) || {};
+  const { lists } = useContext(MyListsContext) || {};
 
   return (
     <Lists
@@ -169,50 +166,13 @@ const AddToListModal = ({ handleOpen, videoId, redirect }) => {
       </ListsLink>
       {lists &&
         Object?.values(lists).map((list, index) => {
-          const videoAdded = list && list?.videos?.includes(parseNumberAndString(videoId));
-
           return (
-            <ListItem key={list.title + index} added={String(!!videoAdded)} cursor='pointer'>
-              <Button
-                style={{ width: '100%' }}
-                variant={'transparent'}
-                disableClickAnimation
-                onClick={(e) => {
-                  if (videoAdded) {
-                    removeFavoriteVideo({ setLists, id: list?.id, videoId });
-                    window.history.pushState(
-                      {},
-                      document.title,
-                      `${window.location.origin + window.location.pathname}`
-                    );
-                    return;
-                  }
-
-                  addFavoriteVideo({ setLists, id: list?.id, videoId });
-                  if (redirect && list?.title) {
-                    window.history.pushState(
-                      {},
-                      document.title,
-                      `${window.location.origin + window.location.pathname}?list=${list?.title}`
-                    );
-                  }
-                }}
-              >
-                <IconContainerListItem>
-                  <Animate>
-                    {videoAdded ? (
-                      <>
-                        <RemoveItemBtn size={18} color='rgb(150,00,0)' />
-                        <AddedItemBtn size={18} />
-                      </>
-                    ) : (
-                      <AddItemBtn size={18} />
-                    )}
-                  </Animate>
-                </IconContainerListItem>
-                <span style={{ marginLeft: '30px' }}>{list.title}</span>
-              </Button>
-            </ListItem>
+            <AddVideoButton
+              key={list.id || list?.title + index}
+              video_id={videoId}
+              list={list}
+              redirect={redirect}
+            />
           );
         })}
       <NewListForm item={videoId} />
