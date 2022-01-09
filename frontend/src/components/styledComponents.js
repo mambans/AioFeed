@@ -261,6 +261,18 @@ export const StyledListForm = styled(Form)`
   }
 `;
 
+export const SearchListError = styled.span`
+  position: absolute;
+  top: 0;
+  transform: translateY(-100%);
+  width: 100%;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #c30000;
+  padding: 3px;
+`;
+
 export const StyledButton = styled(Button).attrs(({ type }) => ({
   type: type || 'submit',
   variant: 'secondary',

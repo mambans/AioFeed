@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 import useLockBodyScroll from '../../hooks/useLockBodyScroll';
 import useClicksOutside from '../../hooks/useClicksOutside';
-import { ButtonLookalikeStyle } from './../../components/styledComponents';
+import { ButtonLookalikeStyle, SearchListError } from './../../components/styledComponents';
 
 const SearchSubmitIcon = styled(FaSearch).attrs({ size: 18 })``;
 
@@ -40,6 +40,7 @@ export const SearchListForm = styled.form`
     open ? 'var(--refreshButtonHoverBackground)' : 'var(--refreshButtonBackground);'};
   width: ${({ open }) => (open ? '310px' : '125px')};
   min-width: ${({ open }) => (open ? '310px' : '125px')};
+  position: relative;
   /* margin-left: ${({ open, direction = 'left' }) =>
     direction === 'left' ? (open ? '0px' : '185px') : 0};
   margin-right: ${({ open, direction = 'left' }) =>
@@ -150,6 +151,7 @@ const SearchList = ({
   searchBtnPath,
   leftIcon,
   keepListOpenOnSubmit = false,
+  error,
 }) => {
   const inputRef = useRef();
   const listRef = useRef();
@@ -178,6 +180,7 @@ const SearchList = ({
       ref={listRef}
       btnDisabled={!input}
     >
+      {error && listIsOpen && <SearchListError>{error}</SearchListError>}
       <input
         ref={inputRef}
         style={{ ...inputStyle }}

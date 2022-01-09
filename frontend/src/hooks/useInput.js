@@ -6,6 +6,7 @@ import { useState } from 'react';
  */
 const useInput = (initialValue, options = { type: 'string' }) => {
   const [value, setValue] = useState(initialValue);
+  const [error, setError] = useState();
 
   return {
     value,
@@ -28,6 +29,8 @@ const useInput = (initialValue, options = { type: 'string' }) => {
             : event.target.value.replace(/ +(?= )/g, '')
         ),
     },
+    setError,
+    error,
   };
 };
 export default useInput;

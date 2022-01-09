@@ -33,9 +33,11 @@ const MyListSmallList = ({ listName, videos, style, list }) => {
 
   const useInput = (initialValue) => {
     const [value, setValue] = useState(initialValue);
+    const [error, setError] = useState();
 
     return {
       value,
+      error,
       setValue,
       reset: () => setValue(''),
       manualSet: {
@@ -47,17 +49,21 @@ const MyListSmallList = ({ listName, videos, style, list }) => {
           const { value: input } = event.target;
           setValue(input.trimStart());
           setCursor({ position: 0 });
+          setError(null);
         },
       },
+      setError,
       returnFirstMatch: () => filteredInputMatched[cursor.position],
     };
   };
 
   const {
     value: videoId,
+    error,
     bind: bindvideoId,
     reset: resetVideoId,
     setValue: setVideoId,
+    setError,
     returnFirstMatch,
     // returnChannel,
   } = useInput('');
@@ -72,6 +78,35 @@ const MyListSmallList = ({ listName, videos, style, list }) => {
       ulListRef.current,
       'title'
     );
+
+  const addVideo = async (video_Id) => {
+    if (Boolean(filteredInputMatched?.length)) {
+      const selectedVideo = returnFirstMatch();
+      const navigateToUrl = constructYUrlLink(selectedVideo);
+
+      window.open(navigateToUrl);
+      resetVideoId();
+      // : navigate(`/category/${returnFirstMatch()}`);
+    } else {
+      const newList = await addFavoriteVideo({ setLists, id: list.id, videoId: video_Id });
+      resetVideoId();
+      if (newList) {
+        setTimeout(() => setCursor({ position: newList?.videos?.length - 1 }), 0);
+        setTimeout(() => scrollToIfNeeded(ulListRef.current), 750);
+      }
+    }
+  };
+
+  function validateYoutubeVideoId(id, callback) {
+    var img = new Image();
+    img.src = 'http://img.youtube.com/vi/' + id + '/mqdefault.jpg';
+    img.onload = function () {
+      if (this.width === 120) return false;
+
+      callback();
+      return true;
+    };
+  }
 
   const handleSubmit = async () => {
     const video_Id = (() => {
@@ -91,21 +126,18 @@ const MyListSmallList = ({ listName, videos, style, list }) => {
       return videoId;
     })();
 
-    if (Boolean(video_Id) && Boolean(filteredInputMatched?.length)) {
-      const selectedVideo = returnFirstMatch();
-      const navigateToUrl = constructYUrlLink(selectedVideo);
+    const regExpForYoutube = new RegExp(/^[A-Za-z0-9_-]{11}$/);
+    const regExpForTwitch = new RegExp(/^[0-9_-]{10}$/);
 
-      window.open(navigateToUrl);
-      resetVideoId();
-      // : navigate(`/category/${returnFirstMatch()}`);
-    } else {
-      const newList = await addFavoriteVideo({ setLists, id: list.id, videoId: video_Id });
-      resetVideoId();
-      if (newList) {
-        setTimeout(() => setCursor({ position: newList?.videos?.length - 1 }), 0);
-        setTimeout(() => scrollToIfNeeded(ulListRef.current), 750);
-      }
+    if (Boolean(video_Id) && video_Id.match(regExpForTwitch)) {
+      addVideo(video_Id);
+      return;
     }
+    if (Boolean(video_Id) && video_Id.match(regExpForYoutube)) {
+      validateYoutubeVideoId(video_Id, () => addVideo(video_Id));
+      return;
+    }
+    setError('Invalid Url/Video ID');
   };
 
   const constructYUrlLink = (v = {}) => {
@@ -163,6 +195,7 @@ const MyListSmallList = ({ listName, videos, style, list }) => {
       setCursor={setCursor}
       keepListOpenOnSubmit={true}
       leftIcon={<AddPlusIcon size={24} type='submitBtn' onClick={handleSubmit} />}
+      error={error}
       style={style}
     >
       {Boolean(filteredInputMatched?.length) && (
