@@ -39,7 +39,10 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
       value,
       error,
       setValue,
-      reset: () => setValue(''),
+      reset: () => {
+        setValue('');
+        onChange?.('');
+      },
       manualSet: {
         onClick: (event) => setValue(event.target.textContent.trim()),
       },
@@ -89,6 +92,7 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
 
       window.open(navigateToUrl);
       resetVideoId();
+
       // : navigate(`/category/${returnFirstMatch()}`);
     } else {
       const newList = await addFavoriteVideo({ setLists, id: list.id, videoId: video_Id });

@@ -43,8 +43,14 @@ const ToolTip = ({
 }) => {
   const { feedVideoSizeProps } = useContext(FeedsContext) || {};
 
+  // return (
+  //   <div title={tooltip} style={{ display: 'flex' }}>
+  //     {children || null}
+  //   </div>
+  // );
   if (show)
     return (
+      // Error locally about ref
       <OverlayTrigger
         key={tooltip + Date.now()}
         placement={placement}
