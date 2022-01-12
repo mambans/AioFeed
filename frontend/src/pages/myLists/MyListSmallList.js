@@ -23,7 +23,7 @@ const getYoutubeIdFromUrl = (videoId) => {
   return searchParams.get('v');
 };
 
-const MyListSmallList = ({ listName, videos, style, list }) => {
+const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
   const { setLists } = useContext(MyListsContext);
   const [listIsOpen, setListIsOpen] = useState();
   const [cursor, setCursor] = useState({ position: 0 });
@@ -50,6 +50,7 @@ const MyListSmallList = ({ listName, videos, style, list }) => {
           setValue(input.trimStart());
           setCursor({ position: 0 });
           setError(null);
+          onChange?.(input);
         },
       },
       setError,

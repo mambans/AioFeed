@@ -215,12 +215,31 @@ const PlaylistInPlayer = ({
   const { setLists, lists, savedVideosWithData, addSavedData } = useContext(MyListsContext);
   const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
   const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
+  const [search, setSearch] = useState();
+  const videos = useMemo(
+    () =>
+      listVideos.filter(
+        ({ id, login, user_name, title, snippet }) =>
+          id?.includes(search) ||
+          login?.includes(search) ||
+          user_name?.includes(search) ||
+          title?.includes(search) ||
+          snippet?.title?.includes(search) ||
+          snippet?.channelTitle?.includes(search) ||
+          snippet?.channelId?.includes(search)
+      ),
+    [listVideos, search]
+  );
 
   useCheckForVideosAndValidateToken({
     lists,
     setYtExistsAndValidated,
     setTwitchExistsAndValidated,
   });
+
+  const handleOnSearchFilter = (v) => {
+    setSearch(v);
+  };
 
   useEffect(() => {
     (async () => {
@@ -324,11 +343,12 @@ const PlaylistInPlayer = ({
         listName={listName}
         videos={listVideos}
         style={{ width: '87%', margin: '0 auto', position: 'relative' }}
+        onChange={handleOnSearchFilter}
       />
       <Container>
         {list && (
           <List
-            listVideos={listVideos}
+            listVideos={videos}
             list={list}
             setListVideos={setListVideos}
             videoId={videoId}

@@ -90,10 +90,6 @@ const Handler = ({ children }) => {
           );
           const uniqueTags = [...new Set(tag_ids)];
 
-          if (uniqueTags?.length) {
-            console.log('uniqueTags to fetch:', uniqueTags);
-          }
-
           const fetchedStreamTags = uniqueTags?.length
             ? await fetchAndAddTags({
                 tag_ids: uniqueTags,
