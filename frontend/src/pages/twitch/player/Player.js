@@ -115,7 +115,7 @@ const Player = () => {
 
   useEventListenerMemo('mouseleave', handleMouseOut, PlayerUIControlls.current);
   useEventListenerMemo('dblclick', toggleFullScreen, PlayerUIControlls.current);
-  useEventListenerMemo('keydown', keyboardEvents);
+  useEventListenerMemo('keydown', keyboardEvents, PlayerUIControlls.current);
 
   const containLinkClicks = (event) => {
     event.stopPropagation();

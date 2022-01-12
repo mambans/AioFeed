@@ -44,7 +44,7 @@ const VolumeEventOverlay = React.forwardRef(
     useEventListenerMemo(
       'keydown',
       keyboardEvents,
-      window,
+      VolumeEventOverlayRef.current,
       addEventListeners && window?.Twitch?.Player?.READY
     );
     useEventListenerMemo(

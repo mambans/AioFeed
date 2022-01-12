@@ -45,7 +45,7 @@ const VideoPlayer = ({
     `${videoDetails?.user_name || channelName || ''} -  ${videoDetails?.title || videoId}`
   );
   useEventListenerMemo('dblclick', toggleFullScreen, VolumeEventOverlayRef.current);
-  useEventListenerMemo('keydown', keyboardEvents);
+  useEventListenerMemo('keydown', keyboardEvents, VolumeEventOverlayRef.current);
 
   function toggleFullScreen(event) {
     toggleFullscreenFunc({
@@ -233,8 +233,10 @@ const VideoPlayer = ({
         >
           {qualities?.current
             ?.filter((q) => q.group !== 'chunked')
-            ?.map((q) => (
-              <li onClick={() => setPlayerQuality(q.group)}>{q.name}</li>
+            ?.map((q, index) => (
+              <li key={q.name || index} onClick={() => setPlayerQuality(q.group)}>
+                {q.name}
+              </li>
             ))}
         </ContextMenuDropDown>
       </>

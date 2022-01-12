@@ -250,7 +250,6 @@ const PlaylistInPlayer = ({
         ytExistsAndValidated,
         twitchExistsAndValidated,
       });
-      console.log('videos:', videos);
 
       setTimeout(() => {
         setListVideos((curr) =>
@@ -284,7 +283,6 @@ const PlaylistInPlayer = ({
       );
     }
   }, [videoId]);
-  console.log('videos:', videos);
 
   return (
     <>
@@ -350,7 +348,7 @@ const PlaylistInPlayer = ({
       <Container>
         {list && (
           <List
-            listVideos={videos}
+            listVideos={videos || listVideos}
             list={list}
             setListVideos={setListVideos}
             videoId={videoId}
