@@ -218,7 +218,7 @@ const PlaylistInPlayer = ({
   const [search, setSearch] = useState();
   const videos = useMemo(
     () =>
-      listVideos.filter(
+      listVideos?.filter(
         ({ id, login, user_name, title, snippet }) =>
           id?.includes(search) ||
           login?.includes(search) ||
