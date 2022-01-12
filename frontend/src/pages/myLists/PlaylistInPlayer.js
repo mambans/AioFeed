@@ -218,15 +218,16 @@ const PlaylistInPlayer = ({
   const [search, setSearch] = useState();
   const videos = useMemo(
     () =>
-      listVideos?.filter(
-        ({ id, login, user_name, title, snippet }) =>
-          id?.includes(search) ||
-          login?.includes(search) ||
-          user_name?.includes(search) ||
-          title?.includes(search) ||
-          snippet?.title?.includes(search) ||
-          snippet?.channelTitle?.includes(search) ||
-          snippet?.channelId?.includes(search)
+      listVideos?.filter(({ id, login, user_name, title, snippet } = {}) =>
+        !search
+          ? listVideos
+          : id?.includes(search) ||
+            login?.includes(search) ||
+            user_name?.includes(search) ||
+            title?.includes(search) ||
+            snippet?.title?.includes(search) ||
+            snippet?.channelTitle?.includes(search) ||
+            snippet?.channelId?.includes(search)
       ),
     [listVideos, search]
   );
@@ -283,6 +284,7 @@ const PlaylistInPlayer = ({
       );
     }
   }, [videoId]);
+  console.log('videos:', videos);
 
   return (
     <>
