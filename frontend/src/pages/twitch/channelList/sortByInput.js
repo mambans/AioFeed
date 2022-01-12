@@ -5,32 +5,33 @@ const sortAlphaByProp = (a, b) => {
 };
 
 const sortByInput = (input, data) => {
-  let caseSensitive = [];
-  let caseInsensitive = [];
-  let others = [];
-
   if (!data) return null;
 
   const inputFilteredList = data?.filter((item) => {
     return (item.user_name || item.name)?.toLowerCase().includes(input?.toLowerCase() || '');
   });
 
-  inputFilteredList.forEach((element) => {
-    if ((element.user_name || element.name).slice(0, input?.length || '') === input) {
-      caseSensitive.push(element);
-    } else if (
-      (element.user_name || element.name).slice(0, input?.length || '')?.toLowerCase() ===
-      input?.toLowerCase()
-    ) {
-      caseInsensitive.push(element);
-    } else {
-      others.push(element);
-    }
-  });
+  const channels = inputFilteredList.reduce(
+    (acc, element) => {
+      if ((element.user_name || element.name).slice(0, input?.length || '') === input) {
+        return { ...acc, caseSensitive: [...acc.caseSensitive, element] };
+      } else if (
+        (element.user_name || element.name).slice(0, input?.length || '')?.toLowerCase() ===
+        input?.toLowerCase()
+      ) {
+        return { ...acc, caseInsensitive: [...acc.caseInsensitive, element] };
+      } else {
+        return { ...acc, others: [...acc.others, element] };
+      }
+    },
+    { caseSensitive: [], caseInsensitive: [], others: [] }
+  );
 
-  caseSensitive.sort(sortAlphaByProp);
-  caseInsensitive.sort(sortAlphaByProp);
-  others.sort(sortAlphaByProp);
-  return [...caseSensitive, ...caseInsensitive, ...others];
+  return Object?.values?.(channels)?.flatMap((ar = []) => ar?.sort(sortAlphaByProp));
+
+  // const caseSensitive = channels.caseSensitive.sort(sortAlphaByProp);
+  // const caseInsensitive = channels.caseInsensitive.sort(sortAlphaByProp);
+  // const others = channels.others.sort(sortAlphaByProp);
+  // return [...caseSensitive, ...caseInsensitive, ...others];
 };
 export default sortByInput;

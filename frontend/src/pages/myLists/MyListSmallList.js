@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { MdDeleteForever } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
@@ -157,6 +157,12 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
     return `/youtube/${v?.id}?list=${listName}`;
   };
 
+  const checkIncludes = useCallback(
+    (values) =>
+      values.some((v) => String(v).toLowerCase().includes(String(videoId)?.toLowerCase())),
+    [videoId]
+  );
+
   const filteredInputMatched = useMemo(() => {
     if (cursor.used) return savedFilteredInputMatched.current;
     const input = String(videoId)?.toLowerCase();
@@ -171,12 +177,14 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
     const inputFiltered = Boolean(input)
       ? videos?.filter((v) => {
           return (
-            v?.title?.toLowerCase()?.includes(input) ||
-            v?.snippet?.title?.toLowerCase()?.includes(input) ||
-            v?.snippet?.channelTitle?.toLowerCase()?.includes(input) ||
-            v?.login?.toLowerCase()?.includes(input) ||
-            v?.user_name?.toLowerCase()?.includes(input) ||
-            v?.id?.toLowerCase()?.includes(input) ||
+            checkIncludes([
+              v?.title,
+              v?.snippet?.title,
+              v?.snippet?.channelTitle,
+              v?.login,
+              v?.user_name,
+              v?.id,
+            ]) ||
             v?.id?.toLowerCase()?.includes(youtubeVideoIdFromUrl) ||
             v?.id?.toLowerCase()?.includes(twitchVideoIdFromUrl)
           );
@@ -186,7 +194,7 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
     savedFilteredInputMatched.current = inputFiltered;
 
     return inputFiltered;
-  }, [cursor.used, videos, videoId]);
+  }, [cursor.used, videos, videoId, checkIncludes]);
 
   return (
     <SearchList

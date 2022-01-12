@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled, { css } from 'styled-components';
 import { MdQueuePlayNext, MdSkipNext } from 'react-icons/md';
@@ -216,20 +216,26 @@ const PlaylistInPlayer = ({
   const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
   const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
   const [search, setSearch] = useState();
+  const checkIncludes = useCallback(
+    (values) => values.some((v) => String(v)?.toLowerCase()?.includes(search?.toLowerCase())),
+    [search]
+  );
   const videos = useMemo(
     () =>
       listVideos?.filter(({ id, login, user_name, title, snippet } = {}) =>
         !search
           ? listVideos
-          : id?.includes(search) ||
-            login?.includes(search) ||
-            user_name?.includes(search) ||
-            title?.includes(search) ||
-            snippet?.title?.includes(search) ||
-            snippet?.channelTitle?.includes(search) ||
-            snippet?.channelId?.includes(search)
+          : checkIncludes([
+              id,
+              login,
+              user_name,
+              title,
+              snippet?.title,
+              snippet?.channelTitle,
+              snippet?.channelId,
+            ])
       ),
-    [listVideos, search]
+    [listVideos, search, checkIncludes]
   );
 
   useCheckForVideosAndValidateToken({
