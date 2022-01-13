@@ -27,8 +27,8 @@ const CreateAndOpenClip = async ({ user_id }) => {
     });
 };
 
-const ClipButton = ({ streamInfo }) => {
-  useEventListenerMemo('keydown', keyboardEvents, window, streamInfo);
+const ClipButton = ({ streamInfo, focused }) => {
+  useEventListenerMemo('keydown', keyboardEvents, window, streamInfo && focused);
 
   const createClip = async () => {
     const user_id =
