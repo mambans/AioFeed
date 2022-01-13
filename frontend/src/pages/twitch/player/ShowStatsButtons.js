@@ -18,12 +18,12 @@ export const latencyColorValue = (name, value) => {
   }
 };
 
-const ShowStatsButtons = ({ TwitchPlayer }) => {
+const ShowStatsButtons = ({ TwitchPlayer, focused }) => {
   const [showPlaybackStats, setShowPlaybackStats] = useState();
   const [playbackStats, setPlaybackStats] = useState();
   const PlayersatsTimer = useRef();
 
-  useEventListenerMemo('keydown', keyboardEvents, window, TwitchPlayer);
+  useEventListenerMemo('keydown', keyboardEvents, window, TwitchPlayer && focused);
 
   const ToggleShowStats = (event = { stopPropagation: () => {}, preventDefault: () => {} }) => {
     event.stopPropagation();

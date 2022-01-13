@@ -32,6 +32,7 @@ const VolumeEventOverlay = React.forwardRef(
       channelName,
       contextMenuChildren,
       ContextMenu,
+      focused,
     },
     ref
   ) => {
@@ -45,7 +46,7 @@ const VolumeEventOverlay = React.forwardRef(
       'keydown',
       keyboardEvents,
       VolumeEventOverlayRef.current,
-      addEventListeners && window?.Twitch?.Player?.READY
+      addEventListeners && window?.Twitch?.Player?.READY && focused
     );
     useEventListenerMemo(
       'dblclick',
@@ -171,7 +172,7 @@ const VolumeEventOverlay = React.forwardRef(
                 setShowControlls={setShowControlls}
                 showAndResetTimer={showAndResetTimer}
               />
-              <ShowStatsButtons TwitchPlayer={player.current} />
+              <ShowStatsButtons TwitchPlayer={player.current} focused={focused} />
               <ShowSetQualityButtons TwitchPlayer={player.current} />
             </>
           )}

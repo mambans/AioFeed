@@ -14,11 +14,12 @@ const VolumeSlider = ({
   PlayerUIControlls,
   setShowControlls,
   showAndResetTimer,
+  focused,
 }) => {
   const [volumeText, setVolumeText] = useState(0);
   const [volumeMuted, setVolumeMuted] = useState(true);
 
-  useEventListenerMemo('keydown', keyboardEvents, window, window?.Twitch?.Player?.READY);
+  useEventListenerMemo('keydown', keyboardEvents, window, window?.Twitch?.Player?.READY && focused);
   useEventListenerMemo(
     'wheel',
     scrollChangeVolumeEvent,

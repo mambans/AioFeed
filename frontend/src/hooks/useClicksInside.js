@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
-const useClicksInside = (ref, func) => {
+const useClicksInside = (ref, func = () => {}) => {
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (ref.current && ref.current.contains(event.target)) func(event);
+      if ((ref?.current || ref) && (ref?.current || ref)?.contains?.(event.target)) func(event);
     };
 
     document.addEventListener('mouseup', handleClickOutside);
