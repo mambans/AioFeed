@@ -4,7 +4,7 @@ import { StyledExpandSection } from './styledComponents';
 const ExpandableSection = ({ collapsed, children, isOpened, unmountOnInitialClosed, ...rest }) => {
   const ref = useRef();
   const [height, setHeight] = useState({ collapsed });
-  const [initialLoad, setInitialLoad] = useState(unmountOnInitialClosed ? false : true);
+  const [initialLoad, setInitialLoad] = useState(unmountOnInitialClosed ? true : false);
   const timer = useRef();
 
   useEffect(() => {
