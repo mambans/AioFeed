@@ -116,7 +116,7 @@ export const FavoriteListContainer = ({
           </>
         }
       />
-      <ExpandableSection collapsed={orders?.[list.id]?.collapsed}>
+      <ExpandableSection collapsed={orders?.[list.id]?.collapsed} unmountOnInitialClosed>
         <List
           list={list}
           ytExistsAndValidated={ytExistsAndValidated}

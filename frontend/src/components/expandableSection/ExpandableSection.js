@@ -1,13 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StyledExpandSection } from './styledComponents';
 
-const ExpandableSection = ({ collapsed, children, isOpened, ...rest }) => {
+const ExpandableSection = ({ collapsed, children, isOpened, unmountOnInitialClosed, ...rest }) => {
   const ref = useRef();
   const [height, setHeight] = useState({ collapsed });
+  const [initialLoad, setInitialLoad] = useState(unmountOnInitialClosed ? false : true);
   const timer = useRef();
 
   useEffect(() => {
     clearTimeout(timer.current);
+    setInitialLoad(false);
     setHeight({
       height: ref.current?.getBoundingClientRect()?.height + 'px',
       isOpened: false,
@@ -41,7 +43,7 @@ const ExpandableSection = ({ collapsed, children, isOpened, ...rest }) => {
       collapsed={String(height?.collapsed)}
       willChange={String(height?.willChange)}
     >
-      <div ref={ref}>{children}</div>
+      <div ref={ref}>{(!initialLoad || height?.isOpened) && children}</div>
     </StyledExpandSection>
   );
 };
