@@ -45,8 +45,8 @@ const VideoPlayer = ({
   useDocumentTitle(
     `${videoDetails?.user_name || channelName || ''} -  ${videoDetails?.title || videoId}`
   );
-  useEventListenerMemo('dblclick', toggleFullScreen, VolumeEventOverlayRef.current, focused);
-  useEventListenerMemo('keydown', keyboardEvents, VolumeEventOverlayRef.current);
+  useEventListenerMemo('dblclick', toggleFullScreen, VolumeEventOverlayRef.current);
+  useEventListenerMemo('keydown', keyboardEvents, VolumeEventOverlayRef.current, focused);
 
   function toggleFullScreen(event) {
     toggleFullscreenFunc({

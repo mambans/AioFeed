@@ -108,7 +108,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
         </Link>
 
         <ToolTip
-          delay={{ show: 250, hide: 0 }}
+          delay={{ show: 1000, hide: 0 }}
           tooltip='Open channels latest vod'
           placement='bottom'
         >
@@ -119,7 +119,11 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
             <MdVideocam color='inherit' size={24} />
           </LatestVodBtn>
         </ToolTip>
-        <ToolTip delay={{ show: 250, hide: 0 }} tooltip='Open stream in new tab' placement='bottom'>
+        <ToolTip
+          delay={{ show: 1000, hide: 0 }}
+          tooltip='Open stream in new tab'
+          placement='bottom'
+        >
           <OpenInNewTab target='_blank' href={`/${login?.toLowerCase() || user_name}`}>
             <FaRegWindowRestore color='inherit' size={24} />
           </OpenInNewTab>

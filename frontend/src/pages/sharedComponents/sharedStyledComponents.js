@@ -372,10 +372,11 @@ export const LatestVodBtn = styled.a`
   transition: all 500ms ease-in 0ms;
   opacity: 0;
   position: absolute;
-  top: 5px;
-  left: 10px;
+  top: 0px;
+  left: 5px;
   z-index: 1;
-  color: rgb(200, 200, 200);
+  color: rgb(180, 180, 180);
+  padding: 5px;
 
   &:hover {
     &&& {
@@ -390,10 +391,11 @@ export const OpenInNewTab = styled.a`
   transition: all 500ms ease-in 0ms;
   opacity: 0;
   position: absolute;
-  top: 5px;
-  right: 10px;
+  top: 0px;
+  right: 5px;
   z-index: 1;
   color: rgb(200, 200, 200);
+  padding: 5px;
 
   &:hover {
     &&& {
@@ -463,8 +465,14 @@ export const StyledImageContainer = styled.div`
     }
 
     ${LatestVodBtn} {
-      transition: opacity 250ms ease-in 1000ms, color 250ms ease-in 0ms;
-      opacity: 0.7;
+      transition: opacity 250ms ease-in 250ms, color 250ms ease-in 0ms;
+      opacity: 0.9;
+      color: rgb(225, 225, 225);
+    }
+    ${OpenInNewTab} {
+      transition: opacity 250ms ease-in 250ms, color 250ms ease-in 0ms;
+      opacity: 0.9;
+      color: rgb(225, 225, 225);
     }
   }
 `;

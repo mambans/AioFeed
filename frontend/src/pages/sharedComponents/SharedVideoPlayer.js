@@ -78,8 +78,6 @@ const SharedVideoPlayer = () => {
   );
 
   useEffect(() => {
-    console.log(1);
-    console.log('urlListName:', urlListName);
     if (lists) {
       const list = (() => {
         const listFromListname = Object.values(lists).find(
