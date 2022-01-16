@@ -32,6 +32,7 @@ export const ResizeDevider = styled.div`
 `;
 
 const MIN_WIDTH = 50;
+const RESIZE_DRAGGER_WIDTH = 6;
 
 const ResizeWrapper = ({ children, parentCallbackWidth = () => {} }) => {
   const [resize, setResize] = useState({
@@ -77,7 +78,7 @@ const ResizeWrapper = ({ children, parentCallbackWidth = () => {} }) => {
 
         setResize((c) => ({
           ...c,
-          width: newWidth,
+          width: newWidth - RESIZE_DRAGGER_WIDTH * 2,
         }));
         parentCallbackWidthDebounce(children.props.id, newWidth);
       }
@@ -105,7 +106,7 @@ const ResizeWrapper = ({ children, parentCallbackWidth = () => {} }) => {
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         active={resize.active}
-        width={6}
+        width={RESIZE_DRAGGER_WIDTH}
         dimmer
       >
         <div />
