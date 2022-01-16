@@ -373,6 +373,24 @@ export const LatestVodBtn = styled.a`
   opacity: 0;
   position: absolute;
   top: 5px;
+  left: 10px;
+  z-index: 1;
+  color: rgb(200, 200, 200);
+
+  &:hover {
+    &&& {
+      transition: color 250ms ease-in 0ms, opacity 250ms ease-in 0ms;
+      color: rgb(255, 255, 255);
+      opacity: 1;
+    }
+  }
+`;
+
+export const OpenInNewTab = styled.a`
+  transition: all 500ms ease-in 0ms;
+  opacity: 0;
+  position: absolute;
+  top: 5px;
   right: 10px;
   z-index: 1;
   color: rgb(200, 200, 200);
