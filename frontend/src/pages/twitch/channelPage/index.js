@@ -42,6 +42,7 @@ import FavoriteStreamBtn from '../live/FavoriteStreamBtn';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import useFavicon from '../../../hooks/useFavicon';
 import FeedsContext from '../../feed/FeedsContext';
+import Schedule from '../schedule';
 
 const ChannelPage = () => {
   const { passedChannelData } = useLocation().state || {};
@@ -426,6 +427,11 @@ const ChannelPage = () => {
                             show={channelInfo}
                             channel={channelInfo.name || channelName}
                             size={26}
+                          />
+                          <Schedule
+                            user={channelInfo.name || channelName}
+                            user_id={channelInfo._id}
+                            absolute={false}
                           />
                           <a
                             className='twitchRedirect'
