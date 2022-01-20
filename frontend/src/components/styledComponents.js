@@ -16,6 +16,7 @@ export const TransparentButton = styled.button`
       color: none;
     }
   }
+  color: white;
 `;
 
 export const HeaderOuterMainContainer = styled.div`

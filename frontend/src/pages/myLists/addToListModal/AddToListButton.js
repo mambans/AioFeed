@@ -44,13 +44,13 @@ const AddToListButton = ({
     return false;
   }
 
-  const toggle = (e) => {
-    if (e) e.stopPropagation();
-    clearTimeout(fadeOutTimer.current);
-    clearTimeout(fadeInTimer.current);
-    fadeInTimer.current = null;
-    setOpen((c) => !c);
-  };
+  // const toggle = (e) => {
+  //   if (e) e.stopPropagation();
+  //   clearTimeout(fadeOutTimer.current);
+  //   clearTimeout(fadeInTimer.current);
+  //   fadeInTimer.current = null;
+  //   setOpen((c) => !c);
+  // };
 
   const handleCloseDelayed = (e) => {
     e.stopPropagation();
@@ -74,7 +74,7 @@ const AddToListButton = ({
     >
       <IconContainer
         onMouseOver={mouseOverDisablePreview}
-        onClick={toggle}
+        onClick={handleOpen}
         style={{ right: '0', position: 'absolute', margin: '5px' }}
         onMouseEnter={handleOpen}
         onMouseLeave={handleCloseDelayed}
