@@ -15,6 +15,8 @@ import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import { TwitchContext } from '../useToken';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import { fetchAndAddTags } from '../fetchAndAddTags';
+import FeedSectionsContext from '../../feedSections/FeedSectionsContext';
+import { checkAgainstRules } from '../../feedSections/FeedSections';
 
 const REFRESH_RATE = 25; // seconds
 
@@ -29,6 +31,7 @@ const Handler = ({ children }) => {
   } = useContext(TwitchContext);
   const { setVods } = useContext(VodsContext);
   const { enableTwitchVods } = useContext(FeedsContext) || {};
+  const { feedSections } = useContext(FeedSectionsContext) || {};
   const [refreshTimer, setRefreshTimer] = useState(20);
   const [loadingStates, setLoadingStates] = useState({
     refreshing: false,
@@ -38,6 +41,7 @@ const Handler = ({ children }) => {
   });
   const followedChannels = useRef([]);
   const liveStreams = useRef();
+  const nonFeedSectionLiveStreams = useRef();
   const oldLiveStreams = useRef([]);
   const [newlyAddedStreams, setNewlyAddedStreams] = useState();
   // const [isInFocus, setIsInFocus] = useState();
@@ -143,7 +147,21 @@ const Handler = ({ children }) => {
             return { ...stream, tag_names, tags: streams_tags };
           });
 
+          const enabledFeedSections =
+            feedSections &&
+            Object.values?.(feedSections)?.filter(
+              (f = {}) => f.enabled && f.excludeFromTwitch_enabled
+            );
+
           liveStreams.current = orderBy(streamsWithTags, (s) => s.viewer_count, 'desc');
+          nonFeedSectionLiveStreams.current = orderBy(
+            streamsWithTags,
+            (s) => s.viewer_count,
+            'desc'
+          )?.filter(
+            (stream) =>
+              !enabledFeedSections?.some(({ rules } = {}) => checkAgainstRules(stream, rules))
+          );
 
           setLoadingStates({
             refreshing: false,
@@ -209,8 +227,26 @@ const Handler = ({ children }) => {
       isEnabledOfflineNotifications,
       updateNotischannels,
       setNewlyAddedStreams,
+      feedSections,
     ]
   );
+
+  useEffect(() => {
+    if (liveStreams?.current?.length) {
+      console.log(1);
+      const enabledFeedSections =
+        feedSections &&
+        Object.values?.(feedSections)?.filter((f = {}) => f.enabled && f.excludeFromTwitch_enabled);
+
+      nonFeedSectionLiveStreams.current = orderBy(
+        liveStreams.current,
+        (s) => s?.viewer_count,
+        'desc'
+      )?.filter(
+        (stream) => !enabledFeedSections?.some(({ rules } = {}) => checkAgainstRules(stream, rules))
+      );
+    }
+  }, [feedSections]);
 
   useEffect(() => {
     (async () => {
@@ -264,6 +300,7 @@ const Handler = ({ children }) => {
     error: loadingStates.error,
     oldLiveStreams: oldLiveStreams.current || [],
     liveStreams: liveStreams.current || [],
+    nonFeedSectionLiveStreams: nonFeedSectionLiveStreams.current || [],
     refresh,
     newlyAddedStreams: newlyAddedStreams,
     REFRESH_RATE,

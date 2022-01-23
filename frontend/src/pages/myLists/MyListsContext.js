@@ -20,9 +20,7 @@ export const MyListsProvider = ({ children }) => {
 
   const addSavedData = (newData = []) => {
     const data = [...(savedVideosWithData.current || []), ...newData].filter((i) => i);
-    console.log('data:', data);
     const uniqueData = uniqBy(data, 'id');
-    console.log('uniqueData:', uniqueData);
     savedVideosWithData.current = uniqueData;
   };
 

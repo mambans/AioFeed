@@ -9,15 +9,13 @@ import AlertHandler from '../../../components/alert';
 import { CenterContext } from '../../feed/FeedsCenterContainer.js';
 import { TwitchContext } from '../useToken.js';
 
-const Twitch = ({ data, hideOnEmpty }) => {
+const Twitch = ({ data, streams, hideOnEmpty }) => {
   const { loaded, error, liveStreams, newlyAddedStreams, refreshAfterUnfollowTimer } = data;
   const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext);
   const { favStreams } = useContext(TwitchContext);
 
-  const favoriteStreams = liveStreams.filter((c) =>
-    favStreams?.includes(c.user_name?.toLowerCase())
-  );
-  const nonFavoriteStreams = liveStreams.filter(
+  const favoriteStreams = streams?.filter((c) => favStreams?.includes(c.user_name?.toLowerCase()));
+  const nonFavoriteStreams = streams?.filter(
     (c) => !favStreams?.includes(c.user_name?.toLowerCase())
   );
 
@@ -94,7 +92,6 @@ const Twitch = ({ data, hideOnEmpty }) => {
           </CSSTransition>
         ))}
       </TransitionGroup>
-
       {!hideOnEmpty && (
         <AlertHandler
           show={!Boolean(liveStreams?.length)}

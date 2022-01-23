@@ -36,6 +36,7 @@ export const FeedSectionsProvider = ({ children }) => {
       title,
       enabled: true,
       notifications_enabled: false,
+      nonFeedSectionLiveStreams: false,
       rules: [],
     };
     setFeedSections((c) => {
@@ -138,6 +139,23 @@ export const FeedSectionsProvider = ({ children }) => {
     });
   };
 
+  const toggleFeedSectionExcludeFromTwitch = (id) => {
+    setFeedSections((c) => {
+      const excludeFromTwitch_enabled = !c[id].excludeFromTwitch_enabled;
+
+      const newFeedSection = {
+        [id]: { ...c[id], excludeFromTwitch_enabled },
+      };
+
+      API.updateCustomFeedSections(id, { excludeFromTwitch_enabled });
+
+      return {
+        ...c,
+        ...newFeedSection,
+      };
+    });
+  };
+
   useEffect(() => {
     if (twitchAccessToken && authKey && !invoked.current) fetchFeedSectionsContextData();
   }, [fetchFeedSectionsContextData, twitchAccessToken, authKey]);
@@ -155,6 +173,7 @@ export const FeedSectionsProvider = ({ children }) => {
         fetchFeedSectionsContextData,
         editFeedSectionTitle,
         toggleFeedSectionNotification,
+        toggleFeedSectionExcludeFromTwitch,
       }}
     >
       {children}

@@ -1,13 +1,13 @@
 'use strict';
 
-const fetchListsUpdate = require('./fetchListsUpdate');
+const fetchLists = require('./fetchLists');
 
 exports.handler = async (event) => {
   try {
     const { authkey } = event.queryStringParameters || {};
     if (!authkey) throw new Error('`authkey` is required');
 
-    const res = await fetchListsUpdate({
+    const res = await fetchLists({
       authkey,
     });
 

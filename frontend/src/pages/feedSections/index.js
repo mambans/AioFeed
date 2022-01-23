@@ -7,6 +7,7 @@ import FeedSectionsContext from './FeedSectionsContext';
 import { AiFillEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { MdDelete, MdAdd, MdNotifications, MdNotificationsOff } from 'react-icons/md';
 import { HiDotsVertical } from 'react-icons/hi';
+import { BsExclude } from 'react-icons/bs';
 import Rules from './Rules';
 import NavigationContext from '../navigation/NavigationContext';
 import MyModal from '../../components/mymodal/MyModal';
@@ -25,6 +26,7 @@ const FeedSectionAdd = () => {
     feedSections,
     editFeedSectionTitle,
     toggleFeedSectionNotification,
+    toggleFeedSectionExcludeFromTwitch,
   } = useContext(FeedSectionsContext);
 
   const { setOverflow } = useContext(NavigationContext);
@@ -78,34 +80,51 @@ const FeedSectionAdd = () => {
               >
                 {/* {Object.values(feedSections).find((l) => parseInt(l.id) === parseInt(section.id)) && ( */}
                 {section.id && (
-                  <RightButton type='button' onClick={() => toggleFeedSection(section.id)}>
-                    {section.enabled ? (
-                      <AiFillEye size={22} color='#ffffff' />
-                    ) : (
-                      <AiOutlineEyeInvisible size={22} color='rgb(150,150,150)' />
-                    )}
-                    <span style={{ paddingLeft: '5px' }}>
-                      {section.enabled ? 'Enabled' : 'Disabled'}
-                    </span>
-                  </RightButton>
-                )}
-                {section.id && (
-                  <RightButton
-                    type='button'
-                    onClick={() => {
-                      askForBrowserNotificationPermission();
-                      toggleFeedSectionNotification(section.id);
-                    }}
-                  >
-                    {section.notifications_enabled ? (
-                      <MdNotifications size={22} color='#ffffff' />
-                    ) : (
-                      <MdNotificationsOff size={22} color='rgb(150,150,150)' />
-                    )}
-                    <span style={{ paddingLeft: '5px' }}>
-                      {section.notifications_enabled ? 'Enabled' : 'Disabled'}
-                    </span>
-                  </RightButton>
+                  <>
+                    <RightButton type='button' onClick={() => toggleFeedSection(section.id)}>
+                      {section.enabled ? (
+                        <AiFillEye size={22} color='#ffffff' />
+                      ) : (
+                        <AiOutlineEyeInvisible size={22} color='rgb(150,150,150)' />
+                      )}
+                      <span style={{ paddingLeft: '5px' }}>
+                        {section.enabled ? 'Visible' : 'Hidden'}
+                      </span>
+                    </RightButton>
+
+                    <RightButton
+                      type='button'
+                      onClick={() => {
+                        askForBrowserNotificationPermission();
+                        toggleFeedSectionNotification(section.id);
+                      }}
+                    >
+                      {section.notifications_enabled ? (
+                        <MdNotifications size={22} color='#ffffff' />
+                      ) : (
+                        <MdNotificationsOff size={22} color='rgb(150,150,150)' />
+                      )}
+                      <span style={{ paddingLeft: '5px' }}>
+                        {section.notifications_enabled ? 'Notis ON' : 'Notis OFF'}
+                      </span>
+                    </RightButton>
+
+                    <RightButton
+                      type='button'
+                      onClick={() => {
+                        toggleFeedSectionExcludeFromTwitch(section.id);
+                      }}
+                    >
+                      {section.excludeFromTwitch_enabled ? (
+                        <BsExclude size={22} color='#ffffff' />
+                      ) : (
+                        <BsExclude size={22} color='rgb(150,150,150)' />
+                      )}
+                      <span style={{ paddingLeft: '5px' }}>
+                        {section.excludeFromTwitch_enabled ? 'Excluding' : 'Including'}
+                      </span>
+                    </RightButton>
+                  </>
                 )}
 
                 {section.id ? (

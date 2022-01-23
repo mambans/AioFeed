@@ -56,7 +56,7 @@ export const Twitch = ({ in: forceMount = false, className }) => {
                   toggleExpanded={() => toggleExpanded('twitch')}
                 />
                 <ExpandableSection collapsed={orders?.['twitch']?.collapsed}>
-                  <TwitchStreams data={data} />
+                  <TwitchStreams data={data} streams={data.nonFeedSectionLiveStreams} />
                 </ExpandableSection>
               </Container>
             </CSSTransition>

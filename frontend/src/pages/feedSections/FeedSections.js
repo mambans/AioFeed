@@ -13,23 +13,23 @@ import ExpandableSection from '../../components/expandableSection/ExpandableSect
 import addSystemNotification from '../twitch/live/addSystemNotification';
 import NotificationsContext from '../notifications/NotificationsContext';
 
+export const checkAgainstRules = (stream, rules) => {
+  return rules.some(
+    (r) =>
+      stream.title.toLowerCase().includes(r.title.toLowerCase()) &&
+      stream.game_name.toLowerCase().includes(r.category.toLowerCase()) &&
+      loginNameFormat(stream).includes(r.channel.toLowerCase()) &&
+      stream?.tag_names?.find((tag_name) =>
+        tag_name?.toLowerCase()?.includes(r?.tag?.toLowerCase())
+      ) &&
+      stream.viewer_count >= r.viewers
+  );
+};
+
 const FeedSections = ({ data }) => {
   // console.log('FeedSections data:', data);
   const { feedSections } = useContext(FeedSectionsContext);
   const { addNotification } = useContext(NotificationsContext);
-
-  const checkAgainstRules = (stream, rules) => {
-    return rules.some(
-      (r) =>
-        stream.title.toLowerCase().includes(r.title.toLowerCase()) &&
-        stream.game_name.toLowerCase().includes(r.category.toLowerCase()) &&
-        loginNameFormat(stream).includes(r.channel.toLowerCase()) &&
-        stream?.tag_names?.find((tag_name) =>
-          tag_name?.toLowerCase()?.includes(r?.tag?.toLowerCase())
-        ) &&
-        stream.viewer_count >= r.viewers
-    );
-  };
 
   return (
     <TransitionGroup component={null}>
@@ -41,7 +41,6 @@ const FeedSections = ({ data }) => {
           if (!curr.enabled || !liveStreams.length) return acc;
           return [...acc, { ...curr, data: { ...data, liveStreams } }];
         }, [])
-
         ?.map((feed, index) => (
           <CSSTransition timeout={1000} classNames='listHorizontalSlide' unmountOnExit appear>
             <Section
@@ -115,7 +114,7 @@ const Section = ({
         rightSide={<Rules rules={rules} name={title} id={id} />}
       />
       <ExpandableSection collapsed={orders?.[id]?.collapsed}>
-        <TwitchStreams data={data} hideOnEmpty />
+        <TwitchStreams data={data} streams={data.liveStreams} hideOnEmpty />
       </ExpandableSection>
     </Container>
   );

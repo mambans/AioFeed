@@ -122,7 +122,6 @@ const List = ({
         ytExistsAndValidated,
         twitchExistsAndValidated,
       });
-      console.log('videos:', videos);
 
       setVideos(videos);
       addSavedData(videos);
