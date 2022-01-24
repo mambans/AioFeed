@@ -24,7 +24,6 @@ import VodsFollowUnfollowBtn from './../vods/VodsFollowUnfollowBtn';
 import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import AnimatedViewCount from './AnimatedViewCount';
 import loginNameFormat from './../loginNameFormat';
-import CustomFilters from '../CustomFilters';
 import ChannelButtonsContainer from './ChannelButtonsContainer';
 import ToolTip from '../../../components/tooltip/ToolTip';
 import FavoriteStreamBtn from './FavoriteStreamBtn';
@@ -179,11 +178,6 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
             <ChannelButtonsContainer className='buttonsContainer'>
               <Schedule user={login || user_name} user_id={user_id} absolute={false} btnSize={22} />
               <FavoriteStreamBtn channel={login} />
-              <CustomFilters
-                channel={login?.toLowerCase() || user_name}
-                enableFormControll={true}
-                videoContainerRef={videoContainerRef}
-              />
               <VodsFollowUnfollowBtn channel={login} channelId={user_id} marginright='5px;' />
               <AddUpdateNotificationsButton channel={login} marginright='5px;' />
               <FollowUnfollowBtn

@@ -7,7 +7,7 @@ import getFollowedOnlineStreams from './GetFollowedStreams';
 import NotificationsContext from './../../notifications/NotificationsContext';
 import FeedsContext from './../../feed/FeedsContext';
 import VodsContext from './../vods/VodsContext';
-import { AddCookie, getLocalstorage } from '../../../util';
+import { AddCookie } from '../../../util';
 import LiveStreamsPromise from './LiveStreamsPromise';
 import OfflineStreamsPromise from './OfflineStreamsPromise';
 import UpdatedStreamsPromise from './UpdatedStreamsPromise';
@@ -82,7 +82,6 @@ const Handler = ({ children }) => {
             disableNotifications: disableNotifications,
             previousStreams: oldLiveStreams.current,
           }));
-        const filters = getLocalstorage('CustomFilters') || [];
         if (streams?.status === 200) {
           const newLiveStreams = [...(streams?.data || [])];
           const uniqueFilteredLiveStreams = uniqBy(newLiveStreams, 'user_id');
@@ -105,36 +104,13 @@ const Handler = ({ children }) => {
           );
           streamTags.current = tags;
 
-          const rulesFilteredLiveStreams = uniqueFilteredLiveStreams.filter((stream) => {
-            const relevantRules =
-              filters?.[stream?.login?.toLowerCase() || stream?.user_name?.toLowerCase()];
-
-            if (Boolean(relevantRules?.length)) {
-              const whitelists = relevantRules?.some((rule) => rule.action === 'Whitelist');
-
-              return relevantRules?.some((rule) => {
-                const match = stream[rule.type?.toLowerCase()]
-                  ?.toLowerCase()
-                  ?.includes(rule.match.toLowerCase());
-
-                if (!Boolean(stream?.game_id)) return true;
-                if (whitelists && !match) return false;
-                if (whitelists && match) return true;
-                if (match && rule?.action === 'Blacklist') return false;
-
-                return true;
-              });
-            }
-            return true;
-          });
-
-          const recentLiveStreams = (rulesFilteredLiveStreams || []).filter(
+          const recentLiveStreams = (uniqueFilteredLiveStreams || []).filter(
             (s = {}) => Math.trunc((Date.now() - new Date(s?.started_at).getTime()) / 1000) <= 150
           );
 
           oldLiveStreams.current = liveStreams.current;
           const uniqueStreams = uniqBy(
-            [...(rulesFilteredLiveStreams || []), ...(recentLiveStreams || [])],
+            [...(uniqueFilteredLiveStreams || []), ...(recentLiveStreams || [])],
             'id'
           );
 

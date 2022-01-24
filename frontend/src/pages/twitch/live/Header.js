@@ -1,7 +1,6 @@
 import React from 'react';
 import { ExpandCollapseFeedButton } from '../../sharedComponents/sharedStyledComponents';
 
-import AllFiltersList from '../CustomFilters/AllFiltersList';
 import Header, { HeaderNumberCount } from '../../../components/Header';
 import ChannelSearchList from './../channelList';
 import BigScheduleList from './BigScheduleList';
@@ -40,7 +39,6 @@ const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed }, ref)
       rightSide={
         <>
           <BigScheduleList followedChannels={followedChannels} />
-          <AllFiltersList />
           <ChannelSearchList placeholder='...' />
         </>
       }

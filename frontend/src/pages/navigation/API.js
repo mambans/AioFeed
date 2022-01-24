@@ -9,27 +9,6 @@ const API = {
     await axios.post(`${BASE_URL}/account/validate`, {
       authkey: getCookie(`AioFeed_AuthKey`),
     }),
-  addCustomfilters: async (value) =>
-    await axios
-      .put(`${BASE_URL}/customfilters`, {
-        filtesObj: value,
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .catch((e) => console.error(e)),
-
-  getCustomfilters: async () =>
-    await axios
-      .get(`${BASE_URL}/customfilters`, {
-        params: {
-          authkey: getCookie(`AioFeed_AuthKey`),
-        },
-      })
-      .then((res) => res.data.Item?.filters || {})
-      .catch((e) => {
-        console.error(e);
-        return {};
-      }),
-
   createSavedList: async (id, values) =>
     await axios
       .post(`${BASE_URL}/savedlists`, {

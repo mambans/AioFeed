@@ -9,7 +9,6 @@ import TwitchAPI from '../API';
 import LiveIndicator from './LiveIndicator';
 import AddVideoExtraData from '../AddVideoExtraData';
 import loginNameFormat from '../loginNameFormat';
-import CustomFilters from '../CustomFilters';
 import ChannelButtonsContainer from '../live/ChannelButtonsContainer';
 import FavoriteStreamBtn from '../live/FavoriteStreamBtn';
 import Schedule from '../schedule';
@@ -106,11 +105,6 @@ const ChannelListElement = ({
           btnSize={22}
         />
         <FavoriteStreamBtn channel={channel?.user_name} show={followingStatus} />
-        <CustomFilters
-          channel={channel?.user_name.toLowerCase()}
-          show={followingStatus}
-          style={{ margin: '0' }}
-        />
         <VodsFollowUnfollowBtn
           show={username && showVodBtn}
           channel={channel?.user_name || searchInput}

@@ -63,13 +63,6 @@ module.exports = async ({ password, authKey }) => {
           ReturnValues: 'ALL_OLD',
         })
         .promise();
-      const filters = await client
-        .delete({
-          TableName: process.env.CUSTOM_FILTERS_TABLE,
-          Key: { Username: username },
-          ReturnValues: 'ALL_OLD',
-        })
-        .promise();
       const twitter = await client
         .delete({
           TableName: process.env.TWITTER_DATA_TABLE,
@@ -80,7 +73,7 @@ module.exports = async ({ password, authKey }) => {
 
       return {
         statusCode: 200,
-        data: { user, twitch, youtube, saed_lists, feed_sections, filters, twitter },
+        data: { user, twitch, youtube, saed_lists, feed_sections, twitter },
       };
     }
   } else {

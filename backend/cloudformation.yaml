@@ -217,7 +217,6 @@ Resources:
           YOUTUBE_DATA_TABLE: !Ref YoutubeData
           SAVED_LISTS: !Ref SavedLists
           CUSTOM_FEED_SECTIONS: !Ref CustomFeedSections
-          CUSTOM_FILTERS_TABLE: !Ref CustomFiltersTable
           TWITTER_DATA_TABLE: !Ref TwitterData
       Policies:
         - DynamoDBCrudPolicy:
@@ -226,7 +225,6 @@ Resources:
             TableName: !Ref YoutubeData
             TableName: !Ref SavedLists
             TableName: !Ref CustomFeedSections
-            TableName: !Ref CustomFiltersTable
             TableName: !Ref TwitterData
       Events:
         Http:
@@ -485,66 +483,6 @@ Resources:
           Properties:
             Path: /app/token
             Method: get
-  CustomFiltersTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      AttributeDefinitions:
-        - AttributeName: Username
-          AttributeType: S
-      KeySchema:
-        - AttributeName: Username
-          KeyType: HASH
-      ProvisionedThroughput:
-        ReadCapacityUnits: 1
-        WriteCapacityUnits: 1
-  UpdateCustomFilers:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: 'Updates custom stream filters.'
-      Handler: customFiltersUpdate/handler.handler
-      Environment:
-        Variables:
-          CUSTOM_FILTERS_TABLE: !Ref CustomFiltersTable
-          USERNAME_TABLE: !Ref UserLogins
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref CustomFiltersTable
-        - DynamoDBReadPolicy:
-            TableName: !Ref UserLogins
-      Events:
-        Http:
-          Type: Api
-          Properties:
-            Path: /customfilters
-            Method: put
-          RequestParameters:
-            - method.request.querystring.filtesObj:
-                Required: true
-            - method.request.querystring.authkey:
-                Required: true
-  FetchCustomFilters:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: 'Fetch custom stream filters.'
-      Handler: customFiltersFetch/handler.handler
-      Environment:
-        Variables:
-          CUSTOM_FILTERS_TABLE: !Ref CustomFiltersTable
-          USERNAME_TABLE: !Ref UserLogins
-      Policies:
-        - DynamoDBReadPolicy:
-            TableName: !Ref CustomFiltersTable
-        - DynamoDBReadPolicy:
-            TableName: !Ref UserLogins
-      Events:
-        Http:
-          Type: Api
-          Properties:
-            Path: /customfilters
-            Method: get
-          RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
   favoriteStreamsUpdate:
     Type: AWS::Serverless::Function
     Properties:

@@ -23,7 +23,6 @@ const clearAllAccountCookiesStates = ({
   localStorage.removeItem('Twitter-Lists');
 
   localStorage.removeItem('YT-followedChannels');
-  localStorage.removeItem('CustomFilters');
   localStorage.removeItem('Vods');
   localStorage.removeItem('MyLists');
   localStorage.removeItem('TwitchChatState');
