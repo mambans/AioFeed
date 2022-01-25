@@ -12,6 +12,10 @@ const Container = styled.div`
   display: flex;
   align-items: center;
 
+  backdrop-filter: blur(10px);
+  padding:3px:
+  border-radius: 3px;
+
   button,
   svg {
     opacity: ${({ open }) => (open ? '1 !important' : '0')};
