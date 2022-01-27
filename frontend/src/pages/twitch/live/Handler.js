@@ -129,55 +129,59 @@ const Handler = ({ children }) => {
               (f = {}) => f.enabled && f.excludeFromTwitch_enabled
             );
 
-          liveStreams.current = orderBy(streamsWithTags, (s) => s.viewer_count, 'desc');
-          nonFeedSectionLiveStreams.current = orderBy(
-            streamsWithTags,
-            (s) => s.viewer_count,
-            'desc'
-          )?.filter(
-            (stream) =>
-              !enabledFeedSections?.some(({ rules } = {}) => checkAgainstRules(stream, rules))
-          );
+          const orderedStreams = orderBy(streamsWithTags, (s) => s.viewer_count, 'desc');
 
-          setLoadingStates({
-            refreshing: false,
-            error: null,
-            loaded: true,
-            lastLoaded: Date.now(),
-          });
+          await Promise.resolve(
+            (() => {
+              liveStreams.current = orderedStreams;
+              nonFeedSectionLiveStreams.current = orderedStreams?.filter(
+                (stream) =>
+                  !enabledFeedSections?.some(({ rules } = {}) => checkAgainstRules(stream, rules))
+              );
 
-          if (
-            !disableNotifications &&
-            (liveStreams.current?.length >= 1 || oldLiveStreams.current?.length >= 1)
-          ) {
-            await Promise.all([
-              await LiveStreamsPromise({
-                liveStreams,
-                oldLiveStreams,
-                enableTwitchVods,
-                setVods,
-                setNewlyAddedStreams,
-              }),
-
-              await OfflineStreamsPromise({
-                liveStreams,
-                oldLiveStreams,
-                isEnabledOfflineNotifications,
-                enableTwitchVods,
-                setVods,
-              }),
-
-              await UpdatedStreamsPromise({
-                liveStreams,
-                oldLiveStreams,
-                isEnabledUpdateNotifications,
-                updateNotischannels,
-              }),
-            ]).then((res) => {
-              const flattenedArray = res.flat(3).filter((n) => n);
-              if (Boolean(flattenedArray?.length)) addNotification(flattenedArray);
+              return { liveStreams, nonFeedSectionLiveStreams };
+            })()
+          ).then(async (res) => {
+            console.log('res:', res);
+            setLoadingStates({
+              refreshing: false,
+              error: null,
+              loaded: true,
+              lastLoaded: Date.now(),
             });
-          }
+            if (
+              !disableNotifications &&
+              (liveStreams.current?.length >= 1 || oldLiveStreams.current?.length >= 1)
+            ) {
+              await Promise.all([
+                await LiveStreamsPromise({
+                  liveStreams,
+                  oldLiveStreams,
+                  enableTwitchVods,
+                  setVods,
+                  setNewlyAddedStreams,
+                }),
+
+                await OfflineStreamsPromise({
+                  liveStreams,
+                  oldLiveStreams,
+                  isEnabledOfflineNotifications,
+                  enableTwitchVods,
+                  setVods,
+                }),
+
+                await UpdatedStreamsPromise({
+                  liveStreams,
+                  oldLiveStreams,
+                  isEnabledUpdateNotifications,
+                  updateNotischannels,
+                }),
+              ]).then((res) => {
+                const flattenedArray = res.flat(3).filter((n) => n);
+                if (Boolean(flattenedArray?.length)) addNotification(flattenedArray);
+              });
+            }
+          });
         } else if (streams?.status === 201) {
           setLoadingStates({
             refreshing: false,
