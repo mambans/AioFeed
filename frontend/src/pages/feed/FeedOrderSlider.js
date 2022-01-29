@@ -159,8 +159,16 @@ const FeedOrderSlider = () => {
   return (
     <SliderMultipuleHandles sliderLength={feeds?.length * 75}>
       <div style={{ position: 'relative' }}>
-        {feeds.map(({ name, id, icon = `url(${process.env.PUBLIC_URL}/list-icon.svg)` }) => {
-          return <SliderThumb name={name} icon={icon} id={id} sliderLength={feeds?.length * 75} />;
+        {feeds.map(({ name, id, icon = `url(${process.env.PUBLIC_URL}/list-icon.svg)` }, index) => {
+          return (
+            <SliderThumb
+              key={id || index}
+              name={name}
+              icon={icon}
+              id={id}
+              sliderLength={feeds?.length * 75}
+            />
+          );
         })}
       </div>
     </SliderMultipuleHandles>

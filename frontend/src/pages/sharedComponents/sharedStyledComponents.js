@@ -69,7 +69,8 @@ export const StyledVideoContainer = styled.div`
 
   &.videoFadeSlide-enter {
     opacity: 0;
-    margin-left: ${({ feedVideoSizeProps }) => -feedVideoSizeProps.totalWidth}px !important;
+    margin-left: ${({ feedVideoSizeProps }) =>
+      -feedVideoSizeProps.totalWidth - feedVideoSizeProps.margin}px !important;
     margin-right: 0px !important;
     transition: opacity 500ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
       transform 750ms;
@@ -98,8 +99,7 @@ export const StyledVideoContainer = styled.div`
 
   &.videoFadeSlide-exit-active {
     opacity: 0;
-    margin-left: ${({ feedVideoSizeProps }) =>
-      -(feedVideoSizeProps.totalWidth + feedVideoSizeProps.margin)}px !important;
+    margin-left: ${({ feedVideoSizeProps }) => -feedVideoSizeProps.totalWidth}px !important;
     margin-right: 0px !important;
     transition: opacity 500ms ease 250ms, margin-left 750ms, width 750ms, margin-right 750ms,
       max-width 750ms, transform 750ms;
