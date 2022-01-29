@@ -43,7 +43,6 @@ const Handler = ({ children }) => {
   });
   const followedChannels = useRef([]);
   const liveStreams = useRef();
-  const nonFeedSectionLiveStreams = useRef();
   const oldLiveStreams = useRef([]);
   const [newlyAddedStreams, setNewlyAddedStreams] = useState();
   // const [isInFocus, setIsInFocus] = useState();
@@ -53,7 +52,7 @@ const Handler = ({ children }) => {
   const refreshAfterUnfollowTimer = useRef();
   // eslint-disable-next-line no-unused-vars
   const [documentTitle, setDocumentTitle] = useDocumentTitle(
-    newlyAddedStreams ? `(${newlyAddedStreams?.length}) Feed` : 'Feed'
+    newlyAddedStreams?.length ? `(${newlyAddedStreams?.length}) Feed` : 'Feed'
   );
   const windowFocusHandler = () => (isInFocus.current = true);
   const windowBlurHandler = () => !autoRefreshEnabled && setNewlyAddedStreams([]);
@@ -136,7 +135,7 @@ const Handler = ({ children }) => {
           await Promise.resolve(
             (() => {
               liveStreams.current = orderedStreams;
-              nonFeedSectionLiveStreams.current = orderedStreams?.filter(
+              const nonFeedSectionLiveStreams = orderedStreams?.filter(
                 (stream) =>
                   !enabledFeedSections?.some(({ rules } = {}) => checkAgainstRules(stream, rules))
               );
@@ -147,7 +146,7 @@ const Handler = ({ children }) => {
             setTimeout(async () => {
               console.log('res:', res);
               setLiveStreamsState(res.liveStreams.current);
-              setNonFeedSectionLiveStreamsState(res.nonFeedSectionLiveStreams.current);
+              setNonFeedSectionLiveStreamsState(res.nonFeedSectionLiveStreams);
               setLoadingStates({
                 refreshing: false,
                 error: null,
@@ -224,12 +223,11 @@ const Handler = ({ children }) => {
         feedSections &&
         Object.values?.(feedSections)?.filter((f = {}) => f.enabled && f.excludeFromTwitch_enabled);
 
-      nonFeedSectionLiveStreams.current = orderBy(
-        liveStreams.current,
-        (s) => s?.viewer_count,
-        'desc'
-      )?.filter(
-        (stream) => !enabledFeedSections?.some(({ rules } = {}) => checkAgainstRules(stream, rules))
+      setNonFeedSectionLiveStreamsState(
+        orderBy(liveStreams.current, (s) => s?.viewer_count, 'desc')?.filter(
+          (stream) =>
+            !enabledFeedSections?.some(({ rules } = {}) => checkAgainstRules(stream, rules))
+        )
       );
     }
   }, [feedSections]);
