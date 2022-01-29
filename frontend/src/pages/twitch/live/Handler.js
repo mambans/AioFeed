@@ -141,8 +141,8 @@ const Handler = ({ children }) => {
 
               return { liveStreams, nonFeedSectionLiveStreams };
             })()
-          ).then(async (res) => {
-            setTimeout(() => {
+          ).then((res) => {
+            setTimeout(async () => {
               console.log('res:', res);
               setLoadingStates({
                 refreshing: false,
