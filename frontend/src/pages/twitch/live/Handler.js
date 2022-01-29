@@ -142,45 +142,47 @@ const Handler = ({ children }) => {
               return { liveStreams, nonFeedSectionLiveStreams };
             })()
           ).then(async (res) => {
-            console.log('res:', res);
-            setLoadingStates({
-              refreshing: false,
-              error: null,
-              loaded: true,
-              lastLoaded: Date.now(),
-            });
-            if (
-              !disableNotifications &&
-              (liveStreams.current?.length >= 1 || oldLiveStreams.current?.length >= 1)
-            ) {
-              await Promise.all([
-                await LiveStreamsPromise({
-                  liveStreams,
-                  oldLiveStreams,
-                  enableTwitchVods,
-                  setVods,
-                  setNewlyAddedStreams,
-                }),
-
-                await OfflineStreamsPromise({
-                  liveStreams,
-                  oldLiveStreams,
-                  isEnabledOfflineNotifications,
-                  enableTwitchVods,
-                  setVods,
-                }),
-
-                await UpdatedStreamsPromise({
-                  liveStreams,
-                  oldLiveStreams,
-                  isEnabledUpdateNotifications,
-                  updateNotischannels,
-                }),
-              ]).then((res) => {
-                const flattenedArray = res.flat(3).filter((n) => n);
-                if (Boolean(flattenedArray?.length)) addNotification(flattenedArray);
+            setTimeout(() => {
+              console.log('res:', res);
+              setLoadingStates({
+                refreshing: false,
+                error: null,
+                loaded: true,
+                lastLoaded: Date.now(),
               });
-            }
+              if (
+                !disableNotifications &&
+                (liveStreams.current?.length >= 1 || oldLiveStreams.current?.length >= 1)
+              ) {
+                await Promise.all([
+                  await LiveStreamsPromise({
+                    liveStreams,
+                    oldLiveStreams,
+                    enableTwitchVods,
+                    setVods,
+                    setNewlyAddedStreams,
+                  }),
+
+                  await OfflineStreamsPromise({
+                    liveStreams,
+                    oldLiveStreams,
+                    isEnabledOfflineNotifications,
+                    enableTwitchVods,
+                    setVods,
+                  }),
+
+                  await UpdatedStreamsPromise({
+                    liveStreams,
+                    oldLiveStreams,
+                    isEnabledUpdateNotifications,
+                    updateNotischannels,
+                  }),
+                ]).then((res) => {
+                  const flattenedArray = res.flat(3).filter((n) => n);
+                  if (Boolean(flattenedArray?.length)) addNotification(flattenedArray);
+                });
+              }
+            }, 0);
           });
         } else if (streams?.status === 201) {
           setLoadingStates({
