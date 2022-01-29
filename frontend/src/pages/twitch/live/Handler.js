@@ -33,6 +33,8 @@ const Handler = ({ children }) => {
   const { enableTwitchVods } = useContext(FeedsContext) || {};
   const { feedSections } = useContext(FeedSectionsContext) || {};
   const [refreshTimer, setRefreshTimer] = useState(20);
+  const [liveStreamsState, setLiveStreamsState] = useState([]);
+  const [nonFeedSectionLiveStreamsState, setNonFeedSectionLiveStreamsState] = useState([]);
   const [loadingStates, setLoadingStates] = useState({
     refreshing: false,
     error: null,
@@ -144,6 +146,8 @@ const Handler = ({ children }) => {
           ).then((res) => {
             setTimeout(async () => {
               console.log('res:', res);
+              setLiveStreamsState(res.liveStreams);
+              setNonFeedSectionLiveStreamsState(res.nonFeedSectionLiveStreams);
               setLoadingStates({
                 refreshing: false,
                 error: null,
@@ -281,8 +285,10 @@ const Handler = ({ children }) => {
     followedChannels: followedChannels.current,
     error: loadingStates.error,
     oldLiveStreams: oldLiveStreams.current || [],
-    liveStreams: liveStreams.current || [],
-    nonFeedSectionLiveStreams: nonFeedSectionLiveStreams.current || [],
+    liveStreams: liveStreamsState || [],
+    nonFeedSectionLiveStreams: nonFeedSectionLiveStreamsState || [],
+    // liveStreams: liveStreams.current || [],
+    // nonFeedSectionLiveStreams: nonFeedSectionLiveStreams.current || [],
     refresh,
     newlyAddedStreams: newlyAddedStreams,
     REFRESH_RATE,

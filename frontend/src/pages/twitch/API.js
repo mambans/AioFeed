@@ -147,17 +147,6 @@ const TwitchAPI = {
     });
   },
 
-  // krakenGetChannelInfo: async (params) => {
-  //   return await axios.get(`${BASE_URL_KRAKEN}/channels/${params.id}`, {
-  //     params,
-  //     headers: {
-  //       Authorization: `OAuth ${await validateToken()}`,
-  //       'Client-ID': CLIENT_ID,
-  //       Accept: 'application/vnd.twitchtv.v5+json',
-  //     },
-  //   });
-  // },
-
   checkFollow: async (params) => {
     return await axios.get(`${BASE_URL}/users/follows`, {
       params,
