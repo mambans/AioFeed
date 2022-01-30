@@ -15,7 +15,7 @@ import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import FeedsCenterContainer, { CenterContext } from './../../feed/FeedsCenterContainer';
 import { Container } from '../StyledComponents';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
-import { TwitchContext } from '../useToken';
+import useToken, { TwitchContext } from '../useToken';
 import ExpandableSection from '../../../components/expandableSection/ExpandableSection';
 
 const VodsStandalone = () => {
@@ -34,6 +34,7 @@ export const Vods = ({ className }) => {
   const { videoElementsAmount } = useContext(CenterContext);
   const { twitchAccessToken, setTwitchAccessToken, setTwitchRefreshToken, twitchUserId } =
     useContext(TwitchContext);
+  const validateToken = useToken();
   const [error, setError] = useState(null);
   const [vodError, setVodError] = useState(null);
   const [vodAmounts, setVodAmounts] = useState({
@@ -74,27 +75,29 @@ export const Vods = ({ className }) => {
 
   useEffect(() => {
     (async () => {
-      refreshBtnRef?.current?.setIsLoading(true);
-      setVods((c) => {
-        getFollowedVods({
-          forceRun: false,
-          setTwitchRefreshToken,
-          setTwitchAccessToken,
-          channels,
-          currentVods: c,
-        }).then((data) => {
-          if (data.er) {
-            setError(data.er);
-          } else if (data.vodError) {
-            setVodError(data.vodError);
-          }
-          refreshBtnRef?.current?.setIsLoading(false);
-          setVods(data.data);
-          // return data.data;
+      if (validateToken) {
+        refreshBtnRef?.current?.setIsLoading(true);
+        setVods((c) => {
+          getFollowedVods({
+            forceRun: false,
+            setTwitchRefreshToken,
+            setTwitchAccessToken,
+            channels,
+            currentVods: c,
+          }).then((data) => {
+            if (data.er) {
+              setError(data.er);
+            } else if (data.vodError) {
+              setVodError(data.vodError);
+            }
+            refreshBtnRef?.current?.setIsLoading(false);
+            setVods(data.data);
+            // return data.data;
+          });
         });
-      });
+      }
     })();
-  }, [twitchUserId, setTwitchAccessToken, setTwitchRefreshToken, setVods, channels]);
+  }, [twitchUserId, setTwitchAccessToken, setTwitchRefreshToken, setVods, channels, validateToken]);
 
   useEffect(() => {
     setVodAmounts({

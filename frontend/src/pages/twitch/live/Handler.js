@@ -12,7 +12,7 @@ import LiveStreamsPromise from './LiveStreamsPromise';
 import OfflineStreamsPromise from './OfflineStreamsPromise';
 import UpdatedStreamsPromise from './UpdatedStreamsPromise';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
-import { TwitchContext } from '../useToken';
+import useToken, { TwitchContext } from '../useToken';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import { fetchAndAddTags } from '../fetchAndAddTags';
 import FeedSectionsContext from '../../feedSections/FeedSectionsContext';
@@ -29,6 +29,7 @@ const Handler = ({ children }) => {
     twitchAccessToken,
     updateNotischannels,
   } = useContext(TwitchContext);
+  const validateToken = useToken();
   const { setVods } = useContext(VodsContext);
   const { enableTwitchVods } = useContext(FeedsContext) || {};
   const { feedSections } = useContext(FeedSectionsContext) || {};
@@ -234,7 +235,7 @@ const Handler = ({ children }) => {
     (async () => {
       try {
         const timeNow = new Date();
-        if (!timer.current) {
+        if (!timer.current && validateToken) {
           if (autoRefreshEnabled) {
             setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
           }
@@ -256,7 +257,7 @@ const Handler = ({ children }) => {
         setLoadingStates({ refreshing: false, error: error, loaded: true });
       }
     })();
-  }, [refresh, autoRefreshEnabled]);
+  }, [refresh, autoRefreshEnabled, validateToken]);
 
   useEffect(() => {
     return () => {
