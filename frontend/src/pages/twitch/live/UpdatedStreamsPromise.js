@@ -10,7 +10,7 @@ const updateSreamsPromise = async ({
   try {
     const res = await new Promise((resolve, reject) => {
       if (!isEnabledUpdateNotifications) reject("Stream 'update' notifications are disabled.");
-      const restStreams = liveStreams.current?.filter((stream) =>
+      const restStreams = liveStreams?.filter((stream) =>
         oldLiveStreams.current.find((old_stream) => stream.user_name === old_stream.user_name)
       );
 

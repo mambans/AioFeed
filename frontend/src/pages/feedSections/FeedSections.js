@@ -70,17 +70,18 @@ const Section = ({
     try {
       if (notifications_enabled && previosStreams?.current) {
         const streamsToNotify = data?.liveStreams?.filter(
-          (stream) =>
-            !previosStreams?.current?.find((s) => s?.user_id === stream?.user_id) &&
-            data?.oldLiveStreams?.find((s) => s?.user_id === stream?.user_id)
+          (stream) => !previosStreams?.current?.find((s) => s?.user_id === stream?.user_id)
         );
 
         // console.log('streamsToNotify:', streamsToNotify);
         const streams = streamsToNotify?.map((stream = {}) => {
-          stream.notiStatus = `in ${title}`;
+          const notisTitle = `${
+            data?.oldLiveStreams?.find((s) => s?.user_id === stream?.user_id) ? 'Live ' : ''
+          }in ${title}`;
+          stream.notiStatus = notisTitle;
 
           addSystemNotification({
-            status: `in ${title}`,
+            status: notisTitle,
             stream: stream,
             title: `${title}`,
             body: `${stream.title || stream.status || ''}\n${

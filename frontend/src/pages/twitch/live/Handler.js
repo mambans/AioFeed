@@ -130,23 +130,21 @@ const Handler = ({ children }) => {
               (f = {}) => f.enabled && f.excludeFromTwitch_enabled
             );
 
-          const orderedStreams = orderBy(streamsWithTags, (s) => s.viewer_count, 'desc');
-
           await Promise.resolve(
             (() => {
-              liveStreams.current = orderedStreams;
+              const orderedStreams = orderBy(streamsWithTags, (s) => s.viewer_count, 'desc');
               const nonFeedSectionLiveStreams = orderedStreams?.filter(
                 (stream) =>
                   !enabledFeedSections?.some(({ rules } = {}) => checkAgainstRules(stream, rules))
               );
 
-              return { liveStreams, nonFeedSectionLiveStreams };
+              liveStreams.current = orderedStreams;
+              return { orderedStreams, nonFeedSectionLiveStreams };
             })()
-          ).then((res) => {
+          ).then(({ orderedStreams, nonFeedSectionLiveStreams } = {}) => {
             setTimeout(async () => {
-              console.log('res:', res);
-              setLiveStreamsState(res.liveStreams.current);
-              setNonFeedSectionLiveStreamsState(res.nonFeedSectionLiveStreams);
+              setLiveStreamsState(orderedStreams);
+              setNonFeedSectionLiveStreamsState(nonFeedSectionLiveStreams);
               setLoadingStates({
                 refreshing: false,
                 error: null,
@@ -155,11 +153,11 @@ const Handler = ({ children }) => {
               });
               if (
                 !disableNotifications &&
-                (liveStreams.current?.length >= 1 || oldLiveStreams.current?.length >= 1)
+                (nonFeedSectionLiveStreams?.length >= 1 || oldLiveStreams.current?.length >= 1)
               ) {
                 await Promise.all([
                   await LiveStreamsPromise({
-                    liveStreams,
+                    liveStreams: nonFeedSectionLiveStreams,
                     oldLiveStreams,
                     enableTwitchVods,
                     setVods,
@@ -175,7 +173,7 @@ const Handler = ({ children }) => {
                   }),
 
                   await UpdatedStreamsPromise({
-                    liveStreams,
+                    liveStreams: nonFeedSectionLiveStreams,
                     oldLiveStreams,
                     isEnabledUpdateNotifications,
                     updateNotischannels,
