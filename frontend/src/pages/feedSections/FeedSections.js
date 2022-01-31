@@ -38,7 +38,7 @@ const FeedSections = ({ data }) => {
           const liveStreams = data?.liveStreams.filter((stream) =>
             checkAgainstRules(stream, curr.rules)
           );
-          if (!curr.enabled || !liveStreams.length) return acc;
+          if (!curr.enabled) return acc;
           return [...acc, { ...curr, data: { ...data, liveStreams } }];
         }, [])
         ?.map((feed, index) => (
@@ -100,6 +100,7 @@ const Section = ({
     previosStreams.current = data?.liveStreams || [];
   }, [data?.liveStreams, data?.oldLiveStreams, title, addNotification, notifications_enabled]);
 
+  if (!data?.liveStreams?.length) return null;
   return (
     <Container order={orders?.[id]?.order} id={`FeedSection${title}Header`}>
       <Header
