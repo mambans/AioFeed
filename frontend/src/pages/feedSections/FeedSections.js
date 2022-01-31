@@ -68,7 +68,6 @@ const Section = ({
   useEffect(() => {
     // console.log('previosStreams?.current:', previosStreams?.current);
     try {
-      console.log(`${title}: `, previosStreams?.current);
       if (notifications_enabled && previosStreams?.current) {
         const streamsToNotify = data?.liveStreams?.filter(
           (stream) => !previosStreams?.current?.find((s) => s?.user_id === stream?.user_id)
