@@ -13,7 +13,9 @@ const useDocumentTitle = (title, restore = true) => {
     [append]
   );
 
-  if (title !== false) setDocumentTitle(title);
+  useEffect(() => {
+    if (title !== false) setDocumentTitle(title);
+  }, [title, setDocumentTitle]);
 
   useEffect(() => {
     const previous = prevTitleRef.current;
