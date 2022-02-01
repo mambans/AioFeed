@@ -62,8 +62,6 @@ import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import useFavicon from '../../../hooks/useFavicon';
 import { TwitchContext } from '../useToken';
 import { ContextMenuDropDown } from './ContextMenuWrapper';
-import useClicksOutside from '../../../hooks/useClicksOutside';
-import useClicksInside from '../../../hooks/useClicksInside';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.12, 175);
 
@@ -73,7 +71,6 @@ const Player = () => {
   const { visible, setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
   const { twitchAccessToken, setTwitchAccessToken } = useContext(TwitchContext);
 
-  const [focused, setFocused] = useState(true);
   const twitchVideoPlayer = useRef();
   const [streamInfo, setStreamInfo] = useState(useLocation().state?.passedChannelData);
   const [showControlls, setShowControlls] = useState();
@@ -118,7 +115,7 @@ const Player = () => {
 
   useEventListenerMemo('mouseleave', handleMouseOut, PlayerUIControlls.current);
   useEventListenerMemo('dblclick', toggleFullScreen, PlayerUIControlls.current);
-  useEventListenerMemo('keydown', keyboardEvents, PlayerUIControlls.current, focused);
+  useEventListenerMemo('keydown', keyboardEvents, PlayerUIControlls.current);
 
   const containLinkClicks = (event) => {
     event.stopPropagation();
@@ -145,9 +142,6 @@ const Player = () => {
   useEventListenerMemo('mousedown', containLinkClicks, link1.current);
   useEventListenerMemo('mousedown', containLinkClicks, link2.current);
   useEventListenerMemo('mousedown', containLinkClicks, link3.current);
-
-  useClicksOutside(PlayerUIControlls.current, () => setFocused(false));
-  useClicksInside(PlayerUIControlls.currents, () => setFocused(true));
 
   const resetValues = () => {
     savedStreamInfo.current = null;
@@ -417,7 +411,6 @@ const Player = () => {
           <VolumeEventOverlay
             show={showUIControlls}
             ref={PlayerUIControlls}
-            focused={focused}
             type='live'
             id='controls'
             hidechat={String(chatState.hideChat)}
@@ -597,7 +590,6 @@ const Player = () => {
                 <PlayPauseButton
                   TwitchPlayer={twitchVideoPlayer.current}
                   PlayerUIControlls={PlayerUIControlls.current}
-                  focused={focused}
                 />
                 <VolumeSlider
                   OpenedDate={OpenedDate}
@@ -605,11 +597,10 @@ const Player = () => {
                   TwitchPlayer={twitchVideoPlayer.current}
                   setShowControlls={setShowControlls}
                   showAndResetTimer={showAndResetTimer}
-                  focused={focused}
                 />
-                <ShowStatsButtons TwitchPlayer={twitchVideoPlayer.current} focused={focused} />
+                <ShowStatsButtons TwitchPlayer={twitchVideoPlayer.current} />
                 <ShowSetQualityButtons TwitchPlayer={twitchVideoPlayer.current} />
-                <ClipButton streamInfo={streamInfo} focused={focused} />
+                <ClipButton streamInfo={streamInfo} />
                 <ResetVideoButton
                   title={'Reload video'}
                   style={{

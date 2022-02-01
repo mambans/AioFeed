@@ -22,8 +22,6 @@ import useLocalStorageState from '../../hooks/useLocalStorageState';
 import VolumeEventOverlay from '../twitch/VolumeEventOverlay';
 import { TwitchContext } from '../twitch/useToken';
 import { parseNumberAndString } from '../myLists/dragDropUtils';
-import useClicksInside from '../../hooks/useClicksInside';
-import useClicksOutside from '../../hooks/useClicksOutside';
 
 const DEFAULT_LIST_WIDTH = Math.max(window.innerWidth * 0.1, 400);
 
@@ -37,7 +35,6 @@ const SharedVideoPlayer = () => {
   const { enableVodVolumeOverlay } = useContext(TwitchContext) || {};
   const { lists } = useContext(MyListsContext) || {};
   const [listToShow, setListToShow] = useState();
-  const [focused, setFocused] = useState(true);
 
   const [viewStates, setViewStates] = useLocalStorageState(
     `${listToShow?.title || 'empty'}-viewStates`,
@@ -62,9 +59,6 @@ const SharedVideoPlayer = () => {
   const videoElementRef = useRef();
   const [playQueue, setPlayQueue] = useState([]);
   const [isFullscreen, setIsFullscreen] = useState();
-
-  useClicksOutside(VolumeEventOverlayRef.current, () => setFocused(false));
-  useClicksInside(VolumeEventOverlayRef.current, () => setFocused(true));
 
   const toggleShowList = useCallback(
     ({ show, updateLocalstorage }) => {
@@ -175,7 +169,6 @@ const SharedVideoPlayer = () => {
           show={resizeActive || (enableVodVolumeOverlay && isPlaying)}
           type='live'
           id='controls'
-          focused={focused}
           hidechat={String(viewStates?.hideList)}
           vodVolumeOverlayEnabled={enableVodVolumeOverlay}
           chatwidth={viewStates?.listWidth || DEFAULT_LIST_WIDTH}
@@ -218,7 +211,6 @@ const SharedVideoPlayer = () => {
             childPlayer={childPlayer}
             videoElementRef={videoElementRef}
             setIsFullscreen={setIsFullscreen}
-            focused={focused}
           />
         )}
         {/* {children} */}

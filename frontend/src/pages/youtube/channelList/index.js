@@ -55,6 +55,8 @@ const ChannelList = (data) => {
       bind: {
         value,
         onChange: (event) => {
+          event.preventDefault();
+          event.stopPropagation();
           setValue(event.target.value);
           if (listIsOpen && event.target.value && event.target.value !== '') {
             const filtered = channels.current.filter((channel) => {

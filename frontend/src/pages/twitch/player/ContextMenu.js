@@ -34,8 +34,10 @@ const PlayerContextMenu = ({
         >
           {TwitchPlayer?.getQualities()
             ?.filter((q) => q.group !== 'chunked')
-            ?.map((q) => (
-              <li onClick={() => TwitchPlayer?.setQuality(q.group)}>{q.name}</li>
+            ?.map((q, index) => (
+              <li key={q.name || index} onClick={() => TwitchPlayer?.setQuality(q.group)}>
+                {q.name}
+              </li>
             ))}
         </ContextMenuDropDown>
       </>

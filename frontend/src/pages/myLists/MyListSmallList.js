@@ -49,8 +49,8 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
       bind: {
         value,
         onChange: (event) => {
-          // event.preventDefault();
-          // event.stopPropagation();
+          event.preventDefault();
+          event.stopPropagation();
           const { value: input } = event.target;
           setValue(input.trimStart());
           setCursor({ position: 0 });

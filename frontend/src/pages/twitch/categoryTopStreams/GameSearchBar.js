@@ -53,6 +53,8 @@ const GameSearchBar = (props) => {
       bind: {
         value,
         onChange: (event) => {
+          event.preventDefault();
+          event.stopPropagation();
           const { value: input } = event.target;
           try {
             setValue(input.trimStart());

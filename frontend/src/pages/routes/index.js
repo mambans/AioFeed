@@ -27,7 +27,7 @@ const NavigationRoutes = () => {
   return (
     <BrowserRouter>
       <Navigation />
-      <MainContentContainer>
+      <MainContentContainer id='MainContentContainer' tabIndex={0}>
         <Routes>
           <Route index element={<Home />} />
           {/* <Route path='' element={<Home />} /> */}
