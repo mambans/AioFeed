@@ -585,32 +585,34 @@ const Player = () => {
               )
             )}
 
-            {Boolean(twitchVideoPlayer.current) && (
-              <SmallButtonContainer>
-                <PlayPauseButton
-                  TwitchPlayer={twitchVideoPlayer.current}
-                  PlayerUIControlls={PlayerUIControlls.current}
-                />
-                <VolumeSlider
-                  OpenedDate={OpenedDate}
-                  PlayerUIControlls={PlayerUIControlls.current}
-                  TwitchPlayer={twitchVideoPlayer.current}
-                  setShowControlls={setShowControlls}
-                  showAndResetTimer={showAndResetTimer}
-                />
-                <ShowStatsButtons TwitchPlayer={twitchVideoPlayer.current} />
-                <ShowSetQualityButtons TwitchPlayer={twitchVideoPlayer.current} />
-                <ClipButton streamInfo={streamInfo} />
-                <ResetVideoButton
-                  title={'Reload video'}
-                  style={{
-                    pointerEvents: !twitchVideoPlayer.current ? 'none' : 'unset',
-                    opacity: !twitchVideoPlayer.current ? '0.2' : '0.7',
-                  }}
-                  onClick={reloadVideoPlayer}
-                />
-              </SmallButtonContainer>
-            )}
+            <SmallButtonContainer>
+              {Boolean(twitchVideoPlayer.current) && (
+                <>
+                  <PlayPauseButton
+                    TwitchPlayer={twitchVideoPlayer.current}
+                    PlayerUIControlls={PlayerUIControlls.current}
+                  />
+                  <VolumeSlider
+                    OpenedDate={OpenedDate}
+                    PlayerUIControlls={PlayerUIControlls.current}
+                    TwitchPlayer={twitchVideoPlayer.current}
+                    setShowControlls={setShowControlls}
+                    showAndResetTimer={showAndResetTimer}
+                  />
+                  <ShowStatsButtons TwitchPlayer={twitchVideoPlayer.current} />
+                  <ShowSetQualityButtons TwitchPlayer={twitchVideoPlayer.current} />
+                  <ClipButton streamInfo={streamInfo} />
+                </>
+              )}
+              <ResetVideoButton
+                title={'Reload video'}
+                style={{
+                  pointerEvents: !twitchVideoPlayer.current ? 'none' : 'unset',
+                  opacity: !twitchVideoPlayer.current ? '0.2' : '0.7',
+                }}
+                onClick={reloadVideoPlayer}
+              />
+            </SmallButtonContainer>
 
             {!isFullscreen ? (
               <MdFullscreen
