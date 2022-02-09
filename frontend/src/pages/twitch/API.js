@@ -4,7 +4,6 @@ import validateToken from './validateToken';
 
 const CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;
 const BASE_URL = 'https://api.twitch.tv/helix';
-const BASE_URL_KRAKEN = 'https://api.twitch.tv/kraken';
 
 const TwitchAPI = {
   getMe: async ({ accessToken }) => {
@@ -132,17 +131,6 @@ const TwitchAPI = {
       headers: {
         Authorization: `Bearer ${await validateToken()}`,
         'Client-ID': CLIENT_ID,
-      },
-    });
-  },
-
-  krakenGetVideo: async (params) => {
-    return await axios.get(`${BASE_URL_KRAKEN}/videos/${params.id}`, {
-      params,
-      headers: {
-        Authorization: `Bearer ${await validateToken()}`,
-        'Client-ID': CLIENT_ID,
-        Accept: 'application/vnd.twitchtv.v5+json',
       },
     });
   },

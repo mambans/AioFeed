@@ -1,7 +1,7 @@
 import { FaRegEye } from 'react-icons/fa';
 import moment from 'moment';
 import Moment from 'react-moment';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 import {
@@ -9,20 +9,16 @@ import {
   ImageContainer,
   ImgBottomInfo,
   ChannelContainer,
-  StyledVideoElementAlert,
   VideoTitleHref,
 } from '../../sharedComponents/sharedStyledComponents';
 
 import { truncate } from '../../../util';
-import { VodLiveIndicator, VodType, VodPreview, VodDates } from './StyledComponents';
+import { VodLiveIndicator, VodType, VodDates } from './StyledComponents';
 import VodsFollowUnfollowBtn from './VodsFollowUnfollowBtn';
 import { formatViewerNumbers, formatTwitchVodsDuration } from './../TwitchUtils';
-import TwitchAPI from '../API';
-import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import loginNameFormat from '../loginNameFormat';
 import { ChannelNameDiv } from '../StyledComponents';
 import AddToListButton from '../../myLists/addToListModal/AddToListButton';
-import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../../components/tooltip/ToolTip';
 import AddRemoveFromPlayQueueButton from '../../sharedComponents/AddRemoveFromPlayQueueButton';
 import RemoveFromCurrentListButton from '../../myLists/addToListModal/RemoveFromCurrentListButton';
@@ -53,54 +49,8 @@ const VodElement = ({
     endDate,
     profile_image_url,
   } = data;
-  const { feedVideoSizeProps } = useContext(FeedsContext) || {};
-  const [previewAvailable, setPreviewAvailable] = useState({});
-  const [showPreview, setShowPreview] = useState();
   const imgRef = useRef();
   const ref = useRef();
-  const hoverTimeoutRef = useRef();
-
-  useEventListenerMemo('mouseenter', handleMouseOver, imgRef.current);
-  useEventListenerMemo('mouseleave', handleMouseOut, imgRef.current);
-
-  async function handleMouseOver() {
-    if (!previewAvailable.data) {
-      hoverTimeoutRef.current = setTimeout(
-        async () => {
-          await TwitchAPI.krakenGetVideo({
-            id: id,
-          })
-            .then((res) => {
-              if (res.data.status === 'recording') {
-                setPreviewAvailable({
-                  status: 'recording',
-                  error: 'Stream is live - no preview yet',
-                });
-              } else {
-                setPreviewAvailable({
-                  data: res.data.animated_preview_url,
-                });
-              }
-              setShowPreview(true);
-            })
-            .catch((error) => {
-              setPreviewAvailable({ error: 'Preview failed' });
-              console.error(error);
-            });
-        },
-        previewAvailable.error ? 5000 : 1000
-      );
-    } else {
-      hoverTimeoutRef.current = setTimeout(() => {
-        setShowPreview(true);
-      }, 250);
-    }
-  }
-
-  function handleMouseOut() {
-    clearTimeout(hoverTimeoutRef.current);
-    setShowPreview(false);
-  }
 
   const onDragStart = (e) => {
     if (setDragSelected) {
@@ -114,11 +64,10 @@ const VodElement = ({
   return (
     <VideoContainer draggable={Boolean(setDragSelected)} onDragStart={onDragStart} {...props}>
       <ImageContainer ref={imgRef} active={active}>
-        <RemoveFromCurrentListButton videoId_p={id} disablepreview={handleMouseOut} list={list} />
+        <RemoveFromCurrentListButton videoId_p={id} list={list} />
         <AddToListButton
           videoId_p={id}
-          disablepreview={handleMouseOut}
-          style={{ top: thumbnail_url === '' && !previewAvailable.data ? '30px' : '0px' }}
+          style={{ top: thumbnail_url === '' ? '30px' : '0px' }}
           size={24}
           list={list}
         />
@@ -129,12 +78,8 @@ const VodElement = ({
             playQueue={playQueue}
           />
         )}
-        {previewAvailable.error && (
-          <StyledVideoElementAlert variant='danger' className='error'>
-            {previewAvailable.error}
-          </StyledVideoElementAlert>
-        )}
-        {thumbnail_url === '' && !previewAvailable.data && (
+
+        {thumbnail_url === '' && (
           <VodLiveIndicator to={`/${login || user_name}`}>Live</VodLiveIndicator>
         )}
         <Link
@@ -146,13 +91,6 @@ const VodElement = ({
           }}
           className='imgLink'
         >
-          {previewAvailable.data && showPreview && (
-            <VodPreview
-              previewAvailable={previewAvailable.data}
-              className='VodPreview'
-              feedVideoSizeProps={feedVideoSizeProps}
-            />
-          )}
           <img
             src={
               thumbnail_url?.replace('%{width}', 640)?.replace('%{height}', 360) ||
@@ -164,7 +102,7 @@ const VodElement = ({
 
         <ImgBottomInfo>
           <div title='duration'>
-            {thumbnail_url === '' && !previewAvailable.data ? (
+            {thumbnail_url === '' ? (
               <Moment durationFromNow>{created_at}</Moment>
             ) : (
               formatTwitchVodsDuration(duration)
