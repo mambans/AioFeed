@@ -6,8 +6,10 @@ const ExpandableSection = ({ collapsed, children, isOpened, unmountOnInitialClos
   const [height, setHeight] = useState({ collapsed });
   const [initialLoad, setInitialLoad] = useState(unmountOnInitialClosed ? true : false);
   const timer = useRef();
+  const animationFrame = useRef();
 
   useEffect(() => {
+    cancelAnimationFrame(animationFrame.current);
     clearTimeout(timer.current);
     setInitialLoad(false);
     setHeight({
@@ -15,7 +17,7 @@ const ExpandableSection = ({ collapsed, children, isOpened, unmountOnInitialClos
       isOpened: false,
       willChange: true,
     });
-    requestAnimationFrame(() => {
+    animationFrame.current = requestAnimationFrame(() => {
       setHeight((c) => ({
         ...c,
         height: ref.current?.getBoundingClientRect()?.height + 'px',
