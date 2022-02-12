@@ -2,20 +2,55 @@ import React, { useContext, useRef, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import SidebarItem from './SidebarItem';
-import { Styledsidebar, SidebarHeader } from './StyledComponents';
+import { Styledsidebar, SidebarHeader, StyledSidebarSection } from './StyledComponents';
 import LoadingSidebar from './LoadingSidebar';
 import { TwitchContext } from '../useToken';
+import ExpandableSection from '../../../components/expandableSection/ExpandableSection';
+import FeedSectionsContext from '../../feedSections/FeedSectionsContext';
+import { checkAgainstRules } from '../../feedSections/FeedSections';
+import FeedsContext from '../../feed/FeedsContext';
+import { ExpandCollapseFeedButton } from '../../sharedComponents/sharedStyledComponents';
 
-const Sidebar = (data) => {
+const Sidebar = ({ data }) => {
+  const { loaded, nonFeedSectionLiveStreams } = data;
+  const { feedSections } = useContext(FeedSectionsContext);
+
+  if (loaded) {
+    return (
+      <Styledsidebar id='twitchSidebar'>
+        <SidebarSection
+          key={'twitch-sidebar-key'}
+          feed={{ title: 'Twitch Live', id: 'twitch' }}
+          data={{ streams: nonFeedSectionLiveStreams }}
+        />
+
+        {Object.values(feedSections)
+          .reduce((acc, curr) => {
+            const liveStreams = data?.liveStreams.filter((stream) =>
+              checkAgainstRules(stream, curr.rules)
+            );
+            if (!curr.enabled) return acc;
+            return [...acc, { ...curr, data: { ...data, liveStreams } }];
+          }, [])
+          ?.map((feed, index) => (
+            <SidebarSection key={feed.id} feed={feed} index={index} data={feed.data} />
+          ))}
+      </Styledsidebar>
+    );
+  }
+  return <LoadingSidebar />;
+};
+export default Sidebar;
+
+const SidebarSection = ({ feed: { title, id }, data, index }) => {
   const { favStreams } = useContext(TwitchContext);
-  const { onlineStreams, newlyAdded, loaded } = data;
+  const { orders, toggleSidebarExpanded } = useContext(FeedsContext);
+  const { streams, newlyAdded } = data;
   const [shows, setShows] = useState();
   const resetShowsTimer = useRef();
 
-  const favoriteStreams = onlineStreams.filter((c) =>
-    favStreams?.includes(c.user_name?.toLowerCase())
-  );
-  const nonFavoriteStreams = onlineStreams.filter(
+  const favoriteStreams = streams?.filter((c) => favStreams?.includes(c.user_name?.toLowerCase()));
+  const nonFavoriteStreams = streams?.filter(
     (c) => !favStreams?.includes(c.user_name?.toLowerCase())
   );
 
@@ -31,11 +66,17 @@ const Sidebar = (data) => {
     unmountOnExit: true,
   };
 
-  if (loaded) {
-    return (
-      <Styledsidebar id='twitchSidebar'>
-        <SidebarHeader>Twitch Live</SidebarHeader>
-        {onlineStreams?.length > 0 ? (
+  const handleCollapse = () => toggleSidebarExpanded(id);
+
+  if (id !== 'twitch' && !streams?.length) return null;
+
+  return (
+    <StyledSidebarSection order={orders?.[id]?.order}>
+      <SidebarHeader onClick={handleCollapse}>
+        {title} <ExpandCollapseFeedButton collapsed={orders?.[id]?.sidebar_collapsed} />
+      </SidebarHeader>
+      <ExpandableSection collapsed={orders?.[id]?.sidebar_collapsed}>
+        {streams?.length ? (
           <>
             <TransitionGroup className='sidebar' component={null}>
               {favoriteStreams.map((stream) => (
@@ -70,9 +111,7 @@ const Sidebar = (data) => {
             <p>None Live</p>
           </div>
         )}
-      </Styledsidebar>
-    );
-  }
-  return <LoadingSidebar />;
+      </ExpandableSection>
+    </StyledSidebarSection>
+  );
 };
-export default Sidebar;

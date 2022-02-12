@@ -27,6 +27,7 @@ const FeedSectionAdd = () => {
     editFeedSectionTitle,
     toggleFeedSectionNotification,
     toggleFeedSectionExcludeFromTwitch,
+    toggleFeedSectionSidebar,
   } = useContext(FeedSectionsContext);
 
   const { setOverflow } = useContext(NavigationContext);
@@ -89,6 +90,16 @@ const FeedSectionAdd = () => {
                       )}
                       <span style={{ paddingLeft: '5px' }}>
                         {section.enabled ? 'Visible' : 'Hidden'}
+                      </span>
+                    </RightButton>
+                    <RightButton type='button' onClick={() => toggleFeedSectionSidebar(section.id)}>
+                      {section.sidebar_enabled ? (
+                        <AiFillEye size={22} color='#ffffff' />
+                      ) : (
+                        <AiOutlineEyeInvisible size={22} color='rgb(150,150,150)' />
+                      )}
+                      <span style={{ paddingLeft: '5px' }}>
+                        {section.sidebar_enabled ? 'Sidebar visible' : 'Sidebar hidden'}
                       </span>
                     </RightButton>
 

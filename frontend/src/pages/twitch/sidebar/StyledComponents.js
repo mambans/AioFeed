@@ -48,16 +48,16 @@ export const Styledsidebar = styled.div`
   width: 275px;
   scrollbar-color: #232526 transparent;
   scrollbar-width: thin;
-  background: var(--sidebarsBackgroundColor);
   position: fixed;
-  border-radius: 10px 10px 0 0;
   overflow: auto;
   max-height: calc(100vh - (60px + 50px));
   padding-bottom: 2px;
   z-index: 2;
   left: 0;
-  box-shadow: 0 9px 0px 0px transparent, 0 -9px 0px 0px transparent, 12px 0 15px -4px #00000030,
-    -12px 0 15px -4px #00000030;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 
   &.twitchSidebar-appear {
     opacity: 0;
@@ -122,6 +122,7 @@ export const SidebarHeader = styled.p`
   justify-content: center;
   display: flex;
   align-items: center;
+  cursor: pointer;
 `;
 
 export const StyledsidebarItem = styled.div`
@@ -292,4 +293,12 @@ export const SecondRow = styled.div`
     align-items: center;
     margin-left: 5px;
   }
+`;
+
+export const StyledSidebarSection = styled.div`
+  order: ${({ order }) => order};
+  background: var(--sidebarsBackgroundColor);
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 9px 0px 0px transparent, 0 -9px 0px 0px transparent, 12px 0 15px -4px #00000030,
+    -12px 0 15px -4px #00000030;
 `;

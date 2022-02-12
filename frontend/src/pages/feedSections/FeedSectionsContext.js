@@ -37,6 +37,7 @@ export const FeedSectionsProvider = ({ children }) => {
       enabled: true,
       notifications_enabled: false,
       nonFeedSectionLiveStreams: false,
+      sidebar_enabled: false,
       rules: [],
     };
     setFeedSections((c) => {
@@ -122,6 +123,23 @@ export const FeedSectionsProvider = ({ children }) => {
     });
   };
 
+  const toggleFeedSectionSidebar = (id) => {
+    setFeedSections((c) => {
+      const sidebar_enabled = !c[id].sidebar_enabled;
+
+      const newFeedSection = {
+        [id]: { ...c[id], sidebar_enabled },
+      };
+
+      API.updateCustomFeedSections(id, { sidebar_enabled });
+
+      return {
+        ...c,
+        ...newFeedSection,
+      };
+    });
+  };
+
   const toggleFeedSectionNotification = (id) => {
     setFeedSections((c) => {
       const notifications_enabled = !c[id].notifications_enabled;
@@ -174,6 +192,7 @@ export const FeedSectionsProvider = ({ children }) => {
         editFeedSectionTitle,
         toggleFeedSectionNotification,
         toggleFeedSectionExcludeFromTwitch,
+        toggleFeedSectionSidebar,
       }}
     >
       {children}

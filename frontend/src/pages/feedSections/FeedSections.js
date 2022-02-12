@@ -42,7 +42,13 @@ const FeedSections = ({ data }) => {
           return [...acc, { ...curr, data: { ...data, liveStreams } }];
         }, [])
         ?.map((feed, index) => (
-          <CSSTransition timeout={1000} classNames='listHorizontalSlide' unmountOnExit appear>
+          <CSSTransition
+            key={feed.id}
+            timeout={1000}
+            classNames='listHorizontalSlide'
+            unmountOnExit
+            appear
+          >
             <Section
               key={feed.id}
               feed={feed}
@@ -102,7 +108,7 @@ const Section = ({
 
   if (!data?.liveStreams?.length) return null;
   return (
-    <Container order={orders?.[id]?.order} id={`FeedSection${title}Header`}>
+    <Container order={orders?.[id]?.order} key={`FeedSection-${id}`}>
       <Header
         id={title}
         title={

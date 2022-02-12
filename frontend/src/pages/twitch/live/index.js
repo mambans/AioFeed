@@ -75,11 +75,7 @@ export const Twitch = ({ in: forceMount = false, className }) => {
             appear
             unmountOnExit
           >
-            <Sidebar
-              loaded={data.loaded}
-              onlineStreams={data.liveStreams}
-              newlyAdded={data.newlyAddedStreams}
-            />
+            <Sidebar data={data} />
           </CSSTransition>
           <CSSTransition
             in={enableFeedSections}

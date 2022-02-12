@@ -26,6 +26,12 @@ export const FeedsProvider = ({ children }) => {
   const toggleExpanded = (ID) => {
     setOrders((c) => ({ ...c, [ID]: { ...(c?.[ID] || {}), collapsed: !c?.[ID]?.collapsed } }));
   };
+  const toggleSidebarExpanded = (ID) => {
+    setOrders((c) => ({
+      ...c,
+      [ID]: { ...(c?.[ID] || {}), sidebar_collapsed: !c?.[ID]?.sidebar_collapsed },
+    }));
+  };
 
   return (
     <FeedsContext.Provider
@@ -51,6 +57,7 @@ export const FeedsProvider = ({ children }) => {
         orders,
         setOrders,
         toggleExpanded,
+        toggleSidebarExpanded,
       }}
     >
       {children}
