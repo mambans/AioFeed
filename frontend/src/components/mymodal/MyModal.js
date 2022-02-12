@@ -164,6 +164,7 @@ const SModal = styled.div`
   overflow-y: auto;
   padding-right: 5px;
   border-radius: 7px;
+  width: max-content;
 
   &.slideLeft-appear {
     opacity: 0;
