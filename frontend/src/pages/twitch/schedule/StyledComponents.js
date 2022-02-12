@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import styled, { css, keyframes } from 'styled-components';
+import styled, { css } from 'styled-components';
 import { pulse } from '../StyledComponents';
 import { MdRefresh } from 'react-icons/md';
 
@@ -32,26 +32,6 @@ const loadingAnimation = css`
   animation: ${pulse} 2s linear infinite;
 `;
 
-const pulseOpacity = keyframes`
-  0% {opacity 1;
-    height: 100%;
-    bottom: 0px;
-  }
-  50% {
-    opacity 0;
-    height: 10%;
-  }
-  100% {
-    opacity 1;
-    height: 100%;
-    top: 0;
-  }
-`;
-
-const loadingAnimationOpacity = css`
-  animation: ${pulseOpacity} 2s linear infinite;
-`;
-
 export const StyledSchedule = styled.div`
   /* width: calc(100% - 20px); */
   &&& {
@@ -73,18 +53,6 @@ export const StyledSchedule = styled.div`
   align-items: center;
   margin: 10px;
   ${({ loading }) => (loading === 'true' ? loadingAnimation : null)};
-
-  &::before {
-    content: '';
-    width: 5px;
-    position: absolute;
-    height: 100%;
-    left: -5px;
-    background-color: #e27626;
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-    ${({ loading }) => (loading === 'true' ? loadingAnimationOpacity : null)};
-  }
 
   p,
   a {
