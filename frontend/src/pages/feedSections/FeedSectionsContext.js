@@ -37,7 +37,7 @@ export const FeedSectionsProvider = ({ children }) => {
       enabled: true,
       notifications_enabled: false,
       nonFeedSectionLiveStreams: false,
-      sidebar_enabled: false,
+      sidebar_enabled: true,
       rules: [],
     };
     setFeedSections((c) => {

@@ -26,11 +26,11 @@ const Sidebar = ({ data }) => {
 
         {Object.values(feedSections)
           .reduce((acc, curr) => {
-            const liveStreams = data?.liveStreams.filter((stream) =>
+            const streams = data?.liveStreams.filter((stream) =>
               checkAgainstRules(stream, curr.rules)
             );
-            if (!curr.enabled) return acc;
-            return [...acc, { ...curr, data: { ...data, liveStreams } }];
+            if (!curr.enabled || !curr.sidebar_enabled) return acc;
+            return [...acc, { ...curr, data: { ...data, streams } }];
           }, [])
           ?.map((feed, index) => (
             <SidebarSection key={feed.id} feed={feed} index={index} data={feed.data} />
