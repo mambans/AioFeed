@@ -31,7 +31,7 @@ html {
   --footerBackground: rgba(0, 0, 0, 0.6);
 
   --twitterBackground: #1010108c;
-  --scrollbarColors: rgb(51, 51, 51) #14181bca;
+  --scrollbarColors: rgb(51, 51, 51) transparent;
   --backgroundColor: hsl(0, 0%, 5%);
   --sidebarsBackgroundColor: rgba(9, 12, 15, 0.678);
 
@@ -43,7 +43,7 @@ html[data-theme='wood'] {
   --backgroundColor: hsl(21, 93%, 5%);
   --sidebarsBackgroundColor: rgba(5, 10, 15, 0.5);
 
-  --scrollbarColors: rgb(51, 51, 51) #14181bca;
+  --scrollbarColors: rgb(51, 51, 51) transparent;
   --twitterBackground: #1010108c;
 }
 
@@ -51,7 +51,7 @@ html[data-theme='clean'] {
   // --backgroundImg: url('/images/webp/clean.webp');
   --backgroundColor: rgb(37, 37, 37);
   --navigationbarBackground: #1c1f22f0;
-  --scrollbarColors: #3d3d3d var(--navigationbarBackground);
+  --scrollbarColors: #3d3d3d transparent;
 }
 
 html[data-theme='christmas'] {
@@ -68,21 +68,21 @@ html[data-theme='christmas'] {
   // --popupListsBackground: linear-gradient(rgba(0, 0, 0, 0.4) 0%, #000000d8 15%);
   --refreshButtonBackground: #0000007a;
   --refreshButtonHoverBackground: #292929bf;
-  --scrollbarColors: rgb(240, 240, 240) rgb(43, 31, 31);
+  --scrollbarColors: rgb(240, 240, 240) transparent;
 }
 
 html[data-theme="new year's eve"] {
   // --backgroundImg: url('/images/webp/new_years_eve.webp');
   --backgroundColor: rgb(7, 38, 58);
   --refreshButtonHoverBackground: #000000b2;
-  --scrollbarColors: rgb(18, 36, 58) rgb(5, 8, 10);
+  --scrollbarColors: rgb(18, 36, 58) transparent;
 }
 
 html[data-theme='stone'] {
   // --backgroundImg: url('/images/webp/stone.webp');
   --backgroundColor: rgb(15, 15, 15);
   --navigationbarBackground: #121415a8;
-  --scrollbarColors: #1c1f22 rgb(5, 8, 10);
+  --scrollbarColors: #1c1f22 transparent;
 }
 
 html[data-theme='dark'] {
@@ -94,7 +94,7 @@ html[data-theme='dark'] {
 
   --backgroundImg: none;
   --backgroundColor: #101216;
-  --scrollbarColors: #3c4554 #1b1f26;
+  --scrollbarColors: #3c4554 transparent;
 
   --navigationbarBackground: var(--main2);
   --navTextColor: var(--text1);
@@ -126,7 +126,7 @@ html[data-theme='light'] {
   --refreshButtonHoverBackground: rgb(255, 255, 255);
   --refreshButtonHoverColor: #1d1d1d;
   --refreshButtonHoverBorder: 1px solid rgb(255, 255, 255);
-  --scrollbarColors: rgb(41, 41, 41) rgb(255, 255, 255);
+  --scrollbarColors: rgb(41, 41, 41) transparent;
 
   --subFeedHeaderBorder: #29292988;
 
@@ -146,7 +146,7 @@ html[data-theme='matt blue'] {
   --twitterBackground: rgba(8, 13, 17, 0.3);
 
   --navigationbarBackground: #080d11e1;
-  --scrollbarColors: #454b61 #1c1f28;
+  --scrollbarColors: #454b61 transparent;
 }
 
 html[data-theme='headphones'] {
@@ -160,7 +160,7 @@ html[data-theme='headphones'] {
   //   var(--navigationbarBackground) 15%
   // );
 
-  --scrollbarColors: #4d2c7e black;
+  --scrollbarColors: #4d2c7e transparent;
 }
 
 html[data-theme='coffee'] {

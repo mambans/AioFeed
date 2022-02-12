@@ -45,8 +45,9 @@ a:hover {
 html,
 body,
 main,
-#root {
-  scrollbar-color: var(--scrollbarColors) !important;
+#root,
+* {
+  scrollbar-color: var(--scrollbarColors);
   scrollbar-width: thin !important;
 }
 
