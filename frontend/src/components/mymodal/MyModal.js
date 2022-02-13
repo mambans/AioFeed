@@ -58,19 +58,19 @@ const MyModal = ({
     });
   };
   const handleClose = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    e?.preventDefault();
+    e?.stopPropagation();
     onClose?.();
     props?.handleClose?.();
     setShow(false);
   };
-  useEventListenerMemo(
-    'keydown',
-    (e) => e.key === 'Escape' && handleClose(),
-    window,
-    closeOnRequest && show
-  );
+
+  const handleKeydown = (e) => {
+    if (e.key === 'Escape') handleClose(e);
+  };
+
   useClicksOutside(ref, handleClose, show && relative);
+  useEventListenerMemo('keydown', handleKeydown, window, closeOnRequest && show);
 
   useEffect(() => setTriggerRefPositions(triggerBtnRef?.current?.getBoundingClientRect?.()), []);
   useEffect(() => setShow(open), [open]);
