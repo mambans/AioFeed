@@ -19,7 +19,9 @@ const TwitchStandalone = () => {
   useDocumentTitle('Twitch Live');
   return (
     <FeedsCenterContainer left={true} right={false}>
-      <Twitch in={true} className='feed' />
+      <div className='feed'>
+        <Twitch in={true} className='feed' />
+      </div>
     </FeedsCenterContainer>
   );
 };
