@@ -311,6 +311,7 @@ const ChannelList = ({
               selected={true}
               followingStatus={false}
               username={username}
+              onClose={() => setListIsOpen(false)}
             />
             <StyledLoadingList amount={3} style={{ paddingLeft: '10px' }} />
           </>
@@ -326,6 +327,7 @@ const ChannelList = ({
                   followingStatus={Boolean(
                     followedChannels?.find((item) => item?.user_id === channel?.user_id)
                   )}
+                  onClose={() => setListIsOpen(false)}
                 />
               );
             })}

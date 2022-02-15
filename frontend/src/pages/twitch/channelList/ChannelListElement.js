@@ -21,6 +21,7 @@ const ChannelListElement = ({
   followingStatus = true,
   style,
   username,
+  onClose = () => {},
 }) => {
   const [channel, setChannel] = useState(data);
   const timer = useRef();
@@ -72,6 +73,7 @@ const ChannelListElement = ({
       style={{ ...style }}
     >
       <Link
+        onClick={onClose}
         to={{
           pathname: `/${
             channel
