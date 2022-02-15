@@ -19,16 +19,15 @@ const TwitchStandalone = () => {
   useDocumentTitle('Twitch Live');
   return (
     <FeedsCenterContainer left={true} right={false}>
-      <Twitch in={true} className='feed' />
+      <div className='feed'>
+        <Twitch in={true} className='feed' />
+      </div>
     </FeedsCenterContainer>
   );
 };
 
 export const Twitch = ({ in: forceMount = false, className }) => {
-  const { enableTwitch, showTwitchSidebar, setShowTwitchSidebar, enableFeedSections } =
-    useContext(FeedsContext) || {};
-
-  const { orders, toggleExpanded } = useContext(FeedsContext);
+  const { enableTwitch, showTwitchSidebar, setShowTwitchSidebar, enableFeedSections, orders, toggleExpanded } = useContext(FeedsContext) || {};
   const refreshBtnRef = useRef();
 
   useEffect(() => {
