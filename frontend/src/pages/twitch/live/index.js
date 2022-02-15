@@ -27,10 +27,7 @@ const TwitchStandalone = () => {
 };
 
 export const Twitch = ({ in: forceMount = false, className }) => {
-  const { enableTwitch, showTwitchSidebar, setShowTwitchSidebar, enableFeedSections } =
-    useContext(FeedsContext) || {};
-
-  const { orders, toggleExpanded } = useContext(FeedsContext);
+  const { enableTwitch, showTwitchSidebar, setShowTwitchSidebar, enableFeedSections, orders, toggleExpanded } = useContext(FeedsContext) || {};
   const refreshBtnRef = useRef();
 
   useEffect(() => {
