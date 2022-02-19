@@ -9,7 +9,6 @@ import FeedsCenterContainer from '../feed/FeedsCenterContainer';
 import List from './List';
 import useToken from '../twitch/useToken';
 import useYoutubeToken from '../youtube/useToken';
-import AlertHandler from '../../components/alert';
 import MyListSmallList from './MyListSmallList';
 import DropDownDrawer from './DropDownDrawer';
 import { Container } from '../twitch/StyledComponents';
@@ -17,6 +16,7 @@ import useDocumentTitle from './../../hooks/useDocumentTitle';
 import FeedsContext from '../feed/FeedsContext';
 import { ExpandCollapseFeedButton } from '../sharedComponents/sharedStyledComponents';
 import ExpandableSection from '../../components/expandableSection/ExpandableSection';
+import Alert from '../../components/alert';
 
 export const useCheckForVideosAndValidateToken = ({
   lists,
@@ -181,15 +181,12 @@ export const MyLists = () => {
             ))}
         </TransitionGroup>
       ) : (
-        <AlertHandler
-          show={true}
+        <Alert
           type='secondary'
-          title="You haven't created any custom list."
-          style={{
-            width: '50%',
-          }}
-          hideMessage={true}
-          dismissible={true}
+          title='No custom lists avaliable'
+          message='Create your first "custtom list" in the sidebar'
+          dismissible
+          fill
         />
       )}
     </>

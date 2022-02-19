@@ -3,12 +3,12 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
 import { getCookie, AddCookie } from '../../util';
-import AlertHandler from '../../components/alert';
 import AccountContext from './../account/AccountContext';
 import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import API from '../navigation/API';
 import { YoutubeContext } from '../youtube/useToken';
+import Alert from '../../components/alert';
 
 const YoutubeAuthCallback = () => {
   const { setVisible, setFooterVisible } = useContext(NavigationContext);
@@ -116,7 +116,7 @@ const YoutubeAuthCallback = () => {
     })();
   }, [getAccessToken, setVisible, setFooterVisible, location.search]);
 
-  if (error) return <AlertHandler data={error} />;
+  if (error) return <Alert type='error' data={error} />;
   return (
     <LoadingIndicator
       height={150}

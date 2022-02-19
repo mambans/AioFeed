@@ -2,7 +2,6 @@ import { CSSTransition } from 'react-transition-group';
 import React, { useContext } from 'react';
 
 import AccountContext from './../account/AccountContext';
-import AlertHandler from '../../components/alert';
 import FeedsContext from './FeedsContext';
 import NoFeedsEnable from './NoFeedsEnabled';
 import { Vods } from '../twitch/vods';
@@ -12,18 +11,23 @@ import FeedsCenterContainer from './FeedsCenterContainer';
 import { Twitch } from '../twitch/live';
 import { MyLists } from '../myLists';
 import FeedOrderSlider from './FeedOrderSlider';
+import Alert from '../../components/alert';
+import NavigationContext from '../navigation/NavigationContext';
 // import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 const Feed = () => {
   // useDocumentTitle('Feed');
   const { enableTwitch, enableYoutube, enableTwitchVods, enableMyLists } = useContext(FeedsContext);
   const { username } = useContext(AccountContext);
+  const { setShowSidebar } = useContext(NavigationContext);
 
   if (!username) {
     return (
-      <AlertHandler
+      <Alert
+        type='info'
         title='Login to continue'
         message='You are not logged with your AioFeed account.'
+        onClick={() => setShowSidebar((c) => !c)}
       />
     );
   }

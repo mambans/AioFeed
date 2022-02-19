@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback, useContext } from 'react';
 import { uniqBy, orderBy } from 'lodash';
 
-import AlertHandler from '../../../components/alert';
 import getMyFollowedChannels from './../getMyFollowedChannels';
 import getFollowedOnlineStreams from './GetFollowedStreams';
 import NotificationsContext from './../../notifications/NotificationsContext';
@@ -17,6 +16,7 @@ import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import { fetchAndAddTags } from '../fetchAndAddTags';
 import FeedSectionsContext from '../../feedSections/FeedSectionsContext';
 import { checkAgainstRules } from '../../feedSections/FeedSections';
+import Alert from '../../../components/alert';
 
 const REFRESH_RATE = 25; // seconds
 
@@ -268,9 +268,10 @@ const Handler = ({ children }) => {
 
   if (!twitchAccessToken) {
     return (
-      <AlertHandler
+      <Alert
         title='Not authenticated/connected with Twitch.'
         message='No access token for Twitch available.'
+        fill
       />
     );
   }

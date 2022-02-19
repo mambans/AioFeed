@@ -5,9 +5,9 @@ import { MdStar } from 'react-icons/md';
 import StreamEle from './StreamElement.js';
 import { Container, FavoriteDeviderLine } from '../StyledComponents';
 import LoadingBoxes from '../LoadingBoxes';
-import AlertHandler from '../../../components/alert';
 import { CenterContext } from '../../feed/FeedsCenterContainer.js';
 import { TwitchContext } from '../useToken.js';
+import Alert from '../../../components/alert/index.js';
 
 const Twitch = ({ data, streams, hideOnEmpty }) => {
   const { loaded, error, liveStreams, newlyAddedStreams, refreshAfterUnfollowTimer } = data;
@@ -28,15 +28,7 @@ const Twitch = ({ data, streams, hideOnEmpty }) => {
       </Container>
     );
   } else if (error) {
-    return (
-      <AlertHandler
-        type='secondary'
-        title={error}
-        style={{
-          width: '50%',
-        }}
-      />
-    );
+    return <Alert type='secondary' fill title={error} />;
   }
 
   const streamEleAttrs = {
@@ -93,15 +85,11 @@ const Twitch = ({ data, streams, hideOnEmpty }) => {
         ))}
       </TransitionGroup>
       {!hideOnEmpty && (
-        <AlertHandler
+        <Alert
           show={!Boolean(liveStreams?.length)}
           type='secondary'
           title='No streams online at the momment'
-          hideMessage={true}
-          style={{
-            width: '50%',
-          }}
-          dismissible={true}
+          dismissible
         />
       )}
     </Container>

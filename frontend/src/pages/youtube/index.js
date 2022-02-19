@@ -5,10 +5,10 @@ import FeedsContext from '../feed/FeedsContext';
 import ExpandableSection from '../../components/expandableSection/ExpandableSection';
 import { Container } from '../twitch/StyledComponents';
 
-import AlertHandler from '../../components/alert';
 import YoutubeDataHandler from './../youtube/Datahandler';
 import YoutubeHeader from './../youtube/Header';
 import YoutubeHandler from './YoutubeHandler';
+import Alert from '../../components/alert';
 
 const YoutubeStandalone = () => {
   useDocumentTitle('YouTube');
@@ -38,7 +38,7 @@ export const Youtube = ({ className }) => {
             toggleExpanded={() => toggleExpanded('youtube')}
           />
 
-          {data.error && <AlertHandler data={data.error}></AlertHandler>}
+          {data.error && <Alert data={data.error}></Alert>}
           <ExpandableSection collapsed={orders?.['youtube']?.collapsed}>
             <YoutubeHandler requestError={data.requestError} videos={data.videos} />
           </ExpandableSection>

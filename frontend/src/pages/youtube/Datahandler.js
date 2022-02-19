@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState, useCallback, useContext } from 'react';
 
 import AccountContext from '../account/AccountContext';
-import AlertHandler from '../../components/alert';
 import getMyFollowedChannels from './getMyFollowedChannels';
 import GetSubscriptionVideos from './GetSubscriptionVideos';
 import useToken, { YoutubeContext } from './useToken';
+import Alert from '../../components/alert';
 
 const Datahandler = ({ children }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -46,9 +46,10 @@ const Datahandler = ({ children }) => {
 
   if (!youtubeAccessToken) {
     return (
-      <AlertHandler
+      <Alert
         title="Couldn't load Youtube feed"
-        message='You are not connected with your Youtube account to AioFeed'
+        message='You have not connected your Youtube account with to AioFeed'
+        fill
       />
     );
   }

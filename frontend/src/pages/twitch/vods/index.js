@@ -2,7 +2,6 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import React, { useState, useEffect, useCallback, useContext, useRef } from 'react';
 import { Button } from 'react-bootstrap';
 
-import AlertHandler from '../../../components/alert';
 import getFollowedVods from './GetFollowedVods';
 import VodElement from './VodElement';
 import LoadMore from '../../../components/loadMore/LoadMore';
@@ -17,6 +16,7 @@ import { Container } from '../StyledComponents';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import useToken, { TwitchContext } from '../useToken';
 import ExpandableSection from '../../../components/expandableSection/ExpandableSection';
+import Alert from '../../../components/alert';
 
 const VodsStandalone = () => {
   useDocumentTitle('Twitch Vods');
@@ -119,21 +119,16 @@ export const Vods = ({ className }) => {
       />
       <ExpandableSection collapsed={orders?.['vods']?.collapsed}>
         {!twitchAccessToken && (
-          <AlertHandler
+          <Alert
             title='Not authenticated/connected with Twitch.'
             message='No access token for twitch availible.'
           />
         )}
         {error && (
-          <AlertHandler
+          <Alert
             data={error}
-            style={{ marginTop: '-150px' }}
-            element={
-              <Button
-                style={{ margin: '0 20px' }}
-                variant='danger'
-                onClick={() => setEnableTwitchVods(false)}
-              >
+            actions={
+              <Button variant='danger' onClick={() => setEnableTwitchVods(false)}>
                 Disable vods
               </Button>
             }

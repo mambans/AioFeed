@@ -8,9 +8,9 @@ import AccountContext from './../../account/AccountContext';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import useInput from './../../../hooks/useInput';
 import SidebarAlert from './Alert';
-import AlertHandler from '../../../components/alert';
 import API from '../API';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
+import Alert from '../../../components/alert';
 
 const CreateAccount = () => {
   useDocumentTitle('Create Account');
@@ -71,7 +71,7 @@ const CreateAccount = () => {
   return (
     <>
       <SidebarAlert />
-      <AlertHandler
+      <Alert
         show={error}
         type='warning'
         title={error?.title}

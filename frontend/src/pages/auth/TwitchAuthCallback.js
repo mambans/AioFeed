@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 
 import { getCookie } from '../../util';
-import AlertHandler from '../../components/alert';
 import AccountContext from './../account/AccountContext';
 import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import TwitchAPI from '../twitch/API';
 import aiofeedAPI from '../navigation/API';
 import { TwitchContext } from '../twitch/useToken';
+import Alert from '../../components/alert';
 
 const TwitchAuthCallback = () => {
   const [error, setError] = useState();
@@ -115,7 +115,8 @@ const TwitchAuthCallback = () => {
     })();
   }, [getAccessToken, setVisible, setFooterVisible]);
 
-  if (error) return <AlertHandler data={error} />;
+  console.log('twitch auth callback error:', error);
+  if (error) return <Alert data={error} />;
   return (
     <LoadingIndicator
       height={150}
