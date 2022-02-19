@@ -4,39 +4,6 @@ import { addVodEndTime } from '../TwitchUtils';
 import reauthenticate from './../reauthenticate';
 import SortAndAddExpire from './SortAndAddExpire';
 
-// maybe delete monitoredChannelNameToId
-// eslint-disable-next-line no-unused-vars
-export const monitoredChannelNameToId = async (followedChannels, followedVodEnabledChannels) => {
-  const vodChannelsWithoutFollow = [];
-  let error;
-  const vodChannelIds = await followedVodEnabledChannels
-    .map((vodChannel) => {
-      const channelFollowed = followedChannels?.find(
-        (channel) => channel.to_name?.toLowerCase() === vodChannel
-      );
-
-      if (channelFollowed) return channelFollowed.to_id;
-
-      vodChannelsWithoutFollow.push(vodChannel);
-      return null;
-    })
-    .filter((channel) => channel);
-
-  const vodChannelsIdsWithoutLiveFollow = Boolean(vodChannelsWithoutFollow.length)
-    ? await TwitchAPI.getUser({
-        login: vodChannelsWithoutFollow,
-        first: 100,
-      })
-        .then((res) => res.data.data.map((channel) => channel.id))
-        .catch((err) => {
-          console.error(err);
-          error = err;
-        })
-    : [];
-
-  return { data: [...vodChannelIds, ...vodChannelsIdsWithoutLiveFollow], error: error };
-};
-
 const fetchVodsFromMonitoredChannels = async (
   vodChannels,
   setTwitchAccessToken,

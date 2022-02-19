@@ -74,7 +74,6 @@ const Handler = ({ children }) => {
         isInFocus.current = false;
         followedChannels.current = await getMyFollowedChannels(forceValidateToken);
 
-        console.log('followedChannels.current:', followedChannels.current);
         if (followedChannels.current && followedChannels.current[0]) {
           AddCookie('Twitch-username', followedChannels.current[0].from_name);
         }
