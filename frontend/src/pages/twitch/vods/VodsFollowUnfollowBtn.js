@@ -13,8 +13,7 @@ import ToolTip from '../../../components/tooltip/ToolTip';
 import API from '../../navigation/API';
 
 /**
- * @param {String} channel - channel name
- * @param {Number} channelId - user_id name
+ * @param {Object} channel - channel
  * @param {String} [loweropacity] - overwrite opacity (0.5)
  * @param {String} [marginright] - overwrite marginright (7px;)
  * @param {Boolean} [show = true] - mount/show button.
@@ -22,7 +21,6 @@ import API from '../../navigation/API';
 
 const VodsFollowUnfollowBtn = ({
   channel,
-  channelId,
   loweropacity,
   marginright,
   className,
@@ -36,7 +34,7 @@ const VodsFollowUnfollowBtn = ({
   const { vods, setVods, channels, setChannels } = useContext(VodsContext) || {};
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
-  const vodEnabled = channels?.includes(channel?.toLowerCase());
+  const vodEnabled = channels?.find((user_id) => channel.user_id === user_id);
   const { feedVideoSizeProps, enableTwitchVods } = useContext(FeedsContext) || {};
 
   const handleMouseEnter = () => setIsHovered(true);
@@ -45,15 +43,15 @@ const VodsFollowUnfollowBtn = ({
   async function removeChannel({ channel, channels, setChannels }) {
     try {
       const vodChannels = new Set(channels || []);
-
-      vodChannels.delete(channel?.toLowerCase());
+      vodChannels.delete(channel.user_id);
       setChannels([...vodChannels]);
 
       const existingVodVideos = vods || { data: [] };
+
       const newVodVideos = {
         ...existingVodVideos,
         data: existingVodVideos.data
-          .filter((video) => video.user_name?.toLowerCase() !== channel?.toLowerCase())
+          .filter((video) => video.user_id !== channel.user_id)
           ?.slice(0, 100),
       };
 
@@ -88,9 +86,9 @@ const VodsFollowUnfollowBtn = ({
             removeChannel({ channel, channels, setChannels });
           } else {
             AddVodChannel({ channel, channels, setChannels, username, authKey });
-            if (channelId) {
+            if (channel.user_id) {
               FetchSingelChannelVods({
-                channelId,
+                user_id: channel.user_id,
                 setVods,
                 amount: 5,
                 feedVideoSizeProps,

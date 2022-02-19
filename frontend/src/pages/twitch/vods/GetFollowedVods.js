@@ -1,11 +1,12 @@
 import AddVideoExtraData from '../AddVideoExtraData';
 import TwitchAPI from '../API';
 import { addVodEndTime } from '../TwitchUtils';
-import getMyFollowedChannels from './../getMyFollowedChannels';
 import reauthenticate from './../reauthenticate';
 import SortAndAddExpire from './SortAndAddExpire';
 
-const monitoredChannelNameToId = async (followedChannels, followedVodEnabledChannels) => {
+// maybe delete monitoredChannelNameToId
+// eslint-disable-next-line no-unused-vars
+export const monitoredChannelNameToId = async (followedChannels, followedVodEnabledChannels) => {
   const vodChannelsWithoutFollow = [];
   let error;
   const vodChannelIds = await followedVodEnabledChannels
@@ -100,10 +101,8 @@ const getFollowedVods = async ({
       cachedVods.expire <= Date.now()
     ) {
       try {
-        const followedChannels = await getMyFollowedChannels();
-
-        const followedVodEnabledChannels = channels;
-        if (!followedVodEnabledChannels || !Boolean(followedVodEnabledChannels.length)) {
+        const vodChannels = channels;
+        if (!vodChannels || !Boolean(vodChannels.length)) {
           return {
             error: {
               data: {
@@ -113,11 +112,6 @@ const getFollowedVods = async ({
             },
           };
         }
-
-        const vodChannels = await monitoredChannelNameToId(
-          followedChannels,
-          followedVodEnabledChannels
-        );
 
         const followedStreamVods = await fetchVodsFromMonitoredChannels(
           vodChannels.data,

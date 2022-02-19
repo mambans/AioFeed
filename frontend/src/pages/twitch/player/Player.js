@@ -500,12 +500,7 @@ const Player = () => {
                       id={streamInfo.user_id || twitchVideoPlayer.current.getChannelId()}
                     />
 
-                    <VodsFollowUnfollowBtn
-                      size={28}
-                      channel={streamInfo?.user_name || channelName}
-                      channelId={streamInfo.user_id}
-                      marginright='5px;'
-                    />
+                    <VodsFollowUnfollowBtn size={28} channel={streamInfo} marginright='5px;' />
 
                     <AddUpdateNotificationsButton
                       channel={streamInfo?.user_name || channelName}

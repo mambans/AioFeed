@@ -7,7 +7,7 @@ import {
   ExpandCollapseFeedButton,
   LastRefreshText,
 } from '../../sharedComponents/sharedStyledComponents';
-import VodChannelList from './VodChannelList';
+// import VodChannelList from './VodChannelList';
 
 const VodsHeader = React.forwardRef((props, ref) => {
   const { refresh, vods, vodError, toggleExpanded, collapsed } = props;
@@ -51,7 +51,7 @@ const VodsHeader = React.forwardRef((props, ref) => {
           )}
         </>
       }
-      rightSide={<VodChannelList />}
+      // rightSide={<VodChannelList />}
     />
   );
 });

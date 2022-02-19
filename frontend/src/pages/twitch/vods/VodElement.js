@@ -146,10 +146,9 @@ const VodElement = ({
 
           <VodsFollowUnfollowBtn
             show={!vodBtnDisabled}
-            channel={login || user_name}
+            channel={data}
             loweropacity='0.5'
             className='extaButton'
-            channelId={user_id}
           />
         </ChannelNameDiv>
         <VodDates>

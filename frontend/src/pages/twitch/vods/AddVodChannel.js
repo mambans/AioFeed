@@ -10,7 +10,7 @@ const addVodChannel = async ({
 }) => {
   try {
     const existingChannels = new Set(channels);
-    const newChannels = [...existingChannels.add(channel?.toLowerCase())];
+    const newChannels = [...existingChannels.add(channel?.user_id)];
 
     setChannels([...newChannels]);
 

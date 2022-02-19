@@ -116,7 +116,7 @@ const FollowUnfollowBtn = ({
             size={size || 30}
             style={{ ...style }}
             onClick={() => {
-              if (!channels?.includes(channelName?.toLowerCase())) {
+              if (!channels?.includes(id)) {
                 setFollowing(false);
                 unfollowStream();
                 return;

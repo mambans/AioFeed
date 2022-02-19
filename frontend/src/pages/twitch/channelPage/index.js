@@ -417,11 +417,7 @@ const ChannelPage = () => {
                             show={Boolean(channelInfo)}
                             marginright={'5px'}
                           />
-                          <VodsFollowUnfollowBtn
-                            size={28}
-                            channel={channelInfo.name || channelName}
-                            channelId={channelInfo._id}
-                          />
+                          <VodsFollowUnfollowBtn size={28} channel={channelInfo} />
 
                           <AddUpdateNotificationsButton
                             show={channelInfo}

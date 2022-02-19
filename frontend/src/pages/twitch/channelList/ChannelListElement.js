@@ -107,11 +107,7 @@ const ChannelListElement = ({
           btnSize={22}
         />
         <FavoriteStreamBtn channel={channel?.user_name} show={followingStatus} />
-        <VodsFollowUnfollowBtn
-          show={username && showVodBtn}
-          channel={channel?.user_name || searchInput}
-          channelId={channel?.user_id}
-        />
+        <VodsFollowUnfollowBtn show={username && showVodBtn} channel={channel} />
         <AddUpdateNotificationsButton
           channel={channel?.user_name || searchInput}
           show={followingStatus}

@@ -32,7 +32,7 @@ const liveStreamsPromise = async ({
         getLocalstorage('TwitchVods-Channels')?.includes(stream.user_name?.toLowerCase())
       ) {
         setTimeout(async () => {
-          await FetchSingelChannelVods({ channelId: stream.user_id, setVods });
+          await FetchSingelChannelVods({ user_id: stream.user_id, setVods });
         }, 30000);
       }
       return '';

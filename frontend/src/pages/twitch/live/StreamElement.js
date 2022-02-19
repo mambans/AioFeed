@@ -178,7 +178,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
             <ChannelButtonsContainer className='buttonsContainer'>
               <Schedule user={login || user_name} user_id={user_id} absolute={false} btnSize={22} />
               <FavoriteStreamBtn channel={login} />
-              <VodsFollowUnfollowBtn channel={login} channelId={user_id} marginright='5px;' />
+              <VodsFollowUnfollowBtn channel={data} marginright='5px;' />
               <AddUpdateNotificationsButton channel={login} marginright='5px;' />
               <FollowUnfollowBtn
                 style={{
