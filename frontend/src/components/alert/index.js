@@ -59,7 +59,9 @@ const Alert = ({
   };
 
   useEffect(() => {
-    setIsOpen(show ?? open);
+    if (show ?? open ?? false) {
+      setIsOpen(show ?? open);
+    }
   }, [show, open]);
 
   if (!isOpen) return null;
