@@ -77,12 +77,14 @@ export const fetchListVideos = async ({
       .filter((i) => i);
 
     //Filtered out the video Ids that have been removed from Twitch/Youtube
+    console.log('mergeVideosOrderedAndUnique:', mergeVideosOrderedAndUnique);
     const newFilteredIdsList = mergeVideosOrderedAndUnique
       .map((v) => parseNumberAndString(v.id))
       .filter((i) => i);
 
     console.log('list.title:', list.title);
     console.log('newFilteredIdsList:', newFilteredIdsList);
+    console.log('videos || list.videos:', videos || list.videos);
     console.log('(videos || list.videos).length:', (videos || list.videos).length);
     // if (newFilteredIdsList.length < (videos || list.videos).length) {
     //   setTimeout(async () => {
