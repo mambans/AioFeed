@@ -20,7 +20,7 @@ const SidebarExpandableSection = ({
   const [expanded, setExpanded] = useLocalStorageState('navsidebar-expandableSection', {});
   const closedTimer = useRef();
   const openedTimer = useRef();
-  const [isclosed, setIsClosed] = useState(!expanded[title] ?? !defaultExpanded);
+  const [isclosed, setIsClosed] = useState(!(expanded[title] ?? defaultExpanded));
   const [isOpened, setIsOpened] = useState(expanded[title] ?? defaultExpanded);
 
   const handleCloseTimer = () => {
@@ -64,10 +64,10 @@ const SidebarExpandableSection = ({
         <MdExpandMore />
       </ToggleButtonsContainerHeader>
       <ExpandableSection
-        collapsed={!expanded[title] ?? !defaultExpanded}
+        collapsed={!(expanded[title] ?? defaultExpanded)}
         isclosed={isclosed}
         isOpened={isOpened}
-        style={{ marginTop: `${!expanded[title] ?? !defaultExpanded ? 0 : 20}px` }}
+        style={{ marginTop: `${!(expanded[title] ?? defaultExpanded) ? 0 : 20}px` }}
       >
         {fixedTopItem}
         <TransitionGroup component={null}>
