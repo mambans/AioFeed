@@ -739,7 +739,7 @@ const Player = () => {
           </>
         )}
       </div>
-      {!(chatState.hideChat || !chatAsOverlay) && (
+      {!chatState.hideChat && !chatAsOverlay && (
         <ResizeDevider onMouseDown={handleResizeMouseDown} resizeActive={resizeActive}>
           <div />
         </ResizeDevider>
