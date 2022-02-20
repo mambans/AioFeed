@@ -17,8 +17,8 @@ export const ScheduleListContainer = styled.div`
   height: ${({ error, nrOfItemsP }) =>
     error ? 'auto' : `${SingelScheduleItemTotalHeight * (nrOfItemsP || nrOfItems) + 10}px`};
   overflow: auto;
-  position: absolute;
-  right: 0px;
+  /* position: absolute; */
+  /* right: 0px; */
   margin-top: 10px;
   z-index: 12;
   margin-right: 10px;

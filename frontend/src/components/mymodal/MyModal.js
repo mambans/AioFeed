@@ -123,6 +123,7 @@ const MyModal = ({
           onMouseOut={onMouseOut}
           onMouseLeave={onMouseLeave}
           type='button'
+          className='my-modal-trigger'
         >
           {trigger}
         </TriggerButton>
@@ -142,6 +143,7 @@ const MyModal = ({
               direction={animationDirection}
               style={style}
               duration={duration}
+              className='my-modal-wrapper'
             >
               <Position position={positionDirection}>{children}</Position>
             </SModal>
