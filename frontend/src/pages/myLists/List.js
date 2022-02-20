@@ -53,7 +53,6 @@ export const fetchListVideos = async ({
         ? await twitchFetchVideos(twitchItems)
         : twitchItems?.map((video) => ({ id: video, loading: true }))
       : [];
-    console.log('twitchItemsWithDetails:', twitchItemsWithDetails);
 
     const youtubeItemsWithDetails = Boolean(youtubeItems?.length)
       ? ytExistsAndValidated
@@ -77,15 +76,21 @@ export const fetchListVideos = async ({
       .filter((i) => i);
 
     //Filtered out the video Ids that have been removed from Twitch/Youtube
-    console.log('mergeVideosOrderedAndUnique:', mergeVideosOrderedAndUnique);
     const newFilteredIdsList = mergeVideosOrderedAndUnique
       .map((v) => parseNumberAndString(v.id))
       .filter((i) => i);
 
+    console.log('\n');
     console.log('list.title:', list.title);
+    console.log('twitchItems:', twitchItems);
+    console.log('youtubeItems:', youtubeItems);
+    console.log('twitchItemsWithDetails:', twitchItemsWithDetails);
+    console.log('youtubeItemsWithDetails:', youtubeItemsWithDetails);
+    console.log('mergedVideosUnordered:', mergedVideosUnordered);
+    console.log('mergeVideosOrderedAndUnique:', mergeVideosOrderedAndUnique);
     console.log('newFilteredIdsList:', newFilteredIdsList);
     console.log('videos || list.videos:', videos || list.videos);
-    console.log('(videos || list.videos).length:', (videos || list.videos).length);
+    console.log('\n');
     // if (newFilteredIdsList.length < (videos || list.videos).length) {
     //   setTimeout(async () => {
     //     await aiofeedAPI.updateSavedList(list.id, { videos: newFilteredIdsList });
