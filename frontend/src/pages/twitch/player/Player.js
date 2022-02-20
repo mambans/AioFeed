@@ -111,7 +111,6 @@ const Player = () => {
 
   const ready = (e) => {
     console.log('Player is ready');
-    console.log('e:', e);
   };
 
   useEventListenerMemo(window?.Twitch?.Player?.READY, ready, twitchVideoPlayer.current);
