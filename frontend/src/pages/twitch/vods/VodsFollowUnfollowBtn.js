@@ -31,10 +31,13 @@ const VodsFollowUnfollowBtn = ({
   padding,
   unfollowStream = () => {},
 }) => {
+  if (!channel?.user_id) {
+    console.log('channel:', channel);
+  }
   const { vods, setVods, channels, setChannels } = useContext(VodsContext) || {};
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
-  const vodEnabled = channels?.find((user_id) => channel.user_id === user_id);
+  const vodEnabled = channels?.find((user_id) => channel?.user_id === user_id);
   const { feedVideoSizeProps, enableTwitchVods } = useContext(FeedsContext) || {};
 
   const handleMouseEnter = () => setIsHovered(true);
@@ -43,7 +46,7 @@ const VodsFollowUnfollowBtn = ({
   async function removeChannel({ channel, channels, setChannels }) {
     try {
       const vodChannels = new Set(channels || []);
-      vodChannels.delete(channel.user_id);
+      vodChannels.delete(channel?.user_id);
       setChannels([...vodChannels]);
 
       const existingVodVideos = vods || { data: [] };
@@ -51,7 +54,7 @@ const VodsFollowUnfollowBtn = ({
       const newVodVideos = {
         ...existingVodVideos,
         data: existingVodVideos.data
-          .filter((video) => video.user_id !== channel.user_id)
+          .filter((video) => video?.user_id !== channel?.user_id)
           ?.slice(0, 100),
       };
 
@@ -68,7 +71,7 @@ const VodsFollowUnfollowBtn = ({
   return (
     <ToolTip
       delay={{ show: 500, hide: 0 }}
-      tooltip={`${vodEnabled ? 'Disable' : 'Enable'} ${channel} vods`}
+      tooltip={`${vodEnabled ? 'Disable' : 'Enable'} ${channel?.user_name} vods`}
       width='max-content'
     >
       <VodAddRemoveButton
@@ -86,7 +89,7 @@ const VodsFollowUnfollowBtn = ({
             removeChannel({ channel, channels, setChannels });
           } else {
             AddVodChannel({ channel, channels, setChannels, username, authKey });
-            if (channel.user_id) {
+            if (channel?.user_id) {
               FetchSingelChannelVods({
                 user_id: channel.user_id,
                 setVods,
