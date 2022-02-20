@@ -37,6 +37,7 @@ const MyModal = ({
   onClick = () => {},
   onOpen = () => {},
   onClose = () => {},
+  position,
   ...props
 }) => {
   const [show, setShow] = useState(open);
@@ -75,7 +76,7 @@ const MyModal = ({
   useEffect(() => setTriggerRefPositions(triggerBtnRef?.current?.getBoundingClientRect?.()), []);
   useEffect(() => setShow(open), [open]);
 
-  const animationDirection = () => {
+  const animationDirection = (() => {
     switch (direction) {
       case 'left':
         return 'translate(50%, 0)';
@@ -91,7 +92,24 @@ const MyModal = ({
         return;
       // return 'translate(0, 0)';
     }
-  };
+  })();
+
+  const positionDirection = (() => {
+    switch (position) {
+      case 'left':
+        return 'translate(-100%,0)';
+      case 'right':
+        return `translate(${triggerRefPositions.width}px,0)`;
+      case 'top':
+      case 'up':
+        return `translate(0, calc(-100% - ${triggerRefPositions.height}px))`;
+      case 'bottom':
+      case 'down':
+        return 'translate(0, 0)';
+      default:
+        return;
+    }
+  })();
 
   return (
     <>
@@ -121,11 +139,11 @@ const MyModal = ({
           <Portal node={relative ? ref.current : document.querySelector('body')}>
             <SModal
               refPos={triggerRefPositions}
-              direction={animationDirection()}
+              direction={animationDirection}
               style={style}
               duration={duration}
             >
-              {children}
+              <Position position={positionDirection}>{children}</Position>
             </SModal>
           </Portal>
         </CSSTransition>
@@ -157,11 +175,18 @@ const TriggerButton = styled(TransparentButton)`
 const Container = styled.div`
   position: relative;
 `;
+
+const Position = styled.div`
+  position: relative;
+  transform: ${({ position }) => position};
+  overflow: auto;
+`;
+
 const SModal = styled.div`
   position: absolute;
   z-index: 999999;
   pointer-events: initial;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   padding-right: 5px;
   border-radius: 7px;
   width: max-content;
