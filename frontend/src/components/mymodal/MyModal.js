@@ -79,15 +79,15 @@ const MyModal = ({
   const animationDirection = (() => {
     switch (direction) {
       case 'left':
-        return 'translate(50%, 0)';
+        return 'translate(25%, 0)';
       case 'right':
-        return 'translate(-50%, 0)';
+        return 'translate(-25%, 0)';
       case 'top':
       case 'up':
-        return 'translate(0, 50%)';
+        return 'translate(0, 25%)';
       case 'bottom':
       case 'down':
-        return 'translate(0, -50%)';
+        return 'translate(0, -25%)';
       default:
         return;
       // return 'translate(0, 0)';
@@ -247,10 +247,7 @@ const SModal = styled.div`
 
 const Backdrop = styled.div`
   position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  inset: 0;
   background-color: transparent;
   z-index: 100;
 `;
