@@ -132,6 +132,7 @@ export const Vods = ({ className }) => {
                 Disable vods
               </Button>
             }
+            fill
           />
         )}
         {!vods?.data ? (
