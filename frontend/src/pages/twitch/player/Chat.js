@@ -117,7 +117,7 @@ const OverlayBackdrop = styled.div`
   position: fixed;
   cursor: ${({ cursor = 'move' }) => cursor};
   inset: 0;
-  background: rgba(50, 50, 50, 0.3);
+  background: transparent;
   z-index: 99999;
 `;
 
