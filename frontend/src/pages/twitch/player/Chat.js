@@ -104,7 +104,7 @@ const DragOverlay = styled.div`
   position: absolute;
   height: 100%;
   width: 100%;
-  background: rgba(50, 50, 50, 0.3);
+  background: transparent;
 `;
 const InnerWrapper = styled.div`
   position: relative;
