@@ -109,6 +109,12 @@ const Player = () => {
   useDocumentTitle(`${streamInfo?.user_name || channelName} ${status ? `(${status || ''})` : ''}`);
   useFavicon(streamInfo?.profile_image_url);
 
+  const ready = (e) => {
+    console.log('Player is ready');
+    console.log('e:', e);
+  };
+
+  useEventListenerMemo(window?.Twitch?.Player?.READY, ready, twitchVideoPlayer.current);
   useEventListenerMemo(window?.Twitch?.Player?.ONLINE, onlineEvents, twitchVideoPlayer.current);
   useEventListenerMemo(window?.Twitch?.Player?.OFFLINE, offlineEvents, twitchVideoPlayer.current);
   useEventListenerMemo(window?.Twitch?.Player?.PLAYING, playingEvents, twitchVideoPlayer.current);
