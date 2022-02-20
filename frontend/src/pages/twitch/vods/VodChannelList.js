@@ -7,7 +7,6 @@ import AccountContext from './../../account/AccountContext';
 import LoadingList from './../LoadingList';
 import VodChannelListElement from './VodChannelListElement';
 import useInput from './../../../hooks/useInput';
-import AddVodChannel from './AddVodChannel';
 import useLockBodyScroll from '../../../hooks/useLockBodyScroll';
 import useSyncedLocalState from '../../../hooks/useSyncedLocalState';
 import { VodChannelListPopup } from './StyledComponents';
@@ -15,6 +14,7 @@ import { VodChannelListPopupTrigger } from './StyledComponents';
 import ToolTip from '../../../components/tooltip/ToolTip';
 import { AddToListModalTrigger } from '../../sharedComponents/sharedStyledComponents';
 import useClicksOutside from '../../../hooks/useClicksOutside';
+import useVodChannel from './useVodChannel';
 
 const VodChannelList = () => {
   const { authKey, username } = useContext(AccountContext);
@@ -24,6 +24,7 @@ const VodChannelList = () => {
   const { value: channel, bind: bindchannel, reset: resetchannel } = useInput('');
   const triggerRef = useRef();
   const popupRef = useRef();
+  const { addVodChannel } = useVodChannel();
   useLockBodyScroll(open);
   useClicksOutside([popupRef, triggerRef], () => setOpen(false), open);
 
@@ -36,7 +37,7 @@ const VodChannelList = () => {
       evt.stopPropagation();
     } else {
       setValidated(true);
-      AddVodChannel({ channel, channels, setChannels, username, authKey });
+      addVodChannel({ channel, channels, setChannels, username, authKey });
 
       resetchannel();
     }

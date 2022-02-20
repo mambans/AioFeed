@@ -5,12 +5,11 @@ import React, { useState, useContext } from 'react';
 
 import AccountContext from '../../account/AccountContext';
 import { VodAddRemoveButton } from '../../sharedComponents/sharedStyledComponents';
-import AddVodChannel from './AddVodChannel';
 import VodsContext from './VodsContext';
 import FetchSingelChannelVods from './FetchSingelChannelVods';
 import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../../components/tooltip/ToolTip';
-import API from '../../navigation/API';
+import useVodChannel from './useVodChannel';
 
 /**
  * @param {Object} channel - channel
@@ -31,36 +30,14 @@ const VodsFollowUnfollowBtn = ({
   padding,
   unfollowStream = () => {},
 }) => {
-  const { vods, setVods, channels, setChannels } = useContext(VodsContext) || {};
+  const { setVods, channels, setChannels } = useContext(VodsContext) || {};
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
-  const { feedVideoSizeProps, enableTwitchVods } = useContext(FeedsContext) || {};
+  const { enableTwitchVods } = useContext(FeedsContext) || {};
+  const { removeChannel, addVodChannel } = useVodChannel();
 
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(null);
-
-  async function removeChannel({ channel, channels, setChannels }) {
-    try {
-      const vodChannels = new Set(channels || []);
-      vodChannels.delete(channel?.user_id);
-      setChannels([...vodChannels]);
-
-      const existingVodVideos = vods || { data: [] };
-
-      const newVodVideos = {
-        ...existingVodVideos,
-        data: existingVodVideos.data
-          .filter((video) => video?.user_id !== channel?.user_id)
-          ?.slice(0, 100),
-      };
-
-      setVods(newVodVideos);
-
-      await API.updateVodChannels(vodChannels);
-    } catch (e) {
-      console.log(e.message);
-    }
-  }
 
   if ((!show && !enableTwitchVods) || !channel) return null;
 
@@ -86,13 +63,12 @@ const VodsFollowUnfollowBtn = ({
             unfollowStream();
             removeChannel({ channel, channels, setChannels });
           } else {
-            AddVodChannel({ channel, channels, setChannels, username, authKey });
+            addVodChannel({ channel, channels, setChannels, username, authKey });
             if (channel?.user_id) {
               FetchSingelChannelVods({
                 user_id: channel.user_id,
                 setVods,
                 amount: 5,
-                feedVideoSizeProps,
               });
             }
           }
