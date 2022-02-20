@@ -31,13 +31,9 @@ const VodsFollowUnfollowBtn = ({
   padding,
   unfollowStream = () => {},
 }) => {
-  if (!channel?.user_id) {
-    console.log('channel:', channel);
-  }
   const { vods, setVods, channels, setChannels } = useContext(VodsContext) || {};
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
-  const vodEnabled = channels?.find((user_id) => channel?.user_id === user_id);
   const { feedVideoSizeProps, enableTwitchVods } = useContext(FeedsContext) || {};
 
   const handleMouseEnter = () => setIsHovered(true);
@@ -66,7 +62,9 @@ const VodsFollowUnfollowBtn = ({
     }
   }
 
-  if (!show && !enableTwitchVods) return null;
+  if ((!show && !enableTwitchVods) || !channel) return null;
+
+  const vodEnabled = channels?.find((user_id) => channel?.user_id === user_id);
 
   return (
     <ToolTip
