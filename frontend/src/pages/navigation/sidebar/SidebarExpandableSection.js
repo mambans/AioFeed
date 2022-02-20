@@ -38,7 +38,7 @@ const SidebarExpandableSection = ({
 
   const handleOnClick = () => {
     setExpanded((c = {}) => {
-      const n = !c[title];
+      const n = !(c[title] ?? defaultExpanded);
       if (n) {
         clearTimeout(closedTimer.current);
         clearTimeout(openedTimer.current);
