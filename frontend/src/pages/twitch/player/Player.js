@@ -74,7 +74,7 @@ const Player = () => {
   const [streamInfo, setStreamInfo] = useState(useLocation().state?.passedChannelData);
   const [showControlls, setShowControlls] = useState();
   const [showUIControlls, setShowUIControlls] = useState();
-  const [chatAsOverlay, setChatAsOverlay] = useState(true);
+  const [chatAsOverlay, setChatAsOverlay] = useState();
   const [chatState, setChatState] = useState({
     chatwidth: DEFAULT_CHAT_WIDTH,
     switchChatSide: false,

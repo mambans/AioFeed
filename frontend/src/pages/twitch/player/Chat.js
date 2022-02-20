@@ -185,7 +185,7 @@ const ResizeActionButtonsWrapper = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  padding: 2px;
+  padding: 7px 5px;
   display: flex;
   flex-direction: row;
   gap: 1rem;
