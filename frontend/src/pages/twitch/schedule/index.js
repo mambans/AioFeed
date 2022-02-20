@@ -86,7 +86,7 @@ export const TriggerButton = memo(
         <StyledButton
           absolute={absolute}
           style={style}
-          onClick={() => setShow((c) => !c)}
+          onClick={() => setShow?.((c) => !c)}
           ref={ref}
         >
           <AiFillSchedule size={btnSize} />

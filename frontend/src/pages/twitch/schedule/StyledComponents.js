@@ -180,8 +180,9 @@ export const CloseOverlay = styled.div`
 export const RefreshBtnIcon = styled(MdRefresh).attrs({ size: 16 })``;
 export const RefreshBtnContainer = styled.div`
   position: absolute;
+  right: 0px;
+  top: 0px;
   /* bottom: 0; */
-  right: 50px;
   margin: 5px;
   opacity: 0.5;
   pointer-events: ${({ loading }) => (loading === 'true' ? 'none' : 'unset')};
@@ -190,8 +191,6 @@ export const RefreshBtnContainer = styled.div`
   cursor: pointer;
   width: 16px;
   display: flex;
-  transform: translate(75%, 50%);
-  position: absolute;
 
   &:hover {
     opacity: ${({ loading }) => (loading ? '0.7' : '1')};

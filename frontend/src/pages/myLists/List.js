@@ -51,7 +51,7 @@ export const fetchListVideos = async ({
     const twitchItemsWithDetails = Boolean(twitchItems?.length)
       ? twitchExistsAndValidated
         ? await twitchFetchVideos(twitchItems)
-        : twitchItems.map((video) => ({ id: video, loading: true }))
+        : twitchItems?.map((video) => ({ id: video, loading: true }))
       : [];
     console.log('twitchItemsWithDetails:', twitchItemsWithDetails);
 
