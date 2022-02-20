@@ -7,6 +7,7 @@ export const TransparentButton = styled.button`
     border: none;
     color: none;
     display: flex;
+    outline: none;
 
     &:hover,
     &:active,

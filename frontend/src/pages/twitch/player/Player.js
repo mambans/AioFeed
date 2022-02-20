@@ -20,7 +20,6 @@ import NavigationContext from '../../navigation/NavigationContext';
 import VolumeSlider from './VolumeSlider';
 import {
   InfoDisplay,
-  StyledChat,
   ToggleSwitchChatSide,
   VideoAndChatContainer,
   ResizeDevider,
@@ -56,12 +55,12 @@ import ToolTip from '../../../components/tooltip/ToolTip';
 import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
 import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import TwitchAPI from '../API';
-import Schedule from '../schedule';
 import VolumeEventOverlay from '../VolumeEventOverlay';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import useFavicon from '../../../hooks/useFavicon';
 import { TwitchContext } from '../useToken';
 import { ContextMenuDropDown } from './ContextMenuWrapper';
+import Chat from './Chat';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.12, 175);
 
@@ -75,6 +74,7 @@ const Player = () => {
   const [streamInfo, setStreamInfo] = useState(useLocation().state?.passedChannelData);
   const [showControlls, setShowControlls] = useState();
   const [showUIControlls, setShowUIControlls] = useState();
+  const [chatAsOverlay, setChatAsOverlay] = useState(true);
   const [chatState, setChatState] = useState({
     chatwidth: DEFAULT_CHAT_WIDTH,
     switchChatSide: false,
@@ -275,7 +275,7 @@ const Player = () => {
 
       await GetAndSetStreamInfo().then(async (res) => {
         setFavion(res?.profile_image_url);
-        const tags = await TwitchAPI.getTags({ broadcaster_id: res.user_id }).then(
+        const tags = await TwitchAPI.getTags({ broadcaster_id: res?.user_id }).then(
           (res) => res?.data?.data
         );
         setStreamInfo(() => ({ ...res, tags }));
@@ -405,6 +405,7 @@ const Player = () => {
       visible={visible}
       switchedChatState={String(chatState.switchChatSide)}
       hidechat={chatState.hideChat}
+      chatAsOverlay={chatAsOverlay}
     >
       <div id='twitch-embed' ref={videoElementRef}>
         <CSSTransition
@@ -738,29 +739,20 @@ const Player = () => {
           </>
         )}
       </div>
-      {!chatState.hideChat && (
+      {!(chatState.hideChat || !chatAsOverlay) && (
         <ResizeDevider onMouseDown={handleResizeMouseDown} resizeActive={resizeActive}>
           <div />
         </ResizeDevider>
       )}
       {!chatState.hideChat ? (
         <>
-          <div id='chat'>
-            <PlayerExtraButtons channelName={channelName}>
-              <Schedule
-                user={streamInfo?.user_name || channelName}
-                user_id={streamInfo?.user_id}
-                absolute={false}
-              />
-            </PlayerExtraButtons>
-            <StyledChat
-              frameborder='0'
-              scrolling='yes'
-              theme='dark'
-              id={channelName + '-chat'}
-              src={`https://www.twitch.tv/embed/${channelName}/chat?darkpopout&parent=aiofeed.com`}
-            />
-          </div>
+          <Chat
+            streamInfo={streamInfo}
+            channelName={channelName}
+            chatAsOverlay={chatAsOverlay}
+            setChatAsOverlay={setChatAsOverlay}
+          />
+
           {resizeActive && (
             <ChatOverlay
               onMouseUp={handleResizeMouseUp}

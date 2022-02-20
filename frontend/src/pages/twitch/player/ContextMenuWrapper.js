@@ -76,6 +76,7 @@ export const ContextMenuDropDownList = styled.div`
   transform: translateX(85%);
   top: -10px;
   transition: opacity 250ms, transform 250ms;
+  z-index: 1;
 
   & > div {
     padding: 1px 7px;
@@ -136,14 +137,13 @@ const ContextMenuWrapper = ({
       if (show) return true;
       e.preventDefault();
       showAndResetTimer();
-      const boundary = outerContainer
-        ? outerContainer.getBoundingClientRect()
-        : {
-            width: window.innerWidth,
-            bottom: 0,
-            left: 0,
-            top: 0,
-          };
+      const boundary = outerContainer?.getBoundingClientRect() || {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        bottom: 0,
+        left: 0,
+        top: 0,
+      };
       const mouseX = e.clientX - boundary.left;
       const mouseY = e.clientY - (includeMarginTop ? boundary.top : 0);
 
@@ -153,14 +153,8 @@ const ContextMenuWrapper = ({
 
       setShow({
         show: true,
-        x:
-          mouseX + menuWidth > boundary.width
-            ? mouseX - (mouseX + menuWidth - boundary.width)
-            : mouseX,
-        y:
-          mouseY + menuHeight > boundary.bottom
-            ? mouseY - (mouseY + menuHeight - boundary.bottom)
-            : mouseY,
+        x: Math.max(0, Math.min(mouseX, boundary.width - menuWidth)),
+        y: Math.max(0, Math.min(mouseY, boundary.height - menuHeight)),
         maxHeight: boundary.height,
       });
       return false;

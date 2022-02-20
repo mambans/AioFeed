@@ -25,8 +25,8 @@ export const VideoAndChatContainer = styled.div`
   transition: top 300ms, height 300ms;
   display: grid;
   transform: translate3d(0, 0, 0);
-  grid-template-areas: ${({ switchedChatState, hidechat }) =>
-    hidechat
+  grid-template-areas: ${({ switchedChatState, hidechat, chatAsOverlay }) =>
+    hidechat || chatAsOverlay
       ? '"video"'
       : switchedChatState === 'true'
       ? '"chat devider video"'
@@ -34,9 +34,9 @@ export const VideoAndChatContainer = styled.div`
   color: var(--navTextColorActive);
   cursor: ${({ resizeActive }) => (resizeActive ? 'w-resize' : 'unset')};
   will-change: ${({ resizeActive }) => (resizeActive ? 'contents' : 'auto')};
-  grid-template-columns: ${({ chatwidth, hidechat, switched }) =>
+  grid-template-columns: ${({ chatwidth, hidechat, switched, chatAsOverlay }) =>
     `${
-      hidechat
+      hidechat || chatAsOverlay
         ? '100vw'
         : switched
         ? `${chatwidth}px min-content auto`
@@ -48,11 +48,6 @@ export const VideoAndChatContainer = styled.div`
 
   div#twitch-embed {
     grid-area: video;
-  }
-
-  div#chat {
-    grid-area: chat;
-    max-height: 100vh;
   }
 
   .IframeContainer {
@@ -891,4 +886,18 @@ export const ErrorMessage = styled.div`
   p {
     font-size: 1.3em;
   }
+`;
+
+export const ChatWrapper = styled.div`
+  grid-area: ${({ chatAsOverlay }) => (chatAsOverlay ? 'none' : 'chat')};
+  max-height: 100vh;
+  height: ${({ chatAsOverlay, pos }) =>
+    chatAsOverlay ? (pos.height ? pos.height + 'px' : '50%') : '100%'};
+  width: ${({ chatAsOverlay, pos }) =>
+    chatAsOverlay ? (pos.width ? pos.width + 'px' : 'unset') : 'unset'};
+  position: ${({ chatAsOverlay }) => (chatAsOverlay ? 'absolute' : 'initial')};
+  overflow: hidden;
+  box-shadow: ${({ dragging }) => (dragging ? '0 0 1px 1px white' : 'none')};
+  top: ${({ pos }) => (pos.y ? pos.y + 'px' : 'initial')};
+  left: ${({ pos }) => (pos.x ? pos.x + 'px' : 'initial')};
 `;
