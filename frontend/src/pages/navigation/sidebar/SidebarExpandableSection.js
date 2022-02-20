@@ -64,10 +64,10 @@ const SidebarExpandableSection = ({
         <MdExpandMore />
       </ToggleButtonsContainerHeader>
       <ExpandableSection
-        collapsed={!expanded[title] ?? defaultExpanded}
+        collapsed={!expanded[title] ?? !defaultExpanded}
         isclosed={isclosed}
         isOpened={isOpened}
-        style={{ marginTop: `${!expanded[title] ?? defaultExpanded ? 0 : 20}px` }}
+        style={{ marginTop: `${!expanded[title] ?? !defaultExpanded ? 0 : 20}px` }}
       >
         {fixedTopItem}
         <TransitionGroup component={null}>
