@@ -53,6 +53,7 @@ export const fetchListVideos = async ({
         ? await twitchFetchVideos(twitchItems)
         : twitchItems.map((video) => ({ id: video, loading: true }))
       : [];
+    console.log('twitchItemsWithDetails:', twitchItemsWithDetails);
 
     const youtubeItemsWithDetails = Boolean(youtubeItems?.length)
       ? ytExistsAndValidated
@@ -77,6 +78,8 @@ export const fetchListVideos = async ({
 
     //Filtered out the video Ids that have been removed from Twitch/Youtube
     const newFilteredIdsList = mergeVideosOrderedAndUnique.map((v) => parseNumberAndString(v.id));
+    console.log('newFilteredIdsList:', newFilteredIdsList);
+    console.log('(videos || list.videos).length:', (videos || list.videos).length);
     if (newFilteredIdsList.length !== (videos || list.videos).length) {
       setTimeout(async () => {
         await aiofeedAPI.updateSavedList(list.id, { videos: newFilteredIdsList });
