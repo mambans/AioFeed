@@ -15,12 +15,13 @@ const SidebarExpandableSection = ({
   fixedBottomItem = null,
   children = null,
 }) => {
+  const defaultExpanded = true;
   const { setOverflow } = useContext(NavigationContext);
-  const [expanded, setExpanded] = useLocalStorageState(title + '-expandableSection', true);
+  const [expanded, setExpanded] = useLocalStorageState('navsidebar-expandableSection', {});
   const closedTimer = useRef();
   const openedTimer = useRef();
-  const [isclosed, setIsClosed] = useState(!expanded);
-  const [isOpened, setIsOpened] = useState(expanded);
+  const [isclosed, setIsClosed] = useState(!expanded[title] ?? !defaultExpanded);
+  const [isOpened, setIsOpened] = useState(expanded[title] ?? defaultExpanded);
 
   const handleCloseTimer = () => {
     clearTimeout(closedTimer.current);
@@ -36,8 +37,8 @@ const SidebarExpandableSection = ({
   };
 
   const handleOnClick = () => {
-    setExpanded((c) => {
-      const n = !c;
+    setExpanded((c = {}) => {
+      const n = !c[title];
       if (n) {
         clearTimeout(closedTimer.current);
         clearTimeout(openedTimer.current);
@@ -49,21 +50,24 @@ const SidebarExpandableSection = ({
         setIsOpened(false);
         handleCloseTimer();
       }
-      return n;
+      return { ...c, [title]: n };
     });
   };
 
   return (
     <div style={{ padding: '5px', marginTop: '15px' }}>
-      <ToggleButtonsContainerHeader expanded={expanded} onClick={handleOnClick}>
+      <ToggleButtonsContainerHeader
+        expanded={expanded[title] ?? defaultExpanded}
+        onClick={handleOnClick}
+      >
         {title}
         <MdExpandMore />
       </ToggleButtonsContainerHeader>
       <ExpandableSection
-        collapsed={!expanded}
+        collapsed={!expanded[title] ?? defaultExpanded}
         isclosed={isclosed}
         isOpened={isOpened}
-        style={{ marginTop: `${!expanded ? 0 : 20}px` }}
+        style={{ marginTop: `${!expanded[title] ?? defaultExpanded ? 0 : 20}px` }}
       >
         {fixedTopItem}
         <TransitionGroup component={null}>
