@@ -81,7 +81,7 @@ const getFollowedVods = async ({
         }
 
         const followedStreamVods = await fetchVodsFromMonitoredChannels(
-          vodChannels.data,
+          vodChannels,
           setTwitchAccessToken,
           setRefreshToken
         );
@@ -98,7 +98,6 @@ const getFollowedVods = async ({
 
         return {
           data: followedOrderedStreamVods || [],
-          vodError: vodChannels.error,
         };
       } catch (er) {
         return {

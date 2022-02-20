@@ -220,9 +220,13 @@ const ChannelPage = () => {
     return () => resetAllValues();
   }, [channelName, getIdFromName]);
 
-  useEffect(() => fetchChannelVods(), [userId, fetchChannelVods]);
+  useEffect(() => {
+    if (userId) fetchChannelVods();
+  }, [userId, fetchChannelVods]);
 
-  useEffect(() => fetchClips(), [userId, fetchClips]);
+  useEffect(() => {
+    if (userId) fetchClips();
+  }, [userId, fetchClips]);
 
   async function onlineEvents() {
     console.log('Stream is Online');
