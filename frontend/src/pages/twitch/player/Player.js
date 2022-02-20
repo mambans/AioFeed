@@ -751,6 +751,7 @@ const Player = () => {
             channelName={channelName}
             chatAsOverlay={chatAsOverlay}
             setChatAsOverlay={setChatAsOverlay}
+            chatState={chatState}
           />
 
           {resizeActive && (

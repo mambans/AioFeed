@@ -8,9 +8,9 @@ import { GrStackOverflow } from 'react-icons/gr';
 import { AiFillLock, AiFillUnlock } from 'react-icons/ai';
 import { TransparentButton } from '../../../components/styledComponents';
 
-const Chat = ({ chatAsOverlay, channelName, streamInfo, setChatAsOverlay }) => {
+const Chat = ({ chatAsOverlay, channelName, streamInfo, setChatAsOverlay, chatState }) => {
   const [dragging, setDragging] = useState();
-  const [pos, setPos] = useState({});
+  const [pos, setPos] = useState({ width: chatState.chatwidth });
   const [locked, setLocked] = useState();
   const overlayBackdropRef = useRef();
   const chatRef = useRef();

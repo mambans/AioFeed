@@ -640,6 +640,7 @@ export const ResizeDevider = styled.div`
   display: flex;
   transform: translate3d(0, 0, 0);
   position: absolute;
+  z-index: 3;
 
   > div {
     transition: opacity 500ms, height 250ms;
