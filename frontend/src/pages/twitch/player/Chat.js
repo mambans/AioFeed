@@ -7,6 +7,7 @@ import { GiResize } from 'react-icons/gi';
 import { GrStackOverflow } from 'react-icons/gr';
 import { AiFillLock, AiFillUnlock } from 'react-icons/ai';
 import { TransparentButton } from '../../../components/styledComponents';
+import useKeyDown from '../../../hooks/useKeyDown';
 
 const Chat = ({ chatAsOverlay, channelName, streamInfo, setChatAsOverlay, chatState }) => {
   const [dragging, setDragging] = useState();
@@ -16,13 +17,13 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, setChatAsOverlay, chatSt
   const chatRef = useRef();
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
 
-  const keydown = (e) => {
-    if (e.key === 'Escape') setDragging(false);
-  };
-  useEventListenerMemo('keydown', keydown, window, dragging);
+  const keydown = (e) => e.key === 'Escape' && setDragging(false);
+  useEventListenerMemo('keydown', keydown, window, chatAsOverlay);
+
+  const ctrlOrAlt = useKeyDown(['Control', 'Alt']);
 
   const onDragInit = (e) => {
-    if (e.button === 0 && !locked) {
+    if (e.button === 0 && (!locked || ctrlOrAlt)) {
       setDragging(true);
       const mouseX = e.clientX;
       const mouseY = e.clientY;
@@ -52,6 +53,9 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, setChatAsOverlay, chatSt
 
   return (
     <>
+      {chatAsOverlay && dragging && (
+        <OverlayBackdrop ref={overlayBackdropRef} onMouseUp={onDragStop} onMouseMove={onDragMove} />
+      )}
       <ChatWrapper
         ref={chatRef}
         pos={pos}
@@ -74,7 +78,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, setChatAsOverlay, chatSt
           />
           {!locked && chatAsOverlay && <Resizer setPos={setPos} target={chatRef.current} />}
 
-          {chatAsOverlay && <DragOverlay />}
+          {chatAsOverlay && (!locked || ctrlOrAlt) && <DragOverlay />}
           <PlayerExtraButtons channelName={channelName}>
             <Schedule
               user={streamInfo?.user_name || channelName}
@@ -92,9 +96,6 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, setChatAsOverlay, chatSt
           />
         </InnerWrapper>
       </ChatWrapper>
-      {chatAsOverlay && dragging && (
-        <OverlayBackdrop ref={overlayBackdropRef} onMouseUp={onDragStop} onMouseMove={onDragMove} />
-      )}
     </>
   );
 };
