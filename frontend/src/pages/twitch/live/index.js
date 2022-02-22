@@ -27,7 +27,14 @@ const TwitchStandalone = () => {
 };
 
 export const Twitch = ({ in: forceMount = false, className }) => {
-  const { enableTwitch, showTwitchSidebar, setShowTwitchSidebar, enableFeedSections, orders, toggleExpanded } = useContext(FeedsContext) || {};
+  const {
+    enableTwitch,
+    showTwitchSidebar,
+    setShowTwitchSidebar,
+    enableFeedSections,
+    orders,
+    toggleExpanded,
+  } = useContext(FeedsContext) || {};
   const refreshBtnRef = useRef();
 
   useEffect(() => {
@@ -45,7 +52,11 @@ export const Twitch = ({ in: forceMount = false, className }) => {
             appear
             unmountOnExit
           >
-            <Container order={orders?.['twitch']?.order} className={className}>
+            <Container
+              aria-labelledby='twitch'
+              order={orders?.['twitch']?.order}
+              className={className}
+            >
               <Header
                 data={data}
                 ref={refreshBtnRef}

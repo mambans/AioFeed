@@ -18,11 +18,11 @@ const VodsHeader = React.forwardRef((props, ref) => {
       refreshFunc={() => refresh(true)}
       ref={ref}
       title={
-        <h5 onClick={toggleExpanded}>
+        <h1 id='vods' onClick={toggleExpanded}>
           Twitch vods
           <MdVideocam size={25} style={{ color: '#6f166f' }} />
           <ExpandCollapseFeedButton collapsed={collapsed} />
-        </h5>
+        </h1>
       }
       leftSide={
         <>

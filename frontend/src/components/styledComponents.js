@@ -20,7 +20,7 @@ export const TransparentButton = styled.button`
   color: white;
 `;
 
-export const HeaderOuterMainContainer = styled.div`
+export const HeaderOuterMainContainer = styled.header`
   width: 100%;
   margin-bottom: 5px;
   scroll-margin-top: 95px;
@@ -86,8 +86,7 @@ export const HeaderTitle = styled.div`
     margin-left: 10px;
   }
 
-  h4,
-  h5 {
+  h1 {
     position: relative;
     cursor: pointer;
     text-align: center;

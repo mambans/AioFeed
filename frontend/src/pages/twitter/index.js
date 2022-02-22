@@ -44,6 +44,7 @@ export const Twitter = ({ in: forceMount = false }) => {
       appear={true}
     >
       <MainContainer
+        aria-label='twitter'
         id='twitter'
         center={forceMount || (!enableTwitch && !enableYoutube && !enableTwitchVods)}
         ref={mainContainerRef}
@@ -51,7 +52,7 @@ export const Twitter = ({ in: forceMount = false }) => {
         <TransitionGroup component={null}>
           {twitterLists?.map((id) => (
             <CSSTransition classNames='twitterList' key={id} timeout={750} unmountOnExit>
-              <div>
+              <section aria-label={id}>
                 <ResizeWrapper parentCallbackWidth={pushTwitterWidthToFeed}>
                   <List key={id} id={id}>
                     <a
@@ -66,7 +67,7 @@ export const Twitter = ({ in: forceMount = false }) => {
                     <Timelines id={id} mainContainerRef={mainContainerRef} />
                   </List>
                 </ResizeWrapper>
-              </div>
+              </section>
             </CSSTransition>
           ))}
         </TransitionGroup>

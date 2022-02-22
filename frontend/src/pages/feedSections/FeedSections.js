@@ -108,16 +108,20 @@ const Section = ({
 
   if (!data?.liveStreams?.length) return null;
   return (
-    <Container order={orders?.[id]?.order} key={`FeedSection-${id}`}>
+    <Container
+      aria-labelledby={`FeedSection-${id}`}
+      order={orders?.[id]?.order}
+      key={`FeedSection-${id}`}
+    >
       <Header
         id={title}
         title={
-          <h5 onClick={() => toggleExpanded(id)}>
+          <h1 id={`FeedSection-${id}`} onClick={() => toggleExpanded(id)}>
             {title}
             <HeaderNumberCount text={data?.liveStreams?.length} />
             <BsCollectionFill size={22} color={'#ff0060'} />
             <ExpandCollapseFeedButton collapsed={orders?.[id]?.collapsed} />
-          </h5>
+          </h1>
         }
         rightSide={<Rules rules={rules} name={title} id={id} />}
       />

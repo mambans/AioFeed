@@ -111,7 +111,7 @@ export const Styledsidebar = styled.div`
   }
 `;
 
-export const SidebarHeader = styled.p`
+export const SidebarHeader = styled.header`
   font-size: 1.1rem;
   font-weight: bold;
   color: var(--textColor2);
@@ -295,7 +295,7 @@ export const SecondRow = styled.div`
   }
 `;
 
-export const StyledSidebarSection = styled.div`
+export const StyledSidebarSection = styled.section`
   order: ${({ order }) => order};
   background: var(--sidebarsBackgroundColor);
   border-radius: 10px 10px 0 0;

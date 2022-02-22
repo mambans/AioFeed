@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const StyledFooterContainer = styled.div`
+export const StyledFooterContainer = styled.footer`
   display: flex;
   background-color: var(--footerBackground);
   padding: 15px;

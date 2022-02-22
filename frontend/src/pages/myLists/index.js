@@ -96,16 +96,20 @@ export const FavoriteListContainer = ({
   const { orders, toggleExpanded } = useContext(FeedsContext);
 
   return (
-    <Container order={orders?.[list.id]?.order} id={'MyListsHeader-' + list.id}>
+    <Container
+      aria-labelledby={`MyList-${list.id}`}
+      order={orders?.[list.id]?.order}
+      id={'MyListsHeader-' + list.id}
+    >
       <Header
         id={list.title}
         title={
-          <h5 onClick={() => toggleExpanded(list.id)}>
+          <h1 id={`MyList-${list.id}`} onClick={() => toggleExpanded(list.id)}>
             {list.title}
             <HeaderNumberCount text={list?.videos?.length} />
             <HiViewList size={25} color={'var(--listColorAdd)'} />
             <ExpandCollapseFeedButton collapsed={orders?.[list.id]?.collapsed} />
-          </h5>
+          </h1>
         }
         refreshFunc={fetchMyListContextData}
         isLoading={isLoading}

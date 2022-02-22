@@ -65,11 +65,11 @@ const YouTubeHeader = (data) => {
     <Header
       id='YoutubeHeader'
       title={
-        <h5 onClick={toggleExpanded}>
+        <h1 id='youtube' onClick={toggleExpanded}>
           YouTube
           <FaYoutube size={25} style={{ color: '#a80000' }} />
           <ExpandCollapseFeedButton collapsed={collapsed} />
-        </h5>
+        </h1>
       }
       refreshFunc={refresh}
       isLoading={!isLoaded}

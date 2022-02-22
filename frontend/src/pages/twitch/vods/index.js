@@ -108,7 +108,7 @@ export const Vods = ({ className }) => {
   }, [videoElementsAmount]);
 
   return (
-    <Container order={orders?.['vods']?.order} className={className}>
+    <Container aria-labelledby='vods' order={orders?.['vods']?.order} className={className}>
       <Header
         ref={refreshBtnRef}
         refresh={refresh}

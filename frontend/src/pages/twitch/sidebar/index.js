@@ -71,8 +71,8 @@ const SidebarSection = ({ feed: { title, id }, data, index }) => {
   if (id !== 'twitch' && !streams?.length) return null;
 
   return (
-    <StyledSidebarSection order={orders?.[id]?.order}>
-      <SidebarHeader onClick={handleCollapse}>
+    <StyledSidebarSection aria-labelledby={`SidebarSection-${id}`} order={orders?.[id]?.order}>
+      <SidebarHeader id={`SidebarSection-${id}`} onClick={handleCollapse}>
         {title} <ExpandCollapseFeedButton collapsed={orders?.[id]?.sidebar_collapsed} />
       </SidebarHeader>
       <ExpandableSection collapsed={orders?.[id]?.sidebar_collapsed}>

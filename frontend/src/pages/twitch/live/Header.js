@@ -5,7 +5,7 @@ import Header, { HeaderNumberCount } from '../../../components/Header';
 import ChannelSearchList from './../channelList';
 import BigScheduleList from './BigScheduleList';
 
-const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed }, ref) => {
+const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed, idTitle }, ref) => {
   const { refreshing, autoRefreshEnabled, refreshTimer, refresh, followedChannels, liveStreams } =
     data;
 
@@ -13,7 +13,7 @@ const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed }, ref)
     <Header
       id='TwitchHeader'
       title={
-        <h5 onClick={toggleExpanded}>
+        <h1 id={'twitch'} onClick={toggleExpanded}>
           Twitch
           <span
             style={{
@@ -29,7 +29,7 @@ const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed }, ref)
           </span>
           <HeaderNumberCount text={liveStreams?.length} />
           <ExpandCollapseFeedButton collapsed={collapsed} />
-        </h5>
+        </h1>
       }
       ref={ref}
       refreshTimer={refreshTimer}

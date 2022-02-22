@@ -189,7 +189,7 @@ export const ChannelNameDiv = styled.div`
   }
 `;
 
-export const Container = styled.div`
+export const Container = styled.section`
   display: flex;
   flex-wrap: wrap;
   margin-top: 0;

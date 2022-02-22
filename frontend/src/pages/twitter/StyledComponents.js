@@ -75,7 +75,7 @@ export const Container = styled.div`
   }
 `;
 
-export const MainContainer = styled.div`
+export const MainContainer = styled.section`
   width: max-content;
   transition: width 1000ms, margin-right 100ms, right 100ms;
   position: fixed;

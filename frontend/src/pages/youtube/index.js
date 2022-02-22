@@ -26,7 +26,11 @@ export const Youtube = ({ className }) => {
   return (
     <YoutubeDataHandler>
       {(data) => (
-        <Container order={orders?.['youtube']?.order} className={className}>
+        <Container
+          aria-labelledby='youtube'
+          order={orders?.['youtube']?.order}
+          className={className}
+        >
           <YoutubeHeader
             videos={data.videos}
             setVideos={data.setVideos}
