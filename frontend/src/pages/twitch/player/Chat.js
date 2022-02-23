@@ -69,6 +69,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, setChatAsOverlay, chatSt
           onMouseUp={onDragStop}
           locked={locked}
           data-chatAsOverlay={chatAsOverlay}
+          onMouseMove={dragging ? onDragMove : () => {}}
         >
           <ResizeActionButtons
             setChatAsOverlay={setChatAsOverlay}
