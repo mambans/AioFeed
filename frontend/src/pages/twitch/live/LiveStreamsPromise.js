@@ -27,10 +27,8 @@ const liveStreamsPromise = async ({
         stream: stream,
         body: `${stream.title || stream.status || ''}\n${stream.game_name || stream.game || ''}`,
       });
-      if (
-        enableTwitchVods &&
-        getLocalstorage('TwitchVods-Channels')?.includes(stream.user_name?.toLowerCase())
-      ) {
+
+      if (enableTwitchVods && getLocalstorage('TwitchVods-Channels')?.includes(stream.user_id)) {
         setTimeout(async () => {
           await FetchSingelChannelVods({ user_id: stream.user_id, setVods });
         }, 30000);
