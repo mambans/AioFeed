@@ -27,14 +27,16 @@ export const VodsProvider = ({ children, forceMount = false }) => {
         enableTwitchVods ||
         forceMount)
     ) {
-      const { vod_channels } = await API.getTwitchData()
+      const res = await API.getTwitchData()
         .then((res) => res?.data?.Item)
         .catch((e) => {
           console.error('Twitch usetoken useEffect error: ', e);
           toast.error(e.message);
         });
 
-      setChannels((vod_channels || getLocalstorage('TwitchVods-Channels') || []).filter((i) => i));
+      setChannels(
+        (res?.vod_channels || getLocalstorage('TwitchVods-Channels') || []).filter((i) => i)
+      );
       invoked.current = true;
     }
   }, [
