@@ -326,6 +326,9 @@ const Player = () => {
         e.preventDefault();
         twitchVideoPlayer.current?.setQuality('chunked');
         break;
+      case "Escape":
+        setResizeActive(false);
+      break;
       default:
         break;
     }
