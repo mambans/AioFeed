@@ -663,6 +663,7 @@ export const ChatOverlay = styled.div`
   width: 100%;
   position: absolute;
   transform: translate3d(0, 0, 0);
+  z-index: 5;
 `;
 
 export const ResetVideoButton = styled(GrRefresh).attrs({ size: 24 })`
