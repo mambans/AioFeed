@@ -35,10 +35,7 @@ const VolumeEventOverlay = React.forwardRef(
     },
     ref
   ) => {
-    // eslint-disable-next-line no-unused-vars
-    const [seekTime, setSeekTime] = useState();
     const [showControlls, setShowControlls] = useState();
-    const seekresetTimer = useRef();
     const fadeTimer = useRef();
 
     useEventListenerMemo(
@@ -85,6 +82,7 @@ const VolumeEventOverlay = React.forwardRef(
     );
 
     function keyboardEvents(e) {
+      console.log('keyboardEvents: ', e.key);
       switch (e.key) {
         case 'f':
         case 'F':
@@ -94,28 +92,6 @@ const VolumeEventOverlay = React.forwardRef(
         case 'Q':
           e.preventDefault();
           player.current?.setQuality('chunked');
-          break;
-        case ' ':
-          e.preventDefault();
-          player.current.isPaused() ? player.current.play() : player.current.pause();
-          break;
-        case 'ArrowRight':
-          setSeekTime((c) => {
-            clearTimeout(seekresetTimer.current);
-            const curr = c || player.current.getCurrentTime();
-            player.current.seek(curr + 10);
-            seekresetTimer.current = setTimeout(() => setSeekTime(null), 3000);
-            return curr + 10;
-          });
-          return;
-        case 'ArrowLeft':
-          setSeekTime((c) => {
-            clearTimeout(seekresetTimer.current);
-            const curr = c || player.current.getCurrentTime();
-            player.current.seek(curr - 10);
-            seekresetTimer.current = setTimeout(() => setSeekTime(null), 3000);
-            return curr - 10;
-          });
           break;
         default:
           break;
@@ -148,15 +124,15 @@ const VolumeEventOverlay = React.forwardRef(
           showcursor={showcursor}
           centerBotttom={centerBotttom}
         >
-          {ContextMenu ||
-            (contextMenuChildren && (
-              <ContextMenuWrapper
-                outerContainer={VolumeEventOverlayRef.current}
-                showAndResetTimer={showAndResetTimer}
-                children={<>{contextMenuChildren}</>}
-                includeMarginTop={true}
-              />
-            ))}
+          {(ContextMenu || contextMenuChildren) && (
+            <ContextMenuWrapper
+              outerContainer={VolumeEventOverlayRef.current}
+              showAndResetTimer={showAndResetTimer}
+              children={<>{contextMenuChildren}</>}
+              includeMarginTop={true}
+            />
+          )}
+
           {showVolumeSlider && player.current && (
             <>
               <Schedule user={channelName} />

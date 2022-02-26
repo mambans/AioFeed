@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
 import { FaPause } from 'react-icons/fa';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 
 const PlayPauseButton = ({ TwitchPlayer, PlayerUIControlls }) => {
   const [isPaused, setIsPaused] = useState(TwitchPlayer?.isPaused() || false);
+  const seekresetTimer = useRef();
+  // eslint-disable-next-line no-unused-vars
+  const [seekTime, setSeekTime] = useState();
 
   useEventListenerMemo(
     'keydown',
@@ -50,14 +53,39 @@ const PlayPauseButton = ({ TwitchPlayer, PlayerUIControlls }) => {
   }
 
   function keyboardEvents(e) {
-    if (e.key === ' ' || e.key === 'Space') {
-      if (!TwitchPlayer.isPaused()) {
-        TwitchPlayer.pause();
-        setIsPaused(true);
-      } else {
-        TwitchPlayer.play();
-        setIsPaused(false);
-      }
+    switch (e.key) {
+      case 'Space':
+      case ' ':
+        e.preventDefault();
+        if (!TwitchPlayer.isPaused()) {
+          TwitchPlayer.pause();
+          setIsPaused(true);
+        } else {
+          TwitchPlayer.play();
+          setIsPaused(false);
+        }
+
+        break;
+      case 'ArrowRight':
+        setSeekTime((c) => {
+          clearTimeout(seekresetTimer.current);
+          const curr = c || TwitchPlayer?.getCurrentTime();
+          TwitchPlayer?.seek(curr + 10);
+          seekresetTimer.current = setTimeout(() => setSeekTime(null), 3000);
+          return curr + 10;
+        });
+        return;
+      case 'ArrowLeft':
+        setSeekTime((c) => {
+          clearTimeout(seekresetTimer.current);
+          const curr = c || TwitchPlayer?.getCurrentTime();
+          TwitchPlayer?.seek(curr - 10);
+          seekresetTimer.current = setTimeout(() => setSeekTime(null), 3000);
+          return curr - 10;
+        });
+        break;
+      default:
+        break;
     }
   }
 
