@@ -67,7 +67,7 @@ const fetchGameName = async ({ items }) => {
     });
     stream.game_img = foundGame
       ? foundGame.box_art_url
-      : stream.game_name === ''
+      : stream?.game_name === ''
       ? ''
       : `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`;
 

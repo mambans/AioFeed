@@ -33,7 +33,10 @@ const updateSreamsPromise = async ({
           (old_stream) => old_stream.user_name === stream.user_name
         );
 
-        if (oldStreamData.game_name !== stream.game_name && oldStreamData.title !== stream.title) {
+        if (
+          oldStreamData?.game_name !== stream?.game_name &&
+          oldStreamData.title !== stream.title
+        ) {
           addSystemNotification({
             status: 'Title & Game updated',
             stream: stream,
@@ -58,7 +61,10 @@ const updateSreamsPromise = async ({
           (old_stream) => old_stream.user_name === stream.user_name
         );
 
-        if (oldStreamData.game_name !== stream.game_name && oldStreamData.title === stream.title) {
+        if (
+          oldStreamData?.game_name !== stream?.game_name &&
+          oldStreamData.title === stream.title
+        ) {
           addSystemNotification({
             status: 'Game updated',
             stream: stream,
@@ -77,7 +83,10 @@ const updateSreamsPromise = async ({
           (old_stream) => old_stream.user_name === stream.user_name
         );
 
-        if (oldStreamData.title !== stream.title && oldStreamData.game_name === stream.game_name) {
+        if (
+          oldStreamData.title !== stream.title &&
+          oldStreamData?.game_name === stream?.game_name
+        ) {
           addSystemNotification({
             status: 'Title updated',
             stream: stream,

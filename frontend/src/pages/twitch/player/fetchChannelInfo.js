@@ -22,11 +22,11 @@ const fetchChannelInfo = async (channelId, format) => {
 
           const data = {
             ...res.data?.data?.[0],
-            user_name: res.data?.data?.[0].broadcaster_name,
-            title: res.data?.data?.[0].title,
-            user_id: res.data?.data?.[0].broadcaster_id,
-            game_name: res.data?.data?.[0].game_name,
-            game: res.data?.data?.[0].game_name,
+            user_name: res.data?.data?.[0]?.broadcaster_name,
+            title: res.data?.data?.[0]?.title,
+            user_id: res.data?.data?.[0]?.broadcaster_id,
+            game_name: res.data?.data?.[0]?.game_name,
+            game: res.data?.data?.[0]?.game_name,
             started_at: Date.now() - 1000,
             viewers: 0,
             game_img: localstorageGameInfo && localstorageGameInfo.box_art_url,
