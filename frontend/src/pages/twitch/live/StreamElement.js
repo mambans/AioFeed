@@ -182,7 +182,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
                 href={`https://www.twitch.tv/${user_name}?redirect=false`}
                 style={{ margin: '1px 1px 0' }}
               >
-                <FaTwitch size={22} color='purple' />
+                <FaTwitch size={20} color='purple' />
               </a>
               <Schedule user={login || user_name} user_id={user_id} absolute={false} btnSize={22} />
               <FavoriteStreamBtn channel={login} />
