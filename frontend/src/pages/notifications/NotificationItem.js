@@ -26,8 +26,8 @@ export const ClearAllNotifications = ({ nr, disabled, onClick, text }) => (
   </StyledClearAllNotifications>
 );
 
-const NotificationItem = ({ title, text, icon, date, iconWidth = '60px' }) => (
-  <StyledNotificationItem>
+const NotificationItem = ({ title, text, icon, date, iconWidth = '60px', onClick }) => (
+  <StyledNotificationItem onClick={onClick}>
     <NotificationIcon width={iconWidth}>{icon}</NotificationIcon>
     <NotificationText>
       <h1>{title}</h1>

@@ -18,10 +18,11 @@ const liveStreamsPromise = async ({
       resolve(newLive);
     });
 
-    res?.map((stream) => {
+    const streams = res?.map((stream) => {
       setNewlyAddedStreams((c) => [...(c || []), stream.user_name]);
       stream.newlyAdded = true;
       stream.notiStatus = 'Live';
+      stream.onClick = () => window.open('https://aiofeed.com/' + stream.user_name);
       addSystemNotification({
         status: 'Live',
         stream: stream,
@@ -33,9 +34,9 @@ const liveStreamsPromise = async ({
           await FetchSingelChannelVods({ user_id: stream.user_id, setVods });
         }, 30000);
       }
-      return '';
+      return stream;
     });
-    return res;
+    return streams;
   } catch (e) {
     return [];
   }

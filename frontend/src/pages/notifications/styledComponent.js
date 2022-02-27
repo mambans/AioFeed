@@ -128,6 +128,8 @@ export const NotificationIcon = styled.div`
 export const StyledNotificationItem = styled.li`
   ${NotificationBoxStyle}
 
+  cursor: ${({ onClick }) => (onClick ? 'pointer' : 'initial')};
+
   h1 {
     font-size: 1.15em;
   }

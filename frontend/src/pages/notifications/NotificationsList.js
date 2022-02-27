@@ -17,10 +17,14 @@ const NotificationsList = () => {
     <NotificationListContainer>
       <ul>
         {notifications?.map(
-          ({ notiStatus, user_name, profile_image_url, text, title, date } = {}, index) => {
+          (
+            { notiStatus, user_name, profile_image_url, text, title, date, onClick } = {},
+            index
+          ) => {
             return (
               <NotificationItem
                 key={String(index)}
+                onClick={onClick}
                 title={
                   <Link
                     to={`/${user_name?.toLowerCase()}/page`}

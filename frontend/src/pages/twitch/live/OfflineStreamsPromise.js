@@ -19,8 +19,10 @@ const offlineStreamsPromise = async ({
       resolve(newOffline);
     });
 
-    res.map((stream) => {
+    const streams = res.map((stream) => {
       stream.notiStatus = 'Offline';
+      stream.onClick = () => window.open('https://aiofeed.com/' + stream.user_name + '/page');
+
       if (
         isEnabledOfflineNotifications &&
         getLocalstorage('TwitchVods-Channels')?.includes(stream.user_id)
@@ -36,10 +38,10 @@ const offlineStreamsPromise = async ({
           await FetchSingelChannelVods({ user_id: stream.user_id, setVods });
         }, 0);
       }
-      return '';
+      return stream;
     });
 
-    return res;
+    return streams;
   } catch (e) {
     return [];
   }
