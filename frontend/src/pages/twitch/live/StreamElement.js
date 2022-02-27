@@ -3,7 +3,7 @@ import { FiAlertCircle } from 'react-icons/fi';
 import Moment from 'react-moment';
 import React, { useRef } from 'react';
 import { MdVideocam } from 'react-icons/md';
-import { FaRegWindowRestore } from 'react-icons/fa';
+import { FaRegWindowRestore, FaTwitch } from 'react-icons/fa';
 
 import {
   VideoTitle,
@@ -176,6 +176,14 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
           </ChannelNameDiv>
           {(location.pathname === '/feed/' || location.pathname === '/feed') && (
             <ChannelButtonsContainer className='buttonsContainer'>
+              <a
+                className='twitchRedirect'
+                alt=''
+                href={`https://www.twitch.tv/${user_name}?redirect=false`}
+                style={{ margin: '0 5px' }}
+              >
+                <FaTwitch size={22} color='purple' />
+              </a>
               <Schedule user={login || user_name} user_id={user_id} absolute={false} btnSize={22} />
               <FavoriteStreamBtn channel={login} />
               <VodsFollowUnfollowBtn channel={data} marginright='5px;' />
