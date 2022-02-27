@@ -1,5 +1,4 @@
 import { Link, useLocation } from 'react-router-dom';
-import { FiAlertCircle } from 'react-icons/fi';
 import Moment from 'react-moment';
 import React, { useRef } from 'react';
 import { MdVideocam } from 'react-icons/md';
