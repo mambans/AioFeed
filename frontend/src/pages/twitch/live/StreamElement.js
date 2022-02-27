@@ -15,6 +15,8 @@ import {
   ImgBottomInfo,
   LatestVodBtn,
   OpenInNewTab,
+  StyledNewlyAddedIndicator,
+  TopRightBtnWrapper,
 } from './../../sharedComponents/sharedStyledComponents';
 import { ChannelNameDiv } from './../StyledComponents';
 import StreamHoverIframe from '../StreamHoverIframe.js';
@@ -31,19 +33,7 @@ import Schedule from '../schedule';
 
 function NewHighlightNoti({ newlyAddedStreams, login }) {
   if (newlyAddedStreams?.includes(login?.toLowerCase())) {
-    return (
-      <FiAlertCircle
-        size={22}
-        style={{
-          position: 'absolute',
-          display: 'flex',
-          color: 'var(--newHighlightColor)',
-          backgroundColor: '#00000042',
-          borderRadius: '8px',
-          margin: '5px',
-        }}
-      />
-    );
+    return <StyledNewlyAddedIndicator>New</StyledNewlyAddedIndicator>;
   }
   return '';
 }
@@ -106,27 +96,25 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
           />
         </Link>
 
-        <ToolTip
-          delay={{ show: 1000, hide: 0 }}
-          tooltip='Open channels latest vod'
-          placement='bottom'
-        >
-          <LatestVodBtn
-            target='_blank'
-            href={`/${login?.toLowerCase() || user_name}/videos/latest?user_id=${user_id}`}
+        <TopRightBtnWrapper>
+          <ToolTip
+            delay={{ show: 1000, hide: 0 }}
+            tooltip='Open streams latest vod'
+            placement='bottom'
           >
-            <MdVideocam color='inherit' size={24} />
-          </LatestVodBtn>
-        </ToolTip>
-        <ToolTip
-          delay={{ show: 1000, hide: 0 }}
-          tooltip='Open stream in new tab'
-          placement='bottom'
-        >
-          <OpenInNewTab target='_blank' href={`/${login?.toLowerCase() || user_name}`}>
-            <FaRegWindowRestore color='inherit' size={24} />
-          </OpenInNewTab>
-        </ToolTip>
+            <LatestVodBtn
+              target='_blank'
+              href={`/${login?.toLowerCase() || user_name}/videos/latest?user_id=${user_id}`}
+            >
+              <MdVideocam color='inherit' size={22} />
+            </LatestVodBtn>
+          </ToolTip>
+          <ToolTip delay={{ show: 1000, hide: 0 }} tooltip='Open in new tab' placement='bottom'>
+            <OpenInNewTab target='_blank' href={`/${login?.toLowerCase() || user_name}`}>
+              <FaRegWindowRestore color='inherit' size={18} />
+            </OpenInNewTab>
+          </ToolTip>
+        </TopRightBtnWrapper>
 
         <ImgBottomInfo>
           <Moment interval={1} durationFromNow>

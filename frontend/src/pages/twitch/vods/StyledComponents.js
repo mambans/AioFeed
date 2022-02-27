@@ -9,7 +9,7 @@ export const VodLiveIndicator = styled(Link)`
   height: 24px;
   transform: scale(1);
   padding: 5px;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   position: absolute;
   background: #d10303;
   color: white;

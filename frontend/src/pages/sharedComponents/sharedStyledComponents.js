@@ -369,41 +369,42 @@ export const VideoTitleHref = styled.a`
   }
 `;
 
-export const LatestVodBtn = styled.a`
-  transition: all 500ms ease-in 0ms;
-  opacity: 0;
-  position: absolute;
-  top: 0px;
-  left: 5px;
-  z-index: 1;
-  color: rgb(180, 180, 180);
-  padding: 5px;
-
-  &:hover {
-    &&& {
-      transition: color 250ms ease-in 0ms, opacity 250ms ease-in 0ms;
-      color: rgb(255, 255, 255);
-      opacity: 1;
-    }
-  }
-`;
-
-export const OpenInNewTab = styled.a`
-  transition: all 500ms ease-in 0ms;
+export const TopRightBtnWrapper = styled.div`
   opacity: 0;
   position: absolute;
   top: 0px;
   right: 5px;
   z-index: 1;
-  color: rgb(200, 200, 200);
   padding: 5px;
+  color: rgb(150, 150, 150);
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
 
   &:hover {
     &&& {
       transition: color 250ms ease-in 0ms, opacity 250ms ease-in 0ms;
-      color: rgb(255, 255, 255);
+      color: rgb(200, 200, 200);
       opacity: 1;
     }
+  }
+`;
+
+export const LatestVodBtn = styled.a`
+  transition: all 250ms ease-in 0ms;
+  color: inherit;
+
+  &:hover {
+    color: rgb(255, 255, 255);
+  }
+`;
+
+export const OpenInNewTab = styled.a`
+  transition: all 250ms ease-in 0ms;
+  color: inherit;
+
+  &:hover {
+    color: rgb(255, 255, 255);
   }
 `;
 
@@ -465,12 +466,7 @@ export const StyledImageContainer = styled.div`
       opacity: 1;
     }
 
-    ${LatestVodBtn} {
-      transition: opacity 250ms ease-in 250ms, color 250ms ease-in 0ms;
-      opacity: 0.9;
-      color: rgb(225, 225, 225);
-    }
-    ${OpenInNewTab} {
+    ${TopRightBtnWrapper} {
       transition: opacity 250ms ease-in 250ms, color 250ms ease-in 0ms;
       opacity: 0.9;
       color: rgb(225, 225, 225);
@@ -601,3 +597,15 @@ export const ExpandCollapseFeedButton = (props) => {
     </ToolTip>
   );
 };
+
+export const StyledNewlyAddedIndicator = styled.div`
+  color: rgb(255, 255, 255);
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  padding: 0.15rem 0.3rem;
+  font-weight: 700;
+  font-size: 1.1em;
+  background: rgb(200, 50, 50);
+  border-radius: 0.25em;
+`;
