@@ -902,4 +902,7 @@ export const ChatWrapper = styled.div`
   box-shadow: ${({ dragging }) => (dragging ? '0 0 1px 1px white' : 'none')};
   top: ${({ pos }) => (pos.y ? pos.y + 'px' : 'initial')};
   left: ${({ pos }) => (pos.x ? pos.x + 'px' : 'initial')};
+
+  max-height: 100%;
+  max-width: 100%;
 `;

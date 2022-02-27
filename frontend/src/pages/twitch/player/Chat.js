@@ -3,7 +3,6 @@ import Schedule from '../schedule';
 import { ChatWrapper, PlayerExtraButtons, StyledChat } from './StyledComponents';
 import styled from 'styled-components';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
-import { GiResize } from 'react-icons/gi';
 import { GrStackOverflow } from 'react-icons/gr';
 import { AiFillLock, AiFillUnlock } from 'react-icons/ai';
 import { TransparentButton } from '../../../components/styledComponents';
@@ -77,7 +76,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, setChatAsOverlay, chatSt
             locked={locked}
             setLocked={setLocked}
           />
-          {!locked && chatAsOverlay && <Resizer setPos={setPos} target={chatRef.current} />}
+          {!locked && chatAsOverlay && <ResizerAllSides setPos={setPos} target={chatRef.current} />}
 
           {chatAsOverlay && (!locked || ctrlOrAlt) && <DragOverlay />}
           <PlayerExtraButtons channelName={channelName}>
@@ -126,10 +125,42 @@ const OverlayBackdrop = styled.div`
 
 const ResizerIcon = styled.div`
   position: absolute;
-  cursor: nw-resize;
-  bottom: 0;
-  right: 0;
   z-index: 2;
+
+  width: 20px;
+  height: 20px;
+  transition: border 250ms;
+  border-color: rgb(150, 150, 150);
+
+  &.topleft {
+    top: 0;
+    left: 0;
+    cursor: nw-resize;
+    border-style: solid none none solid;
+  }
+  &.topright {
+    top: 0;
+    right: 0;
+    cursor: ne-resize;
+    border-style: solid solid none none;
+  }
+  &.bottomright {
+    bottom: 0;
+    right: 0;
+    cursor: nw-resize;
+    border-style: none solid solid none;
+  }
+
+  &.bottomleft {
+    bottom: 0;
+    left: 0;
+    cursor: ne-resize;
+    border-style: none none solid solid;
+  }
+
+  &:hover {
+    border-color: #ffffff;
+  }
 
   svg {
     transition: fill 250ms;
@@ -142,28 +173,18 @@ const ResizerIcon = styled.div`
   }
 `;
 
-const Resizer = ({ setPos, target }) => {
+const ResizerAllSides = ({ setPos, target }) => {
   const [active, setActive] = useState();
 
-  const onMouseDown = (e) => {
+  const onMouseDown = (e, dir) => {
     if (e.button === 0) {
       e.preventDefault();
       e.stopPropagation();
-      setActive(true);
+      setActive(dir);
     }
   };
   const onMouseUp = () => {
     setActive(false);
-  };
-
-  const onMouseMove = (e) => {
-    const targetPos = target?.getBoundingClientRect();
-
-    setPos((c) => ({
-      ...c,
-      height: targetPos.height + (e.clientY - targetPos.bottom),
-      width: targetPos.width + (e.clientX - targetPos.right),
-    }));
   };
 
   const keydown = (e) => {
@@ -171,15 +192,96 @@ const Resizer = ({ setPos, target }) => {
   };
   useEventListenerMemo('keydown', keydown, window, active);
 
+  const onMouseMove = (e) => {
+    const targetPos = target?.getBoundingClientRect();
+
+    switch (active) {
+      case 'topleft':
+        setPos((c) => ({
+          ...c,
+          y: c.y - (targetPos.top - e.clientY),
+          height: targetPos.height + (targetPos.top - e.clientY),
+          width: targetPos.width + (targetPos.left - e.clientX),
+          x: e.clientX,
+        }));
+        break;
+      case 'topright':
+        setPos((c) => {
+          return {
+            ...c,
+            y: c.y - (targetPos.top - e.clientY),
+            height: targetPos.height + (targetPos.top - e.clientY),
+            width: targetPos.width + (e.clientX - targetPos.right),
+          };
+        });
+        break;
+      case 'bottomright':
+        setPos((c) => ({
+          ...c,
+          height: targetPos.height + (e.clientY - targetPos.bottom),
+          width: targetPos.width + (e.clientX - targetPos.right),
+        }));
+        break;
+      case 'bottomleft':
+        setPos((c) => ({
+          ...c,
+          height: targetPos.height + (e.clientY - targetPos.bottom),
+          width: targetPos.width + (targetPos.left - e.clientX),
+          x: e.clientX,
+        }));
+        break;
+      default:
+        break;
+    }
+  };
+
+  const cursor = (() => {
+    if (['topleft', 'bottomright'].includes(active)) return 'nw';
+    if (['topright', 'bottomleft'].includes(active)) return 'ne';
+  })();
+
   return (
     <>
-      <ResizerIcon onMouseDown={onMouseDown} active={active}>
-        <GiResize size={26} />
-      </ResizerIcon>
+      <Resizer
+        onMouseDown={(e) => onMouseDown(e, 'topleft')}
+        onMouseUp={onMouseUp}
+        active={!!active}
+        className={'topleft'}
+      />
+      <Resizer
+        onMouseDown={(e) => onMouseDown(e, 'topright')}
+        onMouseUp={onMouseUp}
+        active={!!active}
+        className={'topright'}
+      />
+      <Resizer
+        onMouseDown={(e) => onMouseDown(e, 'bottomright')}
+        onMouseUp={onMouseUp}
+        active={!!active}
+        className={'bottomright'}
+      />
+      <Resizer
+        onMouseDown={(e) => onMouseDown(e, 'bottomleft')}
+        onMouseUp={onMouseUp}
+        active={!!active}
+        className={'bottomleft'}
+      />
 
-      {active && (
-        <OverlayBackdrop onMouseUp={onMouseUp} onMouseMove={onMouseMove} cursor='nw-resize' />
+      {!!active && (
+        <OverlayBackdrop
+          onMouseUp={onMouseUp}
+          onMouseMove={onMouseMove}
+          cursor={`${cursor}-resize`}
+        />
       )}
+    </>
+  );
+};
+
+const Resizer = ({ className, onMouseDown, active }) => {
+  return (
+    <>
+      <ResizerIcon onMouseDown={onMouseDown} active={active} className={className} />
     </>
   );
 };
@@ -187,7 +289,7 @@ const Resizer = ({ setPos, target }) => {
 const ResizeActionButtonsWrapper = styled.div`
   position: absolute;
   top: 0;
-  left: 0;
+  left: 30px;
   padding: 7px 5px;
   display: flex;
   flex-direction: row;
