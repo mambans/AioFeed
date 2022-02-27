@@ -432,6 +432,7 @@ const ChannelPage = () => {
                             user={channelInfo.name || channelName}
                             user_id={channelInfo._id}
                             absolute={false}
+                            style={{ padding: 0, marginRight: '5px' }}
                           />
                           <a
                             className='twitchRedirect'

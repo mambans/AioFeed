@@ -105,6 +105,7 @@ const ChannelListElement = ({
           user={channel?.user_name || searchInput}
           user_id={channel?.user_id}
           btnSize={22}
+          style={{ padding: 0, marginRight: '5px' }}
         />
         <FavoriteStreamBtn channel={channel?.user_name} show={followingStatus} />
         <VodsFollowUnfollowBtn show={username && showVodBtn && channel} channel={channel} />

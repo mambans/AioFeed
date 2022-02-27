@@ -85,6 +85,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, setChatAsOverlay, chatSt
               user={streamInfo?.user_name || channelName}
               user_id={streamInfo?.user_id}
               absolute={false}
+              style={{ padding: 0, marginRight: '5px' }}
             />
           </PlayerExtraButtons>
           <StyledChat

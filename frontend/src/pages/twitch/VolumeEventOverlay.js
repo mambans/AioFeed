@@ -136,7 +136,7 @@ const VolumeEventOverlay = React.forwardRef(
 
           {showVolumeSlider && player.current && (
             <>
-              <Schedule user={channelName} />
+              <Schedule user={channelName} style={{ padding: 0, marginRight: '5px' }} />
               <PlayPauseButton
                 TwitchPlayer={player.current}
                 PlayerUIControlls={VolumeEventOverlayRef.current}

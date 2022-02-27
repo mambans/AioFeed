@@ -20,7 +20,7 @@ import TwitchAPI from '../API';
 import useClicksOutside from '../../../hooks/useClicksOutside';
 import { Portal } from 'react-portal';
 
-const Schedule = ({ user, user_id, alwaysVisible, absolute = true, btnSize = 26 }) => {
+const Schedule = ({ user, user_id, alwaysVisible, absolute = true, btnSize = 26, style }) => {
   const [show, setShow] = useState();
   const [schedule, setSchedule] = useState();
   const ref = useRef();
@@ -39,7 +39,7 @@ const Schedule = ({ user, user_id, alwaysVisible, absolute = true, btnSize = 26 
             ref={btnRef}
             absolute={String(absolute)}
             btnSize={btnSize}
-            style={{ padding: 0, marginRight: '5px' }}
+            style={style}
           />
         )}
         {(show || alwaysVisible) && (
