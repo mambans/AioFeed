@@ -51,7 +51,8 @@ const updateSreamsPromise = async ({
             oldStreamData.title,
             40
           )} in ${oldStreamData.game_name}`;
-          stream.onClick = () => window.open('https://aiofeed.com/' + stream.user_name);
+          stream.onClick = () =>
+            window.open('https://aiofeed.com/' + stream.login || stream.user_name);
 
           return stream;
         }
@@ -75,7 +76,8 @@ const updateSreamsPromise = async ({
 
           stream.notiStatus = 'Game updated';
           stream.text = `+ ${stream.game_name}\n- ${oldStreamData.game_name}`;
-          stream.onClick = () => window.open('https://aiofeed.com/' + stream.user_name);
+          stream.onClick = () =>
+            window.open('https://aiofeed.com/' + stream.login || stream.user_name);
 
           return stream;
         }
@@ -99,7 +101,8 @@ const updateSreamsPromise = async ({
 
           stream.notiStatus = 'Title updated';
           stream.text = `+ ${stream.title}\n- ${oldStreamData.title}`;
-          stream.onClick = () => window.open('https://aiofeed.com/' + stream.user_name);
+          stream.onClick = () =>
+            window.open('https://aiofeed.com/' + stream.login || stream.user_name);
 
           return stream;
         }
