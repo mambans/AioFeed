@@ -11,6 +11,7 @@ const Container = styled.div`
   right: 0px;
   display: flex;
   align-items: center;
+  gap: 3px;
 
   backdrop-filter: blur(10px);
   padding:3px:
@@ -22,6 +23,13 @@ const Container = styled.div`
     display: flex;
     align-content: center;
     align-items: center;
+  }
+
+  &&& {
+    button,
+    a {
+      margin: 0;
+    }
   }
 
   &:focus-within {

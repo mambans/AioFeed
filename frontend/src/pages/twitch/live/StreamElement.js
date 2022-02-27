@@ -180,7 +180,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
                 className='twitchRedirect'
                 alt=''
                 href={`https://www.twitch.tv/${user_name}?redirect=false`}
-                style={{ margin: '0 5px' }}
+                style={{ margin: '1px 1px 0' }}
               >
                 <FaTwitch size={22} color='purple' />
               </a>

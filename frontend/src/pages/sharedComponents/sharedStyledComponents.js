@@ -204,7 +204,6 @@ export const ChannelContainer = styled.div`
   font-size: 1em;
   z-index: 1;
   position: relative;
-  gap: 3px;
 
   .profileImg {
     grid-row: 1;
@@ -254,10 +253,6 @@ export const ChannelContainer = styled.div`
   a {
     display: flex;
     align-items: center;
-  }
-
-  &&& button {
-    margin: 0;
   }
 `;
 
