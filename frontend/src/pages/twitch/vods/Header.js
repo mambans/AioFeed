@@ -15,7 +15,7 @@ const VodsHeader = React.forwardRef((props, ref) => {
   return (
     <Header
       id='TwitchVodsHeader'
-      refreshFunc={() => refresh(true)}
+      refresh={() => refresh(true)}
       ref={ref}
       title={
         <h1 id='vods' onClick={toggleExpanded}>

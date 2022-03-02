@@ -71,7 +71,7 @@ const YouTubeHeader = (data) => {
           <ExpandCollapseFeedButton collapsed={collapsed} />
         </h1>
       }
-      refreshFunc={refresh}
+      refresh={refresh}
       isLoading={!isLoaded}
       leftSide={
         <>

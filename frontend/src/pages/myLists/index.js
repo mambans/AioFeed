@@ -111,7 +111,7 @@ export const FavoriteListContainer = ({
             <ExpandCollapseFeedButton collapsed={orders?.[list.id]?.collapsed} />
           </h1>
         }
-        refreshFunc={fetchMyListContextData}
+        refresh={fetchMyListContextData}
         isLoading={isLoading}
         rightSide={
           <>

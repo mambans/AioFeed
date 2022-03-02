@@ -24,7 +24,7 @@ const Header = React.forwardRef((props, ref) => {
     leftSide,
     rightSide,
     autoRefreshEnabled,
-    refreshFunc,
+    refresh,
     refreshTimer,
     style = {},
     isLoading,
@@ -35,10 +35,10 @@ const Header = React.forwardRef((props, ref) => {
     <HeaderOuterMainContainer style={style} id={id}>
       <HeaderTopContainer>
         <LeftRightDivs>
-          {refreshFunc && (
+          {refresh && (
             <RefreshButton
               ref={ref}
-              onClick={refreshFunc}
+              onClick={refresh}
               refreshTimer={refreshTimer}
               autoRefreshEnabled={autoRefreshEnabled}
               parentIsLoading={isLoading}

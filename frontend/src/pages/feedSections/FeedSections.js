@@ -114,6 +114,8 @@ const Section = ({
       key={`FeedSection-${id}`}
     >
       <Header
+        {...data}
+        isLoading={data.refreshing}
         id={title}
         title={
           <h1 id={`FeedSection-${id}`} onClick={() => toggleExpanded(id)}>

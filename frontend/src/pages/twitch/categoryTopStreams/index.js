@@ -194,7 +194,7 @@ const TopStreams = () => {
               </div>
             </h1>
           }
-          refreshFunc={refresh}
+          refresh={refresh}
           rightSide={
             <TopDataSortButtonsContainer>
               <GameSearchBar gameName={category} videoType={videoType} />

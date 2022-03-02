@@ -35,7 +35,7 @@ const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed, idTitl
       refreshTimer={refreshTimer}
       autoRefreshEnabled={autoRefreshEnabled}
       isLoading={refreshing}
-      refreshFunc={() => refresh({ forceRefreshThumbnails: true, forceValidateToken: true })}
+      refresh={() => refresh({ forceRefreshThumbnails: true, forceValidateToken: true })}
       rightSide={
         <>
           <BigScheduleList followedChannels={followedChannels} />
