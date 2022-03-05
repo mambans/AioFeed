@@ -175,12 +175,6 @@ const Player = () => {
           return value;
         }
 
-        if (v && typeof v === 'object') {
-          const newChatState = { ...c, ...v };
-          pushChatState(newChatState);
-          return newChatState;
-        }
-
         pushChatState(v);
         return v;
       });
@@ -761,11 +755,11 @@ const Player = () => {
               style={{
                 right: chatState.switchChatSide
                   ? 'unset'
-                  : (chatState.hideChat || chatState.chatAsOverlay)
+                  : chatState.hideChat || chatState.chatAsOverlay
                   ? '10px'
                   : `calc(${chatState.chatwidth}px + 10px)`,
                 left: chatState.switchChatSide
-                  ? (chatState.hideChat || chatState.chatAsOverlay)
+                  ? chatState.hideChat || chatState.chatAsOverlay
                     ? '10px'
                     : `calc(${chatState.chatwidth}px + 10px)`
                   : 'unset',
