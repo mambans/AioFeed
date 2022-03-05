@@ -293,10 +293,8 @@ const API = {
   updateChateState: async (data) =>
     await axios
       .put(`${BASE_URL}/chatstates`, {
-        params: {
-          authkey: getCookie(`AioFeed_AuthKey`),
-          data,
-        },
+        authkey: getCookie(`AioFeed_AuthKey`),
+        data,
       })
       .catch((e) => console.error(e)),
 };
