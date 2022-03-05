@@ -141,7 +141,10 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
               </ToolTip>
             )}
           </ChatHeaderInner>
-          <button onClick={() => updateChatState((c) => ({ ...c, hideChat: true }))}>
+          <button
+            className='chat__close-button'
+            onClick={() => updateChatState((c) => ({ ...c, hideChat: true }))}
+          >
             <FaWindowClose size={24} color='red' />
           </button>
         </ChatHeader>
