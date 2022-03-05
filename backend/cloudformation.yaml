@@ -47,6 +47,18 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
+  ChatStates:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: Username
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Username
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
   YoutubeData:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -765,6 +777,48 @@ Resources:
           Type: Api
           Properties:
             Path: /twitter
+            Method: put
+          RequestParameters:
+            - method.request.querystring.authkey:
+                Required: true
+            - method.request.querystring.data:
+  ChatStatesFetch:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Fetch chat state for a specific channel'
+      Handler: chatStatesFetch/handler.handler
+      Environment:
+        Variables:
+          CHAT_STATES_TABLE: !Ref ChatStates
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ChatStates
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /chatstates
+            Method: get
+          RequestParameters:
+            - method.request.querystring.authkey:
+                Required: true
+            - method.request.querystring.channel_id:
+  ChatStatesUpdate:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Update chat state for a specific channel'
+      Handler: chatStatesFetch/handler.handler
+      Environment:
+        Variables:
+          CHAT_STATES_TABLE: !Ref ChatStates
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ChatStates
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /chatstates
             Method: put
           RequestParameters:
             - method.request.querystring.authkey:

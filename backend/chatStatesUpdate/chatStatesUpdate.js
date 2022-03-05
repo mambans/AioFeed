@@ -6,14 +6,7 @@ const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
 module.exports = async ({
   id,
-  data: {
-    title,
-    rules,
-    enabled,
-    sidebarsidebar_enabled,
-    notifications_enabled,
-    excludeFromTwitch_enabled,
-  },
+  data: { channel_id, chatwidth, switchChatSide, hideChat, chatAsOverlay, overlayPosition },
   authkey,
 }) => {
   const username = await validateAuthkey(authkey);
@@ -21,16 +14,15 @@ module.exports = async ({
   if (username) {
     const res = await client
       .put({
-        TableName: process.env.CUSTOM_FEED_SECTIONS,
+        TableName: process.env.CHAT_STATES_TABLE,
         Item: {
           username,
-          id,
-          title,
-          rules,
-          enabled,
-          sidebarsidebar_enabled,
-          notifications_enabled,
-          excludeFromTwitch_enabled,
+          channel_id,
+          chatwidth,
+          switchChatSide,
+          hideChat,
+          chatAsOverlay,
+          overlayPosition,
         },
         ReturnItemCollectionMetrics: 'SIZE',
         ReturnValues: 'ALL_OLD',

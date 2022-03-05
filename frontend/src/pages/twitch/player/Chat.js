@@ -8,9 +8,19 @@ import { AiFillLock, AiFillUnlock } from 'react-icons/ai';
 import { TransparentButton } from '../../../components/styledComponents';
 import useKeyDown from '../../../hooks/useKeyDown';
 
-const Chat = ({ chatAsOverlay, channelName, streamInfo, setChatAsOverlay, chatState }) => {
+const Chat = ({
+  chatAsOverlay,
+  channelName,
+  streamInfo,
+  chatState,
+  setChatState,
+  updateChatState,
+  pushChatState,
+}) => {
   const [dragging, setDragging] = useState();
-  const [pos, setPos] = useState({ width: chatState.chatwidth });
+  const [overlayPosition, setOverlayPosition] = useState(
+    { width: chatState.chatwidth, ...chatState.overlayPosition } || { width: chatState.chatwidth }
+  );
   const [locked, setLocked] = useState();
   const overlayBackdropRef = useRef();
   const chatRef = useRef();
@@ -39,7 +49,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, setChatAsOverlay, chatSt
 
     const x = mouseX - startPos.x;
     const y = mouseY - startPos.y;
-    setPos((c) => ({
+    setOverlayPosition((c) => ({
       ...c,
       x: Math.max(0, Math.min(x, window.innerWidth - chat.width)),
       y: Math.max(0, Math.min(y, window.innerHeight - chat.height)),
@@ -48,6 +58,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, setChatAsOverlay, chatSt
 
   const onDragStop = (e) => {
     setDragging(false);
+    updateChatState((c) => ({ ...c, overlayPosition: overlayPosition }));
   };
 
   return (
@@ -57,7 +68,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, setChatAsOverlay, chatSt
       )}
       <ChatWrapper
         ref={chatRef}
-        pos={pos}
+        overlayPosition={overlayPosition}
         dragging={dragging}
         id='chat'
         chatAsOverlay={chatAsOverlay}
@@ -71,12 +82,15 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, setChatAsOverlay, chatSt
           onMouseMove={dragging ? onDragMove : () => {}}
         >
           <ResizeActionButtons
-            setChatAsOverlay={setChatAsOverlay}
+            setChatState={setChatState}
+            updateChatState={updateChatState}
             chatAsOverlay={chatAsOverlay}
             locked={locked}
             setLocked={setLocked}
           />
-          {!locked && chatAsOverlay && <ResizerAllSides setPos={setPos} target={chatRef.current} />}
+          {!locked && chatAsOverlay && (
+            <ResizerAllSides setOverlayPosition={setOverlayPosition} target={chatRef.current} />
+          )}
 
           {chatAsOverlay && (!locked || ctrlOrAlt) && <DragOverlay />}
           <PlayerExtraButtons channelName={channelName}>
@@ -173,7 +187,7 @@ const ResizerIcon = styled.div`
   }
 `;
 
-const ResizerAllSides = ({ setPos, target }) => {
+const ResizerAllSides = ({ setOverlayPosition, target }) => {
   const [active, setActive] = useState();
 
   const onMouseDown = (e, dir) => {
@@ -197,7 +211,7 @@ const ResizerAllSides = ({ setPos, target }) => {
 
     switch (active) {
       case 'topleft':
-        setPos((c) => ({
+        setOverlayPosition((c) => ({
           ...c,
           y: c.y - (targetPos.top - e.clientY),
           height: targetPos.height + (targetPos.top - e.clientY),
@@ -206,7 +220,7 @@ const ResizerAllSides = ({ setPos, target }) => {
         }));
         break;
       case 'topright':
-        setPos((c) => {
+        setOverlayPosition((c) => {
           return {
             ...c,
             y: c.y - (targetPos.top - e.clientY),
@@ -216,14 +230,14 @@ const ResizerAllSides = ({ setPos, target }) => {
         });
         break;
       case 'bottomright':
-        setPos((c) => ({
+        setOverlayPosition((c) => ({
           ...c,
           height: targetPos.height + (e.clientY - targetPos.bottom),
           width: targetPos.width + (e.clientX - targetPos.right),
         }));
         break;
       case 'bottomleft':
-        setPos((c) => ({
+        setOverlayPosition((c) => ({
           ...c,
           height: targetPos.height + (e.clientY - targetPos.bottom),
           width: targetPos.width + (targetPos.left - e.clientX),
@@ -297,14 +311,20 @@ const ResizeActionButtonsWrapper = styled.div`
   z-index: 999999;
 `;
 
-const ResizeActionButtons = ({ setChatAsOverlay, chatAsOverlay, locked, setLocked }) => {
+const ResizeActionButtons = ({
+  chatAsOverlay,
+  locked,
+  setLocked,
+  setChatState,
+  updateChatState,
+}) => {
   return (
     <ResizeActionButtonsWrapper>
       <TransparentButton
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          setChatAsOverlay((c) => !c);
+          updateChatState((c) => ({ ...c, chatAsOverlay: !c.chatAsOverlay }));
         }}
       >
         <GrStackOverflow size={20} />

@@ -893,15 +893,15 @@ export const ErrorMessage = styled.div`
 export const ChatWrapper = styled.div`
   grid-area: ${({ chatAsOverlay }) => (chatAsOverlay ? 'none' : 'chat')};
   max-height: 100vh;
-  height: ${({ chatAsOverlay, pos }) =>
-    chatAsOverlay ? (pos.height ? pos.height + 'px' : '50%') : '100%'};
-  width: ${({ chatAsOverlay, pos }) =>
-    chatAsOverlay ? (pos.width ? pos.width + 'px' : 'unset') : 'unset'};
+  height: ${({ chatAsOverlay, overlayPosition }) =>
+    chatAsOverlay ? (overlayPosition.height ? overlayPosition.height + 'px' : '50%') : '100%'};
+  width: ${({ chatAsOverlay, overlayPosition }) =>
+    chatAsOverlay ? (overlayPosition.width ? overlayPosition.width + 'px' : 'unset') : 'unset'};
   position: ${({ chatAsOverlay }) => (chatAsOverlay ? 'absolute' : 'initial')};
   overflow: hidden;
   box-shadow: ${({ dragging }) => (dragging ? '0 0 1px 1px white' : 'none')};
-  top: ${({ pos }) => (pos.y ? pos.y + 'px' : 'initial')};
-  left: ${({ pos }) => (pos.x ? pos.x + 'px' : 'initial')};
+  top: ${({ overlayPosition }) => (overlayPosition.y ? overlayPosition.y + 'px' : 'initial')};
+  left: ${({ overlayPosition }) => (overlayPosition.x ? overlayPosition.x + 'px' : 'initial')};
 
   max-height: 100%;
   max-width: 100%;

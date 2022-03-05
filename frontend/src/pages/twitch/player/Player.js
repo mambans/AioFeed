@@ -1,5 +1,5 @@
 import { CSSTransition } from 'react-transition-group';
-import { throttle, debounce } from 'lodash';
+import { throttle } from 'lodash';
 import { useParams, useLocation, Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';
@@ -42,7 +42,7 @@ import ClipButton from './ClipButton';
 import addGameName from './addGameName';
 import addProfileImg from './addProfileImg';
 import fetchChannelInfo from './fetchChannelInfo';
-import { getLocalstorage, setLocalStorage } from '../../../util';
+import { getLocalstorage } from '../../../util';
 import PlayerContextMenu from './ContextMenu';
 import AnimatedViewCount from '../live/AnimatedViewCount';
 import ReAuthenticateButton from '../../navigation/sidebar/ReAuthenticateButton';
@@ -61,6 +61,7 @@ import useFavicon from '../../../hooks/useFavicon';
 import { TwitchContext } from '../useToken';
 import { ContextMenuDropDown } from './ContextMenuWrapper';
 import Chat from './Chat';
+import API from '../../navigation/API';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.12, 175);
 
@@ -74,13 +75,12 @@ const Player = () => {
   const [streamInfo, setStreamInfo] = useState(useLocation().state?.passedChannelData);
   const [showControlls, setShowControlls] = useState();
   const [showUIControlls, setShowUIControlls] = useState();
-  const [chatAsOverlay, setChatAsOverlay] = useState();
   const [chatState, setChatState] = useState({
     chatwidth: DEFAULT_CHAT_WIDTH,
     switchChatSide: false,
     hideChat: false,
-    ...(getLocalstorage('TwitchChatState')?.[channelName?.toLowerCase()] || {}),
-    default: true,
+    chatAsOverlay: false,
+    overlayPosition: {},
   });
 
   const hideChatSaved = useRef(
@@ -151,11 +151,62 @@ const Player = () => {
   const resetValues = () => {
     savedStreamInfo.current = null;
     setStreamInfo(null);
-    // setFavion(null);
     setChatState({});
   };
 
+  const pushChatState = useCallback(
+    async (chatData = chatState) => {
+      console.log('pushChatState:');
+      const saved_chatstate = await API.updateChateState(chatData).catch((er) => {
+        console.log('er:', er);
+      });
+      console.log('saved_chatstate:', saved_chatstate);
+    },
+    [chatState]
+  );
+
+  const updateChatState = useCallback(
+    (v) => {
+      console.log('updateChatState:');
+      setChatState((c) => {
+        if (typeof v === 'function') {
+          const value = v(c);
+          pushChatState(value);
+          return value;
+        }
+
+        if (v && typeof v === 'object') {
+          const newChatState = { ...c, ...v };
+          pushChatState(newChatState);
+          return newChatState;
+        }
+
+        pushChatState(v);
+        return v;
+      });
+    },
+    [pushChatState]
+  );
+
   useEffect(() => {
+    localStorage.removeItem('TwitchChatState');
+
+    (async () => {
+      const channel = await TwitchAPI.getUser({
+        login: channelName,
+      })
+        .then((res) => res.data.data[0])
+        .catch((error) => 'Not Found');
+      console.log('channel.id:', channel?.id);
+
+      if (channel?.id) {
+        const chatStateData = await API.getChatState({ channel_id: channel.id });
+        console.log('chatStateData:', chatStateData);
+
+        if (chatStateData) setChatState(chatStateData);
+      }
+    })();
+
     return () => resetValues();
   }, [channelName]);
 
@@ -180,25 +231,6 @@ const Player = () => {
       clearTimeout(fadeTimer.current);
     };
   }, [setShrinkNavbar, setFooterVisible, setVisible, channelName]);
-
-  useEffect(() => {
-    const updateCachedChatState = debounce(
-      () => {
-        const localstorageTwitchChatState = getLocalstorage('TwitchChatState') || {};
-
-        setLocalStorage('TwitchChatState', {
-          ...localstorageTwitchChatState,
-          [channelName?.toLowerCase()]: chatState,
-        });
-      },
-      500,
-      { leading: false, trailing: true }
-    );
-
-    if (!chatState?.default) updateCachedChatState();
-
-    return updateCachedChatState.cancel;
-  }, [chatState, channelName]);
 
   function offlineEvents() {
     console.log('Stream is Offline');
@@ -326,16 +358,19 @@ const Player = () => {
         e.preventDefault();
         twitchVideoPlayer.current?.setQuality('chunked');
         break;
-      case "Escape":
+      case 'Escape':
         setResizeActive(false);
-      break;
+        break;
       default:
         break;
     }
   }
 
   const handleResizeMouseDown = () => setResizeActive(true);
-  const handleResizeMouseUp = () => setResizeActive(false);
+  const handleResizeMouseUp = () => {
+    setResizeActive(false);
+    pushChatState();
+  };
   const resize = useCallback(
     (e) => {
       if (resizeActive) {
@@ -346,7 +381,6 @@ const Player = () => {
           : Math.min(Math.max(parseInt(window.innerWidth - mouseX), 10), window.innerWidth - 250);
 
         setChatState((curr) => {
-          delete curr?.default;
           return { ...curr, chatwidth: newWidth };
         });
       }
@@ -408,7 +442,7 @@ const Player = () => {
       visible={visible}
       switchedChatState={String(chatState.switchChatSide)}
       hidechat={chatState.hideChat}
-      chatAsOverlay={chatAsOverlay}
+      chatAsOverlay={chatState.chatAsOverlay}
     >
       <div id='twitch-embed' ref={videoElementRef}>
         <CSSTransition
@@ -435,15 +469,14 @@ const Player = () => {
                   hidechat={String(chatState.hideChat)}
                   TwitchPlayer={twitchVideoPlayer.current}
                   showAndResetTimer={showAndResetTimer}
-                  setChatState={setChatState}
+                  updateChatState={updateChatState}
                   chatState={chatState}
                   channelName={channelName}
                   children={
                     <>
                       <li
                         onClick={() => {
-                          setChatState((curr) => {
-                            delete curr?.default;
+                          updateChatState((curr) => {
                             return { ...curr, hideChat: !curr.hideChat };
                           });
                         }}
@@ -454,8 +487,7 @@ const Player = () => {
 
                       <li
                         onClick={() => {
-                          setChatState((curr) => {
-                            delete curr?.default;
+                          updateChatState((curr) => {
                             return {
                               ...curr,
                               switchChatSide: !chatState.switchChatSide,
@@ -651,8 +683,7 @@ const Player = () => {
                   id='switchSides'
                   switched={String(chatState.switchChatSide)}
                   onClick={() => {
-                    setChatState((curr) => {
-                      delete curr?.default;
+                    updateChatState((curr) => {
                       return {
                         ...curr,
                         switchChatSide: !chatState.switchChatSide,
@@ -666,11 +697,9 @@ const Player = () => {
                   hideChat={chatState.hideChat}
                   switched={chatState.switchChatSide}
                   onClick={() => {
-                    setChatState((curr) => {
+                    updateChatState((curr) => {
                       const newValue = !curr.hideChat;
                       hideChatSaved.current = newValue;
-                      delete curr?.default;
-
                       return { ...curr, hideChat: newValue };
                     });
                   }}
@@ -691,8 +720,7 @@ const Player = () => {
                 id='switchSides'
                 switched={String(chatState.switchChatSide)}
                 onClick={() => {
-                  setChatState((curr) => {
-                    delete curr?.default;
+                  updateChatState((curr) => {
                     return {
                       ...curr,
                       switchChatSide: !chatState.switchChatSide,
@@ -719,10 +747,9 @@ const Player = () => {
               hideChat={chatState.hideChat}
               switched={chatState.switchChatSide}
               onClick={() => {
-                setChatState((curr) => {
+                updateChatState((curr) => {
                   const newValue = !curr.hideChat;
                   hideChatSaved.current = newValue;
-                  delete curr?.default;
                   return { ...curr, hideChat: newValue };
                 });
               }}
@@ -742,7 +769,7 @@ const Player = () => {
           </>
         )}
       </div>
-      {!chatState.hideChat && !chatAsOverlay && (
+      {!chatState.hideChat && !chatState?.chatAsOverlay && (
         <ResizeDevider onMouseDown={handleResizeMouseDown} resizeActive={resizeActive}>
           <div />
         </ResizeDevider>
@@ -752,9 +779,11 @@ const Player = () => {
           <Chat
             streamInfo={streamInfo}
             channelName={channelName}
-            chatAsOverlay={chatAsOverlay}
-            setChatAsOverlay={setChatAsOverlay}
+            chatAsOverlay={chatState.chatAsOverlay}
             chatState={chatState}
+            setChatState={setChatState}
+            updateChatState={updateChatState}
+            pushChatState={pushChatState}
           />
 
           {resizeActive && (

@@ -280,6 +280,24 @@ const API = {
         },
       })
       .catch((e) => console.error(e)),
+  getChatState: async ({ channel_id }) =>
+    await axios
+      .get(`${BASE_URL}/twitter`, {
+        params: {
+          authkey: getCookie(`AioFeed_AuthKey`),
+          channel_id: channel_id,
+        },
+      })
+      .catch((e) => console.error(e)),
+  updateChateState: async (data) =>
+    await axios
+      .get(`${BASE_URL}/twitter`, {
+        params: {
+          authkey: getCookie(`AioFeed_AuthKey`),
+          data,
+        },
+      })
+      .catch((e) => console.error(e)),
 };
 
 export default API;
