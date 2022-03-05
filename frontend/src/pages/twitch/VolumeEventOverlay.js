@@ -32,6 +32,7 @@ const VolumeEventOverlay = React.forwardRef(
       channelName,
       contextMenuChildren,
       ContextMenu,
+      chatAsOverlay,
     },
     ref
   ) => {
@@ -119,6 +120,7 @@ const VolumeEventOverlay = React.forwardRef(
           type={type}
           id={id}
           hidechat={hidechat}
+          chatAsOverlay={chatAsOverlay}
           vodVolumeOverlayEnabled={vodVolumeOverlayEnabled}
           chatwidth={chatwidth}
           showcursor={showcursor}

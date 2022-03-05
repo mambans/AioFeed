@@ -459,6 +459,7 @@ const Player = () => {
             chatwidth={chatState.chatwidth || DEFAULT_CHAT_WIDTH}
             VolumeEventOverlayRef={PlayerUIControlls}
             player={twitchVideoPlayer.current}
+            chatAsOverlay={String(chatState.chatAsOverlay)}
             ContextMenu={
               Boolean(twitchVideoPlayer.current) && (
                 <PlayerContextMenu

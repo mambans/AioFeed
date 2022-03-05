@@ -202,8 +202,8 @@ const VEO_margin_bottom = 150;
 
 export const StyledVolumeEventOverlay = styled.div`
   position: absolute;
-  width: ${({ type, hidechat, chatwidth }) =>
-    hidechat === 'true'
+  width: ${({ type, hidechat, chatwidth, chatAsOverlay }) =>
+    hidechat === 'true' || chatAsOverlay === 'true'
       ? '100vw'
       : type === 'live'
       ? `${window.innerWidth - chatwidth}px`
