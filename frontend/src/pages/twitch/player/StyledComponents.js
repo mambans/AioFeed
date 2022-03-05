@@ -85,13 +85,8 @@ export const StyledVideo = styled.iframe`
 `;
 
 export const ToggleSwitchChatSide = styled(MdCompareArrows).attrs({ size: 30 })`
-  position: absolute;
-  z-index: 1;
   cursor: pointer;
   transition: opacity 300ms;
-  bottom: 60px;
-  right: ${({ switched }) => (switched === 'true' ? 'unset' : '10px')};
-  left: ${({ switched }) => (switched === 'true' ? '10px' : 'unset')};
   background: rgba(0, 0, 0, 0.25) none repeat scroll 0% 0%;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;

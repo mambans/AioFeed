@@ -1,11 +1,4 @@
-const toggleFullscreenFunc = ({
-  event,
-  videoElementRef,
-  setChatState = () => {},
-  hideChatDelay = {},
-  hideChatSaved = {},
-  setIsFullscreen = () => {},
-}) => {
+const toggleFullscreenFunc = ({ event, videoElementRef, setIsFullscreen = () => {} }) => {
   event.preventDefault();
   const video = videoElementRef.current;
   if (
@@ -14,13 +7,6 @@ const toggleFullscreenFunc = ({
     (document.mozFullScreen !== undefined && !document.mozFullScreen) ||
     (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)
   ) {
-    if (hideChatDelay.current) clearTimeout(hideChatDelay.current);
-    hideChatDelay.current = setTimeout(() => {
-      setChatState((curr) => {
-        delete curr?.default;
-        return { ...curr, hideChat: true };
-      });
-    }, 5000);
     setIsFullscreen(true);
     if (video.requestFullScreen) {
       video.requestFullScreen();
@@ -32,11 +18,6 @@ const toggleFullscreenFunc = ({
       video.msRequestFullscreen();
     }
   } else {
-    if (hideChatDelay.current) clearTimeout(hideChatDelay.current);
-    setChatState((curr) => {
-      delete curr?.default;
-      return { ...curr, hideChat: hideChatSaved.current };
-    });
     setIsFullscreen(false);
     if (document.cancelFullScreen) {
       document.cancelFullScreen();

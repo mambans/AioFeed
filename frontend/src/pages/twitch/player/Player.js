@@ -20,7 +20,6 @@ import NavigationContext from '../../navigation/NavigationContext';
 import VolumeSlider from './VolumeSlider';
 import {
   InfoDisplay,
-  ToggleSwitchChatSide,
   VideoAndChatContainer,
   ResizeDevider,
   ChatOverlay,
@@ -35,7 +34,6 @@ import setFavion from '../setFavion';
 import PlayPauseButton from './PlayPauseButton';
 import ShowStatsButtons, { latencyColorValue } from './ShowStatsButtons';
 import ShowSetQualityButtons from './ShowSetQualityButtons';
-import OpenCloseChat from './OpenCloseChat';
 import addSystemNotification from '../live/addSystemNotification';
 import NotificationsContext from '../../notifications/NotificationsContext';
 import ClipButton from './ClipButton';
@@ -96,7 +94,6 @@ const Player = () => {
   const fadeTimer = useRef();
   const refreshStreamInfoTimer = useRef();
   const videoElementRef = useRef();
-  const hideChatDelay = useRef();
   const link0 = useRef();
   const link1 = useRef();
   const link2 = useRef();
@@ -333,8 +330,6 @@ const Player = () => {
     toggleFullscreenFunc({
       event,
       videoElementRef,
-      setChatState,
-      hideChatDelay,
       setIsFullscreen,
     });
   }
@@ -676,98 +671,8 @@ const Player = () => {
                 title='Fullsceen (f)'
               />
             )}
-
-            {!isFullscreen && (
-              <>
-                <ToggleSwitchChatSide
-                  title='Switch chat side'
-                  id='switchSides'
-                  switched={String(chatState.switchChatSide)}
-                  onClick={() => {
-                    updateChatState((curr) => {
-                      return {
-                        ...curr,
-                        switchChatSide: !chatState.switchChatSide,
-                      };
-                    });
-                  }}
-                />
-
-                <OpenCloseChat
-                  chatState={chatState}
-                  hideChat={chatState.hideChat}
-                  switched={chatState.switchChatSide}
-                  onClick={() => {
-                    updateChatState((curr) => {
-                      const newValue = !curr.hideChat;
-                      return { ...curr, hideChat: newValue };
-                    });
-                  }}
-                />
-              </>
-            )}
           </VolumeEventOverlay>
         </CSSTransition>
-        {!showUIControlls && (
-          <>
-            <ToolTip
-              placement={'left'}
-              width='max-content'
-              delay={{ show: 500, hide: 0 }}
-              tooltip='Switch chat side'
-            >
-              <ToggleSwitchChatSide
-                id='switchSides'
-                switched={String(chatState.switchChatSide)}
-                onClick={() => {
-                  updateChatState((curr) => {
-                    return {
-                      ...curr,
-                      switchChatSide: !chatState.switchChatSide,
-                    };
-                  });
-                }}
-                style={{
-                  right: chatState.switchChatSide
-                    ? 'unset'
-                    : chatState.hideChat
-                    ? '10px'
-                    : `calc(${chatState.chatwidth}px + 10px)`,
-                  left: chatState.switchChatSide
-                    ? chatState.hideChat
-                      ? '10px'
-                      : `calc(${chatState.chatwidth}px + 10px)`
-                    : 'unset',
-                }}
-              />
-            </ToolTip>
-
-            <OpenCloseChat
-              chatState={chatState}
-              hideChat={chatState.hideChat}
-              switched={chatState.switchChatSide}
-              onClick={() => {
-                updateChatState((curr) => {
-                  const newValue = !curr.hideChat;
-
-                  return { ...curr, hideChat: newValue };
-                });
-              }}
-              style={{
-                right: chatState.switchChatSide
-                  ? 'unset'
-                  : chatState.hideChat || chatState.chatAsOverlay
-                  ? '10px'
-                  : `calc(${chatState.chatwidth}px + 10px)`,
-                left: chatState.switchChatSide
-                  ? chatState.hideChat || chatState.chatAsOverlay
-                    ? '10px'
-                    : `calc(${chatState.chatwidth}px + 10px)`
-                  : 'unset',
-              }}
-            />
-          </>
-        )}
       </div>
       {!chatState.hideChat && !chatState?.chatAsOverlay && (
         <ResizeDevider onMouseDown={handleResizeMouseDown} resizeActive={resizeActive}>

@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Schedule from '../schedule';
-import { ChatWrapper, StyledChat, ChatHeader, ChatHeaderInner } from './StyledComponents';
+import {
+  ChatWrapper,
+  StyledChat,
+  ChatHeader,
+  ChatHeaderInner,
+  ToggleSwitchChatSide,
+} from './StyledComponents';
 import styled from 'styled-components';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import { GrStackOverflow } from 'react-icons/gr';
@@ -8,6 +14,7 @@ import { AiFillLock, AiFillUnlock } from 'react-icons/ai';
 import { FaWindowClose } from 'react-icons/fa';
 import { TransparentButton } from '../../../components/styledComponents';
 import ShowNavigationButton from '../../navigation/ShowNavigationButton';
+import ToolTip from '../../../components/tooltip/ToolTip';
 
 const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatState }) => {
   const [dragging, setDragging] = useState();
@@ -111,6 +118,27 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
                   <AiFillUnlock size={20} fill='red' />
                 )}
               </TransparentButton>
+            )}
+            {!chatAsOverlay && (
+              <ToolTip
+                placement={'left'}
+                width='max-content'
+                delay={{ show: 500, hide: 0 }}
+                tooltip='Switch chat side'
+              >
+                <ToggleSwitchChatSide
+                  id='switchSides'
+                  switched={String(chatState.switchChatSide)}
+                  onClick={() => {
+                    updateChatState((curr) => {
+                      return {
+                        ...curr,
+                        switchChatSide: !chatState.switchChatSide,
+                      };
+                    });
+                  }}
+                />
+              </ToolTip>
             )}
           </ChatHeaderInner>
           <button onClick={() => updateChatState((c) => ({ ...c, hideChat: true }))}>
