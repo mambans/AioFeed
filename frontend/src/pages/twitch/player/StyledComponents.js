@@ -918,6 +918,7 @@ export const ChatHeader = styled.div`
 
   background: var(--navigationbarBackground);
   z-index: 999999;
+  justify-content: space-between;
 
   button {
     background: none;

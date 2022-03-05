@@ -77,40 +77,41 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
         data-chatAsOverlay={chatAsOverlay}
       >
         <ChatHeader>
-          <ShowNavigationButton />
-          <Schedule
-            user={streamInfo?.user_name || channelName}
-            user_id={streamInfo?.user_id}
-            absolute={false}
-            style={{ padding: 0, marginRight: '5px' }}
-          />
+          <div>
+            <ShowNavigationButton />
+            <Schedule
+              user={streamInfo?.user_name || channelName}
+              user_id={streamInfo?.user_id}
+              absolute={false}
+              style={{ padding: 0, marginRight: '5px' }}
+            />
 
-          <TransparentButton
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              updateChatState((c) => ({ ...c, chatAsOverlay: !c.chatAsOverlay }));
-            }}
-          >
-            <GrStackOverflow size={20} />
-          </TransparentButton>
-
-          {chatAsOverlay && (
             <TransparentButton
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                setLocked((c) => !c);
+                updateChatState((c) => ({ ...c, chatAsOverlay: !c.chatAsOverlay }));
               }}
             >
-              {locked ? (
-                <AiFillLock size={20} fill='green' />
-              ) : (
-                <AiFillUnlock size={20} fill='red' />
-              )}
+              <GrStackOverflow size={20} />
             </TransparentButton>
-          )}
 
+            {chatAsOverlay && (
+              <TransparentButton
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setLocked((c) => !c);
+                }}
+              >
+                {locked ? (
+                  <AiFillLock size={20} fill='green' />
+                ) : (
+                  <AiFillUnlock size={20} fill='red' />
+                )}
+              </TransparentButton>
+            )}
+          </div>
           <button onClick={() => updateChatState((c) => ({ ...c, hideChat: true }))}>
             <FaWindowClose size={24} color='red' />
           </button>
