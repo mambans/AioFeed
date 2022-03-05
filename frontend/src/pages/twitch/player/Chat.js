@@ -25,10 +25,8 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
   const keydown = (e) => e.key === 'Escape' && setDragging(false);
   useEventListenerMemo('keydown', keydown, window, chatAsOverlay);
 
-  const ctrlOrAlt = useKeyDown(['Control', 'Alt']);
-
   const onDragInit = (e) => {
-    if (e.button === 0 && (!locked || ctrlOrAlt)) {
+    if (e.button === 0 && !locked) {
       setDragging(true);
       const mouseX = e.clientX;
       const mouseY = e.clientY;
@@ -127,7 +125,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
           data-chatAsOverlay={chatAsOverlay}
           onMouseMove={dragging ? onDragMove : () => {}}
         >
-          {chatAsOverlay && (!locked || ctrlOrAlt) && <DragOverlay />}
+          {chatAsOverlay && !locked && <DragOverlay />}
 
           <StyledChat
             data-chatAsOverlay={chatAsOverlay}
