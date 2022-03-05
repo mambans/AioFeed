@@ -7,7 +7,6 @@ import { GrStackOverflow } from 'react-icons/gr';
 import { AiFillLock, AiFillUnlock } from 'react-icons/ai';
 import { FaWindowClose } from 'react-icons/fa';
 import { TransparentButton } from '../../../components/styledComponents';
-import useKeyDown from '../../../hooks/useKeyDown';
 import ShowNavigationButton from '../../navigation/ShowNavigationButton';
 
 const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatState }) => {
