@@ -282,16 +282,17 @@ const API = {
       .catch((e) => console.error(e)),
   getChatState: async ({ channel_id }) =>
     await axios
-      .get(`${BASE_URL}/twitter`, {
+      .get(`${BASE_URL}/chatstates`, {
         params: {
           authkey: getCookie(`AioFeed_AuthKey`),
           channel_id: channel_id,
         },
       })
+      .then((res) => res.data?.item)
       .catch((e) => console.error(e)),
   updateChateState: async (data) =>
     await axios
-      .get(`${BASE_URL}/twitter`, {
+      .get(`${BASE_URL}/chatstates`, {
         params: {
           authkey: getCookie(`AioFeed_AuthKey`),
           data,
