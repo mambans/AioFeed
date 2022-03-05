@@ -75,6 +75,7 @@ const Player = () => {
   const [streamInfo, setStreamInfo] = useState(useLocation().state?.passedChannelData);
   const [showControlls, setShowControlls] = useState();
   const [showUIControlls, setShowUIControlls] = useState();
+  const [channeId, setChanneId] = useState();
   const [chatState, setChatState] = useState({
     chatwidth: DEFAULT_CHAT_WIDTH,
     switchChatSide: false,
@@ -156,16 +157,17 @@ const Player = () => {
 
   const pushChatState = useCallback(
     async (chatData = chatState) => {
+      console.log('channeId:', channeId);
       console.log('pushChatState:');
       const saved_chatstate = await API.updateChateState({
         data: chatData,
-        channel_id: streamInfo?.channel_id || streamInfo?.id,
+        channel_id: channeId,
       }).catch((er) => {
         console.log('er:', er);
       });
       console.log('saved_chatstate:', saved_chatstate);
     },
-    [chatState, streamInfo?.channel_id, streamInfo?.id]
+    [chatState, channeId]
   );
 
   const updateChatState = useCallback(
@@ -203,7 +205,7 @@ const Player = () => {
       console.log('channel.id:', channel?.id);
 
       if (channel?.id) {
-        setStreamInfo((c) => ({ ...c, channel_id: channel?.id }));
+        setChanneId(channel?.id);
         const chatStateData = await API.getChatState({ channel_id: channel?.id });
         console.log('chatStateData:', chatStateData);
 
