@@ -915,9 +915,7 @@ export const ChatHeader = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-
   background: var(--navigationbarBackground);
-  z-index: 999999;
   justify-content: space-between;
 
   button {

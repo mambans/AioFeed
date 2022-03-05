@@ -761,11 +761,11 @@ const Player = () => {
               style={{
                 right: chatState.switchChatSide
                   ? 'unset'
-                  : chatState.hideChat
+                  : (chatState.hideChat || chatState.chatAsOverlay)
                   ? '10px'
                   : `calc(${chatState.chatwidth}px + 10px)`,
                 left: chatState.switchChatSide
-                  ? chatState.hideChat
+                  ? (chatState.hideChat || chatState.chatAsOverlay)
                     ? '10px'
                     : `calc(${chatState.chatwidth}px + 10px)`
                   : 'unset',
