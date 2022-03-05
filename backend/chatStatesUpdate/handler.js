@@ -5,6 +5,7 @@ const chatStatesUpdate = require('./chatStatesUpdate');
 exports.handler = async (event) => {
   try {
     const { data, channel_id, authkey } = JSON.parse(event.body);
+    console.log('handler channel_id:', channel_id);
     console.log('data:', data);
 
     if (!channel_id) throw new Error('`channel_id` is required');

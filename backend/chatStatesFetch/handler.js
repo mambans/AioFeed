@@ -7,6 +7,7 @@ exports.handler = async (event) => {
     const { authkey, channel_id } = event.queryStringParameters || {};
     console.log('channel_id11:', channel_id);
     if (!authkey) throw new Error('`authkey` is required');
+    if (!channel_id) throw new Error('`channel_id` is required');
 
     const res = await chatStatesFetch({
       authkey,
@@ -21,6 +22,7 @@ exports.handler = async (event) => {
       },
     };
   } catch (e) {
+    console.log('e:', e);
     return {
       statusCode: 422,
       headers: {

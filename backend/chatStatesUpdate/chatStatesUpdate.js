@@ -5,12 +5,12 @@ const { validateAuthkey } = require('../authkey');
 const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
 module.exports = async ({
-  id,
   data: { chatwidth, switchChatSide, hideChat, chatAsOverlay, overlayPosition },
   authkey,
   channel_id,
 }) => {
   const username = await validateAuthkey(authkey);
+  console.log('channel_id:', channel_id);
 
   if (username) {
     const res = await client

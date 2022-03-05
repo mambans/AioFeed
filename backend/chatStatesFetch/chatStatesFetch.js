@@ -13,8 +13,8 @@ module.exports = async ({ authkey, channel_id }) => {
       .get({
         TableName: process.env.CHAT_STATES_TABLE,
         Key: {
-          username: username,
-          channel_id: channel_id,
+          username,
+          channel_id,
         },
       })
       .promise();

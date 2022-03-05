@@ -288,7 +288,7 @@ const API = {
           channel_id: channel_id,
         },
       })
-      .then((res) => res.data?.item)
+      .then((res) => res.data?.Item)
       .catch((e) => console.error(e)),
   updateChateState: async ({ data, channel_id }) =>
     await axios
