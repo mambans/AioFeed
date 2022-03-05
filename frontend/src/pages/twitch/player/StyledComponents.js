@@ -925,3 +925,9 @@ export const ChatHeader = styled.div`
     border: none;
   }
 `;
+
+export const ChatHeaderInner = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;

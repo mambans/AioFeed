@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Schedule from '../schedule';
-import { ChatWrapper, StyledChat, ChatHeader } from './StyledComponents';
+import { ChatWrapper, StyledChat, ChatHeader, ChatHeaderInner } from './StyledComponents';
 import styled from 'styled-components';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import { GrStackOverflow } from 'react-icons/gr';
@@ -77,7 +77,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
         data-chatAsOverlay={chatAsOverlay}
       >
         <ChatHeader>
-          <div>
+          <ChatHeaderInner>
             <ShowNavigationButton />
             <Schedule
               user={streamInfo?.user_name || channelName}
@@ -111,7 +111,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
                 )}
               </TransparentButton>
             )}
-          </div>
+          </ChatHeaderInner>
           <button onClick={() => updateChatState((c) => ({ ...c, hideChat: true }))}>
             <FaWindowClose size={24} color='red' />
           </button>
