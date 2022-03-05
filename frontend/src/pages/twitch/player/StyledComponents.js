@@ -905,6 +905,8 @@ export const ChatWrapper = styled.div`
 
   max-height: 100%;
   max-width: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const ChatHeader = styled.div`
@@ -913,7 +915,6 @@ export const ChatHeader = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  height: 60px;
 
   background: var(--navigationbarBackground);
   z-index: 999999;
