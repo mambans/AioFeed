@@ -290,10 +290,11 @@ const API = {
       })
       .then((res) => res.data?.item)
       .catch((e) => console.error(e)),
-  updateChateState: async (data) =>
+  updateChateState: async ({ data, channel_id }) =>
     await axios
       .put(`${BASE_URL}/chatstates`, {
         authkey: getCookie(`AioFeed_AuthKey`),
+        channel_id,
         data,
       })
       .catch((e) => console.error(e)),

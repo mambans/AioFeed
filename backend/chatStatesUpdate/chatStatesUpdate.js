@@ -6,8 +6,9 @@ const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
 module.exports = async ({
   id,
-  data: { channel_id, chatwidth, switchChatSide, hideChat, chatAsOverlay, overlayPosition },
+  data: { chatwidth, switchChatSide, hideChat, chatAsOverlay, overlayPosition },
   authkey,
+  channel_id,
 }) => {
   const username = await validateAuthkey(authkey);
 

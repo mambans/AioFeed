@@ -157,12 +157,15 @@ const Player = () => {
   const pushChatState = useCallback(
     async (chatData = chatState) => {
       console.log('pushChatState:');
-      const saved_chatstate = await API.updateChateState(chatData).catch((er) => {
+      const saved_chatstate = await API.updateChateState({
+        data: chatData,
+        channel_id: streamInfo?.channel_id || streamInfo?.id,
+      }).catch((er) => {
         console.log('er:', er);
       });
       console.log('saved_chatstate:', saved_chatstate);
     },
-    [chatState]
+    [chatState, streamInfo?.channel_id, streamInfo?.id]
   );
 
   const updateChatState = useCallback(
@@ -200,7 +203,8 @@ const Player = () => {
       console.log('channel.id:', channel?.id);
 
       if (channel?.id) {
-        const chatStateData = await API.getChatState({ channel_id: channel.id });
+        setStreamInfo((c) => ({ ...c, channel_id: channel?.id }));
+        const chatStateData = await API.getChatState({ channel_id: channel?.id });
         console.log('chatStateData:', chatStateData);
 
         if (chatStateData) setChatState(chatStateData);
