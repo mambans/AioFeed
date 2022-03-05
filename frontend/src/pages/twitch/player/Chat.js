@@ -16,7 +16,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
       width: chatState?.chatwidth,
     }
   );
-  const [locked, setLocked] = useState();
+  const [locked, setLocked] = useState(true);
   const overlayBackdropRef = useRef();
   const chatRef = useRef();
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
@@ -87,7 +87,11 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                updateChatState((c) => ({ ...c, chatAsOverlay: !c.chatAsOverlay }));
+                updateChatState((c) => {
+                  const v = !c.chatAsOverlay;
+                  if (v) setLocked(false);
+                  return { ...c, chatAsOverlay: v };
+                });
               }}
             >
               <GrStackOverflow size={20} />
