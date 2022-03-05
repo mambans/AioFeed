@@ -151,7 +151,7 @@ const DragOverlay = styled.div`
 `;
 const InnerWrapper = styled.div`
   position: relative;
-  height: 100%;
+  height: calc(100% - 60px);
   width: 100%;
   cursor: ${({ locked }) => (locked ? 'initial' : 'move')};
 `;

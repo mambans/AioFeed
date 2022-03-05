@@ -913,6 +913,7 @@ export const ChatHeader = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  height: 60px;
 
   background: var(--navigationbarBackground);
   z-index: 999999;
