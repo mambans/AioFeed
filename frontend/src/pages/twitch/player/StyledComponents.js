@@ -596,7 +596,7 @@ export const PlayerExtraButtons = ({ channelName, children }) => {
     <StyledPlayerExtraButtons>
       <PlayerExtraButtonsTrigger />
       <PlayerExtraButtonsTrigger1 />
-      <ShowNavbarBtn onClick={() => setVisible(!visible)}>
+      <StyledShowNavbarBtn onClick={() => setVisible(!visible)}>
         <MdVerticalAlignBottom
           style={{
             transform: visible ? 'rotateX(180deg)' : 'unset',
@@ -606,7 +606,7 @@ export const PlayerExtraButtons = ({ channelName, children }) => {
           title='Show navbar'
         />
         Nav
-      </ShowNavbarBtn>
+      </StyledShowNavbarBtn>
       {children}
       {channelName && (
         <Link className='link' to={`/${channelName}/page`}>
@@ -617,7 +617,7 @@ export const PlayerExtraButtons = ({ channelName, children }) => {
   );
 };
 
-export const ShowNavbarBtn = styled(Button).attrs({ variant: 'dark' })`
+export const StyledShowNavbarBtn = styled(Button).attrs({ variant: 'dark' })`
   display: flex;
   align-items: center;
   padding: 5px 10px;
@@ -905,4 +905,20 @@ export const ChatWrapper = styled.div`
 
   max-height: 100%;
   max-width: 100%;
+`;
+
+export const ChatHeader = styled.div`
+  width: 100%;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  background: var(--navigationbarBackground);
+  z-index: 999999;
+
+  button {
+    background: none;
+    border: none;
+  }
 `;

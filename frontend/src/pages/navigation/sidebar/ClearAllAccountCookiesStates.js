@@ -25,7 +25,6 @@ const clearAllAccountCookiesStates = ({
   localStorage.removeItem('YT-followedChannels');
   localStorage.removeItem('Vods');
   localStorage.removeItem('MyLists');
-  localStorage.removeItem('TwitchChatState');
   localStorage.removeItem('Cached_SavedYoutubeVideos');
   localStorage.removeItem('notifications');
   localStorage.removeItem('notificationsUnreadCount');

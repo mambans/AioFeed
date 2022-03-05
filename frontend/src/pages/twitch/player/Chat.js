@@ -1,22 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Schedule from '../schedule';
-import { ChatWrapper, PlayerExtraButtons, StyledChat } from './StyledComponents';
+import { ChatWrapper, StyledChat, ChatHeader } from './StyledComponents';
 import styled from 'styled-components';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import { GrStackOverflow } from 'react-icons/gr';
 import { AiFillLock, AiFillUnlock } from 'react-icons/ai';
+import { FaWindowClose } from 'react-icons/fa';
 import { TransparentButton } from '../../../components/styledComponents';
 import useKeyDown from '../../../hooks/useKeyDown';
+import ShowNavigationButton from '../../navigation/ShowNavigationButton';
 
-const Chat = ({
-  chatAsOverlay,
-  channelName,
-  streamInfo,
-  chatState,
-  setChatState,
-  updateChatState,
-  pushChatState,
-}) => {
+const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatState }) => {
   const [dragging, setDragging] = useState();
   const [overlayPosition, setOverlayPosition] = useState(
     { width: chatState?.chatwidth, ...(chatState?.overlayPosition || {}) } || {
@@ -59,8 +53,10 @@ const Chat = ({
   };
 
   const onDragStop = (e) => {
+    if (dragging) {
+      updateChatState((c) => ({ ...c, overlayPosition: overlayPosition }));
+    }
     setDragging(false);
-    updateChatState((c) => ({ ...c, overlayPosition: overlayPosition }));
   };
 
   useEffect(() => {
@@ -80,6 +76,49 @@ const Chat = ({
         chatAsOverlay={chatAsOverlay}
         data-chatAsOverlay={chatAsOverlay}
       >
+        <ChatHeader>
+          <ShowNavigationButton />
+          <Schedule
+            user={streamInfo?.user_name || channelName}
+            user_id={streamInfo?.user_id}
+            absolute={false}
+            style={{ padding: 0, marginRight: '5px' }}
+          />
+
+          <TransparentButton
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              updateChatState((c) => ({ ...c, chatAsOverlay: !c.chatAsOverlay }));
+            }}
+          >
+            <GrStackOverflow size={20} />
+          </TransparentButton>
+
+          {chatAsOverlay && (
+            <TransparentButton
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setLocked((c) => !c);
+              }}
+            >
+              {locked ? (
+                <AiFillLock size={20} fill='green' />
+              ) : (
+                <AiFillUnlock size={20} fill='red' />
+              )}
+            </TransparentButton>
+          )}
+
+          <button onClick={() => updateChatState((c) => ({ ...c, hideChat: true }))}>
+            <FaWindowClose size={24} color='red' />
+          </button>
+        </ChatHeader>
+        {!locked && chatAsOverlay && (
+          <ResizerAllSides setOverlayPosition={setOverlayPosition} target={chatRef.current} />
+        )}
+
         <InnerWrapper
           onMouseDown={onDragInit}
           onMouseUp={onDragStop}
@@ -87,26 +126,8 @@ const Chat = ({
           data-chatAsOverlay={chatAsOverlay}
           onMouseMove={dragging ? onDragMove : () => {}}
         >
-          <ResizeActionButtons
-            setChatState={setChatState}
-            updateChatState={updateChatState}
-            chatAsOverlay={chatAsOverlay}
-            locked={locked}
-            setLocked={setLocked}
-          />
-          {!locked && chatAsOverlay && (
-            <ResizerAllSides setOverlayPosition={setOverlayPosition} target={chatRef.current} />
-          )}
-
           {chatAsOverlay && (!locked || ctrlOrAlt) && <DragOverlay />}
-          <PlayerExtraButtons channelName={channelName}>
-            <Schedule
-              user={streamInfo?.user_name || channelName}
-              user_id={streamInfo?.user_id}
-              absolute={false}
-              style={{ padding: 0, marginRight: '5px' }}
-            />
-          </PlayerExtraButtons>
+
           <StyledChat
             data-chatAsOverlay={chatAsOverlay}
             frameborder='0'
@@ -303,49 +324,5 @@ const Resizer = ({ className, onMouseDown, active }) => {
     <>
       <ResizerIcon onMouseDown={onMouseDown} active={active} className={className} />
     </>
-  );
-};
-
-const ResizeActionButtonsWrapper = styled.div`
-  position: absolute;
-  top: 0;
-  left: 30px;
-  padding: 7px 5px;
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  z-index: 999999;
-`;
-
-const ResizeActionButtons = ({
-  chatAsOverlay,
-  locked,
-  setLocked,
-  setChatState,
-  updateChatState,
-}) => {
-  return (
-    <ResizeActionButtonsWrapper>
-      <TransparentButton
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          updateChatState((c) => ({ ...c, chatAsOverlay: !c.chatAsOverlay }));
-        }}
-      >
-        <GrStackOverflow size={20} />
-      </TransparentButton>
-      {chatAsOverlay && (
-        <TransparentButton
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setLocked((c) => !c);
-          }}
-        >
-          {locked ? <AiFillLock size={20} fill='green' /> : <AiFillUnlock size={20} fill='red' />}
-        </TransparentButton>
-      )}
-    </ResizeActionButtonsWrapper>
   );
 };

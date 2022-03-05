@@ -21,6 +21,7 @@ import { MyListsProvider } from '../myLists/MyListsContext';
 import LogsContext, { LogsProvider } from '../logs/LogsContext';
 import { FeedSectionsProvider } from '../feedSections/FeedSectionsContext';
 import { TwitterProvider } from '../twitter/TwitterContext';
+import CleanUp from './CleanUp';
 
 const AppContainer = styled.div`
   background-image: ${({ image }) => `url(/images/${image})`};
@@ -143,6 +144,7 @@ const App = () => {
 
   return (
     <AppContainer id='AppContainer' image={activeTheme.image}>
+      <CleanUp />
       <Routes />
       <CookieConsentAlert />
       <ToastContainer

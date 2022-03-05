@@ -42,7 +42,6 @@ import ClipButton from './ClipButton';
 import addGameName from './addGameName';
 import addProfileImg from './addProfileImg';
 import fetchChannelInfo from './fetchChannelInfo';
-import { getLocalstorage } from '../../../util';
 import PlayerContextMenu from './ContextMenu';
 import AnimatedViewCount from '../live/AnimatedViewCount';
 import ReAuthenticateButton from '../../navigation/sidebar/ReAuthenticateButton';
@@ -84,9 +83,6 @@ const Player = () => {
     overlayPosition: {},
   });
 
-  const hideChatSaved = useRef(
-    getLocalstorage('TwitchChatState')?.[channelName?.toLowerCase()]?.hideChat || false
-  );
   const [isFullscreen, setIsFullscreen] = useState();
   const [resizeActive, setResizeActive] = useState(false);
 
@@ -172,7 +168,6 @@ const Player = () => {
 
   const updateChatState = useCallback(
     (v) => {
-      console.log('updateChatState:');
       setChatState((c) => {
         if (typeof v === 'function') {
           const value = v(c);
@@ -194,8 +189,6 @@ const Player = () => {
   );
 
   useEffect(() => {
-    localStorage.removeItem('TwitchChatState');
-
     (async () => {
       const channel = await TwitchAPI.getUser({
         login: channelName,
@@ -348,7 +341,6 @@ const Player = () => {
       videoElementRef,
       setChatState,
       hideChatDelay,
-      hideChatSaved,
       setIsFullscreen,
     });
   }
@@ -409,6 +401,12 @@ const Player = () => {
         parent: ['aiofeed.com'],
       });
     }
+  };
+  const reloadChat = () => {
+    setChatState((c) => ({ ...c, hideChat: true }));
+    setTimeout(() => {
+      setChatState((c) => ({ ...c, hideChat: false }));
+    }, 0);
   };
 
   const Stats = () => {
@@ -476,8 +474,6 @@ const Player = () => {
                   TwitchPlayer={twitchVideoPlayer.current}
                   showAndResetTimer={showAndResetTimer}
                   updateChatState={updateChatState}
-                  chatState={chatState}
-                  channelName={channelName}
                   children={
                     <>
                       <li
@@ -508,6 +504,10 @@ const Player = () => {
                       <li onClick={reloadVideoPlayer}>
                         <GrRefresh size={24} />
                         Reload Videoplayer
+                      </li>
+                      <li onClick={reloadChat}>
+                        <GrRefresh size={24} />
+                        Reload Chat
                       </li>
                     </>
                   }
@@ -705,7 +705,6 @@ const Player = () => {
                   onClick={() => {
                     updateChatState((curr) => {
                       const newValue = !curr.hideChat;
-                      hideChatSaved.current = newValue;
                       return { ...curr, hideChat: newValue };
                     });
                   }}
@@ -755,7 +754,7 @@ const Player = () => {
               onClick={() => {
                 updateChatState((curr) => {
                   const newValue = !curr.hideChat;
-                  hideChatSaved.current = newValue;
+
                   return { ...curr, hideChat: newValue };
                 });
               }}
@@ -787,9 +786,7 @@ const Player = () => {
             channelName={channelName}
             chatAsOverlay={chatState.chatAsOverlay}
             chatState={chatState}
-            setChatState={setChatState}
             updateChatState={updateChatState}
-            pushChatState={pushChatState}
           />
 
           {resizeActive && (

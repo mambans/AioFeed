@@ -4,7 +4,7 @@ import React, { useContext, useState, useCallback, useRef, useEffect } from 'rea
 
 import {
   VideoAndChatContainer,
-  ShowNavbarBtn,
+  StyledShowNavbarBtn,
   ResizeDevider,
   // VolumeEventOverlay,
   PlayerExtraButtons,
@@ -148,7 +148,7 @@ const SharedVideoPlayer = () => {
       >
         <PlayerExtraButtons channelName={channelName}>
           {lists && (
-            <ShowNavbarBtn
+            <StyledShowNavbarBtn
               variant='dark'
               onClick={() => toggleShowList({ updateLocalstorage: Boolean(listToShow) })}
             >
@@ -161,7 +161,7 @@ const SharedVideoPlayer = () => {
                 title='Show list'
               />
               List
-            </ShowNavbarBtn>
+            </StyledShowNavbarBtn>
           )}
         </PlayerExtraButtons>
         <VolumeEventOverlay

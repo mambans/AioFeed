@@ -2,18 +2,15 @@ import React from 'react';
 import { MdHighQuality } from 'react-icons/md';
 import { GrRefresh } from 'react-icons/gr';
 import ContextMenu, { ContextMenuDropDown } from './ContextMenuWrapper';
-import { setLocalStorage } from '../../../util';
 import { MdOutlineHighQuality } from 'react-icons/md';
 
 const PlayerContextMenu = ({
   PlayerUIControlls,
   TwitchPlayer,
   showAndResetTimer,
-  setChatState,
+  updateChatState,
   children,
   DEFAULT_CHAT_WIDTH,
-  chatState,
-  channelName,
 }) => {
   const Qualities = () => {
     if (!TwitchPlayer?.getQualities() || !TwitchPlayer?.getQualities()?.length) return null;
@@ -45,13 +42,12 @@ const PlayerContextMenu = ({
   };
 
   const ChatSettings = () => {
-    if (!setChatState) return null;
+    if (!updateChatState) return null;
     return (
       <>
-        {children}
         <li
           onClick={() => {
-            setChatState({
+            updateChatState({
               chatWidth: DEFAULT_CHAT_WIDTH,
               switchChatSide: false,
               hideChat: false,
@@ -60,25 +56,6 @@ const PlayerContextMenu = ({
         >
           <GrRefresh size={24} />
           {'Reset chat position'}
-        </li>
-        <li
-          onClick={() => {
-            const confirmed = window.confirm('Reset ALL chat positions?');
-            if (confirmed) {
-              setLocalStorage('TwitchChatState', {
-                [channelName?.toLowerCase()]: chatState,
-              });
-
-              setChatState({
-                chatWidth: DEFAULT_CHAT_WIDTH,
-                switchChatSide: false,
-                hideChat: false,
-              });
-            }
-          }}
-        >
-          <GrRefresh size={24} />
-          {'Reset ALL chat positions'}
         </li>
       </>
     );
@@ -92,6 +69,7 @@ const PlayerContextMenu = ({
         <>
           <Qualities />
           <ChatSettings />
+          {children}
         </>
       }
     />
