@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Schedule from '../schedule';
 import { ChatWrapper, PlayerExtraButtons, StyledChat } from './StyledComponents';
 import styled from 'styled-components';
@@ -19,7 +19,9 @@ const Chat = ({
 }) => {
   const [dragging, setDragging] = useState();
   const [overlayPosition, setOverlayPosition] = useState(
-    { width: chatState.chatwidth, ...chatState.overlayPosition } || { width: chatState.chatwidth }
+    { width: chatState?.chatwidth, ...(chatState?.overlayPosition || {}) } || {
+      width: chatState?.chatwidth,
+    }
   );
   const [locked, setLocked] = useState();
   const overlayBackdropRef = useRef();
@@ -60,6 +62,10 @@ const Chat = ({
     setDragging(false);
     updateChatState((c) => ({ ...c, overlayPosition: overlayPosition }));
   };
+
+  useEffect(() => {
+    setOverlayPosition({ width: chatState?.chatwidth, ...(chatState?.overlayPosition || {}) });
+  }, [chatState?.overlayPosition, chatState?.chatwidth]);
 
   return (
     <>
