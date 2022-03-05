@@ -807,7 +807,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Description: 'Update chat state for a specific channel'
-      Handler: chatStatesFetch/handler.handler
+      Handler: chatStatesUpdate/handler.handler
       Environment:
         Variables:
           CHAT_STATES_TABLE: !Ref ChatStates
