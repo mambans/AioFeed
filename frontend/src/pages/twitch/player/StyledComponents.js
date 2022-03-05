@@ -916,6 +916,14 @@ export const ChatHeader = styled.div`
   button {
     background: none;
     border: none;
+
+    &.chat__close-button {
+      opacity: 0.35;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
   }
 `;
 
