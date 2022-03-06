@@ -59,6 +59,7 @@ export const VodsProvider = ({ children, forceMount = false }) => {
         channels,
         setChannels,
         fetchVodsContextData,
+        enableTwitchVods,
       }}
     >
       {children}
