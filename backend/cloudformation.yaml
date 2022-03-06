@@ -807,6 +807,7 @@ Resources:
             - method.request.querystring.authkey:
                 Required: true
             - method.request.querystring.channel_id:
+                Required: true
   ChatStatesUpdate:
     Type: AWS::Serverless::Function
     Properties:
@@ -828,3 +829,27 @@ Resources:
             - method.request.querystring.authkey:
                 Required: true
             - method.request.querystring.data:
+            - method.request.querystring.channel_id:
+                Required: true
+  ChatStatesDelete:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Delete chat state for a specific channel'
+      Handler: deleteChatState/handler.handler
+      Environment:
+        Variables:
+          CHAT_STATES_TABLE: !Ref ChatStates
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ChatStates
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /chatstates
+            Method: delete
+          RequestParameters:
+            - method.request.querystring.authkey:
+                Required: true
+            - method.request.querystring.channel_id:
+                Required: true

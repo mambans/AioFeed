@@ -150,15 +150,12 @@ const Player = () => {
 
   const pushChatState = useCallback(
     async (chatData = chatState) => {
-      console.log('channeId:', channeId);
-      console.log('pushChatState:');
-      const saved_chatstate = await API.updateChateState({
+      await API.updateChateState({
         data: chatData,
         channel_id: channeId,
       }).catch((er) => {
         console.log('er:', er);
       });
-      console.log('saved_chatstate:', saved_chatstate);
     },
     [chatState, channeId]
   );
@@ -178,6 +175,17 @@ const Player = () => {
     },
     [pushChatState]
   );
+
+  const resetChatState = () => {
+    API.deleteChateState({ channel_id: channeId });
+    setChatState({
+      chatwidth: DEFAULT_CHAT_WIDTH,
+      switchChatSide: false,
+      hideChat: false,
+      chatAsOverlay: false,
+      overlayPosition: {},
+    });
+  };
 
   useEffect(() => {
     (async () => {
@@ -458,14 +466,13 @@ const Player = () => {
             ContextMenu={
               Boolean(twitchVideoPlayer.current) && (
                 <PlayerContextMenu
-                  DEFAULT_CHAT_WIDTH={DEFAULT_CHAT_WIDTH}
                   PlayerUIControlls={PlayerUIControlls.current}
                   hidechat={String(chatState.hideChat)}
                   TwitchPlayer={twitchVideoPlayer.current}
                   showAndResetTimer={showAndResetTimer}
-                  updateChatState={updateChatState}
                   children={
                     <>
+                      <Stats />
                       <li
                         onClick={() => {
                           updateChatState((curr) => {
@@ -475,6 +482,11 @@ const Player = () => {
                       >
                         <MdChat size={24} />
                         {chatState.hideChat ? 'Show chat' : 'Hide chat'}
+                      </li>
+
+                      <li onClick={resetChatState}>
+                        <GrRefresh size={24} />
+                        Reset chat position
                       </li>
 
                       <li
@@ -490,7 +502,6 @@ const Player = () => {
                         <MdCompareArrows size={24} />
                         Switch chat side
                       </li>
-                      <Stats />
                       <li onClick={reloadVideoPlayer}>
                         <GrRefresh size={24} />
                         Reload Videoplayer

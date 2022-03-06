@@ -1,6 +1,5 @@
 import React from 'react';
 import { MdHighQuality } from 'react-icons/md';
-import { GrRefresh } from 'react-icons/gr';
 import ContextMenu, { ContextMenuDropDown } from './ContextMenuWrapper';
 import { MdOutlineHighQuality } from 'react-icons/md';
 
@@ -8,9 +7,8 @@ const PlayerContextMenu = ({
   PlayerUIControlls,
   TwitchPlayer,
   showAndResetTimer,
-  updateChatState,
+
   children,
-  DEFAULT_CHAT_WIDTH,
 }) => {
   const Qualities = () => {
     if (!TwitchPlayer?.getQualities() || !TwitchPlayer?.getQualities()?.length) return null;
@@ -41,26 +39,6 @@ const PlayerContextMenu = ({
     );
   };
 
-  const ChatSettings = () => {
-    if (!updateChatState) return null;
-    return (
-      <>
-        <li
-          onClick={() => {
-            updateChatState({
-              chatWidth: DEFAULT_CHAT_WIDTH,
-              switchChatSide: false,
-              hideChat: false,
-            });
-          }}
-        >
-          <GrRefresh size={24} />
-          {'Reset chat position'}
-        </li>
-      </>
-    );
-  };
-
   return (
     <ContextMenu
       outerContainer={PlayerUIControlls}
@@ -68,7 +46,6 @@ const PlayerContextMenu = ({
       children={
         <>
           <Qualities />
-          <ChatSettings />
           {children}
         </>
       }

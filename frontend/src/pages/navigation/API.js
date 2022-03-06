@@ -290,12 +290,23 @@ const API = {
       })
       .then((res) => res.data?.Item)
       .catch((e) => console.error(e)),
+
   updateChateState: async ({ data, channel_id }) =>
     await axios
       .put(`${BASE_URL}/chatstates`, {
         authkey: getCookie(`AioFeed_AuthKey`),
         channel_id,
         data,
+      })
+      .catch((e) => console.error(e)),
+
+  deleteChateState: async ({ channel_id }) =>
+    await axios
+      .delete(`${BASE_URL}/chatstates`, {
+        data: {
+          authkey: getCookie(`AioFeed_AuthKey`),
+          channel_id,
+        },
       })
       .catch((e) => console.error(e)),
 };
