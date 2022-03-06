@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { reverse, sortBy } from 'lodash';
+import reverse from 'lodash/reverse';
+import sortBy from 'lodash/sortBy';
 
 import GetVideoInfo from './GetVideoInfo';
 import { getCookie, getLocalstorage, setLocalStorage } from './../../util';

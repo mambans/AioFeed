@@ -8,7 +8,7 @@ import {
   StyledShowAllButton,
 } from './styledComponents';
 
-import { throttle } from 'lodash';
+import throttle from 'lodash/throttle';
 import TwitchAPI from '../API';
 import handleArrowNavigation from '../channelList/handleArrowNavigation';
 import InifinityScroll from '../channelList/InifinityScroll';

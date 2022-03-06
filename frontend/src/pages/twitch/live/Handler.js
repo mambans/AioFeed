@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback, useContext } from 'react';
-import { uniqBy, orderBy } from 'lodash';
+import orderBy from 'lodash/orderBy';
+import uniqBy from 'lodash/uniqBy';
 
 import getMyFollowedChannels from './../getMyFollowedChannels';
 import getFollowedOnlineStreams from './GetFollowedStreams';

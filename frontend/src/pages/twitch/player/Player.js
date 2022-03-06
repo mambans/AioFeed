@@ -1,5 +1,5 @@
 import { CSSTransition } from 'react-transition-group';
-import { throttle } from 'lodash';
+import throttle from 'lodash/throttle';
 import { useParams, useLocation, Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import React, { useContext, useEffect, useState, useRef, useCallback } from 'react';

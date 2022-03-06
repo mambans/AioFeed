@@ -1,5 +1,4 @@
-import { debounce } from 'lodash';
-
+import debounce from 'lodash/debounce';
 import API from '../navigation/API';
 
 export const parseNumberAndString = (value) => {

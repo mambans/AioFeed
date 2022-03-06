@@ -4,7 +4,7 @@ import API from '../navigation/API';
 import AccountContext from '../account/AccountContext';
 import LogsContext from '../logs/LogsContext';
 import { parseNumberAndString } from './dragDropUtils';
-import { uniqBy } from 'lodash';
+import uniqBy from 'lodash/uniqBy';
 
 const MyListsContext = React.createContext();
 

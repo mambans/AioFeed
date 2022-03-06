@@ -1,5 +1,5 @@
 import React, { useContext, useState, useMemo } from 'react';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 
 import FeedsContext from '../../feed/FeedsContext';
 import { StyledFeedSizeSlider } from '../StyledComponents';

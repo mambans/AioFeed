@@ -1,7 +1,7 @@
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Alert } from 'react-bootstrap';
 import React, { useState, useMemo, useContext } from 'react';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 
 import LoadMore from '../../../components/loadMore/LoadMore';
 import { SubFeedContainer } from './../../sharedComponents/sharedStyledComponents';

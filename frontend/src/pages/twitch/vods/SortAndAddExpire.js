@@ -1,4 +1,5 @@
-import { sortBy, reverse } from 'lodash';
+import reverse from 'lodash/reverse';
+import sortBy from 'lodash/sortBy';
 
 const sortAndAddExpire = (followedStreamVods, vodExpire, oldLoaded, oldExpire) => {
   const liveVods = followedStreamVods.filter((vod) => vod.thumbnail_url === '');

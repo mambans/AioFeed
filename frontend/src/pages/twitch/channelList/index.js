@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { throttle } from 'lodash';
+import throttle from 'lodash/throttle';
 
 import { GameListUlContainer } from './../categoryTopStreams/styledComponents';
 import AddVideoExtraData from '../AddVideoExtraData';

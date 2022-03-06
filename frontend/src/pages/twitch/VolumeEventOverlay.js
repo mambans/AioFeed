@@ -3,7 +3,7 @@ import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import { StyledVolumeEventOverlay } from './player/StyledComponents';
 import toggleFullscreenFunc from './player/toggleFullscreenFunc';
 import { CSSTransition } from 'react-transition-group';
-import { throttle } from 'lodash';
+import throttle from 'lodash/throttle';
 import VolumeSlider from './player/VolumeSlider';
 import PlayPauseButton from './player/PlayPauseButton';
 import ShowStatsButtons from './player/ShowStatsButtons';

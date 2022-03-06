@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getLocalstorage, getCookie, chunk, setLocalStorage } from '../../util';
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 
 const getVideoInfo = async ({ videos }) => {
   const videosArray = [...videos];
