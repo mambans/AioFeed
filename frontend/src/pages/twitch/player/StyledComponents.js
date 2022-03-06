@@ -936,6 +936,15 @@ export const ChatHeader = styled.div`
       opacity: 1;
     }
   }
+
+  a {
+    transition: color 250ms;
+    color: rgba(255, 255, 255, 0.75);
+
+    &:hover {
+      color: #ffffff;
+    }
+  }
 `;
 
 export const ChatHeaderInner = styled.div`

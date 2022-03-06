@@ -11,10 +11,12 @@ import styled from 'styled-components';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import { GrStackOverflow } from 'react-icons/gr';
 import { AiFillLock, AiFillUnlock } from 'react-icons/ai';
+import { MdAccountBox } from 'react-icons/md';
 import { FaWindowClose } from 'react-icons/fa';
 import { TransparentButton } from '../../../components/styledComponents';
 import ShowNavigationButton from '../../navigation/ShowNavigationButton';
 import ToolTip from '../../../components/tooltip/ToolTip';
+import { Link } from 'react-router-dom';
 
 const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatState }) => {
   const [dragging, setDragging] = useState();
@@ -83,6 +85,9 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
         <ChatHeader>
           <ChatHeaderInner>
             <ShowNavigationButton />
+            <Link to='page'>
+              <MdAccountBox size={24} />
+            </Link>
             <Schedule
               user={streamInfo?.user_name || channelName}
               user_id={streamInfo?.user_id}
