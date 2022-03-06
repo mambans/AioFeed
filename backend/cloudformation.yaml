@@ -835,7 +835,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Description: 'Delete chat state for a specific channel'
-      Handler: deleteChatState/handler.handler
+      Handler: chatStatesDelete/handler.handler
       Environment:
         Variables:
           CHAT_STATES_TABLE: !Ref ChatStates
