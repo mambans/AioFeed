@@ -8,6 +8,8 @@ import {
 
 const LoadingSidebar = () => {
   const array = Array.apply(null, Array(7)).map((x, i) => i);
+  const channelWidth = Math.floor(Math.random() * (75 - 20)) + 20;
+  const gameWidth = Math.floor(Math.random() * (100 - 20)) + 20;
 
   return (
     <Styledsidebar>
@@ -16,8 +18,8 @@ const LoadingSidebar = () => {
         {array.map((value) => (
           <LoadingSidebarItems
             key={value}
-            channelWidth={`${Math.floor(Math.random() * (75 - 20)) + 20}%`}
-            gameWidth={`${Math.floor(Math.random() * (100 - 20)) + 20}%`}
+            channelWidth={`${channelWidth}%`}
+            gameWidth={`${gameWidth}%`}
           >
             <div className='Profile' />
             <div className='Channel' />
