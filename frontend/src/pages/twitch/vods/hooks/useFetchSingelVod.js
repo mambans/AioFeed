@@ -14,11 +14,6 @@ const useFetchSingelVod = () => {
   const vodExpire = 3; // Number of days
 
   const fetchLatestVod = async ({ user_id, amount = 1, check = false }) => {
-    console.log('fetchLatestVod:');
-    console.log('user_id:', user_id);
-
-    console.log('enableTwitchVods:', enableTwitchVods);
-    console.log('channels?.includes(user_id)):', channels?.includes(user_id));
     if (check && (!enableTwitchVods || !channels?.includes(user_id))) return null;
     return await TwitchAPI.getVideos({
       user_id: user_id,
