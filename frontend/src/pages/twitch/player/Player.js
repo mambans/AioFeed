@@ -98,6 +98,7 @@ const Player = () => {
   const link1 = useRef();
   const link2 = useRef();
   const link3 = useRef();
+  const pushStatesTimer = useRef();
 
   useFullscreen();
   useDocumentTitle(`${streamInfo?.user_name || channelName} ${status ? `(${status || ''})` : ''}`);
@@ -150,6 +151,7 @@ const Player = () => {
 
   const pushChatState = useCallback(
     async (chatData = chatState) => {
+      console.log('pushChatState:');
       await API.updateChateState({
         data: chatData,
         channel_id: channeId,
@@ -162,13 +164,17 @@ const Player = () => {
 
   const updateChatState = useCallback(
     (v) => {
+      console.log('updateChatState:');
       setChatState((c) => {
+        clearTimeout(pushStatesTimer.current);
+
         if (typeof v === 'function') {
           const value = v(c);
-          pushChatState(value);
+          pushStatesTimer.current = setTimeout(() => pushChatState(value), 7500);
           return value;
         }
 
+        pushStatesTimer.current = setTimeout(() => pushChatState(v), 7500);
         pushChatState(v);
         return v;
       });
