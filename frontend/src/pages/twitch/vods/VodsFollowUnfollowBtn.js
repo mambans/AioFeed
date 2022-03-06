@@ -6,10 +6,10 @@ import React, { useState, useContext } from 'react';
 import AccountContext from '../../account/AccountContext';
 import { VodAddRemoveButton } from '../../sharedComponents/sharedStyledComponents';
 import VodsContext from './VodsContext';
-import FetchSingelChannelVods from './FetchSingelChannelVods';
 import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../../components/tooltip/ToolTip';
 import useVodChannel from './useVodChannel';
+import useFetchSingelVod from './useFetchSingelVod';
 
 /**
  * @param {Object} channel - channel
@@ -30,11 +30,12 @@ const VodsFollowUnfollowBtn = ({
   padding,
   unfollowStream = () => {},
 }) => {
-  const { setVods, channels, setChannels } = useContext(VodsContext) || {};
+  const { channels, setChannels } = useContext(VodsContext) || {};
   const { authKey, username } = useContext(AccountContext);
   const [isHovered, setIsHovered] = useState();
   const { enableTwitchVods } = useContext(FeedsContext) || {};
   const { removeChannel, addVodChannel } = useVodChannel();
+  const { fetchLatestVod } = useFetchSingelVod();
 
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(null);
@@ -65,11 +66,12 @@ const VodsFollowUnfollowBtn = ({
           } else {
             addVodChannel({ channel, channels, setChannels, username, authKey });
             if (channel?.user_id) {
-              FetchSingelChannelVods({
-                user_id: channel.user_id,
-                setVods,
-                amount: 5,
-              });
+              fetchLatestVod({ user_id: channel.user_id, amount: 5 });
+              // FetchSingelChannelVods({
+              //   user_id: channel.user_id,
+              //   setVods,
+              //   amount: 5,
+              // });
             }
           }
         }}
