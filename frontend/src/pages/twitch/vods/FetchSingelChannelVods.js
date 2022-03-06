@@ -5,6 +5,7 @@ import AddVideoExtraData from '../AddVideoExtraData';
 import SortAndAddExpire from './SortAndAddExpire';
 import TwitchAPI from '../API';
 
+//Delete? Now replaced by hook useFetchSingelVod
 const fetchSingelChannelVods = async ({ user_id, setVods, amount = 1 }) => {
   const vodExpire = 3; // Number of days
 

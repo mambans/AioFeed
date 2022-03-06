@@ -1,20 +1,21 @@
 import { useContext } from 'react';
-import VodsContext from '../vods/VodsContext';
+import VodsContext from '../VodsContext';
 
 import { uniqBy } from 'lodash';
 
-import { addVodEndTime } from '../TwitchUtils';
-import AddVideoExtraData from '../AddVideoExtraData';
-import SortAndAddExpire from './SortAndAddExpire';
-import TwitchAPI from '../API';
+import { addVodEndTime } from '../../TwitchUtils';
+import AddVideoExtraData from '../../AddVideoExtraData';
+import SortAndAddExpire from '../SortAndAddExpire';
+import TwitchAPI from '../../API';
 
 const useFetchSingelVod = () => {
-  const { setVods, vods } = useContext(VodsContext);
+  const { setVods, vods, enableTwitchVods, channels } = useContext(VodsContext);
 
   const vodExpire = 3; // Number of days
 
-  const fetchLatestVod = async ({ user_id, amount = 1 }) => {
-    await TwitchAPI.getVideos({
+  const fetchLatestVod = async ({ user_id, amount = 1, check = false }) => {
+    if (check && (!enableTwitchVods || !channels?.includes(user_id))) return null;
+    return await TwitchAPI.getVideos({
       user_id: user_id,
       period: 'month',
       first: amount,

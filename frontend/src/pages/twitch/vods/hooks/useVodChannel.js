@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import API from '../../navigation/API';
-import VodsContext from './VodsContext';
+import API from '../../../navigation/API';
+import VodsContext from '../VodsContext';
 
 const useVodChannel = () => {
   const { channels, setChannels, setVods, vods } = useContext(VodsContext);

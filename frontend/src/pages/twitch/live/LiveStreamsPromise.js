@@ -1,13 +1,10 @@
 import addSystemNotification from './addSystemNotification';
-import FetchSingelChannelVods from './../vods/FetchSingelChannelVods';
-import { getLocalstorage } from '../../../util';
 
 const liveStreamsPromise = async ({
   liveStreams,
   oldLiveStreams,
-  setVods,
-  enableTwitchVods,
   setNewlyAddedStreams,
+  fetchLatestVod,
 }) => {
   try {
     const res = await new Promise((resolve, reject) => {
@@ -29,11 +26,8 @@ const liveStreamsPromise = async ({
         body: `${stream.title || stream.status || ''}\n${stream.game_name || stream.game || ''}`,
       });
 
-      if (enableTwitchVods && getLocalstorage('TwitchVods-Channels')?.includes(stream.user_id)) {
-        setTimeout(async () => {
-          await FetchSingelChannelVods({ user_id: stream.user_id, setVods });
-        }, 30000);
-      }
+      setTimeout(() => fetchLatestVod({ user_id: stream.user_id, check: true }), 30000);
+
       return stream;
     });
     return streams;

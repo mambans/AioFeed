@@ -4,8 +4,6 @@ import { uniqBy, orderBy } from 'lodash';
 import getMyFollowedChannels from './../getMyFollowedChannels';
 import getFollowedOnlineStreams from './GetFollowedStreams';
 import NotificationsContext from './../../notifications/NotificationsContext';
-import FeedsContext from './../../feed/FeedsContext';
-import VodsContext from './../vods/VodsContext';
 import { AddCookie } from '../../../util';
 import LiveStreamsPromise from './LiveStreamsPromise';
 import OfflineStreamsPromise from './OfflineStreamsPromise';
@@ -17,6 +15,7 @@ import { fetchAndAddTags } from '../fetchAndAddTags';
 import FeedSectionsContext from '../../feedSections/FeedSectionsContext';
 import { checkAgainstRules } from '../../feedSections/FeedSections';
 import Alert from '../../../components/alert';
+import useFetchSingelVod from '../vods/hooks/useFetchSingelVod';
 
 const REFRESH_RATE = 25; // seconds
 
@@ -29,9 +28,8 @@ const Handler = ({ children }) => {
     twitchAccessToken,
     updateNotischannels,
   } = useContext(TwitchContext);
+  const { fetchLatestVod } = useFetchSingelVod();
   const validateToken = useToken();
-  const { setVods } = useContext(VodsContext);
-  const { enableTwitchVods } = useContext(FeedsContext) || {};
   const { feedSections } = useContext(FeedSectionsContext) || {};
   const [refreshTimer, setRefreshTimer] = useState(20);
   const [liveStreamsState, setLiveStreamsState] = useState([]);
@@ -160,17 +158,15 @@ const Handler = ({ children }) => {
                   await LiveStreamsPromise({
                     liveStreams: nonFeedSectionLiveStreams,
                     oldLiveStreams,
-                    enableTwitchVods,
-                    setVods,
                     setNewlyAddedStreams,
+                    fetchLatestVod,
                   }),
 
                   await OfflineStreamsPromise({
                     liveStreams,
                     oldLiveStreams,
                     isEnabledOfflineNotifications,
-                    enableTwitchVods,
-                    setVods,
+                    fetchLatestVod,
                   }),
 
                   await UpdatedStreamsPromise({
@@ -205,13 +201,12 @@ const Handler = ({ children }) => {
     },
     [
       addNotification,
-      enableTwitchVods,
-      setVods,
       isEnabledUpdateNotifications,
       isEnabledOfflineNotifications,
       updateNotischannels,
       setNewlyAddedStreams,
       feedSections,
+      fetchLatestVod,
     ]
   );
 

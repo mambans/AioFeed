@@ -8,8 +8,8 @@ import { VodAddRemoveButton } from '../../sharedComponents/sharedStyledComponent
 import VodsContext from './VodsContext';
 import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../../components/tooltip/ToolTip';
-import useVodChannel from './useVodChannel';
-import useFetchSingelVod from './useFetchSingelVod';
+import useVodChannel from './hooks/useVodChannel';
+import useFetchSingelVod from './hooks/useFetchSingelVod';
 
 /**
  * @param {Object} channel - channel
@@ -67,11 +67,6 @@ const VodsFollowUnfollowBtn = ({
             addVodChannel({ channel, channels, setChannels, username, authKey });
             if (channel?.user_id) {
               fetchLatestVod({ user_id: channel.user_id, amount: 5 });
-              // FetchSingelChannelVods({
-              //   user_id: channel.user_id,
-              //   setVods,
-              //   amount: 5,
-              // });
             }
           }
         }}

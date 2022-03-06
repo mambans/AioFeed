@@ -10,7 +10,7 @@ import { LoadingVideoElement } from '../twitch/StyledComponents';
 import { addVodEndTime } from '../twitch/TwitchUtils';
 import LoadMore from '../../components/loadMore/LoadMore';
 import { CenterContext } from '../feed/FeedsCenterContainer';
-import { parseNumberAndString, restructureVideoList, uploadNewList } from './dragDropUtils';
+import { restructureVideoList, uploadNewList } from './dragDropUtils';
 // import aiofeedAPI from '../navigation/API';
 import { VideosContainer } from '../../components/styledComponents';
 import addVideoDataToVideos from './addVideoDataToVideos';
@@ -76,21 +76,21 @@ export const fetchListVideos = async ({
       .filter((i) => i);
 
     //Filtered out the video Ids that have been removed from Twitch/Youtube
-    const newFilteredIdsList = mergeVideosOrderedAndUnique
-      .map((v) => parseNumberAndString(v.id))
-      .filter((i) => i);
+    // const newFilteredIdsList = mergeVideosOrderedAndUnique
+    //   .map((v) => parseNumberAndString(v.id))
+    //   .filter((i) => i);
 
-    console.log('\n');
-    console.log('list.title:', list.title);
-    console.log('twitchItems:', twitchItems);
-    console.log('youtubeItems:', youtubeItems);
-    console.log('twitchItemsWithDetails:', twitchItemsWithDetails);
-    console.log('youtubeItemsWithDetails:', youtubeItemsWithDetails);
-    console.log('mergedVideosUnordered:', mergedVideosUnordered);
-    console.log('mergeVideosOrderedAndUnique:', mergeVideosOrderedAndUnique);
-    console.log('newFilteredIdsList:', newFilteredIdsList);
-    console.log('videos || list.videos:', videos || list.videos);
-    console.log('\n');
+    // console.log('\n');
+    // console.log('list.title:', list.title);
+    // console.log('twitchItems:', twitchItems);
+    // console.log('youtubeItems:', youtubeItems);
+    // console.log('twitchItemsWithDetails:', twitchItemsWithDetails);
+    // console.log('youtubeItemsWithDetails:', youtubeItemsWithDetails);
+    // console.log('mergedVideosUnordered:', mergedVideosUnordered);
+    // console.log('mergeVideosOrderedAndUnique:', mergeVideosOrderedAndUnique);
+    // console.log('newFilteredIdsList:', newFilteredIdsList);
+    // console.log('videos || list.videos:', videos || list.videos);
+    // console.log('\n');
     // if (newFilteredIdsList.length < (videos || list.videos).length) {
     //   setTimeout(async () => {
     //     await aiofeedAPI.updateSavedList(list.id, { videos: newFilteredIdsList });
