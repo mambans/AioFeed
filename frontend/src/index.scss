@@ -77,12 +77,3 @@ a {
 .modal-dialog {
   margin: 0;
 }
-
-button,
-a {
-  transition: color 250ms, background 250ms, filter 250ms, opacity 250ms;
-
-  :hover {
-    filter: brightness(1.2);
-  }
-}
