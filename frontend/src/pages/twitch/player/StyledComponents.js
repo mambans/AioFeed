@@ -913,6 +913,7 @@ export const ChatWrapper = styled.div`
   min-width: 1px;
   display: flex;
   flex-direction: column;
+  overflow: visible;
 `;
 
 export const ChatHeader = styled.div`
