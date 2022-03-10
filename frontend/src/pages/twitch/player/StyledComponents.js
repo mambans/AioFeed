@@ -917,35 +917,38 @@ export const ChatWrapper = styled.div`
 `;
 
 export const ChatHeader = styled.div`
-  width: 100%;
-  padding: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: var(--navigationbarBackground);
-  justify-content: space-between;
+	width: 100%;
+	padding: 0.5rem;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	background: var(--navigationbarBackground);
+	justify-content: space-between;
 
-  button {
-    background: none;
-    border: none;
+	button {
+		background: none;
+		border: none;
+		transition: color 250ms, filter 250ms;
 
-    &.chat__close-button {
-      opacity: 0.35;
-    }
+		&.chat__close-button {
+			opacity: 0.35;
+		}
 
-    &:hover {
-      opacity: 1;
-    }
-  }
+		&:hover {
+			opacity: 1;
+			filter: brightness(1.2);
+		}
+	}
 
-  a {
-    transition: color 250ms;
-    color: rgba(255, 255, 255, 0.75);
+	a {
+		transition: color 250ms, filter 250ms;
+		color: rgba(255, 255, 255, 0.75);
 
-    &:hover {
-      color: #ffffff;
-    }
-  }
+		&:hover {
+			color: #ffffff;
+			filter: brightness(1.2);
+		}
+	}
 `;
 
 export const ChatHeaderInner = styled.div`
