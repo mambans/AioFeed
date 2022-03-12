@@ -32,7 +32,7 @@ const offlineStreamsPromise = async ({
           body: '',
         });
 
-      // setTimeout(() => fetchLatestVod({ user_id: stream.user_id, check: true }), 0);
+      setTimeout(() => fetchLatestVod({ user_id: stream.user_id, check: true }), 0);
 
       return stream;
     });

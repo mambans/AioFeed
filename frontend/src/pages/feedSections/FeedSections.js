@@ -16,11 +16,11 @@ import NotificationsContext from '../notifications/NotificationsContext';
 export const checkAgainstRules = (stream, rules) => {
   return rules.some(
     (r) =>
-      stream.title.toLowerCase().includes(r.title.toLowerCase()) &&
-      stream.game_name.toLowerCase().includes(r.category.toLowerCase()) &&
-      loginNameFormat(stream).includes(r.channel.toLowerCase()) &&
+      stream.title?.toLowerCase().includes(r.title?.toLowerCase()?.trim()) &&
+      stream.game_name?.toLowerCase().includes(r.category?.toLowerCase()?.trim()) &&
+      loginNameFormat(stream)?.toLowerCase()?.trim().includes(r.channel?.toLowerCase()?.trim()) &&
       stream?.tag_names?.find((tag_name) =>
-        tag_name?.toLowerCase()?.includes(r?.tag?.toLowerCase())
+        tag_name?.toLowerCase()?.includes(r?.tag?.toLowerCase()?.trim())
       ) &&
       stream.viewer_count >= r.viewers
   );

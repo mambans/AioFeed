@@ -5,6 +5,6 @@ const loginNameFormat = (data) => {
   const rightName =
     (userName?.toLowerCase() !== login?.toLowerCase() && login && `(${login})`) || '';
 
-  return userName && `${userName} ${rightName}`;
+  return userName && `${userName} ${rightName}`.trim();
 };
 export default loginNameFormat;

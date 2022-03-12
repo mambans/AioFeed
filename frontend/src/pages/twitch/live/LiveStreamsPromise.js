@@ -26,7 +26,7 @@ const liveStreamsPromise = async ({
         body: `${stream.title || stream.status || ''}\n${stream.game_name || stream.game || ''}`,
       });
 
-      // setTimeout(() => fetchLatestVod({ user_id: stream.user_id, check: true }), 30000);
+      setTimeout(() => fetchLatestVod({ user_id: stream.user_id, check: true }), 30000);
 
       return stream;
     });

@@ -6,8 +6,14 @@ import ChannelSearchList from './../channelList';
 import BigScheduleList from './BigScheduleList';
 
 const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed, idTitle }, ref) => {
-  const { refreshing, autoRefreshEnabled, refreshTimer, refresh, followedChannels, liveStreams } =
-    data;
+  const {
+    refreshing,
+    autoRefreshEnabled,
+    refreshTimer,
+    refresh,
+    followedChannels,
+    nonFeedSectionLiveStreams,
+  } = data;
 
   return (
     <Header
@@ -27,7 +33,7 @@ const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed, idTitl
           >
             Live
           </span>
-          <HeaderNumberCount text={liveStreams?.length} />
+          <HeaderNumberCount text={nonFeedSectionLiveStreams?.length} />
           <ExpandCollapseFeedButton collapsed={collapsed} />
         </h1>
       }

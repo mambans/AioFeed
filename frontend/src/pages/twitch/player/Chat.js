@@ -10,8 +10,8 @@ import {
 import styled from 'styled-components';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import { GrStackOverflow } from 'react-icons/gr';
-import { AiFillLock, AiFillUnlock } from 'react-icons/ai';
 import { MdAccountBox } from 'react-icons/md';
+import { BiMove } from 'react-icons/bi';
 import { FaWindowClose } from 'react-icons/fa';
 import { TransparentButton } from '../../../components/styledComponents';
 import ShowNavigationButton from '../../navigation/ShowNavigationButton';
@@ -25,7 +25,8 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
       width: chatState?.chatwidth,
     }
   );
-  const [locked, setLocked] = useState(true);
+  // eslint-disable-next-line no-unused-vars
+  const [rnd, setRnd] = useState();
   const overlayBackdropRef = useRef();
   const chatRef = useRef();
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
@@ -33,8 +34,20 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
   const keydown = (e) => e.key === 'Escape' && setDragging(false);
   useEventListenerMemo('keydown', keydown, window, chatAsOverlay);
 
+  // const onResize = useMemo(
+  //   () =>
+  //     debounce(() => setRnd(Math.random()), 10, {
+  //       leading: true,
+  //       trailing: false,
+  //     }),
+  //   []
+  // );
+  const onResize = () => setRnd(Math.random());
+  // trigger rerender to reposition chat when its outside window
+  useEventListenerMemo('resize', onResize, window, chatAsOverlay);
+
   const onDragInit = (e) => {
-    if (e.button === 0 && !locked) {
+    if (e.button === 0) {
       setDragging(true);
       const mouseX = e.clientX;
       const mouseY = e.clientY;
@@ -101,29 +114,25 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
                 e.stopPropagation();
                 updateChatState((c) => {
                   const v = !c.chatAsOverlay;
-                  if (v) setLocked(false);
                   return { ...c, chatAsOverlay: v };
                 });
               }}
             >
               <GrStackOverflow size={20} />
             </TransparentButton>
+            <TransparentButton
+              onMouseDown={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onDragInit(e);
+              }}
+              onMouseUp={onDragStop}
+              onMouseMove={dragging ? onDragMove : () => {}}
+              style={{ cursor: 'move' }}
+            >
+              <BiMove size={20} />
+            </TransparentButton>
 
-            {chatAsOverlay && (
-              <TransparentButton
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setLocked((c) => !c);
-                }}
-              >
-                {locked ? (
-                  <AiFillLock size={20} fill='green' />
-                ) : (
-                  <AiFillUnlock size={20} fill='red' />
-                )}
-              </TransparentButton>
-            )}
             {!chatAsOverlay && (
               <ToolTip
                 placement={'left'}
@@ -153,18 +162,17 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
             <FaWindowClose size={24} color='red' />
           </button>
         </ChatHeader>
-        {!locked && chatAsOverlay && (
+        {chatAsOverlay && (
           <ResizerAllSides setOverlayPosition={setOverlayPosition} target={chatRef.current} />
         )}
 
         <InnerWrapper
           onMouseDown={onDragInit}
           onMouseUp={onDragStop}
-          locked={locked}
           data-chatAsOverlay={chatAsOverlay}
           onMouseMove={dragging ? onDragMove : () => {}}
         >
-          {chatAsOverlay && !locked && <DragOverlay />}
+          {chatAsOverlay && dragging && <DragOverlay />}
 
           <StyledChat
             data-chatAsOverlay={chatAsOverlay}
@@ -191,7 +199,7 @@ const InnerWrapper = styled.div`
   position: relative;
   height: 100%;
   width: 100%;
-  cursor: ${({ locked }) => (locked ? 'initial' : 'move')};
+  cursor: move;
 `;
 
 const OverlayBackdrop = styled.div`
@@ -208,8 +216,9 @@ const ResizerIcon = styled.div`
 
   width: 20px;
   height: 20px;
-  transition: border 250ms;
-  border-color: rgb(150, 150, 150);
+  transition: border 250ms, opacity 250ms;
+  border-color: #ffffff;
+  opacity: 0.2;
 
   &.topleft {
     top: 0;
@@ -238,7 +247,7 @@ const ResizerIcon = styled.div`
   }
 
   &:hover {
-    border-color: #ffffff;
+    opacity: 1;
   }
 
   svg {
