@@ -3,13 +3,7 @@ import LiveInfoPopup from './LiveInfoPopup';
 import styled from 'styled-components';
 import { Tooltip } from 'react-bootstrap';
 import ToolTip from '../../../components/tooltip/ToolTip';
-
-const LiveDot = styled.svg`
-  position: absolute;
-  width: 30px;
-  height: 100%;
-  transform: translate3d(-15px, -5px, 0);
-`;
+import { HeartBeat } from '../../../components/HeartBeat';
 
 export const StyledToolTip = styled(Tooltip)`
   &&& {
@@ -42,9 +36,7 @@ const LiveIndicator = ({ channel }) => (
   >
     <div>
       <img src={channel?.profile_image_url} alt='' />
-      <LiveDot height='100%' width='30px'>
-        <circle cx='5' cy='5' r='5' stroke='white' strokeWidth='0' fill='red' />
-      </LiveDot>
+      <HeartBeat scaleRings={true} scale={1} />
     </div>
   </ToolTip>
 );

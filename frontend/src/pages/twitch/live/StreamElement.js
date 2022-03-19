@@ -29,10 +29,16 @@ import ChannelButtonsContainer from './ChannelButtonsContainer';
 import ToolTip from '../../../components/tooltip/ToolTip';
 import FavoriteStreamBtn from './FavoriteStreamBtn';
 import Schedule from '../schedule';
+import { HeartBeat } from '../../../components/HeartBeat';
 
 function NewHighlightNoti({ newlyAddedStreams, login }) {
   if (newlyAddedStreams?.includes(login?.toLowerCase())) {
-    return <StyledNewlyAddedIndicator>New</StyledNewlyAddedIndicator>;
+    return (
+      <>
+        <StyledNewlyAddedIndicator>New</StyledNewlyAddedIndicator>
+        <HeartBeat scaleRings={true} scale={1} style={{ left: 5, top: 5, right: 'unset' }} />
+      </>
+    );
   }
   return '';
 }
