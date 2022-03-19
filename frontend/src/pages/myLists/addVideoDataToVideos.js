@@ -3,10 +3,11 @@ import { fetchListVideos } from './List';
 const addVideoDataToVideos = async ({
   savedVideosWithData,
   list,
+  videos,
   ytExistsAndValidated,
   twitchExistsAndValidated,
 }) => {
-  const filteredVideos = list?.videos.reduce(
+  const filteredVideos = videos?.reduce(
     (acc, id) => {
       const video = savedVideosWithData.find((v) => String(v.id) === String(id) && !v?.loading);
       if (video) {
@@ -25,7 +26,7 @@ const addVideoDataToVideos = async ({
       videos: filteredVideos.missing,
     });
 
-    const orderAndMergeVideos = list?.videos.reduce((acc, id) => {
+    const orderAndMergeVideos = videos?.reduce((acc, id) => {
       const video = [...filteredVideos.existing, ...newlyFetchedVideoData].find(
         (v) => String(v.id) === String(id) && !v?.loading
       );

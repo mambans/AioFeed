@@ -31,6 +31,7 @@ const Container = styled.div`
   justify-content: center;
   padding-bottom: 75px;
   padding-top: 10px;
+  overflow: auto;
 `;
 
 const PlayListButtonsContainer = styled.div`

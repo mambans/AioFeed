@@ -9,7 +9,7 @@ import VodsContext from './VodsContext';
 import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../../components/tooltip/ToolTip';
 import useVodChannel from './hooks/useVodChannel';
-import useFetchSingelVod from './hooks/useFetchSingelVod';
+// import useFetchSingelVod from './hooks/useFetchSingelVod';
 
 /**
  * @param {Object} channel - channel
@@ -35,7 +35,7 @@ const VodsFollowUnfollowBtn = ({
   const [isHovered, setIsHovered] = useState();
   const { enableTwitchVods } = useContext(FeedsContext) || {};
   const { removeChannel, addVodChannel } = useVodChannel();
-  const { fetchLatestVod } = useFetchSingelVod();
+  // const { fetchLatestVod } = useFetchSingelVod();
 
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(null);
@@ -66,7 +66,7 @@ const VodsFollowUnfollowBtn = ({
           } else {
             addVodChannel({ channel, channels, setChannels, username, authKey });
             if (channel?.user_id) {
-              fetchLatestVod({ user_id: channel.user_id, amount: 5 });
+              // fetchLatestVod({ user_id: channel.user_id, amount: 5 });
             }
           }
         }}

@@ -59,6 +59,7 @@ import { TwitchContext } from '../useToken';
 import { ContextMenuDropDown } from './ContextMenuWrapper';
 import Chat from './Chat';
 import API from '../../navigation/API';
+import useKeyDown from './../../../hooks/useKeyDown';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.12, 175);
 
@@ -83,6 +84,7 @@ const Player = () => {
 
   const [isFullscreen, setIsFullscreen] = useState();
   const [resizeActive, setResizeActive] = useState(false);
+  const ctrlKeyPressed = useKeyDown('Control');
 
   // force refresh when streamer goes live?
   // eslint-disable-next-line no-unused-vars
@@ -459,7 +461,7 @@ const Player = () => {
           classNames='fade-controllUI-1s'
         >
           <VolumeEventOverlay
-            show={showUIControlls}
+            show={!ctrlKeyPressed && showUIControlls}
             ref={PlayerUIControlls}
             type='live'
             id='controls'

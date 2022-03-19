@@ -26,7 +26,8 @@ export const ChannelListLi = styled.li`
     padding: 0;
     font-size: unset;
     white-space: nowrap;
-    overflow: hidden;
+    /* overflow: hidden; */
+    overflow: visible;
     text-overflow: ellipsis;
     color: ${({ selected }) => (selected ? '#ffffff' : 'inherit')};
     font-weight: ${({ selected }) => (selected ? 'bold' : 'unset')};
@@ -35,12 +36,15 @@ export const ChannelListLi = styled.li`
     align-items: center;
     padding-left: 10px;
 
+    .profile-image {
+      margin-right: 10px;
+      position: relative;
+    }
     img {
       width: 30px;
       height: 30px;
-      margin-right: 10px;
       border-radius: 3px;
-      animation: ${({ live }) => (live ? pulseAnimation : 'none')};
+      /* animation: ${({ live }) => (live ? pulseAnimation : 'none')}; */
     }
   }
 

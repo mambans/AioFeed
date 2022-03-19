@@ -226,7 +226,14 @@ const SharedVideoPlayer = () => {
                 <div />
               </ResizeDevider>
             )}
-            <div id='chat' style={{ display: isFullscreen ? 'none' : 'initial' }}>
+            <div
+              id='chat'
+              style={{
+                display: isFullscreen ? 'none' : 'initial',
+                overflow: 'auto',
+                gridArea: 'chat',
+              }}
+            >
               <PlaylistInPlayer
                 listName={urlListName}
                 listVideos={listVideos}

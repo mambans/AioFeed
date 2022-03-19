@@ -111,7 +111,7 @@ const List = ({
   addSavedData,
 }) => {
   const [dragSelected, setDragSelected] = useState();
-  const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext) || {};
+  const { videoElementsAmount } = useContext(CenterContext) || {};
 
   const [videosToShow, setVideosToShow] = useState({
     amount: videoElementsAmount,
@@ -129,22 +129,30 @@ const List = ({
   }, [videoElementsAmount, videos]);
 
   useEffect(() => {
+    // setVideos((c) => {
+    //   const nrToAdd = videosToShow.amount - c?.length;
+
+    //   if (videosToShow.amount !== c?.length || !nrToAdd?.length) return c;
+
+    //   return [...c, ...Array.from(Array(nrToAdd))?.map(() => ({ loading: true }))].filter((i) => i);
+    // });
+
     (async () => {
-      const videos = await addVideoDataToVideos({
+      const videosWithData = await addVideoDataToVideos({
         savedVideosWithData: savedVideosWithData.current,
         list,
+        videos: list.videos,
         ytExistsAndValidated,
         twitchExistsAndValidated,
       });
 
-      setVideos(videos);
-      addSavedData(videos);
+      setVideos(videosWithData);
+      addSavedData(videosWithData);
     })();
   }, [
     list,
     ytExistsAndValidated,
     twitchExistsAndValidated,
-    feedVideoSizeProps.transition,
     setVideos,
     savedVideosWithData,
     addSavedData,
@@ -167,7 +175,7 @@ const List = ({
   return (
     <VideosContainer>
       <TransitionGroup component={null} className={videosToShow.transitionGroup || 'videos'}>
-        {videos?.slice(0, videosToShow.amount).map((video) => (
+        {videos?.slice(0, videosToShow.amount)?.map((video) => (
           <CSSTransition
             key={`${list.title}-${video.contentDetails?.upload?.videoId || video.id}`}
             timeout={videosToShow.timeout}
@@ -203,10 +211,10 @@ const List = ({
         loaded={true}
         setVideosToShow={setVideosToShow}
         videosToShow={videosToShow}
-        videos={videos}
+        videos={list?.videos}
         showAll={() => {
           setVideosToShow({
-            amount: videos.length,
+            amount: videos?.length,
             timeout: 750,
             transitionGroup: 'videos',
             showAll: true,

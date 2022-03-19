@@ -86,16 +86,19 @@ const ChannelListElement = ({
           },
         }}
       >
-        {channel?.live || (channel?.is_live && channel?.started_at !== '') ? (
-          <LiveIndicator channel={channel} />
-        ) : (
-          <img
-            src={
-              channel?.profile_image_url || `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`
-            }
-            alt=''
-          />
-        )}
+        <div className='profile-image'>
+          {channel?.live || (channel?.is_live && channel?.started_at !== '') ? (
+            <LiveIndicator channel={channel} />
+          ) : (
+            <img
+              src={
+                channel?.profile_image_url ||
+                `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`
+              }
+              alt=''
+            />
+          )}
+        </div>
         {loginNameFormat(channel) || `${searchInput}..`}
       </Link>
       {/* <div className='ButtonContianer'> */}

@@ -34,10 +34,10 @@ const LiveIndicator = ({ channel }) => (
       </StyledToolTip>
     }
   >
-    <div>
+    <>
       <img src={channel?.profile_image_url} alt='' />
-      <HeartBeat scaleRings={true} scale={1} />
-    </div>
+      <HeartBeat scaleRings={true} scale={1.5} />
+    </>
   </ToolTip>
 );
 export default LiveIndicator;

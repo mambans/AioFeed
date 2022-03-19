@@ -36,7 +36,7 @@ function NewHighlightNoti({ newlyAddedStreams, login }) {
     return (
       <>
         <StyledNewlyAddedIndicator>New</StyledNewlyAddedIndicator>
-        <HeartBeat scaleRings={true} scale={1} style={{ left: 5, top: 5, right: 'unset' }} />
+        <HeartBeat scaleRings={true} scale={2} style={{ right: 5, top: 5 }} />
       </>
     );
   }
