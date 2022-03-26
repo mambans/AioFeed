@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { StyledExpandSection } from './styledComponents';
 
 const ExpandableSection = ({ collapsed, children, isOpened, unmountOnInitialClosed, ...rest }) => {
@@ -8,7 +8,7 @@ const ExpandableSection = ({ collapsed, children, isOpened, unmountOnInitialClos
   const timer = useRef();
   const animationFrame = useRef();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     cancelAnimationFrame(animationFrame.current);
     clearTimeout(timer.current);
     setInitialLoad(false);
@@ -17,6 +17,9 @@ const ExpandableSection = ({ collapsed, children, isOpened, unmountOnInitialClos
       isOpened: false,
       willChange: true,
     });
+  }, [collapsed]);
+
+  useEffect(() => {
     animationFrame.current = requestAnimationFrame(() => {
       setHeight((c) => ({
         ...c,

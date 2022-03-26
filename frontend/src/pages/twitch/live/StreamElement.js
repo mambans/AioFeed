@@ -15,6 +15,9 @@ import {
   LatestVodBtn,
   OpenInNewTab,
   StyledNewlyAddedIndicator,
+  StyledNewlyAddedIndicatorWrapper,
+  StyledNewlyAddedIndicatorPulseRings,
+  RelativeContainer,
   TopRightBtnWrapper,
 } from './../../sharedComponents/sharedStyledComponents';
 import { ChannelNameDiv } from './../StyledComponents';
@@ -29,15 +32,16 @@ import ChannelButtonsContainer from './ChannelButtonsContainer';
 import ToolTip from '../../../components/tooltip/ToolTip';
 import FavoriteStreamBtn from './FavoriteStreamBtn';
 import Schedule from '../schedule';
-import { HeartBeat } from '../../../components/HeartBeat';
 
 function NewHighlightNoti({ newlyAddedStreams, login }) {
   if (newlyAddedStreams?.includes(login?.toLowerCase())) {
     return (
-      <>
-        <StyledNewlyAddedIndicator>New</StyledNewlyAddedIndicator>
-        <HeartBeat scaleRings={true} scale={2} style={{ right: 5, top: 5 }} />
-      </>
+      <StyledNewlyAddedIndicatorWrapper>
+        <RelativeContainer>
+          <StyledNewlyAddedIndicatorPulseRings />
+          <StyledNewlyAddedIndicator>New</StyledNewlyAddedIndicator>
+        </RelativeContainer>
+      </StyledNewlyAddedIndicatorWrapper>
     );
   }
   return '';

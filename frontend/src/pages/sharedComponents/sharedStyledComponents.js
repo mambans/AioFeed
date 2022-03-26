@@ -1,7 +1,7 @@
 import { Button, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Moment from 'react-moment';
 import { MdAddToQueue, MdRemoveFromQueue, MdExpandLess } from 'react-icons/md';
 
@@ -9,6 +9,7 @@ import FeedsContext from '../feed/FeedsContext';
 import ToolTip from '../../components/tooltip/ToolTip';
 import { ButtonLookalikeStyle, TransparentButton } from '../../components/styledComponents';
 import { TransparentRemoveFromCurrentListButton } from '../myLists/addToListModal/RemoveFromCurrentListButton';
+import Colors from '../../components/themes/Colors';
 
 export const AddToListModalTrigger = styled(Button).attrs({ variant: 'outline-secondary' })`
   ${ButtonLookalikeStyle}
@@ -598,14 +599,58 @@ export const ExpandCollapseFeedButton = (props) => {
   );
 };
 
+const heartBeatAnimation = keyframes`
+  0% {
+    -moz-transform: scale(0);
+    opacity: 0;
+  }
+  25% {
+    -moz-transform: scale(0.1);
+    opacity: 0.1;
+  }
+  50% {
+    -moz-transform: scale(0.5);
+    opacity: 0.3;
+  }
+  75% {
+    -moz-transform: scale(0.8);
+    opacity: 0.5;
+  }
+  to {
+    -moz-transform: scale(1);
+    opacity: 0;
+  }
+`;
+
+export const StyledNewlyAddedIndicatorPulseRings = styled.div`
+  animation: ${heartBeatAnimation} 1s ease-out;
+  animation-iteration-count: infinite;
+  z-index: 10;
+  border: 10px solid ${Colors.red};
+  border-radius: 0.25em;
+  height: calc(100% + 30px);
+  width: calc(100% + 30px);
+  position: absolute;
+  padding: 15px;
+`;
+
 export const StyledNewlyAddedIndicator = styled.div`
   color: rgb(255, 255, 255);
-  position: absolute;
-  top: 5px;
-  left: 5px;
   padding: 0.15rem 0.3rem;
   font-weight: 700;
   font-size: 1.1em;
   background: rgb(200, 50, 50);
   border-radius: 0.25em;
+`;
+export const StyledNewlyAddedIndicatorWrapper = styled.div`
+  position: absolute;
+  top: 5px;
+  left: 5px;
+`;
+
+export const RelativeContainer = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

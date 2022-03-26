@@ -72,14 +72,12 @@ const Section = ({
   const previosStreams = useRef();
 
   useEffect(() => {
-    // console.log('previosStreams?.current:', previosStreams?.current);
     try {
-      if (notifications_enabled && previosStreams?.current) {
+      if (notifications_enabled && previosStreams?.current && data?.loaded) {
         const streamsToNotify = data?.liveStreams?.filter(
           (stream) => !previosStreams?.current?.find((s) => s?.user_id === stream?.user_id)
         );
 
-        // console.log('streamsToNotify:', streamsToNotify);
         const streams = streamsToNotify?.map((stream = {}) => {
           const notisTitle = `${
             !data?.oldLiveStreams?.find((s) => s?.user_id === stream?.user_id) ? 'Live ' : ''
@@ -104,7 +102,14 @@ const Section = ({
       console.log('Section useeffect Error', e);
     }
     previosStreams.current = data?.liveStreams || [];
-  }, [data?.liveStreams, data?.oldLiveStreams, title, addNotification, notifications_enabled]);
+  }, [
+    data?.liveStreams,
+    data?.oldLiveStreams,
+    title,
+    addNotification,
+    notifications_enabled,
+    data?.loaded,
+  ]);
 
   if (!data?.liveStreams?.length) return null;
   return (
