@@ -1,5 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
+import Colors from '../../../components/themes/Colors';
 
 export const VodLiveIndicator = styled(Link)`
   &&& {
@@ -11,12 +12,12 @@ export const VodLiveIndicator = styled(Link)`
   padding: 5px;
   font-size: 0.85rem;
   position: absolute;
-  background: #d10303;
+  background: ${Colors.red};
   color: white;
   border-radius: 10px;
   font-weight: bold;
   align-items: center;
-  border: 1px solid #f00;
+  border: 1px solid ${Colors.red};
   justify-content: center;
   margin: 3px;
   opacity: 0.8;
@@ -181,11 +182,11 @@ export const VodChannelListPopup = styled.div`
       }
 
       i {
-        color: rgb(172, 34, 47);
+        color: ${Colors.red};
       }
 
       &:hover i {
-        color: red;
+        color: ${Colors.red};
       }
     }
   }

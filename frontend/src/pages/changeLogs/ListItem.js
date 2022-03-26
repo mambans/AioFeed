@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { MdAddCircleOutline, MdRemoveCircleOutline } from 'react-icons/md';
 import { FaExchangeAlt } from 'react-icons/fa';
 import { Button } from 'react-bootstrap';
+import Colors from '../../components/themes/Colors';
 
 const AddIcon = styled(MdAddCircleOutline).attrs({ size: 16 })`
   color: green;
@@ -84,11 +85,11 @@ const List = {
     }
 
     #additions {
-      color: rgb(0, 80, 0);
+      color: ${Colors.green};
     }
 
     #deletions {
-      color: rgb(80, 0, 0);
+      color: ${Colors.red};
     }
   `,
 };

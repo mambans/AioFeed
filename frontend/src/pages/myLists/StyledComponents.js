@@ -3,6 +3,7 @@ import { Button, Form } from 'react-bootstrap';
 import { MdPlaylistAdd, MdPlaylistAddCheck, MdAdd } from 'react-icons/md';
 import { IoIosCloseCircleOutline, IoMdCloseCircle } from 'react-icons/io';
 import { CgPlayListRemove } from 'react-icons/cg';
+import Colors from '../../components/themes/Colors';
 
 // export const Open = styled(MdStar)`
 //   position: absolute;
@@ -100,7 +101,7 @@ export const IconContainer = styled.div`
     }
 
     .add {
-      color: var(--listColorAdd);
+      color: ${Colors.green};
     }
 
     .remove {
@@ -111,7 +112,7 @@ export const IconContainer = styled.div`
 
 export const AddedItemBtn = styled(MdPlaylistAddCheck)`
   transition: color 250ms, opacity 250ms;
-  color: var(--listColorAdd);
+  color: ${Colors.green}
 
   &:hover {
     color: rgb(100, 100, 100);
@@ -123,15 +124,15 @@ export const RemoveItemBtn = styled(CgPlayListRemove)`
   color: rgb(100, 100, 100);
 
   &:hover {
-    color: rgb(150, 00, 00);
+    color: ${Colors.red};
   }
 `;
 export const RemoveItemFromCurrentListIcon = styled(IoMdCloseCircle)`
   transition: color 250ms, opacity 250ms;
-  color: rgb(125, 00, 00);
+  color: ${Colors.red};
 
   &:hover {
-    color: rgb(175, 00, 00);
+    color: ${Colors.red};
   }
 `;
 
@@ -140,7 +141,7 @@ export const AddItemBtn = styled(MdPlaylistAdd)`
 
   &:hover {
     color: ${({ disablehovereffect }) =>
-      disablehovereffect === 'true' ? '#ffffff' : 'var (--listColorAdd)'};
+      disablehovereffect === 'true' ? '#ffffff' : Colors.green};
   }
 `;
 
@@ -215,7 +216,7 @@ export const IconContainerListItem = styled.div`
     }
     ${AddItemBtn} {
       opacity: ${({ added }) => (added === 'true' ? 0 : 1)};
-      color: var(--listColorAdd);
+      color: ${Colors.green};
     }
   }
 `;
@@ -294,7 +295,7 @@ export const ListActionButton = styled.div`
     color: rgb(250, 250, 250);
 
     svg {
-      color: ${({ color }) => color || 'rgb(150, 000, 000)'};
+      color: ${({ color }) => color || Colors.red};
     }
   }
 `;

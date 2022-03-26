@@ -4,6 +4,7 @@ import { ExpandCollapseFeedButton } from '../../sharedComponents/sharedStyledCom
 import Header, { HeaderNumberCount } from '../../../components/Header';
 import ChannelSearchList from './../channelList';
 import BigScheduleList from './BigScheduleList';
+import Colors from '../../../components/themes/Colors';
 
 const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed, idTitle }, ref) => {
   const {
@@ -23,7 +24,7 @@ const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed, idTitl
           Twitch
           <span
             style={{
-              background: 'rgb(202, 35, 43)',
+              background: Colors.red,
               fontWeight: 'bold',
               borderRadius: '5px',
               fontSize: '0.9em',

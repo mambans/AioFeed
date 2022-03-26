@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { rgba } from '../../util';
 import { IoMdClose } from 'react-icons/io';
 import { FiAlertCircle } from 'react-icons/fi';
 import { MdOutlineDangerous } from 'react-icons/md';
 import { IoCheckmarkCircleOutline } from 'react-icons/io5';
+import Colors from '../themes/Colors';
 
 const getType = (type) => {
   switch (type) {
     case 'success':
-      return { bg: 'rgb(10, 173, 16)', icon: <IoCheckmarkCircleOutline /> };
+      return { bg: Colors.green, icon: <IoCheckmarkCircleOutline /> };
     case 'danger':
     case 'error':
-      return { bg: 'rgb(168, 50, 50)', icon: <MdOutlineDangerous /> };
+      return { bg: Colors.red, icon: <MdOutlineDangerous /> };
     case 'warning':
-      return { bg: 'rgb(232, 206, 39)', icon: <FiAlertCircle /> };
+      return { bg: Colors.yellow, icon: <FiAlertCircle /> };
     case 'info':
-      return { bg: 'rgb(16, 114, 220)', icon: <FiAlertCircle /> };
+      return { bg: Colors.blue, icon: <FiAlertCircle /> };
     case 'white':
     case 'light':
       return { bg: 'rgb(240,240,240)', icon: <FiAlertCircle /> };
@@ -131,7 +131,6 @@ const Wrapper = styled.div`
   border-radius: 0 0 0.5rem 0.5rem;
   backdrop-filter: blur(5px);
   width: ${({ width }) => width || 'max-content'};
-  /* background: ${({ type }) => rgba(type.bg, 0.5)}; */
   padding: 0 1rem 1rem calc(1rem + ${ICON_WIDTH});
   cursor: ${({ onClick }) => (onClick ? 'pointer' : 'initial')};
   transition: filter 250ms, border 250ms;
@@ -139,7 +138,7 @@ const Wrapper = styled.div`
   border-top: 4px solid ${({ type }) => type.bg};
 
   ${Background} {
-    background: ${({ type }) => rgba(type.bg, 0.5)};
+    background: ${({ type }) => Colors.rgba(type.bg, 0.5)};
   }
 
   ${Title} {

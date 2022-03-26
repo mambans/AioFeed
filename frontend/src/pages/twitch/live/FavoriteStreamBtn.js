@@ -5,18 +5,19 @@ import ToolTip from '../../../components/tooltip/ToolTip';
 import { VodAddRemoveButton } from '../../sharedComponents/sharedStyledComponents';
 import API from '../../navigation/API';
 import { TwitchContext } from '../useToken';
+import Colors from '../../../components/themes/Colors';
 
 const AddItemBtn = styled(MdStarBorder)`
   transition: color 250ms;
 
   &:hover {
-    color: rgb(255, 255, 0);
+    color: ${Colors.yellow};
   }
 `;
 
 const RemoveItemBtn = styled(MdStar)`
   transition: color 250ms;
-  color: rgb(255, 255, 0);
+  color: ${Colors.yellow};
 
   &:hover {
     color: rgb(100, 100, 100);
@@ -25,7 +26,7 @@ const RemoveItemBtn = styled(MdStar)`
 
 const AddedItemBtn = styled(MdStar)`
   transition: color 250ms;
-  color: rgb(255, 255, 0);
+  color: ${Colors.yellow};
 `;
 
 const FavoriteStreamBtn = (

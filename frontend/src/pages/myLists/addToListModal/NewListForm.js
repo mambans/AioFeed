@@ -5,6 +5,7 @@ import MyListsContext from '../MyListsContext';
 import MyInput from '../../../components/myInput/MyInput';
 import ToolTip from '../../../components/tooltip/ToolTip';
 import { StyledButton } from '../../../components/styledComponents';
+import Colors from '../../../components/themes/Colors';
 
 const NewListForm = ({ item, style } = {}) => {
   const { addList, checkIfListNameIsAvaliable } = useContext(MyListsContext) || {};
@@ -16,7 +17,7 @@ const NewListForm = ({ item, style } = {}) => {
       rightSide={
         <ToolTip delay={{ show: 500, hide: 0 }} toltip={`Add new list`}>
           <StyledButton>
-            <MdAdd size={22} color='rgb(0,230,0)' />
+            <MdAdd size={22} color={Colors.green} />
           </StyledButton>
         </ToolTip>
       }

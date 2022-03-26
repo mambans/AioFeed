@@ -1,16 +1,17 @@
 import styled, { keyframes, css } from 'styled-components';
+import Colors from '../../../components/themes/Colors';
 
 const pulse = keyframes`
   0% {
-    box-shadow: 0 0 5px 9px rgba(255, 0, 0, 0.25);;
+    box-shadow: 0 0 5px 9px ${Colors.rgba(Colors.red, 0.25)};
   }
 
   60% {
-    box-shadow: 0 0 5px 10px rgba(255, 0, 0, 0.5);
+    box-shadow: 0 0 5px 10px ${Colors.rgba(Colors.red, 0.5)};
   }
 
   100% {
-    box-shadow: 0 0 5px 9px rgba(255, 0, 0, 0.25);;
+    box-shadow: 0 0 5px 9px ${Colors.rgba(Colors.red, 0.25)};
   }
 `;
 

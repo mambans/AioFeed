@@ -6,6 +6,7 @@ import ToolTip from '../../components/tooltip/ToolTip';
 import { MdDelete, MdAdd } from 'react-icons/md';
 import FeedSectionsContext from './FeedSectionsContext';
 import { StyledListForm, StyledButton } from '../../components/styledComponents';
+import Colors from '../../components/themes/Colors';
 
 const StyledRule = styled.div`
   height: ${({ height }) => height}px;
@@ -200,11 +201,11 @@ const Rule = ({ rule, height, id }) => {
             >
               {rule?.id ? (
                 <StyledButton onClick={handleRemove} type='button'>
-                  <MdDelete size={22} color='rgb(200,0,0)' />
+                  <MdDelete size={22} color={Colors.red} />
                 </StyledButton>
               ) : (
                 <StyledButton onClick={handleAdd} type='button'>
-                  <MdAdd size={22} color='rgb(0,230,0)' />
+                  <MdAdd size={22} color={Colors.green} />
                 </StyledButton>
               )}
             </ToolTip>

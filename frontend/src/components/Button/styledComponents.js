@@ -1,9 +1,10 @@
 import styled, { keyframes } from 'styled-components';
+import Colors from '../themes/Colors';
 import { loadingAnimation, buttonBubbleAnimation, svgAnimation } from './animations';
 
 export const COLORS = {
-  danger: { background: 'rgb(162, 28, 28)' },
-  success: { background: 'rgb(34, 146, 11)' },
+  danger: { background: Colors.red },
+  success: { background: Colors.green },
   light: { background: 'rgb(200,200,200)', color: 'rgb(15,15,15)' },
   default: { background: 'rgb(100, 100, 100)', color: '#ffffff' },
   transparent: { background: 'transparent', color: '#ffffff', loadingColor: '#ffffff' },

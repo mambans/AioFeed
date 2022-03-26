@@ -18,6 +18,7 @@ import NavExpandingSides from './NavExpandingSides';
 import VodsContext, { VodsProvider } from '../twitch/vods/VodsContext';
 import DropDown from './DropDown';
 import LogsContext from '../logs/LogsContext';
+import Colors from '../../components/themes/Colors';
 
 const StyledNavbar = styled(Navbar)`
   display: flex;
@@ -108,19 +109,19 @@ const Navigation = () => {
             </Nav.Link>
             <DropDown title='Individual Feeds'>
               <NavDropdown.Item as={NavLink} to='/mylists'>
-                <HiViewList size={18} color='var(--listColorAdd)' />
+                <HiViewList size={18} color={Colors.green} />
                 My lists
               </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to='/live'>
-                <FaTwitch size={16} color='rgb(118, 65, 198)' />
+                <FaTwitch size={16} color={Colors.purple} />
                 Live
               </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to='/youtube'>
-                <FaYoutube size={16} color='rgb(255, 0, 0)' />
+                <FaYoutube size={16} color={Colors.red} />
                 YouTube
               </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to='/vods'>
-                <MdVideocam size={16} color='rgb(118, 65, 198)' />
+                <MdVideocam size={16} color={Colors.purple} />
                 Vods
               </NavDropdown.Item>
             </DropDown>

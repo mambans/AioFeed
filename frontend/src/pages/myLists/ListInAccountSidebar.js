@@ -6,6 +6,7 @@ import ToolTip from '../../components/tooltip/ToolTip';
 import MyListsContext from './MyListsContext';
 import { AiFillEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { MdDelete, MdAdd } from 'react-icons/md';
+import Colors from '../../components/themes/Colors';
 
 const ListInAccountSidebar = () => {
   const { lists, addList, toggleList, editListName, deleteList, checkIfListNameIsAvaliable } =
@@ -51,11 +52,11 @@ const ListInAccountSidebar = () => {
               >
                 {list.id ? (
                   <StyledButton type='button' onClick={() => deleteList({ id: list.id })}>
-                    <MdDelete size={22} color='rgb(200,0,0)' />
+                    <MdDelete size={22} color={Colors.red} />
                   </StyledButton>
                 ) : (
                   <StyledButton>
-                    <MdAdd size={22} color='rgb(0,230,0)' />
+                    <MdAdd size={22} color={Colors.green} />
                   </StyledButton>
                 )}
               </ToolTip>
@@ -70,7 +71,7 @@ const ListInAccountSidebar = () => {
           rightSide={
             <ToolTip delay={{ show: 500, hide: 0 }} toltip={`Add new list`}>
               <StyledButton>
-                <MdAdd size={22} color='rgb(0,230,0)' />
+                <MdAdd size={22} color={Colors.green} />
               </StyledButton>
             </ToolTip>
           }

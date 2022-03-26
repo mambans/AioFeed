@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import Colors from '../../components/themes/Colors';
 
 export const NotificationListContainer = styled.div`
   max-height: 600px;
@@ -11,7 +12,7 @@ export const NotificationListContainer = styled.div`
 `;
 
 export const UnseenNotifcationCount = styled.div`
-  background-color: rgb(170, 0, 0);
+  background-color: ${Colors.red};
   height: 24px;
   width: 24px;
   border-radius: 50%;

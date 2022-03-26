@@ -6,6 +6,7 @@ import styled, { keyframes } from 'styled-components';
 
 import { addFavoriteVideo, removeFavoriteVideo } from './addToListModal/AddToListModal';
 import { RemoveItemBtn, AddedItemBtn, AddItemBtn } from './StyledComponents';
+import Colors from '../../components/themes/Colors';
 
 const buttonBubbleAnimation = keyframes`
   0% {
@@ -68,7 +69,7 @@ const Button = styled.button`
     }
     ${AddItemBtn} {
       opacity: ${({ added }) => (added === 'true' ? 0 : 1)};
-      color: var(--listColorAdd);
+      color: ${Colors.green};
     }
   }
 
@@ -138,7 +139,7 @@ const AddVideoButton = ({ video_id, list, redirect }) => {
     >
       {added ? (
         <>
-          <RemoveItemBtn size={18} color='rgb(150,00,0)' />
+          <RemoveItemBtn size={18} color={Colors.red} />
           <AddedItemBtn size={18} />
         </>
       ) : (

@@ -17,6 +17,7 @@ import FeedsContext from '../feed/FeedsContext';
 import { ExpandCollapseFeedButton } from '../sharedComponents/sharedStyledComponents';
 import ExpandableSection from '../../components/expandableSection/ExpandableSection';
 import Alert from '../../components/alert';
+import Colors from '../../components/themes/Colors';
 
 export const useCheckForVideosAndValidateToken = ({
   lists,
@@ -107,7 +108,7 @@ export const FavoriteListContainer = ({
           <h1 id={`MyList-${list.id}`} onClick={() => toggleExpanded(list.id)}>
             {list.title}
             <HeaderNumberCount text={list?.videos?.length} />
-            <HiViewList size={25} color={'var(--listColorAdd)'} />
+            <HiViewList size={25} color={Colors.green} />
             <ExpandCollapseFeedButton collapsed={orders?.[list.id]?.collapsed} />
           </h1>
         }

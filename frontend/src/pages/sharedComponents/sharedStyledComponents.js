@@ -443,7 +443,7 @@ export const StyledImageContainer = styled.div`
     top: 0;
     padding: 3px 5px;
     border-radius: 10px;
-    background: rgb(209, 3, 3) none repeat scroll 0% 0%;
+    background: ${Colors.red} none repeat scroll 0% 0%;
     font-size: 0.8em;
     transform: translate3d(-30%, -30%, 0);
     display: ${({ active }) => (active ? 'unset' : 'none')};
@@ -502,7 +502,7 @@ export const VodAddRemoveButton = styled(Button)`
   &&& {
     &:hover {
       color: ${({ vodenabled, variant }) =>
-        variant === 'success' ? 'unset' : vodenabled === 'true' ? 'rgb(225, 000, 000)' : '#14ae14'};
+        variant === 'success' ? 'unset' : vodenabled === 'true' ? Colors.red : Colors.green};
       opacity: 1;
     }
   }
@@ -639,7 +639,7 @@ export const StyledNewlyAddedIndicator = styled.div`
   padding: 0.15rem 0.3rem;
   font-weight: 700;
   font-size: 1.1em;
-  background: rgb(200, 50, 50);
+  background: ${Colors.rgba(Colors.red, 0.9)};
   border-radius: 0.25em;
 `;
 export const StyledNewlyAddedIndicatorWrapper = styled.div`

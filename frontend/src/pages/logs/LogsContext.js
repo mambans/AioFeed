@@ -11,6 +11,7 @@ import MyModal from '../../components/mymodal/MyModal';
 import NotificationItem from '../notifications/NotificationItem';
 import { HiViewList } from 'react-icons/hi';
 import { BsCollectionFill } from 'react-icons/bs';
+import Colors from '../../components/themes/Colors';
 
 const LogsContext = React.createContext();
 
@@ -74,24 +75,24 @@ export const LogsProvider = ({ children }) => {
   const icons = (icon) => {
     switch (icon?.toLowerCase()) {
       case 'twitch':
-        return <FaTwitch size={24} color='rgb(169, 112, 255)' />;
+        return <FaTwitch size={24} color={Colors.purple} />;
       case 'youtube':
-        return <FaYoutube size={24} color='rgb(255, 0, 0)' />;
+        return <FaYoutube size={24} color={Colors.red} />;
       case 'logout':
-        return <FiLogOut size={24} color='rgb(200,50,50)' />;
+        return <FiLogOut size={24} color={Colors.red} />;
       case 'login':
-        return <FiLogIn size={24} color='rgb(200,50,50)' />;
+        return <FiLogIn size={24} color={Colors.red} />;
       case 'authenticated':
-        return <SiAuthy size={24} color='rgb(200,50,50)' />;
+        return <SiAuthy size={24} color={Colors.red} />;
       case 'deleted':
       case 'removed':
-        return <SiAuthy size={24} color='rgb(200,50,50)' />;
+        return <SiAuthy size={24} color={Colors.red} />;
       case 'mylist':
-        return <HiViewList size={24} color='rgb(50, 200, 50)' />;
+        return <HiViewList size={24} color={Colors.green} />;
       case 'feedsection':
-        return <BsCollectionFill size={24} color='rgb(50, 200, 50)' />;
+        return <BsCollectionFill size={24} color={Colors.green} />;
       case 'twitter':
-        return <FaTwitter size={24} color='rgb(50, 200, 50)' />;
+        return <FaTwitter size={24} color={Colors.green} />;
       default:
         return <GiDominoTiles size={24} />;
     }

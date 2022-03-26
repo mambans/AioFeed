@@ -13,6 +13,7 @@ import NavigationContext from '../navigation/NavigationContext';
 import MyModal from '../../components/mymodal/MyModal';
 import styled from 'styled-components';
 import { askForBrowserNotificationPermission } from '../../util';
+import Colors from '../../components/themes/Colors';
 
 const RightButton = styled(StyledButton)`
   width: 100%;
@@ -140,12 +141,12 @@ const FeedSectionAdd = () => {
 
                 {section.id ? (
                   <RightButton type='button' onClick={() => deleteFeedSection(section.id)}>
-                    <MdDelete size={22} color='rgb(200,0,0)' />
+                    <MdDelete size={22} color={Colors.red} />
                     <span style={{ paddingLeft: '5px' }}>Delete</span>
                   </RightButton>
                 ) : (
                   <RightButton>
-                    <MdAdd size={22} color='rgb(0,230,0)' />
+                    <MdAdd size={22} color={Colors.green} />
                     <span style={{ paddingLeft: '5px' }}>Add </span>
                   </RightButton>
                 )}
@@ -169,7 +170,7 @@ const FeedSectionAdd = () => {
           rightSide={
             <ToolTip delay={{ show: 500, hide: 0 }} toltip={`Add new list`}>
               <StyledButton>
-                <MdAdd size={22} color='rgb(0,230,0)' />
+                <MdAdd size={22} color={Colors.green} />
               </StyledButton>
             </ToolTip>
           }

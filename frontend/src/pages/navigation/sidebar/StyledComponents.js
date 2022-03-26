@@ -4,6 +4,7 @@ import { MdRefresh } from 'react-icons/md';
 import { MdFormatIndentDecrease } from 'react-icons/md';
 import { FaWindowClose } from 'react-icons/fa';
 import styled from 'styled-components';
+import Colors from '../../../components/themes/Colors';
 
 export const StyledNavSidebar = styled.div`
   &&& {
@@ -572,7 +573,7 @@ export const StyledToggleButton = styled(Button)`
 
   &:hover {
     background: ${({ enabled }) =>
-      enabled === 'true' ? 'rgba(0, 150, 0, 0.5)' : 'rgba(150, 0 ,0, 0.5)'};
+      enabled === 'true' ? Colors.rgba(Colors.green, 0.75) : Colors.rgba(Colors.red, 0.75)};
   }
 `;
 

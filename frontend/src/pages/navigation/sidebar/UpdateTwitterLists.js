@@ -10,6 +10,7 @@ import API from '../API';
 import TwitterContext from '../../twitter/TwitterContext';
 import LogsContext from '../../logs/LogsContext';
 import { StyledListForm, StyledButton } from '../../../components/styledComponents';
+import Colors from '../../../components/themes/Colors';
 
 const UpdateTwitterLists = ({ style, id }) => {
   const { setTwitterLists, twitterLists } = useContext(TwitterContext) || {};
@@ -61,7 +62,7 @@ const UpdateTwitterLists = ({ style, id }) => {
             <FaTwitter
               style={{ position: 'absolute', transform: 'translateX(-60%)' }}
               size={12}
-              color='rgb(29, 161, 242)'
+              color={Colors.blue}
             />
             {id ? (
               <IoMdList size={22} color='#ffffff' />
@@ -80,9 +81,9 @@ const UpdateTwitterLists = ({ style, id }) => {
           <ToolTip delay={{ show: 500, hide: 0 }} toltip={`${id ? `Remove list` : `Add new list`}`}>
             <StyledButton>
               {id ? (
-                <MdDelete size={22} color='rgb(200,0,0)' />
+                <MdDelete size={22} color={Colors.red} />
               ) : (
-                <MdAdd size={22} color='rgb(0,230,0)' />
+                <MdAdd size={22} color={Colors.green} />
               )}
             </StyledButton>
           </ToolTip>

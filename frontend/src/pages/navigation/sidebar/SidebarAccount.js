@@ -25,6 +25,7 @@ import Settings from './Settings';
 import FeedSectionAdd from '../../feedSections';
 import SidebarExpandableSection from './SidebarExpandableSection';
 import ListInAccountSidebar from '../../myLists/ListInAccountSidebar';
+import Colors from '../../../components/themes/Colors';
 
 const SidebarAccount = () => {
   const { username, authKey } = useContext(AccountContext) || {};
@@ -57,11 +58,11 @@ const SidebarAccount = () => {
   }, [username, authKey, setRenderModal]);
 
   const domainColors = {
-    Twitch: 'rgb(169, 112, 255)',
-    Youtube: 'rgb(255, 0, 0)',
-    MyLists: 'var(--listColorAdd)',
-    Twitter: 'rgb(29, 161, 242)',
-    FeedSections: '#ff0060',
+    Twitch: Colors.purple,
+    Youtube: Colors.red,
+    MyLists: Colors.green,
+    Twitter: Colors.blue,
+    FeedSections: Colors.raspberry,
   };
 
   const feedsBtns = [
