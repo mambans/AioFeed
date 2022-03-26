@@ -28,7 +28,7 @@ const AppContainer = styled.div`
   background-color: var(--backgroundColor);
   object-fit: cover;
   background-position-x: center;
-  background-position-y: center;
+  background-position-y: var(--backgroundImgPositionY);
   background-size: var(--backgroundImgSize);
   background-repeat: var(--backgroundImgRepeat);
   background-attachment: fixed;

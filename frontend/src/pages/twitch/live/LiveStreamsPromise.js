@@ -15,8 +15,9 @@ const liveStreamsPromise = async ({
       resolve(newLive);
     });
 
+    setNewlyAddedStreams((c) => [...(c || []), ...res?.map(({ user_name } = {}) => user_name)]);
+
     const streams = res?.map((stream) => {
-      setNewlyAddedStreams((c) => [...(c || []), stream.user_name]);
       stream.newlyAdded = true;
       stream.notiStatus = 'Live';
       stream.onClick = () => window.open('https://aiofeed.com/' + stream.login || stream.user_name);

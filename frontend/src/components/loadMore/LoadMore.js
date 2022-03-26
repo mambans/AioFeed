@@ -82,10 +82,8 @@ const LoadMore = ({
   useEffect(() => {
     if (Boolean(show || videos?.length > videoElementsAmount)) {
       const thisEle = thisEleRef.current;
-      const observerRef = observer.curren;
-      return () => {
-        return observerRef?.unobserve(thisEle);
-      };
+      const observerRef = observer.current;
+      return () => observerRef?.unobserve(thisEle);
     }
   }, [show, videos, videoElementsAmount]);
 

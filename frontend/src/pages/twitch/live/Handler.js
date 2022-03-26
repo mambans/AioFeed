@@ -16,7 +16,7 @@ import { fetchAndAddTags } from '../fetchAndAddTags';
 import FeedSectionsContext from '../../feedSections/FeedSectionsContext';
 import { checkAgainstRules } from '../../feedSections/FeedSections';
 import Alert from '../../../components/alert';
-// import useFetchSingelVod from '../vods/hooks/useFetchSingelVod';
+import useFetchSingelVod from '../vods/hooks/useFetchSingelVod';
 
 const REFRESH_RATE = 25; // seconds
 
@@ -29,7 +29,7 @@ const Handler = ({ children }) => {
     twitchAccessToken,
     updateNotischannels,
   } = useContext(TwitchContext);
-  // const { fetchLatestVod } = useFetchSingelVod();
+  const { fetchLatestVod } = useFetchSingelVod();
   const validateToken = useToken();
   const { feedSections } = useContext(FeedSectionsContext) || {};
   const [refreshTimer, setRefreshTimer] = useState(20);
@@ -60,11 +60,7 @@ const Handler = ({ children }) => {
   useEventListenerMemo('blur', windowBlurHandler);
 
   const refresh = useCallback(
-    async ({
-      disableNotifications = false,
-      forceRefreshThumbnails = false,
-      forceValidateToken = false,
-    } = {}) => {
+    async ({ disableNotifications = false, forceValidateToken = false } = {}) => {
       setLoadingStates(({ loaded, lastLoaded }) => {
         return { refreshing: true, error: null, loaded: loaded, lastLoaded: lastLoaded };
       });
@@ -160,14 +156,14 @@ const Handler = ({ children }) => {
                     liveStreams: nonFeedSectionLiveStreams,
                     oldLiveStreams,
                     setNewlyAddedStreams,
-                    // fetchLatestVod,
+                    fetchLatestVod,
                   }),
 
                   await OfflineStreamsPromise({
                     liveStreams,
                     oldLiveStreams,
                     isEnabledOfflineNotifications,
-                    // fetchLatestVod,
+                    fetchLatestVod,
                   }),
 
                   await UpdatedStreamsPromise({
@@ -207,13 +203,12 @@ const Handler = ({ children }) => {
       updateNotischannels,
       setNewlyAddedStreams,
       feedSections,
-      // fetchLatestVod,
+      fetchLatestVod,
     ]
   );
 
   useEffect(() => {
     if (liveStreams?.current?.length) {
-      console.log(1);
       const enabledFeedSections =
         feedSections &&
         Object.values?.(feedSections)?.filter((f = {}) => f.enabled && f.excludeFromTwitch_enabled);
@@ -271,6 +266,7 @@ const Handler = ({ children }) => {
       />
     );
   }
+
   return children({
     refreshing: loadingStates.refreshing,
     loaded: loadingStates.loaded,
@@ -284,7 +280,7 @@ const Handler = ({ children }) => {
     // liveStreams: liveStreams.current || [],
     // nonFeedSectionLiveStreams: nonFeedSectionLiveStreams.current || [],
     refresh,
-    newlyAddedStreams: newlyAddedStreams,
+    newlyAddedStreams,
     REFRESH_RATE,
     autoRefreshEnabled,
     refreshAfterUnfollowTimer,

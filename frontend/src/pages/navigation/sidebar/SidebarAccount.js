@@ -199,11 +199,11 @@ const SidebarAccount = () => {
             {feedsBtns?.map((props, index) => {
               return (
                 <ToggleButton
+                  {...props}
                   key={props.serviceName + index}
                   scrollIntoView
                   setEnable={feedProps[`setEnable${props.serviceName}`]}
                   enabled={feedProps[`enable${props.serviceName}`]}
-                  {...props}
                 />
               );
             })}

@@ -1,32 +1,17 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MdStar, MdStarBorder } from 'react-icons/md';
 import ToolTip from '../../../components/tooltip/ToolTip';
 import { VodAddRemoveButton } from '../../sharedComponents/sharedStyledComponents';
 import API from '../../navigation/API';
 import { TwitchContext } from '../useToken';
-import Colors from '../../../components/themes/Colors';
 
 const AddItemBtn = styled(MdStarBorder)`
   transition: color 250ms;
-
-  &:hover {
-    color: ${Colors.yellow};
-  }
-`;
-
-const RemoveItemBtn = styled(MdStar)`
-  transition: color 250ms;
-  color: ${Colors.yellow};
-
-  &:hover {
-    color: rgb(100, 100, 100);
-  }
 `;
 
 const AddedItemBtn = styled(MdStar)`
   transition: color 250ms;
-  color: ${Colors.yellow};
 `;
 
 const FavoriteStreamBtn = (
@@ -34,11 +19,7 @@ const FavoriteStreamBtn = (
   ...props
 ) => {
   const { favStreams, setFavStreams } = useContext(TwitchContext);
-  const [isHovered, setIsHovered] = useState();
-  const added = favStreams?.includes(channel?.toLowerCase());
-
-  const handleMouseEnter = () => setIsHovered(true);
-  const handleMouseLeave = () => setIsHovered(null);
+  const [enabled, setEnabled] = useState(favStreams?.includes(channel?.toLowerCase()));
 
   async function addChannel() {
     try {
@@ -67,34 +48,37 @@ const FavoriteStreamBtn = (
     }
   }
 
+  useEffect(() => {
+    setEnabled(favStreams?.includes(channel?.toLowerCase()));
+  }, [favStreams, channel]);
+
+  const handleOnClick = () => {
+    setEnabled((c) => !c);
+    if (enabled) {
+      removeChannel();
+    } else {
+      addChannel();
+    }
+  };
+
   if (!show) return null;
 
   return (
     <ToolTip
       delay={{ show: 500, hide: 0 }}
       width='max-content'
-      tooltip={`${added ? 'Remove' : 'Add'} ${channel} as a favorite.`}
+      tooltip={`${enabled ? 'Remove' : 'Add'} ${channel} as a favorite.`}
     >
       <VodAddRemoveButton
         className='StreamUpdateNoitificationsButton'
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
         marginright={marginright}
         loweropacity={loweropacity}
-        vodenabled={show.toString()}
+        vodenabled={String(enabled)}
         variant='link'
-        onClick={added ? removeChannel : addChannel}
+        onClick={handleOnClick}
         style={style}
       >
-        {added ? (
-          isHovered ? (
-            <RemoveItemBtn size={size} />
-          ) : (
-            <AddedItemBtn size={size} />
-          )
-        ) : (
-          <AddItemBtn size={size} />
-        )}
+        {enabled ? <AddedItemBtn size={size} /> : <AddItemBtn size={size} />}
       </VodAddRemoveButton>
     </ToolTip>
   );

@@ -1,7 +1,6 @@
 import { TiFlashOutline } from 'react-icons/ti';
 import { TiFlash } from 'react-icons/ti';
-import { IoIosFlashOff } from 'react-icons/io';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 
 import { VodAddRemoveButton } from '../sharedComponents/sharedStyledComponents';
 import ToolTip from '../../components/tooltip/ToolTip';
@@ -39,8 +38,7 @@ const AddUpdateNotificationsButton = ({
   show = true,
 }) => {
   const { updateNotischannels, setUpdateNotischannels } = useContext(TwitchContext);
-  const [isHovered, setIsHovered] = useState();
-  const updateNotificationEnabled = updateNotischannels?.includes(channel?.toLowerCase());
+  const [enabled, setEnabled] = useState(updateNotischannels?.includes(channel?.toLowerCase()));
 
   async function addChannel() {
     try {
@@ -55,13 +53,25 @@ const AddUpdateNotificationsButton = ({
     }
   }
 
-  function handleMouseEnter() {
-    setIsHovered(true);
-  }
+  useEffect(() => {
+    setEnabled(updateNotischannels?.includes(channel?.toLowerCase()));
+  }, [updateNotischannels, channel]);
 
-  function handleMouseLeave() {
-    setIsHovered(null);
-  }
+  const handleOnClick = () => {
+    setEnabled((c) => !c);
+    setTimeout(() => {
+      if (enabled) {
+        // unfollowStream();
+        removeChannel({
+          channel,
+          updateNotischannels,
+          setUpdateNotischannels,
+        });
+      } else {
+        addChannel();
+      }
+    }, 0);
+  };
 
   if (!show) return null;
 
@@ -69,37 +79,17 @@ const AddUpdateNotificationsButton = ({
     <ToolTip
       delay={{ show: 500, hide: 0 }}
       width='max-content'
-      tooltip={`${
-        updateNotificationEnabled ? 'Disable' : 'Enable'
-      }${channel} stream title/game update notification`}
+      tooltip={`${enabled ? 'Disable' : 'Enable'}${channel} stream title/game update notification`}
     >
       <VodAddRemoveButton
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
         className='StreamUpdateNoitificationsButton'
         marginright={marginright}
         loweropacity={loweropacity}
-        vodenabled={updateNotificationEnabled.toString()}
+        vodenabled={String(enabled)}
         variant='link'
-        onClick={() =>
-          updateNotificationEnabled
-            ? removeChannel({
-                channel,
-                updateNotischannels,
-                setUpdateNotischannels,
-              })
-            : addChannel()
-        }
+        onClick={handleOnClick}
       >
-        {updateNotificationEnabled ? (
-          isHovered ? (
-            <IoIosFlashOff size={size} color='red' />
-          ) : (
-            <TiFlash size={size} color='green' />
-          )
-        ) : (
-          <TiFlashOutline size={size} />
-        )}
+        {enabled ? <TiFlash size={size} color='green' /> : <TiFlashOutline size={size} />}
       </VodAddRemoveButton>
     </ToolTip>
   );

@@ -12,6 +12,7 @@ import { ExpandCollapseFeedButton } from '../sharedComponents/sharedStyledCompon
 import ExpandableSection from '../../components/expandableSection/ExpandableSection';
 import addSystemNotification from '../twitch/live/addSystemNotification';
 import NotificationsContext from '../notifications/NotificationsContext';
+import Colors from '../../components/themes/Colors';
 
 export const checkAgainstRules = (stream, rules) => {
   return rules.some(
@@ -126,7 +127,7 @@ const Section = ({
           <h1 id={`FeedSection-${id}`} onClick={() => toggleExpanded(id)}>
             {title}
             <HeaderNumberCount text={data?.liveStreams?.length} />
-            <BsCollectionFill size={22} color={'#ff0060'} />
+            <BsCollectionFill size={22} color={Colors.raspberry} />
             <ExpandCollapseFeedButton collapsed={orders?.[id]?.collapsed} />
           </h1>
         }

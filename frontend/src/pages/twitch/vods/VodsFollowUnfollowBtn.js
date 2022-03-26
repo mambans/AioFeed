@@ -1,7 +1,6 @@
 import { MdVideoCall } from 'react-icons/md';
 import { MdVideocam } from 'react-icons/md';
-import { MdVideocamOff } from 'react-icons/md';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 
 import AccountContext from '../../account/AccountContext';
 import { VodAddRemoveButton } from '../../sharedComponents/sharedStyledComponents';
@@ -9,7 +8,7 @@ import VodsContext from './VodsContext';
 import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../../components/tooltip/ToolTip';
 import useVodChannel from './hooks/useVodChannel';
-// import useFetchSingelVod from './hooks/useFetchSingelVod';
+import useFetchSingelVod from './hooks/useFetchSingelVod';
 
 /**
  * @param {Object} channel - channel
@@ -32,55 +31,51 @@ const VodsFollowUnfollowBtn = ({
 }) => {
   const { channels, setChannels } = useContext(VodsContext) || {};
   const { authKey, username } = useContext(AccountContext);
-  const [isHovered, setIsHovered] = useState();
+  const [enabled, setEnabled] = useState(
+    !!channels?.find((user_id) => channel?.user_id === user_id)
+  );
   const { enableTwitchVods } = useContext(FeedsContext) || {};
   const { removeChannel, addVodChannel } = useVodChannel();
-  // const { fetchLatestVod } = useFetchSingelVod();
+  const { fetchLatestVod } = useFetchSingelVod();
 
-  const handleMouseEnter = () => setIsHovered(true);
-  const handleMouseLeave = () => setIsHovered(null);
+  const handleOnClick = () => {
+    setEnabled((c) => !c);
+    setTimeout(() => {
+      if (enabled) {
+        // unfollowStream();
+        removeChannel({ channel, channels, setChannels });
+      } else {
+        addVodChannel({ channel, channels, setChannels, username, authKey });
+        if (channel?.user_id) {
+          fetchLatestVod({ user_id: channel.user_id, amount: 5 });
+        }
+      }
+    }, 0);
+  };
+
+  useEffect(() => {
+    setEnabled(!!channels?.find((user_id) => channel?.user_id === user_id));
+  }, [channels, channel?.user_id]);
 
   if ((!show && !enableTwitchVods) || !channel) return null;
-
-  const vodEnabled = channels?.find((user_id) => channel?.user_id === user_id);
 
   return (
     <ToolTip
       delay={{ show: 500, hide: 0 }}
-      tooltip={`${vodEnabled ? 'Disable' : 'Enable'} ${channel?.user_name} vods`}
+      tooltip={`${enabled ? 'Disable' : 'Enable'} ${channel?.user_name} vods`}
       width='max-content'
     >
       <VodAddRemoveButton
         className={`VodButton ${className || ''}`}
         marginright={marginright}
         loweropacity={loweropacity}
-        vodenabled={String(vodEnabled)}
+        vodenabled={String(enabled)}
         variant={type}
         padding={padding}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onClick={() => {
-          if (vodEnabled) {
-            unfollowStream();
-            removeChannel({ channel, channels, setChannels });
-          } else {
-            addVodChannel({ channel, channels, setChannels, username, authKey });
-            if (channel?.user_id) {
-              // fetchLatestVod({ user_id: channel.user_id, amount: 5 });
-            }
-          }
-        }}
+        onClick={handleOnClick}
       >
         <>
-          {vodEnabled ? (
-            isHovered ? (
-              <MdVideocamOff size={size} color='red' />
-            ) : (
-              <MdVideocam size={size} color='green' />
-            )
-          ) : (
-            <MdVideoCall size={size} />
-          )}
+          {enabled ? <MdVideocam size={size} /> : <MdVideoCall size={size} />}
           {text}
         </>
       </VodAddRemoveButton>

@@ -31,20 +31,15 @@ const ToggleButton = ({
   const anTokenExists = Boolean(tokenExists || tokensForDomains[serviceName]);
 
   function handleChange() {
-    setEnable(!enabled);
-    // setChecked(!checked);
-
+    const newEnabled = !enabled;
+    setEnable(newEnabled);
     clearTimeout(timeout.current);
-    timeout.current = setTimeout(async () => {
-      // save enabled state in database?
-    }, 2500);
-
-    if (scrollIntoView && !enabled === true) {
-      setTimeout(() => {
+    if (scrollIntoView && newEnabled === true) {
+      timeout.current = setTimeout(() => {
         const element = document.getElementById(`${label || serviceName}Header`);
         element &&
           element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
-      }, 100);
+      }, 150);
     }
   }
 
@@ -52,7 +47,7 @@ const ToggleButton = ({
     <ToolTip tooltip={tooltip} width='max-content'>
       <StyledToggleButton
         onClick={handleChange}
-        disabled={!anTokenExists && !enabled}
+        disabled={!anTokenExists}
         variant='dark'
         buttonsperrow={buttonsperrow}
         enabled={String(enabled)}

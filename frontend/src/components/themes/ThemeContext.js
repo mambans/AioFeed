@@ -24,7 +24,7 @@ export const ThemeProvider = ({ children }) => {
     {
       name: 'coffeepour',
       type: 'dark',
-      image: 'webp/coffeepour-blurred.webp',
+      image: 'webp/coffeepour-blurred-remasted.webp',
       default: true,
     },
     {

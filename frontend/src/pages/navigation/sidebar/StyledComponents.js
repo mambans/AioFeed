@@ -573,7 +573,7 @@ export const StyledToggleButton = styled(Button)`
 
   &:hover {
     background: ${({ enabled }) =>
-      enabled === 'true' ? Colors.rgba(Colors.green, 0.75) : Colors.rgba(Colors.red, 0.75)};
+      enabled === 'true' ? Colors.rgba(Colors.red, 0.75) : Colors.rgba(Colors.green, 0.75)};
   }
 `;
 
