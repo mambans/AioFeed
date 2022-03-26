@@ -14,6 +14,7 @@ import { ExpandCollapseFeedButton } from '../../sharedComponents/sharedStyledCom
 const Sidebar = ({ data }) => {
   const { loaded, nonFeedSectionLiveStreams } = data;
   const { feedSections } = useContext(FeedSectionsContext);
+  const { enableFeedSections } = useContext(FeedsContext);
 
   if (loaded) {
     return (
@@ -24,17 +25,19 @@ const Sidebar = ({ data }) => {
           data={{ streams: nonFeedSectionLiveStreams }}
         />
 
-        {Object.values(feedSections)
-          .reduce((acc, curr) => {
-            const streams = data?.liveStreams.filter((stream) =>
-              checkAgainstRules(stream, curr.rules)
-            );
-            if (!curr.enabled || !curr.sidebar_enabled) return acc;
-            return [...acc, { ...curr, data: { ...data, streams } }];
-          }, [])
-          ?.map((feed, index) => (
-            <SidebarSection key={feed.id} feed={feed} index={index} data={feed.data} />
-          ))}
+        {enableFeedSections &&
+          feedSections &&
+          Object.values(feedSections)
+            .reduce((acc, curr) => {
+              const streams = data?.liveStreams.filter((stream) =>
+                checkAgainstRules(stream, curr.rules)
+              );
+              if (!curr.enabled || !curr.sidebar_enabled) return acc;
+              return [...acc, { ...curr, data: { ...data, streams } }];
+            }, [])
+            ?.map((feed, index) => (
+              <SidebarSection key={feed.id} feed={feed} index={index} data={feed.data} />
+            ))}
       </Styledsidebar>
     );
   }
