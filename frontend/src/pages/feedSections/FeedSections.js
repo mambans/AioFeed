@@ -15,7 +15,8 @@ import NotificationsContext from '../notifications/NotificationsContext';
 import Colors from '../../components/themes/Colors';
 
 export const checkAgainstRules = (stream, rules) => {
-  return rules.some((r) => {
+  if (!rules) return stream;
+  return rules?.some((r) => {
     const title = stream.title?.toLowerCase().includes(r.title?.toLowerCase()?.trim());
     const game = stream.game_name?.toLowerCase().includes(r.category?.toLowerCase()?.trim());
     const name = loginNameFormat(stream)

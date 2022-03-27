@@ -80,13 +80,10 @@ export const FeedSectionsProvider = ({ children }) => {
         return [{ ...rule, id: Date.now() }, ...c?.[id]?.rules];
       })();
 
-      const newRule = {
-        [id]: { ...c[id], rules },
-      };
       API.updateCustomFeedSections(id, { rules });
       return {
         ...c,
-        ...newRule,
+        [id]: { ...c[id], rules },
       };
     });
   };
@@ -94,14 +91,12 @@ export const FeedSectionsProvider = ({ children }) => {
   const deleteFeedSectionRule = (id, rule) => {
     setFeedSections((c) => {
       const rules = c[id].rules.filter((r) => r.id !== rule.id);
-      const newRule = {
-        [id]: { ...c[id], rules },
-      };
+
       API.updateCustomFeedSections(id, { rules });
 
       return {
         ...c,
-        ...newRule,
+        [id]: { ...c[id], rules },
       };
     });
   };
@@ -110,15 +105,11 @@ export const FeedSectionsProvider = ({ children }) => {
     setFeedSections((c) => {
       const enabled = !c[id].enabled;
 
-      const newFeedSection = {
-        [id]: { ...c[id], enabled },
-      };
-
       API.updateCustomFeedSections(id, { enabled });
 
       return {
         ...c,
-        ...newFeedSection,
+        [id]: { ...c[id], enabled },
       };
     });
   };
@@ -127,15 +118,11 @@ export const FeedSectionsProvider = ({ children }) => {
     setFeedSections((c) => {
       const sidebar_enabled = !c[id].sidebar_enabled;
 
-      const newFeedSection = {
-        [id]: { ...c[id], sidebar_enabled },
-      };
-
       API.updateCustomFeedSections(id, { sidebar_enabled });
 
       return {
         ...c,
-        ...newFeedSection,
+        [id]: { ...c[id], sidebar_enabled },
       };
     });
   };
@@ -143,16 +130,11 @@ export const FeedSectionsProvider = ({ children }) => {
   const toggleFeedSectionNotification = (id) => {
     setFeedSections((c) => {
       const notifications_enabled = !c[id].notifications_enabled;
-
-      const newFeedSection = {
-        [id]: { ...c[id], notifications_enabled },
-      };
-
       API.updateCustomFeedSections(id, { notifications_enabled });
 
       return {
         ...c,
-        ...newFeedSection,
+        [id]: { ...c[id], notifications_enabled },
       };
     });
   };
@@ -161,15 +143,11 @@ export const FeedSectionsProvider = ({ children }) => {
     setFeedSections((c) => {
       const excludeFromTwitch_enabled = !c[id].excludeFromTwitch_enabled;
 
-      const newFeedSection = {
-        [id]: { ...c[id], excludeFromTwitch_enabled },
-      };
-
       API.updateCustomFeedSections(id, { excludeFromTwitch_enabled });
 
       return {
         ...c,
-        ...newFeedSection,
+        [id]: { ...c[id], excludeFromTwitch_enabled },
       };
     });
   };
