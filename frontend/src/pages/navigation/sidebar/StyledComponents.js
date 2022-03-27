@@ -585,6 +585,7 @@ export const StyledToggleButtonsContainer = styled.div`
 
 export const ToggleButtonsContainer = ({ children, buttonsperrow }) => {
   const childrens = React.Children.map(children, (child) => {
+    if (!React.isValidElement(child)) return null;
     return React.cloneElement(child, {
       buttonsperrow: buttonsperrow,
     });

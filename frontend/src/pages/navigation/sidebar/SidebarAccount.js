@@ -105,6 +105,7 @@ const SidebarAccount = () => {
       icon: <BsCollectionFill size={24} color={domainColors.FeedSections} />,
       tooltip: (feedProps.enableMyLists ? 'Disable ' : 'Enable ') + ` MyLists feed`,
       tokenExists: twitchAccessToken,
+      mount: feedProps.enableTwitch,
     },
   ];
 
@@ -196,17 +197,20 @@ const SidebarAccount = () => {
         <AccountDetails />
         <SidebarExpandableSection title='Feeds'>
           <ToggleButtonsContainer buttonsperrow={3}>
-            {feedsBtns?.map((props, index) => {
-              return (
-                <ToggleButton
-                  {...props}
-                  key={props.serviceName + index}
-                  scrollIntoView
-                  setEnable={feedProps[`setEnable${props.serviceName}`]}
-                  enabled={feedProps[`enable${props.serviceName}`]}
-                />
-              );
-            })}
+            {feedsBtns
+              ?.filter(({ mount }) => mount ?? true)
+              ?.map((props, index) => {
+                return (
+                  <ToggleButton
+                    {...props}
+                    key={props.serviceName + index}
+                    scrollIntoView
+                    setEnable={feedProps[`setEnable${props.serviceName}`]}
+                    enabled={feedProps[`enable${props.serviceName}`]}
+                    mount={props.mount || true}
+                  />
+                );
+              })}
           </ToggleButtonsContainer>
         </SidebarExpandableSection>
         {feedProps.enableTwitter && <TwitterForms />}
