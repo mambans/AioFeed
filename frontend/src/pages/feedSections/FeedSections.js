@@ -15,16 +15,22 @@ import NotificationsContext from '../notifications/NotificationsContext';
 import Colors from '../../components/themes/Colors';
 
 export const checkAgainstRules = (stream, rules) => {
-  return rules.some(
-    (r) =>
-      stream.title?.toLowerCase().includes(r.title?.toLowerCase()?.trim()) &&
-      stream.game_name?.toLowerCase().includes(r.category?.toLowerCase()?.trim()) &&
-      loginNameFormat(stream)?.toLowerCase()?.trim().includes(r.channel?.toLowerCase()?.trim()) &&
-      stream?.tag_names?.find((tag_name) =>
-        tag_name?.toLowerCase()?.includes(r?.tag?.toLowerCase()?.trim())
-      ) &&
-      stream.viewer_count >= r.viewers
-  );
+  return rules.some((r) => {
+    const title = stream.title?.toLowerCase().includes(r.title?.toLowerCase()?.trim());
+    const game = stream.game_name?.toLowerCase().includes(r.category?.toLowerCase()?.trim());
+    const name = loginNameFormat(stream)
+      ?.toLowerCase()
+      ?.trim()
+      .includes(r.channel?.toLowerCase()?.trim());
+    const tags = stream?.tag_names
+      ? stream?.tag_names?.find((tag_name) =>
+          tag_name?.toLowerCase()?.includes(r?.tag?.toLowerCase()?.trim())
+        )
+      : true;
+    const viewer_count = stream.viewer_count >= r.viewers;
+
+    return title && game && name && tags && viewer_count;
+  });
 };
 
 const FeedSections = ({ data }) => {
