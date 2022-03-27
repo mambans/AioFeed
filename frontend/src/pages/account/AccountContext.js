@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import useCookieState from '../../hooks/useCookieState';
 
@@ -6,9 +6,9 @@ const AccountContext = React.createContext();
 
 export const AccountProvider = ({ children }) => {
   const [username, setUsername] = useCookieState(`AioFeed_AccountName`);
-  const [profileImage, setProfileImage] = useCookieState(`AioFeed_AccountProfileImg`);
+  const [profileImage, setProfileImage] = useState();
   const [authKey, setAuthKey] = useCookieState(`AioFeed_AuthKey`);
-  const [email, setEmail] = useCookieState('AioFeed_AccountEmail');
+  const [email, setEmail] = useState();
 
   return (
     <AccountContext.Provider

@@ -2,8 +2,6 @@ import { RemoveCookie } from '../../../util';
 
 const clearAllAccountCookiesStates = ({
   setUsername = () => RemoveCookie('AioFeed_AccountName'),
-  setProfileImage = () => RemoveCookie('AioFeed_AccountProfileImg'),
-  setEmail = () => RemoveCookie('AioFeed_AccountEmail'),
   setAuthKey = () => RemoveCookie('AioFeed_AuthKey'),
 
   setTwitchAccessToken = () => RemoveCookie('Twitch-access_token'),
@@ -42,8 +40,6 @@ const clearAllAccountCookiesStates = ({
     setYoutubeProfileImage();
 
     setUsername();
-    setProfileImage();
-    setEmail();
     setAuthKey();
     setRenderModal('login');
   }, 500);

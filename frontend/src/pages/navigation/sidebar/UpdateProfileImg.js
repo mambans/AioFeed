@@ -3,7 +3,6 @@ import React, { useContext } from 'react';
 import AccountContext from './../../account/AccountContext';
 import useInput from './../../../hooks/useInput';
 import { ProfileImgInput } from './StyledComponents';
-import { AddCookie } from '../../../util';
 import API from '../API';
 
 const UpdateProfileImg = ({ close }) => {
@@ -11,7 +10,6 @@ const UpdateProfileImg = ({ close }) => {
   const { value: image, bind: bindimage, reset: resetimage } = useInput('');
 
   const addProfileImage = async () => {
-    AddCookie('AioFeed_AccountProfileImg', image);
     setProfileImage(image);
 
     await API.changeProfileImage(image).then(close);
