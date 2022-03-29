@@ -111,7 +111,7 @@ const Section = ({
       console.log('Section useeffect Error', e);
     }
 
-    previosStreams.current = data?.liveStreams || [];
+    if (data?.loaded) previosStreams.current = data?.liveStreams || [];
   }, [
     data?.liveStreams,
     data?.oldLiveStreams,
