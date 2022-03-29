@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.scss';
 import './transitions.scss';
@@ -8,7 +8,9 @@ import App from './pages/app/App';
 
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(<App tab='home' />);
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(<App />);
