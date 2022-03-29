@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Container, ListHeader, EmailButtonAsLink } from './StyledComponents';
 
 const Legality = () => {
   const scrollTo = new URL(window.location.href).hash;
 
-  if (scrollTo) {
-    setTimeout(() => {
+  useEffect(() => {
+    if (scrollTo) {
       const element = document.getElementById(scrollTo);
       element && element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
-    }, 1);
-  }
+    }
+  }, [scrollTo]);
 
   return (
     <Container>

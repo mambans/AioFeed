@@ -61,8 +61,8 @@ const Handler = ({ children }) => {
 
   const refresh = useCallback(
     async ({ disableNotifications = false, forceValidateToken = false } = {}) => {
-      setLoadingStates(({ loaded, lastLoaded }) => {
-        return { refreshing: true, error: null, loaded: loaded, lastLoaded: lastLoaded };
+      setLoadingStates((c) => {
+        return { ...c, refreshing: true, error: null };
       });
       try {
         if (isInFocus.current) setNewlyAddedStreams([]);
@@ -137,47 +137,45 @@ const Handler = ({ children }) => {
               liveStreams.current = orderedStreams;
               return { orderedStreams, nonFeedSectionLiveStreams };
             })()
-          ).then(({ orderedStreams, nonFeedSectionLiveStreams } = {}) => {
-            setTimeout(async () => {
-              setLiveStreamsState(orderedStreams);
-              setNonFeedSectionLiveStreamsState(nonFeedSectionLiveStreams);
-              setLoadingStates({
-                refreshing: false,
-                error: null,
-                loaded: true,
-                lastLoaded: Date.now(),
+          ).then(async ({ orderedStreams, nonFeedSectionLiveStreams } = {}) => {
+            setLiveStreamsState(orderedStreams);
+            setNonFeedSectionLiveStreamsState(nonFeedSectionLiveStreams);
+            setLoadingStates({
+              refreshing: false,
+              error: null,
+              loaded: true,
+              lastLoaded: Date.now(),
+            });
+            if (
+              !disableNotifications &&
+              (nonFeedSectionLiveStreams?.length >= 1 || oldLiveStreams.current?.length >= 1)
+            ) {
+              await Promise.all([
+                await LiveStreamsPromise({
+                  liveStreams: nonFeedSectionLiveStreams,
+                  oldLiveStreams,
+                  setNewlyAddedStreams,
+                  fetchLatestVod,
+                }),
+
+                await OfflineStreamsPromise({
+                  liveStreams,
+                  oldLiveStreams,
+                  isEnabledOfflineNotifications,
+                  fetchLatestVod,
+                }),
+
+                await UpdatedStreamsPromise({
+                  liveStreams: nonFeedSectionLiveStreams,
+                  oldLiveStreams,
+                  isEnabledUpdateNotifications,
+                  updateNotischannels,
+                }),
+              ]).then((res) => {
+                const flattenedArray = res.flat(3).filter((n) => n);
+                if (Boolean(flattenedArray?.length)) addNotification(flattenedArray);
               });
-              if (
-                !disableNotifications &&
-                (nonFeedSectionLiveStreams?.length >= 1 || oldLiveStreams.current?.length >= 1)
-              ) {
-                await Promise.all([
-                  await LiveStreamsPromise({
-                    liveStreams: nonFeedSectionLiveStreams,
-                    oldLiveStreams,
-                    setNewlyAddedStreams,
-                    fetchLatestVod,
-                  }),
-
-                  await OfflineStreamsPromise({
-                    liveStreams,
-                    oldLiveStreams,
-                    isEnabledOfflineNotifications,
-                    fetchLatestVod,
-                  }),
-
-                  await UpdatedStreamsPromise({
-                    liveStreams: nonFeedSectionLiveStreams,
-                    oldLiveStreams,
-                    isEnabledUpdateNotifications,
-                    updateNotischannels,
-                  }),
-                ]).then((res) => {
-                  const flattenedArray = res.flat(3).filter((n) => n);
-                  if (Boolean(flattenedArray?.length)) addNotification(flattenedArray);
-                });
-              }
-            }, 0);
+            }
           });
         } else if (streams?.status === 201) {
           setLoadingStates({

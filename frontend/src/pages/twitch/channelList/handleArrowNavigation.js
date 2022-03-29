@@ -1,26 +1,24 @@
 export const scrollToIfNeeded = (parentEle, childEle) => {
-  setTimeout(() => {
-    const child = !childEle
-      ? parentEle.querySelector('.selected')
-      : typeof childEle === 'function'
-      ? childEle()
-      : childEle;
-    const parentRect = parentEle?.getBoundingClientRect();
-    const childRect = child?.getBoundingClientRect();
-    const scrollValue = childRect?.bottom - (parentRect.bottom - childRect.height);
+  const child = !childEle
+    ? parentEle.querySelector('.selected')
+    : typeof childEle === 'function'
+    ? childEle()
+    : childEle;
+  const parentRect = parentEle?.getBoundingClientRect();
+  const childRect = child?.getBoundingClientRect();
+  const scrollValue = childRect?.bottom - (parentRect.bottom - childRect.height);
 
-    if (scrollValue && Boolean(childRect?.bottom)) {
-      parentEle.scrollBy({
-        top: scrollValue,
-        behavior: 'smooth',
-      });
-    } else if (child) {
-      parentEle.scroll({
-        bottom: child.height || 41,
-        behavior: 'smooth',
-      });
-    }
-  }, 1);
+  if (scrollValue && Boolean(childRect?.bottom)) {
+    parentEle.scrollBy({
+      top: scrollValue,
+      behavior: 'smooth',
+    });
+  } else if (child) {
+    parentEle.scroll({
+      bottom: child.height || 41,
+      behavior: 'smooth',
+    });
+  }
 };
 
 const handleArrowNavigation = (

@@ -258,17 +258,15 @@ const PlaylistInPlayer = ({
         twitchExistsAndValidated,
       });
 
-      setTimeout(() => {
-        setListVideos((curr) =>
-          videos.map((vid) => {
-            if (curr?.find((c) => c.id === vid.id)) {
-              return { ...vid, transition: 'verticalSlide' };
-            }
-            return vid;
-          })
-        );
-        addSavedData(videos);
-      }, 0);
+      setListVideos((curr) =>
+        videos.map((vid) => {
+          if (curr?.find((c) => c.id === vid.id)) {
+            return { ...vid, transition: 'verticalSlide' };
+          }
+          return vid;
+        })
+      );
+      addSavedData(videos);
     })();
   }, [
     list,

@@ -101,19 +101,17 @@ const App = () => {
 
         if (!data) {
           console.log('--expired login--');
-          setTimeout(() => {
-            setAuthKey();
-            setUsername();
-            setEmail();
-            setProfileImage();
-            setShowSidebar(true);
-            toast.warn('Expired login. Please login again');
-            addLog({
-              title: 'Expired login',
-              text: 'Logged in session expired, please login again.',
-              icon: 'logout',
-            });
-          }, 0);
+          setAuthKey();
+          setUsername();
+          setEmail();
+          setProfileImage();
+          setShowSidebar(true);
+          toast.warn('Expired login. Please login again');
+          addLog({
+            title: 'Expired login',
+            text: 'Logged in session expired, please login again.',
+            icon: 'logout',
+          });
         }
 
         return true;

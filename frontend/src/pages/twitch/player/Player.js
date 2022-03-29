@@ -240,12 +240,10 @@ const Player = () => {
 
   function offlineEvents() {
     console.log('Stream is Offline');
-    setTimeout(() => {
-      clearInterval(refreshStreamInfoTimer.current);
-      setShowUIControlls(false);
-      setStreamInfo(null);
-      setStatus('Offline');
-    }, 0);
+    clearInterval(refreshStreamInfoTimer.current);
+    setShowUIControlls(false);
+    setStreamInfo(null);
+    setStatus('Offline');
   }
 
   const GetAndSetStreamInfo = useCallback(async () => {
