@@ -81,6 +81,7 @@ const Section = ({
 
   useEffect(() => {
     try {
+      console.log('data?.loaded:', data?.loaded);
       if (notifications_enabled && previosStreams?.current && data?.loaded) {
         const streamsToNotify = data?.liveStreams?.filter(
           (stream) => !previosStreams?.current?.find((s) => s?.user_id === stream?.user_id)
@@ -109,6 +110,7 @@ const Section = ({
     } catch (e) {
       console.log('Section useeffect Error', e);
     }
+
     previosStreams.current = data?.liveStreams || [];
   }, [
     data?.liveStreams,
