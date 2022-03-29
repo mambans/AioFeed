@@ -138,46 +138,44 @@ const Handler = ({ children }) => {
               return { orderedStreams, nonFeedSectionLiveStreams };
             })()
           ).then(async ({ orderedStreams, nonFeedSectionLiveStreams } = {}) => {
-            setTimeout(async () => {
-              setLiveStreamsState(orderedStreams);
-              setNonFeedSectionLiveStreamsState(nonFeedSectionLiveStreams);
-              setLoadingStates({
-                refreshing: false,
-                error: null,
-                loaded: true,
-                lastLoaded: Date.now(),
+            setLiveStreamsState(orderedStreams);
+            setNonFeedSectionLiveStreamsState(nonFeedSectionLiveStreams);
+            setLoadingStates({
+              refreshing: false,
+              error: null,
+              loaded: true,
+              lastLoaded: Date.now(),
+            });
+            if (
+              !disableNotifications &&
+              (nonFeedSectionLiveStreams?.length >= 1 || oldLiveStreams.current?.length >= 1)
+            ) {
+              await Promise.all([
+                await LiveStreamsPromise({
+                  liveStreams: nonFeedSectionLiveStreams,
+                  oldLiveStreams,
+                  setNewlyAddedStreams,
+                  fetchLatestVod,
+                }),
+
+                await OfflineStreamsPromise({
+                  liveStreams,
+                  oldLiveStreams,
+                  isEnabledOfflineNotifications,
+                  fetchLatestVod,
+                }),
+
+                await UpdatedStreamsPromise({
+                  liveStreams: nonFeedSectionLiveStreams,
+                  oldLiveStreams,
+                  isEnabledUpdateNotifications,
+                  updateNotischannels,
+                }),
+              ]).then((res) => {
+                const flattenedArray = res.flat(3).filter((n) => n);
+                if (Boolean(flattenedArray?.length)) addNotification(flattenedArray);
               });
-              if (
-                !disableNotifications &&
-                (nonFeedSectionLiveStreams?.length >= 1 || oldLiveStreams.current?.length >= 1)
-              ) {
-                await Promise.all([
-                  await LiveStreamsPromise({
-                    liveStreams: nonFeedSectionLiveStreams,
-                    oldLiveStreams,
-                    setNewlyAddedStreams,
-                    fetchLatestVod,
-                  }),
-
-                  await OfflineStreamsPromise({
-                    liveStreams,
-                    oldLiveStreams,
-                    isEnabledOfflineNotifications,
-                    fetchLatestVod,
-                  }),
-
-                  await UpdatedStreamsPromise({
-                    liveStreams: nonFeedSectionLiveStreams,
-                    oldLiveStreams,
-                    isEnabledUpdateNotifications,
-                    updateNotischannels,
-                  }),
-                ]).then((res) => {
-                  const flattenedArray = res.flat(3).filter((n) => n);
-                  if (Boolean(flattenedArray?.length)) addNotification(flattenedArray);
-                });
-              }
-            }, 0);
+            }
           });
         } else if (streams?.status === 201) {
           setLoadingStates({
