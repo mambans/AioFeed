@@ -166,14 +166,17 @@ const List = ({
       onDragEnd: (e) => uploadNewList(e, list.id, videos, setLists),
       // onDrop: (e) => uploadNewList(e, list.name, videos, setLists),
       // onDragStart: (e) => (e.dataTransfer.effectAllowed = 'all'),
-      onDragOver: (e) => restructureVideoList(e, dragSelected, setVideos),
+      onDragOver: (e) => {
+        e.preventDefault();
+        restructureVideoList(e, dragSelected, setVideos);
+      },
       onDragEnter: (e) => e.preventDefault(),
     }),
     [dragSelected, setVideos, videos, list.id, setLists]
   );
 
   return (
-    <VideosContainer>
+    <VideosContainer onDragOver={(e) => e.preventDefault()}>
       <TransitionGroup component={null} className={videosToShow.transitionGroup || 'videos'}>
         {videos?.slice(0, videosToShow.amount)?.map((video) => (
           <CSSTransition
