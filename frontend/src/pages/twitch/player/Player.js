@@ -490,11 +490,6 @@ const Player = () => {
                         {chatState.hideChat ? 'Show chat' : 'Hide chat'}
                       </li>
 
-                      <li onClick={resetChatState}>
-                        <GrRefresh size={24} />
-                        Reset chat position
-                      </li>
-
                       <li
                         onClick={() => {
                           updateChatState((curr) => {
@@ -507,6 +502,12 @@ const Player = () => {
                       >
                         <MdCompareArrows size={24} />
                         Switch chat side
+                      </li>
+
+                      <br />
+                      <li onClick={resetChatState}>
+                        <GrRefresh size={24} />
+                        Reset chat position
                       </li>
                       <li onClick={reloadVideoPlayer}>
                         <GrRefresh size={24} />
