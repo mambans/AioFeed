@@ -31,23 +31,8 @@ module.exports = async ({ username, password }) => {
         Attributes: {
           ...res.Item,
           AuthKey,
-          TwitchPreferences: res.Item.TwitchPreferences
-            ? {
-                ...res.Item.TwitchPreferences,
-                Token: await decrypt(res.Item.TwitchPreferences.Token, 'TwitchPreferences'),
-                Refresh_token: await decrypt(
-                  res.Item.TwitchPreferences.Refresh_token,
-                  'TwitchPreferences'
-                ),
-              }
-            : {},
-
-          YoutubePreferences: res.Item.YoutubePreferences
-            ? {
-                ...res.Item.YoutubePreferences,
-                Token: await decrypt(res.Item.YoutubePreferences.Token, 'YoutubePreferences'),
-              }
-            : {},
+          TwitchPreferences: res.Item.TwitchPreferences,
+          YoutubePreferences: res.Item.YoutubePreferences,
         },
       };
 

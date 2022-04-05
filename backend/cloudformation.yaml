@@ -87,11 +87,11 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-  ValidateAuthKey:
+  validateAccount:
     Type: AWS::Serverless::Function
     Properties:
       Description: 'Validates the passed Auth key to the users stored authkey.'
-      Handler: validateAuthKey/handler.handler
+      Handler: validateAccount/handler.handler
       Environment:
         Variables:
           USERNAME_TABLE: !Ref UserLogins

@@ -43,33 +43,35 @@ const AppContainer = styled.div`
 
 const AppRoutesContainer = () => {
   return (
-    <LogsProvider>
-      <ThemeProvider>
-        <AccountProvider>
-          <TwitchProvider>
-            <YoutubeProvider>
-              <NavigationProvider>
-                <NotificationsProvider>
-                  <TwitterProvider>
-                    <FeedsProvider>
-                      <FeedSectionsProvider>
-                        <MyListsProvider>
-                          <VodsProvider>
-                            <FooterProvider>
-                              <App />
-                            </FooterProvider>
-                          </VodsProvider>
-                        </MyListsProvider>
-                      </FeedSectionsProvider>
-                    </FeedsProvider>
-                  </TwitterProvider>
-                </NotificationsProvider>
-              </NavigationProvider>
-            </YoutubeProvider>
-          </TwitchProvider>
-        </AccountProvider>
-      </ThemeProvider>
-    </LogsProvider>
+    <React.StrictMode>
+      <LogsProvider>
+        <ThemeProvider>
+          <AccountProvider>
+            <TwitchProvider>
+              <YoutubeProvider>
+                <NavigationProvider>
+                  <NotificationsProvider>
+                    <TwitterProvider>
+                      <FeedsProvider>
+                        <FeedSectionsProvider>
+                          <MyListsProvider>
+                            <VodsProvider>
+                              <FooterProvider>
+                                <App />
+                              </FooterProvider>
+                            </VodsProvider>
+                          </MyListsProvider>
+                        </FeedSectionsProvider>
+                      </FeedsProvider>
+                    </TwitterProvider>
+                  </NotificationsProvider>
+                </NavigationProvider>
+              </YoutubeProvider>
+            </TwitchProvider>
+          </AccountProvider>
+        </ThemeProvider>
+      </LogsProvider>
+    </React.StrictMode>
   );
 };
 
@@ -99,20 +101,20 @@ const App = () => {
         });
         console.log('validateAccount data:', data);
 
-        if (!data) {
-          console.log('--expired login--');
-          setAuthKey();
-          setUsername();
-          setEmail();
-          setProfileImage();
-          setShowSidebar(true);
-          toast.warn('Expired login. Please login again');
-          addLog({
-            title: 'Expired login',
-            text: 'Logged in session expired, please login again.',
-            icon: 'logout',
-          });
-        }
+        // if (!data) {
+        //   console.log('--expired login--');
+        //   setAuthKey();
+        //   setUsername();
+        //   setEmail();
+        //   setProfileImage();
+        //   setShowSidebar(true);
+        //   toast.warn('Expired login. Please login again');
+        //   addLog({
+        //     title: 'Expired login',
+        //     text: 'Logged in session expired, please login again.',
+        //     icon: 'logout',
+        //   });
+        // }
 
         return true;
       }

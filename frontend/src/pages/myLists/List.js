@@ -167,7 +167,7 @@ const List = ({
       // onDrop: (e) => uploadNewList(e, list.name, videos, setLists),
       // onDragStart: (e) => (e.dataTransfer.effectAllowed = 'all'),
       onDragOver: (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         restructureVideoList(e, dragSelected, setVideos);
       },
       onDragEnter: (e) => e.preventDefault(),
