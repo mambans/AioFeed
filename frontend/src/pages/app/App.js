@@ -99,7 +99,7 @@ const App = () => {
           console.error('validateAccount error: ', e);
           return {};
         });
-        if (data.Username === 'mambans') console.log('validateAccount data:', data);
+        console.log('validateAccount data:', data);
 
         if (!data) {
           console.log('--expired login--');
@@ -117,8 +117,8 @@ const App = () => {
           return false;
         }
 
-        const { AuthKey, Email, Username, ProfileImg } = data;
-        setAuthKey(AuthKey);
+        const { Email, Username, ProfileImg } = data;
+        // setAuthKey(AuthKey);
         setUsername(Username);
         setEmail(Email);
         setProfileImage(ProfileImg);
