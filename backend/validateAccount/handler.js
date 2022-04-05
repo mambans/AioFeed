@@ -1,5 +1,8 @@
 'use strict';
 
+const DynamoDB = require('aws-sdk/clients/dynamodb');
+const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
+
 const { validateAuthkey } = require('../authkey');
 
 exports.handler = async (event) => {
@@ -26,7 +29,7 @@ exports.handler = async (event) => {
       })
       .promise();
 
-    if (!res || res.Item) {
+    if (!res || !res.Item) {
       return {
         statusCode: 401,
         headers: {
@@ -36,12 +39,14 @@ exports.handler = async (event) => {
       };
     }
 
+    const { Password, ...data } = res.Item;
+
     return {
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': 'https://aiofeed.com',
       },
-      body: res.Item,
+      body: JSON.stringify(data),
     };
   } catch (e) {
     return {

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import FeedsContext, { FeedsProvider } from '../feed/FeedsContext';
@@ -99,24 +99,34 @@ const App = () => {
           console.error('validateAccount error: ', e);
           return {};
         });
-        console.log('validateAccount data:', data);
+        if (data.Username === 'mambans') console.log('validateAccount data:', data);
 
-        // if (!data) {
-        //   console.log('--expired login--');
-        //   setAuthKey();
-        //   setUsername();
-        //   setEmail();
-        //   setProfileImage();
-        //   setShowSidebar(true);
-        //   toast.warn('Expired login. Please login again');
-        //   addLog({
-        //     title: 'Expired login',
-        //     text: 'Logged in session expired, please login again.',
-        //     icon: 'logout',
-        //   });
-        // }
+        if (!data) {
+          console.log('--expired login--');
+          setAuthKey();
+          setUsername();
+          setEmail();
+          setProfileImage();
+          setShowSidebar(true);
+          toast.warn('Expired login. Please login again');
+          addLog({
+            title: 'Expired login',
+            text: 'Logged in session expired, please login again.',
+            icon: 'logout',
+          });
+          return false;
+        }
 
-        return true;
+        const { AuthKey, Email, Username, ProfileImg } = data;
+        setAuthKey(AuthKey);
+        setUsername(Username);
+        setEmail(Email);
+        setProfileImage(ProfileImg);
+        addLog({
+          title: 'Login validated',
+          text: 'Login credentials sucessfully validated',
+          icon: 'authenticated',
+        });
       }
     })();
   }, [username, setAuthKey, setUsername, setEmail, setProfileImage, setShowSidebar, addLog]);
