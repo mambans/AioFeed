@@ -25,13 +25,11 @@ const useEventListenerMemo = (
     const isSupported = savedElement?.addEventListener;
     if (!isSupported) return;
 
-    const eventListener = (event) => savedHandler(event);
-
     if (Boolean(savedSecondArgument)) {
-      savedElement.addEventListener(savedEventName, eventListener, savedOptions);
+      savedElement.addEventListener(savedEventName, savedHandler, savedOptions);
     }
 
-    return () => savedElement.removeEventListener(savedEventName, eventListener);
+    return () => savedElement.removeEventListener(savedEventName, savedHandler);
   }, [savedEventName, savedElement, savedSecondArgument, savedHandler, savedOptions]);
 };
 export default useEventListenerMemo;
