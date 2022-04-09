@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { FaRegEye } from 'react-icons/fa';
 import { formatViewerNumbers } from '../TwitchUtils';
 import styled from 'styled-components';
@@ -48,9 +48,9 @@ const AnimatedViewCount = ({
   disabePrefix = false,
   formatViewcount = true,
 }) => {
-  const previousNumber = useRef(0);
-  const [number, setNumber] = useState(previousNumber.current || viewers || 0);
-  const animationTimer = useRef();
+  // const previousNumber = useRef(0);
+  // const [number, setNumber] = useState(previousNumber.current || viewers || 0);
+  // const animationTimer = useRef();
 
   // useEffect(() => {
   //   const animationStepAmount = Math.max(
