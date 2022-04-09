@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 // import useClicksInside from '../../../hooks/useClicksInside';
 // import useClicksOutside from '../../../hooks/useClicksOutside';
@@ -38,21 +38,17 @@ const Container = styled.div`
   }
 `;
 
-const ChannelButtonsContainer = ({ children, className, forceOpen, style, staticOpen }) => {
+const ChannelButtonsContainer = ({ children, className, style, staticOpen }) => {
   const ref = useRef();
-  const [open, setOpen] = useState(forceOpen);
   const childrenWithProps = React.Children.map(children, (child) => {
     if (React.isValidElement(child)) {
-      return React.cloneElement(child, { setOpenParent: setOpen, openParent: open, size: '1.5em' });
+      return React.cloneElement(child, { size: '1.5em' });
     }
     return child;
   });
 
-  // useClicksInside(ref, () => setOpen(true));
-  // useClicksOutside(ref, () => setOpen(false));
-
   return (
-    <Container ref={ref} open={staticOpen || open} className={className} style={style}>
+    <Container ref={ref} open={staticOpen} className={className} style={style}>
       {childrenWithProps}
     </Container>
   );

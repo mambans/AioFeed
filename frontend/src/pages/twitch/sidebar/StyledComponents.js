@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { MdFormatIndentDecrease } from 'react-icons/md';
 import { pulse } from './../StyledComponents';
+import { TransparentButton } from '../../../components/styledComponents';
 
 export const SidebarInfoPopup = styled.div`
   position: fixed;
@@ -250,7 +250,7 @@ export const LoadingSidebarItems = styled.div`
   }
 `;
 
-export const HideSidebarButton = styled(MdFormatIndentDecrease).attrs({ size: 25.5 })`
+export const HideSidebarButton = styled(TransparentButton)`
   position: fixed;
   height: 50.5px;
   transition: opacity 500ms, transform 350ms, top 350ms, left 350ms;
@@ -262,6 +262,7 @@ export const HideSidebarButton = styled(MdFormatIndentDecrease).attrs({ size: 25
   left: 5px;
   top: 92px;
   z-index: 3;
+  align-items: center;
 
   &:hover {
     opacity: 1;
