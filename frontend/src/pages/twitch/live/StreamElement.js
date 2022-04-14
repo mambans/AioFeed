@@ -52,6 +52,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
   const {
     user_id,
     user_name,
+    user_login,
     started_at,
     title,
     game_name,
@@ -78,6 +79,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
     viewer_count,
     game_name,
     login,
+    user_login,
   };
 
   return (

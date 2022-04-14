@@ -26,6 +26,16 @@ const TwitchAPI = {
     });
   },
 
+  getFollowedStreams: async (params) => {
+    return await axios.get(`${BASE_URL}/streams/followed`, {
+      params,
+      headers: {
+        Authorization: `Bearer ${await validateToken()}`,
+        'Client-ID': CLIENT_ID,
+      },
+    });
+  },
+
   getVideos: async (params) => {
     return await axios.get(`${BASE_URL}/videos`, {
       params,

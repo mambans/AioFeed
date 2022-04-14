@@ -93,7 +93,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
         dragging={dragging}
         id='chat'
         chatAsOverlay={chatAsOverlay}
-        data-chatAsOverlay={chatAsOverlay}
+        data-chatasoverlay={chatAsOverlay}
       >
         <ChatHeader>
           <ChatHeaderInner>
@@ -169,13 +169,13 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
         <InnerWrapper
           onMouseDown={onDragInit}
           onMouseUp={onDragStop}
-          data-chatAsOverlay={chatAsOverlay}
+          data-chatasoverlay={chatAsOverlay}
           onMouseMove={dragging ? onDragMove : () => {}}
         >
           {chatAsOverlay && dragging && <DragOverlay />}
 
           <StyledChat
-            data-chatAsOverlay={chatAsOverlay}
+            data-chatasoverlay={chatAsOverlay}
             frameborder='0'
             scrolling='yes'
             theme='dark'

@@ -11,7 +11,7 @@ import TopStreams from '../twitch/categoryTopStreams';
 import TwitchAuthCallback from '../auth/TwitchAuthCallback';
 import TwitchChannelRoutes from '../twitch/Routes';
 import YoutubeAuthCallback from '../auth/YoutubeAuthCallback';
-import Twitch from '../twitch/live';
+import { TwitchStandalone } from '../twitch/live';
 import TwitchVods from '../twitch/vods';
 import Twitter from '../twitter';
 import Youtube from '../youtube';
@@ -39,7 +39,7 @@ const NavigationRoutes = () => {
 
           <Route path='vods' element={<TwitchVods />} />
           <Route path='feed' element={<Feed />} />
-          <Route path='live' element={<Twitch forceMount={true} />} />
+          <Route path='live' element={<TwitchStandalone forceMount={true} />} />
           {/* <Navigate path='favorites' to='mylists' />
           <Navigate path='customlists' to='mylists' />
           <Navigate path='lists' to='mylists' />

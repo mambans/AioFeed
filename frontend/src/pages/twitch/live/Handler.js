@@ -3,7 +3,6 @@ import orderBy from 'lodash/orderBy';
 import uniqBy from 'lodash/uniqBy';
 
 import getMyFollowedChannels from './../getMyFollowedChannels';
-import getFollowedOnlineStreams from './GetFollowedStreams';
 import NotificationsContext from './../../notifications/NotificationsContext';
 import { AddCookie } from '../../../util';
 import LiveStreamsPromise from './LiveStreamsPromise';
@@ -17,6 +16,9 @@ import FeedSectionsContext from '../../feedSections/FeedSectionsContext';
 import { checkAgainstRules } from '../../feedSections/FeedSections';
 import Alert from '../../../components/alert';
 import useFetchSingelVod from '../vods/hooks/useFetchSingelVod';
+import fetchMyFollowedLiveStreams from '../functions/fetchMyFollowedLiveStreams';
+import addProfileInfo from '../functions/addProfileInfo';
+import addGameInfo from '../functions/addGameInfo';
 
 const REFRESH_RATE = 25; // seconds
 
@@ -28,6 +30,7 @@ const Handler = ({ children }) => {
     isEnabledUpdateNotifications,
     twitchAccessToken,
     updateNotischannels,
+    twitchUserId,
   } = useContext(TwitchContext);
   const { fetchLatestVod } = useFetchSingelVod();
   const validateToken = useToken();
@@ -72,15 +75,17 @@ const Handler = ({ children }) => {
         if (followedChannels.current && followedChannels.current[0]) {
           AddCookie('Twitch-username', followedChannels.current[0].from_name);
         }
-        const streams =
-          Array.isArray(followedChannels.current) &&
-          (await getFollowedOnlineStreams({
-            followedchannels: followedChannels.current,
-            disableNotifications: disableNotifications,
-            previousStreams: oldLiveStreams.current,
-          }));
-        if (streams?.status === 200) {
-          const newLiveStreams = [...(streams?.data || [])];
+
+        const baseStreams = await fetchMyFollowedLiveStreams({ user_id: twitchUserId });
+        const streamsWithProfiles = await addProfileInfo({
+          items: baseStreams,
+          save: true,
+          refresh: disableNotifications,
+        });
+        const streams = await addGameInfo({ items: streamsWithProfiles, save: true });
+
+        if (Array.isArray(streams)) {
+          const newLiveStreams = streams;
           const uniqueFilteredLiveStreams = uniqBy(newLiveStreams, 'user_id');
           const streamsTag_ids = uniqueFilteredLiveStreams.reduce((acc, curr) => {
             return [...acc, ...(curr?.tag_ids || [])];
@@ -177,10 +182,10 @@ const Handler = ({ children }) => {
               });
             }
           });
-        } else if (streams?.status === 201) {
+        } else {
           setLoadingStates({
             refreshing: false,
-            error: streams.error,
+            error: streams,
             loaded: true,
             lastLoaded: Date.now(),
           });
@@ -202,6 +207,7 @@ const Handler = ({ children }) => {
       setNewlyAddedStreams,
       feedSections,
       fetchLatestVod,
+      twitchUserId,
     ]
   );
 

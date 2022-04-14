@@ -112,13 +112,13 @@ const StyledDropDownTrigger = styled.div`
   }
 `;
 
-export const ContextMenuDropDown = ({ trigger, children }) => {
+export const ContextMenuDropDown = ({ trigger, children = null }) => {
   return (
     <StyledDropDownTrigger>
       <li>{trigger}</li>
       <StyledArrow size={24} />
       <ContextMenuDropDownList>
-        <div>{children}</div>
+        <div>{children || null}</div>
       </ContextMenuDropDownList>
     </StyledDropDownTrigger>
   );

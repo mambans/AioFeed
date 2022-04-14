@@ -1,9 +1,9 @@
 import { getLocalstorage } from '../../util';
 
-const getCachedProfiles = () => {
+const getCachedProfiles = ({ refresh } = { refresh: false }) => {
   const profiles = getLocalstorage('TwitchProfiles') || {};
 
-  if (!profiles.expireDate || new Date(profiles.expireDate).getTime() < Date.now()) {
+  if (refresh || !profiles.expireDate || new Date(profiles.expireDate).getTime() < Date.now()) {
     return {
       expireDate: new Date(new Date().setDate(new Date().getDate() + 7)),
     };

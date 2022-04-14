@@ -8,7 +8,7 @@ import { Vods } from '../twitch/vods';
 import { Twitter } from '../twitter';
 import { Youtube } from './../youtube';
 import FeedsCenterContainer from './FeedsCenterContainer';
-import { Twitch } from '../twitch/live';
+import Twitch from '../twitch/live';
 import { MyLists } from '../myLists';
 import FeedOrderSlider from './FeedOrderSlider';
 import Alert from '../../components/alert';

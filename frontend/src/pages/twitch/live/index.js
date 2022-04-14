@@ -16,7 +16,7 @@ import ExpandableSection from '../../../components/expandableSection/ExpandableS
 import { askForBrowserNotificationPermission } from '../../../util';
 import { MdFormatIndentDecrease } from 'react-icons/md';
 
-const TwitchStandalone = () => {
+export const TwitchStandalone = () => {
   useDocumentTitle('Twitch Live');
   return (
     <FeedsCenterContainer left={true} right={false}>
@@ -27,7 +27,7 @@ const TwitchStandalone = () => {
   );
 };
 
-export const Twitch = ({ in: forceMount = false, className }) => {
+const TwitchFeed = ({ data, className, forceMount }) => {
   const {
     enableTwitch,
     showTwitchSidebar,
@@ -38,71 +38,74 @@ export const Twitch = ({ in: forceMount = false, className }) => {
   } = useContext(FeedsContext) || {};
   const refreshBtnRef = useRef();
 
+  return (
+    <>
+      <CSSTransition
+        in={enableTwitch || forceMount}
+        timeout={750}
+        classNames='fade-750ms'
+        appear
+        unmountOnExit
+      >
+        <Container aria-labelledby='twitch' order={orders?.['twitch']?.order} className={className}>
+          <Header
+            data={data}
+            ref={refreshBtnRef}
+            collapsed={orders?.['twitch']?.collapsed}
+            toggleExpanded={() => toggleExpanded('twitch')}
+          />
+          <ExpandableSection collapsed={orders?.['twitch']?.collapsed}>
+            <TwitchStreams data={data} streams={data.nonFeedSectionLiveStreams} />
+          </ExpandableSection>
+        </Container>
+      </CSSTransition>
+      <ToolTip
+        placement={'right'}
+        delay={{ show: 500, hide: 0 }}
+        tooltip={`${showTwitchSidebar ? 'Hide' : 'Show'} sidebar`}
+      >
+        <HideSidebarButton
+          show={String(showTwitchSidebar)}
+          onClick={() => setShowTwitchSidebar(!showTwitchSidebar)}
+        >
+          <MdFormatIndentDecrease size={25.5} />
+        </HideSidebarButton>
+      </ToolTip>
+      <CSSTransition
+        in={(enableTwitch || forceMount) && showTwitchSidebar}
+        timeout={750}
+        classNames='twitchSidebar'
+        appear
+        unmountOnExit
+      >
+        <Sidebar data={data} />
+      </CSSTransition>
+      <CSSTransition
+        in={enableFeedSections}
+        timeout={750}
+        classNames='fade-750ms'
+        unmountOnExit
+        appear
+      >
+        <FeedSections data={data} />
+      </CSSTransition>
+    </>
+  );
+};
+
+export const Twitch = ({ in: forceMount = false, className }) => {
   useEffect(() => {
     askForBrowserNotificationPermission();
   }, []);
+
   return (
     <Handler>
       {(data) => {
-        return (
-          <>
-            <CSSTransition
-              in={enableTwitch || forceMount}
-              timeout={750}
-              classNames='fade-750ms'
-              appear
-              unmountOnExit
-            >
-              <Container
-                aria-labelledby='twitch'
-                order={orders?.['twitch']?.order}
-                className={className}
-              >
-                <Header
-                  data={data}
-                  ref={refreshBtnRef}
-                  collapsed={orders?.['twitch']?.collapsed}
-                  toggleExpanded={() => toggleExpanded('twitch')}
-                />
-                <ExpandableSection collapsed={orders?.['twitch']?.collapsed}>
-                  <TwitchStreams data={data} streams={data.nonFeedSectionLiveStreams} />
-                </ExpandableSection>
-              </Container>
-            </CSSTransition>
-            <ToolTip
-              placement={'right'}
-              delay={{ show: 500, hide: 0 }}
-              tooltip={`${showTwitchSidebar ? 'Hide' : 'Show'} sidebar`}
-            >
-              <HideSidebarButton
-                show={String(showTwitchSidebar)}
-                onClick={() => setShowTwitchSidebar(!showTwitchSidebar)}
-              >
-                <MdFormatIndentDecrease size={25.5} />
-              </HideSidebarButton>
-            </ToolTip>
-            <CSSTransition
-              in={(enableTwitch || forceMount) && showTwitchSidebar}
-              timeout={750}
-              classNames='twitchSidebar'
-              appear
-              unmountOnExit
-            >
-              <Sidebar data={data} />
-            </CSSTransition>
-            <CSSTransition
-              in={enableFeedSections}
-              timeout={750}
-              classNames='fade-750ms'
-              unmountOnExit
-              appear
-            >
-              <FeedSections data={data} />
-            </CSSTransition>
-          </>
-        );
+        return <TwitchFeed forceMount={forceMount} className={className} data={data} />;
       }}
     </Handler>
   );
 };
-export default TwitchStandalone;
+
+// react.memo not doing much atm
+export default React.memo(Twitch);
