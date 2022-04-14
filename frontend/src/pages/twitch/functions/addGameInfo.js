@@ -15,7 +15,9 @@ const addGameInfo = async ({ save, refresh, items } = { items: [] }) => {
   const newGameInfo = nonCached?.length
     ? await Promise.all(
         nonCachedChunked.map(async (array) => {
-          return await TwitchAPI.getGames({ id: array }).then((res) => res?.data?.data);
+          return await TwitchAPI.getGames({ id: array })
+            .then((res) => res?.data?.data)
+            .catch(() => []);
         })
       ).then((res) => res.flat())
     : [];

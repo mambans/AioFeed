@@ -15,7 +15,9 @@ const addProfileInfo = async ({ save, refresh, items = [] } = {}) => {
   const newUsers = nonCached?.length
     ? await Promise.all(
         nonCachedChunked.map(async (array) => {
-          return await TwitchAPI.getUser({ id: array }).then((res) => res?.data?.data);
+          return await TwitchAPI.getUser({ id: array })
+            .then((res) => res?.data?.data)
+            .catch(() => []);
         })
       ).then((res) => res.flat())
     : [];
