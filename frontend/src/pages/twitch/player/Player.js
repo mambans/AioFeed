@@ -544,7 +544,10 @@ const Player = () => {
                       alt=''
                       ref={link1}
                       href={`https://www.twitch.tv/${
-                        streamInfo?.login || streamInfo?.user_name || channelName
+                        streamInfo?.login ||
+                        streamInfo?.user_login ||
+                        streamInfo?.user_name ||
+                        channelName
                       }?redirect=false`}
                     >
                       <FaTwitch size={24} color='purple' />

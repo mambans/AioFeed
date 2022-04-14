@@ -1,6 +1,5 @@
 import TwitchAPI from '../API';
 import { getLocalstorage } from '../../../util';
-// import fetchProfileImages from '../fetchProfileImages';
 import addProfileInfo from '../functions/addProfileInfo';
 
 /**

@@ -30,6 +30,7 @@ const ClipElement = ({ ...data }) => {
     game_img,
     created_at,
     login,
+    user_login,
   } = data.data;
   const imgRef = useRef();
 
@@ -38,7 +39,9 @@ const ClipElement = ({ ...data }) => {
       <ImageContainer ref={imgRef}>
         <a
           className='imgLink'
-          href={`https://www.twitch.tv/${login || user_name || broadcaster_name}/clip/${id}`}
+          href={`https://www.twitch.tv/${
+            login || user_login || user_name || broadcaster_name
+          }/clip/${id}`}
         >
           <img src={thumbnail_url} alt='' />
         </a>
@@ -51,7 +54,7 @@ const ClipElement = ({ ...data }) => {
         </ImgBottomInfo>
       </ImageContainer>
       <ToolTip show={title?.length > 50} tooltip={title || ''}>
-        <VideoTitle to={`/${login || user_name || broadcaster_name}/clip/${id}`}>
+        <VideoTitle to={`/${login || user_login || user_name || broadcaster_name}/clip/${id}`}>
           {truncate(title || '', 70)}
         </VideoTitle>
       </ToolTip>
@@ -60,7 +63,7 @@ const ClipElement = ({ ...data }) => {
           <Link
             className={'profileImg'}
             to={{
-              pathname: `/${(login || broadcaster_name)?.toLowerCase()}/page`,
+              pathname: `/${(login || user_login || broadcaster_name)?.toLowerCase()}/page`,
               state: {
                 p_id: broadcaster_id,
               },
@@ -68,7 +71,10 @@ const ClipElement = ({ ...data }) => {
           >
             <img src={profile_image_url} alt='' />
           </Link>
-          <Link to={`/${(login || broadcaster_name)?.toLowerCase()}/page`} className='channelName'>
+          <Link
+            to={`/${(login || user_login || broadcaster_name)?.toLowerCase()}/page`}
+            className='channelName'
+          >
             {loginNameFormat(data.data)}
           </Link>
         </ChannelContainer>

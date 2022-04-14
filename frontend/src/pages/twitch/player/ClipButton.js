@@ -39,7 +39,7 @@ const ClipButton = ({ streamInfo }) => {
     const user_id =
       streamInfo.user_id ||
       (await TwitchAPI.getUser({
-        login: streamInfo.user_name || streamInfo.login,
+        login: streamInfo.user_name || streamInfo.login || streamInfo.user_login,
       }).then((res) => res.data.data[0].id));
 
     CreateAndOpenClip({ user_id });

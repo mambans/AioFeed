@@ -38,6 +38,7 @@ const VodElement = ({
     id,
     user_id,
     login,
+    user_login,
     user_name,
     url,
     thumbnail_url,
@@ -80,11 +81,13 @@ const VodElement = ({
         )}
 
         {thumbnail_url === '' && (
-          <VodLiveIndicator to={`/${login || user_name}`}>Live</VodLiveIndicator>
+          <VodLiveIndicator to={`/${login || user_login || user_name}`}>Live</VodLiveIndicator>
         )}
         <Link
           to={{
-            pathname: `/${login || user_name}/videos/${id}${listName ? `?list=${listName}` : ''}`,
+            pathname: `/${login || user_login || user_name}/videos/${id}${
+              listName ? `?list=${listName}` : ''
+            }`,
             state: {
               p_title: title,
             },
@@ -123,7 +126,7 @@ const VodElement = ({
         <Link
           className={'profileImg'}
           to={{
-            pathname: `/${login || user_name?.toLowerCase()}/page`,
+            pathname: `/${login || user_login || user_name?.toLowerCase()}/page`,
             state: {
               p_id: user_id,
             },
@@ -134,7 +137,7 @@ const VodElement = ({
         <ChannelNameDiv>
           <Link
             to={{
-              pathname: `/${login || user_name?.toLowerCase()}/page`,
+              pathname: `/${login || user_login || user_name?.toLowerCase()}/page`,
               state: {
                 p_id: user_id,
               },

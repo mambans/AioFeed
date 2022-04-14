@@ -180,7 +180,11 @@ const ChannelPage = () => {
           });
 
           clipPagination.current = res.data.pagination.cursor;
-          const finallClips = await AddVideoExtraData({ items: res.data, saveNewProfiles: false });
+
+          const finallClips = await AddVideoExtraData({
+            items: res.data,
+            saveNewProfiles: false,
+          });
 
           if (pagination) {
             const allClips = previosClipsPage.current.concat(finallClips.data);

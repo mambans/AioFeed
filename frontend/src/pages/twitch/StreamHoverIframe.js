@@ -41,7 +41,7 @@ const Container = styled.div`
 
 const HOVER_DELAY = 100;
 
-const StreamHoverIframe = ({ data: { login, user_name, id }, imageRef }) => {
+const StreamHoverIframe = ({ data: { login, user_name, id, user_login }, imageRef }) => {
   const { twitchVideoHoverEnable } = useContext(TwitchContext);
   const [isHovered, setIsHovered] = useState(false);
   const streamHoverTimer = useRef();
@@ -73,9 +73,9 @@ const StreamHoverIframe = ({ data: { login, user_name, id }, imageRef }) => {
       <Container>
         <HoverIframe
           src={`https://player.twitch.tv/?channel=${
-            login?.toLowerCase() || user_name
+            (login || user_login)?.toLowerCase() || user_name
           }&parent=aiofeed.com&autoplay=true&muted=false&!controls`}
-          title={(login?.toLowerCase() || user_name) + '-iframe'}
+          title={((login || user_login)?.toLowerCase() || user_name) + '-iframe'}
           theme='dark'
           id={id + '-iframe'}
           width='336px'
@@ -85,7 +85,10 @@ const StreamHoverIframe = ({ data: { login, user_name, id }, imageRef }) => {
           allowFullScreen={true}
           frameBorder='0'
         />
-        <IframeContainer to={`/${login?.toLowerCase() || user_name}`} alt=''></IframeContainer>
+        <IframeContainer
+          to={`/${(login || user_login)?.toLowerCase() || user_name}`}
+          alt=''
+        ></IframeContainer>
       </Container>
     );
   }

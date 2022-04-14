@@ -1,4 +1,3 @@
-// import fetchProfileImages from './fetchProfileImages';
 import addGameInfo from './functions/addGameInfo';
 import addProfileInfo from './functions/addProfileInfo';
 
@@ -24,12 +23,12 @@ const addVideoExtraData = async ({
   const originalArray = items;
   const Profiles = fetchProfiles
     ? await addProfileInfo({
-        items,
+        items: items.data,
         refresh: forceNewProfiles,
         save: saveNewProfiles,
       }).catch((e) => [])
     : [];
-  const GameInfo = fetchGameInfo ? await addGameInfo({ items }) : [];
+  const GameInfo = fetchGameInfo ? await addGameInfo({ items: items.data }) : [];
 
   const finallData = originalArray?.data?.map((dataItem) => {
     const foundGameInfo = GameInfo?.find(

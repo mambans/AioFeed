@@ -33,8 +33,8 @@ import ToolTip from '../../../components/tooltip/ToolTip';
 import FavoriteStreamBtn from './FavoriteStreamBtn';
 import Schedule from '../schedule';
 
-function NewHighlightNoti({ newlyAddedStreams, login }) {
-  if (newlyAddedStreams?.includes(login?.toLowerCase())) {
+function NewHighlightNoti({ newlyAddedStreams, login, user_login }) {
+  if (newlyAddedStreams?.includes((login || user_login)?.toLowerCase())) {
     return (
       <StyledNewlyAddedIndicatorWrapper>
         <RelativeContainer>
@@ -62,6 +62,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
     game_img,
     viewer_count,
   } = data;
+  console.log('data:', data);
 
   const ref = useRef();
   const refChannel = useRef();
@@ -85,11 +86,15 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
   return (
     <VideoContainer key={user_id} ref={videoContainerRef}>
       <ImageContainer id={user_id} ref={ref} style={{ marginTop: '5px' }}>
-        <NewHighlightNoti newlyAddedStreams={newlyAddedStreams} login={login} />
+        <NewHighlightNoti
+          newlyAddedStreams={newlyAddedStreams}
+          login={login}
+          user_login={user_login}
+        />
         <Link
           className='imgLink'
           to={{
-            pathname: '/' + login?.toLowerCase() || user_name,
+            pathname: '/' + (login || user_login)?.toLowerCase() || user_name,
             state: {
               passedChannelData: streamData,
             },
@@ -101,7 +106,9 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
             // key={`${user_id}-${lastLoaded}`}
             alt=''
             style={
-              newlyAddedStreams?.includes(login) ? { boxShadow: 'white 0px 0px 3px 2px' } : null
+              newlyAddedStreams?.includes(login || user_login)
+                ? { boxShadow: 'white 0px 0px 3px 2px' }
+                : null
             }
             src={thumbnailUrl + `?${Date.now()}`}
           />
@@ -115,13 +122,18 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
           >
             <LatestVodBtn
               target='_blank'
-              href={`/${login?.toLowerCase() || user_name}/videos/latest?user_id=${user_id}`}
+              href={`/${
+                (login || user_login)?.toLowerCase() || user_name
+              }/videos/latest?user_id=${user_id}`}
             >
               <MdVideocam color='inherit' size={22} />
             </LatestVodBtn>
           </ToolTip>
           <ToolTip delay={{ show: 1000, hide: 0 }} tooltip='Open in new tab' placement='bottom'>
-            <OpenInNewTab target='_blank' href={`/${login?.toLowerCase() || user_name}`}>
+            <OpenInNewTab
+              target='_blank'
+              href={`/${(login || user_login)?.toLowerCase() || user_name}`}
+            >
               <FaRegWindowRestore color='inherit' size={18} />
             </OpenInNewTab>
           </ToolTip>
@@ -137,7 +149,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
       <ToolTip show={title?.length > 50} tooltip={title || ''}>
         <VideoTitle
           to={{
-            pathname: '/' + login?.toLowerCase() || user_name,
+            pathname: '/' + (login || user_login)?.toLowerCase() || user_name,
             state: {
               passedChannelData: streamData,
             },
@@ -152,7 +164,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
           <Link
             className='profileImg'
             to={{
-              pathname: `/${login?.toLowerCase() || user_name}/page`,
+              pathname: `/${(login || user_login)?.toLowerCase() || user_name}/page`,
               state: {
                 passedChannelData: streamData,
               },
@@ -163,7 +175,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
           <ChannelNameDiv>
             <Link
               to={{
-                pathname: `/${login?.toLowerCase() || user_name}/page`,
+                pathname: `/${(login || user_login)?.toLowerCase() || user_name}/page`,
                 state: {
                   passedChannelData: streamData,
                 },
@@ -183,10 +195,15 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
               >
                 <FaTwitch size={20} color='purple' />
               </a>
-              <Schedule user={login || user_name} user_id={user_id} absolute={false} btnSize={22} />
-              <FavoriteStreamBtn channel={login} />
+              <Schedule
+                user={login || user_login || user_name}
+                user_id={user_id}
+                absolute={false}
+                btnSize={22}
+              />
+              <FavoriteStreamBtn channel={login || user_login} />
               <VodsFollowUnfollowBtn channel={data} marginright='5px;' />
-              <AddUpdateNotificationsButton channel={login} marginright='5px;' />
+              <AddUpdateNotificationsButton channel={login || user_login} marginright='5px;' />
               <FollowUnfollowBtn
                 style={{
                   gridRow: '1',
@@ -196,7 +213,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
                   height: '100%',
                 }}
                 size={'1.5em'}
-                channelName={login}
+                channelName={login || user_login}
                 id={user_id}
                 followingStatus={true}
                 refreshStreams={refresh}
