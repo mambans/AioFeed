@@ -4,6 +4,7 @@ const addSystemNotification = async ({ status, stream, body }) => {
   if (Notification.permission === 'granted') {
     const url = `https://aiofeed.com/${(
       stream.login ||
+      stream.user_login ||
       stream.user_name ||
       stream.name ||
       stream.display_name ||

@@ -1,5 +1,5 @@
-import fetchProfileImages from './fetchProfileImages';
-import fetchGameName from './fetchGameName';
+import addGameInfo from './functions/addGameInfo';
+import addProfileInfo from './functions/addProfileInfo';
 
 /**
  * Fetch and add following data to stream objects.
@@ -19,18 +19,16 @@ const addVideoExtraData = async ({
   fetchProfiles = true,
   forceNewProfiles = false,
   saveNewProfiles,
-  previousStreams,
 }) => {
   const originalArray = items;
   const Profiles = fetchProfiles
-    ? await fetchProfileImages({
-        items,
-        forceNewProfiles,
-        previousStreams,
-        saveNewProfiles,
+    ? await addProfileInfo({
+        items: items.data,
+        refresh: forceNewProfiles,
+        save: saveNewProfiles,
       }).catch((e) => [])
     : [];
-  const GameInfo = fetchGameInfo ? await fetchGameName({ items }) : [];
+  const GameInfo = fetchGameInfo ? await addGameInfo({ items: items.data }) : [];
 
   const finallData = originalArray?.data?.map((dataItem) => {
     const foundGameInfo = GameInfo?.find(

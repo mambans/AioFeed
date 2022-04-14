@@ -10,7 +10,9 @@ exports.handler = async (event) => {
     const { authkey } = JSON.parse(event.body);
     if (!authkey) throw { statusCode: 422, message: 'Auth key is required' };
 
+    console.log('authkey:', authkey);
     const username = await validateAuthkey(authkey);
+    console.log('username:', username);
 
     if (!username) {
       return {

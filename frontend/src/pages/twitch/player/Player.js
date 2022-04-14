@@ -37,8 +37,6 @@ import ShowSetQualityButtons from './ShowSetQualityButtons';
 import addSystemNotification from '../live/addSystemNotification';
 import NotificationsContext from '../../notifications/NotificationsContext';
 import ClipButton from './ClipButton';
-import addGameName from './addGameName';
-import addProfileImg from './addProfileImg';
 import fetchChannelInfo from './fetchChannelInfo';
 import PlayerContextMenu from './ContextMenu';
 import AnimatedViewCount from '../live/AnimatedViewCount';
@@ -60,6 +58,8 @@ import { ContextMenuDropDown } from './ContextMenuWrapper';
 import Chat from './Chat';
 import API from '../../navigation/API';
 import useKeyDown from './../../../hooks/useKeyDown';
+import addGameInfo from '../functions/addGameInfo';
+import addProfileInfo from '../functions/addProfileInfo';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.12, 175);
 
@@ -258,20 +258,20 @@ const Player = () => {
       };
 
       if (Object.keys(LIVEStreamInfo).length !== 0 && LIVEStreamInfo.constructor === Object) {
-        const streamWithGame = await addGameName({
-          streamInfo: savedStreamInfo.current,
-          newStreamInfo: LIVEStreamInfo,
+        const streamWithGame = await addGameInfo({
+          items: [LIVEStreamInfo],
+          save: true,
         });
 
-        const streamWithGameAndProfile = await addProfileImg({
-          user_id: LIVEStreamInfo.user_id,
-          currentStreamObj: streamWithGame,
+        const streamWithGameAndProfile = await addProfileInfo({
+          items: streamWithGame,
+          save: true,
         });
 
-        savedStreamInfo.current = streamWithGameAndProfile;
-        setStreamInfo((c) => ({ ...c, ...streamWithGameAndProfile }));
+        savedStreamInfo.current = streamWithGameAndProfile?.[0];
+        setStreamInfo((c) => ({ ...c, ...streamWithGameAndProfile?.[0] }));
 
-        return streamWithGameAndProfile;
+        return streamWithGameAndProfile?.[0];
       } else {
         const streamWithGameAndProfile = await fetchChannelInfo(
           twitchVideoPlayer.current.getChannelId(),
@@ -526,7 +526,7 @@ const Player = () => {
             {streamInfo ? (
               <InfoDisplay>
                 <>
-                  <img src={streamInfo?.profile_image_url} alt='' />
+                  <img className='profile' src={streamInfo?.profile_image_url} alt='' />
                   <div id='name'>
                     <Link
                       ref={link2}
@@ -544,7 +544,10 @@ const Player = () => {
                       alt=''
                       ref={link1}
                       href={`https://www.twitch.tv/${
-                        streamInfo?.login || streamInfo?.user_name || channelName
+                        streamInfo?.login ||
+                        streamInfo?.user_login ||
+                        streamInfo?.user_name ||
+                        channelName
                       }?redirect=false`}
                     >
                       <FaTwitch size={24} color='purple' />
@@ -584,7 +587,13 @@ const Player = () => {
                     <span id='game'>
                       {'Playing '}
                       <Link ref={link3} to={`/category/${streamInfo?.game_name}`}>
-                        {streamInfo?.game_name}
+                        {streamInfo?.game_name}{' '}
+                        <img
+                          src={streamInfo?.game_img
+                            ?.replace('{width}', 130)
+                            ?.replace('{height}', 173)}
+                          alt=''
+                        />
                       </Link>
                     </span>
                   )}

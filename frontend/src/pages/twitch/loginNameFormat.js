@@ -1,8 +1,11 @@
 const loginNameFormat = (data) => {
-  const { user_name, login, broadcaster_name, name, display_name } = data || {};
+  const { user_name, user_login, login, broadcaster_name, name, display_name } = data || {};
   const userName = display_name || broadcaster_name || user_name || name;
 
-  const rightName = userName?.toLowerCase() !== login?.toLowerCase() && login ? `(${login})` : '';
+  const rightName =
+    userName?.toLowerCase() !== (login || user_login)?.toLowerCase() && (login || user_login)
+      ? `(${login || user_login})`
+      : '';
 
   return userName && `${userName} ${rightName}`.trim();
 };

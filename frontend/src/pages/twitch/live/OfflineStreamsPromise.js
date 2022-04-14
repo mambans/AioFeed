@@ -20,7 +20,9 @@ const offlineStreamsPromise = async ({
     const streams = res.map((stream) => {
       stream.notiStatus = 'Offline';
       stream.onClick = () =>
-        window.open('https://aiofeed.com/' + (stream.login || stream.user_name) + '/page');
+        window.open(
+          'https://aiofeed.com/' + (stream.login || stream.user_login || stream.user_name) + '/page'
+        );
 
       if (
         isEnabledOfflineNotifications &&

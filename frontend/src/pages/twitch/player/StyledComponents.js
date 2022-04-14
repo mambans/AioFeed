@@ -370,7 +370,7 @@ export const InfoDisplay = styled.div`
     }
   }
 
-  img {
+  img.profile {
     height: 60px;
     width: 60px;
     border-radius: 50%;
@@ -390,6 +390,9 @@ export const InfoDisplay = styled.div`
   #game {
     grid-area: game;
     width: max-content;
+    img {
+      width: 1.625em;
+    }
   }
 
   #viewers {

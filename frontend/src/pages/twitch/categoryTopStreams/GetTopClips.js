@@ -38,7 +38,10 @@ const getTopClips = async (category, sortByTime, page, feedVideoSizeProps) => {
       return e;
     });
 
-    const finallClips = await AddVideoExtraData({ items: topClips.data, saveNewProfiles: false });
+    const finallClips = await AddVideoExtraData({
+      items: topClips.data,
+      saveNewProfiles: false,
+    });
 
     return { topData: finallClips, error };
   } catch (e) {

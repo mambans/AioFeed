@@ -20,7 +20,8 @@ const liveStreamsPromise = async ({
     const streams = res?.map((stream) => {
       stream.newlyAdded = true;
       stream.notiStatus = 'Live';
-      stream.onClick = () => window.open('https://aiofeed.com/' + stream.login || stream.user_name);
+      stream.onClick = () =>
+        window.open('https://aiofeed.com/' + stream.login || stream.user_login || stream.user_name);
       addSystemNotification({
         status: 'Live',
         stream: stream,
