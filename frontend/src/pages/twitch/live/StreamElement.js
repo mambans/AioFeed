@@ -62,6 +62,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
     game_img,
     viewer_count,
   } = data;
+  console.log('data:', data);
 
   const ref = useRef();
   const refChannel = useRef();
