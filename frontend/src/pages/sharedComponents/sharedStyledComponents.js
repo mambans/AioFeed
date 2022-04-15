@@ -61,47 +61,44 @@ export const StyledVideoContainer = styled.div`
 
   &.videoFadeSlide-appear {
     opacity: 0;
-    transition: opacity 750ms;
+    transition: opacity 750ms, margin-left 750ms, margin-right 750ms;
   }
   &.videoFadeSlide-appear-active {
     opacity: 1;
-    transition: opacity 750ms;
+    transition: opacity 750ms, margin-left 750ms, margin-right 750ms;
   }
 
   &.videoFadeSlide-enter {
     opacity: 0;
     margin-left: ${({ feedVideoSizeProps }) =>
-      -(feedVideoSizeProps.totalWidth - feedVideoSizeProps.margin)}px !important;
+      -(feedVideoSizeProps.totalWidth - feedVideoSizeProps.margin * 2)}px !important;
     margin-right: 0px !important;
-    transition: opacity 500ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
-      transform 750ms;
+    transition: opacity 500ms, margin-left 750ms, margin-right 750ms;
   }
 
   &.videoFadeSlide-enter-active {
     opacity: 1;
     margin-left: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
     margin-right: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
-    transition: opacity 500ms, margin-left 750ms, width 750ms, margin-right 750ms, max-width 750ms,
-      transform 750ms;
+    transition: opacity 500ms, margin-left 750ms, , margin-right 750ms;
   }
 
   &.videoFadeSlide-enter-done {
     opacity: 1;
-    transition: opacity 500ms;
+    transition: opacity 500ms, margin-left 750ms, margin-right 750ms;
   }
 
   &.videoFadeSlide-exit {
     opacity: 1;
     margin-left: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
     margin-right: ${({ feedVideoSizeProps }) => feedVideoSizeProps.margin}px !important;
-    transition: opacity 500ms ease 250ms, margin-left 750ms, width 750ms, margin-right 750ms,
-      max-width 750ms, transform 750ms;
+    transition: opacity 500ms ease 250ms, margin-left 750ms, margin-right 750ms;
   }
 
   &.videoFadeSlide-exit-active {
     opacity: 0;
     margin-left: ${({ feedVideoSizeProps }) =>
-      -(feedVideoSizeProps.totalWidth - feedVideoSizeProps.margin)}px !important;
+      -feedVideoSizeProps.totalWidth + feedVideoSizeProps.margin * 2}px !important;
     margin-right: 0px !important;
     transition: opacity 500ms ease 250ms, margin-left 750ms, width 750ms, margin-right 750ms,
       max-width 750ms, transform 750ms;
