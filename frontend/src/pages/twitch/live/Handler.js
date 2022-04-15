@@ -77,14 +77,14 @@ const Handler = ({ children }) => {
         }
 
         const baseStreams = await fetchMyFollowedLiveStreams({ user_id: twitchUserId });
-        const streamsWithProfiles = await addProfileInfo({
-          items: baseStreams,
-          save: true,
-          refresh: disableNotifications,
-        });
-        const streams = await addGameInfo({ items: streamsWithProfiles, save: true });
 
-        if (Array.isArray(streams)) {
+        if (Array.isArray(baseStreams)) {
+          const streamsWithProfiles = await addProfileInfo({
+            items: baseStreams,
+            save: true,
+            refresh: disableNotifications,
+          });
+          const streams = await addGameInfo({ items: streamsWithProfiles, save: true });
           const newLiveStreams = streams;
           const uniqueFilteredLiveStreams = uniqBy(newLiveStreams, 'user_id');
           const streamsTag_ids = uniqueFilteredLiveStreams.reduce((acc, curr) => {
@@ -185,7 +185,7 @@ const Handler = ({ children }) => {
         } else {
           setLoadingStates({
             refreshing: false,
-            error: streams,
+            error: baseStreams.status === 401 ? null : baseStreams.message,
             loaded: true,
             lastLoaded: Date.now(),
           });

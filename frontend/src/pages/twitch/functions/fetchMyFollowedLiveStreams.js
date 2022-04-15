@@ -19,7 +19,9 @@ const fetch = async ({ user_id, pagination, previousStreams = [] }) => {
       }
       return streams;
     })
-    .catch((e) => console.error('e:', e));
+    .catch((e) => {
+      return e.response.data;
+    });
 };
 
 export default fetchMyFollowedLiveStreams;
