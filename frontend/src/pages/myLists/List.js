@@ -24,9 +24,7 @@ export const fetchListVideos = async ({
 }) => {
   if (videos || list?.videos) {
     const twitchFetchVideos = async (items) => {
-      const fetchedVideos = await TwitchAPI.getVideos({ id: items }).catch((e) => {
-        console.log(e);
-      });
+      const fetchedVideos = await TwitchAPI.getVideos({ id: items }).catch((e) => {});
 
       if (!fetchedVideos) return false;
 
@@ -68,9 +66,9 @@ export const fetchListVideos = async ({
       ...currentVideos,
     ];
 
-    const mergeVideosOrderedAndUnique = (videos || list.videos)
+    const mergeVideosOrderedAndUnique = (videos || list?.videos)
       .map((item) => ({
-        ...mergedVideosUnordered.find((video) => String(video.id) === String(item)),
+        ...mergedVideosUnordered.find((video) => String(video?.id) === String(item)),
         list_id: list?.id,
       }))
       .filter((i) => i);

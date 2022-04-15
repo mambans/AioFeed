@@ -13,7 +13,7 @@ module.exports = async ({ refresh_token, authkey }) => {
         refresh_token
       )}&client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${
         process.env.TWITCH_CLIENT_SECRET
-      }&scope=channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit+user:edit:follows+user:read:follows&response_type=code`
+      }&scope=user:read:follows+channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit+user:edit:follows&response_type=code`
     )
     .then(async (res) => res.data)
     .catch((e) => console.log('reAuthenticateTwitch -> e', e));

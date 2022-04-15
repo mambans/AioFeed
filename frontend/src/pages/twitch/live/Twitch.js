@@ -2,7 +2,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import React, { useContext } from 'react';
 import { MdStar } from 'react-icons/md';
 
-import StreamEle from './StreamElement.js';
+import StreamElement from './StreamElement.js';
 import { Container, FavoriteDeviderLine } from '../StyledComponents';
 import LoadingBoxes from '../LoadingBoxes';
 import { CenterContext } from '../../feed/FeedsCenterContainer.js';
@@ -52,7 +52,7 @@ const Twitch = ({ data, streams, hideOnEmpty }) => {
             classNames={feedVideoSizeProps.transition || 'videoFadeSlide'}
             {...cssTransitionAttrs}
           >
-            <StreamEle
+            <StreamElement
               key={stream.id}
               data={stream}
               newlyAdded={stream.newlyAdded}
@@ -75,7 +75,7 @@ const Twitch = ({ data, streams, hideOnEmpty }) => {
             classNames={feedVideoSizeProps.transition || 'videoFadeSlide'}
             {...cssTransitionAttrs}
           >
-            <StreamEle
+            <StreamElement
               key={stream.id}
               data={stream}
               newlyAdded={stream.newlyAdded}

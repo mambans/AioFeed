@@ -14,7 +14,7 @@ import getTopStreams from './GetTopStreams';
 import getTopVideos from './GetTopVideos';
 import LoadingBoxes from './../LoadingBoxes';
 import SortButton from './../channelPage/SortButton';
-import StreamEle from './../live/StreamElement';
+import StreamElement from './../live/StreamElement';
 import ClipElement from './../channelPage/ClipElement';
 import VodElement from './../vods/VodElement';
 import useQuery from '../../../hooks/useQuery';
@@ -52,13 +52,13 @@ const TopStreams = () => {
   const VideoElementTypeComp = ({ data }) => {
     switch (videoType) {
       case 'streams':
-        return <StreamEle data={data} />;
+        return <StreamElement data={data} />;
       case 'clips':
         return <ClipElement data={data} />;
       case 'videos':
         return <VodElement data={data} />;
       default:
-        return <StreamEle data={data} />;
+        return <StreamElement data={data} />;
     }
   };
 

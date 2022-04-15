@@ -84,9 +84,12 @@ const Handler = ({ children }) => {
             save: true,
             refresh: disableNotifications,
           });
-          const streams = await addGameInfo({ items: streamsWithProfiles, save: true });
-          const newLiveStreams = streams;
-          const uniqueFilteredLiveStreams = uniqBy(newLiveStreams, 'user_id');
+          const streams = await addGameInfo({
+            items: streamsWithProfiles,
+            save: true,
+            refresh: disableNotifications,
+          });
+          const uniqueFilteredLiveStreams = uniqBy(streams, 'user_id');
           const streamsTag_ids = uniqueFilteredLiveStreams.reduce((acc, curr) => {
             return [...acc, ...(curr?.tag_ids || [])];
           }, []);
