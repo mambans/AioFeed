@@ -606,22 +606,32 @@ export const ExpandCollapseFeedButton = (props) => {
 
 const heartBeatAnimation = keyframes`
   0% {
+    transform: scale(0);
+    -webkit-transform: scale(0);
     -moz-transform: scale(0);
     opacity: 0;
   }
   25% {
+    transform: scale(0.1);
+    -webkit-transform: scale(0.1);
     -moz-transform: scale(0.1);
     opacity: 0.1;
   }
   50% {
+    transform: scale(0.5);
+    -webkit-transform: scale(0.5);
     -moz-transform: scale(0.5);
     opacity: 0.3;
   }
   75% {
+    transform: scale(0.8);
+    -webkit-transform: scale(0.8);
     -moz-transform: scale(0.8);
     opacity: 0.5;
   }
   to {
+    transform: scale(1);
+    -webkit-transform: scale(1);
     -moz-transform: scale(1);
     opacity: 0;
   }
@@ -629,7 +639,11 @@ const heartBeatAnimation = keyframes`
 
 export const StyledNewlyAddedIndicatorPulseRings = styled.div`
   animation: ${heartBeatAnimation} 1s ease-out;
+  -webkit-animation: ${heartBeatAnimation} 1s ease-out;
+  -moz-animation: ${heartBeatAnimation} 1s ease-out;
   animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
   z-index: 10;
   border: 10px solid ${Colors.red};
   border-radius: 0.25em;
