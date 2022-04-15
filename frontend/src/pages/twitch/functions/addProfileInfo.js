@@ -39,6 +39,7 @@ const addProfileInfo = async ({ save, refresh, items = [] } = {}) => {
       i.profile_image_url = newCache[i.user_id || i.broadcaster_id]?.profile_image;
     }
     if (!i.login) i.login = newCache[i.user_id || i.broadcaster_id]?.login;
+    if (!i.user_name) i.user_name = newCache[i.user_id || i.broadcaster_id]?.login;
 
     return i;
   });
