@@ -36,7 +36,7 @@ const authenticatePopup = async (domain, urlParam) => {
   }
 };
 
-const TwitchBaseAuthUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/twitch/callback&scope=user:edit+user:read:broadcast+user_follows_edit+user:edit:follows+user:read:follows+clips:edit&response_type=code`;
+const TwitchBaseAuthUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&redirect_uri=https://aiofeed.com/auth/twitch/callback&scope=user:read:follows+clips:edit&response_type=code`;
 
 //to unfollow: scope=https://www.googleapis.com/auth/youtube
 //else  scope=https://www.googleapis.com/auth/youtube.readonly
