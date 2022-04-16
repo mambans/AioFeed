@@ -429,7 +429,7 @@ const ChannelPage = () => {
 
                           <AddUpdateNotificationsButton
                             show={channelInfo}
-                            channel={channelInfo.name || channelName}
+                            channel={channelInfo}
                             size={26}
                           />
                           <Schedule

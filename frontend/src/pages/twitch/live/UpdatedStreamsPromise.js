@@ -11,7 +11,7 @@ const updateSreamsPromise = async ({
     const res = await new Promise((resolve, reject) => {
       if (!isEnabledUpdateNotifications) reject("Stream 'update' notifications are disabled.");
       const restStreams = liveStreams?.filter((stream) =>
-        oldLiveStreams.current.find((old_stream) => stream.user_name === old_stream.user_name)
+        oldLiveStreams.current.find((old_stream) => stream.user_id === old_stream.user_id)
       );
 
       if (restStreams?.length <= 0) reject('No new Updated streams');
@@ -25,7 +25,7 @@ const updateSreamsPromise = async ({
       );
 
       const updateEnabledStreams = existingStreams?.filter((stream) =>
-        updateNotischannels?.includes(stream.user_name?.toLowerCase())
+        updateNotischannels?.includes(stream.user_id)
       );
 
       const newTitleAndGameStreams = updateEnabledStreams?.filter((stream) => {
@@ -53,7 +53,7 @@ const updateSreamsPromise = async ({
           )} in ${oldStreamData.game_name}`;
           stream.onClick = () =>
             window.open(
-              'https://aiofeed.com/' + stream.login || stream.user_login || stream.user_name
+              'https://aiofeed.com/' + (stream.login || stream.user_login || stream.user_name)
             );
 
           return stream;

@@ -561,7 +561,7 @@ const Player = () => {
                     <VodsFollowUnfollowBtn size={28} channel={streamInfo} marginright='5px;' />
 
                     <AddUpdateNotificationsButton
-                      channel={streamInfo?.user_name || channelName}
+                      channel={streamInfo}
                       marginright='5px;'
                       size={26}
                     />

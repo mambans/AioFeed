@@ -18,7 +18,6 @@ const liveStreamsPromise = async ({
     setNewlyAddedStreams((c) => [...(c || []), ...res?.map(({ user_name } = {}) => user_name)]);
 
     const streams = res?.map((stream) => {
-      console.log('stream:', stream);
       stream.newlyAdded = true;
       stream.notiStatus = 'Live';
       stream.onClick = () =>

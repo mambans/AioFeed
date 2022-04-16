@@ -6,12 +6,13 @@ import { VodAddRemoveButton } from '../sharedComponents/sharedStyledComponents';
 import ToolTip from '../../components/tooltip/ToolTip';
 import API from '../navigation/API';
 import { TwitchContext } from './useToken';
+import loginNameFormat from './loginNameFormat';
 
-export const removeChannel = async ({ channel, updateNotischannels, setUpdateNotischannels }) => {
+export const removeChannel = async ({ user_id, updateNotischannels, setUpdateNotischannels }) => {
   try {
     const channelsSets = new Set(updateNotischannels || []);
-    if (channelsSets.has(channel?.toLowerCase())) {
-      channelsSets.delete(channel?.toLowerCase());
+    if (channelsSets.has(user_id)) {
+      channelsSets.delete(user_id);
       const newChannels = [...channelsSets];
 
       setUpdateNotischannels(newChannels);
@@ -24,7 +25,7 @@ export const removeChannel = async ({ channel, updateNotischannels, setUpdateNot
 };
 
 /**
- * @param {String} channel - channel name
+ * @param {Object} channel - channel obj
  * @param {String} [loweropacity] - overwrite opacity (0.5)
  * @param {String} [marginright] - overwrite marginright (7px;)
  * @param {Number} [size=24] - size of the Icons/Svgs;
@@ -38,12 +39,12 @@ const AddUpdateNotificationsButton = ({
   show = true,
 }) => {
   const { updateNotischannels, setUpdateNotischannels } = useContext(TwitchContext);
-  const [enabled, setEnabled] = useState(updateNotischannels?.includes(channel?.toLowerCase()));
+  const [enabled, setEnabled] = useState(updateNotischannels?.includes(channel?.user_id));
 
   async function addChannel() {
     try {
       const existing = new Set(updateNotischannels || []);
-      const newChannels = [...existing.add(channel?.toLowerCase())];
+      const newChannels = [...existing.add(channel?.user_id)];
 
       setUpdateNotischannels(newChannels);
 
@@ -54,7 +55,7 @@ const AddUpdateNotificationsButton = ({
   }
 
   useEffect(() => {
-    setEnabled(updateNotischannels?.includes(channel?.toLowerCase()));
+    setEnabled(updateNotischannels?.includes(channel?.user_id));
   }, [updateNotischannels, channel]);
 
   const handleOnClick = () => {
@@ -63,7 +64,7 @@ const AddUpdateNotificationsButton = ({
       if (enabled) {
         // unfollowStream();
         removeChannel({
-          channel,
+          user_id: channel?.user_id,
           updateNotischannels,
           setUpdateNotischannels,
         });
@@ -79,7 +80,9 @@ const AddUpdateNotificationsButton = ({
     <ToolTip
       delay={{ show: 500, hide: 0 }}
       width='max-content'
-      tooltip={`${enabled ? 'Disable' : 'Enable'}${channel} stream title/game update notification`}
+      tooltip={`${enabled ? 'Disable' : 'Enable'}${loginNameFormat(
+        channel
+      )} stream title/game update notification`}
     >
       <VodAddRemoveButton
         className='StreamUpdateNoitificationsButton'

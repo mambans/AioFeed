@@ -202,7 +202,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
               />
               <FavoriteStreamBtn channel={login || user_login} />
               <VodsFollowUnfollowBtn channel={data} marginright='5px;' />
-              <AddUpdateNotificationsButton channel={login || user_login} marginright='5px;' />
+              <AddUpdateNotificationsButton channel={streamData} marginright='5px;' />
               <FollowUnfollowBtn
                 style={{
                   gridRow: '1',
