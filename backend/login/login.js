@@ -6,7 +6,7 @@ const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 const bcrypt = require('bcrypt');
 const util = require('util');
 const compare = util.promisify(bcrypt.compare);
-const { encrypt, decrypt } = require('../crypto');
+const { encrypt } = require('../crypto');
 // const { validateAuthkey } = require('../authkey');
 
 const EXPIRE_LENGTH = 180;

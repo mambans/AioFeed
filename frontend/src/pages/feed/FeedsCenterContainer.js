@@ -7,6 +7,7 @@ import useEventListenerMemo from './../../hooks/useEventListenerMemo';
 export const CenterContext = React.createContext();
 
 const CenterProvider = ({ children, left, right }) => {
+  console.log('CenterProvider:');
   const { feedVideoSizeProps, enableTwitter, showTwitchSidebar } = useContext(FeedsContext) || {};
 
   const [videoDisplayData, setVideoDisplayData] = useState({
@@ -57,6 +58,7 @@ const CenterProvider = ({ children, left, right }) => {
 };
 
 const Center = ({ children }) => {
+  console.log('Center:');
   const { width, twitterWidth, leftWidth, rightWidth } = useContext(CenterContext);
   const { enableTwitter, showTwitchSidebar } = useContext(FeedsContext) || {};
 
@@ -73,6 +75,7 @@ const Center = ({ children }) => {
 };
 
 const FeedsCenterContainer = ({ children, left = true, right = true } = {}) => {
+  console.log('FeedsCenterContainer:');
   return (
     <CenterProvider left={left} right={right}>
       <Center>{children}</Center>

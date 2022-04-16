@@ -1,8 +1,9 @@
 import { chunk } from '../../../util';
 import TwitchAPI from '../API';
 import getCachedGameInfo from './getCachedGameInfo';
+import { isCancel } from 'axios';
 
-const addGameInfo = async ({ save, refresh, items = [] } = { items: [] }) => {
+const addGameInfo = async ({ save, refresh, items = [], cancelToken } = { items: [] }) => {
   const gamesNonDuplicates = [...new Set(items.map((i) => i?.game_id))].filter((i) => i);
   const cached = getCachedGameInfo({ refresh });
 
@@ -16,9 +17,14 @@ const addGameInfo = async ({ save, refresh, items = [] } = { items: [] }) => {
   const newGameInfo = nonCached?.length
     ? await Promise.all(
         nonCachedChunked.map(async (array) => {
-          return await TwitchAPI.getGames({ id: array })
+          return await TwitchAPI.getGames({ id: array, cancelToken })
             .then((res) => res?.data?.data)
-            .catch(() => []);
+            .catch((e) => {
+              if (isCancel(e)) {
+                console.log('get games axios cancled');
+              }
+              return [];
+            });
         })
       ).then((res) => res.flat())
     : [];

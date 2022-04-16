@@ -7,15 +7,15 @@ const { encrypt } = require('../crypto');
 module.exports = async ({ refresh_token, authkey }) => {
   const username = await validateAuthkey(authkey);
 
+  const url = `https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=${encodeURI(
+    refresh_token
+  )}&client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${
+    process.env.TWITCH_CLIENT_SECRET
+  }&scope=user:edit+user:read:broadcast+user_follows_edit+user:edit:follows+user:read:follows+clips:edit&response_type=code`;
+
   const res = await axios
-    .post(
-      `https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=${encodeURI(
-        refresh_token
-      )}&client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${
-        process.env.TWITCH_CLIENT_SECRET
-      }&scope=user:read:follows+channel:read:subscriptions+user:edit+user:read:broadcast+user_follows_edit+user:edit:follows&response_type=code`
-    )
-    .then(async (res) => res.data)
+    .post(url)
+    .then((res) => res.data)
     .catch((e) => console.log('reAuthenticateTwitch -> e', e));
 
   if (username && res) {

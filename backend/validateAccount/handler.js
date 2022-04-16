@@ -41,7 +41,8 @@ exports.handler = async (event) => {
       };
     }
 
-    const { Password, ...data } = res.Item;
+    const { Password, ...rest } = res.Item;
+    const data = { ...rest, AuthKey: authkey };
 
     return {
       statusCode: 200,

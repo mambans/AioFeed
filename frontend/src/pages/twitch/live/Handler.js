@@ -19,6 +19,7 @@ import useFetchSingelVod from '../vods/hooks/useFetchSingelVod';
 import fetchMyFollowedLiveStreams from '../functions/fetchMyFollowedLiveStreams';
 import addProfileInfo from '../functions/addProfileInfo';
 import addGameInfo from '../functions/addGameInfo';
+import { CancelToken } from 'axios';
 
 const REFRESH_RATE = 25; // seconds
 
@@ -53,6 +54,8 @@ const Handler = ({ children }) => {
   const timer = useRef();
   const streamTags = useRef([]);
   const refreshAfterUnfollowTimer = useRef();
+  const cancelToken = useRef(CancelToken.source());
+
   // eslint-disable-next-line no-unused-vars
   const [documentTitle, setDocumentTitle] = useDocumentTitle(
     newlyAddedStreams?.length ? `(${newlyAddedStreams?.length}) Feed` : 'Feed'
@@ -64,6 +67,9 @@ const Handler = ({ children }) => {
 
   const refresh = useCallback(
     async ({ disableNotifications = false, forceValidateToken = false } = {}) => {
+      console.log('refresh:');
+      cancelToken.current.cancel('New request incoming');
+      cancelToken.current = CancelToken.source();
       setLoadingStates((c) => {
         return { ...c, refreshing: true, error: null };
       });
@@ -76,18 +82,23 @@ const Handler = ({ children }) => {
           AddCookie('Twitch-username', followedChannels.current[0].from_name);
         }
 
-        const baseStreams = await fetchMyFollowedLiveStreams({ user_id: twitchUserId });
+        const baseStreams = await fetchMyFollowedLiveStreams({
+          user_id: twitchUserId,
+          cancelToken: cancelToken.current.token,
+        });
 
         if (Array.isArray(baseStreams)) {
           const streamsWithProfiles = await addProfileInfo({
             items: baseStreams,
             save: true,
             refresh: disableNotifications,
+            cancelToken: cancelToken.current.token,
           });
           const streams = await addGameInfo({
             items: streamsWithProfiles,
             save: true,
             refresh: disableNotifications,
+            cancelToken: cancelToken.current.token,
           });
           const uniqueFilteredLiveStreams = uniqBy(streams, 'user_id');
           const streamsTag_ids = uniqueFilteredLiveStreams.reduce((acc, curr) => {
@@ -241,6 +252,7 @@ const Handler = ({ children }) => {
         }
 
         if (autoRefreshEnabled && !timer.current) {
+          clearInterval(timer.current);
           timer.current = setInterval(() => {
             const timeNow = new Date();
             setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
@@ -259,7 +271,7 @@ const Handler = ({ children }) => {
 
   useEffect(() => {
     return () => {
-      console.log('Unmounting');
+      console.log('Handler Unmounting');
       clearInterval(timer.current);
     };
   }, []);
