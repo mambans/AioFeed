@@ -140,7 +140,7 @@ const AddVideoButton = ({ video_id, list, redirect }) => {
       {added ? (
         <>
           <RemoveItemBtn size={18} color={Colors.red} />
-          <AddedItemBtn size={18} />
+          <AddedItemBtn size={18} color={Colors.green} />
         </>
       ) : (
         <AddItemBtn size={18} />
