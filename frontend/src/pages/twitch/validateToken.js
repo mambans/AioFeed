@@ -18,19 +18,18 @@ export const fullValidateFunc = async () => {
   const access_token = getCookie('Twitch-access_token');
 
   try {
-    const res = await validateFunction(access_token);
     const {
       data: { client_id, login, user_id },
-    } = res;
+    } = await validateFunction(access_token);
     if (
       client_id === TWITCH_CLIENT_ID &&
       user_id === getCookie('Twitch-userId') &&
       login.toLocaleLowerCase() === getCookie('Twitch-username')?.toLocaleLowerCase()
     ) {
-      return res;
+      return access_token;
     }
     console.warn('Twitch: Token validation details DID NOT match.');
-    return await reauthenticate();
+    return reauthenticate();
   } catch (error) {
     console.error('error: ', error);
     console.warn('Twitch: Validation failed!');
@@ -38,49 +37,47 @@ export const fullValidateFunc = async () => {
   }
 };
 
+const TTL = 100000;
 let promise = null;
 
-const validationOfToken = async () => {
+const validationOfToken = (skipValidation) => {
   if (!promise?.promise || Date.now() > promise?.ttl) {
-    const request = await validateTokenFunc();
-    console.log('request:', request);
-    promise = {
-      promise: request.data.access_token,
-      ttl: Date.now() + ((request?.data?.expires_in || 20) - 20) * 1000,
-    };
+    promise = { promise: validateTokenFunc(skipValidation), ttl: Date.now() + TTL };
   }
   return promise.promise;
 };
 
-const validateToken = async () => {
-  const validPromise = await validationOfToken();
+const validateToken = async (skipValidation) => {
+  const validPromise = await validationOfToken(skipValidation);
   return validPromise;
 };
 
-const validateTokenFunc = async () => {
+const validateTokenFunc = async (skipValidation) => {
   const access_token = getCookie('Twitch-access_token');
   const refresh_token = getCookie(`Twitch-refresh_token`);
   const app_token = getCookie(`Twitch-app_token`);
+
+  if (skipValidation) return access_token;
 
   if (access_token) {
     return await fullValidateFunc();
   } else if (refresh_token) {
     console.log('Twitch: No Twitch-access_token avalible, trying with Twitch-refresh_token.');
 
-    return await reauthenticate();
+    return reauthenticate();
   } else if (app_token) {
     return validateFunction(app_token)
       .then(async ({ data: { client_id } }) => {
         if (client_id === TWITCH_CLIENT_ID) return app_token;
         console.warn('Twitch: Token validation details DID NOT match.');
 
-        return await fetchAppAccessToken();
+        return fetchAppAccessToken();
       })
       .catch(async (error) => {
         console.error('error: ', error);
         console.warn('Twitch: Validation failed!');
 
-        return await fetchAppAccessToken();
+        return fetchAppAccessToken();
       });
   }
   return fetchAppAccessToken();
