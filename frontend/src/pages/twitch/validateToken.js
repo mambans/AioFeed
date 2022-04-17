@@ -40,7 +40,7 @@ export const fullValidateFunc = async () => {
 };
 let promise = null;
 
-const validationOfToken = () => {
+const validationOfToken = async () => {
   if (!promise?.promise || Date.now() > promise?.ttl) {
     const request = await validateTokenFunc();
     console.log('request:', request);
