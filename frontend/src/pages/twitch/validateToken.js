@@ -21,9 +21,7 @@ export const fullValidateFunc = async () => {
     const res = await validateFunction(access_token);
     console.log('res1:', res);
     const {
-      data: {
-        data: { client_id, login, user_id },
-      },
+      data: { client_id, login, user_id },
     } = res;
     if (
       client_id === TWITCH_CLIENT_ID &&
