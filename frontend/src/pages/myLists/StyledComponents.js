@@ -112,7 +112,7 @@ export const IconContainer = styled.div`
 
 export const AddedItemBtn = styled(MdPlaylistAddCheck)`
   transition: color 250ms, opacity 250ms;
-  color: ${Colors.green}
+  color: ${Colors.green};
 
   &:hover {
     color: rgb(100, 100, 100);

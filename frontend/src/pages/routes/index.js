@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import Feed from '../feed';
 import Footer from '../footer';
-import Home from '../home';
+import { Home } from '../home';
 import Legality from '../legality';
 import Navigation from '../navigation';
 import TopStreams from '../twitch/categoryTopStreams';

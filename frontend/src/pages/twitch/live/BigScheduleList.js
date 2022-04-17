@@ -42,10 +42,7 @@ const SchedulesList = ({ schedule, setSchedule, followedChannels }) => {
         const fetchedSchedules = await fullValidateFunc().then(async () => {
           const res = await Promise.all(
             followedChannels.map(async (user) => {
-              return await TwitchAPI.getSchedule(
-                { broadcaster_id: user.to_id },
-                { skipValidation: true }
-              );
+              return await TwitchAPI.getSchedule({ broadcaster_id: user.to_id });
             })
           );
           const list = res
