@@ -44,7 +44,8 @@ const validationOfToken = async () => {
   if (!promise?.promise || Date.now() > promise?.ttl) {
     const request = await validateTokenFunc();
     console.log('request:', request);
-    promise = { promise: request, ttl: Date.now() + (request.data.expire_in - 20) * 1000 };
+    const expire = request?.data?.expires_in;
+    promise = { promise: request, ttl: Date.now() + ((expire ? expire : 20) - 20) * 1000 };
   }
   return promise.promise;
 };
