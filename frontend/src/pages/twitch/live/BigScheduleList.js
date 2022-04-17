@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import TwitchAPI from '../API';
 import { SingelScheduleItem } from '../schedule';
 import { RefreshBtn, ScheduleListContainer } from '../schedule/StyledComponents';
-import { fullValidateFunc } from '../validateToken';
 import MyModal from '../../../components/mymodal/MyModal';
 import { AiFillSchedule } from 'react-icons/ai';
 
@@ -39,44 +38,41 @@ const SchedulesList = ({ schedule, setSchedule, followedChannels }) => {
       if (!schedule) {
         if (!followedChannels?.length) return false;
 
-        const fetchedSchedules = await fullValidateFunc().then(async () => {
-          const res = await Promise.all(
-            followedChannels.map(async (user) => {
-              return await TwitchAPI.getSchedule({ broadcaster_id: user.to_id });
-            })
+        const res = await Promise.all(
+          followedChannels.map(async (user) => {
+            return await TwitchAPI.getSchedule({ broadcaster_id: user.to_id });
+          })
+        );
+        const fetchedSchedules = res
+          .filter((i) => i && i?.data?.data?.segments)
+          .map((item) =>
+            item.data.data?.segments.map((o) => ({
+              ...o,
+              user: item.data.data.broadcaster_name,
+            }))
           );
-          const list = res
-            .filter((i) => i && i?.data?.data?.segments)
-            .map((item) =>
-              item.data.data?.segments.map((o) => ({
-                ...o,
-                user: item.data.data.broadcaster_name,
-              }))
-            );
-          const gameIDs = [
-            ...new Set(list.map((channel) => channel.map((i) => i.category?.id)).flat(1)),
-          ].filter((l) => l);
+        const gameIDs = [
+          ...new Set(fetchedSchedules.map((channel) => channel.map((i) => i.category?.id)).flat(1)),
+        ].filter((l) => l);
 
-          if (Boolean(gameIDs?.length)) {
-            const gameData = await TwitchAPI.getGames({
-              id: gameIDs,
-            });
+        if (Boolean(gameIDs?.length)) {
+          const gameData = await TwitchAPI.getGames({
+            id: gameIDs,
+          });
 
-            return list.map((c) => {
-              return c.map((s) => {
-                if (s.category) {
-                  s.category['box_art_url'] = gameData?.data?.data?.find(
-                    (g) => g.id === s.category?.id
-                  )['box_art_url'];
+          return fetchedSchedules.map((c) => {
+            return c.map((s) => {
+              if (s.category) {
+                s.category['box_art_url'] = gameData?.data?.data?.find(
+                  (g) => g.id === s.category?.id
+                )['box_art_url'];
 
-                  return s;
-                }
                 return s;
-              });
+              }
+              return s;
             });
-          }
-          return await list;
-        });
+          });
+        }
 
         const flattedList = fetchedSchedules.flat(2);
         const Sortedlist = flattedList

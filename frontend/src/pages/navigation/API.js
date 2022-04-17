@@ -229,28 +229,28 @@ const API = {
       .then(() => console.log(`Successfully disconnected from Twitch`))
       .catch((e) => console.error(e)),
 
-  updateTwitchToken: async (
-    setTwitchToken = (v) => AddCookie('Twitch-access_token', v),
-    setRefreshToken = (v) => AddCookie('Twitch-refresh_token', v)
-  ) => {
-    await axios
+  updateTwitchToken: async (setTwitchToken, setRefreshToken) => {
+    return await axios
       .put(`${BASE_URL}/twitch/reauth`, {
         refresh_token: getCookie(`Twitch-refresh_token`),
         authkey: getCookie(`AioFeed_AuthKey`),
       })
       .then(async (res) => {
-        setTwitchToken(res.data.access_token);
-        setRefreshToken(res.data.refresh_token);
-        console.log('Successfully re-authenticated to Twitch.');
+        console.log('res.data.access_token:', res.data.access_token);
+        if (setTwitchToken) setTwitchToken(res.data.access_token);
+        if (setRefreshToken) setRefreshToken(res.data.refresh_token);
+        AddCookie('Twitch-access_token', res.data.access_token);
+        AddCookie('Twitch-refresh_token', res.data.refresh_token);
+        if (res?.data?.access_token) console.log('Successfully re-authenticated to Twitch.');
         addLogBase({
           title: 'Twitch re-authenticated',
           text: 'Successfully re-authenticated to Twitch (renewed access token)',
           icon: 'twitch',
         });
 
+        console.log('res00:', res);
         return res;
-      })
-      .catch(() => console.log('!Failed to re-authenticate with Twitch.'));
+      });
   },
 
   getTwitchAccessToken: async (value) =>
