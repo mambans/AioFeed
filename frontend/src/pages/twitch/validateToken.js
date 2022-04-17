@@ -40,9 +40,11 @@ export const fullValidateFunc = async () => {
 const TTL = 100000;
 let promise = null;
 
-const validationOfToken = (skipValidation) => {
+const validationOfToken = async (skipValidation) => {
   if (!promise?.promise || Date.now() > promise?.ttl) {
-    promise = { promise: validateTokenFunc(skipValidation), ttl: Date.now() + TTL };
+    const request = await validateTokenFunc(skipValidation);
+    console.log('request:', request);
+    promise = { promise: request, ttl: Date.now() + TTL };
   }
   return promise.promise;
 };
@@ -56,8 +58,6 @@ const validateTokenFunc = async (skipValidation) => {
   const access_token = getCookie('Twitch-access_token');
   const refresh_token = getCookie(`Twitch-refresh_token`);
   const app_token = getCookie(`Twitch-app_token`);
-
-  if (skipValidation) return access_token;
 
   if (access_token) {
     return await fullValidateFunc();
