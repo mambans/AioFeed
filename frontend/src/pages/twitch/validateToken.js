@@ -39,9 +39,9 @@ export const fullValidateFunc = async () => {
 
 let promise = null;
 
-const validationOfToken = async (skipValidation) => {
+const validationOfToken = async () => {
   if (!promise?.promise || Date.now() > promise?.ttl) {
-    const request = await validateTokenFunc(skipValidation);
+    const request = await validateTokenFunc();
     console.log('request:', request);
     promise = {
       promise: request,
@@ -51,17 +51,15 @@ const validationOfToken = async (skipValidation) => {
   return promise.promise;
 };
 
-const validateToken = async (skipValidation) => {
-  const validPromise = await validationOfToken(skipValidation);
+const validateToken = async () => {
+  const validPromise = await validationOfToken();
   return validPromise;
 };
 
-const validateTokenFunc = async (skipValidation) => {
+const validateTokenFunc = async () => {
   const access_token = getCookie('Twitch-access_token');
   const refresh_token = getCookie(`Twitch-refresh_token`);
   const app_token = getCookie(`Twitch-app_token`);
-
-  if (skipValidation) return access_token;
 
   if (access_token) {
     return await fullValidateFunc();
