@@ -4,7 +4,6 @@ import API from '../navigation/API';
 import reauthenticate from './reauthenticate';
 
 const TWITCH_CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;
-const TTL = 100000;
 let promise = null;
 
 const validateToken = async () => {
