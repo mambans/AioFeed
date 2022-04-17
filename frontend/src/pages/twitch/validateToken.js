@@ -83,7 +83,7 @@ const validateFunction = async (token) => {
   });
 
   console.log('res7:', res);
-  return res;
+  return { ...res, access_token: res?.config?.headers?.Authorization?.split(' ')?.[1] };
 };
 
 const fetchAppAccessToken = async () => await API.getAppAccessToken();
