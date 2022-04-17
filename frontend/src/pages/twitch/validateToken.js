@@ -59,6 +59,8 @@ const validateTokenFunc = async () => {
   const access_token = getCookie('Twitch-access_token');
   const refresh_token = getCookie(`Twitch-refresh_token`);
   const app_token = getCookie(`Twitch-app_token`);
+  console.log('refresh_token:', refresh_token);
+  console.log('app_token:', app_token);
 
   if (access_token) {
     return await fullValidateFunc();

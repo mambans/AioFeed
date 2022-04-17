@@ -40,5 +40,5 @@ module.exports = async ({ refresh_token, authkey }) => {
       .promise();
   }
 
-  return res;
+  return res.data;
 };
