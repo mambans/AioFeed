@@ -239,8 +239,8 @@ const API = {
         authkey: getCookie(`AioFeed_AuthKey`),
       })
       .then(async (res) => {
-        setTwitchToken(res.data.data.access_token);
-        setRefreshToken(res.data.data.refresh_token);
+        setTwitchToken(res.data.access_token);
+        setRefreshToken(res.data.refresh_token);
         console.log('Successfully re-authenticated to Twitch.');
         addLogBase({
           title: 'Twitch re-authenticated',
@@ -248,7 +248,7 @@ const API = {
           icon: 'twitch',
         });
 
-        return res.data.data.access_token;
+        return res;
       })
       .catch(() => console.log('!Failed to re-authenticate with Twitch.'));
   },

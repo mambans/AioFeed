@@ -18,18 +18,19 @@ export const fullValidateFunc = async () => {
   const access_token = getCookie('Twitch-access_token');
 
   try {
+    const res = await validateFunction(access_token);
     const {
       data: { client_id, login, user_id },
-    } = await validateFunction(access_token);
+    } = res;
     if (
       client_id === TWITCH_CLIENT_ID &&
       user_id === getCookie('Twitch-userId') &&
       login.toLocaleLowerCase() === getCookie('Twitch-username')?.toLocaleLowerCase()
     ) {
-      return access_token;
+      return res;
     }
     console.warn('Twitch: Token validation details DID NOT match.');
-    return reauthenticate();
+    return await reauthenticate();
   } catch (error) {
     console.error('error: ', error);
     console.warn('Twitch: Validation failed!');
@@ -44,7 +45,7 @@ const validationOfToken = async () => {
     const request = await validateTokenFunc();
     console.log('request:', request);
     promise = {
-      promise: request,
+      promise: request.data.access_token,
       ttl: Date.now() + ((request?.data?.expires_in || 20) - 20) * 1000,
     };
   }
@@ -66,20 +67,20 @@ const validateTokenFunc = async () => {
   } else if (refresh_token) {
     console.log('Twitch: No Twitch-access_token avalible, trying with Twitch-refresh_token.');
 
-    return reauthenticate();
+    return await reauthenticate();
   } else if (app_token) {
     return validateFunction(app_token)
       .then(async ({ data: { client_id } }) => {
         if (client_id === TWITCH_CLIENT_ID) return app_token;
         console.warn('Twitch: Token validation details DID NOT match.');
 
-        return fetchAppAccessToken();
+        return await fetchAppAccessToken();
       })
       .catch(async (error) => {
         console.error('error: ', error);
         console.warn('Twitch: Validation failed!');
 
-        return fetchAppAccessToken();
+        return await fetchAppAccessToken();
       });
   }
   return fetchAppAccessToken();
