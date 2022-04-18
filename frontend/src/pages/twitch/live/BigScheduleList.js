@@ -47,11 +47,11 @@ const SchedulesList = ({ schedule, setSchedule, followedChannels }) => {
         );
         console.log('SchedulesList res:', res);
         const fetchedSchedules = res
-          .filter((i) => i && i.value && i.value?.data?.segments)
+          .filter((i) => i?.value?.data?.segments)
           .map((item) =>
-            item.data.data?.segments.map((o) => ({
+            item.value.data?.segments.map((o) => ({
               ...o,
-              user: item.data.data.broadcaster_name,
+              user: item.value.data.broadcaster_name,
             }))
           );
         console.log('fetchedSchedules res:', fetchedSchedules);
