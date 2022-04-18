@@ -15,7 +15,7 @@ module.exports = async ({ refresh_token, authkey }) => {
 
   const res = await axios
     .post(url)
-    .then((res) => res.data)
+    .then((res) => res && res.data)
     .catch((e) => console.log('reAuthenticateTwitch -> e', e));
 
   console.log('res123:', res);

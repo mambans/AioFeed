@@ -38,11 +38,12 @@ const SchedulesList = ({ schedule, setSchedule, followedChannels }) => {
       if (!schedule) {
         if (!followedChannels?.length) return false;
 
-        const res = await Promise.all(
+        const res = await Promise.allSettled(
           followedChannels.map(async (user) => {
             return await TwitchAPI.getSchedule({ broadcaster_id: user.to_id });
           })
         );
+        console.log('SchedulesList res:', res);
         const fetchedSchedules = res
           .filter((i) => i && i?.data?.data?.segments)
           .map((item) =>
@@ -51,6 +52,8 @@ const SchedulesList = ({ schedule, setSchedule, followedChannels }) => {
               user: item.data.data.broadcaster_name,
             }))
           );
+        console.log('fetchedSchedules res:', fetchedSchedules);
+
         const gameIDs = [
           ...new Set(fetchedSchedules.map((channel) => channel.map((i) => i.category?.id)).flat(1)),
         ].filter((l) => l);
