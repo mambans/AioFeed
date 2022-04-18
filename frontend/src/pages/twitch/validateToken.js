@@ -25,6 +25,7 @@ const validationOfToken = async () => {
 };
 
 const validateTokenFunc = async () => {
+  console.log('--CALLING validateTokenFunc:');
   const access_token = getCookie('Twitch-access_token');
   const refresh_token = getCookie(`Twitch-refresh_token`);
   // const app_token = getCookie(`Twitch-app_token`);
@@ -83,7 +84,9 @@ const validateFunction = async (token) => {
   });
 
   console.log('res7:', res);
-  return { ...res, access_token: res?.config?.headers?.Authorization?.split(' ')?.[1] };
+  const data = { ...res, access_token: res?.config?.headers?.Authorization?.split(' ')?.[1] };
+  console.log('RES8:', data);
+  return data;
 };
 
 const fetchAppAccessToken = async () => await API.getAppAccessToken();
