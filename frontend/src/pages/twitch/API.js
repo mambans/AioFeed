@@ -39,7 +39,7 @@ const TwitchAPI = {
   },
 
   getVideos: async (params) => {
-    const token = await validateToken();
+    const token = await validateToken({ useApp_token_last: true });
     return await axios.get(`${BASE_URL}/videos`, {
       params,
       headers: {
@@ -71,7 +71,7 @@ const TwitchAPI = {
   },
 
   getUser: async (params) => {
-    const token = await validateToken();
+    const token = await validateToken({ useApp_token_last: true });
     return await axios.get(`${BASE_URL}/users`, {
       params,
       headers: {
@@ -82,7 +82,7 @@ const TwitchAPI = {
   },
 
   getSearchChannels: async (params, query) => {
-    const token = await validateToken();
+    const token = await validateToken({ useApp_token_last: true });
     return await axios.get(`${BASE_URL}/search/channels?query=${encodeURI(query)}`, {
       params,
       headers: {
@@ -93,7 +93,7 @@ const TwitchAPI = {
   },
 
   getChannel: async (params) => {
-    const token = await validateToken();
+    const token = await validateToken({ useApp_token_last: true });
     return await axios.get(`${BASE_URL}/channels`, {
       params,
       headers: {
@@ -126,7 +126,7 @@ const TwitchAPI = {
   },
 
   getGames: async (params) => {
-    const token = await validateToken();
+    const token = await validateToken({ useApp_token_last: true });
     return await axios.get(`${BASE_URL}/games`, {
       params,
       headers: {
@@ -137,7 +137,7 @@ const TwitchAPI = {
   },
 
   getSearchGames: async (params, query) => {
-    const token = await validateToken();
+    const token = await validateToken({ useApp_token_last: true });
     return await axios.get(`${BASE_URL}/search/categories?query=${encodeURI(query)}`, {
       params,
       headers: {
@@ -148,7 +148,7 @@ const TwitchAPI = {
   },
 
   getTopGames: async (params) => {
-    const token = await validateToken();
+    const token = await validateToken({ useApp_token_last: true });
     return await axios.get(`${BASE_URL}/games/top`, {
       params,
       headers: {
@@ -198,7 +198,7 @@ const TwitchAPI = {
   },
 
   getTags: async (params) => {
-    const token = await validateToken();
+    const token = await validateToken({ useApp_token_last: true });
     return await axios
       .get(`${BASE_URL}/streams/tags`, {
         params,
@@ -211,7 +211,7 @@ const TwitchAPI = {
   },
 
   getAllTags: async (params, query) => {
-    const token = await validateToken();
+    const token = await validateToken({ useApp_token_last: true });
     return await axios
       .get(`${BASE_URL}/tags/streams${query || ''}`, {
         params,
@@ -224,7 +224,7 @@ const TwitchAPI = {
   },
 
   getSchedule: async (params) => {
-    const token = await validateToken();
+    const token = await validateToken({ useApp_token_last: true });
     return await axios
       .get(`${BASE_URL}/schedule`, {
         params,

@@ -11,7 +11,7 @@ module.exports = async ({ refresh_token, authkey }) => {
     refresh_token
   )}&client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${
     process.env.TWITCH_CLIENT_SECRET
-  }&scope+user:read:follows+clips:edit&response_type=code`;
+  }&scope=user:read:follows+clips:edit&response_type=code`;
 
   const res = await axios
     .post(url)
@@ -40,5 +40,5 @@ module.exports = async ({ refresh_token, authkey }) => {
       .promise();
   }
 
-  return res.data;
+  return res;
 };

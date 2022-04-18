@@ -136,18 +136,18 @@ const App = () => {
   function receiveMessage(e) {
     if (e.origin.startsWith('https://aiofeed.com') && e.data?.token && e.data?.service) {
       if (e.data.service === 'twitch') {
-        setTwitchAccessToken(e.data.token);
-        setTwitchRefreshToken(e.data.refresh_token);
-        setTwitchUsername(e.data.username);
-        setTwitchUserId(e.data.userId);
-        setTwitchProfileImage(e.data.profileImg);
+        if (setTwitchAccessToken) setTwitchAccessToken(e.data.token);
+        if (setTwitchRefreshToken) setTwitchRefreshToken(e.data.refresh_token);
+        if (setTwitchUsername) setTwitchUsername(e.data.username);
+        if (setTwitchUserId) setTwitchUserId(e.data.userId);
+        if (setTwitchProfileImage) setTwitchProfileImage(e.data.profileImg);
 
         setEnableTwitch(true);
       } else if (e.data.service === 'youtube') {
-        if (e.data.token) setYoutubeAccessToken(e.data.token);
-        if (e.data.username) setYoutubeUsername(e.data.username);
-        if (e.data.profileImg) setYoutubeProfileImage(e.data.profileImg);
-        setEnableYoutube(true);
+        if (e.data.token && setYoutubeAccessToken) setYoutubeAccessToken(e.data.token);
+        if (e.data.username && setYoutubeUsername) setYoutubeUsername(e.data.username);
+        if (e.data.profileImg && setYoutubeProfileImage) setYoutubeProfileImage(e.data.profileImg);
+        if (setEnableYoutube) setEnableYoutube(true);
       }
     }
   }

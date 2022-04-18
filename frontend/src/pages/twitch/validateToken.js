@@ -6,15 +6,15 @@ import reauthenticate from './reauthenticate';
 const TWITCH_CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;
 let promise = null;
 
-const validateToken = async () => {
-  const validPromise = await validationOfToken();
+const validateToken = async ({ useApp_token_last = false } = {}) => {
+  const validPromise = await validationOfToken({ useApp_token_last });
   console.log('validPromise:', validPromise);
   return validPromise;
 };
 
-const validationOfToken = async () => {
+const validationOfToken = async ({ useApp_token_last } = {}) => {
   if (!promise?.promise || Date.now() > promise?.ttl) {
-    const request = await validateTokenFunc();
+    const request = await validateTokenFunc({ useApp_token_last });
     console.log('request:', request);
     promise = {
       promise: request?.data?.access_token,
@@ -24,34 +24,40 @@ const validationOfToken = async () => {
   return promise.promise;
 };
 
-const validateTokenFunc = async () => {
+const validateTokenFunc = async ({ useApp_token_last }) => {
   console.log('--CALLING validateTokenFunc:');
   const access_token = getCookie('Twitch-access_token');
   const refresh_token = getCookie(`Twitch-refresh_token`);
-  // const app_token = getCookie(`Twitch-app_token`);
+  const app_token = getCookie(`Twitch-app_token`);
 
   if (access_token) {
     return await fullValidateFunc();
   } else if (refresh_token) {
     console.log('Twitch: No Twitch-access_token avalible, trying with Twitch-refresh_token.');
     return reauthenticate();
+  } else if (app_token && useApp_token_last) {
+    return validateFunction(app_token)
+      .then(async (res) => {
+        const { client_id } = res?.data || {};
+        if (client_id === TWITCH_CLIENT_ID) return res;
+        console.warn('Twitch: Token validation details DID NOT match.');
+
+        const appTokenRequest = fetchAppAccessToken();
+        console.log('appTokenRequest:', appTokenRequest);
+        return appTokenRequest;
+      })
+      .catch(async (error) => {
+        console.error('error: ', error);
+        console.warn('Twitch: Validation failed!');
+
+        const appTokenRequest = fetchAppAccessToken();
+        console.log('appTokenRequest:', appTokenRequest);
+        return appTokenRequest;
+      });
   }
-  // else if (app_token) {
-  //   return validateFunction(app_token)
-  //     .then(async ({ data: { client_id } }) => {
-  //       if (client_id === TWITCH_CLIENT_ID) return app_token;
-  //       console.warn('Twitch: Token validation details DID NOT match.');
-
-  //       return fetchAppAccessToken();
-  //     })
-  //     .catch(async (error) => {
-  //       console.error('error: ', error);
-  //       console.warn('Twitch: Validation failed!');
-
-  //       return fetchAppAccessToken();
-  //     });
-  // }
-  return fetchAppAccessToken();
+  const appTokenRequest = fetchAppAccessToken();
+  console.log('appTokenRequest:', appTokenRequest);
+  return appTokenRequest;
 };
 // res.data.access_token
 
@@ -83,9 +89,7 @@ const validateFunction = async (token) => {
     },
   });
 
-  console.log('res7:', res);
   res.data.access_token = res?.config?.headers?.Authorization?.split(' ')?.[1] || access_token;
-  console.log('RES8:', res);
   return res;
 };
 

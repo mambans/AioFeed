@@ -86,10 +86,11 @@ const API = {
   getAppAccessToken: async () =>
     await axios
       .get(`${BASE_URL}/app/token`)
-      .then(({ data: { access_token, expires_in } }) => {
+      .then((res) => {
+        const { access_token, expires_in } = res?.data || {};
         const expireData = new Date(expires_in * 1000);
         AddCookie('Twitch-app_token', access_token, { expires: expireData });
-        return access_token;
+        return res;
       })
       .catch((e) => {
         console.error(e);
