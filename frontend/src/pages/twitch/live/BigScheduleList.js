@@ -40,12 +40,14 @@ const SchedulesList = ({ schedule, setSchedule, followedChannels }) => {
 
         const res = await Promise.allSettled(
           await followedChannels.map(async (user) => {
-            return await TwitchAPI.getSchedule({ broadcaster_id: user.to_id });
+            return await TwitchAPI.getSchedule({ broadcaster_id: user.to_id }).then(
+              (res) => res?.data
+            );
           })
         );
         console.log('SchedulesList res:', res);
         const fetchedSchedules = res
-          .filter((i) => i && i?.data?.data?.segments)
+          .filter((i) => i && i.value && i.value?.data?.segments)
           .map((item) =>
             item.data.data?.segments.map((o) => ({
               ...o,
