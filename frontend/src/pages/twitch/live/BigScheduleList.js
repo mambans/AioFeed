@@ -60,26 +60,29 @@ const SchedulesList = ({ schedule, setSchedule, followedChannels }) => {
           ...new Set(fetchedSchedules.map((channel) => channel.map((i) => i.category?.id)).flat(1)),
         ].filter((l) => l);
 
-        if (Boolean(gameIDs?.length)) {
-          const gameData = await TwitchAPI.getGames({
-            id: gameIDs,
-          });
-
-          return fetchedSchedules.map((c) => {
-            return c.map((s) => {
-              if (s.category) {
-                s.category['box_art_url'] = gameData?.data?.data?.find(
-                  (g) => g.id === s.category?.id
-                )['box_art_url'];
-
-                return s;
-              }
-              return s;
+        const schedules = (async () => {
+          if (Boolean(gameIDs?.length)) {
+            const gameData = await TwitchAPI.getGames({
+              id: gameIDs,
             });
-          });
-        }
 
-        const flattedList = fetchedSchedules.flat(2);
+            return fetchedSchedules.map((c) => {
+              return c.map((s) => {
+                if (s.category) {
+                  s.category['box_art_url'] = gameData?.data?.data?.find(
+                    (g) => g.id === s.category?.id
+                  )['box_art_url'];
+                }
+                return s;
+              });
+            });
+          }
+
+          return fetchedSchedules;
+        })();
+
+        console.log('schedules:', schedules);
+        const flattedList = schedules.flat(2);
         const Sortedlist = flattedList
           .sort((a, b) => new Date(b.start_time) - new Date(a.start_time))
           .reverse()
