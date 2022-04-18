@@ -60,7 +60,7 @@ const SchedulesList = ({ schedule, setSchedule, followedChannels }) => {
           ...new Set(fetchedSchedules.map((channel) => channel.map((i) => i.category?.id)).flat(1)),
         ].filter((l) => l);
 
-        const schedules = (async () => {
+        const schedules = await (async () => {
           if (Boolean(gameIDs?.length)) {
             const gameData = await TwitchAPI.getGames({
               id: gameIDs,
