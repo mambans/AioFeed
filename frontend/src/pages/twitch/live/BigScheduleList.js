@@ -39,7 +39,7 @@ const SchedulesList = ({ schedule, setSchedule, followedChannels }) => {
         if (!followedChannels?.length) return false;
 
         const res = await Promise.allSettled(
-          followedChannels.map(async (user) => {
+          await followedChannels.map(async (user) => {
             return await TwitchAPI.getSchedule({ broadcaster_id: user.to_id });
           })
         );
