@@ -95,7 +95,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
         chatAsOverlay={chatAsOverlay}
         data-chatasoverlay={chatAsOverlay}
       >
-        <ChatHeader>
+        <ChatHeader className='chatHeader'>
           <ChatHeaderInner>
             <ShowNavigationButton />
             <Link to='page'>
