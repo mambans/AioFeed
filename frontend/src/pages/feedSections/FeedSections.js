@@ -87,7 +87,7 @@ const Section = ({
         );
 
         const streams = streamsToNotify?.map((stream = {}) => {
-          const notisTitle = `${
+          const notisTitle = `${loginNameFormat(stream)} ${
             !data?.oldLiveStreams?.find((s) => s?.user_id === stream?.user_id) ? 'Live ' : ''
           }in ${title}`;
           stream.notiStatus = notisTitle;
