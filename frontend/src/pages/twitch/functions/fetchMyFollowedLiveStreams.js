@@ -1,5 +1,6 @@
 import { getCookie } from '../../../util';
 import TwitchAPI from '../API';
+import addSystemNotification from '../live/addSystemNotification';
 
 const fetchMyFollowedLiveStreams = async ({ user_id = getCookie('Twitch-userId') }) => {
   const streams = await fetch({ user_id });
@@ -20,6 +21,12 @@ const fetch = async ({ user_id, pagination, previousStreams = [] }) => {
       return streams;
     })
     .catch((e) => {
+      if (e.response.data.status) {
+        addSystemNotification({
+          title: 'Error fetching followed streams',
+          body: `${e.response.data.status} - ${e.response.data.message}`,
+        });
+      }
       return e.response.data;
     });
 };

@@ -1,3 +1,4 @@
+import loginNameFormat from '../loginNameFormat';
 import addSystemNotification from './addSystemNotification';
 
 const liveStreamsPromise = async ({
@@ -24,10 +25,17 @@ const liveStreamsPromise = async ({
         window.open(
           'https://aiofeed.com/' + (stream.login || stream.user_login || stream.user_name)
         );
+
       addSystemNotification({
-        status: 'Live',
-        stream: stream,
+        title: `${loginNameFormat(stream)} is Live`,
+        icon: stream?.profile_image_url,
         body: `${stream.title || stream.status || ''}\n${stream.game_name || stream.game || ''}`,
+        onClick: (e) => {
+          e.preventDefault();
+          window.open(
+            'https://aiofeed.com/' + (stream.login || stream.user_login || stream.user_name)
+          );
+        },
       });
 
       if (fetchLatestVod) {

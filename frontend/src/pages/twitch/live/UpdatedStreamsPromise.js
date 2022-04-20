@@ -1,5 +1,6 @@
 import addSystemNotification from './addSystemNotification';
 import { truncate } from '../../../util';
+import loginNameFormat from '../loginNameFormat';
 
 const updateSreamsPromise = async ({
   oldLiveStreams,
@@ -38,12 +39,18 @@ const updateSreamsPromise = async ({
           oldStreamData.title !== stream.title
         ) {
           addSystemNotification({
-            status: 'Title & Game updated',
-            stream: stream,
+            title: `${loginNameFormat(stream)} Title & Game updated`,
+            icon: stream?.profile_image_url,
             body: `+ ${truncate(stream.title, 40)} in ${stream.game_name}\n- ${truncate(
               oldStreamData.title,
               40
             )} in ${oldStreamData.game_name}`,
+            onClick: (e) => {
+              e.preventDefault();
+              window.open(
+                `https://aiofeed.com/${stream.login || stream.user_login || stream.user_name}`
+              );
+            },
           });
 
           stream.notiStatus = 'Title & Game updated';
@@ -71,9 +78,16 @@ const updateSreamsPromise = async ({
           oldStreamData.title === stream.title
         ) {
           addSystemNotification({
-            status: 'Game updated',
-            stream: stream,
+            title: `${loginNameFormat(stream)} Game updated`,
+            icon: stream?.profile_image_url,
             body: `+ ${truncate(stream.game_name, 40)}\n- ${truncate(oldStreamData.game_name, 40)}`,
+
+            onClick: (e) => {
+              e.preventDefault();
+              window.open(
+                `https://aiofeed.com/${stream.login || stream.user_login || stream.user_name}`
+              );
+            },
           });
 
           stream.notiStatus = 'Game updated';
@@ -98,9 +112,16 @@ const updateSreamsPromise = async ({
           oldStreamData?.game_name === stream?.game_name
         ) {
           addSystemNotification({
-            status: 'Title updated',
-            stream: stream,
+            title: `${loginNameFormat(stream)} Title updated`,
+            icon: stream?.profile_image_url,
             body: `+ ${truncate(stream.title, 40)}\n- ${truncate(oldStreamData.title, 40)}`,
+
+            onClick: (e) => {
+              e.preventDefault();
+              window.open(
+                `https://aiofeed.com/${stream.login || stream.user_login || stream.user_name}`
+              );
+            },
           });
 
           stream.notiStatus = 'Title updated';

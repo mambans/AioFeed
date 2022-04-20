@@ -93,12 +93,23 @@ const Section = ({
           stream.notiStatus = notisTitle;
 
           addSystemNotification({
-            status: notisTitle,
-            stream: stream,
-            title: `${title}`,
+            title: notisTitle,
+            icon: stream?.profile_image_url,
             body: `${stream.title || stream.status || ''}\n${
               stream.game_name || stream.game || ''
             }`,
+            onClick: (e) => {
+              e.preventDefault();
+              const url = `https://aiofeed.com/${(
+                stream.login ||
+                stream.user_login ||
+                stream.user_name ||
+                stream.name ||
+                stream.display_name ||
+                stream.broadcaster_name
+              )?.toLowerCase()}`;
+              window.open(url, '_blank');
+            },
           });
 
           return stream;

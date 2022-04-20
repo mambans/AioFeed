@@ -287,9 +287,15 @@ const Player = () => {
     ({ type, stream }) => {
       if (stream && type === 'Live') {
         addSystemNotification({
-          status: 'Live',
-          stream: stream,
+          title: `${loginNameFormat(stream)} is Live`,
+          icon: stream?.profile_image_url,
           body: `${stream.title}\n${stream.game_name || ''}`,
+          onClick: (e) => {
+            e.preventDefault();
+            window.open(
+              `https://aiofeed.com/${stream.login || stream.user_login || stream.user_name}`
+            );
+          },
         });
 
         addNotification([{ ...stream, notiStatus: type }]);

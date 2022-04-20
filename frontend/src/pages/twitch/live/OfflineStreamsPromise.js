@@ -1,5 +1,8 @@
 import addSystemNotification from './addSystemNotification';
 import { getLocalstorage } from '../../../util';
+import loginNameFormat from '../loginNameFormat';
+import moment from 'moment';
+import { durationMsToDate } from '../TwitchUtils';
 
 const offlineStreamsPromise = async ({
   oldLiveStreams,
@@ -27,12 +30,21 @@ const offlineStreamsPromise = async ({
       if (
         isEnabledOfflineNotifications &&
         getLocalstorage('TwitchVods-Channels')?.includes(stream.user_id)
-      )
+      ) {
+        const duration = durationMsToDate(moment(stream.started_at).diff(moment()));
+
         addSystemNotification({
-          status: 'Offline',
-          stream: stream,
-          body: '',
+          title: `${loginNameFormat(stream)} went Offline`,
+          icon: stream?.profile_image_url,
+          body: `Was live for ${duration}`,
+          onClick: (e) => {
+            e.preventDefault();
+            window.open(
+              `https://aiofeed.com/${stream.login || stream.user_login || stream.user_name}/page`
+            );
+          },
         });
+      }
 
       if (fetchLatestVod) fetchLatestVod({ user_id: stream.user_id, check: true });
 

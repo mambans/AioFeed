@@ -33,6 +33,27 @@ export const durationToDate = (duration, vodCreateDate) => {
   return '0';
 };
 
+function padTo2Digits(num) {
+  return num.toString().padStart(2, '0');
+}
+
+export const durationMsToDate = (duration) => {
+  if (duration) {
+    let seconds = Math.floor(duration / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+
+    seconds = seconds % 60;
+    minutes = minutes % 60;
+
+    if (seconds) return `${hours}h ${padTo2Digits(minutes)}m ${padTo2Digits(seconds)}s`;
+    if (minutes) return `${hours}h ${padTo2Digits(minutes)}m`;
+
+    return `${hours}h`;
+  }
+  return '';
+};
+
 export const formatViewerNumbers = (viewers) => {
   if (!viewers) {
     return viewers;
