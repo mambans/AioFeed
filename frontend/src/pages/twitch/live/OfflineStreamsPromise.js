@@ -31,7 +31,7 @@ const offlineStreamsPromise = async ({
         isEnabledOfflineNotifications &&
         getLocalstorage('TwitchVods-Channels')?.includes(stream.user_id)
       ) {
-        const duration = durationMsToDate(moment(stream.started_at).diff(moment()));
+        const duration = durationMsToDate(moment().diff(moment(stream.started_at)));
 
         addSystemNotification({
           title: `${loginNameFormat(stream)} went Offline`,
