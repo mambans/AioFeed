@@ -7,11 +7,11 @@ import SortAndAddExpire from '../SortAndAddExpire';
 import TwitchAPI from '../../API';
 
 const useFetchSingelVod = () => {
-  const { setVods, vods, enableTwitchVods, channels } = useContext(VodsContext);
+  const { setVods, vods, enableTwitchVods, channels } = useContext(VodsContext) || {};
   const vodExpire = 3; // Number of days
 
   const fetchLatestVod = useCallback(
-    async ({ user_id, amount = 1, check = false }) => {
+    async ({ user_id, amount = 1, check = false } = {}) => {
       if (check && (!enableTwitchVods || !channels?.includes(user_id))) return null;
       return await TwitchAPI.getVideos({
         user_id: user_id,
@@ -19,26 +19,27 @@ const useFetchSingelVod = () => {
         first: amount,
         type: 'all',
       }).then(async (res) => {
-        const newVodWithProfile = await AddVideoExtraData({ items: res.data });
-        const newVodWithEndtime = await addVodEndTime(newVodWithProfile.data);
+        const newVodWithProfile = (await AddVideoExtraData({ items: res.data })) || [];
+        const newVodWithEndtime = (await addVodEndTime(newVodWithProfile.data)) || [];
 
-        setVods((vods = { data: [] }) => {
-          const existingVods = [...vods?.data];
-          const vodsToAdd = [
-            ...newVodWithEndtime.slice(0, amount).map((vod) => ({
-              ...vod,
-              transition: 'videoFadeSlide',
-            })),
-          ];
-          const uniqueVods = uniqBy(
-            [...(vodsToAdd || []), ...(existingVods || [])]?.slice(0, 100),
-            'id'
-          );
-          const FinallVods =
-            SortAndAddExpire(uniqueVods, vodExpire, vods.loaded, vods.expire) || [];
+        if (setVods)
+          setVods((vods = { data: [] }) => {
+            const existingVods = vods?.data ? [...vods?.data] : [];
+            const vodsToAdd = [
+              ...newVodWithEndtime.slice(0, amount).map((vod) => ({
+                ...vod,
+                transition: 'videoFadeSlide',
+              })),
+            ];
+            const uniqueVods = uniqBy(
+              [...(vodsToAdd || []), ...(existingVods || [])]?.slice(0, 100),
+              'id'
+            );
+            const FinallVods =
+              SortAndAddExpire(uniqueVods, vodExpire, vods.loaded, vods.expire) || [];
 
-          return FinallVods;
-        });
+            return FinallVods;
+          });
       });
     },
     [channels, enableTwitchVods, setVods]

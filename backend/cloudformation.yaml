@@ -87,6 +87,66 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
+  SavedLists:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: username
+          AttributeType: S
+        - AttributeName: id
+          AttributeType: N
+      KeySchema:
+        - AttributeName: username
+          KeyType: HASH
+        - AttributeName: id
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+  AppInfo:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: Name
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Name
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+  CustomFeedSections:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: username
+          AttributeType: S
+        - AttributeName: id
+          AttributeType: N
+      KeySchema:
+        - AttributeName: username
+          KeyType: HASH
+        - AttributeName: id
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+  TwitchVodChannels:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: username
+          AttributeType: S
+        - AttributeName: channel_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: username
+          KeyType: HASH
+        - AttributeName: channel_id
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
   validateAccount:
     Type: AWS::Serverless::Function
     Properties:
@@ -172,28 +232,6 @@ Resources:
             Method: put
           RequestParameters:
             - method.request.querystring.data:
-                Required: true
-            - method.request.querystring.authkey:
-                Required: true
-  VodChannelsUpdate:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: 'Update monitored vod channels list.'
-      Handler: vodChannelsUpdate/handler.handler
-      Environment:
-        Variables:
-          TWITCH_DATA_TABLE: !Ref TwitchData
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref TwitchData
-      Events:
-        Http:
-          Type: Api
-          Properties:
-            Path: /twitch/vod-channels
-            Method: put
-          RequestParameters:
-            - method.request.querystring.channels:
                 Required: true
             - method.request.querystring.authkey:
                 Required: true
@@ -295,18 +333,6 @@ Resources:
                 Required: true
             - method.request.querystring.authkey:
                 Required: true
-  AppInfo:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      AttributeDefinitions:
-        - AttributeName: Name
-          AttributeType: S
-      KeySchema:
-        - AttributeName: Name
-          KeyType: HASH
-      ProvisionedThroughput:
-        ReadCapacityUnits: 1
-        WriteCapacityUnits: 1
   YoutubeFetchTokens:
     Type: AWS::Serverless::Function
     Properties:
@@ -370,22 +396,6 @@ Resources:
           RequestParameters:
             - method.request.querystring.authkey:
                 Required: true
-  SavedLists:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      AttributeDefinitions:
-        - AttributeName: username
-          AttributeType: S
-        - AttributeName: id
-          AttributeType: N
-      KeySchema:
-        - AttributeName: username
-          KeyType: HASH
-        - AttributeName: id
-          KeyType: RANGE
-      ProvisionedThroughput:
-        ReadCapacityUnits: 1
-        WriteCapacityUnits: 1
   UpdateSavedLists:
     Type: AWS::Serverless::Function
     Properties:
@@ -547,22 +557,6 @@ Resources:
                 Required: true
             - method.request.querystring.authkey:
                 Required: true
-  CustomFeedSections:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      AttributeDefinitions:
-        - AttributeName: username
-          AttributeType: S
-        - AttributeName: id
-          AttributeType: N
-      KeySchema:
-        - AttributeName: username
-          KeyType: HASH
-        - AttributeName: id
-          KeyType: RANGE
-      ProvisionedThroughput:
-        ReadCapacityUnits: 1
-        WriteCapacityUnits: 1
   CreateCustomFeedSections:
     Type: AWS::Serverless::Function
     Properties:
@@ -852,4 +846,68 @@ Resources:
             - method.request.querystring.authkey:
                 Required: true
             - method.request.querystring.channel_id:
+                Required: true
+  TwitchVodChannelsFetch:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Fetch monitored vod channels list.'
+      Handler: Twitch/Vods/Fetch/handler.handler
+      Environment:
+        Variables:
+          TWITCH_VOD_TABLE: !Ref TwitchVodChannels
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TwitchVodChannels
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /twitch/vod-channels
+            Method: get
+          RequestParameters:
+            - method.request.querystring.authkey:
+                Required: true
+  TwitchVodChannelsCreate:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Add to monitored vod channels list.'
+      Handler: Twitch/Vods/Create/handler.handler
+      Environment:
+        Variables:
+          TWITCH_VOD_TABLE: !Ref TwitchVodChannels
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TwitchVodChannels
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /twitch/vod-channels
+            Method: put
+          RequestParameters:
+            - method.request.querystring.channel_id:
+                Required: true
+            - method.request.querystring.authkey:
+                Required: true
+  TwitchVodChannelsDelete:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'Delete from monitored vod channels list.'
+      Handler: Twitch/Vods/Delete/handler.handler
+      Environment:
+        Variables:
+          TWITCH_VOD_TABLE: !Ref TwitchVodChannels
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TwitchVodChannels
+      Events:
+        Http:
+          Type: Api
+          Properties:
+            Path: /twitch/vod-channels
+            Method: delete
+          RequestParameters:
+            - method.request.querystring.channel_id:
+                Required: true
+            - method.request.querystring.authkey:
                 Required: true

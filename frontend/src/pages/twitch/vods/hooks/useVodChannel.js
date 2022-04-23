@@ -8,11 +8,11 @@ const useVodChannel = () => {
   const addVodChannel = async ({ channel }) => {
     try {
       const existingChannels = new Set(channels);
-      const newChannels = [...existingChannels.add(channel?.user_id)];
+      const newChannels = [...existingChannels.add(channel.user_id)];
 
       setChannels([...newChannels]);
 
-      await API.updateVodChannels(newChannels);
+      await API.addVodChannel(channel.user_id);
 
       return newChannels;
     } catch (e) {
@@ -26,6 +26,7 @@ const useVodChannel = () => {
       vodChannels.delete(channel?.user_id);
 
       setChannels([...vodChannels]);
+      API.removeVodChannel(channel?.user_id);
 
       const existingVodVideos = vods || { data: [] };
       const newVodVideos = {
@@ -36,8 +37,6 @@ const useVodChannel = () => {
       };
 
       setVods(newVodVideos);
-
-      await API.updateVodChannels(vodChannels);
 
       return vodChannels;
     } catch (e) {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 
-import { getCookie } from '../../util';
+import { AddCookie, getCookie } from '../../util';
 import AccountContext from './../account/AccountContext';
 import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from '../../components/LoadingIndicator';
@@ -17,9 +17,9 @@ const TwitchAuthCallback = () => {
     setTwitchUserId,
     setTwitchUsername,
     setTwitchProfileImage,
-  } = useContext(TwitchContext);
-  const { username } = useContext(AccountContext);
-  const { setVisible, setFooterVisible } = useContext(NavigationContext);
+  } = useContext(TwitchContext) || {};
+  const { username } = useContext(AccountContext) || {};
+  const { setVisible, setFooterVisible } = useContext(NavigationContext) || {};
 
   const getAccessToken = useCallback(
     async (url) => {
@@ -29,8 +29,8 @@ const TwitchAuthCallback = () => {
 
       const accessToken = requestAccessToken.data.access_token;
       const refreshToken = requestAccessToken.data.refresh_token;
-      setTwitchAccessToken(accessToken);
-      setTwitchRefreshToken(refreshToken);
+      if (setTwitchAccessToken) setTwitchAccessToken(accessToken);
+      if (setTwitchRefreshToken) setTwitchRefreshToken(refreshToken);
 
       const MyTwitch = await TwitchAPI.getMe({ accessToken: accessToken }).then(async (res) => {
         setTwitchUserId(res.data.data[0].id);
@@ -69,8 +69,8 @@ const TwitchAuthCallback = () => {
   );
 
   useEffect(() => {
-    setVisible(false);
-    setFooterVisible(false);
+    if (setVisible) setVisible(false);
+    if (setFooterVisible) setFooterVisible(false);
     (async function () {
       try {
         const url = new URL(window.location.href);
@@ -79,6 +79,8 @@ const TwitchAuthCallback = () => {
             await getAccessToken(url)
               .then((res) => {
                 console.log('successfully authenticated to Twitch.');
+                if (res.token) AddCookie('Twitch-access_token', res.token);
+
                 window.opener.postMessage(
                   {
                     service: 'twitch',

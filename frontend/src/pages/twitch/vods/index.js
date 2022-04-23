@@ -56,13 +56,11 @@ export const Vods = ({ className }) => {
         channels,
         currentVods: vods,
       }).then((data) => {
-        if (data.er) {
-          setError(data.er);
-        } else if (data.vodError) {
-          setVodError(data.vodError);
-        }
+        setError(data?.er);
+        setVodError(data?.vodError);
+
         refreshBtnRef?.current?.setIsLoading(false);
-        setVods(data.data);
+        if (data?.data) setVods(data.data);
         // return data.data;
       });
     },
@@ -85,13 +83,11 @@ export const Vods = ({ className }) => {
             channels,
             currentVods: c,
           }).then((data) => {
-            if (data.er) {
-              setError(data.er);
-            } else if (data.vodError) {
-              setVodError(data.vodError);
-            }
+            setError(data.er);
+            setVodError(data.vodError);
+
             refreshBtnRef?.current?.setIsLoading(false);
-            setVods(data.data);
+            if (data?.data) setVods(data.data);
             // return data.data;
           });
         });

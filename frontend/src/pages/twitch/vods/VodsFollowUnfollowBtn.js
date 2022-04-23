@@ -2,7 +2,6 @@ import { MdVideoCall } from 'react-icons/md';
 import { MdVideocam } from 'react-icons/md';
 import React, { useState, useContext, useEffect } from 'react';
 
-import AccountContext from '../../account/AccountContext';
 import { VodAddRemoveButton } from '../../sharedComponents/sharedStyledComponents';
 import VodsContext from './VodsContext';
 import FeedsContext from '../../feed/FeedsContext';
@@ -27,25 +26,24 @@ const VodsFollowUnfollowBtn = ({
   text,
   type = 'link',
   padding,
-  unfollowStream = () => {},
 }) => {
-  const { channels, setChannels } = useContext(VodsContext) || {};
-  const { authKey, username } = useContext(AccountContext);
+  const { channels } = useContext(VodsContext) || {};
   const [enabled, setEnabled] = useState(
-    !!channels?.find((user_id) => channel?.user_id === user_id)
+    channels && !!channels?.find((user_id) => channel?.user_id === user_id)
   );
   const { enableTwitchVods } = useContext(FeedsContext) || {};
-  const { removeChannel, addVodChannel } = useVodChannel();
-  const { fetchLatestVod } = useFetchSingelVod();
+  const { removeChannel, addVodChannel } = useVodChannel() || {};
+  const { fetchLatestVod } = useFetchSingelVod() || {};
 
-  const handleOnClick = () => {
+  const handleOnClick = (e) => {
+    e.preventDefault();
     setEnabled((c) => !c);
     setTimeout(() => {
       if (enabled) {
         // unfollowStream();
-        removeChannel({ channel, channels, setChannels });
+        if (removeChannel) removeChannel({ channel });
       } else {
-        addVodChannel({ channel, channels, setChannels, username, authKey });
+        if (addVodChannel) addVodChannel({ channel });
         if (channel?.user_id) {
           fetchLatestVod({ user_id: channel.user_id, amount: 5 });
         }

@@ -15,7 +15,6 @@ import Sidebar from './sidebar';
 import GameSearchBar from '../twitch/categoryTopStreams/GameSearchBar';
 import ChannelSearchList from './../twitch/channelList/index';
 import NavExpandingSides from './NavExpandingSides';
-import VodsContext, { VodsProvider } from '../twitch/vods/VodsContext';
 import DropDown from './DropDown';
 import LogsContext from '../logs/LogsContext';
 import Colors from '../../components/themes/Colors';
@@ -49,7 +48,6 @@ const StyledNav = styled(Nav)`
 
 const Navigation = () => {
   const { visible, shrinkNavbar } = useContext(NavigationContext);
-  const { setChannels } = useContext(VodsContext) || {};
   const { LogsIcon } = useContext(LogsContext) || {};
   const leftExpand = useRef();
 
@@ -134,13 +132,7 @@ const Navigation = () => {
           <FaAngleLeft className='arrow' size={20} />
           <FaAngleLeft className='arrow shadow' size={20} />
           <GameSearchBar {...channelSearchListProps} openInNewTab={true} />
-          {setChannels ? (
-            <ChannelSearchList {...channelSearchListProps} />
-          ) : (
-            <VodsProvider forceMount={true}>
-              <ChannelSearchList {...channelSearchListProps} />
-            </VodsProvider>
-          )}
+          <ChannelSearchList {...channelSearchListProps} />
           {LogsIcon}
           <Sidebar />
         </NavExpandingSides>

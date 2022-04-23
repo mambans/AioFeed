@@ -204,11 +204,28 @@ const API = {
       })
       .catch((e) => console.error(e)),
 
-  updateVodChannels: async (value) =>
+  addVodChannel: async (channel_id) =>
     await axios
       .put(`${BASE_URL}/twitch/vod-channels`, {
         authkey: getCookie(`AioFeed_AuthKey`),
-        channels: [...value],
+        channel_id,
+      })
+      .catch((e) => console.error(e)),
+
+  removeVodChannel: async (channel_id) =>
+    await axios
+      .delete(`${BASE_URL}/twitch/vod-channels`, {
+        data: {
+          authkey: getCookie(`AioFeed_AuthKey`),
+          channel_id,
+        },
+      })
+      .catch((e) => console.error(e)),
+
+  getVodChannel: async () =>
+    await axios
+      .get(`${BASE_URL}/twitch/vod-channels`, {
+        params: { authkey: getCookie(`AioFeed_AuthKey`) },
       })
       .catch((e) => console.error(e)),
 
