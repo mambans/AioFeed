@@ -8,7 +8,7 @@ import useFetchSingelVod from '../vods/hooks/useFetchSingelVod';
 import VodsContext from '../vods/VodsContext';
 import addSystemNotification from './addSystemNotification';
 
-const OfflineStreamsNotifications = ({ liveStreams, oldLiveStreams, setNewlyAddedStreams }) => {
+const OfflineStreamsNotifications = ({ liveStreams, oldLiveStreams }) => {
   const { fetchLatestVod } = useFetchSingelVod();
   const { isEnabledOfflineNotifications } = useContext(TwitchContext);
   const { channels } = useContext(VodsContext);
@@ -59,7 +59,6 @@ const OfflineStreamsNotifications = ({ liveStreams, oldLiveStreams, setNewlyAdde
     fetchLatestVod,
     liveStreams,
     oldLiveStreams,
-    setNewlyAddedStreams,
     isEnabledOfflineNotifications,
     channels,
     addNotification,

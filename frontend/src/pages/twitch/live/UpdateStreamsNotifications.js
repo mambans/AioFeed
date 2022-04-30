@@ -3,11 +3,9 @@ import { truncate } from '../../../util';
 import NotificationsContext from '../../notifications/NotificationsContext';
 import loginNameFormat from '../loginNameFormat';
 import { TwitchContext } from '../useToken';
-import useFetchSingelVod from '../vods/hooks/useFetchSingelVod';
 import addSystemNotification from './addSystemNotification';
 
-const UpdateStreamsNotifications = ({ liveStreams, oldLiveStreams, setNewlyAddedStreams }) => {
-  const { fetchLatestVod } = useFetchSingelVod();
+const UpdateStreamsNotifications = ({ liveStreams, oldLiveStreams }) => {
   const { addNotification } = useContext(NotificationsContext);
   const { isEnabledUpdateNotifications, updateNotischannels } = useContext(TwitchContext);
 
@@ -144,10 +142,8 @@ const UpdateStreamsNotifications = ({ liveStreams, oldLiveStreams, setNewlyAdded
       } catch (e) {}
     })();
   }, [
-    fetchLatestVod,
     liveStreams,
     oldLiveStreams,
-    setNewlyAddedStreams,
     addNotification,
     isEnabledUpdateNotifications,
     updateNotischannels,

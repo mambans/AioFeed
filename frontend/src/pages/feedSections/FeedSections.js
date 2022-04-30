@@ -13,8 +13,8 @@ import ExpandableSection from '../../components/expandableSection/ExpandableSect
 import addSystemNotification from '../twitch/live/addSystemNotification';
 import NotificationsContext from '../notifications/NotificationsContext';
 import Colors from '../../components/themes/Colors';
-import updateSreamsPromise from '../twitch/live/UpdatedStreamsPromise';
 import { TwitchContext } from '../twitch/useToken';
+import UpdateStreamsNotifications from '../twitch/live/UpdateStreamsNotifications';
 
 export const checkAgainstRules = (stream, rules) => {
   if (!rules) return stream;
@@ -151,14 +151,7 @@ const Section = ({
             return stream;
           });
 
-          const updatedStreams = await updateSreamsPromise({
-            liveStreams: data?.liveStreams,
-            oldLiveStreams: previosStreams,
-            isEnabledUpdateNotifications,
-            updateNotischannels,
-          });
-
-          addNotification([...streams, ...leftStreams, ...updatedStreams]);
+          addNotification([...streams, ...leftStreams]);
         }
       } catch (e) {
         console.log('Section useeffect Error', e);
@@ -184,6 +177,7 @@ const Section = ({
       order={orders?.[id]?.order}
       key={`FeedSection-${id}`}
     >
+      <UpdateStreamsNotifications liveStreams={data?.liveStreams} oldLiveStreams={previosStreams} />
       <Header
         {...data}
         isLoading={data.refreshing}

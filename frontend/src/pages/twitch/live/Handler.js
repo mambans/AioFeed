@@ -239,12 +239,10 @@ const Handler = ({ children }) => {
             <OfflineStreamsNotifications
               liveStreams={liveStreamsState}
               oldLiveStreams={oldLiveStreams}
-              setNewlyAddedStreams={setNewlyAddedStreams}
             />
             <UpdateStreamsNotifications
               liveStreams={nonFeedSectionLiveStreamsState}
               oldLiveStreams={oldLiveStreams}
-              setNewlyAddedStreams={setNewlyAddedStreams}
             />
           </>
         )}
