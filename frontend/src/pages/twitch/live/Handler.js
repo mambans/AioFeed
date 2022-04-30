@@ -2,12 +2,6 @@ import React, { useEffect, useState, useRef, useCallback, useContext } from 'rea
 import orderBy from 'lodash/orderBy';
 import uniqBy from 'lodash/uniqBy';
 
-import getMyFollowedChannels from './../getMyFollowedChannels';
-import NotificationsContext from './../../notifications/NotificationsContext';
-import { AddCookie } from '../../../util';
-import LiveStreamsPromise from './LiveStreamsPromise';
-import OfflineStreamsPromise from './OfflineStreamsPromise';
-import UpdatedStreamsPromise from './UpdatedStreamsPromise';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import useToken, { TwitchContext } from '../useToken';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
@@ -15,25 +9,18 @@ import { fetchAndAddTags } from '../fetchAndAddTags';
 import FeedSectionsContext from '../../feedSections/FeedSectionsContext';
 import { checkAgainstRules } from '../../feedSections/FeedSections';
 import Alert from '../../../components/alert';
-import useFetchSingelVod from '../vods/hooks/useFetchSingelVod';
 import fetchMyFollowedLiveStreams from '../functions/fetchMyFollowedLiveStreams';
 import addProfileInfo from '../functions/addProfileInfo';
 import addGameInfo from '../functions/addGameInfo';
 import { CancelToken } from 'axios';
+import LiveStreamsNotifications from './LiveStreamsNotifications';
+import OfflineStreamsNotifications from './OfflineStreamsNotifications';
+import UpdateStreamsNotifications from './UpdateStreamsNotifications';
 
 const REFRESH_RATE = 25; // seconds
 
 const Handler = ({ children }) => {
-  const { addNotification } = useContext(NotificationsContext);
-  const {
-    autoRefreshEnabled,
-    isEnabledOfflineNotifications,
-    isEnabledUpdateNotifications,
-    twitchAccessToken,
-    updateNotischannels,
-    twitchUserId,
-  } = useContext(TwitchContext);
-  const { fetchLatestVod } = useFetchSingelVod();
+  const { autoRefreshEnabled, twitchAccessToken, twitchUserId } = useContext(TwitchContext);
   const validateToken = useToken();
   const { feedSections } = useContext(FeedSectionsContext) || {};
   const [refreshTimer, setRefreshTimer] = useState(20);
@@ -45,7 +32,6 @@ const Handler = ({ children }) => {
     loaded: false,
     lastLoaded: false,
   });
-  const followedChannels = useRef([]);
   const liveStreams = useRef();
   const oldLiveStreams = useRef([]);
   const [newlyAddedStreams, setNewlyAddedStreams] = useState();
@@ -66,7 +52,7 @@ const Handler = ({ children }) => {
   useEventListenerMemo('blur', windowBlurHandler);
 
   const refresh = useCallback(
-    async ({ disableNotifications = false, forceValidateToken = false } = {}) => {
+    async ({ firstLoad = false } = {}) => {
       console.log('refresh:');
       cancelToken.current.cancel('New request incoming');
       cancelToken.current = CancelToken.source();
@@ -76,11 +62,7 @@ const Handler = ({ children }) => {
       try {
         if (isInFocus.current) setNewlyAddedStreams([]);
         isInFocus.current = false;
-        followedChannels.current = await getMyFollowedChannels(forceValidateToken);
-
-        if (followedChannels.current && followedChannels.current[0]) {
-          AddCookie('Twitch-username', followedChannels.current[0].from_name);
-        }
+        // followedChannels.current = await getMyFollowedChannels(forceValidateToken);
 
         const baseStreams = await fetchMyFollowedLiveStreams({
           user_id: twitchUserId,
@@ -91,13 +73,13 @@ const Handler = ({ children }) => {
           const streamsWithProfiles = await addProfileInfo({
             items: baseStreams,
             save: true,
-            refresh: disableNotifications,
+            refresh: firstLoad,
             cancelToken: cancelToken.current.token,
           });
           const streams = await addGameInfo({
             items: streamsWithProfiles,
             save: true,
-            refresh: disableNotifications,
+            refresh: firstLoad,
             cancelToken: cancelToken.current.token,
           });
           const uniqueFilteredLiveStreams = uniqBy(streams, 'user_id');
@@ -145,56 +127,21 @@ const Handler = ({ children }) => {
               (f = {}) => f.enabled && f.excludeFromTwitch_enabled
             );
 
-          await Promise.resolve(
-            (() => {
-              const orderedStreams = orderBy(streamsWithTags, (s) => s.viewer_count, 'desc');
-              const nonFeedSectionLiveStreams = orderedStreams?.filter(
-                (stream) =>
-                  !enabledFeedSections?.some(({ rules } = {}) => checkAgainstRules(stream, rules))
-              );
+          const orderedStreams = orderBy(streamsWithTags, (s) => s.viewer_count, 'desc');
+          const nonFeedSectionLiveStreams = orderedStreams?.filter(
+            (stream) =>
+              !enabledFeedSections?.some(({ rules } = {}) => checkAgainstRules(stream, rules))
+          );
 
-              liveStreams.current = orderedStreams;
-              return { orderedStreams, nonFeedSectionLiveStreams };
-            })()
-          ).then(async ({ orderedStreams, nonFeedSectionLiveStreams } = {}) => {
-            setLiveStreamsState(orderedStreams);
-            setNonFeedSectionLiveStreamsState(nonFeedSectionLiveStreams);
-            setLoadingStates({
-              refreshing: false,
-              error: null,
-              loaded: true,
-              lastLoaded: Date.now(),
-            });
-            if (
-              !disableNotifications &&
-              (nonFeedSectionLiveStreams?.length >= 1 || oldLiveStreams.current?.length >= 1)
-            ) {
-              await Promise.all([
-                await LiveStreamsPromise({
-                  liveStreams: nonFeedSectionLiveStreams,
-                  oldLiveStreams,
-                  setNewlyAddedStreams,
-                  fetchLatestVod,
-                }),
+          liveStreams.current = orderedStreams;
 
-                await OfflineStreamsPromise({
-                  liveStreams: orderedStreams,
-                  oldLiveStreams,
-                  isEnabledOfflineNotifications,
-                  fetchLatestVod,
-                }),
-
-                await UpdatedStreamsPromise({
-                  liveStreams: nonFeedSectionLiveStreams,
-                  oldLiveStreams,
-                  isEnabledUpdateNotifications,
-                  updateNotischannels,
-                }),
-              ]).then((res) => {
-                const flattenedArray = res.flat(3).filter((n) => n);
-                if (Boolean(flattenedArray?.length)) addNotification(flattenedArray);
-              });
-            }
+          setLiveStreamsState(orderedStreams);
+          setNonFeedSectionLiveStreamsState(nonFeedSectionLiveStreams);
+          setLoadingStates({
+            refreshing: false,
+            error: null,
+            loaded: true,
+            lastLoaded: Date.now(),
           });
         } else {
           setLoadingStates({
@@ -213,16 +160,7 @@ const Handler = ({ children }) => {
         });
       }
     },
-    [
-      addNotification,
-      isEnabledUpdateNotifications,
-      isEnabledOfflineNotifications,
-      updateNotischannels,
-      setNewlyAddedStreams,
-      feedSections,
-      fetchLatestVod,
-      twitchUserId,
-    ]
+    [setNewlyAddedStreams, feedSections, twitchUserId]
   );
 
   useEffect(() => {
@@ -248,7 +186,7 @@ const Handler = ({ children }) => {
           if (autoRefreshEnabled) {
             setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
           }
-          await refresh({ disableNotifications: true });
+          refresh({ firstLoad: true });
         }
 
         if (autoRefreshEnabled && !timer.current) {
@@ -286,23 +224,49 @@ const Handler = ({ children }) => {
     );
   }
 
-  return children({
-    refreshing: loadingStates.refreshing,
-    loaded: loadingStates.loaded,
-    lastLoaded: loadingStates.lastLoaded,
-    refreshTimer,
-    followedChannels: followedChannels.current,
-    error: loadingStates.error,
-    oldLiveStreams: oldLiveStreams.current || [],
-    liveStreams: liveStreamsState || [],
-    nonFeedSectionLiveStreams: nonFeedSectionLiveStreamsState || [],
-    // liveStreams: liveStreams.current || [],
-    // nonFeedSectionLiveStreams: nonFeedSectionLiveStreams.current || [],
-    refresh,
-    newlyAddedStreams,
-    REFRESH_RATE,
-    autoRefreshEnabled,
-    refreshAfterUnfollowTimer,
-  });
+  return (
+    <>
+      {loadingStates?.loaded &&
+        timer.current &&
+        validateToken &&
+        (nonFeedSectionLiveStreamsState?.length || oldLiveStreams.current?.length) && (
+          <>
+            <LiveStreamsNotifications
+              liveStreams={nonFeedSectionLiveStreamsState}
+              oldLiveStreams={oldLiveStreams}
+              setNewlyAddedStreams={setNewlyAddedStreams}
+            />
+            <OfflineStreamsNotifications
+              liveStreams={liveStreamsState}
+              oldLiveStreams={oldLiveStreams}
+              setNewlyAddedStreams={setNewlyAddedStreams}
+            />
+            <UpdateStreamsNotifications
+              liveStreams={nonFeedSectionLiveStreamsState}
+              oldLiveStreams={oldLiveStreams}
+              setNewlyAddedStreams={setNewlyAddedStreams}
+            />
+          </>
+        )}
+      {children({
+        refreshing: loadingStates.refreshing,
+        loaded: loadingStates.loaded,
+        lastLoaded: loadingStates.lastLoaded,
+        refreshTimer,
+        // followedChannels: followedChannels.current,
+        error: loadingStates.error,
+        oldLiveStreams: oldLiveStreams.current || [],
+        liveStreams: liveStreamsState || [],
+        nonFeedSectionLiveStreams: nonFeedSectionLiveStreamsState || [],
+        // liveStreams: liveStreams.current || [],
+        // nonFeedSectionLiveStreams: nonFeedSectionLiveStreams.current || [],
+        refresh,
+        newlyAddedStreams,
+        REFRESH_RATE,
+        autoRefreshEnabled,
+        refreshAfterUnfollowTimer,
+      })}
+    </>
+  );
 };
 export default Handler;

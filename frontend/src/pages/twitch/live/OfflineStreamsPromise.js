@@ -1,5 +1,4 @@
 import addSystemNotification from './addSystemNotification';
-import { getLocalstorage } from '../../../util';
 import loginNameFormat from '../loginNameFormat';
 import moment from 'moment';
 import { durationMsToDate } from '../TwitchUtils';
@@ -9,6 +8,7 @@ const offlineStreamsPromise = async ({
   liveStreams,
   isEnabledOfflineNotifications,
   fetchLatestVod,
+  channels,
 }) => {
   try {
     const res = await new Promise((resolve, reject) => {
@@ -20,17 +20,17 @@ const offlineStreamsPromise = async ({
       resolve(newOffline);
     });
 
-    const streams = res.map((stream) => {
+    const streams = res?.map((stream) => {
       stream.notiStatus = 'Offline';
       stream.onClick = () =>
         window.open(
           'https://aiofeed.com/' + (stream.login || stream.user_login || stream.user_name) + '/page'
         );
 
-      if (
-        isEnabledOfflineNotifications &&
-        getLocalstorage('TwitchVods-Channels')?.includes(stream.user_id)
-      ) {
+      console.log('isEnabledOfflineNotifications:', isEnabledOfflineNotifications);
+      console.log('channels:', channels);
+      console.log('stream:', stream);
+      if (isEnabledOfflineNotifications && channels?.includes(stream.user_id)) {
         const duration = durationMsToDate(moment().diff(moment(stream.started_at)));
 
         addSystemNotification({

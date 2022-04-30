@@ -5,6 +5,7 @@ import { SingelScheduleItem } from '../schedule';
 import { RefreshBtn, ScheduleListContainer } from '../schedule/StyledComponents';
 import MyModal from '../../../components/mymodal/MyModal';
 import { AiFillSchedule } from 'react-icons/ai';
+import getMyFollowedChannels from '../getMyFollowedChannels';
 
 const nrOfItems = 4;
 
@@ -35,63 +36,59 @@ export default BigScheduleList;
 const SchedulesList = ({ schedule, setSchedule, followedChannels }) => {
   useEffect(() => {
     (async () => {
-      if (!schedule) {
-        if (!followedChannels?.length) return false;
+      const followedChannels = await getMyFollowedChannels();
+      if (!followedChannels?.length) return false;
 
-        const res = await Promise.allSettled(
-          await followedChannels.map(async (user) => {
-            return await TwitchAPI.getSchedule({ broadcaster_id: user.to_id }).then(
-              (res) => res?.data
-            );
-          })
-        );
-        console.log('SchedulesList res:', res);
-        const fetchedSchedules = res
-          .filter((i) => i?.value?.data?.segments)
-          .map((item) =>
-            item.value.data?.segments.map((o) => ({
-              ...o,
-              user: item.value.data.broadcaster_name,
-            }))
+      const res = await Promise.allSettled(
+        await followedChannels.map(async (user) => {
+          return await TwitchAPI.getSchedule({ broadcaster_id: user.to_id }).then(
+            (res) => res?.data
           );
-        console.log('fetchedSchedules res:', fetchedSchedules);
+        })
+      );
+      const fetchedSchedules = res
+        .filter((i) => i?.value?.data?.segments)
+        .map((item) =>
+          item.value.data?.segments.map((o) => ({
+            ...o,
+            user: item.value.data.broadcaster_name,
+          }))
+        );
 
-        const gameIDs = [
-          ...new Set(fetchedSchedules.map((channel) => channel.map((i) => i.category?.id)).flat(1)),
-        ].filter((l) => l);
+      const gameIDs = [
+        ...new Set(fetchedSchedules.map((channel) => channel.map((i) => i.category?.id)).flat(1)),
+      ].filter((l) => l);
 
-        const schedules = await (async () => {
-          if (Boolean(gameIDs?.length)) {
-            const gameData = await TwitchAPI.getGames({
-              id: gameIDs,
+      const schedules = await (async () => {
+        if (Boolean(gameIDs?.length)) {
+          const gameData = await TwitchAPI.getGames({
+            id: gameIDs,
+          });
+
+          return fetchedSchedules.map((c) => {
+            return c.map((s) => {
+              if (s.category) {
+                s.category['box_art_url'] = gameData?.data?.data?.find(
+                  (g) => g.id === s.category?.id
+                )['box_art_url'];
+              }
+              return s;
             });
+          });
+        }
 
-            return fetchedSchedules.map((c) => {
-              return c.map((s) => {
-                if (s.category) {
-                  s.category['box_art_url'] = gameData?.data?.data?.find(
-                    (g) => g.id === s.category?.id
-                  )['box_art_url'];
-                }
-                return s;
-              });
-            });
-          }
+        return fetchedSchedules;
+      })();
 
-          return fetchedSchedules;
-        })();
+      const flattedList = schedules.flat(2);
+      const Sortedlist = flattedList
+        .sort((a, b) => new Date(b.start_time) - new Date(a.start_time))
+        .reverse()
+        .filter((i) => new Date(i.start_time).getTime() > Date.now());
 
-        console.log('schedules:', schedules);
-        const flattedList = schedules.flat(2);
-        const Sortedlist = flattedList
-          .sort((a, b) => new Date(b.start_time) - new Date(a.start_time))
-          .reverse()
-          .filter((i) => new Date(i.start_time).getTime() > Date.now());
-
-        setSchedule(Sortedlist);
-      }
+      setSchedule(Sortedlist);
     })();
-  }, [followedChannels, setSchedule, schedule]);
+  }, [setSchedule]);
 
   // return null;
 

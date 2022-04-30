@@ -8,14 +8,12 @@ let promise = null;
 
 const validateToken = async ({ useApp_token_last = false } = {}) => {
   const validPromise = await validationOfToken({ useApp_token_last });
-  console.log('validPromise:', validPromise);
   return validPromise;
 };
 
 const validationOfToken = async ({ useApp_token_last } = {}) => {
   if (!promise?.promise || Date.now() > promise?.ttl) {
     const request = await validateTokenFunc({ useApp_token_last });
-    console.log('request:', request);
     promise = {
       promise: request?.data?.access_token,
       ttl: Date.now() + ((request?.data?.expires_in || 20) - 20) * 1000,
@@ -66,7 +64,6 @@ const fullValidateFunc = async () => {
 
   try {
     const res = await validateFunction(access_token);
-    console.log('res22:', res);
     const { client_id, user_id } = res?.data || {};
 
     if (client_id === TWITCH_CLIENT_ID && user_id === getCookie('Twitch-userId')) {
