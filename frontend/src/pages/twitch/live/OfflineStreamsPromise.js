@@ -13,7 +13,7 @@ const offlineStreamsPromise = async ({
   try {
     const res = await new Promise((resolve, reject) => {
       const newOffline = oldLiveStreams.current?.filter(
-        (stream) => !liveStreams.current.find(({ user_id }) => stream.user_id === user_id)
+        (stream) => !liveStreams.find(({ user_id }) => stream.user_id === user_id)
       );
 
       if (newOffline?.length <= 0) reject('No new Offline streams');

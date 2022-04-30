@@ -178,7 +178,7 @@ const Handler = ({ children }) => {
                 }),
 
                 await OfflineStreamsPromise({
-                  liveStreams,
+                  liveStreams: orderedStreams,
                   oldLiveStreams,
                   isEnabledOfflineNotifications,
                   fetchLatestVod,

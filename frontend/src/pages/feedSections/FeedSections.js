@@ -13,6 +13,8 @@ import ExpandableSection from '../../components/expandableSection/ExpandableSect
 import addSystemNotification from '../twitch/live/addSystemNotification';
 import NotificationsContext from '../notifications/NotificationsContext';
 import Colors from '../../components/themes/Colors';
+import updateSreamsPromise from '../twitch/live/UpdatedStreamsPromise';
+import { TwitchContext } from '../twitch/useToken';
 
 export const checkAgainstRules = (stream, rules) => {
   if (!rules) return stream;
@@ -78,48 +80,90 @@ const Section = ({
 }) => {
   const { orders, toggleExpanded } = useContext(FeedsContext);
   const previosStreams = useRef();
+  const { isEnabledUpdateNotifications, updateNotischannels } = useContext(TwitchContext);
 
   useEffect(() => {
-    try {
-      if (notifications_enabled && previosStreams?.current && data?.loaded) {
-        const streamsToNotify = data?.liveStreams?.filter(
-          (stream) => !previosStreams?.current?.find((s) => s?.user_id === stream?.user_id)
-        );
+    (async () => {
+      try {
+        if (previosStreams?.current && data?.loaded) {
+          const streamsToNotifyLive = notifications_enabled
+            ? data?.liveStreams?.filter(
+                (stream) => !previosStreams?.current?.find((s) => s?.user_id === stream?.user_id)
+              )
+            : [];
+          const streamsToNotifyLeftSection = previosStreams?.current?.filter(
+            (stream) => !data?.liveStreams?.find((s) => s?.user_id === stream?.user_id)
+          );
 
-        const streams = streamsToNotify?.map((stream = {}) => {
-          const notisTitle = `${loginNameFormat(stream)} ${
-            !data?.oldLiveStreams?.find((s) => s?.user_id === stream?.user_id) ? 'Live ' : ''
-          }in ${title}`;
-          stream.notiStatus = notisTitle;
+          const streams = streamsToNotifyLive?.map((stream = {}) => {
+            const notisTitle = `${loginNameFormat(stream)} ${
+              !data?.oldLiveStreams?.find((s) => s?.user_id === stream?.user_id) ? 'Live ' : ''
+            }in ${title}`;
+            stream.notiStatus = notisTitle;
 
-          addSystemNotification({
-            title: notisTitle,
-            icon: stream?.profile_image_url,
-            body: `${stream.title || stream.status || ''}\n${
-              stream.game_name || stream.game || ''
-            }`,
-            onClick: (e) => {
-              e.preventDefault();
-              const url = `https://aiofeed.com/${(
-                stream.login ||
-                stream.user_login ||
-                stream.user_name ||
-                stream.name ||
-                stream.display_name ||
-                stream.broadcaster_name
-              )?.toLowerCase()}`;
-              window.open(url, '_blank');
-            },
+            addSystemNotification({
+              title: notisTitle,
+              icon: stream?.profile_image_url,
+              body: `${stream.title || stream.status || ''}\n${
+                stream.game_name || stream.game || ''
+              }`,
+              onClick: (e) => {
+                e.preventDefault();
+                const url = `https://aiofeed.com/${(
+                  stream.login ||
+                  stream.user_login ||
+                  stream.user_name ||
+                  stream.name ||
+                  stream.display_name ||
+                  stream.broadcaster_name
+                )?.toLowerCase()}`;
+                window.open(url, '_blank');
+              },
+            });
+
+            return stream;
           });
 
-          return stream;
-        });
+          const leftStreams = streamsToNotifyLeftSection?.map((stream = {}) => {
+            const notisTitle = `${loginNameFormat(stream)} left ${title}`;
+            stream.notiStatus = notisTitle;
 
-        addNotification(streams);
+            addSystemNotification({
+              title: notisTitle,
+              icon: stream?.profile_image_url,
+              body: `${stream.title || stream.status || ''}\n${
+                stream.game_name || stream.game || ''
+              }`,
+              onClick: (e) => {
+                e.preventDefault();
+                const url = `https://aiofeed.com/${(
+                  stream.login ||
+                  stream.user_login ||
+                  stream.user_name ||
+                  stream.name ||
+                  stream.display_name ||
+                  stream.broadcaster_name
+                )?.toLowerCase()}`;
+                window.open(url, '_blank');
+              },
+            });
+
+            return stream;
+          });
+
+          const updatedStreams = await updateSreamsPromise({
+            liveStreams: data?.liveStreams,
+            oldLiveStreams: previosStreams,
+            isEnabledUpdateNotifications,
+            updateNotischannels,
+          });
+
+          addNotification([...streams, ...leftStreams, ...updatedStreams]);
+        }
+      } catch (e) {
+        console.log('Section useeffect Error', e);
       }
-    } catch (e) {
-      console.log('Section useeffect Error', e);
-    }
+    })();
 
     if (data?.loaded) previosStreams.current = data?.liveStreams || [];
   }, [
@@ -129,6 +173,8 @@ const Section = ({
     addNotification,
     notifications_enabled,
     data?.loaded,
+    isEnabledUpdateNotifications,
+    updateNotischannels,
   ]);
 
   if (!data?.liveStreams?.length) return null;
