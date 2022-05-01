@@ -30,6 +30,7 @@ const ChannelListElement = ({
     if (data) {
       setChannel(data);
     } else if (searchInput) {
+      clearTimeout(timer.current);
       timer.current = setTimeout(async () => {
         const data = await TwitchAPI.getUser({ login: searchInput }).then(
           (res) => res?.data?.data[0]

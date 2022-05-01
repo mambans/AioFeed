@@ -281,6 +281,12 @@ const ChannelList = ({
     }
   }, [listIsOpen, fetchFollowedChannels, twitchAccessToken, twitchUserId]);
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(searchTimer.current);
+    };
+  }, []);
+
   return (
     <SearchList
       style={style}

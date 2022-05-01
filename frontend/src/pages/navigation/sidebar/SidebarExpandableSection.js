@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { MdExpandMore } from 'react-icons/md';
 import NavigationContext from '../NavigationContext';
@@ -53,6 +53,13 @@ const SidebarExpandableSection = ({
       return { ...c, [title]: n };
     });
   };
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(closedTimer.current);
+      clearTimeout(openedTimer.current);
+    };
+  }, []);
 
   return (
     <div style={{ padding: '5px', marginTop: '15px' }}>

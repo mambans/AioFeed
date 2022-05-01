@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
 import { FaPause } from 'react-icons/fa';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
@@ -88,6 +88,12 @@ const PlayPauseButton = ({ TwitchPlayer, PlayerUIControlls }) => {
         break;
     }
   }
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(seekresetTimer.current);
+    };
+  }, []);
 
   if (isPaused) {
     return (

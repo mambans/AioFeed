@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import NotificationsContext from '../../notifications/NotificationsContext';
 import loginNameFormat from '../loginNameFormat';
 import useFetchSingelVod from '../vods/hooks/useFetchSingelVod';
@@ -7,6 +7,7 @@ import addSystemNotification from './addSystemNotification';
 const LiveStreamsNotifications = ({ liveStreams, oldLiveStreams, setNewlyAddedStreams }) => {
   const { fetchLatestVod } = useFetchSingelVod();
   const { addNotification } = useContext(NotificationsContext);
+  const timer = useRef();
 
   useEffect(() => {
     (async () => {
@@ -40,7 +41,10 @@ const LiveStreamsNotifications = ({ liveStreams, oldLiveStreams, setNewlyAddedSt
           });
 
           if (fetchLatestVod) {
-            setTimeout(() => fetchLatestVod({ user_id: stream.user_id, check: true }), 30000);
+            timer.current = setTimeout(
+              () => fetchLatestVod({ user_id: stream.user_id, check: true }),
+              30000
+            );
           }
 
           return stream;
@@ -49,6 +53,10 @@ const LiveStreamsNotifications = ({ liveStreams, oldLiveStreams, setNewlyAddedSt
         if (Boolean(streams?.length)) addNotification(streams);
       } catch (e) {}
     })();
+
+    return () => {
+      clearTimeout(timer.current);
+    };
   }, [fetchLatestVod, liveStreams, oldLiveStreams, setNewlyAddedStreams, addNotification]);
 
   return null;

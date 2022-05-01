@@ -198,6 +198,12 @@ const GameSearchBar = (props) => {
     }
   }, [listIsOpen, fetchTopGamesOnce]);
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(searchTimer.current);
+    };
+  }, []);
+
   return (
     <>
       <SearchList

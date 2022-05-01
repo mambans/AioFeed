@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react';
+import React, { useRef, useContext, useEffect } from 'react';
 
 import { StyledToggleButton } from './StyledComponents';
 import ToolTip from '../../../components/tooltip/ToolTip';
@@ -42,6 +42,12 @@ const ToggleButton = ({
       }, 150);
     }
   }
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(timeout.current);
+    };
+  }, []);
 
   return (
     <ToolTip tooltip={tooltip} width='max-content'>

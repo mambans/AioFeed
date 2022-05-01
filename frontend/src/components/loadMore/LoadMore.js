@@ -83,7 +83,10 @@ const LoadMore = ({
     if (Boolean(show || videos?.length > videoElementsAmount)) {
       const thisEle = thisEleRef.current;
       const observerRef = observer.current;
-      return () => observerRef?.unobserve(thisEle);
+      return () => {
+        observerRef?.unobserve(thisEle);
+        clearTimeout(resetTransitionTimer.current);
+      };
     }
   }, [show, videos, videoElementsAmount]);
 

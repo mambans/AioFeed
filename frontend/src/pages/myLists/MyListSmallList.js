@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { MdDeleteForever } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
@@ -29,6 +29,7 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
   const [cursor, setCursor] = useState({ position: 0 });
 
   const ulListRef = useRef();
+  const scrollTimer = useRef();
   const savedFilteredInputMatched = useRef();
 
   const useInput = (initialValue) => {
@@ -99,7 +100,8 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
       resetVideoId();
       if (newList) {
         setTimeout(() => setCursor({ position: newList?.videos?.length - 1 }), 0);
-        setTimeout(() => scrollToIfNeeded(ulListRef.current), 750);
+        clearTimeout(scrollTimer.current);
+        scrollTimer.current = setTimeout(() => scrollToIfNeeded(ulListRef.current), 750);
       }
     }
   };
@@ -195,6 +197,12 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
 
     return inputFiltered;
   }, [cursor.used, videos, videoId, checkIncludes]);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(scrollTimer.current);
+    };
+  }, []);
 
   return (
     <SearchList

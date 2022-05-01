@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import { StyledVolumeEventOverlay } from './player/StyledComponents';
 import toggleFullscreenFunc from './player/toggleFullscreenFunc';
@@ -105,6 +105,12 @@ const VolumeEventOverlay = React.forwardRef(
         videoElementRef,
       });
     }
+
+    useEffect(() => {
+      return () => {
+        clearTimeout(fadeTimer.current);
+      };
+    }, []);
 
     return (
       <CSSTransition

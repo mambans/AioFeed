@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
 import { AddedItemBtn, AddItemBtn, ButtonContainer, IconContainer } from '../StyledComponents';
@@ -61,6 +61,13 @@ const AddToListButton = ({
     mouseLeaveEnablePreview();
     return false;
   };
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(fadeInTimer.current);
+      clearTimeout(fadeOutTimer.current);
+    };
+  }, []);
 
   if (!enableMyLists) return null;
 

@@ -4,6 +4,7 @@ import StyledLoadingList from './../categoryTopStreams/LoadingList';
 const InifinityScroll = ({ observerFunction }) => {
   const ref = useRef();
   const timer = useRef();
+
   useEffect(() => {
     const elementRef = ref.current;
     const observer = new IntersectionObserver(
