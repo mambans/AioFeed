@@ -59,11 +59,11 @@ export const Styledsidebar = styled.div`
   flex-direction: column;
   gap: 2rem;
 
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
 
   &::-webkit-scrollbar {
-    display: none;
+    display: none !important;
   }
 
   &.twitchSidebar-appear {
