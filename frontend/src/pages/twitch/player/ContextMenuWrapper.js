@@ -113,7 +113,6 @@ const StyledDropDownTrigger = styled.div`
 `;
 
 export const ContextMenuDropDown = ({ trigger, children }) => {
-  console.log('ContextMenuDropDown children:', children);
   return (
     <StyledDropDownTrigger>
       <li>{trigger || null}</li>
@@ -166,7 +165,6 @@ const ContextMenuWrapper = ({
   useClicksOutside(menuRef, () => setShow(false), show);
 
   // if (show?.show) {
-  console.log('children:', children);
   return (
     <Container
       left={show?.x}

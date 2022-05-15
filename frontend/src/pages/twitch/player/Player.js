@@ -165,19 +165,18 @@ const Player = () => {
   );
 
   const updateChatState = useCallback(
-    (v) => {
-      console.log('updateChatState:');
+    (v, push = true) => {
       setChatState((c) => {
         clearTimeout(pushStatesTimer.current);
 
         if (typeof v === 'function') {
           const value = v(c);
-          pushStatesTimer.current = setTimeout(() => pushChatState(value), 7500);
+          if (push) pushStatesTimer.current = setTimeout(() => pushChatState(value), 7500);
           return value;
         }
 
-        pushStatesTimer.current = setTimeout(() => pushChatState(v), 7500);
-        pushChatState(v);
+        if (push) pushStatesTimer.current = setTimeout(() => pushChatState(v), 7500);
+        // pushChatState(v);
         return v;
       });
     },

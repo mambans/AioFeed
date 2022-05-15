@@ -928,6 +928,7 @@ export const ChatHeader = styled.div`
   background: var(--navigationbarBackground);
   justify-content: space-between;
   flex-wrap: wrap;
+  position: relative;
 
   button {
     background: none;
@@ -960,4 +961,5 @@ export const ChatHeaderInner = styled.div`
   align-items: center;
   gap: 0.5rem;
   flex-wrap: wrap;
+  z-index: 1;
 `;

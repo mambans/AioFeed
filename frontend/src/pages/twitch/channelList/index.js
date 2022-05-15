@@ -269,15 +269,14 @@ const ChannelList = ({
 
     if (!twitchAccessToken || !twitchUserId) {
       setShowDropdown(false);
-      return false;
-    }
-
-    if (listIsOpen) {
-      clearTimeout(resetListTimer.current);
-      fetchFollowedChannels().catch((e) => {
-        setShowDropdown(false);
-        console.warn(e);
-      });
+    } else {
+      if (listIsOpen) {
+        clearTimeout(resetListTimer.current);
+        fetchFollowedChannels().catch((e) => {
+          setShowDropdown(false);
+          console.warn(e);
+        });
+      }
     }
   }, [listIsOpen, fetchFollowedChannels, twitchAccessToken, twitchUserId]);
 

@@ -55,7 +55,6 @@ const VideoPlayer = ({
     });
   }
   function keyboardEvents(e) {
-    console.log('keyboardEvents2 :', e.key);
     switch (e.key) {
       case 'f':
       case 'F':

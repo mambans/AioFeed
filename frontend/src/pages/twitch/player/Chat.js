@@ -53,11 +53,16 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
       const mouseY = e.clientY;
       const chat = chatRef.current?.getBoundingClientRect();
 
-      setStartPos({ x: mouseX - chat.left, y: mouseY - chat.top });
+      setStartPos((c) => ({
+        x: mouseX - chat.left,
+        y: mouseY - chat.top,
+      }));
     }
   };
 
   const onDragMove = (e) => {
+    if (!chatAsOverlay) updateChatState((c) => ({ ...c, chatAsOverlay: true }), false);
+
     const mouseX = e.clientX;
     const mouseY = e.clientY;
     const chat = chatRef.current?.getBoundingClientRect();
@@ -72,14 +77,23 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
   };
 
   const onDragStop = (e) => {
-    if (dragging) {
-      updateChatState((c) => ({ ...c, overlayPosition: overlayPosition }));
+    if (dragging && chatAsOverlay) {
+      updateChatState((c) => ({
+        ...c,
+        overlayPosition,
+        chatAsOverlay: true,
+      }));
     }
     setDragging(false);
   };
 
   useEffect(() => {
-    setOverlayPosition({ width: chatState?.chatwidth, ...(chatState?.overlayPosition || {}) });
+    setOverlayPosition((c) => ({
+      height: window.innerHeight,
+      ...c,
+      width: chatState?.chatwidth,
+      ...(chatState?.overlayPosition || {}),
+    }));
   }, [chatState?.overlayPosition, chatState?.chatwidth]);
 
   return (
@@ -96,6 +110,11 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
         data-chatasoverlay={chatAsOverlay}
       >
         <ChatHeader className='chatHeader'>
+          <ChatHeaderBackdropEventDraggable
+            onMouseDown={onDragInit}
+            onMouseUp={onDragStop}
+            onMouseMove={dragging ? onDragMove : () => {}}
+          />
           <ChatHeaderInner>
             <ShowNavigationButton />
             <Link to='page'>
@@ -120,18 +139,20 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
             >
               <GrStackOverflow size={20} />
             </TransparentButton>
-            <TransparentButton
-              onMouseDown={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onDragInit(e);
-              }}
-              onMouseUp={onDragStop}
-              onMouseMove={dragging ? onDragMove : () => {}}
-              style={{ cursor: 'move' }}
-            >
-              <BiMove size={20} />
-            </TransparentButton>
+            {chatAsOverlay && (
+              <TransparentButton
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onDragInit(e);
+                }}
+                onMouseUp={onDragStop}
+                onMouseMove={dragging ? onDragMove : () => {}}
+                style={{ cursor: 'move' }}
+              >
+                <BiMove size={20} />
+              </TransparentButton>
+            )}
 
             {!chatAsOverlay && (
               <ToolTip
@@ -163,7 +184,12 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
           </button>
         </ChatHeader>
         {chatAsOverlay && (
-          <ResizerAllSides setOverlayPosition={setOverlayPosition} target={chatRef.current} />
+          <ResizerAllSides
+            setOverlayPosition={setOverlayPosition}
+            updateChatState={updateChatState}
+            target={chatRef.current}
+            overlayPosition={overlayPosition}
+          />
         )}
 
         <InnerWrapper
@@ -189,12 +215,20 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
 };
 export default Chat;
 
+const ChatHeaderBackdropEventDraggable = styled.div`
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  cursor: move;
+`;
+
 const DragOverlay = styled.div`
   position: absolute;
   height: 100%;
   width: 100%;
   background: transparent;
 `;
+
 const InnerWrapper = styled.div`
   position: relative;
   height: 100%;
@@ -261,7 +295,7 @@ const ResizerIcon = styled.div`
   }
 `;
 
-const ResizerAllSides = ({ setOverlayPosition, target }) => {
+const ResizerAllSides = ({ setOverlayPosition, updateChatState, target, overlayPosition }) => {
   const [active, setActive] = useState();
 
   const onMouseDown = (e, dir) => {
@@ -273,6 +307,7 @@ const ResizerAllSides = ({ setOverlayPosition, target }) => {
   };
   const onMouseUp = () => {
     setActive(false);
+    updateChatState((c) => ({ ...c, overlayPosition }));
   };
 
   const keydown = (e) => {
