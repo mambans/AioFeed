@@ -7,6 +7,22 @@ const ExpandableSection = ({ collapsed, children, isOpened, unmountOnInitialClos
   const [initialLoad, setInitialLoad] = useState(unmountOnInitialClosed ? true : false);
   const animationFrame = useRef();
 
+  const onTransitionEnd = (e) => {
+    if (e.propertyName === 'height') {
+      setHeight((c) => {
+        if (!c.collapsed) {
+          return {
+            height: 'unset',
+            collapsed: c.collapsed,
+            isOpened: true,
+            willChange: false,
+          };
+        }
+        return { ...c, willChange: false };
+      });
+    }
+  };
+
   useLayoutEffect(() => {
     cancelAnimationFrame(animationFrame.current);
     setInitialLoad(false);
@@ -27,21 +43,9 @@ const ExpandableSection = ({ collapsed, children, isOpened, unmountOnInitialClos
     });
   }, [collapsed]);
 
-  const onTransitionEnd = (e) => {
-    if (e.propertyName === 'height') {
-      setHeight((c) => {
-        if (!c.collapsed) {
-          return {
-            height: 'unset',
-            collapsed: c.collapsed,
-            isOpened: true,
-            willChange: false,
-          };
-        }
-        return { ...c, willChange: false };
-      });
-    }
-  };
+  useEffect(() => {
+    onTransitionEnd({ propertyName: 'height' });
+  }, []);
 
   return (
     <StyledExpandSection
