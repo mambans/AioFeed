@@ -5,12 +5,10 @@ const ExpandableSection = ({ collapsed, children, isOpened, unmountOnInitialClos
   const ref = useRef();
   const [height, setHeight] = useState({ collapsed });
   const [initialLoad, setInitialLoad] = useState(unmountOnInitialClosed ? true : false);
-  const timer = useRef();
   const animationFrame = useRef();
 
   useLayoutEffect(() => {
     cancelAnimationFrame(animationFrame.current);
-    clearTimeout(timer.current);
     setInitialLoad(false);
     setHeight({
       height: ref.current?.getBoundingClientRect()?.height + 'px',
@@ -27,18 +25,23 @@ const ExpandableSection = ({ collapsed, children, isOpened, unmountOnInitialClos
         collapsed,
       }));
     });
-
-    timer.current = setTimeout(() => {
-      requestAnimationFrame(() => {
-        setHeight((c) => {
-          if (!c.collapsed) {
-            return { height: 'unset', collapsed: c.collapsed, isOpened: true, willChange: false };
-          }
-          return { ...c, willChange: false };
-        });
-      });
-    }, 501);
   }, [collapsed]);
+
+  const onTransitionEnd = (e) => {
+    if (e.propertyName === 'height') {
+      setHeight((c) => {
+        if (!c.collapsed) {
+          return {
+            height: 'unset',
+            collapsed: c.collapsed,
+            isOpened: true,
+            willChange: false,
+          };
+        }
+        return { ...c, willChange: false };
+      });
+    }
+  };
 
   return (
     <StyledExpandSection
@@ -47,6 +50,7 @@ const ExpandableSection = ({ collapsed, children, isOpened, unmountOnInitialClos
       height={height?.height}
       collapsed={String(height?.collapsed)}
       willChange={String(height?.willChange)}
+      onTransitionEnd={onTransitionEnd}
     >
       <div ref={ref}>{(!initialLoad || height?.isOpened) && children}</div>
     </StyledExpandSection>
