@@ -44,7 +44,9 @@ const ExpandableSection = ({ collapsed, children, isOpened, unmountOnInitialClos
   }, [collapsed]);
 
   useEffect(() => {
-    onTransitionEnd({ propertyName: 'height' });
+    setTimeout(() => {
+      onTransitionEnd({ propertyName: 'height' });
+    }, 0);
   }, []);
 
   return (
