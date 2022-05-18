@@ -89,7 +89,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
 
   useEffect(() => {
     setOverlayPosition((c) => ({
-      height: window.innerHeight,
+      height: window.innerHeight / 2,
       ...c,
       width: chatState?.chatwidth,
       ...(chatState?.overlayPosition || {}),
