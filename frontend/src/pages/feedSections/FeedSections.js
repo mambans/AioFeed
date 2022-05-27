@@ -49,7 +49,7 @@ const FeedSections = ({ data }) => {
             checkAgainstRules(stream, curr.rules)
           );
           if (!curr.enabled) return acc;
-          return [...acc, { ...curr, data: { ...data, liveStreams } }];
+          return [...acc, { ...curr, data: { ...data, liveStreams, streams: data?.liveStreams } }];
         }, [])
         ?.map((feed, index) => (
           <CSSTransition
@@ -125,7 +125,9 @@ const Section = ({
           });
 
           const leftStreams = streamsToNotifyLeftSection?.map((stream = {}) => {
-            const notisTitle = `${loginNameFormat(stream)} left ${title}`;
+            const notisTitle = !data?.streams.find((s) => s.user_id === stream?.user_id)
+              ? `${loginNameFormat(stream)} went offline from ${title}`
+              : `${loginNameFormat(stream)} left ${title}`;
             stream.notiStatus = notisTitle;
 
             addSystemNotification({
@@ -168,6 +170,7 @@ const Section = ({
     data?.loaded,
     isEnabledUpdateNotifications,
     updateNotischannels,
+    data?.streams,
   ]);
 
   if (!data?.liveStreams?.length) return null;

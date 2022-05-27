@@ -237,7 +237,7 @@ const Handler = ({ children }) => {
               setNewlyAddedStreams={setNewlyAddedStreams}
             />
             <OfflineStreamsNotifications
-              liveStreams={liveStreamsState}
+              liveStreams={nonFeedSectionLiveStreamsState}
               oldLiveStreams={oldLiveStreams}
             />
             <UpdateStreamsNotifications
