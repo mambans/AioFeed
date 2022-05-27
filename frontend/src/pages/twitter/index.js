@@ -12,8 +12,6 @@ import Timelines from './Timelines';
 import ResizeWrapper from '../../components/ResizeWrapper';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
 import TwitterContext from './TwitterContext';
-import useEventListenerMemo from '../../hooks/useEventListenerMemo';
-import useForceRerender from '../../hooks/useForceRerender';
 
 const TwitterStandalone = () => {
   useDocumentTitle('Twitter');
@@ -30,14 +28,11 @@ export const Twitter = ({ in: forceMount = false }) => {
   const { activeTheme } = useContext(ThemeContext);
   const { setTwitterWidth } = useContext(CenterContext);
   const mainContainerRef = useRef();
-  const [forceUpdate] = useForceRerender();
 
   const pushTwitterWidthToFeed = useCallback(
     (id, width) => setTwitterWidth((c) => ({ ...c, [id]: width })),
     [setTwitterWidth]
   );
-
-  useEventListenerMemo('focus', forceUpdate);
 
   return (
     <CSSTransition
