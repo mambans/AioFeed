@@ -8,7 +8,11 @@ import useFetchSingelVod from '../vods/hooks/useFetchSingelVod';
 import VodsContext from '../vods/VodsContext';
 import addSystemNotification from './addSystemNotification';
 
-const OfflineStreamsNotifications = ({ liveStreams, oldLiveStreams }) => {
+const OfflineStreamsNotifications = ({
+  liveStreams,
+  oldLiveStreams,
+  nonFeedSectionLiveStreamsState,
+}) => {
   const { fetchLatestVod } = useFetchSingelVod();
   const { isEnabledOfflineNotifications } = useContext(TwitchContext);
   const { channels } = useContext(VodsContext);
@@ -18,7 +22,9 @@ const OfflineStreamsNotifications = ({ liveStreams, oldLiveStreams }) => {
     (async () => {
       try {
         const res = oldLiveStreams.current?.filter(
-          (stream) => !liveStreams.find(({ user_id }) => stream.user_id === user_id)
+          (stream) =>
+            !liveStreams.find(({ user_id }) => stream.user_id === user_id) &&
+            !nonFeedSectionLiveStreamsState.find(({ user_id }) => stream.user_id === user_id)
         );
 
         const streams = res?.map((stream) => {
@@ -62,6 +68,7 @@ const OfflineStreamsNotifications = ({ liveStreams, oldLiveStreams }) => {
     isEnabledOfflineNotifications,
     channels,
     addNotification,
+    nonFeedSectionLiveStreamsState,
   ]);
 
   return null;
