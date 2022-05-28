@@ -288,19 +288,23 @@ const ResizerAllSides = ({ setOverlayPosition, updateChatState, target, overlayP
 
     switch (active) {
       case 'topleft':
-        setOverlayPosition((c) => ({
-          ...c,
-          y: c.y - (targetPos.top - e.clientY),
-          height: targetPos.height + (targetPos.top - e.clientY),
-          width: targetPos.width + (targetPos.left - e.clientX),
-          x: e.clientX,
-        }));
+        setOverlayPosition((c) => {
+          return {
+            ...c,
+            // y: c.y - (c.y - e.clientY),
+            y: targetPos.top - (targetPos.top - e.clientY),
+            height: targetPos.height + (targetPos.top - e.clientY),
+            width: targetPos.width + (targetPos.left - e.clientX),
+            x: e.clientX,
+          };
+        });
         break;
       case 'topright':
         setOverlayPosition((c) => {
           return {
             ...c,
-            y: c.y - (targetPos.top - e.clientY),
+            // // y: c.y - (c.y - e.clientY),
+            y: targetPos.top - (targetPos.top - e.clientY),
             height: targetPos.height + (targetPos.top - e.clientY),
             width: targetPos.width + (e.clientX - targetPos.right),
           };
