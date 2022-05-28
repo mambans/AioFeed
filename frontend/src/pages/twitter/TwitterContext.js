@@ -8,8 +8,10 @@ const TwitterContext = React.createContext();
 
 export const TwitterProvider = ({ children }) => {
   const { authKey } = useContext(AccountContext);
+  const [pref, setPref] = useLocalStorageState('TwitterPreferences', {}) || {};
   const [twitterLists, setTwitterLists] = useLocalStorageState('Twitter-Lists');
   const invoked = useRef(false);
+  const toggle = (i, v) => setPref((c) => ({ ...c, [i]: v || !c[i] }));
 
   const fetchTwitterContextData = useCallback(async () => {
     const { lists } = await API.getTwitterLists()
@@ -28,7 +30,15 @@ export const TwitterProvider = ({ children }) => {
   }, [fetchTwitterContextData, authKey]);
 
   return (
-    <TwitterContext.Provider value={{ twitterLists, setTwitterLists, fetchTwitterContextData }}>
+    <TwitterContext.Provider
+      value={{
+        twitterLists,
+        setTwitterLists,
+        fetchTwitterContextData,
+        toggleRefreshOnFocus: (v) => toggle('refresh_on_focus', v),
+        refreshOnFocusEnabled: Boolean(pref.refresh_on_focus),
+      }}
+    >
       {children}
     </TwitterContext.Provider>
   );

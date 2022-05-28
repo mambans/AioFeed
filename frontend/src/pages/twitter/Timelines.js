@@ -2,11 +2,13 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import ThemeContext from '../../components/themes/ThemeContext';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import { LoadingPlaceholder } from './StyledComponents';
+import TwitterContext from './TwitterContext';
 
 const Timelines = ({ id, mainContainerRef }) => {
   const [loading, setLoading] = useState();
   const containerRef = useRef();
   const { activeTheme } = useContext(ThemeContext) || {};
+  const { refreshOnFocusEnabled } = useContext(TwitterContext) || {};
 
   const onFocus = () => {
     // setRefreshing(true);
@@ -17,7 +19,7 @@ const Timelines = ({ id, mainContainerRef }) => {
     if (containerRef.current.firstChild) addTimeline();
   };
 
-  useEventListenerMemo('focus', onFocus);
+  useEventListenerMemo('focus', onFocus, window, refreshOnFocusEnabled);
 
   const addTimeline = useCallback(() => {
     if (!window.twttr) {

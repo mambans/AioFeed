@@ -5,7 +5,8 @@ import { BsCollectionFill } from 'react-icons/bs';
 import { FiSidebar } from 'react-icons/fi';
 import { TiFlash } from 'react-icons/ti';
 import { AiOutlineDisconnect } from 'react-icons/ai';
-import { HiViewList } from 'react-icons/hi';
+import { HiViewList, HiRefresh } from 'react-icons/hi';
+import { RiFocus2Fill } from 'react-icons/ri';
 
 import AccountContext from './../../account/AccountContext';
 import FeedsContext from './../../feed/FeedsContext';
@@ -26,6 +27,7 @@ import FeedSectionAdd from '../../feedSections';
 import SidebarExpandableSection from './SidebarExpandableSection';
 import ListInAccountSidebar from '../../myLists/ListInAccountSidebar';
 import Colors from '../../../components/themes/Colors';
+import TwitterContext from '../../twitter/TwitterContext';
 
 const SidebarAccount = () => {
   const { username, authKey } = useContext(AccountContext) || {};
@@ -52,6 +54,7 @@ const SidebarAccount = () => {
     youtubeAccessToken,
   } = useContext(YoutubeContext) || {};
   const { showTwitchSidebar, setShowTwitchSidebar, ...feedProps } = useContext(FeedsContext) || {};
+  const { toggleRefreshOnFocus, refreshOnFocusEnabled } = useContext(TwitterContext) || {};
 
   useEffect(() => {
     if (!username || !authKey) setRenderModal('login');
@@ -188,6 +191,15 @@ const SidebarAccount = () => {
         : `Need to connect/authenticate with a Youtube account first.`,
       icon: <MdCrop169 size={18} />,
       smallerIcons: <MdVideocam size={14} color={domainColors.Twitch} />,
+    },
+    {
+      setEnable: toggleRefreshOnFocus,
+      enabled: refreshOnFocusEnabled,
+      label: 'Refresh twitter on focus',
+      serviceName: 'Twitter',
+      tooltip: (refreshOnFocusEnabled ? 'Disable ' : 'Enable ') + `focus-refresh`,
+      icon: <HiRefresh size={18} />,
+      smallerIcons: <RiFocus2Fill size={14} color={domainColors.Twitter} />,
     },
   ];
 

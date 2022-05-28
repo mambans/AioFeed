@@ -27,7 +27,7 @@ export const TwitchProvider = ({ children }) => {
   const [favStreams, setFavStreams] = useSyncedLocalState('FavoriteStreams', []);
   const invoked = useRef(false);
 
-  const toggle = (i, v) => setPref((c) => ({ ...c, [i]: v || !c[i] }));
+  const toggle = (i, v) => setPref((c) => ({ ...c, [i]: v ?? !c[i] }));
   const fetchTwitchContextData = useCallback(async () => {
     const {
       access_token,
