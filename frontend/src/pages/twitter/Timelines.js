@@ -10,16 +10,17 @@ const Timelines = ({ id, mainContainerRef }) => {
   const { activeTheme } = useContext(ThemeContext) || {};
   const { refreshOnFocusEnabled } = useContext(TwitterContext) || {};
 
-  const onFocus = () => {
-    // setRefreshing(true);
-    // setTimeout(() => {
-    //   setRefreshing(false);
-    // }, 10);
+  // const onFocus = () => {
+  //   // if (containerRef.current.firstChild) addTimeline();
+  // };
 
-    if (containerRef.current.firstChild) addTimeline();
-  };
+  function onVisibilityChange() {
+    console.log('onVisibilityChange:', document.visibilityState);
+    if (containerRef.current.firstChild && document.visibilityState === 'visible') addTimeline();
+  }
 
-  useEventListenerMemo('focus', onFocus, window, refreshOnFocusEnabled);
+  // useEventListenerMemo('focus', onFocus, window, refreshOnFocusEnabled);
+  useEventListenerMemo('visibilitychange', onVisibilityChange, window, refreshOnFocusEnabled);
 
   const addTimeline = useCallback(() => {
     if (!window.twttr) {
