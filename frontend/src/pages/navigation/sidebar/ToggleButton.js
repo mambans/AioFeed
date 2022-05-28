@@ -16,6 +16,7 @@ const ToggleButton = ({
   scrollIntoView,
   smallerIcons,
   serviceName,
+  disabled,
 }) => {
   // const [checked, setChecked] = useState(enabled || false);
   const timeout = useRef();
@@ -53,7 +54,7 @@ const ToggleButton = ({
     <ToolTip tooltip={tooltip} width='max-content'>
       <StyledToggleButton
         onClick={handleChange}
-        disabled={!anTokenExists}
+        disabled={disabled ?? !anTokenExists}
         variant='dark'
         buttonsperrow={buttonsperrow}
         enabled={String(enabled)}

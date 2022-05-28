@@ -200,6 +200,7 @@ const SidebarAccount = () => {
       tooltip: (refreshOnFocusEnabled ? 'Disable ' : 'Enable ') + `focus-refresh`,
       icon: <HiRefresh size={18} />,
       smallerIcons: <RiFocus2Fill size={14} color={domainColors.Twitter} />,
+      disabled: false,
     },
   ];
 
@@ -232,11 +233,15 @@ const SidebarAccount = () => {
           <FeedSizeSlider />
           <ToggleButtonsContainer buttonsperrow={3}>
             {settingsButtons.map(
-              ({ setEnable, enabled, label, serviceName, tooltip, icon, smallerIcons }, index) => {
+              (
+                { setEnable, enabled, label, serviceName, tooltip, icon, smallerIcons, disabled },
+                index
+              ) => {
                 return (
                   <ToggleButton
                     key={serviceName + index}
                     setEnable={setEnable}
+                    disabled={disabled}
                     enabled={enabled}
                     label={label}
                     serviceName={serviceName}
