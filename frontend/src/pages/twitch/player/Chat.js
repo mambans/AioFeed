@@ -9,11 +9,8 @@ import {
 } from './StyledComponents';
 import styled from 'styled-components';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
-import { GrStackOverflow } from 'react-icons/gr';
 import { MdAccountBox } from 'react-icons/md';
-import { BiMove } from 'react-icons/bi';
 import { FaWindowClose } from 'react-icons/fa';
-import { TransparentButton } from '../../../components/styledComponents';
 import ShowNavigationButton from '../../navigation/ShowNavigationButton';
 import ToolTip from '../../../components/tooltip/ToolTip';
 import { Link } from 'react-router-dom';
@@ -127,33 +124,6 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
               style={{ padding: 0, marginRight: '5px' }}
             />
 
-            <TransparentButton
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                updateChatState((c) => {
-                  const v = !c.chatAsOverlay;
-                  return { ...c, chatAsOverlay: v };
-                });
-              }}
-            >
-              <GrStackOverflow size={20} />
-            </TransparentButton>
-            {chatAsOverlay && (
-              <TransparentButton
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onDragInit(e);
-                }}
-                onMouseUp={onDragStop}
-                onMouseMove={dragging ? onDragMove : () => {}}
-                style={{ cursor: 'move' }}
-              >
-                <BiMove size={20} />
-              </TransparentButton>
-            )}
-
             {!chatAsOverlay && (
               <ToolTip
                 placement={'left'}
@@ -165,12 +135,10 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
                   id='switchSides'
                   switched={String(chatState.switchChatSide)}
                   onClick={() => {
-                    updateChatState((curr) => {
-                      return {
-                        ...curr,
-                        switchChatSide: !chatState.switchChatSide,
-                      };
-                    });
+                    updateChatState((curr) => ({
+                      ...curr,
+                      switchChatSide: !chatState.switchChatSide,
+                    }));
                   }}
                 />
               </ToolTip>

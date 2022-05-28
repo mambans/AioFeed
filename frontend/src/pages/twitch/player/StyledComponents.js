@@ -896,7 +896,7 @@ export const ChatWrapper = styled.div`
     chatAsOverlay ? (overlayPosition.width ? overlayPosition.width + 'px' : 'unset') : 'unset'};
   position: ${({ chatAsOverlay }) => (chatAsOverlay ? 'absolute' : 'initial')};
   overflow: hidden;
-  box-shadow: ${({ dragging }) => (dragging ? '0 0 1px 1px white' : 'none')};
+  box-shadow: ${({ dragging }) => (dragging ? '0 0 1px 1px rgb(150,150,150)' : 'none')};
   top: ${({ overlayPosition }) =>
     overlayPosition.y
       ? Math.min(
