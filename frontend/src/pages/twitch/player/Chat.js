@@ -11,9 +11,11 @@ import styled from 'styled-components';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import { MdAccountBox } from 'react-icons/md';
 import { FaWindowClose } from 'react-icons/fa';
+import { GrPowerReset } from 'react-icons/gr';
 import ShowNavigationButton from '../../navigation/ShowNavigationButton';
 import ToolTip from '../../../components/tooltip/ToolTip';
 import { Link } from 'react-router-dom';
+import { TransparentButton } from '../../../components/styledComponents';
 
 const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatState }) => {
   const [dragging, setDragging] = useState();
@@ -123,6 +125,20 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
               absolute={false}
               style={{ padding: 0, marginRight: '5px' }}
             />
+
+            {chatAsOverlay && (
+              <ToolTip tooltip='Reset chat to sides'>
+                <TransparentButton
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    updateChatState((c) => ({ ...c, chatAsOverlay: false }));
+                  }}
+                >
+                  <GrPowerReset size={20} />
+                </TransparentButton>
+              </ToolTip>
+            )}
 
             {!chatAsOverlay && (
               <ToolTip
