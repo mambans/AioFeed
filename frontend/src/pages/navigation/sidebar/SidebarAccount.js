@@ -6,7 +6,7 @@ import { FiSidebar } from 'react-icons/fi';
 import { TiFlash } from 'react-icons/ti';
 import { AiOutlineDisconnect } from 'react-icons/ai';
 import { HiViewList, HiRefresh } from 'react-icons/hi';
-import { RiFocus2Fill } from 'react-icons/ri';
+// import { RiFocus2Fill } from 'react-icons/ri';
 
 import AccountContext from './../../account/AccountContext';
 import FeedsContext from './../../feed/FeedsContext';
@@ -111,7 +111,7 @@ const SidebarAccount = () => {
       mount: feedProps.enableTwitch,
     },
   ];
-
+  x;
   const settingsButtons = [
     {
       setEnable: setAutoRefreshEnabled,
@@ -197,9 +197,10 @@ const SidebarAccount = () => {
       enabled: refreshOnFocusEnabled,
       label: 'Refresh twitter on focus',
       serviceName: 'Twitter',
-      tooltip: (refreshOnFocusEnabled ? 'Disable ' : 'Enable ') + `focus-refresh`,
+      tooltip: (refreshOnFocusEnabled ? 'Disable ' : 'Enable ') + `twitter focus-refresh`,
       icon: <HiRefresh size={18} />,
-      smallerIcons: <RiFocus2Fill size={14} color={domainColors.Twitter} />,
+      smallerIcons: <FaTwitter size={14} color={domainColors.Twitter} />,
+      // smallerIcons: <RiFocus2Fill size={14} color={domainColors.Twitter} />,
       disabled: false,
     },
   ];

@@ -135,7 +135,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
                     updateChatState((c) => ({ ...c, chatAsOverlay: false }));
                   }}
                 >
-                  <GrPowerReset size={20} />
+                  <GrPowerReset color='rgba(255, 255, 255, 0.75)' size={20} />
                 </TransparentButton>
               </ToolTip>
             )}
