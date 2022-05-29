@@ -111,7 +111,7 @@ const SidebarAccount = () => {
       mount: feedProps.enableTwitch,
     },
   ];
-  x;
+
   const settingsButtons = [
     {
       setEnable: setAutoRefreshEnabled,
