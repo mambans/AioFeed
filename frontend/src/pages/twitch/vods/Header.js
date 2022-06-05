@@ -28,7 +28,7 @@ const VodsHeader = React.forwardRef((props, ref) => {
         <>
           <LastRefreshText>{(vods && vods.loaded) || new Date()}</LastRefreshText>
 
-          {vodError && (
+          {vodError && typeof vodError === 'string' && (
             <Alert
               key={vodError}
               style={{
