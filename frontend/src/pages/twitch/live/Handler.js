@@ -5,6 +5,7 @@ import uniqBy from 'lodash/uniqBy';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import useToken, { TwitchContext } from '../useToken';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
+import useForceRerender from '../../../hooks/useForceRerender';
 import { fetchAndAddTags } from '../fetchAndAddTags';
 import FeedSectionsContext from '../../feedSections/FeedSectionsContext';
 import { checkAgainstRules } from '../../feedSections/FeedSections';
@@ -25,15 +26,17 @@ const Handler = ({ children }) => {
   const { feedSections } = useContext(FeedSectionsContext) || {};
   const [refreshTimer, setRefreshTimer] = useState(20);
   const [liveStreamsState, setLiveStreamsState] = useState([]);
-  const [nonFeedSectionLiveStreamsState, setNonFeedSectionLiveStreamsState] = useState([]);
   const [loadingStates, setLoadingStates] = useState({
     refreshing: false,
     error: null,
     loaded: false,
     lastLoaded: false,
+    rnd: Math.random(),
   });
   const liveStreams = useRef();
   const oldLiveStreams = useRef([]);
+  const nonFeedSectionsStreams = useRef([]);
+  const oldNonFeedSectionsStreams = useRef([]);
   const [newlyAddedStreams, setNewlyAddedStreams] = useState();
   // const [isInFocus, setIsInFocus] = useState();
   const isInFocus = useRef();
@@ -41,6 +44,7 @@ const Handler = ({ children }) => {
   const streamTags = useRef([]);
   const refreshAfterUnfollowTimer = useRef();
   const cancelToken = useRef(CancelToken.source());
+  const [forceRerender] = useForceRerender();
 
   // eslint-disable-next-line no-unused-vars
   const [documentTitle, setDocumentTitle] = useDocumentTitle(
@@ -107,6 +111,7 @@ const Handler = ({ children }) => {
           );
 
           oldLiveStreams.current = liveStreams.current;
+          oldNonFeedSectionsStreams.current = nonFeedSectionsStreams.current;
           const uniqueStreams = uniqBy(
             [...(uniqueFilteredLiveStreams || []), ...(recentLiveStreams || [])],
             'id'
@@ -136,7 +141,7 @@ const Handler = ({ children }) => {
           liveStreams.current = orderedStreams;
 
           setLiveStreamsState(orderedStreams);
-          setNonFeedSectionLiveStreamsState(nonFeedSectionLiveStreams);
+          nonFeedSectionsStreams.current = nonFeedSectionLiveStreams;
           setLoadingStates({
             refreshing: false,
             error: null,
@@ -169,14 +174,17 @@ const Handler = ({ children }) => {
         feedSections &&
         Object.values?.(feedSections)?.filter((f = {}) => f.enabled && f.excludeFromTwitch_enabled);
 
-      setNonFeedSectionLiveStreamsState(
-        orderBy(liveStreams.current, (s) => s?.viewer_count, 'desc')?.filter(
-          (stream) =>
-            !enabledFeedSections?.some(({ rules } = {}) => checkAgainstRules(stream, rules))
-        )
+      nonFeedSectionsStreams.current = orderBy(
+        liveStreams.current,
+        (s) => s?.viewer_count,
+        'desc'
+      )?.filter(
+        (stream) => !enabledFeedSections?.some(({ rules } = {}) => checkAgainstRules(stream, rules))
       );
+
+      forceRerender();
     }
-  }, [feedSections]);
+  }, [feedSections, forceRerender]);
 
   useEffect(() => {
     (async () => {
@@ -229,20 +237,21 @@ const Handler = ({ children }) => {
       {loadingStates?.loaded &&
         timer.current &&
         validateToken &&
-        (nonFeedSectionLiveStreamsState?.length || oldLiveStreams.current?.length) && (
+        (nonFeedSectionsStreams.current?.length || oldLiveStreams.current?.length) && (
           <>
             <LiveStreamsNotifications
-              liveStreams={nonFeedSectionLiveStreamsState}
+              liveStreams={nonFeedSectionsStreams.current}
               oldLiveStreams={oldLiveStreams}
               setNewlyAddedStreams={setNewlyAddedStreams}
             />
             <OfflineStreamsNotifications
               liveStreams={liveStreamsState}
-              nonFeedSectionLiveStreamsState={nonFeedSectionLiveStreamsState}
+              nonFeedSectionLiveStreamsState={nonFeedSectionsStreams.current}
               oldLiveStreams={oldLiveStreams}
+              oldNonFeedSectionsStreams={oldNonFeedSectionsStreams.current}
             />
             <UpdateStreamsNotifications
-              liveStreams={nonFeedSectionLiveStreamsState}
+              liveStreams={nonFeedSectionsStreams.current}
               oldLiveStreams={oldLiveStreams}
             />
           </>
@@ -256,7 +265,7 @@ const Handler = ({ children }) => {
         error: loadingStates.error,
         oldLiveStreams: oldLiveStreams.current || [],
         liveStreams: liveStreamsState || [],
-        nonFeedSectionLiveStreams: nonFeedSectionLiveStreamsState || [],
+        nonFeedSectionLiveStreams: nonFeedSectionsStreams.current || [],
         // liveStreams: liveStreams.current || [],
         // nonFeedSectionLiveStreams: nonFeedSectionLiveStreams.current || [],
         refresh,

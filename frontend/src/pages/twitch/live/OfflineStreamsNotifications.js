@@ -12,6 +12,7 @@ const OfflineStreamsNotifications = ({
   liveStreams,
   oldLiveStreams,
   nonFeedSectionLiveStreamsState,
+  oldNonFeedSectionsStreams,
 }) => {
   const { fetchLatestVod } = useFetchSingelVod();
   const { isEnabledOfflineNotifications } = useContext(TwitchContext);
@@ -24,7 +25,8 @@ const OfflineStreamsNotifications = ({
         const res = oldLiveStreams.current?.filter(
           (stream) =>
             !liveStreams.find(({ user_id }) => stream.user_id === user_id) &&
-            !nonFeedSectionLiveStreamsState.find(({ user_id }) => stream.user_id === user_id)
+            !nonFeedSectionLiveStreamsState.find(({ user_id }) => stream.user_id === user_id) &&
+            !oldNonFeedSectionsStreams?.find(({ user_id }) => stream.user_id === user_id)
         );
 
         const streams = res?.map((stream) => {
@@ -69,6 +71,7 @@ const OfflineStreamsNotifications = ({
     channels,
     addNotification,
     nonFeedSectionLiveStreamsState,
+    oldNonFeedSectionsStreams,
   ]);
 
   return null;
