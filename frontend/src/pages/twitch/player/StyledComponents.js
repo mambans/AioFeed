@@ -954,6 +954,26 @@ export const ChatHeader = styled.div`
       filter: brightness(1.2);
     }
   }
+
+  svg {
+    transition: fill 250ms, filter 250ms;
+    fill: rgba(255, 255, 255, 0.75);
+
+    &:hover {
+      fill: #ffffff;
+      filter: brightness(1.2);
+    }
+  }
+
+  path {
+    transition: stroke 250ms, filter 250ms;
+    stroke: rgba(255, 255, 255, 0.75);
+
+    &:hover {
+      stroke: #ffffff;
+      filter: brightness(1.2);
+    }
+  }
 `;
 
 export const ChatHeaderInner = styled.div`
