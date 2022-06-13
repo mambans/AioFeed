@@ -15,6 +15,8 @@ import NotificationsContext from '../notifications/NotificationsContext';
 import Colors from '../../components/themes/Colors';
 import { TwitchContext } from '../twitch/useToken';
 import UpdateStreamsNotifications from '../twitch/live/UpdateStreamsNotifications';
+import { durationMsToDate } from '../twitch/TwitchUtils';
+import moment from 'moment';
 
 export const checkAgainstRules = (stream, rules) => {
   if (!rules) return stream;
@@ -125,7 +127,8 @@ const Section = ({
           });
 
           const leftStreams = streamsToNotifyLeftSection?.map((stream = {}) => {
-            const notisTitle = !data?.streams.find((s) => s.user_id === stream?.user_id)
+            const wentOffline = !data?.streams.find((s) => s.user_id === stream?.user_id);
+            const notisTitle = wentOffline
               ? `${loginNameFormat(stream)} went offline from ${title}`
               : `${loginNameFormat(stream)} left ${title}`;
             stream.notiStatus = notisTitle;
@@ -133,9 +136,11 @@ const Section = ({
             addSystemNotification({
               title: notisTitle,
               icon: stream?.profile_image_url,
-              body: `${stream.title || stream.status || ''}\n${
-                stream.game_name || stream.game || ''
-              }`,
+              body: wentOffline
+                ? durationMsToDate(moment().diff(moment(stream.started_at)))
+                : `${stream.title || stream.status || ''}\n${
+                    stream.game_name || stream.game || ''
+                  }`,
               onClick: (e) => {
                 e.preventDefault();
                 const url = `https://aiofeed.com/${(
