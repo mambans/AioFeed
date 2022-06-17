@@ -137,7 +137,7 @@ const Section = ({
               title: notisTitle,
               icon: stream?.profile_image_url,
               body: wentOffline
-                ? durationMsToDate(moment().diff(moment(stream.started_at)))
+                ? `Was live for ${durationMsToDate(moment().diff(moment(stream.started_at)))}`
                 : `${stream.title || stream.status || ''}\n${
                     stream.game_name || stream.game || ''
                   }`,
