@@ -35,7 +35,10 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
 
   const onMouseOutsideWindow = async (e) => {
     if (
-      (e.x < 0 || e.y < 0 || e.x > window.innerWidth || e.y > window.innerHeight) &&
+      (e.clientX < 0 ||
+        e.clientY < 0 ||
+        e.clientX > window.innerWidth ||
+        e.clientY > window.innerHeight) &&
       dragging &&
       chatAsOverlay
     ) {
@@ -66,7 +69,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
   const onResize = () => setRnd(Math.random());
   // trigger rerender to reposition chat when its outside window
   useEventListenerMemo('resize', onResize, window, chatAsOverlay);
-  useEventListenerMemo('mouseout', onMouseOutsideWindow, window, chatAsOverlay);
+  useEventListenerMemo('mouseleave', onMouseOutsideWindow, window, chatAsOverlay);
 
   const onDragInit = (e) => {
     if (e.button === 0) {
