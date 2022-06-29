@@ -33,6 +33,17 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
   const keydown = (e) => e.key === 'Escape' && setDragging(false);
   useEventListenerMemo('keydown', keydown, window, chatAsOverlay);
 
+  const onMouseOutsideWindow = async (e) => {
+    if (
+      (e.x < 0 || e.y < 0 || e.x > window.innerWidth || e.y > window.innerHeight) &&
+      dragging &&
+      chatAsOverlay
+    ) {
+      await onDragMove(e);
+      onDragStop();
+    }
+  };
+
   const onDragStop = (e) => {
     if (dragging && chatAsOverlay) {
       updateChatState((c) => ({
@@ -55,7 +66,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
   const onResize = () => setRnd(Math.random());
   // trigger rerender to reposition chat when its outside window
   useEventListenerMemo('resize', onResize, window, chatAsOverlay);
-  useEventListenerMemo('onmouseout', onDragStop, document, chatAsOverlay);
+  useEventListenerMemo('mouseout', onMouseOutsideWindow, window, chatAsOverlay);
 
   const onDragInit = (e) => {
     if (e.button === 0) {
@@ -71,7 +82,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
     }
   };
 
-  const onDragMove = (e) => {
+  const onDragMove = async (e) => {
     if (!chatAsOverlay) updateChatState((c) => ({ ...c, chatAsOverlay: true }), false);
 
     const mouseX = e.clientX;
