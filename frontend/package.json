@@ -29,8 +29,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "cleanup": "./cleanup.sh eu-north-1 aiofeed-frontend",
+    "cleanup-ts": "./cleanup.sh eu-north-1 aiofeed-frontend-ts",
     "push": "./deploy.sh",
-    "deploy": "npm run cleanup && npm run push"
+    "push-ts": "./deploy-ts.sh",
+    "deploy": "npm run cleanup && npm run push",
+    "deploy-ts": "npm run cleanup-ts && npm run push-ts"
   },
   "eslintConfig": {
     "extends": "react-app"
