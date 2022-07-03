@@ -286,7 +286,7 @@ const ResizerIcon = styled.div`
   svg {
     transition: fill 250ms;
     transform: rotate(90deg);
-    fill: ${({ active }) => (active ? 'rgb(255,255,255)' : 'rgba(255,255,255,0.31)')};
+    fill: ${({ active }) => (active ? 'rgb(255,255,255)' : 'rgba(255,255,255,0.30)')};
 
     &:hover {
       fill: ${({ active }) => (active ? 'rgb(255,255,255)' : 'rgba(255,255,255,0.5)')};
