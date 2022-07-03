@@ -1,6 +1,6 @@
 echo "\e[32mDeploy Started: `date`\e[0m"
 
-aws cloudformation deploy --template-file cloudformation.yaml --stack-name aiofeed-frontend-ts --no-fail-on-empty-changeset
+aws cloudformation deploy --template-file cloudformation-ts.yaml --stack-name aiofeed-frontend-ts --no-fail-on-empty-changeset
 
 set -e
 
