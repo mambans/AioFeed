@@ -20,22 +20,22 @@ const useSyncedLocalState = (key, defaultValue) => {
     }
   });
 
-  useEffect(() => {
-    const listener = (e) => {
-      if (e.storageArea === localStorage && e.key === key) {
-        try {
-          const newVal = e.newValue;
-          if (newVal === 'null' || newVal === 'nNaNull' || newVal === 'undefined') setValue();
-          setValue(JSON.parse(newVal));
-        } catch (error) {
-          setValue(e.newValue);
-        }
-      }
-    };
-    window.addEventListener('storage', listener);
+  // useEffect(() => {
+  //   const listener = (e) => {
+  //     if (e.storageArea === localStorage && e.key === key) {
+  //       try {
+  //         const newVal = e.newValue;
+  //         if (newVal === 'null' || newVal === 'nNaNull' || newVal === 'undefined') setValue();
+  //         setValue(JSON.parse(newVal));
+  //       } catch (error) {
+  //         setValue(e.newValue);
+  //       }
+  //     }
+  //   };
+  //   window.addEventListener('storage', listener);
 
-    return () => window.removeEventListener('storage', listener);
-  }, [key]);
+  //   return () => window.removeEventListener('storage', listener);
+  // }, [key]);
 
   const setLocalStateValue = useCallback(
     (newValue, updateLocalstorage = true) => {
