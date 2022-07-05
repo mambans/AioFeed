@@ -20,7 +20,7 @@ const GoogleLogin = () => {
     clientId: process.env.REACT_APP_YOUTUBE_CLIENT_ID,
     isSignedIn: true,
     accessType: 'offline',
-    // responseType: 'code',
+    responseType: 'code',
     // prompt: 'consent',
   });
 
