@@ -28,6 +28,7 @@ import SidebarExpandableSection from './SidebarExpandableSection';
 import ListInAccountSidebar from '../../myLists/ListInAccountSidebar';
 import Colors from '../../../components/themes/Colors';
 import TwitterContext from '../../twitter/TwitterContext';
+import { GoogleLogin } from '../google';
 
 const SidebarAccount = () => {
   const { username, authKey } = useContext(AccountContext) || {};
@@ -209,6 +210,7 @@ const SidebarAccount = () => {
     <>
       <div style={{ minHeight: 'calc(100% - 120px)' }}>
         <AccountDetails />
+        <GoogleLogin />
         <SidebarExpandableSection title='Feeds'>
           <ToggleButtonsContainer buttonsperrow={3}>
             {feedsBtns
