@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from 'react-bootstrap';
-import { GoogleLogin as ReactGoogleLogin } from 'react-google-login';
+// import { GoogleLogin as ReactGoogleLogin } from 'react-google-login';
 import { useGoogleLogin } from 'react-google-login';
 import { FcGoogle } from 'react-icons/fc';
 
