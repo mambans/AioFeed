@@ -4,14 +4,14 @@ import FeedsContext from '../../feed/FeedsContext';
 import API from '../../navigation/API';
 import { toast } from 'react-toastify';
 import AccountContext from '../../account/AccountContext';
-import useLocalStorageState from '../../../hooks/useLocalStorageState';
+import useSyncedLocalState from '../../../hooks/useSyncedLocalState';
 
 const VodsContext = React.createContext();
 
 export const VodsProvider = ({ children }) => {
   const { authKey } = useContext(AccountContext) || {};
   const { enableTwitchVods } = useContext(FeedsContext) || {};
-  const [vods, setVods] = useLocalStorageState('TwitchVods-Channels', { data: [] });
+  const [vods, setVods] = useSyncedLocalState('TwitchVods-Channels', { data: [] });
   const [channels, setChannels] = useState();
   const invoked = useRef(false);
 
