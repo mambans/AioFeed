@@ -17,6 +17,7 @@ import { TwitchContext } from '../twitch/useToken';
 import UpdateStreamsNotifications from '../twitch/live/UpdateStreamsNotifications';
 import { durationMsToDate } from '../twitch/TwitchUtils';
 import moment from 'moment';
+import useFetchSingelVod from '../twitch/vods/hooks/useFetchSingelVod';
 
 export const checkAgainstRules = (stream, rules) => {
   if (!rules) return stream;
@@ -82,7 +83,9 @@ const Section = ({
 }) => {
   const { orders, toggleExpanded } = useContext(FeedsContext);
   const previosStreams = useRef();
+  const timer = useRef();
   const { isEnabledUpdateNotifications, updateNotischannels } = useContext(TwitchContext);
+  const { fetchLatestVod } = useFetchSingelVod();
 
   useEffect(() => {
     (async () => {
@@ -98,9 +101,8 @@ const Section = ({
           );
 
           const streams = streamsToNotifyLive?.map((stream = {}) => {
-            const notisTitle = `${loginNameFormat(stream)} ${
-              !data?.oldLiveStreams?.find((s) => s?.user_id === stream?.user_id) ? 'Live ' : ''
-            }in ${title}`;
+            const wentLive = !data?.oldLiveStreams?.find((s) => s?.user_id === stream?.user_id);
+            const notisTitle = `${loginNameFormat(stream)} ${wentLive ? 'Live ' : ''}in ${title}`;
             stream.notiStatus = notisTitle;
 
             addSystemNotification({
@@ -122,6 +124,13 @@ const Section = ({
                 window.open(url, '_blank');
               },
             });
+
+            if (fetchLatestVod && wentLive) {
+              timer.current = setTimeout(
+                () => fetchLatestVod({ user_id: stream.user_id, check: true }),
+                30000
+              );
+            }
 
             return stream;
           });
@@ -155,6 +164,10 @@ const Section = ({
               },
             });
 
+            if (wentOffline) {
+              fetchLatestVod({ user_id: stream.user_id, check: true });
+            }
+
             return stream;
           });
 
@@ -166,6 +179,10 @@ const Section = ({
     })();
 
     if (data?.loaded) previosStreams.current = data?.liveStreams || [];
+
+    return () => {
+      clearTimeout(timer.current);
+    };
   }, [
     data?.liveStreams,
     data?.oldLiveStreams,
@@ -176,6 +193,7 @@ const Section = ({
     isEnabledUpdateNotifications,
     updateNotischannels,
     data?.streams,
+    fetchLatestVod,
   ]);
 
   if (!data?.liveStreams?.length) return null;
