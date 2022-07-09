@@ -278,7 +278,8 @@ const ChannelList = ({
     console.log('returnChannel():', returnChannel());
     if (onChange) {
       console.log(123);
-      onChange({ ...e, target: { value: returnChannel() } });
+      e.target.value = returnChannel();
+      onChange(e);
       return;
     }
 
@@ -345,7 +346,8 @@ const ChannelList = ({
                 if (onChange) {
                   e?.preventDefault();
                   e?.stopPropagation();
-                  onChange?.({ ...e, target: { value: channel } });
+                  e.target.value = channel;
+                  onChange?.(e);
                 }
                 setListIsOpen(false);
               }}
@@ -369,7 +371,8 @@ const ChannelList = ({
                       e?.preventDefault();
                       e?.stopPropagation();
                       console.log('channel:', channel);
-                      onChange?.({ ...e, target: { value: channel.broadcaster_login } });
+                      e.target.value = channel.broadcaster_login;
+                      onChange?.(e);
                     }
                     setListIsOpen(false);
                   }}
