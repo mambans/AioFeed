@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 
 // import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import throttle from 'lodash/throttle';
 
 import { GameListUlContainer } from './../categoryTopStreams/styledComponents';
@@ -36,7 +36,7 @@ const ChannelList = ({
   const { username } = useContext(AccountContext);
   const { twitchAccessToken, twitchUserId } = useContext(TwitchContext);
   // const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
 
   const [listIsOpen, setListIsOpen] = useState();
   const [cursor, setCursor] = useState({ position: 0 });
@@ -64,8 +64,8 @@ const ChannelList = ({
         value,
         onChange: (event) => {
           console.log('event123:', event);
-          event?.preventDefault();
-          event?.stopPropagation();
+          event.preventDefault();
+          event.stopPropagation();
           const { value: input } = event.target;
           try {
             setValue(input.trimStart());
@@ -148,7 +148,7 @@ const ChannelList = ({
     reset: resetChannel,
     setValue: setChannel,
     returnChannel,
-    returnChannelUrl,
+    // returnChannelUrl,
   } = useInput(value || '');
 
   const filteredInputMatched = useMemo(() => {
@@ -284,14 +284,15 @@ const ChannelList = ({
       onChange(e);
       return;
     }
+    return;
 
-    if (location.pathname === '/feed') {
-      console.log('window.open(/returnChannelUrl());:', `/${returnChannelUrl()}`);
-      // window.open(`/${returnChannelUrl()}`);
-    } else {
-      console.log('returnChannelUrl():', returnChannelUrl());
-      // navigate(`/${returnChannelUrl()}`);
-    }
+    // if (location.pathname === '/feed') {
+    //   console.log('window.open(/returnChannelUrl());:', `/${returnChannelUrl()}`);
+    //   // window.open(`/${returnChannelUrl()}`);
+    // } else {
+    //   console.log('returnChannelUrl():', returnChannelUrl());
+    //   // navigate(`/${returnChannelUrl()}`);
+    // }
   };
 
   useEffect(() => {
@@ -383,7 +384,7 @@ const ChannelList = ({
                       console.log('ChannelListElement onClick ee:', e);
                       onChange(e);
                     }
-                    // setListIsOpen(false);
+                    setListIsOpen(false);
                   }}
                 />
               );
