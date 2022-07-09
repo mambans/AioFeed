@@ -68,7 +68,7 @@ const ChannelList = ({
           const { value: input } = event.target;
           try {
             setValue(input.trimStart());
-            onChange?.(input.trimStart());
+            onChange?.(event);
             setCursor({ position: 0 });
             if (listIsOpen && input && input !== '' && !cursor.used) {
               clearTimeout(searchTimer.current);
