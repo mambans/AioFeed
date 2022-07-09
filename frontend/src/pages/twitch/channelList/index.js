@@ -327,8 +327,8 @@ const ChannelList = ({
               onClick={(e) => {
                 if (onChange) {
                   e?.preventDefault();
-                  e.stopPropagation();
-                  onChange?.(channel);
+                  e?.stopPropagation();
+                  onChange?.({ e, target: { value: channel } });
                 }
                 setListIsOpen(false);
               }}
@@ -350,8 +350,8 @@ const ChannelList = ({
                   onClick={(e) => {
                     if (onChange) {
                       e?.preventDefault();
-                      e.stopPropagation();
-                      onChange?.(channel.broadcaster_login);
+                      e?.stopPropagation();
+                      onChange?.({ e, target: { value: channel } }.broadcaster_login);
                     }
                     setListIsOpen(false);
                   }}
