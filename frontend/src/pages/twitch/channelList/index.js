@@ -275,8 +275,9 @@ const ChannelList = ({
 
   const handleSubmit = (e) => {
     console.log('handleSubmit:');
-    console.log('onChange:', onChange);
-    console.log('returnChannel():', returnChannel());
+    console.log('handleSubmit onChange:', onChange);
+    console.log('handleSubmit returnChannel():', returnChannel());
+    console.log('handleSubmit e:', e);
     if (onChange) {
       console.log(123);
       e.target.value = returnChannel();
@@ -346,6 +347,7 @@ const ChannelList = ({
               followingStatus={false}
               username={username}
               onClick={(e) => {
+                console.log('onClick ChannelListElement onChange:', onChange);
                 if (onChange) {
                   e?.preventDefault();
                   e?.stopPropagation();
@@ -370,11 +372,15 @@ const ChannelList = ({
                     followedChannels?.find((item) => item?.user_id === channel?.user_id)
                   )}
                   onClick={(e) => {
+                    console.log('onClick2 ChannelListElement onChange:', channel.broadcaster_login);
+
                     if (onChange) {
                       e?.preventDefault();
                       e?.stopPropagation();
-                      console.log('channel:', channel);
-                      e.target.value = channel.broadcaster_login;
+                      console.log('channell:', channel);
+                      e.target.value =
+                        channel.broadcaster_login || channel.user_login || channel.user_name;
+                      console.log('ee:', e);
                       onChange?.(e);
                     }
                     setListIsOpen(false);
