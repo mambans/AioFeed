@@ -339,7 +339,7 @@ const ChannelList = ({
                 if (onChange) {
                   e?.preventDefault();
                   e?.stopPropagation();
-                  onChange?.({ e, target: { value: channel } });
+                  onChange?.({ ...e, target: { value: channel } });
                 }
                 setListIsOpen(false);
               }}
@@ -363,7 +363,7 @@ const ChannelList = ({
                       e?.preventDefault();
                       e?.stopPropagation();
                       console.log('channel:', channel);
-                      onChange?.({ e, target: { value: channel.broadcaster_login } });
+                      onChange?.({ ...e, target: { value: channel.broadcaster_login } });
                     }
                     setListIsOpen(false);
                   }}
