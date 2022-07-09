@@ -158,10 +158,6 @@ const Rule = ({ rule, height, id, index, ...rest }) => {
 
   const handleKeyDown = (ev) => ev.key === 'Enter' && handleSubmit(ev);
 
-  console.log('index:', index);
-  console.log('parseInt(index):', parseInt(index));
-  console.log('9999 - parseInt(index):', 9999 - parseInt(index));
-
   return (
     <StyledRule height={height}>
       <StyledListForm onSubmit={handleSubmit}>
@@ -192,7 +188,8 @@ const Rule = ({ rule, height, id, index, ...rest }) => {
                 minWidth: '200px',
                 width: 'unset',
                 margin: '0 5px',
-                zIndex: 9999 - parseInt(index),
+                // zIndex: 9999 - parseInt(index),
+                zIndex: String(9999 - parseInt(index)),
               }}
               {...bindChannel}
               placeholder='...'
