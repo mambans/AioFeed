@@ -85,7 +85,7 @@ const Section = ({
   const previosStreams = useRef();
   const timer = useRef();
   const { isEnabledUpdateNotifications, updateNotischannels } = useContext(TwitchContext);
-  const { fetchLatestVod } = useFetchSingelVod();
+  const { fetchLatestVod, channels } = useFetchSingelVod();
 
   useEffect(() => {
     (async () => {
@@ -164,7 +164,7 @@ const Section = ({
               },
             });
 
-            if (wentOffline) {
+            if (wentOffline && channels?.includes(stream.user_id)) {
               fetchLatestVod({ user_id: stream.user_id, check: true });
             }
 
@@ -194,6 +194,7 @@ const Section = ({
     updateNotischannels,
     data?.streams,
     fetchLatestVod,
+    channels,
   ]);
 
   if (!data?.liveStreams?.length) return null;
