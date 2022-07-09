@@ -32,7 +32,7 @@ const Rules = ({ rules, name, id, setOverflow = () => {} }) => {
           {rules?.map((rule, index) => {
             return (
               <CSSTransition classNames='ListForm' key={rule.id} timeout={500} unmountOnExit>
-                <Rule height={ITEM_HEIGHT} rule={rule} name={name} id={id} index={index} />
+                <Rule height={ITEM_HEIGHT} rule={rule} name={name} id={id} index={index + 1} />
               </CSSTransition>
             );
           })}
