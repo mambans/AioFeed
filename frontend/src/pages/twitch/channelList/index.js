@@ -28,6 +28,8 @@ const ChannelList = ({
   inputStyle = {},
   showButton = true,
   position,
+  onChange,
+  value,
 }) => {
   const channelName = useParams()?.channelName;
   const { username } = useContext(AccountContext);
@@ -65,6 +67,7 @@ const ChannelList = ({
           const { value: input } = event.target;
           try {
             setValue(input.trimStart());
+            onChange?.(input.trimStart());
             setCursor({ position: 0 });
             if (listIsOpen && input && input !== '' && !cursor.used) {
               clearTimeout(searchTimer.current);
@@ -131,7 +134,7 @@ const ChannelList = ({
     reset: resetChannel,
     setValue: setChannel,
     returnChannel,
-  } = useInput('');
+  } = useInput(value || '');
 
   const filteredInputMatched = useMemo(() => {
     if (cursor.used) return savedFilteredInputMatched.current;
@@ -257,6 +260,11 @@ const ChannelList = ({
 
   const handleSubmit = () => {
     resetChannel();
+    if (onChange) {
+      onChange(channel);
+      return;
+    }
+
     if (location.pathname === '/feed') {
       window.open(`/${returnChannel()}`);
     } else {
@@ -316,7 +324,14 @@ const ChannelList = ({
               selected={true}
               followingStatus={false}
               username={username}
-              onClose={() => setListIsOpen(false)}
+              onClick={(e) => {
+                if (onChange) {
+                  e?.preventDefault();
+                  e.stopPropagation();
+                  onChange?.(channel);
+                }
+                setListIsOpen(false);
+              }}
             />
             <StyledLoadingList amount={3} style={{ paddingLeft: '10px' }} />
           </>
@@ -325,14 +340,21 @@ const ChannelList = ({
             {filteredInputMatched?.data?.map((channel, index) => {
               return (
                 <ChannelListElement
-                  key={channel.user_id}
+                  key={channel?.user_id}
                   data={channel}
                   selected={index === cursor.position}
                   username={username}
                   followingStatus={Boolean(
                     followedChannels?.find((item) => item?.user_id === channel?.user_id)
                   )}
-                  onClose={() => setListIsOpen(false)}
+                  onClick={(e) => {
+                    if (onChange) {
+                      e?.preventDefault();
+                      e.stopPropagation();
+                      onChange?.(channel.broadcaster_login);
+                    }
+                    setListIsOpen(false);
+                  }}
                 />
               );
             })}

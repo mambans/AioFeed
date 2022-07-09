@@ -7,6 +7,7 @@ import { MdDelete, MdAdd } from 'react-icons/md';
 import FeedSectionsContext from './FeedSectionsContext';
 import { StyledListForm, StyledButton } from '../../components/styledComponents';
 import Colors from '../../components/themes/Colors';
+import ChannelSearchList from './../twitch/channelList';
 
 const StyledRule = styled.div`
   height: ${({ height }) => height}px;
@@ -180,13 +181,14 @@ const Rule = ({ rule, height, id }) => {
               {...bindCategory}
               onBlur={handleOnblur}
             />
-            <Input
+            <ChannelSearchList {...bindChannel} placeholder='...' />
+            {/* <Input
               type='text'
               placeholder='channel..'
               name='channel'
               {...bindChannel}
               onBlur={handleOnblur}
-            />
+            /> */}
             <Input type='text' placeholder='tag..' name='tag' {...bindTag} onBlur={handleOnblur} />
             <Input
               type='number'
