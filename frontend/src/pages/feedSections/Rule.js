@@ -182,7 +182,7 @@ const Rule = ({ rule, height, id }) => {
               onBlur={handleOnblur}
             />
             <ChannelSearchList
-              style={{ minWidth: '200px', width: 'unset', margin: '0 5px' }}
+              style={{ minWidth: '200px', width: 'unset', margin: '0 5px', zIndex: 5 }}
               {...bindChannel}
               placeholder='...'
             />

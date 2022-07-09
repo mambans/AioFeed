@@ -122,6 +122,15 @@ const ChannelList = ({
           return p_channel.user_name?.toLowerCase().includes(value?.toLowerCase());
         });
 
+        if (foundChannel) return foundChannel.user_name;
+
+        return value || '';
+      },
+      returnChannelUrl: () => {
+        const foundChannel = filteredInputMatched?.data?.find((p_channel) => {
+          return p_channel.user_name?.toLowerCase().includes(value?.toLowerCase());
+        });
+
         if (foundChannel) return `${foundChannel.user_name}${!foundChannel.live ? '/page' : ''}`;
 
         return value || '';
@@ -135,6 +144,7 @@ const ChannelList = ({
     reset: resetChannel,
     setValue: setChannel,
     returnChannel,
+    returnChannelUrl,
   } = useInput(value || '');
 
   const filteredInputMatched = useMemo(() => {
@@ -262,14 +272,14 @@ const ChannelList = ({
   const handleSubmit = () => {
     resetChannel();
     if (onChange) {
-      onChange(channel);
+      onChange(returnChannel());
       return;
     }
 
     if (location.pathname === '/feed') {
-      window.open(`/${returnChannel()}`);
+      window.open(`/${returnChannelUrl()}`);
     } else {
-      navigate(`/${returnChannel()}`);
+      navigate(`/${returnChannelUrl()}`);
     }
   };
 
