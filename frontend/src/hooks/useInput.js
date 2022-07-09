@@ -31,6 +31,10 @@ const useInput = (initialValue, options = { type: 'string' }) => {
             ? parseInt(event?.target?.value?.replace(/ +(?= )/g, ''))
             : event?.target?.value?.replace(/ +(?= )/g, '')
         );
+
+        setTimeout(() => {
+          console.log('value:', value);
+        }, 100);
       },
     },
     setError,

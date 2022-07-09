@@ -380,10 +380,10 @@ const ChannelList = ({
                       console.log('channell:', channel);
                       e.target.value =
                         channel.broadcaster_login || channel.user_login || channel.user_name;
-                      console.log('ee:', e);
-                      onChange?.(e);
+                      console.log('ChannelListElement onClick ee:', e);
+                      onChange(e);
                     }
-                    setListIsOpen(false);
+                    // setListIsOpen(false);
                   }}
                 />
               );
