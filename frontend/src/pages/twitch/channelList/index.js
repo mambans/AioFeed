@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+// import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import throttle from 'lodash/throttle';
 
 import { GameListUlContainer } from './../categoryTopStreams/styledComponents';
@@ -34,7 +35,7 @@ const ChannelList = ({
   const channelName = useParams()?.channelName;
   const { username } = useContext(AccountContext);
   const { twitchAccessToken, twitchUserId } = useContext(TwitchContext);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const location = useLocation();
 
   const [listIsOpen, setListIsOpen] = useState();
