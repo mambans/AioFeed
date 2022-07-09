@@ -31,7 +31,7 @@ const Rules = ({ rules, name, id, setOverflow = () => {} }) => {
         <TransitionGroup component={null}>
           {rules?.map((rule, index) => (
             <CSSTransition classNames='ListForm' key={rule.id} timeout={500} unmountOnExit>
-              <Rule height={ITEM_HEIGHT} rule={rule} name={name} id={id} />
+              <Rule height={ITEM_HEIGHT} rule={rule} name={name} id={id} index={index} />
             </CSSTransition>
           ))}
         </TransitionGroup>

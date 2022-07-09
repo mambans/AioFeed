@@ -93,7 +93,7 @@ const Input = styled(Form.Control)`
   }
 `;
 
-const Rule = ({ rule, height, id }) => {
+const Rule = ({ rule, height, id, index }) => {
   const { addFeedSectionRule, deleteFeedSectionRule } = useContext(FeedSectionsContext);
 
   const { value: title, bind: bindTitle, reset: resetTitle } = useInput(rule?.title || '');
@@ -182,7 +182,7 @@ const Rule = ({ rule, height, id }) => {
               onBlur={handleOnblur}
             />
             <ChannelSearchList
-              style={{ minWidth: '200px', width: 'unset', margin: '0 5px', zIndex: 5 }}
+              style={{ minWidth: '200px', width: 'unset', margin: '0 5px', zIndex: 9999 - index }}
               {...bindChannel}
               placeholder='...'
             />
