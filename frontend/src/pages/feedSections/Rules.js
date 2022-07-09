@@ -29,11 +29,14 @@ const Rules = ({ rules, name, id, setOverflow = () => {} }) => {
       <RulesContainer itemHeight={ITEM_HEIGHT} id='RULES'>
         <Rule height={ITEM_HEIGHT} name={name} id={id} />
         <TransitionGroup component={null}>
-          {rules?.map((rule, index) => (
-            <CSSTransition classNames='ListForm' key={rule.id} timeout={500} unmountOnExit>
-              <Rule height={ITEM_HEIGHT} rule={rule} name={name} id={id} index={index} />
-            </CSSTransition>
-          ))}
+          {rules?.map((rule, index) => {
+            console.log('index:', index);
+            return (
+              <CSSTransition classNames='ListForm' key={rule.id} timeout={500} unmountOnExit>
+                <Rule height={ITEM_HEIGHT} rule={rule} name={name} id={id} index={index} />
+              </CSSTransition>
+            );
+          })}
         </TransitionGroup>
       </RulesContainer>
     </MyModal>

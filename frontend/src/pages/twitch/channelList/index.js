@@ -273,6 +273,7 @@ const ChannelList = ({
   };
 
   const handleSubmit = (e) => {
+    console.log('handleSubmit:');
     console.log('onChange:', onChange);
     console.log('returnChannel():', returnChannel());
     if (onChange) {
