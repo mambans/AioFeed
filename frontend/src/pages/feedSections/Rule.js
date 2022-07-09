@@ -189,16 +189,16 @@ const Rule = ({ rule, height, id, index }) => {
                 // zIndex: 9999 - parseInt(index),
                 zIndex: String(9999 - parseInt(index)),
               }}
-              {...bindChannel}
+              // {...bindChannel}
               placeholder='...'
             />
-            {/* <Input
+            <Input
               type='text'
               placeholder='channel..'
               name='channel'
               {...bindChannel}
               onBlur={handleOnblur}
-            /> */}
+            />
             <Input type='text' placeholder='tag..' name='tag' {...bindTag} onBlur={handleOnblur} />
             <Input
               type='number'
