@@ -376,8 +376,8 @@ const ChannelList = ({
                     console.log('onClick2 ChannelListElement onChange:', channel.broadcaster_login);
 
                     if (onChange) {
-                      e?.preventDefault();
-                      e?.stopPropagation();
+                      // e.preventDefault();
+                      // e.stopPropagation();
                       console.log('channell:', channel);
                       e.target.value =
                         channel.broadcaster_login || channel.user_login || channel.user_name;
