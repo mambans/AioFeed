@@ -62,8 +62,9 @@ const ChannelList = ({
       bind: {
         value,
         onChange: (event) => {
-          event.preventDefault();
-          event.stopPropagation();
+          console.log('event123:', event);
+          event?.preventDefault();
+          event?.stopPropagation();
           const { value: input } = event.target;
           try {
             setValue(input.trimStart());
@@ -351,7 +352,8 @@ const ChannelList = ({
                     if (onChange) {
                       e?.preventDefault();
                       e?.stopPropagation();
-                      onChange?.({ e, target: { value: channel } }.broadcaster_login);
+                      console.log('channel:', channel);
+                      onChange?.({ e, target: { value: channel.broadcaster_login } });
                     }
                     setListIsOpen(false);
                   }}

@@ -111,7 +111,7 @@ const Rule = ({ rule, height, id }) => {
   const { value: tag, bind: bindTag, reset: resetTag } = useInput(rule?.tag || '');
 
   const handleSubmit = (evt) => {
-    evt.preventDefault();
+    evt?.preventDefault();
 
     if (
       Boolean(title || category || channel || viewers || tag) &&
@@ -181,7 +181,11 @@ const Rule = ({ rule, height, id }) => {
               {...bindCategory}
               onBlur={handleOnblur}
             />
-            <ChannelSearchList {...bindChannel} placeholder='...' />
+            <ChannelSearchList
+              style={{ minWidth: '200px', width: 'unset', margin: '0 5px' }}
+              {...bindChannel}
+              placeholder='...'
+            />
             {/* <Input
               type='text'
               placeholder='channel..'
