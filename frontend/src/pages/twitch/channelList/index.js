@@ -118,9 +118,12 @@ const ChannelList = ({
         },
       },
       returnChannel: () => {
+        console.log('filteredInputMatched?.data:', filteredInputMatched?.data);
+        console.log('value?.toLowerCase():', value?.toLowerCase());
         const foundChannel = filteredInputMatched?.data?.find((p_channel) => {
           return p_channel.user_name?.toLowerCase().includes(value?.toLowerCase());
         });
+        console.log('foundChannel:', foundChannel);
 
         if (foundChannel) return foundChannel.user_name;
 
@@ -272,6 +275,7 @@ const ChannelList = ({
   const handleSubmit = () => {
     resetChannel();
     if (onChange) {
+      console.log('returnChannel():', returnChannel());
       onChange(returnChannel());
       return;
     }
