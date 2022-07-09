@@ -272,11 +272,10 @@ const ChannelList = ({
     resetListTimer.current = setTimeout(() => setFollowedChannels(), 5000);
   };
 
-  const handleSubmit = () => {
-    resetChannel();
+  const handleSubmit = (e) => {
     if (onChange) {
       console.log('returnChannel():', returnChannel());
-      onChange(returnChannel());
+      onChange(resetChannel({ ...e, target: { value: returnChannel() } }));
       return;
     }
 
