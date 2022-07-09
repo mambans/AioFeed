@@ -23,7 +23,7 @@ const useInput = (initialValue, options = { type: 'string' }) => {
     bind: {
       value,
       onChange: (event) => {
-        console.log('event:', event);
+        console.log('eventttt:', event);
         event?.preventDefault();
         event?.stopPropagation();
         setValue(

@@ -93,9 +93,7 @@ const Input = styled(Form.Control)`
   }
 `;
 
-const Rule = ({ rule, height, id, index, ...rest }) => {
-  console.log('Rule index:', index);
-  console.log('Rule rest:', rest);
+const Rule = ({ rule, height, id, index }) => {
   const { addFeedSectionRule, deleteFeedSectionRule } = useContext(FeedSectionsContext);
 
   const { value: title, bind: bindTitle, reset: resetTitle } = useInput(rule?.title || '');

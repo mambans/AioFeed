@@ -27,7 +27,7 @@ const Rules = ({ rules, name, id, setOverflow = () => {} }) => {
       relative
     >
       <RulesContainer itemHeight={ITEM_HEIGHT} id='RULES'>
-        <Rule height={ITEM_HEIGHT} name={name} id={id} />
+        <Rule height={ITEM_HEIGHT} name={name} id={id} index={0} />
         <TransitionGroup component={null}>
           {rules?.map((rule, index) => {
             return (
