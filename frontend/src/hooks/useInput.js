@@ -26,11 +26,12 @@ const useInput = (initialValue, options = { type: 'string' }) => {
         console.log('eventttt:', event);
         event?.preventDefault();
         event?.stopPropagation();
-        setValue(
+        const v =
           options?.type === 'number'
             ? parseInt(event?.target?.value?.replace(/ +(?= )/g, ''))
-            : event?.target?.value?.replace(/ +(?= )/g, '')
-        );
+            : event?.target?.value?.replace(/ +(?= )/g, '');
+        console.log('v:', v);
+        setValue(v);
 
         setTimeout(() => {
           console.log('value:', value);
