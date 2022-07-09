@@ -111,7 +111,7 @@ const Rule = ({ rule, height, id, index }) => {
   const { value: tag, bind: bindTag, reset: resetTag } = useInput(rule?.tag || '');
 
   const handleSubmit = (evt) => {
-    evt?.preventDefault();
+    evt.preventDefault();
 
     if (
       Boolean(title || category || channel || viewers || tag) &&
