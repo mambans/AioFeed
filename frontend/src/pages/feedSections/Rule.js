@@ -156,6 +156,10 @@ const Rule = ({ rule, height, id, index }) => {
 
   const handleKeyDown = (ev) => ev.key === 'Enter' && handleSubmit(ev);
 
+  console.log('index:', index);
+  console.log('parseInt(index):', parseInt(index));
+  console.log('9999 - parseInt(index):', 9999 - parseInt(index));
+
   return (
     <StyledRule height={height}>
       <StyledListForm onSubmit={handleSubmit}>
