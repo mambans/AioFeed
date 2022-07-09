@@ -284,9 +284,11 @@ const ChannelList = ({
     }
 
     if (location.pathname === '/feed') {
-      window.open(`/${returnChannelUrl()}`);
+      console.log('window.open(/returnChannelUrl());:', `/${returnChannelUrl()}`);
+      // window.open(`/${returnChannelUrl()}`);
     } else {
-      navigate(`/${returnChannelUrl()}`);
+      console.log('returnChannelUrl():', returnChannelUrl());
+      // navigate(`/${returnChannelUrl()}`);
     }
   };
 
