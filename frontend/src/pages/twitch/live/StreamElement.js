@@ -21,7 +21,7 @@ import {
   TopRightBtnWrapper,
 } from './../../sharedComponents/sharedStyledComponents';
 import { ChannelNameDiv } from './../StyledComponents';
-import StreamHoverIframe from '../StreamHoverIframe.js';
+// import StreamHoverIframe from '../StreamHoverIframe.js';
 import { truncate } from '../../../util';
 import FollowUnfollowBtn from './../FollowUnfollowBtn';
 import VodsFollowUnfollowBtn from './../vods/VodsFollowUnfollowBtn';
@@ -99,7 +99,7 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
             },
           }}
         >
-          <StreamHoverIframe id={user_id} data={data} imageRef={ref} />
+          {/* <StreamHoverIframe id={user_id} data={data} imageRef={ref} /> */}
           <img
             id={`${user_id}-${Date.now()}`}
             // key={`${user_id}-${lastLoaded}`}
