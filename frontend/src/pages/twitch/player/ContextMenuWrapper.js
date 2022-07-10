@@ -32,7 +32,7 @@ const Container = styled.div`
       cursor: pointer;
       margin: 10px 0;
       transition: color 250ms;
-      font-size: 1rem;
+      font-size: 0.9em;
       padding: 0 10px;
       color: rgb(200, 200, 200);
       overflow: hidden;
