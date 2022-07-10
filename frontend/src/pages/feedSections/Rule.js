@@ -111,6 +111,7 @@ const Rule = ({ rule, height, id, index }) => {
   const { value: tag, bind: bindTag, reset: resetTag } = useInput(rule?.tag || '');
 
   const handleSubmit = (evt) => {
+    console.log('Rule handleSubmit:', handleSubmit);
     evt.preventDefault();
 
     if (
