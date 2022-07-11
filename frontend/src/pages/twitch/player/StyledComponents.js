@@ -16,6 +16,7 @@ import { GrRefresh } from 'react-icons/gr';
 import { Link, NavLink } from 'react-router-dom';
 import NavigationContext from '../../navigation/NavigationContext';
 import { IconContainer } from '../../myLists/StyledComponents';
+import { BottomDiv } from './Chat';
 
 export const VideoAndChatContainer = styled.div`
   position: fixed;
@@ -917,6 +918,13 @@ export const ChatWrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: visible;
+  border-left: 1px solid transparent;
+
+  &:hover {
+    ${BottomDiv} {
+      height: 25px;
+    }
+  }
 `;
 
 export const ChatHeader = styled.div`

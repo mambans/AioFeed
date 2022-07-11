@@ -28,6 +28,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
   const [rnd, setRnd] = useState();
   const overlayBackdropRef = useRef();
   const chatRef = useRef();
+  const bottomRef = useRef();
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
 
   const keydown = (e) => e.key === 'Escape' && setDragging(false);
@@ -73,19 +74,30 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
 
   const onDragInit = (e) => {
     if (e.button === 0) {
-      setDragging(true);
+      setDragging(e.target);
       const mouseX = e.clientX;
       const mouseY = e.clientY;
+      console.log('mouseY:', mouseY);
       const chat = chatRef.current?.getBoundingClientRect();
 
-      setStartPos((c) => ({
-        x: mouseX - chat.left,
-        y: mouseY - chat.top,
-      }));
+      console.log('y: mouseY - chat.top:', mouseY - chat.top);
+      console.log('dragging === bottomRef.current:', dragging === bottomRef.current);
+      if (e.target === bottomRef.current) {
+        setStartPos((c) => ({
+          x: mouseX - chat.left,
+          y: mouseY,
+        }));
+      } else {
+        setStartPos((c) => ({
+          x: mouseX - chat.left,
+          y: mouseY - chat.top,
+        }));
+      }
     }
   };
 
   const onDragMove = async (e) => {
+    console.log('e:', e);
     if (!chatAsOverlay) updateChatState((c) => ({ ...c, chatAsOverlay: true }), false);
 
     const mouseX = e.clientX;
@@ -94,11 +106,19 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
 
     const x = mouseX - startPos.x;
     const y = mouseY - startPos.y;
-    setOverlayPosition((c) => ({
-      ...c,
-      x: Math.max(0, Math.min(x, window.innerWidth - chat.width)),
-      y: Math.max(0, Math.min(y, window.innerHeight - chat.height)),
-    }));
+    if (dragging === bottomRef.current) {
+      setOverlayPosition((c) => ({
+        ...c,
+        x: Math.max(0, Math.min(x, window.innerWidth - chat.width)),
+        y: Math.max(0, mouseY - chat.height),
+      }));
+    } else {
+      setOverlayPosition((c) => ({
+        ...c,
+        x: Math.max(0, Math.min(x, window.innerWidth - chat.width)),
+        y: Math.max(0, Math.min(y, window.innerHeight - chat.height)),
+      }));
+    }
   };
 
   useEffect(() => {
@@ -208,6 +228,14 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
             src={`https://www.twitch.tv/embed/${channelName}/chat?darkpopout&parent=aiofeed.com`}
           />
         </InnerWrapper>
+        <BottomDiv
+          ref={bottomRef}
+          id='BottomDiv'
+          onMouseDown={onDragInit}
+          onMouseUp={onDragStop}
+          onMouseMove={dragging ? onDragMove : () => {}}
+          dragging={dragging}
+        />
       </ChatWrapper>
     </>
   );
@@ -241,6 +269,14 @@ const OverlayBackdrop = styled.div`
   inset: 0;
   background: transparent;
   z-index: 99999;
+`;
+
+export const BottomDiv = styled.div`
+  transition: height 250ms;
+  height: ${({ dragging }) => (dragging ? '25px' : '2px')};
+  width: 100%;
+  background: var(--navigationbarBackground);
+  cursor: move;
 `;
 
 const ResizerIcon = styled.div`
