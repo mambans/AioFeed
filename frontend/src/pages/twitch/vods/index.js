@@ -29,7 +29,7 @@ const VodsStandalone = () => {
 };
 
 export const Vods = ({ className }) => {
-  const { vods, setVods, channels } = useContext(VodsContext);
+  const { vods, setVods, channels, fetchVodsContextData } = useContext(VodsContext);
   const { setEnableTwitchVods, orders, toggleExpanded } = useContext(FeedsContext) || {};
   const { videoElementsAmount } = useContext(CenterContext);
   const { twitchAccessToken, setTwitchAccessToken, setTwitchRefreshToken, twitchUserId } =
@@ -49,6 +49,9 @@ export const Vods = ({ className }) => {
   const refresh = useCallback(
     async (forceRefresh) => {
       refreshBtnRef?.current?.setIsLoading(true);
+      if (forceRefresh) {
+        await fetchVodsContextData();
+      }
       getFollowedVods({
         forceRun: forceRefresh,
         setTwitchRefreshToken,
@@ -64,7 +67,7 @@ export const Vods = ({ className }) => {
         // return data.data;
       });
     },
-    [setTwitchAccessToken, setTwitchRefreshToken, setVods, vods, channels]
+    [setTwitchAccessToken, setTwitchRefreshToken, setVods, vods, channels, fetchVodsContextData]
   );
 
   async function windowFocusHandler() {

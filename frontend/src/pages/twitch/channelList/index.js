@@ -373,11 +373,12 @@ const ChannelList = ({
                     followedChannels?.find((item) => item?.user_id === channel?.user_id)
                   )}
                   onClick={(e) => {
-                    console.log('onClick2 ChannelListElement onChange:', channel.broadcaster_login);
+                    console.log('onClick2 ChannelListElement channel:', channel);
+                    console.log('onClick2 ChannelListElement onChange:', channel);
 
                     if (onChange) {
-                      // e.preventDefault();
-                      // e.stopPropagation();
+                      e.preventDefault();
+                      e.stopPropagation();
                       console.log('channell:', channel);
                       e.target.value =
                         channel.broadcaster_login || channel.user_login || channel.user_name;
