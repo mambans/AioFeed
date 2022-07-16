@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
 import { getCookie, AddCookie } from '../../util';
-import AccountContext from './../account/AccountContext';
 import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import API from '../navigation/API';
@@ -13,7 +12,6 @@ import Alert from '../../components/alert';
 const YoutubeAuthCallback = () => {
   const { setVisible, setFooterVisible } = useContext(NavigationContext);
   const [error, setError] = useState();
-  const { username } = useContext(AccountContext);
   const { setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage } =
     useContext(YoutubeContext);
   const location = useLocation();
@@ -58,25 +56,17 @@ const YoutubeAuthCallback = () => {
         };
       });
 
-    if (username) {
-      await API.updateYoutubeUserData(
-        {
-          Username: MyYoutube.Username,
-          Profile: MyYoutube.ProfileImg,
-        },
-        tokens.access_token,
-        tokens.refresh_token
-      );
-    }
+    await API.updateYoutubeUserData(
+      {
+        Username: MyYoutube.Username,
+        Profile: MyYoutube.ProfileImg,
+      },
+      tokens.access_token,
+      tokens.refresh_token
+    );
 
     return { access_token: tokens.access_token, refresh_token: tokens.refresh_token, ...MyYoutube };
-  }, [
-    username,
-    location.search,
-    setYoutubeAccessToken,
-    setYoutubeUsername,
-    setYoutubeProfileImage,
-  ]);
+  }, [location.search, setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage]);
 
   useEffect(() => {
     setVisible(false);

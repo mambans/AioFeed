@@ -20,7 +20,7 @@ const ChannelListElement = ({
   searchInput,
   followingStatus = true,
   style,
-  username,
+  user,
   onClick = () => {},
 }) => {
   const [channel, setChannel] = useState(data);
@@ -114,7 +114,7 @@ const ChannelListElement = ({
           style={{ padding: 0, marginRight: '5px' }}
         />
         <FavoriteStreamBtn channel={channel?.user_name} show={followingStatus} />
-        <VodsFollowUnfollowBtn show={username && showVodBtn && channel} channel={channel} />
+        <VodsFollowUnfollowBtn show={user && showVodBtn && channel} channel={channel} />
         <AddUpdateNotificationsButton channel={channel} show={followingStatus && channel} />
         <FollowUnfollowBtn
           style={{ marginLeft: '5px', marginRight: '0px', padding: '0' }}

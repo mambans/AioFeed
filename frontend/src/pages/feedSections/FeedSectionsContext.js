@@ -7,7 +7,7 @@ import useSyncedLocalState from './../../hooks/useSyncedLocalState';
 const FeedSectionsContext = React.createContext();
 
 export const FeedSectionsProvider = ({ children }) => {
-  const { authKey } = useContext(AccountContext);
+  const { user } = useContext(AccountContext);
   const { twitchAccessToken } = useContext(TwitchContext);
   const [isloading, setIsLoading] = useState();
   const [feedSections, setFeedSections] = useSyncedLocalState('customFeedSections', {});
@@ -153,8 +153,8 @@ export const FeedSectionsProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (twitchAccessToken && authKey && !invoked.current) fetchFeedSectionsContextData();
-  }, [fetchFeedSectionsContextData, twitchAccessToken, authKey]);
+    if (twitchAccessToken && user && !invoked.current) fetchFeedSectionsContextData();
+  }, [fetchFeedSectionsContextData, twitchAccessToken, user]);
 
   return (
     <FeedSectionsContext.Provider

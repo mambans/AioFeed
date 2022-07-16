@@ -9,7 +9,7 @@ import useSyncedLocalState from '../../../hooks/useSyncedLocalState';
 const VodsContext = React.createContext();
 
 export const VodsProvider = ({ children }) => {
-  const { authKey } = useContext(AccountContext) || {};
+  const { user } = useContext(AccountContext) || {};
   const { enableTwitchVods } = useContext(FeedsContext) || {};
   const [vods, setVods] = useSyncedLocalState('TwitchVods-Channels', { data: [] });
   const [channels, setChannels] = useState();
@@ -31,8 +31,8 @@ export const VodsProvider = ({ children }) => {
   }, [setChannels, enableTwitchVods]);
 
   useEffect(() => {
-    if (authKey && !invoked.current) fetchVodsContextData();
-  }, [fetchVodsContextData, authKey]);
+    if (user && !invoked.current) fetchVodsContextData();
+  }, [fetchVodsContextData, user]);
 
   return (
     <VodsContext.Provider

@@ -11,7 +11,7 @@ const TTL = 30000;
 export const YoutubeContext = React.createContext();
 
 export const YoutubeProvider = ({ children }) => {
-  const { authKey } = useContext(AccountContext);
+  const { user } = useContext(AccountContext);
   const [pref, setPref] = useLocalStorageState('YoutubePreferences', {}) || {};
   const [youtubeAccessToken, setYoutubeAccessToken] = useCookieState('Youtube-access_token');
   const [youtubeUsername, setYoutubeUsername] = useCookieState('YoutubeUsername');
@@ -44,8 +44,8 @@ export const YoutubeProvider = ({ children }) => {
   }, [setYoutubeUsername, setYoutubeProfileImage, setYoutubeAccessToken]);
 
   useEffect(() => {
-    if (youtubeAccessToken && authKey && !invoked.current) fetchYoutubeContextData();
-  }, [fetchYoutubeContextData, youtubeAccessToken, authKey]);
+    if (youtubeAccessToken && user && !invoked.current) fetchYoutubeContextData();
+  }, [fetchYoutubeContextData, youtubeAccessToken, user]);
 
   return (
     <YoutubeContext.Provider

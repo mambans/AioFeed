@@ -1,16 +1,18 @@
 'use strict';
 
+const { parseAuthorization } = require('../parseAuthorization');
 const deleteChatState = require('./deleteChatState');
 
 exports.handler = async (event) => {
   try {
-    const { authkey, channel_id } = JSON.parse(event.body) || {};
-
-    if (!authkey) throw new Error('`authkey` is required');
+    const { channel_id } = JSON.parse(event.body) || {};
+    const { Authorization } = event.headers || {};
+    const authData = await parseAuthorization(Authorization);
+    const UserId = authData.sub;
     if (!channel_id) throw new Error('`channel_id` is required');
 
     const res = await deleteChatState({
-      authkey,
+      UserId,
       channel_id,
     });
 
@@ -27,7 +29,7 @@ exports.handler = async (event) => {
       headers: {
         'Access-Control-Allow-Origin': 'https://aiofeed.com',
       },
-      // body: JSON.stringify(res.data),
+      body: JSON.stringify(e),
     };
   }
 };

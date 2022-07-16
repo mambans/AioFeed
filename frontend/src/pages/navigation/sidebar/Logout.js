@@ -1,43 +1,21 @@
 import React, { useContext } from 'react';
 import { Button } from 'react-bootstrap';
 import AccountContext from '../../account/AccountContext';
-import { TwitchContext } from '../../twitch/useToken';
-import { YoutubeContext } from '../../youtube/useToken';
-import NavigationContext from '../NavigationContext';
-import clearAllAccountCookiesStates from './ClearAllAccountCookiesStates';
 import { GoSignOut } from 'react-icons/go';
 import ToolTip from '../../../components/tooltip/ToolTip';
+import NavigationContext from '../NavigationContext';
+import { toast } from 'react-toastify';
 
 const Logout = () => {
-  const { setUsername, setProfileImage, setAuthKey, setEmail } = useContext(AccountContext) || {};
-  const { setRenderModal } = useContext(NavigationContext);
+  const { signOut } = useContext(AccountContext) || {};
+  const { setSidebarComonentKey } = useContext(NavigationContext) || {};
 
-  const {
-    setTwitchRefreshToken,
-    setTwitchUserId,
-    setTwitchUsername,
-    setTwitchProfileImage,
-    setTwitchAccessToken,
-  } = useContext(TwitchContext) || {};
-  const { setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage } =
-    useContext(YoutubeContext) || {};
-
-  const logout = () =>
-    clearAllAccountCookiesStates({
-      setUsername,
-      setProfileImage,
-      setAuthKey,
-      setEmail,
-      setTwitchAccessToken,
-      setTwitchRefreshToken,
-      setTwitchUserId,
-      setTwitchUsername,
-      setTwitchProfileImage,
-      setYoutubeAccessToken,
-      setYoutubeUsername,
-      setYoutubeProfileImage,
-      setRenderModal,
-    });
+  const logout = async () => {
+    const loggedOut = await signOut();
+    console.log('loggedOut:', loggedOut);
+    setSidebarComonentKey({ comp: 'signin' });
+    toast.success(`Successfully signed out`);
+  };
 
   return (
     <ToolTip tooltip='Logout'>

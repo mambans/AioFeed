@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback, useContext } from 'react';
 
-import AccountContext from '../account/AccountContext';
 import getMyFollowedChannels from './getMyFollowedChannels';
 import GetSubscriptionVideos from './GetSubscriptionVideos';
 import useToken, { YoutubeContext } from './useToken';
@@ -12,7 +11,6 @@ const Datahandler = ({ children }) => {
   const [requestError, setRequestError] = useState();
   const followedChannels = useRef();
   const [videos, setVideos] = useState([]);
-  const { authKey } = useContext(AccountContext);
   const { youtubeAccessToken } = useContext(YoutubeContext);
   const validateToken = useToken();
 
@@ -37,8 +35,8 @@ const Datahandler = ({ children }) => {
       }
     };
     setIsLoaded(false);
-    validateToken({ authKey }).then(() => fetchData());
-  }, [authKey, setVideos, validateToken]);
+    validateToken().then(() => fetchData());
+  }, [setVideos, validateToken]);
 
   useEffect(() => {
     refresh().catch((e) => setError(e));

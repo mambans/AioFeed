@@ -1,14 +1,16 @@
 'use strict';
 
+const { parseAuthorization } = require('../../../parseAuthorization');
 const fetch = require('./fetch');
 
 exports.handler = async (event) => {
   try {
-    const { authkey } = event.queryStringParameters || {};
-    if (!authkey) throw new Error('`Authkey` is required');
+    const { Authorization } = event.headers || {};
+    const authData = await parseAuthorization(Authorization);
+    const UserId = authData.sub;
 
     const res = await fetch({
-      authkey,
+      UserId,
     });
 
     return {

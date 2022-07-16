@@ -1,16 +1,18 @@
 'use strict';
 
+const { parseAuthorization } = require('../parseAuthorization');
 const deleteList = require('./deleteList');
 
 exports.handler = async (event) => {
   try {
-    const { authkey, id } = JSON.parse(event.body) || {};
-
-    if (!authkey) throw new Error('`authkey` is required');
+    const { id } = JSON.parse(event.body) || {};
+    const { Authorization } = event.headers || {};
+    const authData = await parseAuthorization(Authorization);
+    const UserId = authData.sub;
     if (!id) throw new Error('`ListName` is required');
 
     const res = await deleteList({
-      authkey,
+      UserId,
       id,
     });
 
@@ -27,7 +29,7 @@ exports.handler = async (event) => {
       headers: {
         'Access-Control-Allow-Origin': 'https://aiofeed.com',
       },
-      // body: JSON.stringify(res.data),
+      body: JSON.stringify(e),
     };
   }
 };

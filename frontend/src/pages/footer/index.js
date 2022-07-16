@@ -16,9 +16,11 @@ import {
 } from './styledComponents';
 import ChangeLogs from '../changeLogs';
 import styles from '../changeLogs/ChangeLogs.module.scss';
+import AccountContext from '../account/AccountContext';
 
 const Footer = () => {
-  const { footerVisible, setRenderModal, setShowSidebar } = useContext(NavigationContext);
+  const { user } = useContext(AccountContext);
+  const { footerVisible, setSidebarComonentKey, setShowSidebar } = useContext(NavigationContext);
   const [show, setShow] = useState();
   const ref = useRef();
 
@@ -42,16 +44,41 @@ const Footer = () => {
               </Nav.Link>
             </li>
             <li>
-              <div
-                className='button'
-                onClick={() => {
-                  setRenderModal('account');
-                  setShowSidebar(true);
-                }}
-              >
-                <MdAccountCircle size={20} style={{ marginRight: '0.75rem' }} />
-                Account
-              </div>
+              {(user && (
+                <div
+                  className='button'
+                  onClick={() => {
+                    setSidebarComonentKey({ comp: 'account' });
+                    setShowSidebar(true);
+                  }}
+                >
+                  <MdAccountCircle size={20} style={{ marginRight: '0.75rem' }} />
+                  Account
+                </div>
+              )) || (
+                <>
+                  <div
+                    className='button'
+                    onClick={() => {
+                      setSidebarComonentKey({ comp: 'SignIn' });
+                      setShowSidebar(true);
+                    }}
+                  >
+                    <MdAccountCircle size={20} style={{ marginRight: '0.75rem' }} />
+                    Sign in
+                  </div>
+                  <div
+                    className='button'
+                    onClick={() => {
+                      setSidebarComonentKey({ comp: 'SignUp' });
+                      setShowSidebar(true);
+                    }}
+                  >
+                    <MdAccountCircle size={20} style={{ marginRight: '0.75rem' }} />
+                    Create account
+                  </div>
+                </>
+              )}
             </li>
           </ul>
         </div>

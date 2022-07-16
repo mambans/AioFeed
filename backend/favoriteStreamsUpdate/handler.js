@@ -1,17 +1,20 @@
 'use strict';
 
+const { parseAuthorization } = require('../parseAuthorization');
 const favoriteStreamsUpdate = require('./favoriteStreamsUpdate');
 
 exports.handler = async (event) => {
   try {
-    const { channels, authkey } = JSON.parse(event.body);
+    const { channels } = JSON.parse(event.body);
+    const { Authorization } = event.headers || {};
+    const authData = await parseAuthorization(Authorization);
+    const UserId = authData.sub;
 
-    if (!authkey) throw new Error('`authkey` is required');
     if (!channels) throw new Error('`Channels` is required');
 
     const res = await favoriteStreamsUpdate({
       channels,
-      authkey,
+      UserId,
     });
 
     return {
@@ -28,7 +31,7 @@ exports.handler = async (event) => {
       headers: {
         'Access-Control-Allow-Origin': 'https://aiofeed.com',
       },
-      // body: JSON.stringify(res.data),
+      body: JSON.stringify(e),
     };
   }
 };

@@ -1,71 +1,86 @@
 import axios from 'axios';
+import UserPool from '../../Auth/UserPool';
 import { AddCookie, getCookie } from '../../util';
 import addLogBase from '../logs/addLogBase';
 
-const BASE_URL = 'https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod';
+const INSTANCE = axios.create({
+  baseURL: 'https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod',
+  timeout: 5000,
+});
+
+INSTANCE.interceptors.request.use(
+  (config) => {
+    const user = UserPool.getCurrentUser();
+    if (user) {
+      user.getSession((err, session) => {
+        if (session) {
+          config.headers['Authorization'] = session?.idToken?.jwtToken;
+        }
+      });
+    }
+    console.log('config:', config);
+    return config;
+  },
+  (error) => {
+    Promise.reject(error);
+  }
+);
+
+// Add a response interceptor
+INSTANCE.interceptors.response.use(
+  function (response) {
+    console.log('response:', response);
+    // Do something with response data
+    return response;
+  },
+  function (error) {
+    console.log('errorrr:', error);
+    // Do something with response error
+    return Promise.reject(error);
+  }
+);
 
 const API = {
-  validateAccount: async (username) =>
-    await axios.post(`${BASE_URL}/account/validate`, {
-      authkey: getCookie(`AioFeed_AuthKey`),
-    }),
+  validateAccount: async (username) => await INSTANCE.post(`/account/validate`, {}),
   createSavedList: async (id, values) =>
-    await axios
-      .post(`${BASE_URL}/savedlists`, {
-        id: id,
-        obj: values,
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.post(`/savedlists`, {
+      id: id,
+      obj: values,
+    }).catch((e) => console.error(e)),
 
   updateSavedList: async (id, values) =>
-    await axios
-      .put(`${BASE_URL}/savedlists`, {
-        id: id,
-        obj: values,
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.put(`/savedlists`, {
+      id: id,
+      obj: values,
+    }).catch((e) => console.error(e)),
 
   getSavedList: async () =>
-    await axios
-      .get(`${BASE_URL}/savedlists`, {
-        params: {
-          authkey: getCookie(`AioFeed_AuthKey`),
-        },
-      })
+    await INSTANCE.get(`/savedlists`, {
+      params: {},
+    })
       .then((res) => {
         return res.data;
       })
       .catch((e) => console.error(e)),
 
   deleteSavedList: async (id) =>
-    await axios
-      .put(`${BASE_URL}/savedlists/delete`, {
-        authkey: getCookie(`AioFeed_AuthKey`),
-        id,
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.put(`/savedlists/delete`, {
+      id,
+    }).catch((e) => console.error(e)),
 
   deleteYoutubeToken: async () =>
-    await axios
-      .delete(`${BASE_URL}/youtube/token`, {
-        data: {
-          authkey: getCookie(`AioFeed_AuthKey`),
-        },
-      })
+    await INSTANCE.delete(`/youtube/token`, {
+      data: {},
+    })
       .then(() => console.log(`Successfully disconnected from Youtube`))
       .catch((e) => console.error(e)),
 
   getYoutubeTokens: async (codeFromUrl) => {
-    const data = {
-      authkey: getCookie(`AioFeed_AuthKey`),
-    };
+    const data = {};
 
     if (codeFromUrl) data.code = codeFromUrl;
 
-    return await axios
-      .post(`${BASE_URL}/youtube/token`, data)
+    return await INSTANCE.post(`/youtube/token`, data)
       .then(async (res) => {
         if (res.data.access_token || res.data.refresh_token) {
           console.log('YouTube: New Access token fetched');
@@ -84,8 +99,7 @@ const API = {
   },
 
   getAppAccessToken: async () =>
-    await axios
-      .get(`${BASE_URL}/app/token`)
+    await INSTANCE.get(`/app/token`)
       .then((res) => {
         const { access_token, expires_in } = res?.data || {};
         const expireData = new Date(expires_in * 1000);
@@ -97,237 +111,150 @@ const API = {
         console.error('No User or App access tokens found.');
       }),
 
-  login: async (username, password) =>
-    await axios.post(`${BASE_URL}/account/login`, {
-      username,
-      password,
-    }),
-
-  deleteAccount: async (password, authKey) =>
-    await axios.delete(`${BASE_URL}/account`, {
-      data: { password, authKey },
-    }),
-
-  createAccount: async (username, password, email) =>
-    await axios.post(`${BASE_URL}/account/create`, {
-      username,
-      password,
-      email,
-    }),
-  changePassword: async ({ password, newPassword, authKey }) =>
-    await axios.put(`${BASE_URL}/account/reset`, {
-      password: password,
-      new_password: newPassword,
-      authkey: authKey,
-    }),
-
   createCustomFeedSections: async ({ id, data }) => {
-    return await axios
-      .post(`${BASE_URL}/custom_feed_sections`, {
-        authkey: getCookie(`AioFeed_AuthKey`),
-        id,
-        data,
-      })
-      .catch((e) => console.error(e));
+    return await INSTANCE.post(`/custom_feed_sections`, {
+      id,
+      data,
+    }).catch((e) => console.error(e));
   },
   fetchCustomFeedSections: async () =>
-    await axios
-      .get(`${BASE_URL}/custom_feed_sections`, {
-        params: {
-          authkey: getCookie(`AioFeed_AuthKey`),
-        },
-      })
+    await INSTANCE.get(`/custom_feed_sections`, {
+      params: {},
+    })
       .then((res) => {
         return res.data;
       })
       .catch((e) => console.error(e)),
 
   deleteCustomFeedSections: async (id) =>
-    await axios
-      .delete(`${BASE_URL}/custom_feed_sections`, {
-        data: {
-          authkey: getCookie(`AioFeed_AuthKey`),
-          id,
-        },
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.delete(`/custom_feed_sections`, {
+      data: {
+        id,
+      },
+    }).catch((e) => console.error(e)),
 
   updateCustomFeedSections: async (id, data) => {
-    return await axios
-      .put(`${BASE_URL}/custom_feed_sections`, {
-        authkey: getCookie(`AioFeed_AuthKey`),
-        id,
-        data,
-      })
-      .catch((e) => console.error(e));
+    return await INSTANCE.put(`/custom_feed_sections`, {
+      id,
+      data,
+    }).catch((e) => console.error(e));
   },
   //new refactored to seperate tables
   changeProfileImage: async (data) =>
-    await axios
-      .put(`${BASE_URL}/account/profile-image`, {
-        data,
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.put(`/account/profile-image`, {
+      data,
+    }).catch((e) => console.error(e)),
 
   updateTwitchUserData: async (data, access_token, refresh_token) =>
-    await axios
-      .put(`${BASE_URL}/twitch/user`, {
-        data,
-        access_token,
-        refresh_token,
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.put(`/twitch/user`, {
+      data,
+      access_token,
+      refresh_token,
+    }).catch((e) => console.error(e)),
   updateYoutubeUserData: async (data, access_token, refresh_token) =>
-    await axios
-      .put(`${BASE_URL}/youtube/user`, {
-        data,
-        access_token,
-        refresh_token,
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.put(`/youtube/user`, {
+      data,
+      access_token,
+      refresh_token,
+    }).catch((e) => console.error(e)),
 
   getTwitchData: async () =>
-    await axios
-      .get(`${BASE_URL}/twitch`, {
-        params: { authkey: getCookie(`AioFeed_AuthKey`) },
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.get(`/twitch`, {
+      params: {},
+    }).catch((e) => console.error(e)),
 
   updateFavoriteStreams: async (value) =>
-    await axios
-      .put(`${BASE_URL}/twitch/favorite_streams`, {
-        authkey: getCookie(`AioFeed_AuthKey`),
-        channels: [...value],
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.put(`/twitch/favorite_streams`, {
+      channels: [...value],
+    }).catch((e) => console.error(e)),
 
   addVodChannel: async (channel_id) =>
-    await axios
-      .put(`${BASE_URL}/twitch/vod-channels`, {
-        authkey: getCookie(`AioFeed_AuthKey`),
-        channel_id,
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.put(`/twitch/vod-channels`, {
+      channel_id,
+    }).catch((e) => console.error(e)),
 
   removeVodChannel: async (channel_id) =>
-    await axios
-      .delete(`${BASE_URL}/twitch/vod-channels`, {
-        data: {
-          authkey: getCookie(`AioFeed_AuthKey`),
-          channel_id,
-        },
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.delete(`/twitch/vod-channels`, {
+      data: {
+        channel_id,
+      },
+    }).catch((e) => console.error(e)),
 
   getVodChannel: async () =>
-    await axios
-      .get(`${BASE_URL}/twitch/vod-channels`, {
-        params: { authkey: getCookie(`AioFeed_AuthKey`) },
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.get(`/twitch/vod-channels`, {
+      params: {},
+    }).catch((e) => console.error(e)),
 
   addUdateChannels: async (channels) =>
-    await axios
-      .put(`${BASE_URL}/twitch/update-notis-channels`, {
-        authkey: getCookie(`AioFeed_AuthKey`),
-        channels,
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.put(`/twitch/update-notis-channels`, {
+      channels,
+    }).catch((e) => console.error(e)),
 
   deleteTwitchDataUser: async () =>
-    await axios
-      .delete(`${BASE_URL}/twitch/user`, {
-        data: {
-          authkey: getCookie(`AioFeed_AuthKey`),
-        },
-      })
+    await INSTANCE.delete(`/twitch/user`, {
+      data: {},
+    })
       .then(() => console.log(`Successfully disconnected from Twitch`))
       .catch((e) => console.error(e)),
 
   updateTwitchToken: async (setTwitchToken, setRefreshToken) => {
-    return await axios
-      .put(`${BASE_URL}/twitch/reauth`, {
-        refresh_token: getCookie(`Twitch-refresh_token`),
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .then(async (res) => {
-        console.log('res.data.access_token:', res.data.access_token);
-        if (setTwitchToken) setTwitchToken(res.data.access_token);
-        if (setRefreshToken) setRefreshToken(res.data.refresh_token);
-        AddCookie('Twitch-access_token', res.data.access_token);
-        AddCookie('Twitch-refresh_token', res.data.refresh_token);
-        if (res?.data?.access_token) console.log('Successfully re-authenticated to Twitch.');
-        addLogBase({
-          title: 'Twitch re-authenticated',
-          text: 'Successfully re-authenticated to Twitch (renewed access token)',
-          icon: 'twitch',
-        });
-
-        console.log('res00:', res);
-        return res;
+    return await INSTANCE.put(`/twitch/reauth`, {
+      refresh_token: getCookie(`Twitch-refresh_token`),
+    }).then(async (res) => {
+      console.log('res.data.access_token:', res.data.access_token);
+      if (setTwitchToken) setTwitchToken(res.data.access_token);
+      if (setRefreshToken) setRefreshToken(res.data.refresh_token);
+      AddCookie('Twitch-access_token', res.data.access_token);
+      AddCookie('Twitch-refresh_token', res.data.refresh_token);
+      if (res?.data?.access_token) console.log('Successfully re-authenticated to Twitch.');
+      addLogBase({
+        title: 'Twitch re-authenticated',
+        text: 'Successfully re-authenticated to Twitch (renewed access token)',
+        icon: 'twitch',
       });
+
+      console.log('res00:', res);
+      return res;
+    });
   },
 
   getTwitchAccessToken: async (value) =>
-    await axios
-      .put(`${BASE_URL}/twitch/request_auth`, {
-        authCode: value,
-        authkey: getCookie(`AioFeed_AuthKey`),
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.put(`/twitch/request_auth`, {
+      authCode: value,
+    }).catch((e) => console.error(e)),
   getYoutubeData: async () =>
-    await axios
-      .get(`${BASE_URL}/youtube`, {
-        params: { authkey: getCookie(`AioFeed_AuthKey`) },
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.get(`/youtube`, {
+      params: {},
+    }).catch((e) => console.error(e)),
   addTwitterList: async (data) =>
-    await axios
-      .put(`${BASE_URL}/twitter`, {
-        authkey: getCookie(`AioFeed_AuthKey`),
-        data,
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.put(`/twitter`, {
+      data,
+    }).catch((e) => console.error(e)),
   getTwitterLists: async (data) =>
-    await axios
-      .get(`${BASE_URL}/twitter`, {
-        params: {
-          authkey: getCookie(`AioFeed_AuthKey`),
-        },
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.get(`/twitter`, {
+      params: {},
+    }).catch((e) => console.error(e)),
   getChatState: async ({ channel_id }) =>
-    await axios
-      .get(`${BASE_URL}/chatstates`, {
-        params: {
-          authkey: getCookie(`AioFeed_AuthKey`),
-          channel_id: channel_id,
-        },
-      })
+    await INSTANCE.get(`/chatstates`, {
+      params: {
+        channel_id: channel_id,
+      },
+    })
       .then((res) => res.data?.Item)
       .catch((e) => console.error(e)),
 
   updateChateState: async ({ data, channel_id }) =>
-    await axios
-      .put(`${BASE_URL}/chatstates`, {
-        authkey: getCookie(`AioFeed_AuthKey`),
-        channel_id,
-        data,
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.put(`/chatstates`, {
+      channel_id,
+      data,
+    }).catch((e) => console.error(e)),
 
   deleteChateState: async ({ channel_id }) =>
-    await axios
-      .delete(`${BASE_URL}/chatstates`, {
-        data: {
-          authkey: getCookie(`AioFeed_AuthKey`),
-          channel_id,
-        },
-      })
-      .catch((e) => console.error(e)),
+    await INSTANCE.delete(`/chatstates`, {
+      data: {
+        channel_id,
+      },
+    }).catch((e) => console.error(e)),
 };
 
 export default API;

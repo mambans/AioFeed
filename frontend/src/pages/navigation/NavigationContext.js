@@ -4,9 +4,11 @@ import AccountContext from '../account/AccountContext';
 const NavigationContext = React.createContext();
 
 export const NavigationProvider = ({ children }) => {
-  const { username, authKey } = useContext(AccountContext);
+  const { user } = useContext(AccountContext);
   const [showSidebar, setShowSidebar] = useState(false);
-  const [renderModal, setRenderModal] = useState(username && authKey ? 'account' : 'login');
+  const [sidebarComonentKey, setSidebarComonentKey] = useState(
+    user ? { comp: 'account' } : { comp: 'signin' }
+  );
   const [visible, setVisible] = useState(true);
   const [footerVisible, setFooterVisible] = useState(true);
   const [shrinkNavbar, setShrinkNavbar] = useState('false');
@@ -18,8 +20,8 @@ export const NavigationProvider = ({ children }) => {
       value={{
         setShowSidebar,
         showSidebar,
-        renderModal,
-        setRenderModal,
+        sidebarComonentKey,
+        setSidebarComonentKey,
         visible,
         setVisible,
         footerVisible,

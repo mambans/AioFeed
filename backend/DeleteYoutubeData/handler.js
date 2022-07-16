@@ -1,14 +1,16 @@
 'use strict';
 
+const { parseAuthorization } = require('../parseAuthorization');
 const deleteYoutubeData = require('./deleteYoutubeData');
 
 exports.handler = async (event) => {
   try {
-    const { authkey } = JSON.parse(event.body);
-    if (!authkey) throw new Error('authkey is required');
+    const { Authorization } = event.headers || {};
+    const authData = await parseAuthorization(Authorization);
+    const UserId = authData.sub;
 
     const YoutubeTokens = await deleteYoutubeData({
-      authkey,
+      UserId,
     });
 
     return {
@@ -25,6 +27,7 @@ exports.handler = async (event) => {
       headers: {
         'Access-Control-Allow-Origin': 'https://aiofeed.com',
       },
+      body: JSON.stringify(e),
     };
   }
 };

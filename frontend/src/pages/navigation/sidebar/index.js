@@ -2,8 +2,6 @@ import React, { useContext } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
 import AccountContext from './../../account/AccountContext';
-import CreateAccount from './CreateAccount';
-import Login from './Login';
 import NavigationContext from './../NavigationContext';
 import SidebarAccount from './SidebarAccount';
 import { StyledNavSidebarTrigger, StyledLoginButton } from './../StyledComponents';
@@ -13,28 +11,41 @@ import {
   StyledSidebarTrigger,
 } from './StyledComponents';
 import { Portal } from 'react-portal';
+import SignUp from '../../../Auth/SignUp';
+import SignIn from '../../../Auth/SignIn';
 
 const Sidebar = () => {
-  const { profileImage, username, authKey } = useContext(AccountContext);
-  const { renderModal, showSidebar, setShowSidebar, overflow } = useContext(NavigationContext);
-
+  const { user } = useContext(AccountContext);
+  const { sidebarComonentKey, showSidebar, setShowSidebar, overflow } =
+    useContext(NavigationContext);
   const handleToggle = () => setShowSidebar(!showSidebar);
 
-  const modal = {
-    account: username && authKey ? <SidebarAccount /> : <Login />,
-    login: <Login />,
-    create: <CreateAccount />,
-  };
+  const component = (() => {
+    if (user) return <SidebarAccount />;
+    switch (sidebarComonentKey?.comp?.toLowerCase()) {
+      case 'signup':
+        return <SignUp text={sidebarComonentKey?.text} />;
+      case 'signin':
+        return <SignIn text={sidebarComonentKey?.text} />;
+      case 'account':
+      default:
+        return user ? (
+          <SidebarAccount text={sidebarComonentKey?.text} />
+        ) : (
+          <SignIn text={sidebarComonentKey?.text} />
+        );
+    }
+  })();
 
   return (
     <>
       <StyledNavSidebarTrigger onClick={handleToggle} title='Sidebar'>
-        {username && authKey ? (
+        {user ? (
           <>
             <StyledSidebarTrigger id='NavigationProfileImageHoverOverlay' open={showSidebar} />
             <img
               id='NavigationProfileImage'
-              src={profileImage || `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`}
+              src={`${process.env.PUBLIC_URL}/images/webp/placeholder.webp`}
               alt=''
             />
           </>
@@ -56,7 +67,7 @@ const Sidebar = () => {
 
       <CSSTransition in={showSidebar} timeout={500} classNames='NavSidebarSlideRight' unmountOnExit>
         <Portal>
-          <StyledNavSidebar overflow={overflow}>{modal[renderModal]}</StyledNavSidebar>
+          <StyledNavSidebar overflow={overflow}>{component}</StyledNavSidebar>
         </Portal>
       </CSSTransition>
     </>

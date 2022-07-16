@@ -1,17 +1,14 @@
 'use strict';
 
 const DynamoDB = require('aws-sdk/clients/dynamodb');
-const { validateAuthkey } = require('../authkey');
 const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
-module.exports = async ({ authkey, id, obj: { title, videos, enabled } }) => {
-  const username = await validateAuthkey(authkey);
-
+module.exports = async ({ UserId, id, obj: { title, videos, enabled } }) => {
   const res = await client
     .put({
       TableName: process.env.SAVED_LISTS,
       Item: {
-        username,
+        UserId,
         id,
         title,
         videos,

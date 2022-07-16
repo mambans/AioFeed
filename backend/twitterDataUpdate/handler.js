@@ -1,15 +1,18 @@
 'use strict';
 
+const { parseAuthorization } = require('../parseAuthorization');
 const twitterDataUpdate = require('./twitterDataUpdate');
 
 exports.handler = async (event) => {
   try {
-    const { authkey, data } = JSON.parse(event.body);
-    if (!authkey) throw new Error('`authkey` is required');
+    const { data } = JSON.parse(event.body);
+    const { Authorization } = event.headers || {};
+    const authData = await parseAuthorization(Authorization);
+    const UserId = authData.sub;
 
     const res = await twitterDataUpdate({
       data,
-      authkey,
+      UserId,
     });
 
     return {
@@ -26,7 +29,7 @@ exports.handler = async (event) => {
       headers: {
         'Access-Control-Allow-Origin': 'https://aiofeed.com',
       },
-      // body: JSON.stringify(res.data),
+      body: JSON.stringify(e),
     };
   }
 };

@@ -17,6 +17,8 @@ import Twitter from '../twitter';
 import Youtube from '../youtube';
 import MyLists from '../myLists';
 import SharedVideoPlayer from '../sharedComponents/SharedVideoPlayer';
+import SignUp from '../../Auth/SignUp';
+import SignIn from '../../Auth/SignIn';
 
 const MainContentContainer = styled.main`
   min-height: 100vh;
@@ -36,6 +38,15 @@ const NavigationRoutes = () => {
 
           <Route path='legality' element={<Legality />} />
           <Route path='privacy' element={<Legality />} />
+          <Route
+            path='asd'
+            element={
+              <>
+                <SignUp />
+                <SignIn />
+              </>
+            }
+          />
 
           <Route path='vods' element={<TwitchVods />} />
           <Route path='feed' element={<Feed />} />

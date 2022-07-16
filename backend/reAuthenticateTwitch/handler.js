@@ -1,17 +1,19 @@
 'use strict';
 
+const { parseAuthorization } = require('../parseAuthorization');
 const reAuthenticateTwitch = require('./reAuthenticateTwitch');
 
 exports.handler = async (event) => {
   try {
-    const { refresh_token, authkey } = JSON.parse(event.body);
-
+    const { refresh_token } = JSON.parse(event.body);
+    const { Authorization } = event.headers || {};
+    const authData = await parseAuthorization(Authorization);
+    const UserId = authData.sub;
     if (!refresh_token) throw new Error('refresh_token` is required');
-    if (!authkey) throw new Error('authkey` is required');
 
     const res = await reAuthenticateTwitch({
       refresh_token,
-      authkey,
+      UserId,
     });
 
     return {
@@ -28,7 +30,7 @@ exports.handler = async (event) => {
       headers: {
         'Access-Control-Allow-Origin': '*',
       },
-      // body: JSON.stringify(res.data),
+      body: JSON.stringify(e),
     };
   }
 };

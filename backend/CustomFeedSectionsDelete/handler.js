@@ -1,16 +1,19 @@
 'use strict';
 
+const { parseAuthorization } = require('../parseAuthorization');
 const deleteCustomFeedSections = require('./deleteCustomFeedSections');
 
 exports.handler = async (event) => {
   try {
-    const { id, authkey } = JSON.parse(event.body) || {};
+    const { id } = JSON.parse(event.body) || {};
+    const { Authorization } = event.headers || {};
+    const authData = await parseAuthorization(Authorization);
+    const UserId = authData.sub;
     if (!id) throw new Error('`id` is required');
-    if (!authkey) throw new Error('`authkey` is required');
 
     const res = await deleteCustomFeedSections({
       id,
-      authkey,
+      UserId,
     });
 
     return {
@@ -26,7 +29,7 @@ exports.handler = async (event) => {
       headers: {
         'Access-Control-Allow-Origin': 'https://aiofeed.com',
       },
-      // body: JSON.stringify(res.data),
+      body: JSON.stringify(e),
     };
   }
 };

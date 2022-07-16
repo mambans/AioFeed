@@ -1,14 +1,14 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import FeedsContext, { FeedsProvider } from '../feed/FeedsContext';
-import NavigationContext, { NavigationProvider } from '../navigation/NavigationContext';
+import { NavigationProvider } from '../navigation/NavigationContext';
 import { NotificationsProvider } from '../notifications/NotificationsContext';
 import { ThemeProvider } from '../../components/themes/ThemeContext';
 import { FooterProvider } from '../footer/FooterContext';
-import AccountContext, { AccountProvider } from '../account/AccountContext';
+import { AccountProvider } from '../account/AccountContext';
 import CookieConsentAlert from './CookieConsentAlert';
 import Routes from '../routes';
 import ThemeContext from './../../components/themes/ThemeContext';
@@ -16,9 +16,8 @@ import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import { TwitchContext, TwitchProvider } from '../twitch/useToken';
 import { YoutubeContext, YoutubeProvider } from '../youtube/useToken';
 import { VodsProvider } from '../twitch/vods/VodsContext';
-import API from '../navigation/API';
 import { MyListsProvider } from '../myLists/MyListsContext';
-import LogsContext, { LogsProvider } from '../logs/LogsContext';
+import { LogsProvider } from '../logs/LogsContext';
 import { FeedSectionsProvider } from '../feedSections/FeedSectionsContext';
 import { TwitterProvider } from '../twitter/TwitterContext';
 import CleanUp from './CleanUp';
@@ -77,8 +76,6 @@ const AppRoutesContainer = () => {
 
 const App = () => {
   const { activeTheme } = useContext(ThemeContext);
-  const { username, setAuthKey, setUsername, setEmail, setProfileImage } =
-    useContext(AccountContext);
   const { setEnableTwitch, setEnableYoutube } = useContext(FeedsContext);
   const {
     setTwitchAccessToken,
@@ -89,47 +86,6 @@ const App = () => {
   } = useContext(TwitchContext);
   const { setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage } =
     useContext(YoutubeContext);
-  const { setShowSidebar } = useContext(NavigationContext);
-  const { addLog } = useContext(LogsContext);
-
-  useEffect(() => {
-    (async () => {
-      if (username && window.location.host !== 'localhost:3000') {
-        const { data } = await API.validateAccount(username).catch((e) => {
-          console.error('validateAccount error: ', e);
-          return {};
-        });
-        console.log('validateAccount data:', data);
-
-        if (!data) {
-          console.log('--expired login--');
-          setAuthKey();
-          setUsername();
-          setEmail();
-          setProfileImage();
-          setShowSidebar(true);
-          toast.warn('Expired login. Please login again');
-          addLog({
-            title: 'Expired login',
-            text: 'Logged in session expired, please login again.',
-            icon: 'logout',
-          });
-          return false;
-        }
-
-        const { Email, Username, ProfileImg } = data;
-        // setAuthKey(AuthKey);
-        setUsername(Username);
-        setEmail(Email);
-        setProfileImage(ProfileImg);
-        addLog({
-          title: 'Login validated',
-          text: 'Login credentials sucessfully validated',
-          icon: 'authenticated',
-        });
-      }
-    })();
-  }, [username, setAuthKey, setUsername, setEmail, setProfileImage, setShowSidebar, addLog]);
 
   useEventListenerMemo('message', receiveMessage, window, true, { capture: false });
 

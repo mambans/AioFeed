@@ -101,3 +101,12 @@ div[aria-label='Countdown timer'] {
 input.form-control {
   border-bottom: 2px solid rgb(100, 100, 100);
 }
+body .btn-link {
+  text-decoration: none;
+  color: #aeaeae;
+
+  &:hover {
+    text-decoration: underline;
+    color: #ffffff;
+  }
+}

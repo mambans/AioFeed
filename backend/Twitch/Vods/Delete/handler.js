@@ -1,16 +1,19 @@
 'use strict';
 
+const { parseAuthorization } = require('../../../parseAuthorization');
 const deleteFunc = require('./delete');
 
 exports.handler = async (event) => {
   try {
-    const { channel_id, authkey } = JSON.parse(event.body) || {};
+    const { channel_id } = JSON.parse(event.body) || {};
+    const { Authorization } = event.headers || {};
+    const authData = await parseAuthorization(Authorization);
+    const UserId = authData.sub;
     if (!channel_id) throw new Error('`channel_id` is required');
-    if (!authkey) throw new Error('`authkey` is required');
 
     const res = await deleteFunc({
       channel_id,
-      authkey,
+      UserId,
     });
 
     return {

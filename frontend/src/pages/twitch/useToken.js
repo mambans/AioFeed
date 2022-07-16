@@ -13,7 +13,7 @@ const TTL = 100000;
 export const TwitchContext = React.createContext();
 
 export const TwitchProvider = ({ children }) => {
-  const { authKey } = useContext(AccountContext);
+  const { user } = useContext(AccountContext);
   const [pref, setPref] = useLocalStorageState('TwitchPreferences', {}) || {};
   const [twitchAccessToken, setTwitchAccessToken] = useCookieState('Twitch-access_token');
   const [twitchRefreshToken, setTwitchRefreshToken] = useCookieState('Twitch-refresh_token');
@@ -65,8 +65,8 @@ export const TwitchProvider = ({ children }) => {
   ]);
 
   useEffect(() => {
-    if (twitchAccessToken && authKey && !invoked.current) fetchTwitchContextData();
-  }, [fetchTwitchContextData, twitchAccessToken, authKey]);
+    if (user && !invoked.current) fetchTwitchContextData();
+  }, [fetchTwitchContextData, user]);
 
   const promise = useRef();
 

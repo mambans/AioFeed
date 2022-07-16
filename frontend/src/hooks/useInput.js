@@ -23,19 +23,13 @@ const useInput = (initialValue, options = { type: 'string' }) => {
     bind: {
       value,
       onChange: function (event) {
-        console.log('eventttt:', event);
         event?.preventDefault();
         event?.stopPropagation();
         const v =
           options?.type === 'number'
             ? parseInt(event?.target?.value?.replace(/ +(?= )/g, ''))
             : event?.target?.value?.replace(/ +(?= )/g, '');
-        console.log('v:', v);
         setValue(v);
-
-        setTimeout(() => {
-          console.log('value:', value);
-        }, 100);
       },
     },
     setError,

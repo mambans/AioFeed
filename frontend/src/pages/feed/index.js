@@ -18,10 +18,10 @@ import NavigationContext from '../navigation/NavigationContext';
 const Feed = () => {
   // useDocumentTitle('Feed');
   const { enableTwitch, enableYoutube, enableTwitchVods, enableMyLists } = useContext(FeedsContext);
-  const { username } = useContext(AccountContext);
+  const { user } = useContext(AccountContext);
   const { setShowSidebar } = useContext(NavigationContext);
 
-  if (!username) {
+  if (!user) {
     return (
       <Alert
         type='info'

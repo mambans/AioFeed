@@ -1,11 +1,10 @@
 import React, { useRef } from 'react';
-import DeleteAccountButton from './DeleteAccountButton';
-import ChangePassword from './ChangePassword';
 import Logout from './Logout';
 import MyModal from '../../../components/mymodal/MyModal';
 import { MdSettings } from 'react-icons/md';
 import styled from 'styled-components';
 import ClearAllLocalstorage from './ClearAllLocalstorage';
+import EditAccount from './EditAccount';
 
 const Container = styled.div`
   width: 200px;
@@ -38,8 +37,9 @@ const Settings = ({ children }) => {
       }}
     >
       <Container>
-        <DeleteAccountButton />
-        <ChangePassword />
+        {/* <DeleteAccountButton /> */}
+        {/* <ChangePassword /> */}
+        <EditAccount />
         <ClearAllLocalstorage />
         <Logout />
         {children}

@@ -1,9 +1,6 @@
 import { RemoveCookie } from '../../../util';
 
 const clearAllAccountCookiesStates = ({
-  setUsername = () => RemoveCookie('AioFeed_AccountName'),
-  setAuthKey = () => RemoveCookie('AioFeed_AuthKey'),
-
   setTwitchAccessToken = () => RemoveCookie('Twitch-access_token'),
   setTwitchRefreshToken = () => RemoveCookie('Twitch-refresh_token'),
   setTwitchUserId = () => RemoveCookie('Twitch-userId'),
@@ -13,8 +10,6 @@ const clearAllAccountCookiesStates = ({
   setYoutubeAccessToken = () => RemoveCookie('Youtube-access_token'),
   setYoutubeUsername = () => RemoveCookie('YoutubeUsername'),
   setYoutubeProfileImage = () => RemoveCookie('YoutubeProfileImg'),
-
-  setRenderModal = () => {},
 }) => {
   RemoveCookie('Twitch-myState');
   localStorage.removeItem('TwitchVods-Channels');
@@ -38,10 +33,6 @@ const clearAllAccountCookiesStates = ({
     setYoutubeAccessToken();
     setYoutubeUsername();
     setYoutubeProfileImage();
-
-    setUsername();
-    setAuthKey();
-    setRenderModal('login');
   }, 500);
 };
 

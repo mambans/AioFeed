@@ -1,16 +1,18 @@
 'use strict';
 
+const { parseAuthorization } = require('../parseAuthorization');
 const savedListsCreate = require('./savedListsCreate');
 
 exports.handler = async (event) => {
   try {
-    const { id, authkey, obj } = JSON.parse(event.body);
-
+    const { id, obj } = JSON.parse(event.body);
+    const { Authorization } = event.headers || {};
+    const authData = await parseAuthorization(Authorization);
+    const UserId = authData.sub;
     if (!id) throw new Error('`List id missing');
-    // if (!authkey) throw new Error('`Authkey` is required');
 
     const res = await savedListsCreate({
-      authkey,
+      UserId,
       id,
       obj: obj || {},
     });
@@ -29,7 +31,7 @@ exports.handler = async (event) => {
       headers: {
         'Access-Control-Allow-Origin': 'https://aiofeed.com',
       },
-      // body: JSON.stringify(res.data),
+      body: JSON.stringify(e),
     };
   }
 };

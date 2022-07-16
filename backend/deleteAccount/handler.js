@@ -1,15 +1,15 @@
 'use strict';
 
+const { parseAuthorization } = require('../parseAuthorization');
 const deleteAccount = require('./deleteAccount');
 
 exports.handler = async (event) => {
   try {
-    const { password, authKey } = JSON.parse(event.body);
-    if (!password) throw { statusCode: 422, message: 'Password is required' };
-    // if (!username) throw new Error("`Username` is required");
-    // if (!password) throw new Error("`Password` is required");
+    const { Authorization } = event.headers || {};
+    const authData = await parseAuthorization(Authorization);
+    const UserId = authData.sub;
 
-    const res = await deleteAccount({ password, authKey });
+    const res = await deleteAccount({ UserId });
 
     return {
       statusCode: res.statusCode,

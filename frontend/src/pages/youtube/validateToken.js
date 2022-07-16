@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getCookie } from '../../util';
 import autoReauthenticate from './autoReauthenticate';
 
-const validateToken = async ({ authKey = getCookie(`AioFeed_AuthKey`) } = {}) => {
+const validateToken = async () => {
   const access_token = getCookie('Youtube-access_token');
 
   if (access_token) {
@@ -12,11 +12,11 @@ const validateToken = async ({ authKey = getCookie(`AioFeed_AuthKey`) } = {}) =>
       .then((res) => res)
       .catch((error) => {
         console.warn('YouTube: Invalid Access_token');
-        return autoReauthenticate({ authKey });
+        return autoReauthenticate();
       });
   }
   console.warn('YouTube: No Access_token found');
-  return autoReauthenticate({ authKey });
+  return autoReauthenticate();
   // throw new Error('No tokens found.');
 };
 

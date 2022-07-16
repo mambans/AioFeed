@@ -1,15 +1,18 @@
 'use strict';
 
+const { parseAuthorization } = require('../parseAuthorization');
 const YoutubeFetchTokens = require('./YoutubeFetchTokens');
 
 exports.handler = async (event) => {
   try {
-    const { code, authkey } = JSON.parse(event.body);
-    if (!authkey) throw new Error('authkey is required');
+    const { code } = JSON.parse(event.body);
+    const { Authorization } = event.headers || {};
+    const authData = await parseAuthorization(Authorization);
+    const UserId = authData.sub;
 
     const YoutubeTokens = await YoutubeFetchTokens({
       code: decodeURIComponent(code),
-      authkey,
+      UserId,
     });
 
     return {
@@ -26,6 +29,7 @@ exports.handler = async (event) => {
       headers: {
         'Access-Control-Allow-Origin': 'https://aiofeed.com',
       },
+      body: JSON.stringify(e),
     };
   }
 };

@@ -7,7 +7,7 @@ import API from '../navigation/API';
 const TwitterContext = React.createContext();
 
 export const TwitterProvider = ({ children }) => {
-  const { authKey } = useContext(AccountContext);
+  const { user } = useContext(AccountContext);
   const [pref, setPref] = useLocalStorageState('TwitterPreferences', {}) || {};
   const [twitterLists, setTwitterLists] = useLocalStorageState('Twitter-Lists');
   const invoked = useRef(false);
@@ -26,8 +26,8 @@ export const TwitterProvider = ({ children }) => {
   }, [setTwitterLists]);
 
   useEffect(() => {
-    if (authKey && !invoked.current) fetchTwitterContextData();
-  }, [fetchTwitterContextData, authKey]);
+    if (user && !invoked.current) fetchTwitterContextData();
+  }, [fetchTwitterContextData, user]);
 
   return (
     <TwitterContext.Provider

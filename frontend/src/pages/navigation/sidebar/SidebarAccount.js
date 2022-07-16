@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { MdVideocam, MdAutorenew, MdCrop169 } from 'react-icons/md';
 import { FaTwitch, FaYoutube, FaTwitter, FaRegWindowRestore } from 'react-icons/fa';
 import { BsCollectionFill } from 'react-icons/bs';
@@ -8,7 +8,6 @@ import { AiOutlineDisconnect } from 'react-icons/ai';
 import { HiViewList, HiRefresh } from 'react-icons/hi';
 // import { RiFocus2Fill } from 'react-icons/ri';
 
-import AccountContext from './../../account/AccountContext';
 import FeedsContext from './../../feed/FeedsContext';
 import ReAuthenticateButton from './ReAuthenticateButton';
 import Themeselector from './../../../components/themes/Themeselector';
@@ -21,19 +20,14 @@ import { TwitchContext } from '../../twitch/useToken';
 import { YoutubeContext } from '../../youtube/useToken';
 import FeedSizeSlider from './FeedSizeSlider';
 import AccountDetails from './AccountDetails';
-import NavigationContext from '../NavigationContext';
 import Settings from './Settings';
 import FeedSectionAdd from '../../feedSections';
 import SidebarExpandableSection from './SidebarExpandableSection';
 import ListInAccountSidebar from '../../myLists/ListInAccountSidebar';
 import Colors from '../../../components/themes/Colors';
 import TwitterContext from '../../twitter/TwitterContext';
-import { GoogleLogin } from '../google';
 
 const SidebarAccount = () => {
-  const { username, authKey } = useContext(AccountContext) || {};
-  const { setRenderModal } = useContext(NavigationContext);
-
   const {
     setAutoRefreshEnabled,
     autoRefreshEnabled,
@@ -56,10 +50,6 @@ const SidebarAccount = () => {
   } = useContext(YoutubeContext) || {};
   const { showTwitchSidebar, setShowTwitchSidebar, ...feedProps } = useContext(FeedsContext) || {};
   const { toggleRefreshOnFocus, refreshOnFocusEnabled } = useContext(TwitterContext) || {};
-
-  useEffect(() => {
-    if (!username || !authKey) setRenderModal('login');
-  }, [username, authKey, setRenderModal]);
 
   const domainColors = {
     Twitch: Colors.purple,
@@ -210,7 +200,6 @@ const SidebarAccount = () => {
     <>
       <div style={{ minHeight: 'calc(100% - 120px)' }}>
         <AccountDetails />
-        <GoogleLogin />
         <SidebarExpandableSection title='Feeds'>
           <ToggleButtonsContainer buttonsperrow={3}>
             {feedsBtns

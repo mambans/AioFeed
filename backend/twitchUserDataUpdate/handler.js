@@ -1,18 +1,20 @@
 'use strict';
 
+const { parseAuthorization } = require('../parseAuthorization');
 const twitchUserDataUpdate = require('./twitchUserDataUpdate');
 
 exports.handler = async (event) => {
   try {
-    const { authkey, data, access_token, refresh_token } = JSON.parse(event.body);
-
-    if (!authkey) throw new Error('`authkey` is required');
+    const { data, access_token, refresh_token } = JSON.parse(event.body);
+    const { Authorization } = event.headers || {};
+    const authData = await parseAuthorization(Authorization);
+    const UserId = authData.sub;
 
     const res = await twitchUserDataUpdate({
       data,
       access_token,
       refresh_token,
-      authkey,
+      UserId,
     });
 
     return {
@@ -29,7 +31,7 @@ exports.handler = async (event) => {
       headers: {
         'Access-Control-Allow-Origin': 'https://aiofeed.com',
       },
-      // body: JSON.stringify(res.data),
+      body: JSON.stringify(e),
     };
   }
 };

@@ -39,10 +39,10 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        - AttributeName: Username
+        - AttributeName: UserId
           AttributeType: S
       KeySchema:
-        - AttributeName: Username
+        - AttributeName: UserId
           KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: 1
@@ -51,12 +51,12 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        - AttributeName: username
+        - AttributeName: UserId
           AttributeType: S
         - AttributeName: channel_id
           AttributeType: S
       KeySchema:
-        - AttributeName: username
+        - AttributeName: UserId
           KeyType: HASH
         - AttributeName: channel_id
           KeyType: RANGE
@@ -67,10 +67,10 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        - AttributeName: Username
+        - AttributeName: UserId
           AttributeType: S
       KeySchema:
-        - AttributeName: Username
+        - AttributeName: UserId
           KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: 1
@@ -79,10 +79,10 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        - AttributeName: Username
+        - AttributeName: UserId
           AttributeType: S
       KeySchema:
-        - AttributeName: Username
+        - AttributeName: UserId
           KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: 1
@@ -91,12 +91,12 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        - AttributeName: username
+        - AttributeName: UserId
           AttributeType: S
         - AttributeName: id
           AttributeType: N
       KeySchema:
-        - AttributeName: username
+        - AttributeName: UserId
           KeyType: HASH
         - AttributeName: id
           KeyType: RANGE
@@ -119,12 +119,12 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        - AttributeName: username
+        - AttributeName: UserId
           AttributeType: S
         - AttributeName: id
           AttributeType: N
       KeySchema:
-        - AttributeName: username
+        - AttributeName: UserId
           KeyType: HASH
         - AttributeName: id
           KeyType: RANGE
@@ -135,106 +135,18 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       AttributeDefinitions:
-        - AttributeName: username
+        - AttributeName: UserId
           AttributeType: S
         - AttributeName: channel_id
           AttributeType: S
       KeySchema:
-        - AttributeName: username
+        - AttributeName: UserId
           KeyType: HASH
         - AttributeName: channel_id
           KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-  validateAccount:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: 'Validates the passed Auth key to the users stored authkey.'
-      Handler: validateAccount/handler.handler
-      Environment:
-        Variables:
-          USERNAME_TABLE: !Ref UserLogins
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref UserLogins
-      Events:
-        Http:
-          Type: Api
-          Properties:
-            Path: /account/validate
-            Method: post
-            RequestParameters:
-              - method.request.querystring.authkey:
-                  Required: true
-  Login:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: 'Login with AioFeed account and return account info, tokens and monitored vod channels.'
-      Handler: login/handler.handler
-      Environment:
-        Variables:
-          USERNAME_TABLE: !Ref UserLogins
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref UserLogins
-      Events:
-        Http:
-          Type: Api
-          Properties:
-            Path: /account/login
-            Method: post
-            RequestParameters:
-              - method.request.querystring.username:
-                  Required: true
-              - method.request.querystring.password:
-                  Required: true
-  Create:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: 'Create an AioFeed account with tokens and monitored vod channels default to null and empty array.'
-      Handler: create/handler.handler
-      Environment:
-        Variables:
-          USERNAME_TABLE: !Ref UserLogins
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref UserLogins
-      Events:
-        Http:
-          Type: Api
-          Properties:
-            Path: /account/create
-            Method: post
-            RequestParameters:
-              - method.request.querystring.username:
-                  Required: true
-              - method.request.querystring.email:
-                  Required: true
-              - method.request.querystring.password:
-                  Required: true
-  ProfileImageUpdate:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: 'Update acocunt profile image.'
-      Handler: profileImageUpdate/handler.handler
-      Environment:
-        Variables:
-          USERNAME_TABLE: !Ref UserLogins
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref UserLogins
-      Events:
-        Http:
-          Type: Api
-          Properties:
-            Path: /account/profile-image
-            Method: put
-          RequestParameters:
-            - method.request.querystring.data:
-                Required: true
-            - method.request.querystring.authkey:
-                Required: true
   NotisChannelsUpdate:
     Type: AWS::Serverless::Function
     Properties:
@@ -256,8 +168,6 @@ Resources:
             Method: put
           RequestParameters:
             - method.request.querystring.channels:
-                Required: true
-            - method.request.querystring.authkey:
                 Required: true
   DeleteAccount:
     Type: AWS::Serverless::Function
@@ -291,8 +201,6 @@ Resources:
                   Required: true
               - method.request.querystring.password:
                   Required: true
-              - method.request.querystring.authkey:
-                  Required: true
   ReAuthenticateTwitch:
     Type: AWS::Serverless::Function
     Properties:
@@ -315,8 +223,6 @@ Resources:
           RequestParameters:
             - method.request.querystring.refresh_token:
                 Required: true
-            - method.request.querystring.authkey:
-                Required: true
   RequestTwitchTokens:
     Type: AWS::Serverless::Function
     Properties:
@@ -330,8 +236,6 @@ Resources:
             Method: put
           RequestParameters:
             - method.request.querystring.authCode:
-                Required: true
-            - method.request.querystring.authkey:
                 Required: true
   YoutubeFetchTokens:
     Type: AWS::Serverless::Function
@@ -354,8 +258,6 @@ Resources:
             Method: post
           RequestParameters:
             - method.request.querystring.authCode:
-            - method.request.querystring.authkey:
-                Required: true
   DeleteYotubeData:
     Type: AWS::Serverless::Function
     Properties:
@@ -373,9 +275,6 @@ Resources:
           Properties:
             Path: /youtube/token
             Method: delete
-          RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
   DeleteTwitchData:
     Type: AWS::Serverless::Function
     Properties:
@@ -393,9 +292,6 @@ Resources:
           Properties:
             Path: /twitch/user
             Method: delete
-          RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
   UpdateSavedLists:
     Type: AWS::Serverless::Function
     Properties:
@@ -414,8 +310,6 @@ Resources:
             Path: /savedlists
             Method: put
           RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
             - method.request.querystring.obj:
                 Required: true
             - method.request.querystring.id:
@@ -438,8 +332,6 @@ Resources:
             Path: /savedlists
             Method: post
           RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
             - method.request.querystring.obj:
                 Required: true
             - method.request.querystring.id:
@@ -461,13 +353,6 @@ Resources:
           Properties:
             Path: /savedlists
             Method: get
-          RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
-            # - method.request.querystring.videosObj:
-            #     Required: true
-            # - method.request.querystring.listName:
-            #     Required: true
   DeleteSavedLists:
     Type: AWS::Serverless::Function
     Properties:
@@ -486,8 +371,6 @@ Resources:
             Path: /savedlists/delete
             Method: put
           RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
             - method.request.querystring.id:
                 Required: true
             # - method.request.querystring.videosObj:
@@ -531,32 +414,6 @@ Resources:
           RequestParameters:
             - method.request.querystring.channels:
                 Required: true
-            - method.request.querystring.authkey:
-                Required: true
-  changePassword:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: 'Change password'
-      Handler: changePassword/handler.handler
-      Environment:
-        Variables:
-          USERNAME_TABLE: !Ref UserLogins
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref UserLogins
-      Events:
-        Http:
-          Type: Api
-          Properties:
-            Path: /account/reset
-            Method: put
-          RequestParameters:
-            - method.request.querystring.password:
-                Required: true
-            - method.request.querystring.new_password:
-                Required: true
-            - method.request.querystring.authkey:
-                Required: true
   CreateCustomFeedSections:
     Type: AWS::Serverless::Function
     Properties:
@@ -575,8 +432,6 @@ Resources:
             Path: /custom_feed_sections
             Method: post
           RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
             - method.request.querystring.data:
                 Required: true
             - method.request.querystring.id:
@@ -599,8 +454,6 @@ Resources:
             Path: /custom_feed_sections
             Method: put
           RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
             - method.request.querystring.data:
                 Required: true
             - method.request.querystring.id:
@@ -622,9 +475,6 @@ Resources:
           Properties:
             Path: /custom_feed_sections
             Method: get
-          RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
   DeleteCustomFeedSections:
     Type: AWS::Serverless::Function
     Properties:
@@ -644,8 +494,6 @@ Resources:
             Method: delete
           RequestParameters:
             - method.request.querystring.id:
-                Required: true
-            - method.request.querystring.authkey:
                 Required: true
             # - method.request.querystring.videosObj:
             #     Required: true
@@ -669,8 +517,6 @@ Resources:
             Path: /youtube/user
             Method: put
           RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
             - method.request.querystring.data:
             - method.request.querystring.access_token:
             - method.request.querystring.refresh_token:
@@ -694,8 +540,6 @@ Resources:
             Path: /twitch/user
             Method: put
           RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
             - method.request.querystring.data:
             - method.request.querystring.access_token:
             - method.request.querystring.refresh_token:
@@ -716,9 +560,6 @@ Resources:
           Properties:
             Path: /twitch
             Method: get
-          RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
   YoutubeDataFetch:
     Type: AWS::Serverless::Function
     Properties:
@@ -736,9 +577,6 @@ Resources:
           Properties:
             Path: /youtube
             Method: get
-          RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
   TwitterDataFetch:
     Type: AWS::Serverless::Function
     Properties:
@@ -756,9 +594,6 @@ Resources:
           Properties:
             Path: /twitter
             Method: get
-          RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
   TwitterDataUpdate:
     Type: AWS::Serverless::Function
     Properties:
@@ -777,8 +612,6 @@ Resources:
             Path: /twitter
             Method: put
           RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
             - method.request.querystring.data:
   ChatStatesFetch:
     Type: AWS::Serverless::Function
@@ -798,8 +631,6 @@ Resources:
             Path: /chatstates
             Method: get
           RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
             - method.request.querystring.channel_id:
                 Required: true
   ChatStatesUpdate:
@@ -820,8 +651,6 @@ Resources:
             Path: /chatstates
             Method: put
           RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
             - method.request.querystring.data:
             - method.request.querystring.channel_id:
                 Required: true
@@ -843,8 +672,6 @@ Resources:
             Path: /chatstates
             Method: delete
           RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
             - method.request.querystring.channel_id:
                 Required: true
   TwitchVodChannelsFetch:
@@ -864,9 +691,6 @@ Resources:
           Properties:
             Path: /twitch/vod-channels
             Method: get
-          RequestParameters:
-            - method.request.querystring.authkey:
-                Required: true
   TwitchVodChannelsCreate:
     Type: AWS::Serverless::Function
     Properties:
@@ -887,8 +711,6 @@ Resources:
           RequestParameters:
             - method.request.querystring.channel_id:
                 Required: true
-            - method.request.querystring.authkey:
-                Required: true
   TwitchVodChannelsDelete:
     Type: AWS::Serverless::Function
     Properties:
@@ -908,6 +730,4 @@ Resources:
             Method: delete
           RequestParameters:
             - method.request.querystring.channel_id:
-                Required: true
-            - method.request.querystring.authkey:
                 Required: true

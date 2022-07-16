@@ -20,6 +20,7 @@ exports.handler = async () => {
       headers: {
         'Access-Control-Allow-Origin': 'https://aiofeed.com',
       },
+      body: JSON.stringify(e),
     };
   }
 };

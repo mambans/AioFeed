@@ -195,16 +195,14 @@ export const StyledConnectYoutube = styled(Button)`
   }
 `;
 
-export const StyledCreateFormTitle = styled.div`
+export const StyledCreateFormTitle = styled.h3`
   text-align: center;
   border-bottom: 2px solid rgb(163, 163, 163);
   margin: auto;
+  margin-top: auto;
+  margin-top: auto;
   margin-top: 40px;
-
-  p {
-    margin-bottom: 2px;
-    color: #c2c2c2;
-  }
+  padding-bottom: 0.25rem;
 `;
 
 export const StyledCreateForm = styled(Form)`
@@ -611,4 +609,8 @@ export const ToggleButtonsContainerHeader = styled.h5`
   &:hover {
     color: rgb(235, 235, 235);
   }
+`;
+
+export const InlineError = styled.span`
+  color: ${Colors.red};
 `;

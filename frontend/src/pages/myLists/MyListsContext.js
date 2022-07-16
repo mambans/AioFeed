@@ -9,7 +9,7 @@ import uniqBy from 'lodash/uniqBy';
 const MyListsContext = React.createContext();
 
 export const MyListsProvider = ({ children }) => {
-  const { authKey } = useContext(AccountContext);
+  const { user } = useContext(AccountContext);
   const { addLog } = useContext(LogsContext);
   const [lists, setLists] = useSyncedLocalState('Mylists', {}) || {};
   const [myListPreferences, setMyListPreferences] =
@@ -134,8 +134,8 @@ export const MyListsProvider = ({ children }) => {
   );
 
   useEffect(() => {
-    if (authKey && !invoked.current) fetchMyListContextData();
-  }, [fetchMyListContextData, authKey]);
+    if (user && !invoked.current) fetchMyListContextData();
+  }, [fetchMyListContextData, user]);
 
   return (
     <MyListsContext.Provider

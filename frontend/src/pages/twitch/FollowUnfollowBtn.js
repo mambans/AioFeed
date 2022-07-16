@@ -2,7 +2,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 
 import { FollowBtn, UnfollowBtn } from './StyledComponents';
-import AccountContext from '../account/AccountContext';
 import TwitchAPI from './API';
 import useToken, { TwitchContext } from './useToken';
 import ToolTip from '../../components/tooltip/ToolTip';
@@ -22,7 +21,6 @@ const FollowUnfollowBtn = ({
 }) => {
   const [following, setFollowing] = useState(followingStatus);
   const [showUnsubscribeVods, setShowUnsubscribeVods] = useState();
-  const { authKey, username } = useContext(AccountContext);
   const { channels } = useContext(VodsContext);
   const { twitchUserId, setUpdateNotischannels, updateNotischannels } = useContext(TwitchContext);
 
@@ -41,8 +39,6 @@ const FollowUnfollowBtn = ({
               channel: channelName,
               updateNotischannels,
               setUpdateNotischannels,
-              username,
-              authKey,
             });
             if (refreshStreams) {
               clearTimeout(refreshAfterUnfollowTimer.current);

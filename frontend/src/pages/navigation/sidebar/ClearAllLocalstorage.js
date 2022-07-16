@@ -47,7 +47,9 @@ const ClearAllLocalstorage = () => {
         <h4>Delete all localstorage for this site?</h4>
         <ul>
           {Object.keys(localStorage)?.map((key) => (
-            <li style={{ textAlign: 'center' }}>{key}</li>
+            <li key={key} style={{ textAlign: 'center' }}>
+              {key}
+            </li>
           ))}
         </ul>
         <div style={{ display: 'flex', justifyContent: 'space-around' }}>

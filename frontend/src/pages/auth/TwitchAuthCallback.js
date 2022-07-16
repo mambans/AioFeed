@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 
 import { AddCookie, getCookie } from '../../util';
-import AccountContext from './../account/AccountContext';
 import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import TwitchAPI from '../twitch/API';
@@ -18,7 +17,6 @@ const TwitchAuthCallback = () => {
     setTwitchUsername,
     setTwitchProfileImage,
   } = useContext(TwitchContext) || {};
-  const { username } = useContext(AccountContext) || {};
   const { setVisible, setFooterVisible } = useContext(NavigationContext) || {};
 
   const getAccessToken = useCallback(
@@ -37,17 +35,15 @@ const TwitchAuthCallback = () => {
         setTwitchUsername(res.data.data[0].login);
         setTwitchProfileImage(res.data.data[0].profile_image_url);
 
-        if (username) {
-          await aiofeedAPI.updateTwitchUserData(
-            {
-              Username: res.data.data[0].login,
-              Id: res.data.data[0].id,
-              Profile: res.data.data[0].profile_image_url,
-            },
-            accessToken,
-            refreshToken
-          );
-        }
+        await aiofeedAPI.updateTwitchUserData(
+          {
+            Username: res.data.data[0].login,
+            Id: res.data.data[0].id,
+            Profile: res.data.data[0].profile_image_url,
+          },
+          accessToken,
+          refreshToken
+        );
 
         return {
           Username: res.data.data[0].login,
@@ -59,7 +55,6 @@ const TwitchAuthCallback = () => {
       return { token: accessToken, refresh_token: refreshToken, ...MyTwitch };
     },
     [
-      username,
       setTwitchAccessToken,
       setTwitchRefreshToken,
       setTwitchUserId,

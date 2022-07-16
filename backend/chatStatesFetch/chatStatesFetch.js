@@ -1,24 +1,18 @@
 'use strict';
 
 const DynamoDB = require('aws-sdk/clients/dynamodb');
-const { validateAuthkey } = require('../authkey');
 const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
-module.exports = async ({ authkey, channel_id }) => {
-  console.log('channel_id:', channel_id);
-  const username = await validateAuthkey(authkey);
+exports.handler = async ({ UserId, channel_id }) => {
+  const res = await client
+    .get({
+      TableName: process.env.CHAT_STATES_TABLE,
+      Key: {
+        UserId,
+        channel_id,
+      },
+    })
+    .promise();
 
-  if (username) {
-    const res = await client
-      .get({
-        TableName: process.env.CHAT_STATES_TABLE,
-        Key: {
-          username,
-          channel_id,
-        },
-      })
-      .promise();
-
-    return res;
-  }
+  return res;
 };

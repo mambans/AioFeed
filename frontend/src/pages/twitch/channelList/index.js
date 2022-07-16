@@ -33,7 +33,7 @@ const ChannelList = ({
   value,
 }) => {
   const channelName = useParams()?.channelName;
-  const { username } = useContext(AccountContext);
+  const { user } = useContext(AccountContext);
   const { twitchAccessToken, twitchUserId } = useContext(TwitchContext);
   // const navigate = useNavigate();
   // const location = useLocation();
@@ -346,7 +346,7 @@ const ChannelList = ({
               searchInput={channel}
               selected={true}
               followingStatus={false}
-              username={username}
+              user={user}
               onClick={(e) => {
                 console.log('onClick ChannelListElement onChange:', onChange);
                 if (onChange) {
@@ -368,7 +368,7 @@ const ChannelList = ({
                   key={channel?.user_id}
                   data={channel}
                   selected={index === cursor.position}
-                  username={username}
+                  user={user}
                   followingStatus={Boolean(
                     followedChannels?.find((item) => item?.user_id === channel?.user_id)
                   )}
