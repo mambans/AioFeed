@@ -18,7 +18,7 @@ const AccountDetails = () => {
         {user.username}
       </h1>
       <p style={{ textAlign: 'center' }} title='Email'>
-        {user.email}
+        {user.attributes.email}
       </p>
     </>
   );

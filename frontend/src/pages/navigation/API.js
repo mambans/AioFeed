@@ -1,5 +1,5 @@
+import { Auth } from 'aws-amplify';
 import axios from 'axios';
-import UserPool from '../../Auth/UserPool';
 import { AddCookie, getCookie } from '../../util';
 import addLogBase from '../logs/addLogBase';
 
@@ -9,14 +9,10 @@ const INSTANCE = axios.create({
 });
 
 INSTANCE.interceptors.request.use(
-  (config) => {
-    const user = UserPool.getCurrentUser();
-    if (user) {
-      user.getSession((err, session) => {
-        if (session) {
-          config.headers['Authorization'] = session?.idToken?.jwtToken;
-        }
-      });
+  async (config) => {
+    const session = await Auth.currentSession();
+    if (session) {
+      config.headers['Authorization'] = session?.idToken?.jwtToken;
     }
     return config;
   },

@@ -42,18 +42,19 @@ const SignIn = ({ text }) => {
     await authenticate({ username, password })
       .then((data) => {
         console.log('Logged in data:', data);
-        toast.success(`Logged in as ${data?.user?.username}`);
+        toast.success(`Logged in as ${data?.username}`);
         addLog({
           title: `Logged in`,
-          text: `Logged in as  ${data?.user?.username}`,
+          text: `Logged in as  ${data?.username}`,
           icon: 'login',
         });
+        setLoading(false);
+        setSidebarComonentKey({ comp: 'account' });
       })
       .catch((error) => {
+        setLoading(false);
         setError(error);
       });
-    setLoading(false);
-    setSidebarComonentKey({ comp: 'account' });
   };
 
   return (

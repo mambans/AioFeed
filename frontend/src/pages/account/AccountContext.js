@@ -1,92 +1,158 @@
 import React, { useEffect, useState } from 'react';
-import { CognitoUser, AuthenticationDetails } from 'amazon-cognito-identity-js';
-import Pool from '../../Auth/UserPool';
+import Amplify, { Auth, Hub, Logger } from 'aws-amplify';
+
+Amplify.configure({
+  Auth: {
+    region: 'eu-north-1',
+    userPoolId: process.env.REACT_APP_USER_POOL_ID,
+    userPoolWebClientId: process.env.REACT_APP_USER_POOL_CLIENT_ID,
+  },
+});
 
 const AccountContext = React.createContext();
 
 export const AccountProvider = ({ children }) => {
-  const getSession = async () => {
-    return new Promise((resolve, reject) => {
-      const user = Pool.getCurrentUser();
-
-      if (user) {
-        user.getSession((err, session) => {
-          if (err) reject();
-          resolve(session);
-        });
-      } else {
-        reject();
-      }
-    });
-  };
-
   const authenticate = async ({ username, password }) => {
-    return await new Promise((resolve, reject) => {
-      const user = new CognitoUser({
-        Username: username,
-        Pool,
-      });
+    try {
+      const user = await Auth.signIn(username, password);
 
-      const authDetails = new AuthenticationDetails({
-        Username: username,
-        Password: password,
-      });
-
-      user.authenticateUser(authDetails, {
-        onSuccess: (data) => {
-          console.log('onSuccess data:', data);
-          data.user = Pool.getCurrentUser();
-          resolve(data);
-          console.log('Pool.getCurrentUser():', Pool.getCurrentUser());
-          setUser(Pool.getCurrentUser());
-        },
-        onFailure: (error) => {
-          console.error('onFailure error:', error);
-          reject(error);
-        },
-        newPasswordRequired: (data) => {
-          console.log('newpasswordRequired data:', data);
-        },
-      });
-    });
+      // TO COMPLETE NEW PASSWORD (AFTER FORGOT PASSWORD)
+      // if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+      //   const { requiredAttributes } = user.challengeParam; // the array of required attributes, e.g ['email', 'phone_number']
+      //   Auth.completeNewPassword(
+      //     user, // the Cognito User Object
+      //     newPassword, // the new password
+      //     // OPTIONAL, the required attributes
+      //     {
+      //       email: 'xxxx@example.com',
+      //       phone_number: '1234567890',
+      //     }
+      //   )
+      //     .then((user) => {
+      //       // at this time the user is logged in if no MFA required
+      //       console.log(user);
+      //     })
+      //     .catch((e) => {
+      //       console.log(e);
+      //     });
+      // } else {
+      //   // other situations
+      // }
+      setUser(user);
+      return user;
+    } catch (error) {
+      console.log('error signing in', error);
+      setUser(null);
+    }
   };
 
-  const signOut = () => {
-    const user = Pool.getCurrentUser();
-    if (user)
-      return user.signOut(() => {
-        setUser(null);
-      });
+  // async function resendConfirmationCode() {
+  //   try {
+  //     await Auth.resendSignUp(username);
+  //     console.log('code resent successfully');
+  //   } catch (err) {
+  //     console.log('error resending code: ', err);
+  //   }
+  // }
+
+  // async function deleteUser() {
+  //   try {
+  //     const result = await Auth.deleteUser();
+  //     console.log(result);
+  //   } catch (error) {
+  //     console.log('Error deleting user', error);
+  //   }
+  // }
+
+  //CHANGE PASSWORD
+  // Auth.currentAuthenticatedUser()
+  //   .then((user) => {
+  //     return Auth.changePassword(user, 'oldPassword', 'newPassword');
+  //   })
+  //   .then((data) => console.log(data))
+  //   .catch((err) => console.log(err));
+
+  //FORGOT PASSWORD
+  // // Send confirmation code to user's email
+  // Auth.forgotPassword(username)
+  //   .then((data) => console.log(data))
+  //   .catch((err) => console.log(err));
+
+  // // Collect confirmation code and new password, then
+  // Auth.forgotPasswordSubmit(username, code, new_password)
+  //   .then((data) => console.log(data))
+  //   .catch((err) => console.log(err));
+
+  const signOut = async () => {
+    try {
+      //signout from all devices
+      // const signedOut = await Auth.signOut({ global: true });
+      const signedOut = await Auth.signOut();
+      console.log('signedOut:', signedOut);
+      setUser(null);
+    } catch (error) {
+      console.log('error signing out: ', error);
+    }
   };
 
-  const [session, setSession] = useState();
   const [user, setUser] = useState();
 
   useEffect(() => {
     //Fix this runs twice for some reason
     (async () => {
-      console.log('useEffect:');
-      const session = await getSession();
+      const user = await Auth.currentAuthenticatedUser();
+
+      console.log('user:', user);
+      setUser(user);
+      const session = await Auth.currentSession();
       console.log('session:', session);
-      setSession(session);
-      setUser(Pool.getCurrentUser());
+
+      const logger = new Logger('My-Logger');
+
+      const listener = (data) => {
+        switch (data?.payload?.event) {
+          case 'signIn':
+            logger.info('logger: user signed in');
+            console.log('logger: user signed in');
+            break;
+          case 'signUp':
+            logger.info('logger: user signed up');
+            console.log('logger: user signed up');
+            break;
+          case 'signOut':
+            logger.info('logger: user signed out');
+            console.log('logger: user signed out');
+            break;
+          case 'signIn_failure':
+            logger.error('logger: user sign in failed');
+            console.log('logger: user sign in failed');
+            break;
+          case 'tokenRefresh':
+            logger.info('logger: token refresh succeeded');
+            console.log('logger: token refresh succeeded');
+            break;
+          case 'tokenRefresh_failure':
+            logger.error('logger: token refresh failed');
+            console.log('logger: token refresh failed');
+            break;
+          case 'configured':
+            logger.info('logger: the Auth module is configured');
+            console.log('logger: the Auth module is configured');
+            break;
+          default:
+            return;
+        }
+      };
+
+      Hub.listen('auth', listener);
     })();
   }, []);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     console.log('user:', user);
-  //     console.log('session:', session);
-  //   }, 1000);
-  // }, [user, session]);
 
   return (
     <AccountContext.Provider
       value={{
         authenticate,
-        getSession,
         signOut,
-        session,
         user,
       }}
     >
@@ -94,5 +160,4 @@ export const AccountProvider = ({ children }) => {
     </AccountContext.Provider>
   );
 };
-
 export default AccountContext;

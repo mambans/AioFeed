@@ -1,4 +1,3 @@
-import { CognitoUserAttribute } from 'amazon-cognito-identity-js';
 import React, { useContext, useReducer, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import LoadingIndicator from '../components/LoadingIndicator';
@@ -9,7 +8,7 @@ import {
   StyledCreateForm,
   StyledCreateFormTitle,
 } from '../pages/navigation/sidebar/StyledComponents';
-import UserPool from './UserPool';
+import { Auth } from 'aws-amplify';
 
 const SignUp = () => {
   const { setSidebarComonentKey } = useContext(NavigationContext);
@@ -19,11 +18,12 @@ const SignUp = () => {
   const [loading, setLoading] = useState();
 
   const [error, setError] = useReducer((state, error) => {
-    switch (error?.message) {
+    switch (error?.message || error) {
       case 'User is not confirmed.':
         return 'Check your email for confirmation link';
       case 'Missing required parameter USERNAME':
-        return 'Please enter your username';
+      case 'Username cannot be empty':
+        return 'Please enter a username';
       case 'User is disabled.':
         return 'Your account is disabled';
       default:
@@ -36,29 +36,32 @@ const SignUp = () => {
     setError(null);
     setLoading(true);
 
-    var attributeEmail = new CognitoUserAttribute({
-      Name: 'email',
-      Value: email,
-    });
-    UserPool.signUp(username, password, [attributeEmail], null, (error, data) => {
-      console.log('error:', error);
-      console.log('data:', data);
+    Auth.signUp({
+      username,
+      password,
+      attributes: {
+        email,
+      },
+    })
+      .then((data) => {
+        setError(error);
+        setLoading(false);
 
-      console.log(error?.message);
-      setError(error);
-      setLoading(false);
-
-      if (data) {
-        setSidebarComonentKey({
-          comp: 'account',
-          text: (
-            <span style={{ display: 'flex', flexWrap: 'wrap' }}>
-              Confirmation link sent to <b>{email}</b>,<span>please check you'r email.</span>
-            </span>
-          ),
-        });
-      }
-    });
+        if (data) {
+          setSidebarComonentKey({
+            comp: 'account',
+            text: (
+              <span style={{ display: 'flex', flexWrap: 'wrap' }}>
+                Confirmation link sent to <b>{email}</b>,<span>please check you'r email.</span>
+              </span>
+            ),
+          });
+        }
+      })
+      .catch((error) => {
+        setError(error);
+        setLoading(false);
+      });
   };
 
   return (
@@ -84,7 +87,8 @@ const SignUp = () => {
           <Form.Control type='password' placeholder='Password' required {...bindPassword} />
         </Form.Group>
         <div style={{ display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-          <Button variant='primary' type='submit' disabled={!username || !password || !email}>
+          {/* <Button variant='primary' type='submit' disabled={!username || !password || !email}> */}
+          <Button variant='primary' type='submit'>
             Create
           </Button>
         </div>
