@@ -47,7 +47,13 @@ function NewHighlightNoti({ newlyAddedStreams, login, user_login }) {
   return '';
 }
 
-const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfollowTimer }) => {
+const StreamElement = ({
+  data = {},
+  newlyAddedStreams,
+  refresh,
+  refreshAfterUnfollowTimer,
+  size,
+}) => {
   const location = useLocation();
   const {
     user_id,
@@ -67,7 +73,9 @@ const StreamElement = ({ data = {}, newlyAddedStreams, refresh, refreshAfterUnfo
   const refChannel = useRef();
   const videoContainerRef = useRef();
   const thumbnailUrl =
-    `${thumbnail_url?.replace('{width}', 858)?.replace('{height}', 480)}` ||
+    `${thumbnail_url
+      ?.replace('{width}', size === 'small' ? 339 : 858)
+      ?.replace('{height}', size === 'small' ? 192 : 480)}` ||
     `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`;
 
   const streamData = {

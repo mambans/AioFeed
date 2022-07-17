@@ -52,13 +52,13 @@ const TopStreams = () => {
   const VideoElementTypeComp = ({ data }) => {
     switch (videoType) {
       case 'streams':
-        return <StreamElement data={data} />;
+        return <StreamElement data={data} size='small' />;
       case 'clips':
-        return <ClipElement data={data} />;
+        return <ClipElement data={data} size='small' />;
       case 'videos':
-        return <VodElement data={data} />;
+        return <VodElement data={data} size='small' />;
       default:
-        return <StreamElement data={data} />;
+        return <StreamElement data={data} size='small' />;
     }
   };
 

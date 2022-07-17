@@ -32,6 +32,7 @@ const VodElement = ({
   active,
   setPlayQueue,
   playQueue,
+  size,
   ...props
 }) => {
   const {
@@ -96,7 +97,9 @@ const VodElement = ({
         >
           <img
             src={
-              thumbnail_url?.replace('%{width}', 640)?.replace('%{height}', 360) ||
+              thumbnail_url
+                ?.replace('%{width}', size === 'small' ? 339 : 858)
+                ?.replace('%{height}', size === 'small' ? 192 : 480) ||
               'https://vod-secure.twitch.tv/_404/404_processing_320x180.png'
             }
             alt=''
