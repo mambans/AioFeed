@@ -18,7 +18,6 @@ INSTANCE.interceptors.request.use(
         }
       });
     }
-    console.log('config:', config);
     return config;
   },
   (error) => {
@@ -29,12 +28,11 @@ INSTANCE.interceptors.request.use(
 // Add a response interceptor
 INSTANCE.interceptors.response.use(
   function (response) {
-    console.log('response:', response);
     // Do something with response data
     return response;
   },
   function (error) {
-    console.log('errorrr:', error);
+    console.log('INSTANCE error:', error);
     // Do something with response error
     return Promise.reject(error);
   }
