@@ -50,7 +50,7 @@ const YoutubeVideoPlayer = ({ playNext }) => {
         videoId={videoId}
         opts={opts}
         id={videoId + 'player'}
-        containerClassName='IframeContainer'
+        className='IframeContainer'
         onReady={(event) => setDocumentTitle(event)}
         onEnd={playNext}
         onError={onError}
