@@ -12,8 +12,12 @@ Amplify.configure({
 const AccountContext = React.createContext();
 
 export const AccountProvider = ({ children }) => {
+  const [user, setUser] = useState();
+  const [loading, setLoading] = useState();
+
   const authenticate = async ({ username, password }) => {
     try {
+      setLoading(true);
       const user = await Auth.signIn(username, password);
 
       // TO COMPLETE NEW PASSWORD (AFTER FORGOT PASSWORD)
@@ -39,10 +43,12 @@ export const AccountProvider = ({ children }) => {
       //   // other situations
       // }
       setUser(user);
+      setLoading(false);
       return user;
     } catch (error) {
       console.log('error signing in', error);
       setUser(null);
+      setLoading(false);
     }
   };
 
@@ -95,16 +101,16 @@ export const AccountProvider = ({ children }) => {
     }
   };
 
-  const [user, setUser] = useState();
-
   useEffect(() => {
     //Fix this runs twice for some reason
     (async () => {
+      setLoading(true);
       const user = await Auth.currentAuthenticatedUser();
+      const session = await Auth.currentSession();
 
       console.log('user:', user);
       setUser(user);
-      const session = await Auth.currentSession();
+      setLoading(false);
       console.log('session:', session);
 
       const logger = new Logger('My-Logger');
@@ -154,6 +160,8 @@ export const AccountProvider = ({ children }) => {
         authenticate,
         signOut,
         user,
+        loading,
+        setLoading,
       }}
     >
       {children}

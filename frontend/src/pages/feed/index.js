@@ -13,13 +13,16 @@ import { MyLists } from '../myLists';
 import FeedOrderSlider from './FeedOrderSlider';
 import Alert from '../../components/alert';
 import NavigationContext from '../navigation/NavigationContext';
+import LoadingIndicator from '../../components/LoadingIndicator';
 // import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 const Feed = () => {
   // useDocumentTitle('Feed');
   const { enableTwitch, enableYoutube, enableTwitchVods, enableMyLists } = useContext(FeedsContext);
-  const { user } = useContext(AccountContext);
+  const { user, loading } = useContext(AccountContext);
   const { setShowSidebar } = useContext(NavigationContext);
+
+  if (!user && loading) return <LoadingIndicator height={300} width={300} />;
 
   if (!user) {
     return (
