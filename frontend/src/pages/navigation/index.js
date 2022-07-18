@@ -11,13 +11,13 @@ import { NavDropdown } from 'react-bootstrap';
 import RenderNotifications from './../notifications';
 import NavigationContext from './NavigationContext';
 import './Navigation.scss';
-import Sidebar from './sidebar';
 import GameSearchBar from '../twitch/categoryTopStreams/GameSearchBar';
 import ChannelSearchList from './../twitch/channelList/index';
 import NavExpandingSides from './NavExpandingSides';
 import DropDown from './DropDown';
 import LogsContext from '../logs/LogsContext';
 import Colors from '../../components/themes/Colors';
+import { NavigationSidebar } from './sidebar';
 
 const StyledNavbar = styled(Navbar)`
   display: flex;
@@ -134,7 +134,7 @@ const Navigation = () => {
           <GameSearchBar {...channelSearchListProps} openInNewTab={true} />
           <ChannelSearchList {...channelSearchListProps} />
           {LogsIcon}
-          <Sidebar />
+          <NavigationSidebar />
         </NavExpandingSides>
       </StyledNavbar>
     </CSSTransition>
