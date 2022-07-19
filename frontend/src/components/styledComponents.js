@@ -274,6 +274,13 @@ export const SearchListError = styled.span`
   padding: 3px;
 `;
 
+export const ButtonGroup = styled.div`
+  display: flex;
+  gap: ${({ gap }) => gap || '1rem'};
+  flex-direction: ${({ direction }) => direction || 'row'};
+  justify-content: ${({ justifyContent }) => justifyContent};
+`;
+
 export const StyledButton = styled(Button).attrs(({ type }) => ({
   type: type || 'submit',
   variant: 'secondary',

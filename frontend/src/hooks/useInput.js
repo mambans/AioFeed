@@ -4,7 +4,7 @@ import { useState } from 'react';
  * @param {any} initialValue - Start value
  * @returns
  */
-const useInput = (initialValue, options = { type: 'string' }) => {
+const useInput = (initialValue, options = { type: 'string', trim: false }, onChange) => {
   const [value, setValue] = useState(initialValue);
   const [error, setError] = useState();
 
@@ -25,11 +25,12 @@ const useInput = (initialValue, options = { type: 'string' }) => {
       onChange: function (event) {
         event?.preventDefault();
         event?.stopPropagation();
+        onChange?.(event);
         const v =
           options?.type === 'number'
             ? parseInt(event?.target?.value?.replace(/ +(?= )/g, ''))
             : event?.target?.value?.replace(/ +(?= )/g, '');
-        setValue(v);
+        setValue(options.trim ? v.trim() : v);
       },
     },
     setError,

@@ -11,9 +11,10 @@ import {
   StyledSidebarTrigger,
 } from './StyledComponents';
 import { Portal } from 'react-portal';
-import SignUp from '../../../Auth/SignUp';
-import SignIn from '../../../Auth/SignIn';
 import LoadingIndicator from '../../../components/LoadingIndicator';
+import SignUp from '../../account/SignUp';
+import SignIn from '../../account/SignIn';
+import ForgotPassword from '../../account/ForgotPassword';
 
 const NavigationSidebar = () => {
   const { user, loading } = useContext(AccountContext);
@@ -26,6 +27,8 @@ const NavigationSidebar = () => {
     switch (sidebarComonentKey?.comp?.toLowerCase()) {
       case 'signup':
         return <SignUp text={sidebarComonentKey?.text} />;
+      case 'forgotpassword':
+        return <ForgotPassword text={sidebarComonentKey?.text} />;
       case 'signin':
         return <SignIn text={sidebarComonentKey?.text} />;
       case 'account':

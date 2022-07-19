@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Amplify, { Auth, Hub, Logger } from 'aws-amplify';
+import { toast } from 'react-toastify';
+import LogsContext from '../logs/LogsContext';
 
 Amplify.configure({
   Auth: {
@@ -14,6 +16,8 @@ const AccountContext = React.createContext();
 export const AccountProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState();
+  const { addLog } = useContext(LogsContext);
+  const invoked = useRef();
 
   const authenticate = async ({ username, password }) => {
     try {
@@ -49,6 +53,7 @@ export const AccountProvider = ({ children }) => {
       console.log('error signing in', error);
       setUser(null);
       setLoading(false);
+      throw error;
     }
   };
 
@@ -61,14 +66,15 @@ export const AccountProvider = ({ children }) => {
   //   }
   // }
 
-  // async function deleteUser() {
-  //   try {
-  //     const result = await Auth.deleteUser();
-  //     console.log(result);
-  //   } catch (error) {
-  //     console.log('Error deleting user', error);
-  //   }
-  // }
+  async function deleteUser() {
+    try {
+      const result = await Auth.deleteUser();
+      console.log(result);
+      if (result === 'SUCCESS') setUser(null);
+    } catch (error) {
+      console.log('Error deleting user', error);
+    }
+  }
 
   //CHANGE PASSWORD
   // Auth.currentAuthenticatedUser()
@@ -104,14 +110,19 @@ export const AccountProvider = ({ children }) => {
   useEffect(() => {
     //Fix this runs twice for some reason
     (async () => {
-      setLoading(true);
-      const user = await Auth.currentAuthenticatedUser();
-      const session = await Auth.currentSession();
+      if (invoked.current) return null;
+      invoked.current = true;
 
-      console.log('user:', user);
-      setUser(user);
+      setLoading(true);
+      try {
+        const user = await Auth.currentAuthenticatedUser();
+        const session = await Auth.currentSession();
+        console.log('user:', user);
+        console.log('session:', session);
+        setUser(user);
+      } catch (error) {}
+
       setLoading(false);
-      console.log('session:', session);
 
       const logger = new Logger('My-Logger');
 
@@ -120,6 +131,13 @@ export const AccountProvider = ({ children }) => {
           case 'signIn':
             logger.info('logger: user signed in');
             console.log('logger: user signed in');
+            setUser(data?.payload?.data);
+            toast.success(`Logged in as ${data?.payload?.data?.username}`);
+            addLog({
+              title: `Sign in`,
+              text: `Signed in as ${data?.payload?.data?.username}`,
+              icon: 'login',
+            });
             break;
           case 'signUp':
             logger.info('logger: user signed up');
@@ -128,10 +146,17 @@ export const AccountProvider = ({ children }) => {
           case 'signOut':
             logger.info('logger: user signed out');
             console.log('logger: user signed out');
+            setUser(null);
+            toast.success(`Signed out`);
+            addLog({
+              title: `Signed out`,
+              icon: 'login',
+            });
             break;
           case 'signIn_failure':
             logger.error('logger: user sign in failed');
             console.log('logger: user sign in failed');
+            toast.warning(data?.payload?.data?.message);
             break;
           case 'tokenRefresh':
             logger.info('logger: token refresh succeeded');
@@ -152,7 +177,7 @@ export const AccountProvider = ({ children }) => {
 
       Hub.listen('auth', listener);
     })();
-  }, []);
+  }, [addLog]);
 
   return (
     <AccountContext.Provider
@@ -160,8 +185,10 @@ export const AccountProvider = ({ children }) => {
         authenticate,
         signOut,
         user,
+        setUser,
         loading,
         setLoading,
+        deleteUser,
       }}
     >
       {children}

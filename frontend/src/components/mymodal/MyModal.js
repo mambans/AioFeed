@@ -5,7 +5,6 @@ import { CSSTransition } from 'react-transition-group';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import { FaRegWindowRestore } from 'react-icons/fa';
 import { Portal } from 'react-portal';
-import useClicksOutside from '../../hooks/useClicksOutside';
 // import useClicksOutside from '../../hooks/useClicksOutside';
 
 /**
@@ -70,7 +69,7 @@ const MyModal = ({
     if (e.key === 'Escape') handleClose(e);
   };
 
-  useClicksOutside(ref, handleClose, show && relative);
+  // useClicksOutside(ref, handleClose, show && relative);
   useEventListenerMemo('keydown', handleKeydown, window, closeOnRequest && show);
 
   useEffect(() => setTriggerRefPositions(triggerBtnRef?.current?.getBoundingClientRect?.()), []);

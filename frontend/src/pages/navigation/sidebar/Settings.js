@@ -17,6 +17,10 @@ const Container = styled.div`
       width: 100%;
       min-width: 100%;
     }
+
+    button {
+      margin: 0;
+    }
   }
 `;
 

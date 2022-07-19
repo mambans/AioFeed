@@ -1,25 +1,22 @@
 import React, { useContext, useReducer, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Breadcrumb, Button, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import LoadingIndicator from '../components/LoadingIndicator';
-import { ThemeSelector } from '../components/themes/styledComponents';
-import useInput from '../hooks/useInput';
-import AccountContext from '../pages/account/AccountContext';
-import LogsContext from '../pages/logs/LogsContext';
-import NavigationContext from '../pages/navigation/NavigationContext';
+import LoadingIndicator from '../../components/LoadingIndicator';
+import { ThemeSelector } from '../../components/themes/styledComponents';
+import useInput from '../../hooks/useInput';
+import AccountContext from './AccountContext';
+import NavigationContext from '../navigation/NavigationContext';
 import {
   InlineError,
   StyledCreateForm,
   StyledCreateFormTitle,
-} from '../pages/navigation/sidebar/StyledComponents';
+} from '../navigation/sidebar/StyledComponents';
 
 const SignIn = ({ text }) => {
   const { authenticate } = useContext(AccountContext);
   const { setSidebarComonentKey } = useContext(NavigationContext);
-  const { addLog } = useContext(LogsContext);
   const { value: username, bind: bindUsername } = useInput('');
-  const { value: password, bind: bindPassword } = useInput('123456789');
+  const { value: password, bind: bindPassword } = useInput('');
   const [loading, setLoading] = useState();
   const [error, setError] = useReducer((state, error) => {
     switch (error?.message) {
@@ -42,16 +39,12 @@ const SignIn = ({ text }) => {
     await authenticate({ username, password })
       .then((data) => {
         console.log('Logged in data:', data);
-        toast.success(`Logged in as ${data?.username}`);
-        addLog({
-          title: `Logged in`,
-          text: `Logged in as  ${data?.username}`,
-          icon: 'login',
-        });
+
         setLoading(false);
         setSidebarComonentKey({ comp: 'account' });
       })
       .catch((error) => {
+        console.log('errorrrrrrrrrrr:', error);
         setLoading(false);
         setError(error);
       });
@@ -59,6 +52,11 @@ const SignIn = ({ text }) => {
 
   return (
     <>
+      <Breadcrumb>
+        <Breadcrumb.Item active={true} onClick={() => setSidebarComonentKey({ comp: 'signin' })}>
+          Sign in
+        </Breadcrumb.Item>
+      </Breadcrumb>
       <StyledCreateFormTitle>Sign In</StyledCreateFormTitle>
       {text && <p style={{ margin: '1rem 0' }}>{text}</p>}
       <StyledCreateForm onSubmit={handleSubmit} noValidate validated={true}>
@@ -72,21 +70,27 @@ const SignIn = ({ text }) => {
             {...bindUsername}
           />
         </Form.Group>
+
         <Form.Group controlId='formGroupPassword'>
           <Form.Label>Password</Form.Label>
           <Form.Control type='password' placeholder='Password' required {...bindPassword} />
         </Form.Group>
+
         <div style={{ display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
           <Button variant='primary' type='submit' disabled={!username || !password}>
             Sign In
           </Button>
         </div>
+
         {error && <InlineError>{error}</InlineError>}
       </StyledCreateForm>
       <ThemeSelector style={{ marginTop: '20px' }} />
       {loading && <LoadingIndicator height={150} width={150} />}
       <Button variant='link' onClick={() => setSidebarComonentKey({ comp: 'SignUp' })}>
         Don't have an account? Create an account here!
+      </Button>
+      <Button variant='link' onClick={() => setSidebarComonentKey({ comp: 'ForgotPassword' })}>
+        Forgot password?
       </Button>
       <Link
         style={{ position: 'absolute', bottom: '20px', left: '20px', color: '#ffffff' }}

@@ -10,6 +10,7 @@
 
 .btn {
   padding: 0.5rem 0.75rem;
+  margin: 1rem 0;
 }
 
 .btn-outline-secondary:focus,
@@ -109,4 +110,10 @@ body .btn-link {
     text-decoration: underline;
     color: #ffffff;
   }
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+  color: #919191;
+  cursor: not-allowed;
 }

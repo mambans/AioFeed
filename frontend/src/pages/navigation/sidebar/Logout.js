@@ -4,7 +4,6 @@ import AccountContext from '../../account/AccountContext';
 import { GoSignOut } from 'react-icons/go';
 import ToolTip from '../../../components/tooltip/ToolTip';
 import NavigationContext from '../NavigationContext';
-import { toast } from 'react-toastify';
 
 const Logout = () => {
   const { signOut } = useContext(AccountContext) || {};
@@ -14,7 +13,6 @@ const Logout = () => {
     const loggedOut = await signOut();
     console.log('loggedOut:', loggedOut);
     setSidebarComonentKey({ comp: 'signin' });
-    toast.success(`Successfully signed out`);
   };
 
   return (

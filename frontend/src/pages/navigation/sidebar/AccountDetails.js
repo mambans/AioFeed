@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import AccountContext from './../../account/AccountContext';
-import { StyledProfileImg, ProfileImgContainer } from './StyledComponents';
+import { StyledProfileImg, ProfileImgContainer, InlineError } from './StyledComponents';
 
 const AccountDetails = () => {
   const { user } = useContext(AccountContext);
@@ -15,10 +15,11 @@ const AccountDetails = () => {
         />
       </ProfileImgContainer>
       <h1 style={{ fontSize: '2rem', textAlign: 'center' }} title='Username'>
-        {user.username}
+        {user?.username}
       </h1>
       <p style={{ textAlign: 'center' }} title='Email'>
-        {user.attributes.email}
+        {user.attributes?.email}
+        {!user.attributes?.email_verified && <InlineError> not verified</InlineError>}
       </p>
     </>
   );

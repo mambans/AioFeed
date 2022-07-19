@@ -1,13 +1,13 @@
 import React, { useContext, useReducer, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import LoadingIndicator from '../components/LoadingIndicator';
-import useInput from '../hooks/useInput';
-import NavigationContext from '../pages/navigation/NavigationContext';
+import { Breadcrumb, Button, Form } from 'react-bootstrap';
+import LoadingIndicator from '../../components/LoadingIndicator';
+import useInput from '../../hooks/useInput';
+import NavigationContext from '../navigation/NavigationContext';
 import {
   InlineError,
   StyledCreateForm,
   StyledCreateFormTitle,
-} from '../pages/navigation/sidebar/StyledComponents';
+} from '../navigation/sidebar/StyledComponents';
 import { Auth } from 'aws-amplify';
 
 const SignUp = () => {
@@ -66,6 +66,11 @@ const SignUp = () => {
 
   return (
     <>
+      <Breadcrumb>
+        <Breadcrumb.Item active={true} onClick={() => setSidebarComonentKey({ comp: 'signout' })}>
+          Sign out
+        </Breadcrumb.Item>
+      </Breadcrumb>
       <StyledCreateFormTitle>Sign Up</StyledCreateFormTitle>
       <StyledCreateForm onSubmit={handleSubmit} noValidate validated={true}>
         <Form.Group controlId='formGroupUserName'>
