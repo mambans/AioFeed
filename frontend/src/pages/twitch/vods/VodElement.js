@@ -33,6 +33,7 @@ const VodElement = ({
   setPlayQueue,
   playQueue,
   size,
+  loading,
   ...props
 }) => {
   const {

@@ -222,6 +222,7 @@ const PlaylistInPlayer = ({
     (values) => values.some((v) => String(v)?.toLowerCase()?.includes(search?.toLowerCase())),
     [search]
   );
+  // eslint-disable-next-line no-unused-vars
   const videos = useMemo(
     () =>
       listVideos?.filter(({ id, login, user_name, title, snippet } = {}) =>
@@ -289,10 +290,6 @@ const PlaylistInPlayer = ({
       );
     }
   }, [videoId]);
-  console.log('listVideos:', listVideos);
-
-  console.log('list:', list);
-  console.log('videos:', videos);
 
   return (
     <>

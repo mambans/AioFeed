@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { getLocalstorage, setLocalStorage } from '../util';
 
 /**
@@ -11,31 +11,31 @@ const useSyncedLocalState = (key, defaultValue) => {
   const [value, setValue] = useState(() => {
     const storedValue = getLocalstorage(key);
     try {
-      // if (storedValue === 'null') return null;
-      // if (storedValue === 'NaN') return NaN;
-      // if (storedValue === 'undefined') return undefined;
+      if (storedValue === 'null') return null;
+      if (storedValue === 'NaN') return NaN;
+      if (storedValue === 'undefined') return undefined;
       return storedValue ?? defaultValue;
     } catch (error) {
       return storedValue ?? defaultValue;
     }
   });
 
-  // useEffect(() => {
-  //   const listener = (e) => {
-  //     if (e.storageArea === localStorage && e.key === key) {
-  //       try {
-  //         const newVal = e.newValue;
-  //         if (newVal === 'null' || newVal === 'nNaNull' || newVal === 'undefined') setValue();
-  //         setValue(JSON.parse(newVal));
-  //       } catch (error) {
-  //         setValue(e.newValue);
-  //       }
-  //     }
-  //   };
-  //   window.addEventListener('storage', listener);
+  useEffect(() => {
+    const listener = (e) => {
+      if (e.storageArea === localStorage && e.key === key) {
+        try {
+          const newVal = e.newValue;
+          if (newVal === 'null' || newVal === 'nNaNull' || newVal === 'undefined') setValue();
+          setValue(JSON.parse(newVal));
+        } catch (error) {
+          setValue(e.newValue);
+        }
+      }
+    };
+    window.addEventListener('storage', listener);
 
-  //   return () => window.removeEventListener('storage', listener);
-  // }, [key]);
+    return () => window.removeEventListener('storage', listener);
+  }, [key]);
 
   const setLocalStateValue = useCallback(
     (newValue, updateLocalstorage = true) => {
