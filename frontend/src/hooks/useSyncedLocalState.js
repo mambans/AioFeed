@@ -26,9 +26,16 @@ const useSyncedLocalState = (key, defaultValue) => {
         try {
           const newVal = e.newValue;
           if (newVal === 'null' || newVal === 'nNaNull' || newVal === 'undefined') setValue();
-          setValue(JSON.parse(newVal));
+          const val = JSON.parse(newVal);
+          if (val)
+            setValue((c) => {
+              if (JSON.stringify(c) !== JSON.stringify(val)) {
+                return val;
+              }
+              return c;
+            });
         } catch (error) {
-          setValue(e.newValue);
+          if (e.newValue) setValue(e.newValue);
         }
       }
     };

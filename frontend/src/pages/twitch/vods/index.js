@@ -17,6 +17,7 @@ import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import useToken, { TwitchContext } from '../useToken';
 import ExpandableSection from '../../../components/expandableSection/ExpandableSection';
 import Alert from '../../../components/alert';
+import { getLocalstorage } from '../../../util';
 
 const VodsStandalone = () => {
   useDocumentTitle('Twitch Vods');
@@ -76,24 +77,21 @@ export const Vods = ({ className }) => {
 
   useEffect(() => {
     (async () => {
+      console.log('vods index useEffect fetch vods:');
       if (validateToken) {
         refreshBtnRef?.current?.setIsLoading(true);
-        setVods((c) => {
-          getFollowedVods({
-            forceRun: false,
-            setTwitchRefreshToken,
-            setTwitchAccessToken,
-            channels,
-            currentVods: c,
-          }).then((data) => {
-            setError(data.er);
-            setVodError(data.vodError);
-
-            refreshBtnRef?.current?.setIsLoading(false);
-            if (data?.data) setVods(data.data);
-            // return data.data;
-          });
+        const data = await getFollowedVods({
+          forceRun: false,
+          setTwitchRefreshToken,
+          setTwitchAccessToken,
+          channels,
+          currentVods: getLocalstorage('TwitchVods-Channels'),
         });
+
+        refreshBtnRef?.current?.setIsLoading(false);
+        setError(data?.er);
+        setVodError(data?.vodError);
+        setVods(data?.videos);
       }
     })();
   }, [twitchUserId, setTwitchAccessToken, setTwitchRefreshToken, setVods, channels, validateToken]);
