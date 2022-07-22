@@ -7,7 +7,7 @@ module.exports = async ({ id, UserId }) => {
   const res = await client
     .delete({
       TableName: process.env.CUSTOM_FEED_SECTIONS,
-      Key: { Id, UserId },
+      Key: { id, UserId },
       ReturnValues: 'ALL_OLD',
     })
     .promise();

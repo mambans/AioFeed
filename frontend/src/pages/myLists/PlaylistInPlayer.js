@@ -151,6 +151,7 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId, playQueue, s
     [dragSelected, listVideos, list?.id, setLists, setListVideos]
   );
 
+  console.log('listVideos:', listVideos);
   return (
     <TransitionGroup component={null}>
       {listVideos?.map((video) => (
@@ -288,6 +289,10 @@ const PlaylistInPlayer = ({
       );
     }
   }, [videoId]);
+  console.log('listVideos:', listVideos);
+
+  console.log('list:', list);
+  console.log('videos:', videos);
 
   return (
     <>
@@ -353,7 +358,7 @@ const PlaylistInPlayer = ({
       <Container>
         {list && (
           <List
-            listVideos={videos || listVideos}
+            listVideos={listVideos}
             list={list}
             setListVideos={setListVideos}
             videoId={videoId}
