@@ -58,17 +58,17 @@ export const Vods = ({ className }) => {
         setTwitchRefreshToken,
         setTwitchAccessToken,
         channels,
-        currentVods: vods,
+        currentVods: getLocalstorage('TwitchVods'),
       }).then((data) => {
+        refreshBtnRef?.current?.setIsLoading(false);
         setError(data?.er);
         setVodError(data?.vodError);
 
-        refreshBtnRef?.current?.setIsLoading(false);
         if (data?.data) setVods(data.data);
-        // return data.data;
+        return data;
       });
     },
-    [setTwitchAccessToken, setTwitchRefreshToken, setVods, vods, channels, fetchVodsContextData]
+    [setTwitchAccessToken, setTwitchRefreshToken, setVods, channels, fetchVodsContextData]
   );
 
   async function windowFocusHandler() {
@@ -85,13 +85,13 @@ export const Vods = ({ className }) => {
           setTwitchRefreshToken,
           setTwitchAccessToken,
           channels,
-          currentVods: getLocalstorage('TwitchVods-Channels'),
+          currentVods: getLocalstorage('TwitchVods'),
         });
 
         refreshBtnRef?.current?.setIsLoading(false);
         setError(data?.er);
         setVodError(data?.vodError);
-        setVods(data?.videos);
+        if (data?.videos) setVods(data?.videos);
       }
     })();
   }, [twitchUserId, setTwitchAccessToken, setTwitchRefreshToken, setVods, channels, validateToken]);

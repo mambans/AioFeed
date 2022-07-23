@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useCallback, useRef, useState } from 'react';
+import React, { useEffect, useContext, useCallback, useRef } from 'react';
 import { getCookie } from '../../../util';
 import FeedsContext from '../../feed/FeedsContext';
 import API from '../../navigation/API';
@@ -11,8 +11,8 @@ const VodsContext = React.createContext();
 export const VodsProvider = ({ children }) => {
   const { user } = useContext(AccountContext) || {};
   const { enableTwitchVods } = useContext(FeedsContext) || {};
-  const [vods, setVods] = useSyncedLocalState('TwitchVods-Channels', { data: [] });
-  const [channels, setChannels] = useState();
+  const [vods, setVods] = useSyncedLocalState('TwitchVods', { data: [] });
+  const [channels, setChannels] = useSyncedLocalState('TwitchVods-Channels', []);
   const invoked = useRef(false);
 
   const fetchVodsContextData = useCallback(async () => {
