@@ -43,6 +43,7 @@ const MyModal = ({
   const [triggerRefPositions, setTriggerRefPositions] = useState();
   const triggerBtnRef = useRef();
   const ref = useRef();
+  const parentRef = useRef();
 
   // eslint-disable-next-line no-unused-vars
   const handleOpen = () => {
@@ -112,7 +113,7 @@ const MyModal = ({
 
   return (
     <>
-      <Container>
+      <Container ref={parentRef}>
         <TriggerButton
           onClick={handleToggle}
           ref={triggerBtnRef}
@@ -136,7 +137,7 @@ const MyModal = ({
           onEnter={onOpen}
           onExited={onClose}
         >
-          <Portal node={relative ? ref.current : document.querySelector('body')}>
+          <Portal node={relative ? parentRef.current : document.querySelector('body')}>
             <SModal
               refPos={triggerRefPositions}
               direction={animationDirection}
