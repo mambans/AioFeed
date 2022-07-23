@@ -116,9 +116,9 @@ export const AccountProvider = ({ children }) => {
       setLoading(true);
       try {
         const user = await Auth.currentAuthenticatedUser();
-        const session = await Auth.currentSession();
-        console.log('user:', user);
-        console.log('session:', session);
+        // const session = await Auth.currentSession();
+        // console.log('user:', user);
+        // console.log('session:', session);
         setUser(user);
       } catch (error) {}
 
