@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { CSSTransition } from 'react-transition-group';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import { FaRegWindowRestore } from 'react-icons/fa';
-import { MdClose } from 'react-icons/md';
 import { Portal } from 'react-portal';
 import useClicksOutside from '../../hooks/useClicksOutside';
 
@@ -146,12 +145,7 @@ const MyModal = ({
               className='my-modal-wrapper'
               ref={ref}
             >
-              <Position position={positionDirection}>
-                <CloseButton>
-                  <MdClose />
-                </CloseButton>
-                {children}
-              </Position>
+              <Position position={positionDirection}>{children}</Position>
             </SModal>
           </Portal>
         </CSSTransition>
@@ -165,14 +159,6 @@ const MyModal = ({
   );
 };
 export default MyModal;
-
-const CloseButton = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-
-  transform: translate(-100%, 100%);
-`;
 
 const TriggerButton = styled(TransparentButton)`
   &,
