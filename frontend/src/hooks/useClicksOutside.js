@@ -1,8 +1,12 @@
 import { useEffect } from 'react';
 
-const useClicksOutside = (ref, func = () => {}, mount = true) => {
+const useClicksOutside = (ref, func = () => {}, mount = true, preventDefault) => {
   useEffect(() => {
     const handleClickOutside = (event) => {
+      if (preventDefault && event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
       if (Array.isArray(ref) && ref?.length >= 1) {
         if (
           ref.every(
@@ -17,7 +21,7 @@ const useClicksOutside = (ref, func = () => {}, mount = true) => {
 
     if (mount) document.addEventListener('mouseup', handleClickOutside);
     return () => document.removeEventListener('mouseup', handleClickOutside);
-  }, [ref, func, mount]);
+  }, [ref, func, mount, preventDefault]);
 };
 
 export default useClicksOutside;

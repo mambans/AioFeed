@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import { CSSTransition } from 'react-transition-group';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
 import { FaRegWindowRestore } from 'react-icons/fa';
+import { MdClose } from 'react-icons/md';
 import { Portal } from 'react-portal';
-// import useClicksOutside from '../../hooks/useClicksOutside';
+import useClicksOutside from '../../hooks/useClicksOutside';
 
 /**
  *
@@ -69,7 +70,7 @@ const MyModal = ({
     if (e.key === 'Escape') handleClose(e);
   };
 
-  // useClicksOutside(ref, handleClose, show && relative);
+  useClicksOutside([ref, triggerBtnRef], handleClose, show && relative, true);
   useEventListenerMemo('keydown', handleKeydown, window, closeOnRequest && show);
 
   useEffect(() => setTriggerRefPositions(triggerBtnRef?.current?.getBoundingClientRect?.()), []);
@@ -112,7 +113,7 @@ const MyModal = ({
 
   return (
     <>
-      <Container ref={ref}>
+      <Container>
         <TriggerButton
           onClick={handleToggle}
           ref={triggerBtnRef}
@@ -143,8 +144,14 @@ const MyModal = ({
               style={style}
               duration={duration}
               className='my-modal-wrapper'
+              ref={ref}
             >
-              <Position position={positionDirection}>{children}</Position>
+              <Position position={positionDirection}>
+                <CloseButton>
+                  <MdClose />
+                </CloseButton>
+                {children}
+              </Position>
             </SModal>
           </Portal>
         </CSSTransition>
@@ -158,6 +165,14 @@ const MyModal = ({
   );
 };
 export default MyModal;
+
+const CloseButton = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  transform: translate(-100%, 100%);
+`;
 
 const TriggerButton = styled(TransparentButton)`
   &,
