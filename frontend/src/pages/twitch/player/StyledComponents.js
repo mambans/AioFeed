@@ -49,8 +49,6 @@ export const VideoAndChatContainer = styled.div`
 
   div#twitch-embed {
     grid-area: video;
-    place-content: center;
-    display: flex;
   }
 
   .IframeContainer {
@@ -202,12 +200,12 @@ export const StyledVolumeEventOverlay = styled.div`
   position: absolute;
   width: ${({ type, hidechat, chatwidth, chatAsOverlay }) =>
     hidechat === 'true' || chatAsOverlay === 'true'
-      ? '95vw'
+      ? '98vw'
       : type === 'live'
-      ? `${window.innerWidth * 0.95 - chatwidth}px`
-      : '95vw'};
+      ? `${window.innerWidth * 0.98 - chatwidth}px`
+      : '98vw'};
   height: ${({ vodVolumeOverlayEnabled }) =>
-    vodVolumeOverlayEnabled ? `calc(98% - ${VEO_margin_top + VEO_margin_bottom}px)` : '98%'};
+    vodVolumeOverlayEnabled ? `calc(100% - ${VEO_margin_top + VEO_margin_bottom}px)` : '100%'};
   bottom: ${({ type }) => (type === 'live' ? 'unset' : '70px')};
   cursor: ${({ showcursor }) => (showcursor ? 'auto' : 'none')};
   display: ${({ centerBotttom }) => (centerBotttom ? 'flex' : 'block')};
@@ -356,11 +354,11 @@ export const InfoDisplay = styled.div`
   grid-template-columns: 75px auto;
   max-width: 500px;
   background: #00000080;
-  padding: 10px 10px 5px;
+  padding: 5px;
   border-radius: 10px;
   box-shadow: 0px 0px 9px 3px #0000009c;
   position: absolute;
-  margin: 5px;
+  /* margin: 5px; */
 
   p {
     margin: 0;
