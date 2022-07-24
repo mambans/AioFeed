@@ -49,6 +49,8 @@ export const VideoAndChatContainer = styled.div`
 
   div#twitch-embed {
     grid-area: video;
+    place-content: center;
+    display: flex;
   }
 
   .IframeContainer {
@@ -200,10 +202,10 @@ export const StyledVolumeEventOverlay = styled.div`
   position: absolute;
   width: ${({ type, hidechat, chatwidth, chatAsOverlay }) =>
     hidechat === 'true' || chatAsOverlay === 'true'
-      ? '98vw'
+      ? '95vw'
       : type === 'live'
-      ? `${window.innerWidth - chatwidth}px`
-      : '98vw'};
+      ? `${window.innerWidth * 0.95 - chatwidth}px`
+      : '95vw'};
   height: ${({ vodVolumeOverlayEnabled }) =>
     vodVolumeOverlayEnabled ? `calc(98% - ${VEO_margin_top + VEO_margin_bottom}px)` : '98%'};
   bottom: ${({ type }) => (type === 'live' ? 'unset' : '70px')};
