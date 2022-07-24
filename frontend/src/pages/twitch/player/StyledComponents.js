@@ -68,6 +68,7 @@ export const VideoAndChatContainer = styled.div`
     .listVideoButton {
       opacity: 1;
     }
+
     ${IconContainer} {
       opacity: 1;
     }

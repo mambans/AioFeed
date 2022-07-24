@@ -1,5 +1,5 @@
 import React, { useContext, useReducer, useState } from 'react';
-import { Breadcrumb, Button, Form } from 'react-bootstrap';
+import { Breadcrumb, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import { ThemeSelector } from '../../components/themes/styledComponents';
@@ -11,6 +11,7 @@ import {
   StyledCreateForm,
   StyledCreateFormTitle,
 } from '../navigation/sidebar/StyledComponents';
+import Button from '../../components/Button';
 
 const SignIn = ({ text }) => {
   const { authenticate } = useContext(AccountContext);
@@ -76,22 +77,26 @@ const SignIn = ({ text }) => {
           <Form.Control type='password' placeholder='Password' required {...bindPassword} />
         </Form.Group>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-          <Button variant='primary' type='submit' disabled={!username || !password}>
-            Sign In
-          </Button>
-        </div>
+        <Button
+          variant='primary'
+          type='submit'
+          disabled={!username || !password}
+          loading={loading}
+          style={{ margin: '1rem 0' }}
+        >
+          Sign In
+        </Button>
 
         {error && <InlineError>{error}</InlineError>}
       </StyledCreateForm>
       <ThemeSelector style={{ marginTop: '20px' }} />
-      {loading && <LoadingIndicator height={150} width={150} />}
       <Button variant='link' onClick={() => setSidebarComonentKey({ comp: 'SignUp' })}>
         Don't have an account? Create an account here!
       </Button>
       <Button variant='link' onClick={() => setSidebarComonentKey({ comp: 'ForgotPassword' })}>
         Forgot password?
       </Button>
+      {loading && <LoadingIndicator height={150} width={150} />}
       <Link
         style={{ position: 'absolute', bottom: '20px', left: '20px', color: '#ffffff' }}
         to='/legality#Privacy'

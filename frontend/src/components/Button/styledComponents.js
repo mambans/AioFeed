@@ -1,24 +1,25 @@
 import styled, { keyframes } from 'styled-components';
 import Colors from '../themes/Colors';
-import { loadingAnimation, buttonBubbleAnimation, svgAnimation } from './animations';
+import { loadingAnimation, svgAnimation, buttonBubbleAnimationSingle } from './animations';
 
 export const COLORS = {
   danger: { background: Colors.red },
   success: { background: Colors.green },
   light: { background: 'rgb(200,200,200)', color: 'rgb(15,15,15)' },
   default: { background: 'rgb(100, 100, 100)', color: '#ffffff' },
+  primary: { background: Colors.green, color: '#ffffff' },
   transparent: { background: 'transparent', color: '#ffffff', loadingColor: '#ffffff' },
 };
 
-const variantProps = (variant) => {
-  const style = COLORS?.[variant];
-  const bg = style?.background || COLORS.default.background;
-  const color = style?.color || COLORS.default.color;
+const variantProps = (variant = 'default') => {
+  const style = COLORS?.[variant || 'default'];
+  const bg = style?.background || COLORS?.default?.background;
+  const color = style?.color || COLORS?.default?.color;
   return { backgroundColor: bg, color };
 };
 
-const variantPropsInner = (variant) => {
-  const bg = COLORS?.[variant].background || COLORS.default.background;
+const variantPropsInner = (variant = 'default') => {
+  const bg = COLORS?.[variant || 'default']?.background || COLORS?.default?.background;
   return { boxShadow: `0px 0px 2px 0px ${bg}` };
 };
 
@@ -74,7 +75,7 @@ export const StyledButton = styled.button`
   pointer-events: ${({ tempDisabled }) => (tempDisabled ? 'none' : 'auto')};
 
   animation-name: ${({ active, disableClickAnimation }) =>
-    active && buttonBubbleAnimation(disableClickAnimation)};
+    active && buttonBubbleAnimationSingle(disableClickAnimation)};
   animation-duration: ${({ duration }) => duration}ms;
 
   /* svg {
@@ -92,7 +93,7 @@ export const StyledButton = styled.button`
   transform: scale(1);
 
   ${Animate} {
-    animation-name: ${({ active }) => active && buttonBubbleAnimation(false, 1.35)};
+    animation-name: ${({ active }) => active && buttonBubbleAnimationSingle(false, 1.35)};
     animation-duration: ${({ duration }) => duration}ms;
   }
 

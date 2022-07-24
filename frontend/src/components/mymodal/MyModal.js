@@ -205,7 +205,7 @@ const SModal = styled.div`
     transform: translate(0, 0);
     transition: opacity ${({ duration }) => duration / 2 + 'ms'},
       transform ${({ duration }) => duration + 'ms'};
-    pointer-events: none;
+    pointer-events: ${({ disableWhileAnimating }) => (disableWhileAnimating ? 'none' : 'auto')};
   }
 
   &.slideLeft-enter {
@@ -220,7 +220,7 @@ const SModal = styled.div`
     transform: translate(0, 0);
     transition: opacity ${({ duration }) => duration / 2 + 'ms'},
       transform ${({ duration }) => duration + 'ms'};
-    pointer-events: none;
+    pointer-events: ${({ disableWhileAnimating }) => (disableWhileAnimating ? 'none' : 'auto')};
   }
 
   &.slideLeft-exit {
@@ -235,7 +235,7 @@ const SModal = styled.div`
     transform: ${({ direction }) => direction};
     transition: opacity ${({ duration }) => duration / 2 + 'ms'},
       transform ${({ duration }) => duration + 'ms'};
-    pointer-events: none;
+    pointer-events: ${({ disableWhileAnimating }) => (disableWhileAnimating ? 'none' : 'auto')};
   }
 
   &.slideLeft-exit-done {

@@ -1,5 +1,5 @@
 import React, { useContext, useReducer, useState } from 'react';
-import { Breadcrumb, Button, Form } from 'react-bootstrap';
+import { Breadcrumb, Form } from 'react-bootstrap';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import useInput from '../../hooks/useInput';
 import NavigationContext from '../navigation/NavigationContext';
@@ -9,6 +9,7 @@ import {
   StyledCreateFormTitle,
 } from '../navigation/sidebar/StyledComponents';
 import { Auth } from 'aws-amplify';
+import Button from '../../components/Button';
 
 const SignUp = () => {
   const { setSidebarComonentKey } = useContext(NavigationContext);
@@ -67,6 +68,9 @@ const SignUp = () => {
   return (
     <>
       <Breadcrumb>
+        <Breadcrumb.Item onClick={() => setSidebarComonentKey({ comp: 'signin' })}>
+          Sign in
+        </Breadcrumb.Item>
         <Breadcrumb.Item active={true} onClick={() => setSidebarComonentKey({ comp: 'signout' })}>
           Sign out
         </Breadcrumb.Item>
@@ -91,12 +95,16 @@ const SignUp = () => {
           <Form.Label>Password</Form.Label>
           <Form.Control type='password' placeholder='Password' required {...bindPassword} />
         </Form.Group>
-        <div style={{ display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>
-          {/* <Button variant='primary' type='submit' disabled={!username || !password || !email}> */}
-          <Button variant='primary' type='submit'>
-            Create
-          </Button>
-        </div>
+        <Button
+          variant='primary'
+          type='submit'
+          disabled={!username || !password || !email}
+          loading={loading}
+          style={{ margin: '1rem 0' }}
+        >
+          Create
+        </Button>
+
         {error && <InlineError>{error}</InlineError>}
       </StyledCreateForm>
       {loading && <LoadingIndicator height={150} width={150} />}

@@ -1,13 +1,13 @@
 import React, { useContext, useReducer, useState } from 'react';
-import { Breadcrumb, Button, Form, Spinner } from 'react-bootstrap';
+import { Breadcrumb, Form, Spinner } from 'react-bootstrap';
 import useInput from '../../hooks/useInput';
 import { Auth } from 'aws-amplify';
 import { InlineError } from '../navigation/sidebar/StyledComponents';
 import NavigationContext from '../navigation/NavigationContext';
 import { toast } from 'react-toastify';
+import Button from '../../components/Button';
 
 const ForgotPassword = () => {
-  // const [loading, setLoading] = useState();
   const { setSidebarComonentKey } = useContext(NavigationContext);
   const [error, setError] = useReducer((state, error) => {
     switch (error?.message) {
@@ -101,7 +101,7 @@ const ForgotPassword = () => {
             </Form.Group>
           </>
         )}
-        <Button type='submit' variant='primary'>
+        <Button type='submit' variant='primary' style={{ margin: '1rem 0' }} loading={loading}>
           Next {loading && <Spinner />}
         </Button>
       </Form>
