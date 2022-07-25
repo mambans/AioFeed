@@ -126,7 +126,7 @@ const VolumeSlider = ({
         1
       );
 
-      if (TwitchPlayer.getMuted()) {
+      if (TwitchPlayer.getMuted() || volumeMuted) {
         TwitchPlayer.setMuted(false);
         setVolumeMuted(false);
       }
