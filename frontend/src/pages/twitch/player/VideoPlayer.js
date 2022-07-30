@@ -97,7 +97,11 @@ const VideoPlayer = ({
 
   function OnPauseEventListeners() {
     console.log('OnPauseEventListeners:');
-    setIsPlaying(false);
+    const isPaused = twitchVideoPlayer.current.isPaused();
+    console.log('isPaused:', isPaused);
+    if (isPaused) {
+      setIsPlaying(false);
+    }
   }
 
   useEffect(() => {
