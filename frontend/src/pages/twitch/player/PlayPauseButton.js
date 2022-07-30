@@ -95,25 +95,34 @@ const PlayPauseButton = ({ TwitchPlayer, PlayerUIControlls }) => {
     };
   }, []);
 
-  if (isPaused) {
+  const button = (() => {
+    if (isPaused) {
+      return (
+        <FaPlay
+          disabled={!TwitchPlayer}
+          id='PausePlay'
+          size={30}
+          onClick={PausePlay}
+          title={'Play (space)'}
+        />
+      );
+    }
     return (
-      <FaPlay
+      <FaPause
         disabled={!TwitchPlayer}
         id='PausePlay'
         size={30}
         onClick={PausePlay}
-        title={'Play (space)'}
+        title={'Pause (space)'}
       />
     );
-  }
+  })();
+
   return (
-    <FaPause
-      disabled={!TwitchPlayer}
-      id='PausePlay'
-      size={30}
-      onClick={PausePlay}
-      title={'Pause (space)'}
-    />
+    <div>
+      {seekTime && <p>{seekTime}</p>}
+      {button}
+    </div>
   );
 };
 export default PlayPauseButton;
