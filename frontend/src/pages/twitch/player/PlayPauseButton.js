@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FaPlay } from 'react-icons/fa';
 import { FaPause } from 'react-icons/fa';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
+import { msToHMS } from '../../../util';
 
 const PlayPauseButton = ({ TwitchPlayer, PlayerUIControlls }) => {
   const [isPaused, setIsPaused] = useState(TwitchPlayer?.isPaused() || false);
@@ -120,7 +121,7 @@ const PlayPauseButton = ({ TwitchPlayer, PlayerUIControlls }) => {
 
   return (
     <div>
-      {seekTime && <p>{seekTime}</p>}
+      {seekTime && <p>{msToHMS(seekTime)}</p>}
       {button}
     </div>
   );

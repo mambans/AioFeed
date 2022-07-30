@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { toast } from 'react-toastify';
 
 export const RemoveCookie = (cookieName) => {
@@ -102,4 +103,11 @@ export const askForBrowserNotificationPermission = async () => {
     if (result === 'denied') toast.success('Notifications blocked');
     return result;
   }
+};
+
+export const msToHMS = (ms) => {
+  const duration = moment.duration(ms);
+  const seconds = duration.seconds() ? ` ${duration.seconds()}s` : '';
+  const HMS = `${duration.hours()}h ${duration.minutes()}m ${seconds}`;
+  return HMS;
 };

@@ -96,6 +96,7 @@ const VideoPlayer = ({
   }
 
   function OnPauseEventListeners() {
+    console.log('OnPauseEventListeners:');
     setIsPlaying(false);
   }
 

@@ -179,7 +179,6 @@ const SharedVideoPlayer = () => {
           DEFAULT_LIST_WIDTH={DEFAULT_LIST_WIDTH}
           VolumeEventOverlayRef={VolumeEventOverlayRef}
           player={childPlayer}
-          setIsPlaying={setIsPlaying}
           videoElementRef={videoElementRef}
           channelName={channelName}
           showVolumeSlider
