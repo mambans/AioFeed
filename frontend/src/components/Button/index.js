@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { LoadingDiv, Inner, StyledButton, LoadingDivTransparent } from './styledComponents';
 import { Button as ReactButton } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Button
@@ -29,6 +30,8 @@ const Button = (props) => {
     variant = 'default',
     loading,
     disableClickAnimation,
+    to,
+    target,
     ...rest
   } = props;
   const [active, setActive] = useState(false);
@@ -36,14 +39,47 @@ const Button = (props) => {
   const resetTimer = useRef();
   const resetDataTimer = useRef();
   const ref = useRef();
+  const navigate = useNavigate();
+
+  const getUrl = () => {
+    if (target === '_blank') {
+      const toUrl = (() => {
+        if (!to.includes('http') && !to.includes('www')) return window.location.origin + to;
+        return to;
+      })();
+      const url = new URL(toUrl);
+      url.searchParams.append('redirect', false);
+
+      return url.toString();
+    }
+    return to;
+  };
+  const handleOnClickLink = (newtab) => {
+    if (to) {
+      if (target === '_blank' || newtab) {
+        window.open(getUrl(), '_blank');
+        return;
+      }
+      navigate(getUrl());
+    }
+  };
 
   const handleOnClick = (e) => {
-    onClick(e);
+    onClick?.(e);
     clearTimeout(resetTimer.current);
     setActive(true);
     resetTimer.current = setTimeout(() => {
       setActive(false);
     }, duration);
+
+    handleOnClickLink();
+  };
+
+  const onMouseDown = (e) => {
+    if (e.button === 1) {
+      onClick?.(e);
+      handleOnClickLink(true);
+    }
   };
 
   useEffect(() => {
@@ -93,8 +129,6 @@ const Button = (props) => {
     );
   }
 
-  console.log('disabled:', disabled);
-  console.log('loading:', loading);
   return (
     <StyledButton
       ref={ref}
@@ -108,15 +142,19 @@ const Button = (props) => {
       variant={data.variant}
       disableClickAnimation={disableClickAnimation}
       disabled={disabled || loading}
+      onMouseDown={onMouseDown}
       // tempDisabled={active || loading}
+      title={getUrl()}
     >
-      {loading &&
-        (variant === 'transparent' ? (
-          <LoadingDivTransparent variant={variant} />
-        ) : (
-          <LoadingDiv key={'loading'} parent={ref?.current?.getBoundingClientRect()} />
-        ))}
-      <Inner>{data.children}</Inner>
+      <>
+        {loading &&
+          (variant === 'transparent' ? (
+            <LoadingDivTransparent variant={variant} />
+          ) : (
+            <LoadingDiv key={'loading'} parent={ref?.current?.getBoundingClientRect()} />
+          ))}
+        <Inner>{data.children}</Inner>
+      </>
     </StyledButton>
   );
 };

@@ -22,6 +22,7 @@ import useLocalStorageState from '../../hooks/useLocalStorageState';
 import VolumeEventOverlay from '../twitch/VolumeEventOverlay';
 import { TwitchContext } from '../twitch/useToken';
 import { parseNumberAndString } from '../myLists/dragDropUtils';
+import ButtonsBar from '../twitch/player/ButtonsBar';
 
 const DEFAULT_LIST_WIDTH = Math.max(window.innerWidth * 0.1, 400);
 
@@ -164,6 +165,7 @@ const SharedVideoPlayer = () => {
             </StyledShowNavbarBtn>
           )}
         </PlayerExtraButtons>
+
         <VolumeEventOverlay
           ref={VolumeEventOverlayRef}
           show={resizeActive || (enableVodVolumeOverlay && isPlaying)}
@@ -186,6 +188,10 @@ const SharedVideoPlayer = () => {
           centerBotttom
           // contextMenuChildren={<></>}
         >
+          <ButtonsBar
+            style={{ margin: '1rem', position: 'absolute', right: 0, top: 0 }}
+            videoId={videoId}
+          />
           <AddToListButton
             videoId_p={videoId}
             style={{

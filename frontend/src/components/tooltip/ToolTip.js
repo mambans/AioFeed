@@ -35,6 +35,7 @@ const ToolTip = ({
   children,
   show = true,
   tooltip = '',
+  content = '',
   placement = 'bottom',
   delay = { show: 250, hide: 0 },
   fontSize = 'inherit',
@@ -65,7 +66,7 @@ const ToolTip = ({
             id={`tooltip-${'bottom'}`}
             width={width || feedVideoSizeProps?.width || 350}
           >
-            {tooltip}
+            {tooltip || content}
           </ToolTipText>
         }
       >

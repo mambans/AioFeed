@@ -60,6 +60,7 @@ import API from '../../navigation/API';
 import useKeyDown from './../../../hooks/useKeyDown';
 import addGameInfo from '../functions/addGameInfo';
 import addProfileInfo from '../functions/addProfileInfo';
+import ButtonsBar from './ButtonsBar';
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.12, 175);
 
@@ -528,6 +529,13 @@ const Player = () => {
               )
             }
           >
+            <ButtonsBar
+              style={{ margin: '1rem', position: 'absolute', right: 0, top: 0 }}
+              twitchUsername={
+                streamInfo?.login || streamInfo?.user_login || streamInfo?.user_name || channelName
+              }
+            />
+
             {streamInfo ? (
               <InfoDisplay>
                 <>

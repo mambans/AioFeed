@@ -96,9 +96,7 @@ const VideoPlayer = ({
   }
 
   function OnPauseEventListeners() {
-    console.log('OnPauseEventListeners:');
     const isPaused = twitchVideoPlayer.current.isPaused();
-    console.log('isPaused:', isPaused);
     if (isPaused) {
       setIsPlaying(false);
     }

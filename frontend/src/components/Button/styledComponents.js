@@ -3,8 +3,16 @@ import Colors from '../themes/Colors';
 import { loadingAnimation, svgAnimation, buttonBubbleAnimationSingle } from './animations';
 
 export const COLORS = {
+  ...Object.keys(Colors)
+    .filter((k) => typeof Colors[k] === 'object')
+    .reduce((acc, key) => {
+      acc[key] = { background: Colors[key] };
+
+      return acc;
+    }, {}),
   danger: { background: Colors.red },
   success: { background: Colors.green },
+  darkTransparent: { background: 'rgba(13, 13, 13, 0.75)', color: '#ffffff' },
   light: { background: 'rgb(200,200,200)', color: 'rgb(15,15,15)' },
   default: { background: 'rgb(100, 100, 100)', color: '#ffffff' },
   primary: { background: Colors.green, color: '#ffffff' },
@@ -100,7 +108,7 @@ export const StyledButton = styled.button`
   ${Inner} {
     padding: 0.35rem 0.75rem;
     margin: 2px; // controlls the thinkess of the loading border snake
-    ${({ backgroundColor }) => backgroundColor && { backgroundColor }};
+    /* ${({ backgroundColor }) => backgroundColor && { backgroundColor }}; */
     ${({ variant }) => variantProps(variant)};
     transition: filter 250ms, box-shadow 250ms, color 250ms;
     border-radius: 0.15em;
