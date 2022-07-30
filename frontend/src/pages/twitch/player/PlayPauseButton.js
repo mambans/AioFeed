@@ -121,7 +121,7 @@ const PlayPauseButton = ({ TwitchPlayer, PlayerUIControlls }) => {
 
   return (
     <div>
-      {seekTime && <p>{msToHMS(seekTime)}</p>}
+      {seekTime && <p>{msToHMS(seekTime * 1000)}</p>}
       {button}
     </div>
   );

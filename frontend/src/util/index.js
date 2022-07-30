@@ -107,7 +107,9 @@ export const askForBrowserNotificationPermission = async () => {
 
 export const msToHMS = (ms) => {
   const duration = moment.duration(ms);
+  const hours = duration.hours() ? `${duration.hours()}h` : '';
+  const minutes = duration.minutes() || duration.minutes() ? ` ${duration.minutes()}s` : '';
   const seconds = duration.seconds() ? ` ${duration.seconds()}s` : '';
-  const HMS = `${duration.hours()}h ${duration.minutes()}m ${seconds}`;
+  const HMS = `${hours}${minutes}${seconds}`;
   return HMS;
 };
