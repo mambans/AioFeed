@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
 import ThemeContext from './../../components/themes/ThemeContext';
 
@@ -9,6 +10,7 @@ export const Home = () => {
   console.log('Home:');
   useDocumentTitle();
   const { activeTheme } = useContext(ThemeContext);
+  const location = useLocation();
 
   const Logos = () => (
     <>
@@ -41,9 +43,10 @@ export const Home = () => {
   useEffect(() => {
     document.documentElement.setAttribute('homepage', 'true');
     window.scrollTo(0, 0);
+    console.log('location:', location);
 
     return () => document.documentElement.removeAttribute('homepage');
-  }, []);
+  }, [location]);
 
   return <Logos></Logos>;
 };
