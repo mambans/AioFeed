@@ -531,9 +531,15 @@ const Player = () => {
           >
             <ButtonsBar
               style={{ margin: '1rem', position: 'absolute', right: 0, top: 0 }}
-              twitchUsername={
-                streamInfo?.login || streamInfo?.user_login || streamInfo?.user_name || channelName
-              }
+              user={{
+                user_name:
+                  streamInfo?.login ||
+                  streamInfo?.user_login ||
+                  streamInfo?.user_name ||
+                  channelName,
+                ...(streamInfo || {}),
+              }}
+              schedule={true}
             />
 
             {streamInfo ? (

@@ -13,6 +13,7 @@ const AddToListButton = ({
   size = 24,
   disablepreview = () => {},
   redirect,
+  as,
 }) => {
   const videoId = typeof videoId_p === 'number' ? parseInt(videoId_p) || videoId_p : videoId_p;
   const [open, setOpen] = useState();

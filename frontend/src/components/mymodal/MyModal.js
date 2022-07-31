@@ -74,7 +74,9 @@ const MyModal = ({
   useEventListenerMemo('keydown', handleKeydown, window, closeOnRequest && show);
 
   useEffect(() => setTriggerRefPositions(triggerBtnRef?.current?.getBoundingClientRect?.()), []);
-  useEffect(() => setShow(open), [open]);
+  useEffect(() => {
+    setShow(open);
+  }, [open]);
 
   const animationDirection = (() => {
     switch (direction) {

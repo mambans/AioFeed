@@ -73,16 +73,12 @@ const Button = (props) => {
     }, duration);
 
     handleOnClickLink();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
   };
 
   const onMouseDown = (e) => {
     if (e.button === 1) {
       onClick?.(e);
       handleOnClickLink(true);
-      e.stopPropagation();
-      e.stopImmediatePropagation();
     }
   };
 

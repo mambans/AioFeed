@@ -33,7 +33,7 @@ const BigScheduleList = ({ followedChannels }) => {
 
 export default BigScheduleList;
 
-const SchedulesList = ({ schedule, setSchedule, followedChannels }) => {
+export const SchedulesList = ({ schedule, setSchedule, followedChannels }) => {
   useEffect(() => {
     (async () => {
       const followedChannels = await getMyFollowedChannels();

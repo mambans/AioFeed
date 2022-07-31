@@ -1,0 +1,38 @@
+.modal {
+  position: absolute;
+  z-index: 2;
+  background: rgb(255, 255, 255) none repeat scroll 0% 0%;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px;
+  padding: 15px;
+  top: calc(40% - (600px / 2));
+  left: calc(50% - (800px / 2));
+  width: 800px !important;
+  max-height: unset !important;
+  max-width: unset !important;
+  scrollbar-color: #f0f0f0 rgba(0, 0, 0, 0) !important;
+  scrollbar-width: thin !important;
+  background: var(--navigationbarBackground) !important;
+  overflow: scroll;
+  border: none !important;
+  border-radius: 10px;
+
+  // > div {
+  //   height: 100%;
+  // }
+
+  // h1 {
+  //   text-align: center;
+  //   border-bottom: 2px solid white;
+  //   padding: 10px 0;
+  // }
+}
+
+// .modal-dialog {
+//   .ScheduleListContainer {
+//     width: 100%;
+//   }
+// }
+
+.modalBackdrop {
+  opacity: 0.5;
+}

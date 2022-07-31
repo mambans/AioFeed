@@ -8,7 +8,7 @@ const SingelScheduleItemHight = 150;
 const SingelScheduleItemTotalHeight = 150 + 20;
 export const nrOfItems = 3;
 
-export const ScheduleListContainer = styled.div`
+export const ScheduleListContainer = styled.div.attrs({ className: 'ScheduleListContainer' })`
   width: 420px;
   background-color: rgb(38, 38, 38);
   border-radius: 10px;

@@ -14,7 +14,8 @@ export const COLORS = {
   success: { background: Colors.green },
   darkTransparent: { background: 'rgba(13, 13, 13, 0.75)', color: '#ffffff' },
   light: { background: 'rgb(200,200,200)', color: 'rgb(15,15,15)' },
-  default: { background: 'rgb(100, 100, 100)', color: '#ffffff' },
+  default: { background: '#212529', color: '#ffffff' },
+  default2: { background: 'rgb(100, 100, 100)', color: '#ffffff' },
   primary: { background: Colors.green, color: '#ffffff' },
   transparent: { background: 'transparent', color: '#ffffff', loadingColor: '#ffffff' },
 };
