@@ -109,8 +109,8 @@ export const StyledSchedule = styled.div`
     padding: 2px;
     border-radius: 20px;
     justify-self: end;
-    object-fit: cover;
-    width: 100%;
+    object-fit: contain;
+    /* width: 100%; */
   }
   .secondTimeRow {
     grid-area: duration;

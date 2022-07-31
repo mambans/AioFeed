@@ -40,6 +40,7 @@ const ButtonsBar = ({ style, videoId, children, user, schedule = true, size }) =
 
       {schedule && (
         <Modal
+          height={'70%'}
           trigger={
             <Button>
               <AiFillSchedule size={size || DEFAULT_SIZE} />
