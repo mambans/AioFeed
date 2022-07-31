@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { SingelScheduleItem } from '.';
 import TwitchAPI from '../API';
+import loginNameFormat from '../loginNameFormat';
 import { NoSchedulesText, ScheduleListContainer } from './StyledComponents';
 
-const UserSchedule = ({ user, user_id, amount = 10 }) => {
+const UserSchedule = ({ user, amount = 10 }) => {
+  console.log('UserSchedule user:', user);
   const [schedule, setSchedule] = useState();
 
   useEffect(() => {
     (async () => {
       if (!schedule) {
         const id =
-          user_id ||
+          user.user_id ||
           (await TwitchAPI.getUser({
-            login: user,
+            login: loginNameFormat(user, true),
           }).then((res) => res.data.data[0].id));
 
         const fetchedSchedule = await TwitchAPI.getSchedule({ broadcaster_id: id }).catch((e) => {
@@ -42,7 +44,7 @@ const UserSchedule = ({ user, user_id, amount = 10 }) => {
         }
       }
     })();
-  }, [user, user_id, setSchedule, schedule]);
+  }, [user, schedule]);
   return (
     <ScheduleListContainer error={schedule?.error}>
       {schedule?.data?.segments ? (
