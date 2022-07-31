@@ -19,6 +19,7 @@ import ToolTip from '../../../components/tooltip/ToolTip';
 import TwitchAPI from '../API';
 import useClicksOutside from '../../../hooks/useClicksOutside';
 import { Portal } from 'react-portal';
+import loginNameFormat from '../loginNameFormat';
 
 const Schedule = ({ user, user_id, alwaysVisible, absolute = true, btnSize = 26, style }) => {
   const [show, setShow] = useState();
@@ -164,8 +165,9 @@ const SchedulesList = React.forwardRef(({ schedule, setSchedule, user, user_id, 
 });
 
 export const SingelScheduleItem = ({ schedule, user }) => {
+  const user_name = typeof user === 'object' ? loginNameFormat(user, true) : user;
   return (
-    <StyledSchedule to={`/${user}`} id='SCHDEULE' loading={String(!schedule)}>
+    <StyledSchedule to={`/${user_name}`} id='SCHDEULE' loading={String(!schedule)}>
       {schedule && (
         <>
           <div className='time'>
@@ -206,9 +208,9 @@ export const SingelScheduleItem = ({ schedule, user }) => {
             {schedule?.category?.name}
           </Link>
 
-          {user && (
-            <Link to={`/${user}`} className='channel'>
-              {user}
+          {user_name && (
+            <Link to={`/${user_name}`} className='channel'>
+              {user_name}
             </Link>
           )}
 

@@ -45,6 +45,7 @@ const UserSchedule = ({ user, amount = 10 }) => {
       }
     })();
   }, [user, schedule]);
+
   return (
     <ScheduleListContainer error={schedule?.error}>
       {schedule?.data?.segments ? (
