@@ -23,6 +23,7 @@ import VolumeEventOverlay from '../twitch/VolumeEventOverlay';
 import { TwitchContext } from '../twitch/useToken';
 import { parseNumberAndString } from '../myLists/dragDropUtils';
 import ButtonsBar from '../twitch/player/ButtonsBar';
+import Schedule from '../twitch/schedule';
 
 const DEFAULT_LIST_WIDTH = Math.max(window.innerWidth * 0.1, 400);
 
@@ -191,17 +192,19 @@ const SharedVideoPlayer = () => {
           <ButtonsBar
             style={{ margin: '1rem', position: 'absolute', right: 0, top: 0, zIndex: 2 }}
             videoId={videoId}
-          />
-          <AddToListButton
-            videoId_p={videoId}
-            style={{
-              right: '10px',
-              top: '10px',
-              // opacity: '1',
-            }}
-            size={32}
-            redirect
-          />
+          >
+            <AddToListButton
+              videoId_p={videoId}
+              style={{
+                right: '10px',
+                top: '10px',
+                // opacity: '1',
+              }}
+              size={32}
+              redirect
+            />
+            <Schedule user={channelName} style={{ padding: 0 }} />
+          </ButtonsBar>
         </VolumeEventOverlay>
 
         {domain === 'youtube' ? (

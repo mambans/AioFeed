@@ -8,7 +8,7 @@ import VolumeSlider from './player/VolumeSlider';
 import PlayPauseButton from './player/PlayPauseButton';
 import ShowStatsButtons from './player/ShowStatsButtons';
 import ShowSetQualityButtons from './player/ShowSetQualityButtons';
-import Schedule from './schedule';
+// import Schedule from './schedule';
 import ContextMenuWrapper from './player/ContextMenuWrapper';
 
 const VolumeEventOverlay = React.forwardRef(
@@ -144,7 +144,7 @@ const VolumeEventOverlay = React.forwardRef(
 
           {showVolumeSlider && player.current && (
             <>
-              <Schedule user={channelName} style={{ padding: 0, marginRight: '5px' }} />
+              {/* <Schedule user={channelName} style={{ padding: 0, marginRight: '5px' }} /> */}
               <PlayPauseButton
                 TwitchPlayer={player.current}
                 PlayerUIControlls={VolumeEventOverlayRef.current}

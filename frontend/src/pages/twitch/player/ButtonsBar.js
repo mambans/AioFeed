@@ -5,7 +5,12 @@ import Button from '../../../components/Button';
 
 const ButtonsBar = ({ style, videoId, children, twitchUsername }) => {
   return (
-    <Wrapper style={style} onClick={(e) => e.stopPropagation()}>
+    <Wrapper
+      style={style}
+      // onClick={(e) => {
+      //   e.stopImmediatePropagation();
+      // }}
+    >
       {videoId && (
         <Button
           to={`https://twitch.tv/videos/${videoId}?redirect=false`}
