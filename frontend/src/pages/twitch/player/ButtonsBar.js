@@ -8,6 +8,8 @@ import UserSchedule from '../schedule/UserSchedule';
 import { AiFillSchedule } from 'react-icons/ai';
 import ShowNavigationButton from '../../navigation/ShowNavigationButton';
 import { StyledShowNavbarBtn } from './StyledComponents';
+import { MdAccountBox } from 'react-icons/md';
+import ToolTip from '../../../components/tooltip/ToolTip';
 
 const DEFAULT_SIZE = 20;
 
@@ -35,6 +37,11 @@ const ButtonsBar = ({ style, videoId, children, user, schedule = true, size }) =
           variant='darkTransparent '
         >
           <FaTwitch size={size || DEFAULT_SIZE} color='purple' />
+        </Button>
+      )}
+      {loginNameFormat(user, true) && (
+        <Button to={`${loginNameFormat(user, true)}/page`} variant='darkTransparent '>
+          <MdAccountBox size={size || DEFAULT_SIZE} color='white' />
         </Button>
       )}
 
