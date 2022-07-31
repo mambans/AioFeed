@@ -189,7 +189,7 @@ const SharedVideoPlayer = () => {
           // contextMenuChildren={<></>}
         >
           <ButtonsBar
-            style={{ margin: '1rem', position: 'absolute', right: 0, top: 0 }}
+            style={{ margin: '1rem', position: 'absolute', right: 0, top: 0, zIndex: 2 }}
             videoId={videoId}
           />
           <AddToListButton
