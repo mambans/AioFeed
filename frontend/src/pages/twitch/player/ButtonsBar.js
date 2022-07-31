@@ -9,7 +9,6 @@ import { AiFillSchedule } from 'react-icons/ai';
 import ShowNavigationButton from '../../navigation/ShowNavigationButton';
 import { StyledShowNavbarBtn } from './StyledComponents';
 import { MdAccountBox } from 'react-icons/md';
-import ToolTip from '../../../components/tooltip/ToolTip';
 
 const DEFAULT_SIZE = 20;
 
