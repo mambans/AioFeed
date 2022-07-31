@@ -7,20 +7,12 @@ const ButtonsBar = ({ style, videoId, children, twitchUsername }) => {
   return (
     <Wrapper style={style}>
       {videoId && (
-        <Button
-          to={`https://twitch.tv/videos/${videoId}`}
-          target='_blank'
-          variant='darkTransparent '
-        >
+        <Button to={`https://twitch.tv/videos/${videoId}`} variant='darkTransparent '>
           <FaTwitch size={24} color='purple' />
         </Button>
       )}
       {twitchUsername && (
-        <Button
-          to={`https://twitch.tv/${twitchUsername}`}
-          target='_blank'
-          variant='darkTransparent '
-        >
+        <Button to={`https://twitch.tv/${twitchUsername}`} variant='darkTransparent '>
           <FaTwitch size={24} color='purple' />
         </Button>
       )}
