@@ -627,6 +627,7 @@ export const StyledShowNavbarBtn = styled(Button).attrs({ variant: 'dark' })`
   overflow: hidden;
   border: none;
   border-radius: 0.2rem;
+  background: rgba(33, 37, 41, 0.75);
 
   svg {
     min-width: 30px;
