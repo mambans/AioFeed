@@ -65,6 +65,7 @@ const Button = (props) => {
   };
 
   const handleOnClick = (e) => {
+    e.stopPropagation();
     onClick?.(e);
     clearTimeout(resetTimer.current);
     setActive(true);
@@ -78,6 +79,7 @@ const Button = (props) => {
   const onMouseDown = (e) => {
     if (e.button === 1) {
       onClick?.(e);
+      e.stopPropagation();
       handleOnClickLink(true);
     }
   };
