@@ -110,7 +110,7 @@ export const StyledButton = styled.button`
     padding: 0.35rem 0.75rem;
     margin: 2px; // controlls the thinkess of the loading border snake
     /* ${({ backgroundColor }) => backgroundColor && { backgroundColor }}; */
-    ${({ variant }) => variantProps(variant)};
+    color: ${({ variant }) => variantProps(variant)?.color};
     transition: filter 250ms, box-shadow 250ms, color 250ms;
     border-radius: 0.15em;
   }
