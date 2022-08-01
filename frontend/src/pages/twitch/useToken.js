@@ -8,7 +8,7 @@ import AccountContext from '../account/AccountContext';
 import API from '../navigation/API';
 import validateToken from './validateToken';
 
-const TTL = 100000;
+// const TTL = 100000;
 
 export const TwitchContext = React.createContext();
 
@@ -68,19 +68,19 @@ export const TwitchProvider = ({ children }) => {
     if (user && !invoked.current) fetchTwitchContextData();
   }, [fetchTwitchContextData, user]);
 
-  const promise = useRef();
+  // const promise = useRef();
 
-  const validationOfToken = useCallback(() => {
-    if (!promise.current?.promise || Date.now() > promise.current?.ttl) {
-      promise.current = { promise: validateToken(), ttl: Date.now() + TTL };
-    }
-    return promise.current.promise;
-  }, []);
+  // const validationOfToken = useCallback(() => {
+  //   if (!promise.current?.promise || Date.now() > promise.current?.ttl) {
+  //     promise.current = { promise: validateToken(), ttl: Date.now() + TTL };
+  //   }
+  //   return promise.current.promise;
+  // }, []);
 
   return (
     <TwitchContext.Provider
       value={{
-        validationOfToken,
+        validationOfToken: validateToken,
         autoRefreshEnabled: Boolean(pref.auto_refresh),
         setAutoRefreshEnabled: () => toggle('auto_refresh'),
         twitchVideoHoverEnable: Boolean(pref.video_hover),
