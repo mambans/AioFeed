@@ -35,6 +35,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
   useEventListenerMemo('keydown', keydown, window, chatAsOverlay);
 
   const onMouseOutsideWindow = async (e) => {
+    console.log('onMouseOutsideWindow:');
     if (
       (e.clientX < 0 ||
         e.clientY < 0 ||
@@ -77,11 +78,8 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
       setDragging(e.target);
       const mouseX = e.clientX;
       const mouseY = e.clientY;
-      console.log('mouseY:', mouseY);
       const chat = chatRef.current?.getBoundingClientRect();
 
-      console.log('y: mouseY - chat.top:', mouseY - chat.top);
-      console.log('dragging === bottomRef.current:', dragging === bottomRef.current);
       if (e.target === bottomRef.current) {
         setStartPos((c) => ({
           x: mouseX - chat.left,
@@ -97,7 +95,6 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
   };
 
   const onDragMove = async (e) => {
-    console.log('e:', e);
     if (!chatAsOverlay) updateChatState((c) => ({ ...c, chatAsOverlay: true }), false);
 
     const mouseX = e.clientX;
