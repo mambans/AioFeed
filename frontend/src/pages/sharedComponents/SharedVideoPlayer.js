@@ -165,7 +165,25 @@ const SharedVideoPlayer = () => {
             </StyledShowNavbarBtn>
           )}
         </PlayerExtraButtons>
-
+        <ButtonsBar
+          style={{ margin: '1rem', position: 'absolute', right: 0, top: 0, zIndex: 2 }}
+          videoId={videoId}
+          user={{
+            user_name: channelName,
+          }}
+          schedule={true}
+        >
+          <AddToListButton
+            videoId_p={videoId}
+            style={{
+              right: '10px',
+              top: '50px',
+              // opacity: '1',
+            }}
+            size={32}
+            redirect
+          />
+        </ButtonsBar>
         <VolumeEventOverlay
           ref={VolumeEventOverlayRef}
           show={resizeActive || (enableVodVolumeOverlay && isPlaying)}
@@ -187,27 +205,7 @@ const SharedVideoPlayer = () => {
           addEventListeners
           centerBotttom
           // contextMenuChildren={<></>}
-        >
-          <ButtonsBar
-            style={{ margin: '1rem', position: 'absolute', right: 0, top: 0, zIndex: 2 }}
-            videoId={videoId}
-            user={{
-              user_name: channelName,
-            }}
-            schedule={true}
-          >
-            <AddToListButton
-              videoId_p={videoId}
-              style={{
-                right: '10px',
-                top: '50px',
-                // opacity: '1',
-              }}
-              size={32}
-              redirect
-            />
-          </ButtonsBar>
-        </VolumeEventOverlay>
+        ></VolumeEventOverlay>
 
         {domain === 'youtube' ? (
           <YoutubeVideoPlayer playNext={playNext} />
