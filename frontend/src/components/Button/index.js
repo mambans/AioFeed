@@ -55,12 +55,17 @@ const Button = (props) => {
     return to;
   };
   const handleOnClickLink = (newtab) => {
+    const url = getUrl();
     if (to) {
       if (target === '_blank' || newtab) {
-        window.open(getUrl(), '_blank');
+        window.open(url, '_blank');
         return;
       }
-      navigate(getUrl());
+      if (url.includes('www') || url.includes('http')) {
+        window.location = url;
+      } else {
+        navigate(url);
+      }
     }
   };
 
