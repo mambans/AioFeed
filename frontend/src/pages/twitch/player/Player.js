@@ -57,7 +57,6 @@ import { TwitchContext } from '../useToken';
 import { ContextMenuDropDown } from './ContextMenuWrapper';
 import Chat from './Chat';
 import API from '../../navigation/API';
-import useKeyDown from './../../../hooks/useKeyDown';
 import addGameInfo from '../functions/addGameInfo';
 import addProfileInfo from '../functions/addProfileInfo';
 import ButtonsBar from './ButtonsBar';
@@ -85,7 +84,6 @@ const Player = () => {
 
   const [isFullscreen, setIsFullscreen] = useState();
   const [resizeActive, setResizeActive] = useState(false);
-  const ctrlKeyPressed = useKeyDown('Control');
 
   // force refresh when streamer goes live?
   // eslint-disable-next-line no-unused-vars
@@ -459,13 +457,13 @@ const Player = () => {
     >
       <div id='twitch-embed' ref={videoElementRef}>
         <CSSTransition
-          in={showControlls}
+          in={showControlls || status !== 'Live'}
           key={'controllsUI'}
           timeout={1000}
           classNames='fade-controllUI-1s'
         >
           <VolumeEventOverlay
-            show={!ctrlKeyPressed && showUIControlls}
+            show={showUIControlls || status !== 'Live'}
             ref={PlayerUIControlls}
             type='live'
             id='controls'
@@ -475,6 +473,7 @@ const Player = () => {
             VolumeEventOverlayRef={PlayerUIControlls}
             player={twitchVideoPlayer.current}
             chatAsOverlay={String(chatState.chatAsOverlay)}
+            hidePointerEvents={status !== 'Live'}
             ContextMenu={
               Boolean(twitchVideoPlayer.current) && (
                 <PlayerContextMenu

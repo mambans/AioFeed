@@ -33,6 +33,7 @@ const VolumeEventOverlay = React.forwardRef(
       contextMenuChildren,
       ContextMenu,
       chatAsOverlay,
+      hidePointerEvents,
     },
     ref
   ) => {
@@ -131,6 +132,7 @@ const VolumeEventOverlay = React.forwardRef(
           chatwidth={chatwidth}
           showcursor={showcursor}
           centerBotttom={centerBotttom}
+          hidePointerEvents={hidePointerEvents}
         >
           {ContextMenu ||
             (contextMenuChildren && (

@@ -211,7 +211,7 @@ export const StyledVolumeEventOverlay = styled.div`
   cursor: ${({ showcursor }) => (showcursor ? 'auto' : 'none')};
   display: ${({ centerBotttom }) => (centerBotttom ? 'flex' : 'block')};
   align-self: center;
-  pointer-events: ${({ show, showcursor }) => (show && showcursor ? 'all' : 'none')};
+  pointer-events: ${({ show, hidePointerEvents }) => (!hidePointerEvents ? 'all' : 'none')};
 
   transition: background-color 500ms, box-shadow 500ms;
 
