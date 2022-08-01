@@ -39,7 +39,7 @@ const ButtonsBar = ({ style, videoId, children, user, schedule = true, size }) =
         </Button>
       )}
       {loginNameFormat(user, true) && (
-        <Button to={`${loginNameFormat(user, true)}/page`} variant='darkTransparent '>
+        <Button to={`/${loginNameFormat(user, true)}/page`} variant='darkTransparent '>
           <MdAccountBox size={size || DEFAULT_SIZE} color='white' />
         </Button>
       )}

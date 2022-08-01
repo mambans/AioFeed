@@ -165,34 +165,17 @@ const SharedVideoPlayer = () => {
             </StyledShowNavbarBtn>
           )}
         </PlayerExtraButtons>
-        <ButtonsBar
-          style={{ margin: '1rem', position: 'absolute', right: 0, top: 0, zIndex: 2 }}
-          videoId={videoId}
-          user={{
-            user_name: channelName,
-          }}
-          schedule={true}
-        >
-          <AddToListButton
-            videoId_p={videoId}
-            style={{
-              right: '10px',
-              top: '50px',
-              // opacity: '1',
-            }}
-            size={32}
-            redirect
-          />
-        </ButtonsBar>
+
         <VolumeEventOverlay
           ref={VolumeEventOverlayRef}
-          show={resizeActive || (enableVodVolumeOverlay && isPlaying)}
+          // show={resizeActive || (enableVodVolumeOverlay && isPlaying)}
+          show={resizeActive || enableVodVolumeOverlay}
           type='live'
           id='controls'
           hidechat={String(viewStates?.hideList)}
           vodVolumeOverlayEnabled={enableVodVolumeOverlay}
           chatwidth={viewStates?.listWidth || DEFAULT_LIST_WIDTH}
-          showcursor={enableVodVolumeOverlay}
+          showcursor={enableVodVolumeOverlay && isPlaying}
           isPlaying={isPlaying}
           resizeActive={resizeActive}
           listName={urlListName}
@@ -205,7 +188,27 @@ const SharedVideoPlayer = () => {
           addEventListeners
           centerBotttom
           // contextMenuChildren={<></>}
-        ></VolumeEventOverlay>
+        >
+          <ButtonsBar
+            style={{ margin: '1rem', position: 'absolute', right: 0, top: 0, zIndex: 2 }}
+            videoId={videoId}
+            user={{
+              user_name: channelName,
+            }}
+            schedule={true}
+          >
+            <AddToListButton
+              videoId_p={videoId}
+              style={{
+                right: '10px',
+                top: '50px',
+                // opacity: '1',
+              }}
+              size={32}
+              redirect
+            />
+          </ButtonsBar>
+        </VolumeEventOverlay>
 
         {domain === 'youtube' ? (
           <YoutubeVideoPlayer playNext={playNext} />
