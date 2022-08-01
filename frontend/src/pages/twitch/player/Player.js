@@ -458,6 +458,15 @@ const Player = () => {
       chatAsOverlay={chatState.chatAsOverlay}
     >
       <div id='twitch-embed' ref={videoElementRef}>
+        <ButtonsBar
+          style={{ margin: '1rem', position: 'absolute', right: 0, top: 0 }}
+          user={{
+            user_name:
+              streamInfo?.login || streamInfo?.user_login || streamInfo?.user_name || channelName,
+            ...(streamInfo || {}),
+          }}
+          schedule={true}
+        />
         <CSSTransition
           in={showControlls}
           key={'controllsUI'}
@@ -529,19 +538,6 @@ const Player = () => {
               )
             }
           >
-            <ButtonsBar
-              style={{ margin: '1rem', position: 'absolute', right: 0, top: 0 }}
-              user={{
-                user_name:
-                  streamInfo?.login ||
-                  streamInfo?.user_login ||
-                  streamInfo?.user_name ||
-                  channelName,
-                ...(streamInfo || {}),
-              }}
-              schedule={true}
-            />
-
             {streamInfo ? (
               <InfoDisplay>
                 <>
