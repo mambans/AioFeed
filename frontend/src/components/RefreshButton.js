@@ -1,29 +1,30 @@
 import React, { useImperativeHandle, useState } from 'react';
 import { ButtonLookalikeStyle } from './styledComponents';
-import { Button } from 'react-bootstrap';
+// import { Button } from 'react-bootstrap';
 import { MdRefresh } from 'react-icons/md';
 import styled from 'styled-components';
 import CountdownCircleTimer from './CountdownCircleTimer';
+import Button from './Button';
 
-const StyledRefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
-  ${ButtonLookalikeStyle}
-  position: relative;
-  left: 6px;
-  align-items: center;
-  margin-right: 25px;
-  width: 46px;
-  height: 40px;
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  padding: 0;
+// const StyledRefreshButton = styled(Button).attrs({ variant: 'outline-secondary' })`
+//   ${ButtonLookalikeStyle}
+//   position: relative;
+//   left: 6px;
+//   align-items: center;
+//   margin-right: 25px;
+//   width: 46px;
+//   height: 40px;
+//   display: flex;
+//   align-content: center;
+//   justify-content: center;
+//   padding: 0;
 
-  div[aria-label='Countdown timer'] {
-    &&& {
-      margin: 5px auto;
-    }
-  }
-`;
+//   div[aria-label='Countdown timer'] {
+//     &&& {
+//       margin: 5px auto;
+//     }
+//   }
+// `;
 
 const RefreshButton = React.forwardRef(
   ({ children, autoRefreshEnabled, refreshTimer, parentIsLoading, ...props }, ref) => {
@@ -36,7 +37,7 @@ const RefreshButton = React.forwardRef(
     }));
 
     return (
-      <StyledRefreshButton {...props}>
+      <Button {...props} loading={isLoading || parentIsLoading}>
         {children}
         {autoRefreshEnabled || isLoading || parentIsLoading ? (
           <CountdownCircleTimer
@@ -48,7 +49,7 @@ const RefreshButton = React.forwardRef(
         ) : (
           <MdRefresh size={32} />
         )}
-      </StyledRefreshButton>
+      </Button>
     );
   }
 );
