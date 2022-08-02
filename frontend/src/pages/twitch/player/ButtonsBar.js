@@ -26,7 +26,8 @@ const ButtonsBar = ({ style, videoId, children, user, schedule = true, size }) =
       {videoId && (
         <Button
           to={`https://twitch.tv/videos/${videoId}?redirect=false`}
-          variant='darkTransparent '
+          variant='darkTransparent'
+          tooltip={`Watch video on Twitch with a chat`}
         >
           <FaTwitch size={size || DEFAULT_SIZE} color='purple' />
         </Button>
@@ -35,14 +36,19 @@ const ButtonsBar = ({ style, videoId, children, user, schedule = true, size }) =
       {loginNameFormat(user, true) && (
         <Button
           to={`https://twitch.tv/${loginNameFormat(user, true)}?redirect=false`}
-          variant='darkTransparent '
+          variant='darkTransparent'
+          tooltip={`${loginNameFormat(user, true)}'s on Twitch`}
         >
           <FaTwitch size={size || DEFAULT_SIZE} color='purple' />
         </Button>
       )}
 
       {loginNameFormat(user, true) && (
-        <Button to={`/${loginNameFormat(user, true)}/page`} variant='darkTransparent '>
+        <Button
+          to={`/${loginNameFormat(user, true)}/page`}
+          variant='darkTransparent'
+          tooltip={`${loginNameFormat(user, true)}'s page`}
+        >
           <MdAccountBox size={size || DEFAULT_SIZE} color='white' />
         </Button>
       )}
@@ -51,7 +57,7 @@ const ButtonsBar = ({ style, videoId, children, user, schedule = true, size }) =
         <Modal
           height={'70%'}
           trigger={
-            <Button>
+            <Button tooltip={`${loginNameFormat(user, true)}'s schedule`}>
               <AiFillSchedule size={size || DEFAULT_SIZE} />
             </Button>
           }

@@ -31,6 +31,7 @@ const Button = (props) => {
     loading,
     disableClickAnimation,
     to,
+    tooltip,
     target,
     ...rest
   } = props;
@@ -149,7 +150,7 @@ const Button = (props) => {
       disabled={disabled || loading}
       onMouseDown={onMouseDown}
       // tempDisabled={active || loading}
-      title={getUrl()}
+      title={tooltip || getUrl()}
     >
       <>
         {loading &&
