@@ -26,7 +26,6 @@ const ButtonsBar = ({ style, videoId, children, user, schedule = true, size }) =
       {videoId && (
         <Button
           to={`https://twitch.tv/videos/${videoId}?redirect=false`}
-          variant='darkTransparent'
           tooltip={`Watch video on Twitch with a chat`}
         >
           <FaTwitch size={size || DEFAULT_SIZE} color='purple' />
@@ -36,7 +35,6 @@ const ButtonsBar = ({ style, videoId, children, user, schedule = true, size }) =
       {loginNameFormat(user, true) && (
         <Button
           to={`https://twitch.tv/${loginNameFormat(user, true)}?redirect=false`}
-          variant='darkTransparent'
           tooltip={`${loginNameFormat(user, true)}'s on Twitch`}
         >
           <FaTwitch size={size || DEFAULT_SIZE} color='purple' />
@@ -46,7 +44,6 @@ const ButtonsBar = ({ style, videoId, children, user, schedule = true, size }) =
       {loginNameFormat(user, true) && (
         <Button
           to={`/${loginNameFormat(user, true)}/page`}
-          variant='darkTransparent'
           tooltip={`${loginNameFormat(user, true)}'s page`}
         >
           <MdAccountBox size={size || DEFAULT_SIZE} color='white' />

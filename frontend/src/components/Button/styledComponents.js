@@ -127,7 +127,7 @@ export const StyledButton = styled.button`
   &:hover:not(:disabled) {
     /* box-shadow: ${({ shadowColor = 'rgb(84, 84, 84)' }) => `2px 2px 2px ${shadowColor}`}; */
     ${Inner} {
-      filter: ${({ active }) => `brightness(${active ? 1 : 1.25})`};
+      filter: ${({ active }) => `brightness(${active ? 1 : 1.35})`};
       ${({ variant }) => variantPropsInner(variant)};
     }
   }

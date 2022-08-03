@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { StyledShowNavbarBtn } from '../twitch/player/StyledComponents';
 import NavigationContext from './NavigationContext';
 import { MdVerticalAlignBottom } from 'react-icons/md';
+import Button from '../../components/Button';
 
 const ShowNavigationButton = ({ text }) => {
   const { visible, setVisible } = useContext(NavigationContext);
@@ -13,7 +14,7 @@ const ShowNavigationButton = ({ text }) => {
   };
 
   return (
-    <StyledShowNavbarBtn onClick={handleOnClick}>
+    <Button onClick={handleOnClick}>
       <MdVerticalAlignBottom
         style={{
           transform: visible ? 'rotateX(180deg)' : 'unset',
@@ -23,7 +24,7 @@ const ShowNavigationButton = ({ text }) => {
         title='Show navbar'
       />
       {text}
-    </StyledShowNavbarBtn>
+    </Button>
   );
 };
 export default ShowNavigationButton;
