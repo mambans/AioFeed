@@ -24,6 +24,7 @@ const VideoPlayer = ({
   VolumeEventOverlayRef,
   videoElementRef,
   setIsFullscreen,
+  setStatus,
 }) => {
   const channelName = useParams()?.channelName;
   const videoId = useParams()?.videoId;
@@ -64,9 +65,19 @@ const VideoPlayer = ({
         break;
     }
   }
+  const onPlaybackBlocked = () => {
+    setStatus('blocked');
+  };
+
   useEventListenerMemo(
     window?.Twitch?.Player?.PLAYING,
     OnPlayingEventListeners,
+    twitchVideoPlayer.current,
+    twitchVideoPlayer.current
+  );
+  useEventListenerMemo(
+    window?.Twitch?.Player?.PLAYBACK_BLOCKED,
+    onPlaybackBlocked,
     twitchVideoPlayer.current,
     twitchVideoPlayer.current
   );

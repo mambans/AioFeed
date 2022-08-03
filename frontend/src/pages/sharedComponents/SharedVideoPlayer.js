@@ -36,6 +36,7 @@ const SharedVideoPlayer = () => {
   const { enableVodVolumeOverlay } = useContext(TwitchContext) || {};
   const { lists } = useContext(MyListsContext) || {};
   const [listToShow, setListToShow] = useState();
+  const [status, setStatus] = useState();
 
   const [viewStates, setViewStates] = useLocalStorageState(
     `${listToShow?.title || 'empty'}-viewStates`,
@@ -187,6 +188,8 @@ const SharedVideoPlayer = () => {
           showVolumeSlider
           addEventListeners
           centerBotttom
+          hidePointerEvents={status === 'blocked'}
+
           // contextMenuChildren={<></>}
         >
           <ButtonsBar
@@ -222,6 +225,7 @@ const SharedVideoPlayer = () => {
             childPlayer={childPlayer}
             videoElementRef={videoElementRef}
             setIsFullscreen={setIsFullscreen}
+            setStatus={setStatus}
           />
         )}
         {/* {children} */}

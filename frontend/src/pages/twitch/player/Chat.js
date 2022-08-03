@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Schedule from '../schedule';
+// import Schedule from '../schedule';
 import {
   ChatWrapper,
   StyledChat,
@@ -9,12 +9,12 @@ import {
 } from './StyledComponents';
 import styled from 'styled-components';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
-import { MdAccountBox } from 'react-icons/md';
+// import { MdAccountBox } from 'react-icons/md';
 import { FaWindowClose } from 'react-icons/fa';
 import { GrPowerReset } from 'react-icons/gr';
-import ShowNavigationButton from '../../navigation/ShowNavigationButton';
+// import ShowNavigationButton from '../../navigation/ShowNavigationButton';
 import ToolTip from '../../../components/tooltip/ToolTip';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { TransparentButton } from '../../../components/styledComponents';
 
 const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatState }) => {
@@ -147,16 +147,16 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
             onMouseMove={dragging ? onDragMove : () => {}}
           />
           <ChatHeaderInner>
-            <ShowNavigationButton />
+            {/* <ShowNavigationButton />
             <Link to='page'>
               <MdAccountBox size={24} />
-            </Link>
-            <Schedule
+            </Link> */}
+            {/* <Schedule
               user={streamInfo?.user_name || channelName}
               user_id={streamInfo?.user_id}
               absolute={false}
               style={{ padding: 0, marginRight: '5px' }}
-            />
+            /> */}
 
             {chatAsOverlay && (
               <ToolTip tooltip='Reset chat to sides'>
