@@ -47,6 +47,7 @@ export const LeftRightDivs = styled.div`
   align-items: center;
   display: flex;
   position: relative;
+  gap: 1rem;
 `;
 
 export const ButtonLookalikeStyle = css`
