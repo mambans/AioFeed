@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { StyledShowNavbarBtn } from '../twitch/player/StyledComponents';
 import NavigationContext from './NavigationContext';
 import { MdVerticalAlignBottom } from 'react-icons/md';
 import Button from '../../components/Button';
