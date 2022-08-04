@@ -140,7 +140,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
         chatAsOverlay={chatAsOverlay}
         data-chatasoverlay={chatAsOverlay}
       >
-        <ChatHeader className='chatHeader'>
+        <ChatHeader className='chatHeader' show={dragging}>
           <ChatHeaderBackdropEventDraggable
             onMouseDown={onDragInit}
             onMouseUp={onDragStop}
@@ -272,7 +272,7 @@ export const BottomDiv = styled.div`
   transition: height 250ms;
   height: ${({ dragging }) => (dragging ? '25px' : '2px')};
   width: 100%;
-  background: var(--navigationbarBackground);
+  /* background: var(--navigationbarBackground); */
   cursor: move;
 `;
 

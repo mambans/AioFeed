@@ -23,7 +23,7 @@ export const VideoAndChatContainer = styled.div`
   width: 100vw;
   height: ${({ visible }) => (visible ? 'calc(100vh - 70px)' : '100vh')};
   top: ${({ visible }) => (visible ? '70px' : '0')};
-  transition: top 300ms, height 300ms;
+  transition: top 250ms, height 250ms;
   display: grid;
   transform: translate3d(0, 0, 0);
   grid-template-areas: ${({ switchedChatState, hidechat, chatAsOverlay }) =>
@@ -88,7 +88,7 @@ export const StyledVideo = styled.iframe`
 
 export const ToggleSwitchChatSide = styled(MdCompareArrows).attrs({ size: 30 })`
   cursor: pointer;
-  transition: opacity 300ms;
+  transition: opacity 250ms;
   background: rgba(0, 0, 0, 0.25) none repeat scroll 0% 0%;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 5px 1px;
@@ -856,7 +856,7 @@ export const ChatContainer = styled.div`
   justify-content: center;
   height: ${({ visible }) => (visible ? 'calc(100vh - 70px)' : '100vh')};
   top: ${({ visible }) => (visible ? '70px' : '0')};
-  transition: top 300ms, height 300ms;
+  transition: top 250ms, height 250ms;
 `;
 
 export const TagsContainer = styled.div`
@@ -893,54 +893,19 @@ export const ErrorMessage = styled.div`
   }
 `;
 
-export const ChatWrapper = styled.div`
-  grid-area: ${({ chatAsOverlay }) => (chatAsOverlay ? 'none' : 'chat')};
-  height: ${({ chatAsOverlay, overlayPosition }) =>
-    chatAsOverlay ? (overlayPosition.height ? overlayPosition.height + 'px' : '50%') : '100%'};
-  width: ${({ chatAsOverlay, overlayPosition }) =>
-    chatAsOverlay ? (overlayPosition.width ? overlayPosition.width + 'px' : 'unset') : 'unset'};
-  position: ${({ chatAsOverlay }) => (chatAsOverlay ? 'absolute' : 'initial')};
-  overflow: hidden;
-  box-shadow: ${({ dragging }) => (dragging ? '0 0 1px 1px rgb(150,150,150)' : 'none')};
-  top: ${({ overlayPosition }) =>
-    overlayPosition.y
-      ? Math.min(
-          window.innerHeight - (overlayPosition.height || 0),
-          Math.max(0, overlayPosition.y)
-        ) + 'px'
-      : 'initial'};
-  left: ${({ overlayPosition }) =>
-    overlayPosition.x
-      ? Math.min(window.innerWidth - (overlayPosition.width || 0), Math.max(0, overlayPosition.x)) +
-        'px'
-      : 'initial'};
-
-  max-height: 100%;
-  max-width: 100%;
-  min-height: 1px;
-  min-width: 1px;
-  display: flex;
-  flex-direction: column;
-  overflow: visible;
-  border-left: 1px solid transparent;
-
-  &:hover {
-    ${BottomDiv} {
-      height: 25px;
-    }
-  }
-`;
-
 export const ChatHeader = styled.div`
   width: 100%;
-  padding: 0.5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--navigationbarBackground);
+  /* background: var(--navigationbarBackground); */
   justify-content: space-between;
   flex-wrap: wrap;
   position: relative;
+  padding: ${({ show }) => (show ? '0.5rem' : '0')};
+  height: ${({ show }) => (show ? 45 : 0)}px;
+  overflow: hidden;
+  transition: height 250ms, padding 250ms;
 
   button {
     background: none;
@@ -984,6 +949,49 @@ export const ChatHeader = styled.div`
     &:hover {
       stroke: #ffffff;
       filter: brightness(1.2);
+    }
+  }
+`;
+
+export const ChatWrapper = styled.div`
+  grid-area: ${({ chatAsOverlay }) => (chatAsOverlay ? 'none' : 'chat')};
+  height: ${({ chatAsOverlay, overlayPosition }) =>
+    chatAsOverlay ? (overlayPosition.height ? overlayPosition.height + 'px' : '50%') : '100%'};
+  width: ${({ chatAsOverlay, overlayPosition }) =>
+    chatAsOverlay ? (overlayPosition.width ? overlayPosition.width + 'px' : 'unset') : 'unset'};
+  position: ${({ chatAsOverlay }) => (chatAsOverlay ? 'absolute' : 'initial')};
+  overflow: hidden;
+  box-shadow: ${({ dragging }) => (dragging ? '0 0 1px 1px rgb(150,150,150)' : 'none')};
+  top: ${({ overlayPosition }) =>
+    overlayPosition.y
+      ? Math.min(
+          window.innerHeight - (overlayPosition.height || 0),
+          Math.max(0, overlayPosition.y)
+        ) + 'px'
+      : 'initial'};
+  left: ${({ overlayPosition }) =>
+    overlayPosition.x
+      ? Math.min(window.innerWidth - (overlayPosition.width || 0), Math.max(0, overlayPosition.x)) +
+        'px'
+      : 'initial'};
+
+  max-height: 100%;
+  max-width: 100%;
+  min-height: 1px;
+  min-width: 1px;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  border-left: 1px solid transparent;
+  background: var(--navigationbarBackground);
+
+  &:hover {
+    ${BottomDiv} {
+      height: 25px;
+    }
+    ${ChatHeader} {
+      height: 45px;
+      padding: 0.5rem;
     }
   }
 `;
