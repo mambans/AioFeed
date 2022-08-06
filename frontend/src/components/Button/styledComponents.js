@@ -41,7 +41,13 @@ const variantLoading = (variant) => {
 };
 
 export const Inner = styled.div`
-  cursor: 'pointer';
+  cursor: pointer;
+  padding: 0.35rem 0.75rem;
+  margin: 2px; // controlls the thinkess of the loading border snake
+  /* ${({ backgroundColor }) => backgroundColor && { backgroundColor }}; */
+  transition: filter 250ms, box-shadow 250ms, color 250ms;
+  border-radius: 0.15em;
+  flex: 1;
 `;
 export const LoadingDiv = styled.div`
   position: absolute;
@@ -107,16 +113,15 @@ export const StyledButton = styled.button`
   }
 
   ${Inner} {
-    padding: 0.35rem 0.75rem;
-    margin: 2px; // controlls the thinkess of the loading border snake
-    /* ${({ backgroundColor }) => backgroundColor && { backgroundColor }}; */
-    ${({ variant }) => variantProps(variant)};
-    transition: filter 250ms, box-shadow 250ms, color 250ms;
-    border-radius: 0.15em;
+    ${({ variant }) => {
+      const { backgroundColor, ...rest } = variantProps(variant);
+      return { ...rest };
+    }};
+    background: inherit;
   }
 
   ${LoadingDiv} {
-    ${({ variant }) => variantLoading(variant)}
+    ${({ variant }) => variantLoading(variant)};
   }
 
   /* &[disabled] */

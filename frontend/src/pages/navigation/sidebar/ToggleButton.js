@@ -32,6 +32,7 @@ const ToggleButton = ({
   const anTokenExists = Boolean(tokenExists || tokensForDomains[serviceName]);
 
   function handleChange() {
+    console.log('ToggleButton onclick:');
     const newEnabled = !enabled;
     setEnable(newEnabled);
     clearTimeout(timeout.current);

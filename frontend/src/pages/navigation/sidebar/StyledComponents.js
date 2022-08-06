@@ -5,6 +5,7 @@ import { MdFormatIndentDecrease } from 'react-icons/md';
 import { FaWindowClose } from 'react-icons/fa';
 import styled from 'styled-components';
 import Colors from '../../../components/themes/Colors';
+import MyButton from './../../../components/Button';
 
 export const StyledNavSidebar = styled.div`
   &&& {
@@ -540,7 +541,7 @@ export const ProfileImgContainer = styled.div`
   max-height: calc(380px / 16 * 9);
 `;
 
-export const StyledToggleButton = styled(Button)`
+export const StyledToggleButton = styled(MyButton)`
   opacity: ${({ enabled }) => (enabled === 'true' ? 1 : 0.35)};
   margin: 10px;
   border: none;
