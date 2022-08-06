@@ -25,7 +25,7 @@ export const VodsProvider = ({ children }) => {
         });
 
       console.log('getVodChannel channels:', channels);
-      setChannels(channels);
+      setChannels(channels, invoked.current);
       invoked.current = true;
     }
   }, [setChannels, enableTwitchVods]);

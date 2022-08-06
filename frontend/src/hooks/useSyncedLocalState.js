@@ -21,26 +21,35 @@ const useSyncedLocalState = (key, defaultValue) => {
   });
 
   useEffect(() => {
-    // const listener = (e) => {
-    //   if (e.storageArea === localStorage && e.key === key) {
-    //     try {
-    //       const newVal = e.newValue;
-    //       if (newVal === 'null' || newVal === 'nNaNull' || newVal === 'undefined') setValue();
-    //       const val = JSON.parse(newVal);
-    //       if (val)
-    //         setValue((c) => {
-    //           if (JSON.stringify(c) !== JSON.stringify(val)) {
-    //             return val;
-    //           }
-    //           return c;
-    //         });
-    //     } catch (error) {
-    //       if (e.newValue) setValue(e.newValue);
-    //     }
-    //   }
-    // };
-    // window.addEventListener('storage', listener);
-    // return () => window.removeEventListener('storage', listener);
+    const listener = (e) => {
+      if (e.storageArea === localStorage && e.key === key) {
+        try {
+          const newVal = e.newValue;
+          if (newVal === 'null' || newVal === 'nNaNull' || newVal === 'undefined') setValue();
+          const val = JSON.parse(newVal);
+
+          if (val) {
+            setValue((c) => {
+              if (JSON.stringify(c) !== e.newValue) {
+                return val;
+              }
+              return c;
+            });
+          }
+        } catch (error) {
+          if (e.newValue) {
+            setValue((c) => {
+              if (JSON.stringify(c) !== e.newValue) {
+                return e.newValue;
+              }
+              return c;
+            });
+          }
+        }
+      }
+    };
+    window.addEventListener('storage', listener);
+    return () => window.removeEventListener('storage', listener);
   }, [key]);
 
   const setLocalStateValue = useCallback(

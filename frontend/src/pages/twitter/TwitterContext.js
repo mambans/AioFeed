@@ -22,7 +22,8 @@ export const TwitterProvider = ({ children }) => {
         return {};
       });
 
-    setTwitterLists(lists);
+    setTwitterLists(lists, invoked.current);
+    invoked.current = true;
   }, [setTwitterLists]);
 
   useEffect(() => {

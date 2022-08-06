@@ -117,7 +117,8 @@ export const MyListsProvider = ({ children }) => {
       };
     }, {});
 
-    if (lists) setLists(lists);
+    if (lists) setLists(lists, invoked.current);
+    invoked.current = true;
   }, [setLists]);
 
   const checkIfListNameIsAvaliable = useCallback(

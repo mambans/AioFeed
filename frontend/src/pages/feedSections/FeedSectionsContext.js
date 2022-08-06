@@ -24,9 +24,9 @@ export const FeedSectionsProvider = ({ children }) => {
       };
     }, {});
 
-    if (sections) setFeedSections(sections);
-    invoked.current = true;
+    if (sections) setFeedSections(sections, invoked.current);
     setIsLoading(false);
+    invoked.current = true;
   }, [setFeedSections]);
 
   const createFeedSection = (title) => {

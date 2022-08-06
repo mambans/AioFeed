@@ -49,11 +49,15 @@ export const TwitchProvider = ({ children }) => {
     setTwitchUsername(Username);
     setTwitchProfileImage(Profile);
 
-    invoked.current = true;
-    setFavStreams((favorite_streams || getLocalstorage('FavoriteStreams') || []).filter((i) => i));
-    setUpdateNotischannels(
-      (channel_update_notis || getLocalstorage('ChannelsUpdateNotifs') || []).filter((i) => i)
+    setFavStreams(
+      (favorite_streams || getLocalstorage('FavoriteStreams') || []).filter((i) => i),
+      invoked.current
     );
+    setUpdateNotischannels(
+      (channel_update_notis || getLocalstorage('ChannelsUpdateNotifs') || []).filter((i) => i),
+      invoked.current
+    );
+    invoked.current = true;
   }, [
     setTwitchAccessToken,
     setTwitchRefreshToken,

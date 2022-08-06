@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import useSyncedLocalState from '../../hooks/useSyncedLocalState';
 import { GiDominoTiles } from 'react-icons/gi';
 import { SiLogstash, SiAuthy } from 'react-icons/si';
@@ -30,7 +30,6 @@ export const LogsProvider = ({ children }) => {
   const [logs, setLogs] = useSyncedLocalState('logs', []);
   const [logsUnreadCount, setLogsUnreadCount] = useSyncedLocalState('logsUnreadCount', 0);
   const triggerBtnRef = useRef();
-  const updateTimer = useRef();
 
   const addLog = useCallback(
     (n) => {
@@ -61,16 +60,6 @@ export const LogsProvider = ({ children }) => {
     setLogs(getLocalstorage('logs'));
   };
   const handleHover = () => setLogsUnreadCount(getLocalstorage('logsUnreadCount'));
-
-  useEffect(() => {
-    clearInterval(updateTimer.current);
-    updateTimer.current = setInterval(
-      () => setLogsUnreadCount(getLocalstorage('logsUnreadCount')),
-      60 * 10
-    );
-
-    return () => clearInterval(updateTimer.current);
-  }, [setLogsUnreadCount]);
 
   const icons = (icon) => {
     switch (icon?.toLowerCase()) {
