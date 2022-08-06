@@ -45,7 +45,8 @@ export const Inner = styled.div`
   padding: 0.35rem 0.75rem;
   margin: 2px; // controlls the thinkess of the loading border snake
   /* ${({ backgroundColor }) => backgroundColor && { backgroundColor }}; */
-  transition: filter 250ms, box-shadow 250ms, color 250ms;
+  transition: filter 250ms, box-shadow 250ms, color 250ms, background 250ms;
+
   border-radius: 0.15em;
   flex: 1;
 `;
@@ -85,7 +86,7 @@ export const StyledButton = styled.button`
   border-radius: 0.2rem;
   color: #ffffff;
   overflow: hidden;
-  transition: filter 250ms;
+  transition: filter 250ms, background 250ms;
 
   pointer-events: ${({ tempDisabled }) => (tempDisabled ? 'none' : 'auto')};
 
