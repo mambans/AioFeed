@@ -15,7 +15,7 @@ const AccountContext = React.createContext();
 
 export const AccountProvider = ({ children }) => {
   const [user, setUser] = useState();
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(true);
   const { addLog } = useContext(LogsContext);
   const invoked = useRef();
 
