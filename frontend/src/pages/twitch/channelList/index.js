@@ -63,7 +63,6 @@ const ChannelList = ({
       bind: {
         value,
         onChange: (event) => {
-          console.log('event123:', event);
           event.preventDefault();
           event.stopPropagation();
           const { value: input } = event.target;
