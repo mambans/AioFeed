@@ -194,7 +194,7 @@ export const VolumeText = styled.div`
 `;
 
 //VolumeEventOverlay
-const VEO_margin_top = 175;
+// const VEO_margin_top = 175;
 const VEO_margin_bottom = 150;
 
 export const StyledVolumeEventOverlay = styled.div`
@@ -206,7 +206,7 @@ export const StyledVolumeEventOverlay = styled.div`
       ? `${window.innerWidth * 0.98 - chatwidth}px`
       : '98vw'};
   height: ${({ vodVolumeOverlayEnabled }) =>
-    vodVolumeOverlayEnabled ? `calc(100% - ${VEO_margin_top + VEO_margin_bottom}px)` : '100%'};
+    vodVolumeOverlayEnabled ? `calc(100% - ${VEO_margin_bottom}px)` : '100%'};
   bottom: ${({ type }) => (type === 'live' ? 'unset' : '70px')};
   cursor: ${({ showcursor }) => (showcursor ? 'auto' : 'none')};
   display: ${({ centerBotttom }) => (centerBotttom ? 'flex' : 'block')};
@@ -216,8 +216,7 @@ export const StyledVolumeEventOverlay = styled.div`
   transition: background-color 500ms, box-shadow 500ms;
 
   margin: auto;
-  margin-top: ${({ vodVolumeOverlayEnabled }) =>
-    vodVolumeOverlayEnabled ? VEO_margin_top + 'px' : 'auto'};
+  margin-top: 'auto';
   margin-bottom: ${({ vodVolumeOverlayEnabled }) =>
     vodVolumeOverlayEnabled ? VEO_margin_bottom + 'px' : 'auto'};
 
