@@ -469,6 +469,7 @@ const Player = () => {
             id='controls'
             hidechat={String(chatState.hideChat)}
             showcursor={showControlls}
+            isFullscreen={isFullscreen}
             chatwidth={chatState.chatwidth || DEFAULT_CHAT_WIDTH}
             VolumeEventOverlayRef={PlayerUIControlls}
             player={twitchVideoPlayer.current}

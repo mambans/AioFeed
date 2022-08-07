@@ -29,11 +29,11 @@ const VolumeEventOverlay = React.forwardRef(
       showVolumeSlider,
       addEventListeners = false,
       centerBotttom,
-      channelName,
       contextMenuChildren,
       ContextMenu,
       chatAsOverlay,
       hidePointerEvents,
+      isFullscreen,
     },
     ref
   ) => {
@@ -133,6 +133,7 @@ const VolumeEventOverlay = React.forwardRef(
           showcursor={showcursor}
           centerBotttom={centerBotttom}
           hidePointerEvents={hidePointerEvents}
+          isFullscreen={String(isFullscreen)}
         >
           {ContextMenu ||
             (contextMenuChildren && (
@@ -146,7 +147,6 @@ const VolumeEventOverlay = React.forwardRef(
 
           {showVolumeSlider && player.current && (
             <>
-              {/* <Schedule user={channelName} style={{ padding: 0, marginRight: '5px' }} /> */}
               <PlayPauseButton
                 TwitchPlayer={player.current}
                 PlayerUIControlls={VolumeEventOverlayRef.current}
