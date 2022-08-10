@@ -121,6 +121,7 @@ const SharedVideoPlayer = () => {
 		});
 		if (nextVideoUrl) navigate(nextVideoUrl);
 	};
+	console.log("domain:", domain);
 
 	return (
 		<>
@@ -153,7 +154,7 @@ const SharedVideoPlayer = () => {
 				<VolumeEventOverlay
 					ref={VolumeEventOverlayRef}
 					// show={resizeActive || (enableVodVolumeOverlay && isPlaying)}
-					show={(resizeActive || enableVodVolumeOverlay) && domain !== "youtube"}
+					show={resizeActive || enableVodVolumeOverlay}
 					type="live"
 					id="controls"
 					hidechat={String(viewStates?.hideList)}
@@ -171,7 +172,7 @@ const SharedVideoPlayer = () => {
 					showVolumeSlider
 					addEventListeners
 					centerBotttom
-					hidePointerEvents={status === "blocked"}
+					hidePointerEvents={status === "blocked" || domain === "youtube"}
 
 					// contextMenuChildren={<></>}
 				>
