@@ -7,6 +7,7 @@ const NoFeedsEnabled = () => {
   const [noFeeds, setNoFeeds] = useState(
     !enableTwitch && !enableTwitter && !enableYoutube && !enableTwitchVods
   );
+
   useEffect(() => {
     let timer;
     if (!enableTwitch && !enableTwitter && !enableYoutube && !enableTwitchVods) {
@@ -19,15 +20,14 @@ const NoFeedsEnabled = () => {
     return () => clearTimeout(timer);
   }, [enableTwitch, enableYoutube, enableTwitchVods, enableTwitter]);
 
-  return (
-    noFeeds && (
-      <Alert
-        type='info'
-        title='No feeds enabled'
-        message='Enable feeds in the navigation sidebar on the right.'
-      />
-    )
-  );
+  if (noFeeds) {
+    <Alert
+      type='info'
+      title='No feeds enabled'
+      message='Enable feeds in the navigation sidebar on the right.'
+    />;
+  }
+  return null;
 };
 
 export default NoFeedsEnabled;

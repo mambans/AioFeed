@@ -82,8 +82,10 @@ const Alert = ({
       )}
       <InnerWrapper>
         <IconWrapper>{icon || alertType.icon}</IconWrapper>
-        <Title>{title}</Title>
-        <Message>{message}</Message>
+        {(typeof title === 'string' || React.isValidElement(title)) && <Title>{title}</Title>}
+        {(typeof message === 'string' || React.isValidElement(message)) && (
+          <Message>{message}</Message>
+        )}
         <ActionsWrapper
           onClick={(e) => {
             e.preventDefault();
