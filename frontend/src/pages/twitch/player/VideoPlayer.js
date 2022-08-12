@@ -100,6 +100,7 @@ const VideoPlayer = ({
   }
   function OnPlayingEventListeners() {
     setIsPlaying(true);
+    setStatus('playing');
     if (!qualities?.current || !qualities?.current?.length) {
       qualities.current = twitchVideoPlayer.current.getQualities();
     }
