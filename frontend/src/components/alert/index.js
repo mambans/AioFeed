@@ -59,9 +59,7 @@ const Alert = ({
   };
 
   useEffect(() => {
-    if (![undefined, null].includes(show || open)) {
-      setIsOpen(show ?? open);
-    }
+    setIsOpen(show ?? open);
   }, [show, open]);
 
   if (!isOpen) return null;
