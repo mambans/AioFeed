@@ -237,7 +237,7 @@ const Handler = ({ children }) => {
       {loadingStates?.loaded &&
         timer.current &&
         validateToken &&
-        (nonFeedSectionsStreams.current?.length || oldLiveStreams.current?.length) && (
+        (!!nonFeedSectionsStreams.current?.length || !!oldLiveStreams.current?.length) && (
           <>
             <LiveStreamsNotifications
               liveStreams={nonFeedSectionsStreams.current}
