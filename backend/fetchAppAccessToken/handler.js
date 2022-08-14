@@ -10,7 +10,7 @@ exports.handler = async () => {
       statusCode: 200,
       body: JSON.stringify(appToken),
       headers: {
-        'Access-Control-Allow-Origin': 'https://aiofeed.com',
+        'Access-Control-Allow-Origin': '*',
       },
     };
   } catch (e) {
@@ -18,7 +18,7 @@ exports.handler = async () => {
     return {
       statusCode: 422,
       headers: {
-        'Access-Control-Allow-Origin': 'https://aiofeed.com',
+        'Access-Control-Allow-Origin': '*',
       },
       body: JSON.stringify(e),
     };

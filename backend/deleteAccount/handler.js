@@ -14,7 +14,7 @@ exports.handler = async (event) => {
     return {
       statusCode: res.statusCode,
       headers: {
-        'Access-Control-Allow-Origin': 'https://aiofeed.com',
+        'Access-Control-Allow-Origin': '*',
       },
       body: JSON.stringify(res.data),
     };
@@ -22,7 +22,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 401,
       headers: {
-        'Access-Control-Allow-Origin': 'https://aiofeed.com',
+        'Access-Control-Allow-Origin': '*',
       },
       body: JSON.stringify(e),
     };

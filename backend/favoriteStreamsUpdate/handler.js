@@ -21,7 +21,7 @@ exports.handler = async (event) => {
       statusCode: 200,
       body: JSON.stringify(res.Attributes.favorite_streams),
       headers: {
-        'Access-Control-Allow-Origin': 'https://aiofeed.com',
+        'Access-Control-Allow-Origin': '*',
       },
     };
   } catch (e) {
@@ -29,7 +29,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 422,
       headers: {
-        'Access-Control-Allow-Origin': 'https://aiofeed.com',
+        'Access-Control-Allow-Origin': '*',
       },
       body: JSON.stringify(e),
     };
