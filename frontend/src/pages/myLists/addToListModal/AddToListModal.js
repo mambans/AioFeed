@@ -14,6 +14,7 @@ import { parseNumberAndString } from './../dragDropUtils';
 import NewListForm from './NewListForm';
 import API from '../../navigation/API';
 import AddVideoButton from '../AddVideoButton';
+import { toast } from 'react-toastify';
 
 export const mouseOverDisablePreview = () => {
   if (
@@ -49,6 +50,7 @@ export const addFavoriteVideo = async ({ setLists, id, videoId }) => {
         allOrinalLists[id] = newObj;
 
         API.updateSavedList(id, { videos });
+        toast.success(`Video ${videoId} added to ${newObj?.title} list`);
 
         return { ...allOrinalLists };
       }
@@ -67,6 +69,7 @@ export const removeFavoriteVideo = async ({ setLists, id, videoId }) => {
     };
 
     API.updateSavedList(id, { videos });
+    toast.success(`Video ${videoId} removed from ${newObj?.title} list`);
 
     return { ...allOrinalLists, [id]: newObj };
   });
