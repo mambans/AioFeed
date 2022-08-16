@@ -13,7 +13,7 @@ const Container = styled.div`
   width: ${WIDTH}px;
   min-height: ${MIN_HEIGHT}px;
   max-height: ${({ maxHeight }) => maxHeight + 'px'};
-  background: rgba(0, 0, 0, 0.75);
+  background-color: rgba(30, 30, 33, 0.94);
   border-radius: 3px;
   left: ${({ left }) => left + 'px'};
   top: ${({ top }) => top + 'px'};
@@ -28,12 +28,11 @@ const Container = styled.div`
     padding: 0;
     margin: 0;
 
-    li {
+    & > * {
       cursor: pointer;
-      margin: 10px 0;
       transition: color 250ms;
       font-size: 0.9em;
-      padding: 0 10px;
+      padding: 8px;
       color: rgb(200, 200, 200);
       overflow: hidden;
       text-overflow: ellipsis;
@@ -53,6 +52,7 @@ const Container = styled.div`
       &:hover svg {
         color: #ffffff;
         opacity: 1;
+        background-color: rgba(51, 51, 61, 0.94);
       }
     }
   }
