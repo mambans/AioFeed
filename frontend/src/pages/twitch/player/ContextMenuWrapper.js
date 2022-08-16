@@ -13,7 +13,7 @@ const Container = styled.div`
   width: ${WIDTH}px;
   min-height: ${MIN_HEIGHT}px;
   max-height: ${({ maxHeight }) => maxHeight + 'px'};
-  background-color: rgba(30, 30, 33, 0.94);
+  background-color: rgba(23, 23, 25, 0.94);
   border-radius: 3px;
   left: ${({ left }) => left + 'px'};
   top: ${({ top }) => top + 'px'};
@@ -64,7 +64,8 @@ const StyledArrow = styled(MdKeyboardArrowRight)`
     transform: rotate(0deg);
     transition: transform 250ms, fill 250ms;
     fill: rgb(200, 200, 200);
-    top: 0mm;
+    top: 0;
+    height: 100%;
   }
 `;
 
