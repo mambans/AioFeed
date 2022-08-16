@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import NotificationsContext from '../../notifications/NotificationsContext';
 import loginNameFormat from '../loginNameFormat';
 import { durationMsToDate } from '../TwitchUtils';
@@ -18,6 +18,7 @@ const OfflineStreamsNotifications = ({
   const { isEnabledOfflineNotifications } = useContext(TwitchContext);
   const { channels } = useContext(VodsContext);
   const { addNotification } = useContext(NotificationsContext);
+  const timer = useRef();
 
   useEffect(() => {
     (async () => {
@@ -56,13 +57,25 @@ const OfflineStreamsNotifications = ({
             });
           }
 
-          if (fetchLatestVod) fetchLatestVod({ user_id: stream.user_id, check: true });
+          if (fetchLatestVod) {
+            timer.current = setTimeout(
+              () => fetchLatestVod({ user_id: stream.user_id, check: true }),
+              30000
+            );
+          }
           return stream;
         });
 
         if (Boolean(streams?.length)) addNotification(streams);
       } catch (e) {}
     })();
+
+    return () => {
+      if (timer.current) {
+        console.log('clearing timer for fetching singel vod when offline');
+        clearTimeout(timer.current);
+      }
+    };
   }, [
     fetchLatestVod,
     liveStreams,
