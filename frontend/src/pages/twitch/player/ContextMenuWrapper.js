@@ -9,17 +9,16 @@ const MIN_HEIGHT = 275;
 const WIDTH = 275;
 
 const styles = css`
+  background-color: rgba(23, 23, 25, 0.94);
+  border-radius: 3px;
   & > * {
     cursor: pointer;
     transition: color 250ms;
     font-size: 0.9em;
     padding: 8px;
     color: rgb(200, 200, 200);
-    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    background-color: rgba(23, 23, 25, 0.94);
-    border-radius: 3px;
 
     svg {
       margin-right: 5px;
@@ -112,9 +111,7 @@ export const ContextMenuDropDown = ({ trigger, children }) => {
     <StyledDropDownTrigger>
       <li>{trigger || null}</li>
       <StyledArrow size={24} />
-      <ContextMenuDropDownList>
-        <div>{children || null}</div>
-      </ContextMenuDropDownList>
+      <ContextMenuDropDownList>{children || null}</ContextMenuDropDownList>
     </StyledDropDownTrigger>
   );
 };
