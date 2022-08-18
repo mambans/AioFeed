@@ -35,6 +35,7 @@ const styles = css`
 			color: #ffffff;
 			opacity: 1;
 			background-color: rgba(51, 51, 61, 0.94);
+			overflow: visible;
 		}
 	}
 `;

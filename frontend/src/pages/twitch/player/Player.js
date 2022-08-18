@@ -411,7 +411,7 @@ const Player = () => {
 				}
 			>
 				{Object?.keys(playbackStats)?.map((statName) => (
-					<div key={statName}>
+					<div key={statName} style={{ cursor: "none" }}>
 						<span>{`${statName}: `}</span>
 						<span
 							style={{
