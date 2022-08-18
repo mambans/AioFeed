@@ -22,8 +22,8 @@ import { navigationBarVisibleAtom } from '../../navigation/atoms';
 export const VideoAndChatContainer = styled.div`
   position: fixed;
   width: 100vw;
-  height: ${({ visible }) => (visible ? 'calc(100vh - 70px)' : '100vh')};
-  top: ${({ visible }) => (visible ? '70px' : '0')};
+  height: ${({ visible }) => (visible ? 'calc(100vh - 80px)' : '100vh')};
+  top: ${({ visible }) => (visible ? '80px' : '0')};
   transition: top 250ms, height 250ms;
   display: grid;
   transform: translate3d(0, 0, 0);
