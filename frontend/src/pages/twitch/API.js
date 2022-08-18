@@ -22,7 +22,7 @@ INSTANCE.interceptors.request.use(
   }
 );
 
-const controller = new AbortController();
+// const controller = new AbortController();
 
 const TwitchAPI = {
   getMe: async ({ accessToken }) => {
