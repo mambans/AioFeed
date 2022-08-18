@@ -3,14 +3,12 @@ import { MdNotificationsNone } from 'react-icons/md';
 import React, { useContext, useRef } from 'react';
 
 import { UnseenNotifcationCount } from './../notifications/styledComponent';
-import NavigationContext from './../navigation/NavigationContext';
 import NotificationsContext from './../notifications/NotificationsContext';
 import NotificationsList from './NotificationsList';
 import MyModal from '../../components/mymodal/MyModal';
 
 const Notifications = ({ leftExpandRef }) => {
   const { clearUnseenNotifications, unseenNotifications } = useContext(NotificationsContext);
-  const { shrinkNavbar } = useContext(NavigationContext);
   const ref = useRef();
 
   const handleClose = () => {
@@ -45,7 +43,7 @@ const Notifications = ({ leftExpandRef }) => {
             {unseenNotifications?.length > 0 ? (
               <>
                 <MdNotifications
-                  size={shrinkNavbar === 'true' ? 35 : 40}
+                  size={40}
                   style={{
                     color: 'var(--newHighlightColor)',
                     alignItems: 'center',
@@ -59,7 +57,7 @@ const Notifications = ({ leftExpandRef }) => {
               </>
             ) : (
               <MdNotificationsNone
-                size={shrinkNavbar === 'true' ? 35 : 40}
+                size={40}
                 style={{
                   alignItems: 'center',
                   display: 'flex',

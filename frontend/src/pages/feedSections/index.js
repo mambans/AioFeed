@@ -9,7 +9,6 @@ import { MdDelete, MdAdd, MdNotifications, MdNotificationsOff } from 'react-icon
 import { HiDotsVertical } from 'react-icons/hi';
 import { BsExclude } from 'react-icons/bs';
 import Rules from './Rules';
-import NavigationContext from '../navigation/NavigationContext';
 import MyModal from '../../components/mymodal/MyModal';
 import styled from 'styled-components';
 import { askForBrowserNotificationPermission } from '../../util';
@@ -30,8 +29,6 @@ const FeedSectionAdd = () => {
     toggleFeedSectionExcludeFromTwitch,
     toggleFeedSectionSidebar,
   } = useContext(FeedSectionsContext);
-
-  const { setOverflow } = useContext(NavigationContext);
 
   return (
     <SidebarExpandableSection
@@ -56,21 +53,12 @@ const FeedSectionAdd = () => {
                 ))
             );
           }}
-          leftSide={
-            <Rules
-              rules={section.rules}
-              name={section.title}
-              setOverflow={setOverflow}
-              id={section.id}
-            />
-          }
+          leftSide={<Rules rules={section.rules} name={section.title} id={section.id} />}
           rightSide={
             <>
               <MyModal
                 trigger={<HiDotsVertical size={20} />}
                 direction={'left'}
-                // onClick={() => setOverflow('visible')}
-                // onClose={() => setOverflow(null)}
                 style={{
                   right: 0,
                   background: 'rgba(29, 29, 29, 0.88)',

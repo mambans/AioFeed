@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import Amplify, { Auth, Hub, Logger } from 'aws-amplify';
+import { Amplify, Auth, Hub, Logger } from 'aws-amplify';
 import { toast } from 'react-toastify';
 import LogsContext from '../logs/LogsContext';
 

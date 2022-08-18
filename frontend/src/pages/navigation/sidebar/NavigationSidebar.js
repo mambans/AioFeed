@@ -15,12 +15,16 @@ import LoadingIndicator from '../../../components/LoadingIndicator';
 import SignUp from '../../account/SignUp';
 import SignIn from '../../account/SignIn';
 import ForgotPassword from '../../account/ForgotPassword';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { navigationSidebarAtom, navigationSidebarOverflowAtom } from '../atoms';
 
 const NavigationSidebar = () => {
   const { user, loading } = useContext(AccountContext);
-  const { sidebarComonentKey, showSidebar, setShowSidebar, overflow } =
-    useContext(NavigationContext);
-  const handleToggle = () => setShowSidebar(!showSidebar);
+  const { sidebarComonentKey } = useContext(NavigationContext);
+  const [showSidebar, setShowNavigationSidebar] = useRecoilState(navigationSidebarAtom);
+  const navigationSidebarOverflow = useRecoilValue(navigationSidebarOverflowAtom);
+
+  const handleToggle = () => setShowNavigationSidebar((c) => !c);
 
   const component = (() => {
     if (user) return <SidebarAccount />;
@@ -65,15 +69,22 @@ const NavigationSidebar = () => {
         timeout={500}
         classNames='NavSidebarBackdropFade'
         unmountOnExit
+        appear
       >
         <Portal>
-          <StyledNavSidebarBackdrop onClick={() => setShowSidebar(false)} />
+          <StyledNavSidebarBackdrop onClick={() => setShowNavigationSidebar(false)} />
         </Portal>
       </CSSTransition>
 
-      <CSSTransition in={showSidebar} timeout={500} classNames='NavSidebarSlideRight' unmountOnExit>
+      <CSSTransition
+        in={showSidebar}
+        timeout={500}
+        classNames='NavSidebarSlideRight'
+        unmountOnExit
+        appear
+      >
         <Portal>
-          <StyledNavSidebar overflow={overflow}>{component}</StyledNavSidebar>
+          <StyledNavSidebar overflow={navigationSidebarOverflow}>{component}</StyledNavSidebar>
         </Portal>
       </CSSTransition>
     </>

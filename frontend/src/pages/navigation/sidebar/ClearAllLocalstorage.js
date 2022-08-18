@@ -4,7 +4,6 @@ import Modal from 'react-bootstrap/Modal';
 import React, { useState } from 'react';
 
 import { StyledAccountButton } from './StyledComponents';
-import Alert from './Alert';
 import { toast } from 'react-toastify';
 import styles from './Sidebar.module.scss';
 import ToolTip from '../../../components/tooltip/ToolTip';
@@ -60,7 +59,6 @@ const ClearAllLocalstorage = () => {
             Cancel (no)
           </Button>
         </div>
-        <Alert />
       </Modal>
     </>
   );

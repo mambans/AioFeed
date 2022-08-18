@@ -12,15 +12,16 @@ import Twitch from '../twitch/live';
 import { MyLists } from '../myLists';
 import FeedOrderSlider from './FeedOrderSlider';
 import Alert from '../../components/alert';
-import NavigationContext from '../navigation/NavigationContext';
 import LoadingIndicator from '../../components/LoadingIndicator';
+import { useSetRecoilState } from 'recoil';
+import { navigationSidebarAtom } from '../navigation/atoms';
 // import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 const Feed = () => {
   // useDocumentTitle('Feed');
   const { enableTwitch, enableYoutube, enableTwitchVods, enableMyLists } = useContext(FeedsContext);
   const { user, loading } = useContext(AccountContext);
-  const { setShowSidebar } = useContext(NavigationContext);
+  const showNavigationSidebar = useSetRecoilState(navigationSidebarAtom);
 
   if (!user && loading) return <LoadingIndicator height={300} width={300} />;
 
@@ -30,7 +31,7 @@ const Feed = () => {
         type='info'
         title='Login to continue'
         message='You are not logged with your AioFeed account.'
-        onClick={() => setShowSidebar((c) => !c)}
+        onClick={() => showNavigationSidebar((c) => !c)}
       />
     );
   }

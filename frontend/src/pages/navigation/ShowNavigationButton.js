@@ -1,15 +1,16 @@
-import React, { useContext } from 'react';
-import NavigationContext from './NavigationContext';
+import React from 'react';
 import { MdVerticalAlignBottom } from 'react-icons/md';
 import Button from '../../components/Button';
+import { navigationBarVisibleAtom } from './atoms';
+import { useRecoilState } from 'recoil';
 
 const ShowNavigationButton = ({ text }) => {
-  const { visible, setVisible } = useContext(NavigationContext);
+  const [navigationBarVisible, setNavigationBarVisible] = useRecoilState(navigationBarVisibleAtom);
 
   const handleOnClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setVisible((c) => !c);
+    setNavigationBarVisible((c) => !c);
   };
 
   return (
@@ -17,7 +18,7 @@ const ShowNavigationButton = ({ text }) => {
       <MdVerticalAlignBottom
         style={{
           transition: 'transform 250ms',
-          transform: visible ? 'rotateX(180deg)' : 'unset',
+          transform: navigationBarVisible ? 'rotateX(180deg)' : 'unset',
           right: '10px',
         }}
         size={26}

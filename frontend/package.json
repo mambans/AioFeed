@@ -21,6 +21,7 @@
     "react-toastify": "^9.0.6",
     "react-transition-group": "^4.4.1",
     "react-youtube": "^9.0.3",
+    "recoil": "^0.7.5",
     "sass": "^1.50.0",
     "styled-components": "^5.3.5",
     "uniqid": "^5.4.0"

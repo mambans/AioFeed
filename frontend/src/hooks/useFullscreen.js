@@ -1,21 +1,21 @@
-import { useContext, useEffect } from 'react';
-import NavigationContext from '../pages/navigation/NavigationContext';
+import { useEffect } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { footerVisibleAtom, navigationBarVisibleAtom } from '../pages/navigation/atoms';
 
 const useFullscreen = ({ hideNavbar = true } = {}) => {
-  const { setVisible, setFooterVisible, setShrinkNavbar } = useContext(NavigationContext);
+  const setFooterVisible = useSetRecoilState(footerVisibleAtom);
+  const setNavigationBarVisible = useSetRecoilState(navigationBarVisibleAtom);
 
   useEffect(() => {
-    setShrinkNavbar('true');
     setFooterVisible(false);
     document.documentElement.style.overflow = 'hidden';
-    if (hideNavbar) setVisible(false);
+    if (hideNavbar) setNavigationBarVisible(false);
 
     return () => {
       document.documentElement.style.removeProperty('overflow');
-      setShrinkNavbar('false');
       setFooterVisible(true);
-      if (hideNavbar) setVisible(true);
+      if (hideNavbar) setNavigationBarVisible(true);
     };
-  }, [setShrinkNavbar, setFooterVisible, hideNavbar, setVisible]);
+  }, [setFooterVisible, hideNavbar, setNavigationBarVisible]);
 };
 export default useFullscreen;

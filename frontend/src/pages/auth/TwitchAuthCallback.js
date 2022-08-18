@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
 
 import { AddCookie, getCookie } from '../../util';
-import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import TwitchAPI from '../twitch/API';
 import aiofeedAPI from '../navigation/API';
 import { TwitchContext } from '../twitch/useToken';
 import Alert from '../../components/alert';
+import { useSetRecoilState } from 'recoil';
+import { footerVisibleAtom, navigationBarVisibleAtom } from '../navigation/atoms';
 
 const TwitchAuthCallback = () => {
   const [error, setError] = useState();
@@ -17,7 +18,8 @@ const TwitchAuthCallback = () => {
     setTwitchUsername,
     setTwitchProfileImage,
   } = useContext(TwitchContext) || {};
-  const { setVisible, setFooterVisible } = useContext(NavigationContext) || {};
+  const setNavigationBarVisible = useSetRecoilState(navigationBarVisibleAtom);
+  const setFooterVisible = useSetRecoilState(footerVisibleAtom);
 
   const getAccessToken = useCallback(
     async (url) => {
@@ -64,7 +66,7 @@ const TwitchAuthCallback = () => {
   );
 
   useEffect(() => {
-    if (setVisible) setVisible(false);
+    setNavigationBarVisible(false);
     if (setFooterVisible) setFooterVisible(false);
     (async function () {
       try {
@@ -110,7 +112,7 @@ const TwitchAuthCallback = () => {
         setError(error);
       }
     })();
-  }, [getAccessToken, setVisible, setFooterVisible]);
+  }, [getAccessToken, setNavigationBarVisible, setFooterVisible]);
 
   console.log('twitch auth callback error:', error);
   if (error) return <Alert data={error} />;

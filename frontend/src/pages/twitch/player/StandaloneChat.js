@@ -1,15 +1,16 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import useFullscreen from '../../../hooks/useFullscreen';
-import NavigationContext from '../../navigation/NavigationContext';
+import { navigationBarVisibleAtom } from '../../navigation/atoms';
 // import useQuery from '../../../hooks/useQuery';
 
 import { StyledChat, ChatContainer, PlayerExtraButtons } from './StyledComponents';
 
 const StandaloneChat = () => {
   const channelName = useParams()?.channelName;
-  const { visible } = useContext(NavigationContext);
+  const navigationSidebarOverflow = useRecoilValue(navigationBarVisibleAtom);
 
   useFullscreen({ hideNavbar: false });
   useDocumentTitle(`${channelName}'s chat'`);
@@ -17,7 +18,7 @@ const StandaloneChat = () => {
   // const darkpopout = useQuery().get('darkpopout');
 
   return (
-    <ChatContainer visible={visible}>
+    <ChatContainer visible={navigationSidebarOverflow}>
       <PlayerExtraButtons channelName={channelName}></PlayerExtraButtons>
       <StyledChat
         frameborder='0'

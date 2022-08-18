@@ -4,11 +4,15 @@ import { MdFormatListBulleted } from 'react-icons/md';
 import { RulesContainer } from './styledComponents';
 import Rule from './Rule';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { useSetRecoilState } from 'recoil';
+import { navigationSidebarOverflowAtom } from '../navigation/atoms';
 
 const WIDTH = 900;
 const ITEM_HEIGHT = 60;
 
-const Rules = ({ rules, name, id, setOverflow = () => {} }) => {
+const Rules = ({ rules, name, id }) => {
+  const setNavigationSidebarOverflow = useSetRecoilState(navigationSidebarOverflowAtom);
+
   return (
     <MyModal
       trigger={<MdFormatListBulleted size={22} />}
@@ -22,8 +26,8 @@ const Rules = ({ rules, name, id, setOverflow = () => {} }) => {
         boxShadow: 'rgba(0, 0, 0, 0.25) 4px 8px 15px',
         width: WIDTH + 'px',
       }}
-      onClick={() => setOverflow('visible')}
-      onClose={() => setOverflow(null)}
+      onClick={() => setNavigationSidebarOverflow('visible')}
+      onClose={() => setNavigationSidebarOverflow(null)}
       relative
     >
       <RulesContainer itemHeight={ITEM_HEIGHT} id='RULES'>

@@ -3,14 +3,17 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
 import { getCookie, AddCookie } from '../../util';
-import NavigationContext from './../navigation/NavigationContext';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import API from '../navigation/API';
 import { YoutubeContext } from '../youtube/useToken';
 import Alert from '../../components/alert';
+import { useSetRecoilState } from 'recoil';
+import { footerVisibleAtom, navigationBarVisibleAtom } from '../navigation/atoms';
 
 const YoutubeAuthCallback = () => {
-  const { setVisible, setFooterVisible } = useContext(NavigationContext);
+  const setFooterVisible = useSetRecoilState(footerVisibleAtom);
+  const setNavigationBarVisible = useSetRecoilState(navigationBarVisibleAtom);
+
   const [error, setError] = useState();
   const { setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage } =
     useContext(YoutubeContext);
@@ -69,7 +72,7 @@ const YoutubeAuthCallback = () => {
   }, [location.search, setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage]);
 
   useEffect(() => {
-    setVisible(false);
+    setNavigationBarVisible(false);
     setFooterVisible(false);
     (async () => {
       try {
@@ -104,7 +107,7 @@ const YoutubeAuthCallback = () => {
         setError(error);
       }
     })();
-  }, [getAccessToken, setVisible, setFooterVisible, location.search]);
+  }, [getAccessToken, setNavigationBarVisible, setFooterVisible, location.search]);
 
   if (error) return <Alert type='error' data={error} />;
   return (

@@ -17,10 +17,16 @@ import {
 import ChangeLogs from '../changeLogs';
 import styles from '../changeLogs/ChangeLogs.module.scss';
 import AccountContext from '../account/AccountContext';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { footerVisibleAtom, navigationSidebarAtom } from '../navigation/atoms';
 
 const Footer = () => {
   const { user } = useContext(AccountContext);
-  const { footerVisible, setSidebarComonentKey, setShowSidebar } = useContext(NavigationContext);
+  const { setSidebarComonentKey } = useContext(NavigationContext);
+  const footerVisible = useRecoilValue(footerVisibleAtom);
+
+  const showNavigationSidebar = useSetRecoilState(navigationSidebarAtom);
+
   const [show, setShow] = useState();
   const ref = useRef();
 
@@ -49,7 +55,7 @@ const Footer = () => {
                   className='button'
                   onClick={() => {
                     setSidebarComonentKey({ comp: 'account' });
-                    setShowSidebar(true);
+                    showNavigationSidebar(true);
                   }}
                 >
                   <MdAccountCircle size={20} style={{ marginRight: '0.75rem' }} />
@@ -61,7 +67,7 @@ const Footer = () => {
                     className='button'
                     onClick={() => {
                       setSidebarComonentKey({ comp: 'SignIn' });
-                      setShowSidebar(true);
+                      showNavigationSidebar(true);
                     }}
                   >
                     <MdAccountCircle size={20} style={{ marginRight: '0.75rem' }} />
@@ -71,7 +77,7 @@ const Footer = () => {
                     className='button'
                     onClick={() => {
                       setSidebarComonentKey({ comp: 'SignUp' });
-                      setShowSidebar(true);
+                      showNavigationSidebar(true);
                     }}
                   >
                     <MdAccountCircle size={20} style={{ marginRight: '0.75rem' }} />

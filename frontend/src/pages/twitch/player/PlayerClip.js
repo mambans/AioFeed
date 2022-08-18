@@ -2,9 +2,8 @@ import { CSSTransition } from 'react-transition-group';
 import { Link } from 'react-router-dom';
 import { MdAccountCircle } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
-import React, { useContext } from 'react';
+import React from 'react';
 
-import NavigationContext from './../../navigation/NavigationContext';
 import {
   VideoAndChatContainer,
   StyledVideo,
@@ -13,9 +12,12 @@ import {
 } from './StyledComponents';
 import useFullscreen from '../../../hooks/useFullscreen';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
+import { useRecoilValue } from 'recoil';
+import { navigationBarVisibleAtom } from '../../navigation/atoms';
 
 const PlayerClip = () => {
-  const { visible } = useContext(NavigationContext);
+  const navigationSidebarOverflow = useRecoilValue(navigationBarVisibleAtom);
+
   const { videoId, channelName } = useParams();
   useDocumentTitle(`${channelName} - ${videoId}`);
 
@@ -23,7 +25,12 @@ const PlayerClip = () => {
 
   return (
     <>
-      <CSSTransition in={visible} timeout={300} classNames='fade-250ms' unmountOnExit>
+      <CSSTransition
+        in={navigationSidebarOverflow}
+        timeout={300}
+        classNames='fade-250ms'
+        unmountOnExit
+      >
         <PlayerNavbar>
           <Link to={`/${channelName}/page`} className='linkWithIcon' disabled={!channelName}>
             <MdAccountCircle size={26} />
@@ -33,7 +40,7 @@ const PlayerClip = () => {
       </CSSTransition>
       <VideoAndChatContainer
         id='twitch-embed'
-        visible={visible}
+        visible={navigationSidebarOverflow}
         style={{
           display: 'unset',
         }}

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { FaInfoCircle, FaWindowClose } from 'react-icons/fa';
 import {
@@ -14,9 +14,10 @@ import {
 import { Button, Nav } from 'react-bootstrap';
 import { GrRefresh } from 'react-icons/gr';
 import { Link, NavLink } from 'react-router-dom';
-import NavigationContext from '../../navigation/NavigationContext';
 import { IconContainer } from '../../myLists/StyledComponents';
 import { BottomDiv } from './Chat';
+import { useRecoilState } from 'recoil';
+import { navigationBarVisibleAtom } from '../../navigation/atoms';
 
 export const VideoAndChatContainer = styled.div`
   position: fixed;
@@ -590,16 +591,16 @@ const PlayerExtraButtonsTrigger1 = styled(MdViewWeek).attrs({ size: 26 })`
 `;
 
 export const PlayerExtraButtons = ({ channelName, children }) => {
-  const { visible, setVisible } = useContext(NavigationContext);
+  const [navigationBarVisible, setNavigationBarVisible] = useRecoilState(navigationBarVisibleAtom);
 
   return (
     <StyledPlayerExtraButtons>
       <PlayerExtraButtonsTrigger />
       <PlayerExtraButtonsTrigger1 />
-      <StyledShowNavbarBtn onClick={() => setVisible(!visible)}>
+      <StyledShowNavbarBtn onClick={() => setNavigationBarVisible((c) => !c)}>
         <MdVerticalAlignBottom
           style={{
-            transform: visible ? 'rotateX(180deg)' : 'unset',
+            transform: navigationBarVisible ? 'rotateX(180deg)' : 'unset',
             right: '10px',
           }}
           size={26}

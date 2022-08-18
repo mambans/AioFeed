@@ -12,7 +12,9 @@ const useFetchSingelVod = () => {
 
   const fetchLatestVod = useCallback(
     async ({ user_id, amount = 1, check = false } = {}) => {
+      console.log('fetchLatestVod:');
       if (check && (!enableTwitchVods || !channels?.includes(user_id))) return null;
+      console.log(`Fetching singel vod for ${user_id}`);
       return await TwitchAPI.getVideos({
         user_id: user_id,
         period: 'month',

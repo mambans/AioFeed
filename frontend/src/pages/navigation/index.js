@@ -9,7 +9,6 @@ import { HiViewList } from 'react-icons/hi';
 import { NavDropdown } from 'react-bootstrap';
 
 import RenderNotifications from './../notifications';
-import NavigationContext from './NavigationContext';
 import './Navigation.scss';
 import GameSearchBar from '../twitch/categoryTopStreams/GameSearchBar';
 import ChannelSearchList from './../twitch/channelList/index';
@@ -18,6 +17,8 @@ import DropDown from './DropDown';
 import LogsContext from '../logs/LogsContext';
 import Colors from '../../components/themes/Colors';
 import { NavigationSidebar } from './sidebar';
+import { navigationBarVisibleAtom } from './atoms';
+import { useRecoilValue } from 'recoil';
 
 const StyledNavbar = styled(Navbar)`
   display: flex;
@@ -47,7 +48,8 @@ const StyledNav = styled(Nav)`
 `;
 
 const Navigation = () => {
-  const { visible, shrinkNavbar } = useContext(NavigationContext);
+  const navigationSidebarOverflow = useRecoilValue(navigationBarVisibleAtom);
+
   const { LogsIcon } = useContext(LogsContext) || {};
   const leftExpand = useRef();
 
@@ -59,15 +61,13 @@ const Navigation = () => {
   };
 
   return (
-    <CSSTransition in={visible} timeout={300} classNames='fade-250ms' unmountOnExit>
-      <StyledNavbar
-        mode='fixed'
-        collapseOnSelect
-        expand='lg'
-        bg='dark'
-        variant='dark'
-        shrink={shrinkNavbar}
-      >
+    <CSSTransition
+      in={navigationSidebarOverflow}
+      timeout={300}
+      classNames='fade-250ms'
+      unmountOnExit
+    >
+      <StyledNavbar mode='fixed' collapseOnSelect expand='lg' bg='dark' variant='dark'>
         <NavExpandingSides side='left' ref={leftExpand}>
           <Nav.Link
             as={NavLink}

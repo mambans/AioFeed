@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { MdExpandMore } from 'react-icons/md';
-import NavigationContext from '../NavigationContext';
 import { ToggleButtonsContainerHeader } from './StyledComponents';
 import useLocalStorageState from '../../../hooks/useLocalStorageState';
 import ExpandableSection from '../../../components/expandableSection/ExpandableSection';
+import { useSetRecoilState } from 'recoil';
+import { navigationSidebarOverflowAtom } from '../atoms';
 
 const SidebarExpandableSection = ({
   title,
@@ -16,7 +17,8 @@ const SidebarExpandableSection = ({
   children = null,
 }) => {
   const defaultExpanded = true;
-  const { setOverflow } = useContext(NavigationContext);
+  const setNavigationSidebarOverflow = useSetRecoilState(navigationSidebarOverflowAtom);
+
   const [expanded, setExpanded] = useLocalStorageState('navsidebar-expandableSection', {});
   const closedTimer = useRef();
   const openedTimer = useRef();
@@ -85,7 +87,7 @@ const SidebarExpandableSection = ({
               timeout={500}
               unmountOnExit
             >
-              {renderItem(item, index, setOverflow)}
+              {renderItem(item, index, setNavigationSidebarOverflow)}
             </CSSTransition>
           ))}
         </TransitionGroup>

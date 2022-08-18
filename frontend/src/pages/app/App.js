@@ -7,8 +7,6 @@ import FeedsContext, { FeedsProvider } from '../feed/FeedsContext';
 import { NavigationProvider } from '../navigation/NavigationContext';
 import { NotificationsProvider } from '../notifications/NotificationsContext';
 import { ThemeProvider } from '../../components/themes/ThemeContext';
-import { FooterProvider } from '../footer/FooterContext';
-import { AccountProvider } from '../account/AccountContext';
 import CookieConsentAlert from './CookieConsentAlert';
 import Routes from '../routes';
 import ThemeContext from './../../components/themes/ThemeContext';
@@ -21,6 +19,8 @@ import { LogsProvider } from '../logs/LogsContext';
 import { FeedSectionsProvider } from '../feedSections/FeedSectionsContext';
 import { TwitterProvider } from '../twitter/TwitterContext';
 import CleanUp from './CleanUp';
+import { RecoilRoot } from 'recoil';
+import { AccountProvider } from '../account/AccountContext';
 
 const AppContainer = styled.div`
   background-image: ${({ image }) => `url(/images/${image})`};
@@ -44,31 +44,31 @@ const AppRoutesContainer = () => {
   return (
     <React.StrictMode>
       <LogsProvider>
-        <ThemeProvider>
-          <AccountProvider>
-            <TwitchProvider>
-              <YoutubeProvider>
-                <NavigationProvider>
-                  <NotificationsProvider>
-                    <TwitterProvider>
-                      <FeedsProvider>
-                        <FeedSectionsProvider>
-                          <MyListsProvider>
-                            <VodsProvider>
-                              <FooterProvider>
+        <RecoilRoot>
+          <ThemeProvider>
+            <AccountProvider>
+              <TwitchProvider>
+                <YoutubeProvider>
+                  <NavigationProvider>
+                    <NotificationsProvider>
+                      <TwitterProvider>
+                        <FeedsProvider>
+                          <FeedSectionsProvider>
+                            <MyListsProvider>
+                              <VodsProvider>
                                 <App />
-                              </FooterProvider>
-                            </VodsProvider>
-                          </MyListsProvider>
-                        </FeedSectionsProvider>
-                      </FeedsProvider>
-                    </TwitterProvider>
-                  </NotificationsProvider>
-                </NavigationProvider>
-              </YoutubeProvider>
-            </TwitchProvider>
-          </AccountProvider>
-        </ThemeProvider>
+                              </VodsProvider>
+                            </MyListsProvider>
+                          </FeedSectionsProvider>
+                        </FeedsProvider>
+                      </TwitterProvider>
+                    </NotificationsProvider>
+                  </NavigationProvider>
+                </YoutubeProvider>
+              </TwitchProvider>
+            </AccountProvider>
+          </ThemeProvider>
+        </RecoilRoot>
       </LogsProvider>
     </React.StrictMode>
   );
