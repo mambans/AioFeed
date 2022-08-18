@@ -3,241 +3,134 @@ import { getCookie } from '../../util';
 import validateToken from './validateToken';
 
 const CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;
-const BASE_URL = 'https://api.twitch.tv/helix';
+
+const INSTANCE = axios.create({
+  baseURL: 'https://api.twitch.tv/helix',
+  timeout: 5000,
+});
+
+INSTANCE.interceptors.request.use(
+  async (config) => {
+    const token = await validateToken();
+    config.headers['Authorization'] = `Bearer ${token}`;
+    config.headers['Client-ID'] = CLIENT_ID;
+
+    return config;
+  },
+  (error) => {
+    Promise.reject(error);
+  }
+);
+
+const controller = new AbortController();
 
 const TwitchAPI = {
   getMe: async ({ accessToken }) => {
-    const token = accessToken || (await validateToken());
-    return await axios.get(`${BASE_URL}/users`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Client-ID': CLIENT_ID,
-      },
-    });
+    return await INSTANCE.get(`/users`, {});
   },
 
   getStreams: async (params) => {
-    const token = await validateToken();
-    return await axios.get(`${BASE_URL}/streams`, {
+    return await INSTANCE.get(`/streams`, {
       params,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Client-ID': CLIENT_ID,
-      },
     });
   },
 
   getFollowedStreams: async (params) => {
-    const token = await validateToken();
-    return await axios.get(`${BASE_URL}/streams/followed`, {
+    return await INSTANCE.get(`/streams/followed`, {
       params,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Client-ID': CLIENT_ID,
-      },
     });
   },
 
   getVideos: async (params) => {
-    const token = await validateToken({ useApp_token_last: true });
-    return await axios.get(`${BASE_URL}/videos`, {
+    return await INSTANCE.get(`/videos`, {
       params,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Client-ID': CLIENT_ID,
-      },
     });
   },
 
   getClips: async (params) => {
-    const token = await validateToken();
-    return await axios.get(`${BASE_URL}/clips`, {
+    return await INSTANCE.get(`/clips`, {
       params,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Client-ID': CLIENT_ID,
-      },
     });
   },
 
   postClip: async (params) => {
-    const token = await validateToken();
-    return await axios.post(`${BASE_URL}/clips`, params, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Client-ID': CLIENT_ID,
-      },
-    });
+    return await INSTANCE.post(`/clips`, params, {});
   },
 
   getUser: async (params) => {
-    const token = await validateToken({ useApp_token_last: true });
-    return await axios.get(`${BASE_URL}/users`, {
+    return await INSTANCE.get(`/users`, {
       params,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Client-ID': CLIENT_ID,
-      },
     });
   },
 
   getSearchChannels: async (params, query) => {
-    const token = await validateToken({ useApp_token_last: true });
-    return await axios.get(`${BASE_URL}/search/channels?query=${encodeURI(query)}`, {
+    return await INSTANCE.get(`/search/channels?query=${encodeURI(query)}`, {
       params,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Client-ID': CLIENT_ID,
-      },
     });
   },
 
   getChannel: async (params) => {
-    const token = await validateToken({ useApp_token_last: true });
-    return await axios.get(`${BASE_URL}/channels`, {
+    return await INSTANCE.get(`/channels`, {
       params,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Client-ID': CLIENT_ID,
-      },
     });
   },
 
   getMyFollowedChannels: async (params) => {
-    const token = await validateToken();
-    return await axios.get(`${BASE_URL}/users/follows`, {
+    return await INSTANCE.get(`/users/follows`, {
       params: { ...params, from_id: getCookie('Twitch-userId') },
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Client-ID': CLIENT_ID,
-      },
     });
   },
 
   getFollowedChannels: async (params) => {
-    const token = await validateToken();
-    return await axios.get(`${BASE_URL}/users/follows`, {
+    return await INSTANCE.get(`/users/follows`, {
       params,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Client-ID': CLIENT_ID,
-      },
     });
   },
 
   getGames: async (params) => {
-    const token = await validateToken({ useApp_token_last: true });
-    return await axios.get(`${BASE_URL}/games`, {
+    return await INSTANCE.get(`/games`, {
       params,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Client-ID': CLIENT_ID,
-      },
     });
   },
 
   getSearchGames: async (params, query) => {
-    const token = await validateToken({ useApp_token_last: true });
-    return await axios.get(`${BASE_URL}/search/categories?query=${encodeURI(query)}`, {
+    return await INSTANCE.get(`/search/categories?query=${encodeURI(query)}`, {
       params,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Client-ID': CLIENT_ID,
-      },
     });
   },
 
   getTopGames: async (params) => {
-    const token = await validateToken({ useApp_token_last: true });
-    return await axios.get(`${BASE_URL}/games/top`, {
+    return await INSTANCE.get(`/games/top`, {
       params,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Client-ID': CLIENT_ID,
-      },
     });
   },
 
   checkFollow: async (params) => {
-    const token = await validateToken();
-    return await axios.get(`${BASE_URL}/users/follows`, {
+    return await INSTANCE.get(`/users/follows`, {
       params,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Client-ID': CLIENT_ID,
-      },
     });
-  },
-
-  deleteFollow: async (params) => {
-    const token = await validateToken();
-    return await axios.delete(`${BASE_URL}/users/follows`, {
-      params,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'Client-ID': CLIENT_ID,
-      },
-    });
-  },
-
-  addFollow: async (params) => {
-    const token = await validateToken();
-    return await axios.post(
-      `${BASE_URL}/users/follows`,
-      {},
-      {
-        params,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          'Client-ID': CLIENT_ID,
-        },
-      }
-    );
   },
 
   getTags: async (params) => {
-    const token = await validateToken({ useApp_token_last: true });
-    return await axios
-      .get(`${BASE_URL}/streams/tags`, {
-        params,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Client-ID': CLIENT_ID,
-        },
-      })
-      .catch((e) => console.error(e));
+    return await INSTANCE.get(`/streams/tags`, {
+      params,
+    }).catch((e) => console.error(e));
   },
 
   getAllTags: async (params, query) => {
-    const token = await validateToken({ useApp_token_last: true });
-    return await axios
-      .get(`${BASE_URL}/tags/streams${query || ''}`, {
-        params,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Client-ID': CLIENT_ID,
-        },
-      })
-      .catch((e) => console.error(e));
+    return await INSTANCE.get(`/tags/streams${query || ''}`, {
+      params,
+    }).catch((e) => console.error(e));
   },
 
   getSchedule: async (params) => {
-    const token = await validateToken({ useApp_token_last: true });
-    return await axios
-      .get(`${BASE_URL}/schedule`, {
-        params,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Client-ID': CLIENT_ID,
-        },
-      })
-      .catch((e) => {
-        if (e?.response?.data?.status !== 404) {
-          console.error('fetchedSchedule error:', e);
-        }
-      });
+    return await INSTANCE.get(`/schedule`, {
+      params,
+    }).catch((e) => {
+      if (e?.response?.data?.status !== 404) {
+        throw e;
+      }
+    });
   },
 };
 export default TwitchAPI;
