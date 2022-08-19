@@ -59,7 +59,7 @@ const Alert = ({
   };
 
   useEffect(() => {
-    setIsOpen(show ?? open);
+    setIsOpen(show ?? open ?? true);
   }, [show, open]);
 
   if (!isOpen) return null;
@@ -121,7 +121,7 @@ const Message = styled.p`
   font-size: 0.95em;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div.attrs({ className: 'Alert' })`
   font-size: 1rem;
   position: relative;
   display: flex;

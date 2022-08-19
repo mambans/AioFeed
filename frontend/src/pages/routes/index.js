@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -18,62 +18,178 @@ import Youtube from '../youtube';
 import MyLists from '../myLists';
 import SharedVideoPlayer from '../sharedComponents/SharedVideoPlayer';
 import VerifyEmail from '../account/VerifyEmail';
+import AccountContext from '../account/AccountContext';
+import Player from '../twitch/player/Player';
+import StandaloneChat from '../twitch/player/StandaloneChat';
+import LoadingIndicator from '../../components/LoadingIndicator';
 
 const MainContentContainer = styled.main`
   min-height: 100vh;
   padding-top: 95px;
 `;
 
+const routes = [
+  {
+    path: 'index',
+    element: <Home />,
+  },
+  {
+    path: '/',
+    element: <Home />,
+    index: true,
+  },
+  {
+    path: 'home',
+    element: <Home />,
+  },
+  {
+    path: 'legality',
+    element: <Legality />,
+  },
+  {
+    path: 'privacy',
+    element: <Legality />,
+  },
+  {
+    path: 'verify-email',
+    element: <VerifyEmail />,
+  },
+
+  {
+    path: 'vods',
+    element: <TwitchVods />,
+    authRequired: true,
+  },
+  {
+    path: 'feed',
+    element: <Feed />,
+    authRequired: true,
+  },
+  {
+    path: 'live',
+    element: <TwitchStandalone forceMount={true} />,
+    authRequired: true,
+  },
+  {
+    path: 'mylists',
+    element: <MyLists />,
+    authRequired: true,
+  },
+  {
+    path: 'favorites',
+    element: <Navigate to={'../mylists'} replace />,
+  },
+  {
+    path: 'customlists',
+    element: <Navigate to={'../mylists'} replace />,
+  },
+  {
+    path: 'lists',
+    element: <Navigate to={'../mylists'} replace />,
+  },
+  {
+    path: 'saved',
+    element: <Navigate to={'../mylists'} replace />,
+  },
+  {
+    path: 'twitch',
+    element: <Navigate to={'../live'} replace />,
+  },
+  {
+    path: 'twitter',
+    element: <Twitter />,
+    authRequired: true,
+  },
+  {
+    path: 'youtube',
+    element: <Youtube />,
+    authRequired: true,
+  },
+  {
+    path: 'auth/twitch/callback',
+    element: <TwitchAuthCallback />,
+  },
+  {
+    path: 'auth/youtube/callback',
+    element: <Route path='auth/youtube/callback' element={<YoutubeAuthCallback />} />,
+  },
+  {
+    path: 'youtube/:videoId',
+    element: <SharedVideoPlayer />,
+    authRequired: true,
+  },
+  {
+    path: 'category',
+    element: <TopStreams />,
+    authRequired: true,
+  },
+  {
+    path: 'game',
+    element: <Navigate to={'../category'} replace />,
+  },
+  {
+    path: 'category/:category',
+    element: <TopStreams />,
+  },
+  {
+    path: 'game/:category',
+    element: <TopStreams />,
+    authRequired: true,
+  },
+  {
+    path: 'top/:category',
+    element: <TopStreams />,
+    authRequired: true,
+  },
+  {
+    path: 'videos/:videoId',
+    element: <SharedVideoPlayer />,
+    authRequired: true,
+  },
+  {
+    path: ':channelName',
+    element: <Player />,
+  },
+  {
+    path: ':channelName/chat',
+    element: <StandaloneChat />,
+  },
+  {
+    path: ':channelName/*',
+    element: <TwitchChannelRoutes />,
+    authRequired: true,
+  },
+];
+
 const NavigationRoutes = () => {
+  const { user, loading } = useContext(AccountContext);
+
   return (
     <BrowserRouter>
       <Navigation />
       <MainContentContainer id='MainContentContainer' tabIndex={0}>
         <Routes>
-          <Route index element={<Home />} />
-          {/* <Route path='' element={<Home />} /> */}
-          <Route path='index' element={<Home />} />
-          <Route path='home' element={<Home />} />
-
-          <Route path='legality' element={<Legality />} />
-          <Route path='privacy' element={<Legality />} />
-          <Route path='verify-email' element={<VerifyEmail />} />
-
-          <Route path='vods' element={<TwitchVods />} />
-          <Route path='feed' element={<Feed />} />
-          <Route path='live' element={<TwitchStandalone forceMount={true} />} />
-          {/* <Navigate path='favorites' to='mylists' />
-          <Navigate path='customlists' to='mylists' />
-          <Navigate path='lists' to='mylists' />
-          <Navigate path='saved' to='mylists' /> */}
-          <Route path='mylists' element={<MyLists />} />
-          <Route path='favorites' element={<Navigate to={'../mylists'} replace />} />
-          <Route path='customlists' element={<Navigate to={'../mylists'} replace />} />
-          <Route path='lists' element={<Navigate to={'../mylists'} replace />} />
-          <Route path='saved' element={<Navigate to={'../mylists'} replace />} />
-
-          {/* <Navigate path='twitch' to='live' /> */}
-          <Route path='twitch' element={<Navigate to={'../live'} replace />} />
-
-          <Route path='twitter' element={<Twitter />} />
-
-          <Route path='youtube' element={<Youtube />} />
-          <Route path='auth/twitch/callback' element={<TwitchAuthCallback />} />
-          <Route path='auth/youtube/callback' element={<YoutubeAuthCallback />} />
-          <Route path='youtube/:videoId' element={<SharedVideoPlayer />} />
-
-          <Route path='category' element={<TopStreams />} />
-          {/* <Navigate path='game' to='/category' />
-          <Navigate path='top' to='/category' /> */}
-
-          <Route path='game' element={<Navigate to={'../category'} replace />} />
-          <Route path='top' element={<Navigate to={'../category'} replace />} />
-
-          <Route path='category/:category' element={<TopStreams />} />
-          <Route path='game/:category' element={<TopStreams />} />
-          <Route path='top/:category' element={<TopStreams />} />
-          <Route path='videos/:videoId' element={<SharedVideoPlayer />} />
-          <Route path=':channelName/*' element={<TwitchChannelRoutes />} />
+          {routes.map(({ element, authRequired, ...rest }, key) => {
+            return (
+              <Route
+                {...rest}
+                key={key}
+                element={
+                  authRequired ? (
+                    loading ? (
+                      <LoadingIndicator height={400} width={600} text={'Authenticating..'} />
+                    ) : !user ? (
+                      <Navigate to='/' state={{ showLoginAlert: true }} replace />
+                    ) : (
+                      element
+                    )
+                  ) : (
+                    element
+                  )
+                }
+              />
+            );
+          })}
         </Routes>
       </MainContentContainer>
       <Footer />

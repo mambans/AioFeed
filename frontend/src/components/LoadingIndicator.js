@@ -27,6 +27,10 @@ const StyledLoadingContainer = styled.div`
   }
 `;
 
+const H1 = styled.h1`
+  text-shadow: 1px 1px #575757;
+`;
+
 /**
  * Returns a loading element.
  * @param {String} [text] - Optionall loading text
@@ -36,10 +40,23 @@ const StyledLoadingContainer = styled.div`
  * @param {Object} [style] - Additional style object
  * @returns {Element} - JSX loading Element
  */
-const LoadingIndicator = ({ text, smallText, height = 150, width = 150, type = 'bars', style }) => (
+const LoadingIndicator = ({
+  text,
+  smallText,
+  height = 150,
+  width = 150,
+  type = 'bars',
+  style,
+  color,
+}) => (
   <StyledLoadingContainer style={style || null}>
-    <ReactLoading type={type} color={'#ffffff'} height={height} width={width} />
-    {text && <h1>{text}</h1>}
+    <ReactLoading
+      type={type}
+      color={color || 'rgba(255,255,255,0.75)'}
+      height={height}
+      width={width}
+    />
+    {text && <H1>{text}</H1>}
     {smallText && <p>{smallText}</p>}
   </StyledLoadingContainer>
 );

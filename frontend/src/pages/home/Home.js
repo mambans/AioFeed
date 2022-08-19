@@ -1,14 +1,19 @@
 import React, { useContext, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import Alert from '../../components/alert';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
+import { navigationSidebarAtom } from '../navigation/atoms';
 import ThemeContext from './../../components/themes/ThemeContext';
 
 import './Home.scss';
 import { BlurOverlay, LogoText, WelcomeContainer, DevideLine } from './StyledComponents';
 
 export const Home = () => {
-  console.log('Home:');
   useDocumentTitle();
   const { activeTheme } = useContext(ThemeContext);
+  const showLoginAlert = useLocation()?.state?.showLoginAlert;
+  const showNavigationSidebar = useSetRecoilState(navigationSidebarAtom);
 
   const Logos = () => (
     <>
@@ -45,5 +50,21 @@ export const Home = () => {
     return () => document.documentElement.removeAttribute('homepage');
   }, []);
 
+  useEffect(() => {
+    if (showLoginAlert) {
+      showNavigationSidebar(true);
+    }
+  }, [showLoginAlert, showNavigationSidebar]);
+
+  if (showLoginAlert) {
+    return (
+      <Alert
+        type='info'
+        title='Login to continue'
+        message='Login with your AioFeed account'
+        onClick={() => showNavigationSidebar((c) => !c)}
+      />
+    );
+  }
   return <Logos></Logos>;
 };
