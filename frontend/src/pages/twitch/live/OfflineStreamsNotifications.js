@@ -69,13 +69,6 @@ const OfflineStreamsNotifications = ({
         if (Boolean(streams?.length)) addNotification(streams);
       } catch (e) {}
     })();
-
-    return () => {
-      if (timer.current) {
-        console.log('clearing timer for fetching singel vod when offline');
-        clearTimeout(timer.current);
-      }
-    };
   }, [
     fetchLatestVod,
     liveStreams,
