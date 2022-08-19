@@ -174,10 +174,10 @@ const API = {
 
   getVodChannels: async () => {
     console.log('getVodChannels:');
-    await INSTANCE.get(`/twitch/vod-channels`, {
+    return await INSTANCE.get(`/twitch/vod-channels`, {
       params: {},
     })
-      .then((res) => res.data.channels)
+      .then((res) => res?.data?.channels)
       .catch((e) => console.error(e));
   },
 
