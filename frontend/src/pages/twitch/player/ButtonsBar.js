@@ -17,9 +17,11 @@ const ButtonsBar = ({ style, videoId, children, user, schedule = true, size }) =
     <Wrapper
       style={style}
       size={size || DEFAULT_SIZE}
-      // onClick={(e) => {
-      //   e.stopImmediatePropagation();
-      // }}
+      onClick={(e) => {
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        e.preventDefault();
+      }}
     >
       <ShowNavigationButton />
 
