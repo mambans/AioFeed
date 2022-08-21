@@ -3,18 +3,12 @@ import { Navbar, Nav } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
-import { FaAngleRight, FaAngleLeft, FaTwitch, FaYoutube } from 'react-icons/fa';
-import { MdVideocam } from 'react-icons/md';
-import { HiViewList } from 'react-icons/hi';
-import { NavDropdown } from 'react-bootstrap';
-
+import { FaAngleRight, FaAngleLeft } from 'react-icons/fa';
 import RenderNotifications from './../notifications';
 import './Navigation.scss';
 import GameSearchBar from '../twitch/categoryTopStreams/GameSearchBar';
 import NavExpandingSides from './NavExpandingSides';
-import DropDown from './DropDown';
 import LogsContext from '../logs/LogsContext';
-import Colors from '../../components/themes/Colors';
 import { NavigationSidebar } from './sidebar';
 import { navigationBarVisibleAtom } from './atoms';
 import { useRecoilValue } from 'recoil';
@@ -105,7 +99,7 @@ const Navigation = () => {
             >
               Top Streams
             </Nav.Link>
-            <DropDown title='Individual Feeds'>
+            {/* <DropDown title='Individual Feeds'>
               <NavDropdown.Item as={NavLink} to='/mylists'>
                 <HiViewList size={18} color={Colors.green} />
                 My lists
@@ -122,7 +116,7 @@ const Navigation = () => {
                 <MdVideocam size={16} color={Colors.purple} />
                 Vods
               </NavDropdown.Item>
-            </DropDown>
+            </DropDown> */}
           </StyledNav>
           <FaAngleRight className='arrow' size={20} />
           <FaAngleRight className='arrow shadow' size={20} />

@@ -1,5 +1,5 @@
 import { CSSTransition } from 'react-transition-group';
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { Suspense, useContext, useEffect, useRef } from 'react';
 
 import { HideSidebarButton } from '../sidebar/StyledComponents';
 import FeedsContext from '../../feed/FeedsContext';
@@ -7,25 +7,16 @@ import Handler from './Handler';
 import Header from './Header';
 import Sidebar from '../sidebar';
 import TwitchStreams from './Twitch';
-import FeedsCenterContainer from '../../feed/FeedsCenterContainer';
 import { Container } from '../StyledComponents';
 import ToolTip from '../../../components/tooltip/ToolTip';
-import useDocumentTitle from '../../../hooks/useDocumentTitle';
-import FeedSections from '../../feedSections/FeedSections';
+
 import ExpandableSection from '../../../components/expandableSection/ExpandableSection';
 import { askForBrowserNotificationPermission } from '../../../util';
 import { MdFormatIndentDecrease } from 'react-icons/md';
-
-export const TwitchStandalone = () => {
-  useDocumentTitle('Twitch Live');
-  return (
-    <FeedsCenterContainer left={true} right={false}>
-      <div className='feed'>
-        <Twitch in={true} className='feed' />
-      </div>
-    </FeedsCenterContainer>
-  );
-};
+import { BsCollectionFill } from 'react-icons/bs';
+import Colors from '../../../components/themes/Colors';
+// import FeedSections from '../../feedSections/FeedSections';
+const FeedSections = React.lazy(() => import('../../feedSections/FeedSections'));
 
 const TwitchFeed = ({ data, className, forceMount }) => {
   const {
@@ -87,7 +78,16 @@ const TwitchFeed = ({ data, className, forceMount }) => {
         unmountOnExit
         appear
       >
-        <FeedSections data={data} />
+        <Suspense
+          fallback={
+            <h1>
+              FeedSections..
+              <BsCollectionFill size={22} color={Colors.raspberry} />
+            </h1>
+          }
+        >
+          <FeedSections data={data} />
+        </Suspense>
       </CSSTransition>
     </>
   );

@@ -1,31 +1,72 @@
 import { CSSTransition } from 'react-transition-group';
-import React, { useContext } from 'react';
+import React, { Suspense, useContext } from 'react';
 
 import FeedsContext from './FeedsContext';
 import NoFeedsEnable from './NoFeedsEnabled';
-import { Vods } from '../twitch/vods';
-import { Twitter } from '../twitter';
-import { Youtube } from './../youtube';
 import FeedsCenterContainer from './FeedsCenterContainer';
-import Twitch from '../twitch/live';
-import { MyLists } from '../myLists';
 import FeedOrderSlider from './FeedOrderSlider';
+import LoadingFeed from '../../components/LoadingFeed';
+import Colors from '../../components/themes/Colors';
+import { FaYoutube } from 'react-icons/fa';
+import { MdVideocam } from 'react-icons/md';
+import { HiViewList } from 'react-icons/hi';
+const Twitch = React.lazy(() => import('../twitch/live'));
+const Vods = React.lazy(() => import('../twitch/vods'));
+const Twitter = React.lazy(() => import('../twitter'));
+const Youtube = React.lazy(() => import('../youtube'));
+const MyLists = React.lazy(() => import('../myLists'));
 
 // import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 const Feed = () => {
   // useDocumentTitle('Feed');
-  const { enableTwitch, enableYoutube, enableTwitchVods, enableMyLists } = useContext(FeedsContext);
+  const { enableTwitch, enableYoutube, enableTwitchVods, enableMyLists, enableTwitter } =
+    useContext(FeedsContext);
 
   return (
     <FeedsCenterContainer>
       <NoFeedsEnable />
-      <Twitter />
+      <CSSTransition
+        in={enableTwitter}
+        timeout={750}
+        classNames='twitter-slide'
+        unmountOnExit
+        appear={true}
+      >
+        <Suspense fallback={<div></div>}>
+          <Twitter />
+        </Suspense>
+      </CSSTransition>
 
       <div className='feed'>
         <FeedOrderSlider />
+
         <CSSTransition in={enableTwitch} classNames='fade-750ms' timeout={750} unmountOnExit appear>
-          <Twitch />
+          <Suspense
+            fallback={
+              <LoadingFeed
+                title={
+                  <h1 id={'twitch'}>
+                    Twitch
+                    <span
+                      style={{
+                        background: Colors.red,
+                        fontWeight: 'bold',
+                        borderRadius: '5px',
+                        fontSize: '0.9em',
+                        padding: '0px 3px',
+                        marginLeft: '5px',
+                      }}
+                    >
+                      Live
+                    </span>
+                  </h1>
+                }
+              />
+            }
+          >
+            <Twitch />
+          </Suspense>
         </CSSTransition>
         <CSSTransition
           in={enableYoutube}
@@ -34,11 +75,29 @@ const Feed = () => {
           unmountOnExit
           appear
         >
-          <Youtube />
+          <Suspense
+            fallback={
+              <h1 id='youtube'>
+                YouTube
+                <FaYoutube size={25} style={{ color: '#a80000' }} />
+              </h1>
+            }
+          >
+            <Youtube />
+          </Suspense>
         </CSSTransition>
 
         <CSSTransition in={enableTwitchVods} classNames='fade-750ms' timeout={750} unmountOnExit>
-          <Vods />
+          <Suspense
+            fallback={
+              <h1 id='vods'>
+                Twitch vods
+                <MdVideocam size={25} style={{ color: '#6f166f' }} />
+              </h1>
+            }
+          >
+            <Vods />
+          </Suspense>
         </CSSTransition>
 
         <CSSTransition
@@ -48,7 +107,16 @@ const Feed = () => {
           unmountOnExit
           appear
         >
-          <MyLists />
+          <Suspense
+            fallback={
+              <h1>
+                Lists..
+                <HiViewList size={25} color={Colors.green} />
+              </h1>
+            }
+          >
+            <MyLists />
+          </Suspense>
         </CSSTransition>
       </div>
     </FeedsCenterContainer>

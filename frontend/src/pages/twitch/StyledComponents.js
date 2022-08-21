@@ -22,7 +22,7 @@ export const pulseLight = keyframes`
   100% {background: #36393fd1;}
 `;
 
-const pulseAnimation = () => css`
+export const pulseAnimation = () => css`
   ${pulse} 2s linear infinite;
 `;
 

@@ -11,25 +11,14 @@ import VodsContext from './VodsContext';
 import LoadingBoxes from './../LoadingBoxes';
 import FeedsContext from '../../feed/FeedsContext';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
-import FeedsCenterContainer, { CenterContext } from './../../feed/FeedsCenterContainer';
+import { CenterContext } from './../../feed/FeedsCenterContainer';
 import { Container } from '../StyledComponents';
-import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import useToken, { TwitchContext } from '../useToken';
 import ExpandableSection from '../../../components/expandableSection/ExpandableSection';
 import Alert from '../../../components/alert';
 import { getLocalstorage } from '../../../util';
 
-const VodsStandalone = () => {
-  useDocumentTitle('Twitch Vods');
-
-  return (
-    <FeedsCenterContainer left={false} right={false}>
-      <Vods className='feed' />
-    </FeedsCenterContainer>
-  );
-};
-
-export const Vods = ({ className }) => {
+const Vods = ({ className }) => {
   const { vods, setVods, channels, fetchVodsContextData } = useContext(VodsContext);
   const { setEnableTwitchVods, orders, toggleExpanded } = useContext(FeedsContext) || {};
   const { videoElementsAmount } = useContext(CenterContext);
@@ -165,4 +154,4 @@ export const Vods = ({ className }) => {
     </Container>
   );
 };
-export default VodsStandalone;
+export default Vods;

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { Suspense, useContext } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -7,23 +7,23 @@ import Footer from '../footer';
 import { Home } from '../home';
 import Legality from '../legality';
 import Navigation from '../navigation';
-import TopStreams from '../twitch/categoryTopStreams';
+
 import TwitchAuthCallback from '../auth/TwitchAuthCallback';
-import TwitchChannelRoutes from '../twitch/Routes';
+// import TwitchChannelRoutes from '../twitch/Routes';
 import YoutubeAuthCallback from '../auth/YoutubeAuthCallback';
-import { TwitchStandalone } from '../twitch/live';
-import TwitchVods from '../twitch/vods';
-import Twitter from '../twitter';
-import Youtube from '../youtube';
-import MyLists from '../myLists';
 import SharedVideoPlayer from '../sharedComponents/SharedVideoPlayer';
 import VerifyEmail from '../account/VerifyEmail';
 import AccountContext from '../account/AccountContext';
-import Player from '../twitch/player/Player';
+// import Player from '../twitch/player/Player';
 import StandaloneChat from '../twitch/player/StandaloneChat';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import ChannelSearchBar from '../twitch/searchbars/ChannelSearchBar';
 import { msToHMS } from '../../util';
+import LoadingFeed from '../../components/LoadingFeed';
+// import TopStreams from '../twitch/categoryTopStreams';
+const TopStreams = React.lazy(() => import('../twitch/categoryTopStreams'));
+const Player = React.lazy(() => import('../twitch/player/Player'));
+const TwitchChannelRoutes = React.lazy(() => import('../twitch/Routes'));
 
 const MainContentContainer = styled.main`
   min-height: 100vh;
@@ -56,55 +56,9 @@ const routes = [
     path: 'verify-email',
     element: <VerifyEmail />,
   },
-
-  {
-    path: 'vods',
-    element: <TwitchVods />,
-    authRequired: true,
-  },
   {
     path: 'feed',
     element: <Feed />,
-    authRequired: true,
-  },
-  {
-    path: 'live',
-    element: <TwitchStandalone forceMount={true} />,
-    authRequired: true,
-  },
-  {
-    path: 'mylists',
-    element: <MyLists />,
-    authRequired: true,
-  },
-  {
-    path: 'favorites',
-    element: <Navigate to={'../mylists'} replace />,
-  },
-  {
-    path: 'customlists',
-    element: <Navigate to={'../mylists'} replace />,
-  },
-  {
-    path: 'lists',
-    element: <Navigate to={'../mylists'} replace />,
-  },
-  {
-    path: 'saved',
-    element: <Navigate to={'../mylists'} replace />,
-  },
-  {
-    path: 'twitch',
-    element: <Navigate to={'../live'} replace />,
-  },
-  {
-    path: 'twitter',
-    element: <Twitter />,
-    authRequired: true,
-  },
-  {
-    path: 'youtube',
-    element: <Youtube />,
     authRequired: true,
   },
   {
@@ -122,7 +76,11 @@ const routes = [
   },
   {
     path: 'category',
-    element: <TopStreams />,
+    element: (
+      <Suspense fallback={<LoadingFeed title={'Top streams'} />}>
+        <TopStreams />
+      </Suspense>
+    ),
     authRequired: true,
   },
   {
@@ -131,16 +89,28 @@ const routes = [
   },
   {
     path: 'category/:category',
-    element: <TopStreams />,
+    element: (
+      <Suspense fallback={<LoadingFeed title={'Top streams'} />}>
+        <TopStreams />
+      </Suspense>
+    ),
   },
   {
     path: 'game/:category',
-    element: <TopStreams />,
+    element: (
+      <Suspense fallback={<LoadingFeed title={'Top streams'} />}>
+        <TopStreams />
+      </Suspense>
+    ),
     authRequired: true,
   },
   {
     path: 'top/:category',
-    element: <TopStreams />,
+    element: (
+      <Suspense fallback={<LoadingFeed title={'Top streams'} />}>
+        <TopStreams />
+      </Suspense>
+    ),
     authRequired: true,
   },
   {
@@ -158,8 +128,20 @@ const routes = [
     ),
   },
   {
+    path: 'twitch/:channelName',
+    element: (
+      <Suspense>
+        <Player />
+      </Suspense>
+    ),
+  },
+  {
     path: ':channelName',
-    element: <Player />,
+    element: (
+      <Suspense>
+        <Player />
+      </Suspense>
+    ),
   },
   {
     path: ':channelName/chat',
@@ -167,7 +149,11 @@ const routes = [
   },
   {
     path: ':channelName/*',
-    element: <TwitchChannelRoutes />,
+    element: (
+      <Suspense>
+        <TwitchChannelRoutes />
+      </Suspense>
+    ),
     authRequired: true,
   },
 ];

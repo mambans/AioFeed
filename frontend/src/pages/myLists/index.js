@@ -5,14 +5,12 @@ import './MyListsTransitions.scss';
 import Header, { HeaderNumberCount } from '../../components/Header';
 
 import MyListsContext from './MyListsContext';
-import FeedsCenterContainer from '../feed/FeedsCenterContainer';
 import List from './List';
 import useToken from '../twitch/useToken';
 import useYoutubeToken from '../youtube/useToken';
 import MyListSmallList from './MyListSmallList';
 import DropDownDrawer from './DropDownDrawer';
 import { Container } from '../twitch/StyledComponents';
-import useDocumentTitle from './../../hooks/useDocumentTitle';
 import FeedsContext from '../feed/FeedsContext';
 import { ExpandCollapseFeedButton } from '../sharedComponents/sharedStyledComponents';
 import ExpandableSection from '../../components/expandableSection/ExpandableSection';
@@ -70,19 +68,7 @@ export const useCheckForVideosAndValidateToken = ({
   ]);
 };
 
-const MylistsContainer = () => {
-  useDocumentTitle('My lists');
-
-  return (
-    <FeedsCenterContainer left={false} right={false}>
-      <div className='feed'>
-        <MyLists />
-      </div>
-    </FeedsCenterContainer>
-  );
-};
-
-export const FavoriteListContainer = ({
+const FavoriteListContainer = ({
   list,
   setLists,
   ytExistsAndValidated,
@@ -198,4 +184,4 @@ export const MyLists = () => {
   );
 };
 
-export default MylistsContainer;
+export default MyLists;
