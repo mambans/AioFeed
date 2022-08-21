@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ChannelSearchBarItem from './ChannelSearchBarItem';
 import {
@@ -27,6 +27,8 @@ const ChannelSearchBar = ({ searchButton = true, position, ...props }) => {
   const [result, setResult] = useState();
   const [page, setPage] = useState();
   const [loading, setLoading] = useState();
+  // const [visibleItems, setVisibleItems] = useState([]);
+  const [visibleItems, setVisibleItems] = useState([]);
   // eslint-disable-next-line no-unused-vars
   const [rnd, setRnd] = useState();
   const [followedChannels, setFollowedChannels] = useState([]);
@@ -37,6 +39,31 @@ const ChannelSearchBar = ({ searchButton = true, position, ...props }) => {
   const listRef = useRef();
   const controller = new AbortController();
   const limit = 25;
+  const observer = useMemo(
+    () =>
+      new IntersectionObserver(
+        function (entries) {
+          const { visible, hidden } = entries.reduce(
+            (acc, item) => {
+              if (item.isIntersecting) {
+                acc.visible.push(item?.target?.dataset?.['id']);
+              } else {
+                acc.hidden.push(item?.target?.dataset?.['id']);
+              }
+
+              return acc;
+            },
+            { visible: [], hidden: [] }
+          );
+
+          setVisibleItems((c) => {
+            return [...c, ...visible].filter((id) => !hidden.includes(id));
+          });
+        },
+        { root: listRef.current, threshhold: 0.1, rootMargin: '200px' }
+      ),
+    []
+  );
 
   const handleSearch = debounce(
     async (e) => {
@@ -190,9 +217,9 @@ const ChannelSearchBar = ({ searchButton = true, position, ...props }) => {
   };
 
   const onBlur = () => {
-    setTimeout(() => {
-      setShowDropdown(false);
-    }, 0);
+    // setTimeout(() => {
+    //   setShowDropdown(false);
+    // }, 0);
   };
 
   // useEffect(() => {
@@ -229,6 +256,7 @@ const ChannelSearchBar = ({ searchButton = true, position, ...props }) => {
         setRnd((c) => !c);
       }}
       onBlur={onBlur}
+      open={showDropdown}
     >
       <InputWrapper>
         <Input
@@ -263,6 +291,8 @@ const ChannelSearchBar = ({ searchButton = true, position, ...props }) => {
                 key={index}
                 item={i}
                 className={index === 0 && 'selected'}
+                observer={observer}
+                visible={visibleItems.includes(String(i.id))}
               />
             );
           })}

@@ -19,7 +19,7 @@ export const DropDownWrapper = styled.div`
 export const Wrapper = styled.div.attrs({ className: 'searchbar' })`
   position: relative;
   background: var(--navigationbarBackground);
-  width: 125px;
+  width: ${({ open }) => (open ? '310px' : '125px')};
   outline: none;
   transition: width 250ms;
   z-index: 2;
@@ -63,7 +63,7 @@ export const Item = styled(Link).attrs({ className: 'item' })`
   cursor: pointer;
   transition: color 250ms, background 250ms;
   padding: 0.35rem;
-  min-height: 45px;
+  min-height: 46px;
   pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
 
   &.selected {

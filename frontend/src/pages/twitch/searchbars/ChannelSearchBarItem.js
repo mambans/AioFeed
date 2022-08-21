@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { HeartBeat } from '../../../components/HeartBeat';
 import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import ChannelButtonsContainer from '../live/ChannelButtonsContainer';
@@ -8,8 +8,9 @@ import Schedule from '../schedule';
 import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
 import { Item, Profile, ProfileWrapper, Title } from './styledComponents';
 
-const ChannelSearchBarItem = ({ item, className }) => {
+const ChannelSearchBarItem = React.memo(({ item, className, observer, visible }) => {
   /* eslint-disable no-unused-vars */
+  const ref = useRef();
   const {
     broadcaster_login,
     display_name,
@@ -26,30 +27,63 @@ const ChannelSearchBarItem = ({ item, className }) => {
   } = item || {};
   /* eslint-enable no-unused-vars */
 
+  useEffect(() => {
+    if (observer) {
+      const thisItem = ref.current;
+      observer.observe(thisItem);
+
+      return () => {
+        observer.unobserve(thisItem);
+      };
+    }
+  }, [observer]);
+
   return (
-    <Item to={`/${login}`} disabled={!item} className={className}>
-      <ProfileWrapper>
-        {is_live && <HeartBeat scaleRings={true} scale={1.5} />}
-        {profile_image_url && <Profile src={profile_image_url} />}
-      </ProfileWrapper>
-      <Title>{loginNameFormat(item)}</Title>
-      {item && (
-        <ChannelButtonsContainer staticOpen={true}>
-          <Schedule
-            absolute={false}
-            user_id={id}
-            btnSize={22}
-            style={{ padding: 0, marginRight: '5px' }}
-          />
-          {following && (
-            <FavoriteStreamBtn channel={loginNameFormat(item, true)} id={id} show={following} />
-          )}{' '}
-          <VodsFollowUnfollowBtn show={item} channel={item} />
-          {following && <AddUpdateNotificationsButton channel={item} show={following && item} />}
-          {/* </div> */}
-        </ChannelButtonsContainer>
+    <Item
+      ref={ref}
+      to={`/${login}`}
+      disabled={!item}
+      className={className + visible ? ' visible' : ''}
+      onClick={() => {
+        console.log('CLICKED: ', loginNameFormat(item));
+      }}
+      data-id={id}
+    >
+      {visible && (
+        <>
+          <ProfileWrapper>
+            {is_live && <HeartBeat scaleRings={true} scale={1.5} />}
+            {profile_image_url && <Profile src={profile_image_url} />}
+          </ProfileWrapper>
+          <Title>{loginNameFormat(item)}</Title>
+          {item && (
+            <ChannelButtonsContainer
+              staticOpen={true}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                e.stopPropagation();
+              }}
+            >
+              <Schedule
+                absolute={false}
+                user_id={id}
+                btnSize={22}
+                style={{ padding: 0, marginRight: '5px' }}
+              />
+              {following && (
+                <FavoriteStreamBtn channel={loginNameFormat(item, true)} id={id} show={following} />
+              )}{' '}
+              <VodsFollowUnfollowBtn show={item} channel={item} />
+              {following && (
+                <AddUpdateNotificationsButton channel={item} show={following && item} />
+              )}
+              {/* </div> */}
+            </ChannelButtonsContainer>
+          )}
+        </>
       )}
     </Item>
   );
-};
+});
 export default ChannelSearchBarItem;
