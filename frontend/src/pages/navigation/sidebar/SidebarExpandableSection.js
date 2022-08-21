@@ -5,7 +5,6 @@ import { ToggleButtonsContainerHeader } from './StyledComponents';
 import useLocalStorageState from '../../../hooks/useLocalStorageState';
 import ExpandableSection from '../../../components/expandableSection/ExpandableSection';
 import { useSetRecoilState } from 'recoil';
-import { navigationSidebarOverflowAtom } from '../atoms';
 
 const SidebarExpandableSection = ({
   title,
@@ -17,7 +16,6 @@ const SidebarExpandableSection = ({
   children = null,
 }) => {
   const defaultExpanded = true;
-  const setNavigationSidebarOverflow = useSetRecoilState(navigationSidebarOverflowAtom);
 
   const [expanded, setExpanded] = useLocalStorageState('navsidebar-expandableSection', {});
   const closedTimer = useRef();
@@ -87,7 +85,7 @@ const SidebarExpandableSection = ({
               timeout={500}
               unmountOnExit
             >
-              {renderItem(item, index, setNavigationSidebarOverflow)}
+              {renderItem(item, index)}
             </CSSTransition>
           ))}
         </TransitionGroup>

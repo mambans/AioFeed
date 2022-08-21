@@ -124,13 +124,15 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
     try {
       if (e.key === 'ArrowDown') {
         if (showDropdown) e.preventDefault();
+        setShowDropdown(true);
 
         const selected = listRef.current?.querySelector?.('.selected');
         if (!selected && listRef.current) {
           const firstItem = listRef.current.querySelector('.item');
           if (firstItem) firstItem.classList.add('selected');
+          return;
         }
-        const next = selected.nextSibling;
+        const next = selected?.nextSibling;
 
         if (next && !next.classList.contains('loading') && next.classList.contains('item')) {
           selected.classList.remove('selected');
@@ -165,7 +167,12 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
     }
   };
 
-  useEventListenerMemo('keydown', handleArrowNavigation, ref.current);
+  useEventListenerMemo(
+    'keydown',
+    handleArrowNavigation,
+    ref.current,
+    ref.current === document.activeElement || inputRef.current === document.activeElement
+  );
 
   const onSubmit = (event) => {
     const selected = listRef.current?.querySelector?.('.selected');
@@ -228,7 +235,8 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
   const items = getUniqueListBy(
     result
       ?.filter((i) => {
-        return loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current?.value?.trim?.());
+        return true;
+        // return loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current?.value?.trim?.());
       })
       .sort(
         (a, b) =>
@@ -288,6 +296,7 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
                 item={i}
                 className={index === 0 && 'selected'}
                 observer={observer}
+                onSelect={props.onChange}
                 // visible={visibleItems.includes(String(i.id))}
                 visible={!hiddenItems.includes(String(i.id))}
                 // visible={true}

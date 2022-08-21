@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ChannelSearchBarItem from './ChannelSearchBarItem';
 import {
@@ -23,7 +23,13 @@ import useClicksOutside from '../../../hooks/useClicksOutside';
 
 const SearchSubmitIcon = styled(FaSearch).attrs({ size: 18 })``;
 
-const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props }) => {
+const ChannelSearchBar = ({
+  searchButton = true,
+  position,
+  placeholder,
+  hideExtraButtons,
+  ...props
+}) => {
   const [showDropdown, setShowDropdown] = useState();
   const [result, setResult] = useState();
   const [page, setPage] = useState();
@@ -119,13 +125,14 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props
   const handleArrowNavigation = (e) => {
     if (e.key === 'ArrowDown') {
       if (showDropdown) e.preventDefault();
-
+      setShowDropdown(true);
       const selected = listRef.current?.querySelector?.('.selected');
       if (!selected && listRef.current) {
         const firstItem = listRef.current.querySelector('.item');
         if (firstItem) firstItem.classList.add('selected');
+        return;
       }
-      const next = selected.nextSibling;
+      const next = selected?.nextSibling;
 
       if (next && !next.classList.contains('loading') && next.classList.contains('item')) {
         selected.classList.remove('selected');
@@ -138,6 +145,9 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props
       return;
     }
     if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
       if (showDropdown) e.preventDefault();
 
       const selected = listRef.current?.querySelector?.('.selected');
@@ -157,7 +167,12 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props
     }
   };
 
-  useEventListenerMemo('keydown', handleArrowNavigation, ref.current);
+  useEventListenerMemo(
+    'keydown',
+    handleArrowNavigation,
+    ref.current,
+    ref.current === document.activeElement || inputRef.current === document.activeElement
+  );
 
   const onSubmit = (event) => {
     const selected = listRef.current?.querySelector?.('.selected');
@@ -245,21 +260,27 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props
   //   setShowDropdown(false);
   // };
 
+  useEffect(() => {
+    if (inputRef.current) inputRef.current.value = props.value;
+  }, [props.value]);
+
   const loadmore = () => {
     return handleSearch();
   };
 
   const items = getUniqueListBy(
     [
-      ...(followedChannels || []),
+      ...(followedChannels || [])?.filter((i) =>
+        loginNameFormat(i)
+          ?.toLowerCase()
+          ?.includes(inputRef.current?.value?.trim?.()?.toLowerCase())
+      ),
       ...(result || []).sort(
         (a, b) =>
           loginNameFormat(a).replace(inputRef.current?.value?.trim?.())?.length -
           loginNameFormat(b).replace(inputRef.current?.value?.trim?.())?.length
       ),
-    ]?.filter((i) =>
-      loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current?.value?.trim?.()?.toLowerCase())
-    ),
+    ],
     'id'
   );
 
@@ -313,6 +334,8 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props
                 observer={observer}
                 // visible={visibleItems.includes(String(i.id))}
                 visible={!hiddenItems.includes(String(i.id))}
+                hideExtraButtons={hideExtraButtons}
+                onSelect={props.onChange}
               />
             );
           })}

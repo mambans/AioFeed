@@ -15,11 +15,7 @@ import SignUp from '../../account/SignUp';
 import SignIn from '../../account/SignIn';
 import ForgotPassword from '../../account/ForgotPassword';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import {
-  navigationSidebarAtom,
-  navigationSidebarComponentKeyAtom,
-  navigationSidebarOverflowAtom,
-} from '../atoms';
+import { navigationSidebarAtom, navigationSidebarComponentKeyAtom } from '../atoms';
 
 const NavigationSidebar = () => {
   const { user, loading } = useContext(AccountContext);
@@ -27,7 +23,6 @@ const NavigationSidebar = () => {
   const invoked = useRef();
 
   const [showSidebar, setShowNavigationSidebar] = useRecoilState(navigationSidebarAtom);
-  const navigationSidebarOverflow = useRecoilValue(navigationSidebarOverflowAtom);
 
   const handleToggle = () => setShowNavigationSidebar((c) => !c);
 
@@ -96,9 +91,7 @@ const NavigationSidebar = () => {
         appear
       >
         <Portal>
-          <StyledNavSidebar overflow={String(navigationSidebarOverflow)}>
-            {component}
-          </StyledNavSidebar>
+          <StyledNavSidebar>{component}</StyledNavSidebar>
         </Portal>
       </CSSTransition>
     </>

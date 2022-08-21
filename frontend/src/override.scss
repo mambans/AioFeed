@@ -28,8 +28,13 @@
 }
 
 .modal-content {
-  background: transparent !important;
+  background: var(--navigationbarBackground) !important;
   border-color: none !important;
+}
+
+.modal-title {
+  text-align: center;
+  flex: 1;
 }
 
 .popup-content {

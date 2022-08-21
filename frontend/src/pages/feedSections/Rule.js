@@ -8,6 +8,7 @@ import FeedSectionsContext from './FeedSectionsContext';
 import { StyledListForm, StyledButton } from '../../components/styledComponents';
 import Colors from '../../components/themes/Colors';
 import ChannelSearchBar from '../twitch/searchbars/ChannelSearchBar';
+import GameSearchBar from '../twitch/searchbars/GameSearchBar';
 
 const StyledRule = styled.div`
   height: ${({ height }) => height}px;
@@ -179,12 +180,16 @@ const Rule = ({ rule, height, id, index }) => {
               {...bindTitle}
               onBlur={handleOnblur}
             />
-            <Input
-              type='text'
-              placeholder='category..'
-              name='category'
+            <GameSearchBar
+              style={{
+                minWidth: '200px',
+                width: 'unset',
+                margin: '0 5px',
+                // zIndex: 9999 - parseInt(index),
+                zIndex: String(9999 - parseInt(index)),
+              }}
               {...bindCategory}
-              onBlur={handleOnblur}
+              placeholder={category || '...'}
             />
             <ChannelSearchBar
               style={{
@@ -195,15 +200,9 @@ const Rule = ({ rule, height, id, index }) => {
                 zIndex: String(9999 - parseInt(index)),
               }}
               {...bindChannel}
-              placeholder='...'
+              placeholder={channel || '...'}
+              hideExtraButtons
             />
-            {/* <Input
-              type='text'
-              placeholder='channel..'
-              name='channel'
-              {...bindChannel}
-              onBlur={handleOnblur}
-            /> */}
             <Input type='text' placeholder='tag..' name='tag' {...bindTag} onBlur={handleOnblur} />
             <Input
               type='number'
