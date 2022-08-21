@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ChannelSearchBarItem from './ChannelSearchBarItem';
 import {
@@ -200,7 +200,7 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
     } catch (error) {
     } finally {
       setShowDropdown(false);
-      inputRef.current.value = value;
+      inputRef.current.value = value || '';
     }
   };
 
@@ -220,6 +220,10 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
     setShowDropdown(true);
     handleSearch();
   };
+
+  useEffect(() => {
+    if (inputRef.current) inputRef.current.value = props.value || '';
+  }, [props.value]);
 
   // const onBlur = () => {
   //   //FIX, fires when clicking on buttons

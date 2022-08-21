@@ -200,7 +200,7 @@ const ChannelSearchBar = ({
     } catch (error) {
     } finally {
       setShowDropdown(false);
-      inputRef.current.value = value;
+      inputRef.current.value = value || '';
     }
   };
 
@@ -261,7 +261,7 @@ const ChannelSearchBar = ({
   // };
 
   useEffect(() => {
-    if (inputRef.current) inputRef.current.value = props.value;
+    if (inputRef.current) inputRef.current.value = props.value || '';
   }, [props.value]);
 
   const loadmore = () => {
