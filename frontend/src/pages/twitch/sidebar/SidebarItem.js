@@ -75,102 +75,104 @@ const NewHighlight = ({ newlyAdded, user_name }) => {
   }
 };
 
-const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer, favorited }) => {
-  const { user_name, user_id, profile_image_url, viewer_count, game_name, started_at, title } =
-    stream;
-  const [showTitle, setShowTitle] = useState();
-  const ref = useRef();
-  const timerRef = useRef();
+const SidebarItem = React.memo(
+  ({ stream, newlyAdded, shows, setShows, resetShowsTimer, favorited }) => {
+    const { user_name, user_id, profile_image_url, viewer_count, game_name, started_at, title } =
+      stream;
+    const [showTitle, setShowTitle] = useState();
+    const ref = useRef();
+    const timerRef = useRef();
 
-  useEventListenerMemo('mouseenter', handleMouseOver, ref.current);
-  useEventListenerMemo('mouseleave', handleMouseOut, ref.current);
+    useEventListenerMemo('mouseenter', handleMouseOver, ref.current);
+    useEventListenerMemo('mouseleave', handleMouseOut, ref.current);
 
-  function handleMouseOver() {
-    setShowTitle(shows);
-    timerRef.current = setTimeout(() => {
-      setShowTitle(true);
-      setShows(true);
-    }, 1000);
-  }
+    function handleMouseOver() {
+      setShowTitle(shows);
+      timerRef.current = setTimeout(() => {
+        setShowTitle(true);
+        setShows(true);
+      }, 1000);
+    }
 
-  function handleMouseOut() {
-    clearTimeout(timerRef.current);
-    setShowTitle(false);
-    clearTimeout(resetShowsTimer.current);
-    resetShowsTimer.current = setTimeout(() => {
-      setShows(false);
-    }, 5000);
-  }
+    function handleMouseOut() {
+      clearTimeout(timerRef.current);
+      setShowTitle(false);
+      clearTimeout(resetShowsTimer.current);
+      resetShowsTimer.current = setTimeout(() => {
+        setShows(false);
+      }, 5000);
+    }
 
-  return (
-    <SidebarItemkWrapper>
-      <FavoriteStreamBtn
-        channel={user_name}
-        id={user_id}
-        size={20}
-        loweropacity={!favorited ? '0' : '0.3'}
-        style={{ position: 'absolute', top: '0px', left: '0px' }}
-      />
+    return (
+      <SidebarItemkWrapper>
+        <FavoriteStreamBtn
+          channel={user_name}
+          id={user_id}
+          size={20}
+          loweropacity={!favorited ? '0' : '0.3'}
+          style={{ position: 'absolute', top: '0px', left: '0px' }}
+        />
 
-      <SidebarLinkWrapper
-        ref={ref}
-        to={'/' + user_name?.toLowerCase()}
-        key={user_id}
-        duration={String(shows)}
-      >
-        <StyledsidebarItem key={user_id} duration={shows}>
-          <NewHighlight newlyAdded={newlyAdded} user_name={user_name}></NewHighlight>
-
-          <div className={'profileImage'}>
-            <img
-              src={
-                profile_image_url?.replace('{width}', 640)?.replace('{height}', 360) ||
-                `${process.env.PUBLIC_URL}/android-chrome-192x192.webp`
-              }
-              alt=''
-            ></img>
-          </div>
-          <FirstRow>
-            <div className={'sidebarUser'}>{truncate(loginNameFormat(stream), 16)}</div>
-
-            <AnimatedViewCount
-              className={'sidebarViewers'}
-              viewers={viewer_count}
-              disabePrefix={true}
-            />
-          </FirstRow>
-          <SecondRow>
-            <ToolTip
-              show={game_name?.length > 15}
-              delay={{ show: 500, hide: 0 }}
-              tooltip={game_name}
-            >
-              <p className={'sidebarGame'}>{game_name}</p>
-            </ToolTip>
-            <div className={'sidebarDuration'}>
-              <Moment interval={1} durationFromNow>
-                {started_at}
-              </Moment>
-              <FaRegClock size={12} />
-            </div>
-          </SecondRow>
-        </StyledsidebarItem>
-        <CSSTransition
-          in={showTitle}
-          key={user_id + title}
-          timeout={300}
-          classNames='sidebarInfoPopup'
-          unmountOnExit
+        <SidebarLinkWrapper
+          ref={ref}
+          to={'/' + user_name?.toLowerCase()}
+          key={user_id}
+          duration={String(shows)}
         >
-          <SidebarInfoPopup>
-            <div className='borderTop'></div>
-            <LiveInfoPopup channel={stream} />
-            <div className='borderBottom'></div>
-          </SidebarInfoPopup>
-        </CSSTransition>
-      </SidebarLinkWrapper>
-    </SidebarItemkWrapper>
-  );
-};
+          <StyledsidebarItem key={user_id} duration={shows}>
+            <NewHighlight newlyAdded={newlyAdded} user_name={user_name}></NewHighlight>
+
+            <div className={'profileImage'}>
+              <img
+                src={
+                  profile_image_url?.replace('{width}', 640)?.replace('{height}', 360) ||
+                  `${process.env.PUBLIC_URL}/android-chrome-192x192.webp`
+                }
+                alt=''
+              ></img>
+            </div>
+            <FirstRow>
+              <div className={'sidebarUser'}>{truncate(loginNameFormat(stream), 16)}</div>
+
+              <AnimatedViewCount
+                className={'sidebarViewers'}
+                viewers={viewer_count}
+                disabePrefix={true}
+              />
+            </FirstRow>
+            <SecondRow>
+              <ToolTip
+                show={game_name?.length > 15}
+                delay={{ show: 500, hide: 0 }}
+                tooltip={game_name}
+              >
+                <p className={'sidebarGame'}>{game_name}</p>
+              </ToolTip>
+              <div className={'sidebarDuration'}>
+                <Moment interval={1} durationFromNow>
+                  {started_at}
+                </Moment>
+                <FaRegClock size={12} />
+              </div>
+            </SecondRow>
+          </StyledsidebarItem>
+          <CSSTransition
+            in={showTitle}
+            key={user_id + title}
+            timeout={300}
+            classNames='sidebarInfoPopup'
+            unmountOnExit
+          >
+            <SidebarInfoPopup>
+              <div className='borderTop'></div>
+              <LiveInfoPopup channel={stream} />
+              <div className='borderBottom'></div>
+            </SidebarInfoPopup>
+          </CSSTransition>
+        </SidebarLinkWrapper>
+      </SidebarItemkWrapper>
+    );
+  }
+);
 
 export default SidebarItem;
