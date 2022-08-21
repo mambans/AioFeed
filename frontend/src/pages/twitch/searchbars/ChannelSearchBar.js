@@ -288,7 +288,7 @@ const ChannelSearchBar = ({ searchButton = true, position, ...props }) => {
             return (
               <ChannelSearchBarItem
                 searchInput={inputRef.current?.value}
-                key={index}
+                key={i.id}
                 item={i}
                 className={index === 0 && 'selected'}
                 observer={observer}
