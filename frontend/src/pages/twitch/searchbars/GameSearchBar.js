@@ -26,10 +26,10 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
   const [result, setResult] = useState();
   const [page, setPage] = useState();
   const [loading, setLoading] = useState();
+  /* eslint-disable no-unused-vars */
   const [hiddenItems, setHiddenItems] = useState([]);
   const [visibleItems, setVisibleItems] = useState([]);
-  // eslint-disable-next-line no-unused-vars
-  const [rnd, setRnd] = useState();
+  /* eslint-enable no-unused-vars */
   const navigate = useNavigate();
   const location = useLocation();
   const ref = useRef();
@@ -91,23 +91,6 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
             value
           );
         })();
-
-        // const ids = getUniqueListBy(
-        //   result
-        //     ?.filter((i) => {
-        //       return loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current?.value?.trim?.());
-        //     })
-        //     .sort(
-        //       (a, b) =>
-        //         inputRef.current?.value?.trim?.() &&
-        //         loginNameFormat(a).replace(inputRef.current?.value?.trim?.())?.length -
-        //           loginNameFormat(b).replace(inputRef.current?.value?.trim?.())?.length
-        //     ),
-        //   'id'
-        // )
-        //   .splice(0, 25)
-        //   .map((i) => i.id);
-        // setVisibleItems(ids);
 
         setResult((c) => {
           const res = searchResults?.data?.data.map((i) => ({
@@ -231,20 +214,6 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
     handleSearch();
   };
 
-  // useEffect(() => {
-  //   setItems(
-  //     getUniqueListBy(
-  //       [
-  //         ...(followedChannels?.filter((i) =>
-  //           loginNameFormat(i)?.includes(inputRef.current.value)
-  //         ) || []),
-  //         ...(result || []),
-  //       ],
-  //       'id'
-  //     )
-  //   );
-  // }, [followedChannels, result]);
-
   // const onBlur = () => {
   //   //FIX, fires when clicking on buttons
   //   setShowDropdown(false);
@@ -270,15 +239,12 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
     'id'
   );
 
-  console.log('visibleItems:', visibleItems);
   return (
     <Wrapper
       ref={ref}
       tabIndex={1}
       style={props.style}
-      onTransitionEnd={() => {
-        setRnd((c) => !c);
-      }}
+      onTransitionEnd={() => {}}
       // onBlur={onBlur}
       open={showDropdown}
     >

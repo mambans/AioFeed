@@ -57,7 +57,6 @@ const Handler = ({ children }) => {
 
   const refresh = useCallback(
     async ({ firstLoad = false } = {}) => {
-      console.log('refresh:');
       cancelToken.current.cancel('New request incoming');
       cancelToken.current = CancelToken.source();
       setLoadingStates((c) => {
