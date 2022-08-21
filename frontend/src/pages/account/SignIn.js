@@ -5,17 +5,19 @@ import LoadingIndicator from '../../components/LoadingIndicator';
 import { ThemeSelector } from '../../components/themes/styledComponents';
 import useInput from '../../hooks/useInput';
 import AccountContext from './AccountContext';
-import NavigationContext from '../navigation/NavigationContext';
 import {
   InlineError,
   StyledCreateForm,
   StyledCreateFormTitle,
 } from '../navigation/sidebar/StyledComponents';
 import Button from '../../components/Button';
+import { useSetRecoilState } from 'recoil';
+import { navigationSidebarComponentKeyAtom } from '../navigation/atoms';
 
 const SignIn = ({ text }) => {
   const { authenticate } = useContext(AccountContext);
-  const { setSidebarComonentKey } = useContext(NavigationContext);
+  const setNavigationSidebarComponentKey = useSetRecoilState(navigationSidebarComponentKeyAtom);
+
   const { value: username, bind: bindUsername } = useInput('');
   const { value: password, bind: bindPassword } = useInput('');
   const [loading, setLoading] = useState();
@@ -42,7 +44,7 @@ const SignIn = ({ text }) => {
         console.log('Logged in data:', data);
 
         setLoading(false);
-        setSidebarComonentKey({ comp: 'account' });
+        setNavigationSidebarComponentKey({ comp: 'account' });
       })
       .catch((error) => {
         console.log('errorrrrrrrrrrr:', error);
@@ -54,7 +56,10 @@ const SignIn = ({ text }) => {
   return (
     <>
       <Breadcrumb>
-        <Breadcrumb.Item active={true} onClick={() => setSidebarComonentKey({ comp: 'signin' })}>
+        <Breadcrumb.Item
+          active={true}
+          onClick={() => setNavigationSidebarComponentKey({ comp: 'signin' })}
+        >
           Sign in
         </Breadcrumb.Item>
       </Breadcrumb>
@@ -90,10 +95,13 @@ const SignIn = ({ text }) => {
         {error && <InlineError>{error}</InlineError>}
       </StyledCreateForm>
       <ThemeSelector style={{ marginTop: '20px' }} />
-      <Button variant='link' onClick={() => setSidebarComonentKey({ comp: 'SignUp' })}>
+      <Button variant='link' onClick={() => setNavigationSidebarComponentKey({ comp: 'SignUp' })}>
         Don't have an account? Create an account here!
       </Button>
-      <Button variant='link' onClick={() => setSidebarComonentKey({ comp: 'ForgotPassword' })}>
+      <Button
+        variant='link'
+        onClick={() => setNavigationSidebarComponentKey({ comp: 'ForgotPassword' })}
+      >
         Forgot password?
       </Button>
       {loading && <LoadingIndicator height={150} width={150} />}

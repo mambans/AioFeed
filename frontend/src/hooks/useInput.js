@@ -23,13 +23,17 @@ const useInput = (initialValue, options = { type: 'string', trim: false }, onCha
     bind: {
       value,
       onChange: function (event) {
-        event?.preventDefault();
-        event?.stopPropagation();
-        onChange?.(event);
+        event?.preventDefault?.();
+        event?.stopPropagation?.();
+        const val = (() => {
+          if (typeof event === 'string' || typeof event === 'number' || !event) return event;
+          return event?.target?.value;
+        })();
+        onChange?.(val);
         const v =
           options?.type === 'number'
-            ? parseInt(event?.target?.value?.replace(/ +(?= )/g, ''))
-            : event?.target?.value?.replace(/ +(?= )/g, '');
+            ? parseInt(val?.replace(/ +(?= )/g, ''))
+            : val?.replace(/ +(?= )/g, '');
         setValue(options.trim ? v.trim() : v);
       },
     },

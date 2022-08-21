@@ -19,3 +19,8 @@ export const navigationSidebarOverflowAtom = atom({
   key: 'enableNavigationSidebarOverflow',
   default: false,
 });
+
+export const navigationSidebarComponentKeyAtom = atom({
+  key: 'navigationSidebarComponentKeyAtom',
+  default: false,
+});

@@ -448,8 +448,8 @@ const Player = () => {
         <CSSTransition
           in={showControlls || status !== 'Live'}
           key={'controllsUI'}
-          timeout={1000}
-          classNames='fade-controllUI-1s'
+          timeout={showControlls || status !== 'Live' ? 500 : 250}
+          classNames='fade-controllUI'
         >
           <VolumeEventOverlay
             show={showUIControlls || status !== 'Live'}
@@ -464,6 +464,7 @@ const Player = () => {
             player={twitchVideoPlayer.current}
             chatAsOverlay={String(chatState.chatAsOverlay)}
             hidePointerEvents={status !== 'Live'}
+            // addEventListeners
             ContextMenu={
               Boolean(twitchVideoPlayer.current) && (
                 <PlayerContextMenu

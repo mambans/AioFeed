@@ -27,7 +27,7 @@ const Rules = ({ rules, name, id }) => {
         width: WIDTH + 'px',
       }}
       onClick={() => setNavigationSidebarOverflow('visible')}
-      onClose={() => setNavigationSidebarOverflow(null)}
+      onClose={() => setNavigationSidebarOverflow('auto')}
       relative
     >
       <RulesContainer itemHeight={ITEM_HEIGHT} id='RULES'>

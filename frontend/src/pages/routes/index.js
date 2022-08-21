@@ -22,6 +22,8 @@ import AccountContext from '../account/AccountContext';
 import Player from '../twitch/player/Player';
 import StandaloneChat from '../twitch/player/StandaloneChat';
 import LoadingIndicator from '../../components/LoadingIndicator';
+import ChannelSearchBar from '../twitch/searchbars/ChannelSearchBar';
+import { msToHMS } from '../../util';
 
 const MainContentContainer = styled.main`
   min-height: 100vh;
@@ -145,6 +147,15 @@ const routes = [
     path: 'videos/:videoId',
     element: <SharedVideoPlayer />,
     authRequired: true,
+  },
+  {
+    path: 'search',
+    element: (
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        {msToHMS(3660000)}
+        <ChannelSearchBar />
+      </div>
+    ),
   },
   {
     path: ':channelName',

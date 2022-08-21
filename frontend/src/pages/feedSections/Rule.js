@@ -7,10 +7,14 @@ import { MdDelete, MdAdd } from 'react-icons/md';
 import FeedSectionsContext from './FeedSectionsContext';
 import { StyledListForm, StyledButton } from '../../components/styledComponents';
 import Colors from '../../components/themes/Colors';
-import ChannelSearchList from './../twitch/channelList';
+import ChannelSearchBar from '../twitch/searchbars/ChannelSearchBar';
 
 const StyledRule = styled.div`
   height: ${({ height }) => height}px;
+
+  .searchbar {
+    background: transparent;
+  }
 
   &.ListForm-appear {
     opacity: 0;
@@ -182,7 +186,7 @@ const Rule = ({ rule, height, id, index }) => {
               {...bindCategory}
               onBlur={handleOnblur}
             />
-            <ChannelSearchList
+            <ChannelSearchBar
               style={{
                 minWidth: '200px',
                 width: 'unset',
@@ -190,16 +194,16 @@ const Rule = ({ rule, height, id, index }) => {
                 // zIndex: 9999 - parseInt(index),
                 zIndex: String(9999 - parseInt(index)),
               }}
-              // {...bindChannel}
+              {...bindChannel}
               placeholder='...'
             />
-            <Input
+            {/* <Input
               type='text'
               placeholder='channel..'
               name='channel'
               {...bindChannel}
               onBlur={handleOnblur}
-            />
+            /> */}
             <Input type='text' placeholder='tag..' name='tag' {...bindTag} onBlur={handleOnblur} />
             <Input
               type='number'

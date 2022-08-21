@@ -106,6 +106,7 @@ const SidebarItem = ({ stream, newlyAdded, shows, setShows, resetShowsTimer, fav
     <SidebarItemkWrapper>
       <FavoriteStreamBtn
         channel={user_name}
+        id={user_id}
         size={20}
         loweropacity={!favorited ? '0' : '0.3'}
         style={{ position: 'absolute', top: '0px', left: '0px' }}

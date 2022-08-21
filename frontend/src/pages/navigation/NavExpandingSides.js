@@ -18,7 +18,8 @@ const NavExpandingSides = styled.div`
   width: 410px;
   transition: width 250ms cubic-bezier(0.46, 0.03, 0.52, 0.96);
   height: inherit;
-  overflow: hidden;
+  overflow: ${({ side }) => (side === 'right' ? 'visible' : 'hidden')};
+
   display: flex;
   justify-content: ${({ side }) => (side === 'right' ? 'flex-end' : 'flex-start')};
   align-items: center;

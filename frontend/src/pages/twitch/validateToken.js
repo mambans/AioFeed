@@ -59,8 +59,8 @@ const validateTokenFunc = async ({ useApp_token_last }) => {
 };
 // res.data.access_token
 
-const fullValidateFunc = async () => {
-  const access_token = getCookie('Twitch-access_token');
+const fullValidateFunc = async (token) => {
+  const access_token = token || getCookie('Twitch-access_token');
 
   try {
     const res = await validateFunction(access_token);

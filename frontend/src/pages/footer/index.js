@@ -8,7 +8,6 @@ import { NavLink } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import React, { useContext, useState, useRef } from 'react';
 
-import NavigationContext from './../navigation/NavigationContext';
 import {
   StyledFooterContainer,
   StyledCenterBottomText,
@@ -18,11 +17,16 @@ import ChangeLogs from '../changeLogs';
 import styles from '../changeLogs/ChangeLogs.module.scss';
 import AccountContext from '../account/AccountContext';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { footerVisibleAtom, navigationSidebarAtom } from '../navigation/atoms';
+import {
+  footerVisibleAtom,
+  navigationSidebarAtom,
+  navigationSidebarComponentKeyAtom,
+} from '../navigation/atoms';
 
 const Footer = () => {
   const { user } = useContext(AccountContext);
-  const { setSidebarComonentKey } = useContext(NavigationContext);
+  const setNavigationSidebarComponentKey = useSetRecoilState(navigationSidebarComponentKeyAtom);
+
   const footerVisible = useRecoilValue(footerVisibleAtom);
 
   const showNavigationSidebar = useSetRecoilState(navigationSidebarAtom);
@@ -54,7 +58,7 @@ const Footer = () => {
                 <div
                   className='button'
                   onClick={() => {
-                    setSidebarComonentKey({ comp: 'account' });
+                    setNavigationSidebarComponentKey({ comp: 'account' });
                     showNavigationSidebar(true);
                   }}
                 >
@@ -66,7 +70,7 @@ const Footer = () => {
                   <div
                     className='button'
                     onClick={() => {
-                      setSidebarComonentKey({ comp: 'SignIn' });
+                      setNavigationSidebarComponentKey({ comp: 'SignIn' });
                       showNavigationSidebar(true);
                     }}
                   >
@@ -76,12 +80,12 @@ const Footer = () => {
                   <div
                     className='button'
                     onClick={() => {
-                      setSidebarComonentKey({ comp: 'SignUp' });
+                      setNavigationSidebarComponentKey({ comp: 'SignUp' });
                       showNavigationSidebar(true);
                     }}
                   >
                     <MdAccountCircle size={20} style={{ marginRight: '0.75rem' }} />
-                    Create account
+                    Create an account
                   </div>
                 </>
               )}

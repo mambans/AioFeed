@@ -105,11 +105,52 @@ export const askForBrowserNotificationPermission = async () => {
   }
 };
 
+// export const msToHMS = (ms) => {
+//   const duration = moment.duration(ms);
+//   const hours = duration.hours() ? `${duration.hours()}h` : '';
+//   const minutes = duration.minutes() || duration.minutes() ? ` ${duration.minutes()}m` : '';
+//   const seconds = duration.seconds() ? ` ${duration.seconds()}s` : '';
+//   const HMS = `${hours}${minutes}${seconds}`;
+//   return HMS;
+// };
+
 export const msToHMS = (ms) => {
+  if (!ms) return '-';
   const duration = moment.duration(ms);
-  const hours = duration.hours() ? `${duration.hours()}h` : '';
-  const minutes = duration.minutes() || duration.minutes() ? ` ${duration.minutes()}m` : '';
-  const seconds = duration.seconds() ? ` ${duration.seconds()}s` : '';
-  const HMS = `${hours}${minutes}${seconds}`;
-  return HMS;
+
+  const hm = duration
+    .format('h[h] m[m] s[s]')
+    //removes suffixes if there are 0 or nothing
+    .replace(' h', 'h')
+    .replace(' m', 'm')
+    .replace(' 0m', '')
+    .replace(' 0s', '');
+  if (!hm) return duration.format('s [s]');
+  return hm;
+  // console.log('duration:', duration);
+  // const days = duration.hours() ? `${duration.hours()}h` : '';
+  // const hours = duration.hours() ? `${duration.hours()}h` : '';
+  // console.log('hours:', hours);
+  // const minutes = duration.minutes() || duration.minutes() ? ` ${duration.minutes()}m` : '';
+  // console.log('minutes:', minutes);
+  // const seconds = duration.seconds() ? ` ${duration.seconds()}s` : '';
+  // console.log('seconds:', seconds);
+  // const HMS = `${hours}${minutes}${seconds}`;
+  // return HMS;
+};
+
+export const getUniqueListByNoMerge = (arr, key) => {
+  return [...new Map(arr.map((item) => [item[key], item])).values()];
+};
+
+export const getUniqueListBy = (arr, key) => {
+  return arr.reduce((acc, item) => {
+    const foundIndex = acc.findIndex((i) => i[key] === item[key]);
+    if (foundIndex >= 0 && item) {
+      acc[foundIndex] = { ...acc[foundIndex], ...item };
+    } else {
+      acc.push({ ...item });
+    }
+    return acc;
+  }, []);
 };

@@ -11,7 +11,6 @@ import { NavDropdown } from 'react-bootstrap';
 import RenderNotifications from './../notifications';
 import './Navigation.scss';
 import GameSearchBar from '../twitch/categoryTopStreams/GameSearchBar';
-import ChannelSearchList from './../twitch/channelList/index';
 import NavExpandingSides from './NavExpandingSides';
 import DropDown from './DropDown';
 import LogsContext from '../logs/LogsContext';
@@ -19,6 +18,7 @@ import Colors from '../../components/themes/Colors';
 import { NavigationSidebar } from './sidebar';
 import { navigationBarVisibleAtom } from './atoms';
 import { useRecoilValue } from 'recoil';
+import ChannelSearchBar from '../twitch/searchbars/ChannelSearchBar';
 
 const StyledNavbar = styled(Navbar)`
   display: flex;
@@ -132,7 +132,8 @@ const Navigation = () => {
           <FaAngleLeft className='arrow' size={20} />
           <FaAngleLeft className='arrow shadow' size={20} />
           <GameSearchBar {...channelSearchListProps} openInNewTab={true} />
-          <ChannelSearchList {...channelSearchListProps} />
+          <ChannelSearchBar {...channelSearchListProps} />
+          {/* <ChannelSearchLi{...channelSearchListProps} st {...channelSearchListProps} /> */}
           {LogsIcon}
           <NavigationSidebar />
         </NavExpandingSides>

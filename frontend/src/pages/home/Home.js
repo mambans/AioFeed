@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import Alert from '../../components/alert';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
-import { navigationSidebarAtom } from '../navigation/atoms';
+import { navigationSidebarComponentKeyAtom } from '../navigation/atoms';
 import ThemeContext from './../../components/themes/ThemeContext';
 
 import './Home.scss';
@@ -13,7 +13,7 @@ export const Home = () => {
   useDocumentTitle();
   const { activeTheme } = useContext(ThemeContext);
   const showLoginAlert = useLocation()?.state?.showLoginAlert;
-  const showNavigationSidebar = useSetRecoilState(navigationSidebarAtom);
+  const setNavigationSidebarComponentKey = useSetRecoilState(navigationSidebarComponentKeyAtom);
 
   const Logos = () => (
     <>
@@ -52,9 +52,9 @@ export const Home = () => {
 
   useEffect(() => {
     if (showLoginAlert) {
-      showNavigationSidebar(true);
+      setNavigationSidebarComponentKey({ comp: 'signin' });
     }
-  }, [showLoginAlert, showNavigationSidebar]);
+  }, [showLoginAlert, setNavigationSidebarComponentKey]);
 
   if (showLoginAlert) {
     return (
@@ -62,7 +62,7 @@ export const Home = () => {
         type='info'
         title='Login to continue'
         message='Login with your AioFeed account'
-        onClick={() => showNavigationSidebar((c) => !c)}
+        onClick={() => setNavigationSidebarComponentKey({ comp: 'signin' })}
       />
     );
   }

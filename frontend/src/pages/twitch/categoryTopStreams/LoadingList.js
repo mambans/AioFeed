@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
-
-import { StyledLoadingListElement } from './styledComponents';
+import ChannelSearchBarItem from '../searchbars/ChannelSearchBarItem';
 
 const LoadingList = ({ amount, style = {} }) => {
   const array = useRef(
@@ -11,9 +10,9 @@ const LoadingList = ({ amount, style = {} }) => {
   );
 
   return array.current.map((item, index) => (
-    <StyledLoadingListElement key={index} style={{ ...style }}>
-      <div style={{ width: item.width }}></div>
-    </StyledLoadingListElement>
+    <ChannelSearchBarItem className={'loading'} key={index} style={{ ...style }}>
+      {/* <div style={{ width: item.width }}></div> */}
+    </ChannelSearchBarItem>
   ));
 };
 export default LoadingList;

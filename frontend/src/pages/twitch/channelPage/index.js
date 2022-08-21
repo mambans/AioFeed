@@ -422,6 +422,7 @@ const ChannelPage = () => {
                           />
                           <FavoriteStreamBtn
                             channel={channelInfo.name || channelName}
+                            id={channelInfo._id}
                             show={Boolean(channelInfo)}
                             marginright={'5px'}
                           />

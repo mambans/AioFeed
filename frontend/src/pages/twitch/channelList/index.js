@@ -280,7 +280,7 @@ const ChannelList = ({
     if (onChange) {
       console.log(123);
       e.target.value = returnChannel();
-      onChange(e);
+      // onChange(e);
       return;
     }
     return;

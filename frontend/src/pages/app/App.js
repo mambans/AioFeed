@@ -4,7 +4,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import FeedsContext, { FeedsProvider } from '../feed/FeedsContext';
-import { NavigationProvider } from '../navigation/NavigationContext';
 import { NotificationsProvider } from '../notifications/NotificationsContext';
 import { ThemeProvider } from '../../components/themes/ThemeContext';
 import CookieConsentAlert from './CookieConsentAlert';
@@ -43,33 +42,31 @@ const AppContainer = styled.div`
 const AppRoutesContainer = () => {
   return (
     <React.StrictMode>
-      <LogsProvider>
-        <RecoilRoot>
+      <RecoilRoot>
+        <LogsProvider>
           <ThemeProvider>
             <AccountProvider>
               <TwitchProvider>
                 <YoutubeProvider>
-                  <NavigationProvider>
-                    <NotificationsProvider>
-                      <TwitterProvider>
-                        <FeedsProvider>
-                          <FeedSectionsProvider>
-                            <MyListsProvider>
-                              <VodsProvider>
-                                <App />
-                              </VodsProvider>
-                            </MyListsProvider>
-                          </FeedSectionsProvider>
-                        </FeedsProvider>
-                      </TwitterProvider>
-                    </NotificationsProvider>
-                  </NavigationProvider>
+                  <NotificationsProvider>
+                    <TwitterProvider>
+                      <FeedsProvider>
+                        <FeedSectionsProvider>
+                          <MyListsProvider>
+                            <VodsProvider>
+                              <App />
+                            </VodsProvider>
+                          </MyListsProvider>
+                        </FeedSectionsProvider>
+                      </FeedsProvider>
+                    </TwitterProvider>
+                  </NotificationsProvider>
                 </YoutubeProvider>
               </TwitchProvider>
             </AccountProvider>
           </ThemeProvider>
-        </RecoilRoot>
-      </LogsProvider>
+        </LogsProvider>
+      </RecoilRoot>
     </React.StrictMode>
   );
 };

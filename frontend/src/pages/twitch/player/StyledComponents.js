@@ -15,7 +15,6 @@ import { Button, Nav } from 'react-bootstrap';
 import { GrRefresh } from 'react-icons/gr';
 import { Link, NavLink } from 'react-router-dom';
 import { IconContainer } from '../../myLists/StyledComponents';
-import { BottomDiv } from './Chat';
 import { useRecoilState } from 'recoil';
 import { navigationBarVisibleAtom } from '../../navigation/atoms';
 
@@ -260,29 +259,29 @@ export const StyledVolumeEventOverlay = styled.div`
     }
   }
 
-  &.fade-controllUI-1s-enter {
+  &.fade-controllUI-enter {
     opacity: 0;
-    transition: opacity 1000ms;
+    transition: opacity 500ms;
   }
 
-  &.fade-controllUI-1s-enter-active {
-    opacity: 1;
-    transition: opacity 1000ms;
-  }
-
-  &.fade-controllUI-1s-exit {
+  &.fade-controllUI-enter-active {
     opacity: 1;
     transition: opacity 500ms;
   }
 
-  &.fade-controllUI-1s-exit-active {
-    opacity: 0;
-    transition: opacity 500ms;
+  &.fade-controllUI-exit {
+    opacity: 1;
+    transition: opacity 250ms;
   }
 
-  &.fade-controllUI-1s-exit-done {
+  &.fade-controllUI-exit-active {
     opacity: 0;
-    transition: opacity 500ms;
+    transition: opacity 250ms;
+  }
+
+  &.fade-controllUI-exit-done {
+    opacity: 0;
+    transition: opacity 250ms;
   }
 `;
 
@@ -986,9 +985,6 @@ export const ChatWrapper = styled.div`
   background: var(--navigationbarBackground);
 
   &:hover {
-    ${BottomDiv} {
-      height: 25px;
-    }
     ${ChatHeader} {
       height: 45px;
       padding: 0.5rem;

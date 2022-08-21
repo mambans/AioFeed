@@ -208,7 +208,7 @@ const StreamElement = ({
                 absolute={false}
                 btnSize={22}
               />
-              <FavoriteStreamBtn channel={login || user_login} />
+              <FavoriteStreamBtn channel={login || user_login} id={user_id} />
               <VodsFollowUnfollowBtn channel={data} marginright='5px;' />
               <AddUpdateNotificationsButton channel={streamData} marginright='5px;' />
               <FollowUnfollowBtn

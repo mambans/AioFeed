@@ -1,8 +1,7 @@
-import React, { useContext, useReducer, useState } from 'react';
+import React, { useReducer, useState } from 'react';
 import { Breadcrumb, Form } from 'react-bootstrap';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import useInput from '../../hooks/useInput';
-import NavigationContext from '../navigation/NavigationContext';
 import {
   InlineError,
   StyledCreateForm,
@@ -10,9 +9,13 @@ import {
 } from '../navigation/sidebar/StyledComponents';
 import { Auth } from 'aws-amplify';
 import Button from '../../components/Button';
+import { useSetRecoilState } from 'recoil';
+import { navigationSidebarComponentKeyAtom } from '../navigation/atoms';
+import { Link } from 'react-router-dom';
 
 const SignUp = () => {
-  const { setSidebarComonentKey } = useContext(NavigationContext);
+  const setNavigationSidebarComponentKey = useSetRecoilState(navigationSidebarComponentKeyAtom);
+
   const { value: username, bind: bindUsername } = useInput('');
   const { value: email, bind: bindEmail } = useInput('');
   const { value: password, bind: bindPassword } = useInput('');
@@ -49,7 +52,7 @@ const SignUp = () => {
         setLoading(false);
 
         if (data) {
-          setSidebarComonentKey({
+          setNavigationSidebarComponentKey({
             comp: 'account',
             text: (
               <span style={{ display: 'flex', flexWrap: 'wrap' }}>
@@ -68,10 +71,13 @@ const SignUp = () => {
   return (
     <>
       <Breadcrumb>
-        <Breadcrumb.Item onClick={() => setSidebarComonentKey({ comp: 'signin' })}>
+        <Breadcrumb.Item onClick={() => setNavigationSidebarComponentKey({ comp: 'signin' })}>
           Sign in
         </Breadcrumb.Item>
-        <Breadcrumb.Item active={true} onClick={() => setSidebarComonentKey({ comp: 'signout' })}>
+        <Breadcrumb.Item
+          active={true}
+          onClick={() => setNavigationSidebarComponentKey({ comp: 'signout' })}
+        >
           Sign out
         </Breadcrumb.Item>
       </Breadcrumb>
@@ -107,7 +113,13 @@ const SignUp = () => {
 
         {error && <InlineError>{error}</InlineError>}
       </StyledCreateForm>
-      {loading && <LoadingIndicator height={150} width={150} />}
+      {loading && <LoadingIndicator height={150} width={150} />}{' '}
+      <Link
+        style={{ position: 'absolute', bottom: '20px', left: '20px', color: '#ffffff' }}
+        to='/legality#Privacy'
+      >
+        Privacy Notice
+      </Link>
     </>
   );
 };

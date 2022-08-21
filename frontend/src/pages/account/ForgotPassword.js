@@ -1,14 +1,16 @@
-import React, { useContext, useReducer, useState } from 'react';
+import React, { useReducer, useState } from 'react';
 import { Breadcrumb, Form, Spinner } from 'react-bootstrap';
 import useInput from '../../hooks/useInput';
 import { Auth } from 'aws-amplify';
 import { InlineError } from '../navigation/sidebar/StyledComponents';
-import NavigationContext from '../navigation/NavigationContext';
 import { toast } from 'react-toastify';
 import Button from '../../components/Button';
+import { navigationSidebarComponentKeyAtom } from '../navigation/atoms';
+import { useSetRecoilState } from 'recoil';
 
 const ForgotPassword = () => {
-  const { setSidebarComonentKey } = useContext(NavigationContext);
+  const setNavigationSidebarComponentKey = useSetRecoilState(navigationSidebarComponentKeyAtom);
+
   const [error, setError] = useReducer((state, error) => {
     switch (error?.message) {
       case 'User is not confirmed.':
@@ -39,7 +41,7 @@ const ForgotPassword = () => {
         console.log('passwordsubmitRes:', passwordsubmitRes);
         if (passwordsubmitRes === 'SUCCESS') {
           toast.success('Password successfully reset, please login.');
-          setSidebarComonentKey({ comp: 'signin' });
+          setNavigationSidebarComponentKey({ comp: 'signin' });
         }
       } else {
         const res = await Auth.forgotPassword(username);
@@ -58,12 +60,12 @@ const ForgotPassword = () => {
   return (
     <>
       <Breadcrumb>
-        <Breadcrumb.Item onClick={() => setSidebarComonentKey({ comp: 'signin' })}>
+        <Breadcrumb.Item onClick={() => setNavigationSidebarComponentKey({ comp: 'signin' })}>
           Sign in
         </Breadcrumb.Item>
         <Breadcrumb.Item
           active={true}
-          onClick={() => setSidebarComonentKey({ comp: 'forgotpassword' })}
+          onClick={() => setNavigationSidebarComponentKey({ comp: 'forgotpassword' })}
         >
           forgot password
         </Breadcrumb.Item>

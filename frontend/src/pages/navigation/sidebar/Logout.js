@@ -3,16 +3,17 @@ import { Button } from 'react-bootstrap';
 import AccountContext from '../../account/AccountContext';
 import { GoSignOut } from 'react-icons/go';
 import ToolTip from '../../../components/tooltip/ToolTip';
-import NavigationContext from '../NavigationContext';
+import { useSetRecoilState } from 'recoil';
+import { navigationSidebarComponentKeyAtom } from '../atoms';
 
 const Logout = () => {
   const { signOut } = useContext(AccountContext) || {};
-  const { setSidebarComonentKey } = useContext(NavigationContext) || {};
+  const setNavigationSidebarComponentKey = useSetRecoilState(navigationSidebarComponentKeyAtom);
 
   const logout = async () => {
     const loggedOut = await signOut();
     console.log('loggedOut:', loggedOut);
-    setSidebarComonentKey({ comp: 'signin' });
+    setNavigationSidebarComponentKey({ comp: 'signin' });
   };
 
   return (

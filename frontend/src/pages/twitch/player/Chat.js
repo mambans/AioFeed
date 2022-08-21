@@ -225,14 +225,6 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
             src={`https://www.twitch.tv/embed/${channelName}/chat?darkpopout&parent=aiofeed.com`}
           />
         </InnerWrapper>
-        <BottomDiv
-          ref={bottomRef}
-          id='BottomDiv'
-          onMouseDown={onDragInit}
-          onMouseUp={onDragStop}
-          onMouseMove={dragging ? onDragMove : () => {}}
-          dragging={dragging}
-        />
       </ChatWrapper>
     </>
   );
@@ -266,14 +258,6 @@ const OverlayBackdrop = styled.div`
   inset: 0;
   background: transparent;
   z-index: 99999;
-`;
-
-export const BottomDiv = styled.div`
-  transition: height 250ms;
-  height: ${({ dragging }) => (dragging ? '25px' : '2px')};
-  width: 100%;
-  /* background: var(--navigationbarBackground); */
-  cursor: move;
 `;
 
 const ResizerIcon = styled.div`

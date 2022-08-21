@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
 import AccountContext from './../../account/AccountContext';
-import NavigationContext from './../NavigationContext';
 import SidebarAccount from './SidebarAccount';
 import { StyledNavSidebarTrigger, StyledLoginButton } from './../StyledComponents';
 import {
@@ -16,11 +15,17 @@ import SignUp from '../../account/SignUp';
 import SignIn from '../../account/SignIn';
 import ForgotPassword from '../../account/ForgotPassword';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { navigationSidebarAtom, navigationSidebarOverflowAtom } from '../atoms';
+import {
+  navigationSidebarAtom,
+  navigationSidebarComponentKeyAtom,
+  navigationSidebarOverflowAtom,
+} from '../atoms';
 
 const NavigationSidebar = () => {
   const { user, loading } = useContext(AccountContext);
-  const { sidebarComonentKey } = useContext(NavigationContext);
+  const navigationSidebarComponentKey = useRecoilValue(navigationSidebarComponentKeyAtom);
+  const invoked = useRef();
+
   const [showSidebar, setShowNavigationSidebar] = useRecoilState(navigationSidebarAtom);
   const navigationSidebarOverflow = useRecoilValue(navigationSidebarOverflowAtom);
 
@@ -28,22 +33,29 @@ const NavigationSidebar = () => {
 
   const component = (() => {
     if (user) return <SidebarAccount />;
-    switch (sidebarComonentKey?.comp?.toLowerCase()) {
+    switch (navigationSidebarComponentKey?.comp?.toLowerCase()) {
       case 'signup':
-        return <SignUp text={sidebarComonentKey?.text} />;
+        return <SignUp text={navigationSidebarComponentKey?.text} />;
       case 'forgotpassword':
-        return <ForgotPassword text={sidebarComonentKey?.text} />;
+        return <ForgotPassword text={navigationSidebarComponentKey?.text} />;
       case 'signin':
-        return <SignIn text={sidebarComonentKey?.text} />;
+        return <SignIn text={navigationSidebarComponentKey?.text} />;
       case 'account':
       default:
         return user ? (
-          <SidebarAccount text={sidebarComonentKey?.text} />
+          <SidebarAccount text={navigationSidebarComponentKey?.text} />
         ) : (
-          <SignIn text={sidebarComonentKey?.text} />
+          <SignIn text={navigationSidebarComponentKey?.text} />
         );
     }
   })();
+
+  useEffect(() => {
+    if (invoked.current && navigationSidebarComponentKey) {
+      setShowNavigationSidebar(true);
+    }
+    invoked.current = true;
+  }, [navigationSidebarComponentKey, setShowNavigationSidebar]);
 
   return (
     <>
@@ -66,7 +78,7 @@ const NavigationSidebar = () => {
 
       <CSSTransition
         in={showSidebar}
-        timeout={500}
+        timeout={350}
         classNames='NavSidebarBackdropFade'
         unmountOnExit
         appear
@@ -78,13 +90,15 @@ const NavigationSidebar = () => {
 
       <CSSTransition
         in={showSidebar}
-        timeout={500}
+        timeout={showSidebar ? 350 : 150}
         classNames='NavSidebarSlideRight'
         unmountOnExit
         appear
       >
         <Portal>
-          <StyledNavSidebar overflow={navigationSidebarOverflow}>{component}</StyledNavSidebar>
+          <StyledNavSidebar overflow={String(navigationSidebarOverflow)}>
+            {component}
+          </StyledNavSidebar>
         </Portal>
       </CSSTransition>
     </>

@@ -83,6 +83,13 @@ const VolumeEventOverlay = React.forwardRef(
       addEventListeners
     );
 
+    useEventListenerMemo(
+      'mouseleave',
+      showAndResetTimer,
+      VolumeEventOverlayRef.current,
+      addEventListeners
+    );
+
     function keyboardEvents(e) {
       console.log('keyboardEvents: ', e.key);
       switch (e.key) {
@@ -117,8 +124,8 @@ const VolumeEventOverlay = React.forwardRef(
       <CSSTransition
         in={show && showControlls}
         key={'controllsUI'}
-        timeout={1000}
-        classNames='fade-controllUI-1s'
+        timeout={show && showControlls ? 500 : 250}
+        classNames='fade-controllUI'
       >
         <StyledVolumeEventOverlay
           style={style}

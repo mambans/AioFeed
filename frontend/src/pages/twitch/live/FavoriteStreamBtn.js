@@ -15,16 +15,16 @@ const AddedItemBtn = styled(MdStar)`
 `;
 
 const FavoriteStreamBtn = (
-  { channel, size = '1.4em', loweropacity, marginright, show = true, style },
+  { id, channel, size = '1.4em', loweropacity, marginright, show = true, style },
   ...props
 ) => {
   const { favStreams, setFavStreams } = useContext(TwitchContext);
-  const [enabled, setEnabled] = useState(favStreams?.includes(channel?.toLowerCase()));
+  const [enabled, setEnabled] = useState(favStreams?.includes(id));
 
   async function addChannel() {
     try {
       const existing = new Set(favStreams || []);
-      const newChannels = [...existing.add(channel?.toLowerCase())];
+      const newChannels = [...existing.add(id)];
 
       setFavStreams(newChannels);
 
@@ -37,7 +37,7 @@ const FavoriteStreamBtn = (
   async function removeChannel() {
     try {
       const existing = new Set(favStreams || []);
-      existing.delete(channel?.toLowerCase());
+      existing.delete(id);
       const newChannels = [...existing];
 
       setFavStreams(newChannels);
@@ -49,8 +49,8 @@ const FavoriteStreamBtn = (
   }
 
   useEffect(() => {
-    setEnabled(favStreams?.includes(channel?.toLowerCase()));
-  }, [favStreams, channel]);
+    setEnabled(favStreams?.includes(id));
+  }, [favStreams, id]);
 
   const handleOnClick = () => {
     setEnabled((c) => !c);

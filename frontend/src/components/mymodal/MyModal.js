@@ -184,7 +184,7 @@ const Container = styled.div`
 const Position = styled.div`
   position: relative;
   transform: ${({ position }) => position};
-  overflow: auto;
+  /* overflow: auto; */
 `;
 
 const SModal = styled.div`

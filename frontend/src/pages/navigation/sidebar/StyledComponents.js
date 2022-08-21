@@ -23,7 +23,7 @@ export const StyledNavSidebar = styled.div`
   padding: 10px;
   scrollbar-width: thin;
   right: 0;
-  transition: opacity 300ms, transform 500ms;
+  transition: opacity 200ms, transform 350ms;
   transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   overflow: ${({ overflow }) => overflow || 'auto'};
   scrollbar-color: var(--scrollbarColors) !important;
@@ -63,6 +63,7 @@ export const StyledNavSidebar = styled.div`
   &.NavSidebarSlideRight-exit-active {
     opacity: 0;
     transform: translate3d(400px, 0, 0);
+    transition: opacity 150ms, transform 150ms;
 
     @media screen and (max-width: 1920px) {
       transform: translate3d(300px, 0, 0);
@@ -86,7 +87,7 @@ export const StyledNavSidebarBackdrop = styled.div`
   &.NavSidebarBackdropFade-enter-active {
     opacity: 1;
     transform: translate3d(-400px, 0, 0);
-    transition: transform 500ms, opacity 500ms;
+    transition: transform 350ms, opacity 350ms;
     transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     @media screen and (max-width: 1920px) {
@@ -106,7 +107,7 @@ export const StyledNavSidebarBackdrop = styled.div`
   &.NavSidebarBackdropFade-exit-active {
     opacity: 0;
     transform: translate3d(0, 0, 0);
-    transition: transform 500ms, opacity 500ms;
+    transition: transform 150ms, opacity 150ms;
     transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 `;

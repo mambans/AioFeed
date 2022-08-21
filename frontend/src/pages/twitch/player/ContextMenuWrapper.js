@@ -168,7 +168,7 @@ const ContextMenuWrapper = ({
       show={show?.show}
       onClick={() => setShow({})}
     >
-      {children}
+      {children || null}
     </Container>
   );
   // }
