@@ -14,7 +14,7 @@ const InifinityScroll = ({ observerFunction }) => {
             clearTimeout(timer.current);
             timer.current = setTimeout(async () => {
               if (entries[0].isIntersecting === true)
-                await observerFunction(entries).catch((e) => {
+                await observerFunction(entries)?.catch?.((e) => {
                   observer.unobserve(elementRef);
                 });
             }, 750);

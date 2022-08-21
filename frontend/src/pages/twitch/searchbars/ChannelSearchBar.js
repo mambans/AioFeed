@@ -82,6 +82,7 @@ const ChannelSearchBar = ({ searchButton = true, position, ...props }) => {
   const handleArrowNavigation = (e) => {
     if (e.key === 'ArrowDown') {
       if (showDropdown) e.preventDefault();
+
       const selected = listRef.current?.querySelector?.('.selected');
       if (!selected && listRef.current) {
         const firstItem = listRef.current.querySelector('.item');
@@ -92,18 +93,24 @@ const ChannelSearchBar = ({ searchButton = true, position, ...props }) => {
       if (next && !next.classList.contains('loading') && next.classList.contains('item')) {
         selected.classList.remove('selected');
         next.classList.add('selected');
+        //fires onChange and searching which I dpnt want (block onChange?)
+        // inputRef.current.value = next.querySelector('.title')?.textContent;
+
         scrollItemIntoView(next);
       }
       return;
     }
     if (e.key === 'ArrowUp') {
       if (showDropdown) e.preventDefault();
+
       const selected = listRef.current?.querySelector?.('.selected');
 
       const previous = selected?.previousSibling;
       if (previous && !previous.classList.contains('.loading')) {
         selected.classList.remove('selected');
         previous.classList.add('selected');
+        //fires onChange and searching which I dpnt want (block onChange?)
+        // inputRef.current.value = previous.querySelector('.title')?.textContent;
         scrollItemIntoView(previous);
       } else if (inputRef.current) {
         selected.classList.remove('selected');
@@ -158,10 +165,8 @@ const ChannelSearchBar = ({ searchButton = true, position, ...props }) => {
   };
 
   const onFocus = async () => {
-    console.log('onFocus:', onFocus);
     setShowDropdown(true);
     setLoading(true);
-    console.log(123);
 
     const channels = await getMyFollowedChannels();
     const channelsWithProfiles = await addVideoExtraData({
@@ -185,7 +190,9 @@ const ChannelSearchBar = ({ searchButton = true, position, ...props }) => {
   };
 
   const onBlur = () => {
-    setShowDropdown(false);
+    setTimeout(() => {
+      setShowDropdown(false);
+    }, 0);
   };
 
   // useEffect(() => {
@@ -241,9 +248,14 @@ const ChannelSearchBar = ({ searchButton = true, position, ...props }) => {
         <DropDownWrapper
           ref={listRef}
           position={position}
-          width={String(position === 'fixed' && ref.current?.getBoundingClientRect?.()?.width)}
+          width={
+            String(position === 'fixed' && 300)
+            // String(position === 'fixed' && ref.current?.getBoundingClientRect?.()?.width)
+          }
         >
-          {!loading && <div style={{ textAlign: 'center' }}>Total: {items?.length}</div>}
+          <div style={{ textAlign: 'center' }}>
+            {loading ? 'Loading..' : `Total: ${items?.length}`}
+          </div>
           {items?.map((i, index) => {
             return (
               <ChannelSearchBarItem
