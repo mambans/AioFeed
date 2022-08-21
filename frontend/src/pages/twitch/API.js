@@ -94,7 +94,7 @@ const TwitchAPI = {
   },
 
   getSearchGames: async (params, query) => {
-    return await INSTANCE.get(`/search/categories?query=${encodeURI(query)}`, {
+    return await INSTANCE.get(`/search/categories?query=${encodeURI(query) || ''}`, {
       params,
     });
   },

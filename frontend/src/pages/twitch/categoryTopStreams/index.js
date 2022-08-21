@@ -8,7 +8,6 @@ import LoadMore from '../../../components/loadMore/LoadMore';
 import Header from '../../../components/Header';
 import { TopDataSortButtonsContainer, TopStreamsContainer, Container } from './styledComponents';
 import ClipsSortButton from './../channelPage/ClipsSortButton';
-import GameSearchBar from './GameSearchBar';
 import getTopClips from './GetTopClips';
 import getTopStreams from './GetTopStreams';
 import getTopVideos from './GetTopVideos';
@@ -24,6 +23,7 @@ import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import useFavicon from '../../../hooks/useFavicon';
 import { imageAspectDimensions } from '../../../util';
 import FeedsContext from '../../feed/FeedsContext';
+import GameSearchBar from '../searchbars/GameSearchBar';
 
 const TopStreams = () => {
   const { category } = useParams();
@@ -197,7 +197,7 @@ const TopStreams = () => {
           refresh={refresh}
           rightSide={
             <TopDataSortButtonsContainer>
-              <GameSearchBar gameName={category} videoType={videoType} />
+              <GameSearchBar placeholder={category} videoType={videoType} />
               <TypeButton
                 category={category}
                 videoType={videoType}

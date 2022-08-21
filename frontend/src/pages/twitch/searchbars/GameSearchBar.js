@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ChannelSearchBarItem from './ChannelSearchBarItem';
 import {
   DropDownWrapper,
@@ -11,8 +11,6 @@ import {
 import debounce from 'lodash/debounce';
 import TwitchAPI from '../API';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
-import getMyFollowedChannels from '../getMyFollowedChannels';
-import addVideoExtraData from '../AddVideoExtraData';
 import loginNameFormat from '../loginNameFormat';
 import { getUniqueListBy } from '../../../util';
 import { FaSearch } from 'react-icons/fa';
@@ -23,17 +21,15 @@ import useClicksOutside from '../../../hooks/useClicksOutside';
 
 const SearchSubmitIcon = styled(FaSearch).attrs({ size: 18 })``;
 
-const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props }) => {
+const GameSearchBar = ({ searchButton = true, position, placeholder, ...props }) => {
   const [showDropdown, setShowDropdown] = useState();
   const [result, setResult] = useState();
   const [page, setPage] = useState();
   const [loading, setLoading] = useState();
-  /* eslint-disable no-unused-vars */
   const [hiddenItems, setHiddenItems] = useState([]);
   const [visibleItems, setVisibleItems] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [rnd, setRnd] = useState();
-  /* eslint-enable no-unused-vars */
-  const [followedChannels, setFollowedChannels] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
   const ref = useRef();
@@ -68,37 +64,64 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props
             return [...c, ...visible].filter((id) => !hidden.includes(id));
           });
         },
-        { root: listRef.current, threshhold: 0.1, rootMargin: '50px' }
+        { root: listRef.current, threshhold: 0.1, rootMargin: '200px' }
       ),
     []
   );
 
   const handleSearch = debounce(
-    async (e) => {
+    async (pagination) => {
       try {
-        e?.preventDefault?.();
-
         const value = inputRef.current?.value;
         setLoading(true);
 
         controller.abort();
 
-        const searchResults = await TwitchAPI.getSearchChannels(
-          { first: limit, after: page, signal: controller.signal },
-          value
-        );
+        const searchResults = await (async () => {
+          if (!value) {
+            return await TwitchAPI.getTopGames({
+              first: limit,
+              after: pagination,
+              signal: controller.signal,
+            });
+          }
+
+          return await TwitchAPI.getSearchGames(
+            { first: limit, after: pagination, signal: controller.signal },
+            value
+          );
+        })();
+
+        // const ids = getUniqueListBy(
+        //   result
+        //     ?.filter((i) => {
+        //       return loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current?.value?.trim?.());
+        //     })
+        //     .sort(
+        //       (a, b) =>
+        //         inputRef.current?.value?.trim?.() &&
+        //         loginNameFormat(a).replace(inputRef.current?.value?.trim?.())?.length -
+        //           loginNameFormat(b).replace(inputRef.current?.value?.trim?.())?.length
+        //     ),
+        //   'id'
+        // )
+        //   .splice(0, 25)
+        //   .map((i) => i.id);
+        // setVisibleItems(ids);
 
         setResult((c) => {
           const res = searchResults?.data?.data.map((i) => ({
             ...i,
-            login: i.broadcaster_login,
-            profile_image_url: i.thumbnail_url,
+            login: i.name,
+            profile_image_url: i.box_art_url.replace('{width}', 300).replace('{height}', 300),
+            isAGame: true,
           }));
 
           if (page) return [...c, ...res];
 
           return res;
         });
+
         setPage(searchResults?.data?.pagination?.cursor);
         setLoading(false);
       } catch (error) {
@@ -115,43 +138,47 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props
   };
 
   const handleArrowNavigation = (e) => {
-    if (e.key === 'ArrowDown') {
-      if (showDropdown) e.preventDefault();
+    try {
+      if (e.key === 'ArrowDown') {
+        if (showDropdown) e.preventDefault();
 
-      const selected = listRef.current?.querySelector?.('.selected');
-      if (!selected && listRef.current) {
-        const firstItem = listRef.current.querySelector('.item');
-        if (firstItem) firstItem.classList.add('selected');
+        const selected = listRef.current?.querySelector?.('.selected');
+        if (!selected && listRef.current) {
+          const firstItem = listRef.current.querySelector('.item');
+          if (firstItem) firstItem.classList.add('selected');
+        }
+        const next = selected.nextSibling;
+
+        if (next && !next.classList.contains('loading') && next.classList.contains('item')) {
+          selected.classList.remove('selected');
+          next.classList.add('selected');
+          //fires onChange and searching which I dpnt want (block onChange?)
+          // inputRef.current.value = next.querySelector('.title')?.textContent;
+
+          scrollItemIntoView(next);
+        }
+        return;
       }
-      const next = selected.nextSibling;
+      if (e.key === 'ArrowUp') {
+        if (showDropdown) e.preventDefault();
 
-      if (next && !next.classList.contains('loading') && next.classList.contains('item')) {
-        selected.classList.remove('selected');
-        next.classList.add('selected');
-        //fires onChange and searching which I dpnt want (block onChange?)
-        // inputRef.current.value = next.querySelector('.title')?.textContent;
+        const selected = listRef.current?.querySelector?.('.selected');
 
-        scrollItemIntoView(next);
+        const previous = selected?.previousSibling;
+        if (previous && !previous.classList.contains('loading')) {
+          selected.classList.remove('selected');
+          previous.classList.add('selected');
+          //fires onChange and searching which I dpnt want (block onChange?)
+          // inputRef.current.value = previous.querySelector('.title')?.textContent;
+          scrollItemIntoView(previous);
+        } else if (inputRef.current) {
+          selected?.classList?.remove('selected');
+          inputRef.current.focus();
+        }
+        return;
       }
-      return;
-    }
-    if (e.key === 'ArrowUp') {
-      if (showDropdown) e.preventDefault();
-
-      const selected = listRef.current?.querySelector?.('.selected');
-
-      const previous = selected?.previousSibling;
-      if (previous && !previous.classList.contains('loading')) {
-        selected.classList.remove('selected');
-        previous.classList.add('selected');
-        //fires onChange and searching which I dpnt want (block onChange?)
-        // inputRef.current.value = previous.querySelector('.title')?.textContent;
-        scrollItemIntoView(previous);
-      } else if (inputRef.current) {
-        selected?.classList?.remove('selected');
-        inputRef.current.focus();
-      }
-      return;
+    } catch (error) {
+      console.log('error:', error);
     }
   };
 
@@ -189,7 +216,7 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props
 
   const onChange = (e) => {
     setPage(null);
-    handleSearch(e);
+    handleSearch();
     props?.onChange?.(e.target.value?.trimStart?.());
   };
 
@@ -201,27 +228,7 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props
 
   const onFocus = async () => {
     setShowDropdown(true);
-    setLoading(true);
-
-    const channels = await getMyFollowedChannels();
-    const channelsWithProfiles = await addVideoExtraData({
-      items: {
-        data: channels.map((i) => ({ ...i, user_id: i.to_id, login: i.to_login || i.to_name })),
-      },
-      fetchGameInfo: false,
-      fetchProfiles: true,
-    });
-
-    setFollowedChannels(
-      channelsWithProfiles?.data.map((i) => ({
-        ...i,
-        login: loginNameFormat(i, true),
-        id: i.to_id,
-        user_id: i.to_id,
-        following: true,
-      }))
-    );
-    setLoading(false);
+    handleSearch();
   };
 
   // useEffect(() => {
@@ -244,23 +251,26 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props
   // };
 
   const loadmore = () => {
-    return handleSearch();
+    if (page) {
+      return handleSearch(page);
+    }
   };
 
   const items = getUniqueListBy(
-    [
-      ...(followedChannels || []),
-      ...(result || []).sort(
+    result
+      ?.filter((i) => {
+        return loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current?.value?.trim?.());
+      })
+      .sort(
         (a, b) =>
+          inputRef.current?.value?.trim?.() &&
           loginNameFormat(a).replace(inputRef.current?.value?.trim?.())?.length -
-          loginNameFormat(b).replace(inputRef.current?.value?.trim?.())?.length
+            loginNameFormat(b).replace(inputRef.current?.value?.trim?.())?.length
       ),
-    ]?.filter((i) =>
-      loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current?.value?.trim?.()?.toLowerCase())
-    ),
     'id'
   );
 
+  console.log('visibleItems:', visibleItems);
   return (
     <Wrapper
       ref={ref}
@@ -278,7 +288,7 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props
           onChange={onChange}
           onKeyPress={onKeyPress}
           onFocus={onFocus}
-          placeholder={placeholder || 'Channel..'}
+          placeholder={placeholder || 'Game..'}
         />
         {searchButton && (
           <SearchBarSuffixButton
@@ -299,8 +309,11 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props
           }
         >
           <div style={{ textAlign: 'center' }}>
-            {loading ? 'Loading..' : `Total: ${items?.length}`}
+            {loading ? 'Loading..' : `Total: ${items?.length || ''}`}
           </div>
+          <StyledShowAllButton to={'/category/'} key='showAll'>
+            Show all
+          </StyledShowAllButton>
           {items?.map((i, index) => {
             return (
               <ChannelSearchBarItem
@@ -311,6 +324,7 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props
                 observer={observer}
                 // visible={visibleItems.includes(String(i.id))}
                 visible={!hiddenItems.includes(String(i.id))}
+                // visible={true}
               />
             );
           })}
@@ -322,4 +336,17 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props
   );
 };
 
-export default ChannelSearchBar;
+export default GameSearchBar;
+export const StyledShowAllButton = styled(Link)`
+  text-align: center;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #ffffff;
+  width: 100%;
+  display: block;
+
+  &:hover {
+    color: #ffffff;
+  }
+`;

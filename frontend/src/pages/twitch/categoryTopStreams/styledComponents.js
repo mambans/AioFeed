@@ -233,7 +233,7 @@ export const TopDataSortButtonsContainer = styled.div`
   width: 675px;
   min-width: 675px;
 
-  div {
+  & > div {
     margin-left: 10px;
   }
 

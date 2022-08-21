@@ -56,7 +56,7 @@ const ChannelSearchBarItem = React.memo(({ item, className, observer, visible })
             {profile_image_url && <Profile src={profile_image_url} />}
           </ProfileWrapper>
           <Title>{loginNameFormat(item)}</Title>
-          {item && (
+          {item && !item.isAGame && (
             <ChannelButtonsContainer
               staticOpen={true}
               onClick={(e) => {

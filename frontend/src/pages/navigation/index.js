@@ -6,12 +6,12 @@ import styled from 'styled-components';
 import { FaAngleRight, FaAngleLeft } from 'react-icons/fa';
 import RenderNotifications from './../notifications';
 import './Navigation.scss';
-import GameSearchBar from '../twitch/categoryTopStreams/GameSearchBar';
 import NavExpandingSides from './NavExpandingSides';
 import LogsContext from '../logs/LogsContext';
 import { NavigationSidebar } from './sidebar';
 import { navigationBarVisibleAtom } from './atoms';
 import { useRecoilValue } from 'recoil';
+import GameSearchBar from '../twitch/searchbars/GameSearchBar';
 import ChannelSearchBar from '../twitch/searchbars/ChannelSearchBar';
 
 const StyledNavbar = styled(Navbar)`
@@ -125,7 +125,7 @@ const Navigation = () => {
         <NavExpandingSides side='right'>
           <FaAngleLeft className='arrow' size={20} />
           <FaAngleLeft className='arrow shadow' size={20} />
-          <GameSearchBar {...channelSearchListProps} openInNewTab={true} />
+          <GameSearchBar {...channelSearchListProps} />
           <ChannelSearchBar {...channelSearchListProps} />
           {/* <ChannelSearchLi{...channelSearchListProps} st {...channelSearchListProps} /> */}
           {LogsIcon}

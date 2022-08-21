@@ -48,11 +48,6 @@ export const Input = styled.input`
   font-size: ${({ inputFontSize }) => inputFontSize || 'inherit'};
   transition: color 250ms, border 250ms;
   outline: #0000 solid;
-  border-bottom: 1px solid rgb(200, 200, 200, 0.2);
-
-  &:focus {
-    border-bottom: 1px solid rgb(200, 200, 200);
-  }
 `;
 
 export const Item = styled(Link).attrs({ className: 'item' })`
@@ -109,11 +104,19 @@ export const Profile = styled.img`
   width: 100%;
 `;
 
-export const InputWrapper = styled.div``;
+export const InputWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgb(200, 200, 200, 0.2);
+
+  &:focus {
+    border-bottom: 1px solid rgb(200, 200, 200);
+  }
+`;
 
 export const SearchBarSuffixButton = styled.div`
   cursor: pointer;
-  position: absolute;
+  /* position: absolute; */
   right: 0;
   top: 0;
   height: 100%;

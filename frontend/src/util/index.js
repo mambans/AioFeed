@@ -144,6 +144,7 @@ export const getUniqueListByNoMerge = (arr, key) => {
 };
 
 export const getUniqueListBy = (arr, key) => {
+  if (!arr) return [];
   return arr.reduce((acc, item) => {
     const foundIndex = acc.findIndex((i) => i[key] === item[key]);
     if (foundIndex >= 0 && item) {

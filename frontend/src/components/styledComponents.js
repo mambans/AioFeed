@@ -52,20 +52,18 @@ export const LeftRightDivs = styled.div`
 
 export const ButtonLookalikeStyle = css`
   color: var(--refreshButtonColor);
-  background: var(--refreshButtonBackground);
+  background: var(--navigationbarBackground);
   box-shadow: var(--refreshButtonShadow);
   border: var(--refreshButtonBorder);
   transition: color 250ms, background-color 250ms, border-color 250ms, box-shadow 250ms,
-    opacity 250ms;
+    opacity 250ms, filter 250ms;
   text-transform: capitalize;
   border-radius: 5px;
 
   /* &:active,
   &:focus, */
   &:hover {
-    background: var(--refreshButtonHoverBackground);
-    color: var(--refreshButtonHoverColor);
-    border: var(--refreshButtonHoverBorder);
+    filter: brightness(1.2);
   }
 `;
 
