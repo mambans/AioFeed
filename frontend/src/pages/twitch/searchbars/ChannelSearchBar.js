@@ -217,9 +217,9 @@ const ChannelSearchBar = ({ searchButton = true, position, ...props }) => {
   };
 
   const onBlur = () => {
-    // setTimeout(() => {
-    //   setShowDropdown(false);
-    // }, 0);
+    setTimeout(() => {
+      setShowDropdown(false);
+    }, 0);
   };
 
   // useEffect(() => {
