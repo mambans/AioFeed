@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { HeartBeat } from '../../../components/HeartBeat';
 import AddUpdateNotificationsButton from '../AddUpdateNotificationsButton';
 import ChannelButtonsContainer from '../live/ChannelButtonsContainer';
