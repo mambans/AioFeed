@@ -83,23 +83,25 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, ...props
 
         controller.abort();
 
-        const searchResults = await TwitchAPI.getSearchChannels(
-          { first: limit, after: page, signal: controller.signal },
-          value
-        );
+        if (value) {
+          const searchResults = await TwitchAPI.getSearchChannels(
+            { first: limit, after: page, signal: controller.signal },
+            value
+          );
 
-        setResult((c) => {
-          const res = searchResults?.data?.data.map((i) => ({
-            ...i,
-            login: i.broadcaster_login,
-            profile_image_url: i.thumbnail_url,
-          }));
+          setResult((c) => {
+            const res = searchResults?.data?.data.map((i) => ({
+              ...i,
+              login: i.broadcaster_login,
+              profile_image_url: i.thumbnail_url,
+            }));
 
-          if (page) return [...c, ...res];
+            if (page) return [...c, ...res];
 
-          return res;
-        });
-        setPage(searchResults?.data?.pagination?.cursor);
+            return res;
+          });
+          setPage(searchResults?.data?.pagination?.cursor);
+        }
         setLoading(false);
       } catch (error) {
         console.log('error:', error);
