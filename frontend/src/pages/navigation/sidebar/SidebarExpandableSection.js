@@ -4,7 +4,6 @@ import { MdExpandMore } from 'react-icons/md';
 import { ToggleButtonsContainerHeader } from './StyledComponents';
 import useLocalStorageState from '../../../hooks/useLocalStorageState';
 import ExpandableSection from '../../../components/expandableSection/ExpandableSection';
-import { useSetRecoilState } from 'recoil';
 
 const SidebarExpandableSection = ({
   title,
