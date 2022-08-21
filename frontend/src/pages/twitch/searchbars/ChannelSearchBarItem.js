@@ -44,9 +44,9 @@ const ChannelSearchBarItem = React.memo(({ item, className, observer, visible })
       to={`/${login}`}
       disabled={!item}
       className={className + visible ? ' visible' : ''}
-      onClick={() => {
-        console.log('CLICKED: ', loginNameFormat(item));
-      }}
+      // onClick={() => {
+      //   console.log('CLICKED: ', loginNameFormat(item));
+      // }}
       data-id={id}
     >
       {visible && (
@@ -63,6 +63,7 @@ const ChannelSearchBarItem = React.memo(({ item, className, observer, visible })
                 e.preventDefault();
                 e.stopImmediatePropagation();
                 e.stopPropagation();
+                return false;
               }}
             >
               <Schedule
@@ -73,7 +74,7 @@ const ChannelSearchBarItem = React.memo(({ item, className, observer, visible })
               />
               {following && (
                 <FavoriteStreamBtn channel={loginNameFormat(item, true)} id={id} show={following} />
-              )}{' '}
+              )}
               <VodsFollowUnfollowBtn show={item} channel={item} />
               {following && (
                 <AddUpdateNotificationsButton channel={item} show={following && item} />

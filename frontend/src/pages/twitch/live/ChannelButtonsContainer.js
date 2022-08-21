@@ -38,7 +38,7 @@ const Container = styled.div`
   }
 `;
 
-const ChannelButtonsContainer = ({ children, className, style, staticOpen }) => {
+const ChannelButtonsContainer = ({ children, onClick, className, style, staticOpen, ...rest }) => {
   const ref = useRef();
   const childrenWithProps = React.Children.map(children, (child) => {
     if (React.isValidElement(child)) {
@@ -48,7 +48,14 @@ const ChannelButtonsContainer = ({ children, className, style, staticOpen }) => 
   });
 
   return (
-    <Container ref={ref} open={staticOpen} className={className} style={style}>
+    <Container
+      ref={ref}
+      open={staticOpen}
+      className={className}
+      style={style}
+      onClick={onClick}
+      {...rest}
+    >
       {childrenWithProps}
     </Container>
   );

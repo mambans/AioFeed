@@ -19,6 +19,7 @@ import { FaSearch } from 'react-icons/fa';
 import styled from 'styled-components';
 import InifinityScroll from '../channelList/InifinityScroll';
 import LoadingList from './../categoryTopStreams/LoadingList';
+import useClicksOutside from '../../../hooks/useClicksOutside';
 
 const SearchSubmitIcon = styled(FaSearch).attrs({ size: 18 })``;
 
@@ -39,6 +40,9 @@ const ChannelSearchBar = ({ searchButton = true, position, ...props }) => {
   const listRef = useRef();
   const controller = new AbortController();
   const limit = 25;
+
+  useClicksOutside(ref.current, () => setShowDropdown(false), showDropdown);
+
   const observer = useMemo(
     () =>
       new IntersectionObserver(
@@ -216,12 +220,6 @@ const ChannelSearchBar = ({ searchButton = true, position, ...props }) => {
     setLoading(false);
   };
 
-  const onBlur = () => {
-    setTimeout(() => {
-      setShowDropdown(false);
-    }, 0);
-  };
-
   // useEffect(() => {
   //   setItems(
   //     getUniqueListBy(
@@ -235,6 +233,11 @@ const ChannelSearchBar = ({ searchButton = true, position, ...props }) => {
   //     )
   //   );
   // }, [followedChannels, result]);
+
+  // const onBlur = () => {
+  //   //FIX, fires when clicking on buttons
+  //   setShowDropdown(false);
+  // };
 
   const loadmore = () => {
     return handleSearch();
@@ -255,7 +258,7 @@ const ChannelSearchBar = ({ searchButton = true, position, ...props }) => {
       onTransitionEnd={() => {
         setRnd((c) => !c);
       }}
-      onBlur={onBlur}
+      // onBlur={onBlur}
       open={showDropdown}
     >
       <InputWrapper>
