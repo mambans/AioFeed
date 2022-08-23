@@ -5,6 +5,7 @@ import reauthenticate from './reauthenticate';
 
 const TWITCH_CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;
 let promise = null;
+const validateController = new AbortController();
 
 const validateToken = async ({ useApp_token_last = false } = {}) => {
   const validPromise = await validationOfToken({ useApp_token_last });
@@ -19,6 +20,8 @@ const validationOfToken = async ({ useApp_token_last } = {}) => {
       ttl: Date.now() + ((request?.data?.expires_in || 20) - 20) * 1000,
     };
   }
+
+  console.log('promise:', promise);
   return promise.promise;
 };
 
@@ -79,10 +82,12 @@ const fullValidateFunc = async (token) => {
 };
 
 const validateFunction = async (token) => {
+  validateController.abort();
   const access_token = token || getCookie('Twitch-access_token');
   const res = await axios.get('https://id.twitch.tv/oauth2/validate', {
     headers: {
       Authorization: `OAuth ${access_token}`,
+      signal: validateController.signal,
     },
   });
 
