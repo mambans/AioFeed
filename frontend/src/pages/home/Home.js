@@ -45,12 +45,12 @@ export const Home = () => {
 	}, []);
 
 	useEffect(() => {
-		if (showLoginAlert && !user) {
+		if (showLoginAlert) {
 			setNavigationSidebarComponentKey({ comp: "signin" });
 		}
-	}, [showLoginAlert, setNavigationSidebarComponentKey, user]);
+	}, [showLoginAlert, setNavigationSidebarComponentKey]);
 
-	if (showLoginAlert) {
+	if (showLoginAlert && !user) {
 		return (
 			<Alert
 				type="info"
