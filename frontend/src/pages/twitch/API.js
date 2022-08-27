@@ -9,9 +9,20 @@ const INSTANCE = axios.create({
   timeout: 5000,
 });
 
+const canUseAppToken = (config) => {
+  if (config.url === '/games') return true;
+  if (config.url === '/games/top') return true;
+  if (config.url === '/clips') return true;
+  if (config.url === '/videos') return true;
+  if (config.url === '/users') return true;
+  if (config.url === '/streams') return true;
+  if (config.url.includes('/search')) return true;
+  return false;
+};
+
 INSTANCE.interceptors.request.use(
   async (config) => {
-    const token = await validateToken();
+    const token = await validateToken(canUseAppToken(config));
     config.headers['Authorization'] = `Bearer ${token}`;
     config.headers['Client-ID'] = CLIENT_ID;
 

@@ -96,7 +96,7 @@ const ChannelSearchBar = ({
           );
 
           setResult((c) => {
-            const res = searchResults?.data?.data.map((i) => ({
+            const res = searchResults?.data?.data?.map((i) => ({
               ...i,
               login: i.broadcaster_login,
               profile_image_url: i.thumbnail_url,
@@ -223,14 +223,14 @@ const ChannelSearchBar = ({
     const channels = await getMyFollowedChannels();
     const channelsWithProfiles = await addVideoExtraData({
       items: {
-        data: channels.map((i) => ({ ...i, user_id: i.to_id, login: i.to_login || i.to_name })),
+        data: channels?.map((i) => ({ ...i, user_id: i.to_id, login: i.to_login || i.to_name })),
       },
       fetchGameInfo: false,
       fetchProfiles: true,
     });
 
     setFollowedChannels(
-      channelsWithProfiles?.data.map((i) => ({
+      channelsWithProfiles?.data?.map((i) => ({
         ...i,
         login: loginNameFormat(i, true),
         id: i.to_id,

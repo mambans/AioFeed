@@ -26,13 +26,13 @@ import FeedsContext from '../../feed/FeedsContext';
 import GameSearchBar from '../searchbars/GameSearchBar';
 
 const TopStreams = () => {
-  const { category } = useParams();
+  const { category, type } = useParams();
   const { p_videoType } = useLocation().state || {};
   const [topData, setTopData] = useState([]);
   const [gameInfo, setGameInfo] = useState({ name: category });
   const URLQueries = useQuery();
   const [videoType, setVideoType] = useState(
-    URLQueries.get('type')?.toLowerCase() || p_videoType || 'streams'
+    type || URLQueries.get('type')?.toLowerCase() || p_videoType || 'streams'
   );
   const { feedVideoSizeProps } = useContext(FeedsContext) || {};
   const [error, setError] = useState(null);
@@ -64,17 +64,17 @@ const TopStreams = () => {
 
   const fetchVideosDataHandler = (res, shouldLoadMore, setLoading) => {
     if (shouldLoadMore) {
-      const allTopData = oldTopData.current.data.concat(res.topData.data);
+      const allTopData = oldTopData.current.data.concat(res?.topData?.data);
       oldTopData.current = {
         data: allTopData,
-        pagination: res.topData.pagination,
+        pagination: res?.topData?.pagination,
       };
 
       setLoading(false);
       setTopData(allTopData);
     } else {
-      oldTopData.current = res.topData;
-      setTopData(res.topData.data);
+      oldTopData.current = res?.topData;
+      setTopData(res?.topData?.data);
       refreshBtnRef?.current?.setIsLoading(false);
     }
   };
@@ -89,10 +89,10 @@ const TopStreams = () => {
           getTopStreams(category, shouldLoadMore && oldTopData.current, feedVideoSizeProps)
             .then((res) => fetchVideosDataHandler(res, shouldLoadMore, setLoading))
             .catch((e) => {
-              if ((e.message = 'game is undefined')) {
+              if (e?.message === 'game is undefined') {
                 setError('Invalid game name');
               } else {
-                setError(e.message);
+                setError(typeof e === 'string' ? e : e.message);
               }
               refreshBtnRef?.current?.setIsLoading(false);
             });
@@ -101,10 +101,11 @@ const TopStreams = () => {
           getTopClips(category, sortByTime, oldTopData.current, feedVideoSizeProps)
             .then((res) => fetchVideosDataHandler(res, shouldLoadMore, setLoading))
             .catch((e) => {
-              if ((e.message = 'game is undefined')) {
+              console.log('e:', e);
+              if (e?.message === 'game is undefined') {
                 setError('Invalid game name');
               } else {
-                setError(e.message);
+                setError(typeof e === 'string' ? e : e.message);
               }
               refreshBtnRef?.current?.setIsLoading(false);
             });
@@ -113,10 +114,10 @@ const TopStreams = () => {
           getTopVideos(category, sortBy, oldTopData.current, feedVideoSizeProps)
             .then((res) => fetchVideosDataHandler(res, shouldLoadMore, setLoading))
             .catch((e) => {
-              if ((e.message = 'game is undefined')) {
+              if (e?.message === 'game is undefined') {
                 setError('Invalid game name');
               } else {
-                setError(e.message);
+                setError(typeof e === 'string' ? e : e.message);
               }
               refreshBtnRef?.current?.setIsLoading(false);
             });
@@ -125,10 +126,10 @@ const TopStreams = () => {
           getTopStreams(category, shouldLoadMore && oldTopData.current, feedVideoSizeProps)
             .then((res) => fetchVideosDataHandler(res, shouldLoadMore, setLoading))
             .catch((e) => {
-              if ((e.message = 'game is undefined')) {
+              if (e?.message === 'game is undefined') {
                 setError('Invalid game name');
               } else {
-                setError(e.message);
+                setError(typeof e === 'string' ? e : e.message);
               }
               refreshBtnRef?.current?.setIsLoading(false);
             });
@@ -146,6 +147,7 @@ const TopStreams = () => {
   useEffect(() => {
     (async () => {
       const gameInfo = await TwitchAPI.getGames({ name: category }).then((res) => res.data.data[0]);
+      console.log('gameInfo:', gameInfo);
       setGameInfo(gameInfo);
     })();
   }, [category]);

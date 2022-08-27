@@ -1,7 +1,7 @@
+import API from '../../navigation/API';
 import AddVideoExtraData from '../AddVideoExtraData';
 import TwitchAPI from '../API';
 import { addVodEndTime } from '../TwitchUtils';
-import reauthenticate from './../reauthenticate';
 import SortAndAddExpire from './SortAndAddExpire';
 
 const fetchVodsFromMonitoredChannels = async (
@@ -22,27 +22,25 @@ const fetchVodsFromMonitoredChannels = async (
         }).then((response) => response.data.data)
     )
   ).catch(async () => {
-    return await reauthenticate({ setTwitchToken: setTwitchAccessToken, setRefreshToken }).then(
-      async (access_token) => {
-        const channelFetchedVods = [...new Set(followedStreamVods.map((vod) => vod.user_id))];
+    return await API.reauthenticateTwitchToken().then(async (access_token) => {
+      const channelFetchedVods = [...new Set(followedStreamVods.map((vod) => vod.user_id))];
 
-        const channelsIdsUnfetchedVods = await vodChannels.filter(
-          (channel) => !channelFetchedVods?.includes(channel)
-        );
+      const channelsIdsUnfetchedVods = await vodChannels.filter(
+        (channel) => !channelFetchedVods?.includes(channel)
+      );
 
-        return await Promise.all(
-          channelsIdsUnfetchedVods.map(
-            async (channel) =>
-              await TwitchAPI.getVideos({
-                user_id: channel,
-                period: 'month',
-                first: 5,
-                type: 'all',
-              }).then((response) => response.data.data)
-          )
-        );
-      }
-    );
+      return await Promise.all(
+        channelsIdsUnfetchedVods.map(
+          async (channel) =>
+            await TwitchAPI.getVideos({
+              user_id: channel,
+              period: 'month',
+              first: 5,
+              type: 'all',
+            }).then((response) => response.data.data)
+        )
+      );
+    });
   });
 
   return PromiseAllVods.flat(1);

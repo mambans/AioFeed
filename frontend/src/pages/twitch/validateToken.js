@@ -1,84 +1,68 @@
+import { Auth } from 'aws-amplify';
 import axios from 'axios';
 import { getCookie } from '../../util';
 import API from '../navigation/API';
-import reauthenticate from './reauthenticate';
 
 const TWITCH_CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;
-let promise = null;
 const validateController = new AbortController();
+let promise = null;
 
-const validateToken = async ({ useApp_token_last = false } = {}) => {
-  const validPromise = await validationOfToken({ useApp_token_last });
+const validateToken = async (NoAuthNeddedAndFallbackToAppToken) => {
+  if (!NoAuthNeddedAndFallbackToAppToken) {
+    if (await Auth.currentAuthenticatedUser()) return null;
+  }
+
+  const validPromise = await validationOfToken(NoAuthNeddedAndFallbackToAppToken);
   return validPromise;
 };
 
-const validationOfToken = async ({ useApp_token_last } = {}) => {
+const validationOfToken = async (NoAuthNeddedAndFallbackToAppToken) => {
   if (!promise?.promise || Date.now() > promise?.ttl) {
-    const request = await validateTokenFunc({ useApp_token_last });
+    const request = await validateTokenFunc(NoAuthNeddedAndFallbackToAppToken);
     promise = {
       promise: request?.data?.access_token,
       ttl: Date.now() + ((request?.data?.expires_in || 20) - 20) * 1000,
     };
   }
 
-  console.log('promise:', promise);
   return promise.promise;
 };
 
-const validateTokenFunc = async ({ useApp_token_last }) => {
+const validateTokenFunc = async (NoAuthNeddedAndFallbackToAppToken) => {
   console.log('--CALLING validateTokenFunc:');
   const access_token = getCookie('Twitch-access_token');
-  const refresh_token = getCookie(`Twitch-refresh_token`);
   const app_token = getCookie(`Twitch-app_token`);
 
-  if (access_token) {
-    return await fullValidateFunc();
-  } else if (refresh_token) {
-    console.log('Twitch: No Twitch-access_token avalible, trying with Twitch-refresh_token.');
-    return reauthenticate();
-  } else if (app_token && useApp_token_last) {
-    return validateFunction(app_token)
-      .then(async (res) => {
+  try {
+    if (access_token) {
+      return await fullValidateFunc();
+    } else if (app_token && NoAuthNeddedAndFallbackToAppToken) {
+      return validateFunction(app_token).then(async (res) => {
         const { client_id } = res?.data || {};
         if (client_id === TWITCH_CLIENT_ID) return res;
-        console.warn('Twitch: Token validation details DID NOT match.');
-
-        const appTokenRequest = fetchAppAccessToken();
-        console.log('appTokenRequest:', appTokenRequest);
-        return appTokenRequest;
-      })
-      .catch(async (error) => {
-        console.error('error: ', error);
-        console.warn('Twitch: Validation failed!');
-
-        const appTokenRequest = fetchAppAccessToken();
-        console.log('appTokenRequest:', appTokenRequest);
+        const appTokenRequest = await API.getAppAccessToken();
         return appTokenRequest;
       });
-  }
-  const appTokenRequest = fetchAppAccessToken();
-  console.log('appTokenRequest:', appTokenRequest);
-  return appTokenRequest;
-};
-// res.data.access_token
-
-const fullValidateFunc = async (token) => {
-  const access_token = token || getCookie('Twitch-access_token');
-
-  try {
-    const res = await validateFunction(access_token);
-    const { client_id, user_id } = res?.data || {};
-
-    if (client_id === TWITCH_CLIENT_ID && user_id === getCookie('Twitch-userId')) {
-      return res;
     }
-    console.warn('Twitch: Token validation details DID NOT match.');
-    return await reauthenticate();
-  } catch (error) {
-    console.error('error: ', error);
-    console.warn('Twitch: Validation failed!');
-    return await reauthenticate();
+  } catch (e) {
+    if (NoAuthNeddedAndFallbackToAppToken) {
+      const appTokenRequest = await API.getAppAccessToken();
+      return appTokenRequest;
+    }
   }
+};
+
+const fullValidateFunc = async () => {
+  const access_token = getCookie('Twitch-access_token');
+
+  const res = await validateFunction(access_token);
+  const { client_id, user_id } = res?.data || {};
+
+  if (client_id === TWITCH_CLIENT_ID && user_id === getCookie('Twitch-userId')) {
+    return res;
+  }
+  console.warn('Twitch: Token validation details DID NOT match.');
+  return await API.reauthenticateTwitchToken();
 };
 
 const validateFunction = async (token) => {
@@ -87,14 +71,12 @@ const validateFunction = async (token) => {
   const res = await axios.get('https://id.twitch.tv/oauth2/validate', {
     headers: {
       Authorization: `OAuth ${access_token}`,
-      signal: validateController.signal,
     },
+    signal: validateController.signal,
   });
 
   res.data.access_token = res?.config?.headers?.Authorization?.split(' ')?.[1] || access_token;
   return res;
 };
-
-const fetchAppAccessToken = async () => await API.getAppAccessToken();
 
 export default validateToken;

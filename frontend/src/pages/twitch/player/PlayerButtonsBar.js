@@ -12,7 +12,7 @@ import { MdAccountBox } from 'react-icons/md';
 
 const DEFAULT_SIZE = 20;
 
-const ButtonsBar = ({ style, videoId, children, user, schedule = true, size }) => {
+const PlayerButtonsBar = ({ style, videoId, children, user, schedule = true, size }) => {
   return (
     <Wrapper
       style={style}
@@ -69,7 +69,7 @@ const ButtonsBar = ({ style, videoId, children, user, schedule = true, size }) =
     </Wrapper>
   );
 };
-export default ButtonsBar;
+export default PlayerButtonsBar;
 
 const Wrapper = styled.div`
   border-radus: 1rem;

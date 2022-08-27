@@ -79,7 +79,6 @@ const routes = [
         <TopStreams />
       </Suspense>
     ),
-    authRequired: true,
   },
   {
     path: 'game',
@@ -100,7 +99,6 @@ const routes = [
         <TopStreams />
       </Suspense>
     ),
-    authRequired: true,
   },
   {
     path: 'top/:category',
@@ -109,7 +107,14 @@ const routes = [
         <TopStreams />
       </Suspense>
     ),
-    authRequired: true,
+  },
+  {
+    path: 'category/:category/:type',
+    element: (
+      <Suspense fallback={<LoadingFeed title={'Top streams'} />}>
+        <TopStreams />
+      </Suspense>
+    ),
   },
   {
     path: 'videos/:videoId',

@@ -23,30 +23,27 @@ const getTopClips = async (category, sortByTime, page, feedVideoSizeProps) => {
   } else {
     game = { id: null };
   }
-  try {
-    const topClips = await TwitchAPI.getClips({
-      first: nrStreams,
-      game_id: game?.id,
-      after: page ? page.pagination.cursor : null,
-      started_at: sortByTime
-        ? new Date(new Date().setDate(new Date().getDate() - sortByTime)).toISOString()
-        : null,
-      ended_at: sortByTime && new Date().toISOString(),
-    }).catch((e) => {
-      console.error(e.message);
-      error = e;
-      return e;
-    });
 
-    const finallClips = await AddVideoExtraData({
-      items: topClips.data,
-      saveNewProfiles: false,
-    });
+  const topClips = await TwitchAPI.getClips({
+    first: nrStreams,
+    game_id: game?.id,
+    after: page ? page.pagination.cursor : null,
+    started_at: sortByTime
+      ? new Date(new Date().setDate(new Date().getDate() - sortByTime)).toISOString()
+      : null,
+    ended_at: sortByTime && new Date().toISOString(),
+  }).catch((e) => {
+    console.error(e?.message || e);
+    error = e;
+    return e;
+  });
 
-    return { topData: finallClips, error };
-  } catch (e) {
-    console.error(e);
-  }
+  const finallClips = await AddVideoExtraData({
+    items: topClips.data,
+    saveNewProfiles: false,
+  });
+
+  return { topData: finallClips, error };
 };
 
 export default getTopClips;

@@ -23,7 +23,7 @@ const addVideoExtraData = async ({
   const originalArray = items;
   const Profiles = fetchProfiles
     ? await addProfileInfo({
-        items: items.data,
+        items: items?.data,
         refresh: forceNewProfiles,
         save: saveNewProfiles,
       }).catch((e) => [])

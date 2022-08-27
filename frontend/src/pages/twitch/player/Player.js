@@ -58,7 +58,7 @@ import Chat from './Chat';
 import API from '../../navigation/API';
 import addGameInfo from '../functions/addGameInfo';
 import addProfileInfo from '../functions/addProfileInfo';
-import ButtonsBar from './ButtonsBar';
+import PlayerButtonsBar from './PlayerButtonsBar';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { footerVisibleAtom, navigationBarVisibleAtom } from '../../navigation/atoms';
 
@@ -519,7 +519,7 @@ const Player = () => {
               )
             }
           >
-            <ButtonsBar
+            <PlayerButtonsBar
               style={{ margin: '1rem', position: 'absolute', right: 0, top: 0 }}
               user={{
                 user_name:

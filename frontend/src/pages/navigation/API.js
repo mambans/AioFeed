@@ -11,9 +11,13 @@ const controller = new AbortController();
 
 INSTANCE.interceptors.request.use(
   async (config) => {
-    const session = await Auth.currentSession();
-    if (session) {
-      config.headers['Authorization'] = session?.idToken?.jwtToken;
+    try {
+      const session = await Auth.currentSession();
+      if (session) {
+        config.headers['Authorization'] = session?.idToken?.jwtToken;
+      }
+    } catch (e) {
+      console.log('Error', e);
     }
     return config;
   },
@@ -193,15 +197,12 @@ const API = {
       .then(() => console.log(`Successfully disconnected from Twitch`))
       .catch((e) => console.error(e)),
 
-  updateTwitchToken: async (setTwitchToken, setRefreshToken) => {
+  reauthenticateTwitchToken: async () => {
     controller.abort();
     return await INSTANCE.put(`/twitch/reauth`, {
       refresh_token: getCookie(`Twitch-refresh_token`),
       signal: controller.signal,
     }).then(async (res) => {
-      console.log('res.data.access_token:', res.data.access_token);
-      if (setTwitchToken) setTwitchToken(res.data.access_token);
-      if (setRefreshToken) setRefreshToken(res.data.refresh_token);
       AddCookie('Twitch-access_token', res.data.access_token);
       AddCookie('Twitch-refresh_token', res.data.refresh_token);
       if (res?.data?.access_token) console.log('Successfully re-authenticated to Twitch.');
@@ -211,7 +212,6 @@ const API = {
         icon: 'twitch',
       });
 
-      console.log('res00:', res);
       return res;
     });
   },

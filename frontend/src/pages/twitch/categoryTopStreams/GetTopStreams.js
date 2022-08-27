@@ -15,22 +15,16 @@ const getTopStreams = async (category, page, feedVideoSizeProps) => {
   } else {
     game = { id: null };
   }
-  try {
-    const topStreams = await TwitchAPI.getStreams({
-      first: nrStreams,
-      game_id: game?.id,
-      after: page ? page.pagination.cursor : null,
-    }).catch((e) => {
-      console.error(e.message);
-      error = e;
-      return e;
-    });
 
-    const finallData = await AddVideoExtraData({ items: topStreams.data, saveNewProfiles: false });
+  const topStreams = await TwitchAPI.getStreams({
+    first: nrStreams,
+    game_id: game?.id,
+    after: page ? page.pagination.cursor : null,
+  });
 
-    return { topData: finallData, error };
-  } catch (e) {
-    console.error(e);
-  }
+  console.log('topStreams:', topStreams);
+  const finallData = await AddVideoExtraData({ items: topStreams.data, saveNewProfiles: false });
+
+  return { topData: finallData, error };
 };
 export default getTopStreams;

@@ -93,7 +93,7 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
         })();
 
         setResult((c) => {
-          const res = searchResults?.data?.data.map((i) => ({
+          const res = searchResults?.data?.data?.map((i) => ({
             ...i,
             login: i.name,
             profile_image_url: i.box_art_url.replace('{width}', 300).replace('{height}', 300),

@@ -21,7 +21,7 @@ import useLocalStorageState from '../../hooks/useLocalStorageState';
 import VolumeEventOverlay from '../twitch/VolumeEventOverlay';
 import { TwitchContext } from '../twitch/useToken';
 import { parseNumberAndString } from '../myLists/dragDropUtils';
-import ButtonsBar from '../twitch/player/ButtonsBar';
+import PlayerButtonsBar from '../twitch/player/PlayerButtonsBar';
 import { useRecoilValue } from 'recoil';
 import { navigationBarVisibleAtom } from '../navigation/atoms';
 
@@ -195,7 +195,7 @@ const SharedVideoPlayer = () => {
 
           // contextMenuChildren={<></>}
         >
-          <ButtonsBar
+          <PlayerButtonsBar
             style={{ margin: '1rem', position: 'absolute', right: 0, top: 0, zIndex: 2 }}
             videoId={videoId}
             user={{
@@ -213,7 +213,7 @@ const SharedVideoPlayer = () => {
               size={32}
               redirect
             />
-          </ButtonsBar>
+          </PlayerButtonsBar>
         </VolumeEventOverlay>
 
         {domain === 'youtube' ? (
