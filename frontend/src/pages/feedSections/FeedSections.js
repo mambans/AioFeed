@@ -113,14 +113,7 @@ const Section = ({
               }`,
               onClick: (e) => {
                 e.preventDefault();
-                const url = `https://aiofeed.com/${(
-                  stream.login ||
-                  stream.user_login ||
-                  stream.user_name ||
-                  stream.name ||
-                  stream.display_name ||
-                  stream.broadcaster_name
-                )?.toLowerCase()}`;
+                const url = `https://aiofeed.com/${loginNameFormat(stream, true)?.toLowerCase()}`;
                 window.open(url, '_blank');
               },
             });
@@ -152,14 +145,10 @@ const Section = ({
                   }`,
               onClick: (e) => {
                 e.preventDefault();
-                const url = `https://aiofeed.com/${(
-                  stream.login ||
-                  stream.user_login ||
-                  stream.user_name ||
-                  stream.name ||
-                  stream.display_name ||
-                  stream.broadcaster_name
-                )?.toLowerCase()}`;
+                const url = `https://aiofeed.com/${loginNameFormat(
+                  stream,
+                  true
+                )?.toLowerCase()}/page`;
                 window.open(url, '_blank');
               },
             });
