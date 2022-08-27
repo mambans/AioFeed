@@ -48,6 +48,7 @@ const validateTokenFunc = async (NoAuthNeddedAndFallbackToAppToken) => {
       });
     }
   } catch (e) {
+    console.log('validateTokenFunc catch e:', e);
     if (NoAuthNeddedAndFallbackToAppToken) {
       const appTokenRequest = await API.getAppAccessToken();
       return appTokenRequest;
