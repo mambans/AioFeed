@@ -104,7 +104,6 @@ const API = {
       })
       .catch((e) => {
         console.error(e);
-        console.error('No User or App access tokens found.');
       }),
 
   createCustomFeedSections: async ({ id, data }) => {
