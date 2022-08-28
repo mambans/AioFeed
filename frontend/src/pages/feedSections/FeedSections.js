@@ -153,7 +153,7 @@ const Section = ({
               },
             });
 
-            if (wentOffline && channels?.includes(stream.user_id)) {
+            if (wentOffline && channels?.includes(String(stream.user_id))) {
               fetchLatestVod({ user_id: stream.user_id, check: true });
             }
 

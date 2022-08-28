@@ -39,7 +39,7 @@ const OfflineStreamsNotifications = ({
                 '/page'
             );
 
-          if (isEnabledOfflineNotifications && channels?.includes(stream.user_id)) {
+          if (isEnabledOfflineNotifications && channels?.includes(String(stream.user_id))) {
             const duration = durationMsToDate(moment().diff(moment(stream.started_at)));
 
             addSystemNotification({
