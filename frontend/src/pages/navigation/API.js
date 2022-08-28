@@ -197,6 +197,7 @@ const API = {
       .catch((e) => console.error(e)),
 
   reauthenticateTwitchToken: async () => {
+    console.log('reauthenticateTwitchToken:');
     controller.abort();
     return await INSTANCE.put(`/twitch/reauth`, {
       refresh_token: getCookie(`Twitch-refresh_token`),

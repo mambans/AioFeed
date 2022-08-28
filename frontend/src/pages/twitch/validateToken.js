@@ -40,6 +40,7 @@ const validateTokenFunc = async (NoAuthNeddedAndFallbackToAppToken) => {
     } else if (refresh_token) {
       return await API.reauthenticateTwitchToken();
     } else if (app_token && NoAuthNeddedAndFallbackToAppToken) {
+      console.log('APP validateFunction:');
       return validateFunction(app_token).then(async (res) => {
         const { client_id } = res?.data || {};
         if (client_id === TWITCH_CLIENT_ID) return res;
@@ -57,6 +58,7 @@ const validateTokenFunc = async (NoAuthNeddedAndFallbackToAppToken) => {
 };
 
 const fullValidateFunc = async () => {
+  console.log('fullValidateFunc:');
   const access_token = getCookie('Twitch-access_token');
 
   const res = await validateFunction(access_token);
