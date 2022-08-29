@@ -5,7 +5,7 @@ import addLogBase from '../logs/addLogBase';
 
 const INSTANCE = axios.create({
   baseURL: 'https://44rg31jaa9.execute-api.eu-north-1.amazonaws.com/Prod',
-  timeout: 5000,
+  timeout: 10000,
 });
 const controller = new AbortController();
 
@@ -199,10 +199,14 @@ const API = {
   reauthenticateTwitchToken: async () => {
     console.log('reauthenticateTwitchToken:');
     controller.abort();
-    return await INSTANCE.put(`/twitch/reauth`, {
-      refresh_token: getCookie(`Twitch-refresh_token`),
-      signal: controller.signal,
-    }).then(async (res) => {
+    return await INSTANCE.put(
+      `/twitch/reauth`,
+      {
+        refresh_token: getCookie(`Twitch-refresh_token`),
+        signal: controller.signal,
+      },
+      { timeout: 15000 }
+    ).then(async (res) => {
       AddCookie('Twitch-access_token', res.data.access_token);
       AddCookie('Twitch-refresh_token', res.data.refresh_token);
       if (res?.data?.access_token) console.log('Successfully re-authenticated to Twitch.');
