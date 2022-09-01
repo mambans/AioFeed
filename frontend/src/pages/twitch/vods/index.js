@@ -1,6 +1,5 @@
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import React, { useState, useEffect, useCallback, useContext, useRef } from 'react';
-import { Button } from 'react-bootstrap';
 
 import getFollowedVods from './GetFollowedVods';
 import VodElement from './VodElement';
@@ -20,7 +19,7 @@ import { getLocalstorage } from '../../../util';
 
 const Vods = ({ className }) => {
   const { vods, setVods, channels, fetchVodsContextData } = useContext(VodsContext);
-  const { setEnableTwitchVods, orders, toggleExpanded } = useContext(FeedsContext) || {};
+  const { orders, toggleExpanded } = useContext(FeedsContext) || {};
   const { videoElementsAmount } = useContext(CenterContext);
   const { twitchAccessToken, setTwitchAccessToken, setTwitchRefreshToken, twitchUserId } =
     useContext(TwitchContext);
@@ -110,17 +109,7 @@ const Vods = ({ className }) => {
             message='No access token for twitch availible.'
           />
         )}
-        {error && (
-          <Alert
-            data={error}
-            actions={
-              <Button variant='danger' onClick={() => setEnableTwitchVods(false)}>
-                Disable vods
-              </Button>
-            }
-            fill
-          />
-        )}
+        {error && <Alert data={error} fill />}
         {!vods?.data ? (
           <SubFeedContainer>
             <LoadingBoxes amount={videoElementsAmount} type='small' />
