@@ -268,14 +268,21 @@ const ChannelSearchBar = ({
     return handleSearch();
   };
 
+  const followedItemsIds = followedChannels.map((i) => i.id);
   const items = getUniqueListBy(
     [
       ...(followedChannels || [])?.filter((i) =>
+        // new RegExp(inputRef.current?.value?.trim?.()?.toLowerCase(), 'i').test(loginNameFormat(i))
         loginNameFormat(i)
           ?.toLowerCase()
           ?.includes(inputRef.current?.value?.trim?.()?.toLowerCase())
       ),
-      ...(result || []),
+      // ...(result || []),
+      ...(result || [])
+        ?.sort((a, b) => followedItemsIds.includes(b.id))
+        ?.map(
+          (cha) => followedChannels?.find((channel) => String(channel.id) === String(cha.id)) || cha
+        ),
       // .sort(
       //   (a, b) =>
       //     loginNameFormat(a).replace(inputRef.current?.value?.trim?.())?.length -
