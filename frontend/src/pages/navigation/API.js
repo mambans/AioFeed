@@ -207,7 +207,6 @@ const API = {
       },
       { timeout: 15000 }
     ).then(async (res) => {
-      console.log('reauthenticateTwitchToken res:', res);
       AddCookie('Twitch-access_token', res.data.access_token, {
         expires: res?.data?.expires_in,
       });
