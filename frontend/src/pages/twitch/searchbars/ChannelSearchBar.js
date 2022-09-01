@@ -275,11 +275,12 @@ const ChannelSearchBar = ({
           ?.toLowerCase()
           ?.includes(inputRef.current?.value?.trim?.()?.toLowerCase())
       ),
-      ...(result || []).sort(
-        (a, b) =>
-          loginNameFormat(a).replace(inputRef.current?.value?.trim?.())?.length -
-          loginNameFormat(b).replace(inputRef.current?.value?.trim?.())?.length
-      ),
+      ...(result || []),
+      // .sort(
+      //   (a, b) =>
+      //     loginNameFormat(a).replace(inputRef.current?.value?.trim?.())?.length -
+      //     loginNameFormat(b).replace(inputRef.current?.value?.trim?.())?.length
+      // ),
     ],
     'id'
   );
