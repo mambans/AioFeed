@@ -26,7 +26,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
   );
   // eslint-disable-next-line no-unused-vars
   const [rnd, setRnd] = useState();
-  const overlayBackdropRef = useRef();
+  // const overlayBackdropRef = useRef();
   const chatRef = useRef();
   const bottomRef = useRef();
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
@@ -243,12 +243,12 @@ const ChatHeaderBackdropEventDraggable = styled.div`
   cursor: move;
 `;
 
-const DragOverlay = styled.div`
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background: transparent;
-`;
+// const DragOverlay = styled.div`
+//   position: absolute;
+//   height: 100%;
+//   width: 100%;
+//   background: transparent;
+// `;
 
 const InnerWrapper = styled.div`
   position: relative;
