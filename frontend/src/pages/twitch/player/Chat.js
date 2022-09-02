@@ -129,9 +129,13 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
 
   return (
     <>
-      {chatAsOverlay && dragging && (
-        <OverlayBackdrop ref={overlayBackdropRef} onMouseUp={onDragStop} onMouseMove={onDragMove} />
-      )}
+      {/* <OverlayBackdrop
+        ref={overlayBackdropRef}
+        onMouseUp={onDragStop}
+        // onMouseMove={onDragMove}
+        dragging={chatAsOverlay && dragging}
+      /> */}
+
       <ChatWrapper
         ref={chatRef}
         overlayPosition={overlayPosition}
@@ -139,12 +143,14 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
         id='chat'
         chatAsOverlay={chatAsOverlay}
         data-chatasoverlay={chatAsOverlay}
+        onMouseMove={dragging ? onDragMove : () => {}}
+        onMouseUp={dragging ? onDragStop : () => {}}
       >
         <ChatHeader className='chatHeader' show={dragging}>
           <ChatHeaderBackdropEventDraggable
             onMouseDown={onDragInit}
-            onMouseUp={onDragStop}
-            onMouseMove={dragging ? onDragMove : () => {}}
+            // onMouseUp={onDragStop}
+            // onMouseMove={dragging ? onDragMove : () => {}}
           />
           <ChatHeaderInner>
             {/* <ShowNavigationButton />
@@ -209,12 +215,11 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
         )}
 
         <InnerWrapper
-          onMouseDown={onDragInit}
-          onMouseUp={onDragStop}
+          // onMouseDown={onDragInit}
+          // onMouseUp={onDragStop}
           data-chatasoverlay={chatAsOverlay}
-          onMouseMove={dragging ? onDragMove : () => {}}
         >
-          {chatAsOverlay && dragging && <DragOverlay />}
+          {/* {chatAsOverlay && dragging && <DragOverlay />} */}
 
           <StyledChat
             data-chatasoverlay={chatAsOverlay}
@@ -258,6 +263,7 @@ const OverlayBackdrop = styled.div`
   inset: 0;
   background: transparent;
   z-index: 99999;
+  pointer-events: ${({ dragging }) => (dragging ? 'auto' : 'none')};
 `;
 
 const ResizerIcon = styled.div`

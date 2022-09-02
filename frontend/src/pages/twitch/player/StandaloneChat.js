@@ -10,7 +10,7 @@ import { StyledChat, ChatContainer, PlayerExtraButtons } from './StyledComponent
 
 const StandaloneChat = () => {
   const channelName = useParams()?.channelName;
-  const navigationSidebarOverflow = useRecoilValue(navigationBarVisibleAtom);
+  const navigationBarVisible = useRecoilValue(navigationBarVisibleAtom);
 
   useFullscreen({ hideNavbar: false });
   useDocumentTitle(`${channelName}'s chat'`);
@@ -18,7 +18,7 @@ const StandaloneChat = () => {
   // const darkpopout = useQuery().get('darkpopout');
 
   return (
-    <ChatContainer visible={navigationSidebarOverflow}>
+    <ChatContainer visible={navigationBarVisible}>
       <PlayerExtraButtons channelName={channelName}></PlayerExtraButtons>
       <StyledChat
         frameborder='0'

@@ -16,7 +16,7 @@ import { useRecoilValue } from 'recoil';
 import { navigationBarVisibleAtom } from '../../navigation/atoms';
 
 const PlayerClip = () => {
-  const navigationSidebarOverflow = useRecoilValue(navigationBarVisibleAtom);
+  const navigationBarVisible = useRecoilValue(navigationBarVisibleAtom);
 
   const { videoId, channelName } = useParams();
   useDocumentTitle(`${channelName} - ${videoId}`);
@@ -25,12 +25,7 @@ const PlayerClip = () => {
 
   return (
     <>
-      <CSSTransition
-        in={navigationSidebarOverflow}
-        timeout={300}
-        classNames='fade-250ms'
-        unmountOnExit
-      >
+      <CSSTransition in={navigationBarVisible} timeout={300} classNames='fade-250ms' unmountOnExit>
         <PlayerNavbar>
           <Link to={`/${channelName}/page`} className='linkWithIcon' disabled={!channelName}>
             <MdAccountCircle size={26} />
@@ -40,7 +35,7 @@ const PlayerClip = () => {
       </CSSTransition>
       <VideoAndChatContainer
         id='twitch-embed'
-        visible={navigationSidebarOverflow}
+        visible={navigationBarVisible}
         style={{
           display: 'unset',
         }}

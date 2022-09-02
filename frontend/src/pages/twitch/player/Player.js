@@ -429,7 +429,7 @@ const Player = () => {
               {playbackStats?.[statName]}
             </span>
           </div>
-        ))}
+        )) || null}
       </ContextMenuDropDown>
     );
   };

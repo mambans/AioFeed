@@ -33,7 +33,7 @@ const SharedVideoPlayer = () => {
   const location = useLocation();
   const { videoId } = useParams() || {};
   const channelName = useParams()?.channelName;
-  const navigationSidebarOverflow = useRecoilValue(navigationBarVisibleAtom);
+  const navigationBarVisible = useRecoilValue(navigationBarVisibleAtom);
 
   const { enableVodVolumeOverlay } = useContext(TwitchContext) || {};
   const { lists } = useContext(MyListsContext) || {};
@@ -144,7 +144,7 @@ const SharedVideoPlayer = () => {
       <VideoAndChatContainer
         id='twitch-embed'
         ref={videoElementRef}
-        visible={navigationSidebarOverflow}
+        visible={navigationBarVisible}
         chatwidth={viewStates?.listWidth || DEFAULT_LIST_WIDTH}
         resizeActive={resizeActive}
         hidechat={viewStates?.hideList || isFullscreen}
@@ -159,7 +159,7 @@ const SharedVideoPlayer = () => {
             >
               <FaList
                 style={{
-                  transform: navigationSidebarOverflow ? 'rotateX(180deg)' : 'unset',
+                  transform: navigationBarVisible ? 'rotateX(180deg)' : 'unset',
                   right: '10px',
                 }}
                 size={30}

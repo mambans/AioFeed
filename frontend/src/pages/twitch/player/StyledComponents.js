@@ -901,10 +901,21 @@ export const ChatHeader = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
   position: relative;
-  padding: ${({ show }) => (show ? '0.5rem' : '0')};
-  height: ${({ show }) => (show ? 45 : 0)}px;
+  padding: 0.5rem;
+  height: 45px;
   overflow: hidden;
   transition: height 250ms, padding 250ms;
+
+  &::after {
+    content: 'Dragg chat here';
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    opacity: 0.3;
+    pointer-events: none;
+  }
 
   button {
     background: none;
@@ -983,13 +994,6 @@ export const ChatWrapper = styled.div`
   overflow: visible;
   border-left: 1px solid transparent;
   background: var(--navigationbarBackground);
-
-  &:hover {
-    ${ChatHeader} {
-      height: 45px;
-      padding: 0.5rem;
-    }
-  }
 `;
 
 export const ChatHeaderInner = styled.div`

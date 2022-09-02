@@ -21,13 +21,13 @@ const PlayerContextMenu = ({ PlayerUIControlls, TwitchPlayer, showAndResetTimer,
             </>
           }
         >
-          {TwitchPlayer?.getQualities()
+          {TwitchPlayer?.getQualities?.()
             ?.filter((q) => q.group !== 'chunked')
             ?.map((q, index) => (
               <div key={q.name || index} onClick={() => TwitchPlayer?.setQuality(q.group)}>
                 {q.name}
               </div>
-            ))}
+            )) || null}
         </ContextMenuDropDown>
       </>
     );
