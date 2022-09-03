@@ -13,7 +13,7 @@ const validateToken = async (NoAuthNeddedAndFallbackToAppToken) => {
   }
 
   const validPromise = validationOfToken(NoAuthNeddedAndFallbackToAppToken);
-  console.log('validPromise :', validPromise);
+  // console.log('validPromise :', validPromise);
   return validPromise;
 };
 

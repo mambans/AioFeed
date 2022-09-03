@@ -8,6 +8,7 @@ import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../../components/tooltip/ToolTip';
 import useVodChannel from './hooks/useVodChannel';
 import useFetchSingelVod from './hooks/useFetchSingelVod';
+import loginNameFormat from '../loginNameFormat';
 
 /**
  * @param {Object} channel - channel
@@ -60,7 +61,7 @@ const VodsFollowUnfollowBtn = ({
   return (
     <ToolTip
       delay={{ show: 500, hide: 0 }}
-      tooltip={`${enabled ? 'Disable' : 'Enable'} ${channel?.user_name} vods`}
+      tooltip={`${enabled ? 'Disable' : 'Enable'} ${loginNameFormat(channel)} vods`}
       width='max-content'
     >
       <VodAddRemoveButton

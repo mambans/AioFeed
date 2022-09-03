@@ -206,7 +206,7 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
   const onChange = (e) => {
     setPage(null);
     setSearch(e.target.value?.trimStart?.());
-    handleSearch();
+    handleSearch(e, e.target.value?.trimStart?.());
     props?.onChange?.(e.target.value?.trimStart?.());
   };
 
@@ -218,7 +218,7 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
 
   const onFocus = async () => {
     setShowDropdown(true);
-    handleSearch();
+    handleSearch(null, inputRef.current.value?.trimStart?.());
   };
 
   useEffect(() => {
@@ -232,7 +232,7 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
 
   const loadmore = () => {
     if (page) {
-      return handleSearch(page);
+      return handleSearch(page, inputRef.current.value?.trimStart?.());
     }
   };
 
@@ -246,13 +246,15 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
           })
           .sort(
             (a, b) =>
-              search?.trim?.() &&
-              loginNameFormat(a).replace(search?.trim?.())?.length -
-                loginNameFormat(b).replace(search?.trim?.())?.length
+              inputRef.current.value?.trimStart?.()?.trim?.() &&
+              loginNameFormat(a).replace(inputRef.current.value?.trimStart?.()?.trim?.())?.length -
+                loginNameFormat(b).replace(inputRef.current.value?.trimStart?.()?.trim?.())?.length
           ),
         'id'
       ),
+    /* eslint-disable  */
     [result, search]
+    /* eslint-enable  */
   );
 
   return (
