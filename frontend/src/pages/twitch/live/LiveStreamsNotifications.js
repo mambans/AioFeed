@@ -34,9 +34,11 @@ const LiveStreamsNotifications = ({ liveStreams, oldLiveStreams, setNewlyAddedSt
             }`,
             onClick: (e) => {
               e.preventDefault();
-              window.open(
-                'https://aiofeed.com/' + (stream.login || stream.user_login || stream.user_name)
+              console.log(
+                'addSystemNotification loginNameFormat(stream, true):',
+                loginNameFormat(stream, true)
               );
+              window.open('https://aiofeed.com/' + loginNameFormat(stream, true));
             },
           });
 
