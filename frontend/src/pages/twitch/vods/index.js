@@ -21,8 +21,7 @@ const Vods = ({ className }) => {
   const { vods, setVods, channels, fetchVodsContextData } = useContext(VodsContext);
   const { orders, toggleExpanded } = useContext(FeedsContext) || {};
   const { videoElementsAmount } = useContext(CenterContext);
-  const { twitchAccessToken, setTwitchAccessToken, setTwitchRefreshToken, twitchUserId } =
-    useContext(TwitchContext);
+  const { twitchAccessToken, twitchUserId } = useContext(TwitchContext);
   const validateToken = useToken();
   const [error, setError] = useState(null);
   const [vodError, setVodError] = useState(null);
@@ -43,20 +42,18 @@ const Vods = ({ className }) => {
       }
       getFollowedVods({
         forceRun: forceRefresh,
-        setTwitchRefreshToken,
-        setTwitchAccessToken,
         channels,
         currentVods: getLocalstorage('TwitchVods'),
       }).then((data) => {
-        refreshBtnRef?.current?.setIsLoading(false);
         setError(data?.er);
         setVodError(data?.vodError);
 
         if (data?.data) setVods(data.data);
+        refreshBtnRef?.current?.setIsLoading(false);
         return data;
       });
     },
-    [setTwitchAccessToken, setTwitchRefreshToken, setVods, channels, fetchVodsContextData]
+    [setVods, channels, fetchVodsContextData]
   );
 
   async function windowFocusHandler() {
@@ -70,19 +67,18 @@ const Vods = ({ className }) => {
         refreshBtnRef?.current?.setIsLoading(true);
         const data = await getFollowedVods({
           forceRun: false,
-          setTwitchRefreshToken,
-          setTwitchAccessToken,
+
           channels,
           currentVods: getLocalstorage('TwitchVods'),
         });
 
-        refreshBtnRef?.current?.setIsLoading(false);
         setError(data?.er);
         setVodError(data?.vodError);
         if (data?.videos) setVods(data?.videos);
+        refreshBtnRef?.current?.setIsLoading(false);
       }
     })();
-  }, [twitchUserId, setTwitchAccessToken, setTwitchRefreshToken, setVods, channels, validateToken]);
+  }, [twitchUserId, setVods, channels, validateToken]);
 
   useEffect(() => {
     setVodAmounts({

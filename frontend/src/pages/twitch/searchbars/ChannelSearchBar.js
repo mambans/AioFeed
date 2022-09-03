@@ -9,9 +9,8 @@ import {
   Wrapper,
 } from './styledComponents';
 import debounce from 'lodash/debounce';
-import TwitchAPI from '../API';
+import TwitchAPI, { pagination } from '../API';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
-import getMyFollowedChannels from '../getMyFollowedChannels';
 import addVideoExtraData from '../AddVideoExtraData';
 import loginNameFormat from '../loginNameFormat';
 import { getUniqueListBy } from '../../../util';
@@ -220,7 +219,8 @@ const ChannelSearchBar = ({
     setShowDropdown(true);
     setLoading(true);
 
-    const channels = await getMyFollowedChannels();
+    const channels = pagination(await TwitchAPI.getMyFollowedChannels({ first: 100 }));
+
     const channelsWithProfiles = await addVideoExtraData({
       items: {
         data: channels?.map((i) => ({ ...i, user_id: i.to_id, login: i.to_login || i.to_name })),

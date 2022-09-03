@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 // import useClicksOutside from '../../../hooks/useClicksOutside';
-import TwitchAPI from '../API';
+import TwitchAPI, { pagination } from '../API';
 import { SingelScheduleItem } from '../schedule';
 import { RefreshBtn, ScheduleListContainer } from '../schedule/StyledComponents';
 import MyModal from '../../../components/mymodal/MyModal';
 import { AiFillSchedule } from 'react-icons/ai';
-import getMyFollowedChannels from '../getMyFollowedChannels';
 
 const nrOfItems = 4;
 
@@ -36,7 +35,8 @@ export default BigScheduleList;
 export const SchedulesList = ({ schedule, setSchedule, followedChannels }) => {
   useEffect(() => {
     (async () => {
-      const followedChannels = await getMyFollowedChannels();
+      const followedChannels = pagination(await TwitchAPI.getMyFollowedChannels({ first: 100 }));
+
       if (!followedChannels?.length) return false;
 
       const res = await Promise.allSettled(

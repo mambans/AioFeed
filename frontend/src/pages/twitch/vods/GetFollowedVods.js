@@ -1,17 +1,10 @@
-import API from '../../navigation/API';
 import AddVideoExtraData from '../AddVideoExtraData';
 import TwitchAPI from '../API';
 import { addVodEndTime } from '../TwitchUtils';
 import SortAndAddExpire from './SortAndAddExpire';
 
-const fetchVodsFromMonitoredChannels = async (
-  vodChannels,
-  setTwitchAccessToken,
-  setRefreshToken
-) => {
-  let followedStreamVods = [];
-
-  const PromiseAllVods = await Promise.all(
+const fetchVodsFromMonitoredChannels = async (vodChannels) => {
+  const PromiseAllVods = await Promise.allSettled(
     vodChannels.map(
       async (channelId) =>
         await TwitchAPI.getVideos({
@@ -21,38 +14,14 @@ const fetchVodsFromMonitoredChannels = async (
           type: 'all',
         }).then((response) => response.data.data)
     )
-  ).catch(async () => {
-    return await API.reauthenticateTwitchToken().then(async (access_token) => {
-      const channelFetchedVods = [...new Set(followedStreamVods.map((vod) => vod.user_id))];
+  );
 
-      const channelsIdsUnfetchedVods = await vodChannels.filter(
-        (channel) => !channelFetchedVods?.includes(channel)
-      );
-
-      return await Promise.all(
-        channelsIdsUnfetchedVods.map(
-          async (channel) =>
-            await TwitchAPI.getVideos({
-              user_id: channel,
-              period: 'month',
-              first: 5,
-              type: 'all',
-            }).then((response) => response.data.data)
-        )
-      );
-    });
-  });
-
-  return PromiseAllVods.flat(1);
+  return PromiseAllVods.map((promise) => {
+    return promise?.value || [];
+  }).flat(1);
 };
 
-const getFollowedVods = async ({
-  forceRun,
-  setRefreshToken,
-  setTwitchAccessToken,
-  channels,
-  currentVods,
-}) => {
+const getFollowedVods = async ({ forceRun, channels, currentVods }) => {
   const vodExpire = 3; // Number of hours
   // const cachedVods = getLocalstorage(`Vods`);
   const cachedVods = currentVods;
@@ -78,11 +47,7 @@ const getFollowedVods = async ({
           };
         }
 
-        const followedStreamVods = await fetchVodsFromMonitoredChannels(
-          vodChannels,
-          setTwitchAccessToken,
-          setRefreshToken
-        );
+        const followedStreamVods = await fetchVodsFromMonitoredChannels(vodChannels);
 
         const videos = await AddVideoExtraData({
           items: {

@@ -19,7 +19,7 @@ const getTopClips = async (category, sortByTime, page, feedVideoSizeProps) => {
   if (category && category !== 'undefined') {
     game = await TwitchAPI.getGames({
       name: category,
-    }).then((res) => res.data.data[0]);
+    }).then((res) => res[0]);
   } else {
     game = { id: null };
   }
@@ -39,7 +39,7 @@ const getTopClips = async (category, sortByTime, page, feedVideoSizeProps) => {
   });
 
   const finallClips = await AddVideoExtraData({
-    items: topClips.data,
+    items: { data: topClips },
     saveNewProfiles: false,
   });
 

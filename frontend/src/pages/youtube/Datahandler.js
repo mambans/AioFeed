@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState, useCallback, useContext } from 'react';
 
-import getMyFollowedChannels from './getMyFollowedChannels';
 import GetSubscriptionVideos from './GetSubscriptionVideos';
 import useToken, { YoutubeContext } from './useToken';
 import Alert from '../../components/alert';
+import TwitchAPI, { pagination } from '../twitch/API';
 
 const Datahandler = ({ children }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -17,7 +17,9 @@ const Datahandler = ({ children }) => {
   const refresh = useCallback(async () => {
     const fetchData = async () => {
       try {
-        followedChannels.current = await getMyFollowedChannels();
+        followedChannels.current = pagination(
+          await TwitchAPI.getMyFollowedChannels({ first: 100 })
+        );
 
         const SubscriptionData = await GetSubscriptionVideos(followedChannels.current);
         setVideos(SubscriptionData.data);

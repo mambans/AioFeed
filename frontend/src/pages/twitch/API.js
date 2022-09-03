@@ -4,7 +4,7 @@ import validateToken from './validateToken';
 
 const CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;
 
-const INSTANCE = axios.create({
+const TWITCH_INSTANCE = axios.create({
   baseURL: 'https://api.twitch.tv/helix',
   timeout: 5000,
 });
@@ -20,7 +20,7 @@ const canUseAppToken = (config) => {
   return false;
 };
 
-INSTANCE.interceptors.request.use(
+TWITCH_INSTANCE.interceptors.request.use(
   async (config) => {
     const token = await validateToken(canUseAppToken(config));
     config.headers['Authorization'] = `Bearer ${token}`;
@@ -33,109 +33,131 @@ INSTANCE.interceptors.request.use(
   }
 );
 
+TWITCH_INSTANCE.interceptors.response.use(
+  async function (response) {
+    return response;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
+
+export const pagination = async (response) => {
+  if (response?.data?.pagination?.cursor) {
+    const params = { ...response.config.params, after: response?.data?.pagination?.cursor };
+
+    return [
+      ...(response?.data?.data || []),
+      ...((await TWITCH_INSTANCE.get(response.config.url, { params }))?.data?.data || []),
+    ];
+  }
+
+  return response;
+};
+
 // const controller = new AbortController();
 
 const TwitchAPI = {
   getMe: async ({ accessToken }) => {
-    return await INSTANCE.get(`/users`, {});
+    return await TWITCH_INSTANCE.get(`/users`, {});
   },
 
   getStreams: async (params) => {
-    return await INSTANCE.get(`/streams`, {
+    return await TWITCH_INSTANCE.get(`/streams`, {
       params,
     });
   },
 
   getFollowedStreams: async (params) => {
-    return await INSTANCE.get(`/streams/followed`, {
+    return await TWITCH_INSTANCE.get(`/streams/followed`, {
       params,
     });
   },
 
   getVideos: async (params) => {
-    return await INSTANCE.get(`/videos`, {
+    return await TWITCH_INSTANCE.get(`/videos`, {
       params,
     });
   },
 
   getClips: async (params) => {
-    return await INSTANCE.get(`/clips`, {
+    return await TWITCH_INSTANCE.get(`/clips`, {
       params,
     });
   },
 
   postClip: async (params) => {
-    return await INSTANCE.post(`/clips`, params, {});
+    return await TWITCH_INSTANCE.post(`/clips`, params, {});
   },
 
   getUser: async (params) => {
-    return await INSTANCE.get(`/users`, {
+    return await TWITCH_INSTANCE.get(`/users`, {
       params,
     });
   },
 
   getSearchChannels: async (params, query) => {
-    return await INSTANCE.get(`/search/channels?query=${encodeURI(query)}`, {
+    return await TWITCH_INSTANCE.get(`/search/channels?query=${encodeURI(query)}`, {
       params,
     });
   },
 
   getChannel: async (params) => {
-    return await INSTANCE.get(`/channels`, {
+    return await TWITCH_INSTANCE.get(`/channels`, {
       params,
     });
   },
 
   getMyFollowedChannels: async (params) => {
-    return await INSTANCE.get(`/users/follows`, {
+    return await TWITCH_INSTANCE.get(`/users/follows`, {
       params: { ...params, from_id: getCookie('Twitch-userId') },
     });
   },
 
   getFollowedChannels: async (params) => {
-    return await INSTANCE.get(`/users/follows`, {
+    return await TWITCH_INSTANCE.get(`/users/follows`, {
       params,
     });
   },
 
   getGames: async (params) => {
-    return await INSTANCE.get(`/games`, {
+    return await TWITCH_INSTANCE.get(`/games`, {
       params,
     });
   },
 
   getSearchGames: async (params, query) => {
-    return await INSTANCE.get(`/search/categories?query=${encodeURI(query) || ''}`, {
+    return await TWITCH_INSTANCE.get(`/search/categories?query=${encodeURI(query) || ''}`, {
       params,
     });
   },
 
   getTopGames: async (params) => {
-    return await INSTANCE.get(`/games/top`, {
+    return await TWITCH_INSTANCE.get(`/games/top`, {
       params,
     });
   },
 
   checkFollow: async (params) => {
-    return await INSTANCE.get(`/users/follows`, {
+    return await TWITCH_INSTANCE.get(`/users/follows`, {
       params,
     });
   },
 
   getTags: async (params) => {
-    return await INSTANCE.get(`/streams/tags`, {
+    return await TWITCH_INSTANCE.get(`/streams/tags`, {
       params,
     }).catch((e) => console.error(e));
   },
 
   getAllTags: async (params, query) => {
-    return await INSTANCE.get(`/tags/streams${query || ''}`, {
+    return await TWITCH_INSTANCE.get(`/tags/streams${query || ''}`, {
       params,
     }).catch((e) => console.error(e));
   },
 
   getSchedule: async (params) => {
-    return await INSTANCE.get(`/schedule`, {
+    return await TWITCH_INSTANCE.get(`/schedule`, {
       params,
     }).catch((e) => {
       if (e?.response?.data?.status !== 404) {

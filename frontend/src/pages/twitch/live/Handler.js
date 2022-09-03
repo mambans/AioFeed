@@ -10,13 +10,14 @@ import { fetchAndAddTags } from '../fetchAndAddTags';
 import FeedSectionsContext from '../../feedSections/FeedSectionsContext';
 import { checkAgainstRules } from '../../feedSections/FeedSections';
 import Alert from '../../../components/alert';
-import fetchMyFollowedLiveStreams from '../functions/fetchMyFollowedLiveStreams';
 import addProfileInfo from '../functions/addProfileInfo';
 import addGameInfo from '../functions/addGameInfo';
 import { CancelToken } from 'axios';
 import LiveStreamsNotifications from './LiveStreamsNotifications';
 import OfflineStreamsNotifications from './OfflineStreamsNotifications';
 import UpdateStreamsNotifications from './UpdateStreamsNotifications';
+import TwitchAPI, { pagination } from '../API';
+import addSystemNotification from './addSystemNotification';
 
 const REFRESH_RATE = 25; // seconds
 
@@ -65,12 +66,22 @@ const Handler = ({ children }) => {
       try {
         if (isInFocus.current) setNewlyAddedStreams([]);
         isInFocus.current = false;
-        // followedChannels.current = await getMyFollowedChannels(forceValidateToken);
 
-        const baseStreams = await fetchMyFollowedLiveStreams({
-          user_id: twitchUserId,
-          cancelToken: cancelToken.current.token,
-        });
+        const baseStreams = pagination(
+          await TwitchAPI.getFollowedStreams({
+            user_id: twitchUserId,
+            first: 100,
+            cancelToken: cancelToken.current.token,
+          }).catch((e) => {
+            if (e.response.data.status) {
+              addSystemNotification({
+                title: 'Error fetching followed streams',
+                body: `${e.response.data.status} - ${e.response.data.message}`,
+              });
+            }
+            return e.response.data;
+          })
+        );
 
         if (Array.isArray(baseStreams)) {
           const streamsWithProfiles = await addProfileInfo({

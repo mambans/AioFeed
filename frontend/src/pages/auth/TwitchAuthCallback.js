@@ -33,24 +33,25 @@ const TwitchAuthCallback = () => {
       if (setTwitchRefreshToken) setTwitchRefreshToken(refreshToken);
 
       const MyTwitch = await TwitchAPI.getMe({ accessToken: accessToken }).then(async (res) => {
-        setTwitchUserId(res.data.data[0].id);
-        setTwitchUsername(res.data.data[0].login);
-        setTwitchProfileImage(res.data.data[0].profile_image_url);
+        const user = res?.data?.data?.[0];
+        setTwitchUserId(user.id);
+        setTwitchUsername(user.login);
+        setTwitchProfileImage(user.profile_image_url);
 
         await aiofeedAPI.updateTwitchUserData(
           {
-            Username: res.data.data[0].login,
-            Id: res.data.data[0].id,
-            Profile: res.data.data[0].profile_image_url,
+            Username: user.login,
+            Id: user.id,
+            Profile: user.profile_image_url,
           },
           accessToken,
           refreshToken
         );
 
         return {
-          Username: res.data.data[0].login,
-          ProfileImg: res.data.data[0].profile_image_url,
-          userId: res.data.data[0].id,
+          Username: user.login,
+          ProfileImg: user.profile_image_url,
+          userId: user.id,
         };
       });
 
