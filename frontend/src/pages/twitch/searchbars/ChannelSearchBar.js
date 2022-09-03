@@ -33,6 +33,7 @@ const ChannelSearchBar = ({
   const [result, setResult] = useState();
   const [page, setPage] = useState();
   const [loading, setLoading] = useState();
+  const [search, setSearch] = useState('');
   /* eslint-disable no-unused-vars */
   const [hiddenItems, setHiddenItems] = useState([]);
   const [visibleItems, setVisibleItems] = useState([]);
@@ -82,16 +83,13 @@ const ChannelSearchBar = ({
     async (e) => {
       try {
         e?.preventDefault?.();
-
-        const value = inputRef.current?.value;
         setLoading(true);
-
         controller.abort();
 
-        if (value) {
+        if (search) {
           const searchResults = await TwitchAPI.getSearchChannels(
             { first: limit, after: page, signal: controller.signal },
-            value
+            search
           );
 
           setResult((c) => {
@@ -106,6 +104,8 @@ const ChannelSearchBar = ({
             return res;
           });
           setPage(searchResults?.data?.pagination?.cursor);
+        } else {
+          setResult([]);
         }
         setLoading(false);
       } catch (error) {
@@ -113,8 +113,8 @@ const ChannelSearchBar = ({
         setLoading(false);
       }
     },
-    100,
-    { leading: false, trailing: true }
+    500,
+    { leading: false, trailing: true, maxWait: 3000 }
   );
 
   const scrollItemIntoView = (item) => {
@@ -137,8 +137,6 @@ const ChannelSearchBar = ({
         selected.classList.remove('selected');
         next.classList.add('selected');
         //fires onChange and searching which I dpnt want (block onChange?)
-        // inputRef.current.value = next.querySelector('.title')?.textContent;
-
         scrollItemIntoView(next);
       }
       return;
@@ -156,7 +154,6 @@ const ChannelSearchBar = ({
         selected.classList.remove('selected');
         previous.classList.add('selected');
         //fires onChange and searching which I dpnt want (block onChange?)
-        // inputRef.current.value = previous.querySelector('.title')?.textContent;
         scrollItemIntoView(previous);
       } else if (inputRef.current) {
         selected?.classList?.remove('selected');
@@ -176,7 +173,7 @@ const ChannelSearchBar = ({
   const onSubmit = (event) => {
     const selected = listRef.current?.querySelector?.('.selected');
     const elementTitle = selected?.querySelector?.('.title');
-    const value = (elementTitle?.textContent || inputRef.current.value).trimStart();
+    const value = (elementTitle?.textContent || search).trimStart();
 
     try {
       if (elementTitle) {
@@ -199,12 +196,13 @@ const ChannelSearchBar = ({
     } catch (error) {
     } finally {
       setShowDropdown(false);
-      inputRef.current.value = value || '';
+      setSearch(value || '');
     }
   };
 
   const onChange = (e) => {
     setPage(null);
+    setSearch(e.target.value?.trimStart?.());
     handleSearch(e);
     props?.onChange?.(e.target.value?.trimStart?.());
   };
@@ -220,6 +218,7 @@ const ChannelSearchBar = ({
     setLoading(true);
 
     const channels = await pagination(await TwitchAPI.getMyFollowedChannels({ first: 100 }));
+    console.log('channels:', channels);
 
     const channelsWithProfiles = await addVideoExtraData({
       items: {
@@ -268,29 +267,35 @@ const ChannelSearchBar = ({
     return handleSearch();
   };
 
-  const followedItemsIds = followedChannels.map((i) => i.id);
-  const items = getUniqueListBy(
-    [
-      ...(followedChannels || [])?.filter((i) =>
-        // new RegExp(inputRef.current?.value?.trim?.()?.toLowerCase(), 'i').test(loginNameFormat(i))
-        loginNameFormat(i)
-          ?.toLowerCase()
-          ?.includes(inputRef.current?.value?.trim?.()?.toLowerCase())
-      ),
-      // ...(result || []),
-      ...(result || [])
-        ?.sort((a, b) => followedItemsIds.includes(b.id))
-        ?.map(
-          (cha) => followedChannels?.find((channel) => String(channel.id) === String(cha.id)) || cha
+  const items = useMemo(() => {
+    const followedItemsIds = followedChannels.map((i) => i.id);
+    return getUniqueListBy(
+      [
+        ...(followedChannels || [])?.filter(
+          (i) =>
+            // new RegExp(inputRef.current?.value?.trim?.()?.toLowerCase(), 'i').test(loginNameFormat(i))
+            !search || loginNameFormat(i)?.toLowerCase()?.includes(search?.trim?.()?.toLowerCase())
         ),
-      // .sort(
-      //   (a, b) =>
-      //     loginNameFormat(a).replace(inputRef.current?.value?.trim?.())?.length -
-      //     loginNameFormat(b).replace(inputRef.current?.value?.trim?.())?.length
-      // ),
-    ],
-    'id'
-  );
+        // ...(result || []),
+        ...(result || [])
+          .filter(
+            (i) =>
+              search && loginNameFormat(i)?.toLowerCase()?.includes(search?.trim?.()?.toLowerCase())
+          )
+          ?.sort((a, b) => followedItemsIds.includes(b.id))
+          ?.map(
+            (cha) =>
+              followedChannels?.find((channel) => String(channel.id) === String(cha.id)) || cha
+          ),
+        // .sort(
+        //   (a, b) =>
+        //     loginNameFormat(a).replace(inputRef.current?.value?.trim?.())?.length -
+        //     loginNameFormat(b).replace(inputRef.current?.value?.trim?.())?.length
+        // ),
+      ],
+      'id'
+    );
+  }, [followedChannels, result, search]);
 
   return (
     <Wrapper
@@ -306,16 +311,14 @@ const ChannelSearchBar = ({
       <InputWrapper>
         <Input
           ref={inputRef}
+          value={search}
           onChange={onChange}
           onKeyPress={onKeyPress}
           onFocus={onFocus}
           placeholder={placeholder || 'Channel..'}
         />
         {searchButton && (
-          <SearchBarSuffixButton
-            onClick={onSubmit}
-            disabled={!showDropdown || !inputRef.current?.value?.trim?.()}
-          >
+          <SearchBarSuffixButton onClick={onSubmit} disabled={!showDropdown || !search?.trim?.()}>
             <SearchSubmitIcon />
           </SearchBarSuffixButton>
         )}
@@ -335,7 +338,7 @@ const ChannelSearchBar = ({
           {items?.map((i, index) => {
             return (
               <ChannelSearchBarItem
-                searchInput={inputRef.current?.value}
+                searchInput={search}
                 key={i.id}
                 item={i}
                 className={index === 0 && 'selected'}

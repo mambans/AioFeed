@@ -23,6 +23,7 @@ const SearchSubmitIcon = styled(FaSearch).attrs({ size: 18 })``;
 
 const GameSearchBar = ({ searchButton = true, position, placeholder, ...props }) => {
   const [showDropdown, setShowDropdown] = useState();
+  const [search, setSearch] = useState('');
   const [result, setResult] = useState();
   const [page, setPage] = useState();
   const [loading, setLoading] = useState();
@@ -72,13 +73,11 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
   const handleSearch = debounce(
     async (pagination) => {
       try {
-        const value = inputRef.current?.value;
         setLoading(true);
-
         controller.abort();
 
         const searchResults = await (async () => {
-          if (!value) {
+          if (!search) {
             return await TwitchAPI.getTopGames({
               first: limit,
               after: pagination,
@@ -88,7 +87,7 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
 
           return await TwitchAPI.getSearchGames(
             { first: limit, after: pagination, signal: controller.signal },
-            value
+            search
           );
         })();
 
@@ -206,6 +205,7 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
 
   const onChange = (e) => {
     setPage(null);
+    setSearch(e.target.value?.trimStart?.());
     handleSearch();
     props?.onChange?.(e.target.value?.trimStart?.());
   };
@@ -236,19 +236,23 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
     }
   };
 
-  const items = getUniqueListBy(
-    result
-      ?.filter((i) => {
-        return true;
-        // return loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current?.value?.trim?.());
-      })
-      .sort(
-        (a, b) =>
-          inputRef.current?.value?.trim?.() &&
-          loginNameFormat(a).replace(inputRef.current?.value?.trim?.())?.length -
-            loginNameFormat(b).replace(inputRef.current?.value?.trim?.())?.length
+  const items = useMemo(
+    () =>
+      getUniqueListBy(
+        result
+          ?.filter((i) => {
+            return true;
+            // return loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current?.value?.trim?.());
+          })
+          .sort(
+            (a, b) =>
+              search?.trim?.() &&
+              loginNameFormat(a).replace(search?.trim?.())?.length -
+                loginNameFormat(b).replace(search?.trim?.())?.length
+          ),
+        'id'
       ),
-    'id'
+    [result, search]
   );
 
   return (
@@ -269,10 +273,7 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
           placeholder={placeholder || 'Game..'}
         />
         {searchButton && (
-          <SearchBarSuffixButton
-            onClick={onSubmit}
-            disabled={!showDropdown || !inputRef.current?.value?.trim?.()}
-          >
+          <SearchBarSuffixButton onClick={onSubmit} disabled={!showDropdown || !search?.trim?.()}>
             <SearchSubmitIcon />
           </SearchBarSuffixButton>
         )}
@@ -286,16 +287,16 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
             // String(position === 'fixed' && ref.current?.getBoundingClientRect?.()?.width)
           }
         >
-          <div style={{ textAlign: 'center' }}>
-            {loading ? 'Loading..' : `Total: ${items?.length || ''}`}
-          </div>
           <StyledShowAllButton to={'/category/'} key='showAll'>
             Show all
           </StyledShowAllButton>
+          <div style={{ textAlign: 'center' }}>
+            {loading ? 'Loading..' : `Total: ${items?.length || ''}`}
+          </div>
           {items?.map((i, index) => {
             return (
               <ChannelSearchBarItem
-                searchInput={inputRef.current?.value}
+                searchInput={search}
                 key={i.id}
                 item={i}
                 className={index === 0 && 'selected'}

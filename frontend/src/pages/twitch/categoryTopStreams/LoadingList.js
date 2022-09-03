@@ -10,7 +10,7 @@ const LoadingList = ({ amount, style = {} }) => {
   );
 
   return array.current.map((item, index) => (
-    <ChannelSearchBarItem className={'loading'} key={index} style={{ ...style }}>
+    <ChannelSearchBarItem visible={true} className={'loading'} key={index} style={{ ...style }}>
       {/* <div style={{ width: item.width }}></div> */}
     </ChannelSearchBarItem>
   ));

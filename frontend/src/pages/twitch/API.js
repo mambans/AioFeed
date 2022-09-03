@@ -42,13 +42,22 @@ TWITCH_INSTANCE.interceptors.response.use(
   }
 );
 
+// if (response?.data?.pagination?.cursor && paginationEndpoints.includes(response.config.url)) {
+//   const params = { ...response.config.params, after: response?.data?.pagination?.cursor };
+
+//   return [
+//     ...(response?.data?.data || []),
+//     ...((await TWITCH_INSTANCE.get(response.config.url, { params }))?.data?.data || []),
+//   ];
+// }
+
 export const pagination = async (response) => {
   if (response?.data?.pagination?.cursor) {
     const params = { ...response.config.params, after: response?.data?.pagination?.cursor };
 
     return [
       ...(response?.data?.data || []),
-      ...((await TWITCH_INSTANCE.get(response.config.url, { params }))?.data?.data || []),
+      ...((await pagination(await TWITCH_INSTANCE.get(response.config.url, { params }))) || []),
     ];
   }
 

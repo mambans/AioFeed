@@ -44,7 +44,7 @@ const ChannelSearchBarItem = React.memo(
         ref={ref}
         to={`/${login}`}
         disabled={!item}
-        className={className + visible ? ' visible' : ''}
+        className={className + (visible ? ' visible' : '')}
         onClick={(e) => {
           if (onSelect) {
             e.preventDefault();
