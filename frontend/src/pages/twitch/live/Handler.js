@@ -83,7 +83,6 @@ const Handler = ({ children }) => {
             return e.response.data;
           })
         );
-        console.log('baseStreams:', baseStreams);
 
         if (Array.isArray(baseStreams)) {
           const streamsWithProfiles = await addProfileInfo({
