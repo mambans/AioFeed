@@ -219,7 +219,7 @@ const ChannelSearchBar = ({
     setShowDropdown(true);
     setLoading(true);
 
-    const channels = pagination(await TwitchAPI.getMyFollowedChannels({ first: 100 }));
+    const channels = await pagination(await TwitchAPI.getMyFollowedChannels({ first: 100 }));
 
     const channelsWithProfiles = await addVideoExtraData({
       items: {

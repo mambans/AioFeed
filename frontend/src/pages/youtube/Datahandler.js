@@ -17,7 +17,7 @@ const Datahandler = ({ children }) => {
   const refresh = useCallback(async () => {
     const fetchData = async () => {
       try {
-        followedChannels.current = pagination(
+        followedChannels.current = await pagination(
           await TwitchAPI.getMyFollowedChannels({ first: 100 })
         );
 

@@ -67,12 +67,13 @@ const Handler = ({ children }) => {
         if (isInFocus.current) setNewlyAddedStreams([]);
         isInFocus.current = false;
 
-        const baseStreams = pagination(
+        const baseStreams = await pagination(
           await TwitchAPI.getFollowedStreams({
             user_id: twitchUserId,
             first: 100,
             cancelToken: cancelToken.current.token,
           }).catch((e) => {
+            console.log('catch:', e);
             if (e.response.data.status) {
               addSystemNotification({
                 title: 'Error fetching followed streams',
@@ -82,6 +83,7 @@ const Handler = ({ children }) => {
             return e.response.data;
           })
         );
+        console.log('baseStreams:', baseStreams);
 
         if (Array.isArray(baseStreams)) {
           const streamsWithProfiles = await addProfileInfo({

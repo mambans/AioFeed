@@ -35,7 +35,9 @@ export default BigScheduleList;
 export const SchedulesList = ({ schedule, setSchedule, followedChannels }) => {
   useEffect(() => {
     (async () => {
-      const followedChannels = pagination(await TwitchAPI.getMyFollowedChannels({ first: 100 }));
+      const followedChannels = await pagination(
+        await TwitchAPI.getMyFollowedChannels({ first: 100 })
+      );
 
       if (!followedChannels?.length) return false;
 

@@ -52,7 +52,7 @@ export const pagination = async (response) => {
     ];
   }
 
-  return response;
+  return response?.data?.data;
 };
 
 // const controller = new AbortController();
