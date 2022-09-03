@@ -22,7 +22,6 @@ export const VodsProvider = ({ children }) => {
         toast.error(e.message);
       });
 
-      console.log('getVodChannel channels:', channels);
       setChannels(channels, invoked.current);
       invoked.current = true;
     }

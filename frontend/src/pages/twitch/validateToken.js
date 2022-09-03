@@ -12,13 +12,15 @@ const validateToken = async (NoAuthNeddedAndFallbackToAppToken) => {
     if (!(await Auth.currentAuthenticatedUser())) return null;
   }
 
-  const validPromise = await validationOfToken(NoAuthNeddedAndFallbackToAppToken);
+  const validPromise = validationOfToken(NoAuthNeddedAndFallbackToAppToken);
+  console.log('validPromise :', validPromise);
   return validPromise;
 };
 
 const validationOfToken = async (NoAuthNeddedAndFallbackToAppToken) => {
   if (!promise?.promise || Date.now() > promise?.ttl) {
     const request = await validateTokenFunc(NoAuthNeddedAndFallbackToAppToken);
+    console.log('request:', request);
     promise = {
       promise: request?.data?.access_token,
       ttl: Date.now() + ((request?.data?.expires_in || 20) - 20) * 1000,
