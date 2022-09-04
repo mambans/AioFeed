@@ -16,24 +16,19 @@ const getTopClips = async (category, sortByTime, page, feedVideoSizeProps) => {
     Math.floor((window.innerHeight - 150) / (feedVideoSizeProps?.height || 340));
 
   const game = (async () => {
-    console.log('category:', category);
     if (category && category !== 'undefined') {
       return await TwitchAPI.getGames({
         name: category,
-      }).then((res) => {
-        console.log('res:', res);
-        return res?.data?.data[0];
-      });
+      }).then((res) => res?.data?.data?.[0]);
     } else {
       return { id: null };
     }
   })();
 
-  console.log('game:', game);
   const topClips = await TwitchAPI.getClips({
     first: nrStreams,
-    game_id: game?.id,
-    after: page ? page.pagination.cursor : null,
+    game_id: (await game)?.id,
+    after: page?.pagination?.cursor || null,
     started_at: sortByTime
       ? new Date(new Date().setDate(new Date().getDate() - sortByTime)).toISOString()
       : null,
@@ -43,10 +38,9 @@ const getTopClips = async (category, sortByTime, page, feedVideoSizeProps) => {
     error = e;
     return e;
   });
-  console.log('topClips:', topClips);
 
   const finallClips = await AddVideoExtraData({
-    items: topClips?.data,
+    items: topClips?.data || [],
     saveNewProfiles: false,
   });
 
