@@ -46,7 +46,7 @@ const getTopClips = async (category, sortByTime, page, feedVideoSizeProps) => {
   console.log('topClips:', topClips);
 
   const finallClips = await AddVideoExtraData({
-    items: { data: topClips },
+    items: topClips?.data,
     saveNewProfiles: false,
   });
 
