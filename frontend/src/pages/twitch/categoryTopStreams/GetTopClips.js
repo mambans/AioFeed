@@ -10,20 +10,26 @@ import TwitchAPI from '../API';
  * @async
  */
 const getTopClips = async (category, sortByTime, page, feedVideoSizeProps) => {
-  let game;
   let error;
   const nrStreams =
     Math.floor((window.innerWidth - 150) / (feedVideoSizeProps?.totalWidth || 350)) *
     Math.floor((window.innerHeight - 150) / (feedVideoSizeProps?.height || 340));
 
-  if (category && category !== 'undefined') {
-    game = await TwitchAPI.getGames({
-      name: category,
-    }).then((res) => res[0]);
-  } else {
-    game = { id: null };
-  }
+  const game = (async () => {
+    console.log('category:', category);
+    if (category && category !== 'undefined') {
+      return await TwitchAPI.getGames({
+        name: category,
+      }).then((res) => {
+        console.log('res:', res);
+        return res[0];
+      });
+    } else {
+      return { id: null };
+    }
+  })();
 
+  console.log('game:', game);
   const topClips = await TwitchAPI.getClips({
     first: nrStreams,
     game_id: game?.id,
@@ -37,6 +43,7 @@ const getTopClips = async (category, sortByTime, page, feedVideoSizeProps) => {
     error = e;
     return e;
   });
+  console.log('topClips:', topClips);
 
   const finallClips = await AddVideoExtraData({
     items: { data: topClips },
