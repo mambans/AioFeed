@@ -23,6 +23,9 @@ const canUseAppToken = (config) => {
 TWITCH_INSTANCE.interceptors.request.use(
   async (config) => {
     const token = await validateToken(canUseAppToken(config));
+    console.log('token:', token);
+    const asd = Promise.resolve(token);
+    console.log('asd:', asd);
     config.headers['Authorization'] = `Bearer ${token}`;
     config.headers['Client-ID'] = CLIENT_ID;
 
