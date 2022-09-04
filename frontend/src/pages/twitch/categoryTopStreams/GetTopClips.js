@@ -22,7 +22,7 @@ const getTopClips = async (category, sortByTime, page, feedVideoSizeProps) => {
         name: category,
       }).then((res) => {
         console.log('res:', res);
-        return res[0];
+        return res?.data?.data[0];
       });
     } else {
       return { id: null };
