@@ -65,7 +65,11 @@ const fullValidateFunc = async () => {
   if (client_id === TWITCH_CLIENT_ID && user_id === getCookie('Twitch-userId')) {
     return res;
   }
+
   console.warn('Twitch: Token validation details DID NOT match.');
+  console.log('res:', res);
+  console.log('TWITCH_CLIENT_ID:', TWITCH_CLIENT_ID);
+  console.log('getCookie(Twitch-userId):', getCookie('Twitch-userId'));
   return await API.reauthenticateTwitchToken();
 };
 
