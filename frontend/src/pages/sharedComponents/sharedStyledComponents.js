@@ -432,6 +432,7 @@ export const StyledImageContainer = styled.div`
     height: 100%;
     object-fit: cover;
     transition: width 750ms;
+    background-color: var(--navigationbarBackground);
   }
 
   &::after {
