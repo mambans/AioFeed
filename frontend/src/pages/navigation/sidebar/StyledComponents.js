@@ -15,10 +15,9 @@ export const StyledNavSidebar = styled.div`
   color: var(--textColor1);
   position: fixed;
   top: 70px;
-  width: 100px;
   height: calc(100vh - 60px);
   background: var(--navigationbarBackground);
-  width: 400px;
+  width: 450px;
   border-left: 2px solid #494949;
   padding: 10px;
   scrollbar-width: thin;
@@ -36,7 +35,7 @@ export const StyledNavSidebar = styled.div`
   &.NavSidebarSlideRight-enter,
   &.NavSidebarSlideRight-appear {
     opacity: 0;
-    transform: translate3d(400px, 0, 0);
+    transform: translate3d(450px, 0, 0);
     will-change: transform, opacity;
 
     @media screen and (max-width: 1920px) {
@@ -62,7 +61,7 @@ export const StyledNavSidebar = styled.div`
 
   &.NavSidebarSlideRight-exit-active {
     opacity: 0;
-    transform: translate3d(400px, 0, 0);
+    transform: translate3d(450px, 0, 0);
     transition: opacity 150ms, transform 150ms;
 
     @media screen and (max-width: 1920px) {
@@ -86,7 +85,7 @@ export const StyledNavSidebarBackdrop = styled.div`
 
   &.NavSidebarBackdropFade-enter-active {
     opacity: 1;
-    transform: translate3d(-400px, 0, 0);
+    transform: translate3d(-450px, 0, 0);
     transition: transform 350ms, opacity 350ms;
     transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
@@ -97,7 +96,7 @@ export const StyledNavSidebarBackdrop = styled.div`
 
   &.NavSidebarBackdropFade-exit {
     opacity: 1;
-    transform: translate3d(-400px, 0, 0);
+    transform: translate3d(-450px, 0, 0);
 
     @media screen and (max-width: 1920px) {
       transform: translate3d(-300px, 0, 0);
