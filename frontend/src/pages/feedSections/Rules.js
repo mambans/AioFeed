@@ -30,7 +30,7 @@ const Rules = ({ rules, name, id }) => {
           </CloseBtn>
         </Modal.Header>
         <Modal.Body>
-          <Rule height={ITEM_HEIGHT} name={name} id={id} index={0} />
+          <Rule key={'new' + rules?.length} height={ITEM_HEIGHT} name={name} id={id} index={0} />
           <TransitionGroup component={null}>
             {rules?.map((rule, index) => {
               return (
