@@ -160,7 +160,12 @@ const ChannelSearchBar = ({
       const selected = listRef.current?.querySelector?.('.selected');
 
       const previous = selected?.previousSibling;
-      if (previous && !previous.classList.contains('loading')) {
+
+      if (
+        previous &&
+        !previous.classList.contains('loading') &&
+        !previous.classList.contains('total')
+      ) {
         selected.classList.remove('selected');
         previous.classList.add('selected');
         inputRef.current.value = previous.textContent;
