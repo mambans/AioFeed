@@ -82,7 +82,7 @@ const Vods = ({ className }) => {
 
   useEffect(() => {
     setVodAmounts({
-      amount: videoElementsAmount,
+      amount: videoElementsAmount * 2,
       timeout: 750,
       transitionGroup: 'videos',
     });
