@@ -107,7 +107,12 @@ const Rule = ({ rule, height, id, index }) => {
     bind: bindCategory,
     reset: resetCategory,
   } = useInput(rule?.category || '');
-  const { value: channel, bind: bindChannel, reset: resetChannel } = useInput(rule?.channel || '');
+  const {
+    value: channel,
+    bind: bindChannel,
+    reset: resetChannel,
+    // setValue: setChannel,
+  } = useInput(rule?.channel || '');
   const {
     value: viewers,
     bind: bindViewers,
@@ -202,6 +207,12 @@ const Rule = ({ rule, height, id, index }) => {
               {...bindChannel}
               placeholder={channel || '...'}
               hideExtraButtons
+              onSubmit={(value) => {
+                // setChannel(value);
+                handleAdd();
+                // setTimeout(() => {
+                // }, 0);
+              }}
             />
             <Input type='text' placeholder='tag..' name='tag' {...bindTag} onBlur={handleOnblur} />
             <Input
