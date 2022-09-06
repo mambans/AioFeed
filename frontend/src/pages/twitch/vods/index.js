@@ -26,7 +26,7 @@ const Vods = ({ className }) => {
   const [error, setError] = useState(null);
   const [vodError, setVodError] = useState(null);
   const [vodAmounts, setVodAmounts] = useState({
-    amount: videoElementsAmount,
+    amount: videoElementsAmount * 2,
     timeout: 750,
     transitionGroup: 'videos',
   });
