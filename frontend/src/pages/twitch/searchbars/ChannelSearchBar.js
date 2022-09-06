@@ -128,7 +128,13 @@ const ChannelSearchBar = ({
       const selected = listRef.current?.querySelector?.('.selected');
       if (!selected && listRef.current) {
         const firstItem = listRef.current.querySelector('.item');
-        if (firstItem) firstItem.classList.add('selected');
+        if (firstItem) {
+          firstItem.classList.add('selected');
+          inputRef.current.value = firstItem.textContent;
+          if (props.onChange) {
+            props.onChange?.(firstItem.textContent);
+          }
+        }
         return;
       }
       const next = selected?.nextSibling;
@@ -136,6 +142,10 @@ const ChannelSearchBar = ({
       if (next && !next.classList.contains('loading') && next.classList.contains('item')) {
         selected.classList.remove('selected');
         next.classList.add('selected');
+        inputRef.current.value = next.textContent;
+        if (props.onChange) {
+          props.onChange?.(next.textContent);
+        }
         //fires onChange and searching which I dpnt want (block onChange?)
         scrollItemIntoView(next);
       }
@@ -153,6 +163,10 @@ const ChannelSearchBar = ({
       if (previous && !previous.classList.contains('loading')) {
         selected.classList.remove('selected');
         previous.classList.add('selected');
+        inputRef.current.value = previous.textContent;
+        if (props.onChange) {
+          props.onChange?.(previous.textContent);
+        }
         //fires onChange and searching which I dpnt want (block onChange?)
         scrollItemIntoView(previous);
       } else if (inputRef.current) {
