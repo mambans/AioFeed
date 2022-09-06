@@ -150,7 +150,7 @@ const Rule = ({ rule, height, id, index }) => {
   };
 
   const handleAdd = (e) => {
-    e.preventDefault();
+    e?.preventDefault?.();
     if (!rule?.id && Boolean(title || category || channel || viewers || tag)) {
       addFeedSectionRule(id, { title, category, channel, tag, viewers });
       resetTitle();
@@ -208,10 +208,7 @@ const Rule = ({ rule, height, id, index }) => {
               placeholder={channel || '...'}
               hideExtraButtons
               onSubmit={(value) => {
-                // setChannel(value);
                 handleAdd();
-                // setTimeout(() => {
-                // }, 0);
               }}
             />
             <Input type='text' placeholder='tag..' name='tag' {...bindTag} onBlur={handleOnblur} />
