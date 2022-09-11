@@ -421,7 +421,7 @@ const ResizerAllSides = ({ setOverlayPosition, updateChatState, target, overlayP
           onMouseUp={onMouseUp}
           onMouseMove={onMouseMove}
           cursor={`${cursor}-resize`}
-          draggin={true}
+          dragging={true}
         />
       )}
     </>
