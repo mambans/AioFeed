@@ -34,7 +34,6 @@ const validateTokenFunc = async (NoAuthNeddedAndFallbackToAppToken) => {
   const app_token = getCookie(`Twitch-app_token`);
   const refresh_token = getCookie(`Twitch-refresh_token`);
 
-  console.log('access_token:', access_token);
   try {
     if (access_token) {
       return await fullValidateFunc();
@@ -60,7 +59,6 @@ const validateTokenFunc = async (NoAuthNeddedAndFallbackToAppToken) => {
 const fullValidateFunc = async () => {
   const access_token = getCookie('Twitch-access_token');
   const res = await validateFunction(access_token);
-  console.log('res:', res);
   const { client_id, user_id } = res?.data || {};
 
   if (client_id === TWITCH_CLIENT_ID && user_id === getCookie('Twitch-userId')) {
@@ -72,15 +70,14 @@ const fullValidateFunc = async () => {
 };
 
 const validateFunction = async (token) => {
-  validateController.abort();
+  // validateController.abort();
   const access_token = token || getCookie('Twitch-access_token');
-  console.log('access_token:', access_token);
   const res = await axios
     .get('https://id.twitch.tv/oauth2/validate', {
       headers: {
         Authorization: `OAuth ${access_token}`,
       },
-      signal: validateController.signal,
+      // signal: validateController.signal,
     })
     .catch((e) => {
       if (axios.isCancel(e)) {
@@ -90,7 +87,6 @@ const validateFunction = async (token) => {
       throw e;
     });
 
-  console.log('validateFunction res:', res);
   if (res?.data)
     res.data.access_token = res?.config?.headers?.Authorization?.split?.(' ')?.[1] || access_token;
 
