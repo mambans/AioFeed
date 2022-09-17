@@ -12,25 +12,24 @@ const validateToken = async (NoAuthNeddedAndFallbackToAppToken) => {
     if (!(await Auth.currentAuthenticatedUser())) return null;
   }
 
-  const validPromise = validationOfToken(NoAuthNeddedAndFallbackToAppToken);
-  console.log('validPromise :', validPromise);
-  return validPromise;
+  const validPromise = await validationOfToken(NoAuthNeddedAndFallbackToAppToken);
+  return validPromise?.data?.access_token;
 };
 
 const validationOfToken = async (NoAuthNeddedAndFallbackToAppToken) => {
-  if (!promise?.promise || Date.now() > promise?.ttl) {
-    const request = await validateTokenFunc(NoAuthNeddedAndFallbackToAppToken);
+  if (!promise?.requestPromise || Date.now() > promise?.ttl) {
+    const request = validateTokenFunc(NoAuthNeddedAndFallbackToAppToken);
     promise = {
-      promise: request?.data?.access_token,
-      ttl: Date.now() + ((request?.data?.expires_in || 20) - 20) * 1000,
+      requestPromise: request,
+      ttl: Date.now() + ((request?.data?.expires_in || 30) - 20) * 1000,
     };
   }
 
-  return promise.promise;
+  return promise?.requestPromise;
 };
 
 const validateTokenFunc = async (NoAuthNeddedAndFallbackToAppToken) => {
-  console.log('validateTokenFunc:');
+  console.log('--validateTokenFunc--:');
   const access_token = getCookie('Twitch-access_token');
   const app_token = getCookie(`Twitch-app_token`);
   const refresh_token = getCookie(`Twitch-refresh_token`);
@@ -60,6 +59,7 @@ const validateTokenFunc = async (NoAuthNeddedAndFallbackToAppToken) => {
 const fullValidateFunc = async () => {
   const access_token = getCookie('Twitch-access_token');
   const res = await validateFunction(access_token);
+  console.log('res:', res);
   const { client_id, user_id } = res?.data || {};
 
   if (client_id === TWITCH_CLIENT_ID && user_id === getCookie('Twitch-userId')) {
@@ -67,9 +67,6 @@ const fullValidateFunc = async () => {
   }
 
   console.warn('Twitch: Token validation details DID NOT match.');
-  console.log('res:', res);
-  console.log('TWITCH_CLIENT_ID:', TWITCH_CLIENT_ID);
-  console.log('getCookie(Twitch-userId):', getCookie('Twitch-userId'));
   return await API.reauthenticateTwitchToken();
 };
 
