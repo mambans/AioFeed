@@ -34,6 +34,7 @@ const validateTokenFunc = async (NoAuthNeddedAndFallbackToAppToken) => {
   const app_token = getCookie(`Twitch-app_token`);
   const refresh_token = getCookie(`Twitch-refresh_token`);
 
+  console.log('access_token:', access_token);
   try {
     if (access_token) {
       return await fullValidateFunc();
