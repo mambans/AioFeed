@@ -73,6 +73,7 @@ const fullValidateFunc = async () => {
 const validateFunction = async (token) => {
   validateController.abort();
   const access_token = token || getCookie('Twitch-access_token');
+  console.log('access_token:', access_token);
   const res = await axios
     .get('https://id.twitch.tv/oauth2/validate', {
       headers: {
@@ -88,8 +89,10 @@ const validateFunction = async (token) => {
       throw e;
     });
 
+  console.log('validateFunction res:', res);
   if (res?.data)
     res.data.access_token = res?.config?.headers?.Authorization?.split?.(' ')?.[1] || access_token;
+
   return res;
 };
 
