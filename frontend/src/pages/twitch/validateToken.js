@@ -4,7 +4,7 @@ import { getCookie } from '../../util';
 import API from '../navigation/API';
 
 const TWITCH_CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;
-const validateController = new AbortController();
+// const validateController = new AbortController();
 let promise = null;
 
 const validateToken = async (NoAuthNeddedAndFallbackToAppToken) => {
