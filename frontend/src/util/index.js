@@ -7,9 +7,10 @@ export const RemoveCookie = (cookieName) => {
 };
 
 export const AddCookie = (cookieName, value, options = {}) => {
-  document.cookie = `${cookieName}=${value}; ${Object.entries(options)
-    .map((i) => `${i[0]}=${i[1]}`)
-    .join('; ')}  path=/;  SameSite=Lax`;
+  const optionsEntries = Object.entries(options);
+  document.cookie = `${cookieName}=${value}; ${optionsEntries
+    ?.map((i) => `${i[0]}=${i[1]}`)
+    ?.join('; ')}${optionsEntries && optionsEntries.length ? '; ' : ''}path=/; SameSite=Lax`;
 };
 
 export const getCookie = (cname) => {
