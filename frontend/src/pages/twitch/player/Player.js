@@ -474,26 +474,25 @@ const Player = () => {
                   showAndResetTimer={showAndResetTimer}
                   children={
                     <>
-                      <Stats />
                       <div
                         onClick={() => {
-                          updateChatState((curr) => {
-                            return { ...curr, hideChat: !curr.hideChat };
-                          });
+                          updateChatState((curr) => ({
+                            ...curr,
+                            hideChat: !curr.hideChat,
+                          }));
                         }}
                       >
                         <MdChat size={24} />
                         {chatState.hideChat ? 'Show chat' : 'Hide chat'}
                       </div>
+                      <Stats />
 
                       <div
                         onClick={() => {
-                          updateChatState((curr) => {
-                            return {
-                              ...curr,
-                              switchChatSide: !chatState.switchChatSide,
-                            };
-                          });
+                          updateChatState((curr) => ({
+                            ...curr,
+                            switchChatSide: !chatState.switchChatSide,
+                          }));
                         }}
                       >
                         <MdCompareArrows size={24} />
