@@ -84,10 +84,10 @@ const validateFunction = async (token) => {
         return;
       }
       console.log('e:', e);
-      throw e;
+      // return await API.reauthenticateTwitchToken();
     });
 
-  if (res?.data)
+  if (res?.data && !res?.data?.access_token)
     res.data.access_token = res?.config?.headers?.Authorization?.split?.(' ')?.[1] || access_token;
 
   return res;
