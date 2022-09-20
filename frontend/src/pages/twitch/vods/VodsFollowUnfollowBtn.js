@@ -31,7 +31,7 @@ const VodsFollowUnfollowBtn = ({
 }) => {
   const channels = useRecoilValue(vodChannelsAtom);
   const [enabled, setEnabled] = useState(
-    channels && !!channels?.find((user_id) => channel?.user_id === user_id)
+    channels && !!channels?.find?.((user_id) => channel?.user_id === user_id)
   );
   const { vods } = useRecoilValue(feedPreferencesAtom) || {};
 
@@ -55,7 +55,7 @@ const VodsFollowUnfollowBtn = ({
   };
 
   useEffect(() => {
-    setEnabled(!!channels?.find((user_id) => channel?.user_id === user_id));
+    setEnabled(!!channels?.find?.((user_id) => channel?.user_id === user_id));
   }, [channels, channel?.user_id]);
 
   if ((!show && !vods?.enabled) || !channel) return null;
