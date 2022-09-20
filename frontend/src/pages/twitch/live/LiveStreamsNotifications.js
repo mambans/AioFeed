@@ -14,6 +14,7 @@ const LiveStreamsNotifications = () => {
   const [newNonFeedSectionStreams, setNewNonFeedSectionStreams] = useRecoilState(
     newNonFeedSectionStreamsAtom
   );
+  console.log('LiveStreamsNotifications:', newNonFeedSectionStreams);
 
   useEffect(() => {
     (async () => {

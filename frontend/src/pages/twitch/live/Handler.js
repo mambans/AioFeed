@@ -201,6 +201,8 @@ const Handler = ({ children }) => {
     );
   }
 
+  console.log('loadingStates?.loaded:', loadingStates?.loaded);
+  console.log('validateToken:', validateToken);
   return (
     <>
       {loadingStates?.loaded && validateToken && (
