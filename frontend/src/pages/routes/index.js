@@ -18,6 +18,7 @@ import AccountContext from '../account/AccountContext';
 import StandaloneChat from '../twitch/player/StandaloneChat';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import LoadingFeed from '../../components/LoadingFeed';
+
 // import TopStreams from '../twitch/categoryTopStreams';
 const TopStreams = React.lazy(() => import('../twitch/categoryTopStreams'));
 const Player = React.lazy(() => import('../twitch/player/Player'));
@@ -32,15 +33,18 @@ const routes = [
   {
     path: 'index',
     element: <Home />,
+    authRequired: true,
   },
   {
     path: '/',
     element: <Home />,
     index: true,
+    authRequired: true,
   },
   {
     path: 'home',
     element: <Home />,
+    authRequired: true,
   },
   {
     path: 'legality',
@@ -167,9 +171,9 @@ const NavigationRoutes = () => {
                 key={key}
                 element={
                   authRequired ? (
-                    loading ? (
+                    loading === 'loading' ? (
                       <LoadingIndicator height={400} width={600} text={'Authenticating..'} />
-                    ) : !user ? (
+                    ) : !user === 'hasError' ? (
                       <Navigate to='/' state={{ showLoginAlert: true }} replace />
                     ) : (
                       element

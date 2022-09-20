@@ -8,9 +8,12 @@ import LoadingBoxes from '../LoadingBoxes';
 import { CenterContext } from '../../feed/FeedsCenterContainer.js';
 import { TwitchContext } from '../useToken.js';
 import Alert from '../../../components/alert/index.js';
+import { useRecoilValue } from 'recoil';
+import { baseLiveStreamsAtom } from '../atoms.js';
 
 const Twitch = ({ data, streams, hideOnEmpty }) => {
-  const { loaded, error, liveStreams, newlyAddedStreams, refreshAfterUnfollowTimer } = data;
+  const { loaded, error, refreshAfterUnfollowTimer } = data;
+  const baseLiveStreams = useRecoilValue(baseLiveStreamsAtom);
   const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext);
   const { favStreams } = useContext(TwitchContext);
 
@@ -34,7 +37,6 @@ const Twitch = ({ data, streams, hideOnEmpty }) => {
   const streamEleAttrs = {
     refreshAfterUnfollowTimer,
     refresh,
-    newlyAddedStreams,
   };
 
   const cssTransitionAttrs = {
@@ -86,7 +88,7 @@ const Twitch = ({ data, streams, hideOnEmpty }) => {
       </TransitionGroup>
       {!hideOnEmpty && (
         <Alert
-          show={!Boolean(liveStreams?.length)}
+          show={!Boolean(baseLiveStreams?.length)}
           type='secondary'
           title='No streams online at the momment'
           dismissible

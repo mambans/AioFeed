@@ -1,15 +1,16 @@
 import { Button, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import React, { useContext } from 'react';
+import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import Moment from 'react-moment';
 import { MdAddToQueue, MdRemoveFromQueue, MdExpandLess } from 'react-icons/md';
 
-import FeedsContext from '../feed/FeedsContext';
 import ToolTip from '../../components/tooltip/ToolTip';
 import { ButtonLookalikeStyle, TransparentButton } from '../../components/styledComponents';
 import { TransparentRemoveFromCurrentListButton } from '../myLists/addToListModal/RemoveFromCurrentListButton';
 import Colors from '../../components/themes/Colors';
+import { feedVideoSizePropsAtom } from '../../atoms/atoms';
+import { useRecoilValue } from 'recoil';
 
 export const AddToListModalTrigger = styled(Button).attrs({ variant: 'outline-secondary' })`
   ${ButtonLookalikeStyle}
@@ -172,7 +173,7 @@ export const StyledVideoContainer = styled.div`
 `;
 
 export const VideoContainer = React.forwardRef(({ children, ...props }, ref) => {
-  const { feedVideoSizeProps } = useContext(FeedsContext);
+  const feedVideoSizeProps = useRecoilValue(feedVideoSizePropsAtom);
 
   return (
     <StyledVideoContainer feedVideoSizeProps={feedVideoSizeProps} {...props} ref={ref}>
@@ -182,7 +183,7 @@ export const VideoContainer = React.forwardRef(({ children, ...props }, ref) => 
 });
 
 export const ImageContainer = React.forwardRef(({ children, active }, ref) => {
-  const { feedVideoSizeProps } = useContext(FeedsContext);
+  const feedVideoSizeProps = useRecoilValue(feedVideoSizePropsAtom);
 
   return (
     <StyledImageContainer feedVideoSizeProps={feedVideoSizeProps} active={active} ref={ref}>
@@ -311,7 +312,7 @@ export const StyledGameContainer = styled.div`
 `;
 
 export const GameContainer = ({ children }) => {
-  const { feedVideoSizeProps } = useContext(FeedsContext);
+  const feedVideoSizeProps = useRecoilValue(feedVideoSizePropsAtom);
 
   return (
     <StyledGameContainer feedVideoSizeProps={feedVideoSizeProps}>{children}</StyledGameContainer>
@@ -426,13 +427,15 @@ export const StyledImageContainer = styled.div`
     }
   }
 
+  //fallback if img src is invalid
+  background-image: url(${process.env.PUBLIC_URL + '/images/webp/placeholder.webp'});
+
   img {
     border-radius: 10px;
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: width 750ms;
-    background-color: var(--navigationbarBackground);
   }
 
   &::after {

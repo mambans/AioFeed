@@ -1,14 +1,16 @@
 import React, { useContext, useRef, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { feedVideoSizePropsAtom } from '../../atoms/atoms';
 
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
-import FeedsContext from '../feed/FeedsContext';
 import { YoutubeIframe } from './StyledComponents';
 import { YoutubeContext } from './useToken';
 
 const HOVER_DELAY = 500;
 
 const VideoHoverIframe = ({ imageRef, data }) => {
-  const { feedVideoSizeProps } = useContext(FeedsContext);
+  const feedVideoSizeProps = useRecoilValue(feedVideoSizePropsAtom);
+
   const { youtubeVideoHoverEnable } = useContext(YoutubeContext);
 
   const [isHovered, setIsHovered] = useState(false);

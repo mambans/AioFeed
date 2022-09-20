@@ -45,6 +45,7 @@ const RefreshButton = React.forwardRef(
             isLoading={isLoading || parentIsLoading}
             autoRefreshEnabled={autoRefreshEnabled}
             startDuration={Math.max(0, Math.round((refreshTimer - Date.now()) / 1000))}
+            style={{ margin: '4px' }}
           />
         ) : (
           <MdRefresh size={32} />

@@ -1,30 +1,33 @@
 import { useContext, useEffect, useRef } from 'react';
+import { useRecoilState } from 'recoil';
 import NotificationsContext from '../../notifications/NotificationsContext';
+import { newNonFeedSectionStreamsAtom } from '../atoms';
 import loginNameFormat from '../loginNameFormat';
 import useFetchSingelVod from '../vods/hooks/useFetchSingelVod';
 import addSystemNotification from './addSystemNotification';
 
-const LiveStreamsNotifications = ({ liveStreams, oldLiveStreams, setNewlyAddedStreams }) => {
+const LiveStreamsNotifications = () => {
   const { fetchLatestVod } = useFetchSingelVod();
   const { addNotification } = useContext(NotificationsContext);
   const timer = useRef();
 
+  const [newNonFeedSectionStreams, setNewNonFeedSectionStreams] = useRecoilState(
+    newNonFeedSectionStreamsAtom
+  );
+
   useEffect(() => {
     (async () => {
       try {
-        const res = liveStreams?.filter((stream) => {
-          return !oldLiveStreams.current.find(({ user_id }) => stream.user_id === user_id);
-        });
-
-        setNewlyAddedStreams((c) => [...(c || []), ...res?.map(({ user_name } = {}) => user_name)]);
-
-        const streams = res?.map((stream) => {
-          stream.newlyAdded = true;
-          stream.notiStatus = 'Live';
-          stream.onClick = () =>
-            window.open(
-              'https://aiofeed.com/' + (stream.login || stream.user_login || stream.user_name)
-            );
+        const streams = newNonFeedSectionStreams?.map((s) => {
+          const stream = {
+            ...s,
+            newlyAdded: true,
+            notiStatus: 'Live',
+            onClick: () =>
+              window.open(
+                'https://aiofeed.com/' + (stream.login || stream.user_login || stream.user_name)
+              ),
+          };
 
           addSystemNotification({
             title: `${loginNameFormat(stream)} is Live`,
@@ -34,32 +37,31 @@ const LiveStreamsNotifications = ({ liveStreams, oldLiveStreams, setNewlyAddedSt
             }`,
             onClick: (e) => {
               e.preventDefault();
-              console.log(
-                'addSystemNotification loginNameFormat(stream, true):',
-                loginNameFormat(stream, true)
-              );
               window.open('https://aiofeed.com/' + loginNameFormat(stream, true));
             },
           });
 
-          if (fetchLatestVod) {
-            timer.current = setTimeout(
-              () => fetchLatestVod({ user_id: stream.user_id, check: true }),
-              30000
-            );
-          }
+          timer.current = setTimeout(
+            () => fetchLatestVod?.({ user_id: stream.user_id, check: true }),
+            30000
+          );
 
           return stream;
         });
 
-        if (Boolean(streams?.length)) addNotification(streams);
+        if (Boolean(streams?.length)) {
+          addNotification(streams);
+          setNewNonFeedSectionStreams((curr) =>
+            curr.filter((s) => !streams.find((st) => st.id === s.id))
+          );
+        }
       } catch (e) {}
     })();
 
     return () => {
-      clearTimeout(timer.current);
+      // clearTimeout(timer.current);
     };
-  }, [fetchLatestVod, liveStreams, oldLiveStreams, setNewlyAddedStreams, addNotification]);
+  }, [fetchLatestVod, newNonFeedSectionStreams, addNotification, setNewNonFeedSectionStreams]);
 
   return null;
 };

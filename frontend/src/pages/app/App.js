@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import FeedsContext, { FeedsProvider } from '../feed/FeedsContext';
 import { NotificationsProvider } from '../notifications/NotificationsContext';
 import { ThemeProvider } from '../../components/themes/ThemeContext';
 import CookieConsentAlert from './CookieConsentAlert';
@@ -20,6 +19,7 @@ import { TwitterProvider } from '../twitter/TwitterContext';
 import CleanUp from './CleanUp';
 import { RecoilRoot } from 'recoil';
 import { AccountProvider } from '../account/AccountContext';
+import { useFeedPreferences } from '../../atoms/atoms';
 
 const AppContainer = styled.div`
   background-image: ${({ image }) => `url(/images/${image})`};
@@ -50,15 +50,13 @@ const AppRoutesContainer = () => {
                 <YoutubeProvider>
                   <NotificationsProvider>
                     <TwitterProvider>
-                      <FeedsProvider>
-                        <FeedSectionsProvider>
-                          <MyListsProvider>
-                            <VodsProvider>
-                              <App />
-                            </VodsProvider>
-                          </MyListsProvider>
-                        </FeedSectionsProvider>
-                      </FeedsProvider>
+                      <FeedSectionsProvider>
+                        <MyListsProvider>
+                          <VodsProvider>
+                            <App />
+                          </VodsProvider>
+                        </MyListsProvider>
+                      </FeedSectionsProvider>
                     </TwitterProvider>
                   </NotificationsProvider>
                 </YoutubeProvider>
@@ -73,7 +71,7 @@ const AppRoutesContainer = () => {
 
 const App = () => {
   const { activeTheme } = useContext(ThemeContext);
-  const { setEnableTwitch, setEnableYoutube } = useContext(FeedsContext);
+  const { toggleEnabled } = useFeedPreferences();
   const {
     setTwitchAccessToken,
     setTwitchRefreshToken,
@@ -95,12 +93,12 @@ const App = () => {
         if (setTwitchUserId) setTwitchUserId(e.data.userId);
         if (setTwitchProfileImage) setTwitchProfileImage(e.data.profileImg);
 
-        setEnableTwitch(true);
+        toggleEnabled('twitch', true);
       } else if (e.data.service === 'youtube') {
         if (e.data.token && setYoutubeAccessToken) setYoutubeAccessToken(e.data.token);
         if (e.data.username && setYoutubeUsername) setYoutubeUsername(e.data.username);
         if (e.data.profileImg && setYoutubeProfileImage) setYoutubeProfileImage(e.data.profileImg);
-        if (setEnableYoutube) setEnableYoutube(true);
+        toggleEnabled('youtube', true);
       }
     }
   }

@@ -8,7 +8,6 @@ import { AiOutlineDisconnect } from 'react-icons/ai';
 import { HiViewList, HiRefresh } from 'react-icons/hi';
 // import { RiFocus2Fill } from 'react-icons/ri';
 
-import FeedsContext from './../../feed/FeedsContext';
 import ReAuthenticateButton from './ReAuthenticateButton';
 import Themeselector from './../../../components/themes/Themeselector';
 import ToggleButton from './ToggleButton';
@@ -26,6 +25,8 @@ import SidebarExpandableSection from './SidebarExpandableSection';
 import ListInAccountSidebar from '../../myLists/ListInAccountSidebar';
 import Colors from '../../../components/themes/Colors';
 import TwitterContext from '../../twitter/TwitterContext';
+import { useRecoilValue } from 'recoil';
+import { feedPreferencesAtom, useFeedPreferences } from '../../../atoms/atoms';
 
 const SidebarAccount = () => {
   const {
@@ -48,7 +49,9 @@ const SidebarAccount = () => {
     setYoutubeAccessToken,
     youtubeAccessToken,
   } = useContext(YoutubeContext) || {};
-  const { showTwitchSidebar, setShowTwitchSidebar, ...feedProps } = useContext(FeedsContext) || {};
+  const feedPreferences = useRecoilValue(feedPreferencesAtom);
+  const { twitch, youtube, vods, twitter, mylists, feedsections } = feedPreferences;
+  const { toggleEnabled, toggleSidebar } = useFeedPreferences();
   const { toggleRefreshOnFocus, refreshOnFocusEnabled } = useContext(TwitterContext) || {};
 
   const domainColors = {
@@ -61,45 +64,47 @@ const SidebarAccount = () => {
 
   const feedsBtns = [
     {
-      serviceName: 'Twitch',
+      serviceName: 'twitch',
       icon: <FaTwitch size={24} color={domainColors.Twitch} />,
       tooltip: twitchAccessToken
-        ? (feedProps.enableTwitch ? 'Disable ' : 'Enable ') + ` Twitch feed`
+        ? (twitch?.enabled ? 'Disable ' : 'Enable ') + ` Twitch feed`
         : `Need to connect/authenticate with a Twitch account first.`,
+      disabled: !twitchAccessToken,
     },
     {
-      serviceName: 'Twitter',
+      serviceName: 'twitter',
       scrollIntoView: false,
       icon: <FaTwitter size={24} color={domainColors.Twitter} />,
-      tooltip: (feedProps.enableTwitter ? 'Disable ' : 'Enable ') + ` Twitter feed`,
-      tokenExists: true,
+      tooltip: (twitter?.enabled ? 'Disable ' : 'Enable ') + ` Twitter feed`,
     },
     {
-      serviceName: 'Youtube',
+      serviceName: 'youtube',
       icon: <FaYoutube size={24} color={domainColors.Youtube} />,
       tooltip: youtubeAccessToken
-        ? (feedProps.enableYoutube ? 'Disable ' : 'Enable ') + ` Twitch feed`
+        ? (youtube?.enabled ? 'Disable ' : 'Enable ') + ` Twitch feed`
         : `Need to connect/authenticate with a Youtube account first.`,
+      disabled: !youtubeAccessToken,
     },
     {
-      serviceName: 'TwitchVods',
+      serviceName: 'vods',
       icon: <MdVideocam size={24} color={domainColors.Twitch} />,
       tooltip: twitchAccessToken
-        ? (feedProps.enableTwitchVods ? 'Disable ' : 'Enable ') + ` Twitch feed`
+        ? (vods?.enabled ? 'Disable ' : 'Enable ') + ` Twitch feed`
         : `Need to connect/authenticate with a Twitch account first.`,
-      tokenExists: twitchAccessToken,
+      disabled: !twitchAccessToken,
     },
     {
-      serviceName: 'MyLists',
+      serviceName: 'mylists',
       icon: <HiViewList size={24} color={domainColors.MyLists} />,
-      tooltip: (feedProps.enableMyLists ? 'Disable ' : 'Enable ') + ` MyLists feed`,
+      tooltip: (mylists?.enabled ? 'Disable ' : 'Enable ') + ` MyLists feed`,
+      disabled: !twitchAccessToken && !youtubeAccessToken,
     },
     {
-      serviceName: 'FeedSections',
+      serviceName: 'feedsections',
       icon: <BsCollectionFill size={24} color={domainColors.FeedSections} />,
-      tooltip: (feedProps.enableMyLists ? 'Disable ' : 'Enable ') + ` MyLists feed`,
-      tokenExists: twitchAccessToken,
-      mount: feedProps.enableTwitch,
+      tooltip: (feedsections?.enabled ? 'Disable ' : 'Enable ') + ` MyLists feed`,
+      mount: twitch?.enabled,
+      disabled: !twitchAccessToken,
     },
   ];
 
@@ -115,12 +120,12 @@ const SidebarAccount = () => {
       icon: <MdAutorenew size={18} color={domainColors.Twitch} />,
     },
     {
-      setEnable: setShowTwitchSidebar,
-      enabled: showTwitchSidebar,
+      setEnable: () => toggleSidebar('twitch'),
+      enabled: twitch?.sidebar_enabled,
       label: 'Twitch sidebar',
       serviceName: 'Twitch',
       tooltip: twitchAccessToken
-        ? (showTwitchSidebar ? 'Hide ' : 'Show ') + `Twitch Sidebar`
+        ? (twitch?.sidebar_enabled ? 'Hide ' : 'Show ') + `Twitch Sidebar`
         : `Need to connect/authenticate with a Twitch account first.`,
 
       icon: <FiSidebar size={18} color={domainColors.Twitch} />,
@@ -210,17 +215,17 @@ const SidebarAccount = () => {
                     {...props}
                     key={props.serviceName + index}
                     scrollIntoView
-                    setEnable={feedProps[`setEnable${props.serviceName}`]}
-                    enabled={feedProps[`enable${props.serviceName}`]}
-                    mount={props.mount || true}
+                    setEnable={() => toggleEnabled(props.serviceName)}
+                    enabled={feedPreferences[props.serviceName]?.enabled}
+                    mount={props.mount ?? true}
                   />
                 );
               })}
           </ToggleButtonsContainer>
         </SidebarExpandableSection>
-        {feedProps.enableTwitter && <TwitterForms />}
-        {feedProps.enableFeedSections && <FeedSectionAdd />}
-        {feedProps.enableMyLists && <ListInAccountSidebar />}
+        {twitter?.enabled && <TwitterForms />}
+        {feedsections?.enabled && <FeedSectionAdd />}
+        {mylists?.enabled && <ListInAccountSidebar />}
         <SidebarExpandableSection title='Settings'>
           <FeedSizeSlider />
           <ToggleButtonsContainer buttonsperrow={3}>
@@ -248,7 +253,10 @@ const SidebarAccount = () => {
           <br style={{ height: '24px' }} />
           <ReAuthenticateButton
             disconnect={() =>
-              disconnectTwitch({ setTwitchAccessToken, setEnableTwitch: feedProps.setEnableTwitch })
+              disconnectTwitch({
+                setTwitchAccessToken,
+                setEnableTwitch: () => toggleEnabled('twitch'),
+              })
             }
             serviceName='Twitch'
           />
@@ -256,7 +264,7 @@ const SidebarAccount = () => {
             disconnect={() =>
               disconnectYoutube({
                 setYoutubeAccessToken,
-                setEnableYoutube: feedProps.setEnableYoutube,
+                setEnableYoutube: () => toggleEnabled('youtube'),
               })
             }
             serviceName='Youtube'

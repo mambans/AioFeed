@@ -182,7 +182,7 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
       if (elementTitle) {
         event.preventDefault?.();
       }
-      if (props.onSubmit) {
+      if (props.onSubmit && !showDropdown) {
         props.onSubmit?.(value);
         return;
       }

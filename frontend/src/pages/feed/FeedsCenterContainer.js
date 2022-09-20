@@ -1,13 +1,15 @@
 import React, { useState, useContext, useCallback, useEffect } from 'react';
 
 import { CenterContainer } from '../twitch/StyledComponents';
-import FeedsContext from './FeedsContext';
 import useEventListenerMemo from './../../hooks/useEventListenerMemo';
+import { useRecoilValue } from 'recoil';
+import { feedPreferencesAtom, feedVideoSizePropsAtom } from '../../atoms/atoms';
 
 export const CenterContext = React.createContext();
 
 const CenterProvider = ({ children, left, right }) => {
-  const { feedVideoSizeProps, enableTwitter, showTwitchSidebar } = useContext(FeedsContext) || {};
+  const feedVideoSizeProps = useRecoilValue(feedVideoSizePropsAtom);
+  const feedPreferences = useRecoilValue(feedPreferencesAtom);
 
   const [videoDisplayData, setVideoDisplayData] = useState({
     videoElementsAmount: 3,
@@ -15,8 +17,8 @@ const CenterProvider = ({ children, left, right }) => {
   const [twittersWidth, setTwitterWidth] = useState({});
   const twitterContainerWidth =
     Object.values?.(twittersWidth)?.reduce((a, b) => a + (b + 10), 0) || window.outerWidth * 0.12;
-  const leftWidth = left && (showTwitchSidebar ? 275 : 0);
-  const rightWidth = right && enableTwitter && twitterContainerWidth;
+  const leftWidth = left && (feedPreferences?.twitch?.sidebar_enabled ? 275 : 0);
+  const rightWidth = right && feedPreferences?.twitter?.enabled && twitterContainerWidth;
 
   const calcVideoElementsAmount = useCallback(
     () =>
@@ -58,12 +60,12 @@ const CenterProvider = ({ children, left, right }) => {
 
 const Center = ({ children }) => {
   const { width, twitterWidth, leftWidth, rightWidth } = useContext(CenterContext);
-  const { enableTwitter, showTwitchSidebar } = useContext(FeedsContext) || {};
+  const feedPreferences = useRecoilValue(feedPreferencesAtom);
 
   return (
     <CenterContainer
-      left={leftWidth && (showTwitchSidebar ? 275 : 0)}
-      right={rightWidth && enableTwitter && twitterWidth}
+      left={leftWidth && (feedPreferences?.twitch?.sidebar_enabled ? 275 : 0)}
+      right={rightWidth && feedPreferences?.twitter?.enabled && twitterWidth}
       centerWidth={width}
       id='CenterContainer'
     >

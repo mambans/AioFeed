@@ -1,7 +1,6 @@
 import { CSSTransition } from 'react-transition-group';
-import React, { Suspense, useContext } from 'react';
+import React, { Suspense } from 'react';
 
-import FeedsContext from './FeedsContext';
 import NoFeedsEnable from './NoFeedsEnabled';
 import FeedsCenterContainer from './FeedsCenterContainer';
 import FeedOrderSlider from './FeedOrderSlider';
@@ -10,6 +9,8 @@ import Colors from '../../components/themes/Colors';
 import { FaYoutube } from 'react-icons/fa';
 import { MdVideocam } from 'react-icons/md';
 import { HiViewList } from 'react-icons/hi';
+import { useRecoilValue } from 'recoil';
+import { feedPreferencesAtom } from '../../atoms/atoms';
 const Twitch = React.lazy(() => import('../twitch/live'));
 const Vods = React.lazy(() => import('../twitch/vods'));
 const Twitter = React.lazy(() => import('../twitter'));
@@ -19,15 +20,12 @@ const MyLists = React.lazy(() => import('../myLists'));
 // import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 const Feed = () => {
-  // useDocumentTitle('Feed');
-  const { enableTwitch, enableYoutube, enableTwitchVods, enableMyLists, enableTwitter } =
-    useContext(FeedsContext);
-
+  const { twitch, youtube, vods, mylists, twitter } = useRecoilValue(feedPreferencesAtom) || {};
   return (
     <FeedsCenterContainer>
       <NoFeedsEnable />
       <CSSTransition
-        in={enableTwitter}
+        in={twitter?.enabled}
         timeout={750}
         classNames='twitter-slide'
         unmountOnExit
@@ -41,7 +39,13 @@ const Feed = () => {
       <div className='feed'>
         <FeedOrderSlider />
 
-        <CSSTransition in={enableTwitch} classNames='fade-750ms' timeout={750} unmountOnExit appear>
+        <CSSTransition
+          in={twitch?.enabled}
+          classNames='fade-750ms'
+          timeout={750}
+          unmountOnExit
+          appear
+        >
           <Suspense
             fallback={
               <LoadingFeed
@@ -69,7 +73,7 @@ const Feed = () => {
           </Suspense>
         </CSSTransition>
         <CSSTransition
-          in={enableYoutube}
+          in={youtube?.enabled}
           timeout={750}
           classNames='fade-750ms'
           unmountOnExit
@@ -77,23 +81,31 @@ const Feed = () => {
         >
           <Suspense
             fallback={
-              <h1 id='youtube'>
-                YouTube
-                <FaYoutube size={25} style={{ color: '#a80000' }} />
-              </h1>
+              <LoadingFeed
+                title={
+                  <h1 id='youtube'>
+                    YouTube
+                    <FaYoutube size={25} style={{ color: '#a80000' }} />
+                  </h1>
+                }
+              />
             }
           >
             <Youtube />
           </Suspense>
         </CSSTransition>
 
-        <CSSTransition in={enableTwitchVods} classNames='fade-750ms' timeout={750} unmountOnExit>
+        <CSSTransition in={vods?.enabled} classNames='fade-750ms' timeout={750} unmountOnExit>
           <Suspense
             fallback={
-              <h1 id='vods'>
-                Twitch vods
-                <MdVideocam size={25} style={{ color: '#6f166f' }} />
-              </h1>
+              <LoadingFeed
+                title={
+                  <h1 id='vods'>
+                    Twitch vods
+                    <MdVideocam size={25} style={{ color: '#6f166f' }} />
+                  </h1>
+                }
+              />
             }
           >
             <Vods />
@@ -101,7 +113,7 @@ const Feed = () => {
         </CSSTransition>
 
         <CSSTransition
-          in={enableMyLists}
+          in={mylists?.enabled}
           timeout={750}
           classNames='fade-750ms'
           unmountOnExit

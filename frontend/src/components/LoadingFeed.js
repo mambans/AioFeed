@@ -23,7 +23,9 @@ const LoadingFeed = ({ title }) => {
   );
 };
 export default LoadingFeed;
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  order: 9999;
+`;
 const HeaderSection = styled.div`
   height: 50px;
   animation: ${pulseAnimation};

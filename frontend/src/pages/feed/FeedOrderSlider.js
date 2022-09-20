@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
 import styled, { css } from 'styled-components';
-import FeedSectionsContext from '../feedSections/FeedSectionsContext';
 import MyListsContext from '../myLists/MyListsContext';
 import ToolTip from '../../components/tooltip/ToolTip';
-import FeedsContext from './FeedsContext';
+import { useRecoilValue } from 'recoil';
+import { feedSectionsAtom } from '../twitch/atoms';
+import { feedPreferencesAtom, useFeedPreferences } from '../../atoms/atoms';
 
 const SliderMultipuleHandles = styled.div`
   position: absolute;
@@ -87,23 +88,27 @@ const StyledSliderThumb = styled.input.attrs({ type: 'range', min: 1, max: 1000 
 `;
 
 const SliderThumb = ({ name, id, icon, sliderLength }) => {
-  const { orders, setOrders } = useContext(FeedsContext);
+  const feedPreferences = useRecoilValue(feedPreferencesAtom);
+  const { setOrder } = useFeedPreferences();
   const ID = id || name;
 
   const handleSubmit = (e) => {
-    setOrders((c) => ({ ...c, [ID]: { ...c[ID], order: parseInt(e.target.value) } }));
+    setOrder(ID, parseInt(e.target.value));
   };
 
   return (
     <ToolTip
-      tooltip={name + ' @' + orders?.[ID]?.order}
+      tooltip={name + ' @' + (feedPreferences?.[ID]?.order || 500)}
       placement='left'
-      style={{ top: (orders?.[ID]?.order - 500) * (sliderLength / 2 / 500) + 'px', right: '20px' }}
+      style={{
+        top: (feedPreferences?.[ID]?.order - 500) * (sliderLength / 2 / 500) + 'px',
+        right: '20px',
+      }}
     >
       <StyledSliderThumb
         icon={icon}
         onMouseUp={handleSubmit}
-        defaultValue={orders[ID]?.order}
+        defaultValue={feedPreferences?.[ID]?.order || 500}
         sliderLength={sliderLength}
       />
     </ToolTip>
@@ -111,28 +116,28 @@ const SliderThumb = ({ name, id, icon, sliderLength }) => {
 };
 
 const FeedOrderSlider = () => {
-  const { enableTwitch, enableYoutube, enableTwitchVods, enableMyLists, enableFeedSections } =
-    useContext(FeedsContext);
   const { lists } = useContext(MyListsContext);
-  const { feedSections } = useContext(FeedSectionsContext);
+  // const { feedSections } = useContext(FeedSectionsContext);
+  const feedSections = useRecoilValue(feedSectionsAtom);
+  const feedPreferences = useRecoilValue(feedPreferencesAtom);
 
   const feeds = [
-    enableTwitch && {
+    feedPreferences?.twitch?.enabled && {
       name: 'twitch',
       id: 'twitch',
       icon: `url(${process.env.PUBLIC_URL}/twitch-icon.svg)`,
     },
-    enableYoutube && {
+    feedPreferences?.youtube?.enabled && {
       name: 'youtube',
       id: 'youtube',
       icon: `url(${process.env.PUBLIC_URL}/youtube-icon.svg)`,
     },
-    enableTwitchVods && {
+    feedPreferences?.vods?.enabled && {
       name: 'vods',
       id: 'vods',
       icon: `url(${process.env.PUBLIC_URL}/vods-icon.svg)`,
     },
-    enableMyLists &&
+    feedPreferences?.mylists?.enabled &&
       lists &&
       Object.values(lists)
         .filter((l) => l.enabled)
@@ -141,7 +146,7 @@ const FeedOrderSlider = () => {
           id: list.id,
           icon: `url(${process.env.PUBLIC_URL}/list-icon.svg)`,
         })),
-    enableFeedSections &&
+    feedPreferences?.feedsections?.enabled &&
       feedSections &&
       Object.values(feedSections)
         .filter((feed) => feed.enabled)

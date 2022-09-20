@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import { MdFavorite } from 'react-icons/md';
 import { MdFavoriteBorder } from 'react-icons/md';
-import FeedsContext from '../feed/FeedsContext';
+import { useRecoilValue } from 'recoil';
+import { feedVideoSizeAtom, feedVideoSizePropsAtom } from '../../atoms/atoms';
 
 export const pulseOpacity = keyframes`
   0% {opacity 1;}
@@ -97,7 +98,8 @@ export const StyledLoadingBox = styled.div`
 `;
 
 export const LoadingVideoElement = ({ type, freeze }) => {
-  const { feedSize, feedVideoSizeProps } = useContext(FeedsContext);
+  const feedSize = useRecoilValue(feedVideoSizeAtom);
+  const feedVideoSizeProps = useRecoilValue(feedVideoSizePropsAtom);
 
   return (
     <StyledLoadingBox

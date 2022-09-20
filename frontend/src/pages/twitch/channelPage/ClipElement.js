@@ -19,7 +19,6 @@ import ToolTip from '../../../components/tooltip/ToolTip';
 const ClipElement = ({ ...data }) => {
   const { user_name } = data;
   const {
-    broadcaster_name,
     broadcaster_id,
     id,
     thumbnail_url,
@@ -29,8 +28,6 @@ const ClipElement = ({ ...data }) => {
     game_name,
     game_img,
     created_at,
-    login,
-    user_login,
   } = data.data;
   const imgRef = useRef();
 
@@ -39,11 +36,12 @@ const ClipElement = ({ ...data }) => {
       <ImageContainer ref={imgRef}>
         <a
           className='imgLink'
-          href={`https://www.twitch.tv/${
-            login || user_login || user_name || broadcaster_name
-          }/clip/${id}`}
+          href={`https://www.twitch.tv/${loginNameFormat(
+            { ...data?.data, user_name },
+            true
+          )}/clip/${id}`}
         >
-          <img src={thumbnail_url} alt='' />
+          {thumbnail_url && <img src={thumbnail_url} alt='' />}
         </a>
         <ImgBottomInfo>
           <span className={'vodDuration'} title='duration' />
@@ -54,7 +52,7 @@ const ClipElement = ({ ...data }) => {
         </ImgBottomInfo>
       </ImageContainer>
       <ToolTip show={title?.length > 50} tooltip={title || ''}>
-        <VideoTitle to={`/${login || user_login || user_name || broadcaster_name}/clip/${id}`}>
+        <VideoTitle to={`/${loginNameFormat({ ...data?.data, user_name }, true)}/clip/${id}`}>
           {truncate(title || '', 70)}
         </VideoTitle>
       </ToolTip>
@@ -63,7 +61,10 @@ const ClipElement = ({ ...data }) => {
           <Link
             className={'profileImg'}
             to={{
-              pathname: `/${(login || user_login || broadcaster_name)?.toLowerCase()}/page`,
+              pathname: `/${loginNameFormat(
+                { ...data?.data, user_name },
+                true
+              )?.toLowerCase()}/page`,
               state: {
                 p_id: broadcaster_id,
               },
@@ -72,10 +73,10 @@ const ClipElement = ({ ...data }) => {
             <img src={profile_image_url} alt='' />
           </Link>
           <Link
-            to={`/${(login || user_login || broadcaster_name)?.toLowerCase()}/page`}
+            to={`/${loginNameFormat({ ...data?.data, user_name }, true)?.toLowerCase()}/page`}
             className='channelName'
           >
-            {loginNameFormat(data.data)}
+            {loginNameFormat({ ...data?.data, user_name })}
           </Link>
         </ChannelContainer>
         <GameContainer>

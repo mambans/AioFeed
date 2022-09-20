@@ -1,8 +1,11 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { useFeedPreferences } from '../../atoms/atoms';
 import AccountContext from '../account/AccountContext';
 import API from '../navigation/API';
+import { feedSectionsAtom } from '../twitch/atoms';
 import { TwitchContext } from '../twitch/useToken';
-import useSyncedLocalState from './../../hooks/useSyncedLocalState';
+// import useSyncedLocalState from './../../hooks/useSyncedLocalState';
 
 const FeedSectionsContext = React.createContext();
 
@@ -10,7 +13,10 @@ export const FeedSectionsProvider = ({ children }) => {
   const { user } = useContext(AccountContext);
   const { twitchAccessToken } = useContext(TwitchContext);
   const [isloading, setIsLoading] = useState();
-  const [feedSections, setFeedSections] = useSyncedLocalState('customFeedSections', {});
+  // const [feedSections, setFeedSections] = useSyncedLocalState('customFeedSections', {});
+  // const [feedSections, setFeedSections] = useSyncedLocalState('customFeedSections', {});
+  const setFeedSections = useSetRecoilState(feedSectionsAtom);
+  const { toggleEnabled } = useFeedPreferences();
   const invoked = useRef(false);
 
   const fetchFeedSectionsContextData = useCallback(async () => {
@@ -35,7 +41,7 @@ export const FeedSectionsProvider = ({ children }) => {
       id,
       title,
       enabled: true,
-      notifications_enabled: false,
+      notifications_enabled: true,
       nonFeedSectionLiveStreams: false,
       sidebar_enabled: true,
       rules: [],
@@ -46,6 +52,7 @@ export const FeedSectionsProvider = ({ children }) => {
         [id]: data,
       };
     });
+    toggleEnabled(id);
     API.createCustomFeedSections({ id, data });
   };
 
@@ -74,8 +81,9 @@ export const FeedSectionsProvider = ({ children }) => {
 
       const rules = (() => {
         if (existingRule !== undefined && existingRule >= 0) {
-          c?.[id]?.rules.splice(existingRule, 1, rule);
-          return c?.[id]?.rules;
+          const rules = [...(c?.[id]?.rules || [])];
+          rules.splice(existingRule, 1, rule);
+          return rules;
         }
         return [{ ...rule, id: Date.now() }, ...c?.[id]?.rules];
       })();
@@ -160,7 +168,7 @@ export const FeedSectionsProvider = ({ children }) => {
     <FeedSectionsContext.Provider
       value={{
         isloading,
-        feedSections,
+        // feedSections,
         createFeedSection,
         deleteFeedSection,
         addFeedSectionRule,

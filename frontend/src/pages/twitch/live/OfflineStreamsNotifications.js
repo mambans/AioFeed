@@ -1,43 +1,44 @@
 import moment from 'moment';
 import { useContext, useEffect, useRef } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import NotificationsContext from '../../notifications/NotificationsContext';
+import {
+  baseLiveStreamsAtom,
+  newOfflineNonFeedSectionStreamsAtom,
+  previousBaseLiveStreamsAtom,
+  previousNonFeedSectionStreamsAtom,
+} from '../atoms';
 import loginNameFormat from '../loginNameFormat';
 import { durationMsToDate } from '../TwitchUtils';
 import { TwitchContext } from '../useToken';
+import { vodChannelsAtom } from '../vods/atoms';
 import useFetchSingelVod from '../vods/hooks/useFetchSingelVod';
-import VodsContext from '../vods/VodsContext';
 import addSystemNotification from './addSystemNotification';
 
-const OfflineStreamsNotifications = ({
-  liveStreams,
-  oldLiveStreams,
-  nonFeedSectionLiveStreamsState,
-  oldNonFeedSectionsStreams,
-}) => {
+const OfflineStreamsNotifications = () => {
   const { fetchLatestVod } = useFetchSingelVod();
   const { isEnabledOfflineNotifications } = useContext(TwitchContext);
-  const { channels } = useContext(VodsContext);
+  const channels = useRecoilValue(vodChannelsAtom);
+
   const { addNotification } = useContext(NotificationsContext);
+  const liveStreams = useRecoilValue(baseLiveStreamsAtom);
+  const [newOfflineNonFeedSectionStreams, setNewOfflineNonFeedSectionStreams] = useRecoilState(
+    newOfflineNonFeedSectionStreamsAtom
+  );
   const timer = useRef();
+  const previousStreams = useRecoilValue(previousBaseLiveStreamsAtom);
+  const previousNonFeedsectionStreams = useRecoilValue(previousNonFeedSectionStreamsAtom);
 
   useEffect(() => {
     (async () => {
       try {
-        const res = oldLiveStreams.current?.filter(
-          (stream) =>
-            !liveStreams.find(({ user_id }) => stream.user_id === user_id) &&
-            !nonFeedSectionLiveStreamsState.find(({ user_id }) => stream.user_id === user_id) &&
-            oldNonFeedSectionsStreams?.find(({ user_id }) => stream.user_id === user_id)
-        );
-
-        const streams = res?.map((stream) => {
-          stream.notiStatus = 'Offline';
-          stream.onClick = () =>
-            window.open(
-              'https://aiofeed.com/' +
-                (stream.login || stream.user_login || stream.user_name) +
-                '/page'
-            );
+        const streams = newOfflineNonFeedSectionStreams?.map((s) => {
+          const stream = {
+            ...s,
+            notiStatus: 'Offline',
+            onClick: () =>
+              window.open('https://aiofeed.com/' + loginNameFormat(stream, true) + '/page'),
+          };
 
           if (isEnabledOfflineNotifications && channels?.includes(String(stream.user_id))) {
             const duration = durationMsToDate(moment().diff(moment(stream.started_at)));
@@ -55,29 +56,35 @@ const OfflineStreamsNotifications = ({
                 );
               },
             });
-          }
 
-          if (fetchLatestVod) {
             timer.current = setTimeout(
               () => fetchLatestVod({ user_id: stream.user_id, check: true }),
               30000
             );
           }
+
           return stream;
         });
 
-        if (Boolean(streams?.length)) addNotification(streams);
+        if (Boolean(streams?.length)) {
+          addNotification(streams);
+
+          setNewOfflineNonFeedSectionStreams((curr) =>
+            curr.filter((s) => !streams.find((st) => st.id === s.id))
+          );
+        }
       } catch (e) {}
     })();
   }, [
     fetchLatestVod,
     liveStreams,
-    oldLiveStreams,
+    previousStreams,
     isEnabledOfflineNotifications,
     channels,
     addNotification,
-    nonFeedSectionLiveStreamsState,
-    oldNonFeedSectionsStreams,
+    newOfflineNonFeedSectionStreams,
+    previousNonFeedsectionStreams,
+    setNewOfflineNonFeedSectionStreams,
   ]);
 
   return null;

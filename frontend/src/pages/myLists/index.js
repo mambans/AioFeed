@@ -11,11 +11,12 @@ import useYoutubeToken from '../youtube/useToken';
 import MyListSmallList from './MyListSmallList';
 import DropDownDrawer from './DropDownDrawer';
 import { Container } from '../twitch/StyledComponents';
-import FeedsContext from '../feed/FeedsContext';
 import { ExpandCollapseFeedButton } from '../sharedComponents/sharedStyledComponents';
 import ExpandableSection from '../../components/expandableSection/ExpandableSection';
 import Alert from '../../components/alert';
 import Colors from '../../components/themes/Colors';
+import { useRecoilValue } from 'recoil';
+import { feedPreferencesAtom, useFeedPreferences } from '../../atoms/atoms';
 
 export const useCheckForVideosAndValidateToken = ({
   lists,
@@ -80,12 +81,13 @@ const FavoriteListContainer = ({
   addSavedData,
 }) => {
   const [videos, setVideos] = useState();
-  const { orders, toggleExpanded } = useContext(FeedsContext);
+  const { toggleExpanded } = useFeedPreferences();
+  const feedPreferences = useRecoilValue(feedPreferencesAtom);
 
   return (
     <Container
       aria-labelledby={`MyList-${list.id}`}
-      order={orders?.[list.id]?.order}
+      order={feedPreferences?.[list.id]?.order || 500}
       id={'MyListsHeader-' + list.id}
     >
       <Header
@@ -95,7 +97,7 @@ const FavoriteListContainer = ({
             {list.title}
             <HeaderNumberCount text={list?.videos?.length} />
             <HiViewList size={25} color={Colors.green} />
-            <ExpandCollapseFeedButton collapsed={orders?.[list.id]?.collapsed} />
+            <ExpandCollapseFeedButton collapsed={feedPreferences?.[list.id]?.collapsed} />
           </h1>
         }
         refresh={fetchMyListContextData}
@@ -107,7 +109,7 @@ const FavoriteListContainer = ({
           </>
         }
       />
-      <ExpandableSection collapsed={orders?.[list.id]?.collapsed}>
+      <ExpandableSection collapsed={feedPreferences?.[list.id]?.collapsed}>
         <List
           list={list}
           ytExistsAndValidated={ytExistsAndValidated}

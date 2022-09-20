@@ -1,12 +1,14 @@
-import React, { useContext, useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import debounce from 'lodash/debounce';
 
-import FeedsContext from '../../feed/FeedsContext';
 import { StyledFeedSizeSlider } from '../StyledComponents';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { feedPreferencesAtom, feedVideoSizeAtom } from '../../../atoms/atoms';
 
 const FeedSizeSlider = () => {
-  const { setFeedSize, feedSize, enableTwitch, enableTwitchVods, enableYoutube, enableMyLists } =
-    useContext(FeedsContext) || {};
+  const { twitch, vods, youtube, mylists } = useRecoilValue(feedPreferencesAtom) || {};
+
+  const [feedSize, setFeedSize] = useRecoilState(feedVideoSizeAtom);
   const [sizeValue, setSizeValue] = useState(feedSize);
 
   const delayedHandleChange = useMemo(
@@ -19,7 +21,7 @@ const FeedSizeSlider = () => {
     delayedHandleChange(v.target.value);
   };
 
-  if (enableTwitch || enableTwitchVods || enableYoutube || enableMyLists) {
+  if (twitch?.enabled || vods?.enabled || youtube?.enabled || mylists?.enabled) {
     return (
       <StyledFeedSizeSlider>
         {`Feed video size: ${sizeValue}`}

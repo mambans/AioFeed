@@ -194,7 +194,7 @@ const Rule = ({ rule, height, id, index }) => {
                 zIndex: String(9999 - parseInt(index)),
               }}
               {...bindCategory}
-              placeholder={category || '...'}
+              placeholder={category || 'category..'}
             />
             <ChannelSearchBar
               style={{
@@ -205,8 +205,9 @@ const Rule = ({ rule, height, id, index }) => {
                 zIndex: String(9999 - parseInt(index)),
               }}
               {...bindChannel}
-              placeholder={channel || '...'}
+              placeholder={channel || 'channel..'}
               hideExtraButtons
+              // open={true}
               onSubmit={(value) => {
                 handleAdd();
               }}

@@ -8,7 +8,7 @@ import { AiFillSchedule } from 'react-icons/ai';
 
 const nrOfItems = 4;
 
-const BigScheduleList = ({ followedChannels }) => {
+const BigScheduleList = () => {
   const [schedule, setSchedule] = useState();
   // const ref = useRef();
   // const btnRef = useRef();
@@ -21,18 +21,14 @@ const BigScheduleList = ({ followedChannels }) => {
     <MyModal direction={'left'} position={'left'} relative trigger={<AiFillSchedule size={30} />}>
       <RefreshBtn loading={!schedule} onClick={() => setSchedule()} />
 
-      <SchedulesList
-        setSchedule={setSchedule}
-        schedule={schedule}
-        followedChannels={followedChannels}
-      />
+      <SchedulesList setSchedule={setSchedule} schedule={schedule} />
     </MyModal>
   );
 };
 
 export default BigScheduleList;
 
-export const SchedulesList = ({ schedule, setSchedule, followedChannels }) => {
+export const SchedulesList = ({ schedule, setSchedule }) => {
   useEffect(() => {
     (async () => {
       const followedChannels = await pagination(

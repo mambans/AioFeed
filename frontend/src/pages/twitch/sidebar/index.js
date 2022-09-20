@@ -6,15 +6,19 @@ import { Styledsidebar, SidebarHeader, StyledSidebarSection } from './StyledComp
 import LoadingSidebar from './LoadingSidebar';
 import { TwitchContext } from '../useToken';
 import ExpandableSection from '../../../components/expandableSection/ExpandableSection';
-import FeedSectionsContext from '../../feedSections/FeedSectionsContext';
 import { checkAgainstRules } from '../../feedSections/FeedSections';
-import FeedsContext from '../../feed/FeedsContext';
 import { ExpandCollapseFeedButton } from '../../sharedComponents/sharedStyledComponents';
+import { useRecoilValue } from 'recoil';
+import { baseLiveStreamsAtom, feedSectionsAtom, nonFeedSectionStreamsAtom } from '../atoms';
+import { feedPreferencesAtom, useFeedPreferences } from '../../../atoms/atoms';
 
-const Sidebar = ({ data }) => {
-  const { loaded, nonFeedSectionLiveStreams } = data;
-  const { feedSections } = useContext(FeedSectionsContext);
-  const { enableFeedSections } = useContext(FeedsContext);
+const Sidebar = ({ data, streams }) => {
+  const { loaded } = data;
+  const feedSections = useRecoilValue(feedSectionsAtom);
+  const feedPreferences = useRecoilValue(feedPreferencesAtom) || {};
+
+  const liveStreams = useRecoilValue(baseLiveStreamsAtom);
+  const nonFeedSectionsLiveStreams = useRecoilValue(nonFeedSectionStreamsAtom);
 
   if (loaded) {
     return (
@@ -22,21 +26,21 @@ const Sidebar = ({ data }) => {
         <SidebarSection
           key={'twitch-sidebar-key'}
           feed={{ title: 'Twitch Live', id: 'twitch' }}
-          data={{ streams: nonFeedSectionLiveStreams }}
+          items={nonFeedSectionsLiveStreams}
         />
 
-        {enableFeedSections &&
+        {feedPreferences?.feedsections?.enabled &&
           feedSections &&
           Object.values(feedSections)
-            .reduce((acc, curr) => {
-              const streams = data?.liveStreams.filter((stream) =>
-                checkAgainstRules(stream, curr.rules)
+            .reduce((acc, feedsection) => {
+              const streams = liveStreams.filter((stream) =>
+                checkAgainstRules(stream, feedsection.rules)
               );
-              if (!curr.enabled || !curr.sidebar_enabled) return acc;
-              return [...acc, { ...curr, data: { ...data, streams } }];
+              if (!feedsection.enabled || !feedsection.sidebar_enabled) return acc;
+              return [...acc, { ...feedsection, items: streams }];
             }, [])
             ?.map((feed, index) => (
-              <SidebarSection key={feed.id} feed={feed} index={index} data={feed.data} />
+              <SidebarSection key={feed.id} feed={feed} index={index} items={feed.items} />
             ))}
       </Styledsidebar>
     );
@@ -45,20 +49,20 @@ const Sidebar = ({ data }) => {
 };
 export default Sidebar;
 
-const SidebarSection = ({ feed: { title, id }, data, index }) => {
+const SidebarSection = ({ feed: { title, id }, items }) => {
   const { favStreams } = useContext(TwitchContext);
-  const { orders, toggleSidebarExpanded } = useContext(FeedsContext);
-  const { streams, newlyAdded } = data;
+  const { toggleSidebarExpanded } = useFeedPreferences();
+  const feedPreferences = useRecoilValue(feedPreferencesAtom);
+
   const [shows, setShows] = useState();
   const resetShowsTimer = useRef();
 
-  const favoriteStreams = streams?.filter((c) => favStreams?.includes(c.user_name?.toLowerCase()));
-  const nonFavoriteStreams = streams?.filter(
+  const favoriteStreams = items?.filter((c) => favStreams?.includes(c.user_name?.toLowerCase()));
+  const nonFavoriteStreams = items?.filter(
     (c) => !favStreams?.includes(c.user_name?.toLowerCase())
   );
 
   const sidebarItemAttrs = {
-    newlyAdded: newlyAdded,
     shows: shows,
     setShows: setShows,
     resetShowsTimer: resetShowsTimer,
@@ -71,15 +75,18 @@ const SidebarSection = ({ feed: { title, id }, data, index }) => {
 
   const handleCollapse = () => toggleSidebarExpanded(id);
 
-  if (id !== 'twitch' && !streams?.length) return null;
+  if (id !== 'twitch' && !items?.length) return null;
 
   return (
-    <StyledSidebarSection aria-labelledby={`SidebarSection-${id}`} order={orders?.[id]?.order}>
+    <StyledSidebarSection
+      aria-labelledby={`SidebarSection-${id}`}
+      order={feedPreferences?.[id]?.order || 500}
+    >
       <SidebarHeader id={`SidebarSection-${id}`} onClick={handleCollapse}>
-        {title} <ExpandCollapseFeedButton collapsed={orders?.[id]?.sidebar_collapsed} />
+        {title} <ExpandCollapseFeedButton collapsed={feedPreferences?.[id]?.sidebar_collapsed} />
       </SidebarHeader>
-      <ExpandableSection collapsed={orders?.[id]?.sidebar_collapsed}>
-        {streams?.length ? (
+      <ExpandableSection collapsed={feedPreferences?.[id]?.sidebar_collapsed}>
+        {items?.length ? (
           <>
             <TransitionGroup className='sidebar' component={null}>
               {favoriteStreams.map((stream) => (

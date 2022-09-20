@@ -1,8 +1,7 @@
 import { CSSTransition } from 'react-transition-group';
-import React, { Suspense, useContext, useEffect, useRef } from 'react';
+import React, { Suspense, useEffect, useRef } from 'react';
 
 import { HideSidebarButton } from '../sidebar/StyledComponents';
-import FeedsContext from '../../feed/FeedsContext';
 import Handler from './Handler';
 import Header from './Header';
 import Sidebar from '../sidebar';
@@ -15,55 +14,59 @@ import { askForBrowserNotificationPermission } from '../../../util';
 import { MdFormatIndentDecrease } from 'react-icons/md';
 import { BsCollectionFill } from 'react-icons/bs';
 import Colors from '../../../components/themes/Colors';
+import { useRecoilValue } from 'recoil';
+import { nonFeedSectionStreamsAtom } from '../atoms';
+import { feedPreferencesAtom, useFeedPreferences } from '../../../atoms/atoms';
 // import FeedSections from '../../feedSections/FeedSections';
 const FeedSections = React.lazy(() => import('../../feedSections/FeedSections'));
 
 const TwitchFeed = ({ data, className, forceMount }) => {
-  const {
-    enableTwitch,
-    showTwitchSidebar,
-    setShowTwitchSidebar,
-    enableFeedSections,
-    orders,
-    toggleExpanded,
-  } = useContext(FeedsContext) || {};
+  const { twitch, feedsections } = useRecoilValue(feedPreferencesAtom) || {};
+  const nonFeedSectionLiveStreams = useRecoilValue(nonFeedSectionStreamsAtom);
+  const feedPreferences = useRecoilValue(feedPreferencesAtom);
   const refreshBtnRef = useRef();
+  const { toggleSidebar, toggleExpanded } = useFeedPreferences();
 
   return (
     <>
       <CSSTransition
-        in={enableTwitch || forceMount}
+        in={twitch?.enabled || forceMount}
         timeout={750}
         classNames='fade-750ms'
         appear
         unmountOnExit
       >
-        <Container aria-labelledby='twitch' order={orders?.['twitch']?.order} className={className}>
+        <Container
+          aria-labelledby='twitch'
+          order={feedPreferences?.['twitch']?.order || 500}
+          className={className}
+        >
           <Header
             data={data}
             ref={refreshBtnRef}
-            collapsed={orders?.['twitch']?.collapsed}
+            collapsed={feedPreferences?.['twitch']?.collapsed}
             toggleExpanded={() => toggleExpanded('twitch')}
+            count={nonFeedSectionLiveStreams?.length}
           />
-          <ExpandableSection collapsed={orders?.['twitch']?.collapsed}>
-            <TwitchStreams data={data} streams={data.nonFeedSectionLiveStreams} />
+          <ExpandableSection collapsed={feedPreferences?.['twitch']?.collapsed}>
+            <TwitchStreams data={data} streams={nonFeedSectionLiveStreams} />
           </ExpandableSection>
         </Container>
       </CSSTransition>
       <ToolTip
         placement={'right'}
         delay={{ show: 500, hide: 0 }}
-        tooltip={`${showTwitchSidebar ? 'Hide' : 'Show'} sidebar`}
+        tooltip={`${twitch?.sidebar_enabled ? 'Hide' : 'Show'} sidebar`}
       >
         <HideSidebarButton
-          show={String(showTwitchSidebar)}
-          onClick={() => setShowTwitchSidebar(!showTwitchSidebar)}
+          show={String(twitch?.sidebar_enabled)}
+          onClick={() => toggleSidebar('twitch')}
         >
           <MdFormatIndentDecrease size={25.5} />
         </HideSidebarButton>
       </ToolTip>
       <CSSTransition
-        in={(enableTwitch || forceMount) && showTwitchSidebar}
+        in={(twitch?.enabled || forceMount) && twitch?.sidebar_enabled}
         timeout={750}
         classNames='twitchSidebar'
         appear
@@ -72,7 +75,7 @@ const TwitchFeed = ({ data, className, forceMount }) => {
         <Sidebar data={data} />
       </CSSTransition>
       <CSSTransition
-        in={enableFeedSections}
+        in={feedsections?.enabled}
         timeout={750}
         classNames='fade-750ms'
         unmountOnExit

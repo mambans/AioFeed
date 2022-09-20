@@ -1,20 +1,20 @@
-import { useContext } from 'react';
+import { useSetRecoilState } from 'recoil';
 import API from '../../../navigation/API';
-import VodsContext from '../VodsContext';
+import { twitchVodsAtom, vodChannelsAtom } from '../atoms';
 
 const useVodChannel = () => {
-  const { channels, setChannels, setVods, vods } = useContext(VodsContext);
+  const setTwitchVods = useSetRecoilState(twitchVodsAtom);
+  const setChannels = useSetRecoilState(vodChannelsAtom);
 
   const addVodChannel = async ({ channel }) => {
     try {
-      const existingChannels = new Set(channels);
-      const newChannels = [...existingChannels.add(channel.user_id)];
-
-      setChannels([...newChannels]);
+      setChannels((channels) => {
+        const existingChannels = new Set(channels);
+        const newChannels = [...existingChannels.add(channel.user_id)];
+        return newChannels;
+      });
 
       await API.addVodChannel(channel.user_id);
-
-      return newChannels;
     } catch (e) {
       console.log('addVodChannel error: ', e.message);
     }
@@ -22,23 +22,25 @@ const useVodChannel = () => {
 
   const removeChannel = async ({ channel }) => {
     try {
-      const vodChannels = new Set(channels || []);
-      vodChannels.delete(channel?.user_id);
+      setChannels((channels) => {
+        const vodChannels = new Set(channels || []);
+        vodChannels.delete(channel?.user_id);
 
-      setChannels([...vodChannels]);
+        return vodChannels;
+      });
       API.removeVodChannel(channel?.user_id);
 
-      const existingVodVideos = vods || { data: [] };
-      const newVodVideos = {
-        ...existingVodVideos,
-        data: existingVodVideos.data
-          .filter((video) => video?.user_id !== channel?.user_id)
-          ?.slice(0, 100),
-      };
+      setTwitchVods((vods) => {
+        const existingVodVideos = vods || { data: [] };
+        const newVodVideos = {
+          ...existingVodVideos,
+          data: existingVodVideos.data
+            .filter((video) => video?.user_id !== channel?.user_id)
+            ?.slice(0, 100),
+        };
 
-      setVods(newVodVideos);
-
-      return vodChannels;
+        return newVodVideos;
+      });
     } catch (e) {
       console.log('removeChannel error: ', e.message);
     }

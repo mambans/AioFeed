@@ -12,13 +12,37 @@ export const DropDownWrapper = styled.div`
   /* background: var(--refreshButtonHoverBackground); */
   background: var(--popupListsBackground);
   /* width: 100%; */
-  width: ${({ width }) => (width !== 'false' ? width + 'px' : '100%')};
-  /* display: none; */
+  width: ${({ width, wrap }) =>
+    width !== 'false' ? width + 'px' : wrap === 'true' ? '100%' : 'max-content'};
+  /* min-width: ${({ width }) => (width !== 'false' ? width + 'px' : 'max-content')}; */
+  visibility: hidden;
+  transition: visibility 0s ease 250ms, min-width 250ms;
+`;
+
+export const Item = styled(Link).attrs({ className: 'item' })`
+  display: none; //flex
+  gap: 0.5rem;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  transition: color 250ms, background 250ms;
+  padding: 0.35rem;
+  min-height: 46px;
+  pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
+  justify-content: space-between;
+
+  &.selected {
+    font-weight: bold;
+  }
+
+  &:hover: {
+    background-color: rgba(51, 51, 61, 0.5);
+  }
 `;
 
 export const Wrapper = styled.div.attrs({ className: 'searchbar' })`
   position: relative;
-  background: var(--navigationbarBackground);
+  /* background: var(--navigationbarBackground); */
   width: ${({ open }) => (open ? '310px' : '125px')};
   outline: none;
   transition: width 250ms;
@@ -28,9 +52,15 @@ export const Wrapper = styled.div.attrs({ className: 'searchbar' })`
   &:focus,
   &:focus-within {
     width: 310px;
-    /* ${DropDownWrapper} {
-      display: block;
-    } */
+    ${DropDownWrapper} {
+      visibility: visible;
+      min-width: ${({ wrap }) => (wrap ? 'unset' : 'max-content')};
+      transition: visibility 0s ease 0ms;
+
+      ${Item} {
+        display: flex;
+      }
+    }
   }
 `;
 
@@ -48,25 +78,9 @@ export const Input = styled.input`
   font-size: ${({ inputFontSize }) => inputFontSize || 'inherit'};
   transition: color 250ms, border 250ms;
   outline: #0000 solid;
-`;
 
-export const Item = styled(Link).attrs({ className: 'item' })`
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  position: relative;
-  cursor: pointer;
-  transition: color 250ms, background 250ms;
-  padding: 0.35rem;
-  min-height: 46px;
-  pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
-
-  &.selected {
-    font-weight: bold;
-  }
-
-  &:hover: {
-    background-color: rgba(51, 51, 61, 0.5);
+  &::placeholder {
+    color: #373d44;
   }
 `;
 
@@ -79,6 +93,9 @@ export const pulseLight = keyframes`
 export const Title = styled.p.attrs({ className: 'title' })`
   margin: 0;
   color: #ffffff;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
   &:empty {
     height: 25px;
     width: 100%;
@@ -97,6 +114,13 @@ export const ProfileWrapper = styled.div`
   &:empty {
     animation: ${pulseLight} 2s linear infinite;
   }
+`;
+
+export const LeftWrapper = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  white-space: nowrap;
+  overflow: ${({ wrap }) => (wrap === 'true' ? 'hidden' : 'unset')};
 `;
 export const Profile = styled.img`
   border-radius: 5px;

@@ -556,7 +556,7 @@ export const StyledToggleButton = styled(MyButton)`
   display: flex;
   justify-content: center;
 
-  &[disabled] {
+  &[disabled='true'] {
     opacity: 0.15;
   }
 

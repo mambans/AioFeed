@@ -1,31 +1,28 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { feedPreferencesAtom } from '../../atoms/atoms';
 import Alert from '../../components/alert';
-import FeedsContext from './FeedsContext';
+import { navigationSidebarAtom } from '../navigation/atoms';
 
 const NoFeedsEnabled = () => {
-  const { enableTwitch, enableYoutube, enableTwitchVods, enableTwitter } = useContext(FeedsContext);
-  const [noFeeds, setNoFeeds] = useState(
-    !enableTwitch && !enableTwitter && !enableYoutube && !enableTwitchVods
-  );
+  const { twitch, youtube, vods, mylists, twitter } = useRecoilValue(feedPreferencesAtom) || {};
+  const showNavigationSidebar = useSetRecoilState(navigationSidebarAtom);
 
-  useEffect(() => {
-    let timer;
-    if (!enableTwitch && !enableTwitter && !enableYoutube && !enableTwitchVods) {
-      timer = setTimeout(() => setNoFeeds(true), 1000);
-    } else {
-      clearTimeout(timer);
-      setNoFeeds(false);
-    }
-
-    return () => clearTimeout(timer);
-  }, [enableTwitch, enableYoutube, enableTwitchVods, enableTwitter]);
-
-  if (noFeeds) {
-    <Alert
-      type='info'
-      title='No feeds enabled'
-      message='Enable feeds in the navigation sidebar on the right.'
-    />;
+  if (
+    !twitch?.enabled &&
+    !youtube?.enabled &&
+    !vods?.enabled &&
+    !mylists?.enabled &&
+    !twitter?.enabled
+  ) {
+    return (
+      <Alert
+        type='info'
+        title='No feeds enabled'
+        message='Enable feeds in the navigation sidebar on the right.'
+        onClick={showNavigationSidebar}
+      />
+    );
   }
   return null;
 };

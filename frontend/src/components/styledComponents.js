@@ -20,10 +20,89 @@ export const TransparentButton = styled.button`
   color: white;
 `;
 
+export const StyledListForm = styled(Form)`
+  /* margin: 10px; */
+  height: 60px;
+
+  &:hover,
+  &:focus-within,
+  &:focus {
+    opacity: 1 !important;
+  }
+
+  input {
+    color: rgb(200, 200, 200);
+    background-color: transparent;
+    border: none;
+    padding: 0.1875rem 0.75rem;
+    height: calc(1.5em + 0.5rem + 0px);
+    border-bottom: 2px solid rgb(75, 75, 75);
+    border-radius: 0;
+  }
+
+  &.ListForm-appear {
+    opacity: 0;
+    height: 0;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.ListForm-appear-active {
+    opacity: 1;
+    height: 60px;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.ListForm-appear-done {
+    opacity: 1;
+    height: 60px;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.ListForm-enter {
+    opacity: 0;
+    height: 0;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.ListForm-enter-done {
+    opacity: 1;
+    height: 60px;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.ListForm-enter-active {
+    opacity: 1;
+    height: 60px;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.ListForm-exit {
+    opacity: 1;
+    height: 60px;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.ListForm-exit-active {
+    opacity: 0;
+    height: 0;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+
+  &.ListForm-exit-done {
+    opacity: 0;
+    height: 0;
+    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
+  }
+`;
+
 export const HeaderOuterMainContainer = styled.header`
   width: 100%;
   margin-bottom: 5px;
   scroll-margin-top: 95px;
+
+  ${StyledListForm} {
+    height: max-content;
+  }
 `;
 
 export const HeaderNumberCountContainer = styled.div`
@@ -38,7 +117,7 @@ export const HeaderNumberCountContainer = styled.div`
 export const HeaderTopContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: end;
   width: 100%;
 `;
 
@@ -184,81 +263,6 @@ export const VideosContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   /* min-height: 307px; */
-`;
-
-export const StyledListForm = styled(Form)`
-  /* margin: 10px; */
-  height: 60px;
-
-  &:hover,
-  &:focus-within,
-  &:focus {
-    opacity: 1 !important;
-  }
-
-  input {
-    color: rgb(200, 200, 200);
-    background-color: transparent;
-    border: none;
-    padding: 0.1875rem 0.75rem;
-    height: calc(1.5em + 0.5rem + 0px);
-    border-bottom: 2px solid rgb(75, 75, 75);
-    border-radius: 0;
-  }
-
-  &.ListForm-appear {
-    opacity: 0;
-    height: 0;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
-  }
-
-  &.ListForm-appear-active {
-    opacity: 1;
-    height: 60px;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
-  }
-
-  &.ListForm-appear-done {
-    opacity: 1;
-    height: 60px;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
-  }
-
-  &.ListForm-enter {
-    opacity: 0;
-    height: 0;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
-  }
-
-  &.ListForm-enter-done {
-    opacity: 1;
-    height: 60px;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
-  }
-
-  &.ListForm-enter-active {
-    opacity: 1;
-    height: 60px;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
-  }
-
-  &.ListForm-exit {
-    opacity: 1;
-    height: 60px;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
-  }
-
-  &.ListForm-exit-active {
-    opacity: 0;
-    height: 0;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
-  }
-
-  &.ListForm-exit-done {
-    opacity: 0;
-    height: 0;
-    transition: opacity 250ms, height 500ms, margin-top 500ms, margin-bottom 500ms;
-  }
 `;
 
 export const SearchListError = styled.span`

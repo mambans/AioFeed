@@ -1,6 +1,6 @@
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Alert } from 'react-bootstrap';
-import React, { useState, useMemo, useContext } from 'react';
+import React, { useState, useMemo } from 'react';
 import debounce from 'lodash/debounce';
 
 import LoadMore from '../../../components/loadMore/LoadMore';
@@ -11,7 +11,8 @@ import SortButton from './SortButton';
 import ClipElement from './ClipElement';
 import VodElement from '../vods/VodElement';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
-import FeedsContext from '../../feed/FeedsContext';
+import { useRecoilValue } from 'recoil';
+import { feedVideoSizePropsAtom } from '../../../atoms/atoms';
 
 const SubFeed = ({
   feedName,
@@ -23,7 +24,8 @@ const SubFeed = ({
   itemPagination,
   channelInfo,
 }) => {
-  const { feedVideoSizeProps } = useContext(FeedsContext) || {};
+  const feedVideoSizeProps = useRecoilValue(feedVideoSizePropsAtom);
+
   const [numberOfVideos, setNumberOfVideos] = useState(
     Math.floor(window.innerWidth / (feedVideoSizeProps?.totalWidth || 350))
   );

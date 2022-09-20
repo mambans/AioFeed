@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import FeedsContext from '../../pages/feed/FeedsContext';
+import { feedVideoSizeAtom } from '../../atoms/atoms';
 
 const ToolTipText = styled(Tooltip)`
   width: ${({ width }) =>
@@ -42,7 +43,7 @@ const ToolTip = ({
   width = 'unset',
   style,
 }) => {
-  const { feedVideoSizeProps } = useContext(FeedsContext) || {};
+  const feedVideoSizeProps = useRecoilValue(feedVideoSizeAtom);
 
   // return (
   //   <div title={tooltip} style={{ display: 'flex' }}>

@@ -2,7 +2,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { MdMovieCreation, MdLiveTv } from 'react-icons/md';
 import { useParams, useLocation } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
-import React, { useEffect, useState, useCallback, useRef, useContext } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 
 import LoadMore from '../../../components/loadMore/LoadMore';
 import Header from '../../../components/Header';
@@ -22,8 +22,9 @@ import TypeButton from './TypeButton';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import useFavicon from '../../../hooks/useFavicon';
 import { imageAspectDimensions } from '../../../util';
-import FeedsContext from '../../feed/FeedsContext';
 import GameSearchBar from '../searchbars/GameSearchBar';
+import { useRecoilValue } from 'recoil';
+import { feedVideoSizePropsAtom } from '../../../atoms/atoms';
 
 const TopStreams = () => {
   const { category, type } = useParams();
@@ -34,7 +35,8 @@ const TopStreams = () => {
   const [videoType, setVideoType] = useState(
     type || URLQueries.get('type')?.toLowerCase() || p_videoType || 'streams'
   );
-  const { feedVideoSizeProps } = useContext(FeedsContext) || {};
+  const feedVideoSizeProps = useRecoilValue(feedVideoSizePropsAtom);
+
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState('Views');
   const [sortByTime, setSortByTime] = useState(

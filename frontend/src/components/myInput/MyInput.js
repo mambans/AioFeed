@@ -30,6 +30,8 @@ const MyInput = ({
   plaintext,
   children,
   placeholder = 'name...',
+  onBlur,
+  width,
 } = {}) => {
   const { value: input, bind: bindInput, reset: resetInput } = useInput(name || '');
   const ref = useRef();
@@ -62,6 +64,9 @@ const MyInput = ({
             required
             {...bindInput}
             isInvalid={!valid(input)}
+            onBlur={() => onBlur?.(input)}
+            spellCheck={false}
+            style={{ width }}
           />
           {rightSide}
         </div>

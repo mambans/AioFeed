@@ -1,9 +1,10 @@
 import { Button } from 'react-bootstrap';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import FeedsContext from '../../feed/FeedsContext';
 import { ButtonLookalikeStyle } from '../../../components/styledComponents';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
+import { useRecoilValue } from 'recoil';
+import { feedVideoSizePropsAtom } from '../../../atoms/atoms';
 
 export const StyledGameListElement = styled.li`
   justify-content: unset;
@@ -255,7 +256,7 @@ export const StyledContainer = styled.div`
 `;
 
 export const Container = ({ children }) => {
-  const { feedVideoSizeProps } = useContext(FeedsContext);
+  const feedVideoSizeProps = useRecoilValue(feedVideoSizePropsAtom);
   // eslint-disable-next-line no-unused-vars
   const [state, setState] = useState();
   useEventListenerMemo('resize', () => setState((c) => !c));

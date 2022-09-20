@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
 import { AddedItemBtn, AddItemBtn, ButtonContainer, IconContainer } from '../StyledComponents';
 import AddToListModal, { mouseLeaveEnablePreview, mouseOverDisablePreview } from './AddToListModal';
 import useClicksOutside from '../../../hooks/useClicksOutside';
-import FeedsContext from '../../feed/FeedsContext';
+import { useRecoilValue } from 'recoil';
+import { feedPreferencesAtom } from '../../../atoms/atoms';
 
 const AddToListButton = ({
   list,
@@ -19,7 +20,8 @@ const AddToListButton = ({
   const [open, setOpen] = useState();
   const fadeOutTimer = useRef();
   const fadeInTimer = useRef();
-  const { enableMyLists } = useContext(FeedsContext) || {};
+  const { mylists } = useRecoilValue(feedPreferencesAtom) || {};
+
   const ref = useRef();
 
   useClicksOutside(ref, handleClose, open);
@@ -70,7 +72,7 @@ const AddToListButton = ({
     };
   }, []);
 
-  if (!enableMyLists) return null;
+  if (!mylists?.enabled) return null;
 
   return (
     <ButtonContainer

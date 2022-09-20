@@ -1,12 +1,14 @@
-import React, { useContext } from 'react';
-import FeedsContext from '../../feed/FeedsContext';
+import React from 'react';
+import { useRecoilValue } from 'recoil';
+import { feedVideoSizePropsAtom } from '../../../atoms/atoms';
 
 import { SubFeedContainer } from './../../sharedComponents/sharedStyledComponents';
 import LoadingBoxes from './../LoadingBoxes';
 import { SubFeedHeader } from './StyledComponents';
 
 const LoadingPlaceholderVods = ({ numberOfVideos, title = 'Vods', freeze }) => {
-  const { feedVideoSizeProps } = useContext(FeedsContext) || {};
+  const feedVideoSizeProps = useRecoilValue(feedVideoSizePropsAtom);
+
   return (
     <>
       <SubFeedHeader

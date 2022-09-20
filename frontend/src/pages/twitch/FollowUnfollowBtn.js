@@ -6,8 +6,9 @@ import TwitchAPI from './API';
 import useToken, { TwitchContext } from './useToken';
 import ToolTip from '../../components/tooltip/ToolTip';
 import { removeChannel as remmoveUpdateChannel } from './AddUpdateNotificationsButton';
-import VodsContext from './vods/VodsContext';
 import UnsubscribeVodsPopupConfirm from './UnsubscribeVodsPopupConfirm';
+import { useRecoilValue } from 'recoil';
+import { vodChannelsAtom } from './vods/atoms';
 
 const FollowUnfollowBtn = ({
   channelName,
@@ -21,7 +22,8 @@ const FollowUnfollowBtn = ({
 }) => {
   const [following, setFollowing] = useState(followingStatus);
   const [showUnsubscribeVods, setShowUnsubscribeVods] = useState();
-  const { channels } = useContext(VodsContext);
+  const channels = useRecoilValue(vodChannelsAtom);
+
   const { twitchUserId, setUpdateNotischannels, updateNotischannels } = useContext(TwitchContext);
 
   const validateToken = useToken();

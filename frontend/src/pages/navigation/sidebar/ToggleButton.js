@@ -1,15 +1,12 @@
-import React, { useRef, useContext, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 
 import { StyledToggleButton } from './StyledComponents';
 import ToolTip from '../../../components/tooltip/ToolTip';
-import { TwitchContext } from '../../twitch/useToken';
-import { YoutubeContext } from '../../youtube/useToken';
 
 const ToggleButton = ({
   setEnable,
   enabled,
   label,
-  tokenExists,
   tooltip,
   icon,
   buttonsperrow,
@@ -20,16 +17,6 @@ const ToggleButton = ({
 }) => {
   // const [checked, setChecked] = useState(enabled || false);
   const timeout = useRef();
-  const { twitchAccessToken } = useContext(TwitchContext);
-  const { youtubeAccessToken } = useContext(YoutubeContext);
-
-  const tokensForDomains = {
-    Twitch: twitchAccessToken,
-    Youtube: youtubeAccessToken,
-    MyLists: twitchAccessToken || youtubeAccessToken,
-  };
-
-  const anTokenExists = Boolean(tokenExists || tokensForDomains[serviceName]);
 
   function handleChange() {
     console.log('ToggleButton onclick:');
@@ -55,7 +42,7 @@ const ToggleButton = ({
     <ToolTip tooltip={tooltip} width='max-content'>
       <StyledToggleButton
         onClick={handleChange}
-        disabled={disabled ?? !anTokenExists}
+        disabled={disabled}
         variant='dark'
         buttonsperrow={buttonsperrow}
         enabled={String(enabled)}

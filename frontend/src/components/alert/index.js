@@ -29,7 +29,7 @@ const getType = (type) => {
 const Alert = ({
   icon,
   title = 'Oh-oh! Something happened',
-  message = 'Some unexpexted error occured or an action is required by you',
+  message = 'An error occured',
   onClick,
   width,
   center = true,

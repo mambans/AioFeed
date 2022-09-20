@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import Alert from '../../components/alert';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
+import { AddCookie } from '../../util';
 import AccountContext from '../account/AccountContext';
 import { navigationSidebarComponentKeyAtom } from '../navigation/atoms';
 import ThemeContext from './../../components/themes/ThemeContext';
@@ -46,6 +47,7 @@ export const Home = () => {
   );
 
   useEffect(() => {
+    AddCookie('asd', 'valueee', { expires: Date.now() });
     document.documentElement.setAttribute('homepage', 'true');
     window.scrollTo(0, 0);
 

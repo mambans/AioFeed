@@ -6,10 +6,10 @@ import FavoriteStreamBtn from '../live/FavoriteStreamBtn';
 import loginNameFormat from '../loginNameFormat';
 import Schedule from '../schedule';
 import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
-import { Item, Profile, ProfileWrapper, Title } from './styledComponents';
+import { Item, LeftWrapper, Profile, ProfileWrapper, Title } from './styledComponents';
 
 const ChannelSearchBarItem = React.memo(
-  ({ item, className, observer, visible, hideExtraButtons, onSelect }) => {
+  ({ item, className, observer, visible = false, hideExtraButtons, onSelect, wrap }) => {
     /* eslint-disable no-unused-vars */
     const ref = useRef();
     const {
@@ -44,7 +44,7 @@ const ChannelSearchBarItem = React.memo(
         ref={ref}
         to={`/${login}`}
         disabled={!item}
-        className={className + (visible ? ' visible' : '')}
+        className={className + (visible ? ' isVisible' : '')}
         onClick={(e) => {
           if (onSelect) {
             e.preventDefault();
@@ -56,20 +56,23 @@ const ChannelSearchBarItem = React.memo(
       >
         {visible && (
           <>
-            <ProfileWrapper>
-              {is_live && <HeartBeat scaleRings={true} scale={1.5} />}
-              {profile_image_url && <Profile src={profile_image_url} />}
-            </ProfileWrapper>
-            <Title>{loginNameFormat(item)}</Title>
+            <LeftWrapper wrap={String(wrap)}>
+              <ProfileWrapper>
+                {is_live && <HeartBeat scaleRings={true} scale={1.5} />}
+                {profile_image_url && <Profile src={profile_image_url} />}
+              </ProfileWrapper>
+              <Title>{loginNameFormat(item)}</Title>
+            </LeftWrapper>
             {item && !item.isAGame && !hideExtraButtons && (
               <ChannelButtonsContainer
                 staticOpen={true}
                 onClick={(e) => {
                   e.preventDefault();
-                  e.stopImmediatePropagation();
+                  e?.stopImmediatePropagation?.();
                   e.stopPropagation();
                   return false;
                 }}
+                style={{ position: 'relative' }}
               >
                 <Schedule
                   absolute={false}

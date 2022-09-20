@@ -4,16 +4,17 @@ import React, { useCallback, useContext, useRef } from 'react';
 import { MdEdit } from 'react-icons/md';
 
 import { Container, MainContainer } from './StyledComponents';
-import FeedsContext from '../feed/FeedsContext';
 import UpdateTwitterLists from '../navigation/sidebar/UpdateTwitterLists';
 import ThemeContext from './../../components/themes/ThemeContext';
 import { CenterContext } from '../feed/FeedsCenterContainer';
 import Timelines from './Timelines';
 import ResizeWrapper from '../../components/ResizeWrapper';
 import TwitterContext from './TwitterContext';
+import { useRecoilValue } from 'recoil';
+import { feedPreferencesAtom } from '../../atoms/atoms';
 
 const Twitter = () => {
-  const { enableTwitter, enableTwitch, enableYoutube, enableTwitchVods } = useContext(FeedsContext);
+  const { twitch, youtube, vods, twitter } = useRecoilValue(feedPreferencesAtom);
   const { twitterLists } = useContext(TwitterContext);
   const { activeTheme } = useContext(ThemeContext);
   const { setTwitterWidth } = useContext(CenterContext);
@@ -28,7 +29,7 @@ const Twitter = () => {
     <MainContainer
       aria-label='twitter'
       id='twitter'
-      center={!enableTwitch && !enableYoutube && !enableTwitchVods}
+      center={!twitch?.enabled && !youtube?.enabled && !vods?.enabled}
       ref={mainContainerRef}
       key={`Twitter-${activeTheme.type}`}
     >
@@ -62,7 +63,7 @@ const Twitter = () => {
             <hr />
             Please enter a public twitter list id below.
           </Alert>
-          {enableTwitter && <UpdateTwitterLists style={{ padding: '10px' }} />}
+          {twitter?.enabled && <UpdateTwitterLists style={{ padding: '10px' }} />}
         </Container>
       )}
     </MainContainer>

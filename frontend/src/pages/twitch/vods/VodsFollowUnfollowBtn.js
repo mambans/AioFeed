@@ -1,14 +1,15 @@
 import { MdVideoCall } from 'react-icons/md';
 import { MdVideocam } from 'react-icons/md';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { VodAddRemoveButton } from '../../sharedComponents/sharedStyledComponents';
-import VodsContext from './VodsContext';
-import FeedsContext from '../../feed/FeedsContext';
 import ToolTip from '../../../components/tooltip/ToolTip';
 import useVodChannel from './hooks/useVodChannel';
 import useFetchSingelVod from './hooks/useFetchSingelVod';
 import loginNameFormat from '../loginNameFormat';
+import { useRecoilValue } from 'recoil';
+import { vodChannelsAtom } from './atoms';
+import { feedPreferencesAtom } from '../../../atoms/atoms';
 
 /**
  * @param {Object} channel - channel
@@ -28,11 +29,12 @@ const VodsFollowUnfollowBtn = ({
   type = 'link',
   padding,
 }) => {
-  const { channels } = useContext(VodsContext) || {};
+  const channels = useRecoilValue(vodChannelsAtom);
   const [enabled, setEnabled] = useState(
     channels && !!channels?.find((user_id) => channel?.user_id === user_id)
   );
-  const { enableTwitchVods } = useContext(FeedsContext) || {};
+  const { vods } = useRecoilValue(feedPreferencesAtom) || {};
+
   const { removeChannel, addVodChannel } = useVodChannel() || {};
   const { fetchLatestVod } = useFetchSingelVod() || {};
 
@@ -56,7 +58,7 @@ const VodsFollowUnfollowBtn = ({
     setEnabled(!!channels?.find((user_id) => channel?.user_id === user_id));
   }, [channels, channel?.user_id]);
 
-  if ((!show && !enableTwitchVods) || !channel) return null;
+  if ((!show && !vods?.enabled) || !channel) return null;
 
   return (
     <ToolTip
