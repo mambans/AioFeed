@@ -18,6 +18,7 @@ const LiveStreamsNotifications = () => {
   useEffect(() => {
     (async () => {
       try {
+        console.log('newNonFeedSectionStreams:', newNonFeedSectionStreams);
         const streams = newNonFeedSectionStreams?.map((s) => {
           const stream = {
             ...s,
@@ -49,6 +50,7 @@ const LiveStreamsNotifications = () => {
           return stream;
         });
 
+        console.log('streams:', streams);
         if (Boolean(streams?.length)) {
           addNotification(streams);
           setNewNonFeedSectionStreams((curr) =>
