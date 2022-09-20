@@ -73,19 +73,17 @@ export const previousNonFeedSectionStreamsAtom = selector({
   },
   default: [],
 });
-let initialNewNonFeedSectionStreams = true;
+let newInvoked = false;
 export const newNonFeedSectionStreamsAtom = selector({
   key: 'newNonFeedSectionStreamsAtom',
   get: ({ get }) => {
-    console.log('initialNewNonFeedSectionStreams:', initialNewNonFeedSectionStreams);
-    if (initialNewNonFeedSectionStreams) {
-      initialNewNonFeedSectionStreams = false;
-      // return [];
-    }
+    console.log('newInvoked:', newInvoked);
     const previousBaseLiveStreams = get(previousBaseLiveStreamsAtom);
-    console.log('previousBaseLiveStreams:', previousBaseLiveStreams);
     const nonFeedSectionStreams = get(nonFeedSectionStreamsAtom);
-    console.log('nonFeedSectionStreams:', nonFeedSectionStreams);
+    if (!newInvoked) {
+      newInvoked = true;
+      return [];
+    }
 
     const newStreams = nonFeedSectionStreams.filter(
       (stream) => !previousBaseLiveStreams?.find((prevStream) => stream.id === prevStream.id)
@@ -111,16 +109,16 @@ export const newOfflineNonFeedSectionStreamsAtom = selector({
   },
   default: [],
 });
-let initialNewUpdatedNonFeedSectionStreams = true;
+let newUpdatedInvoked = false;
 export const newUpdatedNonFeedSectionStreamsAtom = selector({
   key: 'newUpdatedNonFeedSectionStreamsAtom',
   get: ({ get }) => {
-    if (initialNewUpdatedNonFeedSectionStreams) {
-      initialNewUpdatedNonFeedSectionStreams = false;
-      return [];
-    }
     const previousNonFeedSectionStreams = get(previousNonFeedSectionStreamsAtom);
     const newNonFeedSectionStreams = get(newNonFeedSectionStreamsAtom);
+    if (!newUpdatedInvoked) {
+      newUpdatedInvoked = true;
+      return [];
+    }
 
     const changedStreams = newNonFeedSectionStreams.filter((stream) => {
       return ['game_id', 'title'].some((key) => {
