@@ -157,7 +157,7 @@ const Handler = ({ children }) => {
     (async () => {
       try {
         const timeNow = new Date();
-        if (!timer.current && validateToken) {
+        if (!timer.current) {
           if (autoRefreshEnabled) {
             setRefreshTimer(timeNow.setSeconds(timeNow.getSeconds() + REFRESH_RATE));
           }
@@ -181,7 +181,7 @@ const Handler = ({ children }) => {
         setLoadingStates({ refreshing: false, error: error, loaded: true });
       }
     })();
-  }, [refresh, autoRefreshEnabled, validateToken]);
+  }, [refresh, autoRefreshEnabled]);
 
   useEffect(() => {
     return () => {
@@ -202,10 +202,9 @@ const Handler = ({ children }) => {
   }
 
   console.log('loadingStates?.loaded:', loadingStates?.loaded);
-  console.log('validateToken:', validateToken);
   return (
     <>
-      {loadingStates?.loaded && validateToken && (
+      {loadingStates?.loaded && (
         // (!!nonFeedSectionsStreams.current?.length || !!oldLiveStreams.current?.length) && (
         <>
           <LiveStreamsNotifications />

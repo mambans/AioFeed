@@ -77,17 +77,21 @@ let initialNewNonFeedSectionStreams = true;
 export const newNonFeedSectionStreamsAtom = selector({
   key: 'newNonFeedSectionStreamsAtom',
   get: ({ get }) => {
-    if (initialNewNonFeedSectionStreams) {
-      initialNewNonFeedSectionStreams = false;
-      return [];
-    }
+    console.log('initialNewNonFeedSectionStreams:', initialNewNonFeedSectionStreams);
+    // if (initialNewNonFeedSectionStreams) {
+    //   initialNewNonFeedSectionStreams = false;
+    //   return [];
+    // }
     const previousBaseLiveStreams = get(previousBaseLiveStreamsAtom);
+    console.log('previousBaseLiveStreams:', previousBaseLiveStreams);
     const nonFeedSectionStreams = get(nonFeedSectionStreamsAtom);
+    console.log('nonFeedSectionStreams:', nonFeedSectionStreams);
 
     const newStreams = nonFeedSectionStreams.filter(
       (stream) => !previousBaseLiveStreams?.find((prevStream) => stream.id === prevStream.id)
     );
 
+    console.log('newStreams:', newStreams);
     return newStreams || [];
   },
   default: [],
