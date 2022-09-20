@@ -78,10 +78,10 @@ export const newNonFeedSectionStreamsAtom = selector({
   key: 'newNonFeedSectionStreamsAtom',
   get: ({ get }) => {
     console.log('initialNewNonFeedSectionStreams:', initialNewNonFeedSectionStreams);
-    // if (initialNewNonFeedSectionStreams) {
-    //   initialNewNonFeedSectionStreams = false;
-    //   return [];
-    // }
+    if (initialNewNonFeedSectionStreams) {
+      initialNewNonFeedSectionStreams = false;
+      // return [];
+    }
     const previousBaseLiveStreams = get(previousBaseLiveStreamsAtom);
     console.log('previousBaseLiveStreams:', previousBaseLiveStreams);
     const nonFeedSectionStreams = get(nonFeedSectionStreamsAtom);
