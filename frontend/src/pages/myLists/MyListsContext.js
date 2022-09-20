@@ -5,7 +5,6 @@ import AccountContext from '../account/AccountContext';
 import LogsContext from '../logs/LogsContext';
 import { parseNumberAndString } from './dragDropUtils';
 import uniqBy from 'lodash/uniqBy';
-import { useFeedPreferences } from '../../atoms/atoms';
 
 const MyListsContext = React.createContext();
 
@@ -18,7 +17,6 @@ export const MyListsProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState();
   const invoked = useRef(false);
   const savedVideosWithData = useRef([]);
-  const { toggleEnabled } = useFeedPreferences();
 
   const addSavedData = (newData = []) => {
     const data = [...(savedVideosWithData.current || []), ...newData].filter((i) => i);
@@ -38,7 +36,6 @@ export const MyListsProvider = ({ children }) => {
     };
 
     setLists((curr) => ({ ...curr, [id]: newListObj }));
-    toggleEnabled(id);
 
     setTimeout(() => {
       const list = document.getElementById(title);

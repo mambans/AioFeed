@@ -28,7 +28,7 @@ const Vods = ({ className }) => {
   const feedPreferences = useRecoilValue(feedPreferencesAtom);
 
   const { videoElementsAmount } = useContext(CenterContext);
-  const { twitchAccessToken, twitchUserId } = useContext(TwitchContext);
+  const { twitchAccessToken } = useContext(TwitchContext);
   const validateToken = useToken();
   const [error, setError] = useState(null);
   const [vodError, setVodError] = useState(null);
@@ -42,50 +42,39 @@ const Vods = ({ className }) => {
   useEventListenerMemo('focus', windowFocusHandler);
 
   const refresh = useCallback(
-    async (forceRefresh) => {
+    async (forceRefresh = true) => {
       refreshBtnRef?.current?.setIsLoading(true);
-      if (forceRefresh) {
-        await fetchVodsContextData();
-      }
-      getFollowedVods({
+      const data = await getFollowedVods({
         forceRun: forceRefresh,
         channels,
         currentVods: getLocalstorage('TwitchVods'),
-      }).then((data) => {
-        setError(data?.er);
-        setVodError(data?.vodError);
-
-        if (data?.data) setTwitchVods(data.data);
-        refreshBtnRef?.current?.setIsLoading(false);
-        return data;
       });
+
+      setError(data?.er);
+      setVodError(data?.vodError);
+      if (data?.data) setTwitchVods(data?.data);
+      refreshBtnRef?.current?.setIsLoading(false);
     },
-    [setTwitchVods, channels, fetchVodsContextData]
+    [setTwitchVods, channels]
   );
+
+  const forceRefresh = useCallback(async () => {
+    refreshBtnRef?.current?.setIsLoading(true);
+    // const vodChannels = await API.getVodChannels();
+    // refresh(true, vodChannels);
+    fetchVodsContextData();
+  }, [fetchVodsContextData]);
 
   async function windowFocusHandler() {
     refresh(false);
   }
 
   useEffect(() => {
-    (async () => {
-      console.log('vods index useEffect fetch vods:');
-      if (validateToken) {
-        refreshBtnRef?.current?.setIsLoading(true);
-        const data = await getFollowedVods({
-          forceRun: false,
-
-          channels,
-          currentVods: getLocalstorage('TwitchVods'),
-        });
-
-        setError(data?.er);
-        setVodError(data?.vodError);
-        if (data?.videos) setTwitchVods(data?.videos);
-        refreshBtnRef?.current?.setIsLoading(false);
-      }
-    })();
-  }, [twitchUserId, setTwitchVods, channels, validateToken]);
+    console.log('vods index useEffect fetch vods:');
+    if (validateToken) {
+      refresh();
+    }
+  }, [validateToken, refresh]);
 
   useEffect(() => {
     setVodAmounts({
@@ -103,7 +92,7 @@ const Vods = ({ className }) => {
     >
       <Header
         ref={refreshBtnRef}
-        refresh={refresh}
+        refresh={forceRefresh}
         vods={twitchVods}
         vodError={vodError}
         collapsed={feedPreferences?.['vods']?.collapsed}

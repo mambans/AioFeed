@@ -25,6 +25,7 @@ export const VodsProvider = ({ children }) => {
 
       setChannels(channels, invoked.current);
       invoked.current = true;
+      return channels;
     }
   }, [setChannels, vods?.enabled]);
 
