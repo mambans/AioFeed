@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback, useContext } from 'rea
 import orderBy from 'lodash/orderBy';
 import uniqBy from 'lodash/uniqBy';
 
-import useToken, { TwitchContext } from '../useToken';
+import { TwitchContext } from '../useToken';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import { fetchAndAddTags } from '../fetchAndAddTags';
 import Alert from '../../../components/alert';
@@ -20,7 +20,6 @@ const REFRESH_RATE = 25; // seconds
 
 const Handler = ({ children }) => {
   const { autoRefreshEnabled, twitchAccessToken, twitchUserId } = useContext(TwitchContext);
-  const validateToken = useToken();
   // const { feedSections } = useContext(FeedSectionsContext) || {};
   const [refreshTimer, setRefreshTimer] = useState(20);
   const setStreams = useSetRecoilState(baseLiveStreamsAtom);
