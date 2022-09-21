@@ -207,7 +207,6 @@ const ChannelSearchBar = ({
   };
 
   const onFocus = async (e) => {
-    console.log('onFocus:');
     // setShowDropdown(true);
     // setLoading(true);
 
@@ -294,12 +293,12 @@ const ChannelSearchBar = ({
           ?.map(
             (cha) =>
               followedChannels?.find((channel) => String(channel.id) === String(cha.id)) || cha
+          )
+          .sort(
+            (a, b) =>
+              loginNameFormat(a).replace(inputRef.current?.value?.trim?.())?.length -
+              loginNameFormat(b).replace(inputRef.current?.value?.trim?.())?.length
           ),
-        // .sort(
-        //   (a, b) =>
-        //     loginNameFormat(a).replace(inputRef.current?.value?.trim?.())?.length -
-        //     loginNameFormat(b).replace(inputRef.current?.value?.trim?.())?.length
-        // ),
       ],
       'id'
     );
