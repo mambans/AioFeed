@@ -114,6 +114,7 @@ export const newUpdatedNonFeedSectionStreamsAtom = selector({
   key: 'newUpdatedNonFeedSectionStreamsAtom',
   get: ({ get }) => {
     const previousNonFeedSectionStreams = get(previousNonFeedSectionStreamsAtom);
+    console.log('previousNonFeedSectionStreams:', previousNonFeedSectionStreams);
     const newNonFeedSectionStreams = get(newNonFeedSectionStreamsAtom);
     if (!newUpdatedInvoked) {
       newUpdatedInvoked = true;
@@ -128,6 +129,7 @@ export const newUpdatedNonFeedSectionStreamsAtom = selector({
         return stream?.[key] !== oldStream?.[key];
       });
     });
+    console.log('changedStreams:', changedStreams);
 
     return (
       changedStreams?.map((stream) => ({

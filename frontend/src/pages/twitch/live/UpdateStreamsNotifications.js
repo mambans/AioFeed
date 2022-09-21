@@ -20,6 +20,7 @@ const UpdateStreamsNotifications = () => {
       try {
         if (!isEnabledUpdateNotifications) return null;
 
+        console.log('newUpdatedNonFeedSectionStreams:', newUpdatedNonFeedSectionStreams);
         const updatedStreams = newUpdatedNonFeedSectionStreams
           ?.filter((stream) => updateNotischannels?.includes(stream.user_id))
           ?.map((stream) => {
