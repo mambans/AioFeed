@@ -113,30 +113,26 @@ let newUpdatedInvoked = false;
 export const newUpdatedNonFeedSectionStreamsAtom = selector({
   key: 'newUpdatedNonFeedSectionStreamsAtom',
   get: ({ get }) => {
-    const previousNonFeedSectionStreams = get(previousNonFeedSectionStreamsAtom);
-    console.log('previousNonFeedSectionStreams:', previousNonFeedSectionStreams);
-    const newNonFeedSectionStreams = get(newNonFeedSectionStreamsAtom);
+    const previousBaseStreams = get(previousBaseLiveStreamsAtom);
+    console.log('previousBaseStreams:', previousBaseStreams);
+    const baseStreams = get(baseLiveStreamsAtom);
     if (!newUpdatedInvoked) {
       newUpdatedInvoked = true;
       return [];
     }
 
-    const changedStreams = newNonFeedSectionStreams.filter((stream) => {
-      return ['game_id', 'title'].some((key) => {
-        const oldStream = previousNonFeedSectionStreams?.find(
-          (oldStream) => oldStream.id === stream.id
-        );
-        return stream?.[key] !== oldStream?.[key];
-      });
-    });
+    const changedStreams = baseStreams.reduce((acc, stream) => {
+      const oldStream = previousBaseStreams?.find((oldStream) => oldStream.id === stream.id);
+
+      if (['game_id', 'title'].some((key) => stream?.[key] !== oldStream?.[key])) {
+        return [...acc, { ...stream, oldData: oldStream }];
+      }
+
+      return acc;
+    }, []);
     console.log('changedStreams:', changedStreams);
 
-    return (
-      changedStreams?.map((stream) => ({
-        ...stream,
-        oldData: previousNonFeedSectionStreams?.find((oldStream) => oldStream.id === stream.id),
-      })) || []
-    );
+    return changedStreams || [];
   },
   default: [],
 });
