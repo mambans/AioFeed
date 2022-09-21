@@ -200,7 +200,6 @@ const Handler = ({ children }) => {
     );
   }
 
-  console.log('loadingStates?.loaded:', loadingStates?.loaded);
   return (
     <>
       {loadingStates?.loaded && (

@@ -145,7 +145,10 @@ const Section = ({ section, data, index, addNotification }) => {
           });
 
           const leftStreams = streamsToNotifyLeftSection?.map((s = {}) => {
-            const wentOffline = !baseStreams.find((s) => s.user_id === s?.user_id);
+            console.log('s:', s);
+            console.log('baseStreams:', baseStreams);
+            const wentOffline = !baseStreams.find((s) => s.id === s?.id);
+            console.log('wentOffline:', wentOffline);
             const notisTitle = wentOffline
               ? `${loginNameFormat(s)} went offline from ${title}`
               : `${loginNameFormat(s)} left ${title}`;
