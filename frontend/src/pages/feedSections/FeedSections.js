@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useMemo, useRef } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import Header, { HeaderNumberCount } from '../../components/Header';
 import { Container } from '../twitch/StyledComponents';
@@ -56,7 +56,6 @@ const FeedSections = ({ data }) => {
   // const { feedSections } = useContext(FeedSectionsContext);
   const feedSections = useRecoilValue(feedSectionsAtom);
   const { addNotification } = useContext(NotificationsContext);
-  const streams = useRecoilValue(baseLiveStreamsAtom);
   // const twitchVods = useRecoilValue(twitchVodsAtom);
 
   return (
@@ -64,17 +63,7 @@ const FeedSections = ({ data }) => {
       {Object.values(feedSections)
         .reduce((acc, feedSection) => {
           if (!feedSection.enabled) return acc;
-
-          // const vods =
-          //   // ((feedSection.include_vods || true) &&
-          //   twitchVods?.data?.filter(
-          //     (vod) => checkAgainstRules(vod, feedSection.rules)
-          //   ) || [];
-
-          const liveStreams = streams?.filter((stream) =>
-            checkAgainstRules(stream, feedSection.rules)
-          );
-          return [...acc, { ...feedSection, data: { ...data, liveStreams, streams } }];
+          return [...acc, { ...feedSection, data: { ...data } }];
         }, [])
         ?.map((section, index) => (
           <CSSTransition
@@ -108,18 +97,23 @@ const Section = ({ section, data, index, addNotification }) => {
   const { fetchLatestVod } = useFetchSingelVod();
   const channels = useRecoilValue(vodChannelsAtom);
   const previousStreams = useRecoilValue(previousBaseLiveStreamsAtom);
+  const baseStreams = useRecoilValue(baseLiveStreamsAtom);
+  const feedSectionStreams = useMemo(
+    () => baseStreams?.filter((stream) => checkAgainstRules(stream, section.rules)),
+    [baseStreams, section.rules]
+  );
 
   useEffect(() => {
     (async () => {
       try {
         if (previosStreams?.current && data?.loaded) {
           const streamsToNotifyLive = notifications_enabled
-            ? data?.liveStreams?.filter(
+            ? feedSectionStreams?.filter(
                 (stream) => !previosStreams?.current?.find((s) => s?.user_id === stream?.user_id)
               )
             : [];
           const streamsToNotifyLeftSection = previosStreams?.current?.filter(
-            (stream) => !data?.liveStreams?.find((s) => s?.user_id === stream?.user_id)
+            (stream) => !feedSectionStreams?.find((s) => s?.user_id === stream?.user_id)
           );
 
           const streams = streamsToNotifyLive?.map((s = {}) => {
@@ -151,7 +145,7 @@ const Section = ({ section, data, index, addNotification }) => {
           });
 
           const leftStreams = streamsToNotifyLeftSection?.map((s = {}) => {
-            const wentOffline = !data?.streams.find((s) => s.user_id === s?.user_id);
+            const wentOffline = !baseStreams.find((s) => s.user_id === s?.user_id);
             const notisTitle = wentOffline
               ? `${loginNameFormat(s)} went offline from ${title}`
               : `${loginNameFormat(s)} left ${title}`;
@@ -189,13 +183,12 @@ const Section = ({ section, data, index, addNotification }) => {
       }
     })();
 
-    if (data?.loaded) previosStreams.current = data?.liveStreams || [];
+    if (data?.loaded) previosStreams.current = feedSectionStreams || [];
 
     return () => {
       clearTimeout(timer.current);
     };
   }, [
-    data?.liveStreams,
     previousStreams,
     title,
     addNotification,
@@ -203,12 +196,13 @@ const Section = ({ section, data, index, addNotification }) => {
     data?.loaded,
     isEnabledUpdateNotifications,
     updateNotischannels,
-    data?.streams,
     fetchLatestVod,
     channels,
+    baseStreams,
+    feedSectionStreams,
   ]);
 
-  if (!data?.liveStreams?.length) return null;
+  if (!feedSectionStreams?.length) return null;
 
   return (
     <Container
@@ -217,7 +211,10 @@ const Section = ({ section, data, index, addNotification }) => {
       key={`FeedSection-${id}`}
       id={`FeedSection-${id}`}
     >
-      <UpdateStreamsNotifications liveStreams={data?.liveStreams} oldLiveStreams={previosStreams} />
+      <UpdateStreamsNotifications
+        liveStreams={feedSectionStreams}
+        oldLiveStreams={previosStreams}
+      />
       <Header
         {...data}
         isLoading={data.refreshing}
@@ -225,7 +222,7 @@ const Section = ({ section, data, index, addNotification }) => {
         title={
           <h1 id={`FeedSection-${id}`} onClick={() => toggleExpanded(id)}>
             {title}
-            <HeaderNumberCount text={data?.liveStreams?.length} />
+            <HeaderNumberCount text={feedSectionStreams?.length} />
             <BsCollectionFill size={22} color={Colors.raspberry} />
             <ExpandCollapseFeedButton collapsed={feedPreferences?.[id]?.collapsed} />
           </h1>
@@ -233,7 +230,7 @@ const Section = ({ section, data, index, addNotification }) => {
         rightSide={<FeedSectionSettings section={section} width={290} />}
       />
       <ExpandableSection collapsed={feedPreferences?.[id]?.collapsed}>
-        <TwitchStreams data={data} streams={data.liveStreams} hideOnEmpty />
+        <TwitchStreams data={data} streams={feedSectionStreams} hideOnEmpty />
         {/* <Container>
           {data.vods?.slice(0, videoElementsAmount).map((vod) => (
             <CSSTransition
