@@ -124,7 +124,7 @@ export const newUpdatedNonFeedSectionStreamsAtom = selector({
     const changedStreams = baseStreams.reduce((acc, stream) => {
       const oldStream = previousBaseStreams?.find((oldStream) => oldStream.id === stream.id);
 
-      if (['game_id', 'title'].some((key) => stream?.[key] !== oldStream?.[key])) {
+      if (oldStream && ['game_id', 'title'].some((key) => stream?.[key] !== oldStream?.[key])) {
         return [...acc, { ...stream, oldData: oldStream }];
       }
 
