@@ -4,9 +4,9 @@ import LoadingBoxes from '../pages/twitch/LoadingBoxes';
 import { pulseAnimation } from '../pages/twitch/StyledComponents';
 import { HeaderLines } from './../components/styledComponents';
 
-const LoadingFeed = ({ title }) => {
+const LoadingFeed = ({ title, order }) => {
   return (
-    <Wrapper>
+    <Wrapper order={order}>
       <Header>
         <HeaderSection width={50} />
         <HeaderSection width={125} />
@@ -24,7 +24,7 @@ const LoadingFeed = ({ title }) => {
 };
 export default LoadingFeed;
 const Wrapper = styled.div`
-  order: 9999;
+  order: ${({ order }) => order || 9999};
 `;
 const HeaderSection = styled.div`
   height: 50px;

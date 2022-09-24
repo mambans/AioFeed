@@ -49,6 +49,7 @@ const Feed = () => {
           <Suspense
             fallback={
               <LoadingFeed
+                order={twitch?.order}
                 title={
                   <h1 id={'twitch'}>
                     Twitch
@@ -82,6 +83,7 @@ const Feed = () => {
           <Suspense
             fallback={
               <LoadingFeed
+                order={youtube?.order}
                 title={
                   <h1 id='youtube'>
                     YouTube
@@ -99,6 +101,7 @@ const Feed = () => {
           <Suspense
             fallback={
               <LoadingFeed
+                order={vods?.order}
                 title={
                   <h1 id='vods'>
                     Twitch vods
