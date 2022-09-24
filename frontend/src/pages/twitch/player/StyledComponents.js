@@ -965,30 +965,34 @@ export const ChatHeader = styled.div`
 
 export const ChatWrapper = styled.div`
   grid-area: ${({ chatAsOverlay }) => (chatAsOverlay ? 'none' : 'chat')};
-  height: ${({ chatAsOverlay, overlayPosition }) =>
+  /* height: ${({ chatAsOverlay, overlayPosition }) =>
     chatAsOverlay ? (overlayPosition.height ? overlayPosition.height + 'px' : '50%') : '100%'};
   width: ${({ chatAsOverlay, overlayPosition }) =>
-    chatAsOverlay ? (overlayPosition.width ? overlayPosition.width + 'px' : 'unset') : 'unset'};
+    chatAsOverlay ? (overlayPosition.width ? overlayPosition.width + 'px' : 'unset') : 'unset'}; */
   position: ${({ chatAsOverlay }) => (chatAsOverlay ? 'absolute' : 'initial')};
   overflow: hidden;
   box-shadow: ${({ dragging }) => (dragging ? '0 0 1px 1px rgb(150,150,150)' : 'none')};
   top: ${({ overlayPosition }) =>
-    overlayPosition.y
-      ? Math.min(
-          window.innerHeight - (overlayPosition.height || 0),
-          Math.max(0, overlayPosition.y)
-        ) + 'px'
+    overlayPosition.top || overlayPosition.top === 0
+      ? Math.min(window.innerHeight, Math.max(0, overlayPosition.top)) + 'px'
+      : 'initial'};
+  bottom: ${({ overlayPosition }) =>
+    overlayPosition.bottom || overlayPosition.bottom === 0
+      ? Math.min(window.innerHeight, Math.max(0, overlayPosition.bottom)) + 'px'
       : 'initial'};
   left: ${({ overlayPosition }) =>
-    overlayPosition.x
-      ? Math.min(window.innerWidth - (overlayPosition.width || 0), Math.max(0, overlayPosition.x)) +
-        'px'
+    overlayPosition.left || overlayPosition.left === 0
+      ? Math.min(window.innerWidth, Math.max(0, overlayPosition.left)) + 'px'
+      : 'initial'};
+  right: ${({ overlayPosition }) =>
+    overlayPosition.right || overlayPosition.right === 0
+      ? Math.min(window.innerWidth, Math.max(0, overlayPosition.right)) + 'px'
       : 'initial'};
 
   max-height: 100%;
   max-width: 100%;
-  min-height: 1px;
-  min-width: 1px;
+  min-height: 10px;
+  min-width: 10px;
   display: flex;
   flex-direction: column;
   overflow: visible;

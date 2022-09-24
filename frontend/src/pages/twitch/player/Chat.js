@@ -17,22 +17,21 @@ import ToolTip from '../../../components/tooltip/ToolTip';
 // import { Link } from 'react-router-dom';
 import { TransparentButton } from '../../../components/styledComponents';
 
-const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatState }) => {
+const Chat = ({ channelName, streamInfo, chatState, updateChatState }) => {
   const [dragging, setDragging] = useState();
-  const [overlayPosition, setOverlayPosition] = useState(
-    { width: chatState?.chatwidth, ...(chatState?.overlayPosition || {}) } || {
-      width: chatState?.chatwidth,
-    }
-  );
+  const [overlayPosition, setOverlayPosition] = useState({
+    width: window.innerWidth - (chatState?.chatwidth || 300),
+    ...(chatState?.overlayPosition || {}),
+  });
+
   // eslint-disable-next-line no-unused-vars
   const [rnd, setRnd] = useState();
   // const overlayBackdropRef = useRef();
   const chatRef = useRef();
-  const bottomRef = useRef();
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
 
   const keydown = (e) => e.key === 'Escape' && setDragging(false);
-  useEventListenerMemo('keydown', keydown, window, chatAsOverlay);
+  useEventListenerMemo('keydown', keydown, window, chatState?.chatAsOverlay);
 
   const onMouseOutsideWindow = async (e) => {
     console.log('onMouseOutsideWindow:');
@@ -42,7 +41,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
         e.clientX > window.innerWidth ||
         e.clientY > window.innerHeight) &&
       dragging &&
-      chatAsOverlay
+      chatState?.chatAsOverlay
     ) {
       await onDragMove(e);
       onDragStop();
@@ -50,7 +49,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
   };
 
   const onDragStop = (e) => {
-    if (dragging && chatAsOverlay) {
+    if (dragging && chatState?.chatAsOverlay) {
       updateChatState((c) => ({
         ...c,
         overlayPosition,
@@ -70,8 +69,8 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
   // );
   const onResize = () => setRnd(Math.random());
   // trigger rerender to reposition chat when its outside window
-  useEventListenerMemo('resize', onResize, window, chatAsOverlay);
-  useEventListenerMemo('mouseleave', onMouseOutsideWindow, window, chatAsOverlay);
+  useEventListenerMemo('resize', onResize, window, chatState?.chatAsOverlay);
+  useEventListenerMemo('mouseleave', onMouseOutsideWindow, window, chatState?.chatAsOverlay);
 
   const onDragInit = (e) => {
     if (e.button === 0) {
@@ -80,22 +79,17 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
       const mouseY = e.clientY;
       const chat = chatRef.current?.getBoundingClientRect();
 
-      if (e.target === bottomRef.current) {
-        setStartPos((c) => ({
-          x: mouseX - chat.left,
-          y: mouseY,
-        }));
-      } else {
-        setStartPos((c) => ({
-          x: mouseX - chat.left,
-          y: mouseY - chat.top,
-        }));
-      }
+      setStartPos((c) => ({
+        x: mouseX - chat.left,
+        y: mouseY - chat.top,
+        bottom: mouseY + chat.height,
+      }));
     }
   };
 
   const onDragMove = async (e) => {
-    if (!chatAsOverlay) updateChatState((c) => ({ ...c, chatAsOverlay: true }), false);
+    if (!chatState?.chatAsOverlay)
+      updateChatState((c) => ({ ...c, chatAsOverlay: true, top: window.innerHeight / 2 }), false);
 
     const mouseX = e.clientX;
     const mouseY = e.clientY;
@@ -103,29 +97,40 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
 
     const x = mouseX - startPos.x;
     const y = mouseY - startPos.y;
-    if (dragging === bottomRef.current) {
-      setOverlayPosition((c) => ({
+
+    setOverlayPosition((c) => {
+      const left = Math.max(0, Math.min(x, window.innerWidth - chat.width));
+      const top = Math.max(0, Math.min(y, window.innerHeight - chat.height));
+      const bottom = !chatState?.chatAsOverlay
+        ? window.innerHeight / 2
+        : Math.max(0, window.innerHeight - Math.min(window.innerHeight, top + chat.height));
+
+      const right = Math.max(0, window.innerWidth - Math.min(window.innerWidth, left + chat.width));
+
+      return {
         ...c,
-        x: Math.max(0, Math.min(x, window.innerWidth - chat.width)),
-        y: Math.max(0, mouseY - chat.height),
-      }));
-    } else {
-      setOverlayPosition((c) => ({
-        ...c,
-        x: Math.max(0, Math.min(x, window.innerWidth - chat.width)),
-        y: Math.max(0, Math.min(y, window.innerHeight - chat.height)),
-      }));
-    }
+        left,
+        top,
+        bottom,
+        right,
+      };
+    });
   };
 
+  useEffect(() => {}, []);
+
   useEffect(() => {
+    console.log('12312312');
     setOverlayPosition((c) => ({
-      height: window.innerHeight / 2,
       ...c,
-      width: chatState?.chatwidth,
+      top: window.innerHeight / 2,
+      bottom: 0,
+      right: 0,
+      left: window.innerWidth - 300,
       ...(chatState?.overlayPosition || {}),
+      // width: chatState?.chatwidth,
     }));
-  }, [chatState?.overlayPosition, chatState?.chatwidth]);
+  }, [chatState?.overlayPosition]);
 
   return (
     <>
@@ -141,8 +146,8 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
         overlayPosition={overlayPosition}
         dragging={dragging}
         id='chat'
-        chatAsOverlay={chatAsOverlay}
-        data-chatasoverlay={chatAsOverlay}
+        chatAsOverlay={chatState?.chatAsOverlay}
+        data-chatasoverlay={chatState?.chatAsOverlay}
         onMouseMove={dragging ? onDragMove : () => {}}
         onMouseUp={dragging ? onDragStop : () => {}}
       >
@@ -164,7 +169,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
               style={{ padding: 0, marginRight: '5px' }}
             /> */}
 
-            {chatAsOverlay && (
+            {chatState?.chatAsOverlay && (
               <ToolTip tooltip='Reset chat to sides'>
                 <TransparentButton
                   onClick={(e) => {
@@ -178,7 +183,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
               </ToolTip>
             )}
 
-            {!chatAsOverlay && (
+            {!chatState?.chatAsOverlay && (
               <ToolTip
                 placement={'left'}
                 width='max-content'
@@ -205,7 +210,7 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
             <FaWindowClose size={24} color='red' />
           </button>
         </ChatHeader>
-        {chatAsOverlay && (
+        {chatState?.chatAsOverlay && (
           <ResizerAllSides
             setOverlayPosition={setOverlayPosition}
             updateChatState={updateChatState}
@@ -217,12 +222,12 @@ const Chat = ({ chatAsOverlay, channelName, streamInfo, chatState, updateChatSta
         <InnerWrapper
           // onMouseDown={onDragInit}
           // onMouseUp={onDragStop}
-          data-chatasoverlay={chatAsOverlay}
+          data-chatasoverlay={chatState?.chatAsOverlay}
         >
           {/* {chatAsOverlay && dragging && <DragOverlay />} */}
 
           <StyledChat
-            data-chatasoverlay={chatAsOverlay}
+            data-chatasoverlay={chatState?.chatAsOverlay}
             frameborder='0'
             scrolling='yes'
             theme='dark'
@@ -345,11 +350,8 @@ const ResizerAllSides = ({ setOverlayPosition, updateChatState, target, overlayP
         setOverlayPosition((c) => {
           return {
             ...c,
-            // y: c.y - (c.y - e.clientY),
-            y: targetPos.top - (targetPos.top - e.clientY),
-            height: targetPos.height + (targetPos.top - e.clientY),
-            width: targetPos.width + (targetPos.left - e.clientX),
-            x: e.clientX,
+            top: e.clientY,
+            left: e.clientX,
           };
         });
         break;
@@ -357,26 +359,23 @@ const ResizerAllSides = ({ setOverlayPosition, updateChatState, target, overlayP
         setOverlayPosition((c) => {
           return {
             ...c,
-            // // y: c.y - (c.y - e.clientY),
-            y: targetPos.top - (targetPos.top - e.clientY),
-            height: targetPos.height + (targetPos.top - e.clientY),
-            width: targetPos.width + (e.clientX - targetPos.right),
+            top: targetPos.top - (targetPos.top - e.clientY),
+            right: window.innerWidth - e.clientX,
           };
         });
         break;
       case 'bottomright':
         setOverlayPosition((c) => ({
           ...c,
-          height: targetPos.height + (e.clientY - targetPos.bottom),
-          width: targetPos.width + (e.clientX - targetPos.right),
+          right: window.innerWidth - e.clientX,
+          bottom: window.innerHeight - e.clientY,
         }));
         break;
       case 'bottomleft':
         setOverlayPosition((c) => ({
           ...c,
-          height: targetPos.height + (e.clientY - targetPos.bottom),
-          width: targetPos.width + (targetPos.left - e.clientX),
-          x: e.clientX,
+          left: e.clientX,
+          bottom: window.innerHeight - e.clientY,
         }));
         break;
       default:

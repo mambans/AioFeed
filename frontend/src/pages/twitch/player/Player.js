@@ -716,7 +716,6 @@ const Player = () => {
           <Chat
             streamInfo={streamInfo}
             channelName={channelName}
-            chatAsOverlay={chatState.chatAsOverlay}
             chatState={chatState}
             updateChatState={updateChatState}
           />
