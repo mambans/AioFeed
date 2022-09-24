@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-// import Schedule from '../schedule';
 import {
   ChatWrapper,
   StyledChat,
@@ -9,12 +8,9 @@ import {
 } from './StyledComponents';
 import styled from 'styled-components';
 import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
-// import { MdAccountBox } from 'react-icons/md';
 import { FaWindowClose } from 'react-icons/fa';
 import { GrPowerReset } from 'react-icons/gr';
-// import ShowNavigationButton from '../../navigation/ShowNavigationButton';
 import ToolTip from '../../../components/tooltip/ToolTip';
-// import { Link } from 'react-router-dom';
 import { TransparentButton } from '../../../components/styledComponents';
 
 const Chat = ({ channelName, streamInfo, chatState, updateChatState }) => {
@@ -120,7 +116,6 @@ const Chat = ({ channelName, streamInfo, chatState, updateChatState }) => {
   useEffect(() => {}, []);
 
   useEffect(() => {
-    console.log('12312312');
     setOverlayPosition((c) => ({
       ...c,
       top: window.innerHeight / 2,
