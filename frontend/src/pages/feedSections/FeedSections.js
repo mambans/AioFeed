@@ -47,7 +47,7 @@ export const checkAgainstRules = (stream, rules) => {
 
     const viewer_count = stream.viewer_count >= r.viewers || stream.view_count >= r.viewers;
 
-    return title && game && name && tags && viewer_count;
+    return title && (game || !stream.game_name) && name && tags && viewer_count;
   });
 };
 
