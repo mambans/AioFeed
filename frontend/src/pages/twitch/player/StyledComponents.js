@@ -991,8 +991,8 @@ export const ChatWrapper = styled.div`
 
   max-height: 100%;
   max-width: 100%;
-  min-height: 10px;
-  min-width: 10px;
+  min-height: 50px;
+  min-width: 50px;
   display: flex;
   flex-direction: column;
   overflow: visible;

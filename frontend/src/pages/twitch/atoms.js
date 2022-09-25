@@ -114,7 +114,6 @@ export const newUpdatedNonFeedSectionStreamsAtom = selector({
   key: 'newUpdatedNonFeedSectionStreamsAtom',
   get: ({ get }) => {
     const previousBaseStreams = get(previousBaseLiveStreamsAtom);
-    console.log('previousBaseStreams:', previousBaseStreams);
     const baseStreams = get(baseLiveStreamsAtom);
     if (!newUpdatedInvoked) {
       newUpdatedInvoked = true;
@@ -130,7 +129,6 @@ export const newUpdatedNonFeedSectionStreamsAtom = selector({
 
       return acc;
     }, []);
-    console.log('changedStreams:', changedStreams);
 
     return changedStreams || [];
   },

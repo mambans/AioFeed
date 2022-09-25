@@ -11,7 +11,7 @@ import addSystemNotification from '../twitch/live/addSystemNotification';
 import NotificationsContext from '../notifications/NotificationsContext';
 import Colors from '../../components/themes/Colors';
 import { TwitchContext } from '../twitch/useToken';
-import UpdateStreamsNotifications from '../twitch/live/UpdateStreamsNotifications';
+import { checkUpdatedStreams } from '../twitch/live/UpdateStreamsNotifications';
 import { durationMsToDate } from '../twitch/TwitchUtils';
 import moment from 'moment';
 import useFetchSingelVod from '../twitch/vods/hooks/useFetchSingelVod';
@@ -57,7 +57,6 @@ const FeedSections = ({ data }) => {
   const feedSections = useRecoilValue(feedSectionsAtom);
   const { addNotification } = useContext(NotificationsContext);
   // const twitchVods = useRecoilValue(twitchVodsAtom);
-
   return (
     <TransitionGroup component={null}>
       {Object.values(feedSections)
@@ -176,7 +175,21 @@ const Section = ({ section, data, index, addNotification }) => {
             return stream;
           });
 
-          addNotification([...streams, ...leftStreams]);
+          const updatedStreams = !isEnabledUpdateNotifications
+            ? []
+            : checkUpdatedStreams({
+                streams: feedSectionStreams
+                  .map((stream) => {
+                    return {
+                      ...stream,
+                      oldData: previosStreams?.find((prev) => prev.id === stream.id),
+                    };
+                  })
+                  .filter((s) => s.oldData),
+                updateNotischannels,
+              });
+
+          addNotification([...streams, ...leftStreams, ...updatedStreams]);
         }
       } catch (e) {
         console.log('Section useeffect Error', e);
@@ -211,10 +224,6 @@ const Section = ({ section, data, index, addNotification }) => {
       key={`FeedSection-${id}`}
       id={`FeedSection-${id}`}
     >
-      <UpdateStreamsNotifications
-        liveStreams={feedSectionStreams}
-        oldLiveStreams={previosStreams}
-      />
       <Header
         {...data}
         isLoading={data.refreshing}
