@@ -965,27 +965,36 @@ export const ChatHeader = styled.div`
 
 export const ChatWrapper = styled.div`
   grid-area: ${({ chatAsOverlay }) => (chatAsOverlay ? 'none' : 'chat')};
-  /* height: ${({ chatAsOverlay, overlayPosition }) =>
+  height: ${({ chatAsOverlay, overlayPosition }) =>
     chatAsOverlay ? (overlayPosition.height ? overlayPosition.height + 'px' : '50%') : '100%'};
   width: ${({ chatAsOverlay, overlayPosition }) =>
-    chatAsOverlay ? (overlayPosition.width ? overlayPosition.width + 'px' : 'unset') : 'unset'}; */
+    chatAsOverlay ? (overlayPosition.width ? overlayPosition.width + 'px' : 'unset') : 'unset'};
+
   position: ${({ chatAsOverlay }) => (chatAsOverlay ? 'absolute' : 'initial')};
   overflow: hidden;
   box-shadow: ${({ dragging }) => (dragging ? '0 0 1px 1px rgb(150,150,150)' : 'none')};
   top: ${({ overlayPosition }) =>
-    overlayPosition.top || overlayPosition.top === 0
+    typeof overlayPosition.top !== 'number'
+      ? overlayPosition.top
+      : overlayPosition.top || overlayPosition.top === 0
       ? Math.min(window.innerHeight, Math.max(0, overlayPosition.top)) + 'px'
       : 'initial'};
   bottom: ${({ overlayPosition }) =>
-    overlayPosition.bottom || overlayPosition.bottom === 0
+    typeof overlayPosition.bottom !== 'number'
+      ? overlayPosition.bottom
+      : overlayPosition.bottom || overlayPosition.bottom === 0
       ? Math.min(window.innerHeight, Math.max(0, overlayPosition.bottom)) + 'px'
       : 'initial'};
   left: ${({ overlayPosition }) =>
-    overlayPosition.left || overlayPosition.left === 0
+    typeof overlayPosition.left !== 'number'
+      ? overlayPosition.left
+      : overlayPosition.left || overlayPosition.left === 0
       ? Math.min(window.innerWidth, Math.max(0, overlayPosition.left)) + 'px'
       : 'initial'};
   right: ${({ overlayPosition }) =>
-    overlayPosition.right || overlayPosition.right === 0
+    typeof overlayPosition.right !== 'number'
+      ? overlayPosition.right
+      : overlayPosition.right || overlayPosition.right === 0
       ? Math.min(window.innerWidth, Math.max(0, overlayPosition.right)) + 'px'
       : 'initial'};
 

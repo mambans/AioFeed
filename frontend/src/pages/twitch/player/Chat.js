@@ -78,7 +78,7 @@ const Chat = ({ channelName, streamInfo, chatState, updateChatState }) => {
       setStartPos((c) => ({
         x: mouseX - chat.left,
         y: mouseY - chat.top,
-        bottom: mouseY + chat.height,
+        // bottom: mouseY + chat.height,
       }));
     }
   };
@@ -105,10 +105,10 @@ const Chat = ({ channelName, streamInfo, chatState, updateChatState }) => {
 
       return {
         ...c,
-        left,
-        top,
-        bottom,
-        right,
+        left: left < right ? left : 'unset',
+        top: top < bottom ? top : 'unset',
+        bottom: bottom < top ? bottom : 'unset',
+        right: right < left ? right : 'unset',
       };
     });
   };
@@ -118,14 +118,16 @@ const Chat = ({ channelName, streamInfo, chatState, updateChatState }) => {
   useEffect(() => {
     setOverlayPosition((c) => ({
       ...c,
-      top: window.innerHeight / 2,
-      bottom: 0,
-      right: 0,
+      // top: window.innerHeight / 2,
+      height: window.innerHeight / 2,
+      // bottom: 0,
+      // right: 0,
+      width: chatState?.chatwidth,
       left: window.innerWidth - 300,
       ...(chatState?.overlayPosition || {}),
       // width: chatState?.chatwidth,
     }));
-  }, [chatState?.overlayPosition]);
+  }, [chatState?.overlayPosition, chatState?.chatwidth]);
 
   return (
     <>
@@ -347,6 +349,8 @@ const ResizerAllSides = ({ setOverlayPosition, updateChatState, target, overlayP
             ...c,
             top: e.clientY,
             left: e.clientX,
+            height: targetPos.height + (targetPos.top - e.clientY),
+            width: targetPos.width + (targetPos.left - e.clientX),
           };
         });
         break;
@@ -355,22 +359,24 @@ const ResizerAllSides = ({ setOverlayPosition, updateChatState, target, overlayP
           return {
             ...c,
             top: targetPos.top - (targetPos.top - e.clientY),
-            right: window.innerWidth - e.clientX,
+            height: targetPos.height + (targetPos.top - e.clientY),
+            width: targetPos.width + (e.clientX - targetPos.right),
           };
         });
         break;
       case 'bottomright':
         setOverlayPosition((c) => ({
           ...c,
-          right: window.innerWidth - e.clientX,
-          bottom: window.innerHeight - e.clientY,
+          height: targetPos.height + (e.clientY - targetPos.bottom),
+          width: targetPos.width + (e.clientX - targetPos.right),
         }));
         break;
       case 'bottomleft':
         setOverlayPosition((c) => ({
           ...c,
           left: e.clientX,
-          bottom: window.innerHeight - e.clientY,
+          height: targetPos.height + (e.clientY - targetPos.bottom),
+          width: targetPos.width + (targetPos.left - e.clientX),
         }));
         break;
       default:
