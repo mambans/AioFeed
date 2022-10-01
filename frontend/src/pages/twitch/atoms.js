@@ -77,7 +77,6 @@ let newInvoked = false;
 export const newNonFeedSectionStreamsAtom = selector({
   key: 'newNonFeedSectionStreamsAtom',
   get: ({ get }) => {
-    console.log('newInvoked:', newInvoked);
     const previousBaseLiveStreams = get(previousBaseLiveStreamsAtom);
     const nonFeedSectionStreams = get(nonFeedSectionStreamsAtom);
     if (!newInvoked) {
@@ -89,7 +88,6 @@ export const newNonFeedSectionStreamsAtom = selector({
       (stream) => !previousBaseLiveStreams?.find((prevStream) => stream.id === prevStream.id)
     );
 
-    console.log('newStreams:', newStreams);
     return newStreams || [];
   },
   default: [],
