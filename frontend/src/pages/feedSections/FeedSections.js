@@ -176,7 +176,15 @@ const Section = ({ section, data, index, addNotification }) => {
             });
 
             if (wentOffline && channels?.includes(String(stream.user_id))) {
+              console.log('Fetching singel vod for', loginNameFormat(stream));
               fetchLatestVod({ user_id: stream.user_id, check: true });
+            } else if (wentOffline) {
+              console.log(
+                'not fetching singel vod because not in channels array',
+                loginNameFormat(stream)
+              );
+              console.log('channels:', channels);
+              console.log('stream.user_id:', stream.user_id);
             }
 
             return stream;
