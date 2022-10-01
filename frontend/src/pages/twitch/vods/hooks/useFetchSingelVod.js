@@ -1,5 +1,4 @@
 import { useCallback, useContext } from 'react';
-import VodsContext from '../VodsContext';
 import uniqBy from 'lodash/uniqBy';
 import { addVodEndTime } from '../../TwitchUtils';
 import AddVideoExtraData from '../../AddVideoExtraData';
@@ -7,9 +6,10 @@ import SortAndAddExpire from '../SortAndAddExpire';
 import TwitchAPI from '../../API';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { twitchVodsAtom, vodChannelsAtom } from '../atoms';
+import { feedPreferencesAtom } from '../../../../atoms/atoms';
 
 const useFetchSingelVod = () => {
-  const { enableTwitchVods } = useContext(VodsContext) || {};
+  const { vods } = useContext(feedPreferencesAtom) || {};
 
   const setTwitchVods = useSetRecoilState(twitchVodsAtom);
   const channels = useRecoilValue(vodChannelsAtom);
@@ -20,10 +20,12 @@ const useFetchSingelVod = () => {
     async ({ user_id, amount = 1, check = false } = {}) => {
       console.log('fetchLatestVod:');
       console.log('check:', check);
-      console.log('enableTwitchVods:', enableTwitchVods);
       console.log('channels:', channels);
       console.log('user_id:', user_id);
-      if (check && (!enableTwitchVods || !channels?.includes(user_id))) return null;
+      console.log('channels?.includes(user_id):', channels?.includes(user_id));
+      console.log('channels?.includes(String(user_id)):', channels?.includes(String(user_id)));
+      console.log('vods?.enabled:', vods?.enabled);
+      if (check && (!vods?.enabled || !channels?.includes(user_id))) return null;
       console.log(`Fetching singel vod for ${user_id}`);
       return await TwitchAPI.getVideos({
         user_id: user_id,
@@ -58,7 +60,7 @@ const useFetchSingelVod = () => {
         });
       });
     },
-    [channels, enableTwitchVods, setTwitchVods]
+    [channels, vods, setTwitchVods]
   );
 
   return { fetchLatestVod };
