@@ -22,7 +22,7 @@ const useDocumentTitle = (title, restore = true) => {
     if (restore) {
       return () => (document.title = previous);
     }
-    return;
+    return () => {};
   }, [restore]);
 
   return [document.title, setDocumentTitle];
