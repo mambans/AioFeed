@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 import uniqBy from 'lodash/uniqBy';
 import { addVodEndTime } from '../../TwitchUtils';
 import AddVideoExtraData from '../../AddVideoExtraData';
@@ -9,7 +9,7 @@ import { twitchVodsAtom, vodChannelsAtom } from '../atoms';
 import { feedPreferencesAtom } from '../../../../atoms/atoms';
 
 const useFetchSingelVod = () => {
-  const { vods } = useContext(feedPreferencesAtom) || {};
+  const { vods } = useRecoilValue(feedPreferencesAtom) || {};
 
   const setTwitchVods = useSetRecoilState(twitchVodsAtom);
   const channels = useRecoilValue(vodChannelsAtom);
@@ -23,7 +23,6 @@ const useFetchSingelVod = () => {
       console.log('channels:', channels);
       console.log('user_id:', user_id);
       console.log('channels?.includes(user_id):', channels?.includes(user_id));
-      console.log('channels?.includes(String(user_id)):', channels?.includes(String(user_id)));
       console.log('vods?.enabled:', vods?.enabled);
       if (check && (!vods?.enabled || !channels?.includes(user_id))) return null;
       console.log(`Fetching singel vod for ${user_id}`);
