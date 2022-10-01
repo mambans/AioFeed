@@ -6,10 +6,11 @@ import useEventListenerMemo from '../../../hooks/useEventListenerMemo';
 import { toast } from 'react-toastify';
 
 const CreateAndOpenClip = async ({ user_id }) => {
-  const Width = window.screen.width * 0.6;
-  const Height = 920;
-  const LeftPosition = (window.screen.width - Width) / 2;
-  const TopPosition = (window.screen.height - Height) / 2;
+  // const Width = window.innerWidth * 0.6;
+  const Width = Math.min(window.innerWidth, 1000);
+  const Height = Math.min(window.innerHeight, 920);
+  const LeftPosition = (window.innerWidth - Width) / 2;
+  const TopPosition = (window.innerHeight - Height) / 2;
   const settings = `height=${Height},width=${Width},top=${TopPosition},left=${LeftPosition},scrollbars,resizable,status,location,toolbar,`;
 
   await TwitchAPI.postClip({ broadcaster_id: user_id })

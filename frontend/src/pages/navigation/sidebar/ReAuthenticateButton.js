@@ -23,8 +23,8 @@ const authenticatePopup = async (domain, urlParam) => {
   AddCookie(`${domain}-myState`, orginState);
 
   const url = urlParam + `&state=${orginState}`;
-  const LeftPosition = window.screen.width ? (window.screen.width - 700) / 2 : 0;
-  const TopPosition = window.screen.height ? (window.screen.height - 850) / 2 : 0;
+  const LeftPosition = window.innerWidth ? (window.innerWidth - 700) / 2 : 0;
+  const TopPosition = window.innerHeight ? (window.innerHeight - 850) / 2 : 0;
   const settings = `height=700,width=600,top=${TopPosition},left=${LeftPosition},scrollbars=yes,resizable`;
 
   try {
