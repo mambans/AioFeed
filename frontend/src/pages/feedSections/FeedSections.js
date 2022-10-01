@@ -115,15 +115,15 @@ const Section = ({ section, data, index, addNotification }) => {
         if (previosStreams?.current && data?.loaded) {
           const streamsToNotifyLive = notifications_enabled
             ? feedSectionStreams?.filter(
-                (stream) => !previosStreams?.current?.find((s) => s?.user_id === stream?.user_id)
+                (stream) => !previosStreams?.current?.find?.((s) => s?.user_id === stream?.user_id)
               )
             : [];
-          const streamsToNotifyLeftSection = previosStreams?.current?.filter(
-            (stream) => !feedSectionStreams?.find((s) => s?.user_id === stream?.user_id)
+          const streamsToNotifyLeftSection = previosStreams?.current?.filter?.(
+            (stream) => !feedSectionStreams?.find?.((s) => s?.user_id === stream?.user_id)
           );
 
-          const streams = streamsToNotifyLive?.map((s = {}) => {
-            const wentLive = !previousStreams?.find((st) => s?.user_id === st?.user_id);
+          const streams = streamsToNotifyLive?.map?.((s = {}) => {
+            const wentLive = !previousStreams?.find?.((st) => s?.user_id === st?.user_id);
             const notisTitle = `${loginNameFormat(s)} ${wentLive ? 'Live ' : ''}in ${title}`;
             const stream = { ...s, notiStatus: notisTitle };
 
@@ -151,7 +151,7 @@ const Section = ({ section, data, index, addNotification }) => {
           });
 
           const leftStreams = streamsToNotifyLeftSection?.map((s = {}) => {
-            const wentOffline = !baseStreams.find((st) => st.id === s?.id);
+            const wentOffline = !baseStreams?.find?.((st) => st.id === s?.id);
             const notisTitle = wentOffline
               ? `${loginNameFormat(s)} went offline from ${title}`
               : `${loginNameFormat(s)} left ${title}`;
@@ -189,7 +189,7 @@ const Section = ({ section, data, index, addNotification }) => {
                   .map((stream) => {
                     return {
                       ...stream,
-                      oldData: previosStreams?.find((prev) => prev.id === stream.id),
+                      oldData: previosStreams?.find?.((prev) => prev.id === stream.id),
                     };
                   })
                   .filter((s) => s.oldData),
