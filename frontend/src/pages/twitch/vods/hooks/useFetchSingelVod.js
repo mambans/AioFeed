@@ -27,8 +27,11 @@ const useFetchSingelVod = () => {
         first: amount,
         type: 'all',
       }).then(async (res) => {
+        console.log(' res.data:', res.data);
         const newVodWithProfile = (await AddVideoExtraData({ items: res.data })) || [];
+        console.log('newVodWithProfile:', newVodWithProfile);
         const newVodWithEndtime = (await addVodEndTime(newVodWithProfile.data)) || [];
+        console.log('newVodWithEndtime:', newVodWithEndtime);
 
         setTwitchVods((vods = { data: [] }) => {
           const existingVods = vods?.data ? [...vods?.data] : [];
@@ -38,12 +41,14 @@ const useFetchSingelVod = () => {
               transition: 'videoFadeSlide',
             })),
           ];
+          console.log('vodsToAdd:', vodsToAdd);
           const uniqueVods = uniqBy(
             [...(vodsToAdd || []), ...(existingVods || [])]?.slice(0, 100),
             'id'
           );
           const FinallVods =
             SortAndAddExpire(uniqueVods, vodExpire, vods.loaded, vods.expire) || [];
+          console.log('FinallVods:', FinallVods);
 
           return FinallVods;
         });
