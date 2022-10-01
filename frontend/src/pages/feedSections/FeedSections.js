@@ -204,10 +204,6 @@ const Section = ({ section, data, index, addNotification }) => {
     })();
 
     if (data?.loaded) previosStreams.current = feedSectionStreams || [];
-
-    return () => {
-      clearTimeout(timer.current);
-    };
   }, [
     previousStreams,
     title,
