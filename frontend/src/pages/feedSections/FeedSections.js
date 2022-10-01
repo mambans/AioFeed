@@ -21,7 +21,6 @@ import {
   feedSectionsAtom,
   previousBaseLiveStreamsAtom,
 } from '../twitch/atoms';
-import { vodChannelsAtom } from '../twitch/vods/atoms';
 import { feedPreferencesAtom, useFeedPreferences } from '../../atoms/atoms';
 import FeedSectionSettings from './FeedSectionSettings';
 
@@ -101,7 +100,6 @@ const Section = ({ section, data, index, addNotification }) => {
   const timer = useRef();
   const { isEnabledUpdateNotifications, updateNotischannels } = useContext(TwitchContext);
   const { fetchLatestVod } = useFetchSingelVod();
-  const channels = useRecoilValue(vodChannelsAtom);
   const previousStreams = useRecoilValue(previousBaseLiveStreamsAtom);
   const baseStreams = useRecoilValue(baseLiveStreamsAtom);
   const feedSectionStreams = useMemo(
@@ -175,16 +173,8 @@ const Section = ({ section, data, index, addNotification }) => {
               },
             });
 
-            if (wentOffline && channels?.includes(String(stream.user_id))) {
-              console.log('Fetching singel vod for', loginNameFormat(stream));
+            if (wentOffline) {
               fetchLatestVod({ user_id: stream.user_id, check: true });
-            } else if (wentOffline) {
-              console.log(
-                'not fetching singel vod because not in channels array',
-                loginNameFormat(stream)
-              );
-              console.log('channels:', channels);
-              console.log('stream.user_id:', stream.user_id);
             }
 
             return stream;
@@ -221,7 +211,6 @@ const Section = ({ section, data, index, addNotification }) => {
     isEnabledUpdateNotifications,
     updateNotischannels,
     fetchLatestVod,
-    channels,
     baseStreams,
     feedSectionStreams,
   ]);

@@ -18,25 +18,15 @@ const useFetchSingelVod = () => {
 
   const fetchLatestVod = useCallback(
     async ({ user_id, amount = 1, check = false } = {}) => {
-      console.log('fetchLatestVod:');
-      console.log('check:', check);
-      console.log('channels:', channels);
-      console.log('user_id:', user_id);
-      console.log('channels?.includes(user_id):', channels?.includes(user_id));
-      console.log('vods?.enabled:', vods?.enabled);
       if (check && (!vods?.enabled || !channels?.includes(user_id))) return null;
-      console.log(`Fetching singel vod for ${user_id}`);
       return await TwitchAPI.getVideos({
         user_id: user_id,
         period: 'month',
         first: amount,
         type: 'all',
       }).then(async (res) => {
-        console.log(' res.data:', res.data);
         const newVodWithProfile = (await AddVideoExtraData({ items: res.data })) || [];
-        console.log('newVodWithProfile:', newVodWithProfile);
         const newVodWithEndtime = (await addVodEndTime(newVodWithProfile.data)) || [];
-        console.log('newVodWithEndtime:', newVodWithEndtime);
 
         setTwitchVods((vods = { data: [] }) => {
           const existingVods = vods?.data ? [...vods?.data] : [];
@@ -46,14 +36,12 @@ const useFetchSingelVod = () => {
               transition: 'videoFadeSlide',
             })),
           ];
-          console.log('vodsToAdd:', vodsToAdd);
           const uniqueVods = uniqBy(
             [...(vodsToAdd || []), ...(existingVods || [])]?.slice(0, 100),
             'id'
           );
           const FinallVods =
             SortAndAddExpire(uniqueVods, vodExpire, vods.loaded, vods.expire) || [];
-          console.log('FinallVods:', FinallVods);
 
           return FinallVods;
         });
