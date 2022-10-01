@@ -47,7 +47,7 @@ const Handler = ({ children }) => {
 
   const refresh = useCallback(
     async ({ firstLoad = false } = {}) => {
-      console.log('refresh:');
+      // console.log('refresh:');
       controller.current.abort();
       setLoadingStates((c) => {
         return { ...c, refreshing: true, error: null };

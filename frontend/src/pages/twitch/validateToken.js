@@ -29,7 +29,7 @@ const validationOfToken = async (NoAuthNeddedAndFallbackToAppToken) => {
 };
 
 const validateTokenFunc = async (NoAuthNeddedAndFallbackToAppToken) => {
-  console.log('--validateTokenFunc--:');
+  // console.log('--validateTokenFunc--:');
   const access_token = getCookie('Twitch-access_token');
   const app_token = getCookie(`Twitch-app_token`);
   const refresh_token = getCookie(`Twitch-refresh_token`);
