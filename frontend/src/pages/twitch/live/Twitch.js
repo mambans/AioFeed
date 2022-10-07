@@ -17,9 +17,14 @@ const Twitch = ({ data, streams, hideOnEmpty }) => {
   const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext);
   const { favStreams } = useContext(TwitchContext);
 
-  const favoriteStreams = streams?.filter((c) => favStreams?.includes(c.user_name?.toLowerCase()));
-  const nonFavoriteStreams = streams?.filter(
-    (c) => !favStreams?.includes(c.user_name?.toLowerCase())
+  const { favoriteStreams, nonFavoriteStreams } = streams?.reduce(
+    (acc, stream) => {
+      if (favStreams?.includes?.(stream?.user_id)) {
+        return { ...acc, favoriteStreams: [...acc.favoriteStreams, stream] };
+      }
+      return { ...acc, nonFavoriteStreams: [...acc.nonFavoriteStreams, stream] };
+    },
+    { favoriteStreams: [], nonFavoriteStreams: [] }
   );
 
   const refresh = async () => await data?.refresh();
