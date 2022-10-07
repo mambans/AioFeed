@@ -22,10 +22,13 @@ const useVodChannel = () => {
 
   const removeChannel = async ({ channel }) => {
     try {
+      console.log('channel:', channel);
       setChannels((channels) => {
+        console.log('channels:', channels);
         const vodChannels = new Set(channels || []);
         vodChannels.delete(channel?.user_id);
 
+        console.log('vodChannels:', vodChannels);
         return vodChannels;
       });
       API.removeVodChannel(channel?.user_id);
