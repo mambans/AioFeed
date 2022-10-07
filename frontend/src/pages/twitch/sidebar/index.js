@@ -57,9 +57,14 @@ const SidebarSection = ({ feed: { title, id }, items }) => {
   const [shows, setShows] = useState();
   const resetShowsTimer = useRef();
 
-  const favoriteStreams = items?.filter((c) => favStreams?.includes(c.user_name?.toLowerCase()));
-  const nonFavoriteStreams = items?.filter(
-    (c) => !favStreams?.includes(c.user_name?.toLowerCase())
+  const { favoriteStreams, nonFavoriteStreams } = items?.reduce(
+    (acc, stream) => {
+      if (favStreams?.includes?.(stream?.user_id)) {
+        return { ...acc, favoriteStreams: [...acc.favoriteStreams, stream] };
+      }
+      return { ...acc, nonFavoriteStreams: [...acc.nonFavoriteStreams, stream] };
+    },
+    { favoriteStreams: [], nonFavoriteStreams: [] }
   );
 
   const sidebarItemAttrs = {
