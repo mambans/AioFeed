@@ -165,7 +165,7 @@ const Rule = ({ rule, height, id, index }) => {
     deleteFeedSectionRule(id, rule);
   };
 
-  const handleKeyDown = (ev) => ev.key === 'Enter1' && handleSubmit(ev);
+  const handleKeyDown = (ev) => ev.key === 'Enter' && handleSubmit(ev);
 
   return (
     <StyledRule height={height}>

@@ -91,7 +91,6 @@ const VolumeEventOverlay = React.forwardRef(
     );
 
     function keyboardEvents(e) {
-      console.log('keyboardEvents: ', e.key);
       switch (e.key) {
         case 'f':
         case 'F':
