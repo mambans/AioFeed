@@ -28,9 +28,12 @@ const VolumeSlider = ({
     'wheel',
     scrollChangeVolumeEvent,
     PlayerUIControlls,
-    window?.Twitch?.Player?.READY
+    window?.Twitch?.Player?.READY,
+    { passive: true }
   );
-  useEventListenerMemo('mousedown', mouseEvents, PlayerUIControlls, window?.Twitch?.Player?.READY);
+  useEventListenerMemo('mousedown', mouseEvents, PlayerUIControlls, window?.Twitch?.Player?.READY, {
+    passive: true,
+  });
   useEventListenerMemo(
     window?.Twitch?.Player?.PLAYING,
     OnPlayingEventListeners,
