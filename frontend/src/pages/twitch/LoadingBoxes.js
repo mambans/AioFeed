@@ -4,13 +4,13 @@ import { LoadingVideoElement } from './StyledComponents';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const LoadingBoxes = ({ amount = 3, type, load = true, freeze }) => {
-  const array = Array.apply(null, Array(Math.floor(Math.max(amount, 1)))).map((x, i) => i);
+  const array = [...Array(Math.floor(Math.max(typeof amount === 'number' ? amount : 1, 1)))];
 
   if (load) {
     return (
       <TransitionGroup component={null}>
-        {array.map((v) => (
-          <CSSTransition key={v} timeout={250} classNames='fade-250ms' unmountOnExit>
+        {array.map((v, index) => (
+          <CSSTransition key={index} timeout={250} classNames='fade-250ms' unmountOnExit>
             <LoadingVideoElement type={type} freeze={freeze} />
           </CSSTransition>
         ))}
