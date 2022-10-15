@@ -63,6 +63,8 @@ const LiveStreamsNotifications = () => {
 
     return () => {
       // clearTimeout(timer.current);
+      // invoked.current = false;
+      console.log('livestream notis cleanup');
     };
   }, [fetchLatestVod, newNonFeedSectionStreams, addNotification, setNewNonFeedSectionStreams]);
 
