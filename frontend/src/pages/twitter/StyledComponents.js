@@ -169,7 +169,7 @@ export const LoadingContainer = styled.div`
 
 export const LoadingPlaceholder = () => {
   return (
-    <LoadingContainer>
+    <LoadingContainer className='loading_placeholder'>
       <LoadingTextBox>
         <div className='username'></div>
         <div className='text'>
