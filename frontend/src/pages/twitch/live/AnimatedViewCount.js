@@ -130,7 +130,7 @@ const AnimatedViewCount = ({
     requestAnimationFrame(animate);
 
     return () => {
-      clearTimeout(animationTimer.current);
+      clearInterval(animationTimer.current);
     };
   }, [viewers]);
 
