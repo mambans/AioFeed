@@ -124,10 +124,15 @@ const Feed = () => {
         >
           <Suspense
             fallback={
-              <h1>
-                Lists..
-                <HiViewList size={25} color={Colors.green} />
-              </h1>
+              <LoadingFeed
+                order={999}
+                title={
+                  <h1 id={'lists'}>
+                    Lists
+                    <HiViewList size={25} color={Colors.green} />
+                  </h1>
+                }
+              />
             }
           >
             <MyLists />
