@@ -45,8 +45,8 @@ export const pagination = async (response) => {
 // const controller = new AbortController();
 
 const YoutubeAPI = {
-  getVideoInfo: async (params) => {
-    return await YOUTUBE_INSTANCE.get(`/videos`, {
+  getVideoInfo: async (string = '', params) => {
+    return await YOUTUBE_INSTANCE.get(`/videos${string}`, {
       params,
     });
   },
