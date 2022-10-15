@@ -1,5 +1,6 @@
-import { getLocalstorage, chunk, setLocalStorage } from '../../util';
-import YoutubeAPI from '../youtube/API';
+import axios from 'axios';
+import { getLocalstorage, chunk, setLocalStorage, getCookie } from '../../util';
+// import YoutubeAPI from '../youtube/API';
 
 const GetVideoInfo = async ({ videos = [] }) => {
   const videosArray = [...videos];
@@ -32,7 +33,27 @@ const GetVideoInfo = async ({ videos = [] }) => {
     ? await Promise.all(
         chunk(unCachedFullyVideos, 50).map(
           async (chunk) =>
-            await YoutubeAPI.getVideoInfo({ id: chunk, part: 'contentDetails,snippet' })
+            // await YoutubeAPI.getVideoInfo({ id: chunk, part: 'contentDetails,snippet' })
+            //   .then((res) =>
+            //     res.data.items.map((item) => ({
+            //       ...item,
+            //       contentDetails: {
+            //         ...item.contentDetails,
+            //         upload: { videoId: item.id },
+            //       },
+            //     }))
+            //   )
+            //   .catch((e) => null)
+            await axios
+              .get(
+                `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet&id=${chunk}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
+                {
+                  headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${getCookie('Youtube-access_token')}`,
+                  },
+                }
+              )
               .then((res) =>
                 res.data.items.map((item) => ({
                   ...item,
@@ -43,26 +64,6 @@ const GetVideoInfo = async ({ videos = [] }) => {
                 }))
               )
               .catch((e) => null)
-          // await axios
-          //   .get(
-          //     `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet&id=${chunk}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
-          //     {
-          //       headers: {
-          //         Accept: 'application/json',
-          //         Authorization: `Bearer ${getCookie('Youtube-access_token')}`,
-          //       },
-          //     }
-          //   )
-          //   .then((res) =>
-          //     res.data.items.map((item) => ({
-          //       ...item,
-          //       contentDetails: {
-          //         ...item.contentDetails,
-          //         upload: { videoId: item.id },
-          //       },
-          //     }))
-          //   )
-          //   .catch((e) => null)
         )
       ).then((res) => res.flat(1))
     : CachedFullyVideos;
