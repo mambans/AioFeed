@@ -384,7 +384,8 @@ const Player = () => {
 
   const reloadVideoPlayer = () => {
     console.log('Refreshing Twitch video');
-    videoElementRef.current.removeChild(document.querySelector('iframe'));
+    const nodeToRemove = document.querySelector('iframe');
+    if (videoElementRef.current && nodeToRemove) videoElementRef.current.removeChild(nodeToRemove);
     if (window?.Twitch?.Player) {
       twitchVideoPlayer.current = new window.Twitch.Player('twitch-embed', {
         width: '100%',

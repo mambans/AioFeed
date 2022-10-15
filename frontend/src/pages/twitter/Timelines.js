@@ -48,8 +48,11 @@ const Timelines = ({ id, mainContainerRef }) => {
         options
       )
       .then(() => {
-        while (containerRef.current.childNodes.length > 1) {
-          containerRef.current.removeChild(containerRef.current.firstChild);
+        if (containerRef.current && containerRef.current.childNodes) {
+          while (containerRef.current.childNodes.length > 1) {
+            if (containerRef.current.firstChild)
+              containerRef.current.removeChild(containerRef.current.firstChild);
+          }
         }
         setLoading(false);
       });
