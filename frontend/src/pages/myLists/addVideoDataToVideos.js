@@ -5,7 +5,6 @@ const addVideoDataToVideos = async ({
   list,
   videos,
   ytExistsAndValidated,
-  twitchExistsAndValidated,
 }) => {
   const filteredVideos = videos?.reduce(
     (acc, id) => {
@@ -22,7 +21,6 @@ const addVideoDataToVideos = async ({
     const newlyFetchedVideoData = await fetchListVideos({
       list,
       ytExistsAndValidated,
-      twitchExistsAndValidated,
       videos: filteredVideos.missing,
     });
 

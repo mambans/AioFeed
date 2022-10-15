@@ -18,7 +18,6 @@ import addVideoDataToVideos from './addVideoDataToVideos';
 export const fetchListVideos = async ({
   list,
   ytExistsAndValidated,
-  twitchExistsAndValidated,
   currentVideos = [],
   videos,
 }) => {
@@ -47,10 +46,8 @@ export const fetchListVideos = async ({
       .filter((i) => i && !currentVideos.find((v) => String(v.id) === String(i)));
 
     const twitchItemsWithDetails = Boolean(twitchItems?.length)
-      ? twitchExistsAndValidated
-        ? await twitchFetchVideos(twitchItems)
-        : twitchItems?.map((video) => ({ id: video, loading: true }))
-      : [];
+      ? await twitchFetchVideos(twitchItems)
+      : twitchItems?.map((video) => ({ id: video, loading: true }));
 
     const youtubeItemsWithDetails = Boolean(youtubeItems?.length)
       ? ytExistsAndValidated
@@ -101,7 +98,6 @@ export const fetchListVideos = async ({
 const List = ({
   list,
   ytExistsAndValidated,
-  twitchExistsAndValidated,
   setLists,
   setVideos,
   videos,
@@ -141,20 +137,12 @@ const List = ({
         list,
         videos: list.videos,
         ytExistsAndValidated,
-        twitchExistsAndValidated,
       });
 
       setVideos(videosWithData);
       addSavedData(videosWithData);
     })();
-  }, [
-    list,
-    ytExistsAndValidated,
-    twitchExistsAndValidated,
-    setVideos,
-    savedVideosWithData,
-    addSavedData,
-  ]);
+  }, [list, ytExistsAndValidated, setVideos, savedVideosWithData, addSavedData]);
 
   const dragEvents = useMemo(
     () => ({

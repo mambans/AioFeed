@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback, useContext } from 'react';
 
 import GetSubscriptionVideos from './GetSubscriptionVideos';
-import useToken, { YoutubeContext } from './useToken';
+import { YoutubeContext } from './useToken';
 import Alert from '../../components/alert';
 import TwitchAPI, { pagination } from '../twitch/API';
 
@@ -12,7 +12,6 @@ const Datahandler = ({ children }) => {
   const followedChannels = useRef();
   const [videos, setVideos] = useState([]);
   const { youtubeAccessToken } = useContext(YoutubeContext);
-  const validateToken = useToken();
 
   const refresh = useCallback(async () => {
     const fetchData = async () => {
@@ -37,8 +36,8 @@ const Datahandler = ({ children }) => {
       }
     };
     setIsLoaded(false);
-    validateToken().then(() => fetchData());
-  }, [setVideos, validateToken]);
+    fetchData();
+  }, [setVideos]);
 
   useEffect(() => {
     refresh().catch((e) => setError(e));

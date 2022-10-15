@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { getCookie } from './../../../util';
 import { UnfollowButton } from './../../sharedComponents/sharedStyledComponents';
 import UnfollowChannel from './unFollowChannel';
-import useToken from '../useToken';
 import ToolTip from '../../../components/tooltip/ToolTip';
 
 const ChannelListLi = styled.li`
@@ -28,18 +27,15 @@ const ChannelListLi = styled.li`
 
 const ChannelListElement = (data) => {
   const { channel, setNewChannels, videos, setVideos, selected } = data;
-  const validateToken = useToken();
 
   const handleUnfollow = () => {
-    validateToken().then(() =>
-      UnfollowChannel({
-        subscriptionId: channel.id,
-        channelId: channel.snippet.resourceId.channelId,
-        setChannels: setNewChannels,
-        videos: videos,
-        setVideos: setVideos,
-      })
-    );
+    UnfollowChannel({
+      subscriptionId: channel.id,
+      channelId: channel.snippet.resourceId.channelId,
+      setChannels: setNewChannels,
+      videos: videos,
+      setVideos: setVideos,
+    });
   };
 
   return (

@@ -1,9 +1,9 @@
-import axios from 'axios';
 import reverse from 'lodash/reverse';
 import sortBy from 'lodash/sortBy';
 
 import GetVideoInfo from './GetVideoInfo';
 import { getCookie, getLocalstorage, setLocalStorage } from './../../util';
+import YoutubeAPI from './API';
 
 const filterTypeUpload = async (response) => {
   if (Boolean(response?.items?.length)) {
@@ -34,20 +34,17 @@ const fetchSubscriptionVideos = async (videosCACHE, channel) => {
       }
     : { ...staticHeaders };
 
-  const res = await axios
-    .get(`https://www.googleapis.com/youtube/v3/activities?`, {
-      params: {
-        part: 'snippet,contentDetails',
-        channelId: channel?.snippet?.resourceId?.channelId,
-        maxResults: 10,
-        publishedAfter: DATE_THRESHOLD.toISOString(),
-        key: process.env.REACT_APP_YOUTUBE_API_KEY,
-      },
-      headers: headers,
-    })
+  const res = await YoutubeAPI.getActivities(
+    {
+      part: 'snippet,contentDetails',
+      channelId: channel?.snippet?.resourceId?.channelId,
+      maxResults: 10,
+      publishedAfter: DATE_THRESHOLD.toISOString(),
+    },
+    headers
+  )
     .then((result) => ({ channels: result.data }))
     .catch((e) => ({ channels: cachedChannelObj || null, error: e }));
-
   return res;
 };
 

@@ -1,64 +1,17 @@
-import axios from 'axios';
-import { getCookie, getLocalstorage, setLocalStorage } from '../../util';
-
-const fetchNextPgeOfSubscriptions = async ({ total, PagePagination, followedchannels }) => {
-  if (followedchannels?.length < total && PagePagination) {
-    const nextPage = await axios
-      .get(`https://www.googleapis.com/youtube/v3/subscriptions?`, {
-        params: {
-          maxResults: Math.min(Math.max(parseInt(total - followedchannels?.length), 0), 50),
-          mine: true,
-          part: 'snippet',
-          order: 'alphabetical',
-          key: process.env.REACT_APP_YOUTUBE_API_KEY,
-          pageToken: PagePagination,
-        },
-        headers: {
-          Authorization: 'Bearer ' + getCookie('Youtube-access_token'),
-          Accept: 'application/json',
-        },
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    const channels = [...followedchannels, ...nextPage?.data?.items];
-
-    if (channels?.length < total && nextPage?.data?.nextPageToken) {
-      return await fetchNextPgeOfSubscriptions({
-        total: total,
-        PagePagination: nextPage?.data?.nextPageToken,
-        followedchannels: channels,
-      });
-    }
-    return channels;
-  }
-  return followedchannels;
-};
+import { getLocalstorage, setLocalStorage } from '../../util';
+import YoutubeAPI, { pagination } from './API';
 
 const getMyFollowedChannels = async () => {
   try {
-    const followedchannels = await axios.get(
-      `https://www.googleapis.com/youtube/v3/subscriptions?`,
-      {
-        params: {
-          maxResults: 50,
-          mine: true,
-          part: 'snippet',
-          order: 'alphabetical',
-          key: process.env.REACT_APP_YOUTUBE_API_KEY,
-        },
-        headers: {
-          Authorization: 'Bearer ' + getCookie('Youtube-access_token'),
-          Accept: 'application/json',
-        },
-      }
+    const channels = await pagination(
+      await YoutubeAPI.getSubscriptions({
+        maxResults: 50,
+        mine: true,
+        part: 'snippet',
+        order: 'alphabetical',
+      })
     );
-    const channels = await fetchNextPgeOfSubscriptions({
-      total: followedchannels.data.pageInfo.totalResults,
-      PagePagination: followedchannels.data.nextPageToken,
-      followedchannels: followedchannels.data.items,
-    });
+    console.log('channels:', channels);
 
     const uniqueSubscriptions = channels.filter(
       (item, index, self) =>

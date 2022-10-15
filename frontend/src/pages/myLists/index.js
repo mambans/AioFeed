@@ -6,7 +6,6 @@ import Header, { HeaderNumberCount } from '../../components/Header';
 
 import MyListsContext from './MyListsContext';
 import List from './List';
-import useToken from '../twitch/useToken';
 import useYoutubeToken from '../youtube/useToken';
 import MyListSmallList from './MyListSmallList';
 import DropDownDrawer from './DropDownDrawer';
@@ -22,9 +21,7 @@ export const useCheckForVideosAndValidateToken = ({
   lists,
   setIsLoading = () => {},
   setYtExistsAndValidated,
-  setTwitchExistsAndValidated,
 }) => {
-  const validateToken = useToken();
   const validateYoutubeToken = useYoutubeToken();
 
   useEffect(() => {
@@ -35,20 +32,6 @@ export const useCheckForVideosAndValidateToken = ({
         .map((list) => list?.videos?.find((videoId) => typeof videoId === 'string'))
         .filter((i) => i)?.length;
 
-    const twitchVideoExists =
-      lists &&
-      Object?.values(lists)
-        .filter((l) => l.enabled)
-        .map((list) => list?.videos?.find((videoId) => typeof videoId === 'number'))
-        .filter((i) => i)?.length;
-
-    const twitchPromise =
-      Boolean(twitchVideoExists) &&
-      validateToken().then(() => {
-        setTwitchExistsAndValidated(true);
-        return true;
-      });
-
     const youtubePromise =
       Boolean(youtubeVideoExists) &&
       validateYoutubeToken().then(() => {
@@ -56,24 +39,16 @@ export const useCheckForVideosAndValidateToken = ({
         return true;
       });
 
-    Promise.allSettled([twitchPromise, youtubePromise])
+    Promise.allSettled([youtubePromise])
       .catch((e) => console.log(e))
       .finally(() => setIsLoading(false));
-  }, [
-    lists,
-    setIsLoading,
-    validateToken,
-    validateYoutubeToken,
-    setYtExistsAndValidated,
-    setTwitchExistsAndValidated,
-  ]);
+  }, [lists, setIsLoading, validateYoutubeToken, setYtExistsAndValidated]);
 };
 
 const FavoriteListContainer = ({
   list,
   setLists,
   ytExistsAndValidated,
-  twitchExistsAndValidated,
   isLoading,
   fetchMyListContextData,
   className,
@@ -113,7 +88,6 @@ const FavoriteListContainer = ({
         <List
           list={list}
           ytExistsAndValidated={ytExistsAndValidated}
-          twitchExistsAndValidated={twitchExistsAndValidated}
           setLists={setLists}
           setVideos={setVideos}
           videos={videos}
@@ -136,14 +110,12 @@ export const MyLists = () => {
     addSavedData,
   } = useContext(MyListsContext);
   const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
-  const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
   // const validateToken = useToken();
   // const validateYoutubeToken = useYoutubeToken();
   useCheckForVideosAndValidateToken({
     lists,
     setIsLoading,
     setYtExistsAndValidated,
-    setTwitchExistsAndValidated,
   });
 
   return (
@@ -166,7 +138,6 @@ export const MyLists = () => {
                   isLoading={isLoading}
                   fetchMyListContextData={fetchMyListContextData}
                   ytExistsAndValidated={ytExistsAndValidated}
-                  twitchExistsAndValidated={twitchExistsAndValidated}
                   savedVideosWithData={savedVideosWithData}
                   addSavedData={addSavedData}
                 />

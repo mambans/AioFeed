@@ -1,5 +1,6 @@
-import axios from 'axios';
-import { getCookie, getLocalstorage, setLocalStorage } from './../../../util';
+import { toast } from 'react-toastify';
+import YoutubeAPI from '../API';
+import { getLocalstorage, setLocalStorage } from './../../../util';
 
 const unFollowChannel = async ({ subscriptionId, channelId, setChannels, videos, setVideos }) => {
   const followedChannels = getLocalstorage(`YT-followedChannels`) || [];
@@ -16,15 +17,11 @@ const unFollowChannel = async ({ subscriptionId, channelId, setChannels, videos,
     casheExpire: followedChannels.casheExpire,
   });
 
-  await axios.delete(`https://www.googleapis.com/youtube/v3/subscriptions`, {
-    params: {
-      id: subscriptionId,
-      key: process.env.REACT_APP_YOUTUBE_API_KEY,
-    },
-    headers: {
-      Authorization: 'Bearer ' + getCookie('Youtube-access_token'),
-      Accept: 'application/json',
-    },
+  await YoutubeAPI.unFollow({
+    id: subscriptionId,
+  }).catch((er) => {
+    console.error('er:', er);
+    toast.error('Failed to unfollow channel');
   });
 };
 

@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { getLocalstorage, getCookie, chunk, setLocalStorage } from '../../util';
+import { getLocalstorage, chunk, setLocalStorage } from '../../util';
 import merge from 'lodash/merge';
+import YoutubeAPI from './API';
 
 const getVideoInfo = async ({ videos }) => {
   const videosArray = [...videos];
@@ -47,16 +47,7 @@ const getVideoInfo = async ({ videos }) => {
     ? await Promise.all(
         chunk(noVideoDetailsIDS, 50).map(
           async (chunk) =>
-            await axios
-              .get(
-                `https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${chunk}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
-                {
-                  headers: {
-                    Accept: 'application/json',
-                    Authorization: `Bearer ${getCookie('Youtube-access_token')}`,
-                  },
-                }
-              )
+            await YoutubeAPI.getVideoInfo({ part: 'contentDetails', id: chunk })
               .then((res) => res.data.items)
               .catch((e) => null)
         )

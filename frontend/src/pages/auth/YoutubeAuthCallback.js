@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react';
-import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
 import { getCookie, AddCookie } from '../../util';
@@ -9,6 +8,7 @@ import { YoutubeContext } from '../youtube/useToken';
 import Alert from '../../components/alert';
 import { useSetRecoilState } from 'recoil';
 import { footerVisibleAtom, navigationBarVisibleAtom } from '../navigation/atoms';
+import YoutubeAPI from '../youtube/API';
 
 const YoutubeAuthCallback = () => {
   const setFooterVisible = useSetRecoilState(footerVisibleAtom);
@@ -39,25 +39,15 @@ const YoutubeAuthCallback = () => {
       return res;
     });
 
-    const MyYoutube = await axios
-      .get(
-        `https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
-        {
-          headers: {
-            Authorization: 'Bearer ' + tokens.access_token,
-            Accept: 'application/json',
-          },
-        }
-      )
-      .then((res) => {
-        setYoutubeUsername(res.data.items[0].snippet.title);
-        setYoutubeProfileImage(res.data.items[0].snippet.thumbnails.default.url);
+    const MyYoutube = await YoutubeAPI.getMe().then((res) => {
+      setYoutubeUsername(res.data.items[0].snippet.title);
+      setYoutubeProfileImage(res.data.items[0].snippet.thumbnails.default.url);
 
-        return {
-          Username: res.data.items[0].snippet.title,
-          ProfileImg: res.data.items[0].snippet.thumbnails.default.url,
-        };
-      });
+      return {
+        Username: res.data.items[0].snippet.title,
+        ProfileImg: res.data.items[0].snippet.thumbnails.default.url,
+      };
+    });
 
     await API.updateYoutubeUserData(
       {

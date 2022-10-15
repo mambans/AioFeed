@@ -79,6 +79,8 @@ const OfflineStreamsNotifications = () => {
         invoked.current = true;
       } catch (e) {}
     })();
+
+    return () => {};
   }, [
     fetchLatestVod,
     liveStreams,
