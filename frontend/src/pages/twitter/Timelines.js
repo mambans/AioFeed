@@ -48,12 +48,19 @@ const Timelines = ({ id, mainContainerRef }) => {
         options
       )
       .then(() => {
-        if (containerRef.current && containerRef.current.childNodes) {
-          while (containerRef.current.childNodes.length > 1) {
-            if (containerRef.current.firstChild)
-              containerRef.current.removeChild(containerRef.current.firstChild);
-          }
+        if (
+          containerRef.current &&
+          containerRef.current.childNodes &&
+          Array.from(containerRef.current.childNodes).filter(
+            (ele) => !ele.classList?.contains('loading_placeholder')
+          ).length > 1
+        ) {
+          containerRef.current.childNodes.forEach((ele) => {
+            if (!ele.classList?.contains('loading_placeholder'))
+              containerRef.current.removeChild(ele);
+          });
         }
+
         setLoading(false);
       });
   }, [activeTheme?.type, id, mainContainerRef]);
