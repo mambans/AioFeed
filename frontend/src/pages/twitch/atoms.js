@@ -73,16 +73,11 @@ export const previousNonFeedSectionStreamsAtom = selector({
   },
   default: [],
 });
-let newInvoked = false;
 export const newNonFeedSectionStreamsAtom = selector({
   key: 'newNonFeedSectionStreamsAtom',
   get: ({ get }) => {
     const previousBaseLiveStreams = get(previousBaseLiveStreamsAtom);
     const nonFeedSectionStreams = get(nonFeedSectionStreamsAtom);
-    if (!newInvoked) {
-      newInvoked = true;
-      return [];
-    }
 
     const newStreams = nonFeedSectionStreams.filter(
       (stream) => !previousBaseLiveStreams?.find((prevStream) => stream.id === prevStream.id)
@@ -107,16 +102,12 @@ export const newOfflineNonFeedSectionStreamsAtom = selector({
   },
   default: [],
 });
-let newUpdatedInvoked = false;
+
 export const newUpdatedNonFeedSectionStreamsAtom = selector({
   key: 'newUpdatedNonFeedSectionStreamsAtom',
   get: ({ get }) => {
     const previousBaseStreams = get(previousBaseLiveStreamsAtom);
     const baseStreams = get(baseLiveStreamsAtom);
-    if (!newUpdatedInvoked) {
-      newUpdatedInvoked = true;
-      return [];
-    }
 
     const changedStreams = baseStreams.reduce((acc, stream) => {
       const oldStream = previousBaseStreams?.find((oldStream) => oldStream.id === stream.id);

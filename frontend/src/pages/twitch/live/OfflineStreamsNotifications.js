@@ -28,10 +28,13 @@ const OfflineStreamsNotifications = () => {
   const timer = useRef();
   const previousStreams = useRecoilValue(previousBaseLiveStreamsAtom);
   const previousNonFeedsectionStreams = useRecoilValue(previousNonFeedSectionStreamsAtom);
+  const invoked = useRef(false);
 
   useEffect(() => {
     (async () => {
       try {
+        if (!invoked.current) return;
+
         const streams = newOfflineNonFeedSectionStreams?.map((s) => {
           const stream = {
             ...s,
@@ -73,6 +76,7 @@ const OfflineStreamsNotifications = () => {
             curr.filter((s) => !streams.find((st) => st.id === s.id))
           );
         }
+        invoked.current = true;
       } catch (e) {}
     })();
   }, [

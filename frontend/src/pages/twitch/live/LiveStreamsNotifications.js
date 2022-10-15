@@ -10,6 +10,7 @@ const LiveStreamsNotifications = () => {
   const { fetchLatestVod } = useFetchSingelVod();
   const { addNotification } = useContext(NotificationsContext);
   const timer = useRef();
+  const invoked = useRef(false);
 
   const [newNonFeedSectionStreams, setNewNonFeedSectionStreams] = useRecoilState(
     newNonFeedSectionStreamsAtom
@@ -18,6 +19,7 @@ const LiveStreamsNotifications = () => {
   useEffect(() => {
     (async () => {
       try {
+        if (!invoked.current) return;
         const streams = newNonFeedSectionStreams?.map((s) => {
           const stream = {
             ...s,
@@ -55,6 +57,7 @@ const LiveStreamsNotifications = () => {
             curr.filter((s) => !streams.find((st) => st.id === s.id))
           );
         }
+        invoked.current = true;
       } catch (e) {}
     })();
 
