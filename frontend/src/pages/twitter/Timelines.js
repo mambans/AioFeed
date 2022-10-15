@@ -23,6 +23,7 @@ const Timelines = ({ id, mainContainerRef }) => {
   useEventListenerMemo('visibilitychange', onVisibilityChange, window, refreshOnFocusEnabled);
 
   const addTimeline = useCallback(() => {
+    setLoading(true);
     if (!window.twttr) {
       console.error('Failure to load window.twttr in TwitterTimelineEmbed, aborting load.');
       return;
