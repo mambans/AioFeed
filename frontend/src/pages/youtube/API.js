@@ -56,7 +56,7 @@ const YoutubeAPI = {
     });
   },
   getSubscriptions: async (params) => {
-    return await YOUTUBE_INSTANCE.get('/videos', {
+    return await YOUTUBE_INSTANCE.get('/subscriptions', {
       params,
     });
   },
