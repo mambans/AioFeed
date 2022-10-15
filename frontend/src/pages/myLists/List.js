@@ -112,14 +112,14 @@ const List = ({
   const { videoElementsAmount } = useContext(CenterContext) || {};
 
   const [videosToShow, setVideosToShow] = useState({
-    amount: videoElementsAmount,
+    amount: videoElementsAmount / 2,
     timeout: 750,
     transitionGroup: 'videos',
   });
 
   useEffect(() => {
     setVideosToShow((cr) => ({
-      amount: cr?.showAll && videos?.length ? videos?.length : videoElementsAmount,
+      amount: cr?.showAll && videos?.length ? videos?.length : videoElementsAmount / 2,
       timeout: 750,
       transitionGroup: 'videos',
       showAll: cr?.showAll,
