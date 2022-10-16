@@ -189,7 +189,6 @@ const List = ({
       </TransitionGroup>
       {!!list?.videos?.length && (
         <LoadMore
-          text='Load more'
           loaded={true}
           setVideosToShow={setVideosToShow}
           videosToShow={videosToShow}
