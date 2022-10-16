@@ -16,25 +16,27 @@ const LoadMore = ({
   videosToShow,
   videos,
   showAll,
+  amount,
 }) => {
   const thisEleRef = useRef();
   const { videoElementsAmount } = useContext(CenterContext) || {};
   const resetTransitionTimer = useRef();
   const [loading, setLoading] = useState(!loaded);
+  const amountOfVideosToShow = amount || videoElementsAmount;
 
   const reset = () => {
     if (resetFunc) {
       resetFunc();
-    } else if (setVideosToShow && videoElementsAmount) {
+    } else if (setVideosToShow && amountOfVideosToShow) {
       setVideosToShow({
-        amount: videoElementsAmount,
+        amount: amountOfVideosToShow,
         timeout: 0,
         transitionGroup: 'instant-disappear',
       });
       clearTimeout(resetTransitionTimer.current);
       resetTransitionTimer.current = setTimeout(() => {
         setVideosToShow({
-          amount: videoElementsAmount,
+          amount: amountOfVideosToShow,
           timeout: 750,
           transitionGroup: 'videos',
         });
@@ -51,7 +53,7 @@ const LoadMore = ({
         reset();
       } else {
         setVideosToShow((curr) => ({
-          amount: curr.amount + videoElementsAmount,
+          amount: curr.amount + amountOfVideosToShow,
           timeout: 750,
           transitionGroup: 'videos',
         }));
@@ -80,7 +82,7 @@ const LoadMore = ({
   );
 
   useEffect(() => {
-    if (Boolean(show || videos?.length > videoElementsAmount)) {
+    if (Boolean(show || videos?.length > amountOfVideosToShow)) {
       const thisEle = thisEleRef.current;
       const observerRef = observer.current;
       return () => {
@@ -88,9 +90,9 @@ const LoadMore = ({
         clearTimeout(resetTransitionTimer.current);
       };
     }
-  }, [show, videos, videoElementsAmount]);
+  }, [show, videos, amountOfVideosToShow]);
 
-  if (Boolean(show || videos?.length > videoElementsAmount)) {
+  if (Boolean(show || videos?.length > amountOfVideosToShow)) {
     return (
       <StyledLoadmore ref={thisEleRef} style={style} size={18}>
         <div className='line' />

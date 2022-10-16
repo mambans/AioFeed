@@ -176,27 +176,27 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
         (input?.includes('/videos/') || input?.includes('/youtube/')) &&
         videoId.substring(videoId.lastIndexOf('/') + 1).split('?')[0]);
 
-    const inputFiltered = Boolean(input)
-      ? videos?.filter((v) => {
-          return (
-            checkIncludes([
-              v?.title,
-              v?.snippet?.title,
-              v?.snippet?.channelTitle,
-              v?.login,
-              v?.user_name,
-              v?.id,
-            ]) ||
-            v?.id?.toLowerCase()?.includes(youtubeVideoIdFromUrl) ||
-            v?.id?.toLowerCase()?.includes(twitchVideoIdFromUrl)
-          );
-        })
-      : videos;
+    const inputFiltered = list?.videos?.filter((id) => {
+      const v = videos.find((video) => String(video?.id) === String(id)) || { id };
+      if (!Boolean(input)) return v;
+      return (
+        checkIncludes([
+          v?.title,
+          v?.snippet?.title,
+          v?.snippet?.channelTitle,
+          v?.login,
+          v?.user_name,
+          v?.id,
+        ]) ||
+        v?.id?.toLowerCase()?.includes(youtubeVideoIdFromUrl) ||
+        v?.id?.toLowerCase()?.includes(twitchVideoIdFromUrl)
+      );
+    });
 
     savedFilteredInputMatched.current = inputFiltered;
 
     return inputFiltered;
-  }, [cursor.used, videos, videoId, checkIncludes]);
+  }, [cursor.used, videos, videoId, checkIncludes, list?.videos]);
 
   useEffect(() => {
     return () => {
