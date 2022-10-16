@@ -1,7 +1,7 @@
 import axios from 'axios';
 import validateToken from './validateToken';
 
-const YOUTUBE_INSTANCE = axios.create({
+export const YOUTUBE_INSTANCE = axios.create({
   baseURL: 'https://www.googleapis.com/youtube/v3',
   timeout: 5000,
 });

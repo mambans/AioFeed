@@ -21,6 +21,7 @@ const GetVideoInfo = async ({ videos = [] }) => {
         !fullyCachedVideos.items.find((cache) => cache?.contentDetails?.upload?.videoId === video)
     ) || [];
 
+  console.log('unCachedFullyVideos:', unCachedFullyVideos);
   if (!Boolean(unCachedFullyVideos?.length)) {
     const cachedVideos = fullyCachedVideos.items.filter((cache) =>
       videosArray.find((video) => video === cache?.contentDetails?.upload?.videoId)
