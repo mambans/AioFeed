@@ -16,9 +16,7 @@ const fetchVodsFromMonitoredChannels = async (vodChannels) => {
     )
   );
 
-  return PromiseAllVods.map((promise) => {
-    return promise?.value || [];
-  }).flat(1);
+  return PromiseAllVods.flatMap((promise) => promise?.value || []);
 };
 
 const getFollowedVods = async ({ forceRun, channels, currentVods }) => {

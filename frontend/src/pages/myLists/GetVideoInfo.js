@@ -21,7 +21,6 @@ const GetVideoInfo = async ({ videos = [] }) => {
         !fullyCachedVideos.items.find((cache) => cache?.contentDetails?.upload?.videoId === video)
     ) || [];
 
-  console.log('unCachedFullyVideos:', unCachedFullyVideos);
   if (!Boolean(unCachedFullyVideos?.length)) {
     const cachedVideos = fullyCachedVideos.items.filter((cache) =>
       videosArray.find((video) => video === cache?.contentDetails?.upload?.videoId)
@@ -38,7 +37,6 @@ const GetVideoInfo = async ({ videos = [] }) => {
           id: chunk.join(','),
         })
           .then((res) => {
-            console.log('res:', res);
             return res.data.items.map((item) => ({
               ...item,
               contentDetails: {
@@ -47,12 +45,10 @@ const GetVideoInfo = async ({ videos = [] }) => {
               },
             }));
           })
-          .catch((e) => {
-            return [];
-          });
+          .catch((e) => []);
       })
     )
-  ).flat(1);
+  ).flatMap((promise) => promise.value || []);
 
   console.log('newVideosDetails:', newVideosDetails);
   if (Boolean(fullyCachedVideos.items.length) && Boolean(newVideosDetails.length)) {

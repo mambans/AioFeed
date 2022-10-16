@@ -239,7 +239,7 @@ const ChannelSearchBar = ({
             return response?.data?.data;
           })
         )
-      ).flatMap((promise) => promise.value);
+      ).flatMap((promise) => promise.value || []);
 
       const vodUsers = vodChannels
         .filter((u) => u)
