@@ -187,15 +187,16 @@ const List = ({
           </CSSTransition>
         ))}
       </TransitionGroup>
-      {!!videos?.length && (
+      {!!list?.videos?.length && (
         <LoadMore
+          text='Load more'
           loaded={true}
           setVideosToShow={setVideosToShow}
           videosToShow={videosToShow}
           videos={list?.videos}
           showAll={() => {
             setVideosToShow({
-              amount: videos?.length,
+              amount: list?.video?.length,
               timeout: 750,
               transitionGroup: 'videos',
               showAll: true,
