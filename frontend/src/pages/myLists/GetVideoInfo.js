@@ -31,7 +31,7 @@ const GetVideoInfo = async ({ videos = [] }) => {
     return cachedVideos;
   }
 
-  const newVideosDetails = await Promise.all(
+  const newVideosDetails = await Promise.allSettled(
     chunk(unCachedFullyVideos, 50).map(async (chunk) => {
       // await YOUTUBE_INSTANCE.get(
       //   `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet&id=${chunk}`
@@ -48,28 +48,31 @@ const GetVideoInfo = async ({ videos = [] }) => {
       //   .catch((e) => null)
 
       const asd = await YoutubeAPI.getVideoInfo({ part: 'contentDetails,snippet', id: chunk })
-        .then((res) =>
-          res.data.items.map((item) => ({
+        .then((res) => {
+          console.log('res1:', res);
+          return res.data.items.map((item) => ({
             ...item,
             contentDetails: {
               ...item.contentDetails,
               upload: { videoId: item.id },
             },
-          }))
-        )
+          }));
+        })
         .catch((e) => null);
       console.log('asd:', asd);
 
       const asd2 = await YoutubeAPI.getVideoInfo({ part: ['contentDetails', 'snippet'], id: chunk })
-        .then((res) =>
-          res.data.items.map((item) => ({
+        .then((res) => {
+          console.log('res2:', res);
+
+          return res.data.items.map((item) => ({
             ...item,
             contentDetails: {
               ...item.contentDetails,
               upload: { videoId: item.id },
             },
-          }))
-        )
+          }));
+        })
         .catch((e) => null);
       console.log('asd2:', asd2);
 
@@ -77,15 +80,17 @@ const GetVideoInfo = async ({ videos = [] }) => {
         part: 'contentDetails,snippet',
         id: chunk.join(','),
       })
-        .then((res) =>
-          res.data.items.map((item) => ({
+        .then((res) => {
+          console.log('res3:', res);
+
+          return res.data.items.map((item) => ({
             ...item,
             contentDetails: {
               ...item.contentDetails,
               upload: { videoId: item.id },
             },
-          }))
-        )
+          }));
+        })
         .catch((e) => null);
       console.log('asd3:', asd3);
 
