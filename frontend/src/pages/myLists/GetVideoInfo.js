@@ -30,26 +30,28 @@ const GetVideoInfo = async ({ videos = [] }) => {
     return cachedVideos;
   }
 
-  const newVideosDetails = await Promise.allSettled(
-    chunk(unCachedFullyVideos, 50).map(async (chunk) => {
-      return await YoutubeAPI.getVideoInfo({
-        part: 'contentDetails,snippet',
-        id: chunk.join(','),
-      })
-        .then((res) => {
-          console.log('res:', res);
-          return res.data.items.map((item) => ({
-            ...item,
-            contentDetails: {
-              ...item.contentDetails,
-              upload: { videoId: item.id },
-            },
-          }));
+  const newVideosDetails = (
+    await Promise.allSettled(
+      chunk(unCachedFullyVideos, 50).map(async (chunk) => {
+        return await YoutubeAPI.getVideoInfo({
+          part: 'contentDetails,snippet',
+          id: chunk.join(','),
         })
-        .catch((e) => {
-          return [];
-        });
-    })
+          .then((res) => {
+            console.log('res:', res);
+            return res.data.items.map((item) => ({
+              ...item,
+              contentDetails: {
+                ...item.contentDetails,
+                upload: { videoId: item.id },
+              },
+            }));
+          })
+          .catch((e) => {
+            return [];
+          });
+      })
+    )
   ).then((res) => res.flat(1));
 
   console.log('newVideosDetails:', newVideosDetails);
