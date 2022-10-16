@@ -118,6 +118,7 @@ export const MyListsProvider = ({ children }) => {
     }, {});
 
     if (lists) setLists(lists, invoked.current);
+    setIsLoading(false);
     invoked.current = true;
   }, [setLists]);
 

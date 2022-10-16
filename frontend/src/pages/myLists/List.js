@@ -95,12 +95,12 @@ export const fetchListVideos = async ({
 
 const List = ({
   list,
-
   setLists,
   setVideos,
   videos,
   savedVideosWithData,
   addSavedData,
+  setLoading,
 }) => {
   const [dragSelected, setDragSelected] = useState();
   const { videoElementsAmount } = useContext(CenterContext) || {};
@@ -130,16 +130,17 @@ const List = ({
     // });
 
     (async () => {
+      setLoading(true);
       const videosWithData = await addVideoDataToVideos({
         savedVideosWithData: savedVideosWithData.current,
         list,
         videos: list.videos,
       });
-
+      setLoading(false);
       setVideos(videosWithData);
       addSavedData(videosWithData);
     })();
-  }, [list, setVideos, savedVideosWithData, addSavedData]);
+  }, [list, setVideos, savedVideosWithData, addSavedData, setLoading]);
 
   const dragEvents = useMemo(
     () => ({

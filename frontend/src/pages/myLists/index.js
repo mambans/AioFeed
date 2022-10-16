@@ -26,6 +26,7 @@ const FavoriteListContainer = ({
   addSavedData,
 }) => {
   const [videos, setVideos] = useState();
+  const [loading, setLoading] = useState();
   const { toggleExpanded } = useFeedPreferences();
   const feedPreferences = useRecoilValue(feedPreferencesAtom);
 
@@ -46,7 +47,7 @@ const FavoriteListContainer = ({
           </h1>
         }
         refresh={fetchMyListContextData}
-        isLoading={isLoading}
+        isLoading={isLoading || loading}
         rightSide={
           <>
             <MyListSmallList list={list} videos={videos} listName={list.title} />
@@ -62,6 +63,7 @@ const FavoriteListContainer = ({
           videos={videos}
           savedVideosWithData={savedVideosWithData}
           addSavedData={addSavedData}
+          setLoading={setLoading}
         />
       </ExpandableSection>
     </Container>
