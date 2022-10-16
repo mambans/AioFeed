@@ -204,6 +204,7 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
     };
   }, []);
 
+  console.log('filteredInputMatched:', filteredInputMatched);
   return (
     <SearchList
       setListIsOpen={setListIsOpen}
@@ -223,10 +224,10 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
     >
       {Boolean(filteredInputMatched?.length) && (
         <GameListUlContainer ref={ulListRef} style={{ paddingTop: '10px' }}>
-          {filteredInputMatched.map((v, index) => (
+          {filteredInputMatched?.map((v, index) => (
             <ToolTip
               key={v?.id + index}
-              show={(v?.title || v?.snippet?.title || v?.id).length >= 30}
+              show={(v?.title || v?.snippet?.title || v?.id)?.length >= 30}
               tooltip={v?.title || v?.snippet?.title || v?.id}
             >
               <StyledGameListElement
