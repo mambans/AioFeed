@@ -248,6 +248,7 @@ const PlaylistInPlayer = ({
       const videos = await addVideoDataToVideos({
         savedVideosWithData: savedVideosWithData.current,
         list,
+        videos: list?.videos,
       });
 
       setListVideos((curr) =>

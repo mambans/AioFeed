@@ -19,7 +19,6 @@ import { feedPreferencesAtom, useFeedPreferences } from '../../atoms/atoms';
 const FavoriteListContainer = ({
   list,
   setLists,
-  isLoading,
   fetchMyListContextData,
   className,
   savedVideosWithData,
@@ -29,6 +28,7 @@ const FavoriteListContainer = ({
   const [loading, setLoading] = useState();
   const { toggleExpanded } = useFeedPreferences();
   const feedPreferences = useRecoilValue(feedPreferencesAtom);
+  const { isLoading } = useContext(MyListsContext);
 
   return (
     <Container
@@ -64,6 +64,7 @@ const FavoriteListContainer = ({
           savedVideosWithData={savedVideosWithData}
           addSavedData={addSavedData}
           setLoading={setLoading}
+          isLoading={loading}
         />
       </ExpandableSection>
     </Container>
@@ -71,7 +72,7 @@ const FavoriteListContainer = ({
 };
 
 export const MyLists = () => {
-  const { lists, setLists, fetchMyListContextData, isLoading, savedVideosWithData, addSavedData } =
+  const { lists, setLists, fetchMyListContextData, savedVideosWithData, addSavedData } =
     useContext(MyListsContext);
   // const validateToken = useToken();
   // const validateYoutubeToken = useYoutubeToken();
@@ -93,7 +94,6 @@ export const MyLists = () => {
                 <FavoriteListContainer
                   list={list}
                   setLists={setLists}
-                  isLoading={isLoading}
                   fetchMyListContextData={fetchMyListContextData}
                   savedVideosWithData={savedVideosWithData}
                   addSavedData={addSavedData}

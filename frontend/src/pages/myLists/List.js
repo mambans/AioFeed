@@ -101,6 +101,7 @@ const List = ({
   savedVideosWithData,
   addSavedData,
   setLoading,
+  isLoading,
 }) => {
   const [dragSelected, setDragSelected] = useState();
   const { videoElementsAmount } = useContext(CenterContext) || {};
@@ -111,36 +112,28 @@ const List = ({
     transitionGroup: 'videos',
   });
 
-  useEffect(() => {
-    setVideosToShow((cr) => ({
-      amount: cr?.showAll && videos?.length ? videos?.length : videoElementsAmount / 2,
-      timeout: 750,
-      transitionGroup: 'videos',
-      showAll: cr?.showAll,
-    }));
-  }, [videoElementsAmount, videos]);
+  // useEffect(() => {
+  //   setVideosToShow((cr) => ({
+  //     amount: cr?.showAll && videos?.length ? videos?.length : videoElementsAmount / 2,
+  //     timeout: 750,
+  //     transitionGroup: 'videos',
+  //     showAll: cr?.showAll,
+  //   }));
+  // }, [videoElementsAmount, videos]);
 
   useEffect(() => {
-    // setVideos((c) => {
-    //   const nrToAdd = videosToShow.amount - c?.length;
-
-    //   if (videosToShow.amount !== c?.length || !nrToAdd?.length) return c;
-
-    //   return [...c, ...Array.from(Array(nrToAdd))?.map(() => ({ loading: true }))].filter((i) => i);
-    // });
-
     (async () => {
       setLoading(true);
       const videosWithData = await addVideoDataToVideos({
         savedVideosWithData: savedVideosWithData.current,
         list,
-        videos: list.videos,
+        videos: list?.videos.slice(0, videosToShow?.amount),
       });
       setLoading(false);
-      setVideos(videosWithData);
+      setVideos((c) => videosWithData);
       addSavedData(videosWithData);
     })();
-  }, [list, setVideos, savedVideosWithData, addSavedData, setLoading]);
+  }, [list, setVideos, savedVideosWithData, addSavedData, setLoading, videosToShow?.amount]);
 
   const dragEvents = useMemo(
     () => ({
@@ -208,6 +201,8 @@ const List = ({
               showAll: true,
             });
           }}
+          amount={videoElementsAmount / 2}
+          isLoading={isLoading}
         />
       )}
     </VideosContainer>

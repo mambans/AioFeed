@@ -17,6 +17,7 @@ const LoadMore = ({
   videos,
   showAll,
   amount,
+  isLoading,
 }) => {
   const thisEleRef = useRef();
   const { videoElementsAmount } = useContext(CenterContext) || {};
@@ -97,7 +98,7 @@ const LoadMore = ({
       <StyledLoadmore ref={thisEleRef} style={style} size={18}>
         <div className='line' />
         <div className='button' onClick={onClickFunc}>
-          {loading ? (
+          {loading || isLoading ? (
             <>
               Loading..
               <CountdownCircleTimer isLoading={true} style={{ marginLeft: '10px' }} size={18} />
