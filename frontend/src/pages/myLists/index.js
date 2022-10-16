@@ -24,7 +24,7 @@ const FavoriteListContainer = ({
   savedVideosWithData,
   addSavedData,
 }) => {
-  const [videos, setVideos] = useState();
+  const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState();
   const { toggleExpanded } = useFeedPreferences();
   const feedPreferences = useRecoilValue(feedPreferencesAtom);
