@@ -58,7 +58,11 @@ const GetVideoInfo = async ({ videos = [] }) => {
             },
           }));
         })
-        .catch((e) => null);
+        .catch((e) => {
+          console.log('e1:', e);
+
+          return [];
+        });
       console.log('asd:', asd);
 
       const asd2 = await YoutubeAPI.getVideoInfo({ part: ['contentDetails', 'snippet'], id: chunk })
@@ -73,7 +77,11 @@ const GetVideoInfo = async ({ videos = [] }) => {
             },
           }));
         })
-        .catch((e) => null);
+        .catch((e) => {
+          console.log('e2:', e);
+
+          return [];
+        });
       console.log('asd2:', asd2);
 
       const asd3 = await YoutubeAPI.getVideoInfo({
@@ -91,7 +99,11 @@ const GetVideoInfo = async ({ videos = [] }) => {
             },
           }));
         })
-        .catch((e) => null);
+        .catch((e) => {
+          console.log('e3:', e);
+
+          return [];
+        });
       console.log('asd3:', asd3);
 
       return await axios
@@ -113,7 +125,9 @@ const GetVideoInfo = async ({ videos = [] }) => {
             },
           }))
         )
-        .catch((e) => null);
+        .catch((e) => {
+          return [];
+        });
     })
   ).then((res) => res.flat(1));
 
