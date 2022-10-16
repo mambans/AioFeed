@@ -176,8 +176,12 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
         (input?.includes('/videos/') || input?.includes('/youtube/')) &&
         videoId.substring(videoId.lastIndexOf('/') + 1).split('?')[0]);
 
-    const inputFiltered = list?.videos?.filter((id) => {
-      const v = videos.find((video) => String(video?.id) === String(id)) || { id };
+    const vids = list?.videos.map(
+      (id) => videos.find((video) => String(video?.id) === String(id)) || { id }
+    );
+
+    console.log('vids:', vids);
+    const inputFiltered = vids?.filter((v) => {
       if (!Boolean(input)) return v;
       return (
         checkIncludes([
