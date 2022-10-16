@@ -1,11 +1,6 @@
 import { fetchListVideos } from './List';
 
-const addVideoDataToVideos = async ({
-  savedVideosWithData,
-  list,
-  videos,
-  ytExistsAndValidated,
-}) => {
+const addVideoDataToVideos = async ({ savedVideosWithData, list, videos }) => {
   const filteredVideos = videos?.reduce(
     (acc, id) => {
       const video = savedVideosWithData.find((v) => String(v.id) === String(id) && !v?.loading);
@@ -20,7 +15,7 @@ const addVideoDataToVideos = async ({
   if (filteredVideos?.missing?.length) {
     const newlyFetchedVideoData = await fetchListVideos({
       list,
-      ytExistsAndValidated,
+
       videos: filteredVideos.missing,
     });
 

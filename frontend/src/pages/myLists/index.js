@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { HiViewList } from 'react-icons/hi';
 import './MyListsTransitions.scss';
@@ -6,7 +6,6 @@ import Header, { HeaderNumberCount } from '../../components/Header';
 
 import MyListsContext from './MyListsContext';
 import List from './List';
-import useYoutubeToken from '../youtube/useToken';
 import MyListSmallList from './MyListSmallList';
 import DropDownDrawer from './DropDownDrawer';
 import { Container } from '../twitch/StyledComponents';
@@ -17,38 +16,9 @@ import Colors from '../../components/themes/Colors';
 import { useRecoilValue } from 'recoil';
 import { feedPreferencesAtom, useFeedPreferences } from '../../atoms/atoms';
 
-export const useCheckForVideosAndValidateToken = ({
-  lists,
-  setIsLoading = () => {},
-  setYtExistsAndValidated,
-}) => {
-  const validateYoutubeToken = useYoutubeToken();
-
-  useEffect(() => {
-    const youtubeVideoExists =
-      lists &&
-      Object?.values(lists)
-        .filter((l) => l.enabled)
-        .map((list) => list?.videos?.find((videoId) => typeof videoId === 'string'))
-        .filter((i) => i)?.length;
-
-    const youtubePromise =
-      Boolean(youtubeVideoExists) &&
-      validateYoutubeToken().then(() => {
-        setYtExistsAndValidated(true);
-        return true;
-      });
-
-    Promise.allSettled([youtubePromise])
-      .catch((e) => console.log(e))
-      .finally(() => setIsLoading(false));
-  }, [lists, setIsLoading, validateYoutubeToken, setYtExistsAndValidated]);
-};
-
 const FavoriteListContainer = ({
   list,
   setLists,
-  ytExistsAndValidated,
   isLoading,
   fetchMyListContextData,
   className,
@@ -87,7 +57,6 @@ const FavoriteListContainer = ({
       <ExpandableSection collapsed={feedPreferences?.[list.id]?.collapsed}>
         <List
           list={list}
-          ytExistsAndValidated={ytExistsAndValidated}
           setLists={setLists}
           setVideos={setVideos}
           videos={videos}
@@ -100,23 +69,10 @@ const FavoriteListContainer = ({
 };
 
 export const MyLists = () => {
-  const {
-    lists,
-    setLists,
-    fetchMyListContextData,
-    isLoading,
-    setIsLoading,
-    savedVideosWithData,
-    addSavedData,
-  } = useContext(MyListsContext);
-  const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
+  const { lists, setLists, fetchMyListContextData, isLoading, savedVideosWithData, addSavedData } =
+    useContext(MyListsContext);
   // const validateToken = useToken();
   // const validateYoutubeToken = useYoutubeToken();
-  useCheckForVideosAndValidateToken({
-    lists,
-    setIsLoading,
-    setYtExistsAndValidated,
-  });
 
   return (
     <>
@@ -137,7 +93,6 @@ export const MyLists = () => {
                   setLists={setLists}
                   isLoading={isLoading}
                   fetchMyListContextData={fetchMyListContextData}
-                  ytExistsAndValidated={ytExistsAndValidated}
                   savedVideosWithData={savedVideosWithData}
                   addSavedData={addSavedData}
                 />

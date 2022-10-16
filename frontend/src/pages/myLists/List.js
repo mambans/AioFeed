@@ -17,7 +17,7 @@ import addVideoDataToVideos from './addVideoDataToVideos';
 
 export const fetchListVideos = async ({
   list,
-  ytExistsAndValidated,
+
   currentVideos = [],
   videos,
 }) => {
@@ -50,12 +50,10 @@ export const fetchListVideos = async ({
       : twitchItems?.map((video) => ({ id: video, loading: true }));
 
     const youtubeItemsWithDetails = Boolean(youtubeItems?.length)
-      ? ytExistsAndValidated
-        ? await youtubeFetchVideos(youtubeItems)
-        : youtubeItems.map((video) => {
-            return { id: video, contentDetails: { upload: { videoId: video } }, loading: true };
-          })
-      : [];
+      ? await youtubeFetchVideos(youtubeItems)
+      : youtubeItems.map((video) => {
+          return { id: video, contentDetails: { upload: { videoId: video } }, loading: true };
+        });
 
     const mergedVideosUnordered = [
       ...(twitchItemsWithDetails || []),
@@ -97,7 +95,7 @@ export const fetchListVideos = async ({
 
 const List = ({
   list,
-  ytExistsAndValidated,
+
   setLists,
   setVideos,
   videos,
@@ -136,13 +134,12 @@ const List = ({
         savedVideosWithData: savedVideosWithData.current,
         list,
         videos: list.videos,
-        ytExistsAndValidated,
       });
 
       setVideos(videosWithData);
       addSavedData(videosWithData);
     })();
-  }, [list, ytExistsAndValidated, setVideos, savedVideosWithData, addSavedData]);
+  }, [list, setVideos, savedVideosWithData, addSavedData]);
 
   const dragEvents = useMemo(
     () => ({
@@ -196,20 +193,22 @@ const List = ({
           </CSSTransition>
         ))}
       </TransitionGroup>
-      <LoadMore
-        loaded={true}
-        setVideosToShow={setVideosToShow}
-        videosToShow={videosToShow}
-        videos={list?.videos}
-        showAll={() => {
-          setVideosToShow({
-            amount: videos?.length,
-            timeout: 750,
-            transitionGroup: 'videos',
-            showAll: true,
-          });
-        }}
-      />
+      {!!videos?.length && (
+        <LoadMore
+          loaded={true}
+          setVideosToShow={setVideosToShow}
+          videosToShow={videosToShow}
+          videos={list?.videos}
+          showAll={() => {
+            setVideosToShow({
+              amount: videos?.length,
+              timeout: 750,
+              transitionGroup: 'videos',
+              showAll: true,
+            });
+          }}
+        />
+      )}
     </VideosContainer>
   );
 };

@@ -7,7 +7,6 @@ import { HiViewList } from 'react-icons/hi';
 import { FaRandom } from 'react-icons/fa';
 import { TiArrowLoop } from 'react-icons/ti';
 
-import { useCheckForVideosAndValidateToken } from '.';
 import MyListSmallList from './MyListSmallList';
 import { restructureVideoList, uploadNewList } from './dragDropUtils';
 import MyListsContext from './MyListsContext';
@@ -215,8 +214,7 @@ const PlaylistInPlayer = ({
   setListToShow,
 }) => {
   const { setLists, lists, savedVideosWithData, addSavedData } = useContext(MyListsContext);
-  const [ytExistsAndValidated, setYtExistsAndValidated] = useState(false);
-  const [twitchExistsAndValidated, setTwitchExistsAndValidated] = useState(false);
+
   const [search, setSearch] = useState();
   const checkIncludes = useCallback(
     (values) => values.some((v) => String(v)?.toLowerCase()?.includes(search?.toLowerCase())),
@@ -241,12 +239,6 @@ const PlaylistInPlayer = ({
     [listVideos, search, checkIncludes]
   );
 
-  useCheckForVideosAndValidateToken({
-    lists,
-    setYtExistsAndValidated,
-    setTwitchExistsAndValidated,
-  });
-
   const handleOnSearchFilter = (v) => {
     setSearch(v);
   };
@@ -256,8 +248,6 @@ const PlaylistInPlayer = ({
       const videos = await addVideoDataToVideos({
         savedVideosWithData: savedVideosWithData.current,
         list,
-        ytExistsAndValidated,
-        twitchExistsAndValidated,
       });
 
       setListVideos((curr) =>
@@ -270,15 +260,7 @@ const PlaylistInPlayer = ({
       );
       addSavedData(videos);
     })();
-  }, [
-    list,
-    listName,
-    ytExistsAndValidated,
-    twitchExistsAndValidated,
-    setListVideos,
-    savedVideosWithData,
-    addSavedData,
-  ]);
+  }, [list, listName, setListVideos, savedVideosWithData, addSavedData]);
 
   useEffect(() => {
     const ele = document.querySelector(`#v${videoId}`);

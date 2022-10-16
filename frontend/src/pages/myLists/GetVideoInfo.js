@@ -50,7 +50,6 @@ const GetVideoInfo = async ({ videos = [] }) => {
     )
   ).flatMap((promise) => promise.value || []);
 
-  console.log('newVideosDetails:', newVideosDetails);
   if (Boolean(fullyCachedVideos.items.length) && Boolean(newVideosDetails.length)) {
     setLocalStorage('Cached_SavedYoutubeVideos', {
       items: [...fullyCachedVideos.items.slice(-50), ...newVideosDetails],
