@@ -11,7 +11,7 @@ YOUTUBE_INSTANCE.interceptors.request.use(
     const token = await validateToken();
     config.headers['Authorization'] = `Bearer ${token}`;
     config.headers['Accept'] = 'application/json';
-    config.params.key = process.env.REACT_APP_YOUTUBE_API_KEY;
+    config.params = { ...(config.params || {}), key: process.env.REACT_APP_YOUTUBE_API_KEY };
 
     return config;
   },
@@ -25,6 +25,7 @@ YOUTUBE_INSTANCE.interceptors.response.use(
     return response;
   },
   function (error) {
+    console.log('YOUTUBE_INSTANCE error:', error);
     return Promise.reject(error);
   }
 );
@@ -45,8 +46,8 @@ export const pagination = async (response) => {
 // const controller = new AbortController();
 
 const YoutubeAPI = {
-  getVideoInfo: async (string = '', params) => {
-    return await YOUTUBE_INSTANCE.get(`/videos${string}`, {
+  getVideoInfo: async (params) => {
+    return await YOUTUBE_INSTANCE.get(`/videos`, {
       params,
     });
   },
