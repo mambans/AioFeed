@@ -37,6 +37,7 @@ const GetVideoInfo = async ({ videos = [] }) => {
         id: chunk.join(','),
       })
         .then((res) => {
+          console.log('res:', res);
           return res.data.items.map((item) => ({
             ...item,
             contentDetails: {
@@ -51,6 +52,7 @@ const GetVideoInfo = async ({ videos = [] }) => {
     })
   ).then((res) => res.flat(1));
 
+  console.log('newVideosDetails:', newVideosDetails);
   if (Boolean(fullyCachedVideos.items.length) && Boolean(newVideosDetails.length)) {
     setLocalStorage('Cached_SavedYoutubeVideos', {
       items: [...fullyCachedVideos.items.slice(-50), ...newVideosDetails],
