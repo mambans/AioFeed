@@ -47,7 +47,7 @@ const getVideoInfo = async ({ videos }) => {
     ? await Promise.all(
         chunk(noVideoDetailsIDS, 50).map(
           async (chunk) =>
-            await YoutubeAPI.getVideoInfo({ part: 'contentDetails', id: chunk })
+            await YoutubeAPI.getVideoInfo({ part: 'contentDetails', id: chunk.join(',') })
               .then((res) => res.data.items)
               .catch((e) => null)
         )

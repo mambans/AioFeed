@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { getLocalstorage, chunk, setLocalStorage, getCookie } from '../../util';
+import { getLocalstorage, chunk, setLocalStorage } from '../../util';
 import YoutubeAPI from '../youtube/API';
 // import YoutubeAPI from '../youtube/API';
 
@@ -33,64 +32,11 @@ const GetVideoInfo = async ({ videos = [] }) => {
 
   const newVideosDetails = await Promise.allSettled(
     chunk(unCachedFullyVideos, 50).map(async (chunk) => {
-      // await YOUTUBE_INSTANCE.get(
-      //   `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet&id=${chunk}`
-      // )
-      //   .then((res) =>
-      //     res.data.items.map((item) => ({
-      //       ...item,
-      //       contentDetails: {
-      //         ...item.contentDetails,
-      //         upload: { videoId: item.id },
-      //       },
-      //     }))
-      //   )
-      //   .catch((e) => null)
-
-      const asd = await YoutubeAPI.getVideoInfo({ part: 'contentDetails,snippet', id: chunk })
-        .then((res) => {
-          console.log('res1:', res);
-          return res.data.items.map((item) => ({
-            ...item,
-            contentDetails: {
-              ...item.contentDetails,
-              upload: { videoId: item.id },
-            },
-          }));
-        })
-        .catch((e) => {
-          console.log('e1:', e);
-
-          return [];
-        });
-      console.log('asd:', asd);
-
-      const asd2 = await YoutubeAPI.getVideoInfo({ part: ['contentDetails', 'snippet'], id: chunk })
-        .then((res) => {
-          console.log('res2:', res);
-
-          return res.data.items.map((item) => ({
-            ...item,
-            contentDetails: {
-              ...item.contentDetails,
-              upload: { videoId: item.id },
-            },
-          }));
-        })
-        .catch((e) => {
-          console.log('e2:', e);
-
-          return [];
-        });
-      console.log('asd2:', asd2);
-
-      const asd3 = await YoutubeAPI.getVideoInfo({
+      return await YoutubeAPI.getVideoInfo({
         part: 'contentDetails,snippet',
         id: chunk.join(','),
       })
         .then((res) => {
-          console.log('res3:', res);
-
           return res.data.items.map((item) => ({
             ...item,
             contentDetails: {
@@ -99,32 +45,6 @@ const GetVideoInfo = async ({ videos = [] }) => {
             },
           }));
         })
-        .catch((e) => {
-          console.log('e3:', e);
-
-          return [];
-        });
-      console.log('asd3:', asd3);
-
-      return await axios
-        .get(
-          `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,snippet&id=${chunk}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`,
-          {
-            headers: {
-              Accept: 'application/json',
-              Authorization: `Bearer ${getCookie('Youtube-access_token')}`,
-            },
-          }
-        )
-        .then((res) =>
-          res.data.items.map((item) => ({
-            ...item,
-            contentDetails: {
-              ...item.contentDetails,
-              upload: { videoId: item.id },
-            },
-          }))
-        )
         .catch((e) => {
           return [];
         });
