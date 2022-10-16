@@ -127,13 +127,24 @@ const List = ({
       const videosWithData = await addVideoDataToVideos({
         savedVideosWithData: savedVideosWithData.current,
         list,
-        videos: list?.videos.slice(0, videosToShow?.amount),
+        videos: list?.videos.slice(
+          0,
+          (videosToShow?.showAll && list?.videos?.length) || videosToShow?.amount
+        ),
       });
       setLoading(false);
       setVideos((c) => videosWithData);
       addSavedData(videosWithData);
     })();
-  }, [list, setVideos, savedVideosWithData, addSavedData, setLoading, videosToShow?.amount]);
+  }, [
+    list,
+    setVideos,
+    savedVideosWithData,
+    addSavedData,
+    setLoading,
+    videosToShow?.amount,
+    videosToShow?.showAll,
+  ]);
 
   const dragEvents = useMemo(
     () => ({
