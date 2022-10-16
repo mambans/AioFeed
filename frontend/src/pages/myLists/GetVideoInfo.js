@@ -52,7 +52,7 @@ const GetVideoInfo = async ({ videos = [] }) => {
           });
       })
     )
-  ).then((res) => res.flat(1));
+  ).flat(1);
 
   console.log('newVideosDetails:', newVideosDetails);
   if (Boolean(fullyCachedVideos.items.length) && Boolean(newVideosDetails.length)) {
