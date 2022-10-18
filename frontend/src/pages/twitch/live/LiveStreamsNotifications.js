@@ -19,6 +19,7 @@ const LiveStreamsNotifications = () => {
   useEffect(() => {
     (async () => {
       try {
+        console.log('invoked.current:', invoked.current);
         if (!invoked.current) return;
         const streams = newNonFeedSectionStreams?.map((s) => {
           const stream = {
