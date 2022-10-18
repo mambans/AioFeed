@@ -180,7 +180,6 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
       (id) => videos.find((video) => String(video?.id) === String(id)) || { id }
     );
 
-    console.log('vids:', vids);
     const inputFiltered = vids?.filter((v) => {
       if (!Boolean(input)) return v;
       return (
@@ -208,7 +207,6 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
     };
   }, []);
 
-  console.log('filteredInputMatched:', filteredInputMatched);
   return (
     <SearchList
       setListIsOpen={setListIsOpen}

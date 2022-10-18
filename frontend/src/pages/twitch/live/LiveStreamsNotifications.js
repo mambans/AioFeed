@@ -20,7 +20,10 @@ const LiveStreamsNotifications = () => {
     (async () => {
       try {
         console.log('invoked.current:', invoked.current);
-        if (!invoked.current) return;
+        if (!invoked.current) {
+          invoked.current = true;
+          return;
+        }
         const streams = newNonFeedSectionStreams?.map((s) => {
           const stream = {
             ...s,
@@ -58,7 +61,6 @@ const LiveStreamsNotifications = () => {
             curr.filter((s) => !streams.find((st) => st.id === s.id))
           );
         }
-        invoked.current = true;
       } catch (e) {}
     })();
 

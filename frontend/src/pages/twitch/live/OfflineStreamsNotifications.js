@@ -33,7 +33,10 @@ const OfflineStreamsNotifications = () => {
   useEffect(() => {
     (async () => {
       try {
-        if (!invoked.current) return;
+        if (!invoked.current) {
+          invoked.current = true;
+          return;
+        }
 
         const streams = newOfflineNonFeedSectionStreams?.map((s) => {
           const stream = {
@@ -76,7 +79,6 @@ const OfflineStreamsNotifications = () => {
             curr.filter((s) => !streams.find((st) => st.id === s.id))
           );
         }
-        invoked.current = true;
       } catch (e) {}
     })();
 
