@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { CenterContext } from '../pages/feed/FeedsCenterContainer';
 import LoadingBoxes from '../pages/twitch/LoadingBoxes';
 import { pulseAnimation } from '../pages/twitch/StyledComponents';
 import { HeaderLines } from './../components/styledComponents';
 
 const LoadingFeed = ({ title, order }) => {
+  const { videoElementsAmount } = useContext(CenterContext) || {};
+
   return (
     <Wrapper order={order}>
       <Header>
@@ -17,7 +20,7 @@ const LoadingFeed = ({ title, order }) => {
         <HeaderLines />
       </Line>
       <VideosWrapper>
-        <LoadingBoxes amount={4} type='big' />
+        <LoadingBoxes amount={videoElementsAmount / 2 || 5} type='big' />
       </VideosWrapper>
     </Wrapper>
   );

@@ -33,7 +33,7 @@ const Vods = ({ className }) => {
   const [error, setError] = useState(null);
   const [vodError, setVodError] = useState(null);
   const [vodAmounts, setVodAmounts] = useState({
-    amount: videoElementsAmount * 2,
+    amount: videoElementsAmount,
     timeout: 750,
     transitionGroup: 'videos',
   });
@@ -78,7 +78,7 @@ const Vods = ({ className }) => {
 
   useEffect(() => {
     setVodAmounts({
-      amount: videoElementsAmount * 2,
+      amount: videoElementsAmount,
       timeout: 750,
       transitionGroup: 'videos',
     });
