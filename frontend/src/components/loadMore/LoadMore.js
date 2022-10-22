@@ -1,127 +1,87 @@
 import { GrPowerReset } from 'react-icons/gr';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 import { StyledLoadmore } from './styledComponents';
 import CountdownCircleTimer from '../CountdownCircleTimer';
-import { CenterContext } from '../../pages/feed/FeedsCenterContainer';
 
-const LoadMore = ({
-  style = {},
-  onClick,
-  loaded = true,
-  text,
-  resetFunc,
-  show,
-  setVideosToShow,
-  videosToShow,
-  videos,
-  showAll,
-  amount,
-  isLoading,
-}) => {
-  const thisEleRef = useRef();
-  const { videoElementsAmount } = useContext(CenterContext) || {};
-  const resetTransitionTimer = useRef();
-  const [loading, setLoading] = useState(!loaded);
-  const amountOfVideosToShow = amount || videoElementsAmount;
+const LoadMore = React.forwardRef(
+  ({ style = {}, onClick, onReset, loading: isLoading, onShowAll, reachedEnd, text }, ref) => {
+    const thisEleRef = useRef();
+    const [loading, setLoading] = useState(isLoading);
 
-  const reset = () => {
-    if (resetFunc) {
-      resetFunc();
-    } else if (setVideosToShow && amountOfVideosToShow) {
-      setVideosToShow({
-        amount: amountOfVideosToShow,
-        timeout: 0,
-        transitionGroup: 'instant-disappear',
-      });
-      clearTimeout(resetTransitionTimer.current);
-      resetTransitionTimer.current = setTimeout(() => {
-        setVideosToShow({
-          amount: amountOfVideosToShow,
-          timeout: 750,
-          transitionGroup: 'videos',
-        });
-      }, 750);
-    }
-  };
-
-  const onClickFunc = () => {
-    observer.current.observe(thisEleRef.current);
-    if (onClick) {
-      onClick(true, setLoading);
-    } else {
-      if (videosToShow.amount >= videos?.length) {
-        reset();
-      } else {
-        setVideosToShow((curr) => ({
-          amount: curr.amount + amountOfVideosToShow,
-          timeout: 750,
-          transitionGroup: 'videos',
-        }));
-      }
-    }
-  };
-
-  const observer = useRef(
-    new IntersectionObserver(
-      function (entries) {
-        if (entries[0].isIntersecting === false) {
-          setTimeout(() => {
-            if (thisEleRef.current) {
-              thisEleRef.current.scrollIntoView({
-                behavior: 'smooth',
-                block: 'end',
-                inline: 'nearest',
-              });
-              observer.current.unobserve(thisEleRef.current);
-            }
-          }, 0);
-        }
+    useImperativeHandle(ref, () => ({
+      setLoading(a) {
+        setLoading(a);
       },
-      { threshold: 0.8 }
-    )
-  );
+    }));
 
-  useEffect(() => {
-    if (Boolean(show || videos?.length > amountOfVideosToShow)) {
+    useEffect(() => {
+      setLoading(isLoading);
+    }, [isLoading, setLoading]);
+
+    const onClickFunc = () => {
+      observer.current.observe(thisEleRef.current);
+      onClick();
+    };
+
+    const observer = useRef(
+      new IntersectionObserver(
+        function (entries) {
+          if (entries[0].isIntersecting === false) {
+            setTimeout(() => {
+              if (thisEleRef.current) {
+                thisEleRef.current.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'end',
+                  inline: 'nearest',
+                });
+                observer.current.unobserve(thisEleRef.current);
+              }
+            }, 0);
+          }
+        },
+        { threshold: 0.8 }
+      )
+    );
+
+    useEffect(() => {
       const thisEle = thisEleRef.current;
       const observerRef = observer.current;
       return () => {
         observerRef?.unobserve(thisEle);
-        clearTimeout(resetTransitionTimer.current);
       };
-    }
-  }, [show, videos, amountOfVideosToShow]);
+    }, []);
 
-  if (Boolean(show || videos?.length > amountOfVideosToShow)) {
+    const loadMoreEle = (() => {
+      if (reachedEnd) return null;
+      if (loading)
+        return (
+          <>
+            Loading..
+            <CountdownCircleTimer isLoading={true} style={{ marginLeft: '10px' }} size={18} />
+          </>
+        );
+      return text || 'Load more';
+    })();
+
     return (
       <StyledLoadmore ref={thisEleRef} style={style} size={18}>
         <div className='line' />
         <div className='button' onClick={onClickFunc}>
-          {loading || isLoading ? (
-            <>
-              Loading..
-              <CountdownCircleTimer isLoading={true} style={{ marginLeft: '10px' }} size={18} />
-            </>
-          ) : (
-            text ||
-            (videosToShow.amount >= videos?.length ? 'Show less (reset)' : 'Show more') ||
-            'Load more'
-          )}
+          {loadMoreEle}
         </div>
-        {showAll && (
-          <div className='button' onClick={showAll}>
+        {onShowAll && (
+          <div className='button' onClick={onShowAll}>
             Show all
           </div>
         )}
         <div className='line' />
-        {(setVideosToShow || resetFunc) && (
-          <GrPowerReset size={20} title='Show less (reset)' id='reset' onClick={reset} />
+        {onReset && (
+          <GrPowerReset size={20} title='Show less (reset)' id='reset' onClick={onReset} />
         )}
       </StyledLoadmore>
     );
   }
-  return null;
-};
+);
 
 export default LoadMore;

@@ -298,6 +298,7 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
           {items?.map((i, index) => {
             return (
               <ChannelSearchBarItem
+                isGame
                 searchInput={search}
                 key={i.id}
                 item={i}

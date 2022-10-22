@@ -55,10 +55,38 @@ const YoutubeHandler = ({ requestError, videos }) => {
       </TransitionGroup>
 
       <LoadMore
-        loaded={true}
-        setVideosToShow={setVodAmounts}
-        videosToShow={vodAmounts}
-        videos={videos}
+        onClick={() => {
+          setVodAmounts((curr) => ({
+            amount: curr.amount + videoElementsAmount,
+            timeout: 750,
+            transitionGroup: 'videos',
+          }));
+        }}
+        onReset={() => {
+          setVodAmounts((curr) => ({
+            amount: videoElementsAmount,
+            timeout: 750,
+            transitionGroup: 'videos',
+            //transitionGroup: 'instant-disappear',
+          }));
+          /*clearTimeout(resetTransitionTimer.current);
+            resetTransitionTimer.current = setTimeout(() => {
+              setVideosToShow((curr) => ({
+                amount: curr.amount,
+                timeout: 750,
+                transitionGroup: 'videos',
+              }));
+            }, 750);*/
+        }}
+        reachedEnd={vodAmounts?.amount >= videos?.length}
+        onShowAll={() => {
+          setVodAmounts({
+            amount: videos?.length,
+            timeout: 750,
+            transitionGroup: 'videos',
+            showAll: true,
+          });
+        }}
       />
     </>
   );

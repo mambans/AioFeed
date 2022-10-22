@@ -1,6 +1,6 @@
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Alert } from 'react-bootstrap';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import debounce from 'lodash/debounce';
 
 import LoadMore from '../../../components/loadMore/LoadMore';
@@ -29,6 +29,7 @@ const SubFeed = ({
   const [numberOfVideos, setNumberOfVideos] = useState(
     Math.floor(window.innerWidth / (feedVideoSizeProps?.totalWidth || 350))
   );
+  const loadMoreRef = useRef();
 
   const recalcWidth = useMemo(
     () =>
@@ -105,17 +106,21 @@ const SubFeed = ({
         )
       )}
 
-      <LoadMore
-        show={items && !items.error}
-        text='Load more'
-        onClick={(dull, setLoaded) =>
-          fetchItems({ pagination: itemPagination.current, setLoading: setLoaded })
-        }
-        style={{
-          width: `${numberOfVideos * (feedVideoSizeProps?.totalWidth || 350)}px`,
-          margin: 'auto',
-        }}
-      />
+      {items && !items.error && (
+        <LoadMore
+          ref={loadMoreRef}
+          onClick={() =>
+            fetchItems({
+              pagination: itemPagination.current,
+              setLoading: loadMoreRef.current?.setLoading,
+            })
+          }
+          style={{
+            width: `${numberOfVideos * (feedVideoSizeProps?.totalWidth || 350)}px`,
+            margin: 'auto',
+          }}
+        />
+      )}
     </>
   );
 };

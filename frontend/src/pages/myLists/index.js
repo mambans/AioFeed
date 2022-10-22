@@ -64,7 +64,6 @@ const FavoriteListContainer = ({
           savedVideosWithData={savedVideosWithData}
           addSavedData={addSavedData}
           setLoading={setLoading}
-          isLoading={loading}
         />
       </ExpandableSection>
     </Container>

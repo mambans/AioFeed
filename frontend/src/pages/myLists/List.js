@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import AddVideoExtraData from '../twitch/AddVideoExtraData';
 import TwitchAPI from '../twitch/API';
@@ -15,12 +15,7 @@ import { restructureVideoList, uploadNewList } from './dragDropUtils';
 import { VideosContainer } from '../../components/styledComponents';
 import addVideoDataToVideos from './addVideoDataToVideos';
 
-export const fetchListVideos = async ({
-  list,
-
-  currentVideos = [],
-  videos,
-}) => {
+export const fetchListVideos = async ({ list, currentVideos = [], videos }) => {
   if (videos || list?.videos) {
     const twitchFetchVideos = async (items) => {
       const fetchedVideos = await TwitchAPI.getVideos({ id: items }).catch((e) => {});
@@ -101,7 +96,6 @@ const List = ({
   savedVideosWithData,
   addSavedData,
   setLoading,
-  isLoading,
 }) => {
   const [dragSelected, setDragSelected] = useState();
   const { videoElementsAmount } = useContext(CenterContext) || {};
@@ -111,6 +105,7 @@ const List = ({
     timeout: 750,
     transitionGroup: 'videos',
   });
+  const loadMoreRef = useRef();
 
   // useEffect(() => {
   //   setVideosToShow((cr) => ({
@@ -132,6 +127,8 @@ const List = ({
           (videosToShow?.showAll && list?.videos?.length) || videosToShow?.amount
         ),
       });
+      loadMoreRef.current?.setLoading?.(false);
+
       setLoading(false);
       setVideos((c) => videosWithData);
       addSavedData(videosWithData);
@@ -200,20 +197,40 @@ const List = ({
       </TransitionGroup>
       {!!list?.videos?.length && (
         <LoadMore
-          loaded={true}
-          setVideosToShow={setVideosToShow}
-          videosToShow={videosToShow}
-          videos={list?.videos}
-          showAll={() => {
+          ref={loadMoreRef}
+          onClick={() => {
+            loadMoreRef.current?.setLoading?.(true);
+            setVideosToShow((curr) => ({
+              amount: curr.amount + videoElementsAmount,
+              timeout: 750,
+              transitionGroup: 'videos',
+            }));
+          }}
+          onReset={() => {
+            setVideosToShow((curr) => ({
+              amount: videoElementsAmount / 2,
+              timeout: 750,
+              transitionGroup: 'videos',
+              //transitionGroup: 'instant-disappear',
+            }));
+            /*clearTimeout(resetTransitionTimer.current);
+            resetTransitionTimer.current = setTimeout(() => {
+              setVideosToShow((curr) => ({
+                amount: curr.amount,
+                timeout: 750,
+                transitionGroup: 'videos',
+              }));
+            }, 750);*/
+          }}
+          reachedEnd={videosToShow?.amount >= list?.videos?.length}
+          onShowAll={() => {
             setVideosToShow({
-              amount: list?.video?.length,
+              amount: list?.videos?.length,
               timeout: 750,
               transitionGroup: 'videos',
               showAll: true,
             });
           }}
-          amount={videoElementsAmount / 2}
-          isLoading={isLoading}
         />
       )}
     </VideosContainer>

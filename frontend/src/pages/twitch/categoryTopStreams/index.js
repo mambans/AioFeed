@@ -44,6 +44,7 @@ const TopStreams = () => {
   );
   const oldTopData = useRef();
   const refreshBtnRef = useRef();
+  const loadMoreRef = useRef();
   useDocumentTitle(
     `${gameInfo?.name || category || 'All'} - ${
       videoType.charAt(0).toUpperCase() + videoType.slice(1)
@@ -64,7 +65,7 @@ const TopStreams = () => {
     }
   };
 
-  const fetchVideosDataHandler = (res, shouldLoadMore, setLoading) => {
+  const fetchVideosDataHandler = (res, shouldLoadMore) => {
     if (shouldLoadMore) {
       const allTopData = oldTopData.current.data.concat(res?.topData?.data);
       oldTopData.current = {
@@ -72,7 +73,8 @@ const TopStreams = () => {
         pagination: res?.topData?.pagination,
       };
 
-      setLoading(false);
+      loadMoreRef?.current?.setLoading?.(false);
+
       setTopData(allTopData);
     } else {
       oldTopData.current = res?.topData;
@@ -82,14 +84,14 @@ const TopStreams = () => {
   };
 
   const fetchVideos = useCallback(
-    (shouldLoadMore, setLoading) => {
+    (shouldLoadMore) => {
       setError(null);
-      if (shouldLoadMore) setLoading(true);
+      if (shouldLoadMore) loadMoreRef?.current?.setLoading?.(true);
 
       switch (videoType) {
         case 'streams':
           getTopStreams(category, shouldLoadMore && oldTopData.current, feedVideoSizeProps)
-            .then((res) => fetchVideosDataHandler(res, shouldLoadMore, setLoading))
+            .then((res) => fetchVideosDataHandler(res, shouldLoadMore))
             .catch((e) => {
               if (e?.message === 'game is undefined') {
                 setError('Invalid game name');
@@ -101,7 +103,7 @@ const TopStreams = () => {
           break;
         case 'clips':
           getTopClips(category, sortByTime, oldTopData.current, feedVideoSizeProps)
-            .then((res) => fetchVideosDataHandler(res, shouldLoadMore, setLoading))
+            .then((res) => fetchVideosDataHandler(res, shouldLoadMore))
             .catch((e) => {
               console.log('e:', e);
               if (e?.message === 'game is undefined') {
@@ -114,7 +116,7 @@ const TopStreams = () => {
           break;
         case 'videos':
           getTopVideos(category, sortBy, oldTopData.current, feedVideoSizeProps)
-            .then((res) => fetchVideosDataHandler(res, shouldLoadMore, setLoading))
+            .then((res) => fetchVideosDataHandler(res, shouldLoadMore))
             .catch((e) => {
               if (e?.message === 'game is undefined') {
                 setError('Invalid game name');
@@ -126,7 +128,7 @@ const TopStreams = () => {
           break;
         default:
           getTopStreams(category, shouldLoadMore && oldTopData.current, feedVideoSizeProps)
-            .then((res) => fetchVideosDataHandler(res, shouldLoadMore, setLoading))
+            .then((res) => fetchVideosDataHandler(res, shouldLoadMore))
             .catch((e) => {
               if (e?.message === 'game is undefined') {
                 setError('Invalid game name');
@@ -246,7 +248,6 @@ const TopStreams = () => {
                 load={!topData || topData.length <= 0}
                 type='big'
               />
-
               <TransitionGroup className='twitch-top-live' component={null}>
                 {topData?.map((stream) => (
                   <CSSTransition
@@ -263,8 +264,9 @@ const TopStreams = () => {
                   </CSSTransition>
                 ))}
               </TransitionGroup>
-
-              <LoadMore text='Load more' show={topData?.length} onClick={fetchVideos} />
+              {!!topData?.length && (
+                <LoadMore onClick={() => fetchVideos(true)} ref={loadMoreRef} />
+              )}
             </>
           </TopStreamsContainer>
         )}

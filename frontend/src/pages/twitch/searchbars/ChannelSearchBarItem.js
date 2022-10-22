@@ -9,7 +9,7 @@ import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
 import { Item, LeftWrapper, Profile, ProfileWrapper, Title } from './styledComponents';
 
 const ChannelSearchBarItem = React.memo(
-  ({ item, className, observer, visible = false, hideExtraButtons, onSelect, wrap }) => {
+  ({ item, className, observer, visible = false, hideExtraButtons, onSelect, wrap, isGame }) => {
     /* eslint-disable no-unused-vars */
     const ref = useRef();
     const {
@@ -42,7 +42,7 @@ const ChannelSearchBarItem = React.memo(
     return (
       <Item
         ref={ref}
-        to={`/${login}`}
+        to={isGame ? `category/${login}` : `/${login}`}
         disabled={!item}
         className={className + (visible ? ' isVisible' : '')}
         onClick={(e) => {
