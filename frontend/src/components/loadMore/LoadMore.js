@@ -57,14 +57,15 @@ const LoadMore = React.forwardRef(
     }, []);
 
     const loadMoreEle = (() => {
-      if (reachedEnd) return 'Show less';
-      if (loading)
+      if (loading) {
         return (
           <>
             Loading..
             <CountdownCircleTimer isLoading={true} style={{ marginLeft: '10px' }} size={18} />
           </>
         );
+      }
+      if (reachedEnd) return 'Show less';
       return text || 'Load more';
     })();
 
