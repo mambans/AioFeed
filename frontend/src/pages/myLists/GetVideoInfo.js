@@ -21,6 +21,7 @@ const GetVideoInfo = async ({ videos = [] }) => {
         !fullyCachedVideos.items.find((cache) => cache?.contentDetails?.upload?.videoId === video)
     ) || [];
 
+  console.log('unCachedFullyVideos:', unCachedFullyVideos);
   if (!Boolean(unCachedFullyVideos?.length)) {
     const cachedVideos = fullyCachedVideos.items.filter((cache) =>
       videosArray.find((video) => video === cache?.contentDetails?.upload?.videoId)
@@ -37,6 +38,7 @@ const GetVideoInfo = async ({ videos = [] }) => {
           id: chunk.join(','),
         })
           .then((res) => {
+            console.log('res.data:', res.data);
             return res.data.items.map((item) => ({
               ...item,
               contentDetails: {
@@ -45,7 +47,14 @@ const GetVideoInfo = async ({ videos = [] }) => {
               },
             }));
           })
-          .catch((e) => []);
+          .catch((e) => {
+            console.log('e:', e);
+            console.log('e.message:', e?.message);
+            console.log('e.response.message:', e?.response?.message);
+            console.log('e.response.status:', e?.response?.status);
+
+            return [];
+          });
       })
     )
   ).flatMap((promise) => promise.value || []);
