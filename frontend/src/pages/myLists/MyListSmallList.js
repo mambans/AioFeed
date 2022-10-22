@@ -161,13 +161,13 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
 
   const checkIncludes = useCallback(
     (values) =>
-      values.some((v) => String(v).toLowerCase().includes(String(videoId)?.toLowerCase())),
+      values.some((v) => String(v)?.toLowerCase?.().includes(String(videoId)?.toLowerCase?.())),
     [videoId]
   );
 
   const filteredInputMatched = useMemo(() => {
     if (cursor.used) return savedFilteredInputMatched.current;
-    const input = String(videoId)?.toLowerCase();
+    const input = String(videoId)?.toLowerCase?.();
     const youtubeVideoIdFromUrl =
       Boolean(input) && input?.includes('youtube.com/watch?v') && getYoutubeIdFromUrl(input);
     const twitchVideoIdFromUrl =
@@ -191,8 +191,8 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
           v?.user_name,
           v?.id,
         ]) ||
-        v?.id?.toLowerCase()?.includes(youtubeVideoIdFromUrl) ||
-        v?.id?.toLowerCase()?.includes(twitchVideoIdFromUrl)
+        v?.id?.toLowerCase?.()?.includes(youtubeVideoIdFromUrl) ||
+        v?.id?.toLowerCase?.()?.includes(twitchVideoIdFromUrl)
       );
     });
 
