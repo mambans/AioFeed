@@ -163,7 +163,7 @@ const List = ({
   return (
     <VideosContainer onDragOver={(e) => e.preventDefault()}>
       <TransitionGroup component={null} className={videosToShow.transitionGroup || 'videos'}>
-        {videos?.slice(0, videosToShow.amount)?.map((video) => (
+        {(videosToShow?.showAll ? videos : videos?.slice(0, videosToShow.amount))?.map((video) => (
           <CSSTransition
             key={`${list.title}-${video.contentDetails?.upload?.videoId || video.id}`}
             timeout={videosToShow.timeout}

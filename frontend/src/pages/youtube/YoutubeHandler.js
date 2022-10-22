@@ -38,7 +38,7 @@ const YoutubeHandler = ({ requestError, videos }) => {
         className={vodAmounts.transitionGroup || 'videos'}
         component={SubFeedContainer}
       >
-        {videos.slice(0, vodAmounts.amount).map((video, index) => (
+        {(vodAmounts?.showAll ? videos : videos.slice(0, vodAmounts.amount)).map((video, index) => (
           <CSSTransition
             timeout={vodAmounts.timeout}
             classNames={

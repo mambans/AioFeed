@@ -116,7 +116,10 @@ const Vods = ({ className }) => {
               className={vodAmounts.transitionGroup || 'videos'}
               component={SubFeedContainer}
             >
-              {twitchVods.data?.slice(0, vodAmounts.amount).map((vod) => (
+              {(vodAmounts?.showAll
+                ? twitchVods.data
+                : twitchVods.data?.slice(0, vodAmounts.amount)
+              ).map((vod) => (
                 <CSSTransition
                   key={vod.id}
                   timeout={vodAmounts.timeout}
