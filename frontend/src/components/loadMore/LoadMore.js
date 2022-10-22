@@ -75,7 +75,7 @@ const LoadMore = React.forwardRef(
         <div className='button' onClick={onClickFunc}>
           {loadMoreEle}
         </div>
-        {onShowAll && (
+        {onShowAll && !reachedEnd && (
           <div className='button' onClick={onShowAll}>
             Show all
           </div>
