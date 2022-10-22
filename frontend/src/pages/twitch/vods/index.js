@@ -131,6 +131,7 @@ const Vods = ({ className }) => {
               ))}
             </TransitionGroup>
             <LoadMore
+              text='Show more'
               onClick={() => {
                 setVodAmounts((curr) => ({
                   amount: curr.amount + videoElementsAmount,

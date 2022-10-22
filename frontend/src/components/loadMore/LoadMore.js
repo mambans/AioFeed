@@ -21,7 +21,11 @@ const LoadMore = React.forwardRef(
 
     const onClickFunc = () => {
       observer.current.observe(thisEleRef.current);
-      onClick();
+      if (reachedEnd) {
+        onReset();
+      } else {
+        onClick();
+      }
     };
 
     const observer = useRef(
@@ -53,7 +57,7 @@ const LoadMore = React.forwardRef(
     }, []);
 
     const loadMoreEle = (() => {
-      if (reachedEnd) return null;
+      if (reachedEnd) return 'Show less';
       if (loading)
         return (
           <>
