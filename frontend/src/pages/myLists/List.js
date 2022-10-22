@@ -127,7 +127,15 @@ const List = ({
           (videosToShow?.showAll && list?.videos?.length) || videosToShow?.amount
         ),
       });
+      console.log('videosWithData:', videosWithData);
       loadMoreRef.current?.setLoading?.(false);
+
+      const invalidVideos = list?.videos
+        .slice(0, (videosToShow?.showAll && list?.videos?.length) || videosToShow?.amount)
+        .map((id) => {
+          return !videosWithData.find((v) => String(v.id) === String(id));
+        });
+      console.log('invalidVideos:', invalidVideos);
 
       setLoading(false);
       setVideos((c) => videosWithData);
