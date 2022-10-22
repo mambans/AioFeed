@@ -132,7 +132,7 @@ const List = ({
 
       const invalidVideos = list?.videos
         .slice(0, (videosToShow?.showAll && list?.videos?.length) || videosToShow?.amount)
-        .map((id) => {
+        .filter((id) => {
           return !videosWithData.find((v) => String(v.id) === String(id));
         });
       console.log('invalidVideos:', invalidVideos);
