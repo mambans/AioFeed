@@ -241,12 +241,7 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
                 style={{ fontSize: '0.9em' }}
                 // onEntered={(node) => scrollToIfNeeded(ulListRef.current, node)}
               >
-                <Link
-                  onClick={() => setListIsOpen(false)}
-                  to={{
-                    pathname: constructYUrlLink(v),
-                  }}
-                >
+                <Link onClick={() => setListIsOpen(false)} to={constructYUrlLink(v)}>
                   <img
                     src={
                       v?.thumbnail_url?.replace('{width}', 300)?.replace('{height}', 300) ||

@@ -191,14 +191,7 @@ const SearchList = ({
         // onBlur={() => setListIsOpen(false)}
         {...bindInput}
       />
-      {leftIcon || (
-        <SearchSubmitBtn
-          type='submitBtn'
-          to={{
-            pathname: searchBtnPath,
-          }}
-        />
-      )}
+      {leftIcon || <SearchSubmitBtn type='submitBtn' to={searchBtnPath} />}
       {showButton && (
         <MdFormatListBulleted
           id='ToggleListBtn'

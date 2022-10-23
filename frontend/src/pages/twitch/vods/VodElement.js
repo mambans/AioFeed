@@ -89,9 +89,8 @@ const VodElement = React.memo(
           )}
           <Link
             to={{
-              pathname: `/${login || user_login || user_name}/videos/${id}${
-                listName ? `?list=${listName}` : ''
-              }`,
+              pathname: `/${login || user_login || user_name}/videos/${id}`,
+              search: listName ? `?list=${listName}` : '',
               state: {
                 p_title: title,
               },
