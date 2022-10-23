@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
 import AddVideoExtraData from '../twitch/AddVideoExtraData';
 import TwitchAPI from '../twitch/API';
@@ -10,7 +10,6 @@ import { LoadingVideoElement } from '../twitch/StyledComponents';
 import { addVodEndTime } from '../twitch/TwitchUtils';
 import LoadMore from '../../components/loadMore/LoadMore';
 import { CenterContext } from '../feed/FeedsCenterContainer';
-import { restructureVideoList, uploadNewList } from './dragDropUtils';
 // import aiofeedAPI from '../navigation/API';
 import { VideosContainer } from '../../components/styledComponents';
 import addVideoDataToVideos from './addVideoDataToVideos';
@@ -122,23 +121,6 @@ const List = ({
     videosToShow?.showAll,
   ]);
 
-  const dragEvents = useMemo(
-    () => ({
-      draggable: true,
-      setDragSelected: setDragSelected,
-      dragSelected: dragSelected,
-      onDragEnd: (e) => uploadNewList(e, list.id, videos, setLists),
-      // onDrop: (e) => uploadNewList(e, list.name, videos, setLists),
-      // onDragStart: (e) => (e.dataTransfer.effectAllowed = 'all'),
-      onDragOver: (e) => {
-        // e.preventDefault();
-        restructureVideoList(e, dragSelected, setVideos);
-      },
-      onDragEnter: (e) => e.preventDefault(),
-    }),
-    [dragSelected, setVideos, videos, list.id, setLists]
-  );
-
   return (
     <VideosContainer onDragOver={(e) => e.preventDefault()}>
       <TransitionGroup component={null} className={videosToShow.transitionGroup || 'videos'}>
@@ -159,7 +141,6 @@ const List = ({
                 //data-id used for dragEvents
                 data-id={video.contentDetails?.upload?.videoId}
                 video={video}
-                {...dragEvents}
               />
             ) : (
               <VodElement
@@ -168,7 +149,6 @@ const List = ({
                 //data-id used for dragEvents
                 data-id={video.id}
                 data={video}
-                {...dragEvents}
                 vodBtnDisabled={true}
               />
             )}
