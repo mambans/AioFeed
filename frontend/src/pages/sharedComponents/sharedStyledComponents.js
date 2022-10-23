@@ -350,7 +350,7 @@ export const VideoTitle = styled(Link)`
 
 // YoutubeVideoElement title
 export const VideoTitleHref = styled.a`
-  color: var(--textColor1);
+  color: ${({ error }) => (error ? Colors.red : 'var(--textColor1)')};
   grid-area: title;
   font-size: 1.1em;
   max-width: 100%;

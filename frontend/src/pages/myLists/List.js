@@ -19,6 +19,7 @@ export const fetchListVideos = async ({ list, currentVideos = [], videos }) => {
   if (videos || list?.videos) {
     const twitchFetchVideos = async (items) => {
       const fetchedVideos = await TwitchAPI.getVideos({ id: items }).catch((e) => {});
+      console.log('fetchedVideos:', fetchedVideos);
 
       if (!fetchedVideos) return false;
 
@@ -27,6 +28,7 @@ export const fetchListVideos = async ({ list, currentVideos = [], videos }) => {
         fetchGameInfo: false,
       });
 
+      console.log('finallFetchedVideos:', finallFetchedVideos);
       return await addVodEndTime(finallFetchedVideos.data);
     };
 
@@ -63,27 +65,6 @@ export const fetchListVideos = async ({ list, currentVideos = [], videos }) => {
       }))
       .filter((i) => i);
 
-    //Filtered out the video Ids that have been removed from Twitch/Youtube
-    // const newFilteredIdsList = mergeVideosOrderedAndUnique
-    //   .map((v) => parseNumberAndString(v.id))
-    //   .filter((i) => i);
-
-    // console.log('\n');
-    // console.log('list.title:', list.title);
-    // console.log('twitchItems:', twitchItems);
-    // console.log('youtubeItems:', youtubeItems);
-    // console.log('twitchItemsWithDetails:', twitchItemsWithDetails);
-    // console.log('youtubeItemsWithDetails:', youtubeItemsWithDetails);
-    // console.log('mergedVideosUnordered:', mergedVideosUnordered);
-    // console.log('mergeVideosOrderedAndUnique:', mergeVideosOrderedAndUnique);
-    // console.log('newFilteredIdsList:', newFilteredIdsList);
-    // console.log('videos || list.videos:', videos || list.videos);
-    // console.log('\n');
-    // if (newFilteredIdsList.length < (videos || list.videos).length) {
-    //   setTimeout(async () => {
-    //     await aiofeedAPI.updateSavedList(list.id, { videos: newFilteredIdsList });
-    //   }, 10000);
-    // }
     return mergeVideosOrderedAndUnique;
   }
 };
@@ -130,13 +111,6 @@ const List = ({
       console.log('videosWithData:', videosWithData);
       loadMoreRef.current?.setLoading?.(false);
 
-      const invalidVideos = list?.videos
-        .slice(0, (videosToShow?.showAll && list?.videos?.length) || videosToShow?.amount)
-        .filter((id) => {
-          return !videosWithData.find((v) => String(v.id) === String(id));
-        });
-      console.log('invalidVideos:', invalidVideos);
-
       setLoading(false);
       setVideos((c) => videosWithData);
       addSavedData(videosWithData);
@@ -180,7 +154,7 @@ const List = ({
           >
             {video.loading ? (
               <LoadingVideoElement type={'small'} />
-            ) : video?.kind === 'youtube#video' ? (
+            ) : typeof parseInt(video?.id) !== 'number' ? (
               <YoutubeVideoElement
                 listName={list.title}
                 list={list}

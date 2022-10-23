@@ -25,7 +25,7 @@ const addVideoDataToVideos = async ({ savedVideosWithData, list, videos }) => {
       );
 
       if (video) return [...acc, video];
-      return acc;
+      return [...acc, { id, error: 'Not found' }];
     }, []);
 
     return orderAndMergeVideos;

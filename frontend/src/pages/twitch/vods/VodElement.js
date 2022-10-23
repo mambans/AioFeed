@@ -52,6 +52,7 @@ const VodElement = React.memo(
       title,
       endDate,
       profile_image_url,
+      error,
     } = data;
     const imgRef = useRef();
     const ref = useRef();
@@ -99,10 +100,12 @@ const VodElement = React.memo(
           >
             <img
               src={
-                thumbnail_url
-                  ?.replace('%{width}', size === 'small' ? 339 : 858)
-                  ?.replace('%{height}', size === 'small' ? 192 : 480) ||
-                'https://vod-secure.twitch.tv/_404/404_processing_320x180.png'
+                error
+                  ? `${process.env.PUBLIC_URL}/images/twitch-not-found.png`
+                  : thumbnail_url
+                      ?.replace('%{width}', size === 'small' ? 339 : 858)
+                      ?.replace('%{height}', size === 'small' ? 192 : 480) ||
+                    'https://vod-secure.twitch.tv/_404/404_processing_320x180.png'
               }
               alt=''
             />
@@ -124,7 +127,9 @@ const VodElement = React.memo(
           {type !== 'archive' && <VodType>{type}</VodType>}
         </ImageContainer>
         <ToolTip show={title?.length > 50} tooltip={title} fontSize={'16px'}>
-          <VideoTitleHref href={url}>{truncate(title || '', 70)}</VideoTitleHref>
+          <VideoTitleHref error={!!error} href={url || `https://twitch.tv/videos/${id}`}>
+            {truncate(title || error || '', 70)}
+          </VideoTitleHref>
         </ToolTip>
 
         <ChannelContainer>
