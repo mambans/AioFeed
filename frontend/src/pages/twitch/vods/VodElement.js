@@ -100,6 +100,8 @@ const VodElement = React.memo(
               src={
                 error
                   ? `${process.env.PUBLIC_URL}/images/twitch-not-found.png`
+                  : thumbnail_url === ''
+                  ? `${process.env.PUBLIC_URL}/images/twitch-live.jpg`
                   : thumbnail_url
                       ?.replace('%{width}', size === 'small' ? 339 : 858)
                       ?.replace('%{height}', size === 'small' ? 192 : 480) ||
