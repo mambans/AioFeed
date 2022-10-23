@@ -26,6 +26,12 @@ const YoutubeVideoElement = React.memo(
   ({ list, video, setDragSelected, listName, active, setPlayQueue, playQueue, ...props }) => {
     const ref = useRef();
 
+    console.log('video:', video);
+    console.log('video?.error:', video?.error);
+    console.log(
+      'videoImageUrls(video?.snippet?.thumbnails):',
+      videoImageUrls(video?.snippet?.thumbnails)
+    );
     return (
       <VideoContainer
         key={video?.contentDetails?.upload?.videoId || video?.id}
@@ -95,7 +101,7 @@ const YoutubeVideoElement = React.memo(
               (video?.contentDetails?.upload?.videoId || video.id)
             }
           >
-            {video?.snippet?.title}
+            {video?.snippet?.title || video.error}
           </VideoTitleHref>
         </ToolTip>
         <ChannelNameLink href={`https://www.youtube.com/channel/` + video?.snippet?.channelId}>
