@@ -154,7 +154,8 @@ const List = ({
           >
             {video.loading ? (
               <LoadingVideoElement type={'small'} />
-            ) : typeof parseInt(video?.id) !== 'number' ? (
+            ) : parseInt(video?.id) !== video?.id ? (
+              // ) : video?.kind === 'youtube#video' ? (
               <YoutubeVideoElement
                 listName={list.title}
                 list={list}
