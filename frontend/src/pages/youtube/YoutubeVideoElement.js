@@ -26,12 +26,6 @@ const YoutubeVideoElement = React.memo(
   ({ list, video, setDragSelected, listName, active, setPlayQueue, playQueue, ...props }) => {
     const ref = useRef();
 
-    console.log('video:', video);
-    console.log('video?.error:', video?.error);
-    console.log(
-      'videoImageUrls(video?.snippet?.thumbnails):',
-      videoImageUrls(video?.snippet?.thumbnails)
-    );
     return (
       <VideoContainer
         key={video?.contentDetails?.upload?.videoId || video?.id}
@@ -48,7 +42,7 @@ const YoutubeVideoElement = React.memo(
             list={list}
           />
           <AddToListButton
-            videoId_p={video?.contentDetails?.upload?.videoId}
+            videoId_p={video?.contentDetails?.upload?.videoId || video?.id}
             list={list}
             size={24}
           />
@@ -70,7 +64,7 @@ const YoutubeVideoElement = React.memo(
             // href={`https://www.youtube.com/watch?v=` + video?.contentDetails?.upload?.videoId}
             to={
               `/youtube/` +
-              video?.contentDetails?.upload?.videoId +
+              (video?.contentDetails?.upload?.videoId || video.id) +
               (listName ? `?list=${listName}` : '')
             }
           >
@@ -107,7 +101,9 @@ const YoutubeVideoElement = React.memo(
         <ChannelNameLink href={`https://www.youtube.com/channel/` + video?.snippet?.channelId}>
           {video?.snippet?.channelTitle}
         </ChannelNameLink>
-        <PublishedDate fromNow>{video?.snippet?.publishedAt}</PublishedDate>
+        {video?.snippet?.publishedAt && (
+          <PublishedDate fromNow>{video?.snippet?.publishedAt}</PublishedDate>
+        )}{' '}
       </VideoContainer>
     );
   }
