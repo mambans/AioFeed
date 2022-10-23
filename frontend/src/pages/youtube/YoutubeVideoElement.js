@@ -83,7 +83,7 @@ const YoutubeVideoElement = React.memo(
               alt=''
             />
           </Link>
-          {video?.contentDetails.duration && (
+          {video?.contentDetails?.duration && (
             <ImgBottomInfo>
               <span>{moment.duration(video?.contentDetails?.duration).format('hh:mm:ss')}</span>
             </ImgBottomInfo>
