@@ -15,7 +15,9 @@ import handleArrowNavigation, {
 import { videoImageUrls } from '../youtube/YoutubeVideoElement';
 import { parseNumberAndString } from './dragDropUtils';
 import { ListActionButton, AddPlusIcon } from './StyledComponents';
-import ToolTip from '../../components/tooltip/ToolTip';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import styled from 'styled-components';
+import { RiArrowUpSLine, RiArrowDownSLine } from 'react-icons/ri';
 
 const getYoutubeIdFromUrl = (videoId) => {
   const url = new URL(videoId);
@@ -24,11 +26,13 @@ const getYoutubeIdFromUrl = (videoId) => {
 };
 
 const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
-  const { setLists } = useContext(MyListsContext);
+  const { setLists, editListOrder } = useContext(MyListsContext);
   const [listIsOpen, setListIsOpen] = useState();
   const [cursor, setCursor] = useState({ position: 0 });
+  const [dragging, setDragging] = useState();
 
   const ulListRef = useRef();
+  const scrollInterval = useRef();
   const scrollTimer = useRef();
   const savedFilteredInputMatched = useRef();
 
@@ -204,8 +208,20 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
   useEffect(() => {
     return () => {
       clearTimeout(scrollTimer.current);
+      clearInterval(scrollInterval.current);
     };
   }, []);
+
+  const onDragEnd = (video) => {
+    setDragging(false);
+    if (video.source.index !== video.destination.index) {
+      editListOrder({
+        id: list.id,
+        videoId: parseNumberAndString(video.draggableId),
+        index: video.destination.index,
+      });
+    }
+  };
 
   return (
     <SearchList
@@ -224,46 +240,132 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
       error={error}
       style={style}
     >
-      {Boolean(filteredInputMatched?.length) && (
-        <GameListUlContainer ref={ulListRef} style={{ paddingTop: '10px' }}>
-          {filteredInputMatched?.map((v, index) => (
-            <ToolTip
-              key={v?.id + index}
-              show={(v?.title || v?.snippet?.title || v?.id)?.length >= 30}
-              tooltip={v?.title || v?.snippet?.title || v?.id}
-            >
-              <StyledGameListElement
-                key={v.id}
-                id={`${v.id}`}
-                selected={index === cursor.position}
-                className={index === cursor.position ? 'selected' : ''}
-                imgWidth={`${(30 / 9) * 16}px`}
-                style={{ fontSize: '0.9em' }}
-                // onEntered={(node) => scrollToIfNeeded(ulListRef.current, node)}
-              >
-                <Link onClick={() => setListIsOpen(false)} to={constructYUrlLink(v)}>
-                  <img
-                    src={
-                      v?.thumbnail_url?.replace('{width}', 300)?.replace('{height}', 300) ||
-                      videoImageUrls(v?.snippet?.thumbnails)
-                    }
-                    alt=''
-                  />
-                  {v.title || v?.snippet?.title || v.id}
-                </Link>
-                <ListActionButton
-                  size={16}
-                  onClick={() => removeFavoriteVideo({ setLists, id: list.id, videoId: v.id })}
-                >
-                  <MdDeleteForever size={20} />
-                </ListActionButton>
-              </StyledGameListElement>
-            </ToolTip>
-          ))}
-        </GameListUlContainer>
-      )}
+      <DragDropContext
+        onDragEnd={onDragEnd}
+        onBeforeDragStart={(e) => {
+          setDragging(true);
+          // setTimeout(() => {
+          //   wrapperRef.current.scrollLeft +=
+          //     e.source.index * feedVideoSizeProps.totalWidth - width / 2;
+          // }, 100);
+        }}
+      >
+        <Droppable direction='vertical' droppableId={String(list.id)}>
+          {(provided) =>
+            Boolean(filteredInputMatched?.length) && (
+              <>
+                {dragging && ulListRef.current && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      width: '310px',
+                      maxHeight: '385px',
+                      height: '385px',
+                    }}
+                  >
+                    <ScrollArea
+                      position='top'
+                      onMouseEnter={() => {
+                        requestAnimationFrame(() => (ulListRef.current.scrollTop -= 5));
+                        scrollInterval.current = setInterval(
+                          () => requestAnimationFrame(() => (ulListRef.current.scrollTop -= 35)),
+                          3
+                        );
+                      }}
+                      onMouseLeave={() => clearInterval(scrollInterval.current)}
+                    >
+                      <RiArrowUpSLine />
+                    </ScrollArea>
+
+                    <ScrollArea
+                      position='bottom'
+                      onMouseEnter={() => {
+                        scrollInterval.current = setInterval(
+                          () => requestAnimationFrame(() => (ulListRef.current.scrollTop += 35)),
+                          3
+                        );
+                      }}
+                      onMouseLeave={() => clearInterval(scrollInterval.current)}
+                    >
+                      <RiArrowDownSLine />
+                    </ScrollArea>
+                  </div>
+                )}
+                <GameListUlContainer ref={ulListRef} style={{ paddingTop: '10px' }}>
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {filteredInputMatched?.map((v, index) => (
+                      <Draggable key={v.id} draggableId={String(v.id)} index={index}>
+                        {(provided) => (
+                          <StyledGameListElement
+                            key={v.id}
+                            id={`${v.id}`}
+                            selected={index === cursor.position}
+                            className={index === cursor.position ? 'selected' : ''}
+                            imgWidth={`${(30 / 9) * 16}px`}
+                            style={{ fontSize: '0.9em' }}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            // onEntered={(node) => scrollToIfNeeded(ulListRef.current, node)}
+                          >
+                            <Link onClick={() => setListIsOpen(false)} to={constructYUrlLink(v)}>
+                              <img
+                                src={
+                                  v?.thumbnail_url
+                                    ?.replace('{width}', 300)
+                                    ?.replace('{height}', 300) ||
+                                  videoImageUrls(v?.snippet?.thumbnails)
+                                }
+                                alt=''
+                              />
+                              {v.title || v?.snippet?.title || v.id}
+                            </Link>
+                            <ListActionButton
+                              size={16}
+                              onClick={() =>
+                                removeFavoriteVideo({ setLists, id: list.id, videoId: v.id })
+                              }
+                            >
+                              <MdDeleteForever size={20} />
+                            </ListActionButton>
+                          </StyledGameListElement>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                </GameListUlContainer>
+              </>
+            )
+          }
+        </Droppable>
+      </DragDropContext>
     </SearchList>
   );
 };
 
 export default MyListSmallList;
+
+const ScrollArea = styled.div`
+  position: absolute;
+  top: ${({ position }) => (position === 'top' ? '0px' : 'unset')};
+  bottom: ${({ position }) => (position === 'bottom' ? '0px' : 'unset')};
+  height: 50px;
+  background: rgba(0, 0, 0, 0);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  transition: background 250ms;
+  width: 100%;
+
+  svg {
+    height: 50px;
+    width: 50px;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 1.2);
+  }
+`;

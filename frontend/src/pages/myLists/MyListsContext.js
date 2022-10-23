@@ -51,10 +51,10 @@ export const MyListsProvider = ({ children }) => {
     if (!confirmed) return false;
 
     setLists((curr) => {
-      const orginialList = { ...curr };
-      delete orginialList[id];
+      const orginialLists = { ...curr };
+      delete orginialLists[id];
 
-      return orginialList;
+      return orginialLists;
     });
 
     await API.deleteSavedList(id);
@@ -65,12 +65,27 @@ export const MyListsProvider = ({ children }) => {
     });
   };
 
+  const editListOrder = async ({ id, videoId, index }) => {
+    setLists((curr) => {
+      const orginialLists = { ...curr };
+      const list = orginialLists[id];
+      const currentIndex = list.videos.findIndex((id) => id === videoId);
+      const videos = [...list.videos];
+      videos.splice(currentIndex, 1);
+      videos.splice(index, 0, videoId);
+
+      const newList = { [id]: { ...list, videos } };
+      API.updateSavedList(id, { videos });
+      return { ...orginialLists, ...newList };
+    });
+  };
+
   const editListName = async ({ id, title }) => {
     setLists((curr) => {
-      const orginialList = { ...curr };
-      const list = orginialList[id];
+      const orginialLists = { ...curr };
+      const list = orginialLists[id];
       const newList = { [id]: { ...list, title } };
-      return { ...orginialList, ...newList };
+      return { ...orginialLists, ...newList };
     });
     API.updateSavedList(id, { title });
   };
@@ -156,6 +171,7 @@ export const MyListsProvider = ({ children }) => {
         checkIfListNameIsAvaliable,
         savedVideosWithData: savedVideosWithData,
         addSavedData,
+        editListOrder,
       }}
     >
       {children}

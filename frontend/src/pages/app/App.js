@@ -41,31 +41,31 @@ const AppContainer = styled.div`
 
 const AppRoutesContainer = () => {
   return (
-    <React.StrictMode>
-      <RecoilRoot>
-        <LogsProvider>
-          <ThemeProvider>
-            <AccountProvider>
-              <TwitchProvider>
-                <YoutubeProvider>
-                  <NotificationsProvider>
-                    <TwitterProvider>
-                      <FeedSectionsProvider>
-                        <MyListsProvider>
-                          <VodsProvider>
-                            <App />
-                          </VodsProvider>
-                        </MyListsProvider>
-                      </FeedSectionsProvider>
-                    </TwitterProvider>
-                  </NotificationsProvider>
-                </YoutubeProvider>
-              </TwitchProvider>
-            </AccountProvider>
-          </ThemeProvider>
-        </LogsProvider>
-      </RecoilRoot>
-    </React.StrictMode>
+    // <React.StrictMode>
+    <RecoilRoot>
+      <LogsProvider>
+        <ThemeProvider>
+          <AccountProvider>
+            <TwitchProvider>
+              <YoutubeProvider>
+                <NotificationsProvider>
+                  <TwitterProvider>
+                    <FeedSectionsProvider>
+                      <MyListsProvider>
+                        <VodsProvider>
+                          <App />
+                        </VodsProvider>
+                      </MyListsProvider>
+                    </FeedSectionsProvider>
+                  </TwitterProvider>
+                </NotificationsProvider>
+              </YoutubeProvider>
+            </TwitchProvider>
+          </AccountProvider>
+        </ThemeProvider>
+      </LogsProvider>
+    </RecoilRoot>
+    // {/* </React.StrictMode> */}
   );
 };
 

@@ -23,19 +23,11 @@ export const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
   `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`;
 
 const YoutubeVideoElement = React.memo(
-  ({ list, video, setDragSelected, listName, active, setPlayQueue, playQueue, ...props }) => {
+  ({ list, video, listName, active, setPlayQueue, playQueue, ...props }) => {
     const ref = useRef();
 
     return (
-      <VideoContainer
-        key={video?.contentDetails?.upload?.videoId || video?.id}
-        onDragStart={(e) => {
-          e.dataTransfer.effectAllowed = 'move';
-          e.dataTransfer.setData('text/html', video.id);
-          setDragSelected({ data: video, element: ref.current });
-        }}
-        {...props}
-      >
+      <VideoContainer key={video?.contentDetails?.upload?.videoId || video?.id} {...props}>
         <ImageContainer id={video?.contentDetails?.upload?.videoId} ref={ref} active={active}>
           <RemoveFromCurrentListButton
             videoId_p={video?.contentDetails?.upload?.videoId || video.id}

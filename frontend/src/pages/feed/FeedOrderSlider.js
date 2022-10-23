@@ -146,7 +146,7 @@ const FeedOrderSlider = () => {
           id: list.id,
           icon: `url(${process.env.PUBLIC_URL}/list-icon.svg)`,
         })),
-    feedPreferences?.feedsections?.enabled &&
+    feedPreferences?.feedSections?.enabled &&
       feedSections &&
       Object.values(feedSections)
         .filter((feed) => feed.enabled)

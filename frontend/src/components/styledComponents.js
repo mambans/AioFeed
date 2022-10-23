@@ -261,7 +261,8 @@ export const StyledCountdownCircle = styled.div`
 
 export const VideosContainer = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: ${({ dragging }) => (dragging ? 'unset' : 'wrap')};
+  overflow: ${({ dragging }) => (dragging ? 'scroll' : 'unset')};
   /* min-height: 307px; */
 `;
 
