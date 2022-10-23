@@ -38,7 +38,7 @@ const YoutubeVideoElement = React.memo(
       >
         <ImageContainer id={video?.contentDetails?.upload?.videoId} ref={ref} active={active}>
           <RemoveFromCurrentListButton
-            videoId_p={video?.contentDetails?.upload?.videoId}
+            videoId_p={video?.contentDetails?.upload?.videoId || video.id}
             list={list}
           />
           <AddToListButton

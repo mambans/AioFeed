@@ -19,7 +19,6 @@ export const fetchListVideos = async ({ list, currentVideos = [], videos }) => {
   if (videos || list?.videos) {
     const twitchFetchVideos = async (items) => {
       const fetchedVideos = await TwitchAPI.getVideos({ id: items }).catch((e) => {});
-      console.log('fetchedVideos:', fetchedVideos);
 
       if (!fetchedVideos) return false;
 
@@ -28,7 +27,6 @@ export const fetchListVideos = async ({ list, currentVideos = [], videos }) => {
         fetchGameInfo: false,
       });
 
-      console.log('finallFetchedVideos:', finallFetchedVideos);
       return await addVodEndTime(finallFetchedVideos.data);
     };
 
@@ -108,7 +106,6 @@ const List = ({
           (videosToShow?.showAll && list?.videos?.length) || videosToShow?.amount
         ),
       });
-      console.log('videosWithData:', videosWithData);
       loadMoreRef.current?.setLoading?.(false);
 
       setLoading(false);
@@ -154,7 +151,7 @@ const List = ({
           >
             {video.loading ? (
               <LoadingVideoElement type={'small'} />
-            ) : parseInt(video?.id) !== video?.id ? (
+            ) : String(parseInt(video?.id)) !== String(video?.id) ? (
               // ) : video?.kind === 'youtube#video' ? (
               <YoutubeVideoElement
                 listName={list.title}

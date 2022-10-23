@@ -163,27 +163,29 @@ const VodElement = React.memo(
               className='extaButton'
             />
           </ChannelNameDiv>
-          <VodDates>
-            <div>
-              <Moment interval={300000} durationFromNow className={'date'} id={'timeago'}>
-                {thumbnail_url === '' ? created_at : endDate}
-              </Moment>
-              <p
-                id={'time'}
-                className='viewers'
-                style={{
-                  gridColumn: 2,
-                  justifySelf: 'right',
-                }}
-              >
-                {`${moment(created_at).format('dd HH:mm')} → ${
-                  thumbnail_url === ''
-                    ? moment(Date.now()).format('dd HH:mm')
-                    : moment(endDate).format('dd HH:mm')
-                }`}
-              </p>
-            </div>
-          </VodDates>
+          {created_at && (
+            <VodDates>
+              <div>
+                <Moment interval={300000} durationFromNow className={'date'} id={'timeago'}>
+                  {thumbnail_url === '' ? created_at : endDate}
+                </Moment>
+                <p
+                  id={'time'}
+                  className='viewers'
+                  style={{
+                    gridColumn: 2,
+                    justifySelf: 'right',
+                  }}
+                >
+                  {`${moment(created_at).format('dd HH:mm')} → ${
+                    thumbnail_url === ''
+                      ? moment(Date.now()).format('dd HH:mm')
+                      : moment(endDate).format('dd HH:mm')
+                  }`}
+                </p>
+              </div>
+            </VodDates>
+          )}
         </ChannelContainer>
       </VideoContainer>
     );

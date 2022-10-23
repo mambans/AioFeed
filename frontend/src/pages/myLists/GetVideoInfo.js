@@ -46,7 +46,10 @@ const GetVideoInfo = async ({ videos = [] }) => {
             }));
           })
           .catch((e) => {
-            return [];
+            return chunk?.map((id) => {
+              return { id, error: e.response?.data?.error?.message };
+            });
+            // return [];
           });
       })
     )
