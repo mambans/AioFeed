@@ -14,7 +14,7 @@ import YoutubeAuthCallback from '../auth/YoutubeAuthCallback';
 import SharedVideoPlayer from '../sharedComponents/SharedVideoPlayer';
 import VerifyEmail from '../account/VerifyEmail';
 import AccountContext from '../account/AccountContext';
-// import Player from '../twitch/player/Player';
+import Player from '../twitch/player/Player';
 import StandaloneChat from '../twitch/player/StandaloneChat';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import LoadingFeed from '../../components/LoadingFeed';
