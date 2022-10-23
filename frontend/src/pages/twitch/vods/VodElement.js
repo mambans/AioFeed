@@ -66,6 +66,7 @@ const VodElement = React.memo(
       }
     };
 
+    const name = login || user_login || user_name;
     return (
       <VideoContainer draggable={Boolean(setDragSelected)} onDragStart={onDragStart} {...props}>
         <ImageContainer ref={imgRef} active={active}>
@@ -84,12 +85,10 @@ const VodElement = React.memo(
             />
           )}
 
-          {thumbnail_url === '' && (
-            <VodLiveIndicator to={`/${login || user_login || user_name}`}>Live</VodLiveIndicator>
-          )}
+          {thumbnail_url === '' && <VodLiveIndicator to={`/${name}`}>Live</VodLiveIndicator>}
           <Link
             to={{
-              pathname: `/${login || user_login || user_name}/videos/${id}`,
+              pathname: name ? `/${name}/videos/${id}` : `/videos/${id}`,
               search: listName ? `?list=${listName}` : '',
               state: {
                 p_title: title,
@@ -135,7 +134,7 @@ const VodElement = React.memo(
           <Link
             className={'profileImg'}
             to={{
-              pathname: `/${login || user_login || user_name?.toLowerCase()}/page`,
+              pathname: `/${name?.toLowerCase()}/page`,
               state: {
                 p_id: user_id,
               },
@@ -146,7 +145,7 @@ const VodElement = React.memo(
           <ChannelNameDiv>
             <Link
               to={{
-                pathname: `/${login || user_login || user_name?.toLowerCase()}/page`,
+                pathname: `/${name?.toLowerCase()}/page`,
                 state: {
                   p_id: user_id,
                 },
