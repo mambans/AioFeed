@@ -21,7 +21,7 @@ import LoadingFeed from '../../components/LoadingFeed';
 
 // import TopStreams from '../twitch/categoryTopStreams';
 const TopStreams = React.lazy(() => import('../twitch/categoryTopStreams'));
-const Player = React.lazy(() => import('../twitch/player/Player'));
+// const Player = React.lazy(() => import('../twitch/player/Player'));
 const TwitchChannelRoutes = React.lazy(() => import('../twitch/Routes'));
 
 const MainContentContainer = styled.main`
@@ -127,12 +127,16 @@ const routes = [
   },
   {
     path: 'twitch/:channelName',
-    element: (
-      <Suspense>
-        <Player />
-      </Suspense>
-    ),
+    element: <Player />,
   },
+  // {
+  //   path: 'twitch/:channelName',
+  //   element: (
+  //     <Suspense>
+  //       <Player />
+  //     </Suspense>
+  //   ),
+  // },
   {
     path: ':channelName',
     element: (
