@@ -186,7 +186,7 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
           id,
           thumbnail_url:
             typeof parseNumberAndString(id) === 'string'
-              ? `https://i3.ytimg.com/vi/${id}/maxresdefault.jpg`
+              ? `https://i3.ytimg.com/vi/${id}/hqdefault.jpg`
               : null,
         }
     );
