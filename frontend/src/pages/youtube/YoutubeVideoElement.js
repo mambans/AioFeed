@@ -64,7 +64,8 @@ const YoutubeVideoElement = React.memo(
               src={
                 video?.error
                   ? `${process.env.PUBLIC_URL}/images/youtube-not-found.png`
-                  : videoImageUrls(video?.snippet?.thumbnails)
+                  : videoImageUrls(video?.snippet?.thumbnails) ||
+                    `https://i3.ytimg.com/vi/${video.id}/maxresdefault.jpg`
               }
               alt=''
             />

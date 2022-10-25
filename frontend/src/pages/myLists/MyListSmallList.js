@@ -181,7 +181,14 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
         videoId.substring(videoId.lastIndexOf('/') + 1).split('?')[0]);
 
     const vids = list?.videos.map(
-      (id) => videos.find((video) => String(video?.id) === String(id)) || { id }
+      (id) =>
+        videos.find((video) => String(video?.id) === String(id)) || {
+          id,
+          thumbnail_url:
+            typeof parseNumberAndString(id) === 'string'
+              ? `https://i3.ytimg.com/vi/${id}/maxresdefault.jpg`
+              : null,
+        }
     );
 
     const inputFiltered = vids?.filter((v) => {
