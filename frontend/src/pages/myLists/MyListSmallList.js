@@ -275,8 +275,8 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
                       onMouseEnter={() => {
                         requestAnimationFrame(() => (ulListRef.current.scrollTop -= 5));
                         scrollInterval.current = setInterval(
-                          () => requestAnimationFrame(() => (ulListRef.current.scrollTop -= 35)),
-                          3
+                          () => requestAnimationFrame(() => (ulListRef.current.scrollTop -= 50)),
+                          2
                         );
                       }}
                       onMouseLeave={() => clearInterval(scrollInterval.current)}
@@ -288,8 +288,8 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
                       position='bottom'
                       onMouseEnter={() => {
                         scrollInterval.current = setInterval(
-                          () => requestAnimationFrame(() => (ulListRef.current.scrollTop += 35)),
-                          3
+                          () => requestAnimationFrame(() => (ulListRef.current.scrollTop += 50)),
+                          2
                         );
                       }}
                       onMouseLeave={() => clearInterval(scrollInterval.current)}
@@ -373,6 +373,6 @@ const ScrollArea = styled.div`
   }
 
   &:hover {
-    background: rgba(0, 0, 0, 1.2);
+    background: rgba(0, 0, 0, 0.2);
   }
 `;
