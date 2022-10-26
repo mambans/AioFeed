@@ -182,7 +182,7 @@ const MyListSmallList = ({ listName, videos, style, list, onChange }) => {
 
     const vids = list?.videos.map(
       (id) =>
-        videos.find((video) => String(video?.id) === String(id)) || {
+        (videos && videos.find((video) => String(video?.id) === String(id))) || {
           id,
           thumbnail_url:
             typeof parseNumberAndString(id) === 'string'
