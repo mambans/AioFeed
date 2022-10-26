@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import useSyncedLocalState from '../../hooks/useSyncedLocalState';
 import API from '../navigation/API';
 import AccountContext from '../account/AccountContext';
@@ -75,7 +75,7 @@ export const MyListsProvider = ({ children }) => {
       videos.splice(index, 0, videoId);
 
       const newList = { [id]: { ...list, videos } };
-      API.updateSavedList(id, { videos });
+      // API.updateSavedList(id, { videos });
       return { ...orginialLists, ...newList };
     });
   };
@@ -107,20 +107,6 @@ export const MyListsProvider = ({ children }) => {
       };
     });
   };
-
-  const orderedList = useMemo(() => {
-    return Object.values(lists).reduce((lists, list) => {
-      return {
-        ...lists,
-        [list.title]: {
-          ...list,
-          videos: myListPreferences?.[list.title]?.Reversed
-            ? [...list?.videos]?.reverse()
-            : list.videos,
-        },
-      };
-    }, {});
-  }, [lists, myListPreferences]);
 
   const fetchMyListContextData = useCallback(async () => {
     setIsLoading(true);
@@ -157,7 +143,7 @@ export const MyListsProvider = ({ children }) => {
   return (
     <MyListsContext.Provider
       value={{
-        lists: orderedList,
+        lists,
         setLists,
         fetchMyListContextData,
         isLoading,

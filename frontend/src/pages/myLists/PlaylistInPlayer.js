@@ -8,7 +8,6 @@ import { FaRandom } from 'react-icons/fa';
 import { TiArrowLoop } from 'react-icons/ti';
 
 import MyListSmallList from './MyListSmallList';
-import { restructureVideoList, uploadNewList } from './dragDropUtils';
 import MyListsContext from './MyListsContext';
 import { LoadingVideoElement } from '../twitch/StyledComponents';
 import VodElement from '../twitch/vods/VodElement';
@@ -134,23 +133,7 @@ export const ShowLists = ({ setListToShow, listToShow, setLists, lists = {} }) =
   );
 };
 
-const List = ({ listVideos, list, setLists, setListVideos, videoId, playQueue, setPlayQueue }) => {
-  const [dragSelected, setDragSelected] = useState();
-
-  const dragEvents = useMemo(
-    () => ({
-      draggable: true,
-      setDragSelected: setDragSelected,
-      dragSelected: dragSelected,
-      onDragEnd: (e) => uploadNewList(e, list?.id, listVideos, setLists),
-      // onDrop: (e) => uploadNewList(e, list.name, videos, setLists),
-      onDragOver: (e) => restructureVideoList(e, dragSelected, setListVideos),
-      onDragEnter: (e) => e.preventDefault(),
-    }),
-    [dragSelected, listVideos, list?.id, setLists, setListVideos]
-  );
-
-  console.log('listVideos:', listVideos);
+const List = ({ listVideos, list, videoId, playQueue, setPlayQueue }) => {
   return (
     <TransitionGroup component={null}>
       {listVideos?.map((video) => (
@@ -171,7 +154,6 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId, playQueue, s
               id={`v${video.contentDetails?.upload?.videoId}`}
               // data-id={video.contentDetails?.upload?.videoId}
               video={video}
-              {...dragEvents}
               setPlayQueue={setPlayQueue}
               playQueue={playQueue}
               data-id={video.contentDetails?.upload?.videoId}
@@ -184,7 +166,6 @@ const List = ({ listVideos, list, setLists, setListVideos, videoId, playQueue, s
               id={`v${video.id}`}
               // data-id={video.id}
               data={video}
-              {...dragEvents}
               setPlayQueue={setPlayQueue}
               playQueue={playQueue}
               data-id={video.id}
@@ -340,11 +321,9 @@ const PlaylistInPlayer = ({
           <List
             listVideos={listVideos}
             list={list}
-            setListVideos={setListVideos}
             videoId={videoId}
             setPlayQueue={setPlayQueue}
             playQueue={playQueue}
-            setLists={setLists}
           />
         )}
       </Container>
