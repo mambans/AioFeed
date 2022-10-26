@@ -5,7 +5,6 @@ import DeleteListBtn from './DeleteListBtn';
 import CopyListBtn from './CopyListBtn';
 import { ButtonLookalikeStyle } from '../../components/styledComponents';
 import useClicksOutside from '../../hooks/useClicksOutside';
-import ReverseListButton from './ReverseListButton';
 
 const Container = styled.div`
   margin: auto 15px;
@@ -57,7 +56,6 @@ const DropDownDrawer = ({ list }) => {
         <Dropdown ref={dropdownRef}>
           <CopyListBtn list={list}>Copy</CopyListBtn>
           <DeleteListBtn list={list}>Delete</DeleteListBtn>
-          <ReverseListButton list={list}>Reverse</ReverseListButton>
         </Dropdown>
       )}
     </Container>
