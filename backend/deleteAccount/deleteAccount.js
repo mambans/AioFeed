@@ -3,10 +3,6 @@
 const DynamoDB = require('aws-sdk/clients/dynamodb');
 const client = new DynamoDB.DocumentClient({ apiVersion: '2012-08-10' });
 
-const bcrypt = require('bcrypt');
-const util = require('util');
-const compare = util.promisify(bcrypt.compare);
-
 module.exports = async ({ UserId }) => {
   console.log('deleteAccount -> UserId', UserId);
 
