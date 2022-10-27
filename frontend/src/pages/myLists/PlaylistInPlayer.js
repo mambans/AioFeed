@@ -189,12 +189,12 @@ const List = ({ listVideos, list, videoId, playQueue, setPlayQueue }) => {
                           data-id={video.id}
                         />
                       )}
-                      {provided.placeholder}
                     </div>
                   )}
                 </Draggable>
                 // {/* </CSSTransition> */}
               ))}
+              {provided.placeholder}
             </TransitionGroup>
           </Container>
         )}
