@@ -6,7 +6,7 @@ const CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;
 
 const TWITCH_INSTANCE = axios.create({
   baseURL: 'https://api.twitch.tv/helix',
-  timeout: 5000,
+  timeout: 15000,
 });
 
 const canUseAppToken = (config) => {
