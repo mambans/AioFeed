@@ -116,110 +116,46 @@
 .SlideHorizontal-appear {
   opacity: 0;
   transform: translateX(-25%);
-  -webkit-transform: translateX(-25%);
-  -moz-transform: translateX(-25%);
-  -ms-transform: translateX(-25%);
-  -o-transform: translateX(-25%);
   transition: opacity 250ms, transform 500ms;
-  -webkit-transition: opacity 250ms, transform 500ms;
-  -moz-transition: opacity 250ms, transform 500ms;
-  -ms-transition: opacity 250ms, transform 500ms;
-  -o-transition: opacity 250ms, transform 500ms;
 }
 .SlideHorizontal-appear-active {
   opacity: 1;
   transform: translateX(-100%);
-  -webkit-transform: translateX(-100%);
-  -moz-transform: translateX(-100%);
-  -ms-transform: translateX(-100%);
-  -o-transform: translateX(-100%);
   transition: opacity 250ms, transform 500ms;
-  -webkit-transition: opacity 250ms, transform 500ms;
-  -moz-transition: opacity 250ms, transform 500ms;
-  -ms-transition: opacity 250ms, transform 500ms;
-  -o-transition: opacity 250ms, transform 500ms;
 }
 
 .SlideHorizontal-enter {
   opacity: 0;
   transform: translateX(-60%);
-  -webkit-transform: translateX(-60%);
-  -moz-transform: translateX(-60%);
-  -ms-transform: translateX(-60%);
-  -o-transform: translateX(-60%);
   transition: opacity 250ms, transform 500ms;
-  -webkit-transition: opacity 250ms, transform 500ms;
-  -moz-transition: opacity 250ms, transform 500ms;
-  -ms-transition: opacity 250ms, transform 500ms;
-  -o-transition: opacity 250ms, transform 500ms;
 }
 
 .SlideHorizontal-enter-active {
   opacity: 1;
   transform: translateX(-100%);
-  -webkit-transform: translateX(-100%);
-  -moz-transform: translateX(-100%);
-  -ms-transform: translateX(-100%);
-  -o-transform: translateX(-100%);
   transition: opacity 250ms, transform 500ms;
-  -webkit-transition: opacity 250ms, transform 500ms;
-  -moz-transition: opacity 250ms, transform 500ms;
-  -ms-transition: opacity 250ms, transform 500ms;
-  -o-transition: opacity 250ms, transform 500ms;
 }
 
 .SlideHorizontal-enter-done {
   opacity: 1;
   transform: translateX(-100%);
-  -webkit-transform: translateX(-100%);
-  -moz-transform: translateX(-100%);
-  -ms-transform: translateX(-100%);
-  -o-transform: translateX(-100%);
   transition: opacity 250ms, transform 500ms;
-  -webkit-transition: opacity 250ms, transform 500ms;
-  -moz-transition: opacity 250ms, transform 500ms;
-  -ms-transition: opacity 250ms, transform 500ms;
-  -o-transition: opacity 250ms, transform 500ms;
 }
 
 .SlideHorizontal-exit {
   opacity: 1;
   transform: translateX(-100%);
-  -webkit-transform: translateX(-100%);
-  -moz-transform: translateX(-100%);
-  -ms-transform: translateX(-100%);
-  -o-transform: translateX(-100%);
   transition: opacity 250ms, transform 500ms;
-  -webkit-transition: opacity 250ms, transform 500ms;
-  -moz-transition: opacity 250ms, transform 500ms;
-  -ms-transition: opacity 250ms, transform 500ms;
-  -o-transition: opacity 250ms, transform 500ms;
 }
 
 .SlideHorizontal-exit-active {
   opacity: 0;
   transform: translateX(-60%);
-  -webkit-transform: translateX(-60%);
-  -moz-transform: translateX(-60%);
-  -ms-transform: translateX(-60%);
-  -o-transform: translateX(-60%);
   transition: opacity 250ms, transform 500ms;
-  -webkit-transition: opacity 250ms, transform 500ms;
-  -moz-transition: opacity 250ms, transform 500ms;
-  -ms-transition: opacity 250ms, transform 500ms;
-  -o-transition: opacity 250ms, transform 500ms;
 }
 
 .SlideHorizontal-exit-done {
   opacity: 0;
   transform: translateX(-60%);
-  -webkit-transform: translateX(-60%);
-  -moz-transform: translateX(-60%);
-  -ms-transform: translateX(-60%);
-  -o-transform: translateX(-60%);
   transition: opacity 750ms, transform 1000ms;
-  -webkit-transition: opacity 750ms, transform 1000ms;
-  -moz-transition: opacity 750ms, transform 1000ms;
-  -ms-transition: opacity 750ms, transform 1000ms;
-  -o-transition: opacity 750ms, transform 1000ms;
 }

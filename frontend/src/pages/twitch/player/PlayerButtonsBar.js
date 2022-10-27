@@ -18,9 +18,9 @@ const PlayerButtonsBar = ({ style, videoId, children, user, schedule = true, siz
       style={style}
       size={size || DEFAULT_SIZE}
       onClick={(e) => {
-        e.stopImmediatePropagation();
-        e.stopPropagation();
-        e.preventDefault();
+        e?.stopImmediatePropagation?.();
+        e?.stopPropagation?.();
+        e?.preventDefault?.();
       }}
     >
       <ShowNavigationButton />

@@ -1,5 +1,5 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { TransitionGroup } from 'react-transition-group';
 import styled, { css } from 'styled-components';
 import { MdQueuePlayNext, MdSkipNext } from 'react-icons/md';
 import { CgScrollV } from 'react-icons/cg';
@@ -16,20 +16,23 @@ import ToolTip from '../../components/tooltip/ToolTip';
 import { useParams } from 'react-router';
 import { ListItem } from './StyledComponents';
 import NewListForm from './addToListModal/NewListForm';
-import useClicksOutside from '../../hooks/useClicksOutside';
 import { TransparentButton } from '../../components/styledComponents';
 import addVideoDataToVideos from './addVideoDataToVideos';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { parseNumberAndString } from './dragDropUtils';
+import Popover from '../../components/Popover';
 
 const Container = styled.div`
-  max-height: calc(100% - 60px);
+  max-height: calc(100% - 130px);
   width: 100%;
   display: flex;
   overflow: hidden scroll;
-  flex-flow: row wrap;
-  justify-content: center;
-  padding-bottom: 75px;
+  /* flex-flow: row wrap; */
+  flex-direction: column;
+  /* padding-bottom: 75px; */
   padding-top: 10px;
   overflow: auto;
+  align-items: center;
 `;
 
 const PlayListButtonsContainer = styled.div`
@@ -71,17 +74,6 @@ const PlayNextBtn = styled(MdSkipNext)`
 const ShowListsBtn = styled(HiViewList)`
   ${svgButtonsStyle}
 `;
-const ListsList = styled.div`
-  position: absolute;
-  background: rgba(20, 20, 20, 0.92);
-  left: 500;
-  top: 0;
-  border-radius: 3px;
-  min-width: 125px;
-  min-height: 50px;
-  padding: 15px;
-  z-index: 3;
-`;
 
 const AutoPlayNextBtn = styled(MdQueuePlayNext)`
   ${svgButtonsStyle}
@@ -98,82 +90,116 @@ const PlayNextRandomBtn = styled(FaRandom)`
 `;
 
 export const ShowLists = ({ setListToShow, listToShow, setLists, lists = {} }) => {
-  const [open, setOpen] = useState();
   const { videoId } = useParams() || {};
-  const ref = useRef();
-  useClicksOutside(ref, () => setOpen(false), open);
-  const handleToggle = () => setOpen((c) => !c);
 
   return (
-    <div ref={ref} style={{ height: '20px', display: 'flex' }}>
-      <ShowListsBtn size={20} onClick={handleToggle} />
-      <CSSTransition in={open} timeout={500} classNames='SlideHorizontal' unmountOnExit>
-        <ListsList>
-          {Object?.values(lists)?.map((list, index) => {
-            return (
-              <ListItem
-                key={list?.title + index}
-                added={list?.videos?.includes(videoId)}
-                style={{ height: '45px', fontSize: '1.1em' }}
+    <Popover
+      trigger={
+        <span style={{ display: 'flex' }}>
+          <ShowListsBtn size={20} />
+        </span>
+      }
+    >
+      <>
+        {Object?.values(lists)?.map((list, index) => {
+          return (
+            <ListItem
+              key={list?.title + index}
+              added={list?.videos?.includes(videoId)}
+              style={{ height: '45px', fontSize: '1.1em' }}
+            >
+              <TransparentButton
+                onClick={() => {
+                  if (listToShow?.title !== list.title) setListToShow(list);
+                }}
               >
-                <TransparentButton
-                  onClick={() => {
-                    if (listToShow?.title !== list.title) setListToShow(list);
-                  }}
-                >
-                  {list.title}
-                </TransparentButton>
-              </ListItem>
-            );
-          })}
-          <NewListForm item={videoId} style={{ marginTop: '25px' }} />
-        </ListsList>
-      </CSSTransition>
-    </div>
+                {list.title}
+              </TransparentButton>
+            </ListItem>
+          );
+        })}
+        <NewListForm item={videoId} style={{ marginTop: '25px' }} />
+      </>
+    </Popover>
   );
 };
 
 const List = ({ listVideos, list, videoId, playQueue, setPlayQueue }) => {
+  const { editListOrder } = useContext(MyListsContext) || {};
+
+  const onDragEnd = (video) => {
+    if (video.source.index !== video.destination.index) {
+      editListOrder({
+        id: list.id,
+        videoId: parseNumberAndString(video.draggableId),
+        index: video.destination.index,
+      });
+    }
+  };
+
   return (
-    <TransitionGroup component={null}>
-      {listVideos?.map((video) => (
-        <CSSTransition
-          key={`${list.title}-${video.contentDetails?.upload?.videoId || video.id}`}
-          timeout={750}
-          classNames={video.list_id !== list.id ? 'fade-750ms' : 'verticalSlide'}
-          // classNames='videoFadeSlide'
-          unmountOnExit
-        >
-          {video.loading ? (
-            <LoadingVideoElement type={'small'} />
-          ) : video?.kind === 'youtube#video' ? (
-            <YoutubeVideoElement
-              active={String(video.contentDetails?.upload?.videoId) === videoId}
-              listName={list.title}
-              list={list}
-              id={`v${video.contentDetails?.upload?.videoId}`}
-              // data-id={video.contentDetails?.upload?.videoId}
-              video={video}
-              setPlayQueue={setPlayQueue}
-              playQueue={playQueue}
-              data-id={video.contentDetails?.upload?.videoId}
-            />
-          ) : (
-            <VodElement
-              active={String(video.id) === videoId}
-              listName={list.title}
-              list={list}
-              id={`v${video.id}`}
-              // data-id={video.id}
-              data={video}
-              setPlayQueue={setPlayQueue}
-              playQueue={playQueue}
-              data-id={video.id}
-            />
-          )}
-        </CSSTransition>
-      ))}
-    </TransitionGroup>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable direction='vertical' droppableId={String(list.id)}>
+        {(provided) => (
+          <Container
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            style={{ position: 'relative' }}
+          >
+            <TransitionGroup component={null}>
+              {listVideos?.map((video, index) => (
+                // <CSSTransition
+                //   key={`${list.title}-${video.contentDetails?.upload?.videoId || video.id}`}
+                //   timeout={750}
+                //   classNames={video.list_id !== list.id ? 'fade-750ms' : 'verticalSlide'}
+                //   // classNames='videoFadeSlide'
+                //   unmountOnExit
+                // >
+                <Draggable key={video.id} draggableId={String(video.id)} index={index}>
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      {video.loading ? (
+                        <LoadingVideoElement type={'small'} />
+                      ) : video?.kind === 'youtube#video' ? (
+                        <YoutubeVideoElement
+                          active={String(video.contentDetails?.upload?.videoId) === videoId}
+                          listName={list.title}
+                          list={list}
+                          id={`v${video.contentDetails?.upload?.videoId}`}
+                          // data-id={video.contentDetails?.upload?.videoId}
+                          video={video}
+                          setPlayQueue={setPlayQueue}
+                          playQueue={playQueue}
+                          data-id={video.contentDetails?.upload?.videoId}
+                        />
+                      ) : (
+                        <VodElement
+                          active={String(video.id) === videoId}
+                          listName={list.title}
+                          list={list}
+                          id={`v${video.id}`}
+                          // data-id={video.id}
+                          data={video}
+                          setPlayQueue={setPlayQueue}
+                          playQueue={playQueue}
+                          data-id={video.id}
+                        />
+                      )}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Draggable>
+                // {/* </CSSTransition> */}
+              ))}
+            </TransitionGroup>
+          </Container>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 };
 
@@ -316,17 +342,16 @@ const PlaylistInPlayer = ({
         style={{ width: '87%', margin: '0 auto', position: 'relative' }}
         onChange={handleOnSearchFilter}
       />
-      <Container>
-        {list && (
-          <List
-            listVideos={listVideos}
-            list={list}
-            videoId={videoId}
-            setPlayQueue={setPlayQueue}
-            playQueue={playQueue}
-          />
-        )}
-      </Container>
+
+      {list && (
+        <List
+          listVideos={listVideos}
+          list={list}
+          videoId={videoId}
+          setPlayQueue={setPlayQueue}
+          playQueue={playQueue}
+        />
+      )}
     </>
   );
 };

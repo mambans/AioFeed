@@ -7,7 +7,6 @@ import {
   StyledShowNavbarBtn,
   ResizeDevider,
   // VolumeEventOverlay,
-  PlayerExtraButtons,
 } from '../twitch/player/StyledComponents';
 import AddToListButton from '../myLists/addToListModal/AddToListButton';
 import useQuery from '../../hooks/useQuery';
@@ -151,25 +150,6 @@ const SharedVideoPlayer = () => {
         onMouseUp={handleResizeMouseUp}
         onMouseMove={resize}
       >
-        <PlayerExtraButtons channelName={channelName}>
-          {lists && (
-            <StyledShowNavbarBtn
-              variant='dark'
-              onClick={() => toggleShowList({ updateLocalstorage: Boolean(listToShow) })}
-            >
-              <FaList
-                style={{
-                  transform: navigationBarVisible ? 'rotateX(180deg)' : 'unset',
-                  right: '10px',
-                }}
-                size={30}
-                title='Show list'
-              />
-              List
-            </StyledShowNavbarBtn>
-          )}
-        </PlayerExtraButtons>
-
         <VolumeEventOverlay
           ref={VolumeEventOverlayRef}
           // show={resizeActive || (enableVodVolumeOverlay && isPlaying)}
@@ -213,6 +193,22 @@ const SharedVideoPlayer = () => {
               size={32}
               redirect
             />
+
+            {lists && (
+              <StyledShowNavbarBtn
+                variant='dark'
+                onClick={() => toggleShowList({ updateLocalstorage: Boolean(listToShow) })}
+              >
+                <FaList
+                  style={{
+                    transform: navigationBarVisible ? 'rotateX(180deg)' : 'unset',
+                    right: '10px',
+                  }}
+                  size={20}
+                  title='Show list'
+                />
+              </StyledShowNavbarBtn>
+            )}
           </PlayerButtonsBar>
         </VolumeEventOverlay>
 

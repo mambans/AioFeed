@@ -1,10 +1,10 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import Logout from './Logout';
-import MyModal from '../../../components/mymodal/MyModal';
 import { MdSettings } from 'react-icons/md';
 import styled from 'styled-components';
 import ClearAllLocalstorage from './ClearAllLocalstorage';
 import EditAccount from './EditAccount';
+import Popover from '../../../components/Popover';
 
 const Container = styled.div`
   width: 200px;
@@ -25,20 +25,14 @@ const Container = styled.div`
 `;
 
 const Settings = ({ children }) => {
-  const ref = useRef();
   return (
-    <MyModal
-      direction='left'
+    <Popover
+      placement='left'
       trigger={
-        <div ref={ref}>
+        <span>
           <MdSettings size={30} />
-        </div>
+        </span>
       }
-      style={{
-        right: '70px',
-        bottom: '10px',
-        position: 'fixed',
-      }}
     >
       <Container>
         {/* <DeleteAccountButton /> */}
@@ -48,7 +42,7 @@ const Settings = ({ children }) => {
         <Logout />
         {children}
       </Container>
-    </MyModal>
+    </Popover>
   );
 };
 export default Settings;

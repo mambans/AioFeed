@@ -4,12 +4,7 @@ import { MdAccountCircle } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import React from 'react';
 
-import {
-  VideoAndChatContainer,
-  StyledVideo,
-  PlayerNavbar,
-  PlayerExtraButtons,
-} from './StyledComponents';
+import { VideoAndChatContainer, StyledVideo, PlayerNavbar } from './StyledComponents';
 import useFullscreen from '../../../hooks/useFullscreen';
 import useDocumentTitle from '../../../hooks/useDocumentTitle';
 import { useRecoilValue } from 'recoil';
@@ -40,7 +35,6 @@ const PlayerClip = () => {
           display: 'unset',
         }}
       >
-        <PlayerExtraButtons channelName={channelName}></PlayerExtraButtons>
         <StyledVideo
           src={`https://clips.twitch.tv/embed?clip=${videoId}&parent=aiofeed.com`}
           height='100%'

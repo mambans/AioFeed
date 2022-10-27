@@ -295,7 +295,7 @@ const List = ({
 
 export default List;
 
-const ScrollArea = styled.div`
+export const ScrollArea = styled.div`
   position: absolute;
   right: ${({ position }) => (position === 'right' ? '0px' : 'unset')};
   left: ${({ position }) => (position === 'left' ? '0px' : 'unset')};

@@ -25,7 +25,6 @@ import {
   ResetVideoButton,
   SmallButtonContainer,
   ChannelIconLink,
-  PlayerExtraButtons,
   TagsContainer,
 } from './StyledComponents';
 // import PlayerNavbar from './PlayerNavbar';
@@ -712,7 +711,7 @@ const Player = () => {
           <div />
         </ResizeDevider>
       )}
-      {!chatState.hideChat ? (
+      {!chatState.hideChat && (
         <>
           <Chat
             streamInfo={streamInfo}
@@ -729,8 +728,6 @@ const Player = () => {
             />
           )}
         </>
-      ) : (
-        <PlayerExtraButtons channelName={channelName}></PlayerExtraButtons>
       )}
     </VideoAndChatContainer>
   );

@@ -6,7 +6,7 @@ import useFullscreen from '../../../hooks/useFullscreen';
 import { navigationBarVisibleAtom } from '../../navigation/atoms';
 // import useQuery from '../../../hooks/useQuery';
 
-import { StyledChat, ChatContainer, PlayerExtraButtons } from './StyledComponents';
+import { StyledChat, ChatContainer } from './StyledComponents';
 
 const StandaloneChat = () => {
   const channelName = useParams()?.channelName;
@@ -19,7 +19,6 @@ const StandaloneChat = () => {
 
   return (
     <ChatContainer visible={navigationBarVisible}>
-      <PlayerExtraButtons channelName={channelName}></PlayerExtraButtons>
       <StyledChat
         frameborder='0'
         scrolling='yes'
