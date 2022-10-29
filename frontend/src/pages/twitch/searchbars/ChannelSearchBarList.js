@@ -90,7 +90,7 @@ const ChannelSearchBarList = React.forwardRef(
                 // visible={visibleItems.includes(String(i.id))}
                 visible={!hiddenItems.includes(String(i.id)) || true}
                 hideExtraButtons={hideExtraButtons}
-                onSelect={onChange}
+                onSelect={onSelect}
                 wrap={wrap}
               />
             );
