@@ -14,7 +14,7 @@ import API from '../../navigation/API';
 import ChannelSearchBarList from './ChannelSearchBarList';
 
 const SearchSubmitIcon = styled(FaSearch).attrs({ size: 18 })``;
-
+//
 const ChannelSearchBar = ({
   searchButton = true,
   position,
