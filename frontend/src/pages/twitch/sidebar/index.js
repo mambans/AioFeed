@@ -29,7 +29,7 @@ const Sidebar = ({ data, streams }) => {
           items={nonFeedSectionsLiveStreams}
         />
 
-        {feedPreferences?.feedsections?.enabled &&
+        {feedPreferences?.feedSections?.enabled &&
           feedSections &&
           Object.values(feedSections)
             .reduce((acc, feedsection) => {

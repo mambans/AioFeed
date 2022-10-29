@@ -44,7 +44,7 @@ export const nonFeedSectionStreamsAtom = selector({
     const feedPreferences = get(feedPreferencesAtom);
 
     const enabledFeedSections =
-      feedPreferences?.feedsections?.enabled &&
+      feedPreferences?.feedSections?.enabled &&
       feedSections &&
       Object.values?.(feedSections)?.filter((f = {}) => f.enabled && f.excludeFromTwitch_enabled);
 

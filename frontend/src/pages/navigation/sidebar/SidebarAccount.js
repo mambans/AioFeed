@@ -50,7 +50,7 @@ const SidebarAccount = () => {
     youtubeAccessToken,
   } = useContext(YoutubeContext) || {};
   const feedPreferences = useRecoilValue(feedPreferencesAtom);
-  const { twitch, youtube, vods, twitter, mylists, feedsections } = feedPreferences;
+  const { twitch, youtube, vods, twitter, mylists, feedSections } = feedPreferences;
   const { toggleEnabled, toggleSidebar } = useFeedPreferences();
   const { toggleRefreshOnFocus, refreshOnFocusEnabled } = useContext(TwitterContext) || {};
 
@@ -102,7 +102,7 @@ const SidebarAccount = () => {
     {
       serviceName: 'feedsections',
       icon: <BsCollectionFill size={24} color={domainColors.FeedSections} />,
-      tooltip: (feedsections?.enabled ? 'Disable ' : 'Enable ') + ` MyLists feed`,
+      tooltip: (feedSections?.enabled ? 'Disable ' : 'Enable ') + ` MyLists feed`,
       mount: twitch?.enabled,
       disabled: !twitchAccessToken,
     },
@@ -224,7 +224,7 @@ const SidebarAccount = () => {
           </ToggleButtonsContainer>
         </SidebarExpandableSection>
         {twitter?.enabled && <TwitterForms />}
-        {feedsections?.enabled && <FeedSectionAdd />}
+        {feedSections?.enabled && <FeedSectionAdd />}
         {mylists?.enabled && <ListInAccountSidebar />}
         <SidebarExpandableSection title='Settings'>
           <FeedSizeSlider />

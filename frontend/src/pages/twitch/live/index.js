@@ -21,7 +21,7 @@ import { feedPreferencesAtom, useFeedPreferences } from '../../../atoms/atoms';
 const FeedSections = React.lazy(() => import('../../feedSections/FeedSections'));
 
 const TwitchFeed = ({ data, className, forceMount }) => {
-  const { twitch, feedsections } = useRecoilValue(feedPreferencesAtom) || {};
+  const { twitch, feedSections } = useRecoilValue(feedPreferencesAtom) || {};
   const nonFeedSectionLiveStreams = useRecoilValue(nonFeedSectionStreamsAtom);
   const feedPreferences = useRecoilValue(feedPreferencesAtom);
   const refreshBtnRef = useRef();
@@ -75,7 +75,7 @@ const TwitchFeed = ({ data, className, forceMount }) => {
         <Sidebar data={data} />
       </CSSTransition>
       <CSSTransition
-        in={feedsections?.enabled}
+        in={feedSections?.enabled}
         timeout={750}
         classNames='fade-750ms'
         unmountOnExit
