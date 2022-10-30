@@ -100,7 +100,7 @@ const SidebarAccount = () => {
       disabled: !twitchAccessToken && !youtubeAccessToken,
     },
     {
-      serviceName: 'feedsections',
+      serviceName: 'feedSections',
       icon: <BsCollectionFill size={24} color={domainColors.FeedSections} />,
       tooltip: (feedSections?.enabled ? 'Disable ' : 'Enable ') + ` MyLists feed`,
       mount: twitch?.enabled,
