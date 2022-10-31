@@ -131,12 +131,11 @@ const Chat = ({ channelName, streamInfo, chatState, updateChatState }) => {
 
   return (
     <>
-      {/* <OverlayBackdrop
-        ref={overlayBackdropRef}
+      <OverlayBackdrop
         onMouseUp={onDragStop}
         // onMouseMove={onDragMove}
-        dragging={chatAsOverlay && dragging}
-      /> */}
+        dragging={chatState?.chatAsOverlay && dragging}
+      />
 
       <ChatWrapper
         ref={chatRef}
