@@ -218,7 +218,7 @@ const ChannelPage = () => {
       if (!user_id || user_id === 'Not Found') return false;
 
       fetchChannelInfo(user_id, true).then((res) => {
-        setChannelInfo(res);
+        setChannelInfo((c) => ({ ...c, ...res }));
         // if (res) setFavion(res.logo || res.profile_image_url);
       });
     })();
@@ -276,6 +276,7 @@ const ChannelPage = () => {
       }
     }
   }, [channelName, userId]);
+  console.log('channelInfo:', channelInfo);
 
   if (userId === 'Not Found') {
     return (
