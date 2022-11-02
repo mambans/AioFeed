@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { MdEdit } from 'react-icons/md';
 import DeleteListBtn from './DeleteListBtn';
 import CopyListBtn from './CopyListBtn';
-import { ButtonLookalikeStyle, StyledButton } from '../../components/styledComponents';
+import { ButtonLookalikeStyle } from '../../components/styledComponents';
 import useClicksOutside from '../../hooks/useClicksOutside';
 import { AiFillEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import ToolTip from '../../components/tooltip/ToolTip';
+import { ListActionButton } from './StyledComponents';
 
 const Container = styled.div`
   margin: auto 15px;
@@ -59,24 +59,19 @@ const DropDownDrawer = ({ list, toggleList }) => {
           <CopyListBtn list={list}>Copy</CopyListBtn>
           <DeleteListBtn list={list}>Delete</DeleteListBtn>
 
-          <ToolTip
-            delay={{ show: 500, hide: 0 }}
-            toltip={`${list.enabled ? `Disable feed` : `Enable feed`}`}
-          >
-            <StyledButton type='button' onClick={() => toggleList(list.id)}>
-              {list.enabled ? (
-                <>
-                  Visible
-                  <AiFillEye size={22} color='#ffffff' />
-                </>
-              ) : (
-                <>
-                  Hidden
-                  <AiOutlineEyeInvisible size={22} color='rgb(150,150,150)' />
-                </>
-              )}
-            </StyledButton>
-          </ToolTip>
+          <ListActionButton onClick={() => toggleList(list.id)}>
+            {list.enabled ? (
+              <>
+                <AiFillEye size={22} color='#ffffff' />
+                Visible
+              </>
+            ) : (
+              <>
+                <AiOutlineEyeInvisible size={22} color='rgb(150,150,150)' />
+                Hidden
+              </>
+            )}
+          </ListActionButton>
         </Dropdown>
       )}
     </Container>
