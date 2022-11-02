@@ -79,6 +79,7 @@ const List = ({
   savedVideosWithData,
   addSavedData,
   setLoading,
+  collapsed,
 }) => {
   const [dragging, setDragging] = useState();
   const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext) || {};
@@ -104,6 +105,7 @@ const List = ({
 
   useEffect(() => {
     (async () => {
+      if (collapsed) return false;
       setLoading(true);
       const videosWithData = await addVideoDataToVideos({
         savedVideosWithData: savedVideosWithData.current,
@@ -128,6 +130,7 @@ const List = ({
     setLoading,
     videosToShow?.amount,
     videosToShow?.showAll,
+    collapsed,
   ]);
 
   const onDragEnd = (video) => {
