@@ -28,7 +28,7 @@ const FavoriteListContainer = ({
   const [loading, setLoading] = useState();
   const { toggleExpanded } = useFeedPreferences();
   const feedPreferences = useRecoilValue(feedPreferencesAtom);
-  const { isLoading } = useContext(MyListsContext);
+  const { isLoading, toggleList } = useContext(MyListsContext);
 
   return (
     <Container
@@ -51,7 +51,7 @@ const FavoriteListContainer = ({
         rightSide={
           <>
             <MyListSmallList list={list} videos={videos} listName={list.title} />
-            <DropDownDrawer list={list} />
+            <DropDownDrawer list={list} toggleList={toggleList} />
           </>
         }
       />
