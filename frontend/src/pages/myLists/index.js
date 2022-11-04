@@ -64,6 +64,7 @@ const FavoriteListContainer = ({
           savedVideosWithData={savedVideosWithData}
           addSavedData={addSavedData}
           setLoading={setLoading}
+          loading={loading}
           collapsed={feedPreferences?.[list.id]?.collapsed}
         />
       </ExpandableSection>

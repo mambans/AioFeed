@@ -18,6 +18,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import MyListsContext from './MyListsContext';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
+import LoadingBoxes from '../twitch/LoadingBoxes';
 
 export const fetchListVideos = async ({ list, currentVideos = [], videos }) => {
   if (videos || list?.videos) {
@@ -79,6 +80,7 @@ const List = ({
   savedVideosWithData,
   addSavedData,
   setLoading,
+  loading,
   collapsed,
 }) => {
   const [dragging, setDragging] = useState();
@@ -204,6 +206,7 @@ const List = ({
                   component={null}
                   className={videosToShow.transitionGroup || 'videos'}
                 >
+                  {!videos?.length && loading && !collapsed && <LoadingBoxes amount={5} />}
                   {videos.map((video, index) => {
                     return (
                       <Draggable key={video.id} draggableId={String(video.id)} index={index}>
