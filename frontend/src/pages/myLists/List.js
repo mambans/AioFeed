@@ -251,7 +251,7 @@ const List = ({
                 {provided.placeholder}
               </VideosContainer>
             </div>
-            {!!list?.videos?.length && (
+            {!!list?.videos?.length && !!videos?.length && (
               <LoadMore
                 ref={loadMoreRef}
                 onClick={() => {
