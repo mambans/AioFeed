@@ -208,10 +208,14 @@ const API = {
       },
       { timeout: 15000 }
     ).then(async (res) => {
-      AddCookie('Twitch-access_token', res.data.access_token, {
-        expires: res?.data?.expires_in,
-      });
-      AddCookie('Twitch-refresh_token', res.data.refresh_token);
+      if (res.data.access_token) {
+        AddCookie('Twitch-access_token', res.data.access_token, {
+          expires: res?.data?.expires_in,
+        });
+      }
+      if (res.data.refresh_token) {
+        AddCookie('Twitch-refresh_token', res.data.refresh_token);
+      }
       if (res?.data?.access_token) console.log('Successfully re-authenticated to Twitch.');
       addLogBase({
         title: 'Twitch re-authenticated',
