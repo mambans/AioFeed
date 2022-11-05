@@ -146,7 +146,9 @@ const List = ({
       });
     }
   };
-
+  console.log('videos?.length:', videos?.length);
+  console.log('loading:', loading);
+  console.log('collapsed:', collapsed);
   return (
     <DragDropContext
       onDragEnd={onDragEnd}

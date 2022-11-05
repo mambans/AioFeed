@@ -30,6 +30,7 @@ const FavoriteListContainer = ({
   const feedPreferences = useRecoilValue(feedPreferencesAtom);
   const { isLoading, toggleList } = useContext(MyListsContext);
 
+  console.log('p loading:', loading);
   return (
     <Container
       aria-labelledby={`MyList-${list.id}`}
