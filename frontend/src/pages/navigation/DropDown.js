@@ -37,6 +37,8 @@ const StyledDropdownContainer = styled.div`
   }
 `;
 
+const Arrow = styled(FaAngleDown).attrs({ size: 20 })``;
+
 const DropDownTrigger = styled.div`
   width: max-content;
   font-size: 1.15rem;
@@ -44,7 +46,7 @@ const DropDownTrigger = styled.div`
   user-select: none;
   outline: none;
 
-  svg {
+  ${Arrow} {
     transition: transform 250ms;
     transform: ${({ isOpen }) => (isOpen ? 'rotate(0deg)' : 'rotate(-90deg)')};
   }
@@ -116,7 +118,7 @@ const DropDown = ({ title, trigger, children, items, hoverEnabled, showArrow = t
               tabIndex='4'
             >
               {trigger || title}
-              {showArrow && <FaAngleDown size={20} />}
+              {showArrow && <Arrow />}
             </DropDownTrigger>
             {portal(
               <DropdownContainer

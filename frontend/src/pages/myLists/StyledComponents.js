@@ -287,6 +287,7 @@ export const ListActionButton = styled.div`
   align-items: center;
   height: 22px;
   width: unset;
+  padding: 0.35rem 0.75rem;
 
   svg {
     color: rgb(150, 150, 150);

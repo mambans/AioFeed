@@ -59,6 +59,7 @@ const FavoriteListContainer = ({
           <>
             <MyListSmallList list={list} videos={videos} listName={list.title} />
             <DropDown
+              showArrow={false}
               trigger={
                 <TriggerBtn>
                   <MdEdit size={24} />
