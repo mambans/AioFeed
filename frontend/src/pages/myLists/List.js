@@ -204,11 +204,11 @@ const List = ({
                 </>
               )}
               <VideosContainer dragging={dragging} ref={wrapperRef}>
+                {!videos?.length && loading && !collapsed && <LoadingBoxes amount={4} />}
                 <TransitionGroup
                   component={null}
                   className={videosToShow.transitionGroup || 'videos'}
                 >
-                  {!videos?.length && loading && !collapsed && <LoadingBoxes amount={5} />}
                   {videos.map((video, index) => {
                     return (
                       <Draggable key={video.id} draggableId={String(video.id)} index={index}>
