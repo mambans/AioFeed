@@ -7,7 +7,6 @@ import Header, { HeaderNumberCount } from '../../components/Header';
 import MyListsContext from './MyListsContext';
 import List from './List';
 import MyListSmallList from './MyListSmallList';
-import DropDownDrawer from './DropDownDrawer';
 import { Container } from '../twitch/StyledComponents';
 import { ExpandCollapseFeedButton } from '../sharedComponents/sharedStyledComponents';
 import ExpandableSection from '../../components/expandableSection/ExpandableSection';
@@ -15,6 +14,13 @@ import Alert from '../../components/alert';
 import Colors from '../../components/themes/Colors';
 import { useRecoilValue } from 'recoil';
 import { feedPreferencesAtom, useFeedPreferences } from '../../atoms/atoms';
+import { AiFillEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import DeleteListBtn from './DeleteListBtn';
+import CopyListBtn from './CopyListBtn';
+import { MdEdit } from 'react-icons/md';
+import styled from 'styled-components';
+import { ButtonLookalikeStyle } from '../../components/styledComponents';
+import DropDown from '../navigation/DropDown';
 
 const FavoriteListContainer = ({
   list,
@@ -52,7 +58,41 @@ const FavoriteListContainer = ({
         rightSide={
           <>
             <MyListSmallList list={list} videos={videos} listName={list.title} />
-            <DropDownDrawer list={list} toggleList={toggleList} />
+            <DropDown
+              trigger={
+                <TriggerBtn>
+                  <MdEdit size={24} />
+                </TriggerBtn>
+              }
+              items={[
+                {
+                  title: list.enabled ? 'Visible' : 'Hidden',
+                  icon: list.enabled ? (
+                    <AiFillEye size={22} color='#ffffff' />
+                  ) : (
+                    <AiOutlineEyeInvisible size={22} color='rgb(150,150,150)' />
+                  ),
+                  onClick: () => toggleList(list.id),
+                },
+              ]}
+            >
+              <CopyListBtn list={list} />
+              <DeleteListBtn list={list} />
+
+              {/* <ListActionButton onClick={() => toggleList(list.id)}>
+                {list.enabled ? (
+                  <>
+                    <AiFillEye size={22} color='#ffffff' />
+                    Visible
+                  </>
+                ) : (
+                  <>
+                    <AiOutlineEyeInvisible size={22} color='rgb(150,150,150)' />
+                    Hidden
+                  </>
+                )}
+              </ListActionButton> */}
+            </DropDown>
           </>
         }
       />
@@ -117,3 +157,15 @@ export const MyLists = () => {
 };
 
 export default MyLists;
+
+const TriggerBtn = styled.button`
+  ${ButtonLookalikeStyle}
+  /* color: ${({ open }) => (open ? 'rgb(255, 255, 255)' : 'rgb(150, 150, 150)')};
+  width: ${({ open }) => (open ? '100px' : '36px')}; */
+  transition: color 250ms, width 250ms;
+  padding: 5px;
+  padding-left: ${({ open }) => (open ? '10px' : '5px')};
+  background: ${({ open }) =>
+    open ? 'var(--popupListsBackground)' : 'var(--refreshButtonBackground)'};
+  text-align: left;
+`;

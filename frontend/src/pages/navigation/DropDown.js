@@ -4,17 +4,19 @@ import { FaAngleDown } from 'react-icons/fa';
 
 import { PortalWithState } from 'react-portal';
 import useEventListenerMemo from '../../hooks/useEventListenerMemo';
+import { ListActionButton } from '../myLists/StyledComponents';
 
 const StyledDropdownContainer = styled.div`
   position: fixed;
-  left: ${({ triggerOffset, selfOffets }) => triggerOffset?.left}px;
+  left: ${({ triggerOffset, selfOffets }) =>
+    triggerOffset?.left - (selfOffets?.width / 2 - triggerOffset?.width / 2)}px;
   top: ${({ triggerOffset }) => triggerOffset?.bottom}px;
   background: var(--navigationbarBackground);
   border-radius: 10px;
   z-index: 2;
   padding-top: 8px;
-  width: ${({ triggerOffset }) => triggerOffset?.width}px;
-
+  /* width: ${({ triggerOffset }) => triggerOffset?.width}px; */
+  /* top: ${({ height }) => `calc(50% - (${height || '600px'} / 2))`}; */
   a {
     color: var(--navTextColor);
     /* padding-left: 25px;
@@ -44,7 +46,7 @@ const DropDownTrigger = styled.div`
 
   svg {
     transition: transform 250ms;
-    transform: ${({ isOpen }) => (isOpen ? 'rotate(0deg)' : 'rotate(90deg)')};
+    transform: ${({ isOpen }) => (isOpen ? 'rotate(0deg)' : 'rotate(-90deg)')};
   }
 `;
 
@@ -72,54 +74,73 @@ const DropdownContainer = ({ triggerRef, close, children }) => {
   );
 };
 
-const DropDown = ({ title, children }) => {
+/**
+ *
+ * @param {Array} items = ({icon, title, onClick})
+ * @returns
+ */
+
+const DropDown = ({ title, trigger, children, items, hoverEnabled, showArrow = true }) => {
   const triggerRef = useRef();
 
   return (
     <PortalWithState closeOnOutsideClick closeOnEsc>
-      {({ openPortal, closePortal, isOpen, portal }) => (
-        <div
-          onMouseEnter={(e) => {
+      {({ openPortal, closePortal, isOpen, portal }) => {
+        const hoverEvents = {
+          onMouseEnter: (e) => {
+            if (!hoverEnabled) return;
             triggerRef.current.focus();
             openPortal(e);
-          }}
-          onMouseLeave={(e) => {
+          },
+          onMouseLeave: (e) => {
+            if (!hoverEnabled) return;
             closePortal(e);
             triggerRef.current.blur();
-          }}
-          tabIndex='5'
-        >
-          <DropDownTrigger
-            className='nav-link'
-            onClick={(e) => {
-              if (isOpen) {
-                closePortal(e);
-                triggerRef.current.blur();
-                return;
-              }
-              openPortal(e);
-            }}
-            ref={triggerRef}
-            isOpen={isOpen}
-            tabIndex='4'
-          >
-            {title}
-            <FaAngleDown size={20} />
-          </DropDownTrigger>
-          {portal(
-            <DropdownContainer
-              triggerRef={triggerRef}
-              close={closePortal}
-              onMouseEnter={(e) => {
-                triggerRef.current.focus();
+          },
+        };
+
+        return (
+          <div {...hoverEvents} tabIndex='5'>
+            <DropDownTrigger
+              className='nav-link'
+              onClick={(e) => {
+                if (isOpen) {
+                  closePortal(e);
+                  triggerRef.current.blur();
+                  return;
+                }
                 openPortal(e);
               }}
+              ref={triggerRef}
+              isOpen={isOpen}
+              tabIndex='4'
             >
-              {children}
-            </DropdownContainer>
-          )}
-        </div>
-      )}
+              {trigger || title}
+              {showArrow && <FaAngleDown size={20} />}
+            </DropDownTrigger>
+            {portal(
+              <DropdownContainer
+                triggerRef={triggerRef}
+                close={closePortal}
+                onMouseEnter={(e) => {
+                  triggerRef.current.focus();
+                  openPortal(e);
+                }}
+              >
+                {items?.map(({ title, icon, onClick, color }) => {
+                  return (
+                    <ListActionButton color={color} onClick={onClick}>
+                      {icon}
+                      {title}
+                    </ListActionButton>
+                  );
+                })}
+                {children}
+              </DropdownContainer>
+            )}
+          </div>
+        );
+      }}
     </PortalWithState>
   );
 };

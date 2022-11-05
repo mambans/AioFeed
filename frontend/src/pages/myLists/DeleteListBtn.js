@@ -10,7 +10,7 @@ const DeleteListBtn = ({ list, style, children }) => {
   return (
     <ListActionButton onClick={() => deleteList(list)} style={{ ...style, marginLeft: '-3px' }}>
       <MdDeleteForever size={24} />
-      {children}
+      {children || 'Delete'}
     </ListActionButton>
   );
 };

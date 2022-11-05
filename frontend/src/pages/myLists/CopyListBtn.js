@@ -12,7 +12,7 @@ const CopyListBtn = ({ list, style, children }) => {
     <>
       <ListActionButton onClick={copyList} style={{ ...style }} color={'rgb(255, 255, 0)'}>
         <MdContentCopy size={20}></MdContentCopy>
-        {children}
+        {children || 'Copy'}
       </ListActionButton>
 
       {open && <NewListForm item={list.videos} />}

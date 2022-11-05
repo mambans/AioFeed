@@ -283,19 +283,22 @@ export const ListActionButton = styled.div`
   transition: color 250ms;
   cursor: pointer;
   display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  height: 22px;
+  width: unset;
 
   svg {
     color: rgb(150, 150, 150);
     transition: color 250ms;
     cursor: pointer;
-    margin-right: 3px;
   }
 
   &:hover {
     color: rgb(250, 250, 250);
 
     svg {
-      color: ${({ color }) => color || Colors.red};
+      color: ${({ color }) => color || '#ffffff'};
     }
   }
 `;
