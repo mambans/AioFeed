@@ -129,9 +129,9 @@ const DropDown = ({ title, trigger, children, items, hoverEnabled, showArrow = t
                   openPortal(e);
                 }}
               >
-                {items?.map(({ title, icon, onClick, color }) => {
+                {items?.map(({ title, icon, onClick, color, destructive }) => {
                   return (
-                    <ListActionButton color={color} onClick={onClick}>
+                    <ListActionButton color={color} onClick={onClick} destructive={destructive}>
                       {icon}
                       {title}
                     </ListActionButton>

@@ -285,12 +285,14 @@ export const ListActionButton = styled.div`
   display: flex;
   gap: 0.75rem;
   align-items: center;
-  height: 22px;
+  /* height: 22px; */
   width: unset;
   padding: 0.35rem 0.75rem;
 
   svg {
-    color: rgb(150, 150, 150);
+    color: ${({ color, destructive }) =>
+      color || (destructive ? Colors.red : 'rgb(150, 150, 150)')};
+
     transition: color 250ms;
     cursor: pointer;
   }

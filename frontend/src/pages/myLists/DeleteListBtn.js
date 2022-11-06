@@ -8,7 +8,11 @@ const DeleteListBtn = ({ list, style, children }) => {
   const { deleteList } = useContext(MyListsContext);
 
   return (
-    <ListActionButton onClick={() => deleteList(list)} style={{ ...style, marginLeft: '-3px' }}>
+    <ListActionButton
+      destructive
+      onClick={() => deleteList(list)}
+      style={{ ...style, marginLeft: '-3px' }}
+    >
       <MdDeleteForever size={24} />
       {children || 'Delete'}
     </ListActionButton>
