@@ -282,18 +282,21 @@ const ResizerIcon = styled.div`
     left: 0;
     cursor: nw-resize;
     border-style: solid none none solid;
+    border-top-left-radius: 10px;
   }
   &.topright {
     top: 0;
     right: 0;
     cursor: ne-resize;
     border-style: solid solid none none;
+    border-top-right-radius: 10px;
   }
   &.bottomright {
     bottom: 0;
     right: 0;
     cursor: nw-resize;
     border-style: none solid solid none;
+    border-bottom-right-radius: 10px;
   }
 
   &.bottomleft {
@@ -301,6 +304,7 @@ const ResizerIcon = styled.div`
     left: 0;
     cursor: ne-resize;
     border-style: none none solid solid;
+    border-bottom-left-radius: 10px;
   }
 
   &:hover {
