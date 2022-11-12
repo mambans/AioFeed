@@ -93,6 +93,7 @@ const StreamElement = React.memo(({ data = {}, refresh, refreshAfterUnfollowTime
         <NewHighlightNoti login={login} user_login={user_login} />
         <Link
           className='imgLink'
+          target={location?.pathname === '/feed' && '_blank'}
           to={{
             pathname: '/' + (login || user_login)?.toLowerCase() || user_name,
             state: {
@@ -158,6 +159,7 @@ const StreamElement = React.memo(({ data = {}, refresh, refreshAfterUnfollowTime
         <ChannelContainer ref={refChannel}>
           <Link
             className='profileImg'
+            target={location?.pathname === '/feed' && '_blank'}
             to={{
               pathname: `/${(login || user_login)?.toLowerCase() || user_name}/page`,
               state: {
@@ -169,6 +171,7 @@ const StreamElement = React.memo(({ data = {}, refresh, refreshAfterUnfollowTime
           </Link>
           <ChannelNameDiv>
             <Link
+              target={location?.pathname === '/feed' && '_blank'}
               to={{
                 pathname: `/${(login || user_login)?.toLowerCase() || user_name}/page`,
                 state: {

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import moment from 'moment';
 import React, { useRef } from 'react';
 
@@ -25,6 +25,7 @@ export const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
 const YoutubeVideoElement = React.memo(
   ({ list, video, listName, active, setPlayQueue, playQueue, ...props }) => {
     const ref = useRef();
+    const location = useLocation();
 
     return (
       <VideoContainer key={video?.contentDetails?.upload?.videoId || video?.id} {...props}>
@@ -52,6 +53,7 @@ const YoutubeVideoElement = React.memo(
             imageRef={ref}
           />
           <Link
+            target={location?.pathname === '/feed' && '_blank'}
             className='imgLink'
             // href={`https://www.youtube.com/watch?v=` + video?.contentDetails?.upload?.videoId}
             to={

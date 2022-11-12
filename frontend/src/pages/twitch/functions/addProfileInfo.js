@@ -7,8 +7,8 @@ const addProfileInfo = async ({ save, refresh, items = [], cancelToken } = {}) =
   const cached = getCachedProfiles({ refresh });
 
   const nonCached = items.reduce((acc, i) => {
-    if (cached[i.user_id || i.broadcaster_id]) return acc;
-    return [...acc, i.user_id || i.broadcaster_id];
+    if (cached[i.user_id || i.broadcaster_id || i.to_id]) return acc;
+    return [...acc, i.user_id || i.broadcaster_id || i.to_id];
   }, []);
 
   const nonCachedChunked = chunk(nonCached, 100);
@@ -31,7 +31,7 @@ const addProfileInfo = async ({ save, refresh, items = [], cancelToken } = {}) =
   const newCache = {
     ...cached,
     ...newUsers.reduce((acc, i) => {
-      acc[i.id] = { profile_image: i.profile_image_url, login: i.login };
+      acc[i.id] = { profile_image: i.profile_image_url, login: i.login, id: i.id };
 
       return acc;
     }, {}),
@@ -41,13 +41,14 @@ const addProfileInfo = async ({ save, refresh, items = [], cancelToken } = {}) =
   if (save) localStorage.setItem('TwitchProfiles', JSON.stringify(newCache));
 
   const newItemsWithProfile = items.map((i) => {
-    if (!i.profile_image_url && newCache[i.user_id || i.broadcaster_id]) {
-      i.profile_image_url = newCache[i.user_id || i.broadcaster_id]?.profile_image;
-    }
-    if (!i.login) i.login = newCache[i.user_id || i.broadcaster_id]?.login;
-    if (!i.user_name) i.user_name = newCache[i.user_id || i.broadcaster_id]?.login;
-
-    return i;
+    return {
+      ...i,
+      profile_image_url:
+        i.profile_image_url || newCache[i.user_id || i.broadcaster_id || i.to_id]?.profile_image,
+      login: i.login || newCache[i.user_id || i.broadcaster_id || i.to_id]?.login,
+      user_name: i.user_name || newCache[i.user_id || i.broadcaster_id || i.to_id]?.login,
+      id: i.id || i.user_id || i.broadcaster_id || i.to_id,
+    };
   });
 
   return newItemsWithProfile;

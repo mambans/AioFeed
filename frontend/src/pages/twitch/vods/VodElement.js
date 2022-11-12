@@ -2,7 +2,7 @@ import { FaRegEye } from 'react-icons/fa';
 import moment from 'moment';
 import Moment from 'react-moment';
 import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import {
   VideoContainer,
@@ -56,6 +56,7 @@ const VodElement = React.memo(
     } = data;
     const imgRef = useRef();
     const ref = useRef();
+    const location = useLocation();
 
     const onDragStart = (e) => {
       if (setDragSelected) {
@@ -87,6 +88,7 @@ const VodElement = React.memo(
 
           {thumbnail_url === '' && <VodLiveIndicator to={`/${name}`}>Live</VodLiveIndicator>}
           <Link
+            target={location?.pathname === '/feed' && '_blank'}
             to={{
               pathname: name ? `/${name}/videos/${id}` : `/videos/${id}`,
               search: listName ? `?list=${listName}` : '',
@@ -134,6 +136,7 @@ const VodElement = React.memo(
 
         <ChannelContainer>
           <Link
+            target={location?.pathname === '/feed' && '_blank'}
             className={'profileImg'}
             to={{
               pathname: `/${name?.toLowerCase()}/page`,
@@ -146,6 +149,7 @@ const VodElement = React.memo(
           </Link>
           <ChannelNameDiv>
             <Link
+              target={location?.pathname === '/feed' && '_blank'}
               to={{
                 pathname: `/${name?.toLowerCase()}/page`,
                 state: {
