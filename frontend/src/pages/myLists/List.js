@@ -146,9 +146,9 @@ const List = ({
       });
     }
   };
+  console.log('list?.videos?.length:', list?.videos?.length);
   console.log('videos?.length:', videos?.length);
-  console.log('loading:', loading);
-  console.log('collapsed:', collapsed);
+  console.log('videosToShow:', videosToShow);
   return (
     <DragDropContext
       onDragEnd={onDragEnd}
@@ -272,7 +272,7 @@ const List = ({
                     amount: videoElementsAmount / 2,
                     timeout: 750,
                     transitionGroup: 'videos',
-                    //transitionGroup: 'instant-disappear',
+                    //transitionGroup: 'instan-tdisappear',
                   }));
                   // clearTimeout(resetTransitionTimer.current);
                   // resetTransitionTimer.current = setTimeout(() => {
@@ -283,7 +283,7 @@ const List = ({
                   //   }));
                   // }, 750);
                 }}
-                reachedEnd={videosToShow?.amount >= list?.videos?.length}
+                reachedEnd={videos?.length >= list?.videos?.length}
                 onShowAll={() => {
                   setVideosToShow({
                     amount: list?.videos?.length,
