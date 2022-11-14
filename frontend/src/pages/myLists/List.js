@@ -113,7 +113,6 @@ const List = ({
         (videosToShow?.showAll && list?.videos?.length) ||
           Math.min(list?.videos?.length, videosToShow?.amount)
       );
-      console.log('videoIds:', videoIds);
 
       const videosWithData = await addVideoDataToVideos({
         savedVideosWithData: savedVideosWithData.current,
@@ -122,7 +121,6 @@ const List = ({
       });
       loadMoreRef.current?.setLoading?.(false);
 
-      console.log('videosWithData:', videosWithData);
       setLoading(false);
       setVideos(videosWithData);
       addSavedData(videosWithData);
@@ -149,9 +147,7 @@ const List = ({
       });
     }
   };
-  console.log('list?.videos?.length:', list?.videos?.length);
-  console.log('videos?.length:', videos?.length);
-  console.log('videosToShow:', videosToShow);
+
   return (
     <DragDropContext
       onDragEnd={onDragEnd}
