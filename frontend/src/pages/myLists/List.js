@@ -5,7 +5,6 @@ import TwitchAPI from '../twitch/API';
 import VodElement from '../twitch/vods/VodElement';
 import YoutubeVideoElement from '../youtube/YoutubeVideoElement';
 import GetVideoInfo from './GetVideoInfo';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { LoadingVideoElement } from '../twitch/StyledComponents';
 import { addVodEndTime } from '../twitch/TwitchUtils';
 import LoadMore from '../../components/loadMore/LoadMore';
