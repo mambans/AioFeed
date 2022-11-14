@@ -6,7 +6,7 @@ import VodsFollowUnfollowBtn from '../vods/VodsFollowUnfollowBtn';
 import { ChannelListLi } from './StyledComponents';
 import AddUpdateNotificationsButton from './../AddUpdateNotificationsButton';
 import TwitchAPI from '../API';
-import LiveIndicator from './LiveIndicator';
+import LiveChannelIndicator from './LiveChannelIndicator';
 import AddVideoExtraData from '../AddVideoExtraData';
 import loginNameFormat from '../loginNameFormat';
 import ChannelButtonsContainer from '../live/ChannelButtonsContainer';
@@ -91,7 +91,7 @@ const ChannelListElement = ({
       >
         <div className='profile-image'>
           {channel?.live || (channel?.is_live && channel?.started_at !== '') ? (
-            <LiveIndicator channel={channel} />
+            <LiveChannelIndicator channel={channel} />
           ) : (
             <img
               src={

@@ -109,17 +109,21 @@ const List = ({
     (async () => {
       if (collapsed) return false;
       setLoading(true);
+      const videoIds = list?.videos.slice(
+        0,
+        (videosToShow?.showAll && list?.videos?.length) ||
+          Math.min(list?.videos?.length, videosToShow?.amount)
+      );
+      console.log('videoIds:', videoIds);
+
       const videosWithData = await addVideoDataToVideos({
         savedVideosWithData: savedVideosWithData.current,
         list,
-        videos: list?.videos.slice(
-          0,
-          (videosToShow?.showAll && list?.videos?.length) ||
-            Math.min(list?.videos?.length, videosToShow?.amount)
-        ),
+        videos: videoIds,
       });
       loadMoreRef.current?.setLoading?.(false);
 
+      console.log('videosWithData:', videosWithData);
       setLoading(false);
       setVideos((c) => videosWithData);
       addSavedData(videosWithData);
@@ -285,6 +289,7 @@ const List = ({
                 }}
                 reachedEnd={videos?.length >= list?.videos?.length}
                 onShowAll={() => {
+                  loadMoreRef.current?.setLoading?.(true);
                   setVideosToShow({
                     amount: list?.videos?.length,
                     timeout: 750,

@@ -88,7 +88,7 @@ const VodElement = React.memo(
 
           {thumbnail_url === '' && <VodLiveIndicator to={`/${name}`}>Live</VodLiveIndicator>}
           <Link
-            target={location?.pathname === '/feed' && '_blank'}
+            target={(location?.pathname === '/feed' && '_blank') || null}
             to={{
               pathname: name ? `/${name}/videos/${id}` : `/videos/${id}`,
               search: listName ? `?list=${listName}` : '',
@@ -136,7 +136,7 @@ const VodElement = React.memo(
 
         <ChannelContainer>
           <Link
-            target={location?.pathname === '/feed' && '_blank'}
+            target={(location?.pathname === '/feed' && '_blank') || null}
             className={'profileImg'}
             to={{
               pathname: `/${name?.toLowerCase()}/page`,
@@ -149,7 +149,7 @@ const VodElement = React.memo(
           </Link>
           <ChannelNameDiv>
             <Link
-              target={location?.pathname === '/feed' && '_blank'}
+              target={(location?.pathname === '/feed' && '_blank') || null}
               to={{
                 pathname: `/${name?.toLowerCase()}/page`,
                 state: {

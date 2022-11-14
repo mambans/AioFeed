@@ -53,7 +53,7 @@ const YoutubeVideoElement = React.memo(
             imageRef={ref}
           />
           <Link
-            target={location?.pathname === '/feed' && '_blank'}
+            target={(location?.pathname === '/feed' && '_blank') || null}
             className='imgLink'
             // href={`https://www.youtube.com/watch?v=` + video?.contentDetails?.upload?.videoId}
             to={
