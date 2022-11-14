@@ -5,7 +5,7 @@ import TwitchAPI from '../twitch/API';
 import VodElement from '../twitch/vods/VodElement';
 import YoutubeVideoElement from '../youtube/YoutubeVideoElement';
 import GetVideoInfo from './GetVideoInfo';
-import { TransitionGroup } from 'react-transition-group';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { LoadingVideoElement } from '../twitch/StyledComponents';
 import { addVodEndTime } from '../twitch/TwitchUtils';
 import LoadMore from '../../components/loadMore/LoadMore';
@@ -125,7 +125,7 @@ const List = ({
 
       console.log('videosWithData:', videosWithData);
       setLoading(false);
-      setVideos((c) => videosWithData);
+      setVideos(videosWithData);
       addSavedData(videosWithData);
     })();
   }, [
@@ -217,41 +217,43 @@ const List = ({
                     return (
                       <Draggable key={video.id} draggableId={String(video.id)} index={index}>
                         {(provided) => (
-                          // <CSSTransition
-                          //   key={`${list.title}-${video.contentDetails?.upload?.videoId || video.id}`}
-                          //   timeout={videosToShow.timeout}
-                          //   classNames={video.transition || 'fade-750ms'}
-                          //   unmountOnExit
-                          // >
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
+                          <CSSTransition
+                            key={`${list.title}-${
+                              video.contentDetails?.upload?.videoId || video.id
+                            }`}
+                            timeout={videosToShow.timeout}
+                            classNames={video.transition || 'fade-750ms'}
+                            unmountOnExit
                           >
-                            {video.loading ? (
-                              <LoadingVideoElement type={'small'} />
-                            ) : typeof parseNumberAndString(video?.id) === 'string' ? (
-                              // ) : String(parseInt(video?.id)) !== String(video?.id) ? (
-                              // ) : video?.kind === 'youtube#video' ? (
-                              <YoutubeVideoElement
-                                listName={list.title}
-                                list={list}
-                                //data-id used for dragEvents
-                                data-id={video.contentDetails?.upload?.videoId}
-                                video={video}
-                              />
-                            ) : (
-                              <VodElement
-                                listName={list.title}
-                                list={list}
-                                //data-id used for dragEvents
-                                data-id={video.id}
-                                data={video}
-                                vodBtnDisabled={true}
-                              />
-                            )}
-                          </div>
-                          // {/* </CSSTransition> */}
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              {video.loading ? (
+                                <LoadingVideoElement type={'small'} />
+                              ) : typeof parseNumberAndString(video?.id) === 'string' ? (
+                                // ) : String(parseInt(video?.id)) !== String(video?.id) ? (
+                                // ) : video?.kind === 'youtube#video' ? (
+                                <YoutubeVideoElement
+                                  listName={list.title}
+                                  list={list}
+                                  //data-id used for dragEvents
+                                  data-id={video.contentDetails?.upload?.videoId}
+                                  video={video}
+                                />
+                              ) : (
+                                <VodElement
+                                  listName={list.title}
+                                  list={list}
+                                  //data-id used for dragEvents
+                                  data-id={video.id}
+                                  data={video}
+                                  vodBtnDisabled={true}
+                                />
+                              )}
+                            </div>
+                          </CSSTransition>
                         )}
                       </Draggable>
                     );
