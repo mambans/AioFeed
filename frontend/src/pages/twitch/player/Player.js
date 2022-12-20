@@ -433,6 +433,7 @@ const Player = () => {
       </ContextMenuDropDown>
     );
   };
+  console.log('streamInfo:', streamInfo);
 
   return (
     <VideoAndChatContainer
@@ -621,12 +622,12 @@ const Player = () => {
                 {streamInfo?.tags && (
                   <TagsContainer id={'tags'}>
                     {streamInfo.tags.map((tag) => {
-                      const lang = window.navigator.language?.toLowerCase();
+                      const lang = window?.navigator.language?.toLowerCase();
                       return (
                         <ToolTip
                           placement={'bottom'}
                           delay={{ show: 500, hide: 0 }}
-                          tooltip={tag.localization_descriptions[lang]}
+                          tooltip={tag?.localization_descriptions?.[lang]}
                           width='max-content'
                           key={tag.tag_id}
                         >
