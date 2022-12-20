@@ -69,7 +69,7 @@ const Player = () => {
   const navigationBarVisible = useRecoilValue(navigationBarVisibleAtom);
   const setFooterVisible = useSetRecoilState(footerVisibleAtom);
 
-  const { twitchAccessToken, setTwitchAccessToken } = useContext(TwitchContext);
+  const { twitchAccessToken, setTwitchAccessToken, defaultHideChat } = useContext(TwitchContext);
 
   const twitchVideoPlayer = useRef();
   const [streamInfo, setStreamInfo] = useState(useLocation().state?.passedChannelData);
@@ -79,7 +79,7 @@ const Player = () => {
   const [chatState, setChatState] = useState({
     chatwidth: DEFAULT_CHAT_WIDTH,
     switchChatSide: false,
-    hideChat: false,
+    hideChat: defaultHideChat || false,
     chatAsOverlay: false,
     overlayPosition: {},
   });
@@ -174,7 +174,7 @@ const Player = () => {
     setChatState({
       chatwidth: DEFAULT_CHAT_WIDTH,
       switchChatSide: false,
-      hideChat: false,
+      hideChat: defaultHideChat || false,
       chatAsOverlay: false,
       overlayPosition: {},
     });

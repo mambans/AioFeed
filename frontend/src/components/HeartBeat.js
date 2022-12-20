@@ -2,14 +2,14 @@ import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import Colors from './themes/Colors';
 
-const heartBeatAnimation = keyframes`
+export const heartBeatAnimation = keyframes`
   0% {
     transform: scale(0);
     -moz-transform: scale(0);
     -webkit-transform: scale(0);
     opacity: 0;
   }
-  25% {
+  35% {
     transform: scale(0.1);
     -moz-transform: scale(0.1);
     -webkit-transform: scale(0.1);
@@ -46,9 +46,9 @@ const StyledHeartBeatWrapper = styled.div`
 `;
 
 const StyledHeartBeatPulseRings = styled.div`
-  animation: ${heartBeatAnimation} 1s ease-out;
-  -webkit-animation: ${heartBeatAnimation} 1s ease-out;
-  -moz-animation: ${heartBeatAnimation} 1s ease-out;
+  animation: ${heartBeatAnimation} 1.25s ease-out;
+  -webkit-animation: ${heartBeatAnimation} 1.25s ease-out;
+  -moz-animation: ${heartBeatAnimation} 1.25s ease-out;
   animation-iteration-count: infinite;
   -webkit-animation-iteration-count: infinite;
   -moz-animation-iteration-count: infinite;

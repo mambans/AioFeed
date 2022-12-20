@@ -1009,6 +1009,7 @@ export const ChatWrapper = styled.div`
   overflow: visible;
   border-left: 1px solid transparent;
   background: var(--navigationbarBackground);
+  border-radius: 5px;
 `;
 
 export const ChatHeaderInner = styled.div`

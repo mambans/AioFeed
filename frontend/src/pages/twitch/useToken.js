@@ -103,6 +103,8 @@ export const TwitchProvider = ({ children }) => {
         },
         setEnableVodVolumeOverlay: () => toggle('vod_volume_overlay'),
         enableVodVolumeOverlay: Boolean(pref.vod_volume_overlay),
+        setDefaultHideChat: () => toggle('default_hide_chat'),
+        defaultHideChat: Boolean(pref.default_hide_chat),
         twitchAccessToken,
         setTwitchAccessToken,
         twitchRefreshToken,

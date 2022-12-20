@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { MdVideocam, MdAutorenew, MdCrop169 } from 'react-icons/md';
+import { MdVideocam, MdAutorenew, MdCrop169, MdChat } from 'react-icons/md';
 import { FaTwitch, FaYoutube, FaTwitter, FaRegWindowRestore } from 'react-icons/fa';
 import { BsCollectionFill } from 'react-icons/bs';
 import { FiSidebar } from 'react-icons/fi';
@@ -42,6 +42,8 @@ const SidebarAccount = () => {
     enableVodVolumeOverlay,
     setTwitchAccessToken,
     twitchAccessToken,
+    setDefaultHideChat,
+    defaultHideChat,
   } = useContext(TwitchContext) || {};
   const {
     youtubeVideoHoverEnable,
@@ -196,6 +198,17 @@ const SidebarAccount = () => {
       tooltip: (refreshOnFocusEnabled ? 'Disable ' : 'Enable ') + `twitter focus-refresh`,
       icon: <HiRefresh size={18} />,
       smallerIcons: <FaTwitter size={14} color={domainColors.Twitter} />,
+      // smallerIcons: <RiFocus2Fill size={14} color={domainColors.Twitter} />,
+      disabled: false,
+    },
+    {
+      setEnable: setDefaultHideChat,
+      enabled: !defaultHideChat,
+      label: 'Set Twitch chat default visible state',
+      serviceName: 'Twitch',
+      tooltip: `Set Twitch chat default state to ${defaultHideChat ? 'hidden' : 'visible'}`,
+      icon: <MdChat size={18} />,
+      smallerIcons: <FaTwitch size={14} color={domainColors.Twitch} />,
       // smallerIcons: <RiFocus2Fill size={14} color={domainColors.Twitter} />,
       disabled: false,
     },

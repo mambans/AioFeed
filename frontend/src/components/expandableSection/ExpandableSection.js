@@ -47,6 +47,7 @@ const ExpandableSection = ({ collapsed, children, isOpened, unmountOnInitialClos
       height={height?.height}
       collapsed={String(height?.collapsed)}
       willChange={String(height?.willChange)}
+      aria-expanded={!height?.collapsed}
     >
       <div ref={ref}>{(!initialLoad || height?.isOpened) && children}</div>
     </StyledExpandSection>
