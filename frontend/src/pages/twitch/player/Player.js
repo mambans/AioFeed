@@ -306,6 +306,7 @@ const Player = () => {
         const tags = await TwitchAPI.getTags({ broadcaster_id: res?.user_id }).then(
           (res) => res?.data?.data
         );
+        console.log('tags:', tags);
         setStreamInfo(() => ({ ...res, tags }));
 
         if (
@@ -433,7 +434,6 @@ const Player = () => {
       </ContextMenuDropDown>
     );
   };
-  console.log('streamInfo:', streamInfo);
 
   return (
     <VideoAndChatContainer
@@ -632,7 +632,7 @@ const Player = () => {
                           key={tag.tag_id}
                         >
                           <a href={`https://www.twitch.tv/directory/all/tags/${tag.tag_id}`}>
-                            {tag.localization_names[lang]}
+                            {tag?.localization_names?.[lang]}
                           </a>
                         </ToolTip>
                       );
