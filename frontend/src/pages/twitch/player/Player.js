@@ -434,7 +434,7 @@ const Player = () => {
       </ContextMenuDropDown>
     );
   };
-  console.log('streamInfo.tags:', streamInfo.tags);
+  console.log('streamInfo.tags:', streamInfo?.tags);
 
   return (
     <VideoAndChatContainer
