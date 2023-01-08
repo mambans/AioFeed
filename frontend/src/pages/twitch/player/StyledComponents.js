@@ -875,6 +875,10 @@ export const TagsContainer = styled.div`
     background: rgb(41, 41, 41) none repeat scroll 0% 0%;
     border-radius: 5px;
     font-size: 0.8em;
+
+    &:empty {
+      display: none;
+    }
   }
 `;
 
