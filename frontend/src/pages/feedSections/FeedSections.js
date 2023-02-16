@@ -32,7 +32,7 @@ export const checkAgainstRules = (stream, rules) => {
 		const name = loginNameFormat(stream)?.toLowerCase()?.trim().includes(r.channel?.toLowerCase()?.trim());
 		const tags =
 			(!stream.tag_names && !r.tag) ||
-			!stream?.tag_names ||
+			!stream?.tag_names?.length ||
 			stream?.tag_names?.find((tag_name) => tag_name?.toLowerCase()?.includes(r?.tag?.toLowerCase()?.trim()));
 
 		const viewer_count = stream.viewer_count >= r.viewers || stream.view_count >= r.viewers;
@@ -40,6 +40,14 @@ export const checkAgainstRules = (stream, rules) => {
 		// return title && (game || !stream.game_name) && name && tags && viewer_count;
 		// If !stream.game_name = true but nothing else mathces, than it will falsly add stream to feed.
 		// For examepl, Yuggie does not match ASMR feed section rules, and but since she have no game specified it will return true and she will be added to the ASMR feed
+
+		if (String(stream.user_id) === String(86427705)) {
+			console.log("title:", title);
+			console.log("game:", game);
+			console.log("name:", name);
+			console.log("tags:", tags);
+			console.log("viewer_count:", viewer_count);
+		}
 		return title && game && name && tags && viewer_count;
 	});
 };
