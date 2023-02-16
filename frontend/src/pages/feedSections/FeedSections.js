@@ -40,14 +40,6 @@ export const checkAgainstRules = (stream, rules) => {
 		// return title && (game || !stream.game_name) && name && tags && viewer_count;
 		// If !stream.game_name = true but nothing else mathces, than it will falsly add stream to feed.
 		// For examepl, Yuggie does not match ASMR feed section rules, and but since she have no game specified it will return true and she will be added to the ASMR feed
-
-		if (String(stream.user_id) === String(86427705)) {
-			console.log("title:", title);
-			console.log("game:", game);
-			console.log("name:", name);
-			console.log("tags:", tags);
-			console.log("viewer_count:", viewer_count);
-		}
 		return title && game && name && tags && viewer_count;
 	});
 };
@@ -86,12 +78,6 @@ const Section = ({ section, data, index, addNotification }) => {
 	const previousStreams = useRecoilValue(previousBaseLiveStreamsAtom);
 	const baseStreams = useRecoilValue(baseLiveStreamsAtom);
 	const feedSectionStreams = useMemo(() => baseStreams?.filter((stream) => checkAgainstRules(stream, section.rules)), [baseStreams, section.rules]);
-
-	if (section.title?.toLowerCase() === "asmr") {
-		console.log("section:", section);
-		console.log("baseStreams:", baseStreams);
-		console.log("feedSectionStreams:", feedSectionStreams);
-	}
 
 	useEffect(() => {
 		(async () => {
