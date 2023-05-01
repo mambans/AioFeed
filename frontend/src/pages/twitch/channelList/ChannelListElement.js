@@ -105,7 +105,9 @@ const ChannelListElement = ({
         {loginNameFormat(channel) || `${searchInput}..`}
       </Link>
       {/* <div className='ButtonContianer'> */}
-      <ChannelButtonsContainer staticOpen={true}>
+      <ChannelButtonsContainer staticOpen={true} onClick={(e)=> {
+        e.stopPropagation();
+      }}>
         <Schedule
           absolute={false}
           user={channel?.user_name || searchInput}
