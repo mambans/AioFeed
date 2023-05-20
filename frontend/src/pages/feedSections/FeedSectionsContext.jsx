@@ -1,16 +1,16 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { useFeedPreferences } from "../../atoms/atoms";
-import AccountContext from "../account/AccountContext";
 import API from "../navigation/API";
 import { feedSectionsAtom } from "../twitch/atoms";
 import { TwitchContext } from "../twitch/useToken";
+import useUserStore from "../../stores/userStore";
 // import useSyncedLocalState from './../../hooks/useSyncedLocalState';
 
 const FeedSectionsContext = React.createContext();
 
 export const FeedSectionsProvider = ({ children }) => {
-	const { user } = useContext(AccountContext);
+	const { user } = useUserStore();
 	const { twitchAccessToken } = useContext(TwitchContext);
 	const [isloading, setIsLoading] = useState();
 	// const [feedSections, setFeedSections] = useSyncedLocalState('customFeedSections', {});

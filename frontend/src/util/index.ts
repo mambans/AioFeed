@@ -1,44 +1,30 @@
+import Cookies from "js-cookie";
 import moment from "moment";
 import { toast } from "react-toastify";
 
-export const RemoveCookie = (cookieName) => {
-	document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax`;
-	document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+export const RemoveCookie = (cookieName: string) => {
+	Cookies.remove(cookieName);
 };
 
-export const AddCookie = (cookieName, value, options = {}) => {
-	const optionsEntries = Object.entries(options);
-	document.cookie = `${cookieName}=${value}; ${optionsEntries?.map((i) => `${i[0]}=${i[1]}`)?.join("; ")}${
-		optionsEntries && optionsEntries.length ? "; " : ""
-	}path=/; SameSite=Lax`;
+export const AddCookie = (cookieName: string, value: string, options = {}) => {
+	Cookies.set(cookieName, value, options);
 };
 
-export const getCookie = (cname) => {
-	var name = cname + "=";
-	var decodedCookie = decodeURIComponent(document.cookie);
-	var ca = decodedCookie.split(";");
-	for (var i = 0; i < ca.length; i++) {
-		var c = ca[i];
-		while (c.charAt(0) === " ") {
-			c = c.substring(1);
-		}
-		if (c.indexOf(name) === 0) {
-			if (c.substring(name.length, c.length) === "null") {
-				return null;
-			} else if (c.substring(name.length, c.length) === "false") {
-				return false;
-			} else if (c.substring(name.length, c.length) === "true") {
-				return true;
-			}
-
-			return c.substring(name.length, c.length);
-		}
+export const getCookie = (cname: string) => {
+	const cookie = Cookies.get(cname);
+	if (cookie === "null") {
+		return null;
+	} else if (cookie === "false") {
+		return false;
+	} else if (cookie === "true") {
+		return true;
 	}
-	return null;
+
+	return cookie;
 };
 
-export const getLocalstorage = (name) => {
-	const item = localStorage.getItem(name);
+export const getLocalstorage = (name: string) => {
+	const item: any = localStorage.getItem(name);
 	try {
 		const itemParsed = JSON.parse(item);
 
@@ -54,21 +40,21 @@ export const getLocalstorage = (name) => {
 	}
 };
 
-export const setLocalStorage = (name, data) => {
+export const setLocalStorage = (name: string, data: any) => {
 	try {
-		localStorage.setItem(name, typeof finallValue === "string" ? data : JSON.stringify(data));
+		localStorage.setItem(name, typeof data === "string" ? data : JSON.stringify(data));
 		return data;
 	} catch (error) {
 		console.warn(`setLocalStorage - ${name}: `, error);
 	}
 };
 
-export const truncate = (input, max) => {
+export const truncate = (input: string, max: number) => {
 	if (input && input.length > max) return input.substring(0, max) + "..";
 	return input;
 };
 
-export const chunk = (array, size) => {
+export const chunk = (array: any[], size: number) => {
 	if (array?.length <= size) return [array];
 	const chunked_arr = [];
 	let index = 0;
@@ -79,14 +65,14 @@ export const chunk = (array, size) => {
 	return chunked_arr;
 };
 
-export const imageAspectDimensions = ({ width, height, ar }) => {
+export const imageAspectDimensions = ({ width, height, ar }: { width: number; height: number; ar: number }) => {
 	const calcDimen = height ? height * ar : width / ar;
 
 	if (height) return { height, width: calcDimen };
 	if (width) return { width, height: calcDimen };
 };
 
-export const convertArrayToObject = (array, key) => {
+export const convertArrayToObject = (array: any[], key: string) => {
 	const initialValue = {};
 	return array.reduce((obj, item) => {
 		return {
@@ -115,17 +101,21 @@ export const askForBrowserNotificationPermission = async () => {
 //   return HMS;
 // };
 
-export const msToHMS = (ms) => {
+export const msToHMS = (ms: number) => {
 	if (!ms) return "-";
 	const duration = moment.duration(ms);
 
 	const hm = duration
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		//@ts-ignore
 		?.format("h[h] m[m] s[s]")
 		//removes suffixes if there are 0 or nothing
 		.replace(" h", "h")
 		.replace(" m", "m")
 		.replace(" 0m", "")
 		.replace(" 0s", "");
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	//@ts-ignore
 	if (!hm) return duration.format("s [s]");
 	return hm;
 	// console.log('duration:', duration);
@@ -140,14 +130,14 @@ export const msToHMS = (ms) => {
 	// return HMS;
 };
 
-export const getUniqueListByNoMerge = (arr, key) => {
+export const getUniqueListByNoMerge = (arr: any[], key: string) => {
 	return [...new Map(arr.map((item) => [item[key], item])).values()];
 };
 
-export const getUniqueListBy = (arr, key) => {
+export const getUniqueListBy = (arr: any[], key: string) => {
 	if (!arr) return [];
 	return arr.reduce((acc, item) => {
-		const foundIndex = acc.findIndex((i) => i[key] === item[key]);
+		const foundIndex = acc.findIndex((i: any) => i[key] === item[key]);
 		if (foundIndex >= 0 && item) {
 			acc[foundIndex] = { ...acc[foundIndex], ...item };
 		} else {

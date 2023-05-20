@@ -1,0 +1,20 @@
+{
+	"colors": {
+		"primary": "rgb(21, 28, 38)",
+		"background": "linear-gradient(45deg,rgb(21, 28, 38) 60% , #343f53 100%)",
+		"secondary": "rgb(25, 32, 42)",
+		"text": "#ffffff",
+		"accent": "#2f7e61",
+		"label": "#ffffff80",
+
+		"blue": "#3588cc",
+		"green": "#2abf5b",
+		"orange": "#eba342",
+		"red": "#f55353",
+		"pink": "#e368b3",
+		"yellow": "#f2c61b",
+		"purple": "#aa6df7",
+		"raspberry": "#ff0060"
+	},
+	"borderRadius": "0.35rem"
+}

@@ -8,12 +8,12 @@ import React, { useContext, useState, useRef } from "react";
 import { StyledFooterContainer, StyledCenterBottomText, StyledButtonLinks } from "./styledComponents";
 import ChangeLogs from "../changeLogs";
 import styles from "../changeLogs/ChangeLogs.module.scss";
-import AccountContext from "../account/AccountContext";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { footerVisibleAtom, navigationSidebarAtom, navigationSidebarComponentKeyAtom } from "../navigation/atoms";
+import useUserStore from "../../stores/userStore";
 
 const Footer = () => {
-	const { user } = useContext(AccountContext);
+	const { user } = useUserStore();
 	const setNavigationSidebarComponentKey = useSetRecoilState(navigationSidebarComponentKeyAtom);
 
 	const footerVisible = useRecoilValue(footerVisibleAtom);

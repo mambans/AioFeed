@@ -3,7 +3,6 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
-		"@rollup/plugin-typescript": "^11.1.0",
 		"aws-amplify": "^4.3.41",
 		"axios": "^1.1.3",
 		"bootstrap": "^5.2.1",
@@ -23,14 +22,15 @@
 		"react-transition-group": "^4.4.1",
 		"react-youtube": "^10.0.0",
 		"recoil": "^0.7.5",
-		"rollup-plugin-typescript-paths": "^1.4.0",
 		"sass": "^1.55.0",
 		"styled-components": "^5.3.6",
 		"uniqid": "^5.4.0",
-		"zustand": "^4.3.7"
+		"zustand": "^4.3.7",
+		"@tanstack/react-query": "^4.29.7",
+		"js-cookie": "^3.0.5"
 	},
 	"scripts": {
-		"start": "react-scripts start",
+		"start": "CHOKIDAR_USEPOLLING=true react-scripts start",
 		"build": "react-scripts build",
 		"cleanup": "./cleanup.sh eu-north-1 aiofeed-frontend",
 		"push": "./deploy.sh",
@@ -71,8 +71,5 @@
 		"eslint-plugin-react-hooks": "^4.4.0",
 		"path": "^0.12.7",
 		"typescript": "^5.0.3"
-	},
-	"imports": {
-		"#@/src": "./*.js"
 	}
 }

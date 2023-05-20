@@ -303,7 +303,7 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 			onTransitionEnd={() => setRnd((c) => !c)}
 			// onBlur={onBlur}
 			// open={showDropdown}
-			wrap={wrap}
+			$wrap={wrap}
 		>
 			<InputWrapper>
 				<Input

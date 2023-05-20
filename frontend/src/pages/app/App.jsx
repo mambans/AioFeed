@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
-import styled from "styled-components";
-import { ToastContainer } from "react-toastify";
+import React, { useContext, useEffect } from "react";
+import styled, { ThemeProvider as StyledThemeProvider } from "styled-components";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { NotificationsProvider } from "../notifications/NotificationsContext";
@@ -12,13 +12,19 @@ import { TwitchContext, TwitchProvider } from "../twitch/useToken";
 import { YoutubeContext, YoutubeProvider } from "../youtube/useToken";
 import { VodsProvider } from "../twitch/vods/VodsContext";
 import { MyListsProvider } from "../myLists/MyListsContext";
-import { LogsProvider } from "../logs/LogsContext";
+import LogsContext, { LogsProvider } from "../logs/LogsContext";
 import { FeedSectionsProvider } from "../feedSections/FeedSectionsContext";
 import { TwitterProvider } from "../twitter/TwitterContext";
 import CleanUp from "./CleanUp";
 import { RecoilRoot } from "recoil";
-import { AccountProvider } from "../account/AccountContext";
 import { useFeedPreferences } from "../../atoms/atoms";
+
+import useThemeStore from "../../stores/theme/themeStore";
+import useUserStore from "../../stores/userStore";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { GlobalStyles } from "../../themes/GlobalStyles";
+import { Hub, Logger } from "aws-amplify";
+const queryClient = new QueryClient();
 
 const AppContainer = styled.div`
 	background-image: ${({ image }) => `url(/images/${image})`};
@@ -44,23 +50,21 @@ const AppRoutesContainer = () => {
 		<RecoilRoot>
 			<LogsProvider>
 				<ThemeProvider>
-					<AccountProvider>
-						<TwitchProvider>
-							<YoutubeProvider>
-								<NotificationsProvider>
-									<TwitterProvider>
-										<FeedSectionsProvider>
-											<MyListsProvider>
-												<VodsProvider>
-													<App />
-												</VodsProvider>
-											</MyListsProvider>
-										</FeedSectionsProvider>
-									</TwitterProvider>
-								</NotificationsProvider>
-							</YoutubeProvider>
-						</TwitchProvider>
-					</AccountProvider>
+					<TwitchProvider>
+						<YoutubeProvider>
+							<NotificationsProvider>
+								<TwitterProvider>
+									<FeedSectionsProvider>
+										<MyListsProvider>
+											<VodsProvider>
+												<App />
+											</VodsProvider>
+										</MyListsProvider>
+									</FeedSectionsProvider>
+								</TwitterProvider>
+							</NotificationsProvider>
+						</YoutubeProvider>
+					</TwitchProvider>
 				</ThemeProvider>
 			</LogsProvider>
 		</RecoilRoot>
@@ -73,6 +77,72 @@ const App = () => {
 	const { toggleEnabled } = useFeedPreferences();
 	const { setTwitchAccessToken, setTwitchRefreshToken, setTwitchUserId, setTwitchUsername, setTwitchProfileImage } = useContext(TwitchContext);
 	const { setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage } = useContext(YoutubeContext);
+	const { addLog } = useContext(LogsContext);
+
+	const theme = useThemeStore((state) => state.theme);
+	const { fetchUser, setUser } = useUserStore((state) => state);
+
+	useEffect(() => {
+		fetchUser();
+	}, [fetchUser]);
+
+	useEffect(() => {
+		//Fix this runs twice for some reason
+		(async () => {
+			console.log("logger useEffect:");
+			const logger = new Logger("My-Logger");
+			const listener = (data) => {
+				switch (data?.payload?.event) {
+					case "signIn":
+						logger.info("logger: user signed in");
+						console.log("logger: user signed in");
+						setUser(data?.payload?.data);
+						toast.success(`Logged in as ${data?.payload?.data?.username}`);
+						addLog({
+							title: `Sign in`,
+							text: `Signed in as ${data?.payload?.data?.username}`,
+							icon: "login",
+						});
+						break;
+					case "signUp":
+						logger.info("logger: user signed up");
+						console.log("logger: user signed up");
+						break;
+					case "signOut":
+						logger.info("logger: user signed out");
+						console.log("logger: user signed out");
+						setUser(null);
+						toast.success(`Signed out`);
+						addLog({
+							title: `Signed out`,
+							icon: "login",
+						});
+						break;
+					case "signIn_failure":
+						logger.error("logger: user sign in failed");
+						console.log("logger: user sign in failed");
+						toast.warning(data?.payload?.data?.message);
+						break;
+					case "tokenRefresh":
+						logger.info("logger: token refresh succeeded");
+						console.log("logger: token refresh succeeded");
+						break;
+					case "tokenRefresh_failure":
+						logger.error("logger: token refresh failed");
+						console.log("logger: token refresh failed");
+						break;
+					case "configured":
+						logger.info("logger: the Auth module is configured");
+						console.log("logger: the Auth module is configured");
+						break;
+					default:
+						return;
+				}
+			};
+
+			Hub.listen("auth", listener);
+		})();
+	}, [addLog, setUser]);
 
 	useEventListenerMemo("message", receiveMessage, window, true, { capture: false });
 
@@ -96,21 +166,26 @@ const App = () => {
 	}
 
 	return (
-		<AppContainer id="AppContainer" image={activeTheme.image}>
-			<CleanUp />
-			<Routes />
-			<CookieConsentAlert />
-			<ToastContainer
-				position="bottom-right"
-				autoClose={3000}
-				newestOnTop={false}
-				closeOnClick
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				theme="dark"
-			/>
-		</AppContainer>
+		<QueryClientProvider client={queryClient}>
+			<StyledThemeProvider theme={theme}>
+				<GlobalStyles />
+				<AppContainer id="AppContainer" image={activeTheme.image}>
+					<CleanUp />
+					<Routes />
+					<CookieConsentAlert />
+					<ToastContainer
+						position="bottom-right"
+						autoClose={3000}
+						newestOnTop={false}
+						closeOnClick
+						pauseOnFocusLoss
+						draggable
+						pauseOnHover
+						theme="dark"
+					/>
+				</AppContainer>
+			</StyledThemeProvider>
+		</QueryClientProvider>
 	);
 };
 

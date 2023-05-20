@@ -1,7 +1,5 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
-
-import AccountContext from "./../../account/AccountContext";
 import SidebarAccount from "./SidebarAccount";
 import { StyledNavSidebarTrigger, StyledLoginButton } from "./../StyledComponents";
 import { StyledNavSidebar, StyledNavSidebarBackdrop, StyledSidebarTrigger } from "./StyledComponents";
@@ -12,9 +10,10 @@ import SignIn from "../../account/SignIn";
 import ForgotPassword from "../../account/ForgotPassword";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { navigationSidebarAtom, navigationSidebarComponentKeyAtom } from "../atoms";
+import useUserStore from "../../../stores/userStore";
 
 const NavigationSidebar = () => {
-	const { user, loading } = useContext(AccountContext);
+	const { user, loading } = useUserStore();
 	const navigationSidebarComponentKey = useRecoilValue(navigationSidebarComponentKeyAtom);
 	const invoked = useRef();
 

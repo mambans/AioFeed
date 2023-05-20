@@ -70,7 +70,7 @@ export const LogsProvider = ({ children }) => {
 			case "logout":
 				return <FiLogOut size={24} color={Colors.red} />;
 			case "login":
-				return <FiLogIn size={24} color={Colors.red} />;
+				return <FiLogIn size={24} color={Colors.blue} />;
 			case "authenticated":
 				return <SiAuthy size={24} color={Colors.red} />;
 			case "deleted":
