@@ -1,4 +1,10 @@
 import React, { useEffect } from 'react';
+import { Form } from 'react-bootstrap';
+import { AiFillEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import CopyListBtn from '../myLists/CopyListBtn';
+import DeleteListBtn from '../myLists/DeleteListBtn';
+import DropDownSimple from '../myLists/DropDownSimple';
+import DropDown from '../navigation/DropDown';
 
 import { Container, ListHeader, EmailButtonAsLink } from './StyledComponents';
 
@@ -14,6 +20,66 @@ const Legality = () => {
 
   return (
     <Container>
+      <DropDown
+        showArrow={false}
+        trigger={<p>asdasdasdasdsd</p>}
+        items={[
+          {
+            title: {}?.enabled ? 'Visible' : 'Hidden',
+            icon: {}?.enabled ? (
+              <AiFillEye size={22} color='#ffffff' />
+            ) : (
+              <AiOutlineEyeInvisible size={22} color='rgb(150,150,150)' />
+            ),
+          },
+        ]}
+      >
+        <CopyListBtn list={{}} />
+        <DeleteListBtn list={{}} />
+
+        {/* <ListActionButton onClick={() => toggleList(list.id)}>
+                {list.enabled ? (
+                  <>
+                    <AiFillEye size={22} color='#ffffff' />
+                    Visible
+                  </>
+                ) : (
+                  <>
+                    <AiOutlineEyeInvisible size={22} color='rgb(150,150,150)' />
+                    Hidden
+                  </>
+                )}
+              </ListActionButton> */}
+      </DropDown>
+      <DropDown
+        items={[
+          {
+            title: 'item1',
+            icon: <AiFillEye />,
+            onClick: () => {
+              console.log('clickkk');
+            },
+          },
+        ]}
+        title='click'
+      >
+        <p>asdasd</p>
+        <p>asdasd</p>
+        <p>asdasd</p>
+        <p>asdasdaasdasdsadasd</p>
+      </DropDown>
+      <DropDownSimple trigger={<p>Click here too</p>}>
+        <p>12312312</p>
+        <p>12312312</p>
+        <p>12312312</p>
+        <p>12312312</p>
+      </DropDownSimple>{' '}
+      <Form.Select aria-label='Default select example'>
+        <option>Open this select menu</option>
+        <option value='1'>One</option>
+        <option value='2'>Two</option>
+        <option value='3'>Three</option>
+      </Form.Select>
       <div id='#Privacy'>
         <h2>
           <a href='#Privacy'>Privacy Notice</a>

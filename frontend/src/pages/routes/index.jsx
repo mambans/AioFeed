@@ -177,7 +177,7 @@ const NavigationRoutes = () => {
 									authRequired ? (
 										loading === "loading" ? (
 											<LoadingIndicator height={400} width={600} text={"Authenticating.."} />
-										) : !user === "hasError" ? (
+										) : !user ? (
 											<Navigate to="/" state={{ showLoginAlert: true }} replace />
 										) : (
 											element
