@@ -63,7 +63,7 @@ const Player = () => {
 	const navigationBarVisible = useRecoilValue(navigationBarVisibleAtom);
 	const setFooterVisible = useSetRecoilState(footerVisibleAtom);
 
-	const { twitchAccessToken, setTwitchAccessToken, defaultHideChat } = useContext(TwitchContext);
+	const { twitchAccessToken, setTwitchAccessToken, defaultHideChat, enableVodVolumeOverlay } = useContext(TwitchContext);
 
 	const twitchVideoPlayer = useRef();
 	const [streamInfo, setStreamInfo] = useState(useLocation().state?.passedChannelData);
@@ -435,12 +435,12 @@ const Player = () => {
 					classNames="fade-controllUI"
 				>
 					<VolumeEventOverlay
-						show={showUIControlls || status !== "Live"}
+						show={(showUIControlls || status !== "Live") && enableVodVolumeOverlay}
 						ref={PlayerUIControlls}
 						type="live"
 						id="controls"
 						hidechat={String(chatState.hideChat)}
-						showcursor={showControlls}
+						showcursor={showControlls && enableVodVolumeOverlay}
 						isFullscreen={isFullscreen}
 						chatwidth={chatState.chatwidth || DEFAULT_CHAT_WIDTH}
 						VolumeEventOverlayRef={PlayerUIControlls}
