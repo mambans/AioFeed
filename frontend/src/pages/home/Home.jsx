@@ -15,28 +15,6 @@ export const Home = () => {
 	const showLoginAlert = useLocation()?.state?.showLoginAlert;
 	const setNavigationSidebarVisible = useSetNavigationSidebarVisible();
 
-	// console.log("livestreams:", livestreams);
-	// console.log("previousStreams:", previousStreams);
-	// console.log("newlyAddedStreams:", newlyAddedStreams);
-	// console.log("twitchUserId:", twitchUserId);
-
-	// const { livestreams, setLivestreams } = useStreamsStore();
-	// const livestreams1 = useStreamsStore.getState().livestreams;
-	// const livestreams2 = useStreamsStore((state) => state.livestreams);
-
-	// const unsub1 = useStreamsStore.subscribe((data) => {
-	// 	console.log("data: ", data);
-	// });
-
-	// unsub1();
-
-	// useEffect(() => {
-	// 	(async () => {
-	// 		const res = await fetch(twitchUserId);
-	// 		console.log("res:", res);
-	// 	})();
-	// }, [fetch, twitchUserId]);
-
 	const Logos = () => (
 		<>
 			<WelcomeContainer>
@@ -44,12 +22,12 @@ export const Home = () => {
 					<img rel="preload" src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`} alt="logo" id="logo" />
 					<div>
 						<h1>
-							<b>AioFeed123</b>
+							<b>AioFeed</b>
 						</h1>
 						<DevideLine />
 						<p>View Twitch & YouTube feeds and Twitter list in one page, with Twitch (live/offline/update) notifications.</p>
 						<p>Custom lists with Twitch/YouTube videos.</p>
-						<p>Group Twitch live streams by title/category/channel etc.. </p>
+						<p>Group Twitch live streams by title/category/channel etc... </p>
 					</div>
 				</LogoText>
 			</WelcomeContainer>
