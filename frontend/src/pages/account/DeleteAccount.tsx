@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Breadcrumb, Button, Form } from "react-bootstrap";
-import { ButtonGroup } from "../../components/styledComponents";
+import { ButtonGroup } from "src/components/styledComponents";
 import useInput from "../../hooks/useInput";
 import { useUser, useUserDelete } from "../../stores/user";
 
