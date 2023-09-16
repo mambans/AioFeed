@@ -50,7 +50,7 @@ jobs:
       - name: Deploy cloudformation
         id: deploy-cloudformation
         run: |
-          cd frontend && aws cloudformation deploy --template-file ./frontend/cloudformation.yaml --stack-name aiofeed-frontend --no-fail-on-empty-changeset
+          aws cloudformation deploy --template-file ./frontend/cloudformation.yaml --stack-name aiofeed-frontend --no-fail-on-empty-changeset
           echo "Deployment exit code: $?"
 
       - name: Build
