@@ -2,7 +2,7 @@
 
 [![Build Status](https://app.travis-ci.com/mambans/AioFeed.svg?branch=master)](https://app.travis-ci.com/mambans/AioFeed)
 
-[![Build Status]([https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=master](https://github.com/mambans/aiofeed/actions/workflows/master.yaml/badge.svg))
+[![Build Status]([https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=master](https://github.com/mambans/aiofeed/actions/workflows/master.yaml/badge.svg)
 
 <img src="https://github.com/mambans/AioFeed/blob/master/frontend/public/android-chrome-192x192.webp" alt="Logo" width="300"/>
 
