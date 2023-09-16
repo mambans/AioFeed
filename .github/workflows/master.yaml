@@ -45,7 +45,7 @@ jobs:
 
       - name: Clean previous cloudformation deploy
         id: cleanup-deploy-cloudformation
-        run: cleanup.sh eu-north-1 aiofeed-frontend
+        run: frontend/cleanup.sh eu-north-1 aiofeed-frontend
 
       - name: Install Dependencies
         run: bun install
