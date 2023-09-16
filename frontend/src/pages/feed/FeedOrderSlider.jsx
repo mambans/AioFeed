@@ -2,9 +2,8 @@ import React, { useContext } from "react";
 import styled, { css } from "styled-components";
 import MyListsContext from "../myLists/MyListsContext";
 import ToolTip from "../../components/tooltip/ToolTip";
-import { useRecoilValue } from "recoil";
-import { feedSectionsAtom } from "../twitch/atoms";
-import { feedPreferencesAtom, useFeedPreferences } from "../../atoms/atoms";
+import { useFeedSections } from "../../stores/twitch/feedSections";
+import { useFeedPreferences, useUpdateFeedPreference } from "../../stores/feedPreference";
 
 const SliderMultipuleHandles = styled.div`
 	position: absolute;
@@ -88,12 +87,13 @@ const StyledSliderThumb = styled.input.attrs({ type: "range", min: 1, max: 1000 
 `;
 
 const SliderThumb = ({ name, id, icon, sliderLength }) => {
-	const feedPreferences = useRecoilValue(feedPreferencesAtom);
-	const { setOrder } = useFeedPreferences();
+	const updatePreference = useUpdateFeedPreference();
+	const feedPreferences = useFeedPreferences();
+
 	const ID = id || name;
 
 	const handleSubmit = (e) => {
-		setOrder(ID, parseInt(e.target.value));
+		updatePreference(ID, { order: parseInt(e.target.value) });
 	};
 
 	return (
@@ -112,9 +112,9 @@ const SliderThumb = ({ name, id, icon, sliderLength }) => {
 
 const FeedOrderSlider = () => {
 	const { lists } = useContext(MyListsContext);
-	// const { feedSections } = useContext(FeedSectionsContext);
-	const feedSections = useRecoilValue(feedSectionsAtom);
-	const feedPreferences = useRecoilValue(feedPreferencesAtom);
+	const feedSections = useFeedSections();
+
+	const feedPreferences = useFeedPreferences();
 
 	const feeds = [
 		feedPreferences?.twitch?.enabled && {

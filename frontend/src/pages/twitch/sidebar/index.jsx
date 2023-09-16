@@ -6,19 +6,27 @@ import { Styledsidebar, SidebarHeader, StyledSidebarSection } from "./StyledComp
 import LoadingSidebar from "./LoadingSidebar";
 import { TwitchContext } from "../useToken";
 import ExpandableSection from "../../../components/expandableSection/ExpandableSection";
-import { checkAgainstRules } from "../../feedSections/FeedSections";
+import { checkAgainstRules } from "../../feedSections/utilities";
 import { ExpandCollapseFeedButton } from "../../sharedComponents/sharedStyledComponents";
-import { useRecoilValue } from "recoil";
-import { baseLiveStreamsAtom, feedSectionsAtom, nonFeedSectionStreamsAtom } from "../atoms";
-import { feedPreferencesAtom, useFeedPreferences } from "../../../atoms/atoms";
+import { useFeedSections } from "../../../stores/twitch/feedSections";
+import useStreamsStore from "../../../stores/twitch/streams/useStreamsStore";
+import { useToggleFeedPreference, useFeedPreferences } from "../../../stores/feedPreference";
 
-const Sidebar = ({ data, streams }) => {
+const Sidebar = ({ data }) => {
 	const { loaded } = data;
-	const feedSections = useRecoilValue(feedSectionsAtom);
-	const feedPreferences = useRecoilValue(feedPreferencesAtom) || {};
+	const feedSections = useFeedSections();
+	const feedPreferences = useFeedPreferences();
 
-	const liveStreams = useRecoilValue(baseLiveStreamsAtom);
-	const nonFeedSectionsLiveStreams = useRecoilValue(nonFeedSectionStreamsAtom);
+	const liveStreams = useStreamsStore((state) => state.livestreams);
+
+	const nonFeedSectionsLiveStreams = liveStreams.filter((stream) => {
+		const enabledFeedSections =
+			feedPreferences?.feedSections?.enabled &&
+			feedSections &&
+			Object.values?.(feedSections)?.filter((f = {}) => f.enabled && f.excludeFromTwitch_enabled);
+
+		return !enabledFeedSections?.some?.(({ rules } = {}) => checkAgainstRules(stream, rules));
+	});
 
 	if (loaded) {
 		return (
@@ -43,8 +51,9 @@ export default Sidebar;
 
 const SidebarSection = ({ feed: { title, id }, items }) => {
 	const { favStreams } = useContext(TwitchContext);
-	const { toggleSidebarExpanded } = useFeedPreferences();
-	const feedPreferences = useRecoilValue(feedPreferencesAtom);
+
+	const togglePreference = useToggleFeedPreference();
+	const feedPreferences = useFeedPreferences();
 
 	const [shows, setShows] = useState();
 	const resetShowsTimer = useRef();
@@ -71,7 +80,7 @@ const SidebarSection = ({ feed: { title, id }, items }) => {
 		unmountOnExit: true,
 	};
 
-	const handleCollapse = () => toggleSidebarExpanded(id);
+	const handleCollapse = () => togglePreference(id, "sidebar_collapsed");
 
 	if (id !== "twitch" && !items?.length) return null;
 

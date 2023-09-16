@@ -9,11 +9,10 @@ import "./Navigation.scss";
 import NavExpandingSides from "./NavExpandingSides";
 import LogsContext from "../logs/LogsContext";
 import { NavigationSidebar } from "./sidebar";
-import { navigationBarVisibleAtom } from "./atoms";
-import { useRecoilValue } from "recoil";
 import GameSearchBar from "../twitch/searchbars/GameSearchBar";
 import ChannelSearchBar from "../twitch/searchbars/ChannelSearchBar";
 import ShowNavigationButton from "./ShowNavigationButton";
+import { useNavigationBarVisible } from "../../stores/navigation";
 
 const StyledNavbar = styled(Navbar)`
 	display: flex;
@@ -53,7 +52,7 @@ const ShowNavbarButtonWrapper = styled.div`
 `;
 
 const Navigation = () => {
-	const navigationBarVisible = useRecoilValue(navigationBarVisibleAtom);
+	const navigationBarVisible = useNavigationBarVisible();
 
 	const { LogsIcon } = useContext(LogsContext) || {};
 	const leftExpand = useRef();
@@ -79,7 +78,7 @@ const Navigation = () => {
 							className="logo-link"
 							style={{ display: "flex", alignItems: "center", paddingLeft: "0", minWidth: "141px" }}
 						>
-							<img src={`${process.env.PUBLIC_URL}/android-chrome-192x192.webp`} alt="logo" className="logo" />
+							<img src={`${process.env.PUBLIC_URL}/android-chrome-192x192.png`} alt="logo" className="logo" />
 							AioFeed
 						</Nav.Link>
 						<RenderNotifications leftExpandRef={leftExpand} />

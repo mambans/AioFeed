@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useState } from "react";
+import React from "react";
 import { Breadcrumb, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import LoadingIndicator from "../../components/LoadingIndicator";
@@ -6,13 +6,16 @@ import { ThemeSelector } from "../../components/themes/styledComponents";
 import useInput from "../../hooks/useInput";
 import { InlineError, StyledCreateForm, StyledCreateFormTitle } from "../navigation/sidebar/StyledComponents";
 import Button from "../../components/Button";
-import { useSetRecoilState } from "recoil";
-import { navigationSidebarComponentKeyAtom } from "../navigation/atoms";
-import useUserStore from "../../stores/userStore";
+
+import { useUserError, useUserLoading, useUserSignIn } from "../../stores/user";
+import { useSetNavigationSidebarVisible } from "../../stores/navigation";
 
 const SignIn = ({ text }) => {
-	const { signIn, loading, error: rawError } = useUserStore();
-	const setNavigationSidebarComponentKey = useSetRecoilState(navigationSidebarComponentKeyAtom);
+	const signIn = useUserSignIn();
+	const loading = useUserLoading();
+	const { error: rawError } = useUserError();
+
+	const setNavigationSidebarVisible = useSetNavigationSidebarVisible();
 
 	const { value: username, bind: bindUsername } = useInput("");
 	const { value: password, bind: bindPassword } = useInput("");
@@ -38,7 +41,7 @@ const SignIn = ({ text }) => {
 		//     console.log('Logged in data:', data);
 
 		//     setLoading(false);
-		//     setNavigationSidebarComponentKey({ comp: 'account' });
+		//     setNavigationSidebarVisible(true, 'account' );
 		//   })
 		//   .catch((error) => {
 		//     console.log('errorrrrrrrrrrr:', error);
@@ -50,7 +53,7 @@ const SignIn = ({ text }) => {
 	return (
 		<>
 			<Breadcrumb>
-				<Breadcrumb.Item active={true} onClick={() => setNavigationSidebarComponentKey({ comp: "signin" })}>
+				<Breadcrumb.Item active={true} onClick={() => setNavigationSidebarVisible(true, "signin")}>
 					Sign in
 				</Breadcrumb.Item>
 			</Breadcrumb>
@@ -74,10 +77,10 @@ const SignIn = ({ text }) => {
 				{error && <InlineError>{error}</InlineError>}
 			</StyledCreateForm>
 			<ThemeSelector style={{ marginTop: "20px" }} />
-			<Button variant="link" onClick={() => setNavigationSidebarComponentKey({ comp: "SignUp" })}>
+			<Button variant="link" onClick={() => setNavigationSidebarVisible(true, "SignUp")}>
 				Don't have an account? Create an account here!
 			</Button>
-			<Button variant="link" onClick={() => setNavigationSidebarComponentKey({ comp: "ForgotPassword" })}>
+			<Button variant="link" onClick={() => setNavigationSidebarVisible(true, "ForgotPassword")}>
 				Forgot password?
 			</Button>
 			{loading && <LoadingIndicator height={150} width={150} />}

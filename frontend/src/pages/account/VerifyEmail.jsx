@@ -3,10 +3,12 @@ import React, { useState } from "react";
 import { Breadcrumb, Button, Form, Spinner } from "react-bootstrap";
 import { toast } from "react-toastify";
 import useInput from "../../hooks/useInput";
-import useUserStore from "../../stores/userStore";
+import { useUser, useUserSetUser } from "../../stores/user";
 
 const VerifyEmail = ({ onClose }) => {
-	const { setUser, user } = useUserStore();
+	const user = useUser();
+	const setUser = useUserSetUser();
+
 	const [loading, setLoading] = useState();
 	const [error, setError] = useState();
 

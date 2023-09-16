@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getCookie } from "../../util";
+import { getCookie } from "../../utilities";
 import validateToken from "./validateToken";
 
 const CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;
@@ -120,11 +120,11 @@ const TwitchAPI = {
 		});
 	},
 
-	getFollowedChannels: async (params) => {
-		return await TWITCH_INSTANCE.get(`/users/follows`, {
-			params,
-		});
-	},
+	// getFollowedChannels: async (params) => {
+	// 	return await TWITCH_INSTANCE.get(`/users/follows`, {
+	// 		params,
+	// 	});
+	// },
 
 	getGames: async (params) => {
 		return await TWITCH_INSTANCE.get(`/games`, {
@@ -144,11 +144,11 @@ const TwitchAPI = {
 		});
 	},
 
-	checkFollow: async (params) => {
-		return await TWITCH_INSTANCE.get(`/users/follows`, {
-			params,
-		});
-	},
+	// checkFollow: async (params) => {
+	// 	return await TWITCH_INSTANCE.get(`/users/follows`, {
+	// 		params,
+	// 	});
+	// },
 
 	getTags: async (params) => {
 		return await TWITCH_INSTANCE.get(`/streams/tags`, {

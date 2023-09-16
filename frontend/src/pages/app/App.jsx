@@ -10,31 +10,29 @@ import ThemeContext, { ThemeProvider } from "./../../components/themes/ThemeCont
 import useEventListenerMemo from "../../hooks/useEventListenerMemo";
 import { TwitchContext, TwitchProvider } from "../twitch/useToken";
 import { YoutubeContext, YoutubeProvider } from "../youtube/useToken";
-import { VodsProvider } from "../twitch/vods/VodsContext";
 import { MyListsProvider } from "../myLists/MyListsContext";
 import LogsContext, { LogsProvider } from "../logs/LogsContext";
-import { FeedSectionsProvider } from "../feedSections/FeedSectionsContext";
 import { TwitterProvider } from "../twitter/TwitterContext";
 import CleanUp from "./CleanUp";
-import { RecoilRoot } from "recoil";
-import { useFeedPreferences } from "../../atoms/atoms";
+import { Background } from "./Styles";
 
 import useThemeStore from "../../stores/theme/themeStore";
-import useUserStore from "../../stores/userStore";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GlobalStyles } from "../../themes/GlobalStyles";
 import { Hub, Logger } from "aws-amplify";
+import { useUserSetUser } from "../../stores/user";
+import { useToggleFeedPreference } from "../../stores/feedPreference";
 const queryClient = new QueryClient();
 
 const AppContainer = styled.div`
-	background-image: ${({ image }) => `url(/images/${image})`};
-	background-color: var(--backgroundColor);
+	/* background-image: ${({ image }) => `url(/images/${image})`}; */
+	/* background-color: var(--backgroundColor);
 	object-fit: cover;
 	background-position-x: center;
 	background-position-y: var(--backgroundImgPositionY);
 	background-size: var(--backgroundImgSize);
 	background-repeat: var(--backgroundImgRepeat);
-	background-attachment: fixed;
+	background-attachment: fixed; */
 
 	scrollbar-color: var(--scrollbarColors) !important;
 	scrollbar-width: thin !important;
@@ -47,44 +45,35 @@ const AppContainer = styled.div`
 const AppRoutesContainer = () => {
 	return (
 		// <React.StrictMode>
-		<RecoilRoot>
-			<LogsProvider>
-				<ThemeProvider>
-					<TwitchProvider>
-						<YoutubeProvider>
-							<NotificationsProvider>
-								<TwitterProvider>
-									<FeedSectionsProvider>
-										<MyListsProvider>
-											<VodsProvider>
-												<App />
-											</VodsProvider>
-										</MyListsProvider>
-									</FeedSectionsProvider>
-								</TwitterProvider>
-							</NotificationsProvider>
-						</YoutubeProvider>
-					</TwitchProvider>
-				</ThemeProvider>
-			</LogsProvider>
-		</RecoilRoot>
+		<LogsProvider>
+			<ThemeProvider>
+				<TwitchProvider>
+					<YoutubeProvider>
+						<NotificationsProvider>
+							<TwitterProvider>
+								<MyListsProvider>
+									<App />
+								</MyListsProvider>
+							</TwitterProvider>
+						</NotificationsProvider>
+					</YoutubeProvider>
+				</TwitchProvider>
+			</ThemeProvider>
+		</LogsProvider>
 		// {/* </React.StrictMode> */}
 	);
 };
 
 const App = () => {
 	const { activeTheme } = useContext(ThemeContext);
-	const { toggleEnabled } = useFeedPreferences();
+	const togglePreference = useToggleFeedPreference();
+
 	const { setTwitchAccessToken, setTwitchRefreshToken, setTwitchUserId, setTwitchUsername, setTwitchProfileImage } = useContext(TwitchContext);
 	const { setYoutubeAccessToken, setYoutubeUsername, setYoutubeProfileImage } = useContext(YoutubeContext);
 	const { addLog } = useContext(LogsContext);
 
 	const theme = useThemeStore((state) => state.theme);
-	const { fetchUser, setUser } = useUserStore((state) => state);
-
-	useEffect(() => {
-		fetchUser();
-	}, [fetchUser]);
+	const setUser = useUserSetUser();
 
 	useEffect(() => {
 		//Fix this runs twice for some reason
@@ -155,12 +144,12 @@ const App = () => {
 				if (setTwitchUserId) setTwitchUserId(e.data.userId);
 				if (setTwitchProfileImage) setTwitchProfileImage(e.data.profileImg);
 
-				toggleEnabled("twitch", true);
+				togglePreference("twitch", "enabled", true);
 			} else if (e.data.service === "youtube") {
 				if (e.data.token && setYoutubeAccessToken) setYoutubeAccessToken(e.data.token);
 				if (e.data.username && setYoutubeUsername) setYoutubeUsername(e.data.username);
 				if (e.data.profileImg && setYoutubeProfileImage) setYoutubeProfileImage(e.data.profileImg);
-				toggleEnabled("youtube", true);
+				togglePreference("youtube", "enabled", true);
 			}
 		}
 	}
@@ -169,6 +158,7 @@ const App = () => {
 		<QueryClientProvider client={queryClient}>
 			<StyledThemeProvider theme={theme}>
 				<GlobalStyles />
+				<Background />
 				<AppContainer id="AppContainer" image={activeTheme.image}>
 					<CleanUp />
 					<Routes />

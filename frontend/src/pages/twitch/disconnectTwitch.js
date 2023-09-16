@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getCookie, RemoveCookie } from "../../util";
+import { getCookie, RemoveCookie } from "../../utilities";
 import API from "../navigation/API";
 
 const disconnectTwitch = async ({ setTwitchToken = () => {}, setEnableTwitch = () => {} }) => {

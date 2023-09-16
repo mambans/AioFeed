@@ -22,7 +22,7 @@ import {
 } from "./../../sharedComponents/sharedStyledComponents";
 import { ChannelNameDiv } from "./../StyledComponents";
 import StreamHoverIframe from "../StreamHoverIframe.jsx";
-import { truncate } from "../../../util";
+import { truncate } from "../../../utilities";
 import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 import VodsFollowUnfollowBtn from "./../vods/VodsFollowUnfollowBtn";
 import AddUpdateNotificationsButton from "../AddUpdateNotificationsButton";
@@ -32,11 +32,12 @@ import ChannelButtonsContainer from "./ChannelButtonsContainer";
 import ToolTip from "../../../components/tooltip/ToolTip";
 import FavoriteStreamBtn from "./FavoriteStreamBtn";
 import Schedule from "../schedule";
-import { useRecoilValue } from "recoil";
-import { newBaseLiveStreamsAtom } from "../atoms";
+import useStreamsStore from "../../../stores/twitch/streams/useStreamsStore";
 
 function NewHighlightNoti({ login, user_login }) {
-	const newBaseLiveStreams = useRecoilValue(newBaseLiveStreamsAtom);
+	//TODO: Refactor this to display streams that i have not seen yet since last visit (not just since last fetch)
+	const newBaseLiveStreams = useStreamsStore((state) => state.newlyAddedStreams);
+
 	if (newBaseLiveStreams?.includes((login || user_login)?.toLowerCase())) {
 		return (
 			<StyledNewlyAddedIndicatorWrapper>
@@ -50,7 +51,7 @@ function NewHighlightNoti({ login, user_login }) {
 	return "";
 }
 
-const StreamElement = React.memo(({ data = {}, refresh, refreshAfterUnfollowTimer, size }) => {
+const StreamElement = React.memo(({ data = {}, refresh, size }) => {
 	const location = useLocation();
 	const { user_id, user_name, user_login, started_at, title, game_name, thumbnail_url, profile_image_url, login, game_img, viewer_count } = data;
 
@@ -59,7 +60,7 @@ const StreamElement = React.memo(({ data = {}, refresh, refreshAfterUnfollowTime
 	const videoContainerRef = useRef();
 	const thumbnailUrl =
 		`${thumbnail_url?.replace("{width}", size === "small" ? 339 : 858)?.replace("{height}", size === "small" ? 192 : 480)}` ||
-		`${process.env.PUBLIC_URL}/images/webp/placeholder.webp`;
+		`${process.env.PUBLIC_URL}/images/webp/placeholder.png`;
 
 	const streamData = {
 		started_at,
@@ -179,7 +180,6 @@ const StreamElement = React.memo(({ data = {}, refresh, refreshAfterUnfollowTime
 								id={user_id}
 								followingStatus={true}
 								refreshStreams={refresh}
-								refreshAfterUnfollowTimer={refreshAfterUnfollowTimer}
 							/>
 						</ChannelButtonsContainer>
 					)}

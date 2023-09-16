@@ -4,12 +4,9 @@ import React, { useState, useEffect } from "react";
 
 import { VodAddRemoveButton } from "../../sharedComponents/sharedStyledComponents";
 import ToolTip from "../../../components/tooltip/ToolTip";
-import useVodChannel from "./hooks/useVodChannel";
-import useFetchSingelVod from "./hooks/useFetchSingelVod";
 import loginNameFormat from "../loginNameFormat";
-import { useRecoilValue } from "recoil";
-import { vodChannelsAtom } from "./atoms";
-import { feedPreferencesAtom } from "../../../atoms/atoms";
+import { useVodsAddVodChannel, useVodsChannels, useVodsFetchChannelVods, useVodsRemoveChannel } from "../../../stores/twitch/vods";
+import { useFeedPreferences } from "../../../stores/feedPreference";
 
 /**
  * @param {Object} channel - channel
@@ -19,12 +16,15 @@ import { feedPreferencesAtom } from "../../../atoms/atoms";
  */
 
 const VodsFollowUnfollowBtn = ({ channel, loweropacity, marginright, className, show = true, size = "1.4em", text, type = "link", padding }) => {
-	const channels = useRecoilValue(vodChannelsAtom);
+	const channels = useVodsChannels();
 	const [enabled, setEnabled] = useState(channels && !!channels?.find?.((user_id) => channel?.user_id === user_id));
-	const { vods } = useRecoilValue(feedPreferencesAtom) || {};
+	const feedPreferences = useFeedPreferences();
 
-	const { removeChannel, addVodChannel } = useVodChannel() || {};
-	const { fetchLatestVod } = useFetchSingelVod() || {};
+	const { vods } = feedPreferences || {};
+
+	const addVodChannel = useVodsAddVodChannel();
+	const removeChannel = useVodsRemoveChannel();
+	const fetchChannelVods = useVodsFetchChannelVods();
 
 	const handleOnClick = (e) => {
 		e.preventDefault();
@@ -36,7 +36,7 @@ const VodsFollowUnfollowBtn = ({ channel, loweropacity, marginright, className, 
 			} else {
 				if (addVodChannel) addVodChannel({ channel });
 				if (channel?.user_id) {
-					fetchLatestVod({ user_id: channel.user_id, amount: 5 });
+					fetchChannelVods({ user_id: channel.user_id, amount: 5 });
 				}
 			}
 		}, 0);

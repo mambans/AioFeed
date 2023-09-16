@@ -52,16 +52,14 @@ import API from "../../navigation/API";
 import addGameInfo from "../functions/addGameInfo";
 import addProfileInfo from "../functions/addProfileInfo";
 import PlayerButtonsBar from "./PlayerButtonsBar";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { footerVisibleAtom, navigationBarVisibleAtom } from "../../navigation/atoms";
+import { useNavigationBarVisible } from "../../../stores/navigation";
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.12, 175);
 
 const Player = () => {
 	const channelName = useParams()?.channelName;
 	const { addNotification } = useContext(NotificationsContext);
-	const navigationBarVisible = useRecoilValue(navigationBarVisibleAtom);
-	const setFooterVisible = useSetRecoilState(footerVisibleAtom);
+	const navigationBarVisible = useNavigationBarVisible();
 
 	const { twitchAccessToken, setTwitchAccessToken, defaultHideChat, enableVodVolumeOverlay } = useContext(TwitchContext);
 
@@ -216,7 +214,7 @@ const Player = () => {
 			clearInterval(refreshStreamInfoTimer.current);
 			clearTimeout(fadeTimer.current);
 		};
-	}, [setFooterVisible, channelName]);
+	}, [channelName]);
 
 	function offlineEvents() {
 		console.log("Stream is Offline");

@@ -1,68 +1,60 @@
-import { getLocalstorage, chunk, setLocalStorage } from '../../util';
-import YoutubeAPI from '../youtube/API';
+import { getLocalstorage, chunk, setLocalStorage } from "../../utilities";
+import YoutubeAPI from "../youtube/API";
 // import YoutubeAPI from '../youtube/API';
 
 const GetVideoInfo = async ({ videos = [] }) => {
-  const videosArray = [...videos];
+	const videosArray = [...videos];
 
-  const fullyCachedVideos =
-    getLocalstorage('Cached_SavedYoutubeVideos')?.items &&
-    getLocalstorage('Cached_SavedYoutubeVideos')?.expire >= Date.now()
-      ? getLocalstorage('Cached_SavedYoutubeVideos')
-      : { items: [], expire: Date.now() + 7 * 24 * 60 * 60 * 1000 };
+	const fullyCachedVideos =
+		getLocalstorage("Cached_SavedYoutubeVideos")?.items && getLocalstorage("Cached_SavedYoutubeVideos")?.expire >= Date.now()
+			? getLocalstorage("Cached_SavedYoutubeVideos")
+			: { items: [], expire: Date.now() + 7 * 24 * 60 * 60 * 1000 };
 
-  const CachedFullyVideos = fullyCachedVideos.items.filter((video) =>
-    videosArray.includes(video?.contentDetails?.upload?.videoId)
-  );
+	const CachedFullyVideos = fullyCachedVideos.items.filter((video) => videosArray.includes(video?.contentDetails?.upload?.videoId));
 
-  const unCachedFullyVideos =
-    videosArray.filter(
-      (video) =>
-        !fullyCachedVideos.items.find((cache) => cache?.contentDetails?.upload?.videoId === video)
-    ) || [];
+	const unCachedFullyVideos =
+		videosArray.filter((video) => !fullyCachedVideos.items.find((cache) => cache?.contentDetails?.upload?.videoId === video)) || [];
 
-  if (!Boolean(unCachedFullyVideos?.length)) {
-    const cachedVideos = fullyCachedVideos.items.filter((cache) =>
-      videosArray.find((video) => video === cache?.contentDetails?.upload?.videoId)
-    );
+	if (!Boolean(unCachedFullyVideos?.length)) {
+		const cachedVideos = fullyCachedVideos.items.filter((cache) => videosArray.find((video) => video === cache?.contentDetails?.upload?.videoId));
 
-    return cachedVideos;
-  }
+		return cachedVideos;
+	}
 
-  const newVideosDetails = (
-    await Promise.allSettled(
-      chunk(unCachedFullyVideos, 50).map(async (chunk) => {
-        return await YoutubeAPI.getVideoInfo({
-          part: 'contentDetails,snippet',
-          id: chunk.join(','),
-        })
-          .then((res) => {
-            return res.data.items.map((item) => ({
-              ...item,
-              contentDetails: {
-                ...item.contentDetails,
-                upload: { videoId: item.id },
-              },
-            }));
-          })
-          .catch((e) => {
-            return chunk?.map((id) => {
-              return { id, error: e.response?.data?.error?.message };
-            });
-            // return [];
-          });
-      })
-    )
-  ).flatMap((promise) => promise.value || []);
+	const newVideosDetails = (
+		await Promise.allSettled(
+			chunk(unCachedFullyVideos, 50).map(async (chunk) => {
+				return await YoutubeAPI.getVideoInfo({
+					part: "contentDetails,snippet",
+					id: chunk.join(","),
+				})
+					.then((res) => {
+						return res.data.items.map((item) => ({
+							...item,
+							contentDetails: {
+								...item.contentDetails,
+								upload: { videoId: item.id },
+							},
+						}));
+					})
+					.catch((e) => {
+						return chunk?.map((id) => {
+							return { id, error: e.response?.data?.error?.message };
+						});
+						// return [];
+					});
+			})
+		)
+	).flatMap((promise) => promise.value || []);
 
-  if (Boolean(fullyCachedVideos.items.length) && Boolean(newVideosDetails.length)) {
-    setLocalStorage('Cached_SavedYoutubeVideos', {
-      items: [...fullyCachedVideos.items.slice(-50), ...newVideosDetails],
-      expire: fullyCachedVideos.expire,
-    });
-  }
+	if (Boolean(fullyCachedVideos.items.length) && Boolean(newVideosDetails.length)) {
+		setLocalStorage("Cached_SavedYoutubeVideos", {
+			items: [...fullyCachedVideos.items.slice(-50), ...newVideosDetails],
+			expire: fullyCachedVideos.expire,
+		});
+	}
 
-  return [...(newVideosDetails || []), ...(CachedFullyVideos || [])];
+	return [...(newVideosDetails || []), ...(CachedFullyVideos || [])];
 };
 
 export default GetVideoInfo;

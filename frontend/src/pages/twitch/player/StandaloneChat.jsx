@@ -1,33 +1,33 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import useDocumentTitle from '../../../hooks/useDocumentTitle';
-import useFullscreen from '../../../hooks/useFullscreen';
-import { navigationBarVisibleAtom } from '../../navigation/atoms';
+import React from "react";
+import { useParams } from "react-router-dom";
+import useDocumentTitle from "../../../hooks/useDocumentTitle";
+import useFullscreen from "../../../hooks/useFullscreen";
 // import useQuery from '../../../hooks/useQuery';
 
-import { StyledChat, ChatContainer } from './StyledComponents';
+import { StyledChat, ChatContainer } from "./StyledComponents";
+import { useNavigationBarVisible } from "../../../stores/navigation";
 
 const StandaloneChat = () => {
-  const channelName = useParams()?.channelName;
-  const navigationBarVisible = useRecoilValue(navigationBarVisibleAtom);
+	const channelName = useParams()?.channelName;
 
-  useFullscreen({ hideNavbar: false });
-  useDocumentTitle(`${channelName}'s chat'`);
+	const navigationBarVisible = useNavigationBarVisible();
 
-  // const darkpopout = useQuery().get('darkpopout');
+	useFullscreen({ hideNavbar: false });
+	useDocumentTitle(`${channelName}'s chat'`);
 
-  return (
-    <ChatContainer visible={navigationBarVisible}>
-      <StyledChat
-        frameborder='0'
-        scrolling='yes'
-        theme='dark'
-        id={channelName + '-chat'}
-        src={`https://www.twitch.tv/embed/${channelName}/chat?darkpopout&parent=aiofeed.com`}
-      />
-    </ChatContainer>
-  );
+	// const darkpopout = useQuery().get('darkpopout');
+
+	return (
+		<ChatContainer visible={navigationBarVisible}>
+			<StyledChat
+				frameborder="0"
+				scrolling="yes"
+				theme="dark"
+				id={channelName + "-chat"}
+				src={`https://www.twitch.tv/embed/${channelName}/chat?darkpopout&parent=aiofeed.com`}
+			/>
+		</ChatContainer>
+	);
 };
 
 export default StandaloneChat;

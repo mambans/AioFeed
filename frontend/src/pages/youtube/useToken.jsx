@@ -4,14 +4,15 @@ import useCookieState from "../../hooks/useCookieState";
 import useLocalStorageState from "../../hooks/useLocalStorageState";
 import API from "../navigation/API";
 import validateToken from "./validateToken";
-import useUserStore from "../../stores/userStore";
+import { useUser } from "../../stores/user";
 
 const TTL = 30000;
 
 export const YoutubeContext = React.createContext();
 
 export const YoutubeProvider = ({ children }) => {
-	const { user } = useUserStore();
+	const user = useUser();
+
 	const [pref, setPref] = useLocalStorageState("YoutubePreferences", {}) || {};
 	const [youtubeAccessToken, setYoutubeAccessToken] = useCookieState("Youtube-access_token");
 	const [youtubeUsername, setYoutubeUsername] = useCookieState("YoutubeUsername");

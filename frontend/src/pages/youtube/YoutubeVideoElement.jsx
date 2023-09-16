@@ -11,7 +11,7 @@ import AddRemoveFromPlayQueueButton from "../sharedComponents/AddRemoveFromPlayQ
 import RemoveFromCurrentListButton from "../myLists/addToListModal/RemoveFromCurrentListButton";
 
 export const videoImageUrls = ({ maxres, standard, high, medium } = {}) =>
-	maxres?.url || standard?.url || high?.url || medium?.url || `${process.env.PUBLIC_URL}/images/webp/placeholder.webp`;
+	maxres?.url || standard?.url || high?.url || medium?.url || `${process.env.PUBLIC_URL}/images/webp/placeholder.png`;
 
 const YoutubeVideoElement = React.memo(({ list, video, listName, active, setPlayQueue, playQueue, ...props }) => {
 	const ref = useRef();

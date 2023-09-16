@@ -5,11 +5,10 @@ import React from "react";
 import { VideoAndChatContainer, StyledVideo, PlayerNavbar } from "./StyledComponents";
 import useFullscreen from "../../../hooks/useFullscreen";
 import useDocumentTitle from "../../../hooks/useDocumentTitle";
-import { useRecoilValue } from "recoil";
-import { navigationBarVisibleAtom } from "../../navigation/atoms";
+import { useNavigationBarVisible } from "../../../stores/navigation";
 
 const PlayerClip = () => {
-	const navigationBarVisible = useRecoilValue(navigationBarVisibleAtom);
+	const navigationBarVisible = useNavigationBarVisible();
 
 	const { videoId, channelName } = useParams();
 	useDocumentTitle(`${channelName} - ${videoId}`);

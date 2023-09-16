@@ -6,7 +6,7 @@ import debounce from "lodash/debounce";
 import TwitchAPI from "../API";
 import useEventListenerMemo from "../../../hooks/useEventListenerMemo";
 import loginNameFormat from "../loginNameFormat";
-import { getUniqueListBy } from "../../../util";
+import { getUniqueListBy } from "../../../utilities";
 import { FaSearch } from "react-icons/fa";
 import styled from "styled-components";
 import InifinityScroll from "../channelList/InifinityScroll";
@@ -21,7 +21,7 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
 	const [result, setResult] = useState();
 	const [page, setPage] = useState();
 	const [loading, setLoading] = useState();
-	/* eslint-disable no-unused-vars */
+	/* eslint-disable no-unused-vars , @typescript-eslint/no-unused-vars*/
 	const [hiddenItems, setHiddenItems] = useState([]);
 	const [visibleItems, setVisibleItems] = useState([]);
 	/* eslint-enable no-unused-vars */

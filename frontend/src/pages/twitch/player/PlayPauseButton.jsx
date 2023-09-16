@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaPlay, FaPause } from "react-icons/fa";
 import useEventListenerMemo from "../../../hooks/useEventListenerMemo";
-import { msToHMS } from "../../../util";
+import { msToHMS } from "../../../utilities";
 
 const PlayPauseButton = ({ TwitchPlayer, PlayerUIControlls }) => {
 	const [isPaused, setIsPaused] = useState(TwitchPlayer?.isPaused() || false);

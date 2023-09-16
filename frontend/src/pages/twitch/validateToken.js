@@ -1,6 +1,6 @@
 import { Auth } from "aws-amplify";
 import axios, { isCancel } from "axios";
-import { getCookie } from "../../util";
+import { getCookie } from "../../utilities";
 import API from "../navigation/API";
 
 const TWITCH_CLIENT_ID = process.env.REACT_APP_TWITCH_CLIENT_ID;

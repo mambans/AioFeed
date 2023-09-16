@@ -20,7 +20,7 @@ Globals:
       # AllowCredentials: true
       # Header is omitted when false. Checkout [HTTP Spec](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials) for more details on this value.
   Function:
-    Runtime: nodejs14.x
+    Runtime: nodejs18.x
     CodeUri: '.'
 Resources:
   UserLogins:

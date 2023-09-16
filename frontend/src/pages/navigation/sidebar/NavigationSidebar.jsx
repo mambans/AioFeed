@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { CSSTransition } from "react-transition-group";
 import SidebarAccount from "./SidebarAccount";
 import { StyledNavSidebarTrigger, StyledLoginButton } from "./../StyledComponents";
@@ -8,40 +8,34 @@ import LoadingIndicator from "../../../components/LoadingIndicator";
 import SignUp from "../../account/SignUp";
 import SignIn from "../../account/SignIn";
 import ForgotPassword from "../../account/ForgotPassword";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { navigationSidebarAtom, navigationSidebarComponentKeyAtom } from "../atoms";
-import useUserStore from "../../../stores/userStore";
+
+import { useUser, useUserLoading } from "../../../stores/user";
+import { useNavigationData, useNavigationKey, useNavigationSidebarVisible, useSetNavigationSidebarVisible } from "../../../stores/navigation";
 
 const NavigationSidebar = () => {
-	const { user, loading } = useUserStore();
-	const navigationSidebarComponentKey = useRecoilValue(navigationSidebarComponentKeyAtom);
-	const invoked = useRef();
+	const user = useUser();
+	const loading = useUserLoading();
+	const navigationKey = useNavigationKey();
+	const data = useNavigationData();
+	const setNavigationSidebarVisible = useSetNavigationSidebarVisible();
+	const showSidebar = useNavigationSidebarVisible();
 
-	const [showSidebar, setShowNavigationSidebar] = useRecoilState(navigationSidebarAtom);
-
-	const handleToggle = () => setShowNavigationSidebar((c) => !c);
+	const handleToggle = () => setNavigationSidebarVisible(!showSidebar);
 
 	const component = (() => {
 		if (user) return <SidebarAccount />;
-		switch (navigationSidebarComponentKey?.comp?.toLowerCase()) {
+		switch (navigationKey?.toLowerCase()) {
 			case "signup":
-				return <SignUp text={navigationSidebarComponentKey?.text} />;
+				return <SignUp text={data?.text} />;
 			case "forgotpassword":
-				return <ForgotPassword text={navigationSidebarComponentKey?.text} />;
+				return <ForgotPassword text={data?.text} />;
 			case "signin":
-				return <SignIn text={navigationSidebarComponentKey?.text} />;
+				return <SignIn text={data?.text} />;
 			case "account":
 			default:
-				return user ? <SidebarAccount text={navigationSidebarComponentKey?.text} /> : <SignIn text={navigationSidebarComponentKey?.text} />;
+				return user ? <SidebarAccount text={data?.text} /> : <SignIn text={data?.text} />;
 		}
 	})();
-
-	useEffect(() => {
-		if (invoked.current && navigationSidebarComponentKey) {
-			setShowNavigationSidebar(true);
-		}
-		invoked.current = true;
-	}, [navigationSidebarComponentKey, setShowNavigationSidebar]);
 
 	return (
 		<>
@@ -49,7 +43,7 @@ const NavigationSidebar = () => {
 				{user ? (
 					<>
 						<StyledSidebarTrigger id="NavigationProfileImageHoverOverlay" open={showSidebar} />
-						<img id="NavigationProfileImage" src={`${process.env.PUBLIC_URL}/images/webp/placeholder.webp`} alt="" />
+						<img id="NavigationProfileImage" src={`${process.env.PUBLIC_URL}/images/webp/placeholder.png`} alt="" />
 					</>
 				) : loading ? (
 					<LoadingIndicator height={32} width={32} />
@@ -60,7 +54,7 @@ const NavigationSidebar = () => {
 
 			<CSSTransition in={showSidebar} timeout={350} classNames="NavSidebarBackdropFade" unmountOnExit appear>
 				<Portal>
-					<StyledNavSidebarBackdrop onClick={() => setShowNavigationSidebar(false)} />
+					<StyledNavSidebarBackdrop onClick={() => setNavigationSidebarVisible(false)} />
 				</Portal>
 			</CSSTransition>
 

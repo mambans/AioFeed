@@ -1,0 +1,92 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: "eu-north-1"
+
+jobs:
+  build:
+    name: Building
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      # - name: Debug AWS CLI Configuration
+      #   run: aws configure list
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     AWS_DEFAULT_REGION: 'eu-north-1'
+
+      - name: Validate CloudFormation Template
+        run: aws cloudformation validate-template --template-body file://cloudformation.yaml
+
+      - name: Clean previous cloudformation deploy
+        id: cleanup-deploy-cloudformation
+        run: bun run cleanup
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Deploy cloudformation
+        id: deploy-cloudformation
+        run: |
+          aws cloudformation deploy --template-file cloudformation.yaml --stack-name aiofeed-frontend --no-fail-on-empty-changeset
+          echo "Deployment exit code: $?"
+
+      - name: Build
+        id: build
+        run: bun run build
+
+      - name: Sync to s3
+        id: sync-s3
+        run: aws s3 sync --delete ./out s3://aiofeed.com
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Deployment Success
+        uses: rjstone/discord-webhook-notify@v1
+        if: success()
+        with:
+          severity: info
+          details: ✅ Deployment Succeeded [AioFeed]!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          text: ✅ Deployment Succeeded [AioFeed]!
+
+      - name: Deployment Failure
+        uses: rjstone/discord-webhook-notify@v1
+        if: failure()
+        with:
+          severity: error
+          details: ❗Deployment Failed [AioFeed]!
+          text: ❗Deployment Failed [AioFeed]!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      - name: Deployment Cancelled
+        uses: rjstone/discord-webhook-notify@v1
+        if: cancelled()
+        with:
+          severity: warn
+          details: ⚠️ Deployment Cancelled [AioFeed]!
+          text: ⚠️ Deployment Cancelled [AioFeed]!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}

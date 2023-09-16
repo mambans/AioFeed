@@ -42,8 +42,8 @@ module.exports = {
 			},
 		],
 		"@typescript-eslint/no-explicit-any": "off",
-		"no-unused-vars": "off",
-		"@typescript-eslint/no-unused-vars": "off",
+		// "no-unused-vars": "off",
+		// "@typescript-eslint/no-unused-vars": "off",
 		"jsx-a11y/label-has-associated-control": "off",
 		"react/display-name": "off",
 
@@ -63,6 +63,8 @@ module.exports = {
 		],
 		"jsx-a11y/no-noninteractive-element-interactions": "off",
 		"jsx-a11y/no-noninteractive-tabindex": "off",
-		// "@typescript-eslint/no-unused-vars": ["error", { args: "none" }],
+		"@typescript-eslint/no-empty-interface": "off",
+		"@typescript-eslint/no-unused-vars": ["error", { args: "none" }],
+		"@typescript-eslint/no-non-null-assertion": "off",
 	},
 };

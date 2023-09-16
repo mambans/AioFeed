@@ -8,8 +8,7 @@ import YoutubeDataHandler from "./Datahandler";
 import YoutubeHeader from "./Header";
 import YoutubeHandler from "./YoutubeHandler";
 import Alert from "../../components/alert";
-import { useRecoilValue } from "recoil";
-import { feedPreferencesAtom, useFeedPreferences } from "../../atoms/atoms";
+import { useToggleFeedPreference, useFeedPreferences } from "../../stores/feedPreference";
 
 const YoutubeStandalone = () => {
 	useDocumentTitle("YouTube");
@@ -22,8 +21,8 @@ const YoutubeStandalone = () => {
 };
 
 export const Youtube = ({ className }) => {
-	const { toggleExpanded } = useFeedPreferences();
-	const feedPreferences = useRecoilValue(feedPreferencesAtom);
+	const togglePreference = useToggleFeedPreference();
+	const feedPreferences = useFeedPreferences();
 
 	return (
 		<YoutubeDataHandler>
@@ -37,7 +36,7 @@ export const Youtube = ({ className }) => {
 						requestError={data.requestError}
 						followedChannels={data.followedChannels}
 						collapsed={feedPreferences?.["youtube"]?.collapsed}
-						toggleExpanded={() => toggleExpanded("youtube")}
+						toggleExpanded={() => togglePreference("youtube", "collapsed")}
 					/>
 
 					{data.error && <Alert data={data.error}></Alert>}

@@ -3,7 +3,7 @@ import { FaTwitch, FaYoutube } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import React, { useContext } from "react";
 import { StyledConnectTwitch, StyledConnectYoutube, StyledConnectContainer, StyledReconnectIcon } from "./StyledComponents";
-import { AddCookie } from "../../../util";
+import { AddCookie } from "../../../utilities";
 import { TwitchContext } from "../../twitch/useToken";
 import { YoutubeContext } from "../../youtube/useToken";
 import ToolTip from "../../../components/tooltip/ToolTip";

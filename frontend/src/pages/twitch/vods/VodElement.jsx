@@ -6,7 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 
 import { VideoContainer, ImageContainer, ImgBottomInfo, ChannelContainer, VideoTitleHref } from "../../sharedComponents/sharedStyledComponents";
 
-import { truncate } from "../../../util";
+import { truncate } from "../../../utilities";
 import { VodLiveIndicator, VodType, VodDates } from "./StyledComponents";
 import VodsFollowUnfollowBtn from "./VodsFollowUnfollowBtn";
 import { formatViewerNumbers, formatTwitchVodsDuration } from "./../TwitchUtils";

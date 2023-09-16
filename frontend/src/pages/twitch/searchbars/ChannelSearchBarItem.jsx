@@ -9,11 +9,11 @@ import VodsFollowUnfollowBtn from "../vods/VodsFollowUnfollowBtn";
 import { Item, LeftWrapper, Profile, ProfileWrapper, Title } from "./styledComponents";
 
 const ChannelSearchBarItem = React.memo(({ item, className, observer, visible = false, hideExtraButtons, onSelect, wrap, isGame }) => {
-	/* eslint-disable no-unused-vars */
+	/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 	const ref = useRef();
 	const { broadcaster_login, display_name, game_id, game_name, thumbnail_url, profile_image_url, title, started_at, is_live, id, login, following } =
 		item || {};
-	/* eslint-enable no-unused-vars */
+	/* eslint-enable no-unused-vars, @typescript-eslint/no-unused-vars */
 
 	useEffect(() => {
 		if (observer) {

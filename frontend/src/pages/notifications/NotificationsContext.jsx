@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 
 import useSyncedLocalState from "../../hooks/useSyncedLocalState";
-import { getLocalstorage } from "../../util";
+import { getLocalstorage } from "../../utilities";
 
 const NotificationsContext = React.createContext();
 

@@ -9,8 +9,7 @@ import ToolTip from "../../components/tooltip/ToolTip";
 import { ButtonLookalikeStyle, TransparentButton } from "../../components/styledComponents";
 import { TransparentRemoveFromCurrentListButton } from "../myLists/addToListModal/RemoveFromCurrentListButton";
 import Colors from "../../components/themes/Colors";
-import { feedVideoSizePropsAtom } from "../../atoms/atoms";
-import { useRecoilValue } from "recoil";
+import { useFeedVideoSizeObject } from "../../stores/feedVideoSize";
 
 export const AddToListModalTrigger = styled(Button).attrs({ variant: "outline-secondary" })`
 	${ButtonLookalikeStyle}
@@ -165,7 +164,7 @@ export const StyledVideoContainer = styled.div`
 `;
 
 export const VideoContainer = React.forwardRef(({ children, ...props }, ref) => {
-	const feedVideoSizeProps = useRecoilValue(feedVideoSizePropsAtom);
+	const feedVideoSizeProps = useFeedVideoSizeObject();
 
 	return (
 		<StyledVideoContainer feedVideoSizeProps={feedVideoSizeProps} {...props} ref={ref}>
@@ -175,7 +174,7 @@ export const VideoContainer = React.forwardRef(({ children, ...props }, ref) => 
 });
 
 export const ImageContainer = React.forwardRef(({ children, active }, ref) => {
-	const feedVideoSizeProps = useRecoilValue(feedVideoSizePropsAtom);
+	const feedVideoSizeProps = useFeedVideoSizeObject();
 
 	return (
 		<StyledImageContainer feedVideoSizeProps={feedVideoSizeProps} active={active} ref={ref}>
@@ -304,7 +303,7 @@ export const StyledGameContainer = styled.div`
 `;
 
 export const GameContainer = ({ children }) => {
-	const feedVideoSizeProps = useRecoilValue(feedVideoSizePropsAtom);
+	const feedVideoSizeProps = useFeedVideoSizeObject();
 
 	return <StyledGameContainer feedVideoSizeProps={feedVideoSizeProps}>{children}</StyledGameContainer>;
 };

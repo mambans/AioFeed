@@ -1,29 +1,47 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
 import Alert from "../../components/alert";
 import useDocumentTitle from "../../hooks/useDocumentTitle";
-import { AddCookie } from "../../util";
-import { navigationSidebarComponentKeyAtom } from "../navigation/atoms";
-import ThemeContext from "./../../components/themes/ThemeContext";
+import { AddCookie } from "../../utilities";
 
 import "./Home.scss";
-import { BlurOverlay, LogoText, WelcomeContainer, DevideLine } from "./StyledComponents";
-import useUserStore from "../../stores/userStore";
+import { LogoText, WelcomeContainer, DevideLine } from "./StyledComponents";
+import { useUser } from "../../stores/user";
+import { useSetNavigationSidebarVisible } from "../../stores/navigation";
 
 export const Home = () => {
 	useDocumentTitle();
-	const { activeTheme } = useContext(ThemeContext);
-	const { user } = useUserStore();
+	const user = useUser();
 	const showLoginAlert = useLocation()?.state?.showLoginAlert;
-	const setNavigationSidebarComponentKey = useSetRecoilState(navigationSidebarComponentKeyAtom);
+	const setNavigationSidebarVisible = useSetNavigationSidebarVisible();
+
+	// console.log("livestreams:", livestreams);
+	// console.log("previousStreams:", previousStreams);
+	// console.log("newlyAddedStreams:", newlyAddedStreams);
+	// console.log("twitchUserId:", twitchUserId);
+
+	// const { livestreams, setLivestreams } = useStreamsStore();
+	// const livestreams1 = useStreamsStore.getState().livestreams;
+	// const livestreams2 = useStreamsStore((state) => state.livestreams);
+
+	// const unsub1 = useStreamsStore.subscribe((data) => {
+	// 	console.log("data: ", data);
+	// });
+
+	// unsub1();
+
+	// useEffect(() => {
+	// 	(async () => {
+	// 		const res = await fetch(twitchUserId);
+	// 		console.log("res:", res);
+	// 	})();
+	// }, [fetch, twitchUserId]);
 
 	const Logos = () => (
 		<>
-			<BlurOverlay image={activeTheme.image} />
 			<WelcomeContainer>
 				<LogoText>
-					<img rel="preload" src={`${process.env.PUBLIC_URL}/android-chrome-512x512.webp`} alt="logo" id="logo" />
+					<img rel="preload" src={`${process.env.PUBLIC_URL}/android-chrome-512x512.png`} alt="logo" id="logo" />
 					<div>
 						<h1>
 							<b>AioFeed123</b>
@@ -48,9 +66,9 @@ export const Home = () => {
 
 	useEffect(() => {
 		if (showLoginAlert) {
-			setNavigationSidebarComponentKey({ comp: "signin" });
+			setNavigationSidebarVisible(true, "signin");
 		}
-	}, [showLoginAlert, setNavigationSidebarComponentKey]);
+	}, [showLoginAlert, setNavigationSidebarVisible]);
 
 	if (showLoginAlert && !user) {
 		return (
@@ -58,7 +76,7 @@ export const Home = () => {
 				type="info"
 				title="Login to continue"
 				message="Login with your AioFeed account"
-				onClick={() => setNavigationSidebarComponentKey({ comp: "signin" })}
+				onClick={() => setNavigationSidebarVisible(true, "signin")}
 			/>
 		);
 	}

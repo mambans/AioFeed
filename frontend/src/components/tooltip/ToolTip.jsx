@@ -1,24 +1,22 @@
-import React from 'react';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { useRecoilValue } from 'recoil';
-import styled from 'styled-components';
-import { feedVideoSizeAtom } from '../../atoms/atoms';
+import React from "react";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import styled from "styled-components";
+import { useFeedVideoSizeObject } from "../../stores/feedVideoSize";
 
 const ToolTipText = styled(Tooltip)`
-  width: ${({ width }) =>
-    width ? (typeof width === 'number' ? width + 'px' : width) : 'max-content'};
-  z-index: 99999999;
+	width: ${({ width }) => (width ? (typeof width === "number" ? width + "px" : width) : "max-content")};
+	z-index: 99999999;
 
-  top: ${({ top }) => (top ? top + ' !important' : 'initial')};
-  right: ${({ right }) => (right ? right + ' !important' : 'initial')};
-  bottom: ${({ bottom }) => (bottom ? bottom + ' !important' : 'initial')};
-  left: ${({ left }) => (left ? left + ' !important' : 'initial')};
+	top: ${({ top }) => (top ? top + " !important" : "initial")};
+	right: ${({ right }) => (right ? right + " !important" : "initial")};
+	bottom: ${({ bottom }) => (bottom ? bottom + " !important" : "initial")};
+	left: ${({ left }) => (left ? left + " !important" : "initial")};
 
-  &&& {
-    .tooltip-inner {
-      font-size: ${({ fontSize }) => fontSize};
-    }
-  }
+	&&& {
+		.tooltip-inner {
+			font-size: ${({ fontSize }) => fontSize};
+		}
+	}
 `;
 
 /**
@@ -33,49 +31,49 @@ const ToolTipText = styled(Tooltip)`
  */
 
 const ToolTip = ({
-  children,
-  show = true,
-  tooltip = '',
-  content = '',
-  placement = 'bottom',
-  delay = { show: 250, hide: 0 },
-  fontSize = 'inherit',
-  width = 'unset',
-  style,
+	children,
+	show = true,
+	tooltip = "",
+	content = "",
+	placement = "bottom",
+	delay = { show: 250, hide: 0 },
+	fontSize = "inherit",
+	width = "unset",
+	style,
 }) => {
-  const feedVideoSizeProps = useRecoilValue(feedVideoSizeAtom);
+	const feedVideoSizeProps = useFeedVideoSizeObject();
 
-  // return (
-  //   <div title={tooltip} style={{ display: 'flex' }}>
-  //     {children || null}
-  //   </div>
-  // );
-  if (show)
-    return (
-      // Error locally about ref
-      <OverlayTrigger
-        key={tooltip + Date.now()}
-        placement={placement}
-        delay={typeof delay === 'object' ? delay : { show: delay }}
-        overlay={
-          <ToolTipText
-            top={style?.top}
-            right={style?.right}
-            bottom={style?.bottom}
-            left={style?.left}
-            fontSize={fontSize}
-            id={`tooltip-${'bottom'}`}
-            width={width || feedVideoSizeProps?.width || 350}
-          >
-            {tooltip || content}
-          </ToolTipText>
-        }
-      >
-        {children}
-      </OverlayTrigger>
-    );
+	// return (
+	//   <div title={tooltip} style={{ display: 'flex' }}>
+	//     {children || null}
+	//   </div>
+	// );
+	if (show)
+		return (
+			// Error locally about ref
+			<OverlayTrigger
+				key={tooltip + Date.now()}
+				placement={placement}
+				delay={typeof delay === "object" ? delay : { show: delay }}
+				overlay={
+					<ToolTipText
+						top={style?.top}
+						right={style?.right}
+						bottom={style?.bottom}
+						left={style?.left}
+						fontSize={fontSize}
+						id={`tooltip-${"bottom"}`}
+						width={width || feedVideoSizeProps?.width || 350}
+					>
+						{tooltip || content}
+					</ToolTipText>
+				}
+			>
+				{children}
+			</OverlayTrigger>
+		);
 
-  return children;
+	return children;
 };
 
 export default ToolTip;

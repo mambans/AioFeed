@@ -2,12 +2,13 @@ import React, { useCallback, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import useLocalStorageState from "../../hooks/useLocalStorageState";
 import API from "../navigation/API";
-import useUserStore from "../../stores/userStore";
+import { useUser } from "../../stores/user";
 
 const TwitterContext = React.createContext();
 
 export const TwitterProvider = ({ children }) => {
-	const { user } = useUserStore();
+	const user = useUser();
+
 	const [pref, setPref] = useLocalStorageState("TwitterPreferences", {}) || {};
 	const [twitterLists, setTwitterLists] = useLocalStorageState("Twitter-Lists");
 	const invoked = useRef(false);

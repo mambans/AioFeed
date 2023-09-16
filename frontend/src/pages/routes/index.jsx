@@ -17,7 +17,7 @@ import Player from "../twitch/player/Player";
 import StandaloneChat from "../twitch/player/StandaloneChat";
 import LoadingIndicator from "../../components/LoadingIndicator";
 import LoadingFeed from "../../components/LoadingFeed";
-import useUserStore from "../../stores/userStore";
+import { useUser, useUserLoading } from "../../stores/user";
 
 // import TopStreams from '../twitch/categoryTopStreams';
 const TopStreams = React.lazy(() => import("../twitch/categoryTopStreams"));
@@ -29,22 +29,19 @@ const MainContentContainer = styled.main`
 	padding-top: 95px;
 `;
 
-const routes = [
+export const routes = [
 	{
 		path: "index",
 		element: <Home />,
-		authRequired: true,
 	},
 	{
 		path: "/",
 		element: <Home />,
 		index: true,
-		authRequired: true,
 	},
 	{
 		path: "home",
 		element: <Home />,
-		authRequired: true,
 	},
 	{
 		path: "legality",
@@ -75,6 +72,7 @@ const routes = [
 		path: "youtube/:videoId",
 		element: <SharedVideoPlayer />,
 		authRequired: true,
+		footer: false,
 	},
 	{
 		path: "category",
@@ -124,10 +122,12 @@ const routes = [
 		path: "videos/:videoId",
 		element: <SharedVideoPlayer />,
 		authRequired: true,
+		footer: false,
 	},
 	{
 		path: "twitch/:channelName",
 		element: <Player />,
+		footer: false,
 	},
 	// {
 	//   path: 'twitch/:channelName',
@@ -144,6 +144,7 @@ const routes = [
 				<Player />
 			</Suspense>
 		),
+		footer: false,
 	},
 	{
 		path: ":channelName/chat",
@@ -161,7 +162,8 @@ const routes = [
 ];
 
 const NavigationRoutes = () => {
-	const { user, loading } = useUserStore();
+	const user = useUser();
+	const loading = useUserLoading();
 
 	return (
 		<BrowserRouter>
@@ -175,10 +177,10 @@ const NavigationRoutes = () => {
 								key={key}
 								element={
 									authRequired ? (
-										loading === "loading" ? (
+										loading ? (
 											<LoadingIndicator height={400} width={600} text={"Authenticating.."} />
 										) : !user ? (
-											<Navigate to="/" state={{ showLoginAlert: true }} replace />
+											<Navigate to="/" state={{ showLoginAlert: authRequired }} replace />
 										) : (
 											element
 										)

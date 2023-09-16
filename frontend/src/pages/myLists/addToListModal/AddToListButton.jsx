@@ -1,102 +1,89 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { CSSTransition } from 'react-transition-group';
+import React, { useEffect, useRef, useState } from "react";
+import { CSSTransition } from "react-transition-group";
 
-import { AddedItemBtn, AddItemBtn, ButtonContainer, IconContainer } from '../StyledComponents';
-import AddToListModal, { mouseLeaveEnablePreview, mouseOverDisablePreview } from './AddToListModal';
-import useClicksOutside from '../../../hooks/useClicksOutside';
-import { useRecoilValue } from 'recoil';
-import { feedPreferencesAtom } from '../../../atoms/atoms';
+import { AddedItemBtn, AddItemBtn, ButtonContainer, IconContainer } from "../StyledComponents";
+import AddToListModal, { mouseLeaveEnablePreview, mouseOverDisablePreview } from "./AddToListModal";
+import useClicksOutside from "../../../hooks/useClicksOutside";
+import { useFeedPreferences } from "../../../stores/feedPreference";
 
-const AddToListButton = ({
-  list,
-  videoId_p,
-  style = {},
-  size = 24,
-  disablepreview = () => {},
-  redirect,
-  as,
-}) => {
-  const videoId = typeof videoId_p === 'number' ? parseInt(videoId_p) || videoId_p : videoId_p;
-  const [open, setOpen] = useState();
-  const fadeOutTimer = useRef();
-  const fadeInTimer = useRef();
-  const { mylists } = useRecoilValue(feedPreferencesAtom) || {};
+const AddToListButton = ({ list, videoId_p, style = {}, size = 24, disablepreview = () => {}, redirect, as }) => {
+	const videoId = typeof videoId_p === "number" ? parseInt(videoId_p) || videoId_p : videoId_p;
+	const [open, setOpen] = useState();
+	const fadeOutTimer = useRef();
+	const fadeInTimer = useRef();
+	const feedPreferences = useFeedPreferences();
 
-  const ref = useRef();
+	const { mylists } = feedPreferences || {};
 
-  useClicksOutside(ref, handleClose, open);
+	const ref = useRef();
 
-  const handleOpen = (e) => {
-    disablepreview();
-    e.stopPropagation();
-    clearTimeout(fadeOutTimer.current);
-    if (!fadeInTimer.current) {
-      fadeInTimer.current = setTimeout(() => {
-        setOpen(true);
-      }, 300);
-    }
-    return false;
-  };
+	useClicksOutside(ref, handleClose, open);
 
-  function handleClose(e) {
-    if (e) e.stopPropagation();
-    clearTimeout(fadeInTimer.current);
-    fadeInTimer.current = null;
-    clearTimeout(fadeOutTimer.current);
-    setOpen(false);
-    return false;
-  }
+	const handleOpen = (e) => {
+		disablepreview();
+		e.stopPropagation();
+		clearTimeout(fadeOutTimer.current);
+		if (!fadeInTimer.current) {
+			fadeInTimer.current = setTimeout(() => {
+				setOpen(true);
+			}, 300);
+		}
+		return false;
+	};
 
-  // const toggle = (e) => {
-  //   if (e) e.stopPropagation();
-  //   clearTimeout(fadeOutTimer.current);
-  //   clearTimeout(fadeInTimer.current);
-  //   fadeInTimer.current = null;
-  //   setOpen((c) => !c);
-  // };
+	function handleClose(e) {
+		if (e) e.stopPropagation();
+		clearTimeout(fadeInTimer.current);
+		fadeInTimer.current = null;
+		clearTimeout(fadeOutTimer.current);
+		setOpen(false);
+		return false;
+	}
 
-  const handleCloseDelayed = (e) => {
-    e.stopPropagation();
-    clearTimeout(fadeInTimer.current);
-    fadeInTimer.current = null;
-    clearTimeout(fadeOutTimer.current);
-    fadeOutTimer.current = setTimeout(() => setOpen(false), 250);
-    mouseLeaveEnablePreview();
-    return false;
-  };
+	// const toggle = (e) => {
+	//   if (e) e.stopPropagation();
+	//   clearTimeout(fadeOutTimer.current);
+	//   clearTimeout(fadeInTimer.current);
+	//   fadeInTimer.current = null;
+	//   setOpen((c) => !c);
+	// };
 
-  useEffect(() => {
-    return () => {
-      clearTimeout(fadeInTimer.current);
-      clearTimeout(fadeOutTimer.current);
-    };
-  }, []);
+	const handleCloseDelayed = (e) => {
+		e.stopPropagation();
+		clearTimeout(fadeInTimer.current);
+		fadeInTimer.current = null;
+		clearTimeout(fadeOutTimer.current);
+		fadeOutTimer.current = setTimeout(() => setOpen(false), 250);
+		mouseLeaveEnablePreview();
+		return false;
+	};
 
-  if (!mylists?.enabled) return null;
+	useEffect(() => {
+		return () => {
+			clearTimeout(fadeInTimer.current);
+			clearTimeout(fadeOutTimer.current);
+		};
+	}, []);
 
-  return (
-    <ButtonContainer
-      className='listVideoButton'
-      style={style}
-      open={open}
-      onMouseLeave={handleCloseDelayed}
-      ref={ref}
-    >
-      <IconContainer
-        onMouseOver={mouseOverDisablePreview}
-        onClick={handleOpen}
-        style={{ right: '0', position: 'absolute', margin: '5px' }}
-        onMouseEnter={handleOpen}
-        onMouseLeave={handleCloseDelayed}
-      >
-        {list ? <AddedItemBtn size={size} /> : <AddItemBtn size={size} />}
-      </IconContainer>
+	if (!mylists?.enabled) return null;
 
-      <CSSTransition in={open} timeout={250} classNames='fade' unmountOnExit>
-        <AddToListModal handleOpen={handleOpen} videoId={videoId} redirect={redirect} />
-      </CSSTransition>
-    </ButtonContainer>
-  );
+	return (
+		<ButtonContainer className="listVideoButton" style={style} open={open} onMouseLeave={handleCloseDelayed} ref={ref}>
+			<IconContainer
+				onMouseOver={mouseOverDisablePreview}
+				onClick={handleOpen}
+				style={{ right: "0", position: "absolute", margin: "5px" }}
+				onMouseEnter={handleOpen}
+				onMouseLeave={handleCloseDelayed}
+			>
+				{list ? <AddedItemBtn size={size} /> : <AddItemBtn size={size} />}
+			</IconContainer>
+
+			<CSSTransition in={open} timeout={250} classNames="fade" unmountOnExit>
+				<AddToListModal handleOpen={handleOpen} videoId={videoId} redirect={redirect} />
+			</CSSTransition>
+		</ButtonContainer>
+	);
 };
 
 export default AddToListButton;

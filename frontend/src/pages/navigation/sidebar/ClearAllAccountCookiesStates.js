@@ -1,4 +1,4 @@
-import { RemoveCookie } from '../../../util';
+import { RemoveCookie } from '../../../utilities';
 
 const clearAllAccountCookiesStates = ({
   setTwitchAccessToken = () => RemoveCookie('Twitch-access_token'),

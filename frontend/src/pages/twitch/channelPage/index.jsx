@@ -42,16 +42,14 @@ import FavoriteStreamBtn from "../live/FavoriteStreamBtn";
 import useDocumentTitle from "../../../hooks/useDocumentTitle";
 import useFavicon from "../../../hooks/useFavicon";
 import Schedule from "../schedule";
-import { useRecoilValue } from "recoil";
-import { feedVideoSizePropsAtom } from "../../../atoms/atoms";
+import { useFeedVideoSizeObject } from "../../../stores/feedVideoSize";
 
 const ChannelPage = () => {
 	const { passedChannelData } = useLocation().state || {};
 	const { channelName } = useParams();
 	const [channelInfo, setChannelInfo] = useState(passedChannelData);
 	const [streamInfo, setStreamInfo] = useState(passedChannelData);
-	const feedVideoSizeProps = useRecoilValue(feedVideoSizePropsAtom);
-
+	const feedVideoSizeProps = useFeedVideoSizeObject();
 	const numberOfVideos = Math.floor(window.innerWidth / (feedVideoSizeProps?.totalWidth || 350));
 	const URLQueries = useQuery();
 

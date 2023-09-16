@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { FiLogOut, FiLogIn } from "react-icons/fi";
 import ToolTip from "../../components/tooltip/ToolTip";
 import { FaTwitch, FaYoutube, FaTwitter } from "react-icons/fa";
-import { getLocalstorage } from "../../util";
+import { getLocalstorage } from "../../utilities";
 import MyModal from "../../components/mymodal/MyModal";
 import NotificationItem from "../notifications/NotificationItem";
 import { HiViewList } from "react-icons/hi";

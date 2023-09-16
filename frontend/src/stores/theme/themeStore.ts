@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import * as dark from "../../themes/dark.json";
-import { setLocalStorage } from "../../util";
+import { setLocalStorage } from "../../utilities";
 
 const rgba = (color: string, alpha: number) => {
 	if (!color) return null;

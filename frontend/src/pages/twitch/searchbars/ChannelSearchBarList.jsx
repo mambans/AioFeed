@@ -6,10 +6,10 @@ import { DropDownWrapper } from "./styledComponents";
 
 const ChannelSearchBarList = React.forwardRef(
 	({ items, search, position, hideExtraButtons, onChange, onSelect, page, loading, result, limit, loadmore, listRef, wrap }, ref) => {
-		/* eslint-disable no-unused-vars */
+		/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 		const [hiddenItems, setHiddenItems] = useState([]);
 		const [visibleItems, setVisibleItems] = useState([]);
-		/* eslint-enable no-unused-vars */
+		/* eslint-enable no-unused-vars, @typescript-eslint/no-unused-vars */
 		// const listRef = useRef();
 
 		const observer = useMemo(() => {

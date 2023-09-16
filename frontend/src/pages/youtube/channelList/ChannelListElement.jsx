@@ -2,7 +2,7 @@ import React from "react";
 import { MdDelete } from "react-icons/md";
 import styled from "styled-components";
 
-import { getCookie } from "./../../../util";
+import { getCookie } from "./../../../utilities";
 import { UnfollowButton } from "./../../sharedComponents/sharedStyledComponents";
 import UnfollowChannel from "./unFollowChannel";
 import ToolTip from "../../../components/tooltip/ToolTip";

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getCookie } from "../../util";
+import { getCookie } from "../../utilities";
 import autoReauthenticate from "./autoReauthenticate";
 import { Auth } from "aws-amplify";
 

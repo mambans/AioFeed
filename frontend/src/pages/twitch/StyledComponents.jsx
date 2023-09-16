@@ -1,9 +1,7 @@
 import React from "react";
 import styled, { css, keyframes } from "styled-components";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
-
-import { useRecoilValue } from "recoil";
-import { feedVideoSizeAtom, feedVideoSizePropsAtom } from "../../atoms/atoms";
+import { useFeedVideoSize, useFeedVideoSizeObject } from "../../stores/feedVideoSize";
 
 export const pulseOpacity = keyframes`
   0% {opacity: 1;}
@@ -100,8 +98,8 @@ export const StyledLoadingBox = styled.div`
 `;
 
 export const LoadingVideoElement = ({ type, freeze }) => {
-	const feedSize = useRecoilValue(feedVideoSizeAtom);
-	const feedVideoSizeProps = useRecoilValue(feedVideoSizePropsAtom);
+	const feedSize = useFeedVideoSize();
+	const feedVideoSizeProps = useFeedVideoSizeObject();
 
 	return (
 		<StyledLoadingBox type={type} feedSize={feedSize} feedVideoSizeProps={feedVideoSizeProps} freeze={freeze}>

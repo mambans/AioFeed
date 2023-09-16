@@ -11,11 +11,10 @@ import SortButton from "./SortButton";
 import ClipElement from "./ClipElement";
 import VodElement from "../vods/VodElement";
 import useEventListenerMemo from "../../../hooks/useEventListenerMemo";
-import { useRecoilValue } from "recoil";
-import { feedVideoSizePropsAtom } from "../../../atoms/atoms";
+import { useFeedVideoSizeObject } from "../../../stores/feedVideoSize";
 
 const SubFeed = ({ feedName, items, sortBy, setSortBy, setSortData, fetchItems, itemPagination, channelInfo }) => {
-	const feedVideoSizeProps = useRecoilValue(feedVideoSizePropsAtom);
+	const feedVideoSizeProps = useFeedVideoSizeObject();
 
 	const [numberOfVideos, setNumberOfVideos] = useState(Math.floor(window.innerWidth / (feedVideoSizeProps?.totalWidth || 350)));
 	const loadMoreRef = useRef();

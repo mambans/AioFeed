@@ -3,17 +3,17 @@ import { toast } from "react-toastify";
 import useCookieState from "../../hooks/useCookieState";
 import useLocalStorageState from "../../hooks/useLocalStorageState";
 import useSyncedLocalState from "../../hooks/useSyncedLocalState";
-import { askForBrowserNotificationPermission, getLocalstorage } from "../../util";
+import { askForBrowserNotificationPermission, getLocalstorage } from "../../utilities";
 import API from "../navigation/API";
 import validateToken from "./validateToken";
-import useUserStore from "../../stores/userStore";
+import { useUser } from "../../stores/user";
 
 // const TTL = 100000;
 
 export const TwitchContext = React.createContext();
 
 export const TwitchProvider = ({ children }) => {
-	const { user } = useUserStore();
+	const user = useUser();
 	const [pref, setPref] = useLocalStorageState("TwitchPreferences", {}) || {};
 	const [twitchAccessToken, setTwitchAccessToken] = useCookieState("Twitch-access_token");
 	const [twitchRefreshToken, setTwitchRefreshToken] = useCookieState("Twitch-refresh_token");

@@ -161,7 +161,7 @@ const List = ({ list, setLists, setVideos, videos, savedVideosWithData, addSaved
 									>
 										<RiArrowRightSLine />
 									</ScrollArea>
-								</> 
+								</>
 							)}
 							<VideosContainer dragging={dragging} ref={wrapperRef}>
 								{!videos?.length && loading && !collapsed && <LoadingBoxes amount={4} />}

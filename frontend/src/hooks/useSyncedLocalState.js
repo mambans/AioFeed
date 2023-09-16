@@ -1,5 +1,5 @@
-import { useState, useCallback, useEffect } from 'react';
-import { getLocalstorage, setLocalStorage } from '../util';
+import { useState, useCallback, useEffect } from "react";
+import { getLocalstorage, setLocalStorage } from "../utilities";
 
 /**
  * Save in localstorage and sync state across multipul tabs/windows.
@@ -8,67 +8,67 @@ import { getLocalstorage, setLocalStorage } from '../util';
  * @returns
  */
 const useSyncedLocalState = (key, defaultValue) => {
-  const [value, setValue] = useState(() => {
-    const storedValue = getLocalstorage(key);
-    try {
-      if (storedValue === 'null') return null;
-      if (storedValue === 'NaN') return NaN;
-      if (storedValue === 'undefined') return undefined;
-      return storedValue ?? defaultValue;
-    } catch (error) {
-      return storedValue ?? defaultValue;
-    }
-  });
+	const [value, setValue] = useState(() => {
+		const storedValue = getLocalstorage(key);
+		try {
+			if (storedValue === "null") return null;
+			if (storedValue === "NaN") return NaN;
+			if (storedValue === "undefined") return undefined;
+			return storedValue ?? defaultValue;
+		} catch (error) {
+			return storedValue ?? defaultValue;
+		}
+	});
 
-  useEffect(() => {
-    const listener = (e) => {
-      if (e.storageArea === localStorage && e.key === key) {
-        try {
-          const newVal = e.newValue;
-          if (newVal === 'null' || newVal === 'nNaNull' || newVal === 'undefined') setValue();
-          const val = JSON.parse(newVal);
+	useEffect(() => {
+		const listener = (e) => {
+			if (e.storageArea === localStorage && e.key === key) {
+				try {
+					const newVal = e.newValue;
+					if (newVal === "null" || newVal === "nNaNull" || newVal === "undefined") setValue();
+					const val = JSON.parse(newVal);
 
-          if (val) {
-            setValue((c) => {
-              if (JSON.stringify(c) !== e.newValue) {
-                return val;
-              }
-              return c;
-            });
-          }
-        } catch (error) {
-          if (e.newValue) {
-            setValue((c) => {
-              if (JSON.stringify(c) !== e.newValue) {
-                return e.newValue;
-              }
-              return c;
-            });
-          }
-        }
-      }
-    };
-    window.addEventListener('storage', listener);
-    return () => window.removeEventListener('storage', listener);
-  }, [key]);
+					if (val) {
+						setValue((c) => {
+							if (JSON.stringify(c) !== e.newValue) {
+								return val;
+							}
+							return c;
+						});
+					}
+				} catch (error) {
+					if (e.newValue) {
+						setValue((c) => {
+							if (JSON.stringify(c) !== e.newValue) {
+								return e.newValue;
+							}
+							return c;
+						});
+					}
+				}
+			}
+		};
+		window.addEventListener("storage", listener);
+		return () => window.removeEventListener("storage", listener);
+	}, [key]);
 
-  const setLocalStateValue = useCallback(
-    (newValue, updateLocalstorage = true) => {
-      setValue((currentValue) => {
-        const finallValue = typeof newValue === 'function' ? newValue(currentValue) : newValue;
-        try {
-          if (updateLocalstorage) {
-            setLocalStorage(key, finallValue);
-          }
-        } catch (error) {
-          console.log('Localstorage error:', error);
-        }
-        return finallValue;
-      });
-    },
-    [key]
-  );
+	const setLocalStateValue = useCallback(
+		(newValue, updateLocalstorage = true) => {
+			setValue((currentValue) => {
+				const finallValue = typeof newValue === "function" ? newValue(currentValue) : newValue;
+				try {
+					if (updateLocalstorage) {
+						setLocalStorage(key, finallValue);
+					}
+				} catch (error) {
+					console.log("Localstorage error:", error);
+				}
+				return finallValue;
+			});
+		},
+		[key]
+	);
 
-  return [value, setLocalStateValue];
+	return [value, setLocalStateValue];
 };
 export default useSyncedLocalState;

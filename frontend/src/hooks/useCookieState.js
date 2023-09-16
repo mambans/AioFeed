@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { AddCookie, getCookie, RemoveCookie } from '../util';
+import { useState, useCallback } from "react";
+import { AddCookie, getCookie, RemoveCookie } from "../utilities";
 
 /**
  * Save in browser cookies
@@ -9,27 +9,27 @@ import { AddCookie, getCookie, RemoveCookie } from '../util';
  * @returns
  */
 const useCookieState = (key, defaultValue, options) => {
-  const [value, setValue] = useState(() => getCookie(key) || defaultValue);
+	const [value, setValue] = useState(() => getCookie(key) || defaultValue);
 
-  const setCookieValue = useCallback(
-    (newValue) => {
-      setValue((currentValue) => {
-        const finallValue = typeof newValue === 'function' ? newValue(currentValue) : newValue;
-        try {
-          if (finallValue) {
-            AddCookie(key, finallValue, options);
-          } else {
-            RemoveCookie(key);
-          }
-        } catch (error) {
-          console.log('useCookieState error:', error);
-        }
-        return finallValue;
-      });
-    },
-    [key, options]
-  );
+	const setCookieValue = useCallback(
+		(newValue) => {
+			setValue((currentValue) => {
+				const finallValue = typeof newValue === "function" ? newValue(currentValue) : newValue;
+				try {
+					if (finallValue) {
+						AddCookie(key, finallValue, options);
+					} else {
+						RemoveCookie(key);
+					}
+				} catch (error) {
+					console.log("useCookieState error:", error);
+				}
+				return finallValue;
+			});
+		},
+		[key, options]
+	);
 
-  return [value, setCookieValue];
+	return [value, setCookieValue];
 };
 export default useCookieState;

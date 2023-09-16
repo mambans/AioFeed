@@ -11,6 +11,8 @@ backend/node_modules
 
 # testing
 /coverage
+frontend/coverage-ts
+
 
 # production
 frontend/build

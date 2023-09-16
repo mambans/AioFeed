@@ -1,19 +1,18 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Button } from "react-bootstrap";
 import { GoSignOut } from "react-icons/go";
 import ToolTip from "../../../components/tooltip/ToolTip";
-import { useSetRecoilState } from "recoil";
-import { navigationSidebarComponentKeyAtom } from "../atoms";
-import useUserStore from "../../../stores/userStore";
+import { useUserSignOut } from "../../../stores/user";
+import { useSetNavigationSidebarVisible } from "../../../stores/navigation";
 
 const Logout = () => {
-	const { signOut } = useUserStore();
-	const setNavigationSidebarComponentKey = useSetRecoilState(navigationSidebarComponentKeyAtom);
+	const signOut = useUserSignOut();
+	const setNavigationSidebarVisible = useSetNavigationSidebarVisible();
 
 	const logout = async () => {
 		const loggedOut = await signOut();
 		console.log("loggedOut:", loggedOut);
-		setNavigationSidebarComponentKey({ comp: "signin" });
+		setNavigationSidebarVisible(false, "signin");
 	};
 
 	return (

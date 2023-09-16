@@ -4,12 +4,12 @@ import API from "../navigation/API";
 import LogsContext from "../logs/LogsContext";
 import { parseNumberAndString } from "./dragDropUtils";
 import uniqBy from "lodash/uniqBy";
-import useUserStore from "../../stores/userStore";
+import { useUser } from "../../stores/user";
 
 const MyListsContext = React.createContext();
 
 export const MyListsProvider = ({ children }) => {
-	const { user } = useUserStore();
+	const user = useUser();
 	const { addLog } = useContext(LogsContext);
 	const [lists, setLists] = useSyncedLocalState("Mylists", {}) || {};
 	const [myListPreferences, setMyListPreferences] = useSyncedLocalState("MylistsPreferences", {}) || {};

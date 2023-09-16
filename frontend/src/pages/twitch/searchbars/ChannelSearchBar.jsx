@@ -6,7 +6,7 @@ import TwitchAPI, { pagination } from "../API";
 import useEventListenerMemo from "../../../hooks/useEventListenerMemo";
 import addVideoExtraData from "../AddVideoExtraData";
 import loginNameFormat from "../loginNameFormat";
-import { chunk, getUniqueListBy } from "../../../util";
+import { chunk, getUniqueListBy } from "../../../utilities";
 import { FaSearch } from "react-icons/fa";
 import styled from "styled-components";
 // import useClicksOutside from '../../../hooks/useClicksOutside';
@@ -21,7 +21,7 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 	const [page, setPage] = useState();
 	const [loading, setLoading] = useState();
 	const [search, setSearch] = useState("");
-	/* eslint-disable no-unused-vars */
+	/* eslint-disable no-unused-vars , @typescript-eslint/no-unused-vars*/
 	const [rnd, setRnd] = useState(true);
 	/* eslint-enable no-unused-vars */
 	const [followedChannels, setFollowedChannels] = useState([]);

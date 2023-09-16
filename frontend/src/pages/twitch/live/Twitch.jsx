@@ -8,12 +8,9 @@ import LoadingBoxes from "../LoadingBoxes";
 import { CenterContext } from "../../feed/FeedsCenterContainer.jsx";
 import { TwitchContext } from "../useToken.jsx";
 import Alert from "../../../components/alert/index.jsx";
-import { useRecoilValue } from "recoil";
-import { baseLiveStreamsAtom } from "../atoms.js";
 
 const Twitch = ({ data, streams, hideOnEmpty }) => {
-	const { loaded, error, refreshAfterUnfollowTimer } = data;
-	const baseLiveStreams = useRecoilValue(baseLiveStreamsAtom);
+	const { loading, error } = data;
 	const { videoElementsAmount, feedVideoSizeProps } = useContext(CenterContext);
 	const { favStreams } = useContext(TwitchContext);
 
@@ -30,7 +27,7 @@ const Twitch = ({ data, streams, hideOnEmpty }) => {
 
 	const refresh = async () => await data?.refresh();
 
-	if (!loaded) {
+	if (loading && !streams?.length) {
 		return (
 			<Container>
 				<LoadingBoxes amount={videoElementsAmount || 4} type="big" />
@@ -41,7 +38,6 @@ const Twitch = ({ data, streams, hideOnEmpty }) => {
 	}
 
 	const streamEleAttrs = {
-		refreshAfterUnfollowTimer,
 		refresh,
 	};
 
@@ -74,7 +70,6 @@ const Twitch = ({ data, streams, hideOnEmpty }) => {
 					</CSSTransition>
 				))}
 			</TransitionGroup>
-			{!hideOnEmpty && <Alert show={!Boolean(baseLiveStreams?.length)} type="secondary" title="No streams online at the momment" dismissible />}
 		</Container>
 	);
 };

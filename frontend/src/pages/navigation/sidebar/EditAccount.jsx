@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useState } from "react";
+import React, { useReducer, useState } from "react";
 import { Breadcrumb, Button, Form, Modal, Spinner } from "react-bootstrap";
 import ToolTip from "../../../components/tooltip/ToolTip";
 import { StyledAccountButton } from "./StyledComponents";
@@ -10,7 +10,7 @@ import DeleteAccount from "../../account/DeleteAccount";
 import { Auth } from "aws-amplify";
 import { toast } from "react-toastify";
 import VerifyEmail from "../../account/VerifyEmail";
-import useUserStore from "../../../stores/userStore";
+import { useUser, useUserSetUser } from "../../../stores/user";
 
 const EditAccount = () => {
 	const [open, setOpen] = useState();
@@ -28,7 +28,10 @@ const EditAccount = () => {
 	}, null);
 	const [openDelete, setOpenDelete] = useState();
 	const [openVerifyCode, setOpenVerifyCode] = useState();
-	const { user, setUser } = useUserStore();
+
+	const user = useUser();
+	const setUser = useUserSetUser();
+
 	const [loading, setLoading] = useState();
 
 	const handleToggle = () => {

@@ -1,17 +1,16 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { InlineError } from "./StyledComponents";
-import useUserStore from "../../../stores/userStore";
 import { BiRefresh } from "react-icons/bi";
 import styled from "styled-components";
 import ToolTip from "../../../components/tooltip/ToolTip";
-import { useNavigate } from "react-router-dom";
 import styles from "./Sidebar.module.scss";
 import VerifyEmail from "../../account/VerifyEmail";
 import { Modal } from "react-bootstrap";
+import { useUser, useUserResendEmailVerify } from "../../../stores/user";
 
 const AccountDetails = () => {
-	const { user, resendEmailVerify } = useUserStore();
-	const navigate = useNavigate();
+	const user = useUser();
+	const resendEmailVerify = useUserResendEmailVerify();
 	const [verifyIsOpen, setVerifyIsOpen] = useState();
 
 	return (

@@ -1,35 +1,35 @@
-import { StyledCountdownCircle } from './styledComponents';
-import React, { useState, useEffect } from 'react';
+import moment from "moment";
+import { StyledCountdownCircle } from "./styledComponents";
+import React, { useState, useEffect } from "react";
 
-const CountdownCircleTimer = ({
-  startDuration,
-  isLoading,
-  autoRefreshEnabled,
-  style = {},
-  size = 24,
-}) => {
-  const [countdown, setCountdown] = useState(startDuration);
+const CountdownCircleTimer = ({ isLoading, nextRefresh, style = {}, size = 24 }) => {
+	const [countdown, setCountdown] = useState();
 
-  useEffect(() => {
-    if (startDuration) {
-      setCountdown(startDuration);
+	useEffect(() => {
+		if (nextRefresh) {
+			const duration = moment.duration(moment(nextRefresh).diff(moment()));
+			const seconds = duration.asSeconds();
 
-      const timer = setInterval(() => setCountdown((countdown) => Math.max(0, --countdown)), 1000);
+			setCountdown(seconds);
 
-      return () => clearInterval(timer);
-    }
-  }, [startDuration]);
+			setInterval(() => {
+				const duration = moment.duration(moment(nextRefresh).diff(moment()));
+				const seconds = duration.asSeconds();
 
-  return (
-    <StyledCountdownCircle isLoading={isLoading} style={style} size={size}>
-      {autoRefreshEnabled && startDuration && !isLoading && (
-        <div id='countdown-number'>{countdown || 0}</div>
-      )}
-      <svg>
-        <circle r={size / 2 - 2} cx={size / 2} cy={size / 2}></circle>
-      </svg>
-    </StyledCountdownCircle>
-  );
+				setCountdown(seconds);
+			}, 1000);
+		}
+	}, [nextRefresh]);
+
+	console.log("isLoading:", isLoading);
+	return (
+		<StyledCountdownCircle isLoading={isLoading} style={style} size={size}>
+			{nextRefresh && !isLoading && <div id="countdown-number">{countdown > 0 ? Math.ceil(countdown) : 0}</div>}
+			<svg>
+				<circle r={size / 2 - 2} cx={size / 2} cy={size / 2}></circle>
+			</svg>
+		</StyledCountdownCircle>
+	);
 };
 
 export default CountdownCircleTimer;

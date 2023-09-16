@@ -6,7 +6,7 @@ import React, { useState, useRef } from "react";
 import styled from "styled-components";
 
 import { SidebarInfoPopup, StyledsidebarItem, FirstRow, SecondRow } from "./StyledComponents";
-import { truncate } from "../../../util";
+import { truncate } from "../../../utilities";
 import AnimatedViewCount from "../live/AnimatedViewCount";
 import LiveInfoPopup from "../channelList/LiveInfoPopup";
 import useEventListenerMemo from "../../../hooks/useEventListenerMemo";
@@ -117,7 +117,7 @@ const SidebarItem = React.memo(({ stream, newlyAdded, shows, setShows, resetShow
 
 					<div className={"profileImage"}>
 						<img
-							src={profile_image_url?.replace("{width}", 640)?.replace("{height}", 360) || `${process.env.PUBLIC_URL}/android-chrome-192x192.webp`}
+							src={profile_image_url?.replace("{width}", 640)?.replace("{height}", 360) || `${process.env.PUBLIC_URL}/android-chrome-192x192.png`}
 							alt=""
 						></img>
 					</div>

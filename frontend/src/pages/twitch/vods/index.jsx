@@ -1,12 +1,10 @@
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import React, { useState, useEffect, useCallback, useContext, useRef } from "react";
 
-import getFollowedVods from "./GetFollowedVods";
 import VodElement from "./VodElement";
 import LoadMore from "../../../components/loadMore/LoadMore";
 import { SubFeedContainer } from "../../sharedComponents/sharedStyledComponents";
 import Header from "./Header";
-import VodsContext from "./VodsContext";
 import LoadingBoxes from "../LoadingBoxes";
 import useEventListenerMemo from "../../../hooks/useEventListenerMemo";
 import { CenterContext } from "../../feed/FeedsCenterContainer";
@@ -14,24 +12,20 @@ import { Container } from "../StyledComponents";
 import useToken, { TwitchContext } from "../useToken";
 import ExpandableSection from "../../../components/expandableSection/ExpandableSection";
 import Alert from "../../../components/alert";
-import { getLocalstorage } from "../../../util";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { twitchVodsAtom, vodChannelsAtom } from "./atoms";
-import { feedPreferencesAtom, useFeedPreferences } from "../../../atoms/atoms";
+import { useVods, useVodsError, useVodsFetch } from "../../../stores/twitch/vods";
+import { useToggleFeedPreference, useFeedPreferences } from "../../../stores/feedPreference";
 
 const Vods = ({ className }) => {
-	const { fetchVodsContextData } = useContext(VodsContext) || {};
-	const [twitchVods, setTwitchVods] = useRecoilState(twitchVodsAtom);
+	const fetch = useVodsFetch();
+	const vods = useVods();
+	const { error, vodError } = useVodsError();
 
-	const channels = useRecoilValue(vodChannelsAtom);
-	const { toggleExpanded } = useFeedPreferences();
-	const feedPreferences = useRecoilValue(feedPreferencesAtom);
+	const togglePreference = useToggleFeedPreference();
+	const feedPreferences = useFeedPreferences();
 
 	const { videoElementsAmount } = useContext(CenterContext);
 	const { twitchAccessToken } = useContext(TwitchContext);
 	const validateToken = useToken();
-	const [error, setError] = useState(null);
-	const [vodError, setVodError] = useState(null);
 	const [vodAmounts, setVodAmounts] = useState({
 		amount: videoElementsAmount,
 		timeout: 750,
@@ -44,26 +38,11 @@ const Vods = ({ className }) => {
 	const refresh = useCallback(
 		async (forceRefresh = true) => {
 			refreshBtnRef?.current?.setIsLoading(true);
-			const data = await getFollowedVods({
-				forceRun: forceRefresh,
-				channels,
-				currentVods: getLocalstorage("TwitchVods"),
-			});
-
-			setError(data?.er);
-			setVodError(data?.vodError);
-			if (data?.data) setTwitchVods(data?.data);
+			fetch();
 			refreshBtnRef?.current?.setIsLoading(false);
 		},
-		[setTwitchVods, channels]
+		[fetch]
 	);
-
-	const forceRefresh = useCallback(async () => {
-		refreshBtnRef?.current?.setIsLoading(true);
-		// const vodChannels = await API.getVodChannels();
-		// refresh(true, vodChannels);
-		fetchVodsContextData();
-	}, [fetchVodsContextData]);
 
 	async function windowFocusHandler() {
 		refresh(false);
@@ -88,23 +67,23 @@ const Vods = ({ className }) => {
 		<Container aria-labelledby="vods" order={feedPreferences?.["vods"]?.order || 500} className={className}>
 			<Header
 				ref={refreshBtnRef}
-				refresh={forceRefresh}
-				vods={twitchVods}
+				refresh={refresh}
+				vods={vods}
 				vodError={vodError}
 				collapsed={feedPreferences?.["vods"]?.collapsed}
-				toggleExpanded={() => toggleExpanded("vods")}
+				toggleExpanded={() => togglePreference("vods", "collapsed")}
 			/>
 			<ExpandableSection collapsed={feedPreferences?.["vods"]?.collapsed}>
 				{!twitchAccessToken && <Alert title="Not authenticated/connected with Twitch." message="No access token for twitch availible." />}
 				{error && <Alert data={error} fill />}
-				{!twitchVods?.data ? (
+				{!vods?.data ? (
 					<SubFeedContainer>
 						<LoadingBoxes amount={videoElementsAmount * 2} type="small" />
 					</SubFeedContainer>
 				) : (
 					<>
 						<TransitionGroup className={vodAmounts.transitionGroup || "videos"} component={SubFeedContainer}>
-							{(vodAmounts?.showAll ? twitchVods.data : twitchVods.data?.slice(0, vodAmounts.amount))?.map((vod) => (
+							{(vodAmounts?.showAll ? vods.data : vods.data?.slice(0, vodAmounts.amount))?.map((vod) => (
 								<CSSTransition key={vod.id} timeout={vodAmounts.timeout} classNames={vod.transition || "fade-750ms"} unmountOnExit>
 									<VodElement data={vod} />
 								</CSSTransition>
@@ -135,10 +114,10 @@ const Vods = ({ className }) => {
               }));
             }, 750);*/
 							}}
-							reachedEnd={vodAmounts?.amount >= twitchVods.data?.length}
+							reachedEnd={vodAmounts?.amount >= vods.data?.length}
 							onShowAll={() => {
 								setVodAmounts({
-									amount: twitchVods.data?.length,
+									amount: vods.data?.length,
 									timeout: 750,
 									transitionGroup: "videos",
 									showAll: true,

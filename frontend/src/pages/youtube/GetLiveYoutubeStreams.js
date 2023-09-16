@@ -1,5 +1,5 @@
 import axios from "axios";
-import { setLocalStorage } from "../../util";
+import { setLocalStorage } from "../../utilities";
 
 async function GetLiveYoutubeStreams(channel) {
 	try {

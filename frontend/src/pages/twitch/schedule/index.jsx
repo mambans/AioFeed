@@ -207,7 +207,7 @@ export const SingelScheduleItem = ({ schedule, user }) => {
 							className="image"
 							src={
 								schedule?.category?.box_art_url?.replace("{width}", 144)?.replace("{height}", 192) ||
-								`${process.env.PUBLIC_URL}/images/webp/placeholder.webp`
+								`${process.env.PUBLIC_URL}/images/webp/placeholder.png`
 							}
 							alt=""
 						/>

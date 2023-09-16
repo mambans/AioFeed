@@ -3,21 +3,20 @@ import React from "react";
 import { FaRegClock } from "react-icons/fa";
 import Moment from "react-moment";
 import { Link, useLocation } from "react-router-dom";
-import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { feedVideoSizePropsAtom } from "../../../atoms/atoms";
 import ToolTip from "../../../components/tooltip/ToolTip";
-import { baseLiveStreamsAtom } from "../atoms";
 import LiveIndicator from "../LiveIndicator";
+import useStreamsStore from "../../../stores/twitch/streams/useStreamsStore";
+import { useFeedVideoSizeObject } from "../../../stores/feedVideoSize";
 
 const ScheduleItem = ({ user, category, start_time, end_time, title }) => {
 	const { id: gameId, name, box_art_url } = category || {};
 	const { profile_image_url, login, user_name, id } = user || {};
-	const feedPreferences = useRecoilValue(feedVideoSizePropsAtom);
+	const feedVideoSizeProps = useFeedVideoSizeObject();
 	const location = useLocation();
 
 	const isPassed = moment(start_time).isBefore(moment());
-	const liveStreams = useRecoilValue(baseLiveStreamsAtom);
+	const liveStreams = useStreamsStore((state) => state.livestreams);
 	const liveStream = liveStreams.find((stream) => stream.user_id === id) || true;
 	console.log("liveStream:", liveStream);
 
