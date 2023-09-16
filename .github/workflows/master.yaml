@@ -19,7 +19,7 @@ env:
   AWS_DEFAULT_REGION: "eu-north-1"
 
 jobs:
-  build:
+  build_frontend:
     name: Building
     runs-on: ubuntu-latest
     steps:
@@ -29,6 +29,9 @@ jobs:
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
+
+      - name: Navigate to frontend folder
+        run: cd frontend
 
       # - name: Debug AWS CLI Configuration
       #   run: aws configure list
@@ -42,7 +45,7 @@ jobs:
 
       - name: Clean previous cloudformation deploy
         id: cleanup-deploy-cloudformation
-        run: bun run cleanup
+        run: ./cleanup.sh eu-north-1 aiofeed-frontend
 
       - name: Install Dependencies
         run: bun install
@@ -59,7 +62,7 @@ jobs:
 
       - name: Sync to s3
         id: sync-s3
-        run: aws s3 sync --delete ./out s3://aiofeed.com
+        run: aws s3 sync --delete ./build s3://aiofeed.com
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
