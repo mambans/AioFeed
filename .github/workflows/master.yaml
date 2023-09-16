@@ -30,9 +30,6 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Navigate to frontend folder
-        run: cd frontend
-
       # - name: Debug AWS CLI Configuration
       #   run: aws configure list
       #   env:
@@ -46,6 +43,15 @@ jobs:
       - name: Clean previous cloudformation deploy
         id: cleanup-deploy-cloudformation
         run: frontend/cleanup.sh eu-north-1 aiofeed-frontend
+
+      - name: Navigate to frontend folder
+        run: cd frontend
+
+      - name: Print current working directory
+        run: pwd
+
+      - name: ls
+        run: ls
 
       - name: Install Dependencies
         run: bun install
