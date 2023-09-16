@@ -38,7 +38,7 @@ jobs:
       #     AWS_DEFAULT_REGION: 'eu-north-1'
 
       - name: Validate CloudFormation Template
-        run: aws cloudformation validate-template --template-body file://cloudformation.yaml
+        run: aws cloudformation validate-template --template-body file://frontend/cloudformation.yaml
 
       - name: Clean previous cloudformation deploy
         id: cleanup-deploy-cloudformation
@@ -50,7 +50,7 @@ jobs:
       - name: Deploy cloudformation
         id: deploy-cloudformation
         run: |
-          aws cloudformation deploy --template-file cloudformation.yaml --stack-name aiofeed-frontend --no-fail-on-empty-changeset
+          aws cloudformation deploy --template-file ./frontend/cloudformation.yaml --stack-name aiofeed-frontend --no-fail-on-empty-changeset
           echo "Deployment exit code: $?"
 
       - name: Build

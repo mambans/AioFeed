@@ -1,17 +1,15 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AiFillSchedule } from "react-icons/ai";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { feedPreferencesAtom, useFeedPreferences } from "../../../atoms/atoms";
 import ExpandableSection from "../../../components/expandableSection/ExpandableSection";
 import Header from "../../../components/Header";
 import LoadMore from "../../../components/loadMore/LoadMore";
-import { CenterContext } from "../../feed/FeedsCenterContainer";
 import { ExpandCollapseFeedButton, SubFeedContainer } from "../../sharedComponents/sharedStyledComponents";
 import TwitchAPI from "../API";
-import { twitchFollowedChannelsAtom } from "../atoms";
 import addProfileInfo from "../functions/addProfileInfo";
 import { Container } from "../StyledComponents";
 import ScheduleItem from "./ScheduleItem";
+import useStreamsStore from "../../../stores/twitch/streams/useStreamsStore";
+import { useToggleFeedPreference, useFeedPreferences } from "../../../stores/feedPreference";
 
 const Schedules = () => {
 	// const { videoElementsAmount } = useContext(CenterContext);
@@ -3462,15 +3460,17 @@ const Schedules = () => {
 	const [nextPaginations, setNextPaginations] = useState();
 	const [prevPaginations, setPrevPaginations] = useState();
 	const refreshBtnRef = useRef();
-	const feedPreferences = useRecoilValue(feedPreferencesAtom);
-	const { toggleExpanded } = useFeedPreferences();
+
+	const togglePreference = useToggleFeedPreference();
+	const feedPreferences = useFeedPreferences();
+
 	const [loadMoreData, setLoadMoreData] = useState({
 		amount: videoElementsAmount,
 		timeout: 750,
 		transitionGroup: "videos",
 	});
 
-	const setFollowedChannels = useSetRecoilState(twitchFollowedChannelsAtom);
+	const setFollowedChannels = useStreamsStore((state) => state.setFollowedChannels);
 
 	const fetch = useCallback(async () => {
 		console.log("getSchedules:");
@@ -3560,14 +3560,14 @@ const Schedules = () => {
 				ref={refreshBtnRef}
 				refresh={fetch}
 				title={
-					<h1 id="schedules" onClick={() => toggleExpanded("schedules")}>
+					<h1 id="schedules" onClick={() => togglePreference("schedules", "collapsed")}>
 						Twitch schedules
 						<AiFillSchedule size={25} style={{ color: "#6f166f" }} />
 						<ExpandCollapseFeedButton collapsed={feedPreferences?.["schedules"]?.collapsed} />
 					</h1>
 				}
 				collapsed={feedPreferences?.["schedules"]?.collapsed}
-				toggleExpanded={() => toggleExpanded("schedules")}
+				toggleExpanded={() => togglePreference("schedules", "collapsed")}
 			/>
 			<ExpandableSection collapsed={feedPreferences?.["schedules"]?.collapsed}>
 				<SubFeedContainer>
