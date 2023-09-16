@@ -44,31 +44,22 @@ jobs:
         id: cleanup-deploy-cloudformation
         run: frontend/cleanup.sh eu-north-1 aiofeed-frontend
 
-      - name: Navigate to frontend folder
-        run: cd frontend
-
-      - name: Print current working directory
-        run: pwd
-
-      - name: ls
-        run: ls
-
       - name: Install Dependencies
-        run: bun install
+        run: cd frontend && bun install
 
       - name: Deploy cloudformation
         id: deploy-cloudformation
         run: |
-          aws cloudformation deploy --template-file ./frontend/cloudformation.yaml --stack-name aiofeed-frontend --no-fail-on-empty-changeset
+          cd frontend && aws cloudformation deploy --template-file ./frontend/cloudformation.yaml --stack-name aiofeed-frontend --no-fail-on-empty-changeset
           echo "Deployment exit code: $?"
 
       - name: Build
         id: build
-        run: bun run build
+        run: cd frontend && bun run build
 
       - name: Sync to s3
         id: sync-s3
-        run: aws s3 sync --delete ./build s3://aiofeed.com
+        run: cd frontend && aws s3 sync --delete ./build s3://aiofeed.com
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
