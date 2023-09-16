@@ -2,6 +2,8 @@
 
 [![Build Status](https://app.travis-ci.com/mambans/AioFeed.svg?branch=master)](https://app.travis-ci.com/mambans/AioFeed)
 
+![example branch parameter](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=master)
+
 <img src="https://github.com/mambans/AioFeed/blob/master/frontend/public/android-chrome-192x192.webp" alt="Logo" width="300"/>
 
 My personal project **AioFeed**, is a site that combines feeds from different sites such as [Twitch](https://twitch.tv), [Youtube](https://youtube.com) and Twitter lists into one page. Along with some features I personally thought was missing from [Twitch](https://twitch.tv) such as filtering out/grouping streams based on current title/game, saving vods in custom lists and show all vods without leaving main page.
