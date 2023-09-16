@@ -59,7 +59,7 @@ jobs:
 
       - name: Sync to s3
         id: sync-s3
-        run: cd frontend && aws s3 sync --delete ./build s3://aiofeed.com
+        run: aws s3 sync --delete frontend/build s3://aiofeed.com
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
