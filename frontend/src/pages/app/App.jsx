@@ -19,17 +19,9 @@ import { Background } from "./Styles";
 import useThemeStore from "../../stores/theme/themeStore";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GlobalStyles } from "../../themes/GlobalStyles";
-import { Amplify, Hub, Logger } from "aws-amplify";
+import { Hub, Logger } from "aws-amplify";
 import { useUserSetUser } from "../../stores/user";
 import { useToggleFeedPreference } from "../../stores/feedPreference";
-
-Amplify.configure({
-	Auth: {
-		region: "eu-north-1",
-		userPoolId: process.env.REACT_APP_USER_POOL_ID,
-		userPoolWebClientId: process.env.REACT_APP_USER_POOL_CLIENT_ID,
-	},
-});
 
 const queryClient = new QueryClient();
 
