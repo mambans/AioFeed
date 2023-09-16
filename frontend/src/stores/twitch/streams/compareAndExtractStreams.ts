@@ -1,8 +1,8 @@
 const compareAndExtractStreams = (streams: StreamType[], previousStreams: StreamType[]) => {
-	const livestreams = [];
-	const newlyAddedStreams = [];
+	const livestreams = [] as StreamType[];
+	const newlyAddedStreams = [] as StreamType[];
 
-	streams.forEach((stream) => {
+	streams.forEach((stream: StreamType) => {
 		const previousStream = previousStreams.find((previousStream) => previousStream.id === stream.id);
 
 		if (previousStream) {

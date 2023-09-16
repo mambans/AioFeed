@@ -16,7 +16,8 @@
 		"noEmit": true,
 		"jsx": "react-jsx",
 		"types": ["node"],
-		"baseUrl": "."
+		"baseUrl": ".",
+		"noImplicitAny": false
 	},
 	"include": ["src"],
 	"exclude": ["node_modules", ".eslintrc.js"]

@@ -58,7 +58,7 @@ export const truncate = (input: string, max: number) => {
 
 export const chunk = (array: any[], size: number) => {
 	if (array?.length <= size) return [array];
-	const chunked_arr = [];
+	const chunked_arr: any[] = [];
 	let index = 0;
 	while (index < array.length) {
 		chunked_arr.push(array.slice(index, size + index));

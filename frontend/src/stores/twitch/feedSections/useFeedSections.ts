@@ -57,7 +57,7 @@ const useFeedSectionsStore = create<any>((set, get) => ({
 			},
 		});
 
-		API.updateCustomFeedSections(id, { title });
+		API.updateCustomFeedSections(id, data);
 	},
 
 	addFeedSectionRule: (id, rule) => {

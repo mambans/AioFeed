@@ -1,10 +1,10 @@
 import TwitchAPI from "./../../../pages/twitch/API";
 import { create } from "zustand";
 
-import API from "src/pages/navigation/API";
+import API from "../../../pages/navigation/API";
 
 import { useEffect } from "react";
-import { getLocalstorage, setLocalStorage } from "src/utilities";
+import { getLocalstorage, setLocalStorage } from "../../../utilities";
 import getFollowedVods from "./../../../pages/twitch/vods/GetFollowedVods";
 
 import AddVideoExtraData from "./../../../pages/twitch/AddVideoExtraData";
@@ -12,7 +12,9 @@ import SortAndAddExpire from "./../../../pages/twitch/vods/SortAndAddExpire";
 import { addVodEndTime } from "./../../../pages/twitch/TwitchUtils";
 import { uniqBy } from "lodash";
 
-const useVodsStore = create<any>((set, get) => ({
+const vodExpire = 3; // Number of hours
+
+const useVodsStore = create((set, get) => ({
 	loaded: false,
 	loading: true,
 	error: null,
@@ -82,19 +84,17 @@ const useVodsStore = create<any>((set, get) => ({
 			const newVodWithProfile = (await AddVideoExtraData({ items: res.data })) || [];
 			const newVodWithEndtime = (await addVodEndTime(newVodWithProfile.data)) || [];
 
-			setTwitchVods((vods = { data: [] }) => {
-				const existingVods = vods?.data ? [...(vods?.data || [])] : [];
-				const vodsToAdd = [
-					...newVodWithEndtime.slice(0, amount).map((vod) => ({
-						...vod,
-						transition: "videoFadeSlide",
-					})),
-				];
-				const uniqueVods = uniqBy([...(vodsToAdd || []), ...(existingVods || [])]?.slice(0, 100), "id");
-				const FinallVods = SortAndAddExpire(uniqueVods, vodExpire, vods.loaded, vods.expire) || [];
+			const existingVods = get().vods?.data ? [...(get().vods?.data || [])] : [];
+			const vodsToAdd = [
+				...newVodWithEndtime.slice(0, amount).map((vod) => ({
+					...vod,
+					transition: "videoFadeSlide",
+				})),
+			];
+			const uniqueVods = uniqBy([...(vodsToAdd || []), ...(existingVods || [])]?.slice(0, 100), "id");
+			const FinallVods = SortAndAddExpire(uniqueVods, vodExpire, get().vods.loaded, get().vods.expire) || [];
 
-				return FinallVods;
-			});
+			get().setVods(FinallVods);
 		});
 	},
 
@@ -105,7 +105,7 @@ const useVodsStore = create<any>((set, get) => ({
 		return channels;
 	},
 
-	fetch: async (forceRun?: boolean) => {
+	fetch: async (forceRun) => {
 		set({ loading: true });
 
 		const data = await getFollowedVods({
@@ -131,7 +131,7 @@ const useVodsStore = create<any>((set, get) => ({
 				await get().setChannels(channels);
 
 				return await get().fetch();
-			} catch (error: any) {
+			} catch (error) {
 				console.log("error:", error);
 				set({ error });
 				return null;

@@ -1,8 +1,8 @@
-import { loginNameFormat } from "src/utilities";
+import { loginNameFormat } from "../../../utilities";
 
-const checkAgainstRules = (stream, rules) => {
+const checkAgainstRules = (stream: StreamType, rules: any[]) => {
 	if (!rules) return stream;
-	return rules?.some((r) => {
+	return rules?.some((r: { title: string; category: string; channel: string; tag: string; viewers: number }) => {
 		const title = (!stream.title && !r.title) || stream.title?.toLowerCase().includes(r.title?.toLowerCase()?.trim());
 		//game is not included in vods, so cant filter vods based on game
 		//but if i have !stream.game_name, then rules with only a game will return true
@@ -13,7 +13,7 @@ const checkAgainstRules = (stream, rules) => {
 		const tags =
 			(!stream.tags && !r.tag) ||
 			!stream?.tags?.length ||
-			stream?.tags?.find((tag_name) => tag_name?.toLowerCase()?.includes(r?.tag?.toLowerCase()?.trim()));
+			stream?.tags?.find((tag_name: string) => tag_name?.toLowerCase()?.includes(r?.tag?.toLowerCase()?.trim()));
 
 		const viewer_count = stream.viewer_count >= r.viewers || stream.view_count >= r.viewers;
 

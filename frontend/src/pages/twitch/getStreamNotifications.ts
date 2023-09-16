@@ -1,9 +1,13 @@
 import { durationMsToDate, loginNameFormat, truncate } from "./../../utilities";
 import { checkAgainstRules } from "./../feedSections/utilities";
 
-const createKeys = (streams, enabledFeedSections) => {
-	return streams.reduce((acc, stream) => {
-		const feedSections = enabledFeedSections?.filter?.(({ rules } = {}) => checkAgainstRules(stream, rules));
+type StreamTypeWithKeys = StreamType & {
+	keys: string[];
+};
+
+const createKeys = (streams: any[], enabledFeedSections: FeedSectionType[]): StreamType[] => {
+	return streams.reduce((acc, stream: any) => {
+		const feedSections = enabledFeedSections?.filter?.(({ rules } = {} as any) => checkAgainstRules(stream, rules));
 		const feedSectionKeys = feedSections?.map((section) => `${stream.id}_${section.id}`) || [];
 
 		const mainKey = `${stream.id}_${stream.title}_${stream.game_id}`;
@@ -17,7 +21,7 @@ const createKeys = (streams, enabledFeedSections) => {
 				keys,
 			},
 		];
-	}, []);
+	}, []) as any;
 };
 
 const getStreamNotifications = ({
@@ -26,17 +30,18 @@ const getStreamNotifications = ({
 	feedSections,
 	favoriteStreams,
 }: any): StreamNotificationType[] => {
-	const enabledFeedSections = feedSections && Object.values?.(feedSections)?.filter((f) => f.enabled && f.notifications_enabled);
+	const enabledFeedSections =
+		feedSections && Object.values?.(feedSections)?.filter((f: FeedSectionType | any) => f.enabled && f.notifications_enabled);
 
-	const streams = createKeys(currentStreams || [], enabledFeedSections);
-	const previousStreams = createKeys(previousLiveStreams || [], enabledFeedSections);
+	const streams = createKeys(currentStreams || [], enabledFeedSections) as StreamTypeWithKeys[];
+	const previousStreams = createKeys(previousLiveStreams || [], enabledFeedSections) as StreamTypeWithKeys[];
 
-	const streamsWithPreviouosStream = streams.map((stream) => ({
+	const streamsWithPreviouosStream = streams.map((stream: StreamTypeWithKeys) => ({
 		...stream,
 		previousStream: previousStreams?.find?.(({ id }) => id === stream.id),
 	}));
 
-	const previouosStreamsWithCurrentStream = previousStreams.map((stream) => ({
+	const previouosStreamsWithCurrentStream = previousStreams.map((stream: StreamTypeWithKeys) => ({
 		...stream,
 		currentStream: streams?.find?.(({ id }) => id === stream.id),
 	}));
@@ -45,7 +50,7 @@ const getStreamNotifications = ({
 		.filter((stream) => !stream.previousStream || stream.previousStream.keys?.some?.((key) => !stream.keys?.includes?.(key)))
 		.flatMap((stream) => {
 			const previousStream = stream.previousStream;
-			const feedSections = enabledFeedSections?.filter?.(({ rules }) => checkAgainstRules(stream, rules));
+			const feedSections = enabledFeedSections?.filter?.((feedSection: FeedSectionType) => checkAgainstRules(stream, feedSection.rules));
 
 			const baseNotis = {
 				title: `${loginNameFormat(stream)} went Live`,
@@ -61,7 +66,7 @@ const getStreamNotifications = ({
 			if (feedSections?.length) {
 				//If I only wanted to return one notis per stream even if multuple feed sections matched,
 				//I could sort feedSections here and just return the first one here
-				return feedSections?.map((section) => {
+				return feedSections?.map((section: FeedSectionType) => {
 					if (!previousStream) {
 						return {
 							...baseNotis,
@@ -120,7 +125,7 @@ const getStreamNotifications = ({
 		})
 		.flatMap((stream) => {
 			console.log("+++stream:", stream);
-			const feedSections = enabledFeedSections?.filter?.(({ rules }) => checkAgainstRules(stream, rules));
+			const feedSections = enabledFeedSections?.filter?.((feedSection: FeedSectionType) => checkAgainstRules(stream, feedSection.rules));
 			const duration = durationMsToDate(stream.started_at);
 
 			const baseNotis = {
@@ -137,7 +142,7 @@ const getStreamNotifications = ({
 			if (feedSections?.length) {
 				//If I only wanted to return one notis per stream even if multuple feed sections matched,
 				//I could sort feedSections here and just return the first one here
-				return feedSections?.map((section) => {
+				return feedSections?.map((section: FeedSectionType) => {
 					return {
 						...baseNotis,
 						title: `${loginNameFormat(stream)} went Offline from ${section.title}`,

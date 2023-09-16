@@ -1,8 +1,8 @@
 import orderBy from "lodash/orderBy";
 import uniqBy from "lodash/uniqBy";
 
-import addProfileInfo from "src/pages/twitch/functions/addProfileInfo";
-import addGameInfo from "src/pages/twitch/functions/addGameInfo";
+import addProfileInfo from "../../../pages/twitch/functions/addProfileInfo";
+import addGameInfo from "../../../pages/twitch/functions/addGameInfo";
 
 const decorateStreams = async (streams: BaseStream[], refreshMetadata = false) => {
 	if (Array.isArray(streams)) {
@@ -21,7 +21,7 @@ const decorateStreams = async (streams: BaseStream[], refreshMetadata = false) =
 		const uniqueFilteredLiveStreams = uniqBy(streamsWithGame, "user_id");
 
 		const recentLiveStreams = (uniqueFilteredLiveStreams || []).filter(
-			(s = {}) => Math.trunc((Date.now() - new Date(s?.started_at).getTime()) / 1000) <= 150
+			(s) => Math.trunc((Date.now() - new Date(s?.started_at).getTime()) / 1000) <= 150
 		);
 
 		const uniqueStreams = uniqBy([...(uniqueFilteredLiveStreams || []), ...(recentLiveStreams || [])], "id");

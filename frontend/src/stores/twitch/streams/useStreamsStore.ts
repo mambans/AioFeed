@@ -22,7 +22,6 @@ interface StreamStore {
 	setPreviousStreams: (previousStreams: any[]) => any;
 	setNewlyAddedStreams: (newlyAddedStreams: any[]) => any;
 	setFollowedChannels: (followedChannels: any[]) => any;
-	setFollowedChannels: (loaded: any[]) => any;
 }
 
 const useStreamsStore = create<StreamStore>((set, get) => ({

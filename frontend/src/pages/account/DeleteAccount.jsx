@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Breadcrumb, Button, Form } from "react-bootstrap";
-import { ButtonGroup } from "src/components/styledComponents";
+import { ButtonGroup } from "../../components/styledComponents";
 import useInput from "../../hooks/useInput";
 import { useUser, useUserDelete } from "../../stores/user";
 
 const DeleteAccount = ({ onClose }) => {
-	const [error, setError] = useState<string | null>("");
+	const [error, setError] = useState("");
 
 	const user = useUser();
 	const deleteUser = useUserDelete();

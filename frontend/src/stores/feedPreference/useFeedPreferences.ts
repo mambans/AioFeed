@@ -1,4 +1,4 @@
-import { getLocalstorage } from "src/utilities";
+import { getLocalstorage } from "../../utilities";
 import { create } from "zustand";
 
 const useFeedPreferencesStore = create<any>((set, get) => ({

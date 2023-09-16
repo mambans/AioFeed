@@ -1,4 +1,4 @@
-import { getLocalstorage } from "src/utilities";
+import { getLocalstorage } from "../../utilities";
 import { create } from "zustand";
 
 const useFeedVideoSizeStore = create<any>((set, get) => ({
