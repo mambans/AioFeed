@@ -6,6 +6,7 @@ type UseNotificationsStore = {
 	notifications: StreamNotificationType[];
 	addNotifications: (notifications: StreamNotificationType[]) => void;
 	markAllAsRead: () => void;
+	clearNotifications: () => void;
 };
 
 const useNotificationsStore = create<UseNotificationsStore>((set, get) => ({
@@ -35,10 +36,17 @@ const useNotificationsStore = create<UseNotificationsStore>((set, get) => ({
 			})),
 		}));
 	},
+
+	clearNotifications: () => {
+		set((state: any) => ({
+			notifications: [],
+		}));
+	},
 }));
 
 const useNotifications = () => useNotificationsStore((state: any) => state.notifications);
 const useAddNotifications = () => useNotificationsStore((state: any) => state.addNotifications);
 const useMarkNotificationsAsRead = () => useNotificationsStore((state: any) => state.markAllAsRead);
+const useClearNotifications = () => useNotificationsStore((state: any) => state.clearNotifications);
 
-export { useNotifications, useAddNotifications, useMarkNotificationsAsRead };
+export { useNotifications, useAddNotifications, useMarkNotificationsAsRead, useClearNotifications };

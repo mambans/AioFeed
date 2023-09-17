@@ -2,7 +2,7 @@ import React from "react";
 
 import { NotificationListContainer } from "./styledComponent";
 import NotificationItem, { ClearAllNotifications } from "./NotificationItem";
-import { useMarkNotificationsAsRead, useNotifications } from "../../stores/notifications";
+import { useClearNotifications, useNotifications } from "../../stores/notifications";
 
 //deconstruct nested params
 // const NotificationTwitchItem = ({
@@ -11,9 +11,8 @@ import { useMarkNotificationsAsRead, useNotifications } from "../../stores/notif
 
 const NotificationsList = () => {
 	const notifications = useNotifications();
-	const markAllAsRead = useMarkNotificationsAsRead();
+	const clearNotifications = useClearNotifications();
 
-	console.log("notifications:", notifications);
 	return (
 		<NotificationListContainer>
 			<ul>
@@ -36,7 +35,7 @@ const NotificationsList = () => {
 						/>
 					);
 				})}
-				<ClearAllNotifications onClick={markAllAsRead} nr={notifications?.length || 0} disabled={!notifications?.length} />
+				<ClearAllNotifications onClick={clearNotifications} nr={notifications?.length || 0} disabled={!notifications?.length} />
 			</ul>
 		</NotificationListContainer>
 	);
