@@ -25,8 +25,6 @@ import setFavion from "../setFavion";
 import PlayPauseButton from "./PlayPauseButton";
 import ShowStatsButtons, { latencyColorValue } from "./ShowStatsButtons";
 import ShowSetQualityButtons from "./ShowSetQualityButtons";
-import addSystemNotification from "../live/addSystemNotification";
-import NotificationsContext from "../../notifications/NotificationsContext";
 import ClipButton from "./ClipButton";
 import fetchChannelInfo from "./fetchChannelInfo";
 import PlayerContextMenu from "./ContextMenu";
@@ -52,12 +50,13 @@ import addGameInfo from "../functions/addGameInfo";
 import addProfileInfo from "../functions/addProfileInfo";
 import PlayerButtonsBar from "./PlayerButtonsBar";
 import { useNavigationBarVisible } from "../../../stores/navigation";
+import { useAddNotifications } from "../../../stores/notifications";
 
 const DEFAULT_CHAT_WIDTH = Math.max(window.innerWidth * 0.12, 175);
 
 const Player = () => {
 	const channelName = useParams()?.channelName;
-	const { addNotification } = useContext(NotificationsContext);
+	const addNotifications = useAddNotifications();
 	const navigationBarVisible = useNavigationBarVisible();
 
 	const { twitchAccessToken, setTwitchAccessToken, defaultHideChat, enableVodVolumeOverlay } = useContext(TwitchContext);
@@ -258,20 +257,10 @@ const Player = () => {
 	const addNoti = useCallback(
 		({ type, stream }) => {
 			if (stream && type === "Live") {
-				addSystemNotification({
-					title: `${loginNameFormat(stream)} is Live`,
-					icon: stream?.profile_image_url,
-					body: `${stream.title}\n${stream.game_name || ""}`,
-					onClick: (e) => {
-						e.preventDefault();
-						window.open(`https://aiofeed.com/${stream.login || stream.user_login || stream.user_name}`);
-					},
-				});
-
-				addNotification([{ ...stream, notiStatus: type }]);
+				addNotifications([{ ...stream, type: type }]);
 			}
 		},
-		[addNotification]
+		[addNotifications]
 	);
 
 	async function onlineEvents() {
@@ -288,11 +277,11 @@ const Player = () => {
 			await GetAndSetStreamInfo().then(async (res) => {
 				setFavion(res?.profile_image_url);
 				const tags = await TwitchAPI.getTags({ broadcaster_id: res?.user_id }).then((res) => res?.data?.data);
-				console.log("tags:", tags);
 				setStreamInfo(() => ({ ...res, tags }));
+				const stream = { type: "live", ...res };
 
 				if (streamInfo === null && res?.broadcaster_software && !res?.broadcaster_software?.toLowerCase().includes("rerun")) {
-					addNoti({ type: "Live", stream: res });
+					addNoti(stream);
 				}
 			});
 		} catch (error) {

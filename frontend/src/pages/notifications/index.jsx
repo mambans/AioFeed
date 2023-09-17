@@ -1,20 +1,23 @@
 import { MdNotifications, MdNotificationsNone } from "react-icons/md";
-import React, { useContext, useRef } from "react";
+import React, { useRef } from "react";
 import { UnseenNotifcationCount } from "./../notifications/styledComponent";
-import NotificationsContext from "./../notifications/NotificationsContext";
 import NotificationsList from "./NotificationsList";
 import MyModal from "../../components/mymodal/MyModal";
+import { useMarkNotificationsAsRead, useNotifications } from "../../stores/notifications";
 
 const Notifications = ({ leftExpandRef }) => {
-	const { clearUnseenNotifications, unseenNotifications } = useContext(NotificationsContext);
 	const ref = useRef();
+
+	const markAllAsRead = useMarkNotificationsAsRead();
+	const notifications = useNotifications();
+	const unseenNotifications = notifications?.filter?.((n) => n?.unread);
 
 	const handleClose = () => {
 		leftExpandRef.current.style.removeProperty("width");
 		leftExpandRef.current.childNodes[leftExpandRef.current.childNodes?.length - 1].style.removeProperty("opacity");
 	};
 	const handleShow = () => {
-		clearUnseenNotifications();
+		markAllAsRead();
 		leftExpandRef.current.style.width = "100%";
 		leftExpandRef.current.childNodes[leftExpandRef.current.childNodes?.length - 1].style.opacity = "0";
 	};

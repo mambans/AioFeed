@@ -1,9 +1,8 @@
-import { Link } from 'react-router-dom';
-import React, { useContext } from 'react';
+import React from "react";
 
-import { NotificationListContainer } from './styledComponent';
-import NotificationsContext from './../notifications/NotificationsContext';
-import NotificationItem, { ClearAllNotifications } from './NotificationItem';
+import { NotificationListContainer } from "./styledComponent";
+import NotificationItem, { ClearAllNotifications } from "./NotificationItem";
+import { useMarkNotificationsAsRead, useNotifications } from "../../stores/notifications";
 
 //deconstruct nested params
 // const NotificationTwitchItem = ({
@@ -11,54 +10,36 @@ import NotificationItem, { ClearAllNotifications } from './NotificationItem';
 // }) => {}
 
 const NotificationsList = () => {
-  const { clearNotifications, notifications } = useContext(NotificationsContext);
+	const notifications = useNotifications();
+	const markAllAsRead = useMarkNotificationsAsRead();
 
-  return (
-    <NotificationListContainer>
-      <ul>
-        {notifications?.map(
-          (
-            { notiStatus, user_name, profile_image_url, text, title, date, onClick } = {},
-            index
-          ) => {
-            return (
-              <NotificationItem
-                key={String(index)}
-                onClick={onClick}
-                title={
-                  <Link
-                    to={`/${user_name?.toLowerCase()}/page`}
-                    className='name'
-                    style={{ fontSize: '0.85em' }}
-                  >
-                    <b>{user_name}</b> {notiStatus}
-                  </Link>
-                }
-                text={
-                  text?.split('\n').map((line) => (
-                    <p className='UpdateText' key={line}>
-                      {line}
-                    </p>
-                  )) || title
-                }
-                icon={
-                  <Link to={`/${user_name?.toLowerCase()}/page`} className='profileImg' alt=''>
-                    <img style={{ borderRadius: '50%' }} src={profile_image_url} alt=''></img>
-                  </Link>
-                }
-                date={date}
-              />
-            );
-          }
-        )}
-        <ClearAllNotifications
-          onClick={clearNotifications}
-          nr={notifications?.length || 0}
-          disabled={!notifications?.length}
-        />
-      </ul>
-    </NotificationListContainer>
-  );
+	console.log("notifications:", notifications);
+	return (
+		<NotificationListContainer>
+			<ul>
+				{notifications?.map(({ icon, body, title, date, onClick }, index) => {
+					return (
+						<NotificationItem
+							key={String(index)}
+							onClick={onClick}
+							// title={title.replace(user_name, `<b>${user_name}</b>`)}
+							title={title}
+							text={
+								body?.split("\n").map((line) => (
+									<p className="UpdateText" key={line}>
+										{line}
+									</p>
+								)) || title
+							}
+							icon={React.isValidElement(icon) ? icon : <img style={{ borderRadius: "50%" }} src={icon} alt=""></img>}
+							date={date}
+						/>
+					);
+				})}
+				<ClearAllNotifications onClick={markAllAsRead} nr={notifications?.length || 0} disabled={!notifications?.length} />
+			</ul>
+		</NotificationListContainer>
+	);
 };
 
 export default NotificationsList;

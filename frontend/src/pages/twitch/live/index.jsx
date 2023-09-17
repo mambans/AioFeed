@@ -20,10 +20,10 @@ import moment from "moment";
 import { checkAgainstRules } from "../../feedSections/utilities";
 // import FeedSections from '../../feedSections/FeedSections';
 import getStreamNotifications from "./../getStreamNotifications";
-import addSystemNotification from "./addSystemNotification";
 import { useFeedSections } from "../../../stores/twitch/feedSections";
 import { useVodsChannels, useVodsFetchChannelVods } from "../../../stores/twitch/vods";
 import { useToggleFeedPreference, useFeedPreferences } from "../../../stores/feedPreference";
+import { useAddNotifications } from "../../../stores/notifications";
 
 const FeedSections = React.lazy(() => import("../../feedSections/FeedSections"));
 
@@ -46,6 +46,7 @@ const TwitchFeed = ({ data, className }) => {
 
 	const refreshBtnRef = useRef();
 
+	console.log("nonFeedSectionLiveStreams:", nonFeedSectionLiveStreams);
 	return (
 		<>
 			<CSSTransition in={twitch?.enabled} timeout={750} classNames="fade-750ms" appear unmountOnExit>
@@ -102,6 +103,7 @@ export const Twitch = ({ className }) => {
 	const feedSections = useFeedSections();
 	const timers = useRef({});
 	const timer = useRef();
+	const addNotifications = useAddNotifications();
 
 	useEffect(() => {
 		if (canPushNoitifications) {
@@ -126,7 +128,7 @@ export const Twitch = ({ className }) => {
 
 				if (type === "updated" && !favoriteStreams?.includes(noti.stream.user_id)) return;
 
-				addSystemNotification(noti);
+				addNotifications([noti]);
 			});
 		}
 	}, [
@@ -138,6 +140,7 @@ export const Twitch = ({ className }) => {
 		vodChannels,
 		isEnabledOfflineNotifications,
 		fetchChannelVods,
+		addNotifications,
 	]);
 
 	useEffect(() => {

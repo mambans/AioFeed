@@ -61,6 +61,7 @@ const getStreamNotifications = ({
 				},
 				stream,
 				type: "live",
+				unread: true,
 			};
 
 			if (feedSections?.length) {
@@ -124,7 +125,6 @@ const getStreamNotifications = ({
 			// return !stream.currentStream;
 		})
 		.flatMap((stream) => {
-			console.log("+++stream:", stream);
 			const feedSections = enabledFeedSections?.filter?.((feedSection: FeedSectionType) => checkAgainstRules(stream, feedSection.rules));
 			const duration = durationMsToDate(stream.started_at);
 
@@ -157,7 +157,6 @@ const getStreamNotifications = ({
 			};
 		});
 
-	console.log("offlineNotifications:", offlineNotifications);
 	return [...liveAndUpdatedNotifications, ...offlineNotifications].filter(Boolean);
 };
 

@@ -3,7 +3,6 @@ import styled, { ThemeProvider as StyledThemeProvider } from "styled-components"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { NotificationsProvider } from "../notifications/NotificationsContext";
 import CookieConsentAlert from "./CookieConsentAlert";
 import Routes from "../routes";
 import ThemeContext, { ThemeProvider } from "./../../components/themes/ThemeContext";
@@ -50,13 +49,11 @@ const AppRoutesContainer = () => {
 			<ThemeProvider>
 				<TwitchProvider>
 					<YoutubeProvider>
-						<NotificationsProvider>
-							<TwitterProvider>
-								<MyListsProvider>
-									<App />
-								</MyListsProvider>
-							</TwitterProvider>
-						</NotificationsProvider>
+						<TwitterProvider>
+							<MyListsProvider>
+								<App />
+							</MyListsProvider>
+						</TwitterProvider>
 					</YoutubeProvider>
 				</TwitchProvider>
 			</ThemeProvider>

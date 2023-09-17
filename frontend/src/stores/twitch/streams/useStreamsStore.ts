@@ -73,15 +73,6 @@ const useStreamsStore = create<StreamStore>((set, get) => ({
 					user_id: twitchUserId,
 					first: 100,
 					// signal: controller.current?.signal,
-				}).catch((e) => {
-					console.log("catch:", e);
-					if (e.response.data.status) {
-						// addSystemNotification({
-						// 	title: "Error fetching followed streams",
-						// 	body: `${e.response.data.status} - ${e.response.data.message}`,
-						// });
-					}
-					return e.response.data;
 				})
 			);
 
