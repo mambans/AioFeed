@@ -38,7 +38,7 @@ const Vods = ({ className }) => {
 	const refresh = useCallback(
 		async (forceRefresh = true) => {
 			refreshBtnRef?.current?.setIsLoading(true);
-			fetch();
+			await fetch();
 			refreshBtnRef?.current?.setIsLoading(false);
 		},
 		[fetch]
