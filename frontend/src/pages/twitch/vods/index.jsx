@@ -38,7 +38,7 @@ const Vods = ({ className }) => {
 	const refresh = useCallback(
 		async (forceRefresh = true) => {
 			refreshBtnRef?.current?.setIsLoading(true);
-			await fetch();
+			await fetch(forceRefresh);
 			refreshBtnRef?.current?.setIsLoading(false);
 		},
 		[fetch]
@@ -52,7 +52,7 @@ const Vods = ({ className }) => {
 		console.log("vods index useEffect fetch vods:");
 		console.log("validateToken:", validateToken);
 		// if (validateToken) {
-		refresh();
+		refresh(true);
 		// }
 	}, [validateToken, refresh]);
 
@@ -68,7 +68,7 @@ const Vods = ({ className }) => {
 		<Container aria-labelledby="vods" order={feedPreferences?.["vods"]?.order || 500} className={className}>
 			<Header
 				ref={refreshBtnRef}
-				refresh={refresh}
+				refresh={() => refresh(true)}
 				vods={vods}
 				vodError={vodError}
 				collapsed={feedPreferences?.["vods"]?.collapsed}
