@@ -13,14 +13,23 @@ export const NotificationListContainer = styled.div`
 
 export const UnseenNotifcationCount = styled.div`
 	background-color: ${Colors.red};
-	height: 24px;
-	width: 24px;
+	height: 20px;
+	width: 20px;
 	border-radius: 50%;
 	position: absolute;
-	top: 5px;
-	left: 20px;
+	top: 0;
+	left: 0;
+
 	line-height: 24px;
 	text-align: center;
+	color: #ffffff;
+	font-size: 0.8rem;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	transform: translate(-50%, 0);
 `;
 
 export const StyledDate = styled.div`

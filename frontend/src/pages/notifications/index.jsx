@@ -37,8 +37,13 @@ const Notifications = ({ leftExpandRef }) => {
 				}}
 				triggerStyle={{ padding: "0 5px", margin: "0 30px" }}
 				trigger={
-					<div ref={ref}>
-						{unseenNotifications?.length > 0 ? (
+					<div
+						ref={ref}
+						style={{
+							position: "relative",
+						}}
+					>
+						{unseenNotifications?.length > 1 ? (
 							<>
 								<MdNotifications
 									size={40}

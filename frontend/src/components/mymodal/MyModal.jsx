@@ -163,7 +163,7 @@ const TriggerButton = styled(TransparentButton)`
 	}
 
 	&:hover {
-		transform: scale(1.1);
+		/* transform: scale(1.1); */
 		svg {
 			color: #ffffff;
 		}
