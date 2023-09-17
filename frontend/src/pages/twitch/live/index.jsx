@@ -103,6 +103,7 @@ export const Twitch = ({ className }) => {
 	const timer = useRef();
 
 	useEffect(() => {
+		console.log("canPushNoitifications:", canPushNoitifications);
 		if (canPushNoitifications) {
 			const notifications = getStreamNotifications({
 				currentStreams: livestreams,
@@ -111,12 +112,14 @@ export const Twitch = ({ className }) => {
 				favoriteStreams,
 			});
 
+			console.log("notifications:", notifications);
+
 			notifications.forEach((noti) => {
 				const type = noti?.type;
 
 				//add notis to notis "log"
 
-				if ((type === "offline" && !isEnabledOfflineNotifications) || !vodChannels.includes(noti.stream.user_id)) return;
+				if (type === "offline" && (!isEnabledOfflineNotifications || !vodChannels.includes(noti.stream.user_id))) return;
 
 				if (type === "offline" || type === "live") {
 					// clearTimeout(timers.current[noti.stream.user_id]);
