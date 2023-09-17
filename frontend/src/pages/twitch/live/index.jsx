@@ -103,7 +103,6 @@ export const Twitch = ({ className }) => {
 	const timer = useRef();
 
 	useEffect(() => {
-		console.log("canPushNoitifications:", canPushNoitifications);
 		if (canPushNoitifications) {
 			const notifications = getStreamNotifications({
 				currentStreams: livestreams,
@@ -111,8 +110,6 @@ export const Twitch = ({ className }) => {
 				feedSections,
 				favoriteStreams,
 			});
-
-			console.log("notifications:", notifications);
 
 			notifications.forEach((noti) => {
 				const type = noti?.type;
@@ -173,6 +170,9 @@ export const Twitch = ({ className }) => {
 
 		return () => {
 			console.log("unmounting Twitch.jsx");
+			setNextRefresh(0);
+			clearInterval(timer.current);
+			timer.current = null;
 		};
 	}, [fetch, twitchUserId, autoRefreshEnabled]);
 

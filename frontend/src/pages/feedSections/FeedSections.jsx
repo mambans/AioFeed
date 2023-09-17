@@ -21,11 +21,11 @@ const FeedSections = ({ data }) => {
 			{Object.values(feedSections)
 				.reduce((acc, feedSection) => {
 					if (!feedSection.enabled) return acc;
-					return [...acc, { ...feedSection, data: { ...data } }];
+					return [...acc, { ...feedSection }];
 				}, [])
 				?.map((section, index) => (
 					<CSSTransition key={section.id} timeout={1000} classNames="listHorizontalSlide" unmountOnExit appear>
-						<Section key={section.id} section={section} index={index} data={section.data} />
+						<Section key={section.id} section={section} index={index} data={data} />
 					</CSSTransition>
 				))}
 		</TransitionGroup>
@@ -43,11 +43,12 @@ const Section = ({ section, data, index }) => {
 
 	if (!feedSectionStreams?.length) return null;
 
+	console.log("data:", data);
 	return (
 		<Container aria-labelledby={`FeedSection-${id}`} order={feedPreferences?.[id]?.order || 500} key={`FeedSection-${id}`} id={`FeedSection-${id}`}>
 			<Header
 				{...data}
-				isLoading={data.refreshing}
+				isLoading={data.loading}
 				id={title}
 				title={
 					<h1 id={`FeedSection-${id}`} onClick={() => togglePreference(id, "collapsed")}>

@@ -65,8 +65,6 @@ const useStreamsStore = create<StreamStore>((set, get) => ({
 	},
 
 	fetch: async (twitchUserId, refreshMetadata = false) => {
-		console.log("fetch:");
-
 		try {
 			set({ loading: true });
 			const streams = await pagination(

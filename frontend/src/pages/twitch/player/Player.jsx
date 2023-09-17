@@ -9,7 +9,6 @@ import { FaTwitch, FaInfoCircle } from "react-icons/fa";
 import { GrRefresh } from "react-icons/gr";
 
 import fetchStreamInfo from "./fetchStreamInfo";
-import FollowUnfollowBtn from "../FollowUnfollowBtn";
 import VolumeSlider from "./VolumeSlider";
 import {
 	InfoDisplay,
@@ -529,11 +528,6 @@ const Player = () => {
 										>
 											<FaTwitch size={24} color="purple" />
 										</a>
-
-										<FollowUnfollowBtn
-											channelName={streamInfo?.user_name || channelName}
-											id={streamInfo.user_id || twitchVideoPlayer.current.getChannelId()}
-										/>
 
 										<VodsFollowUnfollowBtn size={28} channel={streamInfo} marginright="5px;" />
 

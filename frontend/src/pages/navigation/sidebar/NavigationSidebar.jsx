@@ -43,7 +43,7 @@ const NavigationSidebar = () => {
 				{user ? (
 					<>
 						<StyledSidebarTrigger id="NavigationProfileImageHoverOverlay" open={showSidebar} />
-						<img id="NavigationProfileImage" src={`${process.env.PUBLIC_URL}/images/webp/placeholder.png`} alt="" />
+						<img id="NavigationProfileImage" src={`${process.env.PUBLIC_URL}/images/webp/placeholder.webp`} alt="" />
 					</>
 				) : loading ? (
 					<LoadingIndicator height={32} width={32} />

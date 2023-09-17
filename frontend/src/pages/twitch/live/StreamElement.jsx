@@ -23,7 +23,6 @@ import {
 import { ChannelNameDiv } from "./../StyledComponents";
 import StreamHoverIframe from "../StreamHoverIframe.jsx";
 import { truncate } from "../../../utilities";
-import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 import VodsFollowUnfollowBtn from "./../vods/VodsFollowUnfollowBtn";
 import AddUpdateNotificationsButton from "../AddUpdateNotificationsButton";
 import AnimatedViewCount from "./AnimatedViewCount";
@@ -167,20 +166,6 @@ const StreamElement = React.memo(({ data = {}, refresh, size }) => {
 							<FavoriteStreamBtn channel={login || user_login} id={user_id} />
 							<VodsFollowUnfollowBtn channel={data} marginright="5px;" />
 							<AddUpdateNotificationsButton channel={streamData} marginright="5px;" />
-							<FollowUnfollowBtn
-								style={{
-									gridRow: "1",
-									justifySelf: "right",
-									margin: "0",
-									marginRight: "8px",
-									height: "100%",
-								}}
-								size={"1.5em"}
-								channelName={login || user_login}
-								id={user_id}
-								followingStatus={true}
-								refreshStreams={refresh}
-							/>
 						</ChannelButtonsContainer>
 					)}
 				</ChannelContainer>

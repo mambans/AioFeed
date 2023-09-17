@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import React, { useState, useRef, useEffect } from "react";
 
-import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 import VodsFollowUnfollowBtn from "../vods/VodsFollowUnfollowBtn";
 import { ChannelListLi } from "./StyledComponents";
 import AddUpdateNotificationsButton from "./../AddUpdateNotificationsButton";
@@ -100,13 +99,7 @@ const ChannelListElement = ({ data, selected, showVodBtn = true, searchInput, fo
 				<FavoriteStreamBtn channel={channel?.user_name} id={channel?.user_id} show={followingStatus} />
 				<VodsFollowUnfollowBtn show={user && showVodBtn && channel} channel={channel} />
 				<AddUpdateNotificationsButton channel={channel} show={followingStatus && channel} />
-				<FollowUnfollowBtn
-					style={{ marginLeft: "5px", marginRight: "0px", padding: "0" }}
-					size={22}
-					channelName={channel?.user_name || searchInput}
-					id={channel?.user_id}
-					followingStatus={followingStatus}
-				/>
+
 				{/* </div> */}
 			</ChannelButtonsContainer>
 		</ChannelListLi>

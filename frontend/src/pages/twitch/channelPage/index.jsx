@@ -25,7 +25,6 @@ import {
 	ButtonRow,
 	FullDescriptioon,
 } from "./StyledComponents";
-import FollowUnfollowBtn from "./../FollowUnfollowBtn";
 import AddVideoExtraData from "../AddVideoExtraData";
 import fetchStreamInfo from "./../player/fetchStreamInfo";
 import fetchChannelInfo from "./../player/fetchChannelInfo";
@@ -388,7 +387,6 @@ const ChannelPage = () => {
 											<NameAndButtons>
 												<div className="buttonsContainer">
 													{channelInfo.partner && <img id="partnered" title="Partnered" alt="" src={`${process.env.PUBLIC_URL}/partnered.png`} />}
-													<FollowUnfollowBtn show={channelInfo} channelName={channelName} id={channelInfo._id} />
 													<FavoriteStreamBtn
 														channel={channelInfo.name || channelName}
 														id={channelInfo._id}
