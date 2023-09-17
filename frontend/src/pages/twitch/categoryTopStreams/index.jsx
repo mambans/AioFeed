@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { MdMovieCreation, MdLiveTv } from "react-icons/md";
 import { useParams, useLocation } from "react-router-dom";
@@ -130,7 +131,7 @@ const TopStreams = () => {
 						});
 			}
 		},
-		[category, sortBy, sortByTime, videoType, feedVideoSizeProps]
+		[category, sortBy, sortByTime, videoType]
 	);
 
 	const refresh = useCallback(() => {
@@ -141,6 +142,8 @@ const TopStreams = () => {
 
 	useEffect(() => {
 		(async () => {
+			if (!category) return null;
+
 			const gameInfo = await TwitchAPI.getGames({ name: category }).then((res) => res.data.data[0]);
 			console.log("gameInfo:", gameInfo);
 			setGameInfo(gameInfo);
