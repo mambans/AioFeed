@@ -46,7 +46,6 @@ const TwitchFeed = ({ data, className }) => {
 
 	const refreshBtnRef = useRef();
 
-	console.log("nonFeedSectionLiveStreams:", nonFeedSectionLiveStreams);
 	return (
 		<>
 			<CSSTransition in={twitch?.enabled} timeout={750} classNames="fade-750ms" appear unmountOnExit>

@@ -60,7 +60,6 @@ const CenterProvider = ({ children, left, right }) => {
 const Center = ({ children }) => {
 	const { width, twitterWidth, leftWidth, rightWidth } = useContext(CenterContext);
 	const feedPreferences = useFeedPreferences();
-	console.log("width:", width);
 
 	return (
 		<CenterContainer
