@@ -131,7 +131,7 @@ const TopStreams = () => {
 						});
 			}
 		},
-		[category, sortBy, sortByTime, videoType]
+		[category, sortBy, sortByTime, videoType, feedVideoSizeProps]
 	);
 
 	const refresh = useCallback(() => {
