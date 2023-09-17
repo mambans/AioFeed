@@ -37,10 +37,10 @@ const decorateStreams = async (streams: BaseStream[], refreshMetadata = false) =
 
 		const orderedStreams = orderBy(uniqueStreams, (s) => s.viewer_count, "desc");
 
-		return { error: null, decoratedStreams: orderedStreams };
+		return orderedStreams;
 	}
 
-	return { error: "errorrrrr", decoratedStreams: [] };
+	throw new Error("Streams is not an array");
 };
 
 export default decorateStreams;

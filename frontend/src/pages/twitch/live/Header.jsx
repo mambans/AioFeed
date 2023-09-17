@@ -5,9 +5,10 @@ import Header, { HeaderNumberCount } from "../../../components/Header";
 import BigScheduleList from "./BigScheduleList";
 import Colors from "../../../components/themes/Colors";
 import ChannelSearchBar from "../searchbars/ChannelSearchBar";
+import { InlineError } from "../../navigation/sidebar/StyledComponents";
 
 const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed, idTitle, count }, ref) => {
-	const { loading, nextRefresh, refresh } = data;
+	const { loading, nextRefresh, refresh, error } = data;
 
 	return (
 		<Header
@@ -35,6 +36,11 @@ const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed, idTitl
 			nextRefresh={nextRefresh}
 			isLoading={loading}
 			refresh={() => refresh({ firstLoad: true })}
+			leftSide={error &&
+				<InlineError style={{ margin: "0 10px" }}>
+					{error}
+				</InlineError>
+			}
 			rightSide={
 				<>
 					<BigScheduleList />

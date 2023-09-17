@@ -33,7 +33,7 @@ const Twitch = ({ data, streams, hideOnEmpty }) => {
 				<LoadingBoxes amount={videoElementsAmount || 4} type="big" />
 			</Container>
 		);
-	} else if (error) {
+	} else if (error && !streams?.length) {
 		return <Alert type="secondary" fill title={error} />;
 	}
 

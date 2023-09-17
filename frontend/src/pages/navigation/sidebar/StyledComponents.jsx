@@ -1,8 +1,8 @@
 import React from "react";
 import { Form, Button } from "react-bootstrap";
-import { MdRefresh, MdFormatIndentDecrease } from "react-icons/md";
+import { MdRefresh, MdFormatIndentDecrease, MdOutlineError } from "react-icons/md";
 import { FaWindowClose } from "react-icons/fa";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Colors from "../../../components/themes/Colors";
 import MyButton from "./../../../components/Button";
 
@@ -609,6 +609,31 @@ export const ToggleButtonsContainerHeader = styled.h5`
 	}
 `;
 
-export const InlineError = styled.span`
-	color: ${Colors.red};
+const breathing = keyframes`
+    from {
+      filter: brightness(1);
+    }
+    to {
+      filter: brightness(1.25);
+			}
 `;
+
+export const StyledInlineError = styled.div`
+	color: ${Colors.red};
+	gap: 0.25rem;
+	display: flex;
+	padding: 0.35rem 0.75rem;
+	align-items: center;
+	background-color: ${Colors.rgba(Colors.red, 0.1)};
+	border-radius: 0.35rem;
+	animation: 1.5s infinite alternate ease-out ${breathing};
+`;
+
+export const InlineError = ({ children }) => {
+	return (
+		<StyledInlineError>
+			<MdOutlineError size={30} title={children} />
+			{children}
+		</StyledInlineError>
+	);
+};

@@ -16,8 +16,8 @@ const CenterProvider = ({ children, left, right }) => {
 	});
 	const [twittersWidth, setTwitterWidth] = useState({});
 	const twitterContainerWidth = Object.values?.(twittersWidth)?.reduce((a, b) => a + (b + 10), 0) || window.outerWidth * 0.12;
-	const leftWidth = left && (feedPreferences?.twitch?.sidebar_enabled ? 275 : 0);
-	const rightWidth = right && feedPreferences?.twitter?.enabled && twitterContainerWidth;
+	const leftWidth = (left && (feedPreferences?.twitch?.sidebar_enabled ? 275 : 0)) || 0;
+	const rightWidth = (right && feedPreferences?.twitter?.enabled && twitterContainerWidth) || 0;
 
 	const calcVideoElementsAmount = useCallback(
 		() => Math.floor((document.documentElement.clientWidth - (leftWidth + rightWidth + 50)) / feedVideoSizeProps.totalWidth) * 2,
@@ -27,6 +27,7 @@ const CenterProvider = ({ children, left, right }) => {
 
 	const reCalcWidthAndAmount = useCallback(() => {
 		const amountOfVideos = calcVideoElementsAmount();
+
 		setVideoDisplayData({
 			videoElementsAmount: amountOfVideos,
 			width: (amountOfVideos / 2) * feedVideoSizeProps.totalWidth + 5,
@@ -59,6 +60,7 @@ const CenterProvider = ({ children, left, right }) => {
 const Center = ({ children }) => {
 	const { width, twitterWidth, leftWidth, rightWidth } = useContext(CenterContext);
 	const feedPreferences = useFeedPreferences();
+	console.log("width:", width);
 
 	return (
 		<CenterContainer

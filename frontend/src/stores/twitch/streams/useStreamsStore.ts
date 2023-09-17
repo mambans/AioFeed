@@ -60,6 +60,7 @@ const useStreamsStore = create<StreamStore>((set, get) => ({
 			newlyAddedStreams,
 			canPushNoitifications: !!get().previousStreams,
 			loaded: true,
+			error: null,
 		});
 		return { livestreams: streams, previousStreams, newlyAddedStreams };
 	},
@@ -84,8 +85,7 @@ const useStreamsStore = create<StreamStore>((set, get) => ({
 				})
 			);
 
-			const { decoratedStreams, error } = await decorateStreams(streams || get().previousStreams, refreshMetadata);
-			set({ error });
+			const decoratedStreams = await decorateStreams(streams || get().previousStreams, refreshMetadata);
 
 			return get().updateStreams(decoratedStreams);
 		} catch (error) {
