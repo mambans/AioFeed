@@ -126,7 +126,7 @@ export const Twitch = ({ className }) => {
 					timers.current[noti.stream.user_id] = setTimeout(() => fetchChannelVods(noti.stream.user_id), 30000);
 				}
 
-				if (type === "update" && !favoriteStreams?.includes(noti.stream.user_id)) return;
+				if (type === "updated" && !favoriteStreams?.includes(noti.stream.user_id)) return;
 
 				addSystemNotification(noti);
 			});
