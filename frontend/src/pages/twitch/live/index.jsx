@@ -32,7 +32,8 @@ const REFRESH_RATE = 25; // seconds
 const TwitchFeed = ({ data, className }) => {
 	const feedPreferences = useFeedPreferences();
 	const togglePreference = useToggleFeedPreference();
-	const { twitch, feedSections } = feedPreferences || {};
+	const feedSections = useFeedSections();
+	const { twitch } = feedPreferences || {};
 
 	const nonFeedSectionLiveStreams = useStreamsStore((state) => {
 		const enabledFeedSections =
@@ -69,7 +70,7 @@ const TwitchFeed = ({ data, className }) => {
 			<CSSTransition in={twitch?.enabled && twitch?.sidebar_enabled} timeout={750} classNames="twitchSidebar" appear unmountOnExit>
 				<Sidebar data={data} />
 			</CSSTransition>
-			<CSSTransition in={feedSections?.enabled} timeout={750} classNames="fade-750ms" unmountOnExit appear>
+			<CSSTransition in={feedPreferences?.feedSections?.enabled} timeout={750} classNames="fade-750ms" unmountOnExit appear>
 				<Suspense
 					fallback={
 						<h1>
