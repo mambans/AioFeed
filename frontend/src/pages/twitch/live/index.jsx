@@ -122,7 +122,7 @@ export const Twitch = ({ className }) => {
 
 				if (type === "offline" || type === "live") {
 					// clearTimeout(timers.current[noti.stream.user_id]);
-					timers.current[noti.stream.user_id] = setTimeout(() => fetchChannelVods(noti.stream.user_id), 30000);
+					timers.current[noti.stream.user_id] = setTimeout(() => fetchChannelVods({ user_id: noti.stream.user_id, amount: 2 }), 30000);
 				}
 
 				if (type === "updated" && !favoriteStreams?.includes(noti.stream.user_id)) return;
