@@ -50,9 +50,10 @@ const Vods = ({ className }) => {
 
 	useEffect(() => {
 		console.log("vods index useEffect fetch vods:");
-		if (validateToken) {
-			refresh();
-		}
+		console.log("validateToken:", validateToken);
+		// if (validateToken) {
+		refresh();
+		// }
 	}, [validateToken, refresh]);
 
 	useEffect(() => {

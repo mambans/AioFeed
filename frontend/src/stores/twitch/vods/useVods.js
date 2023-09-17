@@ -106,6 +106,7 @@ const useVodsStore = create((set, get) => ({
 	},
 
 	fetch: async (forceRun) => {
+		console.log("useVods fetch:");
 		set({ loading: true });
 
 		const data = await getFollowedVods({
@@ -114,6 +115,7 @@ const useVodsStore = create((set, get) => ({
 			currentVods: get().vods,
 		});
 
+		console.log("useVods data:", data);
 		set({ loading: false, loaded: true, vods: data?.data, error: data?.er, vodError: data?.vodError });
 
 		if (data?.data) get().setVods(data?.data);
