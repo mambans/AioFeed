@@ -29,7 +29,6 @@ const FavoriteListContainer = ({ list, setLists, fetchMyListContextData, classNa
 	const togglePreference = useToggleFeedPreference();
 	const feedPreferences = useFeedPreferences();
 
-	console.log("p loading:", loading);
 	return (
 		<Container aria-labelledby={`MyList-${list.id}`} order={feedPreferences?.[list.id]?.order || 500} id={"MyListsHeader-" + list.id}>
 			<Header
