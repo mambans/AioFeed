@@ -3,7 +3,8 @@ import { Form } from "react-bootstrap";
 import styled from "styled-components";
 import useInput from "../../hooks/useInput";
 import ToolTip from "../../components/tooltip/ToolTip";
-import { MdDelete, MdAdd, MdStarBorder, MdStar } from "react-icons/md";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { MdDelete, MdAdd, MdStarBorder, MdStar, MdSave, MdCheck } from "react-icons/md";
 import { StyledListForm, StyledButton } from "../../components/styledComponents";
 import { CheckBox } from "../../components";
 import Colors from "../../components/themes/Colors";
@@ -115,11 +116,9 @@ const Rule = ({ rule, height, id, index }) => {
 	const { value: viewers, bind: bindViewers, reset: resetViewers } = useInput(rule?.viewers || "", { type: "number" });
 	const { value: tag, bind: bindTag, reset: resetTag } = useInput(rule?.tag || "");
 
-	const handleSubmit = (evt) => {
-		evt.preventDefault();
-
-		if (
-			Boolean(title || category || channel || viewers || tag) &&
+	const checkIfChanged = () => {
+		return (
+			Boolean(title || category || channel || viewers || tag || favorited) &&
 			Boolean(
 				title?.toLowerCase() !== rule?.title?.toLowerCase() ||
 					category?.toLowerCase() !== rule?.category?.toLowerCase() ||
@@ -128,7 +127,13 @@ const Rule = ({ rule, height, id, index }) => {
 					viewers !== rule?.viewers ||
 					favorited !== rule?.favorited
 			)
-		) {
+		);
+	};
+
+	const handleSubmit = (evt) => {
+		evt?.preventDefault?.();
+
+		if (checkIfChanged()) {
 			addFeedSectionRule(id, { title, category, channel, viewers, tag, id: rule?.id, favorited });
 			if (!rule?.id) {
 				resetTitle();
@@ -141,18 +146,9 @@ const Rule = ({ rule, height, id, index }) => {
 		}
 	};
 
-	const handleOnblur = (evt) => {
-		if (rule?.id) handleSubmit(evt);
-	};
-
 	const handleAdd = (e) => {
 		e?.preventDefault?.();
-		console.log("favorited:", favorited);
-		console.log(
-			"!rule?.id && Boolean(title || category || channel || viewers || tag || favorited):",
-			!rule?.id && Boolean(title || category || channel || viewers || tag || favorited)
-		);
-		console.log("rule?.id:", rule?.id);
+
 		if (!rule?.id && Boolean(title || category || channel || viewers || tag || favorited)) {
 			addFeedSectionRule(id, { title, category, channel, tag, viewers, favorited });
 			resetTitle();
@@ -185,7 +181,7 @@ const Rule = ({ rule, height, id, index }) => {
 								disabled: <MdStar size={22} color={Colors.yellow} />,
 							}}
 						/>
-						<Input type="text" placeholder="title.." name="title" {...bindTitle} onBlur={handleOnblur} />
+						<Input type="text" placeholder="title.." name="title" {...bindTitle} />
 						<GameSearchBar
 							style={{
 								minWidth: "200px",
@@ -213,9 +209,17 @@ const Rule = ({ rule, height, id, index }) => {
 								handleAdd();
 							}}
 						/>
-						<Input type="text" placeholder="tag.." name="tag" {...bindTag} onBlur={handleOnblur} />
-						<Input type="number" placeholder="viewers.." name="viewers" {...bindViewers} onBlur={handleOnblur} />
-						<ToolTip delay={{ show: 500, hide: 0 }} toltip={`${rule?.id ? `Remove list` : `Add new list`}`}>
+						<Input type="text" placeholder="tag.." name="tag" {...bindTag} />
+						<Input type="number" placeholder="viewers.." name="viewers" {...bindViewers} />
+						{checkIfChanged() && rule?.id && (
+							<ToolTip delay={{ show: 500, hide: 0 }} tooltip={"Save"}>
+								<StyledButton onClick={handleSubmit} type="button">
+									<MdCheck size={22} color={Colors.green} />
+								</StyledButton>
+							</ToolTip>
+						)}
+
+						<ToolTip delay={{ show: 500, hide: 0 }} tooltip={`${rule?.id ? `Remove list` : `Add new list`}`}>
 							{rule?.id ? (
 								<StyledButton onClick={handleRemove} type="button">
 									<MdDelete size={22} color={Colors.red} />

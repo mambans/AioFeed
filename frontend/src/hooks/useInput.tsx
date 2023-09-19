@@ -11,7 +11,7 @@ type ValueChangeEvent = string | number | ChangeEvent<HTMLInputElement> | null |
 
 const useInput = (
 	initialValue: any,
-	options: Options = { type: typeof initialValue || "string", trim: false },
+	options: Options | null = { type: typeof initialValue || "string", trim: false },
 	onChange?: (value: ValueChangeEvent) => void
 ) => {
 	const [value, setValue] = useState<any>(initialValue);
@@ -55,12 +55,9 @@ const useInput = (
 
 				onChange?.(val);
 
-				console.log("options?.type:", options?.type);
 				const v = options?.type === "number" ? parseInt((val as string).replace(/ +(?= )/g, "")) : (val as string)?.replace?.(/ +(?= )/g, "");
 
-				setValue(options.trim && typeof v !== "number" ? v.trim() : v);
-				console.log("val:", val);
-				console.log("!!val:", !!val);
+				setValue(options?.trim && typeof v !== "number" ? v.trim() : v);
 				setChecked(!!val);
 			},
 		},

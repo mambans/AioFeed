@@ -5,9 +5,9 @@ type StreamTypeWithKeys = StreamType & {
 	keys: string[];
 };
 
-const createKeys = (streams: any[], enabledFeedSections: FeedSectionType[]): StreamType[] => {
+const createKeys = (streams: any[], enabledFeedSections: FeedSectionType[], favoriteStreams): StreamType[] => {
 	return streams.reduce((acc, stream: any) => {
-		const feedSections = enabledFeedSections?.filter?.(({ rules } = {} as any) => checkAgainstRules(stream, rules));
+		const feedSections = enabledFeedSections?.filter?.(({ rules } = {} as any) => checkAgainstRules(stream, rules, favoriteStreams));
 		const feedSectionKeys = feedSections?.map((section) => `${stream.id}_${section.id}`) || [];
 
 		const mainKey = `${stream.id}_${stream.title}_${stream.game_id}`;
@@ -33,8 +33,8 @@ const getStreamNotifications = ({
 	const enabledFeedSections =
 		feedSections && Object.values?.(feedSections)?.filter((f: FeedSectionType | any) => f.enabled && f.notifications_enabled);
 
-	const streams = createKeys(currentStreams || [], enabledFeedSections) as StreamTypeWithKeys[];
-	const previousStreams = createKeys(previousLiveStreams || [], enabledFeedSections) as StreamTypeWithKeys[];
+	const streams = createKeys(currentStreams || [], enabledFeedSections, favoriteStreams) as StreamTypeWithKeys[];
+	const previousStreams = createKeys(previousLiveStreams || [], enabledFeedSections, favoriteStreams) as StreamTypeWithKeys[];
 
 	const streamsWithPreviouosStream = streams.map((stream: StreamTypeWithKeys) => ({
 		...stream,
@@ -50,7 +50,9 @@ const getStreamNotifications = ({
 		.filter((stream) => !stream.previousStream || stream.previousStream.keys?.some?.((key) => !stream.keys?.includes?.(key)))
 		.flatMap((stream) => {
 			const previousStream = stream.previousStream;
-			const feedSections = enabledFeedSections?.filter?.((feedSection: FeedSectionType) => checkAgainstRules(stream, feedSection.rules));
+			const feedSections = enabledFeedSections?.filter?.((feedSection: FeedSectionType) =>
+				checkAgainstRules(stream, feedSection.rules, favoriteStreams)
+			);
 
 			const baseNotis = {
 				title: `${loginNameFormat(stream)} went Live`,

@@ -16,6 +16,7 @@ const Sidebar = ({ data }) => {
 	const { loaded } = data;
 	const feedSections = useFeedSections();
 	const feedPreferences = useFeedPreferences();
+	const { favStreams: favoriteStreams } = useContext(TwitchContext);
 
 	const liveStreams = useStreamsStore((state) => state.livestreams);
 
@@ -25,7 +26,7 @@ const Sidebar = ({ data }) => {
 			feedSections &&
 			Object.values?.(feedSections)?.filter((f = {}) => f.enabled && f.excludeFromTwitch_enabled);
 
-		return !enabledFeedSections?.some?.(({ rules } = {}) => checkAgainstRules(stream, rules));
+		return !enabledFeedSections?.some?.(({ rules } = {}) => checkAgainstRules(stream, rules, favoriteStreams));
 	});
 
 	if (loaded) {
@@ -37,7 +38,7 @@ const Sidebar = ({ data }) => {
 					feedSections &&
 					Object.values(feedSections)
 						.reduce((acc, feedsection) => {
-							const streams = liveStreams.filter((stream) => checkAgainstRules(stream, feedsection.rules));
+							const streams = liveStreams.filter((stream) => checkAgainstRules(stream, feedsection.rules, favoriteStreams));
 							if (!feedsection.enabled || !feedsection.sidebar_enabled) return acc;
 							return [...acc, { ...feedsection, items: streams }];
 						}, [])

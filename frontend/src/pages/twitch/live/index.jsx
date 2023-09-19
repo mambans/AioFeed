@@ -34,6 +34,7 @@ const TwitchFeed = ({ data, className }) => {
 	const togglePreference = useToggleFeedPreference();
 	const feedSections = useFeedSections();
 	const { twitch } = feedPreferences || {};
+	const { favStreams: favoriteStreams } = useContext(TwitchContext);
 
 	const nonFeedSectionLiveStreams = useStreamsStore((state) => {
 		const enabledFeedSections =
@@ -41,7 +42,7 @@ const TwitchFeed = ({ data, className }) => {
 			feedSections &&
 			Object.values?.(feedSections)?.filter((f = {}) => f.enabled && f.excludeFromTwitch_enabled);
 
-		return state.livestreams?.filter((stream) => !enabledFeedSections?.some?.(({ rules } = {}) => checkAgainstRules(stream, rules)));
+		return state.livestreams?.filter((stream) => !enabledFeedSections?.some?.(({ rules } = {}) => checkAgainstRules(stream, rules, favoriteStreams)));
 	});
 
 	const refreshBtnRef = useRef();

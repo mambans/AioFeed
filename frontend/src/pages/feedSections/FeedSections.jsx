@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import Header, { HeaderNumberCount } from "../../components/Header";
 import { Container } from "../twitch/StyledComponents";
@@ -12,6 +12,7 @@ import useStreamsStore from "../../stores/twitch/streams/useStreamsStore";
 import { checkAgainstRules } from "./utilities";
 import { useFeedSections } from "../../stores/twitch/feedSections";
 import { useToggleFeedPreference, useFeedPreferences } from "../../stores/feedPreference";
+import { TwitchContext } from "../twitch/useToken";
 
 const FeedSections = ({ data }) => {
 	const feedSections = useFeedSections();
@@ -36,10 +37,14 @@ const Section = ({ section, data, index }) => {
 	const { title, id } = section;
 	const togglePreference = useToggleFeedPreference();
 	const feedPreferences = useFeedPreferences();
+	const { favStreams: favoriteStreams } = useContext(TwitchContext);
 
 	const baseStreams = useStreamsStore((state) => state.livestreams);
 
-	const feedSectionStreams = useMemo(() => baseStreams?.filter((stream) => checkAgainstRules(stream, section.rules)), [baseStreams, section.rules]);
+	const feedSectionStreams = useMemo(
+		() => baseStreams?.filter((stream) => checkAgainstRules(stream, section.rules, favoriteStreams)),
+		[baseStreams, section.rules, favoriteStreams]
+	);
 
 	if (!feedSectionStreams?.length) return null;
 
