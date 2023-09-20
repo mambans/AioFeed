@@ -18,8 +18,7 @@ const checkAgainstRules = (stream: StreamType, rules: any[], favorites: any[] = 
 
 			const viewer_count = stream.viewer_count >= r.viewers || stream.view_count >= r.viewers;
 
-			// console.log(' favorites?.includes?.(stream.user_id):',  favorites?.includes?.(stream.user_id))
-			const favorite = !r.favorited || favorites?.includes?.(stream.user_id);
+			const favorite = !r.favorited || favorites?.some?.((user_id) => String(user_id) === String(stream.user_id));
 
 			// return title && (game || !stream.game_name) && name && tags && viewer_count;
 			// If !stream.game_name = true but nothing else mathces, than it will falsly add stream to feed.
