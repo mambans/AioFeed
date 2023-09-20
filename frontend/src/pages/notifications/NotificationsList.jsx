@@ -16,25 +16,27 @@ const NotificationsList = () => {
 	return (
 		<NotificationListContainer>
 			<ul>
-				{notifications?.map(({ icon, body, title, date, onClick }, index) => {
-					return (
-						<NotificationItem
-							key={String(index)}
-							onClick={onClick}
-							// title={title.replace(user_name, `<b>${user_name}</b>`)}
-							title={title}
-							text={
-								body?.split("\n").map((line) => (
-									<p className="UpdateText" key={line}>
-										{line}
-									</p>
-								)) || title
-							}
-							icon={React.isValidElement(icon) ? icon : <img style={{ borderRadius: "50%" }} src={icon} alt=""></img>}
-							date={date}
-						/>
-					);
-				})}
+				{notifications
+					?.sort((a, b) => new Date(b.date) - new Date(a.date))
+					?.map(({ icon, body, title, date, onClick }, index) => {
+						return (
+							<NotificationItem
+								key={String(index)}
+								onClick={onClick}
+								// title={title.replace(user_name, `<b>${user_name}</b>`)}
+								title={title}
+								text={
+									body?.split("\n").map((line) => (
+										<p className="UpdateText" key={line}>
+											{line}
+										</p>
+									)) || title
+								}
+								icon={React.isValidElement(icon) ? icon : <img style={{ borderRadius: "50%" }} src={icon} alt=""></img>}
+								date={date}
+							/>
+						);
+					})}
 				<ClearAllNotifications onClick={clearNotifications} nr={notifications?.length || 0} disabled={!notifications?.length} />
 			</ul>
 		</NotificationListContainer>
