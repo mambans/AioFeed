@@ -14,6 +14,8 @@ const useNotificationsStore = create<UseNotificationsStore>((set, get) => ({
 	notifications: getLocalstorage("notifications") || [],
 
 	addNotifications: (notifications: StreamNotificationType[]) => {
+		const previouosNotifications = getLocalstorage("notifications") || [];
+
 		notifications.forEach((stream) => {
 			addSystemNotification(stream);
 		});
@@ -24,7 +26,7 @@ const useNotificationsStore = create<UseNotificationsStore>((set, get) => ({
 			key: (notification.stream?.id || "") + Date.now() + notification.type,
 		}));
 
-		const newNotifications = [...notificationsWithKeys, ...get().notifications];
+		const newNotifications = [...notificationsWithKeys, ...previouosNotifications];
 
 		setLocalStorage("notifications", newNotifications);
 
