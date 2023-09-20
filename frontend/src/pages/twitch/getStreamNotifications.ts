@@ -59,7 +59,7 @@ const getStreamNotifications = ({
 				icon: stream?.profile_image_url,
 				body: `${stream.title || ""}\n${stream.game_name || stream.game || ""}`,
 				onClick: () => {
-					window.open("https://aiofeed.com/" + loginNameFormat(stream, true), loginNameFormat(stream, true));
+					window.open("https://aiofeed.com/" + loginNameFormat(stream, true), "_blank");
 				},
 				stream,
 				type: "live",
@@ -135,7 +135,7 @@ const getStreamNotifications = ({
 				icon: stream?.profile_image_url,
 				body: `${stream.title || ""}\n${stream.game_name || stream.game || ""}`,
 				onClick: () => {
-					window.open(`https://aiofeed.com/${loginNameFormat(stream, true)}/page`, loginNameFormat(stream, true));
+					window.open(`https://aiofeed.com/${loginNameFormat(stream, true)}/page`, "_blank");
 				},
 				stream,
 				type: "offline",
