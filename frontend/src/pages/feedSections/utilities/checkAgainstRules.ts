@@ -2,8 +2,9 @@ import { loginNameFormat } from "../../../utilities";
 
 const checkAgainstRules = (stream: StreamType, rules: any[], favorites: any[] = []) => {
 	if (!rules) return stream;
-	return rules?.some(
-		(r: { title: string; category: string; channel: string; tag: string; viewers: number; favorited?: boolean | null | undefined }) => {
+	return rules
+		?.filter((r) => r.enabled)
+		?.some((r: { title: string; category: string; channel: string; tag: string; viewers: number; favorited?: boolean | null | undefined }) => {
 			const title = (!stream.title && !r.title) || stream.title?.toLowerCase().includes(r.title?.toLowerCase()?.trim());
 			//game is not included in vods, so cant filter vods based on game
 			//but if i have !stream.game_name, then rules with only a game will return true
@@ -24,8 +25,7 @@ const checkAgainstRules = (stream: StreamType, rules: any[], favorites: any[] = 
 			// If !stream.game_name = true but nothing else mathces, than it will falsly add stream to feed.
 			// For examepl, Yuggie does not match ASMR feed section rules, and but since she have no game specified it will return true and she will be added to the ASMR feed
 			return title && game && name && tags && viewer_count && favorite;
-		}
-	);
+		});
 };
 
 export default checkAgainstRules;

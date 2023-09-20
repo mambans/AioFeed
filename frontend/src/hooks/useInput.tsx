@@ -23,9 +23,9 @@ const useInput = (
 		setValue,
 		checked,
 		setChecked,
-		reset: () => {
-			setValue(options?.type === "number" ? 0 : "");
-			setChecked(false);
+		reset: (value = null) => {
+			setValue(value || (options?.type === "number" ? 0 : ""));
+			setChecked(value || false);
 		},
 		manualSet: {
 			onClick: (event: any) => {

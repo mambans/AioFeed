@@ -104,6 +104,7 @@ const Rule = ({ rule, height, id, index }) => {
 	const addFeedSectionRule = useFeedSectionsAddFeedSectionRule();
 	const deleteFeedSectionRule = useFeedSectionsDeleteFeedSectionRule();
 
+	const { checked: enabled, bind: bindEnabled, reset: resetEnabled } = useInput(!!rule?.enabled);
 	const { checked: favorited, bind: bindFavorited, reset: resetFavorited } = useInput(!!rule?.favorited);
 	const { value: title, bind: bindTitle, reset: resetTitle } = useInput(rule?.title || "");
 	const { value: category, bind: bindCategory, reset: resetCategory } = useInput(rule?.category || "");
@@ -118,14 +119,15 @@ const Rule = ({ rule, height, id, index }) => {
 
 	const checkIfChanged = () => {
 		return (
-			Boolean(title || category || channel || viewers || tag || favorited) &&
+			Boolean(title || category || channel || viewers || tag || favorited || enabled) &&
 			Boolean(
 				title?.toLowerCase() !== rule?.title?.toLowerCase() ||
 					category?.toLowerCase() !== rule?.category?.toLowerCase() ||
 					channel?.toLowerCase() !== rule?.channel?.toLowerCase() ||
 					tag?.toLowerCase() !== rule?.tag?.toLowerCase() ||
 					viewers !== rule?.viewers ||
-					favorited !== rule?.favorited
+					favorited !== !!rule?.favorited ||
+					enabled !== !!rule?.enabled
 			)
 		);
 	};
@@ -134,11 +136,12 @@ const Rule = ({ rule, height, id, index }) => {
 		evt?.preventDefault?.();
 
 		if (checkIfChanged()) {
-			addFeedSectionRule(id, { title, category, channel, viewers, tag, id: rule?.id, favorited });
+			addFeedSectionRule(id, { title, category, channel, viewers, tag, id: rule?.id, favorited, enabled });
 			if (!rule?.id) {
 				resetTitle();
 				resetCategory();
 				resetFavorited();
+				resetEnabled();
 				resetChannel();
 				resetViewers();
 				resetTag();
@@ -149,8 +152,8 @@ const Rule = ({ rule, height, id, index }) => {
 	const handleAdd = (e) => {
 		e?.preventDefault?.();
 
-		if (!rule?.id && Boolean(title || category || channel || viewers || tag || favorited)) {
-			addFeedSectionRule(id, { title, category, channel, tag, viewers, favorited });
+		if (!rule?.id && Boolean(title || category || channel || viewers || tag || favorited || enabled)) {
+			addFeedSectionRule(id, { title, category, channel, tag, viewers, favorited, enabled });
 			resetTitle();
 			resetCategory();
 			resetFavorited();
@@ -174,12 +177,15 @@ const Rule = ({ rule, height, id, index }) => {
 					<InputsContainer>
 						{/* <InputGroup className='mb-3'> */}
 
+						<CheckBox {...bindEnabled} style={{ marginRight: "1rem" }} tooltip="Enabled/Disabled this rule" />
+
 						<CheckBox
 							{...bindFavorited}
 							icons={{
-								enabled: <MdStarBorder size={22} color={Colors.yellow} />,
-								disabled: <MdStar size={22} color={Colors.yellow} />,
+								checked: <MdStar size={22} color={Colors.yellow} />,
+								unchecked: <MdStarBorder size={22} color={Colors.yellow} />,
 							}}
+							tooltip="Stream must be favorited"
 						/>
 						<Input type="text" placeholder="title.." name="title" {...bindTitle} />
 						<GameSearchBar

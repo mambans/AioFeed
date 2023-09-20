@@ -8,6 +8,8 @@ const wave = keyframes`
 `;
 
 export const CheckBoxContainer = styled.div`
+	cursor: pointer;
+
 	input[type="checkbox"] {
 		display: none;
 		visibility: hidden;
