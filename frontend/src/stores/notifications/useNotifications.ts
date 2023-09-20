@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import addSystemNotification from "../../pages/twitch/live/addSystemNotification";
 import { getLocalstorage, setLocalStorage } from "../../utilities";
+import moment from "moment";
 
 type UseNotificationsStore = {
 	notifications: StreamNotificationType[];
@@ -19,32 +20,32 @@ const useNotificationsStore = create<UseNotificationsStore>((set, get) => ({
 
 		const notificationsWithKeys = notifications.map((notification: StreamNotificationType) => ({
 			...notification,
-			date: notification.date || new Date(),
+			date: notification.date || moment().format("YYYY-MM-DD HH:mm:ss"),
 			key: (notification.stream?.id || "") + Date.now() + notification.type,
 		}));
 
-		setLocalStorage("notifications", notificationsWithKeys);
+		const newNotifications = [...get().notifications, ...notificationsWithKeys];
 
-		set((state: any) => ({
-			notifications: [...state.notifications, ...notificationsWithKeys],
-		}));
+		setLocalStorage("notifications", newNotifications);
+
+		set({
+			notifications: newNotifications,
+		});
 	},
 
 	markAllAsRead: () => {
-		set((state: any) => ({
-			notifications: state.notifications.map((notification: any) => ({
+		set({
+			notifications: get().notifications.map((notification: any) => ({
 				...notification,
 				unread: false,
 			})),
-		}));
+		});
 	},
 
 	clearNotifications: () => {
 		setLocalStorage("notifications", []);
 
-		set((state: any) => ({
-			notifications: [],
-		}));
+		set({ notifications: [] });
 	},
 }));
 
