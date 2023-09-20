@@ -50,6 +50,22 @@ const VodElement = React.memo(
 		};
 
 		const name = login || user_login || user_name;
+		const imageUrl = (() => {
+			if (error) return `${process.env.PUBLIC_URL}/images/twitch-not-found.png`;
+
+			if (thumbnail_url === "") return `${process.env.PUBLIC_URL}/images/twitch-live.jpg`;
+
+			if (thumbnail_url === "https://vod-secure.twitch.tv/_404/404_processing_%{width}x%{height}.png")
+				return "https://vod-secure.twitch.tv/_404/404_processing_320x180.png";
+
+			if (thumbnail_url) {
+				return (
+					thumbnail_url?.replace("%{width}", size === "small" ? 339 : 858)?.replace("%{height}", size === "small" ? 192 : 480) ||
+					"https://vod-secure.twitch.tv/_404/404_processing_320x180.png"
+				);
+			}
+		})();
+
 		return (
 			<VideoContainer draggable={Boolean(setDragSelected)} onDragStart={onDragStart} {...props}>
 				<ImageContainer ref={imgRef} active={active}>
@@ -69,17 +85,7 @@ const VodElement = React.memo(
 						}}
 						className="imgLink"
 					>
-						<img
-							src={
-								error
-									? `${process.env.PUBLIC_URL}/images/twitch-not-found.png`
-									: thumbnail_url === ""
-									? `${process.env.PUBLIC_URL}/images/twitch-live.jpg`
-									: thumbnail_url?.replace("%{width}", size === "small" ? 339 : 858)?.replace("%{height}", size === "small" ? 192 : 480) ||
-									  "https://vod-secure.twitch.tv/_404/404_processing_320x180.png"
-							}
-							alt=""
-						/>
+						{imageUrl && <img src={imageUrl} alt="" />}
 					</Link>
 
 					<ImgBottomInfo>
