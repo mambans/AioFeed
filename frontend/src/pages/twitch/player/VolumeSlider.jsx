@@ -10,9 +10,7 @@ const VolumeSlider = ({ TwitchPlayer, OpenedDate, PlayerUIControlls, setShowCont
 
 	useEventListenerMemo("keydown", keyboardEvents, document.querySelector("#MainContentContainer"), window?.Twitch?.Player?.READY);
 	useEventListenerMemo("wheel", scrollChangeVolumeEvent, PlayerUIControlls, window?.Twitch?.Player?.READY, { passive: true });
-	useEventListenerMemo("mousedown", mouseEvents, PlayerUIControlls, window?.Twitch?.Player?.READY, {
-		passive: true,
-	});
+	useEventListenerMemo("mousedown", mouseEvents, PlayerUIControlls, window?.Twitch?.Player?.READY);
 	useEventListenerMemo(window?.Twitch?.Player?.PLAYING, OnPlayingEventListeners, TwitchPlayer, TwitchPlayer);
 
 	const volumeIcon = () => {
