@@ -59,6 +59,7 @@ const VolumeSlider = ({ TwitchPlayer, OpenedDate, PlayerUIControlls, setShowCont
 	function mouseEvents(e) {
 		switch (e.button) {
 			case 1:
+				e.preventDefault();
 				TwitchPlayer.setMuted(!TwitchPlayer.getMuted());
 				setVolumeMuted(!TwitchPlayer.getMuted());
 				break;
