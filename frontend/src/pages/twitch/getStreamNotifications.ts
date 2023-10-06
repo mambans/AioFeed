@@ -6,11 +6,11 @@ type StreamTypeWithKeys = StreamType & {
 };
 
 const createKeys = (streams: any[], enabledFeedSections: FeedSectionType[], favoriteStreams): StreamType[] => {
-	return streams.reduce((acc, stream: any) => {
+	return streams.reduce((acc, stream: StreamType) => {
 		const feedSections = enabledFeedSections?.filter?.(({ rules } = {} as any) => checkAgainstRules(stream, rules, favoriteStreams));
-		const feedSectionKeys = feedSections?.map((section) => `${stream.id}_${section.id}`) || [];
+		const feedSectionKeys = feedSections?.map((section) => `${stream.user_id}_${section.id}`) || [];
 
-		const mainKey = `${stream.id}_${stream.title}_${stream.game_id}`;
+		const mainKey = `${stream.user_id}_${stream.title}_${stream.game_id}`;
 
 		const keys = [mainKey, ...feedSectionKeys];
 
