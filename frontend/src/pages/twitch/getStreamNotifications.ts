@@ -38,12 +38,12 @@ const getStreamNotifications = ({
 
 	const streamsWithPreviouosStream = streams.map((stream: StreamTypeWithKeys) => ({
 		...stream,
-		previousStream: previousStreams?.find?.(({ id }) => id === stream.id),
+		previousStream: previousStreams?.find?.(({ user_id }) => user_id === stream.user_id),
 	}));
 
 	const previouosStreamsWithCurrentStream = previousStreams.map((stream: StreamTypeWithKeys) => ({
 		...stream,
-		currentStream: streams?.find?.(({ id }) => id === stream.id),
+		currentStream: streams?.find?.(({ user_id }) => user_id === stream.user_id),
 	}));
 
 	const liveAndUpdatedNotifications = streamsWithPreviouosStream
