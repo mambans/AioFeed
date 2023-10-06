@@ -49,7 +49,7 @@ const useStreamsStore = create<StreamStore>((set, get) => ({
 
 			if (previousStream) {
 				livestreams.push(stream);
-			} else {
+			} else if (!!get().previousStreams) {
 				newlyAddedStreams.push(stream);
 			}
 		});
