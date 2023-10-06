@@ -168,20 +168,19 @@ export const Twitch = ({ className }) => {
 	useEffect(() => {
 		console.log(".useEffect.");
 		if (!timer.current) {
-			fetch(twitchUserId, true).then(() => {
-				if (resetNewlyAddedStreams.current) setNewlyAddedStreams([]);
-				resetNewlyAddedStreams.current = false;
-			});
+			if (resetNewlyAddedStreams.current) setNewlyAddedStreams([]);
+			resetNewlyAddedStreams.current = false;
+
+			fetch(twitchUserId, true);
 
 			if (autoRefreshEnabled) {
 				setNextRefresh(moment().add(REFRESH_RATE, "seconds"));
 
 				timer.current = setInterval(() => {
 					setNextRefresh(moment().add(REFRESH_RATE, "seconds"));
-					fetch(twitchUserId).then(() => {
-						if (resetNewlyAddedStreams.current) setNewlyAddedStreams([]);
-						resetNewlyAddedStreams.current = false;
-					});
+					if (resetNewlyAddedStreams.current) setNewlyAddedStreams([]);
+					resetNewlyAddedStreams.current = false;
+					fetch(twitchUserId);
 				}, REFRESH_RATE * 1000);
 			}
 		}
