@@ -628,24 +628,22 @@ const heartBeatAnimation = keyframes`
 `;
 
 export const StyledNewlyAddedIndicatorPulseRings = styled.div`
-  animation: ${heartBeatAnimation} 1s ease-out;
-  animation-iteration-count: infinite;
-/
-
-  z-index: 10;
-  border: 10px solid ${Colors.red};
-  border-radius: 0.35em;
-  height: calc(100% + 30px);
-  width: calc(100% + 30px);
-  position: absolute;
-  padding: 15px;
+	animation: ${heartBeatAnimation} 1s ease-out;
+	animation-iteration-count: infinite;
+	z-index: 10;
+	border: 10px solid ${Colors.red};
+	border-radius: 0.35em;
+	height: calc(100% + 30px);
+	width: calc(100% + 30px);
+	position: absolute;
+	padding: 15px;
 `;
 
 export const StyledNewlyAddedIndicator = styled.div`
 	color: rgb(255, 255, 255);
 	padding: 0.15rem 0.3rem;
 	font-weight: 700;
-	font-size: 1.1em;
+	font-size: 1em;
 	background: ${Colors.rgba(Colors.red, 0.9)};
 	border-radius: 0.25em;
 `;
@@ -653,6 +651,11 @@ export const StyledNewlyAddedIndicatorWrapper = styled.div`
 	position: absolute;
 	top: 5px;
 	left: 5px;
+	pointer-events: none;
+
+	* {
+		pointer-events: none;
+	}
 `;
 
 export const RelativeContainer = styled.div`

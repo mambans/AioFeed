@@ -33,8 +33,8 @@ import FavoriteStreamBtn from "./FavoriteStreamBtn";
 import Schedule from "../schedule";
 import useStreamsStore from "../../../stores/twitch/streams/useStreamsStore";
 
-function NewHighlightNoti({ login, user_login }) {
-	//TODO: Refactor this to display streams that i have not seen yet since last visit (not just since last fetch)
+function NewHighlightNoti({ stream }) {
+	const { login, user_login } = stream;
 	const newBaseLiveStreams = useStreamsStore((state) => state.newlyAddedStreams);
 
 	if (newBaseLiveStreams?.includes((login || user_login)?.toLowerCase())) {
@@ -76,7 +76,7 @@ const StreamElement = React.memo(({ data = {}, refresh, size }) => {
 	return (
 		<VideoContainer key={user_id} ref={videoContainerRef}>
 			<ImageContainer id={user_id} ref={ref} style={{ marginTop: "5px" }}>
-				<NewHighlightNoti login={login} user_login={user_login} />
+				<NewHighlightNoti stream={streamData} />
 				<Link
 					className="imgLink"
 					target={(location?.pathname === "/feed" && "_blank") || null}

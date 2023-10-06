@@ -96,7 +96,7 @@ export const Twitch = ({ className }) => {
 		favStreams: favoriteStreams,
 	} = useContext(TwitchContext);
 	const [nextRefresh, setNextRefresh] = useState(0);
-	const { fetch, loading, error, livestreams, previousStreams, canPushNoitifications, loaded } = useStreamsStore();
+	const { fetch, loading, error, livestreams, previousStreams, canPushNoitifications, loaded, setNewlyAddedStreams } = useStreamsStore();
 	const fetchChannelVods = useVodsFetchChannelVods();
 
 	const vodChannels = useVodsChannels();
@@ -104,6 +104,7 @@ export const Twitch = ({ className }) => {
 	const timers = useRef({});
 	const timer = useRef();
 	const addNotifications = useAddNotifications();
+	const resetNewlyAddedStreams = useRef(false);
 
 	useEffect(() => {
 		if (canPushNoitifications) {
@@ -153,15 +154,34 @@ export const Twitch = ({ className }) => {
 	}, []);
 
 	useEffect(() => {
+		const onFocus = () => {
+			resetNewlyAddedStreams.current = true;
+		};
+
+		window.addEventListener("focus", onFocus);
+
+		return () => {
+			window.removeEventListener("focus", onFocus);
+		};
+	}, []);
+
+	useEffect(() => {
+		console.log(".useEffect.");
 		if (!timer.current) {
-			fetch(twitchUserId, true);
+			fetch(twitchUserId, true).then(() => {
+				if (resetNewlyAddedStreams.current) setNewlyAddedStreams([]);
+				resetNewlyAddedStreams.current = false;
+			});
 
 			if (autoRefreshEnabled) {
 				setNextRefresh(moment().add(REFRESH_RATE, "seconds"));
 
 				timer.current = setInterval(() => {
 					setNextRefresh(moment().add(REFRESH_RATE, "seconds"));
-					fetch(twitchUserId);
+					fetch(twitchUserId).then(() => {
+						if (resetNewlyAddedStreams.current) setNewlyAddedStreams([]);
+						resetNewlyAddedStreams.current = false;
+					});
 				}, REFRESH_RATE * 1000);
 			}
 		}
@@ -178,7 +198,7 @@ export const Twitch = ({ className }) => {
 			clearInterval(timer.current);
 			timer.current = null;
 		};
-	}, [fetch, twitchUserId, autoRefreshEnabled]);
+	}, [fetch, twitchUserId, autoRefreshEnabled, setNewlyAddedStreams]);
 
 	if (!twitchAccessToken) {
 		return <Alert title="Not authenticated/connected with Twitch." message="No access token for Twitch available." fill />;
