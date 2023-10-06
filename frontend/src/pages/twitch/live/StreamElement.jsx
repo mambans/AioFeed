@@ -34,10 +34,9 @@ import Schedule from "../schedule";
 import useStreamsStore from "../../../stores/twitch/streams/useStreamsStore";
 
 function NewHighlightNoti({ stream }) {
-	const { login, user_login } = stream;
 	const newBaseLiveStreams = useStreamsStore((state) => state.newlyAddedStreams);
 
-	if (newBaseLiveStreams?.includes((login || user_login)?.toLowerCase())) {
+	if (newBaseLiveStreams?.some?.((s) => s.id === stream.id)) {
 		return (
 			<StyledNewlyAddedIndicatorWrapper>
 				<RelativeContainer>
@@ -52,7 +51,7 @@ function NewHighlightNoti({ stream }) {
 
 const StreamElement = React.memo(({ data = {}, refresh, size }) => {
 	const location = useLocation();
-	const { user_id, user_name, user_login, started_at, title, game_name, thumbnail_url, profile_image_url, login, game_img, viewer_count } = data;
+	const { id, user_id, user_name, user_login, started_at, title, game_name, thumbnail_url, profile_image_url, login, game_img, viewer_count } = data;
 
 	const ref = useRef();
 	const refChannel = useRef();
@@ -62,6 +61,7 @@ const StreamElement = React.memo(({ data = {}, refresh, size }) => {
 		`${process.env.PUBLIC_URL}/images/webp/placeholder.png`;
 
 	const streamData = {
+		id,
 		started_at,
 		title,
 		profile_image_url,
