@@ -216,12 +216,7 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 
 				//replace these context or atoms?? but then the whole searchbar will rerender when adding vod channels
 
-				setFollowedChannels(
-					decoratedStreams?.map((i) => ({
-						...i,
-						following: true,
-					}))
-				);
+				setFollowedChannels(decoratedStreams);
 				const vodChannelIds = await API.getVodChannels();
 				const vodChannels = (
 					await Promise.allSettled(
@@ -258,7 +253,9 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 	};
 
 	const items = useMemo(() => {
-		return getUniqueListBy([...(followedChannels || []), ...(vodChannels || []), ...(result || [])], "id")
+		console.log("followedChannels:", followedChannels);
+
+		return getUniqueListBy([...(followedChannels?.map((i) => ({ ...i, following: true })) || []), ...(vodChannels || []), ...(result || [])], "id")
 			?.filter(
 				(i) => !inputRef.current.value?.trimStart?.() || loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current.value?.trim?.()?.toLowerCase())
 			)

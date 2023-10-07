@@ -142,7 +142,7 @@ export const getUniqueListBy = (arr: any[], key: string) => {
 			if (!uniqueMap.has(keyValue)) {
 				uniqueMap.set(keyValue, { ...item });
 			} else {
-				uniqueMap.set(keyValue, { ...uniqueMap.get(keyValue), ...item });
+				uniqueMap.set(keyValue, { ...item, ...uniqueMap.get(keyValue) });
 			}
 		}
 	});
