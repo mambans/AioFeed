@@ -104,7 +104,7 @@ const Footer = () => {
 						</StyledButtonLinks>
 					</li>
 					<li>
-						<StyledButtonLinks onClick={() => window.open("mailto:perssons1996@gmail.com?subject=subject&body=body")}>
+						<StyledButtonLinks onClick={() => window.open("mailto:support@aiofeed.com?subject=subject&body=body")}>
 							<MdEmail size={20} style={{ marginRight: "0.75rem" }} />
 							Email
 						</StyledButtonLinks>
