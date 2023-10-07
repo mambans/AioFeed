@@ -198,6 +198,7 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 			setTimeout(async () => {
 				//replace these context or atoms?? but then the whole searchbar will rerender when adding vod channels
 				const channels = await pagination(await TwitchAPI.getMyFollowedChannels({ first: 100 }));
+				console.log("channels:", channels);
 
 				const channelsWithProfiles = await addVideoExtraData({
 					items: {
@@ -206,6 +207,7 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 					fetchGameInfo: false,
 					fetchProfiles: true,
 				});
+				console.log("channelsWithProfiles:", channelsWithProfiles);
 
 				setFollowedChannels(
 					channelsWithProfiles?.data?.map((i) => ({
@@ -281,9 +283,9 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 			],
 			"id"
 		);
-		/* eslint-disable  */
 	}, [followedChannels, result, vodChannels]);
-	/* eslint-enable  */
+
+	console.log("items:", items);
 
 	const onChange = (e) => {
 		setTimeout(() => {
