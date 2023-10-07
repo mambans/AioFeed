@@ -194,48 +194,52 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 		// setShowDropdown(true);
 		// setLoading(true);
 
-		setTimeout(async () => {
-			//replace these context or atoms?? but then the whole searchbar will rerender when adding vod channels
-			const channels = await pagination(await TwitchAPI.getMyFollowedChannels({ first: 100 }));
+		try {
+			setTimeout(async () => {
+				//replace these context or atoms?? but then the whole searchbar will rerender when adding vod channels
+				const channels = await pagination(await TwitchAPI.getMyFollowedChannels({ first: 100 }));
 
-			const channelsWithProfiles = await addVideoExtraData({
-				items: {
-					data: channels?.map((i) => ({ ...i, user_id: i.to_id, login: i.to_login || i.to_name })),
-				},
-				fetchGameInfo: false,
-				fetchProfiles: true,
-			});
-
-			setFollowedChannels(
-				channelsWithProfiles?.data?.map((i) => ({
-					...i,
-					login: loginNameFormat(i, true),
-					id: i.to_id,
-					user_id: i.to_id,
-					following: true,
-				}))
-			);
-			const vodChannelIds = await API.getVodChannels();
-			const vodChannels = (
-				await Promise.allSettled(
-					chunk(vodChannelIds, 100).map(async (ids) => {
-						const response = await TwitchAPI.getUser({ id: ids, first: 100 });
-						return response?.data?.data;
-					})
-				)
-			).flatMap((promise) => promise.value || []);
-
-			const vodUsers = vodChannels
-				.filter((u) => u)
-				.map((user) => {
-					return { ...user, user_id: user.id };
+				const channelsWithProfiles = await addVideoExtraData({
+					items: {
+						data: channels?.map((i) => ({ ...i, user_id: i.to_id, login: i.to_login || i.to_name })),
+					},
+					fetchGameInfo: false,
+					fetchProfiles: true,
 				});
-			setVodChannels(vodUsers);
 
-			if (e.target.value?.trimStart?.()) handleSearch(e, e.target.value?.trimStart?.());
+				setFollowedChannels(
+					channelsWithProfiles?.data?.map((i) => ({
+						...i,
+						login: loginNameFormat(i, true),
+						id: i.to_id,
+						user_id: i.to_id,
+						following: true,
+					}))
+				);
+				const vodChannelIds = await API.getVodChannels();
+				const vodChannels = (
+					await Promise.allSettled(
+						chunk(vodChannelIds, 100).map(async (ids) => {
+							const response = await TwitchAPI.getUser({ id: ids, first: 100 });
+							return response?.data?.data;
+						})
+					)
+				).flatMap((promise) => promise.value || []);
 
-			setLoading(false);
-		}, 0);
+				const vodUsers = vodChannels
+					.filter((u) => u)
+					.map((user) => {
+						return { ...user, user_id: user.id };
+					});
+				setVodChannels(vodUsers);
+
+				if (e.target.value?.trimStart?.()) handleSearch(e, e.target.value?.trimStart?.());
+
+				setLoading(false);
+			}, 0);
+		} catch (error) {
+			console.error("error:", error);
+		}
 	};
 
 	useEffect(() => {
@@ -248,7 +252,6 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 	};
 
 	const items = useMemo(() => {
-		const followedItemsIds = followedChannels.map((i) => i.id);
 		return getUniqueListBy(
 			[
 				...(followedChannels?.filter(
@@ -269,7 +272,6 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 					//   (i) =>
 					//     search && loginNameFormat(i)?.toLowerCase()?.includes(search?.trim?.()?.toLowerCase())
 					// )
-					?.sort((a, b) => followedItemsIds.includes(b.id))
 					?.map((cha) => followedChannels?.find((channel) => String(channel.id) === String(cha.id)) || cha)
 					?.sort(
 						(a, b) =>

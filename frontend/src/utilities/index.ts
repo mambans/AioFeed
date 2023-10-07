@@ -117,17 +117,37 @@ export const getUniqueListByNoMerge = (arr: any[], key: string) => {
 	return [...new Map(arr.map((item) => [item[key], item])).values()];
 };
 
+// export const getUniqueListBy = (arr: any[], key: string) => {
+// 	if (!arr) return [];
+// 	return arr.reduce((acc, item) => {
+// 		const foundIndex = acc.findIndex((i: any) => i[key] === item[key]);
+// 		if (foundIndex >= 0 && item) {
+// 			acc[foundIndex] = { ...acc[foundIndex], ...item };
+// 		} else {
+// 			acc.push({ ...item });
+// 		}
+// 		return acc;
+// 	}, []);
+// };
+
 export const getUniqueListBy = (arr: any[], key: string) => {
 	if (!arr) return [];
-	return arr.reduce((acc, item) => {
-		const foundIndex = acc.findIndex((i: any) => i[key] === item[key]);
-		if (foundIndex >= 0 && item) {
-			acc[foundIndex] = { ...acc[foundIndex], ...item };
-		} else {
-			acc.push({ ...item });
+
+	const uniqueMap = new Map();
+
+	arr.forEach((item) => {
+		const keyValue = item[key];
+
+		if (keyValue !== undefined) {
+			if (!uniqueMap.has(keyValue)) {
+				uniqueMap.set(keyValue, { ...item });
+			} else {
+				uniqueMap.set(keyValue, { ...uniqueMap.get(keyValue), ...item });
+			}
 		}
-		return acc;
-	}, []);
+	});
+
+	return Array.from(uniqueMap.values());
 };
 
 export { durationMsToDate, loginNameFormat };
