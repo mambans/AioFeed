@@ -211,10 +211,8 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 						// signal: controller.current?.signal,
 					})
 				);
-				console.log("streams:", streams);
 
 				const decoratedStreams = await decorateStreams(streams, false);
-				console.log("decoratedStreams:", decoratedStreams);
 
 				//replace these context or atoms?? but then the whole searchbar will rerender when adding vod channels
 
@@ -260,16 +258,26 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 	};
 
 	const items = useMemo(() => {
-		console.log("followedChannels:", followedChannels);
 		return getUniqueListBy([...(followedChannels || []), ...(vodChannels || []), ...(result || [])], "id")
 			?.filter(
 				(i) => !inputRef.current.value?.trimStart?.() || loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current.value?.trim?.()?.toLowerCase())
 			)
-			?.sort(
-				(a, b) =>
-					loginNameFormat(a).replace(inputRef.current?.value?.trim?.(), "")?.length -
-					loginNameFormat(b).replace(inputRef.current?.value?.trim?.(), "")?.length
-			);
+			?.sort((a, b) => {
+				const aIsFollowed = a.following || false;
+				const bIsFollowed = b.following || false;
+
+				// Prioritize followed items at the top
+				if (aIsFollowed && !bIsFollowed) {
+					return -1;
+				} else if (!aIsFollowed && bIsFollowed) {
+					return 1;
+				}
+
+				return (
+					loginNameFormat(a)?.toLowerCase().replace(inputRef.current?.value?.trim?.(), "")?.length -
+					loginNameFormat(b)?.toLowerCase().replace(inputRef.current?.value?.trim?.(), "")?.length
+				);
+			});
 	}, [followedChannels, result, vodChannels]);
 
 	console.log("items:", items);
