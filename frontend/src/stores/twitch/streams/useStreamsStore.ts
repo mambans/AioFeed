@@ -41,14 +41,14 @@ const useStreamsStore = create<StreamStore>((set, get) => ({
 
 	updateStreams: (streams) => {
 		const previousStreams: StreamType[] = [];
-		const livestreams: StreamType[] = [];
+		const newlyLivestreams: StreamType[] = [];
 		const newlyAddedStreams: StreamType[] = [];
 
 		streams.forEach((stream) => {
 			const previousStream = get().previousStreams?.find((previousStream) => previousStream.id === stream.id);
 
 			if (previousStream) {
-				livestreams.push(stream);
+				newlyLivestreams.push(stream);
 			} else if (!!get().previousStreams) {
 				newlyAddedStreams.push(stream);
 			}

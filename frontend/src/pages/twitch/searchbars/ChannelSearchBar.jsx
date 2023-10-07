@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Input, InputWrapper, SearchBarSuffixButton, Wrapper } from "./styledComponents";
 import debounce from "lodash/debounce";
 import TwitchAPI, { pagination } from "../API";
 import useEventListenerMemo from "../../../hooks/useEventListenerMemo";
-import addVideoExtraData from "../AddVideoExtraData";
 import loginNameFormat from "../loginNameFormat";
 import { chunk, getUniqueListBy } from "../../../utilities";
 import { FaSearch } from "react-icons/fa";
@@ -12,6 +11,9 @@ import styled from "styled-components";
 // import useClicksOutside from '../../../hooks/useClicksOutside';
 import API from "../../navigation/API";
 import ChannelSearchBarList from "./ChannelSearchBarList";
+import decorateStreams from "../../../stores/twitch/streams/decorateStreams";
+import useStreamsStore from "../../../stores/twitch/streams/useStreamsStore";
+import { TwitchContext } from "../useToken";
 
 const SearchSubmitIcon = styled(FaSearch).attrs({ size: 18 })``;
 //
@@ -24,7 +26,6 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 	/* eslint-disable no-unused-vars , @typescript-eslint/no-unused-vars*/
 	const [rnd, setRnd] = useState(true);
 	/* eslint-enable no-unused-vars */
-	const [followedChannels, setFollowedChannels] = useState([]);
 	const [vodChannels, setVodChannels] = useState([]);
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -34,6 +35,13 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 	const previousSearch = useRef();
 	const controller = new AbortController();
 	const limit = 25;
+	const { livestreams } = useStreamsStore();
+	const [followedChannels, setFollowedChannels] = useState(livestreams);
+	const { twitchUserId } = useContext(TwitchContext);
+
+	useEffect(() => {
+		setFollowedChannels(livestreams);
+	}, [livestreams]);
 
 	// useClicksOutside(ref.current, () => setShowDropdown(false), showDropdown);
 
@@ -196,25 +204,23 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 
 		try {
 			setTimeout(async () => {
-				//replace these context or atoms?? but then the whole searchbar will rerender when adding vod channels
-				const channels = await pagination(await TwitchAPI.getMyFollowedChannels({ first: 100 }));
-				console.log("channels:", channels);
+				const streams = await pagination(
+					await TwitchAPI.getFollowedStreams({
+						user_id: twitchUserId,
+						first: 100,
+						// signal: controller.current?.signal,
+					})
+				);
+				console.log("streams:", streams);
 
-				const channelsWithProfiles = await addVideoExtraData({
-					items: {
-						data: channels?.map((i) => ({ ...i, user_id: i.to_id, login: i.to_login || i.to_name })),
-					},
-					fetchGameInfo: false,
-					fetchProfiles: true,
-				});
-				console.log("channelsWithProfiles:", channelsWithProfiles);
+				const decoratedStreams = await decorateStreams(streams, false);
+				console.log("decoratedStreams:", decoratedStreams);
+
+				//replace these context or atoms?? but then the whole searchbar will rerender when adding vod channels
 
 				setFollowedChannels(
-					channelsWithProfiles?.data?.map((i) => ({
+					decoratedStreams?.map((i) => ({
 						...i,
-						login: loginNameFormat(i, true),
-						id: i.to_id,
-						user_id: i.to_id,
 						following: true,
 					}))
 				);
@@ -254,35 +260,16 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 	};
 
 	const items = useMemo(() => {
-		return getUniqueListBy(
-			[
-				...(followedChannels?.filter(
-					(i) =>
-						// new RegExp(inputRef.current?.value?.trim?.()?.toLowerCase(), 'i').test(loginNameFormat(i))
-						!inputRef.current.value?.trimStart?.() ||
-						loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current.value?.trimStart?.()?.trim?.()?.toLowerCase())
-				) || []),
-				...(vodChannels?.filter(
-					(i) =>
-						// new RegExp(inputRef.current?.value?.trim?.()?.toLowerCase(), 'i').test(loginNameFormat(i))
-						!inputRef.current.value?.trimStart?.() ||
-						loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current.value?.trimStart?.()?.trim?.()?.toLowerCase())
-				) || []),
-				// ...(result || []),
-				...(result
-					// .filter(
-					//   (i) =>
-					//     search && loginNameFormat(i)?.toLowerCase()?.includes(search?.trim?.()?.toLowerCase())
-					// )
-					?.map((cha) => followedChannels?.find((channel) => String(channel.id) === String(cha.id)) || cha)
-					?.sort(
-						(a, b) =>
-							loginNameFormat(a).replace(inputRef.current?.value?.trim?.())?.length -
-							loginNameFormat(b).replace(inputRef.current?.value?.trim?.())?.length
-					) || []),
-			],
-			"id"
-		);
+		console.log("followedChannels:", followedChannels);
+		return getUniqueListBy([...(followedChannels || []), ...(vodChannels || []), ...(result || [])], "id")
+			?.filter(
+				(i) => !inputRef.current.value?.trimStart?.() || loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current.value?.trim?.()?.toLowerCase())
+			)
+			?.sort(
+				(a, b) =>
+					loginNameFormat(a).replace(inputRef.current?.value?.trim?.(), "")?.length -
+					loginNameFormat(b).replace(inputRef.current?.value?.trim?.(), "")?.length
+			);
 	}, [followedChannels, result, vodChannels]);
 
 	console.log("items:", items);

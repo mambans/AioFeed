@@ -18,22 +18,8 @@ const decorateStreams = async (streams: BaseStream[], refreshMetadata = false) =
 			refresh: refreshMetadata,
 			// signal: controller.current?.signal,
 		});
-		const uniqueFilteredLiveStreams = uniqBy(streamsWithGame, "user_id");
 
-		const recentLiveStreams = (uniqueFilteredLiveStreams || []).filter(
-			(s) => Math.trunc((Date.now() - new Date(s?.started_at).getTime()) / 1000) <= 150
-		);
-
-		const uniqueStreams = uniqBy([...(uniqueFilteredLiveStreams || []), ...(recentLiveStreams || [])], "id");
-
-		// const streamsWithTags = uniqueStreams?.map((stream = {}) => {
-		// 	const streams_tags = stream?.tag_ids?.map((id) => {
-		// 		return tags?.find(({ tag_id } = {}) => tag_id === id);
-		// 	});
-		// 	const tag_names = streams_tags?.map((tag) => tag?.localization_names?.["en-us"]);
-
-		// 	return { ...stream, tag_names, tags: streams_tags };
-		// });
+		const uniqueStreams = uniqBy(streamsWithGame, "user_id");
 
 		const orderedStreams = orderBy(uniqueStreams, (s) => s.viewer_count, "desc");
 
