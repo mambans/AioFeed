@@ -207,7 +207,12 @@ export const Twitch = ({ className }) => {
 		loading,
 		nextRefresh,
 		error,
-		refresh: () => fetch(twitchUserId, true),
+		refresh: () => {
+			if (resetNewlyAddedStreams.current) setNewlyAddedStreams([]);
+			resetNewlyAddedStreams.current = false;
+
+			return fetch(twitchUserId, true);
+		},
 		loaded: loaded,
 	};
 
