@@ -115,8 +115,8 @@ const TwitchAPI = {
 	},
 
 	getMyFollowedChannels: async (params) => {
-		return await TWITCH_INSTANCE.get(`/users/follows`, {
-			params: { ...params, from_id: getCookie("Twitch-userId") },
+		return await TWITCH_INSTANCE.get(`/channels/followed`, {
+			params: { user_id: getCookie("Twitch-userId"), ...(params || {}) },
 		});
 	},
 
