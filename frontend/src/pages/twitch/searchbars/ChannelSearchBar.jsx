@@ -11,7 +11,7 @@ import styled from "styled-components";
 // import useClicksOutside from '../../../hooks/useClicksOutside';
 import API from "../../navigation/API";
 import ChannelSearchBarList from "./ChannelSearchBarList";
-import decorateStreams from "../../../stores/twitch/streams/decorateStreams";
+// import decorateStreams from "../../../stores/twitch/streams/decorateStreams";
 import useStreamsStore from "../../../stores/twitch/streams/useStreamsStore";
 import { TwitchContext } from "../useToken";
 
@@ -38,10 +38,6 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 	const { livestreams } = useStreamsStore();
 	const [followedChannels, setFollowedChannels] = useState(livestreams);
 	const { twitchUserId } = useContext(TwitchContext);
-
-	useEffect(() => {
-		setFollowedChannels(livestreams);
-	}, [livestreams]);
 
 	// useClicksOutside(ref.current, () => setShowDropdown(false), showDropdown);
 
@@ -204,19 +200,17 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 
 		try {
 			setTimeout(async () => {
-				const streams = await pagination(
-					await TwitchAPI.getFollowedStreams({
+				const followedChannels = await pagination(
+					await TwitchAPI.getMyFollowedChannels({
 						user_id: twitchUserId,
 						first: 100,
 						// signal: controller.current?.signal,
 					})
 				);
 
-				const decoratedStreams = await decorateStreams(streams, false);
-
 				//replace these context or atoms?? but then the whole searchbar will rerender when adding vod channels
 
-				setFollowedChannels(decoratedStreams);
+				setFollowedChannels(followedChannels);
 				const vodChannelIds = await API.getVodChannels();
 				const vodChannels = (
 					await Promise.allSettled(
@@ -253,9 +247,10 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 	};
 
 	const items = useMemo(() => {
-		console.log("followedChannels:", followedChannels);
+		const followedChannelsIds = new Map(followedChannels?.map((i) => [i.broadcaster_id, i]));
 
-		return getUniqueListBy([...(followedChannels?.map((i) => ({ ...i, following: true })) || []), ...(vodChannels || []), ...(result || [])], "id")
+		return getUniqueListBy([...(livestreams || []), ...(vodChannels || []), ...(result || [])], "user_id")
+			?.map((i) => ({ ...i, following: followedChannelsIds.has(i.user_id) }))
 			?.filter(
 				(i) => !inputRef.current.value?.trimStart?.() || loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current.value?.trim?.()?.toLowerCase())
 			)
@@ -275,9 +270,7 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 					loginNameFormat(b)?.toLowerCase().replace(inputRef.current?.value?.trim?.(), "")?.length
 				);
 			});
-	}, [followedChannels, result, vodChannels]);
-
-	console.log("items:", items);
+	}, [followedChannels, result, vodChannels, livestreams]);
 
 	const onChange = (e) => {
 		setTimeout(() => {
