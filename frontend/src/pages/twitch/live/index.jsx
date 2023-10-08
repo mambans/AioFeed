@@ -24,6 +24,7 @@ import { useFeedSections } from "../../../stores/twitch/feedSections";
 import { useVodsChannels, useVodsFetchChannelVods } from "../../../stores/twitch/vods";
 import { useToggleFeedPreference, useFeedPreferences } from "../../../stores/feedPreference";
 import { useAddNotifications } from "../../../stores/notifications";
+import useDocumentTitle from "../../../hooks/useDocumentTitle";
 
 const FeedSections = React.lazy(() => import("../../feedSections/FeedSections"));
 
@@ -35,6 +36,7 @@ const TwitchFeed = ({ data, className }) => {
 	const feedSections = useFeedSections();
 	const { twitch } = feedPreferences || {};
 	const { favStreams: favoriteStreams } = useContext(TwitchContext);
+	// const [sort, setSort] = useState({ key: "viewers", order: "desc" });
 
 	const nonFeedSectionLiveStreams = useStreamsStore((state) => {
 		const enabledFeedSections =
@@ -57,6 +59,7 @@ const TwitchFeed = ({ data, className }) => {
 						collapsed={feedPreferences?.["twitch"]?.collapsed}
 						toggleExpanded={() => togglePreference("twitch", "collapsed")}
 						count={nonFeedSectionLiveStreams?.length}
+						rightSide={null}
 					/>
 					<ExpandableSection collapsed={feedPreferences?.["twitch"]?.collapsed}>
 						<TwitchStreams data={data} streams={nonFeedSectionLiveStreams} />
@@ -96,7 +99,8 @@ export const Twitch = ({ className }) => {
 		favStreams: favoriteStreams,
 	} = useContext(TwitchContext);
 	const [nextRefresh, setNextRefresh] = useState(0);
-	const { fetch, loading, error, livestreams, previousStreams, canPushNoitifications, loaded, setNewlyAddedStreams } = useStreamsStore();
+	const { fetch, loading, error, livestreams, previousStreams, canPushNoitifications, loaded, setNewlyAddedStreams, newlyAddedStreams } =
+		useStreamsStore();
 	const fetchChannelVods = useVodsFetchChannelVods();
 
 	const vodChannels = useVodsChannels();
@@ -105,6 +109,12 @@ export const Twitch = ({ className }) => {
 	const timer = useRef();
 	const addNotifications = useAddNotifications();
 	const resetNewlyAddedStreams = useRef(false);
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const [documentTitle, setDocumentTitle] = useDocumentTitle(`AioFeed ${(newlyAddedStreams?.length && ` (${newlyAddedStreams?.length})`) || ""}`);
+
+	useEffect(() => {
+		setDocumentTitle(`AioFeed ${(newlyAddedStreams?.length && ` (${newlyAddedStreams?.length})`) || ""}`);
+	}, [newlyAddedStreams, setDocumentTitle]);
 
 	useEffect(() => {
 		if (canPushNoitifications) {
