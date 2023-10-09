@@ -46,16 +46,16 @@ const useStreamsStore = create<StreamStore>((set, get) => ({
 		streams.forEach((stream:StreamType) => {
 			const previousStream = previousStreams?.find((previousStream:StreamType) => previousStream.user_id === stream.user_id);
 
-			if (!previousStream && !!previousStreams) {
+			if (!previousStream && get().loaded) {
 				newlyAddedStreams.push(stream);
 			}
 		});
 
 		set({
 			livestreams: streams,
-			previousStreams: get().livestreams,
+			previousStreams: get().loaded ? streams :  get().livestreams,
 			newlyAddedStreams,
-			canPushNoitifications: !!previousStreams,
+			canPushNoitifications: get().loaded,
 			loaded: true,
 			error: null,
 		});

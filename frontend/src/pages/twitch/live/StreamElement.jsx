@@ -37,7 +37,6 @@ function NewHighlightNoti({ stream }) {
 	const newBaseLiveStreams = useStreamsStore((state) => state.newlyAddedStreams);
 
 	if (newBaseLiveStreams?.some?.((s) => s.user_id === stream.user_id)) {
-		console.log('newBaseLiveStreams:', newBaseLiveStreams)
 		return (
 			<StyledNewlyAddedIndicatorWrapper>
 				<RelativeContainer>
