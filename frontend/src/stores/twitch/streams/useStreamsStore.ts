@@ -39,17 +39,14 @@ const useStreamsStore = create<StreamStore>((set, get) => ({
 	setNewlyAddedStreams: (newlyAddedStreams: StreamStore["newlyAddedStreams"]) => set(() => ({ newlyAddedStreams })),
 	setFollowedChannels: (followedChannels: StreamStore["followedChannels"]) => set(() => ({ followedChannels })),
 
-	updateStreams: (streams) => {
-		const previousStreams: StreamType[] = [];
-		const newlyLivestreams: StreamType[] = [];
+	updateStreams: (streams: StreamType[]) => {
 		const newlyAddedStreams: StreamType[] = get().newlyAddedStreams || [];
+		const previousStreams = get().previousStreams;
 
 		streams.forEach((stream:StreamType) => {
-			const previousStream = get().previousStreams?.find((previousStream:StreamType) => previousStream.id === stream.id);
+			const previousStream = previousStreams?.find((previousStream:StreamType) => previousStream.user_id === stream.user_id);
 
-			if (previousStream) {
-				newlyLivestreams.push(stream);
-			} else if (!!get().previousStreams) {
+			if (!previousStream && !!previousStreams) {
 				newlyAddedStreams.push(stream);
 			}
 		});
@@ -58,11 +55,11 @@ const useStreamsStore = create<StreamStore>((set, get) => ({
 			livestreams: streams,
 			previousStreams: get().livestreams,
 			newlyAddedStreams,
-			canPushNoitifications: !!get().previousStreams,
+			canPushNoitifications: !!previousStreams,
 			loaded: true,
 			error: null,
 		});
-		return { livestreams: streams, previousStreams, newlyAddedStreams };
+		return { livestreams: streams, previousStreams: get().livestreams, newlyAddedStreams };
 	},
 
 	fetch: async (twitchUserId, refreshMetadata = false) => {

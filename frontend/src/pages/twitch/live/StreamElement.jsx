@@ -52,7 +52,7 @@ function NewHighlightNoti({ stream }) {
 
 const StreamElement = React.memo(({ data = {}, refresh, size }) => {
 	const location = useLocation();
-	const { id, user_id, user_name, user_login, started_at, title, game_name, thumbnail_url, profile_image_url, login, game_img, viewer_count } = data;
+	const { user_id, user_name, user_login, started_at, title, game_name, thumbnail_url, profile_image_url, login, game_img, viewer_count } = data;
 
 	const ref = useRef();
 	const refChannel = useRef();
