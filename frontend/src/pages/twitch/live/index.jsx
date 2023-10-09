@@ -168,10 +168,10 @@ export const Twitch = ({ className }) => {
 			resetNewlyAddedStreams.current = true;
 		};
 
-		window.addEventListener("focus", onFocus);
+		window.addEventListener("blur", onFocus);
 
 		return () => {
-			window.removeEventListener("focus", onFocus);
+			window.removeEventListener("blur", onFocus);
 		};
 	}, []);
 
@@ -180,8 +180,7 @@ export const Twitch = ({ className }) => {
 		if (!timer.current) {
 			if (resetNewlyAddedStreams.current) setNewlyAddedStreams([]);
 			resetNewlyAddedStreams.current = false;
-
-			fetch(twitchUserId, true);
+			setTimeout(() => fetch(twitchUserId, true), 0);
 
 			if (autoRefreshEnabled) {
 				setNextRefresh(moment().add(REFRESH_RATE, "seconds"));
@@ -190,7 +189,7 @@ export const Twitch = ({ className }) => {
 					setNextRefresh(moment().add(REFRESH_RATE, "seconds"));
 					if (resetNewlyAddedStreams.current) setNewlyAddedStreams([]);
 					resetNewlyAddedStreams.current = false;
-					fetch(twitchUserId);
+					setTimeout(() => fetch(twitchUserId), 0);
 				}, REFRESH_RATE * 1000);
 			}
 		}
