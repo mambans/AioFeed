@@ -53,7 +53,7 @@ const useStreamsStore = create<StreamStore>((set, get) => ({
 
 		set({
 			livestreams: streams,
-			previousStreams: get().loaded ? streams :  get().livestreams,
+			previousStreams: !get().loaded ? streams : get().livestreams,
 			newlyAddedStreams,
 			canPushNoitifications: get().loaded,
 			loaded: true,
