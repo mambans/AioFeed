@@ -36,7 +36,8 @@ import useStreamsStore from "../../../stores/twitch/streams/useStreamsStore";
 function NewHighlightNoti({ stream }) {
 	const newBaseLiveStreams = useStreamsStore((state) => state.newlyAddedStreams);
 
-	if (newBaseLiveStreams?.some?.((s) => s.id === stream.id)) {
+	if (newBaseLiveStreams?.some?.((s) => s.user_id === stream.user_id)) {
+		console.log('newBaseLiveStreams:', newBaseLiveStreams)
 		return (
 			<StyledNewlyAddedIndicatorWrapper>
 				<RelativeContainer>
@@ -60,30 +61,17 @@ const StreamElement = React.memo(({ data = {}, refresh, size }) => {
 		`${thumbnail_url?.replace("{width}", size === "small" ? 339 : 858)?.replace("{height}", size === "small" ? 192 : 480)}` ||
 		`${process.env.PUBLIC_URL}/images/webp/placeholder.png`;
 
-	const streamData = {
-		id,
-		started_at,
-		title,
-		profile_image_url,
-		user_id,
-		user_name,
-		viewer_count,
-		game_name,
-		login,
-		user_login,
-	};
-
 	return (
 		<VideoContainer key={user_id} ref={videoContainerRef}>
 			<ImageContainer id={user_id} ref={ref} style={{ marginTop: "5px" }}>
-				<NewHighlightNoti stream={streamData} />
+				<NewHighlightNoti stream={data} />
 				<Link
 					className="imgLink"
 					target={(location?.pathname === "/feed" && "_blank") || null}
 					to={{
 						pathname: "/" + (login || user_login)?.toLowerCase() || user_name,
 						state: {
-							passedChannelData: streamData,
+							passedChannelData: data,
 						},
 					}}
 				>
@@ -121,7 +109,7 @@ const StreamElement = React.memo(({ data = {}, refresh, size }) => {
 					to={{
 						pathname: "/" + (login || user_login)?.toLowerCase() || user_name,
 						state: {
-							passedChannelData: streamData,
+							passedChannelData: data,
 						},
 					}}
 				>
@@ -137,7 +125,7 @@ const StreamElement = React.memo(({ data = {}, refresh, size }) => {
 						to={{
 							pathname: `/${(login || user_login)?.toLowerCase() || user_name}/page`,
 							state: {
-								passedChannelData: streamData,
+								passedChannelData: data,
 							},
 						}}
 					>
@@ -149,7 +137,7 @@ const StreamElement = React.memo(({ data = {}, refresh, size }) => {
 							to={{
 								pathname: `/${(login || user_login)?.toLowerCase() || user_name}/page`,
 								state: {
-									passedChannelData: streamData,
+									passedChannelData: data,
 								},
 							}}
 							className="channelName"
@@ -165,7 +153,7 @@ const StreamElement = React.memo(({ data = {}, refresh, size }) => {
 							<Schedule user={login || user_login || user_name} user_id={user_id} absolute={false} btnSize={22} />
 							<FavoriteStreamBtn channel={login || user_login} id={user_id} />
 							<VodsFollowUnfollowBtn channel={data} marginright="5px;" />
-							<AddUpdateNotificationsButton channel={streamData} marginright="5px;" />
+							<AddUpdateNotificationsButton channel={data} marginright="5px;" />
 						</ChannelButtonsContainer>
 					)}
 				</ChannelContainer>
