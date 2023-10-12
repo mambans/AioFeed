@@ -58,8 +58,9 @@ const getStreamNotifications = ({
 				title: `${loginNameFormat(stream)} went Live`,
 				icon: stream?.profile_image_url,
 				body: `${stream.title || ""}\n${stream.game_name || stream.game || ""}`,
-				onClick: () => {
-					window.open("https://aiofeed.com/" + loginNameFormat(stream, true), "_blank");
+				onClick: (e) => {
+					e.preventDefault();
+					window.open("https://aiofeed.com/" + loginNameFormat(stream, true), stream.user_id);
 				},
 				stream,
 				type: "live",
@@ -134,8 +135,9 @@ const getStreamNotifications = ({
 				title: `${loginNameFormat(stream)} went Offline`,
 				icon: stream?.profile_image_url,
 				body: `${stream.title || ""}\n${stream.game_name || stream.game || ""}`,
-				onClick: () => {
-					window.open(`https://aiofeed.com/${loginNameFormat(stream, true)}/page`, "_blank");
+				onClick: (e) => {
+					e.preventDefault();
+					window.open(`https://aiofeed.com/${loginNameFormat(stream, true)}/page`, stream.user_id);
 				},
 				stream,
 				type: "offline",
