@@ -10,7 +10,7 @@ const createKeys = (streams: any[], enabledFeedSections: FeedSectionType[], favo
 		const feedSections = enabledFeedSections?.filter?.(({ rules } = {} as any) => checkAgainstRules(stream, rules, favoriteStreams));
 		const feedSectionKeys = feedSections?.map((section) => `${stream.user_id}_${section.id}`) || [];
 
-		const mainKey = `${stream.user_id}_${stream.title}_${stream.game_id}`;
+		const mainKey = `${stream.user_id}`;
 
 		const keys = [mainKey, ...feedSectionKeys];
 
