@@ -46,8 +46,16 @@ const getStreamNotifications = ({
 		currentStream: streams?.find?.(({ user_id }) => user_id === stream.user_id),
 	}));
 
+	// !stream.keys.every((value) => stream.previousStream?.keys.includes(value)) &&
+	// 	!stream.previousStream?.keys.every((value) => stream.keys.includes(value));
+
 	const liveAndUpdatedNotifications = streamsWithPreviouosStream
-		.filter((stream) => !stream.previousStream || stream.previousStream.keys?.some?.((key) => !stream.keys?.includes?.(key)))
+		.filter(
+			(stream) =>
+				!stream.previousStream ||
+				stream.keys?.some?.((key) => !stream.previousStream?.keys?.includes?.(key)) ||
+				stream.previousStream.keys?.some?.((key) => !stream.keys?.includes?.(key))
+		)
 		.flatMap((stream) => {
 			const previousStream = stream.previousStream;
 			const feedSections = enabledFeedSections?.filter?.((feedSection: FeedSectionType) =>
