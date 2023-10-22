@@ -36,14 +36,15 @@ const useNotificationsStore = create<UseNotificationsStore>((set, get) => ({
 	},
 
 	markAllAsRead: () => {
-		setLocalStorage("notifications", []);
-		const notifications = getLocalstorage("notifications") || [];
+		const notifications = (getLocalstorage("notifications") || []).map((notification: any) => ({
+			...notification,
+			unread: false,
+		}));
+
+		setLocalStorage("notifications", notifications);
 
 		set({
-			notifications: notifications.map((notification: any) => ({
-				...notification,
-				unread: false,
-			})),
+			notifications,
 		});
 	},
 
