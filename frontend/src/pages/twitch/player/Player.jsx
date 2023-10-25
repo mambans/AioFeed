@@ -411,230 +411,232 @@ const Player = () => {
 			chatAsOverlay={chatState.chatAsOverlay}
 		>
 			<div id="twitch-embed" ref={videoElementRef}>
-				<CSSTransition
-					in={(showControlls || status !== "Live") && enableVodVolumeOverlay}
-					key={"controllsUI"}
-					timeout={showControlls || status !== "Live" ? 500 : 250}
-					classNames="fade-controllUI"
-				>
-					<VolumeEventOverlay
-						show={(showUIControlls || status !== "Live") && enableVodVolumeOverlay}
-						ref={PlayerUIControlls}
-						type="live"
-						id="controls"
-						hidechat={String(chatState.hideChat)}
-						showcursor={showControlls && enableVodVolumeOverlay}
-						isFullscreen={isFullscreen}
-						chatwidth={chatState.chatwidth || DEFAULT_CHAT_WIDTH}
-						VolumeEventOverlayRef={PlayerUIControlls}
-						player={twitchVideoPlayer.current}
-						chatAsOverlay={String(chatState.chatAsOverlay)}
-						hidePointerEvents={status !== "Live"}
-						// addEventListeners
-						ContextMenu={
-							Boolean(twitchVideoPlayer.current) && (
-								<PlayerContextMenu
-									PlayerUIControlls={PlayerUIControlls.current}
-									hidechat={String(chatState.hideChat)}
-									TwitchPlayer={twitchVideoPlayer.current}
-									showAndResetTimer={showAndResetTimer}
-								>
-									<div
-										onClick={() => {
-											updateChatState((curr) => ({
-												...curr,
-												hideChat: !curr.hideChat,
-											}));
-										}}
-									>
-										<MdChat size={24} />
-										{chatState.hideChat ? "Show chat" : "Hide chat"}
-									</div>
-									<Stats />
-
-									<div
-										onClick={() => {
-											updateChatState((curr) => ({
-												...curr,
-												switchChatSide: !chatState.switchChatSide,
-											}));
-										}}
-									>
-										<MdCompareArrows size={24} />
-										Switch chat side
-									</div>
-
-									<br />
-									<div onClick={resetChatState}>
-										<GrRefresh size={24} />
-										Reset chat position
-									</div>
-									<div onClick={reloadVideoPlayer}>
-										<GrRefresh size={24} />
-										Reload Videoplayer
-									</div>
-									<div onClick={reloadChat}>
-										<GrRefresh size={24} />
-										Reload Chat
-									</div>
-								</PlayerContextMenu>
-							)
-						}
+				{enableVodVolumeOverlay && (
+					<CSSTransition
+						in={(showControlls || status !== "Live") && enableVodVolumeOverlay}
+						key={"controllsUI"}
+						timeout={showControlls || status !== "Live" ? 500 : 250}
+						classNames="fade-controllUI"
 					>
-						<PlayerButtonsBar
-							style={{ margin: "1rem", position: "absolute", right: 0, top: 0 }}
-							user={{
-								user_name: streamInfo?.login || streamInfo?.user_login || streamInfo?.user_name || channelName,
-								...(streamInfo || {}),
-							}}
-							schedule={true}
-						/>
-
-						{streamInfo ? (
-							<InfoDisplay>
-								<>
-									<img className="profile" src={streamInfo?.profile_image_url} alt="" />
-									<div id="name">
-										<Link
-											to={{
-												pathname: `page`,
-												state: {
-													p_id: streamInfo?.user_id,
-												},
+						<VolumeEventOverlay
+							show={(showUIControlls || status !== "Live") && enableVodVolumeOverlay}
+							ref={PlayerUIControlls}
+							type="live"
+							id="controls"
+							hidechat={String(chatState.hideChat)}
+							showcursor={showControlls && enableVodVolumeOverlay}
+							isFullscreen={isFullscreen}
+							chatwidth={chatState.chatwidth || DEFAULT_CHAT_WIDTH}
+							VolumeEventOverlayRef={PlayerUIControlls}
+							player={twitchVideoPlayer.current}
+							chatAsOverlay={String(chatState.chatAsOverlay)}
+							hidePointerEvents={status !== "Live"}
+							// addEventListeners
+							ContextMenu={
+								Boolean(twitchVideoPlayer.current) && (
+									<PlayerContextMenu
+										PlayerUIControlls={PlayerUIControlls.current}
+										hidechat={String(chatState.hideChat)}
+										TwitchPlayer={twitchVideoPlayer.current}
+										showAndResetTimer={showAndResetTimer}
+									>
+										<div
+											onClick={() => {
+												updateChatState((curr) => ({
+													...curr,
+													hideChat: !curr.hideChat,
+												}));
 											}}
 										>
-											{loginNameFormat(streamInfo || { data: channelName })}
-										</Link>
-										<a
-											className="twitchRedirect"
-											alt=""
-											href={`https://www.twitch.tv/${
-												streamInfo?.login || streamInfo?.user_login || streamInfo?.user_name || channelName
-											}?redirect=false`}
+											<MdChat size={24} />
+											{chatState.hideChat ? "Show chat" : "Hide chat"}
+										</div>
+										<Stats />
+
+										<div
+											onClick={() => {
+												updateChatState((curr) => ({
+													...curr,
+													switchChatSide: !chatState.switchChatSide,
+												}));
+											}}
 										>
-											<FaTwitch size={24} color="purple" />
-										</a>
+											<MdCompareArrows size={24} />
+											Switch chat side
+										</div>
 
-										<VodsFollowUnfollowBtn size={28} channel={streamInfo} marginright="5px;" />
+										<br />
+										<div onClick={resetChatState}>
+											<GrRefresh size={24} />
+											Reset chat position
+										</div>
+										<div onClick={reloadVideoPlayer}>
+											<GrRefresh size={24} />
+											Reload Videoplayer
+										</div>
+										<div onClick={reloadChat}>
+											<GrRefresh size={24} />
+											Reload Chat
+										</div>
+									</PlayerContextMenu>
+								)
+							}
+						>
+							<PlayerButtonsBar
+								style={{ margin: "1rem", position: "absolute", right: 0, top: 0 }}
+								user={{
+									user_name: streamInfo?.login || streamInfo?.user_login || streamInfo?.user_name || channelName,
+									...(streamInfo || {}),
+								}}
+								schedule={true}
+							/>
 
-										<AddUpdateNotificationsButton channel={streamInfo} marginright="5px;" size={26} />
-
-										<ToolTip
-											placement={"right"}
-											delay={{ show: 500, hide: 0 }}
-											tooltip="Go to channel page incl. videos and clips"
-											width="max-content"
-										>
-											<ChannelIconLink
+							{streamInfo ? (
+								<InfoDisplay>
+									<>
+										<img className="profile" src={streamInfo?.profile_image_url} alt="" />
+										<div id="name">
+											<Link
 												to={{
 													pathname: `page`,
+													state: {
+														p_id: streamInfo?.user_id,
+													},
 												}}
 											>
-												<MdAccountBox size={30} />
-											</ChannelIconLink>
-										</ToolTip>
-									</div>
-									<p id="title">{streamInfo?.title}</p>
-									{streamInfo?.game_name && (
-										<span id="game">
-											{"Playing "}
-											<Link to={`/category/${streamInfo?.game_name}`}>
-												{streamInfo?.game_name} <img src={streamInfo?.game_img?.replace("{width}", 130)?.replace("{height}", 173)} alt="" />
+												{loginNameFormat(streamInfo || { data: channelName })}
 											</Link>
-										</span>
-									)}
-								</>
-								{streamInfo?.viewer_count && <AnimatedViewCount id={"viewers"} viewers={streamInfo?.viewer_count} disabeIcon={true} />}
-								{streamInfo?.started_at && (
-									<p id="uptime">
-										Uptime{" "}
-										<Moment interval={1} durationFromNow>
-											{streamInfo?.started_at}
-										</Moment>
-									</p>
-								)}
-								{streamInfo?.tags && (
-									<TagsContainer id={"tags"}>
-										{streamInfo.tags.map((tag) => {
-											const lang = window?.navigator.language?.toLowerCase();
-											return (
-												<ToolTip
-													placement={"bottom"}
-													delay={{ show: 500, hide: 0 }}
-													tooltip={tag?.localization_descriptions?.[lang]}
-													width="max-content"
-													key={tag.tag_id}
+											<a
+												className="twitchRedirect"
+												alt=""
+												href={`https://www.twitch.tv/${
+													streamInfo?.login || streamInfo?.user_login || streamInfo?.user_name || channelName
+												}?redirect=false`}
+											>
+												<FaTwitch size={24} color="purple" />
+											</a>
+
+											<VodsFollowUnfollowBtn size={28} channel={streamInfo} marginright="5px;" />
+
+											<AddUpdateNotificationsButton channel={streamInfo} marginright="5px;" size={26} />
+
+											<ToolTip
+												placement={"right"}
+												delay={{ show: 500, hide: 0 }}
+												tooltip="Go to channel page incl. videos and clips"
+												width="max-content"
+											>
+												<ChannelIconLink
+													to={{
+														pathname: `page`,
+													}}
 												>
-													<a href={`https://www.twitch.tv/directory/all/tags/${tag.tag_id}`}>{tag?.localization_names?.[lang]}</a>
-												</ToolTip>
-											);
-										})}
-									</TagsContainer>
-								)}
-							</InfoDisplay>
-						) : (
-							!twitchAccessToken && (
-								<ReAuthenticateButton
-									disconnect={() => disconnectTwitch({ setTwitchAccessToken })}
-									serviceName={"Twitch"}
-									style={{ margin: "20px" }}
-								/>
-							)
-						)}
-
-						<SmallButtonContainer>
-							{Boolean(twitchVideoPlayer.current) && (
-								<>
-									<PlayPauseButton TwitchPlayer={twitchVideoPlayer.current} PlayerUIControlls={PlayerUIControlls.current} />
-									<VolumeSlider
-										OpenedDate={OpenedDate}
-										PlayerUIControlls={PlayerUIControlls.current}
-										TwitchPlayer={twitchVideoPlayer.current}
-										setShowControlls={setShowControlls}
-										showAndResetTimer={showAndResetTimer}
+													<MdAccountBox size={30} />
+												</ChannelIconLink>
+											</ToolTip>
+										</div>
+										<p id="title">{streamInfo?.title}</p>
+										{streamInfo?.game_name && (
+											<span id="game">
+												{"Playing "}
+												<Link to={`/category/${streamInfo?.game_name}`}>
+													{streamInfo?.game_name} <img src={streamInfo?.game_img?.replace("{width}", 130)?.replace("{height}", 173)} alt="" />
+												</Link>
+											</span>
+										)}
+									</>
+									{streamInfo?.viewer_count && <AnimatedViewCount id={"viewers"} viewers={streamInfo?.viewer_count} disabeIcon={true} />}
+									{streamInfo?.started_at && (
+										<p id="uptime">
+											Uptime{" "}
+											<Moment interval={1} durationFromNow>
+												{streamInfo?.started_at}
+											</Moment>
+										</p>
+									)}
+									{streamInfo?.tags && (
+										<TagsContainer id={"tags"}>
+											{streamInfo.tags.map((tag) => {
+												const lang = window?.navigator.language?.toLowerCase();
+												return (
+													<ToolTip
+														placement={"bottom"}
+														delay={{ show: 500, hide: 0 }}
+														tooltip={tag?.localization_descriptions?.[lang]}
+														width="max-content"
+														key={tag.tag_id}
+													>
+														<a href={`https://www.twitch.tv/directory/all/tags/${tag.tag_id}`}>{tag?.localization_names?.[lang]}</a>
+													</ToolTip>
+												);
+											})}
+										</TagsContainer>
+									)}
+								</InfoDisplay>
+							) : (
+								!twitchAccessToken && (
+									<ReAuthenticateButton
+										disconnect={() => disconnectTwitch({ setTwitchAccessToken })}
+										serviceName={"Twitch"}
+										style={{ margin: "20px" }}
 									/>
-									<ShowStatsButtons TwitchPlayer={twitchVideoPlayer.current} />
-									<ShowSetQualityButtons TwitchPlayer={twitchVideoPlayer.current} />
-									<ClipButton streamInfo={streamInfo} />
-								</>
+								)
 							)}
-							<ResetVideoButton
-								title={"Reload video"}
-								style={{
-									pointerEvents: !twitchVideoPlayer.current ? "none" : "unset",
-									opacity: !twitchVideoPlayer.current ? "0.2" : "0.7",
-								}}
-								onClick={reloadVideoPlayer}
-							/>
-						</SmallButtonContainer>
 
-						{!isFullscreen ? (
-							<MdFullscreen
-								size={34}
-								style={{
-									position: "absolute",
-									right: "12px",
-									bottom: "12px",
-									cursor: "pointer",
-								}}
-								onClick={toggleFullScreen}
-								title="Fullsceen (f)"
-							/>
-						) : (
-							<MdFullscreenExit
-								size={34}
-								style={{
-									position: "absolute",
-									right: "12px",
-									bottom: "12px",
-									cursor: "pointer",
-								}}
-								onClick={toggleFullScreen}
-								title="Fullsceen (f)"
-							/>
-						)}
-					</VolumeEventOverlay>
-				</CSSTransition>
+							<SmallButtonContainer>
+								{Boolean(twitchVideoPlayer.current) && (
+									<>
+										<PlayPauseButton TwitchPlayer={twitchVideoPlayer.current} PlayerUIControlls={PlayerUIControlls.current} />
+										<VolumeSlider
+											OpenedDate={OpenedDate}
+											PlayerUIControlls={PlayerUIControlls.current}
+											TwitchPlayer={twitchVideoPlayer.current}
+											setShowControlls={setShowControlls}
+											showAndResetTimer={showAndResetTimer}
+										/>
+										<ShowStatsButtons TwitchPlayer={twitchVideoPlayer.current} />
+										<ShowSetQualityButtons TwitchPlayer={twitchVideoPlayer.current} />
+										<ClipButton streamInfo={streamInfo} />
+									</>
+								)}
+								<ResetVideoButton
+									title={"Reload video"}
+									style={{
+										pointerEvents: !twitchVideoPlayer.current ? "none" : "unset",
+										opacity: !twitchVideoPlayer.current ? "0.2" : "0.7",
+									}}
+									onClick={reloadVideoPlayer}
+								/>
+							</SmallButtonContainer>
+
+							{!isFullscreen ? (
+								<MdFullscreen
+									size={34}
+									style={{
+										position: "absolute",
+										right: "12px",
+										bottom: "12px",
+										cursor: "pointer",
+									}}
+									onClick={toggleFullScreen}
+									title="Fullsceen (f)"
+								/>
+							) : (
+								<MdFullscreenExit
+									size={34}
+									style={{
+										position: "absolute",
+										right: "12px",
+										bottom: "12px",
+										cursor: "pointer",
+									}}
+									onClick={toggleFullScreen}
+									title="Fullsceen (f)"
+								/>
+							)}
+						</VolumeEventOverlay>
+					</CSSTransition>
+				)}
 			</div>
 			{!chatState.hideChat && !chatState?.chatAsOverlay && (
 				<ResizeDevider onMouseDown={handleResizeMouseDown} resizeActive={resizeActive}>
