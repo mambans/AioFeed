@@ -34,6 +34,7 @@ const VolumeEventOverlay = React.forwardRef(
 			chatAsOverlay,
 			hidePointerEvents,
 			isFullscreen,
+			enabled,
 		},
 		ref
 	) => {
@@ -105,6 +106,7 @@ const VolumeEventOverlay = React.forwardRef(
 					centerBotttom={centerBotttom}
 					hidePointerEvents={hidePointerEvents}
 					isFullscreen={String(isFullscreen)}
+					enabled={enabled}
 				>
 					{ContextMenu ||
 						(contextMenuChildren && (

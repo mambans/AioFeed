@@ -142,6 +142,7 @@ const SharedVideoPlayer = () => {
 					type="live"
 					id="controls"
 					hidechat={String(viewStates?.hideList)}
+					enabled={enableVodVolumeOverlay}
 					vodVolumeOverlayEnabled={enableVodVolumeOverlay}
 					chatwidth={viewStates?.listWidth || DEFAULT_LIST_WIDTH}
 					showcursor={enableVodVolumeOverlay && isPlaying}
