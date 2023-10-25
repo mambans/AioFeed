@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { FaInfoCircle, FaWindowClose } from "react-icons/fa";
 import { MdMovieCreation, MdLoop, MdMore, MdCompareArrows, MdChat, MdVerticalAlignBottom, MdAccountCircle, MdViewWeek } from "react-icons/md";
 import { Button, Nav } from "react-bootstrap";
@@ -263,6 +263,14 @@ export const StyledVolumeEventOverlay = styled.div`
 		opacity: 0;
 		transition: opacity 250ms;
 	}
+
+	${({ enabled }) =>
+		!enabled &&
+		css`
+			pointer-events: none;
+			opacity: 0;
+			visibility: hidden;
+		`}
 `;
 
 export const StyledVolumeSlider = styled.div`

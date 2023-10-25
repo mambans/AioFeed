@@ -3,7 +3,6 @@ import throttle from "lodash/throttle";
 import { useParams, useLocation, Link } from "react-router-dom";
 import Moment from "react-moment";
 import React, { useContext, useEffect, useState, useRef, useCallback } from "react";
-
 import { MdFullscreen, MdCompareArrows, MdFullscreenExit, MdChat, MdAccountBox } from "react-icons/md";
 import { FaTwitch, FaInfoCircle } from "react-icons/fa";
 import { GrRefresh } from "react-icons/gr";
@@ -220,7 +219,7 @@ const Player = () => {
 		setStatus("Offline");
 	}
 
-	const GetAndSetStreamInfo = useCallback(async () => {
+	const getStreamInfo = useCallback(async () => {
 		if (twitchVideoPlayer.current) {
 			const LIVEStreamInfo = {
 				...savedStreamInfo.current,
@@ -241,12 +240,12 @@ const Player = () => {
 				});
 
 				savedStreamInfo.current = streamWithGameAndProfile?.[0];
-				setStreamInfo((c) => ({ ...c, ...streamWithGameAndProfile?.[0] }));
+				// setStreamInfo((c) => ({ ...c, ...streamWithGameAndProfile?.[0] }));
 
 				return streamWithGameAndProfile?.[0];
 			} else {
 				const streamWithGameAndProfile = await fetchChannelInfo(twitchVideoPlayer.current.getChannelId(), true);
-				setStreamInfo((c) => ({ ...c, ...streamWithGameAndProfile }));
+				// setStreamInfo((c) => ({ ...c, ...streamWithGameAndProfile }));
 				return streamWithGameAndProfile;
 			}
 		}
@@ -261,27 +260,48 @@ const Player = () => {
 		[addNotifications]
 	);
 
+	const getStreamAndChannelInfo = useCallback(async () => {
+		if (!refreshStreamInfoTimer.current && channelName) {
+			refreshStreamInfoTimer.current = setInterval(async () => {
+				const info = await getStreamInfo();
+				setStreamInfo((c) => ({ ...(c || {}), ...info }));
+			}, 1000 * 60 * 1);
+		}
+
+		return await getStreamInfo().then(async (res) => {
+			setFavion(res?.profile_image_url);
+			// const tags = await TwitchAPI.getTags({ broadcaster_id: res?.user_id }).then((res) => res?.data?.data);
+
+			return { ...res };
+		});
+	}, [getStreamInfo, channelName]);
+
+	useEffect(() => {
+		(async () => {
+			const info = await getStreamAndChannelInfo();
+			setStreamInfo((c) => ({ ...(c || {}), ...info }));
+		})();
+
+		return () => {
+			clearInterval(refreshStreamInfoTimer.current);
+		};
+	}, [enableVodVolumeOverlay, getStreamAndChannelInfo]);
+
 	async function onlineEvents() {
 		console.log("Stream is Online");
 		setStatus("Live");
 
 		try {
-			if (!refreshStreamInfoTimer.current && channelName) {
-				refreshStreamInfoTimer.current = setInterval(async () => {
-					GetAndSetStreamInfo();
-				}, 1000 * 60 * 1);
+			const info = await getStreamAndChannelInfo();
+			setStreamInfo((c) => ({ ...(c || {}), ...info }));
+
+			const stream = { type: "live", ...info };
+
+			console.log("onlineEvents streamInfo:", streamInfo);
+			if (streamInfo === null) {
+				console.log("onlineEvents info:", info);
+				addNoti(stream);
 			}
-
-			await GetAndSetStreamInfo().then(async (res) => {
-				setFavion(res?.profile_image_url);
-				const tags = await TwitchAPI.getTags({ broadcaster_id: res?.user_id }).then((res) => res?.data?.data);
-				setStreamInfo(() => ({ ...res, tags }));
-				const stream = { type: "live", ...res };
-
-				if (streamInfo === null && res?.broadcaster_software && !res?.broadcaster_software?.toLowerCase().includes("rerun")) {
-					addNoti(stream);
-				}
-			});
 		} catch (error) {
 			console.log("onlineEvents -> error", error);
 		}
@@ -410,7 +430,15 @@ const Player = () => {
 			hidechat={chatState.hideChat}
 			chatAsOverlay={chatState.chatAsOverlay}
 		>
-			<div id="twitch-embed" ref={videoElementRef}>
+			<div id="twitch-embed" ref={videoElementRef} style={{ position: "relative" }}>
+				<PlayerButtonsBar
+					style={{ margin: "1rem", position: "absolute", right: 0, top: 0 }}
+					user={{
+						user_name: streamInfo?.login || streamInfo?.user_login || streamInfo?.user_name || channelName,
+						...(streamInfo || {}),
+					}}
+					schedule={true}
+				/>
 				<CSSTransition
 					in={showControlls || status !== "Live"}
 					key={"controllsUI"}
@@ -482,15 +510,6 @@ const Player = () => {
 							)
 						}
 					>
-						<PlayerButtonsBar
-							style={{ margin: "1rem", position: "absolute", right: 0, top: 0 }}
-							user={{
-								user_name: streamInfo?.login || streamInfo?.user_login || streamInfo?.user_name || channelName,
-								...(streamInfo || {}),
-							}}
-							schedule={true}
-						/>
-
 						{streamInfo ? (
 							<InfoDisplay>
 								<>
