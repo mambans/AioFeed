@@ -191,7 +191,7 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 	};
 
 	const onBlur = () => {
-		inputRef.current.value = "";
+		if (inputRef.current) inputRef.current.value = "";
 	};
 
 	const onFocus = async (e) => {
@@ -252,7 +252,7 @@ const ChannelSearchBar = ({ searchButton = true, position, placeholder, hideExtr
 		return getUniqueListBy([...(livestreams || []), ...(vodChannels || []), ...(result || [])], "user_id")
 			?.map((i) => ({ ...i, following: followedChannelsIds.has(i.user_id) }))
 			?.filter(
-				(i) => !inputRef.current.value?.trimStart?.() || loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current.value?.trim?.()?.toLowerCase())
+				(i) => !inputRef.current?.value?.trimStart?.() || loginNameFormat(i)?.toLowerCase()?.includes(inputRef.current.value?.trim?.()?.toLowerCase())
 			)
 			?.sort((a, b) => {
 				const aIsFollowed = a.following || false;

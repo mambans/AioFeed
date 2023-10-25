@@ -167,7 +167,7 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
 	const onSubmit = (event) => {
 		const selected = listRef.current?.querySelector?.(".selected");
 		const elementTitle = selected?.querySelector?.(".title");
-		const value = (elementTitle?.textContent || inputRef.current.value).trimStart();
+		const value = (elementTitle?.textContent || inputRef.current?.value || "").trimStart();
 
 		try {
 			if (elementTitle) {
@@ -191,7 +191,7 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
 			console.error("error:", error);
 		} finally {
 			setShowDropdown(false);
-			inputRef.current.value = value || "";
+			if (inputRef.current) inputRef.current.value = value || "";
 		}
 	};
 
@@ -210,7 +210,7 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
 
 	const onFocus = async () => {
 		setShowDropdown(true);
-		handleSearch(null, inputRef.current.value?.trimStart?.());
+		handleSearch(null, inputRef.current?.value?.trimStart?.());
 	};
 
 	useEffect(() => {
@@ -224,7 +224,7 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
 
 	const loadmore = () => {
 		if (page) {
-			return handleSearch(page, inputRef.current.value?.trimStart?.());
+			return handleSearch(page, inputRef.current?.value?.trimStart?.());
 		}
 	};
 
@@ -238,9 +238,9 @@ const GameSearchBar = ({ searchButton = true, position, placeholder, ...props })
 					})
 					.sort(
 						(a, b) =>
-							inputRef.current.value?.trimStart?.()?.trim?.() &&
-							loginNameFormat(a).replace(inputRef.current.value?.trimStart?.()?.trim?.())?.length -
-								loginNameFormat(b).replace(inputRef.current.value?.trimStart?.()?.trim?.())?.length
+							inputRef.current?.value?.trimStart?.()?.trim?.() &&
+							loginNameFormat(a).replace(inputRef.current?.value?.trimStart?.()?.trim?.())?.length -
+								loginNameFormat(b).replace(inputRef.current?.value?.trimStart?.()?.trim?.())?.length
 					),
 				"id"
 			),
