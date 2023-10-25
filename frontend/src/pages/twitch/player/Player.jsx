@@ -177,12 +177,10 @@ const Player = () => {
 			})
 				.then((res) => res.data.data[0])
 				.catch((error) => "Not Found");
-			console.log("channel.id:", channel?.id);
 
 			if (channel?.id) {
 				setChanneId(channel?.id);
 				const chatStateData = await API.getChatState({ channel_id: channel?.id });
-				console.log("chatStateData:", chatStateData);
 
 				if (chatStateData) setChatState(chatStateData);
 			}
@@ -401,7 +399,6 @@ const Player = () => {
 			</ContextMenuDropDown>
 		);
 	};
-	console.log("streamInfo.tags:", streamInfo?.tags);
 
 	return (
 		<VideoAndChatContainer
@@ -415,7 +412,7 @@ const Player = () => {
 		>
 			<div id="twitch-embed" ref={videoElementRef}>
 				<CSSTransition
-					in={showControlls || status !== "Live"}
+					in={(showControlls || status !== "Live") && enableVodVolumeOverlay}
 					key={"controllsUI"}
 					timeout={showControlls || status !== "Live" ? 500 : 250}
 					classNames="fade-controllUI"
