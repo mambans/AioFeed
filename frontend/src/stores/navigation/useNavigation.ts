@@ -1,12 +1,16 @@
 import { create } from "zustand";
 
 const useNavigationStore = create<any>((set, get) => ({
-		navigationSidebarVisible: false,
+	navigationSidebarVisible: false,
 	navigationBarVisible: true,
 	key: null,
 	data: null,
 	setNavigationSidebarVisible: (navigationSidebarVisible: boolean, key: string | null) => set(() => ({ navigationSidebarVisible, key })),
-	setNavigationBarVisible: (navigationBarVisible: boolean) => set(() => ({ navigationBarVisible })),
+	setNavigationBarVisible: (navigationBarVisible: boolean | ((c?: boolean) => boolean)) =>
+		typeof navigationBarVisible == "function"
+			? set((state) => ({ navigationBarVisible: navigationBarVisible(state.navigationBarVisible) }))
+			: set(() => ({ navigationBarVisible })),
+
 	setNavigationKey: (key: string) => set(() => ({ key })),
 	setNavigationData: (data: any) => set(() => ({ data })),
 }));
