@@ -31,13 +31,18 @@ YOUTUBE_INSTANCE.interceptors.response.use(
 );
 
 export const pagination = async (response) => {
-	if (response?.data?.nextPageToken) {
-		const params = { ...response.config.params, pageToken: response?.data?.nextPageToken };
+	try {
+		if (response?.data?.nextPageToken) {
+			const params = { ...response.config.params, pageToken: response.data.nextPageToken };
 
-		return [...(response?.data || []), ...((await pagination(await YOUTUBE_INSTANCE.get(response.config.url, { params }))) || [])];
+			return [...(response?.data?.items || []), ...((await pagination(await YOUTUBE_INSTANCE.get(response.config.url, { params }))) || [])];
+		}
+
+		return response?.data?.items;
+	} catch (error) {
+		console.log("error:", error);
+		console.log("response:", response);
 	}
-
-	return response?.data;
 };
 
 // const controller = new AbortController();

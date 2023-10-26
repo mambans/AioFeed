@@ -1,6 +1,4 @@
 import React from "react";
-import useDocumentTitle from "../../hooks/useDocumentTitle";
-import FeedsCenterContainer from "../feed/FeedsCenterContainer";
 import ExpandableSection from "../../components/expandableSection/ExpandableSection";
 import { Container } from "../twitch/StyledComponents";
 
@@ -10,17 +8,7 @@ import YoutubeHandler from "./YoutubeHandler";
 import Alert from "../../components/alert";
 import { useToggleFeedPreference, useFeedPreferences } from "../../stores/feedPreference";
 
-const YoutubeStandalone = () => {
-	useDocumentTitle("YouTube");
-
-	return (
-		<FeedsCenterContainer left={false} right={false}>
-			<Youtube className="feed" />
-		</FeedsCenterContainer>
-	);
-};
-
-export const Youtube = ({ className }) => {
+const Youtube = ({ className }) => {
 	const togglePreference = useToggleFeedPreference();
 	const feedPreferences = useFeedPreferences();
 
@@ -49,4 +37,4 @@ export const Youtube = ({ className }) => {
 	);
 };
 
-export default YoutubeStandalone;
+export default Youtube;

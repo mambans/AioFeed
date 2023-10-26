@@ -16,7 +16,7 @@ const Datahandler = ({ children }) => {
 	const refresh = useCallback(async () => {
 		const fetchData = async () => {
 			try {
-				followedChannels.current = getMyFollowedChannels();
+				followedChannels.current = await getMyFollowedChannels();
 
 				const SubscriptionData = await GetSubscriptionVideos(followedChannels.current);
 				setVideos(SubscriptionData.data);

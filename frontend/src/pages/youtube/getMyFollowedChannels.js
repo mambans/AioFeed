@@ -26,7 +26,7 @@ const getMyFollowedChannels = async () => {
 
 		return uniqueSubscriptions;
 	} catch (error) {
-		console.warn("error", error);
+		console.error("error", error);
 		console.log("Youtube: Followed-channels cache used.");
 		if (getLocalstorage("YT-followedChannels")) return getLocalstorage("YT-followedChannels").data;
 
