@@ -83,7 +83,7 @@ const getStreamNotifications = ({
 						return {
 							...baseNotis,
 							title: `${loginNameFormat(stream)} went Live in ${section.title}`,
-							requireInteraction: favoriteStreams?.includes?.(stream.user_id),
+							requireInteraction: section.is_important || favoriteStreams?.includes?.(stream.user_id),
 						};
 					}
 
@@ -91,7 +91,7 @@ const getStreamNotifications = ({
 						...baseNotis,
 						title: `${loginNameFormat(stream)} in ${section.title}`,
 						type: "in",
-						requireInteraction: favoriteStreams?.includes?.(stream.user_id),
+						requireInteraction: section.is_important || favoriteStreams?.includes?.(stream.user_id),
 					};
 				});
 			} else {

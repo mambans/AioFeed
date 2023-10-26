@@ -2,7 +2,7 @@ import React from "react";
 import MyInput from "../../components/myInput/MyInput";
 import { StyledButton } from "../../components/styledComponents";
 import { AiFillEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { MdDelete, MdAdd, MdNotifications, MdNotificationsOff } from "react-icons/md";
+import { MdDelete, MdAdd, MdNotifications, MdNotificationsOff, MdLabelImportant, MdLabelImportantOutline } from "react-icons/md";
 import { HiDotsVertical } from "react-icons/hi";
 import { BsExclude } from "react-icons/bs";
 import Rules from "./Rules";
@@ -16,9 +16,11 @@ import {
 	useFeedSectionsEditFeedSection,
 	useFeedSectionsToggleFeedSection,
 } from "../../stores/twitch/feedSections";
+import ToolTip from "../../components/tooltip/ToolTip";
 
 const RightButton = styled(StyledButton)`
 	width: 100%;
+	justify-content: start;
 `;
 const FeedSectionSettings = ({ section, width }) => {
 	const feedSections = useFeedSections();
@@ -86,15 +88,55 @@ const FeedSectionSettings = ({ section, width }) => {
 									<span style={{ paddingLeft: "5px" }}>{section.notifications_enabled ? "Notis ON" : "Notis OFF"}</span>
 								</RightButton>
 
-								<RightButton
-									type="button"
-									onClick={() => {
-										toggleFeedSection(section.id, "excludeFromTwitch_enabled");
-									}}
+								<ToolTip
+									tooltip={
+										<div>
+											<p>
+												<b>Important:</b> Requires interaction to dismiss the notification.
+											</p>
+											<p style={{ margin: 0 }}>
+												<b>Normal:</b> No interaction required to dismiss the notification.
+											</p>
+										</div>
+									}
 								>
-									{section.excludeFromTwitch_enabled ? <BsExclude size={22} color="#ffffff" /> : <BsExclude size={22} color="rgb(150,150,150)" />}
-									<span style={{ paddingLeft: "5px" }}>{section.excludeFromTwitch_enabled ? "Excluding" : "Including"}</span>
-								</RightButton>
+									<RightButton
+										type="button"
+										onClick={() => {
+											toggleFeedSection(section.id, "is_important");
+										}}
+									>
+										{section.is_important ? (
+											<MdLabelImportant size={22} color="#ffffff" />
+										) : (
+											<MdLabelImportantOutline size={22} color="rgb(150,150,150)" />
+										)}
+										<span style={{ paddingLeft: "5px" }}>{section.is_important ? "Important" : "Normal"}</span>
+									</RightButton>
+								</ToolTip>
+
+								<ToolTip
+									tooltip={
+										<div>
+											<p>
+												<b>Enabled:</b> Streams in this section will not be shown in the Twitch default section.
+											</p>
+											<p style={{ margin: 0 }}>
+												<b>Disabled:</b> Streams in this section will still also be shown in the Twitch default section.
+											</p>
+										</div>
+									}
+								>
+									<RightButton
+										type="button"
+										onClick={() => {
+											toggleFeedSection(section.id, "excludeFromTwitch_enabled");
+										}}
+									>
+										{section.excludeFromTwitch_enabled ? <BsExclude size={22} color="#ffffff" /> : <BsExclude size={22} color="rgb(150,150,150)" />}
+										<span style={{ paddingLeft: "5px" }}>{section.excludeFromTwitch_enabled ? "Excluding" : "Including"}</span>
+									</RightButton>
+								</ToolTip>
 							</>
 						)}
 

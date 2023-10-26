@@ -14,4 +14,5 @@ type FeedSectionType = {
 	id: number;
 	excludeFromTwitch_enabled: boolean;
 	title: string;
+	is_important: boolean;
 };
