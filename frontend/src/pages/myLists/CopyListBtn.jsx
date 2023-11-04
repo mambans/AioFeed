@@ -1,23 +1,37 @@
-import React, { useState } from 'react';
-import { MdContentCopy } from 'react-icons/md';
+import React, { useState } from "react";
+import { MdContentCopy } from "react-icons/md";
 
-import { ListActionButton } from './StyledComponents';
-import NewListForm from './addToListModal/NewListForm';
+import { ListActionButton } from "./StyledComponents";
+import NewListForm from "./addToListModal/NewListForm";
 
 const CopyListBtn = ({ list, style, children }) => {
-  const [open, setOpen] = useState();
-  const copyList = async () => setOpen((c) => !c);
+	const [open, setOpen] = useState(false);
+	const copyList = async (e) => {
+		e.preventDefault();
+		e.stopPropagation();
 
-  return (
-    <>
-      <ListActionButton onClick={copyList} style={{ ...style }}>
-        <MdContentCopy size={20}></MdContentCopy>
-        {children || 'Copy'}
-      </ListActionButton>
+		setOpen((c) => !c);
+	};
 
-      {open && <NewListForm item={list.videos} />}
-    </>
-  );
+	return (
+		<>
+			<ListActionButton onClick={copyList} style={{ ...style }}>
+				<MdContentCopy size={20}></MdContentCopy>
+				{children || "Copy"}
+			</ListActionButton>
+
+			{open && (
+				<div
+					onClick={(e) => {
+						e.preventDefault();
+						e.stopPropagation();
+					}}
+				>
+					<NewListForm item={list.videos} />
+				</div>
+			)}
+		</>
+	);
 };
 
 export default CopyListBtn;
