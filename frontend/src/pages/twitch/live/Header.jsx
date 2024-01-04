@@ -7,7 +7,7 @@ import Colors from "../../../components/themes/Colors";
 import ChannelSearchBar from "../searchbars/ChannelSearchBar";
 import { InlineError } from "../../navigation/sidebar/StyledComponents";
 
-const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed, idTitle, count }, ref) => {
+const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed, idTitle, count, rightSide, leftSide }, ref) => {
 	const { loading, nextRefresh, refresh, error } = data;
 
 	return (
@@ -36,13 +36,15 @@ const TwitchHeader = React.forwardRef(({ data, toggleExpanded, collapsed, idTitl
 			nextRefresh={nextRefresh}
 			isLoading={loading}
 			refresh={() => refresh({ firstLoad: true })}
-			leftSide={error &&
-				<InlineError style={{ margin: "0 10px" }}>
-					{error}
-				</InlineError>
+			leftSide={
+				<>
+					{leftSide}
+					{error && <InlineError style={{ margin: "0 10px" }}>{error}</InlineError>}
+				</>
 			}
 			rightSide={
 				<>
+					{rightSide}
 					<BigScheduleList />
 					{/* <ChannelSearchList placeholder='...' /> */}
 					<ChannelSearchBar open={true} />
