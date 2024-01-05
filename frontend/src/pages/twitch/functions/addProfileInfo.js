@@ -14,7 +14,7 @@ const addProfileInfo = async ({ save, refresh, items = [], cancelToken } = {}) =
 	const nonCachedChunked = chunk(nonCached, 100);
 
 	const newUsers = nonCached?.length
-		? await Promise.all(
+		? await Promise.allSettled(
 				nonCachedChunked.map(async (array) => {
 					return await TwitchAPI.getUser({ id: array, cancelToken })
 						.then((res) => res?.data?.data)
@@ -25,7 +25,7 @@ const addProfileInfo = async ({ save, refresh, items = [], cancelToken } = {}) =
 							return [];
 						});
 				})
-		  ).then((res) => res.flat())
+		  ).then((res) => res?.reduce((acc, i) => [...acc, ...(i?.value || [])]?.filter(Boolean), []))
 		: [];
 
 	const newCache = {

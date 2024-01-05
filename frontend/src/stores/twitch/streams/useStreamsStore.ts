@@ -43,8 +43,8 @@ const useStreamsStore = create<StreamStore>((set, get) => ({
 		const newlyAddedStreams: StreamType[] = get().newlyAddedStreams || [];
 		const previousStreams = get().previousStreams;
 
-		streams.forEach((stream:StreamType) => {
-			const previousStream = previousStreams?.find((previousStream:StreamType) => previousStream.user_id === stream.user_id);
+		streams.forEach((stream: StreamType) => {
+			const previousStream = previousStreams?.find((previousStream: StreamType) => previousStream.user_id === stream.user_id);
 
 			if (!previousStream && get().loaded) {
 				newlyAddedStreams.push(stream);
@@ -76,9 +76,14 @@ const useStreamsStore = create<StreamStore>((set, get) => ({
 			const decoratedStreams = await decorateStreams(streams || get().previousStreams, refreshMetadata);
 
 			return get().updateStreams(decoratedStreams);
-		} catch (error) {
+		} catch (error: any) {
 			console.log("error:", error);
-			set({ error });
+			const errorKey = Object.keys(error);
+			console.log("errorKey:", errorKey);
+			//get the message from the error
+			const message = error?.message || error;
+
+			set({ error: message });
 			return { error, livestreams: get().livestreams, previousStreams: get().previousStreams, newlyAddedStreams: get().newlyAddedStreams };
 		} finally {
 			set({ loading: false });
