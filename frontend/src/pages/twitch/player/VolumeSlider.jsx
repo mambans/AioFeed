@@ -70,7 +70,12 @@ const VolumeSlider = ({ TwitchPlayer, OpenedDate, PlayerUIControlls, setShowCont
 					console.log("TwitchPlayer.getVideo():", TwitchPlayer.getVideo());
 					console.log("TwitchPlayer._target:", TwitchPlayer._target);
 					console.log("TwitchPlayer._target?.dispatchEvent:", TwitchPlayer._target?.dispatchEvent);
-					TwitchPlayer._target?.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+					const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+					const iframe = TwitchPlayer._target.querySelector("iframe");
+					TwitchPlayer._target?.dispatchEvent(event);
+					console.log("iframe:", iframe);
+					console.log("iframe?.dispatchEvent:", iframe?.dispatchEvent);
+					iframe?.dispatchEvent(event);
 
 					TwitchPlayer.setMuted(false);
 					setVolumeMuted(false);
