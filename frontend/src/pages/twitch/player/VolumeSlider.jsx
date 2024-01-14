@@ -64,6 +64,14 @@ const VolumeSlider = ({ TwitchPlayer, OpenedDate, PlayerUIControlls, setShowCont
 			case 0:
 				if (!TwitchPlayer.isPaused() && Date.now() - OpenedDate?.current <= 15000) {
 					console.log("TwitchPlayer:", TwitchPlayer);
+					console.log("TwitchPlayer.getPlayerState():", TwitchPlayer.getPlayerState());
+					console.log("TwitchPlayer.getPlaybackStats():", TwitchPlayer.getPlaybackStats());
+
+					console.log("TwitchPlayer.getVideo():", TwitchPlayer.getVideo());
+					console.log("TwitchPlayer._target:", TwitchPlayer._target);
+					console.log("TwitchPlayer._target?.dispatchEvent:", TwitchPlayer._target?.dispatchEvent);
+					TwitchPlayer._target?.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+
 					TwitchPlayer.setMuted(false);
 					setVolumeMuted(false);
 					setVolumeText(TwitchPlayer.getVolume() * 100);
