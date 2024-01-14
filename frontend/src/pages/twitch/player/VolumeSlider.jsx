@@ -45,6 +45,7 @@ const VolumeSlider = ({ TwitchPlayer, OpenedDate, PlayerUIControlls, setShowCont
 	};
 
 	const handleChange = (e) => {
+		console.info("TwitchPlayer.getMuted():", TwitchPlayer.getMuted());
 		if (TwitchPlayer.getMuted()) {
 			TwitchPlayer.setMuted(false);
 			setVolumeMuted(false);
@@ -62,6 +63,10 @@ const VolumeSlider = ({ TwitchPlayer, OpenedDate, PlayerUIControlls, setShowCont
 				setVolumeMuted(!TwitchPlayer.getMuted());
 				break;
 			case 0:
+				console.info("TwitchPlayer.isPaused():", TwitchPlayer.isPaused());
+				console.info("Date.now():", Date.now());
+				console.info("OpenedDate?.current:", OpenedDate?.current);
+				console.info("Date.now() - OpenedDate?.current:", Date.now() - OpenedDate?.current);
 				if (!TwitchPlayer.isPaused() && Date.now() - OpenedDate?.current <= 15000) {
 					TwitchPlayer.setMuted(false);
 					setVolumeMuted(false);
