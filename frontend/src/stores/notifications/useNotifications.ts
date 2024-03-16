@@ -26,7 +26,7 @@ const useNotificationsStore = create<UseNotificationsStore>((set, get) => ({
 			key: (notification.stream?.id || "") + Date.now() + notification.type,
 		}));
 
-		const newNotifications = [...notificationsWithKeys, ...previouosNotifications];
+		const newNotifications = [...notificationsWithKeys, ...previouosNotifications].slice(0, 100);
 
 		setLocalStorage("notifications", newNotifications);
 
